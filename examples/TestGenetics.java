@@ -39,7 +39,15 @@ public class TestGenetics {
     Genotype genotype = null;
 
     try {
-      gaConf.setChromosomeSize(Integer.parseInt(args[0]));
+      int chromeSize = Integer.parseInt( args[0] );
+      if ( chromeSize > 32 ) 
+      {
+        System.err.println( "This example does not handle " + 
+          "Chromosomes greater than 32." );
+        System.exit(-1);
+      }
+
+      gaConf.setChromosomeSize(chromeSize);
       gaConf.setPopulationSize(Integer.parseInt(args[1]));
       gaConf.setFitnessFunction(new MaxFunction());
 

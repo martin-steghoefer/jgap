@@ -35,8 +35,8 @@ public class MaxFunction implements FitnessFunction {
    * as much and, therefore, twice the incentive to select the higher
    * value.
    */
-  public long evaluate(Chromosome subject) {
-    long total = 0;
+  public int evaluate(Chromosome subject) {
+    int total = 0;
     
     for(int i = 0; i < subject.size(); i++) {
       if(subject.getAllele(subject.size() - (i + 1))) {
