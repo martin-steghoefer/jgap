@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private int m_minLength;
 
@@ -70,7 +70,6 @@ public class StringGene
   private void init() {
     rn = new Random();
   }
-
 
   /**
    * @author Klaus Meffert
@@ -122,6 +121,7 @@ public class StringGene
    * Executed by the genetic engine when this Gene instance is no
    * longer needed and should perform any necessary resource cleanup.
    *
+   * @author Klaus Meffert
    * @since 1.1
    */
   public void cleanup() {
@@ -214,7 +214,7 @@ public class StringGene
       String maxLengthRepresentation = tokenizer.nextToken();
       String alphabetRepresentation = tokenizer.nextToken();
       // Now parse and set the minimum length.
-      // ----------------------------------
+      // -------------------------------------
       try {
         m_minLength = Integer.parseInt(minLengthRepresentation);
       }
@@ -225,7 +225,7 @@ public class StringGene
             "an integer value.");
       }
       // Now parse and set the maximum length.
-      // ----------------------------------
+      // -------------------------------------
       try {
         m_maxLength = Integer.parseInt(maxLengthRepresentation);
       }
@@ -627,10 +627,10 @@ public class StringGene
   public void applyMutation(int index, double a_percentage) {
     String s = stringValue();
     int ch = s.charAt(index);
-    int newValue = (int) Math.round(ch * (1.0d + a_percentage));
+    char newValue = (char) Math.round(ch * (1.0d + a_percentage));
     // Set mutated character by concatenating the String by using "ch"
     // ---------------------------------------------------------------
-    s = s.substring(0, index) + ch + s.substring(index + 1);
+    s = s.substring(0, index) + newValue + s.substring(index + 1);
     setAllele(s);
     // If the value isn't in the alphabet of this Gene,
     // map it to a value within the alphabet closest to wanted value.
