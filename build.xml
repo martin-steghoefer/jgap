@@ -64,6 +64,7 @@
        <include name="org/jgap/event/*.class"/>
        <include name="org/jgap/ext/*.class"/>
        <include name="org/jgap/gp/*.class"/>
+       <include name="org/jgap/gui/*.class"/>
        <include name="org/jgap/impl/*.class"/>
        <include name="org/jgap/perf/*.class"/>
        <include name="org/jgap/supergenes/*.class"/>
@@ -106,7 +107,7 @@
     <javadoc sourcepath="${src}"
              destdir="javadocs/"
              Public="true"
-             packagenames="org.jgap, org.jgap.data, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.impl, org.jgap.xml, org.jgap.event, org.jgap.supergenes">
+             packagenames="org.jgap, org.jgap.data, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.impl, org.jgap.xml, org.jgap.event, org.jgap.supergenes, org.jgap.gui">
     </javadoc>
   </target>
 
