@@ -19,7 +19,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -31,15 +30,14 @@ import org.jgap.*;
  * @since 1.1
  */
 public class BestChromosomesSelector
-    implements NaturalSelector {
-
+    extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
    */
-  private List chromosomes;
+  private Population chromosomes;
 
   /**
    * Allows or disallows doublette chromosomes to be added to the selector
@@ -56,17 +54,38 @@ public class BestChromosomesSelector
    */
   private FitnessValueComparator fitnessValueComparator;
 
+  /**
+   * The rate of original Chromosomes selected. This is because we otherwise
+   * would always return the original input as output
+   */
+  private double m_originalRate;
+
+  /**
+   * Internal: Indicated whether we pass the input unchanged to the output.
+   * If so, then we must not empty the list of Chromosomes because we would
+   * then empty the output list.
+   */
+  private boolean m_doNotEmpty;
+
+  /**
+   * Constructor
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public BestChromosomesSelector() {
-    chromosomes = new Vector();
+    super();
+    chromosomes = new Population();
     needsSorting = false;
+    setOriginalRate(0.5d);
     fitnessValueComparator = new FitnessValueComparator();
   }
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
-   * @param a_activeConfigurator: The current active Configuration to be used
+   * @param a_activeConfigurator The current active Configuration to be used
    *                              during the add process.
-   * @param a_chromosomeToAdd: The specimen to add to the pool.
+   * @param a_chromosomeToAdd The specimen to add to the pool.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -75,12 +94,13 @@ public class BestChromosomesSelector
                                Chromosome a_chromosomeToAdd) {
     // Check if chromosome already added
     // This speeds up the process by orders of magnitude!!!
-    if (!m_doublettesAllowed && chromosomes.contains(a_chromosomeToAdd)) {
+    if (!m_doublettesAllowed &&
+        chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
       return;
     }
     // New chromosome, insert it into the sorted collection of chromosomes
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
-    chromosomes.add(a_chromosomeToAdd);
+    chromosomes.addChromosome(a_chromosomeToAdd);
     // Indicate that the list of chromosomes to add needs sorting
     // ----------------------------------------------------------
     needsSorting = true;
@@ -90,9 +110,9 @@ public class BestChromosomesSelector
    * Select a given number of Chromosomes from the pool that will move on
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
-   * @param a_activeConfiguration: The current active Configuration that is
+   * @param a_activeConfiguration The current active Configuration that is
    *                               to be used during the selection process.
-   * @param a_howManyToSelect: The number of Chromosomes to select.
+   * @param a_howManyToSelect The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
    *
@@ -100,15 +120,29 @@ public class BestChromosomesSelector
    * @since 1.1
    */
   public synchronized Population select(Configuration a_activeConfiguration,
-                                          int a_howManyToSelect) {
+                                        int a_howManyToSelect) {
     if (a_howManyToSelect > chromosomes.size()) {
       a_howManyToSelect = chromosomes.size();
+    }
+
+    int neededSize = a_howManyToSelect;
+    if (m_originalRate < 1.0d) {
+      a_howManyToSelect = (int) (a_howManyToSelect * m_originalRate);
+    }
+
+    if (a_howManyToSelect >= chromosomes.size()) {
+      //return original!
+      m_doNotEmpty = true;
+      return chromosomes;
+    }
+    else {
+      m_doNotEmpty = false;
     }
     // Sort the collection of chromosomes previously added for evaluation.
     // Only do this if necessary.
     // -------------------------------------------------------------------
     if (needsSorting) {
-      Collections.sort(chromosomes, fitnessValueComparator);
+      Collections.sort(chromosomes.getChromosomes(), fitnessValueComparator);
       needsSorting = false;
     }
     Population population = new Population(a_howManyToSelect);
@@ -116,7 +150,14 @@ public class BestChromosomesSelector
     // --------------------------------------------------------
     Chromosome selectedChromosome;
     for (int i = 0; i < a_howManyToSelect; i++) {
-      selectedChromosome = (Chromosome) chromosomes.get(i);
+      selectedChromosome = chromosomes.getChromosome(i);
+      selectedChromosome.setIsSelectedForNextGeneration(true);
+      population.addChromosome(selectedChromosome);
+    }
+    // Add existing Chromosome's by cloning them to fill up the return result
+    // to contain the desired number of Chromosome's
+    for (int i = 0; i < (neededSize - a_howManyToSelect); i++) {
+      selectedChromosome = chromosomes.getChromosome(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);
       population.addChromosome(selectedChromosome);
     }
@@ -132,7 +173,9 @@ public class BestChromosomesSelector
   public synchronized void empty() {
     // clear the list of chromosomes
     // -----------------------------
-    chromosomes.clear();
+    if (!m_doNotEmpty) {
+      chromosomes.getChromosomes().clear();
+    }
     needsSorting = false;
   }
 
@@ -176,10 +219,47 @@ public class BestChromosomesSelector
 
   /**
    * @return TRUE: doublette chromosomes allowed to be added to the selector
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
   public boolean getDoubletteChromosomesAllowed() {
     return m_doublettesAllowed;
+  }
+
+  /**
+   * @return always true as no Chromosome can be returnd multiple times
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public boolean returnsUniqueChromosomes() {
+    return true;
+  }
+
+  /**
+   *
+   * @param a_originalRate double
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setOriginalRate(double a_originalRate) {
+    if (a_originalRate < 0.0d || a_originalRate > 1.0d) {
+      throw new IllegalArgumentException("Original rate must be greater than"
+                                         + " zero and not greater than one!");
+    }
+    m_originalRate = a_originalRate;
+  }
+
+  /**
+   *
+   * @return double
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public double getOriginalRate() {
+    return m_originalRate;
   }
 }

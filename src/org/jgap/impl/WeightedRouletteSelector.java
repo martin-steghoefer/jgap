@@ -36,9 +36,9 @@ import org.jgap.*;
  * @since 1.0
  */
 public class WeightedRouletteSelector
-    implements NaturalSelector {
+    extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -198,6 +198,8 @@ public class WeightedRouletteSelector
    *                        respective Chromosomes.
    * @param a_chromosomes The respective Chromosome instances from which
    *                      selection is to occur.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   private Chromosome spinWheel(RandomGenerator a_generator,
@@ -312,6 +314,16 @@ public class WeightedRouletteSelector
       counter.scaleFitnessValue(scalingFactor);
     }
   }
+
+  /**
+   * @return always false as some Chromosome's could be returnd multiple times
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public boolean returnsUniqueChromosomes() {
+    return false;
+  }
 }
 
 /**
@@ -374,7 +386,7 @@ class SlotCounter {
 
   /**
    * Retrieves the current value of this counter: ie, the number of slots
-   * on the roulette wheel that are  currently occupied by the Chromosome
+   * on the roulette wheel that are currently occupied by the Chromosome
    * associated with this SlotCounter instance.
    *
    * @return the current value of this counter.
