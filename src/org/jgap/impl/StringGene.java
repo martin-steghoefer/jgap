@@ -50,7 +50,7 @@ public class StringGene
     public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.4 $";
+    private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     private int m_minLength;
     private int m_maxLength;
@@ -251,27 +251,36 @@ public class StringGene
 
             String tempValue;
             // Parse and set the representation of the value.
-            // ----------------------------------------------------
+            // ----------------------------------------------
             if (valueRepresentation.equals ("null"))
             {
                 tempValue = null;
             }
             else
             {
-                tempValue = valueRepresentation;
+                if (valueRepresentation.equals(("\"\""))) {
+                    tempValue = "";
+                }
+                else {
+                    tempValue = valueRepresentation;
+                }
             }
 
             //check if minLength and maxLength are violated
             //---------------------------------------------
-            if (m_minLength > valueRepresentation.length ())
-            {
-                throw new UnsupportedRepresentationException ("The value given"
-                    + " is shorter than the allowed maximum length.");
-            }
-            if (m_maxLength < valueRepresentation.length ())
-            {
-                throw new UnsupportedRepresentationException ("The value given"
-                    + " is longer than the allowed maximum length.");
+            if (tempValue != null) {
+                if (m_minLength > tempValue.length ())
+                {
+                    throw new UnsupportedRepresentationException (
+                        "The value given"
+                        + " is shorter than the allowed maximum length.");
+                }
+                if (m_maxLength < tempValue.length ())
+                {
+                    throw new UnsupportedRepresentationException (
+                        "The value given"
+                        + " is longer than the allowed maximum length.");
+                }
             }
 
             //check if all characters are within the alphabet
@@ -313,7 +322,7 @@ public class StringGene
     {
         // The persistent representation includes the value, minimum length,
         // maximum length and valid alphabet. Each is separated by a colon.
-        // --------------------------------------------------------------
+        // ----------------------------------------------------------------
         return toString () + PERSISTENT_FIELD_DELIMITER + m_minLength +
             PERSISTENT_FIELD_DELIMITER + m_maxLength +
             PERSISTENT_FIELD_DELIMITER + m_alphabet;
@@ -507,7 +516,12 @@ public class StringGene
         }
         else
         {
-            return m_value.toString ();
+            if (m_value.equals("")) {
+             return "\"\"";
+            }
+            else {
+                return m_value.toString ();
+            }
         }
     }
 
