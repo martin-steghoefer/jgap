@@ -10,7 +10,6 @@
 package org.jgap;
 
 import java.util.*;
-
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
@@ -36,9 +35,10 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 1.0
  */
-public class Configuration implements Configurable {
+public class Configuration
+    implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -56,7 +56,6 @@ public class Configuration implements Configurable {
    */
   private FitnessEvaluator m_fitnessEvaluator;
 
-
   /**
    * Minimum size guaranteed for population. If zero or below then no ensurance
    */
@@ -66,7 +65,7 @@ public class Configuration implements Configurable {
    * References the current bulk fitness function that will be used to
    * evaluate chromosomes (in bulk) during the natural selection
    * process. Note that only this or the normal fitness function
-   * may be set--the two are mutually exclusive.
+   * may be set - the two are mutually exclusive.
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -178,7 +177,7 @@ public class Configuration implements Configurable {
    * @since 2.2
    */
   private int m_generationNr;
-  
+
   /**
    * The Configuration Handler for this Configurable.
    * @author Siddhartha Azad
@@ -225,12 +224,14 @@ public class Configuration implements Configurable {
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given fitness function isn't null.
+
     // -------------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
           "The FitnessFunction instance may not be null.");
     }
     // Make sure the bulk fitness function hasn't already been set.
+
     // ------------------------------------------------------------
     if (m_bulkObjectiveFunction != null) {
       throw new InvalidConfigurationException(
@@ -279,13 +280,16 @@ public class Configuration implements Configurable {
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given bulk fitness function
+
     // isn't null.
+
     // ------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
           "The BulkFitnessFunction instance may not be null.");
     }
     // Make sure a normal fitness function hasn't already been set.
+
     // ------------------------------------------------------------
     if (m_objectiveFunction != null) {
       throw new InvalidConfigurationException(
@@ -328,6 +332,7 @@ public class Configuration implements Configurable {
       InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given chromosome isn't null.
+
     // -----------------------------------------------------------
     if (a_sampleChromosomeToSet == null) {
       throw new InvalidConfigurationException(
@@ -406,6 +411,7 @@ public class Configuration implements Configurable {
 
   /**
    *
+
    * @param processBeforeGeneticOperators boolean
    * @param index int
    * @return NaturalSelector
@@ -413,10 +419,13 @@ public class Configuration implements Configurable {
    * @author Klaus Meffert
    * @since 1.1
    */
-  public NaturalSelector getNaturalSelector(boolean processBeforeGeneticOperators, int index) {
+  public NaturalSelector getNaturalSelector(boolean
+                                            processBeforeGeneticOperators,
+                                            int index) {
     if (processBeforeGeneticOperators) {
       if (m_sizeNaturalSelectorsPre <= index) {
-        throw new IllegalArgumentException("Index of NaturalSelector out of bounds");
+        throw new IllegalArgumentException(
+            "Index of NaturalSelector out of bounds");
       }
       else {
         return m_preSelectors.get(index);
@@ -424,17 +433,18 @@ public class Configuration implements Configurable {
     }
     else {
       if (m_sizeNaturalSelectorsPost <= index) {
-        throw new IllegalArgumentException("Index of NaturalSelector out of bounds");
+        throw new IllegalArgumentException(
+            "Index of NaturalSelector out of bounds");
       }
       else {
         return m_postSelectors.get(index);
       }
     }
-
   }
 
   /**
    *
+
    * @param processBeforeGeneticOperators boolean
    * @return ChainOfSelectors
    *
@@ -904,13 +914,15 @@ public class Configuration implements Configurable {
   public int getGenerationNr() {
     return m_generationNr;
   }
-  
-  // implementation of the Configurable interface
-  
-  public ConfigurationHandler getConfigurationHandler() {
-  	if(conHandler == null)
-  		conHandler =new RootConfigurationHandler(); 
-  	return conHandler;
-  }
 
+  /**
+   * implementation of the Configurable interface
+   * @return ConfigurationHandler
+   * @author Siddhartha Azad
+   */
+  public ConfigurationHandler getConfigurationHandler() {
+    if (conHandler == null)
+      conHandler = new RootConfigurationHandler();
+    return conHandler;
+  }
 }
