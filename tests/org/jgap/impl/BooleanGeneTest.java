@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public BooleanGeneTest() {
   }
@@ -209,6 +209,29 @@ public class BooleanGeneTest
     assertEquals( -1, gene2.compareTo(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_4() {
+    Gene gene1 = new BooleanGene();
+    gene1.setAllele(new Boolean(true));
+    Gene gene2 = new BooleanGene();
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals( -1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_5() {
+    Gene gene1 = new BooleanGene();
+    Gene gene2 = new BooleanGene();
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene1.compareTo(gene2));
+  }
+
   public void testApplyMutation_0() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -268,18 +291,29 @@ public class BooleanGeneTest
   public void testApplyMutation_8() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
-    gene.applyMutation(22, -0.5d);//22 should be ignored
+    gene.applyMutation(22, -0.5d); //22 should be ignored
     assertEquals(false, gene.booleanValue());
   }
 
   public void testApplyMutation_9() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
-    gene.applyMutation(22, 0.5d);//22 should be ignored
+    gene.applyMutation(22, 0.5d); //22 should be ignored
     assertEquals(true, gene.booleanValue());
   }
 
   /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testApplyMutation_10() {
+    BooleanGene gene = new BooleanGene();
+    gene.applyMutation(0, 0.0d);
+    assertEquals(false, gene.booleanValue());
+  }
+
+  /**
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_0() {
@@ -295,6 +329,7 @@ public class BooleanGeneTest
 
   /**
    * @throws Exception
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_1()
@@ -306,6 +341,7 @@ public class BooleanGeneTest
 
   /**
    * @throws Exception
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_2()
@@ -317,6 +353,7 @@ public class BooleanGeneTest
 
   /**
    * @throws Exception
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_3()
@@ -327,6 +364,7 @@ public class BooleanGeneTest
   }
 
   /**
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_4() {
@@ -341,6 +379,7 @@ public class BooleanGeneTest
   }
 
   /**
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_5() {
@@ -355,6 +394,7 @@ public class BooleanGeneTest
   }
 
   /**
+   * @author Klaus Meffert
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_6() {
@@ -369,23 +409,31 @@ public class BooleanGeneTest
   }
 
   public void testGetPersistentRepresentation_0() {
-     BooleanGene gene = new BooleanGene();
-     gene.setAllele(new Boolean(true));
-     String s = gene.getPersistentRepresentation();
-     assertEquals("true",s);
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    String s = gene.getPersistentRepresentation();
+    assertEquals("true", s);
   }
 
   public void testGetPersistentRepresentation_1() {
-     BooleanGene gene = new BooleanGene();
-     gene.setAllele(new Boolean(false));
-     String s = gene.getPersistentRepresentation();
-     assertEquals("false",s);
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    String s = gene.getPersistentRepresentation();
+    assertEquals("false", s);
   }
 
   public void testGetPersistentRepresentation_2() {
-     BooleanGene gene = new BooleanGene();
-     String s = gene.getPersistentRepresentation();
-     assertEquals("null",s);
+    BooleanGene gene = new BooleanGene();
+    String s = gene.getPersistentRepresentation();
+    assertEquals("null", s);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testHashCode_0() {
+    BooleanGene gene = new BooleanGene();
+    assertEquals( -2, gene.hashCode());
+  }
 }
