@@ -12,7 +12,7 @@
   JGAP interfaces, such as genetic operators and natural selectors,
   are now stored.
 * Changed FitnessFunction interface to represent fitness value with
-  an unsigned long instead of an int.
+  a long instead of an int.
 * Updated Ant build script.
 * Fixed bug wherein BitSet.length() was occasionally being used instead
   of Chromosome.size(), resulting in less desirable behavior.
