@@ -38,7 +38,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -163,6 +163,12 @@ public class Configuration {
   private int m_sizeNaturalSelectorsPre;
 
   private int m_sizeNaturalSelectorsPost;
+
+  /**
+   * Should the fittest chromosome in the population be preserved to the next
+   * generation when evolving (in Genotype.evolve()) ?
+   */
+  private boolean m_preserveFittestIndividual;
 
   /**
    * @author Neil Rotstan
@@ -854,4 +860,25 @@ public class Configuration {
     m_fitnessEvaluator = a_fitnessEvaluator;
   }
 
+  /**
+   * @return true: fittest chromosome should always be transferred to next
+   * generation.
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
+  public boolean isPreserveFittestIndividual() {
+    return m_preserveFittestIndividual;
+  }
+
+  /**
+   * Determines whether to save (keep) the fittest individual
+   * @param a_preserveFittest true: always transfer fittest chromosome to next gen.
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
+  public void setPreservFittestIndividual(boolean a_preserveFittest) {
+    m_preserveFittestIndividual = a_preserveFittest;
+  }
 }
