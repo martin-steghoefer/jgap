@@ -8,7 +8,7 @@
 * Replaced BitSet representation of genes with Allele interface.
   Each gene in the Chromosome can be represented by a different
   Allele implementation. The desired implementations must be
-  specified in the Configuration.
+  specified in the active Configuration instance.
 * Added object pooling for the Allele instances.
 * Heavily modified the representation of genes in the XML format.
 * The various "get" methods in XMLManager now throw two new
@@ -35,6 +35,9 @@
   the EventManager.fireGeneticEvent() method. Event listeners
   must now provide the names of events they wish to subscribe to
   and will only be notified when those kinds of events are fired.
+* Added a docs/ subdirectory and some basic high-level documentation
+  on genetic algorithms in general, using JGAP, and writing custom
+  genetic operators.
 * Updated the README file.
 
 
