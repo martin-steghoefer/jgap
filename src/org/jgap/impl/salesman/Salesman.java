@@ -44,6 +44,9 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
    /**
     * Override this method to compute the distance between "cities",
     * indicated by these two given genes. The algorithm is not dependent
