@@ -46,7 +46,7 @@ import org.jgap.*;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Represents the delimiter that is used to separate genes in the
@@ -309,7 +309,7 @@ public class CompositeGene
     if (! (a_newValue instanceof List)) {
       throw new IllegalArgumentException(
           "The expected type of the allele"
-          + " is a Vector.");
+          + " is a List descendent.");
     }
     List alleles = (List) a_newValue;
     Gene gene;
