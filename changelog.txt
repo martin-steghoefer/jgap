@@ -43,6 +43,7 @@
 * Improved comments througout the whole code basis
 * Fixed Chromosome.setFitnessValue
 * Improved documentation of class testHashcode
+* Made variable ASSERTIONS non-static in GreedyCrossover
 
 
 2.11
