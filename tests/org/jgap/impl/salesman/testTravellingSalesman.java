@@ -26,6 +26,7 @@ import org.jgap.impl.salesman.*;
 import org.jgap.Chromosome;
 import org.jgap.Gene;
 import org.jgap.RandomGenerator;
+import org.jgap.impl.*;
 
 
 /** Test the travelling salesman */
