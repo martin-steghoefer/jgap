@@ -19,17 +19,14 @@
  */
 package org.jgap.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Vector;
+
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.NaturalSelector;
-import org.jgap.RandomGenerator;
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Random;
 
 /**
  * Implementation of a NaturalSelector that takes the top n chromosomes into
@@ -44,7 +41,7 @@ public class BestChromosomesSelector
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     /**
      * Stores the chromosomes to be taken into account for selection
@@ -70,7 +67,6 @@ public class BestChromosomesSelector
 
     /**
      * Add a Chromosome instance to this selector's working pool of Chromosomes.
-     *
      * @param a_activeConfigurator: The current active Configuration to be used
      *                              during the add process.
      * @param a_chromosomeToAdd: The specimen to add to the pool.
@@ -99,7 +95,6 @@ public class BestChromosomesSelector
      * Select a given number of Chromosomes from the pool that will move on
      * to the next generation population. This selection will be guided by the
      * fitness values. The chromosomes with the best fitness value win.
-     *
      * @param a_activeConfiguration: The current active Configuration that is
      *                               to be used during the selection process.
      * @param a_howManyToSelect: The number of Chromosomes to select.
@@ -140,7 +135,6 @@ public class BestChromosomesSelector
 
     /**
      * Empty out the working pool of Chromosomes.
-     *
      * @since 1.1
      */
     public synchronized void empty ()
