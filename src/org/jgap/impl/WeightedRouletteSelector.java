@@ -19,6 +19,7 @@ package org.jgap.impl;
 
 import java.math.*;
 import java.util.*;
+
 import org.jgap.*;
 
 /**
@@ -38,7 +39,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -70,6 +71,15 @@ public class WeightedRouletteSelector
    * Allows or disallows doublette chromosomes to be added to the selector
    */
   private boolean m_doublettesAllowed;
+
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.0 (prior: existent thru super class)
+   */
+  public WeightedRouletteSelector() {
+    m_doublettesAllowed = true;
+  }
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
