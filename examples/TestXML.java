@@ -36,7 +36,7 @@ public class TestXML
 
       if (!(genotypeFromXML.equals(genotype)))
       {
-        System.out.println("Test failed.");
+        System.out.println("Genotype test failed.");
         System.exit(-1);
       }
     }

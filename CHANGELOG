@@ -1,10 +1,14 @@
-(in progress)
+0.21
 ----------
 * Added equals and hashcode methods to Chromosome and Genotype
 * Chromosome now implements Comparable interface
 * Added XMLManager, which can convert genotypes and chromosomes
   into XML and vice versa.
 * Added events system.
+* Modified stock natural selection algorithm and mutation operator
+  to help reduce population stagnation.
+* Added TestXML example class.
+* Minor updates to README file.
 
 
 0.2
