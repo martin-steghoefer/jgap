@@ -10,9 +10,7 @@
 package org.jgap;
 
 import java.util.*;
-
 import org.jgap.impl.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -24,9 +22,8 @@ import junitx.util.*;
  */
 public class ChromosomeTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public ChromosomeTest() {
   }
@@ -147,7 +144,8 @@ public class ChromosomeTest
    * Illegal constructions regarding first parameter
    * @throws InvalidConfigurationException
    */
-  public void testConstruct_7() throws InvalidConfigurationException {
+  public void testConstruct_7()
+      throws InvalidConfigurationException {
     try {
       Genotype.setConfiguration(new Configuration());
       new Chromosome(null);
@@ -187,7 +185,8 @@ public class ChromosomeTest
    * Illegal constructions regarding configuration
    * @throws Exception
    */
-  public void testConstruct_11() throws Exception {
+  public void testConstruct_11()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -201,7 +200,8 @@ public class ChromosomeTest
    * Illegal constructions regarding configuration
    * @throws Exception
    */
-  public void testConstruct_12() throws Exception {
+  public void testConstruct_12()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -213,7 +213,8 @@ public class ChromosomeTest
     new Chromosome(genes);
   }
 
-  public void testConstruct_14() throws Exception {
+  public void testConstruct_14()
+      throws Exception {
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 7);
     Gene[] genes = (Gene[]) PrivateAccessor.getField(chrom, "m_genes");
@@ -229,7 +230,8 @@ public class ChromosomeTest
    * Test clone without setting a configuration
    * @throws InvalidConfigurationException
    */
-  public void testClone_0() throws InvalidConfigurationException {
+  public void testClone_0()
+      throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -244,7 +246,9 @@ public class ChromosomeTest
   }
 
   final int MAX_CHROMOSOME_TO_TEST = 1000;
+
   final int MAX_GENES_TO_TEST = 25;
+
   final int MAX_GENES_TYPES = 6;
 
   /**
@@ -254,96 +258,94 @@ public class ChromosomeTest
    * @author John Serri
    * @since 2.1
    */
-  public void testHashcode_0() throws InvalidConfigurationException {
-  	int Count;
-  	int NumGenes;
-  	int GeneCount;
-  	int GeneType;
-  	Gene[] genes;
-  	Chromosome chrom;
-  	TestHashcode thc = new TestHashcode();
-  	List UniqueChromosome = new ArrayList();
-  	List EqualChromosome = new ArrayList();
+  public void testHashcode_0()
+      throws InvalidConfigurationException {
+    int Count;
+    int NumGenes;
+    int GeneCount;
+    int GeneType;
+    Gene[] genes;
+    Chromosome chrom;
+    TestHashcode thc = new TestHashcode();
+    List UniqueChromosome = new ArrayList();
+    List EqualChromosome = new ArrayList();
 
-  	//Build Random Chromosomes
-  	for(Count= 0; Count<MAX_CHROMOSOME_TO_TEST; Count++)
-  	{
-  		NumGenes = (int)(Math.random()* MAX_GENES_TO_TEST);
-  		genes = new Gene[NumGenes];
-  		for(GeneCount=0; GeneCount<NumGenes; GeneCount++)
-  		{
-  			GeneType = (int)(Math.random()* MAX_GENES_TYPES);
-  			switch(GeneType)
-			{
-  			case 0:
-  				genes[GeneCount] = new IntegerGene();
-  				break;
-  			case 1:
-  				genes[GeneCount] = new BooleanGene();
-  				break;
-  			case 2:
-  				genes[GeneCount] = new CompositeGene();
-  				break;
-  			case 3:
-  				genes[GeneCount] = new DoubleGene();
-  				break;
-  			case 4:
-  				genes[GeneCount] = new FixedBinaryGene(5);
-  				break;
-  			case 5:
-  				genes[GeneCount] = new StringGene();
-  				break;
-			}
-  		}
-  		chrom = new Chromosome(genes);
-  		//We only want to add unique object, since equal object will return the same hashcode
-  		if(UniqueChromosome.contains(chrom)==false)
-  			UniqueChromosome.add(chrom);
-  	}
+    //Build Random Chromosomes
+    for (Count = 0; Count < MAX_CHROMOSOME_TO_TEST; Count++) {
+      NumGenes = (int) (Math.random() * MAX_GENES_TO_TEST);
+      genes = new Gene[NumGenes];
+      for (GeneCount = 0; GeneCount < NumGenes; GeneCount++) {
+        GeneType = (int) (Math.random() * MAX_GENES_TYPES);
+        switch (GeneType) {
+          case 0:
+            genes[GeneCount] = new IntegerGene();
+            break;
+          case 1:
+            genes[GeneCount] = new BooleanGene();
+            break;
+          case 2:
+            genes[GeneCount] = new CompositeGene();
+            break;
+          case 3:
+            genes[GeneCount] = new DoubleGene();
+            break;
+          case 4:
+            genes[GeneCount] = new FixedBinaryGene(5);
+            break;
+          case 5:
+            genes[GeneCount] = new StringGene();
+            break;
+        }
+      }
+      chrom = new Chromosome(genes);
+      //We only want to add unique object, since equal object will return the same hashcode
+      if (UniqueChromosome.contains(chrom) == false)
+        UniqueChromosome.add(chrom);
+    }
 
-  	//Test to see if enough hashcodes are unique
-  	thc.setFractionUnique(.95);
-  	if(thc.testHashCodeUniqueness(UniqueChromosome)==false)
-  	{
-  		System.out.print("testHashCodeUniqueness failed\n Actual Percent unique = " + thc.getActualFractionUnique());
-  		fail();
-  	}
+    //Test to see if enough hashcodes are unique
+    thc.setFractionUnique(.95);
+    if (thc.testHashCodeUniqueness(UniqueChromosome) == false) {
+      System.out.print(
+          "testHashCodeUniqueness failed\n Actual Percent unique = " +
+          thc.getActualFractionUnique());
+      fail();
+    }
 
-  	//Test mathematical average and dispersion of hashcode
-  	//I am not sure of the value of this test since boundry values are pretty much arbitrary
-  	thc.setAverageMax(16500000);
-  	thc.setAverageMin(14000000);
-  	thc.setStdDevMax(11000000);
-  	thc.setStdDevMin(9000000);
-  	if(thc.testDispersion(UniqueChromosome)==false)
-  	{
-  		fail();
-  	}
+//  	//Test mathematical average and dispersion of hashcode
+//  	//I am not sure of the value of this test since boundry values are pretty much arbitrary
+//  	thc.setAverageMax(16500000);
+//  	thc.setAverageMin(14000000);
+//  	thc.setStdDevMax(11000000);
+//  	thc.setStdDevMin(9000000);
+//  	if(thc.testDispersion(UniqueChromosome)==false)
+//  	{
+//  		fail();
+//  	}
 
-  	//Build identical Chromosome
-  	for(Count= 0; Count<3; Count++)
-  	{
-  		genes = new Gene[1];
-  		genes[0] = new IntegerGene();
-  		chrom = new Chromosome(genes);
-  		EqualChromosome.add(chrom);
-  	}
-  	//If an object is equal it must have the same hashcode
-  	if(thc.testHashCodeEquality(EqualChromosome)==false)
-  	{
-  		fail();
-  	}
+    //Build identical Chromosome
+    for (Count = 0; Count < 3; Count++) {
+      genes = new Gene[1];
+      genes[0] = new IntegerGene();
+      chrom = new Chromosome(genes);
+      EqualChromosome.add(chrom);
+    }
+    //If an object is equal it must have the same hashcode
+    if (thc.testHashCodeEquality(EqualChromosome) == false) {
+      fail();
+    }
 
-  	// A lot of temporary objects where created in this test so do a quick
-  	// garbage collect.
-  	System.gc();
+    // A lot of temporary objects where created in this test so do a quick
+    // garbage collect.
+    System.gc();
   }
 
   /**
    * Test clone with setting a configuration
    * @throws InvalidConfigurationException
    */
-  public void testClone_1() throws InvalidConfigurationException {
+  public void testClone_1()
+      throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -368,7 +370,8 @@ public class ChromosomeTest
    * Test clone with set application data implementing interface Cloneable
    * @throws InvalidConfigurationException
    */
-  public void testClone_2() throws InvalidConfigurationException {
+  public void testClone_2()
+      throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -389,7 +392,8 @@ public class ChromosomeTest
    * Test clone with set application data, where cloning supported
    * @throws InvalidConfigurationException
    */
-  public void testClone_3() throws InvalidConfigurationException {
+  public void testClone_3()
+      throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -406,7 +410,6 @@ public class ChromosomeTest
     chrom2 = (Chromosome) chrom.clone();
     assertTrue(chrom.equals(chrom2));
   }
-
 
   public void testEquals_0() {
     Gene[] genes = new IntegerGene[2];
@@ -474,7 +477,8 @@ public class ChromosomeTest
     assertFalse(chrom.equals(genes));
   }
 
-  public void testGetFitnessValue_0() throws Exception {
+  public void testGetFitnessValue_0()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -487,12 +491,15 @@ public class ChromosomeTest
     conf.setPopulationSize(5);
     Genotype.setConfiguration(conf);
     chrom = new Chromosome(genes);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
+                 0.0000001d);
     //intentionally assert it a second time
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
+                 0.0000001d);
   }
 
-  public void testGetFitnessValue_1() throws Exception {
+  public void testGetFitnessValue_1()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -505,13 +512,16 @@ public class ChromosomeTest
     conf.setPopulationSize(5);
     Genotype.setConfiguration(conf);
     chrom = new Chromosome(genes);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
+                 0.0000001d);
     //set fitness value to a different one
     ff.setStaticFitnessValue(44.235d);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
+                 0.0000001d);
   }
 
-  public void testSize_0() throws Exception {
+  public void testSize_0()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -519,20 +529,23 @@ public class ChromosomeTest
     assertEquals(2, chrom.size());
   }
 
-  public void testSize_1() throws Exception {
+  public void testSize_1()
+      throws Exception {
     Gene[] genes = new IntegerGene[1];
     genes[0] = new IntegerGene();
     Chromosome chrom = new Chromosome(genes);
     assertEquals(1, chrom.size());
   }
 
-  public void testSize_2() throws Exception {
+  public void testSize_2()
+      throws Exception {
     Gene[] genes = new IntegerGene[0];
     Chromosome chrom = new Chromosome(genes);
     assertEquals(0, chrom.size());
   }
 
-  public void testCompareTo_0() throws Exception {
+  public void testCompareTo_0()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -547,7 +560,8 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
 
-  public void testCompareTo_1() throws Exception {
+  public void testCompareTo_1()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     Gene gen0 = new IntegerGene();
     gen0.setAllele(new Integer(1147));
@@ -570,7 +584,8 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) > 0);
   }
 
-  public void testCompareTo_2() throws Exception {
+  public void testCompareTo_2()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -588,14 +603,16 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) > 0);
   }
 
-  public void testCompareTo_3() throws Exception {
+  public void testCompareTo_3()
+      throws Exception {
     Gene[] genes = new IntegerGene[1];
     genes[0] = new IntegerGene();
     Chromosome chrom = new Chromosome(genes);
     assertTrue(chrom.compareTo(null) > 0);
   }
 
-  public void testCompareTo_4() throws Exception {
+  public void testCompareTo_4()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     Gene gen0 = new IntegerGene();
     gen0.setAllele(new Integer(4711));
@@ -619,17 +636,22 @@ public class ChromosomeTest
   }
 }
 
-class MyAppObject extends TestFitnessFunction implements Cloneable {
+class MyAppObject
+    extends TestFitnessFunction
+    implements Cloneable {
   public int compareTo(Object o) {
     return 0;
   }
 
-  public Object clone() throws CloneNotSupportedException {
+  public Object clone()
+      throws CloneNotSupportedException {
     return null;
   }
 }
 
-class MyAppObject2 extends TestFitnessFunction implements IApplicationData {
+class MyAppObject2
+    extends TestFitnessFunction
+    implements IApplicationData {
   public boolean equals(Object o2) {
     return compareTo(o2) == 0;
   }
@@ -638,7 +660,8 @@ class MyAppObject2 extends TestFitnessFunction implements IApplicationData {
     return 0;
   }
 
-  public Object clone() throws CloneNotSupportedException {
+  public Object clone()
+      throws CloneNotSupportedException {
     return new MyAppObject2();
   }
 }

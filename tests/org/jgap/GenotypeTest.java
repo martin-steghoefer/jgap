@@ -23,7 +23,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public GenotypeTest() {
   }
@@ -391,7 +391,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(99999);
     Genotype genotype = new Genotype(conf, chroms);
-    genotype.hashcode();
+    genotype.hashCode();
   }
 
   final int MAX_CHROMOSOME_TO_TEST = 1000;
@@ -409,6 +409,7 @@ public class GenotypeTest
     Gene[] genes;
     Chromosome chrom;
     TestHashcode thc = new TestHashcode();
+    thc.setVerbose(true);
     List UniqueChromosome = new ArrayList();
     List EqualChromosome = new ArrayList();
     Genotype geno;
@@ -464,17 +465,15 @@ public class GenotypeTest
 
     //Test mathematical average and dispersion of hashcode
     //I am not sure of the value of this test since boundry values are pretty much arbitrary
-
 //    thc.setAverageMax(16500000);
-//    thc.setAverageMin(14000000);
-//    thc.setStdDevMax(11000000);
-//    thc.setStdDevMin(9000000);
-//    if(thc.testDispersion(UniqueChromosome)==false)
-//    {
-//            fail();
+//    thc.setAverageMin(14000);
+//    thc.setStdDevMax(2100000000);
+//    thc.setStdDevMin(90000);
+//    if (thc.testDispersion(UniqueChromosome) == false) {
+//      fail();
 //    }
 
-    //Build identical Chromosome
+    //Build identical Chromosomes
     for (Count = 0; Count < 3; Count++) {
       genes = new Gene[1];
       genes[0] = new IntegerGene();
