@@ -20,6 +20,7 @@ package org.jgap.xml;
 
 import org.jgap.data.*;
 import org.w3c.dom.*;
+import javax.xml.parsers.*;
 
 /**
  * Class building an XML file. Can be used to persiste objects like Genotype,
@@ -31,7 +32,7 @@ import org.w3c.dom.*;
 public class XMLDocumentBuilder
     extends DocumentBuilderBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   protected void setAttribute(Object xmlElement, String key, String value) {
     ( (Element) xmlElement).setAttribute(key, value);
@@ -47,5 +48,25 @@ public class XMLDocumentBuilder
 
   protected Object createElement(Object doc, Object xmlElement, String tagName) {
     return ( (Document) doc).createElement(tagName);
+  }
+
+  /**
+   * Convenience method to build an XML document from a generic input structure
+   * (of type IDataCreators)
+   * @param a_document IDataCreators the input structure holding the data to
+   *   be represented as XML document
+   * @throws Exception
+   * @return Object the XML document
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public Object buildDocument(IDataCreators a_document)
+      throws Exception {
+    DocumentBuilder m_documentCreator = DocumentBuilderFactory.newInstance().
+        newDocumentBuilder();
+    Document xmlDoc = m_documentCreator.newDocument();
+
+    return super.buildDocument(a_document, xmlDoc);
   }
 }
