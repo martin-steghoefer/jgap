@@ -16,6 +16,7 @@
 * Improved hashCode() functions of Gene implementations
 * Improved compareTo method considering app. data only
   when opting in to it
+* Improved method FixedBinaryGene.toString()
 * Optimized Chromosome.getFitnessValue()
 * Removed m_doNotEmpty in BestChromosomesSelector
 * Added example: Formula Finder
