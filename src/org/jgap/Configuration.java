@@ -38,7 +38,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -922,8 +922,9 @@ public class Configuration
    * @author Siddhartha Azad
    */
   public ConfigurationHandler getConfigurationHandler() {
-    if (conHandler == null)
+    if (conHandler == null) {
       conHandler = new RootConfigurationHandler();
+    }
     return conHandler;
   }
   
