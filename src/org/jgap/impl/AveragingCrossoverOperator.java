@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -133,8 +133,8 @@ public class AveragingCrossoverOperator
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void operate(Population a_population,
-                      List a_candidateChromosomes) {
+  public void operate(final Population a_population,
+                      final List a_candidateChromosomes) {
     // Determine the number of crossovers that should be performed
     int numCrossovers = 0;
     if (m_crossoverRateCalc == null){
