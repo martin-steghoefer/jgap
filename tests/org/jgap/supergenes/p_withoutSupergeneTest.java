@@ -11,9 +11,6 @@ package org.jgap.supergenes;
 
 import org.jgap.*;
 import org.jgap.impl.*;
-import java.io.*;
-
-import org.jgap.supergenes.*;
 
 /**
  * Computes the optimal change with the same condition as
