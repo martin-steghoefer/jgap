@@ -22,6 +22,7 @@ package org.jgap;
 import org.jgap.event.EventManager;
 import org.jgap.impl.BooleanGene;
 import org.jgap.impl.CrossoverOperator;
+import org.jgap.impl.GaussianRandomGenerator;
 import org.jgap.impl.MutationOperator;
 import org.jgap.impl.ReproductionOperator;
 import org.jgap.impl.StaticFitnessFunction;
@@ -42,7 +43,7 @@ public class ConfigurationTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.4 $";
+    private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     public ConfigurationTest ()
     {
@@ -277,7 +278,7 @@ public class ConfigurationTest
         conf.addGeneticOperator (croOp);
         conf.setPopulationSize (7);
         assertEquals (fitFunc, conf.getFitnessFunction ());
-        assertEquals (natSel, conf.getNaturalSelectors (false).get(0));
+        assertEquals (natSel, conf.getNaturalSelectors (false).get (0));
         assertEquals (randGen, conf.getRandomGenerator ());
         assertEquals (sample, conf.getSampleChromosome ());
         assertEquals (evMan, conf.getEventManager ());
@@ -290,19 +291,214 @@ public class ConfigurationTest
 
     /**
      * Tests a deprecated function!
+     * @throws Exception
      */
-    public void testSetNaturalSelector_0() {
-        /**@todo implement*/
+    public void testSetNaturalSelector_0 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        NaturalSelector selector = new WeightedRouletteSelector ();
+        conf.setNaturalSelector (selector);
+        assertEquals (selector, conf.getNaturalSelectors (false).get (0));
     }
 
     /**
      * Tests a deprecated function!
      */
-    public void testGetNaturalSelector_0() {
-        /**@todo implement*/
+    public void testGetNaturalSelector_0 ()
+    {
+        Configuration conf = new Configuration ();
+        NaturalSelector selector = conf.getNaturalSelector ();
+        assertEquals (null, selector);
     }
 
-    public void testAddNaturalSelector_0() {
-        /**@todo implement*/
+    public void testAddNaturalSelector_0 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        NaturalSelector selector = new WeightedRouletteSelector ();
+        conf.addNaturalSelector (selector, true);
+        assertEquals (selector, conf.getNaturalSelectors (true).get (0));
+    }
+
+    public void testAddNaturalSelector_1 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        NaturalSelector selector = new WeightedRouletteSelector ();
+        conf.addNaturalSelector (selector, false);
+        assertEquals (selector, conf.getNaturalSelectors (false).get (0));
+    }
+
+    public void testAddNaturalSelector_2 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        NaturalSelector selector1 = new WeightedRouletteSelector ();
+        NaturalSelector selector2 = new WeightedRouletteSelector ();
+        conf.addNaturalSelector (selector1, false);
+        assertEquals (selector1, conf.getNaturalSelectors (false).get (0));
+        conf.addNaturalSelector (selector2, true);
+        assertEquals (selector2, conf.getNaturalSelectors (true).get (0));
+        assertEquals (selector1, conf.getNaturalSelectors (false).get (0));
+        try
+        {
+            assertEquals (null, conf.getNaturalSelectors (false).get (1));
+            fail ();
+        }
+        catch (Exception ex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void setFitnessFunction_0 ()
+    {
+        Configuration conf = new Configuration ();
+        try
+        {
+            conf.setFitnessFunction (null);
+            fail ();
+        }
+        catch (InvalidConfigurationException invex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void setBulkFitnessFunction_0 ()
+    {
+        Configuration conf = new Configuration ();
+        try
+        {
+            conf.setBulkFitnessFunction (null);
+            fail ();
+        }
+        catch (InvalidConfigurationException invex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void setBulkFitnessFunction_1 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        conf.setFitnessFunction (new TestFitnessFunction ());
+        try
+        {
+            conf.setBulkFitnessFunction (new TestBulkFitnessFunction ());
+            fail ();
+        }
+        catch (InvalidConfigurationException invex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testGetPopulationSize_0 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        assertEquals (0, conf.getPopulationSize ());
+        final int SIZE = 22;
+        conf.setPopulationSize (SIZE);
+        assertEquals (SIZE, conf.getPopulationSize ());
+    }
+
+    public void testSetPopulationSize_1 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        try
+        {
+            conf.setPopulationSize (0);
+            fail ();
+        }
+        catch (InvalidConfigurationException invex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testLock_0 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        try
+        {
+            conf.lockSettings ();
+            fail ();
+        }
+        catch (InvalidConfigurationException invex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testLock_1 ()
+        throws Exception
+    {
+        Configuration conf = new Configuration ();
+        conf.setFitnessFunction (new TestFitnessFunction ());
+        Gene gene = new BooleanGene ();
+        Chromosome sample = new Chromosome (gene, 55);
+        conf.setSampleChromosome (sample);
+        conf.addNaturalSelector (new WeightedRouletteSelector (), false);
+        conf.setRandomGenerator (new GaussianRandomGenerator ());
+        conf.setEventManager (new EventManager ());
+        conf.addGeneticOperator (new MutationOperator ());
+        conf.setPopulationSize (1);
+        conf.lockSettings ();
+        assertEquals (true, conf.isLocked ());
+        try
+        {
+            conf.verifyChangesAllowed ();
+            fail ();
+        }
+        catch (InvalidConfigurationException invex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testSetSampleChromosome_0() throws Exception {
+        Configuration conf = new Configuration ();
+        Gene gene = new BooleanGene ();
+        Chromosome sample = new Chromosome (gene, 55);
+        try {
+            conf.setSampleChromosome (null);
+            fail();
+        } catch (InvalidConfigurationException invex) {
+            ; //this is OK
+        }
+    }
+    public void testGetChromosomeSize_0() throws Exception {
+        Configuration conf = new Configuration ();
+        Gene gene = new BooleanGene ();
+        final int SIZE = 55;
+        Chromosome sample = new Chromosome (gene, SIZE);
+        conf.setSampleChromosome (sample);
+        assertEquals(SIZE, conf.getChromosomeSize());
     }
 }
+
+class TestFitnessFunction
+    extends FitnessFunction
+{
+    protected int evaluate (Chromosome a_subject)
+    {
+        //result does not matter here
+        return 1;
+    }
+
+}
+
+class TestBulkFitnessFunction
+    extends BulkFitnessFunction
+{
+    public void evaluate (Chromosome[] a_subjects)
+    {
+    }
+
+ }
