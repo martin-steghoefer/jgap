@@ -43,7 +43,6 @@
 package org.jgap;
 
 import java.io.*;
-
 import org.jgap.impl.*;
 
 /**
@@ -63,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -95,6 +94,15 @@ public class Chromosome
    * @since 2.0 (until 1.1: type int)
    */
   protected double m_fitnessValue = -1.0000000d;
+
+  /**
+   * Method compareTo(): Should we also consider the application data when
+   * comparing? Default is "false" as "true" means a Chromosome's losing its
+   * identity when application data is set differently!
+   *
+   * @since 2.2
+   */
+  private boolean m_compareAppData;
 
   /**
    * Constructs a Chromosome of the given size separate from any specific
@@ -323,7 +331,10 @@ public class Chromosome
    * @since 2.0 (until 1.1: return type int)
    */
   public double getFitnessValue() {
-      if (Genotype.getConfiguration() != null) {
+    if (m_fitnessValue >=0.000d) {
+      return m_fitnessValue;
+    }
+    if (Genotype.getConfiguration() != null) {
       FitnessFunction normalFitnessFunction =
           Genotype.getConfiguration().getFitnessFunction();
       if (normalFitnessFunction != null) {
@@ -331,7 +342,7 @@ public class Chromosome
         // fitness value.
         // --------------------------------------------------------------
         m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
-        }
+      }
     }
     return m_fitnessValue;
   }
@@ -348,7 +359,7 @@ public class Chromosome
    * @since 1.0
    */
   public void setFitnessValue(double a_newFitnessValue) {
-    if (a_newFitnessValue > 0) {
+    if (a_newFitnessValue >= 0 && m_fitnessValue != a_newFitnessValue) {
       m_fitnessValue = a_newFitnessValue;
     }
   }
@@ -416,7 +427,8 @@ public class Chromosome
       Chromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {
         Gene[] genes = randomChromosome.getGenes();
-        RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+        RandomGenerator generator = Genotype.getConfiguration().
+            getRandomGenerator();
         for (int i = 0; i < genes.length; i++) {
           genes[i].setToRandomValue(generator);
         }
@@ -542,20 +554,22 @@ public class Chromosome
         return comparison;
       }
     }
-    // Compare application data
-    // ------------------------
-    if (getApplicationData() == null) {
-      if (otherChromosome.getApplicationData() != null) {
-        return -1;
+    if (m_compareAppData) {
+      // Compare application data
+      // ------------------------
+      if (getApplicationData() == null) {
+        if (otherChromosome.getApplicationData() != null) {
+          return -1;
+        }
       }
-    }
-    else if (otherChromosome.getApplicationData() == null) {
-      return 1;
-    }
-    else {
-      if (getApplicationData() instanceof Comparable) {
-        return ( (Comparable) getApplicationData()).compareTo(otherChromosome.
-            getApplicationData());
+      else if (otherChromosome.getApplicationData() == null) {
+        return 1;
+      }
+      else {
+        if (getApplicationData() instanceof Comparable) {
+          return ( (Comparable) getApplicationData()).compareTo(otherChromosome.
+              getApplicationData());
+        }
       }
     }
     // Everything is equal. Return zero.
@@ -601,7 +615,8 @@ public class Chromosome
   public void cleanup() {
     // First, reset our internal state.
     // --------------------------------
-    m_fitnessValue = Genotype.getConfiguration().getFitnessFunction().getNoFitnessValue();
+    m_fitnessValue = Genotype.getConfiguration().getFitnessFunction().
+        getNoFitnessValue();
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool
     // if one has been setup so that we can save a little time and memory
@@ -669,5 +684,29 @@ public class Chromosome
 
   public void setGenes(Gene[] a_genes) {
     m_genes = a_genes;
+  }
+
+  /**
+   * Should we also consider the application data when comparing? Default is
+   * "false" as "true" means a Chromosome is losing its identity when
+   * application data is set differently!
+   *
+   * @param a_doCompare true consider application data in method compareTo
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void setCompareApplicationData(boolean a_doCompare) {
+    m_compareAppData = a_doCompare;
+  }
+
+  /*
+   * @return should we also consider the application data when comparing?
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public boolean isCompareApplicationData() {
+    return m_compareAppData;
   }
 }
