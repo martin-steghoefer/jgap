@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -248,12 +248,12 @@ public class Chromosome
    * will be constructed and its value set appropriately before returning.
    *
    * @return A copy of this Chromosome.
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
   public synchronized Object clone() {
-    /**@todo what about the application data?*/
 
     // Before doing anything, make sure that a Configuration object
     // has been set on this Chromosome. If not, then throw an
@@ -358,7 +358,7 @@ public class Chromosome
    * first gene is at index zero and the last gene is at the index equal to
    * the size of this Chromosome - 1.
    *
-   * @param a_desiredLocus: The index of the gene value to be returned.
+   * @param a_desiredLocus The index of the gene value to be returned.
    * @return The Gene at the given index.
    *
    * @author Neil Rotstan
@@ -462,6 +462,7 @@ public class Chromosome
    * @return A string representation of this Chromosome.
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public String toString() {
@@ -488,7 +489,7 @@ public class Chromosome
    * be constructed and its gene values randomized before returning it.
    *
    * @param a_activeConfiguration The current active configuration.
-   *
+   * @return randomly initialized Chromosome
    * @throws InvalidConfigurationException if the given Configuration
    *         instance is invalid.
    * @throws IllegalArgumentException if the given Configuration instance
