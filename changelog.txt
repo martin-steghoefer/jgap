@@ -1,3 +1,11 @@
+2.2
+----------
+* Fixed bug with BulkFitnessFunction in Genotype.evolve
+* Removed variable m_workingPool in class Genotype
+* Introduced generation number in class Configuration.
+  It is incremented automatically in Genotype.evolve()
+
+
 2.1
 ----------
 * Extended JGAP documentation heavily (also see JGAP homepage at
@@ -75,8 +83,8 @@
 
 1.1
 ----------
-* Changed return type of fitness value from int to double, see request
-  783997 
+* Changed return type of fitness value from int to double, see
+  request 783997 
 * Implemented feature request 708774 (averaging crossover)
 * Implemented feature request 710497 (attach application data)
 * Added support for more than one NaturalSelector
@@ -86,13 +94,13 @@
 * Did minor changes across all packages.
 * Implemented feature requests 708772, 708781
 * Added unit tests
-* Fixed a bug in the BestChromosomesSelector and WeightedRouletteSelector
-  classes
+* Fixed a bug in the BestChromosomesSelector and
+  WeightedRouletteSelector classes
 
 1.0
 ----------
-* A RuntimeException is now thrown if a fitness function attempts to
-  return a non-positive fitness value
+* A RuntimeException is now thrown if a fitness function attempts
+  to return a non-positive fitness value
 * Fixed a bug in the WeightedRouletteSelector that, under certain
   circumstances, resulted in a fatal "logic error" exception
 * Updated the sample fitness function to ensure that it never
@@ -103,11 +111,12 @@
 1.0-RC2
 ----------
 * Added new BulkFitnessFunction class, which can be used to create
-  fitness functions that evaluate an entire working pool of chromosomes
-  all at once
-* Fixed hashCode() in Chromosome class so that it is no longer dependent
-  on the fitness function
-* Java serialization of Genotypes and Chromosomes is now working properly
+  fitness functions that evaluate an entire working pool of
+  chromosomes all at once
+* Fixed hashCode() in Chromosome class so that it is no longer
+  dependent on the fitness function
+* Java serialization of Genotypes and Chromosomes is now
+  working properly
 * Added a FAQ document
 * Updated various documentation
 * Updated the README file
@@ -115,13 +124,13 @@
 
 1.0-RC1
 ----------
-* Added new document on using the XMLManager to marshall populations
-  into XML representations that can be used for persistence, transmission,
-  etc
-* Renamed Allele class to Gene class and updated all of the source files
-  accordingly to fix source and documentation
-* Renamed Gene.setValue() and Gene.getValue() methods to Gene.setAllele()
-  and Gene.getAllele(), respectively
+* Added new document on using the XMLManager to
+  marshall populations into XML representations that can be
+  used for persistence, transmission, etc.
+* Renamed Allele class to Gene class and updated all of the
+  source files accordingly to fix source and documentation
+* Renamed Gene.setValue() and Gene.getValue() methods to
+  Gene.setAllele() and Gene.getAllele(), respectively
 * Renamed IntegerAllele to IntegerGene, BooleanAllele to BooleanGene,
   and AlleleCreationException to GeneCreationException
 * Removed the MakeChange.java and MakeChangeFitnessFunction.java files
@@ -140,10 +149,11 @@
 
 0.32
 ----------
-* Added new document on creating custom Alleles in the docs/ subdirectory
-* Modified WeightedRouletteSelector to represent the "wheel" as an array
-  just prior to selection of Chromosomes in order to increase iteration 
-  speed
+* Added new document on creating custom Alleles in the
+  "docs" subdirectory
+* Modified WeightedRouletteSelector to represent the "wheel"
+  as an array just prior to selection of Chromosomes in order
+  to increase iteration speed
 * Modified ReproductionOperator to simply add the Chromosomes from the 
   population directly into the pool of candidate chromosomes, rather than
   making a copy of each one and adding the copy, in order to increase speed
