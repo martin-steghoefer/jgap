@@ -19,19 +19,25 @@
  */
 package org.jgap.impl;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Vector;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 /**
  * Tests for Pool class
+ *
+ * @since 1.1
+ * @author Klaus Meffert
  */
 public class PoolTest
     extends TestCase
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     public PoolTest ()
     {
@@ -45,31 +51,59 @@ public class PoolTest
 
     public void testConstruct_0 ()
     {
-        /**@todo implement*/
+        Pool pool = new Pool ();
     }
 
     public void testClear_0 ()
     {
         /**@todo implement*/
+        Pool pool = new Pool ();
+        assertEquals (0, pool.size ());
+        pool.clear ();
+        assertEquals (0, pool.size ());
+        pool.releaseObject (new Object ());
+        assertEquals (1, pool.size ());
+        pool.releaseObject (new Object ());
+        assertEquals (2, pool.size ());
+        pool.clear ();
+        assertEquals (0, pool.size ());
     }
 
     public void testAcquirePooledObject_0 ()
     {
-        /**@todo implement*/
+        Pool pool = new Pool ();
+        assertEquals (null, pool.acquirePooledObject ());
+        Vector obj = new Vector();
+        pool.releaseObject(obj);
+        assertEquals(1, pool.size());
+        Object obj2 = pool.acquirePooledObject();
+        assertEquals(obj, obj2);
+        assertEquals(0, pool.size());
     }
 
     public void testReleaseAllObjects_0 ()
     {
-        /**@todo implement*/
+        Pool pool = new Pool ();
+        pool.releaseAllObjects(null);
+        assertEquals(0, pool.size());
     }
 
-    public void testReleaseObject_0 ()
+    public void testReleaseAllObjects_1 ()
     {
-        /**@todo implement*/
+        Pool pool = new Pool ();
+        Collection coll = new Vector();
+        coll.add(new HashMap());
+        coll.add(new Vector());
+        pool.releaseAllObjects(coll);
+        assertEquals(2, pool.size());
+        coll.add(new Object());
+        pool.releaseAllObjects(coll);
+        assertEquals(5, pool.size());
     }
 
     public void testSize_0 ()
     {
-        /**@todo implement*/
+        Pool pool = new Pool ();
+        assertEquals (0, pool.size ());
     }
 }
