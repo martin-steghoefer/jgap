@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -219,8 +219,7 @@ public class Chromosome
    * @since 1.0
    */
   public void setActiveConfiguration(Configuration a_activeConfiguration)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     // Only assign the given Configuration object if we don't already
     // have one.
     // --------------------------------------------------------------
