@@ -51,7 +51,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private int m_minLength;
 
@@ -500,15 +500,6 @@ public class StringGene
     //check if a substring is equal to the PERSISTENT_FIELD_DELIMITER
     //which is not allowed currently
     //---------------------------------------------------------------
-    /** @todo blocked by audrius. */
-    if (false)
-    if (containsString(a_alphabet, PERSISTENT_FIELD_DELIMITER)) {
-      throw new IllegalArgumentException(
-          "The alphabet may not contain a "
-          + "substring equal to the persistent field delimiter (which is "
-          + PERSISTENT_FIELD_DELIMITER
-          + " currently).");
-    }
     /**@todo optionally check if alphabet contains doublettes*/
     this.m_alphabet = a_alphabet;
   }
