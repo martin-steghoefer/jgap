@@ -53,6 +53,6 @@ public interface FitnessFunction extends java.io.Serializable {
    *
    * @return The fitness rating of the given Chromosome.
    */
-  public long evaluate(Chromosome subject);
+  public int evaluate(Chromosome subject);
 } 
  

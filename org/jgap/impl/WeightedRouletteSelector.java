@@ -67,7 +67,7 @@ public class WeightedRouletteSelector implements NaturalSelector {
 
     Arrays.sort(selectedIndices);
 
-    Iterator iterator = population.keySet().iterator();
+    Iterator iterator = population.entrySet().iterator();
     int currentSelection = 0;
     int currentIndex = 0;
     long currentCount = 0;
@@ -75,9 +75,10 @@ public class WeightedRouletteSelector implements NaturalSelector {
     Chromosome currentChromosome;
  
     while(iterator.hasNext() && currentIndex < selectedIndices.length) {
-      currentChromosome = (Chromosome) iterator.next();
+      Map.Entry chromosomeEntry = (Map.Entry) iterator.next(); 
+      currentChromosome = (Chromosome) chromosomeEntry.getKey();
 
-      currentCount += ((Counter) population.get(currentChromosome)).getCount();
+      currentCount += ((Counter) chromosomeEntry.getValue()).getCount();
 
       while(currentIndex < selectedIndices.length &&
             currentCount >= selectedIndices[currentIndex]) {
