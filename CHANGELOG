@@ -1,4 +1,4 @@
-0.1.1 (in progress)
+0.2
 -----------
 * Added this CHANGELOG file
 * Added a TODO file
@@ -10,9 +10,13 @@
   the random number generator.
 * Created an org.jgap.impl package where stock implementations of
   JGAP interfaces, such as genetic operators and natural selectors,
-  are now stored
+  are now stored.
+* Changed FitnessFunction interface to represent fitness value with
+  an unsigned long instead of an int.
+* Updated Ant build script.
 * Fixed bug wherein BitSet.length() was occasionally being used instead
   of Chromosome.size(), resulting in less desirable behavior.
+* Fixed memory leak in Genotype.
 * Made thread-safe.
 * Updated the brace and indentation style.
 * Updated README file

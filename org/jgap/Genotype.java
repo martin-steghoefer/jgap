@@ -155,7 +155,7 @@ public class Genotype implements java.io.Serializable {
    *
    * @return A string representation of this Genotype instance.
    */
-  public synchronized String toString() {
+  public String toString() {
     StringBuffer buffer = new StringBuffer();
 
     for(int i = 0; i < chromosomes.length; i++) {
@@ -168,6 +168,7 @@ public class Genotype implements java.io.Serializable {
 
     return buffer.toString();
   }
+
 
   /**
    * Convenience method that returns a newly constructed Genotype

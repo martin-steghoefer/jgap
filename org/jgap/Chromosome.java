@@ -147,7 +147,7 @@ public class Chromosome implements Cloneable, java.io.Serializable {
    *
    * @return A string representation of this Chromosome.
    */
-  public synchronized String toString() {
+  public String toString() {
     return genes.toString();
   }
 
