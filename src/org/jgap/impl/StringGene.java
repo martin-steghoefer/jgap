@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private int m_minLength;
 
@@ -59,7 +59,7 @@ public class StringGene
   /**
    * References the internal String value (allele) of this Gene.
    */
-  protected String m_value = null;
+  private String m_value;
 
   private void init() {
     rn = new Random();
