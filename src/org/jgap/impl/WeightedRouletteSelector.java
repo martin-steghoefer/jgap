@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -308,7 +308,7 @@ public class WeightedRouletteSelector
     // Now divide the total fitness by the largest fitness value to
     // compute the scaling factor.
     // ------------------------------------------------------------
-    if (largestFitnessValue > 0.000000d) {
+    if (largestFitnessValue > 0.000000d && totalFitness.floatValue() > 0.0000001d) {
       double scalingFactor =
           totalFitness.divide(new BigDecimal(largestFitnessValue),
                               BigDecimal.ROUND_HALF_UP).doubleValue();
