@@ -33,7 +33,7 @@ public class AllImplTests
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.9 $";
+    private final static String CVS_REVISION = "$Revision: 1.10 $";
 
     public AllImplTests ()
     {
@@ -43,22 +43,23 @@ public class AllImplTests
     public static Test suite ()
     {
         TestSuite suite = new TestSuite ();
-        suite.addTest (NumberGeneTest.suite ());
-        suite.addTest (IntegerGeneTest.suite ());
-        suite.addTest (DoubleGeneTest.suite ());
-        suite.addTest (StringGeneTest.suite ());
-        suite.addTest (CompositeGeneTest.suite ());
-        suite.addTest (BooleanGeneTest.suite ());
-        suite.addTest (MutationOperatorTest.suite ());
-        suite.addTest (DefaultMutationRateCalculatorTest.suite ());
-        suite.addTest (GaussianRandomGeneratorTest.suite ());
-        suite.addTest (CauchyRandomGeneratorTest.suite ());
-        suite.addTest (CrossoverOperatorTest.suite ());
-        suite.addTest (ReproductionOperatorTest.suite ());
-        suite.addTest (DefaultConfigurationTest.suite ());
-        suite.addTest (PoolTest.suite ());
-        suite.addTest (WeightedRouletteSelectorTest.suite ());
         suite.addTest (BestChromosomesSelectorTest.suite ());
+        suite.addTest (BooleanGeneTest.suite ());
+        suite.addTest (CauchyRandomGeneratorTest.suite ());
+        suite.addTest (ChainOfSelectorsTest.suite ());
+        suite.addTest (CompositeGeneTest.suite ());
+        suite.addTest (CrossoverOperatorTest.suite ());
+        suite.addTest (DefaultConfigurationTest.suite ());
+        suite.addTest (DefaultMutationRateCalculatorTest.suite ());
+        suite.addTest (DoubleGeneTest.suite ());
+        suite.addTest (GaussianRandomGeneratorTest.suite ());
+        suite.addTest (IntegerGeneTest.suite ());
+        suite.addTest (MutationOperatorTest.suite ());
+        suite.addTest (NumberGeneTest.suite ());
+        suite.addTest (ReproductionOperatorTest.suite ());
+        suite.addTest (PoolTest.suite ());
+        suite.addTest (StringGeneTest.suite ());
+        suite.addTest (WeightedRouletteSelectorTest.suite ());
         return suite;
     }
 
