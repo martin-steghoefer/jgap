@@ -9,8 +9,6 @@
  */
 package org.jgap.impl;
 
-import java.util.*;
-
 import org.jgap.*;
 
 import junit.framework.*;
@@ -25,7 +23,7 @@ public class FittestPopulationMergerTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public FittestPopulationMergerTest() {
   }
