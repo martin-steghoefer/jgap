@@ -30,7 +30,7 @@ import junitx.util.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public PopulationTest() {
   }
@@ -39,11 +39,48 @@ public class PopulationTest extends TestCase {
     TestSuite suite = new TestSuite(PopulationTest.class);
     return suite;
   }
-
+  
   public void testConstruct_0() {
-    /**@todo implement*/
+      try
+      {
+        Population pop = new Population(null);
+        fail();
+      }
+      catch (NullPointerException e)
+      {
+          //this is OK        
+          return;
+      }
+      //any other exception we fail
+      fail();
   }
 
-  /**@todo add further tests*/
+  public void testConstruct_1() {
+      try
+      {
+        Population pop = new Population(-1);    
+      }
+      catch (IllegalArgumentException iae)
+      {
+          //this is ok
+          return;
+      }
+      //any other exception we fail
+      fail();
+  }
+  
+  public void testConstruct_2() {
+      Population pop = new Population();    
+      this.assertNotNull(pop);
+  }
+  
+  public void testConstruct_3() {
+      int nTot = 100;
+      Chromosome[] chromosomes = new Chromosome[nTot];
+      Population pop = new Population(chromosomes);
+      assertNotNull(pop);
 
+      //check size is correct
+      assertEquals(pop.size(), nTot);
+  }
 }
