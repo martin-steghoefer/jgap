@@ -42,7 +42,7 @@
       ReproductionOperator:
     </p>
 
-<pre>
+<pre class="code">
 <tt>
 <b><font color=#000080>package</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>impl</font><font color=#000000>;</font>
 
@@ -128,7 +128,7 @@
       during your normal setup phase:
     </p>
     
-<pre>
+<pre class="code">
 <tt>
               <font color=#000000>Configuration</font> <font color=#000000>conf</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>DefaultConfiguration</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
               <font color=#000000>conf</font><font color=#000000>.</font><font color=#000000>addGeneticOperator</font><font color=#000000>(</font> <b><font color=#000080>new</font></b> <font color=#000000>ReproductionOperator</font><font color=#000000>(</font><font color=#000000>)</font> <font color=#000000>)</font><font color=#000000>;</font>
@@ -144,7 +144,7 @@
       implementation, or place your genetic operator in "front" of an
       existing operator, you won't be able to rely on the DefaultConfiguration
       convenience class, since it automatically adds all of the stock genetic
-      operators. Intead, you'll need to setup your Configuration from scratch,
+      operators. Instead, you'll need to setup your Configuration from scratch,
       which isn't all that daunting a task. Just have a look at the 
       DefaultConfiguration class to see what it does. If you're just adding
       new genetic operators (and not replacing existing ones) and are content

@@ -79,7 +79,7 @@
 
 <!-- What follows is the source-highlighted code -->
 
-<pre>
+<pre class="code">
 <tt>
 <b><font color=#000080>package</font></b> <font color=#000000>hypothetical</font><font color=#000000>.</font><font color=#000000>examples</font><font color=#000000>;</font>
 
@@ -352,7 +352,8 @@
 <i><font color=#808080>     */</font></i>
     <b><font color=#000080>public</font></b> <b><font color=#000080>boolean</font></b> <font color=#000000>equals</font><font color=#000000>(</font> <font color=#000000>Object</font> <font color=#000000>otherQuarterGene</font> <font color=#000000>)</font>
     <font color=#000000>{</font>
-        <b><font color=#000080>return</font></b> <font color=#000000>compareTo</font><font color=#000000>(</font> <font color=#000000>otherQuarterGene</font> <font color=#000000>)</font> <font color=#000000>=</font><font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font>
+        <b><font color=#000080>return</font></b> <font color=#000000>otherQuarterGene</font> <b><font color=#000080>instanceof</font></b> <font color=#000000>QuarterGene && </font>
+               <font color=#000000>compareTo</font><font color=#000000>(</font> <font color=#000000>otherQuarterGene</font> <font color=#000000>)</font> <font color=#000000>=</font><font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font>
     <font color=#000000>}</font>
 <font color=#000000>}</font>
 

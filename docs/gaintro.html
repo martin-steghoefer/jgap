@@ -19,7 +19,7 @@
       of potential solutions which then evolves toward a set of more optimal
       solutions. Within the sample set, solutions that are poor tend
       to die out while better solutions mate and propegate their
-      advantageous traits, thus introducing a larger number of
+      advantageous traits, thus introducing more
       solutions into the set that boast greater potential (the total
       set size remains constant; for each new solution added, an old
       one is removed). A little random mutation helps guarantee
@@ -40,7 +40,7 @@
 
     <p>
       However, in order for genetic algorithms to work effectively,
-      two criteria must be met:
+      a few criteria must be met:
 
       <ul>
         <li>
@@ -53,6 +53,12 @@
           It must be possible to break a potential solution into
           discrete parts that can vary independently. These parts
           become the "genes" in the genetic algorithm.
+        </li>
+
+        <li>
+          Finally, genetic algorithms are best suited for situations
+          where a "good" answer will suffice, even if it's not the
+          absolute best answer.
         </li>
       </ul>
     </p>
@@ -96,11 +102,11 @@
       The fitness values are then used in a process of natural selection
       to choose which potential solutions will continue on to the next
       generation, and which will die out. It should be noted, however,
-      that natural selection process does not merely choose the top X
-      number of solutions; the solutions are chosen statistically such
-      that it is more likely a solution with a higher fitness value will
-      be chosen, but it is not guaranteed. This tends to correspond to
-      the natural world.
+      that natural selection process does not merely choose the top <i>x</i> 
+      number of solutions; the solutions are instead chosen statistically
+      such that it is more likely that a solution with a higher fitness value
+      will be chosen, but it is not guaranteed. This tends to correspond
+      to the natural world.
     </p>
 
     <p>
@@ -111,14 +117,14 @@
       spun and the solution on which it stops is selected. Statistically
       speaking, solutions with a higher fitness value will have a greater
       chance of being selected since they occupy more slots on the wheel,
-      but selection is not guaranteed.
+      but even solutions with just a single slot still have a chance.
     </p>
 
     <p>
       The above metaphor can also be useful for illustrating an additional
       point: relative fitness is measured as a <em>percentage</em>, not an
-      absolute value. As a result, a chromosome with a fitness value of 255
-      has only about 0.4% chance of being selected over a chromosome with a
+      absolute value. As a result, a solution with a fitness value of 255
+      has only about 0.4% chance of being selected over a solution with a
       fitness of 254. At higher fitness values, this problem is even
       more exaggerated. In order to keep your evolving solutions from
       stagnating at some point, it's important to implement your fitness

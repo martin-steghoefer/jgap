@@ -28,9 +28,8 @@
     <p>
       Through the course of this tutorial, we'll build a simple example
       program that makes use of JGAP. The goal of our program will be to
-      produce an amount of change in the fewest possible American coins 
-      (quarters, dimes, nickels, and pennies) equal to a target amount 
-      provided by the user.
+      produce a user-specified amount of change in the fewest possible 
+      American coins (quarters, dimes, nickels, and pennies).
     </p>
 
     <a name="step1">
@@ -44,24 +43,23 @@
       of individual people, such as their sex or eye color. During the
       JGAP evolution process, chromosomes are exposed to multiple genetic
       operators that represent mating, mutation, etc. and then are chosen
-      during a natural selection phase based upon their "fitness," which
-      is a measure of how optimal that solution is relative to other
-      potential solutions. The entire goal of the genetic algorithm is
-      to mimic the natural process of evolution in order to produce
-      superior solutions.
+      for the next generation during a natural selection phase based upon
+      their "fitness," which is a measure of how optimal that solution is
+      relative to other potential solutions. The entire goal of the genetic
+      algorithm is to mimic the natural process of evolution in order to
+      produce superior solutions.
     </p>
      
     <p> 
       Step 1, therefore, is to decide on the makeup of your chromosomes,
       which includes how many genes you want and what those genes will
       represent. In our sample program, we want to create a pile
-      of change that contains the fewst possible American coins that total
-      up to a target amount specified by the user. Since a Chromosome 
+      of change that contains the fewest possible American coins that total
+      up to the amount specified by the user. Since a chromosome 
       represents a potential solution, in our sample it will represent a 
       pile of change. We'll setup our genes to represent the different 
-      denominations of coins, so we'll have a total of four genes per 
-      Chromosome (one for quarters, one for dimes, one for nickels, and one
-      for pennies).
+      denominations of coins so that we'll have a total of four genes per 
+      chromosome (one each for quarters, dimes, nickels, and pennies). 
     </p>     
 
     <center> 
@@ -71,7 +69,7 @@
     </center>
 
     <p> 
-      We'll actually write the code to setup our Chromosomes in 
+      We'll actually write the code to setup our Chromosome objects in 
       <a href="#step3">step 3</a>.
     </p>
 
@@ -90,7 +88,7 @@
       solution and returns an integer value that indicates how good 
       (or "fit") that solution is relative to other possible solutions.
       The higher the number, the better the solution. The lower the 
-      number (one being the lowest legal fitness value), the poorer the
+      number (1 being the lowest legal fitness value), the poorer the
       solution. JGAP will use these fitness measurements to evolve the 
       population of solutions toward a more optimal set of solutions.
     </p>
@@ -104,13 +102,13 @@
       for a particular solution would be a combination of the relative
       closeness of the amount of change it represented to the target 
       amount of change, and the total number of coins represented by
-      the solution.
+      the solution (fewer being better).
     </p>
 
     <p>
 
 
-<pre>
+<pre class="code">
 <tt>
 <b><font color=#000080>package</font></b> <font color=#000000>examples</font><font color=#000000>;</font>
 
@@ -316,7 +314,7 @@
       stages. The first stage calculates an initial fitness value based on
       how far away the solution amount is from the target amount. Then, if
       the solution amount happens to equal the target amount, we go to stage
-      2, which adjusts the fitness value based upon the total number of
+      two, which adjusts the fitness value based upon the total number of
       coins represented by the solution. In the end, we want to return high
       fitness values for solutions that match the target amount with very
       few coins, and return lower fitness values for solutions that are far
@@ -326,8 +324,8 @@
     <p> 
       Moving beyond the evaluate() method, we encounter those helper methods
       we mentioned earlier. The amountOfChange() method calculates the total
-      amount of change (in cents) represented by a chromosome that is passed
-      to it. Internally, it defers the getNumberOfCoinsAtGene() method to 
+      amount of change (in cents) represented by a Chromosome that is passed
+      to it. Internally, it defers to the getNumberOfCoinsAtGene() method to 
       actually extract the number of each type of coin. It then calculates
       the total amount of change and returns it.
     </p>
@@ -335,9 +333,9 @@
     <p>
       The next convenience method, getNumberOfCoinsAtGene(), is responsible
       for determining the number of coins represented by a specific gene in
-      the given chromosome. As mentioned earlier, the value of each
+      the given Chromosome. As mentioned earlier, the value of each
       gene in the Chromosome is called an allele. This method gets
-      the allele for the gene at the provided position in the chromosome
+      the allele for the gene at the provided position in the Chromosome
       and then returns it as an int primitive. 
     </p>
     
@@ -376,7 +374,7 @@
 
     <p>
 
-<pre>
+<pre class="code">
 <tt>
 <i><font color=#808080>// Start with a DefaultConfiguration, which comes setup with the</font></i>
 <i><font color=#808080>// most common settings.</font></i>
@@ -444,7 +442,7 @@
       could have actually written a separate Gene class for each
       coin type in our example, such as a QuarterGene, DimeGene, NickelGene,
       and PennyGene. In fact, we look at what a QuarterGene might look like
-      in the Creating Custom Genes document mentioned above.
+      in the <i>Creating Custom Genes</i> document that we just mentioned.
     </p>
 
     <p>
@@ -488,14 +486,14 @@
       class we need to construct to create our population. If you want, you
       can construct each Chromosome individually and then pass them all into
       a new Genotype (much like we constructed each Gene and passed them
-      into the Chromosome in step 2), but JGAP provides a much quicker and
-      easier way of creating a random population. In fact, it only takes one
-      line of code!
+      into the sample Chromosome in step 3), but JGAP provides a much quicker
+      and easier way of creating a random population. In fact, it only takes
+      one line of code!
     </p>
 
     <p>
 
-<pre>
+<pre class="code">
 <tt>
 <font color=#000000>Genotype</font> <font color=#000000>population</font> <font color=#000000>=</font> <font color=#000000>Genotype</font><font color=#000000>.</font><font color=#000000>randomInitialGenotype</font><font color=#000000>(</font> <font color=#000000>conf</font> <font color=#000000>)</font><font color=#000000>;</font>
 
@@ -506,7 +504,7 @@
 
     <p>
       The randomInitialGenotype() method takes in a Configuration object
-      (which we setup in step 2) and returns a Genotype with the correct
+      (which we setup in step 3) and returns a Genotype with the correct
       number of Chromosomes, each of which has its genes set to random
       values. In other words, it generates a random population. For most
       applications, this is all that's necessary to create your initial
@@ -526,7 +524,7 @@
 
     <p>
 
-<pre>
+<pre class="code">
 <tt>
 <font color=#000000>population</font><font color=#000000>.</font><font color=#000000>evolve</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
 
@@ -543,7 +541,7 @@
     </p>
 
     <p>
-<pre>
+<pre class="code">
 <tt>
 <font color=#000000>Chromosome</font> <font color=#000000>bestSolutionSoFar</font> <font color=#000000>=</font> <font color=#000000>population</font><font color=#000000>.</font><font color=#000000>getFittestChromosome</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
 
@@ -561,7 +559,7 @@
     </p>
 
     <p>
-<pre>
+<pre class="code">
 <tt>
 <font color=#000000>Chromosome</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>;</font>
 
@@ -573,26 +571,26 @@
 <font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font> <b><font color=#009900>"The best solution contained the following: "</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
 <font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
-    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>0</font> <font color=#000000>)</font> <font color=#000000>+</font>
-    <b><font color=#009900>" quarters."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font>
+        <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>0</font> <font color=#000000>)</font> <font color=#000000>+</font> <b><font color=#009900>" quarters."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
 <font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
-    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>1</font> <font color=#000000>)</font> <font color=#000000>+</font>
-    <b><font color=#009900>" dimes."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font>
+        <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>1</font> <font color=#000000>)</font> <font color=#000000>+</font> <b><font color=#009900>" dimes."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
 <font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
-    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>2</font> <font color=#000000>)</font> <font color=#000000>+</font>
-    <b><font color=#009900>" nickels."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font>
+        <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>2</font> <font color=#000000>)</font> <font color=#000000>+</font> <b><font color=#009900>" nickels."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
 <font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
-    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>3</font> <font color=#000000>)</font> <font color=#000000>+</font>
-    <b><font color=#009900>" pennies."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font>
+        <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>3</font> <font color=#000000>)</font> <font color=#000000>+</font> <b><font color=#009900>" pennies."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
 <font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font> <b><font color=#009900>"For a total of "</font></b> <font color=#000000>+</font>
-    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>amountOfChange</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font> <font color=#000000>)</font> <font color=#000000>+</font>
-    <b><font color=#009900>" cents in "</font></b> <font color=#000000>+</font>
-    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getTotalNumberOfCoins</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font> <font color=#000000>)</font> <font color=#000000>+</font>
-    <b><font color=#009900>" coins."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>amountOfChange</font><font color=#000000>(</font>
+        <font color=#000000>bestSolutionSoFar</font> <font color=#000000>)</font> <font color=#000000>+</font> <b><font color=#009900>" cents in "</font></b> <font color=#000000>+</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getTotalNumberOfCoins</font><font color=#000000>(</font>
+        <font color=#000000>bestSolutionSoFar</font> <font color=#000000>)</font> <font color=#000000>+</font> <b><font color=#009900>" coins."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
 </tt>
 </pre>
