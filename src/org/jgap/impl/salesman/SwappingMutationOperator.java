@@ -18,17 +18,19 @@
 
 package org.jgap.impl.salesman;
 
-import org.jgap.impl.MutationOperator;
 import org.jgap.IUniversalRateCalculator;
 import org.jgap.Population;
 import org.jgap.RandomGenerator;
 import org.jgap.Chromosome;
 import org.jgap.Genotype;
 import org.jgap.Gene;
-import java.util.List;
+
+import org.jgap.impl.MutationOperator;
 import org.jgap.impl.IntegerGene;
-import java.util.StringTokenizer;
 import org.jgap.impl.StockRandomGenerator;
+
+import java.util.StringTokenizer;
+import java.util.List;
 
 /**
  * Swaps the genes instead of mutating them. This kind of operator is

@@ -21,17 +21,19 @@ import org.jgap.Gene;
 import org.jgap.impl.NumberGene;
 import org.jgap.impl.IntegerGene;
 import org.jgap.Population;
-import java.util.List;
 import org.jgap.RandomGenerator;
 import org.jgap.Genotype;
 import org.jgap.Chromosome;
+import org.jgap.GeneticOperator;
+import org.jgap.impl.StockRandomGenerator;
+
+import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeSet;
 import java.util.StringTokenizer;
-import org.jgap.impl.StockRandomGenerator;
 import java.util.Iterator;
-import org.jgap.GeneticOperator;
+
 
 /**
  * Greedy crossover can be best explained in the terms of the
