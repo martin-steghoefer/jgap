@@ -28,14 +28,14 @@ package org.jgap;
  * Chromosomes given in an array and set their fitness values prior
  * to returning.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public abstract class BulkFitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Calculates and sets the fitness values on each of the given

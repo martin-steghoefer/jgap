@@ -31,7 +31,7 @@ public class DefaultFitnessEvaluator implements FitnessEvaluator
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public DefaultFitnessEvaluator()
     {
@@ -45,8 +45,9 @@ public class DefaultFitnessEvaluator implements FitnessEvaluator
      * @return true: first fitness value greater than second
      *
      * @since 1.1
+     * @since 2.0 (until 1.1: input types int)
      */
-    public boolean isFitter(int a_fitness_value1, int a_fitness_value2) {
+    public boolean isFitter(double a_fitness_value1, double a_fitness_value2) {
         return a_fitness_value1 > a_fitness_value2;
     }
 

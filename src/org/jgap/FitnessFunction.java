@@ -40,23 +40,24 @@ public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Retrieves the fitness value of the given Chromosome. The fitness
-   * value will be a positive integer.
+   * value will be a positive double.
    *
    * @param a_subject the Chromosome for which to compute and return the
    *                  fitness value.
    * @return the fitness value of the given Chromosome.
+   * @since 2.0 (until 1.1: return type int)
    */
-  public final int getFitnessValue(Chromosome a_subject) {
+  public final double getFitnessValue(Chromosome a_subject) {
     // Delegate to the evaluate() method to actually compute the
     // fitness value. If the returned value is less than one,
     // then we throw a runtime exception.
     // ---------------------------------------------------------
-    int fitnessValue = evaluate(a_subject);
-    if (fitnessValue < 1) {
+    double fitnessValue = evaluate(a_subject);
+    if (fitnessValue < 1.00000000d) {
       throw new RuntimeException(
           "Fitness values must be positive! Received value: " +
           fitnessValue);
@@ -71,9 +72,12 @@ public abstract class FitnessFunction
    *
    * @param a_subject: The Chromosome instance to evaluate.
    *
-   * @return A positive integer reflecting the fitness rating of the given
-   *         Chromosome. Note that if a non-positive integer is returned,
-   *         a RuntimeException will be generated.
+   * @return A positive double reflecting the fitness rating of the given
+   *         Chromosome. Note that if a non-positive double is returned,
+   *         a RuntimeException should be generated.
+   * @since 2.0 (until 1.1: return type int)
    */
-  protected abstract int evaluate(Chromosome a_subject);
+  protected abstract double evaluate(Chromosome a_subject);
+
+
 }

@@ -205,18 +205,13 @@ public class Genotype
       return null;
     }
     // Set the best fitness value to that of the first chromosome.
-
     // Then loop over the rest of the chromosomes and see if any has
-
     // a better fitness value.
-
     // The decision whether a fitness value if better than another is
-
     // delegated to a FitnessEvaluator
-
     // --------------------------------------------------------------
     Chromosome fittestChromosome = m_chromosomes[0];
-    int fittestValue = fittestChromosome.getFitnessValue();
+    double fittestValue = fittestChromosome.getFitnessValue();
     for (int i = 1; i < m_chromosomes.length; i++) {
       if (m_fitnessEvaluator.isFitter(m_chromosomes[i].getFitnessValue(),
                                       fittestValue)) {
@@ -331,6 +326,7 @@ public class Genotype
    *                             before returning.
    */
   public void evolve(int a_numberOfEvolutions) {
+    //done as given by request 708781
     for (int i = 0; i < a_numberOfEvolutions; i++) {
       evolve();
     }

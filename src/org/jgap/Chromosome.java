@@ -31,11 +31,15 @@ import org.jgap.impl.ChromosomePool;
  * in a chromosome must share the same concrete implementation as gene 1 in all
  * other chromosomes in the population.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
   /**
    * The current active genetic configuration.
    */
@@ -61,8 +65,10 @@ public class Chromosome
    * active fitness function. A value of -1 indicates that this field
    * has not yet been set with this Chromosome's fitness values (valid
    * fitness values are always positive).
+   *
+   * @since 2.0 (until 1.1: type int)
    */
-  protected int m_fitnessValue = -1;
+  protected double m_fitnessValue = -1.00000d;
   /**
    * Stores the hash-code of this Chromosome so that it doesn't need
    * to be recalculated each time.
@@ -317,7 +323,7 @@ public class Chromosome
    *         Chromosome, or -1 if a bulk fitness function is in use and has
    *         not yet assigned a fitness value to this Chromosome.
    */
-  public int getFitnessValue() {
+  public double getFitnessValue() {
     if (m_fitnessValue < 0) {
       // We don't have a fitness value yet. We'll see if there's a
       // "normal" fitness function configured (as opposed to a bulk

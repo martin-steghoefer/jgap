@@ -28,7 +28,7 @@ package org.jgap;
  */
 public interface FitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -36,7 +36,7 @@ public interface FitnessEvaluator {
    * @param a_fitness_value1 first fitness value
    * @param a_fitness_value2 second fitness value
    * @return true: first fitness value greater than second
-   * @since 1.1
+   * @since 2.0 (until 1.1: input types int)
    */
-  boolean isFitter(int a_fitness_value1, int a_fitness_value2);
+  boolean isFitter(double a_fitness_value1, double a_fitness_value2);
 }
