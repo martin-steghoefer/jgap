@@ -63,7 +63,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -498,8 +498,8 @@ public class Chromosome
     int geneHashcode;
     int hashCode = 1;
     for (int i = 0; i < m_genes.length; i++) {
-        geneHashcode = m_genes[i].hashCode();
-        hashCode = 31*hashCode + geneHashcode;
+      geneHashcode = m_genes[i].hashCode();
+      hashCode = 31 * hashCode + geneHashcode;
     }
     return hashCode;
   }
