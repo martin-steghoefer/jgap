@@ -18,13 +18,9 @@
 
 package org.jgap.impl;
 
-import java.util.List;
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.GeneticOperator;
-import org.jgap.MutationRateCalculator;
-import org.jgap.RandomGenerator;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * The mutation operator runs through the genes in each of the Chromosomes
@@ -45,6 +41,9 @@ import org.jgap.RandomGenerator;
 public class MutationOperator
     implements GeneticOperator {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
   /**
    * The current mutation rate used by this MutationOperator, expressed as
    * the denominator in the 1 / X ratio. For example, a value of 1000 would
@@ -56,9 +55,9 @@ public class MutationOperator
    * Calculator for dynamically determining the mutation rate. If set to
    * null the value of m_mutationRate will be used.
    * Replaces the previously used boolean m_dynamicMutationRate
-   * @since 1.1
    */
   private MutationRateCalculator m_mutationRateCalc;
+
   /**
    * Constructs a new instance of this MutationOperator without a specified
    * mutation rate, which results in dynamic mutation being turned on. This
@@ -75,6 +74,7 @@ public class MutationOperator
    * on.
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    *        computation
+   * @since 1.1
    */
   public MutationOperator(MutationRateCalculator a_mutationRateCalculator) {
     setMutationRateCalc(a_mutationRateCalculator);
@@ -89,6 +89,7 @@ public class MutationOperator
    *                              For example, 1000 would result in 1/1000
    *                              genes being mutated on average. A mutation
    *                              rate of zero disables mutation entirely.
+   * @since 1.1
    */
   public MutationOperator(int a_desiredMutationRate) {
     m_mutationRate = a_desiredMutationRate;
@@ -119,6 +120,7 @@ public class MutationOperator
    *                               modified copies of Chromosomes to this
    *                               list if it's desired for them to be
    *                               considered for natural selection.
+   * @since 1.0
    */
   public void operate(final Configuration a_activeConfiguration,
                       final Chromosome[] a_population,
@@ -215,10 +217,20 @@ public class MutationOperator
     }
   }
 
+  /**
+   *
+   * @return MutationRateCalculator
+   * @since 1.1
+   */
   public MutationRateCalculator getMutationRateCalc() {
     return m_mutationRateCalc;
   }
 
+  /**
+   *
+   * @param m_mutationRateCalc MutationRateCalculator
+   * @since 1.1
+   */
   public void setMutationRateCalc(MutationRateCalculator m_mutationRateCalc) {
     this.m_mutationRateCalc = m_mutationRateCalc;
     if (m_mutationRateCalc != null) {
