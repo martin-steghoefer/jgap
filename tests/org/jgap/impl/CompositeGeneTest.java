@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -316,6 +316,48 @@ public class CompositeGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_4() {
+    CompositeGene gene = new CompositeGene();
+    DoubleGene gene2 = new DoubleGene(1.0d, 3.0d);
+    gene2.setAllele(new Double(1.0d));
+    gene.addGene(gene2);
+    gene.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    List l = new Vector();
+    l.add(new Double(2.0d));
+    gene.setAllele(l);
+    assertEquals(1.0d, ( (Double) gene2.getAllele()).doubleValue(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_5() {
+    CompositeGene gene = new CompositeGene();
+    DoubleGene gene2 = new DoubleGene(1.0d, 3.0d);
+    gene2.setAllele(new Double(1.0d));
+    gene.addGene(gene2);
+    gene.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return true;
+      }
+    });
+    List l = new Vector();
+    l.add(new Double(2.0d));
+    gene.setAllele(l);
+    assertEquals(2.0d, ( (Double) gene2.getAllele()).doubleValue(), DELTA);
+  }
+
   public void testNewGene_0()
       throws Exception {
     CompositeGene gene1 = new CompositeGene();
@@ -563,8 +605,9 @@ public class CompositeGeneTest
     try {
       gene1.setToRandomValue(null);
       fail();
-    }catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
@@ -574,10 +617,10 @@ public class CompositeGeneTest
    */
   public void testSetToRandomValue_1() {
     CompositeGene gene1 = new CompositeGene();
-    DoubleGene d = new DoubleGene(0.0d,1.0d);
+    DoubleGene d = new DoubleGene(0.0d, 1.0d);
     gene1.addGene(d);
     gene1.setToRandomValue(new RandomGeneratorForTest(0.23d));
-    assertEquals(0.23d, d.doubleValue(),DELTA);
+    assertEquals(0.23d, d.doubleValue(), DELTA);
   }
 
   /**
@@ -586,9 +629,9 @@ public class CompositeGeneTest
    */
   public void testSetToRandomValue_2() {
     CompositeGene gene1 = new CompositeGene();
-    DoubleGene d = new DoubleGene(0.5d,1.8d);
+    DoubleGene d = new DoubleGene(0.5d, 1.8d);
     gene1.addGene(d);
     gene1.setToRandomValue(new RandomGeneratorForTest(0.23d));
-    assertEquals((1.8d-0.5d)*0.23d+0.5d, d.doubleValue(),DELTA);
+    assertEquals( (1.8d - 0.5d) * 0.23d + 0.5d, d.doubleValue(), DELTA);
   }
 }
