@@ -45,6 +45,14 @@ public class Chromosome implements Comparable, Cloneable, Serializable
     transient protected Configuration m_activeConfiguration = null;
 
     /**
+     * Application-specific data that is attached to this Chromosome.
+     * This data may assist the application in evaluating this Chromosome
+     * in the fitness function. JGAP completely ignores the data, aside
+     * from allowing it to be set and retrieved.
+     */
+    private Object m_applicationData = null;
+
+    /**
      * The array of Genes contained in this Chromosome.
      */
     protected Gene[] m_genes = null;
@@ -701,6 +709,36 @@ public class Chromosome implements Comparable, Cloneable, Serializable
                 m_genes[ i ].cleanup();
             }
         }
+    }
+
+
+    /**
+     * This sets the application-specific data that is attached to this
+     * Chromosome. Attaching application-specific data may be useful for
+     * some applications when it comes time to evaluate this Chromosome
+     * in the fitness function. JGAP ignores this data.
+     *
+     * @param a_newData The new application-specific data to attach to this
+     *                  Chromosome.
+     */
+    public void setApplicationData( final Object a_newData )
+    {
+        m_applicationData = a_newData;
+    }
+
+
+    /**
+     * Retrieves the application-specific data that is attached to this
+     * Chromosome. Attaching application-specific data may be useful for
+     * some applications when it comes time to evaluate this Chromosome
+     * in the fitness function. JGAP ignores this data.
+     *
+     * @return The application-specific data previously attached to this
+     *         Chromosome, or null if there is no attached data.
+     */
+    public Object getApplicationData()
+    {
+        return m_applicationData;
     }
 }
 

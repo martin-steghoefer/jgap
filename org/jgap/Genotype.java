@@ -313,6 +313,23 @@ public class Genotype implements Serializable
 
 
     /**
+     * Evolves this Genotype the specified number of times. This is
+     * equivalent to invoking the standard evolve() method the given number
+     * of times in a row.
+     *
+     * @param a_numberOfEvolutions The number of times to evolve this Genotype
+     *                             before returning.
+     */
+    public void evolve( int a_numberOfEvolutions )
+    {
+        for( int i = 0; i < a_numberOfEvolutions; i++ )
+        {
+            evolve();
+        }
+    }
+
+
+    /**
      * Return a string representation of this Genotype instance,
      * useful for dispaly purposes.
      *
