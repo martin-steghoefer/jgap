@@ -143,6 +143,9 @@ public class Genotype implements java.io.Serializable {
     // selector
     chromosomes = gaConf.getNaturalSelector().select(gaConf,
                                                      chromosomes.length);
+
+    // Clean up
+    gaConf.getNaturalSelector().empty();
   }
 
 
