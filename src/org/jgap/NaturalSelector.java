@@ -26,13 +26,14 @@ package org.jgap;
  * fitness values are more likely to survive than those with lesser fitness
  * values, but it's not guaranteed.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public interface NaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
