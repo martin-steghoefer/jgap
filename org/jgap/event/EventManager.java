@@ -22,6 +22,8 @@ package org.jgap.event;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
 
 
 /**
@@ -35,35 +37,58 @@ import java.util.Iterator;
  */
 public class EventManager
 {
-    private List listeners = new ArrayList();
+    /**
+     * References a Map of subscribed event listeners. Each key is an event
+     * name, and each value is a List of listeners subscribed to that event.
+     */
+    private Map m_listeners = new HashMap();
 
 
     /**
-     * Adds a new listener that will be notified when genetic events occur.
+     * Adds a new listener that will be notified when the event represented
+     * by the given name is fired.
      *
-     * @param a_eventListenerToAdd the genetic listener to subscribe to the
-     *                             genetic event notifications.
+     * @param a_eventName the name of the event to which the given listener
+     *                    should be subscribed. Standard events are
+     *                    represented by constants in the GeneticEvent class.
+     * @param a_eventListenerToAdd the genetic listener to subscribe to
+     *                             notifications of the given event.
      */
     public synchronized void addEventListener(
+                                 String a_eventName,
                                  GeneticEventListener a_eventListenerToAdd )
     {
-        listeners.add( a_eventListenerToAdd );
+        List eventListeners = (List) m_listeners.get( a_eventName );
+
+        if( eventListeners == null )
+        {
+            eventListeners = new ArrayList();
+            m_listeners.put( a_eventName, eventListeners );
+        }
+
+        eventListeners.add( a_eventListenerToAdd );
     }
 
 
     /**
-     * Removes the given listener from the event subscribers. The listener
-     * will no longer be notified when genetic events occur.
+     * Removes the given listener from subscription of the indicated event.
+     * The listener will no longer be notified when the given event occurs.
      *
+     * @param a_eventName the name of the event to which the given listener
+     *                    should be removed. Standard events are
+     *                    represented by constants in the GeneticEvent class.
      * @param a_eventListenerToRemove the genetic listener to unsubscribe from
-     *                                genetic event notifications.
+     *                                notifications of the given event.
      */
     public synchronized void removeEventListener(
+                                 String a_eventName,
                                  GeneticEventListener a_eventListenerToRemove )
     {
-        if ( listeners.contains( a_eventListenerToRemove ) )
+        List eventListeners = (List) m_listeners.get( a_eventName );
+
+        if( eventListeners != null )
         {
-            listeners.remove( a_eventListenerToRemove );
+            eventListeners.remove( a_eventListenerToRemove );
         }
     }
 
@@ -72,36 +97,45 @@ public class EventManager
      * Fires a Genotype Evolved Event. All subscribers will be notified
      * of the event.
      *
-     * @param a_eventToFire The representation of the GenotypeEvent to fire.
+     * @param a_eventToFire The representation of the GeneticEvent to fire.
      */
-    public void fireGenotypeEvolvedEvent( GenotypeEvent a_eventToFire )
+    public void fireGeneticEvent( GeneticEvent a_eventToFire )
     {
-        // If there are no listeners, there's nothing to do.
-        // -------------------------------------------------
-        if ( listeners.isEmpty() )
-        {
-            return;
-        }
+        List eventListeners;
+        List workingCopyOfEventListeners;
 
-        // Make a copy of the list of current subscribers. Otherwise, we have
-        // to synchronize and lock everyone out while we perform notifications,
-        // which could really slow things down since we have no idea what each
-        // of the listeners is going to do. This way, worst case is that there
-        // may be a bit of a delay before other subscribers are notified.
-        // --------------------------------------------------------------------
-        List currentListeners = new ArrayList();
         synchronized( this )
         {
-            currentListeners.addAll( listeners );
+            eventListeners =
+                (List) m_listeners.get( a_eventToFire.getEventName() );
+
+            if ( eventListeners == null )
+            {
+                // If there are no listeners, there's nothing to do.
+                // -------------------------------------------------
+                return;
+            }
+            else
+            {
+                // Make a copy of the list of current subscribers. Otherwise,
+                // we have to synchronize and lock everyone out while we
+                // perform notifications, which could really slow things down
+                // since we have no idea what each of the listeners is going
+                // to do. This way, worst case is that there may be a bit of a
+                // delay before other subscribers are notified.
+                // -----------------------------------------------------------
+                workingCopyOfEventListeners = new ArrayList();
+                workingCopyOfEventListeners.addAll( eventListeners );
+            }
         }
 
         // Iterate over the listeners and notify each one of the event.
         // ------------------------------------------------------------
-        Iterator listenerIterator = currentListeners.iterator();
+        Iterator listenerIterator = workingCopyOfEventListeners.iterator();
         while( listenerIterator.hasNext() )
         {
-            ( (GeneticEventListener) listenerIterator.next() ).genotypeEvolved(
-                                         a_eventToFire );
+            ( (GeneticEventListener) listenerIterator.next() ).
+                geneticEventFired( a_eventToFire );
         }
     }
 }

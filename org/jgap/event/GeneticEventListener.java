@@ -22,17 +22,18 @@ package org.jgap.event;
 
 /**
  * Represents objects that process genetic events. Once subscribed to an
- * EventManager, an object implementing this interface will be notified
- * via the appropriate method each time a genetic event is fired.
+ * event with the EventManager, an object implementing this interface will
+ * be notified each time a genetic event is fired.
  */
 public interface GeneticEventListener
 {
     /**
-     * Notify this GeneticEventListener that a genotype has been evolved.
+     * Notify this GeneticEventListener that an event has been fired to which
+     * this listener is subscribed
      *
-     * @param a_evolutionEvent The event object representing the evolution
-     *                         of a Genotype.
+     * @param a_firedEvent The event object that was fired. The type of event
+     *                     can be determined by the GeneticEvent's name.
      */
-    void genotypeEvolved( GenotypeEvent a_evolutionEvent );
+    void geneticEventFired( GeneticEvent a_firedEvent );
 }
 

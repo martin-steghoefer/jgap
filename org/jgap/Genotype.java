@@ -20,7 +20,7 @@
 
 package org.jgap;
 
-import org.jgap.event.GenotypeEvent;
+import org.jgap.event.GeneticEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -228,8 +228,8 @@ public class Genotype implements java.io.Serializable
 
         // Fire an event to indicate we've performed an evolution.
         // -------------------------------------------------------
-        m_activeConfiguration.getEventManager().fireGenotypeEvolvedEvent(
-                new GenotypeEvent( this ) );
+        m_activeConfiguration.getEventManager().fireGeneticEvent(
+                new GeneticEvent( GeneticEvent.GENOTYPE_EVOLVED_EVENT, this ) );
 
         // Remove the selected chromosomes from the working pool and then
         // cleanup up any that are leftover in the pool and no longer needed.
