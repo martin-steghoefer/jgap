@@ -34,8 +34,11 @@ import org.jgap.RandomGenerator;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-  private static final double DELTA = 0.0000001;
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
+
+  //delta for distinguishing whether a value is to be interpreted as zero
+  private static final double DELTA = 0.000001;
+
   private double m_standardDistribution;
   private Random rn = new Random();
   public CauchyRandomGenerator() {
