@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -56,7 +56,6 @@ public class CoinsExample {
       throws
       Exception {
 
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     PlotOrientation or = PlotOrientation.VERTICAL;
 
     // Start with a DefaultConfiguration, which comes setup with the
@@ -105,29 +104,40 @@ public class CoinsExample {
     pconf.addGeneticOperatorSlot(new MutationOperator());
 
     pconf.addNaturalSelectorSlot(new BestChromosomesSelector());
-    pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
+//    pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
 
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
+//    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+//    rn.setNextDouble(0.7d);
+//    rn.setNextInt(2);
+//    pconf.addRandomGeneratorSlot(rn);
 //    pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
 
     pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(a_targetChangeAmount));
 
+    Evaluator eval = new Evaluator(pconf);
+
     /**@todo class Evaluator:
-     * input: + PermutingConfiguration
-     *        + Number of evaluation runs pers config (to turn off randomness
-     *          as much as possible)
-     *        + output facility (data container)
-     *        + optional: event subscribers
+     * input:
+     *   + PermutingConfiguration
+     *   + Number of evaluation runs pers config (to turn off randomness
+     *     as much as possible)
+     *   + output facility (data container)
+     *   + optional: event subscribers
+     * output:
+     *   + averaged curve of fitness value thru all generations
+     *   + best fitness value accomplished
+     *   + average number of performance improvements for all generations
      */
 
     int k=0;
-    while (pconf.hasNext()) {
+    while (eval.hasNext()) {
 
       // Create random initial population of Chromosomes.
       // ------------------------------------------------
-      Genotype population = Genotype.randomInitialGenotype(pconf.next());
+      Genotype population = Genotype.randomInitialGenotype(eval.next());
 
-      for (int run=0;run<5;run++) {
+      for (int run=0;run<10;run++) {
         // Evolve the population. Since we don't know what the best answer
         // is going to be, we just evolve the max number of times.
         // ---------------------------------------------------------------
@@ -137,7 +147,7 @@ public class CoinsExample {
           double fitness = population.getFittestChromosome().getFitnessValue();
           if (i % 3 == 0) {
             String s = String.valueOf(i);
-            Number n = dataset.getValue("Fitness " + k, s);
+            Number n = eval.getValue("Fitness " + k, s);
             double d;
             if (n != null) {
               // calculate historical average
@@ -146,7 +156,7 @@ public class CoinsExample {
             else {
               d = fitness;
             }
-            dataset.setValue(d, "Fitness " + k, s);
+            eval.setValue(d, "Fitness " + k, s);
           }
         }
       }
@@ -181,7 +191,22 @@ public class CoinsExample {
           bestSolutionSoFar) + " coins.");
       k++;
     }
-    // Create chart
+
+    // Create chart: fitness values history.
+    // -------------------------------------
+
+    // construct JFreeChart Dataset.
+    // -----------------------------
+    DefaultKeyedValues2D myDataset = eval.getData();
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
+      for (int jj=0;jj<myDataset.getRowCount();jj++) {
+        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
+                                            myDataset.getColumnKey(ii)),
+                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
+      }
+    }
+
     JFreeChart chart = ChartFactory.createLineChart(
         "JGAP: Evolution progress",
         "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
@@ -189,7 +214,7 @@ public class CoinsExample {
         /*tooltips*/
         , false /*urls*/);
     BufferedImage image = chart.createBufferedImage(640, 480);
-    FileOutputStream fo = new FileOutputStream("c:\\chart.jpg");
+    FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
     ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
   }
 
