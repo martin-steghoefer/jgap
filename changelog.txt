@@ -1,9 +1,12 @@
 2.0
 ----------
+* Added new NaturalSelector: class TournamentSelector (see request 1066342)
+* Added new class GaussianMutationOperator
+* Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
+  set it and Genotype.getConfiguration() to obtain it.
 * Introduced overall performance test to ensure performance
 * Changed return type Chromosome[] to Population containing list of Chromosomes
 * Added new unit tests
-* Added new class GaussianMutationOperator
 * Class Chromosome: made attribute "Gene[] m_genes" private
 * Class Chromosome: added csupport for application data object in method clone()
 * Renamed interface NaturalSelector to INaturalSelector, introduced abstract base
@@ -13,8 +16,7 @@
   always the first one computed
 * Fixed design flaw in Genes' methods mapValueToWithinBounds()
 * Genes now can hold a Configuration object
-* Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
-  set it and Genotype.getConfiguration() to obtain it.
+* Added DeltaFitnessEvaluator interpreting fitness values a defect rates
 
 Swarm Intelligence
 
