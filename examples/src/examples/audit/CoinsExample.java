@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -134,7 +134,7 @@ public class CoinsExample {
       // ------------------------------------------------
       Genotype population = Genotype.randomInitialGenotype(eval.next());
 
-      for (int run=0;run<10;run++) {
+      for (int run = 0; run < 10; run++) {
         // Evolve the population. Since we don't know what the best answer
         // is going to be, we just evolve the max number of times.
         // ---------------------------------------------------------------
@@ -216,18 +216,19 @@ public class CoinsExample {
     FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
     ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
 
-    // Create chart: fitness values average for first permutations.
+    // Create chart: performance metrics for all permutations.
     // -----------------------------------------------------------
+    int maxPerm = permutation-1;
+    for (int i=0;i<maxPerm;i++) {
 
-    // construct JFreeChart Dataset.
-    // -----------------------------
-    myDataset = eval.calcAvgFitness(0);
-    Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(0);
-    System.err.println("Best Fitness " +dataAvg.bestFitnessValue);
-    System.err.println(" Generation  " +dataAvg.bestFitnessValueGeneration);
-    System.err.println("Avg. Fitness " +dataAvg.avgFitnessValue);
-    System.err.println("Avg. Div.    " +dataAvg.avgDiversityFitnessValue);
-    System.err.println("Avg. BestD   " +dataAvg.avgBestDeltaFitnessValue);
+      myDataset = eval.calcAvgFitness(i);
+      Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(1);
+      System.err.println("Best Fitness " + dataAvg.bestFitnessValue);
+      System.err.println(" Generation  " + dataAvg.bestFitnessValueGeneration);
+      System.err.println("Avg. Fitness " + dataAvg.avgFitnessValue);
+      System.err.println("Avg. Div.    " + dataAvg.avgDiversityFitnessValue);
+      System.err.println("Avg. BestD   " + dataAvg.avgBestDeltaFitnessValue);
+    }
 //    dataset = new DefaultCategoryDataset();
 //    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
 //      for (int jj=0;jj<myDataset.getRowCount();jj++) {
