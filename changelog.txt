@@ -24,6 +24,7 @@
 * Completed unit tests for existing classes
 * Changed input type of Chromosome.setFitnessValue from int to
   double
+* Marked org.jgap.impl.ReproductionOperator as deprecated
 
 2.0
 ----------
