@@ -32,12 +32,12 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
    */
-  private Population chromosomes;
+  private Population m_chromosomes;
 
   /**
    * Allows or disallows doublette chromosomes to be added to the selector
@@ -47,12 +47,12 @@ public class BestChromosomesSelector
   /**
    * Indicated whether the list of added chromosomes needs sorting
    */
-  private boolean needsSorting;
+  private boolean m_needsSorting;
 
   /**
    * Comparator that is only concerned about fitness values
    */
-  private FitnessValueComparator fitnessValueComparator;
+  private FitnessValueComparator m_fitnessValueComparator;
 
   /**
    * The rate of original Chromosomes selected. This is because we otherwise
@@ -75,10 +75,10 @@ public class BestChromosomesSelector
    */
   public BestChromosomesSelector() {
     super();
-    chromosomes = new Population();
-    needsSorting = false;
+    m_chromosomes = new Population();
+    m_needsSorting = false;
     setOriginalRate(1.0d);
-    fitnessValueComparator = new FitnessValueComparator();
+    m_fitnessValueComparator = new FitnessValueComparator();
   }
 
   /**
@@ -93,15 +93,15 @@ public class BestChromosomesSelector
     // This speeds up the process by orders of magnitude but could lower the
     // quality of evolved results because of fewer Chromosome's used!!!
    if (!m_doublettesAllowed &&
-        chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
+        m_chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
       return;
     }
     // New chromosome, insert it into the sorted collection of chromosomes
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
-    chromosomes.addChromosome(a_chromosomeToAdd);
+    m_chromosomes.addChromosome(a_chromosomeToAdd);
     // Indicate that the list of chromosomes to add needs sorting
     // ----------------------------------------------------------
-    needsSorting = true;
+    m_needsSorting = true;
   }
 
   /**
@@ -117,8 +117,8 @@ public class BestChromosomesSelector
    */
   public synchronized Population select(int a_howManyToSelect) {
     int canBeSelected;
-    if (a_howManyToSelect > chromosomes.size()) {
-      canBeSelected = chromosomes.size();
+    if (a_howManyToSelect > m_chromosomes.size()) {
+      canBeSelected = m_chromosomes.size();
     }
     else {
       canBeSelected = a_howManyToSelect;
@@ -133,28 +133,21 @@ public class BestChromosomesSelector
       }
     }
 
-    if (a_howManyToSelect >= chromosomes.size() && false) {
-      /**@todo resolve this to a clean solution*/
-      //return original!
-      m_doNotEmpty = true;
-      return chromosomes;
-    }
-    else {
-      m_doNotEmpty = false;
-    }
+    m_doNotEmpty = false;
+
     // Sort the collection of chromosomes previously added for evaluation.
     // Only do this if necessary.
     // -------------------------------------------------------------------
-    if (needsSorting) {
-      Collections.sort(chromosomes.getChromosomes(), fitnessValueComparator);
-      needsSorting = false;
+    if (m_needsSorting) {
+      Collections.sort(m_chromosomes.getChromosomes(), m_fitnessValueComparator);
+      m_needsSorting = false;
     }
     Population population = new Population(canBeSelected);
     // To select a chromosome, we just go thru the sorted list.
     // --------------------------------------------------------
     Chromosome selectedChromosome;
     for (int i = 0; i < canBeSelected; i++) {
-      selectedChromosome = chromosomes.getChromosome(i);
+      selectedChromosome = m_chromosomes.getChromosome(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);
       population.addChromosome(selectedChromosome);
     }
@@ -173,7 +166,7 @@ public class BestChromosomesSelector
         // Add existing Chromosome's by cloning them to fill up the return result
         // to contain the desired number of Chromosome's
         for (int i = 0; i < loopCount; i++) {
-          selectedChromosome = chromosomes.getChromosome(i);
+          selectedChromosome = m_chromosomes.getChromosome(i);
           selectedChromosome.setIsSelectedForNextGeneration(true);
           population.addChromosome(selectedChromosome);
         }
@@ -193,9 +186,9 @@ public class BestChromosomesSelector
     // clear the list of chromosomes
     // -----------------------------
     if (!m_doNotEmpty) {
-      chromosomes.getChromosomes().clear();
+      m_chromosomes.getChromosomes().clear();
     }
-    needsSorting = false;
+    m_needsSorting = false;
   }
 
   /**
