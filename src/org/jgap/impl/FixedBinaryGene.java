@@ -40,7 +40,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private int m_length;
 
@@ -338,7 +338,7 @@ public class FixedBinaryGene
    * @since 2.0
    */
   public int size() {
-    return getLength();
+    return m_value.length;
   }
 
   /**
@@ -393,6 +393,29 @@ public class FixedBinaryGene
   }
 
   /**
+   * Compares this Gene with the given object and returns true if
+   * the other object is a FixedBinaryGene and has the same value as this
+   * Gene. Otherwise it returns false.
+   *
+   * @param other the object to compare to this Gene for equality.
+   * @return true if this Gene is equal to the given object,
+   *         false otherwise.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public boolean equals(Object other) {
+    try {
+      return compareTo(other) == 0;
+    }
+    catch (ClassCastException e) {
+      // If the other object isn't a BooleanGene, then we're not equal.
+      // --------------------------------------------------------------
+      return false;
+    }
+  }
+
+  /**
    * Compares this Gene with the specified object for order. A
    * 0 value is considered to be less than a 1 value. A null value
    * is considered to be less than any non-null value.
@@ -429,30 +452,31 @@ public class FixedBinaryGene
       if (thisLen > otherLen) {
         return 1;
       }
-    }
-    else {
-      return -1;
+      else {
+        return -1;
+      }
     }
     // Count number of 1's for this Gene
     int this1s = 0;
-    for (int i = 0; i < thisLen; i++) {
+    for (int i = 0; i < m_value.length; i++) {
       if (m_value[i] == 1) {
         this1s++;
       }
-      // Count number of 1's for other Gene
-      int other1s = 0;
-      for (i = 0; i < thisLen; i++) {
-        if (otherGene.m_value[i] == 1) {
-          other1s++;
-        }
+    }
+
+    // Count number of 1's for other Gene
+    int other1s = 0;
+    for (int i = 0; i < otherGene.m_value.length; i++) {
+      if (otherGene.m_value[i] == 1) {
+        other1s++;
       }
-      if (this1s != other1s) {
-        if (this1s > other1s) {
-          return 1;
-        }
-        else {
-          return -1;
-        }
+    }
+    if (this1s != other1s) {
+      if (this1s > other1s) {
+        return 1;
+      }
+      else {
+        return -1;
       }
     }
     // Determine int value of binary representation
