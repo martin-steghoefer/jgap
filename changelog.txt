@@ -5,6 +5,8 @@
 * Fixed error in method FixedBinaryGene.setToRandomValue
 * Fixed error in Configuration.getNaturalSelector
 * Improved method Chromosome.cleanup()
+* Improved method NumberGene.compareTo to recognize
+  invalid types
 * Provided javadocs for packages forgotten before
 * Introduced abstract base class for all org.jgap.Gene
   implementations: org.jgap.BaseGene
