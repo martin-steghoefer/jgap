@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+
+<title>Testing the Supergene conception in evolution</title>
+<link rel="stylesheet" href="../stylesheet.css" type="text/css">
+</head>
+
+<body>
+
+<h1 class="docTitle">Testing the <i>Supergene</i> conception</h1>
+
+<h2 class="docTitle">The test</h2>
+
+<p>The test task: given amount [20..99] in pennies. Express this
+value in pennies, nickels (5 pennies), dimes (10 pennies) and
+quarters (25 pennies), additional requiring, that the number of
+pennies and nickels should be both even or both odd. For some
+amounts the ideal solution does not exists, and the system should
+suggest an alternative with a slightly different change amount. </p>
+
+<p>In the supergene version, the chromosome, representing the
+solution of the task, consisted of 2 regular genes (quarters and
+dimes) and one supergene, enclosing two subgenes (nickels and
+pennies). The supergene validity condition was set to nickels <em>mod</em>
+2 = pennies <em>mod</em> 2. The alternative algorithm used
+chromosome with 4 independent genes and estimation function,
+including the mentioned condition.</p>
+
+<h2 class="docTitle">Conditions</h2>
+
+<p>The test program computed the change for all values from 20 to
+99, measuring the computation speed and deviation from the ideal
+solution (exact change amount and the satisfied additional
+condition). The test was repeated 10 times, averaging the data.
+The test program was executed on computer, having Intel Pentium 4
+2.5 Mhz processor, 512 Mb RAM, Windows XP SP 2.0, Java 1.4.2
+b-28.</p>
+
+<h2 class="docTitle">Results</h2>
+
+<p>The results were dependent from the population size and
+maximal allowed number of iterations.</p>
+
+<p>For the small population size (64) and small number of
+iterations the supergene method is a little more accurate,
+running roughly at the same speed as the simplified version.
+However this advantage decreases when incrasing the number of
+allowed iterations.</p>
+
+<p><img src="st64.gif" width="715" height="340"></p>
+
+<p>For the moderate population size (512) the supergene method is
+significantly (up to three times) faster than the simplified
+version. </p>
+
+<p><img src="st512.gif" width="720" height="341"></p>
+
+<p>For a large populations (1024) the supergene method may be
+slightly less accurate. However this difference seems minor,
+ and the method is still up to three times faster than the
+simplified version.</p>
+
+<p><img src="st1024.gif" width="719" height="349"></p>
+
+<h3 class="docTitle">Conclusion</h3>
+
+<p>The supergene conception can significantly (up to 3 times)
+increase the evolution speed. It can also increase the accuracy
+of solution for the small populations. However these effects are
+dependent from the chosen population size and maximal number of
+iterations. While in some cases the use of supergenes can be
+definitely sensible, we would recommend to try both supergene and
+non-supergene versions for your specific task. </p>
+
+<p>This testing work has been performed by Audrius
+Meskauskas</p>
+
+<p class="copyright">This page is copyright © 2004 <a href="http://sourceforge.net/users/audriusa/">Audrius
+Meskauskas</a>, GNU free documentation <a
+href="http://www.gnu.org/licenses/fdl.html">license</a></p>
+
+<hr>
+
+
+<a href="http://sourceforge.net/projects/jgap/"><img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5"
+alt="SourceForge Logo" border="0" width="210" height="62"></a> </p>
+
+
+</body>
+</html>
