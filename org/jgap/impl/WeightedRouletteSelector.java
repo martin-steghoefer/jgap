@@ -209,28 +209,22 @@ public class WeightedRouletteSelector implements NaturalSelector
 
         for( int i = 0; i < a_counterValues.length; i++ )
         {
-            // Only bother with this chromosome if it has slots left on
-            // the wheel.
-            // --------------------------------------------------------
-            if( a_counterValues[ i ] > 0 )
+            // Increment our ongoing total and see if we've landed on the
+            // selected slot.
+            // ----------------------------------------------------------
+            currentSlot += a_counterValues[ i ];
+
+            if ( currentSlot > selectedSlot )
             {
-                // Increment our ongoing total and see if we've landed on the
-                // selected slot.
-                // ----------------------------------------------------------
-                currentSlot += a_counterValues[ i ];
+                // Remove one instance of the chromosome from the wheel by
+                // decrementing the slot counter by the fitness value.
+                // --------------------------------------------------------
+                a_counterValues[ i ] -= a_fitnessValues[ i ];
+                m_totalNumberOfUsedSlots -= a_fitnessValues[ i ];
 
-                if ( currentSlot > selectedSlot )
-                {
-                    // Remove one instance of the chromosome from the wheel by
-                    // decrementing the slot counter by the fitness value.
-                    // --------------------------------------------------------
-                    a_counterValues[ i ] -= a_fitnessValues[ i ];
-                    m_totalNumberOfUsedSlots -= a_fitnessValues[ i ];
-
-                    // Now return our selected Chromosome
-                    // ----------------------------------
-                    return a_chromosomes[ i ];
-                }
+                // Now return our selected Chromosome
+                // ----------------------------------
+                return a_chromosomes[ i ];
             }
         }
 
