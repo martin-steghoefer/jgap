@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Each data has its own data container
@@ -255,7 +255,7 @@ public class Evaluator {
    * @param a_permutation the permutation to determine the number of runs for
    * @return the number of runs for the given permutation
    */
-  protected int getNumberOfRuns(int a_permutation) {
+  public int getNumberOfRuns(int a_permutation) {
     Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
       return 0;
@@ -334,7 +334,6 @@ public class Evaluator {
     int fitnessBestGen = -1;
     double fitnessAvgChroms;
     double fitnessDiversityChromsOld = -1.0d;
-    double fitnessDelta;
     double fitnessBestDeltaAvg = 0.0d;
     double fitnessDiversity;
     double fitnessDiversityAvg = 0.0d;
@@ -351,11 +350,12 @@ public class Evaluator {
       }
 
       // average number of chromosomes
-      sizeAvg += data.size / numRuns;
+      sizeAvg += (double)data.size / numRuns;
 
       size = data.size;
       fitnessAvgChroms = 0.0d;
       fitnessDiversity = 0.0d;
+      double fitnessBestLocal = -1.0d;
       for (int j = 0; j < size; j++) {
         chrom = data.chromosomeData[j];
         fitness = chrom.fitnessValue;
@@ -369,11 +369,16 @@ public class Evaluator {
         // average fitness value for generation over all Chromosomes
         fitnessAvgChroms += fitness / size;
 
-        // fittest chromosome in generation
+        // fittest chromosome in generation over all runs
         if (fitnessBest < fitness) {
           fitnessBest = fitness;
           // memorize generation number in which fittest chromosome appeared
           fitnessBestGen = data.generation;
+        }
+
+        // fittest chromosome in generation over current runs
+        if (fitnessBestLocal < fitness) {
+          fitnessBestLocal = fitness;
         }
 
       }
@@ -385,9 +390,9 @@ public class Evaluator {
 
       // absolute delta between two adjacent best fitness values
       if (i > 0) {
-        fitnessBestDeltaAvg += Math.abs(fitnessBest - fitnessBestOld) / numRuns;
+        fitnessBestDeltaAvg += Math.abs(fitnessBestLocal - fitnessBestOld) / (numRuns-1);
       }
-      fitnessBestOld = fitnessBest;
+      fitnessBestOld = fitnessBestLocal;
     }
 
     dataAvg.sizeAvg = sizeAvg;
