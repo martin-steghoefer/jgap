@@ -31,19 +31,25 @@ import org.jgap.RandomGenerator;
  */
 public class GaussianRandomGenerator
     implements RandomGenerator {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
+
   private Random rn;
+
   /**
    * Mean of the gaussian deviation
    */
   private double m_mean;
+
   /**
    * Standard deviation of the gaussian deviation
    */
   private double m_standardDeviation;
+
   public GaussianRandomGenerator() {
     this(0.0d);
   }
