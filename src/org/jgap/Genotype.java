@@ -20,6 +20,7 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.event.*;
 
 /**
@@ -36,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The current active Configuration instance.
@@ -219,6 +220,7 @@ public class Genotype
    * @return The Chromosome with the highest fitness value, or null if
    *         there are no chromosomes in this Genotype.
    *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
@@ -251,12 +253,16 @@ public class Genotype
    * chromosomes will be included in the next generation population. Note
    * that the population size not always remains constant (dependent on the
    * NaturalSelector's used!).
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public synchronized void evolve() {
     verifyConfigurationAvailable();
     // Process all natural selectors applicable before executing the
     // Genetic Operators.
+    // -------------------------------------------------------------
     int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(true);
     if (selectorSize > 0) {
       // Add the chromosomes pool to the natural selector.
@@ -360,6 +366,7 @@ public class Genotype
    * @param a_numberOfEvolutions The number of times to evolve this Genotype
    *                             before returning.
    *
+   * @author Klaus Meffert
    * @since 1.1
    */
   public void evolve(int a_numberOfEvolutions) {
@@ -374,6 +381,8 @@ public class Genotype
    * useful for display purposes.
    *
    * @return A string representation of this Genotype instance.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public String toString() {
@@ -406,6 +415,7 @@ public class Genotype
    * @throws InvalidConfigurationException if the given Configuration
    *         instance not in a valid state.
    *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public static Genotype randomInitialGenotype(
@@ -442,6 +452,9 @@ public class Genotype
    *
    * @param other The object to compare against.
    * @return true if the objects are the same, false otherwise.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public boolean equals(Object other) {
@@ -485,6 +498,8 @@ public class Genotype
    * Genotype instance. If not, then an IllegalStateException is thrown.
    * In general, this method should be invoked by any operation on this
    * Genotype that makes use of the Configuration instance.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   private void verifyConfigurationAvailable() {
@@ -497,6 +512,8 @@ public class Genotype
 
   /**
    * @return the assigned FitnessEvaluator
+   *
+   * @author Klaus Meffert
    * @since 1.1
    */
   public FitnessEvaluator getFitnessEvaluator() {
