@@ -33,7 +33,7 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -51,7 +51,7 @@ public class GaussianRandomGenerator
   private double m_standardDeviation;
 
   public GaussianRandomGenerator() {
-    this(0.0d);
+    this(1.0d);
   }
 
   /**
@@ -76,6 +76,10 @@ public class GaussianRandomGenerator
   }
 
   public void setGaussianStdDeviation(double a_standardDeviation) {
+    if (a_standardDeviation <= 0.00000d) {
+      throw new IllegalArgumentException(
+          "Standard deviation must be greater 0!");
+    }
     m_standardDeviation = a_standardDeviation;
   }
 
@@ -83,11 +87,17 @@ public class GaussianRandomGenerator
     return m_standardDeviation;
   }
 
+  /**
+   * @return positive integer
+   */
   public int nextInt() {
-    return Math.min(Integer.MAX_VALUE - 1,
-                    (int) Math.round(nextGaussian() * Integer.MAX_VALUE));
+    return Math.abs(Math.min(Integer.MAX_VALUE - 1,
+                    (int) Math.round(nextGaussian() * Integer.MAX_VALUE)));
   }
 
+  /**
+   * @return positive integer between 0 and ceiling
+   */
   public int nextInt(int ceiling) {
     return Math.min(ceiling - 1,
                     (int) Math.round(nextGaussian() * ceiling));
@@ -113,9 +123,16 @@ public class GaussianRandomGenerator
 
   /**
    * @return the next randomly distributed gaussian with current standard
-   * deviation
+   * deviation, will be greater/equal zero
    */
   private double nextGaussian() {
-    return rn.nextGaussian() * getGaussianStdDeviation();
+    /**@todo this is not satisfying! We need an algorithm where boundaries
+     * are known to then scale to 0..1*/
+    double r = (rn.nextGaussian() + 2.8284271247d ) / 2;
+    if (r < DELTA) {
+      r = 0.0000001d;
+    }
+    return r;
+
   }
 }
