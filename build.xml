@@ -1,12 +1,47 @@
 <project name="jgap" default="jar" basedir=".">
   <property name="src" value="."/>
+  <property name="test" value="./tests"/>
+  <property name="lib" value="./lib"/>
+  <property name="classDir" value="./classes"/>
+  <property name="allTests" value="org.jgap.AllTests" />
+
+
+  <path id="classpathCompile">
+    <fileset dir="${lib}">
+      <include name="junit-addons-1.4.jar"/>
+      <include name="junit3.8.1.jar"/>
+    </fileset>
+    <pathelement path="${classDir}"/>
+  </path>
+
 
   <target name="compile">
-    <javac srcdir="${src}"/>
+    <mkdir dir="${classDir}" />
+    <javac srcdir="${src}"
+           destdir="${classDir}"
+           classpathref="classpathCompile">
+    </javac>
+    <javac srcdir="${test}"
+           destdir="${classDir}"
+           classpathref="classpathCompile">
+    </javac>
   </target>
 
   <target name="compile-debug">
     <javac debug="on" srcdir="${src}"/>
+  </target>
+
+  <target name="test" depends="compile">
+    <junit printsummary="yes" haltonfailure="no" fork="yes">
+      <formatter type="brief"/>
+      <classpath>
+        <pathelement path="${classDir}"/>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <test name="${allTests}"/>
+    </junit>
   </target>
 
   <target name="jar" depends="compile">
