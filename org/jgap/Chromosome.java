@@ -64,10 +64,21 @@ public class Chromosome
    *                      this Chromosome instance. Each bit in the
    *                      BitSet represents a single gene.
    */
-  public Chromosome( BitSet initialGenes )
+  public Chromosome( BitSet initialGenes, int chromosomeLength )
   {
+    if( initialGenes == null )
+    {
+      throw new IllegalArgumentException( "Genes cannot be null." );
+    }
+
+    else if( chromosomeLength <= 0 )
+    {
+      throw new IllegalArgumentException( 
+        "Chromosome length must be positive" );
+    }
+
     genes = initialGenes;
-    numberOfGenes = genes.length();
+    numberOfGenes = chromosomeLength;
     mutationRate = DEFAULT_MUTATION_RATE;
   }
 
@@ -93,10 +104,22 @@ public class Chromosome
    *                             processed would incur mutation during
    *                             evolution.
    */
-  public Chromosome( BitSet initialGenes, int desiredMutationRate )
+  public Chromosome( BitSet initialGenes, int chromosomeLength,
+                     int desiredMutationRate )
   {
+    if( initialGenes == null )
+    {
+      throw new IllegalArgumentException( "Genes cannot be null." );
+    }
+
+    else if( chromosomeLength <= 0 )
+    {
+      throw new IllegalArgumentException(
+        "Chromosomes must have a positive length" );
+    }
+
     genes = initialGenes;
-    numberOfGenes = genes.length();
+    numberOfGenes = chromosomeLength;
     mutationRate = desiredMutationRate;
   }
 
@@ -109,7 +132,8 @@ public class Chromosome
    */
   public Chromosome reproduce()
   {
-    return new Chromosome( (BitSet) genes.clone() );
+    return new Chromosome( 
+      (BitSet) genes.clone(), numberOfGenes, mutationRate );
   }
 
 
@@ -233,6 +257,7 @@ public class Chromosome
     return genes.toString();
   }
 
+
   /**
    * Convenience method that returns a newly constructed Chromosome
    * instance of the given size with a random population of genes.
@@ -274,6 +299,6 @@ public class Chromosome
       }
     }
 
-    return new Chromosome( genes, mutationRate );
+    return new Chromosome( genes, size, mutationRate );
   }
 }  
