@@ -2,6 +2,10 @@
 ----------
 * Fixed a severe bugb in GaussianMutationOperator
 * Added new Mutation Operator: SwappingMutationOperator
+* Added methods setPreserveFittestIndividual(..) and 
+  isPreserveFittestIndividual() to class Configuration
+  and added support of it to Genotype.evolve().
+  Also see request 1088476.
 * Modified hashcode function in class Chromosome to be as
   in java.util.AbstractList
 * Made GaussianMutationOperator work with CompositeGene
@@ -29,6 +33,7 @@
 * Added convenience method contains(Chromosome) in
   org.jgap.Population
 * General code improvements, e.g. Genotype.getFittestChromosome()
+* Added package.html info file to each package
 
 2.0
 ----------
