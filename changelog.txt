@@ -27,10 +27,15 @@
 
 2.0
 ----------
-* Added new NaturalSelector: class TournamentSelector
-  (see request 1066342)
 * Made add(Chromosome) method protected by moving from
   INaturalSelector to NaturalSelector
+* Renamed interface NaturalSelector to INaturalSelector,
+  introduced abstract base class NaturalSelector implementing
+  INaturalSelector (see request 1075249)
+* Interface INaturalSelector: Introduced new method
+  boolean returnsUniqueChromosomes()
+* Added new NaturalSelector: class TournamentSelector
+  (see request 1066342)
 * Added new class GaussianMutationOperator (see request 708772)
 * Added new class GreedyCrossover
 * Added DeltaFitnessEvaluator interpreting fitness values as
@@ -50,18 +55,11 @@
 * Changed return type Chromosome[] to Population containing list
   of Chromosomes
 * Added new unit tests
-* Class Chromosome: made attribute "Gene[] m_genes" private
 * Class Chromosome: added support for application data object
   in method clone()
-* Renamed interface NaturalSelector to INaturalSelector,
-  introduced abstract base class NaturalSelector implementing
-  INaturalSelector (see request 1075249)
-* Interface INaturalSelector: Introduced new method
-  boolean returnsUniqueChromosomes()
 * Fixed Chromosome.getFitnessValue() to return the current fitness
   value and not always the first one computed
 * Fixed design flaw in Genes' methods mapValueToWithinBounds()
-* Genes now can hold a Configuration object
 
 1.1
 ----------
