@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * The current active Configuration instance.
@@ -248,8 +248,8 @@ public class Genotype
   public synchronized void evolve() {
     verifyConfigurationAvailable();
 
-    // Apply NaturalSelectors before GeneticOperators will be applied
-    // --------------------------------------------------------------
+    // Apply NaturalSelectors before GeneticOperators will be applied.
+    // ---------------------------------------------------------------
     applyNaturalSelectors(true);
 
     // Execute all of the Genetic Operators.
@@ -272,8 +272,8 @@ public class Genotype
       bulkFunction.evaluate(m_workingPool);
     }
 
-    // Apply NaturalSelectors after GeneticOperators have been applied
-    // ---------------------------------------------------------------
+    // Apply NaturalSelectors after GeneticOperators have been applied.
+    // ----------------------------------------------------------------
     applyNaturalSelectors(false);
 
     // Fill up population if size dropped below 10% of original size
