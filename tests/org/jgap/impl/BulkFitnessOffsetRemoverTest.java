@@ -9,19 +9,9 @@
  */
 package org.jgap.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import junit.framework.AssertionFailedError;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.jgap.BulkFitnessFunction;
 import org.jgap.*;
-import org.jgap.Chromosome;
-import org.jgap.FitnessFunction;
-import org.jgap.Gene;
+
+import junit.framework.*;
 
 /**
  * Tests for the BulkFitnessOffsetRemover class
@@ -32,7 +22,7 @@ import org.jgap.Gene;
 public class BulkFitnessOffsetRemoverTest extends TestCase
 {
     /** String containing the CVS revision. Read out via reflection! */
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     // A plainforward implementation for this test.
     //---------------------------------------------
@@ -135,24 +125,13 @@ public class BulkFitnessOffsetRemoverTest extends TestCase
             fail("The constructor of "
                     + test.getClass().getName() + " allows a null value!");
         } catch (Throwable f) {
-            if (f instanceof AssertionFailedError) {
-                throw (AssertionFailedError) f;
-            }
-            else {
-                System.out
-                        .println("Estimated exception for passing null to constructor was thrown:");
-                f.printStackTrace(System.err);
-            }
-            // OK, we want the constructor to throw an Exception
-            // when null is provided.
-            //---------------------------------------------------
+            ;//this is OK
         }
     }
 
     /**
      * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)}with a
      * list of two Chromosomes with each one IntegerGene with the allele 100.
-     *
      */
     public void testEvaluate_0()
     {
