@@ -22,12 +22,17 @@ package org.jgap;
 /**
  * A default implementation of a fitness evaluator. This implementation is
  * straight forward
+ *
  * @author Klaus Meffert
  * @since 1.1
  */
 
 public class DefaultFitnessEvaluator implements FitnessEvaluator
 {
+
+    /** String containing the CVS revision. Read out via reflection!*/
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
+
     public DefaultFitnessEvaluator()
     {
     }
@@ -38,6 +43,7 @@ public class DefaultFitnessEvaluator implements FitnessEvaluator
      * @param a_fitness_value1 first fitness value
      * @param a_fitness_value2 second fitness value
      * @return true: first fitness value greater than second
+     *
      * @since 1.1
      */
     public boolean isFitter(int a_fitness_value1, int a_fitness_value2) {
