@@ -52,7 +52,7 @@ public class DefaultConfiguration extends Configuration
             setEventManager( new EventManager() );
             setChromosomePool( new ChromosomePool() );
             addGeneticOperator( new ReproductionOperator() );
-            addGeneticOperator( new CrossoverOperator() );
+            addGeneticOperator( new AveragingCrossoverOperator() );
             addGeneticOperator( new MutationOperator( ) );
         }
         catch ( InvalidConfigurationException e )
