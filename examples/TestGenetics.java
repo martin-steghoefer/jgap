@@ -19,6 +19,7 @@
  */
 
 import org.jgap.*;
+import org.jgap.impl.*;
 
 /**
  * Simple test class that demonstrates basic usage of JGAP.
@@ -42,6 +43,11 @@ public class TestGenetics {
       gaConf.setPopulationSize(Integer.parseInt(args[1]));
       gaConf.setFitnessFunction(new MaxFunction());
       gaConf.setNaturalSelector(new WeightedRouletteSelector());
+      gaConf.setRandomGenerator(new StockRandomGenerator());
+
+      gaConf.addGeneticOperator(new ReproductionOperator());
+      gaConf.addGeneticOperator(new CrossoverOperator());
+      gaConf.addGeneticOperator(new MutationOperator(1000));
 
       genotype = Genotype.randomInitialGenotype(gaConf); 
     }

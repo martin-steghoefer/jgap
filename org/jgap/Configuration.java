@@ -20,6 +20,8 @@
 
 package org.jgap;
 
+import java.util.*;
+
 /**
  * The Configuration class represents the current configuration of
  * plugins and flags necessary to execute the genetic algorithm (such
@@ -41,9 +43,10 @@ package org.jgap;
 public class Configuration implements java.io.Serializable {
   protected FitnessFunction objectiveFunction = null;
   protected NaturalSelector populationSelector = null;
+  protected RandomGenerator random = null;
+  protected List geneticOperators = new ArrayList();
   protected int chromosomeSize = 0;
   protected int populationSize = 0;
-  protected int mutationRate = 0;
   protected boolean settingsLocked = false;
 
 
@@ -65,6 +68,11 @@ public class Configuration implements java.io.Serializable {
   public synchronized void setFitnessFunction(FitnessFunction f)
                            throws InvalidConfigurationException {
     verifyChangesAllowed();
+
+    if (f == null) {
+      throw new InvalidConfigurationException(
+        "FitnessFunction instance must not be null.");
+    }
 
     objectiveFunction = f;
   }
@@ -97,6 +105,11 @@ public class Configuration implements java.io.Serializable {
   public synchronized void setNaturalSelector(NaturalSelector s)
                            throws InvalidConfigurationException {
     verifyChangesAllowed();
+
+    if (s == null) {
+      throw new InvalidConfigurationException(
+        "Natural Selector instance must not be null.");
+    }
     
     populationSelector = s;
   }
@@ -106,10 +119,87 @@ public class Configuration implements java.io.Serializable {
    * Retrieve the natural selector being used by this genetic
    * algorithm.
    *
-   * @return The natural selectorused by this genetic algorithm.
+   * @return The natural selector used by this genetic algorithm.
    */
   public NaturalSelector getNaturalSelector() {
     return populationSelector;
+  }
+
+
+  /**
+   * Set the random generator to be used for this genetic algorithm.
+   * The random generator is responsible for genrating random numbers,
+   * which are used throughout the process of genetic evolution and
+   * selection.
+   *
+   * This setting is required.
+   *
+   * @param g   The random generator to be used.
+   * @throws InvalidConfigurationException if the random generator
+   *         is not satisfactory or this object is locked.
+   */
+  public synchronized void setRandomGenerator(RandomGenerator g)
+                           throws InvalidConfigurationException {
+    verifyChangesAllowed();
+
+    if (g == null) {
+      throw new InvalidConfigurationException(
+        "RandomGenerator instance must not be null.");
+    }
+
+    random = g;
+  }
+
+
+  /**
+   * Retrieve the random generator being used by this genetic
+   * algorithm.
+   *
+   * @return The random generator used by this genetic algorithm.
+   */
+  public RandomGenerator getRandomGenerator() {
+    return random;
+  }
+
+
+  /**
+   * Add a genetic operator for use in this algorithm. Genetic operators
+   * represent evolutionary steps that, when combined, make up the
+   * evolutionary process. Examples of genetic operators are reproduction,
+   * crossover, and mutation. During the evolution process, all of the
+   * genetic operators added via this method are invoked in the order
+   * they were added.
+   *
+   * At least one genetic operator must be provided.
+   *
+   * @param o   The genetic operator to be added.
+   * @throws InvalidConfigurationException if the genetic operator
+   *         is null o this robject is locked.
+   */
+  public synchronized void addGeneticOperator(GeneticOperator o)
+                           throws InvalidConfigurationException {
+    verifyChangesAllowed();
+
+    if (o == null) {
+      throw new InvalidConfigurationException(
+        "GeneticOperator instance must not be null.");
+    }
+
+    geneticOperators.add(o);
+  }
+
+
+  /**
+   * Retrieve the genetic operators added for this genetic algorithm.
+   * Note that once this Configuration instance is locked, a new,
+   * immutable list of operators is used and any lists previously
+   * retrieved with this method will no longer reflect the actual
+   * list in use.
+   *
+   * @return The list of genetic operators added to this Configuration
+   */
+  public List getGeneticOperators() {
+    return geneticOperators;
   }
 
 
@@ -160,6 +250,7 @@ public class Configuration implements java.io.Serializable {
     populationSize = s;
   }
 
+
   /**
    * Retrieve the population size being used by this genetic
    * algorithm.
@@ -168,38 +259,6 @@ public class Configuration implements java.io.Serializable {
    */
   public int getPopulationSize() {
     return populationSize;
-  }
-
-
-
-  /**
-   * Set the mutation rate to be used for this genetic algorithm.
-   * The mutation rate should reflect the desired chances of a
-   * Chromosome randomly mutating. For example, if 1000 were
-   * provided, then there would be a statistical 1/1000 chance
-   * of each Chromosome being mutated.
-   *
-   * This setting is optional. If not set, mutation will be turned off.
-   *
-   * @param r   The mutation rate to be used.
-   * @throws InvalidConfigurationException if the mutation rate
-   *         is not satisfactory or this object is locked.
-   */
-  public synchronized void setMutationRate(int r) 
-                           throws InvalidConfigurationException {  
-    verifyChangesAllowed();
-
-    mutationRate = r;
-  }
-
-  /**
-   * Retrieve the mutation rate being used by this genetic
-   * algorithm.
-   *
-   * @return The mutation rate used by this genetic algorithm.
-   */
-  public int getMutationRate() {
-    return mutationRate;
   }
 
 
@@ -232,6 +291,9 @@ public class Configuration implements java.io.Serializable {
       }
 
       settingsLocked = true;
+
+      // Make geneticOperators list immutable
+      geneticOperators = Collections.unmodifiableList(geneticOperators);
     }
   }
 
@@ -259,6 +321,8 @@ public class Configuration implements java.io.Serializable {
   public synchronized boolean hasValidState() {
     return objectiveFunction != null &&
            populationSelector != null &&
+           random != null &&
+           !geneticOperators.isEmpty() &&
            chromosomeSize > 0 &&
            populationSize > 0;
   }

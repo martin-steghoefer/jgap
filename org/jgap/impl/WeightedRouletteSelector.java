@@ -18,8 +18,9 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package org.jgap;
+package org.jgap.impl;
 
+import org.jgap.*;
 import java.util.*;
 
 
@@ -38,13 +39,11 @@ import java.util.*;
  * @author Neil Rotstan (neil at bluesock.org)
  */
 public class WeightedRouletteSelector implements NaturalSelector {
-  private static Random generator = new Random();
-
   private HashMap population = new HashMap();
   private int totalInstances = 0;
 
 
-  public void add(Chromosome chromosome, int fitness) {
+  public void add(Configuration gaConf, Chromosome chromosome, int fitness) {
     if(population.containsKey(chromosome)) {
       ((Counter) population.get(chromosome)).increment(fitness);
     }
@@ -56,7 +55,8 @@ public class WeightedRouletteSelector implements NaturalSelector {
   }
 
  
-  public Chromosome[] select(int howMany) {
+  public Chromosome[] select(Configuration gaConf, int howMany) {
+    RandomGenerator generator = gaConf.getRandomGenerator();
     Chromosome[] selections = new Chromosome[howMany];
     int[] selectedIndices = new int[howMany];
 

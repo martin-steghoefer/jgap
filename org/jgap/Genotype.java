@@ -31,8 +31,6 @@ import java.util.*;
  * @author Neil Rotstan (neil at bluesock.org)
  */
 public class Genotype implements java.io.Serializable {
-  protected static Random generator = new Random();
-
   protected Configuration gaConf;
   protected Chromosome[] chromosomes;
   protected List workingPool;
@@ -111,59 +109,40 @@ public class Genotype implements java.io.Serializable {
 
   /**
    * Evolve the collection of Chromosomes within this
-   * Genotype. This is implemented via the following steps:
-   *
-   * (1) Reproduce each Chromosome instance.
-   * (2) Randomly select two Chromosome instances and have
-   *     them crossover. Repeat this step a number of times 
-   *     equal to the original number of Chromosomes managed
-   *     by this Genotype instance.
-   * (3) Give each Chromosome instance an opportunity to mutate.
-   * (4) Evaluate the fitness of each Chromosome instance and
-   *     hand the Chromosome and its fitness value to a natural
-   *     selector.
-   * (5) Have the natural selector choose a number of Chromosome
-   *     instances equal to the size of the original population
-   *     managed by this Genotype. These instances become the new
-   *     population managed by this Genotype instance.
+   * Genotype. This will execute all of the genetic operators
+   * added to the present Configuration and then invoke the
+   * natural selector to choose which chromosomes will be
+   * included in the next population. Note that the population
+   * size always remains constant.
    */
   public void evolve() {
     workingPool.removeAll(workingPool);
 
-    for(int i = 0; i < chromosomes.length; i++) {
-      // Step 1.
-      workingPool.add(chromosomes[i].reproduce());
+    // Execute all of the Genetic Operators
+    List geneticOperators = gaConf.getGeneticOperators();
+    Iterator operatorIterator = geneticOperators.iterator();
 
-      // Step 2.
-      Chromosome firstMate =
-        chromosomes[generator.nextInt(chromosomes.length)];
-        
-      Chromosome secondMate =   
-        chromosomes[generator.nextInt(chromosomes.length)];
-
-      firstMate.crossover(secondMate);
-
-      workingPool.add(firstMate);
-      workingPool.add(secondMate);
+    while (operatorIterator.hasNext()) {
+      ((GeneticOperator) operatorIterator.next()).operate(
+        gaConf, chromosomes, workingPool);
     }
-
-
+    
+    // Add the chromosomes in the working pool to the natural selector
     Iterator iterator = workingPool.iterator();
 
     while(iterator.hasNext()) {
       Chromosome currentChromosome = (Chromosome) iterator.next();
 
-      // Step 3.
-      currentChromosome.mutate();
-
-      // Step 4.
       gaConf.getNaturalSelector().add(
+        gaConf,
         currentChromosome,
         gaConf.getFitnessFunction().evaluate(currentChromosome));
     }
 
-    // Step 5.
-    chromosomes = gaConf.getNaturalSelector().select(chromosomes.length);
+    // Repopulate the chromosomes with those selected by the natural
+    // selector
+    chromosomes = gaConf.getNaturalSelector().select(gaConf,
+                                                     chromosomes.length);
   }
 
 

@@ -34,21 +34,13 @@ import java.util.*;
  * if more than two possible values are desired.
  * In the future, a Gene class and Allele interface may be
  * created that will allow more flexibility in this regard.
- * <p>
- * Chromosomes support reproduction, crossover, and mutation.
- * Additional mechanisms for chromosome evolution are
- * planned for future versions.
  *
- * @author Neil Rotstan (neil at bluesock.org)
+ * @author Neil Rotstan
  */
-public class Chromosome implements java.io.Serializable {
+public class Chromosome implements Cloneable, java.io.Serializable {
   protected final Configuration gaConf;
   protected final int numberOfGenes;
-  protected int mutationRate;
   protected final BitSet genes;
-
-  private static Random generator = new Random();
-
 
   /**
    * Constructs this Chromosome instance with the given set of genes.
@@ -58,9 +50,17 @@ public class Chromosome implements java.io.Serializable {
    * specified size. This constructor exists in case it's desirable
    * to initialize Chromosomes with specific gene values.
    *
+   * @param configuration A configuration instance that controls
+   *                      the behavior of this GA run. Note that
+   *                      it must be in a valid state at the time
+   *                      of invocation, or an InvalidConfigurationException
+   *                      will be thrown.
    * @param initialGenes  The set of genes with which to initialize
    *                      this Chromosome instance. Each bit in the
    *                      BitSet represents a single gene.
+   *
+   * @throws InvalidConfigurationException if the given Configuration
+   *         instance is null or invalid.
    */
   public Chromosome(Configuration configuration, BitSet initialGenes)
          throws InvalidConfigurationException {
@@ -78,7 +78,6 @@ public class Chromosome implements java.io.Serializable {
 
     genes = initialGenes;
     numberOfGenes = gaConf.getChromosomeSize();
-    mutationRate = gaConf.getMutationRate();
   }
 
 
@@ -88,7 +87,7 @@ public class Chromosome implements java.io.Serializable {
    *
    * @return A copy of this Chromosome.
    */
-  public Chromosome reproduce() {
+  public Object clone() {
     try {
       return new Chromosome(gaConf, (BitSet) genes.clone());
     }
@@ -101,80 +100,6 @@ public class Chromosome implements java.io.Serializable {
         "Fatal Error: reproduce operation produced an " +
         "InvalidConfigurationException. This should never happen." +
         "Please report this as a bug.");
-    }
-  }
-
-
-  /**
-   * Performs basic crossover between this Chromosome instance and
-   * the given instance. A locus (element index) is randomly selected
-   * and all genes with a locus greater or equal to that randomly
-   * selected are then swapped between the two Chromosome instances.
-   * For example, suppose this Chromosome had the genes 1010 and the
-   * given Chromosome had the genes 0011. This method would choose a
-   * random index from 0-3. Let's say it chose 2. Then it would swap
-   * the genes with indexes >= 2 between the two chromosomes. This
-   * chromosome would then be 1011 and the given Chromosome would be
-   * 0010. 
-   *
-   * Note that the given Chromosome must have the same number of
-   * genes as this Chromosome or an IllegalArgumentException will be
-   * thrown.
-   *
-   * @param mate: The Chromosome to "mate" with this one via the
-   *              crossover mechanism described above.
-   *
-   * @throws IllegalArgumentException if the size of the given
-   *         Chromosome is not the same as the size of this
-   *         Chromosome.
-   */
-  public void crossover(Chromosome mate) {
-    int locus = generator.nextInt(numberOfGenes);
-    boolean currentAllele;
-
-    for(int i = locus; i < numberOfGenes; i++) {
-      currentAllele = genes.get(i);
-      
-      if(mate.genes.get(i)) {
-        genes.set(i);
-      }
-
-      else {
-        genes.clear(i);
-      }
-
-      if(currentAllele) {
-        mate.genes.set(i);
-      }
-
-      else {
-        mate.genes.clear(i);
-      }
-    }
-  }
-
-
-  /**
-   * Runs through the genes of this Chromosome, possibly mutating
-   * some in the process. For each gene, a random number is chosen
-   * between zero and the mutation rate provided at construction
-   * (or the default rate if none was provided). If the value of
-   * the random number is 0, then the gene's bit will be flipped.
-   */
-  public void mutate() {
-    if (mutationRate == 0) {
-      return;
-    }
-
-    for(int i = 0 ; i < numberOfGenes; i++) {
-      if(generator.nextInt(mutationRate) == 0) {
-        if(genes.get(i)) {
-          genes.clear(i);
-        }
-        else {
-          genes.set(i);
-        }
-      }
     }
   }
 
@@ -193,6 +118,18 @@ public class Chromosome implements java.io.Serializable {
   }
 
 
+  /**
+   * Retrieves the set of genes that make up this Chromosome.
+   * This method exists primarily for the benefit of GeneticOperators
+   * that require the ability to manipulate Chromosomes at a low leve.
+   *
+   * @return a BitSet of genes.
+   */
+  public BitSet getGenes() {
+    return genes;
+  }
+
+  
   /**
    * Returns the size of this Chromosome (the number of genes).
    * A Chromosome's size is constant and will never change.
@@ -217,12 +154,16 @@ public class Chromosome implements java.io.Serializable {
 
   /**
    * Convenience method that returns a newly constructed Chromosome
-   * instance of the given size with a random population of genes
-   * and instantiated with the given mutation rate.
+   * setup according to the settings in the given Configuration
+   * instance and assigned random gene values.
    *
-   * @param size: The number of genes the Chromosome should contain.
-   * @param mutationRate: The desired mutation rate for this
-   *                      Chromosome.
+   * @param gaConf A Configuration instance that controls the
+   *               execution of this GA. Note that it must be
+   *               in a valid state at the time of this invocation,
+   *               or an InvalidConfigurationException will be thrown.
+   *
+   * @throws InvalidConfigurationException if the given Configuration
+   *         instance is null or invalid.
    */
   public static Chromosome randomInitialChromosome(Configuration gaConf)
                            throws InvalidConfigurationException {
@@ -237,7 +178,11 @@ public class Chromosome implements java.io.Serializable {
     BitSet genes = new BitSet(size);
     
     for(int i = 0; i < size; i++) {
-      if(generator.nextInt(2) == 0) {
+      // Java 1.4 provides a Bitset.set() method that accepts a boolean,
+      // which would clean up the following code a little bit. But
+      // slightly cleaner code doesn't seem an adequate reason to create
+      // a dependency on version 1.4.
+      if(gaConf.getRandomGenerator().nextBoolean()) {
         genes.set(i);
       }
       else {
@@ -247,4 +192,5 @@ public class Chromosome implements java.io.Serializable {
 
     return new Chromosome(gaConf, genes);
   }
-}  
+}
+  
