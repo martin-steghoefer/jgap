@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -221,10 +221,13 @@ public class CoinsExample {
     int maxPerm = permutation-1;
     for (int i=0;i<maxPerm;i++) {
 
-      myDataset = eval.calcAvgFitness(i);
-      Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(1);
+//      myDataset = eval.calcAvgFitness(i);
+      Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(i);
+      System.err.println("-----------------------------");
+      System.err.println("Perm " +i);
       System.err.println("Best Fitness " + dataAvg.bestFitnessValue);
       System.err.println(" Generation  " + dataAvg.bestFitnessValueGeneration);
+      System.err.println(" BestFit/Gen " + dataAvg.bestFitnessValue/dataAvg.bestFitnessValueGeneration);
       System.err.println("Avg. Fitness " + dataAvg.avgFitnessValue);
       System.err.println("Avg. Div.    " + dataAvg.avgDiversityFitnessValue);
       System.err.println("Avg. BestD   " + dataAvg.avgBestDeltaFitnessValue);
