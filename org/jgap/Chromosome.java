@@ -39,12 +39,12 @@ public class Chromosome implements Comparable, Cloneable, Serializable
     /**
      * The current active genetic configuration.
      */
-    protected final Configuration m_activeConfiguration;
+    protected transient Configuration m_activeConfiguration = null;
 
     /**
      * The array of Genes contained in this Chromosome.
      */
-    protected final Gene[] m_genes;
+    protected Gene[] m_genes = null;
 
     /**
      * Keeps track of whether or not this Chromosome has been selected by
@@ -65,6 +65,18 @@ public class Chromosome implements Comparable, Cloneable, Serializable
      * to be recalculated each time.
      */
     private int m_hashCode = 0;
+
+
+    /**
+     * This default constructor exists solely to support serialization. Using
+     * it directly will probably result in undesired behavior. Note that,
+     * following deserialization, it is imperative that the
+     * setActiveConfiguration() method is invoked prior to any other method
+     * in this class or else IllegalStateExceptions may be thrown.
+     */
+    public Chromosome()
+    {
+    }
 
 
     /**
@@ -202,6 +214,43 @@ public class Chromosome implements Comparable, Cloneable, Serializable
 
 
     /**
+     * Sets the active Configuration object on this Chromosome. The given
+     * Configuration will be used internally from now on. Typically, this
+     * method is invoked after a Chromosome has been deserialized or
+     * retrieved from a Chromosome pool shared amongst multiple genetic
+     * algorithms. Note that changing the active configuration on a Chromosome
+     * while it is still in active use can have unexpected and undesirable
+     * consequences.
+     *
+     * @param a_activeConfiguration The current active Configuration object
+     *                              that is to be referenced internally from
+     *                              now on by this Chromosome instance.
+     *
+     * @throws InvalidConfigurationException if the Configuration object is
+     *         null or cannot be locked because it is in an invalid or
+     *         incomplete state.
+     */
+    public void setActiveConfiguration( Configuration a_activeConfiguration )
+                throws InvalidConfigurationException
+    {
+        if( a_activeConfiguration == null )
+        {
+            throw new InvalidConfigurationException(
+                "The given Configuration object may not be null." );
+        }
+        else
+        {
+            // Make sure the Configuration object is locked and cannot be
+            // changed.
+            // ----------------------------------------------------------
+            a_activeConfiguration.lockSettings();
+
+            m_activeConfiguration = a_activeConfiguration;
+        }
+    }
+
+
+    /**
      * Returns a copy of this Chromosome. The returned instance can evolve
      * independently of this instance. Note that, if possible, this method
      * will first attempt to acquire a Chromosome instance from the active
@@ -213,7 +262,18 @@ public class Chromosome implements Comparable, Cloneable, Serializable
      */
     public synchronized Object clone()
     {
-        // First see if we can pull a Chromosome from the pool and just
+        // Before doing anything, make sure that a Configuration object
+        // has been set on this Chromosome. If not, then throw an
+        // IllegalStateException.
+        // ------------------------------------------------------------
+        if( m_activeConfiguration == null )
+        {
+            throw new IllegalStateException(
+                "The active Configuration object must be set on this " +
+                "Chromosome prior to invocation of the clone() method." );
+        }
+
+        // Now, first see if we can pull a Chromosome from the pool and just
         // set its gene values (alleles) appropriately.
         // ------------------------------------------------------------
         ChromosomePool pool = m_activeConfiguration.getChromosomePool();
@@ -310,7 +370,7 @@ public class Chromosome implements Comparable, Cloneable, Serializable
     /**
      * Retrieves the fitness value of this Chromosome, as determined by the
      * active fitness function. If a bulk fitness function is in use and
-     * has not yet assigned a fitnes value to this Chromosome, then -1 is
+     * has not yet assigned a fitness value to this Chromosome, then -1 is
      * returned.
      *
      * @return a positive integer value representing the fitness of this
@@ -321,6 +381,24 @@ public class Chromosome implements Comparable, Cloneable, Serializable
     {
         if( m_fitnessValue < 0 )
         {
+            // We don't have a fitness value yet. We'll see if there's a
+            // "normal" fitness function configured (as opposed to a bulk
+            // fitness function) and, if so, then we'll use it to determine
+            // our fitness so that we can return it. First, though, we have
+            // to make sure that a Configuration object has been set on this
+            // Chromosome or else throw an IllegalStateException.
+            // -------------------------------------------------------------
+            if( m_activeConfiguration == null )
+            {
+                throw new IllegalStateException(
+                    "The active Configuration object must be set on this " +
+                    "Chromosome prior to invocation of the getFitnessValue() " +
+                    "method." );
+            }
+
+            // Now grab the "normal" fitness function and, if one exists,
+            // ask it to calculate our fitness value.
+            // ----------------------------------------------------------
             FitnessFunction normalFitnessFunction =
                 m_activeConfiguration.getFitnessFunction();
 
@@ -593,21 +671,37 @@ public class Chromosome implements Comparable, Cloneable, Serializable
         m_hashCode = 0;
         m_isSelectedForNextGeneration = false;
 
-        // If a ChromosomePool is setup in the active configuration, then
-        // release this Chromosome to the pool so it can be recycled later,
-        // thereby saving some memory.
-        // --------------------------------------------------------------
+        // Next we want to try to release this Chromosome to a ChromosomePool
+        // if one has been setup so that we can save a little time and memory
+        // next time a Chromosome is needed. Before trying this, however, we
+        // have to make sure the active Configuration has been set on this
+        // Chromosome or else throw an IllegalStateException.
+        // ------------------------------------------------------------------
+        if( m_activeConfiguration == null )
+        {
+            throw new IllegalStateException(
+                "The active Configuration object must be set on this " +
+                "Chromosome prior to invocation of the cleanup() method." );
+        }
+
+        // Now fetch the active ChromosomePool from the Configuration object
+        // and, if the pool exists, release this Chromosome to it.
+        // -----------------------------------------------------------------
         ChromosomePool pool = m_activeConfiguration.getChromosomePool();
+
         if( pool != null )
         {
-            // The pool will take care of any gene cleanup for us.
-            // -----------------------------------------------------
+            // Note that the pool will take care of any gene cleanup for us,
+            // so we don't need to worry about it here.
+            // -------------------------------------------------------------
             pool.releaseChromosome( this );
         }
         else
         {
-            // We need to manually cleanup our genes.
-            // ----------------------------------------
+            // No pool is available, so we need to finish cleaning up, which
+            // basically entails requesting each of our genes to clean
+            // themselves up as well.
+            // -------------------------------------------------------------
             for( int i = 0; i < m_genes.length; i++ )
             {
                 m_genes[ i ].cleanup();
