@@ -21,6 +21,8 @@ package org.jgap;
  * The RandomGenerator interface provides an abstraction for the random
  * number implementation so that more rigorous or alternative implementations
  * can be provided as desired.
+ * <p>
+ * ATTENTION:
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -28,7 +30,7 @@ package org.jgap;
  */
 public interface RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Returns the next pseudorandom, uniformly distributed int value
@@ -51,6 +53,7 @@ public interface RandomGenerator {
    * is that one int value in the specified range is pseudorandomly
    * generated and returned. All n possible int values are produced with
    * (approximately) equal probability.
+   * @param ceiling the upper boundary excluded
    *
    * @return a pseudorandom integer value between 0 and the given
    *         ceiling - 1, inclusive.
@@ -78,7 +81,7 @@ public interface RandomGenerator {
    * Returns the next pseudorandom, uniformly distributed double value
    * between 0.0 and 1.0 from this random number generator's sequence.
    *
-   * @return a psuedorandom double value.
+   * @return a psuedorandom double value GREATER/EQUAL 0 AND LESS THAN 1.
    *
    * @author Neil Rotstan
    * @since 1.0
