@@ -15,9 +15,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
-  private final static Random RANDOM = new Random();
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   private double m_deviation;
 
@@ -57,8 +55,7 @@ public class GaussianMutationOperator
     if (rn instanceof GaussianRandomGenerator) {
       setRandomGenerator((GaussianRandomGenerator)rn);
     }
-    /**@todo resolve the following to not reference a test class*/
-    else if (rn instanceof RandomGeneratorForTest) {
+    else if (rn instanceof RandomGenerator) {
       setRandomGenerator(rn);
     }
     else {
@@ -66,19 +63,16 @@ public class GaussianMutationOperator
     }
     for (int i = 0; i < a_population.size(); i++) {
       Gene[] genes = a_population.getChromosome(i).getGenes();
-      // ...take a copy of it...
+      // clone the Chromosome
       Chromosome copyOfChromosome = (Chromosome) a_population.getChromosome(i).
           clone();
-      // ...add it to the candidate pool...
+      // Add the Chromosome to the candidate pool
       a_candidateChromosomes.add(copyOfChromosome);
-      // ...then Gaussian mutate all its genes...
+      // ...then Gaussian mutate all its genes
       genes = copyOfChromosome.getGenes();
       for (int j = 0; j < genes.length; j++) {
-//        double value = ( (Double) genes[j].getAllele()).doubleValue();
         double nextGaussian = m_rg.nextDouble();
         double diff = nextGaussian * m_deviation;
-//        value += diff;
-//        genes[j].setAllele(new Double(value));
         mutateGene(genes[j], diff);
       }
     }

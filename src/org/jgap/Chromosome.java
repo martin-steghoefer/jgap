@@ -1,21 +1,45 @@
-/*
- * This file is part of JGAP.
+/**
+ * JGAP offers a dual license model(see below for specific license information):
+ * +The LGPL may be used anytime.
+ * +The MPL may be used if at least $20 have been donated to the JGAP project
+ *  thru PayPal (see http://www.sourceforge.net/projects/jgap).
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * Specific license information (MPL and LGPL)
+ * -------------------------------------------
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
  *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * The Original Code is 'JGAP - Java Genetic Algorithms Package'.
+ * The Initial Developer of the Original Code is Neil Rotstan. Portions created
+ * by the Initial Developer are Copyright (C) 2002- 2003 by Neil Rotstan.
+ * All Rights Reserved.
+ * Co-developer of the code is Klaus Meffert. Portions created by the co-
+ * developer are Copyright (C) 2003-2005 by Klaus Meffert. All Rights Reserved.
+ * Contributor(s): all the names of the contributors are added in the source
+ * code where applicable.
+ *
+ * Alternatively, the contents of this file may be used under the terms of the
+ * LGPL license (the "GNU LESSER PUBLIC LICENSE"), in which case the
+ * provisions of LGPL are applicable instead of those above.  If you wish to
+ * allow use of your version of this file only under the terms of the LGPL
+ * License and not to allow others to use your version of this file under
+ * the MPL, indicate your decision by deleting the provisions above and
+ * replace them with the notice and other provisions required by the LGPL.
+ * If you do not delete the provisions above, a recipient may use your version
+ * of this file under either the MPL or the LGPL.
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the MPL as stated above or under the terms of the LGPL.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser Public License for more
+ * details.
  */
-
 package org.jgap;
 
 import java.io.*;
@@ -39,7 +63,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static final double DELTA = 0.000000001d;
 
