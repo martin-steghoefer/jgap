@@ -19,9 +19,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -34,7 +32,7 @@ import junitx.util.*;
 public class IntegerGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public IntegerGeneTest() {
   }
@@ -193,8 +191,7 @@ public class IntegerGeneTest
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer(59));
     assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
-        getAllele()),
-                 gene1.compareTo(gene2));
+        getAllele()), gene1.compareTo(gene2));
   }
 
   public void testCompareToNative_1() {
@@ -203,8 +200,7 @@ public class IntegerGeneTest
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer(58));
     assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
-        getAllele()),
-                 gene1.compareTo(gene2));
+        getAllele()), gene1.compareTo(gene2));
   }
 
   public void testCompareToNative_2() {
@@ -213,8 +209,7 @@ public class IntegerGeneTest
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer(58));
     assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
-        getAllele()),
-                 gene1.compareTo(gene2));
+        getAllele()), gene1.compareTo(gene2));
   }
 
   public void testCompareToNative_3() {
@@ -223,8 +218,7 @@ public class IntegerGeneTest
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer( -59));
     assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
-        getAllele()),
-                 gene1.compareTo(gene2));
+        getAllele()), gene1.compareTo(gene2));
   }
 
   public void testCompareToNative_4() {
@@ -233,8 +227,7 @@ public class IntegerGeneTest
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer( -0));
     assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
-        getAllele()),
-                 gene1.compareTo(gene2));
+        getAllele()), gene1.compareTo(gene2));
   }
 
   public void testApplyMutation_0() {
@@ -309,5 +302,4 @@ public class IntegerGeneTest
   public void testSetToRandomValue_0() {
     /**@todo implement*/
   }
-
 }
