@@ -21,7 +21,7 @@ public class Force {
           {
               if (abstractSupergeneTest.amountOfChange(q,d,n,p)==a_sum)
                   if ( p % 2 == n % 2)
-                      {
+                      {  if (REPORT_ENABLED)
                           System.out.println("Force "+a_sum+": "+q+
                           " quarters "+d+" dimes "+
                               n+" nickels "+p+" pennies");
@@ -29,7 +29,8 @@ public class Force {
                       }
           }
 
-          System.out.println("Force "+a_sum+": no solution");
+          if (REPORT_ENABLED)
+           System.out.println("Force "+a_sum+": no solution");
           return false;
      }
 
@@ -39,5 +40,7 @@ public class Force {
              solve(i);
          }
      }
+
+     public static boolean REPORT_ENABLED = true;
 
 }

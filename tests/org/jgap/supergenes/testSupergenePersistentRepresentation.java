@@ -59,6 +59,13 @@ public class testSupergenePersistentRepresentation {
             gene.addGene(nested);
 
             instantiableSupergene nested2 = new instantiableSupergene();
+            nested2.setValidator(new Validator()
+             {
+                 public boolean isValid(Gene [] g, Supergene s)
+                  {
+                      return true;
+                  }
+             });
 
             Gene nn1 = new IntegerGene (1, 1000);
             Gene nn2 = new DoubleGene  (0, 1000);
@@ -71,7 +78,8 @@ public class testSupergenePersistentRepresentation {
 
             gene.addGene(nested2);
 
-            CompositeGene nested3 = new CompositeGene();
+            instantiableSupergene nested3 = new instantiableSupergene();
+            nested3.setValidator(null);
 
             Gene nnn1 = new IntegerGene (1, 1000);
             Gene nnn2 = new DoubleGene  (0, 1000);

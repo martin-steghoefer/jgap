@@ -132,6 +132,13 @@ public abstract class abstractSupergeneTest {
         return bestSolutionSoFar;
     }
 
+    /** If set to true (required for strict tests),
+     * only tasks with existing solutions will be submitted as
+     * a test tasks.
+     */
+    public static boolean EXISTING_SOLUTIONS_ONLY = false;
+
+
     /** Test the method, returns the sum of all differences between
      * the required and obtained excange amount. One exception counts
      * as 1000 on the error score.
@@ -145,7 +152,9 @@ public abstract class abstractSupergeneTest {
                 if (REPORT_ENABLED)
                  System.out.println ("EXCANGING " + amount+" ");
                 // do not solve cases without solutions
-                //if (!Force.solve(amount)) continue Test;
+                if (EXISTING_SOLUTIONS_ONLY)
+                 if (!Force.solve(amount)) continue Test;
+
                 //Force.solve(amount);
 
                 e = makeChangeForAmount (amount);

@@ -37,7 +37,7 @@ public class NickelsPenniesSupergene extends abstractSupergene {
          super(a_genes);
      }
 
-    public boolean isValid(Gene [] genes)
+    public boolean isValid(Gene [] genes, Supergene s)
     {
          IntegerGene nickels = (IntegerGene)  genes[0];
          IntegerGene pennies  = (IntegerGene) genes[1];
