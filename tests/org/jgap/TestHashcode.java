@@ -62,7 +62,7 @@ public class TestHashcode {
 		{
 			int hashcode = ObjectList.get(Index).hashCode();
 			key = new Integer(hashcode);
-			if(HashCodes.containsKey(key)==true)
+			if(HashCodes.containsKey(key))
 			{
 				newvalue = ((Integer) HashCodes.get(key)).intValue() + 1;
 				HashCodes.put(key, new Integer(newvalue));
