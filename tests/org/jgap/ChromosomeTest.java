@@ -10,9 +10,7 @@
 package org.jgap;
 
 import java.util.*;
-
 import org.jgap.impl.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -25,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public ChromosomeTest() {
   }
@@ -130,26 +128,10 @@ public class ChromosomeTest
   }
 
   /**
-   * Illegal constructions regarding first and second parameter
+   * Illegal constructions regarding first parameter
    */
   public void testConstruct_6() {
     try {
-      new Chromosome(null);
-      fail();
-    }
-    catch (IllegalArgumentException illex) {
-      ; //this is OK
-    }
-  }
-
-  /**
-   * Illegal constructions regarding first parameter
-   * @throws InvalidConfigurationException
-   */
-  public void testConstruct_7()
-      throws InvalidConfigurationException {
-    try {
-      Genotype.setConfiguration(new Configuration());
       new Chromosome(null);
       fail();
     }
@@ -174,12 +156,18 @@ public class ChromosomeTest
     }
   }
 
-  public void testConstruct_10() {
+  /**
+   * Illegal constructions regarding configuration
+   * @throws Exception
+   */
+  public void testConstruct_10()
+      throws Exception {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
+    // fitness function missing in config.,
     new Chromosome(genes);
   }
 
@@ -209,9 +197,9 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
+    Genotype.setConfiguration(conf);
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
-    Genotype.setConfiguration(conf);
     new Chromosome(genes);
   }
 
@@ -254,7 +242,10 @@ public class ChromosomeTest
   final int MAX_GENES_TYPES = 6;
 
   /**
-   * Test hashcode for intensity of diversity.
+   * Test hashcode for intensity of diversity.<p>
+   *
+   * <b>Warning:</b> when a new Gene type is added the constant MAX_GENES_TYPES
+   * must be adjusted as well as adding the new type in the switch case below.
    * @throws InvalidConfigurationException
    *
    * @author John Serri
@@ -269,10 +260,11 @@ public class ChromosomeTest
     Gene[] genes;
     Chromosome chrom;
     TestHashcode thc = new TestHashcode();
+    thc.setVerbose(true);
     List uniqueChromosome = new ArrayList();
     List equalChromosome = new ArrayList();
 
-    // Build random Chromosomes
+    // Build Random Chromosomes
     for (count = 0; count < MAX_CHROMOSOME_TO_TEST; count++) {
       numGenes = (int) (Math.random() * MAX_GENES_TO_TEST);
       genes = new Gene[numGenes];
@@ -300,31 +292,31 @@ public class ChromosomeTest
         }
       }
       chrom = new Chromosome(genes);
-      // We only want to add unique object, since equal object will return
-      // the same hashcode
+      // We only want to add unique object, since equal object will
+      // return the same hashcode
       if (!uniqueChromosome.contains(chrom))
         uniqueChromosome.add(chrom);
     }
 
-    // Test to see if enough hashcodes are unique
+    //Test to see if enough hashcodes are unique
     thc.setFractionUnique(.95);
     if (!thc.testHashCodeUniqueness(uniqueChromosome)) {
       System.out.println(
           "testHashCodeUniqueness failed\n Actual Percent unique = " +
           thc.getActualFractionUnique());
-       fail();
+      fail();
     }
 
-//  	//Test mathematical average and dispersion of hashcode
-//  	//I am not sure of the value of this test since boundry values are pretty much arbitrary
-//  	thc.setAverageMax(16500000);
-//  	thc.setAverageMin(14000000);
-//  	thc.setStdDevMax(11000000);
-//  	thc.setStdDevMin(9000000);
-//  	if(thc.testDispersion(UniqueChromosome)==false)
-//  	{
-//  		fail();
-//  	}
+    //Test mathematical average and dispersion of hashcode
+    //I am not sure of the value of this test since boundry values are
+    // pretty much arbitrary
+    thc.setAverageMax(2100000000);
+    thc.setAverageMin( -140000000);
+    thc.setStdDevMax(2100000000);
+    thc.setStdDevMin(9000000);
+    if (!thc.testDispersion(uniqueChromosome)) {
+      fail();
+    }
 
     // Build identical Chromosomes
     for (count = 0; count < 3; count++) {
@@ -333,7 +325,7 @@ public class ChromosomeTest
       chrom = new Chromosome(genes);
       equalChromosome.add(chrom);
     }
-    // If an object is equal it must have the same hashcode
+    //If an object is equal it must have the same hashcode
     if (!thc.testHashCodeEquality(equalChromosome)) {
       fail();
     }
@@ -384,7 +376,6 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
-    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
@@ -492,7 +483,6 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
-    Genotype.setConfiguration(conf);
     chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
                  0.0000001d);
@@ -513,7 +503,6 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
-    Genotype.setConfiguration(conf);
     chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
                  0.0000001d);
@@ -521,7 +510,7 @@ public class ChromosomeTest
     // as no computation is performed once the fitness is known in the
     // chromosome.
     ff.setStaticFitnessValue(44.235d);
-    assertEquals(20, chrom.getFitnessValue(),0.0000001d);
+    assertEquals(20, chrom.getFitnessValue(), 0.0000001d);
   }
 
   public void testSize_0()
@@ -676,7 +665,6 @@ public class ChromosomeTest
     genes1[1].setAllele(new Boolean(true));
     assertFalse(chrom2.compareTo(chrom) == 0);
   }
-
 }
 
 class MyAppObject
