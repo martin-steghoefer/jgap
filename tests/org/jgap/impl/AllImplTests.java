@@ -16,11 +16,9 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 package org.jgap.impl;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import junit.framework.*;
 
 /**
  * Test suite for all tests of package org.jgap.impl
@@ -32,18 +30,20 @@ public class AllImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public AllImplTests() {
   }
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
+    suite.addTest(AveragingCrossoverOperatorTest.suite());
     suite.addTest(BestChromosomesSelectorTest.suite());
     suite.addTest(BooleanGeneTest.suite());
     suite.addTest(CauchyRandomGeneratorTest.suite());
     suite.addTest(ChainOfSelectorsTest.suite());
     suite.addTest(CompositeGeneTest.suite());
+    suite.addTest(ChromosomePoolTest.suite());
     suite.addTest(CrossoverOperatorTest.suite());
     suite.addTest(DefaultConfigurationTest.suite());
     suite.addTest(DefaultMutationRateCalculatorTest.suite());
@@ -52,8 +52,8 @@ public class AllImplTests
     suite.addTest(IntegerGeneTest.suite());
     suite.addTest(MutationOperatorTest.suite());
     suite.addTest(NumberGeneTest.suite());
-    suite.addTest(ReproductionOperatorTest.suite());
     suite.addTest(PoolTest.suite());
+    suite.addTest(ReproductionOperatorTest.suite());
     suite.addTest(StringGeneTest.suite());
     suite.addTest(WeightedRouletteSelectorTest.suite());
     return suite;
