@@ -29,12 +29,13 @@ package org.jgap.xml;
  * reason for failure.
  *
  * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class GeneCreationException
     extends Exception {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Constructs a new GeneCreationException instance with the given error
@@ -42,6 +43,9 @@ public class GeneCreationException
    *
    * @param a_message An error message describing the reason this exception
    *                  is being thrown.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public GeneCreationException(String a_message) {
     super(a_message);

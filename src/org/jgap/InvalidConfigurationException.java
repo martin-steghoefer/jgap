@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -19,7 +17,6 @@
  */
 package org.jgap;
 
-
 /**
  * This exception is typically thrown when an invalid value has been
  * passed to a Configuration object, an attempt is made to lock a Configuration
@@ -28,19 +25,25 @@ package org.jgap;
  * successfully locked.
  *
  * @author Neil Rotstan
+ * @authro Klaus Meffert
  * @since 1.0
  */
-public class InvalidConfigurationException extends Exception
-{
-    /**
-     * Constructs a new InvalidConfigurationException instance with the
-     * given error message.
-     *
-     * @param a_message An error message describing the reason this exception
-     *                  is being thrown.
-     */
-    public InvalidConfigurationException( String a_message )
-    {
-        super( a_message );
-    }
+public class InvalidConfigurationException
+    extends Exception {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**
+   * Constructs a new InvalidConfigurationException instance with the
+   * given error message.
+   *
+   * @param a_message An error message describing the reason this exception
+   *                  is being thrown.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
+   */
+  public InvalidConfigurationException(String a_message) {
+    super(a_message);
+  }
 }
