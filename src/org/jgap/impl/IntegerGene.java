@@ -19,34 +19,29 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Gene;
+import java.util.StringTokenizer;
+
 import org.jgap.Configuration;
+import org.jgap.Gene;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
 
-import java.util.StringTokenizer;
-
-
 /**
- * A Gene implementation that supports a integer values for its allele.
+ * A Gene implementation that supports an integer values for its allele.
  * Upper and lower bounds may optionally be provided to restrict the range
  * of legal values allowed by this Gene instance.
  *
  * @author Neil Rotstan
  * @since 1.0
  */
-public class IntegerGene implements Gene, java.io.Serializable
+public class IntegerGene extends NumberGene
+    implements Gene
 {
     /**
      * Represents the constant range of values supported by integers.
      */
     protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
-                                                (long) Integer.MIN_VALUE;
-
-    /**
-     * References the internal integer value (allele) of this Gene.
-     */
-    protected Integer m_value = null;
+        (long) Integer.MIN_VALUE;
 
     /**
      * The upper bounds of values represented by this Gene. If not explicitly
@@ -71,19 +66,17 @@ public class IntegerGene implements Gene, java.io.Serializable
      */
     protected long m_boundsUnitsToIntegerUnits;
 
-
     /**
      * Constructs a new IntegerGene with default settings. No bounds will
      * be put into effect for values (alleles) of this Gene instance, other
      * than the standard range of integer values.
      */
-    public IntegerGene()
+    public IntegerGene ()
     {
         m_lowerBounds = Integer.MIN_VALUE;
         m_upperBounds = Integer.MAX_VALUE;
-        calculateBoundsUnitsToIntegerUnitsRatio();
+        calculateBoundsUnitsToIntegerUnitsRatio ();
     }
-
 
     /**
      * Constructs a new IntegerGene with the specified lower and upper
@@ -94,13 +87,12 @@ public class IntegerGene implements Gene, java.io.Serializable
      * @param a_upperBounds The highest value that this Gene may possess,
      *                      inclusive.
      */
-    public IntegerGene( int a_lowerBounds, int a_upperBounds )
+    public IntegerGene (int a_lowerBounds, int a_upperBounds)
     {
         m_lowerBounds = a_lowerBounds;
         m_upperBounds = a_upperBounds;
-        calculateBoundsUnitsToIntegerUnitsRatio();
+        calculateBoundsUnitsToIntegerUnitsRatio ();
     }
-
 
     /**
      * Provides an implementation-independent means for creating new Gene
@@ -117,34 +109,14 @@ public class IntegerGene implements Gene, java.io.Serializable
      * of the returned Gene and it should therefore be considered to be
      * undefined.
      *
-     * @param a_activeConfiguration The current active configuration.
+     * @param a_activeConfiguration ignored here
      * @return A new Gene instance of the same type and with the same
      *         setup as this concrete Gene.
      */
-    public Gene newGene( Configuration a_activeConfiguration )
+    public Gene newGene (Configuration a_activeConfiguration)
     {
-        return new IntegerGene( m_lowerBounds, m_upperBounds );
+        return new IntegerGene (m_lowerBounds, m_upperBounds);
     }
-
-
-    /**
-     * Sets the value (allele) of this Gene to the new given value. This class
-     * expects the value to be an Integer instance. If the value is above
-     * or below the upper or lower bounds, it will be mappped to within
-     * the allowable range.
-     *
-     * @param a_newValue the new value of this Gene instance.
-     */
-    public void setAllele( Object a_newValue )
-    {
-        m_value = (Integer) a_newValue;
-
-        // If the value isn't between the upper and lower bounds of this
-        // IntegerGene, map it to a value within those bounds.
-        // -------------------------------------------------------------
-        mapValueToWithinBounds();
-    }
-
 
     /**
      * Retrieves a string representation of this Gene that includes any
@@ -159,16 +131,15 @@ public class IntegerGene implements Gene, java.io.Serializable
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
      */
-    public String getPersistentRepresentation() throws
-                  UnsupportedOperationException
+    public String getPersistentRepresentation ()
+        throws UnsupportedOperationException
     {
         // The persistent representation includes the value, lower bound,
         // and upper bound. Each is separated by a colon.
         // --------------------------------------------------------------
-        return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
-                            PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+        return toString () + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
+            PERSISTENT_FIELD_DELIMITER + m_upperBounds;
     }
-
 
     /**
      * Sets the value and internal state of this Gene from the string
@@ -187,32 +158,32 @@ public class IntegerGene implements Gene, java.io.Serializable
      * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
      */
-    public void setValueFromPersistentRepresentation( String a_representation )
-                throws UnsupportedRepresentationException
+    public void setValueFromPersistentRepresentation (String a_representation)
+        throws UnsupportedRepresentationException
     {
-        if( a_representation != null )
+        if (a_representation != null)
         {
             StringTokenizer tokenizer =
-                new StringTokenizer( a_representation,
-                                     PERSISTENT_FIELD_DELIMITER );
+                new StringTokenizer (a_representation,
+                PERSISTENT_FIELD_DELIMITER);
 
             // Make sure the representation contains the correct number of
             // fields. If not, throw an exception.
             // -----------------------------------------------------------
-            if( tokenizer.countTokens() != 3 )
+            if (tokenizer.countTokens () != 3)
             {
-                throw new UnsupportedRepresentationException(
+                throw new UnsupportedRepresentationException (
                     "The format of the given persistent representation " +
-                    "is not recognized: it does not contain three tokens." );
+                    "is not recognized: it does not contain three tokens.");
             }
 
-            String valueRepresentation = tokenizer.nextToken();
-            String lowerBoundRepresentation = tokenizer.nextToken();
-            String upperBoundRepresentation = tokenizer.nextToken();
+            String valueRepresentation = tokenizer.nextToken ();
+            String lowerBoundRepresentation = tokenizer.nextToken ();
+            String upperBoundRepresentation = tokenizer.nextToken ();
 
             // First parse and set the representation of the value.
             // ----------------------------------------------------
-            if( valueRepresentation.equals( "null") )
+            if (valueRepresentation.equals ("null"))
             {
                 m_value = null;
             }
@@ -221,11 +192,11 @@ public class IntegerGene implements Gene, java.io.Serializable
                 try
                 {
                     m_value =
-                        new Integer( Integer.parseInt( valueRepresentation ) );
+                        new Integer (Integer.parseInt (valueRepresentation));
                 }
-                catch( NumberFormatException e )
+                catch (NumberFormatException e)
                 {
-                    throw new UnsupportedRepresentationException(
+                    throw new UnsupportedRepresentationException (
                         "The format of the given persistent representation " +
                         "is not recognized: field 1 does not appear to be " +
                         "an integer value.");
@@ -237,11 +208,11 @@ public class IntegerGene implements Gene, java.io.Serializable
             try
             {
                 m_lowerBounds =
-                    Integer.parseInt( lowerBoundRepresentation );
+                    Integer.parseInt (lowerBoundRepresentation);
             }
-            catch( NumberFormatException e )
+            catch (NumberFormatException e)
             {
-                throw new UnsupportedRepresentationException(
+                throw new UnsupportedRepresentationException (
                     "The format of the given persistent representation " +
                     "is not recognized: field 2 does not appear to be " +
                     "an integer value.");
@@ -252,11 +223,11 @@ public class IntegerGene implements Gene, java.io.Serializable
             try
             {
                 m_upperBounds =
-                    Integer.parseInt( upperBoundRepresentation );
+                    Integer.parseInt (upperBoundRepresentation);
             }
-            catch( NumberFormatException e )
+            catch (NumberFormatException e)
             {
-                throw new UnsupportedRepresentationException(
+                throw new UnsupportedRepresentationException (
                     "The format of the given persistent representation " +
                     "is not recognized: field 3 does not appear to be " +
                     "an integer value.");
@@ -266,22 +237,9 @@ public class IntegerGene implements Gene, java.io.Serializable
             // ratio since our lower and upper bounds have probably just
             // been changed.
             // -------------------------------------------------------------
-            calculateBoundsUnitsToIntegerUnitsRatio();
+            calculateBoundsUnitsToIntegerUnitsRatio ();
         }
     }
-
-
-    /**
-     * Retrieves the value (allele) represented by this Gene. All values
-     * returned by this class will be Integer instances.
-     *
-     * @return the Integer value of this Gene.
-     */
-    public Object getAllele()
-    {
-        return m_value;
-    }
-
 
     /**
      * Retrieves the int value of this Gene, which may be more convenient in
@@ -289,9 +247,9 @@ public class IntegerGene implements Gene, java.io.Serializable
      *
      * @return the int value of this Gene.
      */
-    public int intValue()
+    public int intValue ()
     {
-        return m_value.intValue();
+        return ((Integer)m_value).intValue ();
     }
 
     /**
@@ -305,139 +263,29 @@ public class IntegerGene implements Gene, java.io.Serializable
      *                          to use the random number generator of their
      *                          choice.
      */
-    public void setToRandomValue( RandomGenerator a_numberGenerator )
+    public void setToRandomValue (RandomGenerator a_numberGenerator)
     {
-        m_value = new Integer( a_numberGenerator.nextInt() );
+        m_value = new Integer (a_numberGenerator.nextInt ());
 
         // If the value isn't between the upper and lower bounds of this
         // IntegerGene, map it to a value within those bounds.
         // -------------------------------------------------------------
-        mapValueToWithinBounds();
+        mapValueToWithinBounds ();
     }
 
-
     /**
-     * Compares this IntegerGene with the specified object (which must also
-     * be an IntegerGene) for order, which is determined by the integer
-     * value of this Gene compared to the one provided for comparison.
-     *
-     * @param  other the IntegerGene to be compared to this IntegerGene.
+     * Compares to objects by first casting them into their expected type
+     * (e.g. Integer for IntegerGene) and then calling the compareTo-method
+     * of the casted type.
+     * @param o1 first object to be compared, always is not null
+     * @param o2 second object to be compared, always is not null
      * @return a negative integer, zero, or a positive integer as this object
-     *		   is less than, equal to, or greater than the object provided for
+     *	       is less than, equal to, or greater than the object provided for
      *         comparison.
-     *
-     * @throws ClassCastException if the specified object's type prevents it
-     *         from being compared to this IntegerGene.
      */
-    public int compareTo( Object other )
-    {
-        IntegerGene otherIntegerGene = (IntegerGene) other;
-
-        // First, if the other gene (or its value) is null, then this is
-        // the greater allele. Otherwise, just use the Integer's compareTo
-        // method to perform the comparison.
-        // ---------------------------------------------------------------
-        if( otherIntegerGene == null )
-        {
-            return 1;
-        }
-        else if( otherIntegerGene.m_value == null )
-        {
-            // If our value is also null, then we're the same. Otherwise,
-            // this is the greater gene.
-            // ----------------------------------------------------------
-            return m_value == null ? 0 : 1;
-        }
-        else
-        {
-            try
-            {
-                return m_value.compareTo( otherIntegerGene.m_value );
-            }
-            catch( ClassCastException e )
-            {
-                e.printStackTrace();
-                throw e;
-            }
-        }
+    protected int compareToNative(Object o1, Object o2) {
+        return ((Integer)o1).compareTo (o2);
     }
-
-
-    /**
-     * Compares this IntegerGene with the given object and returns true if
-     * the other object is a IntegerGene and has the same value (allele) as
-     * this IntegerGene. Otherwise it returns false.
-     *
-     * @param other the object to compare to this IntegerGene for equality.
-     * @return true if this IntegerGene is equal to the given object,
-     *         false otherwise.
-     */
-    public boolean equals( Object other )
-    {
-        try
-        {
-            return compareTo( other ) == 0;
-        }
-        catch( ClassCastException e )
-        {
-            // If the other object isn't an IntegerGene, then we're not
-            // equal.
-            // ----------------------------------------------------------
-            return false;
-        }
-    }
-
-
-    /**
-     * Retrieves the hash code value for this IntegerGene.
-     *
-     * @return this IntegerGene's hash code.
-     */
-    public int hashCode()
-    {
-        // If our internal Integer is null, then return zero. Otherwise,
-        // just return the hash code of the Integer.
-        // -------------------------------------------------------------
-        if( m_value == null )
-        {
-            return 0;
-        }
-        else
-        {
-            return m_value.hashCode();
-        }
-    }
-
-
-    /**
-     * Retrieves a string representation of this IntegerGene's value that
-     * may be useful for display purposes.
-     *
-     * @return a string representation of this IntegerGene's value.
-     */
-    public String toString()
-    {
-        if( m_value == null )
-        {
-            return "null";
-        }
-        else
-        {
-            return m_value.toString();
-        }
-    }
-
-
-    /**
-     * Executed by the genetic engine when this Gene instance is no
-     * longer needed and should perform any necessary resource cleanup.
-     */
-    public void cleanup()
-    {
-        // No specific cleanup is necessary for this implementation.
-        // ---------------------------------------------------------
-    }
-
 
     /**
      * Maps the value of this IntegerGene to within the bounds specified by
@@ -448,30 +296,30 @@ public class IntegerGene implements Gene, java.io.Serializable
      * between the upper bounds and lower bounds). If the value is null or
      * is already within the bounds, it will be left unchanged.
      */
-    protected void mapValueToWithinBounds()
+    protected void mapValueToWithinBounds ()
     {
-        if( m_value != null )
+        if (m_value != null)
         {
+            Integer i_value = ((Integer)m_value);
             // If the value exceeds either the upper or lower bounds, then
             // map the value to within the legal range. To do this, we basically
             // calculate the distance between the value and the integer min,
             // determine how many bounds units that represents, and then add
             // that number of units to the upper bound.
             // -----------------------------------------------------------------
-            if( m_value.intValue() > m_upperBounds ||
-                m_value.intValue() < m_lowerBounds )
+            if (i_value.intValue () > m_upperBounds ||
+                i_value.intValue () < m_lowerBounds)
             {
                 long differenceFromIntMin = (long) Integer.MIN_VALUE +
-                                            (long) m_value.intValue();
+                    (long) i_value.intValue ();
                 int differenceFromBoundsMin =
-                    (int) ( differenceFromIntMin / m_boundsUnitsToIntegerUnits );
+                    (int) (differenceFromIntMin / m_boundsUnitsToIntegerUnits);
 
                 m_value =
-                    new Integer( m_upperBounds + differenceFromBoundsMin );
+                    new Integer (m_upperBounds + differenceFromBoundsMin);
             }
         }
     }
-
 
     /**
      * Calculates and sets the m_boundsUnitsToIntegerUnits field based
@@ -483,11 +331,11 @@ public class IntegerGene implements Gene, java.io.Serializable
      * allele values that are outside of the bounds to legal allele values that
      * are within the bounds.
      */
-    protected void calculateBoundsUnitsToIntegerUnitsRatio()
+    protected void calculateBoundsUnitsToIntegerUnitsRatio ()
     {
         int divisor = m_upperBounds - m_lowerBounds + 1;
 
-        if( divisor == 0 )
+        if (divisor == 0)
         {
             m_boundsUnitsToIntegerUnits = INTEGER_RANGE;
         }

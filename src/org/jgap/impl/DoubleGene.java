@@ -19,11 +19,12 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Gene;
+import java.util.StringTokenizer;
+
 import org.jgap.Configuration;
+import org.jgap.Gene;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
-import java.util.StringTokenizer;
 
 /**
  * A Gene implementation that supports a double values for its allele.
@@ -35,6 +36,7 @@ import java.util.StringTokenizer;
  * @since 1.1
  */
 public class DoubleGene
+    extends NumberGene
     implements Gene
 {
     /**
@@ -42,11 +44,6 @@ public class DoubleGene
      */
     protected final static double DOUBLE_RANGE = Double.MAX_VALUE -
         Double.MIN_VALUE;
-
-    /**
-     * References the internal double value (allele) of this Gene.
-     */
-    protected Double m_value = null;
 
     /**
      * The upper bounds of values represented by this Gene. If not explicitly
@@ -116,7 +113,7 @@ public class DoubleGene
      * of the returned Gene and it should therefore be considered to be
      * undefined.
      *
-     * @param a_activeConfiguration The current active configuration.
+     * @param a_activeConfiguration ignored here.
      * @return A new Gene instance of the same type and with the same
      *         setup as this concrete Gene.
      *
@@ -126,26 +123,6 @@ public class DoubleGene
     public Gene newGene (Configuration a_activeConfiguration)
     {
         return new DoubleGene (m_lowerBounds, m_upperBounds);
-    }
-
-    /**
-     * Sets the value (allele) of this Gene to the new given value. This class
-     * expects the value to be a Double instance. If the value is above
-     * or below the upper or lower bounds, it will be mappped to within
-     * the allowable range.
-     *
-     * @param a_newValue the new value of this Gene instance.
-     *
-     * @author Klaus Meffert
-     * @since 1.1
-     */
-    public void setAllele (Object a_newValue)
-    {
-        m_value = (Double) a_newValue;
-        // If the value isn't between the upper and lower bounds of this
-        // DoubleGene, map it to a value within those bounds.
-        // -------------------------------------------------------------
-        mapValueToWithinBounds ();
     }
 
     /**
@@ -164,8 +141,8 @@ public class DoubleGene
      * @author Klaus Meffert
      * @since 1.1
      */
-    public String getPersistentRepresentation () throws
-        UnsupportedOperationException
+    public String getPersistentRepresentation ()
+        throws UnsupportedOperationException
     {
         // The persistent representation includes the value, lower bound,
         // and upper bound. Each is separated by a colon.
@@ -194,14 +171,14 @@ public class DoubleGene
      * @author Klaus Meffert
      * @since 1.1
      */
-    public void setValueFromPersistentRepresentation (String a_representation) throws
-        UnsupportedRepresentationException
+    public void setValueFromPersistentRepresentation (String a_representation)
+        throws UnsupportedRepresentationException
     {
         if (a_representation != null)
         {
             StringTokenizer tokenizer =
                 new StringTokenizer (a_representation,
-                                     PERSISTENT_FIELD_DELIMITER);
+                PERSISTENT_FIELD_DELIMITER);
             // Make sure the representation contains the correct number of
             // fields. If not, throw an exception.
             // -----------------------------------------------------------
@@ -272,19 +249,6 @@ public class DoubleGene
     }
 
     /**
-     * Retrieves the value (allele) represented by this Gene. All values
-     * returned by this class will be Double instances.
-     *
-     * @return the Double value of this Gene.
-     *
-     * @since 1.1
-     */
-    public Object getAllele ()
-    {
-        return m_value;
-    }
-
-    /**
      * Retrieves the double value of this Gene, which may be more convenient in
      * some cases than the more general getAllele() method.
      *
@@ -292,7 +256,7 @@ public class DoubleGene
      */
     public double doubleValue ()
     {
-        return m_value.doubleValue ();
+        return ( (Double) m_value).doubleValue ();
     }
 
     /**
@@ -300,7 +264,7 @@ public class DoubleGene
      * the lower and upper bounds (if any) of this Gene.
      *
      * @param a_numberGenerator The random number generator that should be
-         *                          used to create any random values. It's important
+     *                          used to create any random values. It's important
      *                          to use this generator to maintain the user's
      *                          flexibility to configure the genetic engine
      *                          to use the random number generator of their
@@ -319,134 +283,18 @@ public class DoubleGene
     }
 
     /**
-     * Compares this DoubleGene with the specified object (which must also
-     * be a DoubleGene) for order, which is determined by the double
-     * value of this Gene compared to the one provided for comparison.
-     *
-     * @param  other the DoubleGene to be compared to this DoubleGene.
-     * @return a negative double, zero, or a positive double as this object
-     *		   is less than, equal to, or greater than the object provided for
+     * Compares to objects by first casting them into their expected type
+     * (e.g. Integer for IntegerGene) and then calling the compareTo-method
+     * of the casted type.
+     * @param o1 first object to be compared, always is not null
+     * @param o2 second object to be compared, always is not null
+     * @return a negative integer, zero, or a positive integer as this object
+     *	       is less than, equal to, or greater than the object provided for
      *         comparison.
-     *
-     * @throws ClassCastException if the specified object's type prevents it
-     *         from being compared to this DoubleGene.
-     *
-     * @author Klaus Meffert
-     * @since 1.1
      */
-    public int compareTo (Object other)
+    protected int compareToNative (Object o1, Object o2)
     {
-        DoubleGene otherDoubleGene = (DoubleGene) other;
-        // First, if the other gene (or its value) is null, then this is
-        // the greater allele. Otherwise, just use the Double's compareTo
-        // method to perform the comparison.
-        // ---------------------------------------------------------------
-        if (otherDoubleGene == null)
-        {
-            return 1;
-        }
-        else if (otherDoubleGene.m_value == null)
-        {
-            // If our value is also null, then we're the same. Otherwise,
-            // this is the greater gene.
-            // ----------------------------------------------------------
-            return m_value == null ? 0 : 1;
-        }
-        else
-        {
-            try
-            {
-                return m_value.compareTo (otherDoubleGene.m_value);
-            }
-            catch (ClassCastException e)
-            {
-                e.printStackTrace ();
-                throw e;
-            }
-        }
-    }
-
-    /**
-     * Compares this DoubleGene with the given object and returns true if
-     * the other object is a DoubleGene and has the same value (allele) as
-     * this DoubleGene. Otherwise it returns false.
-     *
-     * @param other the object to compare to this DoubleGene for equality.
-     * @return true if this DoubleGene is equal to the given object,
-     *         false otherwise.
-     *
-     * @author Klaus Meffert
-     * @since 1.1
-     */
-    public boolean equals (Object other)
-    {
-        try
-        {
-            return compareTo (other) == 0;
-        }
-        catch (ClassCastException e)
-        {
-            // If the other object isn't a DoubleGene, then we're not
-            // equal.
-            // ----------------------------------------------------------
-            return false;
-        }
-    }
-
-    /**
-     * Retrieves the hash code value for this DoubleGene.
-     *
-     * @return this DoubleGene's hash code.
-     *
-     * @author Klaus Meffert
-     * @since 1.1
-     */
-    public int hashCode ()
-    {
-        // If our internal Double is null, then return zero. Otherwise,
-        // just return the hash code of the Double.
-        // -------------------------------------------------------------
-        if (m_value == null)
-        {
-            return 0;
-        }
-        else
-        {
-            return m_value.hashCode ();
-        }
-    }
-
-    /**
-     * Retrieves a string representation of this DoubleGene's value that
-     * may be useful for display purposes.
-     *
-     * @return a string representation of this DoubleGene's value.
-     *
-     * @author Klaus Meffert
-     * @since 1.1
-     */
-    public String toString ()
-    {
-        if (m_value == null)
-        {
-            return "null";
-        }
-        else
-        {
-            return m_value.toString ();
-        }
-    }
-
-    /**
-     * Executed by the genetic engine when this Gene instance is no
-     * longer needed and should perform any necessary resource cleanup.
-     *
-     * @since 1.1
-     */
-    public void cleanup ()
-    {
-        // No specific cleanup is necessary for this implementation.
-        // ---------------------------------------------------------
+        return ( (Double) o1).compareTo (o2);
     }
 
     /**
@@ -465,17 +313,18 @@ public class DoubleGene
     {
         if (m_value != null)
         {
+            Double d_value = ( (Double) m_value);
             // If the value exceeds either the upper or lower bounds, then
             // map the value to within the legal range. To do this, we basically
             // calculate the distance between the value and the double min,
             // determine how many bounds units that represents, and then add
             // that number of units to the upper bound.
             // -----------------------------------------------------------------
-            if (m_value.doubleValue () > m_upperBounds ||
-                m_value.doubleValue () < m_lowerBounds)
+            if (d_value.doubleValue () > m_upperBounds ||
+                d_value.doubleValue () < m_lowerBounds)
             {
                 double differenceFromDoubleMin = Double.MIN_VALUE +
-                    m_value.doubleValue ();
+                    d_value.doubleValue ();
                 double differenceFromBoundsMin =
                     (differenceFromDoubleMin / m_boundsUnitsToDoubleUnits);
                 m_value =
