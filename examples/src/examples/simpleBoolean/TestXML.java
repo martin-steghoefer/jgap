@@ -22,6 +22,10 @@ import org.w3c.dom.*;
  * @since 2.0
  */
 public class TestXML {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
+
   public static void main(String[] args) {
     try {
       Configuration activeConfiguration = new DefaultConfiguration();

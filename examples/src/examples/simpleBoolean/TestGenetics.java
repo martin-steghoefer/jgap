@@ -20,9 +20,12 @@ import org.jgap.impl.*;
  * @since 2.0
  */
 public class TestGenetics {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
+
   public static void main(String[] args) {
     int numEvolutions = 500;
-    ;
     Configuration gaConf = new DefaultConfiguration();
     gaConf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     Genotype genotype = null;
