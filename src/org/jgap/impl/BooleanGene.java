@@ -367,7 +367,10 @@ public class BooleanGene
      * element at given index (NumberGenes only have one atomic element)
      * @param index index of atomic element, between 0 and size()-1
      * @param a_percentage percentage of mutation (greater than -1 and smaller
-     * than 1).
+     *        than 1).
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void applyMutation (int index, double a_percentage)
     {
