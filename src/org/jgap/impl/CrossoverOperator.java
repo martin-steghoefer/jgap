@@ -34,7 +34,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -85,6 +85,9 @@ public class CrossoverOperator
    * @since 2.0
    */
   public CrossoverOperator(int a_desiredCrossoverRate) {
+    if (a_desiredCrossoverRate < 1) {
+      throw new IllegalArgumentException("Crossover rate must be greater zero");
+    }
     m_crossoverRate = a_desiredCrossoverRate;
     setCrossoverRateCalc(null);
   }
