@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -181,9 +181,7 @@ public class WeightedRouletteSelector
     // ------------------------------------------------------------
     Chromosome selectedChromosome;
     for (int i = 0; i < a_howManyToSelect; i++) {
-      selectedChromosome = spinWheel(generator,
-                                     fitnessValues,
-                                     counterValues,
+      selectedChromosome = spinWheel(generator, fitnessValues, counterValues,
                                      chromosomes);
       selectedChromosome.setIsSelectedForNextGeneration(true);
       a_to_pop.addChromosome(selectedChromosome);
@@ -377,12 +375,12 @@ class SlotCounter {
    * reused for other Chromosomes, thus saving some memory and the overhead
    * of constructing them from scratch.
    */
-  private double m_fitnessValue = 0.0;
+  private double m_fitnessValue;
 
   /**
    * The current number of Chromosomes represented by this counter.
    */
-  private int m_count = 0;
+  private int m_count;
 
   /**
    * Resets the internal state of this SlotCounter instance so that it can
