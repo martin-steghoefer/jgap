@@ -17,10 +17,7 @@ import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
 import org.jfree.data.category.*;
 import org.jgap.*;
-import org.jgap.data.*;
 import org.jgap.impl.*;
-import org.jgap.xml.*;
-import org.w3c.dom.*;
 
 /**
  * Same logic as in MinimizingMakeChange except that we are using the new
@@ -31,7 +28,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The total number of times we'll let the population evolve.
