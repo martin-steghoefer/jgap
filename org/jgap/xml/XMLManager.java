@@ -13,6 +13,13 @@ import org.jgap.*;
  */
 public class XMLManager 
 {
+  private static final String CHROMOSOME_TAG = "chromosome";
+  private static final String GENOTYPE_TAG = "genotype";
+  private static final String GENES_TAG = "genes";
+  private static final String SIZE_ATTRIBUTE = "size"; 
+  private static final String REPRESENTATION_ATTRIBUTE = "representation";
+  private static final String BINARY_VALUE = "binary";
+
   private static final DocumentBuilder documentCreator;
 
   static 
@@ -107,11 +114,12 @@ public class XMLManager
   {
     int subjectSize = subject.size();
 
-    Element chromosomeTag = xmlDocument.createElement("chromosome"); 
-    chromosomeTag.setAttribute("size", Integer.toString(subjectSize));
+    Element chromosomeTag = xmlDocument.createElement(CHROMOSOME_TAG); 
+    chromosomeTag.setAttribute(SIZE_ATTRIBUTE, 
+                               Integer.toString(subjectSize));
 
-    Element genesTag = xmlDocument.createElement("genes");
-    genesTag.setAttribute("representation", "binary");
+    Element genesTag = xmlDocument.createElement(GENES_TAG);
+    genesTag.setAttribute(REPRESENTATION_ATTRIBUTE, BINARY_VALUE);
 
     StringBuffer geneValues = new StringBuffer(subjectSize);
     
@@ -157,8 +165,9 @@ public class XMLManager
   {
     Chromosome[] population = subject.getChromosomes();
 
-    Element genotypeTag = xmlDocument.createElement("genotype");
-    genotypeTag.setAttribute("size", Integer.toString(population.length));
+    Element genotypeTag = xmlDocument.createElement(GENOTYPE_TAG);
+    genotypeTag.setAttribute(SIZE_ATTRIBUTE, 
+                             Integer.toString(population.length));
 
     for(int i = 0; i < population.length; i++)
     {
@@ -184,13 +193,34 @@ public class XMLManager
    *
    * @return A new Chromosome instance setup with the data
    *         from the XML Element representation.
+   *
+   * @throws ImproperXMLException if the given Element is improperly
+   *                              structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is
+   *                                       in an inconsistent state.
    */
   public static Chromosome getChromosomeFromElement(Configuration gaConf,
                                                     Element xmlElement)
-                           throws InvalidConfigurationException
+                           throws ImproperXMLException,
+                                  InvalidConfigurationException
   {
-    // Find the text node, which is the representation of the genes.
-    Node genes = xmlElement.getElementsByTagName("genes").item(0);
+    if (xmlElement == null ||
+        !(xmlElement.getTagName().equals(CHROMOSOME_TAG)))
+    {
+      throw new ImproperXMLException(
+        "Unable to build Chromosome instance from XML Element: " +
+        "given Element is not a 'chromosome' element.");
+    }
+
+    Node genes = xmlElement.getElementsByTagName(GENES_TAG).item(0);
+
+    if (genes == null)
+    {
+      throw new ImproperXMLException(
+        "Unable to build Chromosome instance from XML Element: " +
+        "'genes' sub-element not found.");
+    }
+
     genes.normalize();
     NodeList children = genes.getChildNodes();
     int childrenSize = children.getLength();
@@ -207,20 +237,29 @@ public class XMLManager
 
     if (geneValues == null)
     {
-      throw new RuntimeException("<genes> element not found!");
+      throw new ImproperXMLException(
+        "Unable to build Chromosome instance from XML Element: " +
+        "no gene values found.");
     }
 
     int genesLength = geneValues.length();
     BitSet geneBits = new BitSet(genesLength);
+
     for(int i = 0; i < genesLength; i++)
     {
       if (geneValues.charAt(i) == '1')
       {
         geneBits.set(i);
       }
-      else
+      else if (geneValues.charAt(i) == '0')
       {
         geneBits.clear(i);
+      }
+      else
+      {
+        throw new ImproperXMLException(
+          "Unable to build Chromosome instance from XML Element: " +
+          "gene value '" + geneValues.charAt(i) + "' is invalid.");
       }
     }
 
@@ -242,12 +281,26 @@ public class XMLManager
    * @return A new Genotype instance, complete with a population
    *         of Chromosomes, setup with the data from the XML
    *         Element representation.
+   *
+   * @throws ImproperXMLException if the given Element is improperly
+   *                              structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is
+   *                                       in an inconsistent state.
    */
   public static Genotype getGenotypeFromElement(Configuration gaConf,
                                                 Element xmlElement)
-                         throws InvalidConfigurationException
+                         throws ImproperXMLException,
+                                InvalidConfigurationException
   {
-    NodeList chromosomes = xmlElement.getElementsByTagName("chromosome");
+    if (xmlElement == null ||
+        !(xmlElement.getTagName().equals(GENOTYPE_TAG)))
+    {
+      throw new ImproperXMLException(
+        "Unable to build Genotype instance from XML Element: " +
+        "given Element is not a 'genotype' element.");
+    }
+
+    NodeList chromosomes = xmlElement.getElementsByTagName(CHROMOSOME_TAG);
     int numChromosomes = chromosomes.getLength();
 
     Chromosome[] population = new Chromosome[numChromosomes];
@@ -276,12 +329,28 @@ public class XMLManager
    * @return A new Genotype instance, complete with a population
    *         of Chromosomes, setup with the data from the XML
    *         Document representation.
+   *
+   * @throws ImproperXMLException if the given Document is improperly
+   *                              structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is
+   *                                       in an inconsistent state.
    */
   public static Genotype getGenotypeFromDocument(Configuration gaConf,
                                                  Document xmlDocument)
-                         throws InvalidConfigurationException
+                         throws ImproperXMLException,
+                                 InvalidConfigurationException
   {
-    return getGenotypeFromElement(gaConf, xmlDocument.getDocumentElement());
+    Element rootElement = xmlDocument.getDocumentElement();
+
+    if (rootElement == null || 
+        !(rootElement.getTagName().equals(GENOTYPE_TAG)))
+    {
+      throw new ImproperXMLException(
+        "Unable to build Genotype from XML Document: " +
+        "'genotype' element must be at root of document.");
+    }
+
+    return getGenotypeFromElement(gaConf, rootElement);
   }
 
 
@@ -297,12 +366,27 @@ public class XMLManager
    *
    * @return A new Chromosome instance setup with the data
    *         from the XML Document representation.
+   *
+   * @throws ImproperXMLException if the given Document is improperly
+   *                              structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is
+   *                                       in an inconsistent state.
    */
   public static Chromosome getChromosomeFromDocument(Configuration gaConf,
                                                      Document xmlDocument)
-                           throws InvalidConfigurationException
+                           throws ImproperXMLException,
+                                  InvalidConfigurationException
   {
-    return getChromosomeFromElement(gaConf, xmlDocument.getDocumentElement());
+    Element rootElement = xmlDocument.getDocumentElement();
+    if (rootElement == null || 
+        !(rootElement.getTagName().equals(CHROMOSOME_TAG)))
+    {
+      throw new ImproperXMLException(
+        "Unable to build Chromosome instance from XML Document: " +
+        "'chromosome' element must be at root of Document.");
+    }
+
+    return getChromosomeFromElement(gaConf, rootElement);
   }
 }
 

@@ -223,16 +223,12 @@ public class Genotype implements java.io.Serializable {
     */
    public boolean equals(Object other)
    {
-     System.out.println("Equals method invoked!");
      try
      {
        Genotype otherGenotype = (Genotype) other;
 
        if (chromosomes.length != otherGenotype.chromosomes.length)
        {
-         System.out.println("Lengths don't match: " +
-           chromosomes.length + " vs. " +
-           otherGenotype.chromosomes.length);
          return false;
        }
 
@@ -246,9 +242,6 @@ public class Genotype implements java.io.Serializable {
        {
          if (!(chromosomes[i].equals(otherGenotype.chromosomes[i])))
          {
-           System.out.println("Unequal chromosomes at " + i + ": " +
-             chromosomes[i].toString() + " | " +
-             otherGenotype.chromosomes[i].toString());
            return false;
          }
        }
@@ -258,7 +251,6 @@ public class Genotype implements java.io.Serializable {
 
      catch(ClassCastException e)
      {
-       e.printStackTrace();
        return false;
      }
    }
