@@ -116,9 +116,10 @@ public abstract class Breeder
    */
   private synchronized void pause(int milliSec) {
     try {
-      this.wait(milliSec);
+      wait(milliSec);
     }
     catch (InterruptedException e) {
+      ;
     }
   }
 

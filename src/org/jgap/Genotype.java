@@ -17,9 +17,9 @@ import org.jgap.event.*;
 /**
  * Genotypes are fixed-length populations of chromosomes. As an instance of
  * a Genotype is evolved, all of its Chromosomes are also evolved. A Genotype
- * may be constructed normally, whereby an array of Chromosomes must be
- * provided, or the static randomInitialGenotype() method can be used to
- * generate a Genotype with a randomized Chromosome population.
+ * may be constructed normally via constructor, or the static
+ * randomInitialGenotype() method can be used to generate a Genotype with a
+ * randomized Chromosome population.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * The current active Configuration instance.
@@ -85,8 +85,7 @@ public class Genotype
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Genotype(Configuration a_activeConfiguration,
-                  Population a_population)
+  public Genotype(Configuration a_activeConfiguration, Population a_population)
       throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
@@ -429,9 +428,6 @@ public class Genotype
     }
   }
 
-  private boolean m_doPerfBoost;
-  private boolean m_perfBoostChecked;
-
   /**
    * Applies all NaturalSelectors registered with the Configuration
    * @param processBeforeGeneticOperators true apply NaturalSelectors
@@ -479,7 +475,7 @@ public class Genotype
         selector.empty();
       }
 
-      m_population = new Population();
+      setPopulation(new Population());
       getPopulation().addChromosomes(m_new_population);
     }
 
@@ -523,4 +519,7 @@ public class Genotype
     return localHashCode;
   }
 
+  protected void setPopulation(Population a_pop) {
+    m_population = a_pop;
+  }
 }
