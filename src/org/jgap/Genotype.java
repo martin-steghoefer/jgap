@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The current active Configuration instance.
@@ -82,6 +82,9 @@ public class Genotype
    *         in the array of Chromosomes is null.
    * @throws InvalidConfigurationException if the given Configuration object
    *         is in an invalid state.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public Genotype(Configuration a_activeConfiguration,
@@ -101,6 +104,9 @@ public class Genotype
    *                             managed by this Genotype instance.
    * @param a_fitnessEvaluator a specific fitness value evaluator
    * @throws InvalidConfigurationException
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.1
    */
   public Genotype(Configuration a_activeConfiguration,
@@ -155,6 +161,9 @@ public class Genotype
    * @throws InvalidConfigurationException if the Configuration object is
    *         null or cannot be locked because it is in an invalid or
    *         incomplete state.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public void setActiveConfiguration(Configuration a_activeConfiguration)
@@ -196,6 +205,9 @@ public class Genotype
    * Genotype instance.
    *
    * @return The population of Chromosomes.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    * @deprecated uses getPopulation() instead
    */
@@ -221,6 +233,7 @@ public class Genotype
    *         there are no chromosomes in this Genotype.
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
