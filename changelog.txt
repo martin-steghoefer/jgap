@@ -1,12 +1,27 @@
 2.0
 ----------
-* Changed return type of fitness value from int to double, see request
-* Implemented feature request 708774 (averaging crossover)
-* Implemented feature request 710497 (attach application data)
+* Introduced overall performance test to ensure performance
+* Changed return type Chromosome[] to Population containing list of Chromosomes
+* Added new unit tests
+* Added new class GaussianMutationOperator
+* Class Chromosome: made attribute "Gene[] m_genes" private
+* Class Chromosome: added csupport for application data object in method clone()
+* Renamed interface NaturalSelector to INaturalSelector, introduced abstract base
+  class NaturalSelector implementing INaturalSelector (see request 1075249)
+* Interface INaturalSelector: Introduced new method boolean returnsUniqueChromosomes()
+* Fixed Chromosome.getFitnessValue() to return the current fitness value and not
+  always the first one computed
+* Fixed design flaw in Genes' methods mapValueToWithinBounds()
+* Genes now can hold a Configuration object
+
 Swarm Intelligence
 
 1.1
 ----------
+* Changed return type of fitness value from int to double, see request
+  783997 
+* Implemented feature request 708774 (averaging crossover)
+* Implemented feature request 710497 (attach application data)
 * Added support for more than one NaturalSelector.
 * Added support for processing of NaturalSelector's before and after
   applying GeneticOperator's.
