@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -294,7 +294,14 @@ public class IntegerGene
       // -----------------------------------------------------------------
       if (i_value.intValue() > m_upperBounds ||
           i_value.intValue() < m_lowerBounds) {
-        m_value = new Integer(Genotype.getConfiguration().getRandomGenerator().nextInt(
+        RandomGenerator rn;
+        if (Genotype.getConfiguration() != null) {
+          rn = Genotype.getConfiguration().getRandomGenerator();
+        }
+        else {
+          rn = new StockRandomGenerator();
+        }
+        m_value = new Integer(rn.nextInt(
             m_upperBounds - m_lowerBounds) + m_lowerBounds);
       }
     }
@@ -311,7 +318,12 @@ public class IntegerGene
    */
   public void applyMutation(int index, double a_percentage) {
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
-    int newValue = (int) Math.round(intValue() + range);
-    setAllele(new Integer(newValue));
+    if (m_value == null) {
+     setAllele(new Integer((int)range+m_lowerBounds));
+    }
+    else {
+      int newValue = (int) Math.round(intValue() + range);
+      setAllele(new Integer(newValue));
+    }
   }
 }

@@ -18,9 +18,7 @@
 
 package org.jgap.impl;
 
-import org.jgap.Gene;
-import org.jgap.RandomGenerator;
-import org.jgap.UnsupportedRepresentationException;
+import org.jgap.*;
 
 /**
  * A Gene implementation that supports two possible values (alleles) for each
@@ -40,7 +38,7 @@ import org.jgap.UnsupportedRepresentationException;
 public class BooleanGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -367,7 +365,10 @@ public class BooleanGene
    * @since 1.1
    */
   public void applyMutation(int index, double a_percentage) {
-    if (a_percentage > 0) {
+    if (m_value == null) {
+      m_value = new Boolean(false);
+    }
+    else if (a_percentage > 0) {
       // change to TRUE
       // ---------------
       if (!m_value.booleanValue()) {

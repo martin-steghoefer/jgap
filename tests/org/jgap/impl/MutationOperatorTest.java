@@ -32,7 +32,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public MutationOperatorTest() {
   }
@@ -72,14 +72,15 @@ public class MutationOperatorTest
   }
 
   public void testOperate_0() throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Genotype.setConfiguration(conf);
     MutationOperator mutOp = new MutationOperator();
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[]{};
-    mutOp.operate(new Configuration(), new Population(population), candChroms);
+    mutOp.operate(new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
     candChroms.clear();
-    Configuration conf = new DefaultConfiguration();
-    conf.setFitnessFunction(new TestFitnessFunction());
     RandomGeneratorForTest gen = new RandomGeneratorForTest();
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
@@ -91,14 +92,12 @@ public class MutationOperatorTest
     for (int i=0;i<c1.getGenes().length;i++) {
       c1.getGene(i).setAllele(Boolean.TRUE);
     }
-//    c1.setActiveConfiguration(conf);
     Chromosome c2 = new Chromosome(new IntegerGene(),4);
-//    c2.setActiveConfiguration(conf);
     for (int i=0;i<c2.getGenes().length;i++) {
       c2.getGene(i).setAllele(new Integer(27));
     }
     population = new Chromosome[]{c1,c2};
-    mutOp.operate(conf, new Population(population), candChroms);
+    mutOp.operate(new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
   }
 
@@ -108,13 +107,8 @@ public class MutationOperatorTest
     Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
     Configuration conf = new Configuration();
     conf.setRandomGenerator(new StockRandomGenerator());
-    try {
-      mutOp.operate(conf, new Population(population), candChroms);
-      fail();
-    }
-    catch (IllegalStateException iex) {
-      ;//this is OK
-    }
+    Genotype.setConfiguration(conf);
+    mutOp.operate(new Population(population), candChroms);
   }
 
   public void testOperate_2() {
@@ -122,7 +116,7 @@ public class MutationOperatorTest
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
     try {
-      mutOp.operate(new Configuration(), new Population(population), candChroms);
+      mutOp.operate(new Population(population), candChroms);
       fail();
     }
     catch (NullPointerException nex) {

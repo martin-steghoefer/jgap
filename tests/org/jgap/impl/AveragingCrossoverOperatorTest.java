@@ -34,7 +34,7 @@ public class AveragingCrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public AveragingCrossoverOperatorTest() {
   }
@@ -84,7 +84,7 @@ public class AveragingCrossoverOperatorTest
     Gene gene3 = new IntegerGene(1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
-    op.operate(conf, new Population(population), chroms);
+    op.operate(new Population(population), chroms);
     assertEquals(5, chroms.size());
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
@@ -132,8 +132,8 @@ public class AveragingCrossoverOperatorTest
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     Chromosome[] population2 = (Chromosome[]) population.clone();
-    op.operate(conf, new Population(population), chroms);
-    op.operate(conf, new Population(population2), chroms);
+    op.operate(new Population(population), chroms);
+    op.operate(new Population(population2), chroms);
     assertTrue(isChromosomesEqual(population, population2));
   }
 

@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -83,18 +83,16 @@ public class AveragingCrossoverOperator
     * averaging over space if different p is chosen for each i.
    * @see CrossoverOperator for general description.
    * @see feature request 708774
-   * @param a_activeConfiguration Configuration
    * @param a_population Chromosome[]
    * @param a_candidateChromosomes List
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void operate(final Configuration a_activeConfiguration,
-                      final Population a_population,
+  public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
     int numCrossovers = a_population.size() / 2;
-    RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     if (crossoverGenerator == null) {
       crossoverGenerator = generator;
     }

@@ -15,7 +15,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static Random RANDOM = new Random();
 
@@ -40,15 +40,13 @@ public class GaussianMutationOperator
 
   /**
    * Executes the operation.
-   * @param a_activeConfiguration not needed here
    * @param a_population containing chromosomes to be mutated
    * @param a_candidateChromosomes resulting chromosomes
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void operate(final Configuration a_activeConfiguration,
-                      final Population a_population,
+  public void operate(final Population a_population,
                       List a_candidateChromosomes) {
     // For each Chromosome in the population...
     for (int i = 0; i < a_population.size(); i++) {

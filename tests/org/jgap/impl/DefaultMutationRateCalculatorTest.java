@@ -19,9 +19,8 @@
 package org.jgap.impl;
 
 import org.jgap.*;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import junit.framework.*;
 
 /**
  * Tests for DefaultMutationRateCalculator class
@@ -32,8 +31,13 @@ import junit.framework.TestSuite;
 public class DefaultMutationRateCalculatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
+
   public DefaultMutationRateCalculatorTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -43,15 +47,16 @@ public class DefaultMutationRateCalculatorTest
 
   public void testCalculateCurrentRate_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
     MutationRateCalculator calc = new DefaultMutationRateCalculator();
     Gene gene = new IntegerGene(1, 5);
     Chromosome chrom = new Chromosome(gene, 50);
     conf.setSampleChromosome(chrom);
-    int rate = calc.calculateCurrentRate(conf);
+    int rate = calc.calculateCurrentRate();
     assertEquals(conf.getChromosomeSize(), rate);
     chrom = new Chromosome(gene, 30);
     conf.setSampleChromosome(chrom);
-    rate = calc.calculateCurrentRate(conf);
+    rate = calc.calculateCurrentRate();
     assertEquals(conf.getChromosomeSize(), rate);
   }
 
@@ -63,8 +68,9 @@ public class DefaultMutationRateCalculatorTest
    */
   public void testCalculateCurrentRate_1() throws Exception {
     Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
     MutationRateCalculator calc = new DefaultMutationRateCalculator();
-    int rate = calc.calculateCurrentRate(conf);
+    int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);
   }
 }

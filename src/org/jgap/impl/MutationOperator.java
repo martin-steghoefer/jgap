@@ -42,7 +42,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -117,7 +117,6 @@ public class MutationOperator
    * should never modify the original population, but should first make copies
    * of the Chromosomes selected for modification and operate upon the copies.
    *
-   * @param a_activeConfiguration The current active genetic configuration.
    * @param a_population The population of chromosomes from the current
    *                     evolution prior to exposure to any genetic operators.
    *                     Chromosomes in this array should never be modified.
@@ -133,8 +132,7 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.0
    */
-  public void operate(final Configuration a_activeConfiguration,
-                      final Population a_population,
+  public void operate(final Population a_population,
                       List a_candidateChromosomes) {
     // If the mutation rate is set to zero and dynamic mutation rate is
     // disabled, then we don't perform any mutation.
@@ -148,13 +146,12 @@ public class MutationOperator
     // --------------------------------------------------------------
     int currentRate;
     if (m_mutationRateCalc != null) {
-      currentRate = m_mutationRateCalc.calculateCurrentRate(
-          a_activeConfiguration);
+      currentRate = m_mutationRateCalc.calculateCurrentRate();
     }
     else {
       currentRate = m_mutationRate;
     }
-    RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.

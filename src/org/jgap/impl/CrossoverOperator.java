@@ -37,7 +37,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -52,7 +52,6 @@ public class CrossoverOperator
    * should never modify the original population, but should first make copies
    * of the Chromosomes selected for modification and operate upon the copies.
    *
-   * @param a_activeConfiguration The current active genetic configuration.
    * @param a_population The population of chromosomes from the current
    *                     evolution prior to exposure to any genetic operators.
    *                     Chromosomes in this array should never be modified.
@@ -63,13 +62,14 @@ public class CrossoverOperator
    *                               modified copies of Chromosomes to this
    *                               list if it's desired for them to be
    *                               considered for natural selection.
-   * @since 1.0
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 2.0 (earlier versions referenced the Configution object)
    */
-  public void operate(final Configuration a_activeConfiguration,
-                      final Population a_population,
+  public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
     int numCrossovers = a_population.size() / 2;
-    RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
     // to the "right" (those with greater loci) of that gene between

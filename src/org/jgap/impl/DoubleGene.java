@@ -34,7 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -290,7 +290,14 @@ public class DoubleGene
       // -----------------------------------------------------------------
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
-        m_value = new Double(Genotype.getConfiguration().getRandomGenerator().nextDouble()
+        RandomGenerator rn;
+        if (Genotype.getConfiguration() != null) {
+          rn = Genotype.getConfiguration().getRandomGenerator();
+        }
+        else {
+          rn = new StockRandomGenerator();
+        }
+        m_value = new Double(rn.nextDouble()
             *(m_upperBounds - m_lowerBounds) + m_lowerBounds);
       }
     }

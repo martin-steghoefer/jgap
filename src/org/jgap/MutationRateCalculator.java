@@ -27,15 +27,14 @@ package org.jgap;
 public interface MutationRateCalculator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Calculates the mutation rate
-   * @param a_activeConfiguration current active configuration
    * @return the currently applying mutation rate. It is calculated
    * dynamically
    *
    * @since 1.1
    */
-  int calculateCurrentRate(Configuration a_activeConfiguration);
+  int calculateCurrentRate();
 }

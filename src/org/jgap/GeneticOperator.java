@@ -35,7 +35,7 @@ public interface GeneticOperator
     extends java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -50,7 +50,6 @@ public interface GeneticOperator
    * should never modify the original population, but should first make copies
    * of the Chromosomes selected for modification and operate upon the copies.
    *
-   * @param a_activeConfiguration The current active genetic configuration.
    * @param a_population The population of chromosomes from the current
    *                     evolution prior to exposure to any genetic operators.
    *                     Chromosomes in this array should never be modified.
@@ -63,9 +62,9 @@ public interface GeneticOperator
    *                               considered for natural selection.
    *
    * @author Neil Rotstan
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 2.0 (earlier versions referenced the Configuration object)
    */
-  public void operate(final Configuration a_activeConfiguration,
-                      final Population a_population,
+  public void operate(final Population a_population,
                       final List a_candidateChromosomes);
 }

@@ -36,7 +36,7 @@ import org.jgap.*;
 public class ReproductionOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -51,7 +51,6 @@ public class ReproductionOperator
    * should never modify the original population, but should first make copies
    * of the Chromosomes selected for modification and operate upon the copies.
    *
-   * @param a_activeConfiguration The current active genetic configuration.
    * @param a_population The population of chromosomes from the current
    *                     evolution prior to exposure to any genetic operators.
    *                     Chromosomes in this array should never be modified.
@@ -66,8 +65,7 @@ public class ReproductionOperator
    * @author Klaus Meffert
    * @since 1.0
    */
-  public void operate(final Configuration a_activeConfiguration,
-                      final Population a_population,
+  public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
     // Loop over the chromosomes in the population and add each one to
     // the candidate chromosomes pool so that they'll be considered for

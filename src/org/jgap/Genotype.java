@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * The current active Configuration instance.
@@ -264,8 +264,8 @@ public class Genotype
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
-      ( (GeneticOperator) operatorIterator.next()).operate(
-          m_activeConfiguration, m_population, m_workingPool);
+      ( (GeneticOperator) operatorIterator.next()).operate(m_population,
+          m_workingPool);
     }
 
     // Add the chromosomes in the working pool to the population.
@@ -400,6 +400,7 @@ public class Genotype
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
     }
+    Genotype.setConfiguration(a_activeConfiguration);
     a_activeConfiguration.lockSettings();
     // Create an array of chromosomes equal to the desired size in the
     // active Configuration and then populate that array with Chromosome

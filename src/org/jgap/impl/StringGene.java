@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private int m_minLength;
 
@@ -636,6 +636,13 @@ public class StringGene
       randomize = true;
     }
     char newValue;
+    RandomGenerator rn;
+    if (Genotype.getConfiguration() != null) {
+      rn = Genotype.getConfiguration().getRandomGenerator();
+    }
+    else {
+      rn = new StockRandomGenerator();
+    }
     if (!randomize) {
       int indexC = m_alphabet.indexOf(s.charAt(index));
       index2 = indexC + (int) Math.round(len * a_percentage);
@@ -643,12 +650,12 @@ public class StringGene
       // character. This randomness helps in the process of evolution.
       // ------------------------------------------------------------------
       if (index2 < 0 || index2 >= len) {
-        index2 = Genotype.getConfiguration().getRandomGenerator().nextInt(len);
+        index2 = rn.nextInt(len);
       }
       newValue = m_alphabet.charAt(index2);
     }
     else {
-      index2 = Genotype.getConfiguration().getRandomGenerator().nextInt(256);
+      index2 = rn.nextInt(256);
       newValue = (char) index2;
     }
     // Set mutated character by concatenating the String with it.
