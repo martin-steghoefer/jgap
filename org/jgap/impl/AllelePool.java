@@ -23,8 +23,6 @@ import org.jgap.Allele;
 import org.jgap.Configuration;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,76 +31,79 @@ import java.util.List;
  * released, thus allowing them to be easily resused to save on the number
  * of transient objects that would otherwise be created. Each instance of
  * this class is tied to a specific Configuration, which must be supplied
- * at construction time.
+ * at time of initialization.
  */
 public class AllelePool
 {
     /**
-     * A Map of allele pools managed by this class. Each key is the Class
-     * of the pooled alleles, and the value is an ArrayList containing the
-     * pool of those alleles.
+     * An array of allele pools managed by this class. Each index of the
+     * array corresponds to a locus (gene position) in the Chromosome setup
+     * currently in use. Each List stores the pooled Alleles for that gene
+     * position.
      */
-    private final Map m_allelePools;
-
+    private List[] m_allelePools = null;
 
     /**
      * References the current active Configuration object.
      */
-    private final Configuration m_activeConfiguration;
-
+    private Configuration m_activeConfiguration;
 
     /**
-     * Constructs a new AllelePool instance with the given active
-     * Configuration.
+     * Constructor.
      */
-    public AllelePool( Configuration a_activeConfiguration )
+    public AllelePool()
     {
-        m_allelePools = new HashMap();
-        m_activeConfiguration = a_activeConfiguration;
+        // Nothing to do. All the action happens in the initialize() call.
+        // We don't take in the Configuration object here because this
+        // AllelePool itself will be created during the process of setting
+        // up the Configuration, which means that when this constructor is
+        // called, the Configuration may not be completely setup yet.
+        // ---------------------------------------------------------------
     }
 
 
     /**
-     * Attempts to acquire an Allele instance from the allele pool of the
-     * given class and intended for the given gene position. It should
-     * be noted that nothing is guaranteed about the value of the Allele and
-     * it should be treated as undefined.
+     * Initialize this pool with the given active Configuration.
      *
-     * @param a_alleleType The Class of the desired allele.
+     * @param a_activeConfiguration the current active configuration
+     */
+    public void initialize( Configuration a_activeConfiguration )
+    {
+        m_activeConfiguration = a_activeConfiguration;
+        m_allelePools = new List[ m_activeConfiguration.getChromosomeSize() ];
+    }
+
+
+    /**
+     * Attempts to acquire an Allele instance from the allele pool that is
+     * intended for the given gene position. It should be noted that nothing
+     * is guaranteed about the value of the Allele and it should be treated as
+     * undefined.
+     *
      * @param a_locus The gene position for which the allele is destined.
      *
      * @return An Allele instance from the pool (with an undefined value), or
-     *         null if no allele instances are available in the pool.
+     *         null if no allele instances are available in the pool for the
+     *         given gene position.
      */
-    public synchronized Allele acquireAllele( Class a_alleleType,
-                                              int a_locus )
+    public synchronized Allele acquireAllele( int a_locus )
     {
-        // First pull out all the Alleles of the given class type.
-        // -------------------------------------------------------
-        List[] classPool = (List[]) m_allelePools.get( a_alleleType );
-        if( classPool == null )
+        // Pull out all of the Alleles associated with the given gene
+        // position.
+        // ----------------------------------------------------------
+        List locusPool = m_allelePools[ a_locus ];
+        if( locusPool == null || locusPool.isEmpty() )
         {
             return null;
         }
         else
         {
-            // Now pull out all of the Alleles associated with the given
-            // gene position.
-            // ---------------------------------------------------------
-            List locusPool = classPool[ a_locus ];
-            if( locusPool == null || locusPool.isEmpty() )
-            {
-                return null;
-            }
-            else
-            {
-                // Remove the last allele in the pool and return it.
-                // Note that removing the last allele (as opposed to the first
-                // one) is an optimization because it prevents the ArrayList
-                // from resizing itself.
-                // -----------------------------------------------------------
-                return (Allele) locusPool.remove( locusPool.size() - 1 );
-            }
+            // Remove the last allele in the pool and return it.
+            // Note that removing the last allele (as opposed to the first
+            // one) is an optimization because it prevents the ArrayList
+            // from resizing itself.
+            // -----------------------------------------------------------
+            return (Allele) locusPool.remove( locusPool.size() - 1 );
         }
      }
 
@@ -124,23 +125,14 @@ public class AllelePool
         // --------------------------------------------------------------
         a_alleleToRelease.cleanup();
 
-        // Now add it to the pool appropriate for both its class and locus.
-        // If no such pool exists, we create it.
-        // ----------------------------------------------------------------
-        Class alleleType = a_alleleToRelease.getClass();
-
-        List[] classPool = (List[]) m_allelePools.get( alleleType );
-        if( classPool == null )
-        {
-            classPool = new List[ m_activeConfiguration.getChromosomeSize() ];
-            m_allelePools.put( alleleType, classPool );
-        }
-
-        List locusPool = classPool[ a_locus ];
+        // Now add it to the pool appropriate for its locus. If no such
+        // pool exists, we create it.
+        // ------------------------------------------------------------
+        List locusPool = m_allelePools[ a_locus ];
         if( locusPool == null )
         {
             locusPool = new ArrayList();
-            classPool[ a_locus ] = locusPool;
+            m_allelePools[ a_locus ] = locusPool;
         }
 
         locusPool.add( a_alleleToRelease );

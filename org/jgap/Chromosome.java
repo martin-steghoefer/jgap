@@ -191,7 +191,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             Allele copy = null;
             if( pool != null )
             {
-                copy = pool.acquireAllele( m_genes[i].getClass(), i );
+                copy = pool.acquireAllele( i );
             }
 
             if( copy == null )
@@ -366,8 +366,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             newGenes[i] = null;
             if( pool != null )
             {
-                newGenes[i] =
-                    pool.acquireAllele( sampleGenes[i].getClass(), i );
+                newGenes[i] = pool.acquireAllele( i );
             }
 
             if( newGenes[i] == null )

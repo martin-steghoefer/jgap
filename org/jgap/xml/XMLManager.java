@@ -25,7 +25,6 @@ import org.jgap.Configuration;
 import org.jgap.Genotype;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.UnsupportedRepresentationException;
-import org.jgap.impl.AllelePool;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -367,27 +366,17 @@ public class XMLManager
             String alleleClassName =
                 thisAlleleElement.getAttribute( CLASS_ATTRIBUTE );
 
-            // Try to pull the new allele from the allele pool to save on
-            // memory. If the pool is not available, or if there is no
-            // appropriate Allele in the pool, then create a fresh Allele.
-            // -----------------------------------------------------------
-            AllelePool pool = a_activeConfiguration.getAllelePool();
             Allele thisAlleleObject;
             try
             {
-                thisAlleleObject = null;
-
-                if( pool != null )
-                {
-                    thisAlleleObject = pool.acquireAllele(
-                        Class.forName( alleleClassName ), i );
-                }
-
-                if( thisAlleleObject == null )
-                {
-                    thisAlleleObject =
-                        (Allele) Class.forName( alleleClassName ).newInstance();
-                }
+                // Note that we don't bother trying to get an allele from
+                // the AllelePool. We're assuming here that if you're loading
+                // stuff from an XML file, then you're just getting started
+                // and there won't be anything in the pool to get. This keeps
+                // the code here a little bit simpler.
+                // ----------------------------------------------------------
+                thisAlleleObject =
+                    (Allele) Class.forName( alleleClassName ).newInstance();
             }
             catch( Exception e )
             {

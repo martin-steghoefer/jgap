@@ -479,6 +479,7 @@ public class Configuration implements java.io.Serializable
                 Collections.unmodifiableList( m_geneticOperators );
 
             m_settingsLocked = true;
+            m_allelePool.initialize( this );
         }
     }
 

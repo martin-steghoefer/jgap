@@ -17,7 +17,6 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap.impl;
 
 import org.jgap.Chromosome;
@@ -28,6 +27,7 @@ import org.jgap.RandomGenerator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -44,8 +44,8 @@ public class WeightedRouletteSelector implements NaturalSelector
 {
     /**
      * Represents the "roulette wheel." Each key in the Map is a Chromosome
-     * and each value is an instance of the SlotCounter inner class, which keeps
-     * track of how many slots on the wheel that Chromosome is using.
+     * and each value is an instance of the SlotCounter inner class, which
+     * keeps track of how many slots on the wheel that Chromosome is using.
      */
     private Map m_wheel = new HashMap();
 
@@ -78,10 +78,11 @@ public class WeightedRouletteSelector implements NaturalSelector
         // already in the Map, then we just increment its number of slots
         // by its fitness value. Otherwise we add it to the Map.
         // -----------------------------------------------------------------
-        if ( m_wheel.containsKey( a_chromosomeToAdd ) )
+        SlotCounter counter = (SlotCounter) m_wheel.get( a_chromosomeToAdd );
+
+        if( counter != null )
         {
-            ((SlotCounter) m_wheel.get(
-                a_chromosomeToAdd )).incrementByFitness();
+            counter.incrementByFitness();
         }
         else
         {
@@ -114,16 +115,54 @@ public class WeightedRouletteSelector implements NaturalSelector
     public synchronized Chromosome[] select( Configuration a_activeConfiguration,
                                              int a_howManyToSelect )
     {
+        RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+        Chromosome[] selections = new Chromosome[ a_howManyToSelect ];
+
+        // Build three arrays from the sorted set: one that contains the
+        // fitness values for each chromosome, one that contains the total
+        // number of "slots on the wheel" for each chromosome, and one that
+        // contains the chromosomes themselves. The array indices can be
+        // used to associate the fitness values, counter values, and
+        // chromosomes with each other (eg, if a chromosome is at index 5,
+        // then its fitness value and counter values are also at index 5
+        // of their respective arrays).
+        // -----------------------------------------------------------------
+        Set entries = m_wheel.entrySet();
+        int[] fitnessValues = new int[ entries.size() ];
+        long[] counterValues = new long[ entries.size() ];
+        Chromosome[] chromosomes = new Chromosome[ entries.size() ];
+
+        int currentIndex = 0;
+        Iterator entryIterator = entries.iterator();
+        while( entryIterator.hasNext() )
+        {
+            Map.Entry chromosomeEntry = (Map.Entry) entryIterator.next();
+
+            Chromosome currentChromosome =
+                (Chromosome) chromosomeEntry.getKey();
+
+            SlotCounter currentCounter =
+                (SlotCounter) chromosomeEntry.getValue();
+
+            fitnessValues[ currentIndex ] = currentCounter.getFitnessValue();
+            counterValues[ currentIndex ] = currentCounter.getCounterValue();
+            chromosomes[ currentIndex ] = currentChromosome;
+
+            currentIndex++;
+        }
+
         // To select each chromosome, we just "spin" the wheel and grab
         // whichever chromosome it lands on.
         // ------------------------------------------------------------
-        RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
-        Chromosome[] selections = new Chromosome[ a_howManyToSelect ];
         Chromosome selectedChromosome;
 
         for ( int i = 0; i < a_howManyToSelect; i++ )
         {
-            selectedChromosome = spinWheel( generator );
+            selectedChromosome = spinWheel( generator,
+                                            fitnessValues,
+                                            counterValues,
+                                            chromosomes );
+
             selectedChromosome.setIsSelected( true );
             selections[ i ] = selectedChromosome;
         }
@@ -140,71 +179,78 @@ public class WeightedRouletteSelector implements NaturalSelector
      * @param a_generator The random number generator to be used during the
      *                    spinning process.
      */
-    private Chromosome spinWheel( RandomGenerator a_generator )
+    private Chromosome spinWheel( RandomGenerator a_generator,
+                                  int[] a_fitnessValues,
+                                  long[] a_counterValues,
+                                  Chromosome[] a_chromosomes )
     {
         // Randomly choose a slot on the wheel.
         // ------------------------------------
         long selectedSlot =
             Math.abs( a_generator.nextLong() % m_totalNumberOfUsedSlots );
 
-        Iterator iterator = m_wheel.entrySet().iterator();
+        // Loop through the wheel until we find our selected slot. Here's
+        // how this works: we have three arrays, one with the fitness values
+        // of the chromosomes, one with the total number of slots on the
+        // wheel that each chromosome occupies (its counter value), and
+        // one with the chromosomes themselves. The array indices associate
+        // each of the three together (eg, if a chromosome is at index 5,
+        // then its fitness value and counter value are also at index 5 of
+        // their respective arrays).
+        //
+        // We've already chosen a random slot number on the wheel from which
+        // we want to select the Chromosome. We loop through each of the
+        // array indices and, for each one, we add the number of slots it's
+        // consuming (its counter value) to an ongoing total until that total
+        // reaches or exceeds the chosen slot number. When that happenes,
+        // we've found the chromosome sitting in that slot and we return it.
+        // ------------------------------------------------------------------
         long currentSlot = 0;
 
-        // Iterate through the wheel until we find our selected slot. Here's
-        // how this works: Each chromosome on the wheel is represented by
-        // an instance of the SlotCounter inner class, which keeps track of
-        // how many slots that chromosome is consuming. For each chromosome
-        // we encounter, we add its number of slots to an ongoing total until
-        // that total reaches (or exceeds) the chosen slot number. When that
-        // happens, we've "landed" on the chosen Chromosome and return it.
-        // ------------------------------------------------------------------
-        while ( iterator.hasNext() )
+        for( int i = 0; i < a_counterValues.length; i++ )
         {
-            // Pull out the current chromosome and its counter from the Map.
-            // -------------------------------------------------------------
-            Map.Entry chromosomeEntry = (Map.Entry) iterator.next();
-
-            Chromosome currentChromosome =
-                (Chromosome) chromosomeEntry.getKey();
-
-            SlotCounter currentCounter =
-                (SlotCounter) chromosomeEntry.getValue();
-
-            // Increment our ongoing total and see if we've landed on the
-            // selected slot.
-            // ----------------------------------------------------------
-            currentSlot += currentCounter.getCounterValue();
-
-            if ( currentSlot > selectedSlot )
+            // Only bother with this chromosome if it has slots left on
+            // the wheel.
+            // --------------------------------------------------------
+            if( a_counterValues[ i ] > 0 )
             {
-                // Remove one instance of the chromosome from the wheel by
-                // decrementing slot counter by its fitness value (which is
-                // the number of slots it was occupying).
-                // --------------------------------------------------------
-                currentCounter.decrementByFitness();
-                m_totalNumberOfUsedSlots -= currentCounter.getFitnessValue();
+                // Increment our ongoing total and see if we've landed on the
+                // selected slot.
+                // ----------------------------------------------------------
+                currentSlot += a_counterValues[ i ];
 
-                // If no instances of the chromosome are left on the wheel
-                // (its counter equals zero) then clean it up from our Map.
-                // --------------------------------------------------------
-                if ( currentCounter.getCounterValue() <= 0 )
+                if ( currentSlot > selectedSlot )
                 {
-                    iterator.remove();
-                }
+                    // Remove one instance of the chromosome from the wheel by
+                    // decrementing the slot counter by the fitness value.
+                    // --------------------------------------------------------
+                    a_counterValues[ i ] -= a_fitnessValues[ i ];
+                    m_totalNumberOfUsedSlots -= a_fitnessValues[ i ];
 
-                // Now return our selected Chromosome
-                // ----------------------------------
-                return currentChromosome;
+                    // Now return our selected Chromosome
+                    // ----------------------------------
+                    return a_chromosomes[ i ];
+                }
             }
         }
 
         // If we have reached here, it means we have not found any chromosomes
         // to select and something is wrong with our logic. For some reason
-        // the selected slot has exceeded the slots on our wheel.
+        // the selected slot has exceeded the slots on our wheel. To help
+        // with debugging, we tally up the total number of slots left on
+        // the wheel and report it along with the chosen slot number that we
+        // couldn't find.
         // -------------------------------------------------------------------
+        long totalSlotsLeft = 0;
+        for( int i = 0; i < a_counterValues.length; i++ )
+        {
+            totalSlotsLeft += a_counterValues[ i ];
+        }
+
         throw new RuntimeException( "Logic Error. This code should never " +
                 "be reached. Please report this to the " +
-                "jgap team: SelectedSlot exceeded max value." );
+                "jgap team: selected slot " + selectedSlot + " " +
+                "exceeded " + totalSlotsLeft + " number of slots left." );
     }
 
 
