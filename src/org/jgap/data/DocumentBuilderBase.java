@@ -26,59 +26,83 @@ import java.util.*;
  * For example, have a look at XMLDocumentBuilder
  *
  * @author Klaus Meffert
- * @since 1.0
+ * @since 2.0
  */
 public abstract class DocumentBuilderBase {
   /**@todo add new class DocumentCreatorBase that reads in data written by
    * DocumentBuilderBase */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public Object buildDocument(IDataCreators a_document, Object document)
+  /**
+   *
+   * @param a_dataholder IDataCreators the input structure holding the data to
+   *   be represented as a generic document
+   * @param a_document Object the document to put the elements in
+   * @throws Exception
+   * @return Object the document built up by adding elements
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public Object buildDocument(IDataCreators a_dataholder, Object a_document)
       throws Exception {
     // traverse over input structure
-    IDataElementList tree = a_document.getTree();
+    IDataElementList tree = a_dataholder.getTree();
     int len = tree.getLength();
     IDataElement elem;
     for (int i = 0; i < len; i++) {
       elem = tree.item(i);
-      doTraverse(elem, document, null);
+      doTraverse(elem, a_document, null);
     }
-    return document;
+    return a_document;
   }
 
   /**
    * Recursive traversing over data tree containing elements to be transformed
-   * into XML tags
-   * @param elem IDataElement
-   * @param doc Document
-   * @param xmlElement Element
+   * into tags
+   * @param a_elem IDataElement
+   * @param a_document Document
+   * @param a_Element Element
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
-  private void doTraverse(IDataElement elem, Object doc,
-                          Object xmlElement)
+  private void doTraverse(IDataElement a_elem, Object a_document,
+                          Object a_Element)
       throws Exception {
-    String tagName = elem.getTagName();
-    xmlElement = createElementGeneric(doc, xmlElement, tagName);
-    Map attributes = elem.getAttributes();
+    String tagName = a_elem.getTagName();
+    a_Element = createElementGeneric(a_document, a_Element, tagName);
+    Map attributes = a_elem.getAttributes();
     Set keys = attributes.keySet();
     Iterator it = keys.iterator();
     String key, value;
     while (it.hasNext()) {
       key = (String) it.next();
       value = (String) attributes.get(key);
-      setAttribute(xmlElement, key, value);
+      setAttribute(a_Element, key, value);
     }
-    IDataElementList list = elem.getChildNodes();
+    IDataElementList list = a_elem.getChildNodes();
     if (list != null) {
       for (int j = 0; j < list.getLength(); j++) {
         IDataElement elem2 = list.item(j);
-        doTraverse(elem2, doc, xmlElement);
+        doTraverse(elem2, a_document, a_Element);
       }
     }
   }
 
+  /**
+   *
+   * @param document Object
+   * @param element Object
+   * @param tagName String
+   * @return Object
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   private Object createElementGeneric(Object document, Object element,
                                       String tagName) {
     if (element == null) {
