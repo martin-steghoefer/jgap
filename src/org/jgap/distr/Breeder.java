@@ -1,9 +1,26 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * JGAP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser Public License
+ * along with JGAP; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package org.jgap.distr;
 
 import java.util.*;
-import org.jgap.*;
 
-//import net.openai.ai.ga.*;
+import org.jgap.*;
 
 /**
  * Breeds populations using a GA that will be breeded either on a single
@@ -18,8 +35,6 @@ import org.jgap.*;
  */
 public abstract class Breeder
     implements Runnable {
-
-//  private GeneticAlgorithm genAlgo;
 
   /**
    * The parent Breeder to report to
