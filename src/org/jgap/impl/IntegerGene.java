@@ -18,11 +18,9 @@
 
 package org.jgap.impl;
 
-import java.util.StringTokenizer;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.RandomGenerator;
-import org.jgap.UnsupportedRepresentationException;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * A Gene implementation that supports an integer values for its allele.
@@ -37,23 +35,26 @@ public class IntegerGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Represents the constant range of values supported by integers.
    */
   protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
       (long) Integer.MIN_VALUE;
+
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Integer.MAX_VALUE.
    */
   protected int m_upperBounds;
+
   /**
    * The lower bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Integer.MIN_VALUE
    */
   protected int m_lowerBounds;
+
   /**
    * Stores the number of integer range units that a single bounds-range
    * unit represents. For example, if the integer range is -2 billion to
@@ -64,6 +65,7 @@ public class IntegerGene
    * bounds to legal allele values that are within the bounds.
    */
   protected long m_boundsUnitsToIntegerUnits;
+
   /**
    * Constructs a new IntegerGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
