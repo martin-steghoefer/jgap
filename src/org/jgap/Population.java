@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -23,11 +23,18 @@ public class Population {
    */
   private Chromosome m_fittestChromosome;
 
+  /**
+   * Indicated whether at least one of the chromosomes has been changed (deleted,
+   * added, modified)
+   */
+  private boolean m_changed;
+
   public Population(Chromosome[] chromosomes) {
     this();
     for (int i = 0; i < chromosomes.length; i++) {
       m_chromosomes.add(chromosomes[i]);
     }
+    setChanged(true);
   }
 
   public Population(int size) {
@@ -50,6 +57,7 @@ public class Population {
   public void addChromosome(Chromosome toAdd) {
     if (toAdd != null) {
       m_chromosomes.add(toAdd);
+      setChanged(true);
     }
   }
 
@@ -65,6 +73,7 @@ public class Population {
   public void addChromosomes(Population toAdd) {
     if (toAdd != null) {
       m_chromosomes.addAll(toAdd.getChromosomes());
+      setChanged(true);
     }
   }
 
@@ -93,15 +102,32 @@ public class Population {
   }
 
   /**
-   * Sets the fittest Chromosome in the population (the one with the highest
-   * fitness value.
-   * @param a_fittestChromosome the fittest Chromosome of the population
+   * Determines the fittest Chromosome in the population (the one with the highest
+   * fitness value) and memorizes it
+   * @return the fittest Chromosome of the population
    *
    * @author Klaus Meffert
    * @since 2.0
    */
+  public Chromosome determineFittestChromosome() {
+    if (!m_changed) {
+      return m_fittestChromosome;
+    }
+    Iterator it = m_chromosomes.iterator();
+    double bestFitness = -1.0d;
+    while (it.hasNext()) {
+      Chromosome chrom = (Chromosome)it.next();
+      double fitness = chrom.getFitnessValue();
+      if (fitness > bestFitness || m_fittestChromosome == null) {
+        m_fittestChromosome = chrom;
+        bestFitness = fitness;
+      }
+    }
+    setChanged(false);
+    return m_fittestChromosome;
+  }
 
-  public void setFittestChromosome(Chromosome a_fittestChromosome) {
-    m_fittestChromosome = a_fittestChromosome;
+  private void setChanged(boolean a_changed) {
+    m_changed = a_changed;
   }
 }
