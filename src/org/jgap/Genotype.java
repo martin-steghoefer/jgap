@@ -20,7 +20,6 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.event.*;
 
 /**
@@ -37,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The current active Configuration instance.
@@ -319,36 +318,9 @@ public class Genotype
    */
   public synchronized void evolve() {
     verifyConfigurationAvailable();
-    // Process all natural selectors applicable before executing the
-    // Genetic Operators.
-    // -------------------------------------------------------------
-    int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(true);
-    if (selectorSize > 0) {
-      // Add the chromosomes pool to the natural selector.
-      // Iterate over all natural selectors!
-      // ----------------------------------------------------------------
-      Iterator iterator1 = m_population.iterator(); // Arrays.asList(m_chromosomes).iterator();
-      while (iterator1.hasNext()) {
-        Chromosome currentChromosome = (Chromosome) iterator1.next();
-        for (int i = 0; i < selectorSize; i++) {
-          m_activeConfiguration.getNaturalSelector(true, i).add(
-              m_activeConfiguration,
-              currentChromosome);
-        }
-      }
-      // Repopulate the population of chromosomes with those selected
-      // by the natural selector.
-      // Iterate over all natural selectors!
-      // ------------------------------------------------------------
-      for (int i = 0; i < selectorSize; i++) {
-        m_population = m_activeConfiguration.getNaturalSelector(true, i).
-            select(m_activeConfiguration,
-                   m_activeConfiguration.getPopulationSize());
-        // Clean up the natural selector.
-        // ------------------------------
-        m_activeConfiguration.getNaturalSelector(true, i).empty();
-      }
-    }
+
+    applyNaturalSelectors(true);
+
     // Execute all of the Genetic Operators.
     // -------------------------------------
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
@@ -369,33 +341,9 @@ public class Genotype
           m_workingPool.toArray(new Chromosome[m_workingPool.size()]);
       bulkFunction.evaluate(candidateChromosomes);
     }
-    selectorSize = m_activeConfiguration.getNaturalSelectorsSize(false);
-    if (selectorSize > 0) {
-      // Add the chromosomes in the working pool to the natural selector.
-      // Iterate over all natural selectors!
-      // ----------------------------------------------------------------
-      Iterator iterator = m_workingPool.iterator();
-      NaturalSelector selector;
-      while (iterator.hasNext()) {
-        Chromosome currentChromosome = (Chromosome) iterator.next();
-        for (int i = 0; i < selectorSize; i++) {
-          selector = m_activeConfiguration.getNaturalSelector(false, i);
-          selector.add(m_activeConfiguration,
-                       currentChromosome);
-        }
-      }
-      // Repopulate the population of chromosomes with those selected
-      // by the natural selector.
-      // Iterate over all natural selectors!
-      // ------------------------------------------------------------
-      for (int i = 0; i < selectorSize; i++) {
-        m_population = m_activeConfiguration.getNaturalSelector(false, i).
-            select(m_activeConfiguration, m_population.size());
-        // Clean up the natural selector.
-        // ------------------------------
-        m_activeConfiguration.getNaturalSelector(false, i).empty();
-      }
-    }
+
+    applyNaturalSelectors(false);
+
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
     m_activeConfiguration.getEventManager().fireGeneticEvent(
@@ -494,10 +442,10 @@ public class Genotype
     // us.
     // ------------------------------------------------------------------
     int populationSize = a_activeConfiguration.getPopulationSize();
-    Chromosome[] chromosomes = new Chromosome[populationSize];
     Population pop = new Population(populationSize);
     for (int i = 0; i < populationSize; i++) {
-      pop.addChromosome(Chromosome.randomInitialChromosome(a_activeConfiguration));
+      pop.addChromosome(Chromosome.randomInitialChromosome(
+          a_activeConfiguration));
     }
     return new Genotype(a_activeConfiguration, pop);
   }
@@ -578,5 +526,64 @@ public class Genotype
    */
   public FitnessEvaluator getFitnessEvaluator() {
     return m_fitnessEvaluator;
+  }
+
+  /**
+   * Applies all NaturalSelector's registered with the Configuration
+   * @param processBeforeGeneticOperators true apply NaturalSelector's
+   *   applicable before GeneticOperator's, false: apply the ones applicable
+   *   after GeneticOperator's
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  protected void applyNaturalSelectors(boolean processBeforeGeneticOperators) {
+    // Process all natural selectors applicable before executing the
+    // genetic operators (reproduction, crossing over, mutation...).
+    // -------------------------------------------------------------
+    int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(
+        processBeforeGeneticOperators);
+    if (selectorSize > 0) {
+      // Add the chromosomes pool to the first natural selector
+      // (of type BestChromosomesSelector, WeightedRouletteSelector...).
+      // Iterate over all natural selectors.
+      // ----------------------------------------------------------------
+      Iterator iterator1 = m_population.iterator();
+      NaturalSelector selector;
+      if (selectorSize > 0) {
+        selector = m_activeConfiguration.getNaturalSelector(
+            processBeforeGeneticOperators, 0);
+        while (iterator1.hasNext()) {
+          Chromosome currentChromosome = (Chromosome) iterator1.next();
+          selector.add(m_activeConfiguration, currentChromosome);
+        }
+      }
+
+      // Repopulate the population of chromosomes with those selected
+      // by the natural selector.
+      // Iterate over all natural selectors.
+      // ------------------------------------------------------------
+      for (int i = 0; i < selectorSize; i++) {
+        selector = m_activeConfiguration.getNaturalSelector(
+            processBeforeGeneticOperators, i);
+        m_population = selector.select(m_activeConfiguration, m_population.size());
+        // Clean up the natural selector.
+        // ------------------------------
+        selector.empty();
+
+        // Add output from previous selector to input of next selector, if any
+        // -------------------------------------------------------------------
+        if (i < selectorSize - 1) {
+          selector = m_activeConfiguration.getNaturalSelector(
+              processBeforeGeneticOperators, i + 1);
+          iterator1 = m_population.iterator();
+          while (iterator1.hasNext()) {
+            Chromosome currentChromosome = (Chromosome) iterator1.next();
+            selector.add(m_activeConfiguration, currentChromosome);
+          }
+        }
+      }
+    }
+
   }
 }
