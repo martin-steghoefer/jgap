@@ -18,23 +18,29 @@
 
 package org.jgap;
 
-import org.jgap.impl.*;
-import junit.framework.*;
-import junitx.util.*;
 import java.util.*;
+
+import org.jgap.impl.*;
+
+import junit.framework.*;
 
 /**
  * Tests for Population class
  *
  * @author Klaus Meffert
+ * @author Chris Knowles
  * @since 2.0
  */
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public PopulationTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -45,30 +51,24 @@ public class PopulationTest extends TestCase {
   public void testConstruct_0() {
       try
       {
-        Population pop = new Population(null);
+        new Population(null);
         fail();
       }
       catch (NullPointerException e)
       {
-          //this is OK
-          return;
+        ;//this is OK
       }
-      //any other exception we fail
-      fail();
   }
 
   public void testConstruct_1() {
       try
       {
-        Population pop = new Population(-1);
+        new Population(-1);
       }
       catch (IllegalArgumentException iae)
       {
-          //this is ok
-          return;
+        ;//this is ok
       }
-      //any other exception we fail
-      fail();
   }
 
   public void testConstruct_2() {
@@ -94,7 +94,6 @@ public class PopulationTest extends TestCase {
       p.addChromosome(c);
       assertEquals(p.size(), 1);
   }
-
 
   public void testAddChromosomes_0(){
       Gene g = new DoubleGene();
@@ -184,26 +183,24 @@ public class PopulationTest extends TestCase {
   }
 
   public void testDetermineFittestChromosome_0() throws Exception {
-      List chromosomes = new ArrayList();
-      Gene g = null;
-      Chromosome c = null;
-      Population p = new Population();
+    Genotype.setConfiguration(new DefaultConfiguration());
+    List chromosomes = new ArrayList();
+    Gene g = null;
+    Chromosome c = null;
+    Population p = new Population();
 
-      int nTot = 100;
-      for(int i =0;i<nTot;i++){
-        g = new DoubleGene();
-        c = new Chromosome(g,10);
-        c.setFitnessValue(i);
-        p.addChromosome(c);
-        chromosomes.add(c);
-//        c.setActiveConfiguration(new DefaultConfiguration());
-      }
+    int nTot = 100;
+    for (int i = 0; i < nTot; i++) {
+      g = new DoubleGene();
+      c = new Chromosome(g, 10);
+      c.setFitnessValue(i);
+      p.addChromosome(c);
+      chromosomes.add(c);
+    }
 
-      Chromosome fittest = (Chromosome) chromosomes.get(99);
-
-      p.setChromosomes(chromosomes);
-
-      assertEquals(p.determineFittestChromosome(), fittest);
+    Chromosome fittest = (Chromosome) chromosomes.get(99);
+    p.setChromosomes(chromosomes);
+    assertEquals(p.determineFittestChromosome(), fittest);
   }
 
 }
