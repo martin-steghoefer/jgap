@@ -50,14 +50,20 @@ public abstract class Breeder
    */
   private Genotype genotype;
 
+  /**
+   * Helper class for merging together two Populations into one.
+   */
+  private IPopulationMerger m_populationMerger;
+
   private transient boolean running;
 
   private transient boolean stopped = true;
 
   private transient MeanBuffer meanBuffer = new MeanBuffer(40);
 
-  public Breeder() {
+  public Breeder(IPopulationMerger a_populationMerger) {
     super();
+    m_populationMerger = a_populationMerger;
   }
 
   /**
