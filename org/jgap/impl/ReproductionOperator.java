@@ -30,7 +30,7 @@ import java.util.*;
  * remains a candidate for selection for the next population.
  */
 public class ReproductionOperator implements GeneticOperator {
-  public void operate(Configuration gaConf, Chromosome[] population,
+  public void operate(final Configuration gaConf, final Chromosome[] population,
                       List candidateChromosomes) {
     for (int i = 0; i < population.length; i++) {
       candidateChromosomes.add(population[i].clone());

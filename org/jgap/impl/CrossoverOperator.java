@@ -32,7 +32,7 @@ import java.util.*;
  * as many times as there are Chromosomes in the population.
  */
 public class CrossoverOperator implements GeneticOperator {
-  public void operate(Configuration gaConf, Chromosome[] population,
+  public void operate(final Configuration gaConf, final Chromosome[] population,
                       List candidateChromosomes) {
     int numCrossovers = population.length / 2;
     RandomGenerator generator = gaConf.getRandomGenerator();
