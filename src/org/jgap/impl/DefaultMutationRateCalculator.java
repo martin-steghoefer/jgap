@@ -27,12 +27,10 @@ import org.jgap.*;
  * @since 1.1
  */
 public class DefaultMutationRateCalculator
-    implements MutationRateCalculator {
+    implements IUniversalRateCalculator {
+        
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
-
-  public DefaultMutationRateCalculator() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Calculates the mutation rate
@@ -48,4 +46,19 @@ public class DefaultMutationRateCalculator
     }
     return size;
   }
+  
+  /**
+   * Determines whether mutation is to be carried out. In this case
+   * the rate is the size of the chromosome. There is therefore a
+   * probability of 1/totalgenes that a particular gene mutates. 
+   * @return true if gene should be mutated.
+   *
+   * @author Chris Knowles
+   * @since 2.0
+   */
+  public boolean toBePermutated()
+  {
+      RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+      return (generator.nextInt(calculateCurrentRate()) == 0);
+  } 
 }

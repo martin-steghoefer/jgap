@@ -42,7 +42,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -57,7 +57,7 @@ public class MutationOperator
    * null the value of m_mutationRate will be used.
    * Replaces the previously used boolean m_dynamicMutationRate
    */
-  private MutationRateCalculator m_mutationRateCalc;
+  private IUniversalRateCalculator m_mutationRateCalc;
 
   /**
    * Constructs a new instance of this MutationOperator without a specified
@@ -82,7 +82,7 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.1
    */
-  public MutationOperator(MutationRateCalculator a_mutationRateCalculator) {
+  public MutationOperator(IUniversalRateCalculator a_mutationRateCalculator) {
     setMutationRateCalc(a_mutationRateCalculator);
   }
 
@@ -141,17 +141,14 @@ public class MutationOperator
       return;
     }
     // Determine the mutation rate. If dynamic rate is enabled, then
-    // calculate it based upon the number of genes in the chromosome.
+    // calculate it using the IUniversalRateCalculator instance. 
     // Otherwise, go with the mutation rate set upon construction.
     // --------------------------------------------------------------
     int currentRate;
-    if (m_mutationRateCalc != null) {
-      currentRate = m_mutationRateCalc.calculateCurrentRate();
-    }
-    else {
-      currentRate = m_mutationRate;
-    }
+    boolean mutate = false;   
+    
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
@@ -163,10 +160,19 @@ public class MutationOperator
 
       // ----------------------------------------
       for (int j = 0; j < genes.length; j++) {
-        // Ensure probability of 1/currentRate for applying mutation
-
-        // ---------------------------------------------------------
-        if (generator.nextInt(currentRate) == 0) {
+        mutate = false;
+        
+        if (m_mutationRateCalc != null){
+            // If it's a dynamic mutation rate then let the calculator decide
+            // whether the current gene should be mutated 
+            mutate = m_mutationRateCalc.toBePermutated();
+        } else{
+            // Else non-dynamic so just mutate based on the the current rate.
+            // In fact we use a rate of 1/m_mutationRate
+            mutate = (generator.nextInt(m_mutationRate)==0);
+        }
+        
+        if (mutate) {
           // Now that we want to actually modify the Chromosome,
           // let's make a copy of it (if we haven't already) and
           // add it to the candidate chromosomes so that it will
@@ -236,7 +242,7 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.1
    */
-  public MutationRateCalculator getMutationRateCalc() {
+  public IUniversalRateCalculator getMutationRateCalc() {
     return m_mutationRateCalc;
   }
 
@@ -248,7 +254,7 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setMutationRateCalc(MutationRateCalculator m_mutationRateCalc) {
+  public void setMutationRateCalc(IUniversalRateCalculator m_mutationRateCalc) {
     this.m_mutationRateCalc = m_mutationRateCalc;
     if (m_mutationRateCalc != null) {
       m_mutationRate = 0;
