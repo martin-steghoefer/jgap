@@ -18,13 +18,13 @@
 
 package org.jgap.impl;
 
-import org.jgap.MutationRateCalculator;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.util.*;
+import org.jgap.*;
+import junit.framework.*;
 
 /**
  * Tests for MutationOperator class
+ *
  * @author Klaus Meffert
  * @since 1.1
  */
@@ -32,7 +32,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public MutationOperatorTest() {
   }
@@ -67,9 +67,75 @@ public class MutationOperatorTest
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
 
-  public void testOperate_0() {
-    /**@todo implement.
-     * E.g. we could check if something has changed. For that use a
-     * RandomGeneratorForTest*/
+  public void testOperate_0() throws Exception {
+    MutationOperator mutOp = new MutationOperator();
+    List candChroms = new Vector();
+    Chromosome[] population = new Chromosome[]{};
+    mutOp.operate(new Configuration(), population, candChroms);
+    assertEquals(candChroms.size(), population.length);
+    candChroms.clear();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    RandomGeneratorForTest gen = new RandomGeneratorForTest();
+    gen.setNextInt(9);
+    conf.setRandomGenerator(gen);
+    Chromosome c1 = new Chromosome(new BooleanGene(),9);
+    conf.setSampleChromosome(c1);
+    conf.addNaturalSelector(new BestChromosomesSelector(),true);
+    conf.setPopulationSize(5);
+    for (int i=0;i<c1.getGenes().length;i++) {
+      c1.getGene(i).setAllele(Boolean.TRUE);
+    }
+    c1.setActiveConfiguration(conf);
+    Chromosome c2 = new Chromosome(new IntegerGene(),4);
+    c2.setActiveConfiguration(conf);
+    for (int i=0;i<c2.getGenes().length;i++) {
+      c2.getGene(i).setAllele(new Integer(27));
+    }
+    population = new Chromosome[]{c1,c2};
+    mutOp.operate(conf, population, candChroms);
+    assertEquals(candChroms.size(), population.length);
+  }
+
+  public void testOperate_1() throws Exception {
+    MutationOperator mutOp = new MutationOperator();
+    List candChroms = new Vector();
+    Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
+    Configuration conf = new Configuration();
+    conf.setRandomGenerator(new StockRandomGenerator());
+    try {
+      mutOp.operate(conf, population, candChroms);
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ;//this is OK
+    }
+  }
+
+  public void testOperate_2() {
+    MutationOperator mutOp = new MutationOperator();
+    List candChroms = new Vector();
+    Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
+    try {
+      mutOp.operate(new Configuration(), population, candChroms);
+      fail();
+    }
+    catch (NullPointerException nex) {
+        ;//this is OK
+    }
+  }
+
+  public void testOperate_3() {
+  /**@todo implement.
+   * E.g. we could check if something has changed. For that use a
+   * RandomGeneratorForTest*/
+  }
+}
+
+class TestFitnessFunction
+    extends FitnessFunction {
+  protected int evaluate(Chromosome a_subject) {
+    //result does not matter here
+    return 1;
   }
 }
