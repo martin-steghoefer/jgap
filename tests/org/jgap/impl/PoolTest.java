@@ -18,12 +18,9 @@
 
 package org.jgap.impl;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Vector;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.util.*;
+
+import junit.framework.*;
 
 /**
  * Tests for Pool class
@@ -35,8 +32,8 @@ public class PoolTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
   public PoolTest() {
   }
 

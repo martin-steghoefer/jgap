@@ -19,7 +19,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -42,7 +41,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -141,14 +140,14 @@ public class MutationOperator
       return;
     }
     // Determine the mutation rate. If dynamic rate is enabled, then
-    // calculate it using the IUniversalRateCalculator instance. 
+    // calculate it using the IUniversalRateCalculator instance.
     // Otherwise, go with the mutation rate set upon construction.
     // --------------------------------------------------------------
     int currentRate;
-    boolean mutate = false;   
-    
+    boolean mutate = false;
+
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
-    
+
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
@@ -161,17 +160,18 @@ public class MutationOperator
       // ----------------------------------------
       for (int j = 0; j < genes.length; j++) {
         mutate = false;
-        
-        if (m_mutationRateCalc != null){
-            // If it's a dynamic mutation rate then let the calculator decide
-            // whether the current gene should be mutated 
-            mutate = m_mutationRateCalc.toBePermutated();
-        } else{
-            // Else non-dynamic so just mutate based on the the current rate.
-            // In fact we use a rate of 1/m_mutationRate
-            mutate = (generator.nextInt(m_mutationRate)==0);
+
+        if (m_mutationRateCalc != null) {
+          // If it's a dynamic mutation rate then let the calculator decide
+          // whether the current gene should be mutated
+          mutate = m_mutationRateCalc.toBePermutated();
         }
-        
+        else {
+          // Else non-dynamic so just mutate based on the the current rate.
+          // In fact we use a rate of 1/m_mutationRate
+          mutate = (generator.nextInt(m_mutationRate) == 0);
+        }
+
         if (mutate) {
           // Now that we want to actually modify the Chromosome,
           // let's make a copy of it (if we haven't already) and
