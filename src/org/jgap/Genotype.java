@@ -37,7 +37,7 @@ public class Genotype
     implements Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The current active Configuration instance.
@@ -211,6 +211,7 @@ public class Genotype
    *
    * @return The Chromosome with the highest fitness value, or null if
    *         there are no chromosomes in this Genotype.
+   *
    * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
@@ -238,9 +239,10 @@ public class Genotype
   /**
    * Evolve the population of Chromosomes within this Genotype. This will
    * execute all of the genetic operators added to the present active
-   * Configuration and then invoke the natural selector to choose which
+   * configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population. Note
-   * that the population size always remains constant.
+   * that the population size not always remains constant (dependent on the
+   * NaturalSelector's used!).
    * @since 1.0
    */
   public synchronized void evolve() {
@@ -349,7 +351,7 @@ public class Genotype
 
   /**
    * Return a string representation of this Genotype instance,
-   * useful for dispaly purposes.
+   * useful for display purposes.
    *
    * @return A string representation of this Genotype instance.
    * @since 1.0
