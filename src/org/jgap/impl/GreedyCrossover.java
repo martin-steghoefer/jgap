@@ -38,7 +38,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -67,7 +67,7 @@ public class GreedyCrossover implements GeneticOperator {
        RandomGenerator generator
          = Genotype.getConfiguration().getRandomGenerator();
 
-       // For each crossover, grab two random chromosomes and do that
+       // For each crossover, grab two random chromosomes and do what
        // Grefenstette et al says
        // --------------------------------------------------------------
        for (int i = 0; i < numCrossovers; i++) {
@@ -81,7 +81,6 @@ public class GreedyCrossover implements GeneticOperator {
              nextInt(a_population.size())).clone();
 
          operate(firstMate, secondMate);
-
 
          // Add the modified chromosomes to the candidate pool so that
          // they'll be considered for natural selection during the next
