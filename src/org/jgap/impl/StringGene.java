@@ -20,6 +20,10 @@ package org.jgap.impl;
 import java.util.*;
 
 import org.jgap.*;
+import java.io.*;
+
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * A Gene implementation that supports a string for its allele. The valid
@@ -30,6 +34,7 @@ import org.jgap.*;
  * Partly copied from IntegerGene.
  *
  * @author Klaus Meffert
+ * @author Audrius Meskauskas
  * @since 1.1
  */
 public class StringGene
@@ -46,7 +51,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private int m_minLength;
 
@@ -200,13 +205,28 @@ public class StringGene
       // -----------------------------------------------------------
       if (tokenizer.countTokens() != 4) {
         throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation " +
+            "The format of the given persistent representation '" +
+            a_representation+"'"+
             "is not recognized: it does not contain four tokens.");
       }
-      String valueRepresentation = tokenizer.nextToken();
-      String minLengthRepresentation = tokenizer.nextToken();
-      String maxLengthRepresentation = tokenizer.nextToken();
-      String alphabetRepresentation = tokenizer.nextToken();
+
+      String valueRepresentation;
+      String alphabetRepresentation;
+      String minLengthRepresentation;
+      String maxLengthRepresentation;
+
+      try {
+        valueRepresentation =
+          URLDecoder.decode (tokenizer.nextToken (), "UTF-8");
+        minLengthRepresentation = tokenizer.nextToken();
+        maxLengthRepresentation = tokenizer.nextToken();
+        alphabetRepresentation =
+          URLDecoder.decode (tokenizer.nextToken (), "UTF-8");
+       }
+         catch (UnsupportedEncodingException ex) {
+          throw new Error ("UTF-8 encoding should be always supported");
+       }
+
       // Now parse and set the minimum length.
       // -------------------------------------
       try {
@@ -289,12 +309,21 @@ public class StringGene
   public String getPersistentRepresentation()
       throws
       UnsupportedOperationException {
-    // The persistent representation includes the value, minimum length,
-    // maximum length and valid alphabet. Each is separated by a colon.
-    // ----------------------------------------------------------------
-    return toString() + PERSISTENT_FIELD_DELIMITER + m_minLength +
-        PERSISTENT_FIELD_DELIMITER + m_maxLength +
-        PERSISTENT_FIELD_DELIMITER + m_alphabet;
+    try {
+        String s = toString(); if (s==null) s = "null";
+        // The persistent representation includes the value, minimum length,
+        // maximum length and valid alphabet. Each is separated by a colon.
+        // ----------------------------------------------------------------
+        return
+            URLEncoder.encode ( ""+toString (), "UTF-8") +
+            PERSISTENT_FIELD_DELIMITER + m_minLength +
+            PERSISTENT_FIELD_DELIMITER + m_maxLength +
+            PERSISTENT_FIELD_DELIMITER +
+            URLEncoder.encode( ""+m_alphabet, "UTF-8");
+    }
+    catch (UnsupportedEncodingException ex) {
+        throw new Error ("UTF-8 encoding should be supported");
+    }
   }
 
   /**
@@ -471,6 +500,8 @@ public class StringGene
     //check if a substring is equal to the PERSISTENT_FIELD_DELIMITER
     //which is not allowed currently
     //---------------------------------------------------------------
+    /** @todo blocked by audrius. */
+    if (false)
     if (containsString(a_alphabet, PERSISTENT_FIELD_DELIMITER)) {
       throw new IllegalArgumentException(
           "The alphabet may not contain a "
