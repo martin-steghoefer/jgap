@@ -28,7 +28,6 @@ import org.jgap.GeneticOperator;
 import org.jgap.MutationRateCalculator;
 import org.jgap.RandomGenerator;
 
-
 /**
  * The mutation operator runs through the genes in each of the Chromosomes
  * in the population and mutates them in statistical accordance to the
@@ -45,7 +44,8 @@ import org.jgap.RandomGenerator;
  * @author Neil Rotstan
  * @since 1.0
  */
-public class MutationOperator implements GeneticOperator
+public class MutationOperator
+    implements GeneticOperator
 {
     /**
      * The current mutation rate used by this MutationOperator, expressed as
@@ -63,16 +63,15 @@ public class MutationOperator implements GeneticOperator
      */
     private MutationRateCalculator m_mutationRateCalc;
 
-
     /**
      * Constructs a new instance of this MutationOperator without a specified
      * mutation rate, which results in dynamic mutation being turned on. This
      * means that the mutation rate will be automatically determined by this
      * operator based upon the number of genes present in the chromosomes.
      */
-    public MutationOperator()
+    public MutationOperator ()
     {
-        setMutationRateCalc(new DefaultMutationRateCalculator());
+        setMutationRateCalc (new DefaultMutationRateCalculator ());
     }
 
     /**
@@ -82,11 +81,10 @@ public class MutationOperator implements GeneticOperator
      * @param a_mutationRateCalculator calculator for dynamic mutation rate
      *        computation
      */
-    public MutationOperator(MutationRateCalculator a_mutationRateCalculator)
+    public MutationOperator (MutationRateCalculator a_mutationRateCalculator)
     {
-        setMutationRateCalc(a_mutationRateCalculator);
+        setMutationRateCalc (a_mutationRateCalculator);
     }
-
 
     /**
      * Constructs a new instance of this MutationOperator with the given
@@ -98,12 +96,11 @@ public class MutationOperator implements GeneticOperator
      *                              genes being mutated on average. A mutation
      *                              rate of zero disables mutation entirely.
      */
-    public MutationOperator( int a_desiredMutationRate )
+    public MutationOperator (int a_desiredMutationRate)
     {
         m_mutationRate = a_desiredMutationRate;
-        setMutationRateCalc(null);
+        setMutationRateCalc (null);
     }
-
 
     /**
      * The operate method will be invoked on each of the genetic operators
@@ -130,14 +127,14 @@ public class MutationOperator implements GeneticOperator
      *                               list if it's desired for them to be
      *                               considered for natural selection.
      */
-    public void operate( final Configuration a_activeConfiguration,
-                         final Chromosome[] a_population,
-                         List a_candidateChromosomes )
+    public void operate (final Configuration a_activeConfiguration,
+        final Chromosome[] a_population,
+        List a_candidateChromosomes)
     {
         // If the mutation rate is set to zero and dynamic mutation rate is
         // disabled, then we don't perform any mutation.
         // ----------------------------------------------------------------
-        if ( m_mutationRate == 0 && m_mutationRateCalc == null)
+        if (m_mutationRate == 0 && m_mutationRateCalc == null)
         {
             return;
         }
@@ -147,23 +144,27 @@ public class MutationOperator implements GeneticOperator
         // Otherwise, go with the mutation rate set upon construction.
         // --------------------------------------------------------------
         int currentRate = m_mutationRateCalc != null ?
-            m_mutationRateCalc.calculateCurrentRate(a_activeConfiguration):
-                              m_mutationRate;
+            m_mutationRateCalc.calculateCurrentRate (a_activeConfiguration) :
+            m_mutationRate;
 
-        RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+        RandomGenerator generator = a_activeConfiguration.getRandomGenerator ();
 
         // It would be inefficient to create copies of each Chromosome just
         // to decide whether to mutate them. Instead, we only make a copy
         // once we've positively decided to perform a mutation.
         // ----------------------------------------------------------------
-        for ( int i = 0; i < a_population.length; i++ )
+        for (int i = 0; i < a_population.length; i++)
         {
-            Gene[] genes = a_population[ i ].getGenes();
+            Gene[] genes = a_population[i].getGenes ();
             Chromosome copyOfChromosome = null;
 
-            for ( int j = 0; j < genes.length; j++ )
+            // For each Chromosome in the population...
+            // ----------------------------------------
+            for (int j = 0; j < genes.length; j++)
             {
-                if ( generator.nextInt( currentRate ) == 0 )
+                // Ensure probability of 1/currentRate for applying mutation
+                // ---------------------------------------------------------
+                if (generator.nextInt (currentRate) == 0)
                 {
                     // Now that we want to actually modify the Chromosome,
                     // let's make a copy of it (if we haven't already) and
@@ -173,37 +174,82 @@ public class MutationOperator implements GeneticOperator
                     // to a random value as the implementation of our
                     // "mutation" of the gene.
                     // ---------------------------------------------------
-                    if ( copyOfChromosome == null )
+                    if (copyOfChromosome == null)
                     {
-                        copyOfChromosome =
-                            (Chromosome) a_population[ i ].clone();
+                        // ...take a copy of it...
+                        // -----------------------
+                        copyOfChromosome = (Chromosome) a_population[i].clone ();
 
-                        a_candidateChromosomes.add( copyOfChromosome );
-                        genes = copyOfChromosome.getGenes();
+                        // ...add it to the candidate pool...
+                        // ----------------------------------
+                        a_candidateChromosomes.add (copyOfChromosome);
+
+                        // ...then Gaussian mutate all its genes...
+                        // ----------------------------------------
+                        genes = copyOfChromosome.getGenes ();
+
                     }
-                    /**@todo modify this to obtain the possibility of using
-                     * Gaussian distribution for mutation (see req. 708772)
-                     *
-                     * Note: we really don't want a random generator here in
-                     * any way. Sometimes yes, but sometimes we would want to
-                     * use a (more or less) deterministic algorithm
-                     */
-                    genes[ j ].setToRandomValue( generator );
+                    // Significant architectural changes made here due to
+                    // request 708772 (also changed Gene classes)
+                    // --------------------------------------------------
+
+                    // Process all atomic elements in the gene. For a StringGene
+                    // this would be the length of the string, for an
+                    // IntegerGene, it is always one element
+                    // ---------------------------------------------------------
+                    if (genes[j] instanceof CompositeGene)
+                    {
+                        CompositeGene compositeGene = (CompositeGene) genes[j];
+                        for (int k = 0; k < compositeGene.size (); k++)
+                        {
+                            mutateGene (compositeGene.geneAt (k), generator);
+                        }
+                    }
+                    else
+                    {
+                        mutateGene (genes[j], generator);
+                    }
+                    // End of changed for request 708772
                 }
             }
         }
     }
 
-    public MutationRateCalculator getMutationRateCalc()
+    /**
+     * Helper: mutate all atomic elements of a gene
+     * @param a_gene the gene to be mutated
+     * @param a_generator the generator delivering amount of mutation
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    private void mutateGene (Gene a_gene, RandomGenerator a_generator)
+    {
+        for (int k = 0; k < a_gene.size (); k++)
+        {
+            // Retrieve value between 0 and 1 (not included) from
+            // generator. Then map this value to range -1 and 1
+            // (-1 included, 1 not)
+            // --------------------------------------------------
+            double percentage = -1 + a_generator.nextDouble () * 2;
+
+            // Mutate atomic element by calculated percentage
+            // ----------------------------------------------
+            a_gene.applyMutation (k, percentage);
+        }
+    }
+
+    public MutationRateCalculator getMutationRateCalc ()
     {
         return m_mutationRateCalc;
     }
-    public void setMutationRateCalc(MutationRateCalculator m_mutationRateCalc)
+
+    public void setMutationRateCalc (MutationRateCalculator m_mutationRateCalc)
     {
         this.m_mutationRateCalc = m_mutationRateCalc;
-        if (m_mutationRateCalc != null) {
+        if (m_mutationRateCalc != null)
+        {
             m_mutationRate = 0;
         }
     }
 }
-
