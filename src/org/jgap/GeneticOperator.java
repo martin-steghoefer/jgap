@@ -35,7 +35,7 @@ public interface GeneticOperator
     extends java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -61,6 +61,9 @@ public interface GeneticOperator
    *                               modified copies of Chromosomes to this
    *                               list if it's desired for them to be
    *                               considered for natural selection.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void operate(final Configuration a_activeConfiguration,
                       final Population a_population,

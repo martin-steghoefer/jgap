@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The current active Configuration instance.
@@ -146,8 +146,8 @@ public class Genotype
    * Additionally a specific fitnessEvaluator can be specified here. See
    * interface class FitnessEvaluator for details.
    * @param a_activeConfiguration The current active Configuration object.
-   * @param a_initialChromosomes The Chromosome population to be
-   *                             managed by this Genotype instance.
+   * @param a_population The Chromosome population to be managed by this
+   *        Genotype instance.
    * @param a_fitnessEvaluator a specific fitness value evaluator
    * @throws InvalidConfigurationException
    *
