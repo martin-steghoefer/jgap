@@ -35,7 +35,7 @@ public abstract class BulkFitnessFunction implements java.io.Serializable
 {
     /**
      * Calculates and sets the fitness values on each of the given
-     * Chromosomes via their setFitness() method.
+     * Chromosomes via their setFitnessValue() method.
      *
      * @param a_subjects the Chromosomes for which the fitness values
      *                   must be computed and set.
