@@ -18,12 +18,9 @@
 
 package org.jgap.impl;
 
-import java.util.StringTokenizer;
-import java.util.Vector;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.RandomGenerator;
-import org.jgap.UnsupportedRepresentationException;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * Ordered container for multiple genes
@@ -49,15 +46,33 @@ import org.jgap.UnsupportedRepresentationException;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
   /**
    * Represents the delimiter that is used to separate genes in the
    * persistent representation of CompositeGene instances.
    */
   public final static String GENE_DELIMITER = "*";
-  private Vector genes;
+
+  private Gene m_geneTypeAllowed;
+
+  private List genes;
+
   public CompositeGene() {
     genes = new Vector();
+  }
+
+  /**
+   * Allows to specify which Gene implementation is allowed to be added to the
+   * CompositeGene.
+   *
+   * @param geneTypeAllowed Class
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public CompositeGene(Gene a_geneTypeAllowed) {
+    this();
+    m_geneTypeAllowed = a_geneTypeAllowed;
   }
 
   public void addGene(Gene a_gene) {
@@ -77,6 +92,12 @@ public class CompositeGene
    * @since 1.1
    */
   public void addGene(Gene a_gene, boolean strict) {
+    if (m_geneTypeAllowed != null) {
+      if (! a_gene.getClass().getName().equals(m_geneTypeAllowed.getClass().getName())) {
+        throw new IllegalArgumentException("Adding a "+a_gene.getClass().getName()
+                                           + " has been forbidden!");
+      }
+    }
     if (a_gene instanceof CompositeGene) {
       throw new IllegalArgumentException("It is not allowed to add a"
                                          + " CompositeGene to a CompositeGene!");
@@ -264,7 +285,7 @@ public class CompositeGene
    * @since 1.1
    */
   public Object getAllele() {
-    Vector alleles = new Vector();
+    List alleles = new Vector();
     Gene gene;
     for (int i = 0; i < genes.size(); i++) {
       gene = (Gene) genes.get(i);
@@ -285,16 +306,16 @@ public class CompositeGene
    * @since 1.1
    */
   public void setAllele(Object a_newValue) {
-    if (! (a_newValue instanceof Vector)) {
+    if (! (a_newValue instanceof List)) {
       throw new IllegalArgumentException(
           "The expected type of the allele"
           + " is a Vector.");
     }
-    Vector alleles = (Vector) a_newValue;
+    List alleles = (List) a_newValue;
     Gene gene;
     for (int i = 0; i < alleles.size(); i++) {
       gene = (Gene) genes.get(i);
-      gene.setAllele(alleles.elementAt(i));
+      gene.setAllele(alleles.get(i));
     }
   }
 
