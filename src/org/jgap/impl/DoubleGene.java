@@ -29,6 +29,10 @@ import java.util.StringTokenizer;
  * A Gene implementation that supports a double values for its allele.
  * Upper and lower bounds may optionally be provided to restrict the range
  * of legal values allowed by this Gene instance.
+ * Partly copied from IntegerGene.
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class DoubleGene
     implements Gene
@@ -87,6 +91,8 @@ public class DoubleGene
      *                      inclusive.
      * @param a_upperBounds The highest value that this Gene may possess,
      *                      inclusive.
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public DoubleGene (double a_lowerBounds, double a_upperBounds)
     {
@@ -113,6 +119,9 @@ public class DoubleGene
      * @param a_activeConfiguration The current active configuration.
      * @return A new Gene instance of the same type and with the same
      *         setup as this concrete Gene.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public Gene newGene (Configuration a_activeConfiguration)
     {
@@ -126,6 +135,9 @@ public class DoubleGene
      * the allowable range.
      *
      * @param a_newValue the new value of this Gene instance.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void setAllele (Object a_newValue)
     {
@@ -148,6 +160,9 @@ public class DoubleGene
      * @return A string representation of this Gene's current state.
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public String getPersistentRepresentation () throws
         UnsupportedOperationException
@@ -175,6 +190,9 @@ public class DoubleGene
      *         is provided for this method.
      * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void setValueFromPersistentRepresentation (String a_representation) throws
         UnsupportedRepresentationException
@@ -258,6 +276,8 @@ public class DoubleGene
      * returned by this class will be Double instances.
      *
      * @return the Double value of this Gene.
+     *
+     * @since 1.1
      */
     public Object getAllele ()
     {
@@ -285,6 +305,9 @@ public class DoubleGene
      *                          flexibility to configure the genetic engine
      *                          to use the random number generator of their
      *                          choice.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void setToRandomValue (RandomGenerator a_numberGenerator)
     {
@@ -307,6 +330,9 @@ public class DoubleGene
      *
      * @throws ClassCastException if the specified object's type prevents it
      *         from being compared to this DoubleGene.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public int compareTo (Object other)
     {
@@ -348,6 +374,9 @@ public class DoubleGene
      * @param other the object to compare to this DoubleGene for equality.
      * @return true if this DoubleGene is equal to the given object,
      *         false otherwise.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public boolean equals (Object other)
     {
@@ -368,6 +397,9 @@ public class DoubleGene
      * Retrieves the hash code value for this DoubleGene.
      *
      * @return this DoubleGene's hash code.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public int hashCode ()
     {
@@ -389,6 +421,9 @@ public class DoubleGene
      * may be useful for display purposes.
      *
      * @return a string representation of this DoubleGene's value.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public String toString ()
     {
@@ -405,6 +440,8 @@ public class DoubleGene
     /**
      * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
+     *
+     * @since 1.1
      */
     public void cleanup ()
     {
@@ -420,6 +457,9 @@ public class DoubleGene
      * double max and min, then the resulting value will be about halfway
      * between the upper bounds and lower bounds). If the value is null or
      * is already within the bounds, it will be left unchanged.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     protected void mapValueToWithinBounds ()
     {
@@ -453,6 +493,9 @@ public class DoubleGene
      * field would therefore be 2. This mapping unit is used to map illegal
      * allele values that are outside of the bounds to legal allele values that
      * are within the bounds.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     protected void calculateBoundsUnitsToDoubleUnitsRatio ()
     {

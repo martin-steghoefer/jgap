@@ -35,6 +35,9 @@ import org.jgap.UnsupportedRepresentationException;
  * A Gene implementation that supports a string for its allele. The valid alphabet
  * as well as the minimum and maximum length of the string can be specified.
  * Partly copied from IntegerGene.
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class StringGene
     implements Gene
@@ -49,7 +52,7 @@ public class StringGene
     public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     private int m_minLength;
     private int m_maxLength;
@@ -67,11 +70,28 @@ public class StringGene
     {
     }
 
+    /**
+     *
+     * @param a_minLength
+     * @param a_maxLength
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public StringGene (int a_minLength, int a_maxLength)
     {
         this (a_minLength, a_maxLength, null);
     }
 
+    /**
+     *
+     * @param a_minLength
+     * @param a_maxLength
+     * @param a_alphabet
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public StringGene (int a_minLength, int a_maxLength, String a_alphabet)
     {
         if (a_minLength < 0)
@@ -94,6 +114,8 @@ public class StringGene
     /**
      * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
+     *
+     * @since 1.1
      */
     public void cleanup ()
     {
@@ -111,6 +133,9 @@ public class StringGene
      *                          flexibility to configure the genetic engine
      *                          to use the random number generator of their
      *                          choice.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void setToRandomValue (RandomGenerator a_numberGenerator)
     {
@@ -127,9 +152,8 @@ public class StringGene
         }
 
         //randomize length of string
+        //--------------------------
 
-        //for each character: randomize character value (which can be represented
-        //by an integer value)
         int length;
         char value;
         int index;
@@ -143,6 +167,9 @@ public class StringGene
         }
         length = m_minLength + i;
 
+        //for each character: randomize character value (which can be represented
+        //by an integer value)
+        //-----------------------------------------------------------------------
         m_value = "";
         final int alphabetLength = m_alphabet.length ();
         for (int j = 0; j < length; j++)
@@ -169,6 +196,9 @@ public class StringGene
      *         is provided for this method.
      * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void setValueFromPersistentRepresentation (String a_representation) throws
         UnsupportedRepresentationException
@@ -250,6 +280,9 @@ public class StringGene
      * @return A string representation of this Gene's current state.
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public String getPersistentRepresentation () throws
         UnsupportedOperationException
@@ -267,6 +300,8 @@ public class StringGene
      * returned by this class will be String instances.
      *
      * @return the String value of this Gene.
+     *
+     * @since 1.1
      */
     public Object getAllele ()
     {
@@ -280,6 +315,9 @@ public class StringGene
      * the valid alphabet an exception is throwsn
      *
      * @param a_newValue the new value of this Gene instance.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void setAllele (Object a_newValue)
     {
@@ -315,6 +353,9 @@ public class StringGene
      * @param a_activeConfiguration The current active configuration.
      * @return A new Gene instance of the same type and with the same
      *         setup as this concrete Gene.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public Gene newGene (Configuration a_activeConfiguration)
     {
@@ -333,6 +374,9 @@ public class StringGene
      *
      * @throws ClassCastException if the specified object's type prevents it
      *         from being compared to this StringGene.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public int compareTo (Object other)
     {
@@ -391,9 +435,24 @@ public class StringGene
         return m_alphabet;
     }
 
+    /**
+     *
+     * @param m_alphabet
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public void setAlphabet (String m_alphabet)
     {
-            /**@todo check if one character is equal to the PERSISTENT_FIELD_DELIMITER*/
+        //check if a substring is equal to the PERSISTENT_FIELD_DELIMITER
+        //which is not allowed currently
+        //---------------------------------------------------------------
+        if (containsString(m_alphabet,PERSISTENT_FIELD_DELIMITER)) {
+        throw new IllegalArgumentException ("The alphabet may not contain a"
+            + " substring equal to the persistent field delimiter (which is "
+            +PERSISTENT_FIELD_DELIMITER
+            +" currently).");
+        }
         this.m_alphabet = m_alphabet;
     }
 
@@ -402,6 +461,9 @@ public class StringGene
      * may be useful for display purposes.
      *
      * @return a string representation of this StringGene's value.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public String toString ()
     {
@@ -423,6 +485,9 @@ public class StringGene
      * @param other the object to compare to this DoubleGene for equality.
      * @return true if this DoubleGene is equal to the given object,
      *         false otherwise.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public boolean equals (Object other)
     {
@@ -442,6 +507,9 @@ public class StringGene
      * Retrieves the hash code value for this StringGene.
      *
      * @return this StringGene's hash code.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public int hashCode ()
     {
@@ -458,4 +526,19 @@ public class StringGene
         }
     }
 
+    /**
+     *
+     * @param totalString
+     * @param subString
+     * @return
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    private boolean containsString(String totalString, String subString) {
+        if (totalString == null || subString == null) {
+            return false;
+        }
+        return totalString.indexOf(subString) >= 0;
+    }
 }
