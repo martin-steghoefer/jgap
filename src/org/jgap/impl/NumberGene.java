@@ -12,8 +12,8 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * Base class for all Genes based on numbers.
- * Known implementations: IntegerGene, DoubleGene
+ * Base class for all Genes based on numbers.<br>
+ * Known implementations: ene, DoubleGene
  *
  * @author Klaus Meffert
  * @since 1.1 (most code moved and adapted from IntegerGene)
@@ -22,7 +22,7 @@ public abstract class NumberGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -49,13 +49,13 @@ public abstract class NumberGene
   }
 
   /**
-   * Compares this IntegerGene with the given object and returns true if
-   * the other object is a IntegerGene and has the same value (allele) as
-   * this IntegerGene. Otherwise it returns false.
+   * Compares this NumberGene with the given object and returns true if
+   * the other object is a NumberGene and has the same value (allele) as
+   * this NumberGene. Otherwise it returns false.
    *
-   * @param other the object to compare to this IntegerGene for equality.
+   * @param other the object to compare to this NumberGene for equality.
    * @return true if this Gene is equal to the given object,
-   *         false otherwise.
+   * false otherwise.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -73,9 +73,9 @@ public abstract class NumberGene
   }
 
   /**
-   * Retrieves the hash code value for this IntegerGene.
+   * Retrieves the hash code value for this NumberGene.
    *
-   * @return this IntegerGene's hash code.
+   * @return this NumberGene's hash code.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -93,17 +93,16 @@ public abstract class NumberGene
   }
 
   /**
-   * Compares this IntegerGene with the specified object (which must also
-   * be an IntegerGene) for order, which is determined by the integer
+   * Compares this NumberGene with the specified object (which must also
+   * be a NumberGene) for order, which is determined by the number
    * value of this Gene compared to the one provided for comparison.
    *
-   * @param  other the IntegerGene to be compared to this IntegerGene.
+   * @param  other the NumberGene to be compared to this NumberGene.
    * @return a negative integer, zero, or a positive integer as this object
-   *	       is less than, equal to, or greater than the object provided for
-   *         comparison.
+   * is less than, equal to, or greater than the object provided for comparison.
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this IntegerGene.
+   *         from being compared to this NumberGene.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -111,7 +110,7 @@ public abstract class NumberGene
   public int compareTo(Object other) {
     NumberGene otherGene = (NumberGene) other;
     // First, if the other gene (or its value) is null, then this is
-    // the greater allele. Otherwise, just use the Integer's compareTo
+    // the greater allele. Otherwise, just use the overridden compareToNative
     // method to perform the comparison.
     // ---------------------------------------------------------------
     if (otherGene == null) {
@@ -140,8 +139,7 @@ public abstract class NumberGene
    * @param o1 first object to be compared, always is not null
    * @param o2 second object to be compared, always is not null
    * @return a negative integer, zero, or a positive integer as this object
-   *	       is less than, equal to, or greater than the object provided for
-   *         comparison.
+   * is less than, equal to, or greater than the object provided for comparison.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -149,10 +147,10 @@ public abstract class NumberGene
   protected abstract int compareToNative(Object o1, Object o2);
 
   /**
-   * Retrieves a string representation of this IntegerGene's value that
+   * Retrieves a string representation of this NumberGene's value that
    * may be useful for display purposes.
    *
-   * @return a string representation of this IntegerGene's value.
+   * @return a string representation of this NumberGene's value.
   *
    * @author Klaus Meffert
    * @since 1.1
@@ -228,7 +226,7 @@ public abstract class NumberGene
 
   /**
    * @return the size of the gene, i.e the number of atomic elements.
-   *         Always 1 for numbers
+   * Always 1 for numbers
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -238,7 +236,7 @@ public abstract class NumberGene
   }
 
   /**
-   * Maps the value of this IntegerGene to within the bounds specified by
+   * Maps the value of this NumberGene to within the bounds specified by
    * the m_upperBounds and m_lowerBounds instance variables. The value's
    * relative position within the integer range will be preserved within the
    * bounds range (in other words, if the value is about halfway between the
@@ -257,7 +255,7 @@ public abstract class NumberGene
    *
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1).
    *
    * @author Klaus Meffert
    * @since 1.1
