@@ -42,6 +42,7 @@
 * Added tests for CrossoverOperator
 * Added tests for ChainOfSelectors
 * Added tests for EventManager
+* Added tests for function builder example
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request
   1084383)
