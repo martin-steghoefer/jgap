@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -104,14 +104,14 @@ public class CoinsExample {
     pconf.addGeneticOperatorSlot(new MutationOperator());
 
     pconf.addNaturalSelectorSlot(new BestChromosomesSelector());
-//    pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
+    pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
 
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
 //    RandomGeneratorForTest rn = new RandomGeneratorForTest();
 //    rn.setNextDouble(0.7d);
 //    rn.setNextInt(2);
 //    pconf.addRandomGeneratorSlot(rn);
-//    pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
+    pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
 
     pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(a_targetChangeAmount));
 
@@ -241,7 +241,7 @@ public class CoinsExample {
     image = chart.createBufferedImage(640, 480);
     fo = new FileOutputStream("c:\\JGAP_chart_fitness_values_1.jpg");
     ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
-
+/**@todo add table output*/
   }
 
   public static void main(String[] args) {
