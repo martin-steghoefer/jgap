@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public ChromosomeTest() {
   }
@@ -260,56 +260,57 @@ public class ChromosomeTest
    */
   public void testHashcode_0()
       throws InvalidConfigurationException {
-    int Count;
-    int NumGenes;
-    int GeneCount;
-    int GeneType;
+    int count;
+    int numGenes;
+    int geneCount;
+    int geneType;
     Gene[] genes;
     Chromosome chrom;
     TestHashcode thc = new TestHashcode();
-    List UniqueChromosome = new ArrayList();
-    List EqualChromosome = new ArrayList();
+    List uniqueChromosome = new ArrayList();
+    List equalChromosome = new ArrayList();
 
-    //Build Random Chromosomes
-    for (Count = 0; Count < MAX_CHROMOSOME_TO_TEST; Count++) {
-      NumGenes = (int) (Math.random() * MAX_GENES_TO_TEST);
-      genes = new Gene[NumGenes];
-      for (GeneCount = 0; GeneCount < NumGenes; GeneCount++) {
-        GeneType = (int) (Math.random() * MAX_GENES_TYPES);
-        switch (GeneType) {
+    // Build random Chromosomes
+    for (count = 0; count < MAX_CHROMOSOME_TO_TEST; count++) {
+      numGenes = (int) (Math.random() * MAX_GENES_TO_TEST);
+      genes = new Gene[numGenes];
+      for (geneCount = 0; geneCount < numGenes; geneCount++) {
+        geneType = (int) (Math.random() * MAX_GENES_TYPES);
+        switch (geneType) {
           case 0:
-            genes[GeneCount] = new IntegerGene();
+            genes[geneCount] = new IntegerGene();
             break;
           case 1:
-            genes[GeneCount] = new BooleanGene();
+            genes[geneCount] = new BooleanGene();
             break;
           case 2:
-            genes[GeneCount] = new CompositeGene();
+            genes[geneCount] = new CompositeGene();
             break;
           case 3:
-            genes[GeneCount] = new DoubleGene();
+            genes[geneCount] = new DoubleGene();
             break;
           case 4:
-            genes[GeneCount] = new FixedBinaryGene(5);
+            genes[geneCount] = new FixedBinaryGene(5);
             break;
           case 5:
-            genes[GeneCount] = new StringGene();
+            genes[geneCount] = new StringGene();
             break;
         }
       }
       chrom = new Chromosome(genes);
-      //We only want to add unique object, since equal object will return the same hashcode
-      if (UniqueChromosome.contains(chrom) == false)
-        UniqueChromosome.add(chrom);
+      // We only want to add unique object, since equal object will return
+      // the same hashcode
+      if (!uniqueChromosome.contains(chrom))
+        uniqueChromosome.add(chrom);
     }
 
-    //Test to see if enough hashcodes are unique
+    // Test to see if enough hashcodes are unique
     thc.setFractionUnique(.95);
-    if (thc.testHashCodeUniqueness(UniqueChromosome) == false) {
-      System.out.print(
+    if (!thc.testHashCodeUniqueness(uniqueChromosome)) {
+      System.out.println(
           "testHashCodeUniqueness failed\n Actual Percent unique = " +
           thc.getActualFractionUnique());
-      fail();
+       fail();
     }
 
 //  	//Test mathematical average and dispersion of hashcode
@@ -323,15 +324,15 @@ public class ChromosomeTest
 //  		fail();
 //  	}
 
-    //Build identical Chromosome
-    for (Count = 0; Count < 3; Count++) {
+    // Build identical Chromosomes
+    for (count = 0; count < 3; count++) {
       genes = new Gene[1];
       genes[0] = new IntegerGene();
       chrom = new Chromosome(genes);
-      EqualChromosome.add(chrom);
+      equalChromosome.add(chrom);
     }
-    //If an object is equal it must have the same hashcode
-    if (thc.testHashCodeEquality(EqualChromosome) == false) {
+    // If an object is equal it must have the same hashcode
+    if (!thc.testHashCodeEquality(equalChromosome)) {
       fail();
     }
 
@@ -634,6 +635,45 @@ public class ChromosomeTest
     assertTrue(chrom.compareTo(chrom2) == 0);
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
+
+  public void testCompareTo_5()
+      throws Exception {
+    Gene[] genes = new Gene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new BooleanGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    assertTrue(chrom.compareTo(chrom2) == 0);
+    assertTrue(chrom2.compareTo(chrom) == 0);
+  }
+
+  public void testCompareTo_6()
+      throws Exception {
+    Gene[] genes1 = new Gene[2];
+    genes1[0] = new IntegerGene();
+    genes1[1] = new BooleanGene();
+    Gene[] genes2 = new Gene[2];
+    genes2[0] = new IntegerGene();
+    genes2[1] = new BooleanGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes1);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes2);
+    assertTrue(chrom.compareTo(chrom2) == 0);
+    assertTrue(chrom2.compareTo(chrom) == 0);
+    genes2[1].setAllele(new Boolean(false));
+    genes1[1].setAllele(new Boolean(true));
+    assertFalse(chrom2.compareTo(chrom) == 0);
+  }
+
 }
 
 class MyAppObject
