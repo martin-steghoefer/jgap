@@ -32,20 +32,16 @@ import org.jgap.event.*;
  * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
-
 public class Genotype
     implements Serializable {
-
   /**
    * The current active Configuration instance.
    */
   transient protected Configuration m_activeConfiguration;
-
   /**
    * The array of Chromosomes that makeup the Genotype's population.
    */
   protected Chromosome[] m_chromosomes;
-
   /**
    * The working pool of Chromosomes, which is where Chromosomes that are
    * to be candidates for the next natural selection process are deposited.
@@ -57,13 +53,11 @@ public class Genotype
    * clean after each cycle of evolution.
    */
   transient protected List m_workingPool;
-
   /**
    * The fitness evaluator. See interface class FitnessEvaluator for details
    * @since 1.1
    */
   private FitnessEvaluator m_fitnessEvaluator;
-
   /**
    * Constructs a new Genotype instance with the given array of
    * Chromosomes and the given active Configuration instance. Note
@@ -137,7 +131,6 @@ public class Genotype
     m_activeConfiguration = a_activeConfiguration;
     m_fitnessEvaluator = a_fitnessEvaluator;
     m_workingPool = new ArrayList();
-
   }
 
   /**
@@ -188,7 +181,6 @@ public class Genotype
         }
       }
     }
-
   }
 
   /**
@@ -199,7 +191,6 @@ public class Genotype
    */
   public synchronized Chromosome[] getChromosomes() {
     return m_chromosomes;
-
   }
 
   /**
@@ -234,7 +225,6 @@ public class Genotype
       }
     }
     return fittestChromosome;
-
   }
 
   /**
@@ -248,31 +238,26 @@ public class Genotype
     verifyConfigurationAvailable();
     // Process all natural selectors applicable before executing the
     // Genetic Operators.
-    // -------------------------------------------------------------
-    // Add the chromosomes pool to the natural selector.
-    // ----------------------------------------------------------------
-    Iterator iterator1 = Arrays.asList(m_chromosomes).iterator();
-    while (iterator1.hasNext()) {
-      Chromosome currentChromosome = (Chromosome) iterator1.next();
-      m_activeConfiguration.getNaturalSelector().add(
-          m_activeConfiguration,
-          currentChromosome);
-    }
-    // Repopulate the population of chromosomes with those selected
-    // by the natural selector.
-    // ------------------------------------------------------------
-//TODO: Interate over all natural selectors!
     if (m_activeConfiguration.getNaturalSelectors(true).size() > 0) {
+      //TODO: Interate over all natural selectors!
+      // Add the chromosomes pool to the natural selector.
+      // ----------------------------------------------------------------
+      Iterator iterator1 = Arrays.asList(m_chromosomes).iterator();
+      while (iterator1.hasNext()) {
+        Chromosome currentChromosome = (Chromosome) iterator1.next();
+        m_activeConfiguration.getNaturalSelectors(true).get(0).add(
+            m_activeConfiguration,
+            currentChromosome);
+      }
+      // Repopulate the population of chromosomes with those selected
+      // by the natural selector.
+      // ------------------------------------------------------------
       m_chromosomes = m_activeConfiguration.getNaturalSelectors(true).get(0).
           select(m_activeConfiguration,
                  m_activeConfiguration.getPopulationSize());
-      // Fire an event to indicate we've performed an evolution.
-      // -------------------------------------------------------
-      m_activeConfiguration.getEventManager().fireGeneticEvent(
-          new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
       // Clean up the natural selector.
       // ------------------------------
-      m_activeConfiguration.getNaturalSelector().empty();
+      m_activeConfiguration.getNaturalSelectors(true).get(0).empty();
     }
     // Execute all of the Genetic Operators.
     // -------------------------------------
@@ -294,22 +279,28 @@ public class Genotype
           m_workingPool.toArray(new Chromosome[m_workingPool.size()]);
       bulkFunction.evaluate(candidateChromosomes);
     }
-    // Add the chromosomes in the working pool to the natural selector.
-    // ----------------------------------------------------------------
-    Iterator iterator = m_workingPool.iterator();
-    NaturalSelector selector;
-    while (iterator.hasNext()) {
-      Chromosome currentChromosome = (Chromosome) iterator.next();
-      selector = m_activeConfiguration.getNaturalSelector();
-      selector.add(m_activeConfiguration,
-                   currentChromosome);
+    if (m_activeConfiguration.getNaturalSelectors(false).size() > 0) {
+      //TODO: Interate over all natural selectors!
+      // Add the chromosomes in the working pool to the natural selector.
+      // ----------------------------------------------------------------
+      Iterator iterator = m_workingPool.iterator();
+      NaturalSelector selector;
+      while (iterator.hasNext()) {
+        Chromosome currentChromosome = (Chromosome) iterator.next();
+        selector = m_activeConfiguration.getNaturalSelectors(false).get(0);
+        selector.add(m_activeConfiguration,
+                     currentChromosome);
+      }
+      // Repopulate the population of chromosomes with those selected
+      // by the natural selector.
+      // ------------------------------------------------------------
+      m_chromosomes = m_activeConfiguration.getNaturalSelector().select(
+          m_activeConfiguration,
+          m_chromosomes.length);
+      // Clean up the natural selector.
+      // ------------------------------
+      m_activeConfiguration.getNaturalSelectors(false).get(0).empty();
     }
-    // Repopulate the population of chromosomes with those selected
-    // by the natural selector.
-    // ------------------------------------------------------------
-    m_chromosomes = m_activeConfiguration.getNaturalSelector().select(
-        m_activeConfiguration,
-        m_chromosomes.length);
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
     m_activeConfiguration.getEventManager().fireGeneticEvent(
@@ -351,7 +342,6 @@ public class Genotype
    *
    * @return A string representation of this Genotype instance.
    */
-
   public String toString() {
     StringBuffer buffer = new StringBuffer();
     for (int i = 0; i < m_chromosomes.length; i++) {
@@ -362,7 +352,6 @@ public class Genotype
       buffer.append('\n');
     }
     return buffer.toString();
-
   }
 
   /**
@@ -410,7 +399,6 @@ public class Genotype
           Chromosome.randomInitialChromosome(a_activeConfiguration);
     }
     return new Genotype(a_activeConfiguration, chromosomes);
-
   }
 
   /**
@@ -460,7 +448,6 @@ public class Genotype
     catch (ClassCastException e) {
       return false;
     }
-
   }
 
   /**
@@ -475,11 +462,9 @@ public class Genotype
           "The active Configuration object must be set on this " +
           "Genotype prior to invocation of other operations.");
     }
-
   }
 
   public FitnessEvaluator getFitnessEvaluator() {
     return m_fitnessEvaluator;
   }
-
 }
