@@ -63,7 +63,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -482,7 +482,8 @@ public class Chromosome
   }
 
   /**
-   * Retrieve a hash code for this Chromosome.
+   * Retrieve a hash code for this Chromosome. Does not considers the order
+   * of the Genes for all cases (especially when gene is empty).
    *
    * @return the hash code of this Chromosome.
    *
@@ -491,10 +492,8 @@ public class Chromosome
    * @since 1.0
    */
   public int hashCode() {
-    // Take the hash codes of the genes and XOR them all together, using
-    // a prime multiplier of 31 additionally. This is what
-    // java.util.AbstractList does
-    // -----------------------------------------------------------------
+    // Do what {@link java.util.AbstractList} does.
+    // --------------------------------------------
     int geneHashcode;
     int hashCode = 1;
     for (int i = 0; i < m_genes.length; i++) {
