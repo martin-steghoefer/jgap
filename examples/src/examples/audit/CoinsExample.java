@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -222,25 +222,30 @@ public class CoinsExample {
     // construct JFreeChart Dataset.
     // -----------------------------
     myDataset = eval.calcAvgFitness(0);
-    dataset = new DefaultCategoryDataset();
-    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
-      for (int jj=0;jj<myDataset.getRowCount();jj++) {
-        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
-                                            myDataset.getColumnKey(ii)),
-                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
-      }
-    }
-
-    chart = ChartFactory.createLineChart(
-        "JGAP: Evolution progress",
-        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
-        true
-        /*tooltips*/
-        , false /*urls*/);
-    image = chart.createBufferedImage(640, 480);
-    fo = new FileOutputStream("c:\\JGAP_chart_fitness_values_1.jpg");
-    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
-/**@todo add table output*/
+    Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(0);
+    System.err.println("Best Fitness " +dataAvg.bestFitnessValue);
+    System.err.println(" Generation  " +dataAvg.bestFitnessValueGeneration);
+    System.err.println("Avg. Fitness " +dataAvg.avgFitnessValue);
+    System.err.println("Avg. Div.    " +dataAvg.avgDiversityFitnessValue);
+    System.err.println("Avg. BestD   " +dataAvg.avgBestDeltaFitnessValue);
+//    dataset = new DefaultCategoryDataset();
+//    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
+//      for (int jj=0;jj<myDataset.getRowCount();jj++) {
+//        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
+//                                            myDataset.getColumnKey(ii)),
+//                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
+//      }
+//    }
+//
+//    chart = ChartFactory.createLineChart(
+//        "JGAP: Evolution progress",
+//        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
+//        true
+//        /*tooltips*/
+//        , false /*urls*/);
+//    image = chart.createBufferedImage(640, 480);
+//    fo = new FileOutputStream("c:\\JGAP_chart_fitness_values_1.jpg");
+//    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
   }
 
   public static void main(String[] args) {
