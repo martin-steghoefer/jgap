@@ -34,7 +34,7 @@ public class BestChromosomesSelector
     implements NaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -69,9 +69,10 @@ public class BestChromosomesSelector
   public synchronized void add(Configuration a_activeConfigurator,
                                Chromosome a_chromosomeToAdd) {
     // Check if chromosome already added
-//    if (chromosomes.contains(a_chromosomeToAdd)) {
-//      return;
-//    }
+    // This speeds up the process by orders of magnitude!!!
+    if (chromosomes.contains(a_chromosomeToAdd)) {
+      return;
+    }
     // New chromosome, insert it into the sorted collection of chromosomes
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
     chromosomes.add(a_chromosomeToAdd);
@@ -93,7 +94,7 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  public synchronized Chromosome[] select(Configuration a_activeConfiguration,
+  public synchronized Population select(Configuration a_activeConfiguration,
                                           int a_howManyToSelect) {
     if (a_howManyToSelect > chromosomes.size()) {
       a_howManyToSelect = chromosomes.size();
@@ -105,16 +106,16 @@ public class BestChromosomesSelector
       Collections.sort(chromosomes, fitnessValueComparator);
       needsSorting = false;
     }
-    Chromosome[] selections = new Chromosome[a_howManyToSelect];
+    Population population = new Population(a_howManyToSelect);
     // To select a chromosome, we just go thru the sorted list.
     // --------------------------------------------------------
     Chromosome selectedChromosome;
     for (int i = 0; i < a_howManyToSelect; i++) {
       selectedChromosome = (Chromosome) chromosomes.get(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);
-      selections[i] = selectedChromosome;
+      population.addChromosome(selectedChromosome);
     }
-    return selections;
+    return population;
   }
 
   /**
