@@ -47,7 +47,7 @@ public class testTravellingSalesman extends TestCase {
         super.tearDown();
     }
 
-    public void testRunTest() {
+    public void testSampleTravellingSalesmanApp() {
         boolean expectedReturn = true;
         boolean actualReturn = m_testTravellingSalesman.runTest();
         assertEquals("return value", expectedReturn, actualReturn);
