@@ -9,6 +9,8 @@
 * Simplified tests for WeightedRouletteSelector
 * Fixed an error in GaussianRandomGenerator
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
+* Added org.jgap.impl.BulkFitnessOffsetRemover (see request
+  1084383)
 
 
 2.1
