@@ -30,7 +30,7 @@ public class AllImplTests
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public AllImplTests ()
     {
@@ -41,11 +41,13 @@ public class AllImplTests
     {
         TestSuite suite = new TestSuite ();
         suite.addTest (IntegerGeneTest.suite ());
+        suite.addTest (DoubleGeneTest.suite ());
         suite.addTest (BooleanGeneTest.suite ());
         suite.addTest (MutationOperatorTest.suite ());
         suite.addTest (CrossoverOperatorTest.suite ());
         suite.addTest (ReproductionOperatorTest.suite ());
         suite.addTest (DefaultConfigurationTest.suite ());
+        suite.addTest (PoolTest.suite ());
         return suite;
     }
 
