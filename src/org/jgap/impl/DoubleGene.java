@@ -34,7 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Represents the constant range of values supported by doubles.
@@ -324,7 +324,6 @@ public class DoubleGene
             (differenceFromDoubleMin / m_boundsUnitsToDoubleUnits);
         m_value =
             new Double(m_upperBounds + differenceFromBoundsMin);
-        System.err.println("XXXXXXXXXX");
       }
     }
   }
