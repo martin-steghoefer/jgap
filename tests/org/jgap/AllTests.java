@@ -26,6 +26,8 @@ import junit.framework.TestSuite;
 
 /**
  * Test suite for all test cases.
+ * Start this class to execute all Tests.
+ * Required are junit.jar and junit-addons_1.4.jar
  * In here, only test suites will be coped with (see method suite()).
  * Don't add any test cases to this class.
  *
@@ -36,7 +38,7 @@ public class AllTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public AllTests() {
   }
