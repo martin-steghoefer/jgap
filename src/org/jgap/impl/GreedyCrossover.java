@@ -14,6 +14,26 @@ import java.util.*;
 import org.jgap.*;
 
 /**
+ *
+ * The Greedy Crossover is a specific type of crossover. It can only be is
+ * applied if
+ * <ul>
+ * <li>
+ * 1. All genes in the chromosome are different and
+ * </li>
+ * <li>
+ * 2. The set of genes for both chromosomes is identical and only they order
+ * in the chromosome can vary.
+ * </li>
+ * </ul>
+ *
+ * After the GreedyCrossover, these two conditions always remain true, so
+ * it can be applied again and again.
+ *
+ * The algorithm throws an assertion error if the two initial chromosomes
+ * does not satisfy these conditions.
+ *
+ *
  * Greedy crossover can be best explained in the terms of the
  * Traveling Salesman Problem:
  *
@@ -38,7 +58,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -91,16 +111,23 @@ public class GreedyCrossover implements GeneticOperator {
        }
      }
 
-    private void operate (Chromosome firstMate, Chromosome secondMate) throws
+   /** Perfroms a greedy crossover for the two given chromosoms.
+    * @throws error if the gene set in the chromosomes is not identical.
+    */
+   public void operate (Chromosome a_firstMate, Chromosome a_secondMate) throws
         Error {
-        Gene[] g1 = firstMate.getGenes();
-        Gene[] g2 = secondMate.getGenes();
 
-        operate (firstMate,  g1, g2);
-        operate (secondMate, g2, g1);
+        Gene[] g1 = a_firstMate.getGenes();
+        Gene[] g2 = a_secondMate.getGenes();
+
+        Gene[] c1 = operate (g1, g2);
+        Gene[] c2 = operate (g2, g1);
+
+        a_firstMate.setGenes(c1);
+        a_secondMate.setGenes(c2);
     }
 
-   void operate(Chromosome mate, Gene[] g1, Gene[] g2)
+   Gene [] operate(Gene[] g1, Gene[] g2)
    {
        int n = g1.length;
 
@@ -180,7 +207,7 @@ public class GreedyCrossover implements GeneticOperator {
            g [i] = (Gene) gi.next();
        }
 
-       mate.setGenes( g );
+       return g;
 
    }
 

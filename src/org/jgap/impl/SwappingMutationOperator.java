@@ -32,7 +32,7 @@ import org.jgap.*;
 public class SwappingMutationOperator extends MutationOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     /** {@inheritDoc} */
     public SwappingMutationOperator() {
@@ -88,7 +88,13 @@ public class SwappingMutationOperator extends MutationOperator {
       }
   }
 
-  private Chromosome operate(Chromosome a_x, int a_rate,
+  /**
+   * Operate on the given chromosome with the given mutation rate.
+   * @param a_x chromosome to operate
+   * @param a_rate mutation rate
+   * @return mutated chromosome of null if no mutation has occured.
+   */
+  protected Chromosome operate(Chromosome a_x, int a_rate,
    RandomGenerator generator)
   {
       Chromosome chromosome = null;
@@ -100,23 +106,36 @@ public class SwappingMutationOperator extends MutationOperator {
           if (chromosome == null)
             chromosome = (Chromosome) a_x.clone();
           Gene[] genes = chromosome.getGenes();
-          // swap this gene with the other one now:
-          //  mutateGene(genes[j], generator);
-          // ------------------------------------
-          int other = m_startOffset +
-            generator.nextInt( genes.length-m_startOffset );
-          Gene t = genes [j];
-          genes [j] = genes [other];
-          genes [other] = t;
-          // Important! The array is modified expecting that the changes
-          // will reflect to the chromosome for that getGene() was called.
-          // In other words, the code above supposes that the refernce to
-          // the original array m_genes in Chromosome was returned.
-          //
+          Gene[] mutated = operate(generator, j, genes);
+          // setGenes is not required for this operator, but it may
+          // be needed for the derived operators.
+          chromosome.setGenes(mutated);
         }
       }
       return chromosome;
   }
+
+  /** Operate on the given array of genes. This method is only called
+   * when it is already clear that the mutation must occur under the given
+   * mutation rate.
+   * @param a_generator A random number generator that may be needed to
+   * perform a mutation.
+   * @param a_target_gene An index of gene in the chromosome that will mutate.
+   * @param a_genes The array of all genes in the chromosome.
+   * @return The mutated gene array.
+   */
+  protected Gene [] operate (RandomGenerator a_generator,
+    int a_target_gene, Gene[] a_genes) {
+        // swap this gene with the other one now:
+        //  mutateGene(genes[j], generator);
+        // ------------------------------------
+        int other = m_startOffset +
+          a_generator.nextInt( a_genes.length-m_startOffset );
+        Gene t = a_genes [a_target_gene];
+        a_genes [a_target_gene] = a_genes [other];
+        a_genes [other] = t;
+        return a_genes;
+    }
 
     private int m_startOffset = 1;
 
