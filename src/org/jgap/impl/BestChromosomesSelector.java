@@ -32,7 +32,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     implements NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
   /**
    * Stores the chromosomes to be taken into account for selection
    */
@@ -90,7 +90,7 @@ public class BestChromosomesSelector
   public synchronized Chromosome[] select(Configuration a_activeConfiguration,
                                           int a_howManyToSelect) {
     if (a_howManyToSelect > chromosomes.size()) {
-      a_howManyToSelect = chromosomes.size();
+//      a_howManyToSelect = chromosomes.size();
     }
     // Sort the collection of chromosomes previously added for evaluation.
     // Only do this if necessary.
