@@ -46,7 +46,7 @@ import org.jgap.*;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Represents the delimiter that is used to separate genes in the
@@ -56,7 +56,22 @@ public class CompositeGene
 
   private Gene m_geneTypeAllowed;
 
+  /**
+   * The genes contained in this CompositeGene
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   private List genes;
+
+  /**
+   * Optional helper class for checking if a given allele value to be set
+   * is valid. If not the allele value may not be set for the gene!
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  private IGeneConstraintChecker m_geneAlleleChecker;
 
   public CompositeGene() {
     genes = new Vector();
@@ -66,7 +81,9 @@ public class CompositeGene
    * Allows to specify which Gene implementation is allowed to be added to the
    * CompositeGene.
    *
-   * @param geneTypeAllowed Class
+   * @param geneTypeAllowed the class of Genes to be allowed to be added to the
+   * CompositeGene
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -311,12 +328,40 @@ public class CompositeGene
           "The expected type of the allele"
           + " is a List descendent.");
     }
+    if (m_geneAlleleChecker != null) {
+      if (!m_geneAlleleChecker.verify(this, a_newValue)) {
+        return;
+      }
+    }
     List alleles = (List) a_newValue;
     Gene gene;
     for (int i = 0; i < alleles.size(); i++) {
       gene = (Gene) genes.get(i);
       gene.setAllele(alleles.get(i));
     }
+  }
+
+  /**
+   * Sets the constraint checker to be used for this gene whenever method
+   * setAllele(Object a_newValue) is called
+   * @param a_constraintChecker the constraint checker to be set
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker) {
+    m_geneAlleleChecker = a_constraintChecker;
+  }
+
+  /**
+   * @return IGeneConstraintChecker the constraint checker to be used whenever
+   * method setAllele(Object a_newValue) is called
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public IGeneConstraintChecker getConstraintChecker() {
+    return m_geneAlleleChecker;
   }
 
   /**
@@ -448,6 +493,8 @@ public class CompositeGene
    * contained gene's string representation is delimited by the given
    * delimiter
    *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.1
    */
   public String toString() {
