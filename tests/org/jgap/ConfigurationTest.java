@@ -41,7 +41,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public ConfigurationTest() {
   }
@@ -192,6 +192,7 @@ public class ConfigurationTest
     conf.addNaturalSelector(new WeightedRouletteSelector(), true);
     conf.setRandomGenerator(new StockRandomGenerator());
     conf.setEventManager(new EventManager());
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
     conf.addGeneticOperator(new MutationOperator());
     conf.setPopulationSize(1);
     conf.verifyStateIsValid();
@@ -201,6 +202,7 @@ public class ConfigurationTest
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
     Gene gene = new BooleanGene();
     conf.setSampleChromosome(new Chromosome(gene, 5));
     conf.addNaturalSelector(new WeightedRouletteSelector(), false);
@@ -371,6 +373,7 @@ public class ConfigurationTest
     conf.addNaturalSelector(new WeightedRouletteSelector(), false);
     conf.setRandomGenerator(new GaussianRandomGenerator());
     conf.setEventManager(new EventManager());
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
     conf.addGeneticOperator(new MutationOperator());
     conf.setPopulationSize(1);
     conf.lockSettings();

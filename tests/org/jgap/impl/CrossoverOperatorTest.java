@@ -34,7 +34,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public CrossoverOperatorTest() {
   }
@@ -46,6 +46,7 @@ public class CrossoverOperatorTest
 
   public void testOperate_0() throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});

@@ -32,9 +32,13 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public MutationOperatorTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -79,6 +83,7 @@ public class MutationOperatorTest
     RandomGeneratorForTest gen = new RandomGeneratorForTest();
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
+    Genotype.setConfiguration(conf);
     Chromosome c1 = new Chromosome(new BooleanGene(),9);
     conf.setSampleChromosome(c1);
     conf.addNaturalSelector(new BestChromosomesSelector(),true);
@@ -86,9 +91,9 @@ public class MutationOperatorTest
     for (int i=0;i<c1.getGenes().length;i++) {
       c1.getGene(i).setAllele(Boolean.TRUE);
     }
-    c1.setActiveConfiguration(conf);
+//    c1.setActiveConfiguration(conf);
     Chromosome c2 = new Chromosome(new IntegerGene(),4);
-    c2.setActiveConfiguration(conf);
+//    c2.setActiveConfiguration(conf);
     for (int i=0;i<c2.getGenes().length;i++) {
       c2.getGene(i).setAllele(new Integer(27));
     }

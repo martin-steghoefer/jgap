@@ -33,9 +33,13 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public ChromosomeTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -309,6 +313,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(conf, genes);
     chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom.hashCode(), chrom2.hashCode());
@@ -329,6 +334,7 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Genotype.setConfiguration(conf);
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
@@ -347,6 +353,7 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Genotype.setConfiguration(conf);
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
@@ -431,6 +438,7 @@ public class ChromosomeTest
     Configuration conf = new DefaultConfiguration();
     StaticFitnessFunction ff = new StaticFitnessFunction(20);
     conf.setFitnessFunction(ff);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
@@ -447,6 +455,7 @@ public class ChromosomeTest
     Configuration conf = new DefaultConfiguration();
     StaticFitnessFunction ff = new StaticFitnessFunction(20);
     conf.setFitnessFunction(ff);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);

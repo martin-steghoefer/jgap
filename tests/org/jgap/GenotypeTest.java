@@ -33,7 +33,7 @@ public class GenotypeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public GenotypeTest() {
   }
@@ -126,7 +126,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
-    assertTrue(genotype.getFitnessEvaluator() instanceof
+    assertTrue(genotype.getConfiguration().getFitnessEvaluator() instanceof
                DefaultFitnessEvaluator);
   }
 
@@ -152,28 +152,11 @@ public class GenotypeTest
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
-    try {
-      Genotype genotype = new Genotype(conf, chroms, null);
-      fail();
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
+    Genotype genotype = new Genotype(conf, chroms);
   }
 
   public void testConstruct_9() throws Exception {
-    Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
-    Configuration conf = new DefaultConfiguration();
-    conf.setFitnessFunction(new StaticFitnessFunction(5));
-    conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
-    conf.setPopulationSize(7);
-    Genotype genotype = new Genotype(conf, chroms,
-                                     new DefaultFitnessEvaluator());
-  }
-
-  public void testConstruct_10() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
@@ -225,7 +208,7 @@ public class GenotypeTest
     chroms[0] = chrom;
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
-    chrom.setActiveConfiguration(conf);
+//    chrom.setActiveConfiguration(conf);
     Genotype genotype = new Genotype(conf, chroms);
     Chromosome chrom2 = genotype.getFittestChromosome();
     assertEquals(chrom, chrom2);
@@ -245,7 +228,7 @@ public class GenotypeTest
     chroms[0] = chrom;
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
-    chrom.setActiveConfiguration(conf);
+//    chrom.setActiveConfiguration(conf);
     Genotype genotype = new Genotype(conf, chroms);
     assertTrue(genotype.toString() != null);
     assertTrue(genotype.toString().length() > 0);
@@ -287,7 +270,7 @@ public class GenotypeTest
     //active configuration not yet set
     assertEquals(genotype.toString(), genotype2.toString());
     //now set active configuration
-    chroms[0].setActiveConfiguration(conf);
+//    chroms[0].setActiveConfiguration(conf);
     assertEquals(genotype.toString(), genotype2.toString());
   }
 }
