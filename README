@@ -17,6 +17,9 @@ Package, which means it is not feature complete, is not optimized, and
 probably contains bugs. The APIs are also considered a work in progress
 and are subject to change.
 
+This software is OSI Certified Open Source Software. OSI Certified is
+a certification mark of the Open Source Initiative.
+
 Any existing documentation, including Javadocs, can be found on the JGAP
 home page at http://jgap.sourceforge.net. Javadocs can also be found in
 the javadocs/ directory of the JGAP distribution. A basic introduction to
