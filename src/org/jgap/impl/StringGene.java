@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private int m_minLength;
 
@@ -328,8 +328,11 @@ public class StringGene
         throw new IllegalArgumentException("The given value contains"
                                            + " at least one invalid character.");
       }
+      m_value = temp;
     }
-    m_value = (String) a_newValue;
+    else {
+      m_value = null;
+    }
   }
 
   /**
