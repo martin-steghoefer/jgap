@@ -32,26 +32,36 @@ import org.jgap.*;
  */
 public class CauchyRandomGenerator
     implements RandomGenerator {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
 
   private double m_scale;
+
   private double m_location;
 
   private Random rn;
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public CauchyRandomGenerator() {
     this(0.0d, 1.0d);
   }
 
+  /**
+   * @param a_location double
+   * @param a_scale double
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public CauchyRandomGenerator(double a_location, double a_scale) {
     m_location = a_location;
     m_scale = a_scale;
-
     rn = new Random();
   }
 
@@ -84,16 +94,23 @@ public class CauchyRandomGenerator
   }
 
   /**
-  * Calculate Cumulative Cauchy distribution function.
-  * @return the probability that a stochastic variable x is less than X
-  */
+   * Calculate Cumulative Cauchy distribution function.
+   * @return the probability that a stochastic variable x is less than X
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public double nextCauchy() {
-     return 0.5 + Math.atan( (rn.nextDouble() - m_location) / m_scale) / Math.PI;
+    return 0.5 + Math.atan( (rn.nextDouble() - m_location) / m_scale) / Math.PI;
   }
 
+  /**
+   * @return double
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public double getCauchyStandardDeviation() {
-     return m_scale;
+    return m_scale;
   }
-
-
 }
