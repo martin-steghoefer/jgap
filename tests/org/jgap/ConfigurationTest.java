@@ -18,18 +18,10 @@
 
 package org.jgap;
 
-import org.jgap.event.EventManager;
-import org.jgap.impl.BooleanGene;
-import org.jgap.impl.CrossoverOperator;
-import org.jgap.impl.GaussianRandomGenerator;
-import org.jgap.impl.MutationOperator;
-import org.jgap.impl.ReproductionOperator;
-import org.jgap.impl.StaticFitnessFunction;
-import org.jgap.impl.StockRandomGenerator;
-import org.jgap.impl.WeightedRouletteSelector;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.jgap.event.*;
+import org.jgap.impl.*;
+
+import junit.framework.*;
 
 /**
  * Tests for Configuration class
@@ -41,9 +33,13 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public ConfigurationTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
