@@ -1,5 +1,5 @@
 
-Thank-you for trying JGAP 1.0 Release Candidate 1 (1.0-RC1 for short).
+Thank-you for trying JGAP 1.0 Release Candidate 2 (1.0-RC2 for short).
 We are very interested in any feedback you might have, including details
 of how you're using JGAP, what you like about it, and what you think
 needs improvement. You can leave this feedback on the user's mailing
@@ -12,7 +12,7 @@ for your support!
 ------------------------------------------------------------------------
 About This Release:
 
-This represents the first beta release of JGAP, the Java Genetic Algorithms
+This represents the second beta release of JGAP, the Java Genetic Algorithms
 Package, which means it may contain bugs. It is, however, considered to
 be feature complete (for version 1.0) and the API is considered frozen. 
 For a general list of changes, fixes, and enhancements in this version, 
@@ -30,9 +30,9 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP 1.0-RC1 was compiled and tested with Java 1.4 on Linux, Windows XP,
-and Mac OS X, although the authors believe that Java 1.2 on any platform
-should be sufficient for its use.
+JGAP 1.0-RC2 was compiled and tested with Java 1.4 on Linux and Mac OS X,
+although the authors believe that Java 1.2 on any platform should be
+sufficient for its use.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
@@ -63,8 +63,8 @@ is located at http://jgap.sourceforge.net
 1. If you haven't already, untar or unzip the JGAP archive into your
 directory of choice.
 
-2. Simply add the jgap.jar to your classpath. If you wish to the
-example, then also add the jgap-examples.jar to your classpath.
+2. Simply add the jgap.jar to your classpath. If you wish to use the
+examples, then also add the jgap-examples.jar to your classpath.
 
 3. Finally, if you wish to view or modify the source code, it can
 be found in the src/ directory of the archive. For convenience, an Ant
@@ -72,8 +72,8 @@ build script is included. For more information on Ant, please see the
 Ant home page at http://jakarta.apache.org/ant/
 
 4. Javadocs can be found in the javadocs/ directory. Other documentation,
-including basic documents to help you get started, can be found both
-in the docs/ directory. A simple example can be found in the src/examples
+including basic documents to help you get started, can be found in the
+docs/ directory. A simple example can be found in the src/examples
 directory.
 
 If you have any questions, or run into any problems, please feel free
@@ -86,9 +86,8 @@ or to the developers mailing list at jgap-devl@lists.sourceforge.net.
 ------------------------------------------------------------------------
 Special Thanks:
 
-Thanks go to Alexandre Freire, Jan Sabak, and Khalil Bouhamza for their
-bug reports, and to Mike Crowe for his prototyping work on the custom 
-genes. Mike has since joined the JGAP team.
+Thanks go to everyone who has been using JGAP, especially those who
+have provided feedback and bug reports! Your support is invaluable.
 
 Thanks also to the folks at Sourceforge who kindly host the JGAP
 project. For more information on SourceForge, please visit
