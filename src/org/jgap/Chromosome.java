@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -146,55 +146,6 @@ public class Chromosome
   }
 
   /**
-   * Constructs this Chromosome instance with the given array of gene values.
-   * For convenience, the randomInitialChromosome method is provided
-   * that will take care of generating a Chromosome instance of a
-   * specified size. This constructor exists in case it's desirable
-   * to initialize Chromosomes with genes that contain specific values
-   * (alleles).
-   *
-   * @param a_activeConfiguration The current, active Configuration object.
-   * @param a_initialGenes The array of genes that are to be contained
-   *                       within this Chromosome instance.
-   *
-   * @throws InvalidConfigurationException if the given Configuration
-   *         instance is null or invalid.
-   * @throws IllegalArgumentException if any of the given parameters are
-   *         invalid, such as a null genes array or element.
-   *
-   * @author Neil Rotstan
-   * @since 1.0
-   */
-  public Chromosome(Configuration a_activeConfiguration,
-                    Gene[] a_initialGenes)
-      throws InvalidConfigurationException {
-    /**@todo remove configuration object from here*/
-    // Sanity checks: make sure the parameters are all valid.
-    // ------------------------------------------------------
-    if (a_initialGenes == null) {
-      throw new IllegalArgumentException(
-          "The given array of genes cannot be null.");
-    }
-    for (int i = 0; i < a_initialGenes.length; i++) {
-      if (a_initialGenes[i] == null) {
-        throw new IllegalArgumentException(
-            "The gene at index " + i + " in the given array of " +
-            "genes was found to be null. No genes in the array " +
-            "may be null.");
-      }
-    }
-    if (a_activeConfiguration == null) {
-      throw new InvalidConfigurationException(
-          "Configuration instance must not be null");
-    }
-    // Lock the configuration settings so that they can't be changed from
-    // now on, and then populate our instance variables.
-    // ------------------------------------------------------------------
-    a_activeConfiguration.lockSettings();
-    m_genes = a_initialGenes;
-  }
-
-  /**
    * Returns a copy of this Chromosome. The returned instance can evolve
    * independently of this instance. Note that, if possible, this method
    * will first attempt to acquire a Chromosome instance from the active
@@ -263,7 +214,7 @@ public class Chromosome
     // return it. Also clone the IApplicationData object.
     // ---------------------------------------------------------------
     try {
-      Chromosome ret = new Chromosome(Genotype.getConfiguration(), copyOfGenes);
+      Chromosome ret = new Chromosome(copyOfGenes);
       if (getApplicationData() != null) {
         /**@todo support Cloneable interface, i.e. look for public clone()
          * method via introspection
@@ -294,17 +245,6 @@ public class Chromosome
       // rethrow as RuntimeException to be backward compatible and have
       // a more convenient handling
       throw new IllegalStateException(cex.getMessage());
-    }
-    catch (InvalidConfigurationException e) {
-      // This should never happen because the configuration has already
-      // been validated and locked for this instance of the Chromosome,
-      // and the configuration given to the new instance should be
-      // identical.
-      // --------------------------------------------------------------
-      throw new RuntimeException(
-          "Fatal Error: clone method produced an " +
-          "InvalidConfigurationException. This should never happen." +
-          "Please report this as a bug to the JGAP team.");
     }
   }
 
@@ -438,30 +378,28 @@ public class Chromosome
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static Chromosome randomInitialChromosome(
-      Configuration a_activeConfiguration)
+  public static Chromosome randomInitialChromosome()
       throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
-    if (a_activeConfiguration == null) {
+    if (Genotype.getConfiguration() == null) {
       throw new IllegalArgumentException(
           "Configuration instance must not be null");
     }
     // Lock the configuration settings so that they can't be changed
     // from now on.
     // -------------------------------------------------------------
-    a_activeConfiguration.lockSettings();
+    Genotype.getConfiguration().lockSettings();
     // First see if we can get a Chromosome instance from the pool.
     // If we can, we'll randomize its gene values (alleles) and then
     // return it.
     // ------------------------------------------------------------
-    ChromosomePool pool = a_activeConfiguration.getChromosomePool();
+    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       Chromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {
         Gene[] genes = randomChromosome.getGenes();
-        RandomGenerator generator =
-            a_activeConfiguration.getRandomGenerator();
+        RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
         for (int i = 0; i < genes.length; i++) {
           genes[i].setToRandomValue(generator);
         }
@@ -473,10 +411,10 @@ public class Chromosome
     // scratch.
     // ------------------------------------------------------------------
     Chromosome sampleChromosome =
-        a_activeConfiguration.getSampleChromosome();
+        Genotype.getConfiguration().getSampleChromosome();
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
-    RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     for (int i = 0; i < newGenes.length; i++) {
       // We use the newGene() method on each of the genes in the
       // sample Chromosome to generate our new Gene instances for
@@ -484,7 +422,7 @@ public class Chromosome
       // new Genes are setup with all of the correct internal state
       // for the respective gene position they're going to inhabit.
       // -----------------------------------------------------------
-      newGenes[i] = sampleGenes[i].newGene(a_activeConfiguration);
+      newGenes[i] = sampleGenes[i].newGene(Genotype.getConfiguration());
       // Set the gene's value (allele) to a random value.
       // ------------------------------------------------
       newGenes[i].setToRandomValue(generator);
@@ -492,7 +430,7 @@ public class Chromosome
     // Finally, construct the new chromosome with the new random
     // genes values and return it.
     // ---------------------------------------------------------
-    return new Chromosome(a_activeConfiguration, newGenes);
+    return new Chromosome(newGenes);
   }
 
   /**

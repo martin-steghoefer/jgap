@@ -34,7 +34,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public CrossoverOperatorTest() {
   }
@@ -61,12 +61,12 @@ public class CrossoverOperatorTest
     cgene1.setAllele(new Integer(6));
     Gene[] genes1 = new Gene[] {
         cgene1};
-    Chromosome chrom1 = new Chromosome(conf, genes1);
+    Chromosome chrom1 = new Chromosome(genes1);
     Gene cgene2 = new IntegerGene(1, 10);
     cgene2.setAllele(new Integer(8));
     Gene[] genes2 = new Gene[] {
         cgene2};
-    Chromosome chrom2 = new Chromosome(conf, genes2);
+    Chromosome chrom2 = new Chromosome(genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();

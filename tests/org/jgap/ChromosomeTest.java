@@ -33,7 +33,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public ChromosomeTest() {
   }
@@ -138,27 +138,11 @@ public class ChromosomeTest
   }
 
   /**
-   * Illegal constructions regarding first and second parameter
+   * Illegal constructions regarding first parameter
    */
   public void testConstruct_6() {
     try {
-      new Chromosome(null, null);
-      fail();
-    }
-    catch (IllegalArgumentException illex) {
-      ; //this is OK
-    }
-    catch (InvalidConfigurationException invex) {
-      ; //this is OK
-    }
-  }
-
-  /**
-   * Illegal constructions regarding first parameter
-   */
-  public void testConstruct_7() throws InvalidConfigurationException {
-    try {
-      new Chromosome(new Configuration(), null);
+      new Chromosome(null);
       fail();
     }
     catch (IllegalArgumentException illex) {
@@ -174,29 +158,10 @@ public class ChromosomeTest
       Gene[] genes = new IntegerGene[2];
       genes[0] = new IntegerGene();
       genes[1] = null;
-      new Chromosome(null, genes);
+      new Chromosome(genes);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
-      ; //this is OK
     }
     catch (IllegalArgumentException illex) {
-      ; //this is OK
-    }
-  }
-
-  /**
-   * Illegal constructions regarding first parameter
-   */
-  public void testConstruct_9() throws IllegalArgumentException {
-    try {
-      Gene[] genes = new IntegerGene[2];
-      genes[0] = new IntegerGene();
-      genes[1] = new IntegerGene();
-      new Chromosome(null, genes);
-      fail();
-    }
-    catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -209,12 +174,9 @@ public class ChromosomeTest
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
-    try {
-      new Chromosome(conf, genes);
-    }
-    catch (InvalidConfigurationException invex) {
-      ; //this is OK: fitness function missing
-    }
+    Genotype.setConfiguration(conf);
+    // fitness function missing in config.,
+    new Chromosome(genes);
   }
 
   /**
@@ -226,12 +188,8 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
-    try {
-      new Chromosome(conf, genes);
-    }
-    catch (InvalidConfigurationException invex) {
-      ; //this is OK: sample Chromosome missing
-    }
+    Genotype.setConfiguration(conf);
+      new Chromosome(genes);
   }
 
   /**
@@ -243,14 +201,10 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
+    Genotype.setConfiguration(conf);
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
-    try {
-      new Chromosome(conf, genes);
-    }
-    catch (InvalidConfigurationException invex) {
-      ; //this is OK: genotype size <= zero
-    }
+      new Chromosome(genes);
   }
 
   public void testConstruct_14() throws Exception {
@@ -294,7 +248,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     /**@todo implement random chromosomes to check how diverse the hashcode
      * function is.
      * E.g., if we have 10 chromosomes and only 2 different hashcodes, then
@@ -314,7 +268,7 @@ public class ChromosomeTest
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
     Genotype.setConfiguration(conf);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom.hashCode(), chrom2.hashCode());
     assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), 0.0000001d);
@@ -338,7 +292,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
     chrom2 = (Chromosome) chrom.clone();
@@ -357,7 +311,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject2();
     chrom.setApplicationData(appObj);
     chrom2 = (Chromosome) chrom.clone();
@@ -442,7 +396,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
-    chrom = new Chromosome(conf, genes);
+    chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
     //intentionally assert it a second time
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
@@ -459,7 +413,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
-    chrom = new Chromosome(conf, genes);
+    chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
     //set fitness value to a different one
     ff.setStaticFitnessValue(44.235d);
@@ -496,7 +450,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     assertTrue(chrom.compareTo(chrom2) == 0);
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
@@ -512,7 +466,7 @@ public class ChromosomeTest
     conf.setFitnessFunction(new StaticFitnessFunction(20));
     conf.setSampleChromosome(chrom0);
     conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     Gene[] genes2 = new IntegerGene[2];
     Gene gene01 = new IntegerGene();
     gene01.setAllele(new Integer(4711));
@@ -559,7 +513,7 @@ public class ChromosomeTest
     conf.setFitnessFunction(new StaticFitnessFunction(20));
     conf.setSampleChromosome(chrom0);
     conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(conf, genes);
+    Chromosome chrom = new Chromosome(genes);
     Gene[] genes2 = new IntegerGene[2];
     Gene gene01 = new IntegerGene();
     gene01.setAllele(new Integer(4711));

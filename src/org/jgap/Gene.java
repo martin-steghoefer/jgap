@@ -36,7 +36,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.8 $";
+  final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -65,7 +65,7 @@ public interface Gene
    *
    * @since 1.0
    */
-  Gene newGene(Configuration a_activeConfiguration);
+  Gene newGene(Configuration a_activeConfiguration);/**@todo remove Configuration*/
 
   /**
    * Sets the value of this Gene to the new given value. The actual
