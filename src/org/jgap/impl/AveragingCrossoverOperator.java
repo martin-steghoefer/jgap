@@ -30,7 +30,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -156,10 +156,30 @@ public class AveragingCrossoverOperator
       // Swap the genes.
       // ---------------
       Object firstAllele;
+      Object secondAllele;
+      Gene gene1;
+      Gene gene2;
       for (int j = locus; j < firstGenes.length; j++) {
-        firstAllele = firstGenes[j].getAllele();
-        firstGenes[j].setAllele(secondGenes[j].getAllele());
-        secondGenes[j].setAllele(firstAllele);
+        if (firstGenes[j] instanceof CompositeGene) {
+          //randomly determine gene to be considered
+          index1 = generator.nextInt(firstGenes[j].size());
+          gene1 = ((CompositeGene)firstGenes[j]).geneAt(index1);
+        }
+        else {
+          gene1 = firstGenes[j];
+        }
+        firstAllele = gene1.getAllele();
+        if (secondGenes[j] instanceof CompositeGene) {
+          //randomly determine gene to be considered
+          index2 = generator.nextInt(secondGenes[j].size());
+          gene2 = ((CompositeGene)secondGenes[j]).geneAt(index2);
+        }
+        else {
+          gene2 = secondGenes[j];
+        }
+        secondAllele = gene2.getAllele();
+        gene1.setAllele(secondAllele);
+        gene2.setAllele(firstAllele);
       }
       // Add the modified chromosomes to the candidate pool so that
       // they'll be considered for natural selection during the next
