@@ -26,9 +26,10 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
-  /* The method that merges the Populations.
+  /*
+   * The method that merges the Populations.
    * @see org.jgap.distr.IPopulationMerger#mergePopulations(org.jgap.Population, org.jgap.Population, int)
    */
   public Population mergePopulations(Population a_population1,
@@ -56,7 +57,9 @@ public class FittestPopulationMerger
    * according to their fitness values. For convenience, the
    * sorting is done in a reverse way, so this comparator
    * returns 1 if the first chromosome has a LOWER fitness value.
+   *
    * @author Henrique Goulart
+   * @since 2.0
    */
   private class FitnessChromosomeComparator
       implements Comparator {
@@ -65,7 +68,8 @@ public class FittestPopulationMerger
     private FitnessEvaluator fEvaluator = Genotype.getConfiguration().
         getFitnessEvaluator();
 
-    /** Implements the compare method using the fitness function.
+    /**
+     * Implements the compare method using the fitness function.
      * The comparation is implemented in a reverse way to make the
      * merging easier (the list of chromosomes is sorted in a
      * descending fitness value order).
