@@ -28,6 +28,8 @@ package org.jgap;
  * sole determining factor. Therefore, Chromosomes with higher
  * fitness values are more likely to survive than those with
  * lesser fitness values, but it's not guaranteed.
+ *
+ * @author Neil Rotstan (neil at bluesock.org)
  */
 public interface NaturalSelector
 {

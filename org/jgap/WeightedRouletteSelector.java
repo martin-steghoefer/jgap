@@ -24,16 +24,18 @@ import java.util.*;
 
 
 /**
- * A basic implementation of NaturalSelector that acts as a basic
+ * A basic implementation of NaturalSelector that models a
  * roulette wheel. When a Chromosome is added, it gets a number
  * of "slots" on the wheel equal to its fitness value. When the
  * select method is invoked, the wheel is "spun" and the Chromosome
- * occuping the spot on which it lands is selected. Then the wheel
+ * occupying the spot on which it lands is selected. Then the wheel
  * is spun again and again until the requested number of
  * Chromosomes have been selected. Since Chromosomes with higher
  * fitness values get more slots on the wheel, there's a higher
- * statistical probability that they'll be chosen--but it's not
+ * statistical probability that they'll be chosen, but it's not
  * guaranteed.
+ *
+ * @author Neil Rotstan (neil at bluesock.org)
  */
 public class WeightedRouletteSelector implements NaturalSelector
 {
@@ -106,3 +108,46 @@ public class WeightedRouletteSelector implements NaturalSelector
     totalInstances = 0;
   }
 }  
+
+
+class Counter
+{
+  private int count;
+
+
+  public Counter( int initialCount )
+  {
+    count = initialCount;
+  }
+
+
+  public Counter()
+  {
+    this( 0 );
+  }
+
+
+  public void increment()
+  {
+    count++;
+  }
+
+
+  public void increment( int howMany )
+  {
+    count += howMany;
+  }
+
+
+  public int getCount()
+  {
+    return count;
+  }
+
+
+  public void reset()
+  {
+    count = 0;
+  }
+}
+

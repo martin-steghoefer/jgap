@@ -28,17 +28,18 @@ import java.util.*;
  * In the current implementation, this is the lowest
  * level class since genes are, themselves, represented
  * as individual bits. Each gene can have two values
- * (true or false). While this could be a little
- * inconvenient for some applications, it shouldn't be
- * too serious of a problem since fitness functions
- * can always take multiple genes into account if more
- * than two possible values are desired. In the future,
- * a Gene class and Allele interface may be created that
- * will allow more flexibility in this regard.
- *
+ * (true or false). This should be suitable for most
+ * applications, but it's always possible for a fitness
+ * function to consider multiple genes as a single unit
+ * if more than two possible values are desired.
+ * In the future, a Gene class and Allele interface may be
+ * created that will allow more flexibility in this regard.
+ * <p>
  * Chromosomes support reproduction, crossover, and mutation.
  * Additional mechanisms for chromosome evolution are
  * planned for future versions.
+ *
+ * @author Neil Rotstan (neil at bluesock.org)
  */
 public class Chromosome
 {

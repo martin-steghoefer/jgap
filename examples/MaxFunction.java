@@ -18,45 +18,27 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package org.jgap;
+import org.jgap.*;
 
-public class Counter
+public class MaxFunction implements FitnessFunction
 {
-  private int count;
-
-
-  public Counter( int initialCount )
+  /**
+   * This example implementation calculates the fitness
+   * value to be the numeric value of the bits. In other
+   * words, it optimizes the numeric value of the bit set.
+   */
+  public int evaluate( Chromosome subject )
   {
-    count = initialCount;
-  }
+    int total = 0;
+    
+    for( int i = 0; i < subject.size(); i++ )
+    {
+      if( subject.getAllele( subject.size() - (i + 1) ) )
+      {
+        total += Math.pow( 2.0, (double) i );
+      }
+    }
 
-
-  public Counter()
-  {
-    this( 0 );
-  }
-
-
-  public void increment()
-  {
-    count++;
-  }
-
-
-  public void increment( int howMany )
-  {
-    count += howMany;
-  }
-
-
-  public int getCount()
-  {
-    return count;
-  }
-
-
-  public void reset()
-  {
-    count = 0;
+    return total;
   }
 }  

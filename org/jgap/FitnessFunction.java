@@ -21,6 +21,8 @@
 package org.jgap;
 
 /**
+ * Fitness functions are used to determine how optimal a
+ * particular solution is relative to other solutions.
  * This interface should be implemented by all concrete
  * fitness functions. The fitness function is given a
  * Chromosome to evaluate and should return its fitness
@@ -33,13 +35,12 @@ package org.jgap;
  * other as two Chromosomes with respective fitness values of
  * 10 and 1000 (in each case, the first is 1% as fit as the
  * second).
- *
+ * <p>
  * Note: Two Chromosomes of the same size and with equivalent
  * sets of genes should always be assigned the same fitness
  * value by any implementation of this method.
  *
- * @param The chromosome to evaluate
- * @return The fitness value of the Chromosome.
+ * @author Neil Rotstan (neil at bluesock.org)
  */
 public interface FitnessFunction
 {
