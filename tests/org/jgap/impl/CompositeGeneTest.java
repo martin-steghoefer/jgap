@@ -18,11 +18,10 @@
 
 package org.jgap.impl;
 
-import java.util.Vector;
-import org.jgap.Gene;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.util.*;
+
+import org.jgap.*;
+import junit.framework.*;
 
 /**
  * Tests for CompositeGene class
@@ -32,7 +31,13 @@ import junit.framework.TestSuite;
  */
 public class CompositeGeneTest
     extends TestCase {
-  private static final double DELTA = 0.0001d;
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
+  //delta for distinguishing whether a value is to be interpreted as zero
+  private static final double DELTA = 0.000001d;
+
   public CompositeGeneTest() {
   }
 

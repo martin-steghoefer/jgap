@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,10 +15,10 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import java.util.Vector;
-
 import org.jgap.Gene;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -34,292 +32,243 @@ import junitx.util.PrivateAccessor;
  * @since 1.1
  */
 public class StringGeneTest
-    extends TestCase
-{
-    public StringGeneTest ()
-    {
-    }
+    extends TestCase {
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (StringGeneTest.class);
-        return suite;
-    }
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
-    public void testConstruct_0 ()
-    {
-        Gene gene = new StringGene (1, 100);
-        //following should be possible without exception
-        gene.setAllele ("ABC");
-    }
+  public StringGeneTest() {
+  }
 
-    public void testConstruct_1 ()
-    {
-        try
-        {
-            Gene gene = new StringGene (2, 1);
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite(StringGeneTest.class);
+    return suite;
+  }
 
-    public void testConstruct_2 ()
-    {
-        try
-        {
-            Gene gene = new StringGene ( -1, 3);
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
-    }
+  public void testConstruct_0() {
+    Gene gene = new StringGene(1, 100);
+    //following should be possible without exception
+    gene.setAllele("ABC");
+  }
 
-    public void testConstruct_3 ()
-    {
-        try
-        {
-            Gene gene = new StringGene (1, 3);
-            gene.setAllele ("ABCD");
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
+  public void testConstruct_1() {
+    try {
+      Gene gene = new StringGene(2, 1);
+      fail();
     }
-
-    public void testConstruct_4 ()
-    {
-        try
-        {
-            Gene gene = new StringGene (1, 3);
-            gene.setAllele (new Double (2.3d));
-        }
-        catch (ClassCastException castex)
-        {
-            ; //this is OK
-        }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testSetAlphabet_0 ()
-    {
-        StringGene gene = new StringGene (3, 5);
-        try
-        {
-            gene.setAlphabet ("1" + Gene.PERSISTENT_FIELD_DELIMITER);
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
+  public void testConstruct_2() {
+    try {
+      Gene gene = new StringGene( -1, 3);
+      fail();
     }
-
-    public void testSetAlphabet_1 ()
-        throws Exception
-    {
-        StringGene gene = new StringGene (3, 5);
-        final String ALPHABET = "1234";
-        gene.setAlphabet (ALPHABET);
-        String alphabet = (String) PrivateAccessor.getField (gene, "m_alphabet");
-        assertEquals (ALPHABET, alphabet);
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testToString_0 ()
-    {
-        Gene gene = new StringGene (3, 7);
-        gene.setAllele ("ABC");
-        assertEquals ("ABC", gene.toString ());
+  public void testConstruct_3() {
+    try {
+      Gene gene = new StringGene(1, 3);
+      gene.setAllele("ABCD");
     }
-
-    public void testGetAllele_0 ()
-    {
-        Gene gene = new StringGene (3, 5);
-        gene.setAllele ("BCD");
-        assertEquals ("BCD", gene.getAllele ());
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testEquals_0 ()
-    {
-        Gene gene1 = new StringGene (1, 100);
-        Gene gene2 = new StringGene (1, 100);
-        assertTrue (gene1.equals (gene2));
-        assertTrue (gene2.equals (gene1));
+  public void testConstruct_4() {
+    try {
+      Gene gene = new StringGene(1, 3);
+      gene.setAllele(new Double(2.3d));
     }
-
-    public void testEquals_1 ()
-    {
-        Gene gene1 = new StringGene (3, 100);
-        assertFalse (gene1.equals (null));
+    catch (ClassCastException castex) {
+      ; //this is OK
     }
+  }
 
-    public void testEquals_2 ()
-    {
-        Gene gene1 = new StringGene (11, 77);
-        assertTrue (gene1.equals (new StringGene ()));
+  public void testSetAlphabet_0() {
+    StringGene gene = new StringGene(3, 5);
+    try {
+      gene.setAlphabet("1" + Gene.PERSISTENT_FIELD_DELIMITER);
+      fail();
     }
-
-    public void testEquals_3 ()
-    {
-        Gene gene1 = new StringGene (11, 17);
-        assertFalse (gene1.equals (new Vector ()));
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testEquals_4 ()
-    {
-        Gene gene1 = new StringGene (12, 100);
-        Gene gene2 = new StringGene (12, 99);
-        assertTrue (gene1.equals (gene2));
-        assertTrue (gene2.equals (gene1));
+  public void testSetAlphabet_1() throws Exception {
+    StringGene gene = new StringGene(3, 5);
+    final String ALPHABET = "1234";
+    gene.setAlphabet(ALPHABET);
+    String alphabet = (String) PrivateAccessor.getField(gene, "m_alphabet");
+    assertEquals(ALPHABET, alphabet);
+  }
+
+  public void testToString_0() {
+    Gene gene = new StringGene(3, 7);
+    gene.setAllele("ABC");
+    assertEquals("ABC", gene.toString());
+  }
+
+  public void testGetAllele_0() {
+    Gene gene = new StringGene(3, 5);
+    gene.setAllele("BCD");
+    assertEquals("BCD", gene.getAllele());
+  }
+
+  public void testEquals_0() {
+    Gene gene1 = new StringGene(1, 100);
+    Gene gene2 = new StringGene(1, 100);
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+  }
+
+  public void testEquals_1() {
+    Gene gene1 = new StringGene(3, 100);
+    assertFalse(gene1.equals(null));
+  }
+
+  public void testEquals_2() {
+    Gene gene1 = new StringGene(11, 77);
+    assertTrue(gene1.equals(new StringGene()));
+  }
+
+  public void testEquals_3() {
+    Gene gene1 = new StringGene(11, 17);
+    assertFalse(gene1.equals(new Vector()));
+  }
+
+  public void testEquals_4() {
+    Gene gene1 = new StringGene(12, 100);
+    Gene gene2 = new StringGene(12, 99);
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+  }
+
+  public void testEquals_5() {
+    Gene gene1 = new StringGene(2, 5);
+    Gene gene2 = new StringGene(1, 5);
+    gene1.setAllele("ABC");
+    gene2.setAllele("AB");
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  /**
+   * Set Allele to null, no exception should occur
+
+   */
+  public void testSetAllele_0() {
+    Gene gene1 = new StringGene(0, 10000);
+    gene1.setAllele(null);
+  }
+
+  public void testSetAllele_1() {
+    Gene gene1 = new StringGene(3, 4);
+    try {
+      gene1.setAllele("AB");
+      fail();
     }
-
-    public void testEquals_5 ()
-    {
-        Gene gene1 = new StringGene (2, 5);
-        Gene gene2 = new StringGene (1, 5);
-        gene1.setAllele ("ABC");
-        gene2.setAllele ("AB");
-        assertFalse (gene1.equals (gene2));
-        assertFalse (gene2.equals (gene1));
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    /**
-     * Set Allele to null, no exception should occur
-     */
-    public void testSetAllele_0 ()
-    {
-        Gene gene1 = new StringGene (0, 10000);
-        gene1.setAllele (null);
+  public void testSetAllele_2() {
+    Gene gene1 = new StringGene(3, 4, "ABCDEFHI");
+    try {
+      gene1.setAllele("ABDG");
+      fail();
     }
-
-    public void testSetAllele_1 ()
-    {
-        Gene gene1 = new StringGene (3, 4);
-        try
-        {
-            gene1.setAllele ("AB");
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testSetAllele_2 ()
-    {
-        Gene gene1 = new StringGene (3, 4, "ABCDEFHI");
-        try
-        {
-            gene1.setAllele ("ABDG");
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
+  public void testSetAllele_3() {
+    Gene gene1 = new StringGene(3, 4, "EGAL");
+    try {
+      //length of allele to short
+      gene1.setAllele("");
+      fail();
     }
-
-    public void testSetAllele_3 ()
-    {
-        Gene gene1 = new StringGene (3, 4, "EGAL");
-        try
-        {
-            //length of allele to short
-            gene1.setAllele ("");
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testSetAllele_4 ()
-    {
-        Gene gene1 = new StringGene (0, 4, "");
-        //following should be possible
-        gene1.setAllele ("");
+  public void testSetAllele_4() {
+    Gene gene1 = new StringGene(0, 4, "");
+    //following should be possible
+    gene1.setAllele("");
+  }
+
+  public void testNewGene_0() throws Exception {
+    StringGene gene1 = new StringGene(1, 4);
+    gene1.setAllele("XYZ");
+    int minLength1 = gene1.getMinLength();
+    int maxLength1 = gene1.getMaxLength();
+    StringGene gene2 = (StringGene) gene1.newGene(new DefaultConfiguration());
+    int minLength2 = gene2.getMinLength();
+    int maxLength2 = gene2.getMaxLength();
+    assertEquals(minLength1, minLength2);
+    assertEquals(maxLength1, maxLength2);
+  }
+
+  public void testPersistentRepresentation_0() throws Exception {
+    Gene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(new String("BABE"));
+    String pres1 = gene1.getPersistentRepresentation();
+    Gene gene2 = new StringGene();
+    gene2.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene2.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+  }
+
+  public void testPersistentRepresentation_1() {
+    Gene gene1 = new StringGene(2, 10);
+    try {
+      gene1.setAllele("");
+      fail();
     }
-
-    public void testNewGene_0 ()
-        throws Exception
-    {
-        StringGene gene1 = new StringGene (1, 4);
-        gene1.setAllele ("XYZ");
-        int minLength1 = gene1.getMinLength ();
-        int maxLength1 = gene1.getMaxLength ();
-        StringGene gene2 = (StringGene) gene1.newGene (new DefaultConfiguration ());
-        int minLength2 = gene2.getMinLength ();
-        int maxLength2 = gene2.getMaxLength ();
-        assertEquals (minLength1, minLength2);
-        assertEquals (maxLength1, maxLength2);
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
+  }
 
-    public void testPersistentRepresentation_0 ()
-        throws Exception
-    {
-        Gene gene1 = new StringGene (2, 10, "ABCDE");
-        gene1.setAllele (new String ("BABE"));
-        String pres1 = gene1.getPersistentRepresentation ();
-        Gene gene2 = new StringGene ();
-        gene2.setValueFromPersistentRepresentation (pres1);
-        String pres2 = gene2.getPersistentRepresentation ();
-        assertEquals (pres1, pres2);
-    }
+  public void testPersistentRepresentation_2() throws Exception {
+    Gene gene1 = new StringGene(0, 10);
+    gene1.setAllele("");
+    String pres1 = gene1.getPersistentRepresentation();
+    Gene gene2 = new StringGene();
+    gene2.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene2.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+  }
 
-    public void testPersistentRepresentation_1 ()
-    {
-        Gene gene1 = new StringGene (2, 10);
-        try
-        {
-            gene1.setAllele ("");
-            fail ();
-        }
-        catch (IllegalArgumentException iex)
-        {
-            ; //this is OK
-        }
-    }
+  public void testPersistentRepresentation_3() throws Exception {
+    Gene gene1 = new StringGene();
+    gene1.setAllele("");
+    String pres1 = gene1.getPersistentRepresentation();
+    Gene gene2 = new StringGene();
+    gene2.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene2.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+  }
 
-    public void testPersistentRepresentation_2 ()
-        throws Exception
-    {
-        Gene gene1 = new StringGene (0, 10);
-        gene1.setAllele ("");
-        String pres1 = gene1.getPersistentRepresentation ();
-        Gene gene2 = new StringGene ();
-        gene2.setValueFromPersistentRepresentation (pres1);
-        String pres2 = gene2.getPersistentRepresentation ();
-        assertEquals (pres1, pres2);
-    }
-
-    public void testPersistentRepresentation_3 ()
-        throws Exception
-    {
-        Gene gene1 = new StringGene ();
-        gene1.setAllele ("");
-        String pres1 = gene1.getPersistentRepresentation ();
-        Gene gene2 = new StringGene ();
-        gene2.setValueFromPersistentRepresentation (pres1);
-        String pres2 = gene2.getPersistentRepresentation ();
-        assertEquals (pres1, pres2);
-    }
-
-    public void testPersistentRepresentation_4 ()
-        throws Exception
-    {
-        Gene gene1 = new StringGene ();
-        gene1.setAllele (null);
-        String pres1 = gene1.getPersistentRepresentation ();
-        Gene gene2 = new StringGene ();
-        gene2.setValueFromPersistentRepresentation (pres1);
-        String pres2 = gene2.getPersistentRepresentation ();
-        assertEquals (pres1, pres2);
-    }
-
+  public void testPersistentRepresentation_4() throws Exception {
+    Gene gene1 = new StringGene();
+    gene1.setAllele(null);
+    String pres1 = gene1.getPersistentRepresentation();
+    Gene gene2 = new StringGene();
+    gene2.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene2.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+  }
 }
