@@ -127,24 +127,26 @@ public class MinimizingMakeChange
         System.out.println( "The best solution contained the following: " );
 
         System.out.println(
-            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 0 ) + " quarters." );
 
         System.out.println(
-            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 1 ) + " dimes." );
 
         System.out.println(
-            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 2 ) + " nickels." );
 
         System.out.println(
-            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 3 ) + " pennies." );
 
         System.out.println( "For a total of " +
             MinimizingMakeChangeFitnessFunction.amountOfChange(
-                bestSolutionSoFar ) + " cents." );
+                bestSolutionSoFar ) + " cents in " +
+            MinimizingMakeChangeFitnessFunction.getTotalNumberOfCoins(
+                bestSolutionSoFar ) );
     }
 
 
