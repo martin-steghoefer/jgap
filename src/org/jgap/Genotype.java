@@ -37,7 +37,7 @@ public class Genotype
     implements Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The current active Configuration instance.
@@ -305,7 +305,7 @@ public class Genotype
       // Repopulate the population of chromosomes with those selected
       // by the natural selector.
       // ------------------------------------------------------------
-      m_chromosomes = m_activeConfiguration.getNaturalSelector().select(
+      m_chromosomes = m_activeConfiguration.getNaturalSelectors(false).get(0).select(
           m_activeConfiguration,
           m_chromosomes.length);
       // Clean up the natural selector.
