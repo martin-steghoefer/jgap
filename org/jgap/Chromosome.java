@@ -37,7 +37,9 @@ import java.util.*;
  *
  * @author Neil Rotstan
  */
-public class Chromosome implements Cloneable, java.io.Serializable {
+public class Chromosome implements Cloneable, java.io.Serializable,
+                                   Comparable
+{
   protected final Configuration gaConf;
   protected final int numberOfGenes;
   protected final BitSet genes;
@@ -191,6 +193,62 @@ public class Chromosome implements Cloneable, java.io.Serializable {
     }
 
     return new Chromosome(gaConf, genes);
+  }
+
+
+  /**
+   * Compares this Chromosome against the specified object. The
+   * result is true if and only if the argument is an instance
+   * of the Chromosome class and has a BitSet equal to this
+   * Chromosome's BitSet.
+   *
+   * @param other The object to compare against.
+   * @return true if the objects are the same, false otherwise.
+   */
+  public boolean equals(Object other)
+  {
+    try
+    {
+      Chromosome otherChromosome = (Chromosome) other;
+
+      return genes.equals(otherChromosome.genes);
+    }
+
+    catch (ClassCastException e)
+    {
+      return false;
+    }
+  }
+
+
+  /**
+   * Retrieve a hash code for this Chromosome. The hash code
+   * used is simply that of the internal BitSet.
+   *
+   * @return the hash code of this Chromosome.
+   */
+  public int hashCode()
+  {
+    return genes.hashCode();
+  }
+
+
+  public int compareTo(Object other)
+  {
+    Chromosome otherChromosome = (Chromosome) other;
+
+    if (genes.hashCode() < otherChromosome.genes.hashCode())
+    {
+      return -1;
+    }
+    else if (genes.hashCode() > otherChromosome.genes.hashCode())
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
   }
 }
   

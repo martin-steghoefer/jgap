@@ -207,5 +207,60 @@ public class Genotype implements java.io.Serializable {
 
      return new Genotype(gaConf, chromosomes);
    }
+
+
+   /**
+    * Compares this Genotype against the specified object. The
+    * result is true if and only if the argument is an instance
+    * of the Genotype class, has exactly the same number of
+    * chromosomes as the given Genotype, and, for each chromosome 
+    * in this Genotype, there is an equal chromosome in the
+    * given Genotype. The chromosomes do not need to appear in
+    * the same order within the population.
+    *
+    * @param other The object to compare against.
+    * @return true if the objects are the same, false otherwise.
+    */
+   public boolean equals(Object other)
+   {
+     System.out.println("Equals method invoked!");
+     try
+     {
+       Genotype otherGenotype = (Genotype) other;
+
+       if (chromosomes.length != otherGenotype.chromosomes.length)
+       {
+         System.out.println("Lengths don't match: " +
+           chromosomes.length + " vs. " +
+           otherGenotype.chromosomes.length);
+         return false;
+       }
+
+       // Sorting the chromosomes won't affect the genetic
+       // algorithm, and makes this operation more
+       // efficient and less memory intensive.
+       Arrays.sort(chromosomes);
+       Arrays.sort(otherGenotype.chromosomes);
+
+       for (int i = 0; i < chromosomes.length; i++)
+       {
+         if (!(chromosomes[i].equals(otherGenotype.chromosomes[i])))
+         {
+           System.out.println("Unequal chromosomes at " + i + ": " +
+             chromosomes[i].toString() + " | " +
+             otherGenotype.chromosomes[i].toString());
+           return false;
+         }
+       }
+
+       return true;
+     }
+
+     catch(ClassCastException e)
+     {
+       e.printStackTrace();
+       return false;
+     }
+   }
 }
 

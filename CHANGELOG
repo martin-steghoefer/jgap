@@ -1,3 +1,12 @@
+(in progress)
+----------
+* Added equals and hashcode methods to Chromosome and Genotype
+* Chromosome now implements Comparable interface
+* Added XMLManager, which can convert genotypes and chromosomes
+  into XML and vice versa.
+* Added events system.
+
+
 0.2
 -----------
 * Added this CHANGELOG file
