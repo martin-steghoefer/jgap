@@ -38,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class XMLManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -301,6 +301,7 @@ public class XMLManager {
    * Unmarshall a Chromosome instance from a given XML Element
    * representation.
    *
+   * @param a_activeConfiguration current Configuration object
    * @param a_xmlElement The XML Element representation of the Chromosome.
    *
    * @return A new Chromosome instance setup with the data from the XML
@@ -489,15 +490,16 @@ public class XMLManager {
    *         populating an Gene instance.
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public static Genotype getGenotypeFromElement(
       Configuration a_activeConfiguration, Element a_xmlElement)
       throws ImproperXMLException, InvalidConfigurationException,
       UnsupportedRepresentationException, GeneCreationException {
+
     // Sanity check. Make sure the XML element isn't null and that it
     // actually represents a genotype.
-    // --------------------Genotype------------------------------------------
     if (a_xmlElement == null ||
         ! (a_xmlElement.getTagName().equals(GENOTYPE_TAG))) {
       throw new ImproperXMLException(
@@ -510,10 +512,10 @@ public class XMLManager {
     NodeList chromosomes =
         a_xmlElement.getElementsByTagName(CHROMOSOME_TAG);
     int numChromosomes = chromosomes.getLength();
-    Chromosome[] population = new Chromosome[numChromosomes];
+    Population population = new Population(numChromosomes);
     for (int i = 0; i < numChromosomes; i++) {
-      population[i] = getChromosomeFromElement(a_activeConfiguration,
-                                               (Element) chromosomes.item(i));
+      population.addChromosome(getChromosomeFromElement(a_activeConfiguration,
+                                               (Element) chromosomes.item(i)));
     }
     // Construct a new Genotype with the chromosomes and return it.
     // ------------------------------------------------------------

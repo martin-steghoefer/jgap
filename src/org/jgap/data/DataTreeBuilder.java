@@ -32,7 +32,7 @@ import org.jgap.*;
  */
 public class DataTreeBuilder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -143,20 +143,20 @@ public class DataTreeBuilder {
    */
   public IDataElement representGenotypeAsElement(Genotype a_subject)
       throws Exception {
-    Chromosome[] population = a_subject.getChromosomes();
+    Population population = a_subject.getPopulation();
     // Start by creating the genotype element and its size attribute,
     // which represents the number of chromosomes present in the
     // genotype.
     // --------------------------------------------------------------
     IDataElement genotypeTag = new DataElement(GENOTYPE_TAG);
     genotypeTag.setAttribute(SIZE_ATTRIBUTE,
-                             Integer.toString(population.length));
+                             Integer.toString(population.size()));
     // Next, add nested elements for each of the chromosomes in the
     // genotype.
     // ------------------------------------------------------------
-    for (int i = 0; i < population.length; i++) {
+    for (int i = 0; i < population.size(); i++) {
       IDataElement chromosomeElement =
-          representChromosomeAsElement(population[i]);
+          representChromosomeAsElement(population.getChromosome(i));
       genotypeTag.appendChild(chromosomeElement);
     }
     return genotypeTag;
