@@ -1,7 +1,8 @@
 package org.jgap.impl;
 
-import org.jgap.*;
 import java.util.*;
+
+import org.jgap.*;
 
 /**
  * This genetic operator performs Gaussian mutation across
@@ -14,7 +15,7 @@ import java.util.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static Random RANDOM = new Random();
 
@@ -28,13 +29,24 @@ public class GaussianMutationOperator
   }
 
   /**
-   * Constructs a GaussianMutationOperator with the
-   * given deviation.
+   * Constructs a GaussianMutationOperator with the given deviation.
+   * @param p_dDeviation sic.
+   *
+   * @since 2.0
    */
   public GaussianMutationOperator(double p_dDeviation) {
     m_dDeviation = p_dDeviation;
   }
 
+  /**
+   * Executes the operation.
+   * @param a_activeConfiguration not needed here
+   * @param a_population containing chromosomes to be mutated
+   * @param a_candidateChromosomes resulting chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void operate(final Configuration a_activeConfiguration,
                       final Population a_population,
                       List a_candidateChromosomes) {
