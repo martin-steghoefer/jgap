@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   public MutationOperatorTest() {
   }
@@ -224,7 +224,54 @@ public class MutationOperatorTest
     mutOp.operate(null, null);
     /**@todo ensure that nothing mutated*/
   }
-  /**@todo test against CompositeGene*/
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testOperate_7()
+      throws Exception {
+    MutationOperator mutOp = new MutationOperator();
+    BooleanGene gene1 = new BooleanGene();
+    CompositeGene comp1 = new CompositeGene();
+    comp1.addGene(gene1);
+    Chromosome chrom1 = new Chromosome(comp1, 1);
+    ( (CompositeGene) chrom1.getGene(0)).geneAt(0).setAllele(new Boolean(false));
+    IntegerGene gene2 = new IntegerGene(0, 10);
+    CompositeGene comp2 = new CompositeGene();
+    comp2.addGene(gene2);
+    Chromosome chrom2 = new Chromosome(comp2, 1);
+    ( (CompositeGene) chrom2.getGene(0)).geneAt(0).setAllele(new Integer(3));
+    Chromosome[] chroms = new Chromosome[] {
+        chrom1, chrom2};
+    Configuration conf = new Configuration();
+    conf.setPopulationSize(5);
+    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    rn.setNextInt(0);
+    rn.setNextDouble(0.8d);
+    conf.setRandomGenerator(rn);
+    Genotype.setConfiguration(conf);
+    Population pop = new Population(chroms);
+    mutOp.operate(pop, pop.getChromosomes());
+    assertEquals(2 + 2, pop.getChromosomes().size());
+    //old gene
+    assertFalse( ( (BooleanGene) ( (CompositeGene) pop.getChromosome(0).getGene(
+        0)).geneAt(0)).booleanValue());
+    //mutated gene
+    assertTrue( ( (BooleanGene) ( (CompositeGene) pop.getChromosome(2).getGene(
+        0)).geneAt(0)).booleanValue());
+    //old gene
+    assertEquals(3,
+                 ( (IntegerGene) ( (CompositeGene) pop.getChromosome(1).
+                                  getGene(0)).geneAt(0)).intValue());
+    //mutated gene
+    assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
+                 ( (
+                  IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
+                  geneAt(0)).intValue());
+  }
 }
 
 class TestFitnessFunction
