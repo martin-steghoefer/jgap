@@ -38,7 +38,7 @@ public class Chromosome
     implements Comparable, Cloneable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -256,8 +256,10 @@ public class Chromosome
         // Also clone the IApplicationData object.
         // ---------------------------------------
         try {
-          copy.setApplicationData( (IApplicationData) getApplicationData().
-                                  clone());
+          if (getApplicationData() != null) {
+            copy.setApplicationData( (IApplicationData) getApplicationData().
+                                    clone());
+          }
           return copy;
         } catch (CloneNotSupportedException cex) {
           // rethrow as RuntimeException to be backward compatible and have
