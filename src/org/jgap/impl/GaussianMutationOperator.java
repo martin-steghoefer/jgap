@@ -15,11 +15,11 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static Random RANDOM = new Random();
 
-  private double m_dDeviation = 0.05;
+  private double m_deviation = 0.05;
 
   /**
    * Constructs a GaussianMutationOperator with a default
@@ -30,12 +30,12 @@ public class GaussianMutationOperator
 
   /**
    * Constructs a GaussianMutationOperator with the given deviation.
-   * @param p_dDeviation sic.
+   * @param a_deviation sic.
    *
    * @since 2.0
    */
-  public GaussianMutationOperator(double p_dDeviation) {
-    m_dDeviation = p_dDeviation;
+  public GaussianMutationOperator(double a_deviation) {
+    m_deviation = a_deviation;
   }
 
   /**
@@ -49,6 +49,7 @@ public class GaussianMutationOperator
   public void operate(final Population a_population,
                       List a_candidateChromosomes) {
     // For each Chromosome in the population...
+    RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
     for (int i = 0; i < a_population.size(); i++) {
       Gene[] genes = a_population.getChromosome(i).getGenes();
       // ...take a copy of it...
@@ -59,12 +60,31 @@ public class GaussianMutationOperator
       // ...then Gaussian mutate all its genes...
       genes = copyOfChromosome.getGenes();
       for (int j = 0; j < genes.length; j++) {
-        double dValue = ( (Double) genes[j].getAllele()).doubleValue();
-        double dNextGaussian = RANDOM.nextGaussian();
-        double dDifference = dNextGaussian * m_dDeviation;
-        dValue += dDifference;
-        genes[j].setAllele(new Double(dValue));
+//        double value = ( (Double) genes[j].getAllele()).doubleValue();
+        double nextGaussian = RANDOM.nextGaussian();
+        double diff = nextGaussian * m_deviation;
+//        value += diff;
+//        genes[j].setAllele(new Double(value));
+        mutateGene(genes[j], diff);
       }
     }
   }
+
+  /**
+   * Helper: mutate all atomic elements of a gene
+   * @param a_gene the gene to be mutated
+   * @param a_percentage the percentage the gene is to be mutated with
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  private void mutateGene(Gene a_gene, double a_percentage) {
+    for (int k = 0; k < a_gene.size(); k++) {
+      // Mutate atomic element by given percentage.
+      // ------------------------------------------
+      System.err.println(a_percentage);
+      a_gene.applyMutation(k, a_percentage);
+    }
+  }
+
 }
