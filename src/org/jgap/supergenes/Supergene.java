@@ -40,7 +40,6 @@ import org.jgap.Gene;
  * </p>
  *
  * @author Audrius Meskauskas
- * @version 1.0
  */
 
 public interface Supergene extends Gene {

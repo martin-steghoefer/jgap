@@ -112,9 +112,12 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     public abstract boolean isValid();
 
     /** Creates a new instance of this Supergene class with the same number of
-     * genes, calling newGene for each subgene. The class, derived from this
+     * genes, calling newGene() for each subgene. The class, derived from this
      * abstract supergene will be instantiated
-     * (not the instance of abstractSupergene itself.
+     * (not the instance of abstractSupergene itself).
+     * @throws Error if the instance of <i>this</i> cannot be instantiated
+     * (for example, if it is not public or  the parameterless constructor is
+     * not provided).
      * */
     public Gene newGene() {
         Gene [] g = new Gene[m_genes.length];
@@ -146,7 +149,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * at the given index. Retries while isValid() returns true for the
      * supergene. The method is delegated to the first element [0] of the
      * gene, indexed by <code>index</code>.
-     * @see isValid()
+     * @see org.jgap.supergenes.abstractSupergene.isValid()
      */
     public void applyMutation(int index, double a_percentage) {
 
@@ -288,7 +291,8 @@ public abstract class abstractSupergene implements Supergene, Serializable {
 
     /**
      * Retrieves a string representation of the value of this Supergene
-     * instance, using calls to the Supergene components.
+     * instance, using calls to the Supergene components. Supports other
+     * (nested) supergenes in this supergene.
      */
     public String getPersistentRepresentation()
       throws UnsupportedOperationException {
@@ -306,6 +310,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * representation returned by a previous invocation of the
      * getPersistentRepresentation() method.
      * Calls getPersistentRepresentation() for all Supergene components.
+     * Supports nested supergenes.
      */
     public void setValueFromPersistentRepresentation (String a_representation)
     throws UnsupportedOperationException, UnsupportedRepresentationException {
@@ -349,7 +354,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
         return m_genes.length;
     }
 
-    /** Calls compareTo of subgenes. The passed parameter must be
+    /** Calls compareTo() for all subgenes. The passed parameter must be
      * an instance of abstractSupergene. */
     public int compareTo(Object o) {
         abstractSupergene q = (abstractSupergene) o;
