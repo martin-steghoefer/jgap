@@ -22,7 +22,7 @@ public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final int m_targetAmount;
 
@@ -81,15 +81,19 @@ public class MinimizingMakeChangeFitnessFunction
     // -----------------------------------------------------------------
     if( changeDifference == 0 )
     {
-        fitness += MAX_BOUND - ( (MAX_BOUND*0.05d) * totalCoins );
-        /**@todo the lower the number of coins the faster the fitness value
-         * should rise (and not in a linear manner!);
-         */
+        fitness += MAX_BOUND - computeCoinNumberPenalty(totalCoins);
         }
 
     // Make sure fitness value is always positive.
     // -------------------------------------------
     return Math.max(1, fitness);
+  }
+
+  protected double computeCoinNumberPenalty(int a_coins) {
+    /**@todo the lower the number of coins the faster the fitness value
+     * should rise (and not in a linear manner!);
+     */
+    return ( (MAX_BOUND*0.05d) * a_coins );
   }
 
   /**
