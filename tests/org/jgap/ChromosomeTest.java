@@ -38,7 +38,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public ChromosomeTest() {
   }
@@ -281,6 +281,25 @@ public class ChromosomeTest
     catch (IllegalStateException illex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * Test hashcode for intensity of diversity
+   */
+  public void testHashcode_0() throws InvalidConfigurationException {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new RandomFitnessFunction());
+    Chromosome chrom2 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Chromosome chrom = new Chromosome(conf, genes);
+    /**@todo implement random chromosomes to check how diverse the hashcode
+     * function is.
+     * E.g., if we have 10 chromosomes and only 2 different hashcodes, then
+     * something must be wrong most probably*/
   }
 
   /**
