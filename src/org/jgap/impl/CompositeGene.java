@@ -32,7 +32,6 @@ import org.jgap.UnsupportedRepresentationException;
  * Has the same interface as a single gene and could be used accordingly.
  * Use the addGene(Gene) method to add single genes (not CompositeGenes!) after
  * construction, an empty CompositeGene without genes makes no sense.
-
  * Beware that there are two equalities defined for a CompsoiteGene in respect
  * to its contained genes:
  * a) Two genes are (only) equal if they are identical
@@ -43,7 +42,7 @@ import org.jgap.UnsupportedRepresentationException;
  * variant only allows to add genes not seen as equal to already added genes in
  * respect to their equals function. But: the equals function returns true for
  * two different DoubleGenes (e.g.) just after their creation. If no specific
- * (and hopefully different)  allele is set for these DoubleGenes they are seen
+ * (and hopefully different) allele is set for these DoubleGenes they are seen
  * as equal!
  *
  * @author Klaus Meffert
@@ -55,7 +54,7 @@ public class CompositeGene
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.4 $";
+    private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     /**
      * Represents the delimiter that is used to separate genes in the
@@ -72,16 +71,18 @@ public class CompositeGene
 
     public void addGene (Gene a_gene)
     {
-        addGene(a_gene, false);
+        addGene (a_gene, false);
     }
+
     /**
      * Adds a gene to the CompositeGene's container. See comments in class
      * header for additional details about equality (concerning "strict" param.)
      * @param a_gene the gene to be added
      * @param strict false: add the given gene except the gene itself already is
-     *       contained within the CompositeGene's container.
-     *       true: add the gene if there is no other gene being equal to the
-     *       given gene in request to the Gene's equals method
+     *        contained within the CompositeGene's container.
+     *        true: add the gene if there is no other gene being equal to the
+     *        given gene in request to the Gene's equals method
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
@@ -117,21 +118,26 @@ public class CompositeGene
      * method will not be used here intentionally
      * @param gene the gene to be removed
      * @return true: given gene found and removed
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
     public boolean removeGeneByIdentity (Gene gene)
     {
         boolean result;
-        int size = size();
-        if (size < 1) {
+        int size = size ();
+        if (size < 1)
+        {
             result = false;
         }
-        else {
+        else
+        {
             result = false;
-            for (int i=0;i<size;i++) {
-                if (geneAt(i) == gene) {
-                    genes.remove(i);
+            for (int i = 0; i < size; i++)
+            {
+                if (geneAt (i) == gene)
+                {
+                    genes.remove (i);
                     result = true;
                     break;
                 }
@@ -146,15 +152,19 @@ public class CompositeGene
      * to the equals method of the gene
      * @param gene the gene to be removed
      * @return true: given gene found and removed
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
     public boolean removeGene (Gene gene)
     {
-        return genes.remove(gene);
+        return genes.remove (gene);
     }
 
     /**
+     * Executed by the genetic engine when this Gene instance is no
+     * longer needed and should perform any necessary resource cleanup.
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
@@ -169,37 +179,45 @@ public class CompositeGene
     }
 
     /**
+     * See interface Gene for description
+     * @param a_numberGenerator The random number generator that should be
+     *        used to create any random values. It's important to use this
+     * generator to maintain the user's flexibility to configure the genetic
+     * engine to use the random number generator of their choice.
      *
-     * @param randomGenerator
      * @author Klaus Meffert
      * @since 1.1
      */
-    public void setToRandomValue (RandomGenerator randomGenerator)
+    public void setToRandomValue (RandomGenerator a_numberGenerator)
     {
         Gene gene;
         for (int i = 0; i < genes.size (); i++)
         {
             gene = (Gene) genes.get (i);
-            gene.setToRandomValue (randomGenerator);
+            gene.setToRandomValue (a_numberGenerator);
         }
     }
 
     /**
+     * See interface Gene for description
+     * @param a_representation the string representation retrieved from a
+     *        prior call to the getPersistentRepresentation() method.
      *
-     * @param a_representation
      * @throws UnsupportedRepresentationException
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
-    public void setValueFromPersistentRepresentation (String a_representation) throws
+    public void setValueFromPersistentRepresentation (String a_representation)
+        throws
         UnsupportedRepresentationException
     {
         if (a_representation != null)
         {
             StringTokenizer tokenizer =
-                new StringTokenizer (a_representation,GENE_DELIMITER);
+                new StringTokenizer (a_representation, GENE_DELIMITER);
 
-            int numberGenes = tokenizer.countTokens();
+            int numberGenes = tokenizer.countTokens ();
             String singleGene;
             String geneTypeClass;
             try
@@ -208,44 +226,50 @@ public class CompositeGene
                 {
                     singleGene = tokenizer.nextToken ();
                     StringTokenizer geneTypeTokenizer =
-                        new StringTokenizer (singleGene,Gene.PERSISTENT_FIELD_DELIMITER);
+                        new StringTokenizer (singleGene,
+                        Gene.PERSISTENT_FIELD_DELIMITER);
 
                     //read type for every gene and then newly construct it
                     //----------------------------------------------------
                     geneTypeClass = geneTypeTokenizer.nextToken ();
                     Class clazz = Class.forName (geneTypeClass);
-                    Gene gene = (Gene)clazz.newInstance();
+                    Gene gene = (Gene) clazz.newInstance ();
 
                     //now work with the freshly constructed genes
                     // ------------------------------------------
                     String rep = "";
-                    while (geneTypeTokenizer.hasMoreTokens()) {
-                        if (rep.length() > 0) {
+                    while (geneTypeTokenizer.hasMoreTokens ())
+                    {
+                        if (rep.length () > 0)
+                        {
                             rep += Gene.PERSISTENT_FIELD_DELIMITER;
                         }
-                        rep += geneTypeTokenizer.nextToken();
+                        rep += geneTypeTokenizer.nextToken ();
                     }
-                    gene.setValueFromPersistentRepresentation(rep);
-                    addGene(gene);
+                    gene.setValueFromPersistentRepresentation (rep);
+                    addGene (gene);
                 }
 
             }
             catch (Exception ex)
             {
-                throw new UnsupportedRepresentationException (ex.getCause().getMessage());
+                throw new UnsupportedRepresentationException (ex.getCause ().
+                    getMessage ());
             }
 
         }
     }
 
     /**
-     *
-     * @return
+     * See interface Gene for description
+     * @return A string representation of this Gene's current state.
      * @throws UnsupportedOperationException
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
-    public String getPersistentRepresentation () throws
+    public String getPersistentRepresentation ()
+        throws
         UnsupportedOperationException
     {
         String result = "";
@@ -256,7 +280,7 @@ public class CompositeGene
 
             //save type with every gene to make the process reversible
             //--------------------------------------------------------
-            result += gene.getClass().getName();
+            result += gene.getClass ().getName ();
             result += gene.PERSISTENT_FIELD_DELIMITER;
 
             //get persistent representation from each gene itself
@@ -280,6 +304,7 @@ public class CompositeGene
      * container
      *
      * @return the Boolean value of this Gene.
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
@@ -308,9 +333,11 @@ public class CompositeGene
      */
     public void setAllele (Object a_newValue)
     {
-        if (! (a_newValue instanceof Vector)) {
-            throw new IllegalArgumentException("The expected type of the allele"
-                +" is a Vector.");
+        if (! (a_newValue instanceof Vector))
+        {
+            throw new IllegalArgumentException (
+                "The expected type of the allele"
+                + " is a Vector.");
         }
         Vector alleles = (Vector) a_newValue;
         Gene gene;
@@ -367,6 +394,7 @@ public class CompositeGene
      *
      * @throws ClassCastException if the specified object's type prevents it
      *         from being compared to this CompositeGene.
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
@@ -441,6 +469,7 @@ public class CompositeGene
      * @param other the object to compare to this IntegerGene for equality.
      * @return true if this IntegerGene is equal to the given object,
      *         false otherwise.
+     *
      * @since 1.1
      */
     public boolean equals (Object other)
@@ -464,6 +493,7 @@ public class CompositeGene
      * @return a string representation of this CompositeGene's value. Every
      * contained gene's string representation is delimited by the given
      * delimiter
+     *
      * @since 1.1
      */
     public String toString ()
@@ -491,6 +521,7 @@ public class CompositeGene
 
     /**
      * @return true: no genes contained, false otherwise
+     *
      * @since 1.1
      */
     public boolean isEmpty ()
@@ -502,6 +533,7 @@ public class CompositeGene
      * Returns the gene at the given index
      * @param index sic
      * @return the gene at the given index
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
@@ -512,6 +544,7 @@ public class CompositeGene
 
     /**
      * @return the number of genes contained
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
@@ -525,22 +558,28 @@ public class CompositeGene
      * will be done by checking for identity and not using the equal method!
      * @param gene the gene under test
      * @return true: the given gene object is contained
+     *
      * @author Klaus Meffert
      * @since 1.1
      */
-    public boolean containsGeneByIdentity(Gene gene) {
+    public boolean containsGeneByIdentity (Gene gene)
+    {
         boolean result;
-        int size = size();
-        if (size < 1) {
+        int size = size ();
+        if (size < 1)
+        {
             result = false;
         }
-        else {
+        else
+        {
             result = false;
-            for (int i=0;i<size;i++) {
+            for (int i = 0; i < size; i++)
+            {
 
                 //check for identity
                 //------------------
-                if (geneAt(i) == gene) {
+                if (geneAt (i) == gene)
+                {
                     result = true;
                     break;
                 }
@@ -548,4 +587,30 @@ public class CompositeGene
         }
         return result;
     }
+
+    /**
+     * Applies a mutation of a given intensity (percentage) onto the atomic
+     * element at given index (NumberGenes only have one atomic element)
+     * @param index index of atomic element, between 0 and size()-1
+     * @param a_percentage percentage of mutation (greater than -1 and smaller
+     *        than 1).
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public void applyMutation (int index, double a_percentage)
+    {
+        for (int i = 0; i < size (); i++)
+        {
+            /**@todo problem here: size() of CompositeGene not equal to
+             * (different) sizes of contained genes.
+             * Solution: Change MutationOperator to check for CompositeGene and
+             *           then apply changes to every single gene
+             */
+            throw new RuntimeException ("applyMutation may not be called for"
+                + " a CompositeGene.");
+//            geneAt(i).applyMutation(index, a_percentage);
+        }
+    }
+
 }
