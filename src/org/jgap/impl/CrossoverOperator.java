@@ -42,7 +42,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -64,7 +64,7 @@ public class CrossoverOperator
    * @since 2.0
    */
   public CrossoverOperator() {
-      //set the default crossoverRate to be populationsize\2
+      //set the default crossoverRate to be populationsize/2
       m_crossoverRate = 2;
       setCrossoverRateCalc(null);
   }
@@ -142,11 +142,14 @@ public class CrossoverOperator
     // to the "right" (those with greater loci) of that gene between
     // the two chromosomes.
     // --------------------------------------------------------------
+    int index1, index2;
     for (int i = 0; i < numCrossovers; i++) {
-      Chromosome firstMate = (Chromosome)
-          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
-      Chromosome secondMate = (Chromosome)
-          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
+      index1 = generator.nextInt(a_population.size());
+      index2 = generator.nextInt(a_population.size());
+      Chromosome chrom1 = a_population.getChromosome(index1);
+      Chromosome chrom2 = a_population.getChromosome(index2);
+      Chromosome firstMate = (Chromosome)chrom1.clone();
+      Chromosome secondMate = (Chromosome)chrom2.clone();
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = generator.nextInt(firstGenes.length);
