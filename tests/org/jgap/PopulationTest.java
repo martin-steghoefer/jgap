@@ -18,8 +18,10 @@
 
 package org.jgap;
 
+import org.jgap.impl.*;
 import junit.framework.*;
 import junitx.util.*;
+import java.util.*;
 
 /**
  * Tests for Population class
@@ -30,7 +32,7 @@ import junitx.util.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public PopulationTest() {
   }
@@ -83,4 +85,126 @@ public class PopulationTest extends TestCase {
       //check size is correct
       assertEquals(pop.size(), nTot);
   }
+  
+  public void testAddChromosome_0(){
+      Gene g = new IntegerGene();
+      Chromosome c = new Chromosome(g, 29);
+      c.setFitnessValue(45);
+      Population p = new Population();
+      p.addChromosome(c);
+      assertEquals(p.size(), 1);  
+  }
+  
+    
+  public void testAddChromosomes_0(){
+      Gene g = new DoubleGene();
+      Chromosome c = new Chromosome(g,10);
+      c.setFitnessValue(45);
+      
+      Population p1 = new Population();
+      p1.addChromosome(c);
+      
+      Population p2 = new Population();
+      p2.addChromosomes(p1);
+      assertEquals(p1.size(), p2.size());  
+  }
+  
+  public void testSetChromosomes_0(){
+      List chromosomes = new ArrayList();
+      Gene g = null;
+      Chromosome c = null;
+      int nTot = 200;
+      for(int i =0;i<nTot;i++){
+        g = new DoubleGene();
+        c = new Chromosome(g,10);
+        chromosomes.add(c);
+      }
+      
+      Population p = new Population();
+      p.setChromosomes(chromosomes);
+      this.assertEquals(nTot, p.size());
+  }
+  
+  public void testGetChromosomes_0(){
+      List chromosomes = new ArrayList();
+      Gene g = null;
+      Chromosome c = null;
+      int nTot = 200;
+      for(int i =0;i<nTot;i++){
+        g = new DoubleGene();
+        c = new Chromosome(g,10);
+        chromosomes.add(c);
+      }
+      
+      Population p = new Population();
+      p.setChromosomes(chromosomes);
+      this.assertEquals(chromosomes, p.getChromosomes());
+  }
+  
+  public void testGetChromosome_0(){
+      List chromosomes = new ArrayList();
+      Gene g = null;
+      Chromosome c = null;
+      Chromosome thechosenone=null;
+      int nTot = 200;
+      for(int i =0;i<nTot;i++){
+        g = new DoubleGene();
+        c = new Chromosome(g,10);
+        chromosomes.add(c);
+        if (i==100){
+            thechosenone = c;
+        }
+      }
+      
+      Population p = new Population();
+      p.setChromosomes(chromosomes);
+      this.assertEquals(thechosenone, p.getChromosome(100));
+  }
+  
+  public void testToChromosomes_0(){
+      List chromosomes = new ArrayList();
+      Gene g = null;
+      Chromosome c = null;
+     
+      int nTot = 200;
+      for(int i =0;i<nTot;i++){
+        g = new DoubleGene();
+        c = new Chromosome(g,10);
+        chromosomes.add(c);
+      }
+      
+      Population p = new Population();
+      p.setChromosomes(chromosomes);
+      
+      Chromosome[] aChromosome = p.toChromosomes();
+      assertEquals(aChromosome.length, chromosomes.size());
+      for(int i=0;i<nTot;i++){
+          assertTrue(chromosomes.contains(aChromosome[i]));
+      }
+  }
+  
+  public void testDetermineFittestChromosome_0(){
+      List chromosomes = new ArrayList();
+      Gene g = null;
+      Chromosome c = null;
+      Population p = new Population();
+      
+      int nTot = 100;
+      for(int i =0;i<nTot;i++){
+        g = new DoubleGene();
+        c = new Chromosome(g,10);
+        c.setFitnessValue(i);
+        p.addChromosome(c);
+        chromosomes.add(c);
+      }
+      
+      Chromosome fittest = (Chromosome) chromosomes.get(99);
+   
+      //set changed is not set CAN'T USE THIS
+      //p.setChromosomes(chromosomes);
+
+      assertEquals(p.determineFittestChromosome(), fittest);
+  }
+  
 }
+
