@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * The current active Configuration instance.
@@ -228,6 +228,10 @@ public class Genotype
           m_population.getChromosomes());
     }
 
+    // Apply NaturalSelectors after GeneticOperators have been applied.
+    // ----------------------------------------------------------------
+    applyNaturalSelectors(false);
+
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction =
@@ -236,11 +240,8 @@ public class Genotype
       bulkFunction.evaluate(m_population);
     }
 
-    // Apply NaturalSelectors after GeneticOperators have been applied.
-    // ----------------------------------------------------------------
-    applyNaturalSelectors(false);
-
-    // Fill up population if size dropped below 10% of original size
+    // Fill up population randomly if size dropped below 10% of original size.
+    // -----------------------------------------------------------------------
     if (m_activeConfiguration.getMinimumPopSizePercent() > 0) {
       int minSize = (int) (m_activeConfiguration.getPopulationSize() *
                            m_activeConfiguration.getMinimumPopSizePercent() /
@@ -427,6 +428,9 @@ public class Genotype
           "Genotype prior to invocation of other operations.");
     }
   }
+
+  private boolean m_doPerfBoost;
+  private boolean m_perfBoostChecked;
 
   /**
    * Applies all NaturalSelectors registered with the Configuration
