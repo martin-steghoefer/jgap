@@ -32,7 +32,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public MutationOperatorTest() {
   }
@@ -134,8 +134,14 @@ public class MutationOperatorTest
 
 class TestFitnessFunction
     extends FitnessFunction {
-  protected int evaluate(Chromosome a_subject) {
+
+  /**
+   * @param a_subject Chromosome
+   * @return double
+   * @since 2.0 (until 1.1: return type int)
+   */
+  protected double evaluate(Chromosome a_subject) {
     //result does not matter here
-    return 1;
+    return 1.000000d;
   }
 }

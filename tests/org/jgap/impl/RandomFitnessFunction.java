@@ -32,7 +32,7 @@ public class RandomFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Random rand;
 
@@ -40,9 +40,14 @@ public class RandomFitnessFunction
     rand = new Random();
   }
 
-  public int evaluate(Chromosome chrom) {
-    int result;
-    result = rand.nextInt();
+  /**
+   * @param chrom Chromosome
+   * @return double
+   * @since 2.0 (until 1.1: return type int)
+   */
+  public double evaluate(Chromosome chrom) {
+    double result;
+    result = rand.nextDouble();
     return result;
   }
 }

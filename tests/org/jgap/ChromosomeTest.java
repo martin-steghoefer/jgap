@@ -38,7 +38,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public ChromosomeTest() {
   }
@@ -298,7 +298,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(conf, genes);
     chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom.hashCode(), chrom2.hashCode());
-    assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue());
+    assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), 0.0000001d);
     assertEquals(chrom.isSelectedForNextGeneration(),
                  chrom2.isSelectedForNextGeneration());
     assertEquals(chrom.size(), chrom2.size());
@@ -383,9 +383,9 @@ public class ChromosomeTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
     chrom = new Chromosome(conf, genes);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue());
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
     //intentionally assert it a second time
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue());
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
   }
 
   public void testSize_0() throws Exception {

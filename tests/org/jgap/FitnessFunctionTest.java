@@ -32,7 +32,7 @@ public class FitnessFunctionTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public FitnessFunctionTest() {
   }
@@ -44,7 +44,7 @@ public class FitnessFunctionTest
 
   public void testGetFitnessValue_0() {
     FitnessFunctionImpl fitfunc = new FitnessFunctionImpl(7);
-    assertEquals(7, fitfunc.getFitnessValue(null));
+    assertEquals(7.0d, fitfunc.getFitnessValue(null),0.00000001d);
   }
 
   public void testGetFitnessValue_1() {
@@ -75,12 +75,16 @@ public class FitnessFunctionTest
    */
   private class FitnessFunctionImpl
       extends FitnessFunction {
-    private int evaluationValue;
-    public FitnessFunctionImpl(int evaluationValue) {
+
+    /**
+     * @since 2.0 (until 1.1: type int)
+     */
+    private double evaluationValue;
+    public FitnessFunctionImpl(double evaluationValue) {
       this.evaluationValue = evaluationValue;
     }
 
-    protected int evaluate(Chromosome a_subject) {
+    protected double evaluate(Chromosome a_subject) {
       return evaluationValue;
     }
   }
