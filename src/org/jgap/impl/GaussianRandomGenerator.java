@@ -23,13 +23,10 @@ import java.util.Random;
 
 import org.jgap.RandomGenerator;
 
-/**@todo not ready yet*/
-/**@todo not ready yet*/
-/**@todo not ready yet*/
-
-
 /**
- * Gaussian deviation serving as basis for randomly finding a number
+ * Gaussian deviation serving as basis for randomly finding a number.
+ * @see http://tracer.lcc.uma.es/tws/cEA/GMut.htm
+ * @see http://hyperphysics.phy-astr.gsu.edu/hbase/math/gaufcn.html
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -38,11 +35,11 @@ public class GaussianRandomGenerator
     implements RandomGenerator
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     private static final double DELTA = 0.0000001;
 
-    private Random rn = new Random ();
+    private Random rn;
 
     /**
      * Mean of the gaussian deviation
@@ -62,13 +59,20 @@ public class GaussianRandomGenerator
     /**
      * Constructor speicifying the (obliagtory) standard deviation
      * @param a_standardDeviation the standard deviation to use
-     *
-     * @since 1.1
      */
     public GaussianRandomGenerator (double a_standardDeviation)
     {
         super ();
+        init ();
         setGaussianStdDeviation (a_standardDeviation);
+    }
+
+    /**
+     * Initializations on construction
+     */
+    private void init ()
+    {
+        rn = new Random ();
     }
 
     public void setGaussianMean (double a_mean)
@@ -86,78 +90,46 @@ public class GaussianRandomGenerator
         return m_standardDeviation;
     }
 
-    /**
-     * Calculates the density of the gaussian derivation for a given input
-     * @param a_x input for computation
-     * @return calculated density
-     *
-     * @see http://tracer.lcc.uma.es/tws/cEA/GMut.htm
-     * @see http://hyperphysics.phy-astr.gsu.edu/hbase/math/gaufcn.html
-     * @since 1.1 (same functionality since earlier, but not encapsulated)
-     */
-    private int calculateDensity (double a_x)
-    {
-        if (Math.abs (m_standardDeviation) < DELTA)
-        {
-            throw new IllegalStateException (
-                "Before using the Gaussian mutation"
-                + " rate calculator, initialize it by setting the standard"
-                + " deviation.");
-        }
-
-        //compute gaussian deviation:
-        //f(x) = (1/sqrt(2pi*(stddev)²)*exp([-(x-stddev)²]/[2stddev²])
-        //because x = a, the second term is eliminated
-        //------------------------------------------------------------------
-
-        int result;
-        double rate, rate2;
-
-        rate = (1 / Math.sqrt (2 * Math.PI * m_standardDeviation *
-            m_standardDeviation));
-        rate2 = Math.exp ( ( - (a_x - 0.5d) * (a_x -
-            0.5d)) / (2 * m_standardDeviation *
-            m_standardDeviation));
-        rate = rate * rate2;
-
-        //width of the curve is approx. 6*m_standardDeviation
-
-        //invert the result as higher values indicate less probable mutation
-        //------------------------------------------------------------------
-        /**@todo implement*/
-
-        result = (int) Math.round (rate);
-        return result;
-    }
-
     public int nextInt ()
     {
-        return rn.nextInt ();
+        return Math.min (Integer.MAX_VALUE - 1,
+            (int) Math.round (nextGaussian () * Integer.MAX_VALUE));
     }
 
     public int nextInt (int ceiling)
     {
-        return nextInt () % ceiling;
+        return Math.min (ceiling - 1,
+            (int) Math.round (nextGaussian () * ceiling));
     }
 
     public long nextLong ()
     {
-        return rn.nextLong ();
+        return Math.min (Long.MAX_VALUE - 1,
+            Math.round (nextGaussian () * Long.MAX_VALUE));
     }
 
     public double nextDouble ()
     {
-        return rn.nextDouble ();
+        return nextGaussian ();
     }
 
     public float nextFloat ()
     {
-        return rn.nextFloat ();
+        return Math.min (Float.MAX_VALUE - 1,
+            (float) (nextGaussian () * Float.MAX_VALUE));
     }
 
     public boolean nextBoolean ()
     {
-        return rn.nextBoolean ();
+        return nextGaussian () >= 0.5d;
     }
 
+    /**
+     * @return the next randomly distributed gaussian with current standard
+     * deviation
+     */
+    private double nextGaussian ()
+    {
+        return rn.nextGaussian () * getGaussianStdDeviation ();
+    }
 }
