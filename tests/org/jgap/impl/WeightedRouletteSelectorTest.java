@@ -26,7 +26,7 @@ public class WeightedRouletteSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public WeightedRouletteSelectorTest() {
   }
@@ -49,7 +49,7 @@ public class WeightedRouletteSelectorTest
 
   public void testAdd_0()
       throws Exception {
-    WeightedRouletteSelectorForTest selector = new WeightedRouletteSelectorForTest();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
@@ -72,7 +72,7 @@ public class WeightedRouletteSelectorTest
 
   public void testSelect_0()
       throws Exception {
-    WeightedRouletteSelectorForTest selector = new WeightedRouletteSelectorForTest();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     // --------------------
     Gene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -135,7 +135,7 @@ public class WeightedRouletteSelectorTest
 
   public void testEmpty_0()
       throws Exception {
-    WeightedRouletteSelectorForTest selector = new WeightedRouletteSelectorForTest();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     conf.setPopulationSize(7);
     conf.setFitnessFunction(new TestFitnessFunction());
@@ -156,7 +156,7 @@ public class WeightedRouletteSelectorTest
    */
   public void testEmpty_1()
       throws Exception {
-    WeightedRouletteSelectorForTest selector = new WeightedRouletteSelectorForTest();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -173,7 +173,7 @@ public class WeightedRouletteSelectorTest
 
   public void testEmpty_11()
       throws Exception {
-    WeightedRouletteSelectorForTest selector = new WeightedRouletteSelectorForTest();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -196,7 +196,7 @@ public class WeightedRouletteSelectorTest
    */
   public void testEmpty_2()
       throws Exception {
-    WeightedRouletteSelectorForTest selector = new WeightedRouletteSelectorForTest();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -209,11 +209,5 @@ public class WeightedRouletteSelectorTest
     selector.select(1, null, popNew);
     selector.empty();
     assertEquals(1, popNew.size());
-  }
-}
-
-class WeightedRouletteSelectorForTest extends WeightedRouletteSelector {
-  public void add(Chromosome toAdd) {
-    super.add(toAdd);
   }
 }
