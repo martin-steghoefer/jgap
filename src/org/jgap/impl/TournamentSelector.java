@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -48,15 +48,22 @@ public class TournamentSelector
   private FitnessValueComparator m_fitnessValueComparator;
 
   /**
-   *
-   * @param a_tournament_size int
-   * @param a_probability double
+   * Constructor
+   * @param a_tournament_size the size of each tournament to play
+   * @param a_probability probability for selecting the best individuals
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public TournamentSelector(int a_tournament_size, double a_probability) {
     super();
+    if (a_tournament_size < 1) {
+      throw new IllegalArgumentException("Tournament size must be at least 1!");
+    }
+    if (a_probability <= 0.0d || a_probability > 1.0d) {
+      throw new IllegalArgumentException("Probability must be greater 0.0 and"
+                                         +" less or equal than 1.0!");
+    }
     m_tournament_size = a_tournament_size;
     m_probability = a_probability;
     m_chromosomes = new Vector();
@@ -97,16 +104,19 @@ public class TournamentSelector
       double prob = rn.nextDouble();
       double probAccumulated = m_probability;
       int index = 0;
-      do {
-        if (prob <= probAccumulated) {
-          break;
+      //play the tournament
+      if (m_tournament_size > 1) {
+        do {
+          if (prob <= probAccumulated) {
+            break;
+          }
+          else {
+            probAccumulated += probAccumulated * (1 - m_probability);
+            index++;
+          }
         }
-        else {
-          probAccumulated += probAccumulated * (1 - m_probability);
-          index++;
-        }
+        while (index < m_tournament_size - 1);
       }
-      while (index < m_tournament_size - 1);
       a_to_pop.addChromosome( (Chromosome) tournament.get(index));
     }
   }
