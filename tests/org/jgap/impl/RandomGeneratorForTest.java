@@ -20,11 +20,14 @@
 
 package org.jgap.impl;
 
+import java.util.List;
+
 import org.jgap.RandomGenerator;
 
 /**
  * A random generator only determined for testing purposes.
- * With this, you can specify the next value which will be returned
+ * With this, you can specify the next value which will be returned.
+ * It is also possible to specify a sequence to be appearing
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -35,13 +38,15 @@ public class RandomGeneratorForTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.3 $";
+    private static final String CVS_REVISION = "$Revision: 1.4 $";
 
     private int m_nextInt;
     private long m_nextLong;
     private double m_nextDouble;
     private float m_nextFloat;
     private boolean m_nextBoolean;
+    private int[] m_nextIntSequence;
+    private int m_intIndex;
 
     public RandomGeneratorForTest ()
     {
@@ -50,12 +55,16 @@ public class RandomGeneratorForTest
 
     public int nextInt ()
     {
-        return m_nextInt;
+        int result = m_nextIntSequence[m_intIndex++];
+        if (m_intIndex >= m_nextIntSequence.length) {
+            m_intIndex = 0;
+        }
+        return result;
     }
 
     public int nextInt (int ceiling)
     {
-        return m_nextInt % ceiling;
+        return nextInt() % ceiling;
     }
 
     public long nextLong ()
@@ -95,12 +104,17 @@ public class RandomGeneratorForTest
 
     public void setNextInt (int a_nextInt)
     {
-        m_nextInt = a_nextInt;
+        setNextIntSequence(new int[]{a_nextInt});
     }
 
     public void setNextLong (long a_nextLong)
     {
         m_nextLong = a_nextLong;
+    }
+
+    public void setNextIntSequence(int[] a_sequence) {
+        m_intIndex = 0;
+        m_nextIntSequence = a_sequence;
     }
 
 }
