@@ -23,7 +23,7 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -40,7 +40,6 @@ public class GaussianRandomGeneratorTest
    * Check if construction and calculation in general possible
    */
   public void testGeneral() {
-    Configuration conf = new DefaultConfiguration();
     GaussianRandomGenerator calc = new GaussianRandomGenerator();
     calc.nextInt();
     calc.nextBoolean();
@@ -51,9 +50,8 @@ public class GaussianRandomGeneratorTest
   }
 
   public void testConstruct_0() {
-    Configuration conf = new DefaultConfiguration();
     try {
-      GaussianRandomGenerator calc = new GaussianRandomGenerator(0.0d);
+      new GaussianRandomGenerator(0.0d);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -62,7 +60,6 @@ public class GaussianRandomGeneratorTest
   }
 
   public void testConstruct_1() {
-    Configuration conf = new DefaultConfiguration();
     GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
     int i = calc.nextInt();
     if (Math.abs(i) < DELTA) {
@@ -77,10 +74,8 @@ public class GaussianRandomGeneratorTest
   }
 
   public void testGetGaussianStdDeviation_0() throws Exception {
-    Configuration conf = new DefaultConfiguration();
     final double stdDeriv = 0.04d;
-    GaussianRandomGenerator calc = new GaussianRandomGenerator(
-        stdDeriv);
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(stdDeriv);
     assertEquals(stdDeriv, calc.getGaussianStdDeviation(), DELTA);
 //    Gene gene = new IntegerGene(1, 5);
 //    Chromosome chrom = new Chromosome(gene, 50);
