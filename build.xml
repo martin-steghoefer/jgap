@@ -12,6 +12,7 @@
       <include name="junit-addons-1.4.jar"/>
       <include name="junit3.8.1.jar"/>
       <include name="jeksparser.jar"/>
+      <include name="TableLayout.jar"/>
     </fileset>
     <pathelement path="${classDir}"/>
   </path>
@@ -50,6 +51,10 @@
     </junit>
   </target>
 
+ <target name="guiTest" depends="compile">
+ 	<java classname="org.jgap.gui.GUIManager" classpathref="classpathCompile"/>
+ </target>
+	
   <target name="jar" depends="compile">
     <jar jarfile="jgap.jar" basedir="${classDir}"> 
        <include name="org/jgap/*.class"/>
@@ -91,6 +96,7 @@
         <include name="org/jgap/perf/*.class"/>
         <include name="org/jgap/supergenes/*.class"/>
         <include name="org/jgap/xml/*.class"/>
+        <include name="org/jgap/gui/*.class"/>
         <include name="examples/*.class"/>
       </fileset>
     </delete>

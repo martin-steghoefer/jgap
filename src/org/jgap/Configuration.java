@@ -36,9 +36,9 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 1.0
  */
-public class Configuration {
+public class Configuration implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -178,6 +178,12 @@ public class Configuration {
    * @since 2.2
    */
   private int m_generationNr;
+  
+  /**
+   * The Configuration Handler for this Configurable.
+   * @author Siddhartha Azad
+   */
+  private RootConfigurationHandler conHandler;
 
   /**
    * @author Neil Rotstan
@@ -190,6 +196,7 @@ public class Configuration {
     m_sizeNaturalSelectorsPre = 0;
     m_sizeNaturalSelectorsPost = 0;
     m_geneticOperators = new ArrayList();
+    conHandler = new RootConfigurationHandler();
   }
 
   /**
@@ -897,4 +904,13 @@ public class Configuration {
   public int getGenerationNr() {
     return m_generationNr;
   }
+  
+  // implementation of the Configurable interface
+  
+  public ConfigurationHandler getConfigurationHandler() {
+  	if(conHandler == null)
+  		conHandler =new RootConfigurationHandler(); 
+  	return conHandler;
+  }
+
 }
