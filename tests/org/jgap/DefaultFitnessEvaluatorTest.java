@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Test cases for class DefaultFitnessEvaluator
+ * Test cases for clasfs DefaultFitnessEvaluator
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -31,7 +31,7 @@ import junit.framework.TestSuite;
 public final class DefaultFitnessEvaluatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
   public DefaultFitnessEvaluatorTest() {
   }
 
