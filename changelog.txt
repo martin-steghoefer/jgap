@@ -1,7 +1,7 @@
 2.0
 ----------
 * Added new NaturalSelector: class TournamentSelector (see request 1066342)
-* Added new class GaussianMutationOperator
+* Added new class GaussianMutationOperator (see request 708772)
 * Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
   set it and Genotype.getConfiguration() to obtain it.
 * Introduced overall performance test to ensure performance
