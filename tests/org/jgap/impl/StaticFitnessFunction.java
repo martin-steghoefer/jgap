@@ -12,8 +12,7 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * Fitness function always returning the same value.
- * <p>
+ * Fitness function always returning the same value.<p>
  * Only for testing purpose!
  *
  * @author Klaus Meffert
@@ -23,7 +22,7 @@ public class StaticFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * @since 2.0 (until 1.1: type int)
