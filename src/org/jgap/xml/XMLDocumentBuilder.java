@@ -14,7 +14,7 @@ import org.w3c.dom.*;
 import javax.xml.parsers.*;
 
 /**
- * Class building an XML file. Can be used to persiste objects like Genotype,
+ * Class building an XML file. Can be used to persist objects like Genotype,
  * Chromosome or Gene (or a list of them) to an XML file.
  *
  * @author Klaus Meffert
@@ -23,7 +23,7 @@ import javax.xml.parsers.*;
 public class XMLDocumentBuilder
     extends DocumentBuilderBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   protected void setAttribute(Object xmlElement, String key, String value) {
     ( (Element) xmlElement).setAttribute(key, value);
