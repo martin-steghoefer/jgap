@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -567,8 +567,18 @@ public class Chromosome
       }
       else {
         if (getApplicationData() instanceof Comparable) {
-          return ( (Comparable) getApplicationData()).compareTo(otherChromosome.
-              getApplicationData());
+          try {
+            return ( (Comparable) getApplicationData()).compareTo(
+                otherChromosome.getApplicationData());
+          }
+          catch (ClassCastException cex) {
+            /**@todo improve*/
+            return -1;
+          }
+        }
+        else {
+          return getApplicationData().getClass().getName().compareTo(
+              otherChromosome.getApplicationData().getClass().getName());
         }
       }
     }
@@ -613,6 +623,11 @@ public class Chromosome
    * @since 1.0
    */
   public void cleanup() {
+    if (Genotype.getConfiguration() == null) {
+      throw new IllegalStateException(
+          "The active Configuration object must be set on this " +
+          "Chromosome prior to invocation of the cleanup() method.");
+    }
     // First, reset our internal state.
     // --------------------------------
     m_fitnessValue = Genotype.getConfiguration().getFitnessFunction().
@@ -620,15 +635,8 @@ public class Chromosome
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool
     // if one has been setup so that we can save a little time and memory
-    // next time a Chromosome is needed. Before trying this, however, we
-    // have to make sure the active Configuration has been set on this
-    // Chromosome or else throw an IllegalStateException.
+    // next time a Chromosome is needed.
     // ------------------------------------------------------------------
-    if (Genotype.getConfiguration() == null) {
-      throw new IllegalStateException(
-          "The active Configuration object must be set on this " +
-          "Chromosome prior to invocation of the cleanup() method.");
-    }
     // Now fetch the active ChromosomePool from the Configuration object
     // and, if the pool exists, release this Chromosome to it.
     // -----------------------------------------------------------------
