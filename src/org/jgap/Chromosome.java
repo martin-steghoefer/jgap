@@ -63,7 +63,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -95,12 +95,6 @@ public class Chromosome
    * @since 2.0 (until 1.1: type int)
    */
   protected double m_fitnessValue = -1.0000000d;
-
-  /**
-   * Stores the hash-code of this Chromosome so that it doesn't need
-   * to be recalculated each time.
-   */
-  private int m_hashCode;
 
   /**
    * Constructs a Chromosome of the given size separate from any specific
@@ -609,7 +603,6 @@ public class Chromosome
     // First, reset our internal state.
     // --------------------------------
     m_fitnessValue = Genotype.getConfiguration().getFitnessFunction().getNoFitnessValue();
-    m_hashCode = 0;
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool
     // if one has been setup so that we can save a little time and memory
