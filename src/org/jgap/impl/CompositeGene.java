@@ -28,10 +28,26 @@ import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
 
 /**
- * Container for multiple genes
+ * Ordered container for multiple genes
  * Has the same interface as a single gene and could be used accordingly.
  * Use the addGene(Gene) method to add single genes (not CompositeGenes!) after
- * construction, an empty CompositeGene without genes makes no sense</p>
+ * construction, an empty CompositeGene without genes makes no sense.
+
+ * Beware that there are two equalities defined for a CompsoiteGene in respect
+ * to its contained genes:
+ * a) Two genes are (only) equal if they are identical
+ * b) Two genes are (seen as) equal if their equals method returns true
+ *
+ * This influences several methods such as addGene. Notice that it is "better"
+ * to use addGene(a_gene, false) than addGene(a_gene, true) because the second
+ * variant only allows to add genes not seen as equal to already added genes in
+ * respect to their equals function. But: the equals function returns true for
+ * two different DoubleGenes (e.g.) just after their creation. If no specific
+ * (and hopefully different)  allele is set for these DoubleGenes they are seen
+ * as equal!
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 
 public class CompositeGene
@@ -39,15 +55,13 @@ public class CompositeGene
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     /**
-     * Represents the delimiter that is used to separate fields in the
-     * persistent representation of IntegerGene instances.
+     * Represents the delimiter that is used to separate genes in the
+     * persistent representation of CompositeGene instances.
      */
-    protected final static String PERSISTENT_FIELD_DELIMITER = "*";
-
-    public final static String GENE_DELIMITER = ":";
+    public final static String GENE_DELIMITER = "*";
 
     private Vector genes;
 
@@ -56,24 +70,94 @@ public class CompositeGene
         genes = new Vector ();
     }
 
-    public void addGene (Gene gene)
+    public void addGene (Gene a_gene)
     {
-        if (gene instanceof CompositeGene)
+        addGene(a_gene, false);
+    }
+    /**
+     * Adds a gene to the CompositeGene's container. See comments in class
+     * header for additional details about equality (concerning "strict" param.)
+     * @param a_gene the gene to be added
+     * @param strict false: add the given gene except the gene itself already is
+     *       contained within the CompositeGene's container.
+     *       true: add the gene if there is no other gene being equal to the
+     *       given gene in request to the Gene's equals method
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public void addGene (Gene a_gene, boolean strict)
+    {
+        if (a_gene instanceof CompositeGene)
         {
-            throw new IllegalArgumentException (
-                "It is not allowed to add a CompositeGene"
-                + " to a CompositeGene!");
+            throw new IllegalArgumentException ("It is not allowed to add a"
+                + " CompositeGene to a CompositeGene!");
         }
-        /**@todo check if gene already exists*/
-
-        genes.add (gene);
+        //check if gene already exists
+        //----------------------------
+        boolean containsGene;
+        if (!strict)
+        {
+            containsGene = containsGeneByIdentity (a_gene);
+        }
+        else
+        {
+            containsGene = genes.contains (a_gene);
+        }
+        if (containsGene)
+        {
+            throw new IllegalArgumentException ("The gene is already contained"
+                + " in the CompositeGene!");
+        }
+        genes.add (a_gene);
     }
 
+    /**
+     * Removes the given gene from the collection of genes. The gene is only
+     * removed if an object of the same identity is contained. The equals
+     * method will not be used here intentionally
+     * @param gene the gene to be removed
+     * @return true: given gene found and removed
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public boolean removeGeneByIdentity (Gene gene)
+    {
+        boolean result;
+        int size = size();
+        if (size < 1) {
+            result = false;
+        }
+        else {
+            result = false;
+            for (int i=0;i<size;i++) {
+                if (geneAt(i) == gene) {
+                    genes.remove(i);
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Removes the given gene from the collection of genes. The gene is
+     * removed if another gene exists that is equal to the given gene in respect
+     * to the equals method of the gene
+     * @param gene the gene to be removed
+     * @return true: given gene found and removed
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public boolean removeGene (Gene gene)
     {
-        return genes.remove (gene);
+        return genes.remove(gene);
     }
 
+    /**
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public void cleanup ()
     {
         Gene gene;
@@ -84,6 +168,12 @@ public class CompositeGene
         }
     }
 
+    /**
+     *
+     * @param randomGenerator
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public void setToRandomValue (RandomGenerator randomGenerator)
     {
         Gene gene;
@@ -94,19 +184,26 @@ public class CompositeGene
         }
     }
 
+    /**
+     *
+     * @param a_representation
+     * @throws UnsupportedRepresentationException
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public void setValueFromPersistentRepresentation (String a_representation) throws
         UnsupportedRepresentationException
     {
         if (a_representation != null)
         {
             StringTokenizer tokenizer =
-                new StringTokenizer (a_representation,
-                                     PERSISTENT_FIELD_DELIMITER);
+                new StringTokenizer (a_representation,GENE_DELIMITER);
             Gene gene;
             String single_representation;
             /**@todo read type for every gene and then newly construct it*/
 
             //now work with the freshly constructed genes
+            // ------------------------------------------
             for (int i = 0; i < genes.size (); i++)
             {
                 gene = (Gene) genes.get (i);
@@ -117,6 +214,13 @@ public class CompositeGene
         }
     }
 
+    /**
+     *
+     * @return
+     * @throws UnsupportedOperationException
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public String getPersistentRepresentation () throws
         UnsupportedOperationException
     {
@@ -128,13 +232,28 @@ public class CompositeGene
             result += gene.getPersistentRepresentation ();
             if (i < genes.size () - 1)
             {
-                result += PERSISTENT_FIELD_DELIMITER;
-                    /**@todo save type with every gene to make the process reversible*/
+                result += GENE_DELIMITER;
+                /**@todo if GENE_DELIMITER occurs in a StringGene (e.g.)
+                 * undertake actions to maintain consistency
+                 */
+
+                /**@todo save type with every gene to make the process
+                 * reversible*/
             }
         }
         return result;
     }
 
+    /**
+     * Retrieves the value represented by this Gene. All values returned
+     * by this class will be Vector instances. Each element of the Vector
+     * represents the allele of the corresponding gene in the CompositeGene's
+     * container
+     *
+     * @return the Boolean value of this Gene.
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public Object getAllele ()
     {
         Vector alleles = new Vector ();
@@ -147,9 +266,24 @@ public class CompositeGene
         return alleles;
     }
 
-    public void setAllele (Object object)
+    /**
+     * Sets the value of the contained Genes to the new given value. This class
+     * expects the value to be of a Vector type. Each element of the Vector
+     * must conform with the type of the gene in the CompositeGene's container
+     * at the corresponding position.
+     *
+     * @param a_newValue the new value of this Gene instance.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public void setAllele (Object a_newValue)
     {
-        Vector alleles = (Vector) object;
+        if (! (a_newValue instanceof Vector)) {
+            throw new IllegalArgumentException("The expected type of the allele"
+                +" is a Vector.");
+        }
+        Vector alleles = (Vector) a_newValue;
         Gene gene;
         for (int i = 0; i < alleles.size (); i++)
         {
@@ -158,7 +292,29 @@ public class CompositeGene
         }
     }
 
-    public Gene newGene (Configuration configuration)
+    /**
+     * Provides an implementation-independent means for creating new Gene
+     * instances. The new instance that is created and returned should be
+     * setup with any implementation-dependent configuration that this Gene
+     * instance is setup with (aside from the actual value, of course). For
+     * example, if this Gene were setup with bounds on its value, then the
+     * Gene instance returned from this method should also be setup with
+     * those same bounds. This is important, as the JGAP core will invoke this
+     * method on each Gene in the sample Chromosome in order to create each
+     * new Gene in the same respective gene position for a new Chromosome.
+     * <p>
+     * It should be noted that nothing is guaranteed about the actual value
+     * of the returned Gene and it should therefore be considered to be
+     * undefined.
+     *
+     * @param a_activeConfiguration The current active configuration.
+     * @return A new Gene instance of the same type and with the same
+     *         setup as this concrete Gene.
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public Gene newGene (Configuration a_activeConfiguration)
     {
         CompositeGene compositeGene = new CompositeGene ();
         Gene gene;
@@ -166,11 +322,25 @@ public class CompositeGene
         for (int i = 0; i < geneSize; i++)
         {
             gene = (Gene) genes.get (i);
-            compositeGene.addGene (gene.newGene (configuration));
+            compositeGene.addGene (gene.newGene (a_activeConfiguration), false);
         }
         return compositeGene;
     }
 
+    /**
+     * Compares this CompositeGene with the specified object for order. A
+     * false value is considered to be less than a true value. A null value
+     * is considered to be less than any non-null value.
+     *
+     * @param  other the CompositeGene to be compared.
+     * @return  a negative integer, zero, or a positive integer as this object
+     *		is less than, equal to, or greater than the specified object.
+     *
+     * @throws ClassCastException if the specified object's type prevents it
+     *         from being compared to this CompositeGene.
+     * @author Klaus Meffert
+     * @since 1.1
+     */
     public int compareTo (Object other)
     {
         CompositeGene otherCompositeGene = (CompositeGene) other;
@@ -192,6 +362,7 @@ public class CompositeGene
         else
         {
             //compare each gene against each other
+            // -----------------------------------
             int numberGenes = Math.min (size (), otherCompositeGene.size ());
             Gene gene1;
             Gene gene2;
@@ -221,6 +392,7 @@ public class CompositeGene
             }
             //if everything is equal until now the CompositeGene with more
             //contained genes wins
+            // -----------------------------------------------------------
             if (size () == otherCompositeGene.size ())
             {
                 return 0;
@@ -240,6 +412,7 @@ public class CompositeGene
      * @param other the object to compare to this IntegerGene for equality.
      * @return true if this IntegerGene is equal to the given object,
      *         false otherwise.
+     * @since 1.1
      */
     public boolean equals (Object other)
     {
@@ -259,9 +432,10 @@ public class CompositeGene
     /**
      * Retrieves a string representation of this CompositeGene's value that
      * may be useful for display purposes.
-     *
-         * @return a string representation of this CompositeGene's value. Every contained
-     * gene's string representation is delimited by the given delimiter
+     * @return a string representation of this CompositeGene's value. Every
+     * contained gene's string representation is delimited by the given
+     * delimiter
+     * @since 1.1
      */
     public String toString ()
     {
@@ -288,6 +462,7 @@ public class CompositeGene
 
     /**
      * @return true: no genes contained, false otherwise
+     * @since 1.1
      */
     public boolean isEmpty ()
     {
@@ -299,6 +474,7 @@ public class CompositeGene
      * @param index sic
      * @return the gene at the given index
      * @author Klaus Meffert
+     * @since 1.1
      */
     public Gene geneAt (int index)
     {
@@ -308,9 +484,39 @@ public class CompositeGene
     /**
      * @return the number of genes contained
      * @author Klaus Meffert
+     * @since 1.1
      */
     public int size ()
     {
         return genes.size ();
+    }
+
+    /**
+     * Checks whether a specific gene is already contained. The determination
+     * will be done by checking for identity and not using the equal method!
+     * @param gene the gene under test
+     * @return true: the given gene object is contained
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public boolean containsGeneByIdentity(Gene gene) {
+        boolean result;
+        int size = size();
+        if (size < 1) {
+            result = false;
+        }
+        else {
+            result = false;
+            for (int i=0;i<size;i++) {
+
+                //check for identity
+                //------------------
+                if (geneAt(i) == gene) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
