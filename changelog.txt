@@ -1,6 +1,7 @@
 2.0
 ----------
 * Added new NaturalSelector: class TournamentSelector (see request 1066342)
+* Made add(Chromosome) method protected by moving from INaturalSelector to NaturalSelector
 * Added new class GaussianMutationOperator (see request 708772)
 * Added DeltaFitnessEvaluator interpreting fitness values a defect rates
 * Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
