@@ -1,22 +1,15 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-
 package org.jgap;
+
+import java.util.*;
 
 import org.jgap.impl.*;
 
@@ -33,7 +26,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public ChromosomeTest() {
   }
@@ -138,10 +131,25 @@ public class ChromosomeTest
   }
 
   /**
-   * Illegal constructions regarding first parameter
+   * Illegal constructions regarding first and second parameter
    */
   public void testConstruct_6() {
     try {
+      new Chromosome(null);
+      fail();
+    }
+    catch (IllegalArgumentException illex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Illegal constructions regarding first parameter
+   * @throws InvalidConfigurationException
+   */
+  public void testConstruct_7() throws InvalidConfigurationException {
+    try {
+      Genotype.setConfiguration(new Configuration());
       new Chromosome(null);
       fail();
     }
@@ -166,21 +174,18 @@ public class ChromosomeTest
     }
   }
 
-  /**
-   * Illegal constructions regarding configuration
-   */
-  public void testConstruct_10() throws Exception {
+  public void testConstruct_10() {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-    // fitness function missing in config.,
     new Chromosome(genes);
   }
 
   /**
    * Illegal constructions regarding configuration
+   * @throws Exception
    */
   public void testConstruct_11() throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -189,11 +194,12 @@ public class ChromosomeTest
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
     Genotype.setConfiguration(conf);
-      new Chromosome(genes);
+    new Chromosome(genes);
   }
 
   /**
    * Illegal constructions regarding configuration
+   * @throws Exception
    */
   public void testConstruct_12() throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -201,10 +207,10 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
-    Genotype.setConfiguration(conf);
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
-      new Chromosome(genes);
+    Genotype.setConfiguration(conf);
+    new Chromosome(genes);
   }
 
   public void testConstruct_14() throws Exception {
@@ -221,6 +227,7 @@ public class ChromosomeTest
 
   /**
    * Test clone without setting a configuration
+   * @throws InvalidConfigurationException
    */
   public void testClone_0() throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
@@ -236,27 +243,103 @@ public class ChromosomeTest
     }
   }
 
+  final int MAX_CHROMOSOME_TO_TEST = 1000;
+  final int MAX_GENES_TO_TEST = 25;
+  final int MAX_GENES_TYPES = 6;
+
   /**
    * Test hashcode for intensity of diversity
+   * @throws InvalidConfigurationException
+   * @author John Serri
    */
   public void testHashcode_0() throws InvalidConfigurationException {
-    Gene[] genes = new IntegerGene[2];
-    genes[0] = new IntegerGene();
-    genes[1] = new IntegerGene();
-    Configuration conf = new DefaultConfiguration();
-    conf.setFitnessFunction(new RandomFitnessFunction());
-    Chromosome chrom2 = new Chromosome(genes);
-    conf.setSampleChromosome(chrom2);
-    conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(genes);
-    /**@todo implement random chromosomes to check how diverse the hashcode
-     * function is.
-     * E.g., if we have 10 chromosomes and only 2 different hashcodes, then
-     * something must be wrong most probably*/
+  	int Count;
+  	int NumGenes;
+  	int GeneCount;
+  	int GeneType;
+  	Gene[] genes;
+  	Chromosome chrom;
+  	TestHashcode thc = new TestHashcode();
+  	List UniqueChromosome = new ArrayList();
+  	List EqualChromosome = new ArrayList();
+
+  	//Build Random Chromosomes
+  	for(Count= 0; Count<MAX_CHROMOSOME_TO_TEST; Count++)
+  	{
+  		NumGenes = (int)(Math.random()* MAX_GENES_TO_TEST);
+  		genes = new Gene[NumGenes];
+  		for(GeneCount=0; GeneCount<NumGenes; GeneCount++)
+  		{
+  			GeneType = (int)(Math.random()* MAX_GENES_TYPES);
+  			switch(GeneType)
+			{
+  			case 0:
+  				genes[GeneCount] = new IntegerGene();
+  				break;
+  			case 1:
+  				genes[GeneCount] = new BooleanGene();
+  				break;
+  			case 2:
+  				genes[GeneCount] = new CompositeGene();
+  				break;
+  			case 3:
+  				genes[GeneCount] = new DoubleGene();
+  				break;
+  			case 4:
+  				genes[GeneCount] = new FixedBinaryGene(5);
+  				break;
+  			case 5:
+  				genes[GeneCount] = new StringGene();
+  				break;
+			}
+  		}
+  		chrom = new Chromosome(genes);
+  		//We only want to add unique object, since equal object will return the same hashcode
+  		if(UniqueChromosome.contains(chrom)==false)
+  			UniqueChromosome.add(chrom);
+  	}
+
+  	//Test to see if enough hashcodes are unique
+  	thc.setFractionUnique(.95);
+  	if(thc.testHashCodeUniqueness(UniqueChromosome)==false)
+  	{
+  		System.out.print("testHashCodeUniqueness failed\n Actual Percent unique = " + thc.getActualFractionUnique());
+  		fail();
+  	}
+
+  	//Test mathematical average and dispersion of hashcode
+  	//I am not sure of the value of this test since boundry values are pretty much arbitrary
+  	thc.setAverageMax(16500000);
+  	thc.setAverageMin(14000000);
+  	thc.setStdDevMax(11000000);
+  	thc.setStdDevMin(9000000);
+  	if(thc.testDispersion(UniqueChromosome)==false)
+  	{
+  		fail();
+  	}
+
+  	//Build identical Chromosome
+  	for(Count= 0; Count<3; Count++)
+  	{
+  		genes = new Gene[1];
+  		genes[0] = new IntegerGene();
+  		chrom = new Chromosome(genes);
+  		EqualChromosome.add(chrom);
+  	}
+  	//If an object is equal it must have the same hashcode
+  	if(thc.testHashCodeEquality(EqualChromosome)==false)
+  	{
+  		fail();
+  	}
+
+  	// A lot of temporary objects where created in this test so do a quick
+  	// garbage collect.
+  	System.gc();
   }
 
   /**
    * Test clone with setting a configuration
+   * @throws InvalidConfigurationException
    */
   public void testClone_1() throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
@@ -281,6 +364,7 @@ public class ChromosomeTest
 
   /**
    * Test clone with set application data implementing interface Cloneable
+   * @throws InvalidConfigurationException
    */
   public void testClone_2() throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
@@ -292,6 +376,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
@@ -300,6 +385,7 @@ public class ChromosomeTest
 
   /**
    * Test clone with set application data, where cloning supported
+   * @throws InvalidConfigurationException
    */
   public void testClone_3() throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
@@ -311,6 +397,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject2();
     chrom.setApplicationData(appObj);
@@ -396,6 +483,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
     //intentionally assert it a second time
@@ -413,6 +501,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
     //set fitness value to a different one
@@ -450,6 +539,7 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes);
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     assertTrue(chrom.compareTo(chrom2) == 0);
     assertTrue(chrom2.compareTo(chrom) == 0);
@@ -466,6 +556,7 @@ public class ChromosomeTest
     conf.setFitnessFunction(new StaticFitnessFunction(20));
     conf.setSampleChromosome(chrom0);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     Gene[] genes2 = new IntegerGene[2];
     Gene gene01 = new IntegerGene();
@@ -513,6 +604,7 @@ public class ChromosomeTest
     conf.setFitnessFunction(new StaticFitnessFunction(20));
     conf.setSampleChromosome(chrom0);
     conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
     Gene[] genes2 = new IntegerGene[2];
     Gene gene01 = new IntegerGene();
