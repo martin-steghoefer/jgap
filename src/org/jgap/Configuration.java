@@ -47,7 +47,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -819,11 +819,11 @@ public class Configuration {
     }
   }
 
-  public void setMinimumSizePopulation(int a_minimumSizeGuaranteed) {
-    m_minPercentageSizePopulation = a_minimumSizeGuaranteed;
+  public void setMinimumPopSizePercent(int a_minimumSizeGuaranteedPercent) {
+    m_minPercentageSizePopulation = a_minimumSizeGuaranteedPercent;
   }
 
-  public int getMinimumSizePopulation() {
+  public int getMinimumPopSizePercent() {
     return m_minPercentageSizePopulation;
   }
 
