@@ -35,18 +35,24 @@ import org.jgap.event.*;
 public class DefaultConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Constructs a new DefaultConfiguration instance with a number of
    * Configuration settings set to default values. It is still necessary
    * to set the sample Chromosome, population size, and desired fitness
    * function. Other settings may optionally be altered as desired.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
   public DefaultConfiguration() {
     super();
     try {
-      addNaturalSelector(new BestChromosomesSelector(), true);
+      BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector();
+      bestChromsSelector.setDoubletteChromosomesAllowed(false);
+      addNaturalSelector(bestChromsSelector, true);
       setRandomGenerator(new StockRandomGenerator());
       setMinimumPopSizePercent(0);
       setEventManager(new EventManager());
