@@ -38,7 +38,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -121,7 +121,7 @@ public class Configuration {
    * @author Klaus Meffert
    * @since 1.1
    */
-  private List m_geneticOperators = new ArrayList();
+  private List m_geneticOperators;
 
   /**
    * The number of genes that will be stored in each chromosome in the
@@ -171,6 +171,15 @@ public class Configuration {
   private boolean m_preserveFittestIndividual;
 
   /**
+   * Indicates how many times the evolve()-method in class Genotype has been
+   * called. Represents the number of the current population.
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  private int m_generationNr;
+
+  /**
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
@@ -180,6 +189,7 @@ public class Configuration {
     m_postSelectors = new ChainOfSelectors();
     m_sizeNaturalSelectorsPre = 0;
     m_sizeNaturalSelectorsPost = 0;
+    m_geneticOperators = new ArrayList();
   }
 
   /**
@@ -880,5 +890,13 @@ public class Configuration {
    */
   public void setPreservFittestIndividual(boolean a_preserveFittest) {
     m_preserveFittestIndividual = a_preserveFittest;
+  }
+
+  public void incrementGenerationNr() {
+    m_generationNr++;
+  }
+
+  public int getGenerationNr() {
+    return m_generationNr;
   }
 }
