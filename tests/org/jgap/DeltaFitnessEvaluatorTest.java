@@ -21,10 +21,7 @@ public final class DeltaFitnessEvaluatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
-  public DeltaFitnessEvaluatorTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DeltaFitnessEvaluatorTest.class);
