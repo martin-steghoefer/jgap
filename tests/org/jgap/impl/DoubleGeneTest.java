@@ -34,7 +34,7 @@ import junitx.util.*;
 public class DoubleGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -211,66 +211,57 @@ public class DoubleGeneTest
   }
 
   public void testSetToRandomValue_0() {
-
     Gene gene = new DoubleGene(1.3d, 6.5d);
-	gene.setAllele(new Double(5.8d));
+    gene.setAllele(new Double(5.8d));
 
-    gene.setToRandomValue(new RandomGeneratorForTest(2.789d));
-	assertEquals(gene.getAllele(), new Double(2.789d));
+    gene.setToRandomValue(new RandomGeneratorForTest(0.789d));
+    assertEquals(new Double(0.789d * (6.5d - 1.3d) + 1.3d), gene.getAllele());
   }
 
-  public void testSetToRandomValue_1(){
+  public void testSetToRandomValue_1() throws Exception {
+    Gene gene = new DoubleGene( -1.3d, 6.5d);
+    gene.setAllele(new Double(5.8d));
 
-	Gene gene = new DoubleGene(1.3d, 6.5d);
-	gene.setAllele(new Double(5.8d));
+    Configuration conf = new DefaultConfiguration();
+    conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
+    Genotype.setConfiguration(conf);
 
-	Configuration conf = new DefaultConfiguration();
-	conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-	Genotype.setConfiguration(conf);
-
-
-	gene.setToRandomValue(new RandomGeneratorForTest(1.014));
-	assertEquals(gene.getAllele(), new Double(2.6416d));
-
+    gene.setToRandomValue(new RandomGeneratorForTest(0.014));
+    assertEquals(new Double(0.014d * (6.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
-   public void testSetToRandomValue_2(){
+   public void testSetToRandomValue_2() throws Exception {
+     Gene gene = new DoubleGene( -1.3d, -0.5d);
+     gene.setAllele(new Double(5.8d));
 
-  	 Gene gene = new DoubleGene(1.3d, 6.5d);
-  	 gene.setAllele(new Double(5.8d));
+     Configuration conf = new DefaultConfiguration();
+     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
+     Genotype.setConfiguration(conf);
 
-  	 Configuration conf = new DefaultConfiguration();
-  	 conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-  	 Genotype.setConfiguration(conf);
-
-
-   	 gene.setToRandomValue(new RandomGeneratorForTest(7.83d));
-   	 assertEquals(gene.getAllele(), new Double(2.6416d));
-
+     gene.setToRandomValue(new RandomGeneratorForTest(0.83d));
+     assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
   public void testSetToRandomValue_3(){
+    DoubleGene gene = new DoubleGene(1.3d, 6.5d);
+    gene.setAllele(new Double(5.8d));
+    gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
 
-	 Gene gene = new DoubleGene(1.3d, 6.5d);
-	 gene.setAllele(new Double(5.8d));
-	 gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
-
-	 if(gene.doubleValue() < 1.3d ||
-	 	gene.doubleValue() > 6.5d){
-			fail();
-		}
+    if (gene.doubleValue() < 1.3d ||
+        gene.doubleValue() > 6.5d) {
+      fail();
+    }
   }
 
   public void testSetToRandomValue_4(){
+    DoubleGene gene = new DoubleGene(1.3d, 6.5d);
+    gene.setAllele(new Double(5.8d));
+    gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
 
-  	 Gene gene = new DoubleGene(1.3d, 6.5d);
-  	 gene.setAllele(new Double(5.8d));
-  	 gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
-
-  	 if(gene.doubleValue() < 1.3d ||
-  	 	gene.doubleValue() > 6.5d){
-  			fail();
-  		}
+    if (gene.doubleValue() < 1.3d ||
+        gene.doubleValue() > 6.5d) {
+      fail();
+    }
   }
 
   public void testCompareToNative_0() {
