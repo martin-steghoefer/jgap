@@ -33,7 +33,7 @@ public class CompositeGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public CompositeGeneTest() {
   }
@@ -289,6 +289,11 @@ public class CompositeGeneTest
     assertEquals(pres1, pres2);
   }
 
+  /**
+   * Tests if persistent representation of a gene possible which contains
+   * the special delimiter character within its allele value!
+   * @throws Exception
+   */
   public void testPersistentPresentation_1() throws Exception {
     CompositeGene gene1 = new CompositeGene();
     Gene gene0 = new StringGene(5,10);
