@@ -25,7 +25,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -349,4 +349,24 @@ public class DoubleGene
     return m_geneAlleleChecker;
   }
 
+  protected Object getInternalValue() {
+    return m_value;
+  }
+
+  /**
+   * Modified hashCode() function to return different hashcodes for differently
+   * ordered genes in a chromosome
+   * @return -3 if no allele set, otherwise value return by BaseGene.hashCode()
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public int hashCode() {
+    if (getInternalValue() == null) {
+      return -3;
+    }
+    else {
+      return super.hashCode();
+    }
+  }
 }

@@ -13,16 +13,15 @@ import org.jgap.*;
 
 /**
  * Base class for all Genes based on numbers.<br>
- * Known implementations: ene, DoubleGene
  *
  * @author Klaus Meffert
  * @since 1.1 (most code moved and adapted from IntegerGene)
  */
-public abstract class NumberGene
+public abstract class NumberGene extends BaseGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -35,62 +34,6 @@ public abstract class NumberGene
    * is valid. If not the allele value may not be set for the gene!
    */
   private IGeneConstraintChecker m_geneAlleleChecker;
-
-  /**
-   * Executed by the genetic engine when this Gene instance is no
-   * longer needed and should perform any necessary resource cleanup.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public void cleanup() {
-    // No specific cleanup is necessary for this implementation.
-    // ---------------------------------------------------------
-  }
-
-  /**
-   * Compares this NumberGene with the given object and returns true if
-   * the other object is a NumberGene and has the same value (allele) as
-   * this NumberGene. Otherwise it returns false.
-   *
-   * @param other the object to compare to this NumberGene for equality.
-   * @return true if this Gene is equal to the given object,
-   * false otherwise.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public boolean equals(Object other) {
-    try {
-      return compareTo(other) == 0;
-    }
-    catch (ClassCastException e) {
-      // If the other object isn't an Gene of current type
-      // (like IntegerGene), then we're not equal.
-      // -------------------------------------------------
-      return false;
-    }
-  }
-
-  /**
-   * Retrieves the hash code value for this NumberGene.
-   *
-   * @return this NumberGene's hash code.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public int hashCode() {
-    // If our internal Integer is null, then return zero. Otherwise,
-    // just return the hash code of the Integer.
-    // -------------------------------------------------------------
-    if (m_value == null) {
-      return 0;
-    }
-    else {
-      return m_value.hashCode();
-    }
-  }
 
   /**
    * Compares this NumberGene with the specified object (which must also
@@ -117,6 +60,12 @@ public abstract class NumberGene
       return 1;
     }
     else if (otherGene.m_value == null) {
+      // check if type corresponds (because we could have a type not inherited
+      // from NumberGene)
+      if (!otherGene.getClass().equals(this.getClass())) {
+        throw new ClassCastException(
+            "Comparison not possible: different types!");
+      }
       // If our value is also null, then we're the same. Otherwise,
       // this is the greater gene.
       // ----------------------------------------------------------
@@ -145,24 +94,6 @@ public abstract class NumberGene
    * @since 1.1
    */
   protected abstract int compareToNative(Object o1, Object o2);
-
-  /**
-   * Retrieves a string representation of this NumberGene's value that
-   * may be useful for display purposes.
-   *
-   * @return a string representation of this NumberGene's value.
-  *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public String toString() {
-    if (m_value == null) {
-      return "null";
-    }
-    else {
-      return m_value.toString();
-    }
-  }
 
   /**
    * Sets the value (allele) of this Gene to the new given value. This class
@@ -212,30 +143,6 @@ public abstract class NumberGene
   }
 
   /**
-   * Retrieves the value (allele) represented by this Gene. All values
-   * returned by this class will be Integer instances.
-   *
-   * @return the Integer value of this Gene.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public Object getAllele() {
-    return m_value;
-  }
-
-  /**
-   * @return the size of the gene, i.e the number of atomic elements.
-   * Always 1 for numbers
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public int size() {
-    return 1;
-  }
-
-  /**
    * Maps the value of this NumberGene to within the bounds specified by
    * the m_upperBounds and m_lowerBounds instance variables. The value's
    * relative position within the integer range will be preserved within the
@@ -249,17 +156,7 @@ public abstract class NumberGene
    */
   protected abstract void mapValueToWithinBounds();
 
-  /**
-   * Applies a mutation of a given intensity (percentage) onto the atomic
-   * element at given index (NumberGenes only have one atomic element)
-   *
-   * @param index index of atomic element, between 0 and size()-1
-   * @param a_percentage percentage of mutation (greater than -1 and smaller
-   * than 1).
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public abstract void applyMutation(int index, double a_percentage);
-
+  protected Object getInternalValue() {
+    return m_value;
+  }
 }

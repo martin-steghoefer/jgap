@@ -14,7 +14,7 @@ import org.jgap.*;
 
 /**
  * A Gene implementation that supports two possible values (alleles, 1 and 0)
- * with a fixed length of alleles
+ * with a fixed length of alleles.
  * <p>
  * NOTE: Since this Gene implementation only supports two different
  * values (1 and 0), there's only a 50% chance that invocation
@@ -24,15 +24,16 @@ import org.jgap.*;
  * is in use.
  * <p>
  * Partly adapted stuff from the JAGA (Java API for Genetic Algorithms)
- * package (see http://www.jaga.org).
+ * package (see {@link http://www.jaga.org}).
  *
  * @author Klaus Meffert
  * @since 2.0
  */
 public class FixedBinaryGene
+    extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private int m_length;
 
@@ -331,18 +332,6 @@ public class FixedBinaryGene
   }
 
   /**
-   * Executed by the genetic engine when this Gene instance is no
-   * longer needed and should perform any necessary resource cleanup.
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public void cleanup() {
-    // No specific cleanup is necessary for this implementation.
-    // ---------------------------------------------------------
-  }
-
-  /**
    * @return String
    *
    * @author Klaus Meffert
@@ -385,26 +374,6 @@ public class FixedBinaryGene
   }
 
   /**
-   * Retrieves the hash code value of this Gene.
-   *
-   * @return this Gene's hash code.
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public int hashCode() {
-    // If the internal value hasn't been set, return zero. Otherwise,
-    // just return the value's hash code.
-    // ----------------------------------------------------------------
-    if (m_value == null) {
-      return 0;
-    }
-    else {
-      return m_value.hashCode();
-    }
-  }
-
-  /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
    * element at given index
    * @param index index of atomic element, between 0 and size()-1
@@ -432,29 +401,6 @@ public class FixedBinaryGene
       if (getBit(index)) {
         setBit(index, false);
       }
-    }
-  }
-
-  /**
-   * Compares this Gene with the given object and returns true if
-   * the other object is a FixedBinaryGene and has the same value as this
-   * Gene. Otherwise it returns false.
-   *
-   * @param other the object to compare to this Gene for equality.
-   * @return true if this Gene is equal to the given object,
-   *         false otherwise.
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public boolean equals(Object other) {
-    try {
-      return compareTo(other) == 0;
-    }
-    catch (ClassCastException e) {
-      // If the other object isn't a BooleanGene, then we're not equal.
-      // --------------------------------------------------------------
-      return false;
     }
   }
 
@@ -516,5 +462,26 @@ public class FixedBinaryGene
     }
     // Determine int value of binary representation
     return 0;
+  }
+
+  protected Object getInternalValue() {
+    return m_value;
+  }
+
+  /**
+   * Modified hashCode() function to return different hashcodes for differently
+   * ordered genes in a chromosome
+   * @return -4 of no allele set, otherwise value return by BaseGene.hashCode()
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public int hashCode() {
+    if (getInternalValue() == null) {
+      return -4;
+    }
+    else {
+      return super.hashCode();
+    }
   }
 }

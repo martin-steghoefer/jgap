@@ -25,7 +25,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -254,7 +254,7 @@ public class IntegerGene
    * @since 1.0
    */
   protected int compareToNative(Object o1, Object o2) {
-    return ( (Integer) o1).compareTo(o2);
+    return ( (Integer) o1).compareTo((Integer)o2);
   }
 
   /**
@@ -311,6 +311,23 @@ public class IntegerGene
     else {
       int newValue = (int) Math.round(intValue() + range);
       setAllele(new Integer(newValue));
+    }
+  }
+
+  /**
+   * Modified hashCode() function to return different hashcodes for differently
+   * ordered genes in a chromosome
+   * @return -1 if no allele set, otherwise value return by BaseGene.hashCode()
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public int hashCode() {
+    if (getInternalValue() == null) {
+      return -1;
+    }
+    else {
+      return super.hashCode();
     }
   }
 }

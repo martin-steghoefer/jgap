@@ -28,6 +28,7 @@ import org.jgap.*;
  * @since 1.1
  */
 public class StringGene
+    extends BaseGene
     implements Gene {
   //Constants for ready-to-use alphabets or serving as part of concetenation
   public static final String ALPHABET_CHARACTERS_UPPER =
@@ -41,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   private int m_minLength;
 
@@ -103,18 +104,6 @@ public class StringGene
     m_minLength = a_minLength;
     m_maxLength = a_maxLength;
     setAlphabet(a_alphabet);
-  }
-
-  /**
-   * Executed by the genetic engine when this Gene instance is no
-   * longer needed and should perform any necessary resource cleanup.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public void cleanup() {
-    // No specific cleanup is necessary for this implementation.
-    // ---------------------------------------------------------
   }
 
   /**
@@ -317,18 +306,6 @@ public class StringGene
   }
 
   /**
-   * Retrieves the value (allele) represented by this Gene. All values
-   * returned by this class will be String instances.
-   *
-   * @return the String value of this Gene.
-   *
-   * @since 1.1
-   */
-  public Object getAllele() {
-    return m_value;
-  }
-
-  /**
    * Sets the value (allele) of this Gene to the new given value. This class
    * expects the value to be a String instance. If the value is shorter or
    * longer than the minimum or maximum length or any character is not within
@@ -518,49 +495,6 @@ public class StringGene
   }
 
   /**
-   * Compares this Gene with the given object and returns true if
-   * the other object is a Gene of this type and has the same value (allele) as
-   * this Gene. Otherwise it returns false.
-   *
-   * @param other the object to compare to this Gene for equality.
-   * @return true if this Gene is equal to the given object,
-   *         false otherwise.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public boolean equals(Object other) {
-    try {
-      return compareTo(other) == 0;
-    }
-    catch (ClassCastException e) {
-      // If the other object isn't a StringGene, then we're not equal.
-      // -------------------------------------------------------------
-      return false;
-    }
-  }
-
-  /**
-   * Retrieves the hash code value for this StringGene.
-   *
-   * @return this StringGene's hash code.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public int hashCode() {
-    // If our internal String is null, then return zero. Otherwise,
-    // just return the hash code of the String.
-    // -------------------------------------------------------------
-    if (m_value == null) {
-      return 0;
-    }
-    else {
-      return m_value.hashCode();
-    }
-  }
-
-  /**
    * Retrieves the String value of this Gene, which may be more convenient in
    * some cases than the more general getAllele() method.
    *
@@ -679,6 +613,10 @@ public class StringGene
       s = s.substring(0, index) + newValue + s.substring(index + 1);
     }
     setAllele(s);
+  }
+
+  protected Object getInternalValue() {
+    return m_value;
   }
 
 }
