@@ -41,7 +41,7 @@ public class TestOverallPerformanceFitnessFunc
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject: The Chromosome instance to evaluate.
+   * @param a_subject The Chromosome instance to evaluate.
    *
    * @return A positive integer reflecting the fitness rating of the given
    *         Chromosome.
