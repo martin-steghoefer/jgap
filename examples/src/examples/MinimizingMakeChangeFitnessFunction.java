@@ -22,7 +22,7 @@ public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private final int m_targetAmount;
 
@@ -103,6 +103,9 @@ public class MinimizingMakeChangeFitnessFunction
    * @param a_potentialSolution The pontential solution to evaluate.
    * @return The total amount of change (in cents) represented by the
    *         given solution.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public static int amountOfChange(Chromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution, 0);
@@ -121,6 +124,9 @@ public class MinimizingMakeChangeFitnessFunction
    * @param a_position The gene position to evaluate.
    * @return the number of coins represented by the potential solution
    *         at the given gene position.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public static int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
                                            int a_position) {
@@ -135,6 +141,9 @@ public class MinimizingMakeChangeFitnessFunction
    *
    * @param a_potentialsolution The potential solution to evaluate.
    * @return The total number of coins represented by the given Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public static int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
     int totalCoins = 0;
