@@ -20,16 +20,26 @@ import org.jgap.*;
  * @since 2.0
  */
 public class PopulationHistory {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private List populations;
 
   private int m_maxSize;
 
+  /**
+   * Constructor.
+   * @param a_maxSize the maximum number of Population objects to hold, or
+   * zero if there is no limit.
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public PopulationHistory(int a_maxSize) {
     populations = new Vector();
+    if (a_maxSize < 0) {
+      throw new IllegalArgumentException("Maximum size must be greater"
+                                         + " or equal to zero!");
+    }
     m_maxSize = a_maxSize;
   }
 
@@ -49,7 +59,7 @@ public class PopulationHistory {
   public void addPopulation(Population pop) {
     populations.add(0, pop);
     int popSize = populations.size();
-    if (popSize > m_maxSize) {
+    if (m_maxSize != 0 && popSize > m_maxSize) {
       populations.remove(popSize - 1);
     }
   }
@@ -71,7 +81,7 @@ public class PopulationHistory {
   }
 
   /**
-   * Sets the list of populations to the list provided
+   * Sets the list of populations to the list provided.
    * @param populations list of populations to be set
    *
    * @author Klaus Meffert
@@ -80,7 +90,7 @@ public class PopulationHistory {
   public void setPopulations(List populations) {
     this.populations = populations;
     int popSize = populations.size();
-    if (popSize > m_maxSize) {
+    if (m_maxSize != 0 && popSize > m_maxSize) {
       for (int i = m_maxSize; i < popSize; i++) {
         populations.remove(m_maxSize);
       }
