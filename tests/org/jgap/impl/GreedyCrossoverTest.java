@@ -25,7 +25,7 @@ public class GreedyCrossoverTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public GreedyCrossoverTest() {
   }
@@ -302,11 +302,11 @@ public class GreedyCrossoverTest
     // choice is involved in the last step. In this implementation
     // the choice is not random and the last two genes are always
     // returned as 3, 4.
-    // ------------------------------------------------
+    // -----------------------------------------------------------------
     Chromosome must_a = chromosome(new int[] {1, 2, 0, 5, 3, 4});
 
     // this is same as in the literature, the random choice is not involved.
-    // ------------------------------------------------
+    // ---------------------------------------------------------------------
     Chromosome must_b = chromosome(new int[] {4, 1, 2, 0, 5, 3});
 
     cross.operate(b, a);
@@ -377,6 +377,7 @@ public class GreedyCrossoverTest
    * @throws Exception
    *
    * @author Audrius Meskauskas
+   * @since 2.1
    */
   private Chromosome chromosome ( int [] genes ) throws Exception
   {
