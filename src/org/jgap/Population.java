@@ -11,12 +11,17 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
    */
   private List m_chromosomes;
+
+  /**
+   * The fittest Chromosome of the population
+   */
+  private Chromosome m_fittestChromosome;
 
   public Population(Chromosome[] chromosomes) {
     this();
@@ -85,5 +90,18 @@ public class Population {
       result[i] = (Chromosome) m_chromosomes.get(i);
     }
     return result;
+  }
+
+  /**
+   * Sets the fittest Chromosome in the population (the one with the highest
+   * fitness value.
+   * @param a_fittestChromosome the fittest Chromosome of the population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+
+  public void setFittestChromosome(Chromosome a_fittestChromosome) {
+    m_fittestChromosome = a_fittestChromosome;
   }
 }
