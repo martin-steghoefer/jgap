@@ -23,7 +23,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public GenotypeTest() {
   }
@@ -292,6 +292,10 @@ public class GenotypeTest
   public void testEvolve_0() {
     /**@todo implement*/
     /**@todo check for correcctness of method when NaturalSelectors missing*/
+  }
+
+  public void testEvolve_1() {
+    /**@todo implement, test BulkFitnessFunction*/
   }
 
   /**
