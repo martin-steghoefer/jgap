@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 import junit.framework.*;
 
@@ -22,9 +21,8 @@ import junit.framework.*;
  */
 public class CompositeGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -42,21 +40,16 @@ public class CompositeGeneTest
     Gene gene = new CompositeGene();
   }
 
-   /**
-    * Blocked.
-    * @todo Unblock if the nested composite genes are not yet properly
-    * supported
-    * @author Audrius Meskauskas (of blocking this test).
-    * */
+  /**
+   * Ensures that a CompositeGene may be added to a CompositeGene
+   * @author Audrius Meskauskas
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testAddGene_0() {
     CompositeGene gene = new CompositeGene();
-    try {
-      gene.addGene(new CompositeGene(), false);
-      // fail(); // uncomment this to remove the block
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
+    gene.addGene(new CompositeGene(), false);
+    assertEquals(1, gene.size());
   }
 
   public void testAddGene_1() {
@@ -79,17 +72,101 @@ public class CompositeGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddGene_2() {
+    CompositeGene gene = new CompositeGene(new DoubleGene(2, 3));
+    gene.addGene(new DoubleGene(), false);
+    assertEquals(1, gene.size());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddGene_3() {
+    CompositeGene gene = new CompositeGene(new DoubleGene(2, 3));
+    try {
+      gene.addGene(new CompositeGene(), false);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddGene_4() {
+    CompositeGene gene = new CompositeGene();
+    gene.addGene(new CompositeGene(), true);
+    assertEquals(1, gene.size());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddGene_5() {
+    CompositeGene gene = new CompositeGene();
+    CompositeGene gene2 = new CompositeGene();
+    gene.addGene(gene2, true);
+    try {
+      gene.addGene(gene2, false);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Adding two different initial genes with strict parameter set is not
+   * allowed
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddGene_6() {
+    CompositeGene gene = new CompositeGene();
+    gene.addGene(new CompositeGene(), true);
+    try {
+      gene.addGene(new CompositeGene(), true);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Adding an initial CompositeGene twice should be possible, if they are two
+   * newly created instances
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddGene_7() {
+    CompositeGene gene = new CompositeGene();
+    gene.addGene(new CompositeGene(), true);
+    gene.addGene(new CompositeGene(), false);
+  }
+
   public void testToString_0() {
     CompositeGene gene = new CompositeGene();
     Gene newGene1 = new DoubleGene();
     newGene1.setAllele(new Double(47.123d));
     gene.addGene(newGene1, false);
-    assertEquals("("+newGene1.toString()+")", gene.toString());
+    assertEquals("(" + newGene1.toString() + ")", gene.toString());
     Gene newGene2 = new IntegerGene();
     newGene2.setAllele(new Integer(23456));
     gene.addGene(newGene2, false);
-    assertEquals("("+newGene1.toString() + gene.GENE_DELIMITER +
-                 newGene2.toString()+")", gene.toString());
+    assertEquals("(" + newGene1.toString() + gene.GENE_DELIMITER +
+                 newGene2.toString() + ")", gene.toString());
   }
 
   public void testGetAllele_0() {
@@ -230,7 +307,8 @@ public class CompositeGeneTest
     }
   }
 
-  public void testNewGene_0() throws Exception {
+  public void testNewGene_0()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene();
     gene1.addGene(new DoubleGene(2.05d, 7.53d), false);
     gene1.addGene(new DoubleGene(128.35d, 155.90d), false);
@@ -250,7 +328,8 @@ public class CompositeGeneTest
     assertEquals(0, gene2.size());
   }
 
-  public void testPersistentPresentation_0() throws Exception {
+  public void testPersistentPresentation_0()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene();
     Gene gene0 = new DoubleGene(2.05d, 7.53d);
     gene0.setAllele(new Double(7.52d));
@@ -279,8 +358,10 @@ public class CompositeGeneTest
    * @throws Exception
    *
    * @author Audrius Meskauskas
+   * @since 2.0
    */
-  public void testPersistentPresentation_1() throws Exception {
+  public void testPersistentPresentation_1()
+      throws Exception {
     CompositeGene composite1 = new CompositeGene();
     Gene strgene = new DoubleGene(2.05d, 7.53d);
     strgene.setAllele(new Double(7.52d));
@@ -305,7 +386,6 @@ public class CompositeGeneTest
     int stringPosition = composite1.size();
     composite1.addGene(strgene, false);
 
-
     CompositeGene compositeInside = new CompositeGene();
 
     Gene istrgene = new DoubleGene(2.05d, 17.53d);
@@ -329,7 +409,7 @@ public class CompositeGeneTest
     compositeInside.addGene(istrgene, false);
 
     int whereCompositeGene = composite1.size();
-    composite1.addGene( compositeInside );
+    composite1.addGene(compositeInside);
 
     String pres1 = composite1.getPersistentRepresentation();
     CompositeGene gene2 = new CompositeGene();
@@ -341,13 +421,111 @@ public class CompositeGeneTest
 
     // check the string
     StringGene s = (StringGene) gene2.geneAt(stringPosition);
-    assertTrue ( string.equals(s.getAllele()));
+    assertTrue(string.equals(s.getAllele()));
 
     // check also in the composite gene
     CompositeGene cg = (CompositeGene) gene2.geneAt(whereCompositeGene);
     s = (StringGene) cg.geneAt(position2);
 
-    assertTrue (string2.equals(s.getAllele()));
+    assertTrue(string2.equals(s.getAllele()));
   }
- }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentPresentation_2()
+      throws Exception {
+    CompositeGene gene1 = new CompositeGene();
+    gene1.setValueFromPersistentRepresentation(null);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentPresentation_3()
+      throws Exception {
+    CompositeGene gene1 = new CompositeGene();
+    try {
+      gene1.setValueFromPersistentRepresentation("1" +
+                                                 CompositeGene.GENE_DELIMITER +
+                                                 "2");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentPresentation_4()
+      throws Exception {
+    CompositeGene gene1 = new CompositeGene();
+    try {
+      gene1.setValueFromPersistentRepresentation("<1" +
+                                                 CompositeGene.GENE_DELIMITER +
+                                                 "2>");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Tests if removal from empty list returns false no matter what to remove
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testRemoveGeneByIdentity_0() {
+    CompositeGene gene1 = new CompositeGene();
+    assertFalse(gene1.removeGeneByIdentity(gene1));
+    assertFalse(gene1.removeGeneByIdentity(null));
+  }
+
+  static int cleanedUp = 0;
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCleanup_0() {
+    CompositeGene gene = new CompositeGene();
+    CompositeGene gene2 = new CompositeGene() {
+      public void cleanup() {
+        cleanedUp++;
+      }
+    };
+    CompositeGene gene3 = new CompositeGene() {
+      public void cleanup() {
+        cleanedUp++;
+      }
+    };
+    gene.addGene(gene2, true);
+    gene.addGene(gene3, false);
+    gene.cleanup();
+    assertEquals(2, gene.size());
+    assertEquals(2, cleanedUp);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCleanup_1() {
+    CompositeGene gene = new CompositeGene();
+    gene.cleanup();
+    assertEquals(0, gene.size());
+  }
+}
