@@ -25,7 +25,7 @@ import junit.framework.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public PopulationTest() {
   }
@@ -64,7 +64,7 @@ public class PopulationTest extends TestCase {
 
   public void testConstruct_2() {
       Population pop = new Population();
-      this.assertNotNull(pop);
+      assertNotNull(pop);
   }
 
   public void testConstruct_3() {
@@ -74,7 +74,7 @@ public class PopulationTest extends TestCase {
       assertNotNull(pop);
 
       //check size is correct
-      assertEquals(pop.size(), nTot);
+      assertEquals(nTot, pop.size());
   }
 
   public void testAddChromosome_0(){
@@ -83,7 +83,13 @@ public class PopulationTest extends TestCase {
       c.setFitnessValue(45);
       Population p = new Population();
       p.addChromosome(c);
-      assertEquals(p.size(), 1);
+      assertEquals(1,p.size());
+  }
+
+  public void testAddChromosome_1(){
+      Population p = new Population();
+      p.addChromosome(null);
+      assertEquals(0,p.size());
   }
 
   public void testAddChromosomes_0(){
@@ -99,6 +105,38 @@ public class PopulationTest extends TestCase {
       assertEquals(p1.size(), p2.size());
   }
 
+  public void testAddChromosomes_1(){
+      Population p = new Population();
+      p.addChromosomes(null);
+      assertEquals(0,p.size());
+  }
+
+  public void testSetChromosome_0(){
+      Gene g = new DoubleGene();
+      Chromosome c = new Chromosome(g,10);
+
+      Population p = new Population();
+      try {
+        p.setChromosome(0, c);
+        fail();
+      }catch (IndexOutOfBoundsException oex) {
+        ;//this is OK
+      }
+  }
+
+  public void testSetChromosome_1(){
+      Gene g = new DoubleGene();
+      Chromosome c = new Chromosome(g,10);
+
+      Population p = new Population();
+      p.addChromosome(c);
+      Chromosome c2 = new Chromosome(g,20);
+      p.setChromosome(0, c2);
+      assertEquals(1, p.size());
+      assertEquals(p.getChromosome(0),c2);
+      assertFalse(c.equals(c2));
+  }
+
   public void testSetChromosomes_0(){
       List chromosomes = new ArrayList();
       Gene g = null;
@@ -112,7 +150,7 @@ public class PopulationTest extends TestCase {
 
       Population p = new Population();
       p.setChromosomes(chromosomes);
-      this.assertEquals(nTot, p.size());
+      assertEquals(nTot, p.size());
   }
 
   public void testGetChromosomes_0(){
@@ -128,7 +166,7 @@ public class PopulationTest extends TestCase {
 
       Population p = new Population();
       p.setChromosomes(chromosomes);
-      this.assertEquals(chromosomes, p.getChromosomes());
+      assertEquals(chromosomes, p.getChromosomes());
   }
 
   public void testGetChromosome_0(){
@@ -148,7 +186,7 @@ public class PopulationTest extends TestCase {
 
       Population p = new Population();
       p.setChromosomes(chromosomes);
-      this.assertEquals(thechosenone, p.getChromosome(100));
+      assertEquals(thechosenone, p.getChromosome(100));
   }
 
   public void testToChromosomes_0(){

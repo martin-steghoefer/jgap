@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public ChromosomeTest() {
   }
@@ -553,6 +553,24 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
 
+  public void testCompareTo_0_2()
+      throws Exception {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes);
+    chrom2.setCompareApplicationData(true);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    chrom.setCompareApplicationData(true);
+    assertTrue(chrom.compareTo(chrom2) == 0);
+    assertTrue(chrom2.compareTo(chrom) == 0);
+  }
+
   public void testCompareTo_1()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -664,6 +682,31 @@ public class ChromosomeTest
     genes2[1].setAllele(new Boolean(false));
     genes1[1].setAllele(new Boolean(true));
     assertFalse(chrom2.compareTo(chrom) == 0);
+  }
+
+  public void testRandomInitialChromosome_0() throws Exception {
+    try {
+      Chromosome.randomInitialChromosome();
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
+  }
+
+  public void testCleanUp_0() throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    chrom.cleanup();
+  }
+
+  public void testSetCompareApplicationData_0() throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    assertFalse(chrom.isCompareApplicationData());
+    chrom.setCompareApplicationData(true);
+    assertTrue(chrom.isCompareApplicationData());
   }
 }
 
