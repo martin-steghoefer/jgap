@@ -21,6 +21,7 @@ package org.jgap;
 import org.jgap.data.*;
 import org.jgap.distr.*;
 import org.jgap.eval.*;
+import org.jgap.ext.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
 import org.jgap.xml.*;
@@ -41,7 +42,7 @@ public class AllTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public AllTests() {
   }
@@ -53,6 +54,7 @@ public class AllTests
     suite.addTest(AllDistrTests.suite());
     suite.addTest(AllEvalTests.suite());
     suite.addTest(AllEventTests.suite());
+    suite.addTest(AllExtTests.suite());
     suite.addTest(AllImplTests.suite());
     suite.addTest(AllXMLTests.suite());
     return suite;
