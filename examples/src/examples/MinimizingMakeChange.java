@@ -47,7 +47,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -112,7 +112,8 @@ public class MinimizingMakeChange {
     // ------------------------------------------------------------
     conf.setPopulationSize(500);
     // Create random initial population of Chromosomes.
-    // Here we also could read in a previous run via XMLManager.readFile(..)
+    // Here we try to read in a previous run via XMLManager.readFile(..)
+    // for demonstration purpose!
     // ------------------------------------------------
     Genotype population;
 
@@ -131,16 +132,16 @@ public class MinimizingMakeChange {
       population.evolve();
     }
 
+    // Save progress to file. A new run of this example will then be able to
+    // resume where it stopped before!
+
     // represent Genotype as tree with elements Chromomes and Genes
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
     IDataCreators doc2 = builder.representGenotypeAsDocument(population);
 
     // create XML document from generated tree
-    DocumentBuilder m_documentCreator;
-    m_documentCreator = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    Document XMLDoc2 = m_documentCreator.newDocument();
-    DocumentBuilderBase docbuilder = new XMLDocumentBuilder();
-    Document xmlDoc = (Document) docbuilder.buildDocument(doc2, XMLDoc2);
+    XMLDocumentBuilder docbuilder = new XMLDocumentBuilder();
+    Document xmlDoc = (Document) docbuilder.buildDocument(doc2);
     XMLManager.writeFile(xmlDoc, new File("testJGAP.xml"));
 
     // Display the best solution we found.
