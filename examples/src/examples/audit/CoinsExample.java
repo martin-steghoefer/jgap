@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -130,7 +130,7 @@ public class CoinsExample {
      *   + average number of performance improvements for all generations
      */
 
-    int k=0;
+    int permutation=0;
     while (eval.hasNext()) {
 
       // Create random initial population of Chromosomes.
@@ -147,7 +147,7 @@ public class CoinsExample {
           double fitness = population.getFittestChromosome().getFitnessValue();
           if (i % 3 == 0) {
             String s = String.valueOf(i);
-            Number n = eval.getValue("Fitness " + k, s);
+            Number n = eval.getValue("Fitness " + permutation, s);
             double d;
             if (n != null) {
               // calculate historical average
@@ -156,7 +156,7 @@ public class CoinsExample {
             else {
               d = fitness;
             }
-            eval.setValue(d, "Fitness " + k, s);
+            eval.setValue(permutation,run,d, "Fitness " + permutation, s);
           }
         }
       }
@@ -189,7 +189,7 @@ public class CoinsExample {
                          CoinsExampleFitnessFunction.
                          getTotalNumberOfCoins(
           bestSolutionSoFar) + " coins.");
-      k++;
+      permutation++;
     }
 
     // Create chart: fitness values history.
@@ -197,7 +197,7 @@ public class CoinsExample {
 
     // construct JFreeChart Dataset.
     // -----------------------------
-    DefaultKeyedValues2D myDataset = eval.getData();
+    DefaultKeyedValues2D myDataset = eval.calcAvgFitness(-1);//eval.getData();
     DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     for (int ii=0;ii<myDataset.getColumnCount();ii++) {
       for (int jj=0;jj<myDataset.getRowCount();jj++) {
