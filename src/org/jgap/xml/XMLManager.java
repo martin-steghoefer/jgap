@@ -17,24 +17,23 @@
  */
 package org.jgap.xml;
 
-import org.jgap.Gene;
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.Genotype;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.UnsupportedRepresentationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import java.util.*;
+import java.io.*;
+import javax.xml.parsers.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.ArrayList;
-import java.util.List;
+import org.jgap.*;
+import org.w3c.dom.*;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerConfigurationException;
+
+import javax.xml.transform.dom.DOMSource;
+
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.*;
 
 /**
  * The XMLManager performs marshalling of genetic entity instances
@@ -42,14 +41,13 @@ import java.util.List;
  * entities, as well as unmarshalling. All of the methods in this class are
  * static, so no construction is required (or allowed).
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public class XMLManager
 {
-
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     /**
      * Constant representing the name of the genotype XML element tag.
@@ -94,7 +92,9 @@ public class XMLManager
      */
     private static final Object m_lock = new Object();
 
-
+    /**
+     * @since 1.0
+     */
     static
     {
         try
@@ -125,6 +125,7 @@ public class XMLManager
      * @param a_subject The chromosome to represent as an XML document.
      *
      * @return a Document object representing the given Chromosome.
+     * @since 1.0
      */
     public static Document representChromosomeAsDocument( Chromosome a_subject )
     {
@@ -152,6 +153,7 @@ public class XMLManager
      * @param a_subject The genotype to represent as an XML document.
      *
      * @return a Document object representing the given Genotype.
+     * @since 1.0
      */
     public static Document representGenotypeAsDocument( Genotype a_subject )
     {
@@ -181,6 +183,7 @@ public class XMLManager
      *                      NOT be added to the document by this method.
      *
      * @return an Element object representing the given genes.
+     * @since 1.0
      */
     public static Element representGenesAsElement( Gene[] a_geneValues,
                                                    Document a_xmlDocument )
@@ -234,6 +237,7 @@ public class XMLManager
      *                      NOT be added to the document by this method.
      *
      * @return an Element object representing the given Chromosome.
+     * @since 1.0
      */
     public static Element representChromosomeAsElement( Chromosome a_subject,
                                                         Document a_xmlDocument )
@@ -275,6 +279,7 @@ public class XMLManager
      *                      NOT be added to the document by this method.
      *
      * @return an Element object representing the given Genotype.
+     * @since 1.0
      */
     public static Element representGenotypeAsElement( Genotype a_subject,
                                                       Document a_xmlDocument )
@@ -319,6 +324,7 @@ public class XMLManager
      *         of the alleles used in the given XML document.
      * @throws GeneCreationException if there is a problem creating or
      *                                 populating an Gene instance.
+     * @since 1.0
      */
     public static Gene[] getGenesFromElement(
                                Configuration a_activeConfiguration,
@@ -346,9 +352,10 @@ public class XMLManager
 
         if ( geneElements == null )
         {
-            throw new ImproperXMLException(
-                "Unable to build Gene instances from XML Element: " +
-                "'gene' sub-elements not found." );
+          throw new ImproperXMLException(
+              "Unable to build Gene instances from XML Element: " +
+              "'" + GENE_TAG + "'" +
+              " sub-elements not found.");
         }
 
         // For each gene, get the class attribute so we know what class
@@ -451,6 +458,7 @@ public class XMLManager
      *         of the alleles used in the given XML document.
      * @throws GeneCreationException if there is a problem creating or
      *                                 populating an Gene instance.
+     * @since 1.0
      */
     public static Chromosome getChromosomeFromElement(
                                  Configuration a_activeConfiguration,
@@ -518,6 +526,7 @@ public class XMLManager
      *         of the alleles used in the given XML document.
      * @throws GeneCreationException if there is a problem creating or
      *         populating an Gene instance.
+     * @since 1.0
      */
     public static Genotype getGenotypeFromElement( Configuration a_activeConfiguration,
                                                    Element a_xmlElement )
@@ -582,6 +591,7 @@ public class XMLManager
      *         of the alleles used in the given XML document.
      * @throws GeneCreationException if there is a problem creating or
      *         populating an Gene instance.
+     * @since 1.0
      */
     public static Genotype getGenotypeFromDocument(
                                Configuration a_activeConfiguration,
@@ -633,6 +643,7 @@ public class XMLManager
      *         of the alleles used in the given XML document.
      * @throws GeneCreationException if there is a problem creating or
      *         populating an Gene instance.
+     * @since 1.0
      */
     public static Chromosome getChromosomeFromDocument( Configuration a_activeConfiguration,
                                                         Document a_xmlDocument )
@@ -657,4 +668,46 @@ public class XMLManager
 
         return getChromosomeFromElement( a_activeConfiguration, rootElement );
     }
+
+    /**
+     * Reads in an XML file and returns a Document object
+     * @param file the file to be read in
+     * @throws IOException
+     * @throws SAXException
+     * @return Document
+     * @author Klaus Meffert
+     * @since 2.0
+     */
+    public static Document readFile(File file) throws IOException, org.xml.sax.SAXException {
+      return m_documentCreator.parse(file);
+    }
+
+    /**
+     * Writes an XML file from a Document object
+     * @param doc the Document object to be written to file
+     * @param file the file to be written
+     * @throws IOException
+     * @author Klaus Meffert
+     * @since 2.0
+     */
+    public static void writeFile(Document doc, File file) throws IOException {
+         // Use a Transformer for output
+        TransformerFactory tFactory =
+            TransformerFactory.newInstance();
+        Transformer transformer;
+        try {
+          transformer = tFactory.newTransformer();
+        }
+        catch (TransformerConfigurationException tex) {
+          throw new IOException(tex.getMessage());
+        }
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new FileOutputStream(file));
+        try {
+          transformer.transform(source, result);
+        }
+        catch (TransformerException tex) {
+          throw new IOException(tex.getMessage());
+        }
+      }
 }
