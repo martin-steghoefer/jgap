@@ -25,7 +25,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public CrossoverOperatorTest() {
   }
@@ -135,6 +135,60 @@ public class CrossoverOperatorTest
     assertTrue(isChromosomesEqual(population, population2));
   }
 
+  /**
+   * Test with CompositeGene
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
+  public void testOperate_2()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    rand.setNextIntSequence(new int[] {
+                            0, 1, 0, 1, 2});
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(1, 10);
+    Chromosome chrom = new Chromosome(sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    CrossoverOperator op = new CrossoverOperator();
+    Gene cgene1 = new IntegerGene(1, 10);
+    cgene1.setAllele(new Integer(6));
+    CompositeGene compGene = new CompositeGene ();
+    compGene.addGene(cgene1);
+    Gene[] genes1 = new Gene[] {
+        compGene};
+    Chromosome chrom1 = new Chromosome(genes1);
+    Gene cgene2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(8));
+    Gene[] genes2 = new Gene[] {
+        cgene2};
+    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome[] population = new Chromosome[] {
+        chrom1, chrom2};
+    List chroms = new Vector();
+    Gene gene1 = new IntegerGene(1, 10);
+    gene1.setAllele(new Integer(5));
+    chroms.add(gene1);
+    Gene gene2 = new IntegerGene(1, 10);
+    gene2.setAllele(new Integer(7));
+    chroms.add(gene2);
+    Gene gene3 = new IntegerGene(1, 10);
+    gene3.setAllele(new Integer(4));
+    chroms.add(gene3);
+    op.operate(new Population(population), chroms);
+    assertEquals(5, chroms.size());
+    Chromosome target = (Chromosome) chroms.get(4);
+    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
+    target = (Chromosome) chroms.get(3);
+    CompositeGene result = (CompositeGene)target.getGene(0);
+    assertEquals(8, ( (Integer) ((Vector)result.getAllele()).get(0)).intValue());
+  }
+
   public static boolean isChromosomesEqual(Chromosome[] list1,
                                            Chromosome[] list2) {
     if (list1 == null) {
@@ -164,4 +218,6 @@ public class CrossoverOperatorTest
       }
     }
   }
+
+  /*@todo check if working with CompositeGene*/
 }
