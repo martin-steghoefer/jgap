@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class TestOverallPerformance {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -113,34 +113,9 @@ public class TestOverallPerformance {
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
     }
-    // Display the best solution we found.
-    // -----------------------------------
-    Chromosome bestSolutionSoFar = population.getFittestChromosome();
-    /*
-        System.out.println("The best solution contained the following: ");
-        System.out.println("\t" +
-                           TestOverallPerformanceFitnessFunc.
-                           getNumberOfCoinsAtGene(
-            bestSolutionSoFar, 0) + " quarters.");
-        System.out.println("\t" +
-                           TestOverallPerformanceFitnessFunc.
-                           getNumberOfCoinsAtGene(
-            bestSolutionSoFar, 1) + " dimes.");
-        System.out.println("\t" +
-                           TestOverallPerformanceFitnessFunc.
-                           getNumberOfCoinsAtGene(
-            bestSolutionSoFar, 2) + " nickels.");
-        System.out.println("\t" +
-                           TestOverallPerformanceFitnessFunc.
-                           getNumberOfCoinsAtGene(
-            bestSolutionSoFar, 3) + " pennies.");
-        System.out.println("For a total of " +
-                           TestOverallPerformanceFitnessFunc.amountOfChange(
-            bestSolutionSoFar) + " cents in " +
-                           TestOverallPerformanceFitnessFunc.
-                           getTotalNumberOfCoins(
-            bestSolutionSoFar) + " coins.");
-     */
+    // Determine the best solution we found.
+    // -------------------------------------
+    population.getFittestChromosome();
   }
 
   /**
