@@ -60,6 +60,12 @@ public class Chromosome implements Comparable, Cloneable, Serializable
      */
     protected int m_fitnessValue = -1;
 
+    /**
+     * Stores the hash-code of this Chromosome so that it doesn't need
+     * to be recalculated each time.
+     */
+    private int m_hashCode = 0;
+
 
     /**
      * Constructs a Chromosome of the given size separate from any specific
@@ -480,7 +486,20 @@ public class Chromosome implements Comparable, Cloneable, Serializable
      */
     public int hashCode()
     {
-        return getFitnessValue();
+        // Take the hash codes of the genes and XOR them all together.
+        // I'm not really sure how effective this is, but I notice that's
+        // what the java.lang.Long class does (albeit with only two
+        // hashcode values).
+        // --------------------------------------------------------------
+        if( m_hashCode == 0 )
+        {
+            for( int i = 0; i < m_genes.length; i++ )
+            {
+                m_hashCode ^= m_genes[ i ].hashCode();
+            }
+        }
+
+        return m_hashCode;
     }
 
 
@@ -571,6 +590,7 @@ public class Chromosome implements Comparable, Cloneable, Serializable
         // First, reset our internal state.
         // --------------------------------
         m_fitnessValue = -1;
+        m_hashCode = 0;
         m_isSelectedForNextGeneration = false;
 
         // If a ChromosomePool is setup in the active configuration, then
