@@ -21,7 +21,7 @@ public class AllBaseTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public AllBaseTests() {
   }
@@ -31,6 +31,7 @@ public class AllBaseTests
     suite.addTest(ChromosomeTest.suite());
     suite.addTest(ConfigurationTest.suite());
     suite.addTest(DefaultFitnessEvaluatorTest.suite());
+    suite.addTest(DeltaFitnessEvaluatorTest.suite());
     suite.addTest(FitnessFunctionTest.suite());
     suite.addTest(GenotypeTest.suite());
     suite.addTest(PopulationTest.suite());
