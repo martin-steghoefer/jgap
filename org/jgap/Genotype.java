@@ -24,8 +24,8 @@ import java.util.*;
 
 
 /**
- * Genotypes represent fixed-length collections of Chromosomes.
- * As an instance of a genotype is evolved, all of its
+ * Genotypes represent fixed-length collections or "populations" of
+ * Chromosomes. As an instance of a genotype is evolved, all of its
  * Chromosomes are also evolved.
  *
  * @author Neil Rotstan (neil at bluesock.org)
