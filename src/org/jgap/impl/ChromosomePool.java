@@ -30,10 +30,15 @@ import org.jgap.Gene;
  * @since 1.0
  */
 public class ChromosomePool {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
+
   /**
    * The internal pool in which the Chromosomes are stored.
    */
   private Pool m_chromosomePool;
+
   /**
    * Constructor.
    */
