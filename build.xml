@@ -11,6 +11,7 @@
     <fileset dir="${lib}">
       <include name="junit-addons-1.4.jar"/>
       <include name="junit3.8.1.jar"/>
+      <include name="jeksparser.jar"/>
     </fileset>
     <pathelement path="${classDir}"/>
   </path>
