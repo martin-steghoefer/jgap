@@ -38,7 +38,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -621,8 +621,8 @@ public class Configuration {
   /**
    * Sets the ChromosomePool that is to be associated with this
    * configuration. The ChromosomePool is used to pool discarded Chromosome
-   * instances so that they may be recycled later, thereby memory and the
-   * time to construct them from scratch. The presence of a ChromosomePool
+   * instances so that they may be recycled later, thereby saving memory and
+   * the time to construct them from scratch. The presence of a ChromosomePool
    * is optional. If none exists, then a new Chromosome will be constructed
    * each time one is needed.
    *
@@ -633,8 +633,7 @@ public class Configuration {
    * @since 1.0
    */
   public void setChromosomePool(ChromosomePool a_chromosomePoolToSet)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     m_chromosomePool = a_chromosomePoolToSet;
   }
