@@ -24,7 +24,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   public MutationOperatorTest() {
   }
@@ -189,6 +189,23 @@ public class MutationOperatorTest
     mutOp.operate(pop, pop.getChromosomes());
     assertEquals(2, pop.getChromosomes().size());
   }
+
+  /**
+   * Following should be possible without exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testOperate_6()
+       {
+    MutationOperator mutOp = new MutationOperator(0);
+    mutOp.setMutationRateCalc(null);
+    mutOp.operate(null, null);
+    /**@todo ensure that nothing mutated*/
+  }
+
+  /**@todo test against CompositeGene*/
+
 }
 
 class TestFitnessFunction
@@ -202,5 +219,4 @@ class TestFitnessFunction
     //result does not matter here
     return 1.000000d;
   }
-  /**@todo test against CompositeGene*/
 }

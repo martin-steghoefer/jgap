@@ -25,9 +25,13 @@ public class GreedyCrossoverTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public GreedyCrossoverTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -55,6 +59,7 @@ public class GreedyCrossoverTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
     GreedyCrossover op = new GreedyCrossover();
+    op.ASSERTIONS = true;
     op.setStartOffset(0);
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
@@ -108,6 +113,7 @@ public class GreedyCrossoverTest
     conf.setPopulationSize(6);
 
     GreedyCrossover op = new GreedyCrossover();
+    op.ASSERTIONS = true;
     op.setStartOffset(1);
 
     Gene cgene1 = new IntegerGene(1, 10);
@@ -154,6 +160,7 @@ public class GreedyCrossoverTest
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     GreedyCrossover op = new GreedyCrossover();
+    op.ASSERTIONS = true;
 
     Gene sampleGene = new IntegerGene(1, 10);
     Chromosome chrom = new Chromosome(sampleGene, 3);
@@ -204,6 +211,7 @@ public class GreedyCrossoverTest
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     GreedyCrossover op = new GreedyCrossover();
+    op.ASSERTIONS = true;
     op.setStartOffset(0);
 
     Gene sampleGene = new IntegerGene(1, 10);
@@ -290,6 +298,7 @@ public class GreedyCrossoverTest
       }
     };
 
+    cross.ASSERTIONS = true;
     cross.setStartOffset(0);
 
     Chromosome a =
@@ -326,6 +335,7 @@ public class GreedyCrossoverTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     GreedyCrossover op = new GreedyCrossover();
+    op.ASSERTIONS = true;
     conf.addGeneticOperator(op);
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
@@ -389,4 +399,19 @@ public class GreedyCrossoverTest
       return new Chromosome (ig);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testStartoffset_0() {
+    GreedyCrossover op = new GreedyCrossover();
+    assertEquals(1,op.getStartOffset());
+    op.setStartOffset(2);
+    assertEquals(2,op.getStartOffset());
+    op.setStartOffset(1);
+    assertEquals(1,op.getStartOffset());
+    op.setStartOffset(0);
+    assertEquals(0,op.getStartOffset());
+
+  }
 }
