@@ -55,7 +55,7 @@ public class CompositeGene
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     /**
      * Represents the delimiter that is used to separate genes in the
@@ -232,7 +232,7 @@ public class CompositeGene
             }
             catch (Exception ex)
             {
-                throw new UnsupportedRepresentationException (ex.getMessage());
+                throw new UnsupportedRepresentationException (ex.getCause().getMessage());
             }
 
         }
