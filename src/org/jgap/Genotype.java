@@ -36,15 +36,17 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The current active Configuration instance.
+   * @since 1.0
    */
   transient protected Configuration m_activeConfiguration;
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
+   * @since 2.0
    */
   protected Population m_population;
 
@@ -57,6 +59,7 @@ public class Genotype
    * to the NaturalSelector so that it can choose which Chromosomes will
    * go on to the next generation and which will be discarded. It is wiped
    * clean after each cycle of evolution.
+   * @since 1.0
    */
   transient protected List m_workingPool;
 
@@ -95,10 +98,16 @@ public class Genotype
   }
 
   /**
+   * Constructs a new Genotype instance with the given array of
+   * Chromosomes and the given active Configuration instance. Note
+   * that the Configuration object must be in a valid state
+   * when this method is invoked, or a InvalidconfigurationException
+   * will be thrown.
    *
    * @param a_activeConfiguration Configuration
    * @param a_population Population
    * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -121,6 +130,7 @@ public class Genotype
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.1
+   * @deprecated use Genotype(Configuration, Population, FitnessEvaluator) instead
    */
   public Genotype(Configuration a_activeConfiguration,
                   Chromosome[] a_initialChromosomes,
@@ -130,6 +140,20 @@ public class Genotype
          a_fitnessEvaluator);
   }
 
+  /**
+   * Same as constructor without parameter of type FitnessEvaluator.
+   * Additionally a specific fitnessEvaluator can be specified here. See
+   * interface class FitnessEvaluator for details.
+   * @param a_activeConfiguration The current active Configuration object.
+   * @param a_initialChromosomes The Chromosome population to be
+   *                             managed by this Genotype instance.
+   * @param a_fitnessEvaluator a specific fitness value evaluator
+   * @throws InvalidConfigurationException
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Genotype(Configuration a_activeConfiguration,
                   Population a_population,
                   FitnessEvaluator a_fitnessEvaluator)
