@@ -15,12 +15,14 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package examples;
+package examples.salesman;
 
-import org.jgap.*;
 import org.jgap.impl.IntegerGene;
 import org.jgap.impl.StockRandomGenerator;
-import org.jgap.impl.salesman.*;
+import org.jgap.impl.Salesman;
+import org.jgap.Chromosome;
+import org.jgap.Gene;
+import org.jgap.RandomGenerator;
 
 
 /**

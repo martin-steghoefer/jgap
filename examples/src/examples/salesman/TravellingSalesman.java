@@ -17,11 +17,12 @@
  */
 package examples.salesman;
 
-import org.jgap.*;
 import org.jgap.impl.IntegerGene;
 import org.jgap.impl.StockRandomGenerator;
-import org.jgap.impl.salesman.*;
-import org.jgap.impl.*;
+import org.jgap.impl.Salesman;
+import org.jgap.Chromosome;
+import org.jgap.Gene;
+import org.jgap.RandomGenerator;
 
 
 /**
