@@ -1,12 +1,15 @@
 2.2
 ----------
+* Added example: Formula Finder
 * Improved Genotype.evolve
 * Fixed bug with BulkFitnessFunction in Genotype.evolve
+* Fixed bug with counting NaturalSelectors in Configuration 
 * Removed variable m_workingPool in class Genotype
 * Introduced generation number in class Configuration.
   It is incremented automatically in Genotype.evolve()
 * Added javadocs for salesman related classes
 * Simplified tests for WeightedRouletteSelector
+* Added tests for Configuration exposing a previous bug
 * Fixed an error in GaussianRandomGenerator
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request
