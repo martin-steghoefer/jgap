@@ -38,63 +38,76 @@ import java.util.*;
  *
  * @author Neil Rotstan (neil at bluesock.org)
  */
-public class WeightedRouletteSelector implements NaturalSelector {
-  private HashMap population = new HashMap();
+public class WeightedRouletteSelector implements NaturalSelector 
+{
+  private HashMap wheel = new HashMap();
   private long totalInstances = 0;
 
 
   public synchronized void add(Configuration gaConf, Chromosome chromosome,
-                               long fitness) {
-    if(population.containsKey(chromosome)) {
-      ((Counter) population.get(chromosome)).increment(fitness);
+                               long fitness) 
+  {
+    if (wheel.containsKey(chromosome)) 
+    {
+      ((Counter) wheel.get(chromosome)).increment(fitness);
     }
-    else {
-      population.put(chromosome, new Counter(fitness));
+    else 
+    {
+      wheel.put(chromosome, new Counter(fitness));
     }
 
     totalInstances += fitness;
   }
 
  
-  public synchronized Chromosome[] select(Configuration gaConf, int howMany) {
+  public synchronized Chromosome[] select(Configuration gaConf, int howMany) 
+  {
     RandomGenerator generator = gaConf.getRandomGenerator();
     Chromosome[] selections = new Chromosome[howMany];
-    long[] selectedIndices = new long[howMany];
-
-    for(int i = 0; i < howMany; i++) {
-      selectedIndices[i] = generator.nextLong() % totalInstances;
-    }
-
-    Arrays.sort(selectedIndices);
-
-    Iterator iterator = population.entrySet().iterator();
-    int currentSelection = 0;
-    int currentIndex = 0;
-    long currentCount = 0;
-
-    Chromosome currentChromosome;
- 
-    while(iterator.hasNext() && currentIndex < selectedIndices.length) {
-      Map.Entry chromosomeEntry = (Map.Entry) iterator.next(); 
-      currentChromosome = (Chromosome) chromosomeEntry.getKey();
-
-      currentCount += ((Counter) chromosomeEntry.getValue()).getCount();
-
-      while(currentIndex < selectedIndices.length &&
-            currentCount >= selectedIndices[currentIndex]) {
-        selections[currentSelection] = currentChromosome;
-
-        currentSelection++;
-        currentIndex++;
-      }
+    
+    for ( int i = 0; i < howMany; i++ )
+    {
+      selections[i] = spinWheel(generator);
     }
 
     return selections;
   }
 
+  private Chromosome spinWheel(RandomGenerator generator) 
+  {
+    long selectedSlot = Math.abs(generator.nextLong() % totalInstances);
+ 
+    Iterator iterator = wheel.entrySet().iterator();
+    int currentSlot = 0;
+    while( iterator.hasNext() )
+    {
+      Map.Entry chromosomeEntry = (Map.Entry) iterator.next();
+      Chromosome chromo = (Chromosome) chromosomeEntry.getKey();
+      Counter chromoCounter = (Counter) chromosomeEntry.getValue(); 
+       
+      currentSlot += chromoCounter.getCount();
+      long fitness = chromoCounter.getStartCount();
 
-  public synchronized void empty() {
-    population.clear();
+      if ( currentSlot > selectedSlot)
+      {
+        ((Counter)wheel.get(chromo)).decrement(fitness);  
+        
+        if (((Counter)chromosomeEntry.getValue()).getCount() <= 0 )
+          wheel.remove( chromo );
+        
+        totalInstances -= fitness;
+        return chromo;
+      }
+    } 
+
+    throw new RuntimeException( "Logic Error. This code should  never " +
+                                "be reached. Please report this to the " +
+                                "jgap team: SelectedSlot exceeded max value." );
+  }
+
+  public synchronized void empty() 
+  {
+    wheel.clear();
     totalInstances = 0;
   }
 }  
@@ -102,9 +115,10 @@ public class WeightedRouletteSelector implements NaturalSelector {
 
 class Counter {
   private long count;
-
+  private long startCount;
 
   public Counter(long initialCount) {
+    startCount = initialCount;
     count = initialCount;
   }
 
@@ -113,6 +127,10 @@ class Counter {
     this(0);
   }
 
+
+  public long getStartCount() {
+    return startCount;
+  }
 
   public void increment() {
     count++;
@@ -123,6 +141,9 @@ class Counter {
     count += howMany;
   }
 
+  public void decrement(long howMany) {
+    count -= howMany;
+  }
 
   public long getCount() {
     return count;
