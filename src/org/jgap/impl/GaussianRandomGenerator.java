@@ -23,17 +23,12 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
 
   private Random rn;
-
-  /**
-   * Mean of the gaussian deviation
-   */
-  private double m_mean;
 
   /**
    * Standard deviation of the gaussian deviation
@@ -59,10 +54,6 @@ public class GaussianRandomGenerator
    */
   private void init() {
     rn = new Random();
-  }
-
-  public void setGaussianMean(double a_mean) {
-    m_mean = a_mean;
   }
 
   public void setGaussianStdDeviation(double a_standardDeviation) {
