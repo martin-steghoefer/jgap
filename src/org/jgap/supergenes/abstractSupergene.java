@@ -47,10 +47,29 @@ import java.util.TreeSet;
  * isValid methods.
  */
 
-public abstract class abstractSupergene implements Supergene, Serializable {
+public abstract class abstractSupergene implements Supergene, Serializable
+ {
 
     /** String containing the CVS revision. Read out via reflection!*/
     final static String CVS_REVISION = "0.0.1 alpha-explosive";
+
+    /**
+     * This field separates gene class name from
+     * the gene persistent representation string.
+     */
+    public final static String GENE_DELIMITER = "#";
+    /**
+     * Represents the heading delimiter that is used to separate genes in the
+     * persistent representation of CompositeGene instances.
+     */
+    public final static String GENE_DELIMITER_HEADING = "<";
+
+    /**
+     * Represents the closing delimiter that is used to separate genes in the
+     * persistent representation of CompositeGene instances.
+     */
+    public final static String GENE_DELIMITER_CLOSING = ">";
+
 
     /** Holds the genes of this supergene. */
     private Gene[] m_genes;
@@ -295,37 +314,81 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * (nested) supergenes in this supergene.
      */
     public String getPersistentRepresentation()
-      throws UnsupportedOperationException {
+     throws  UnsupportedOperationException {
         StringBuffer b = new StringBuffer();
+
+        Gene gene;
         for (int i = 0; i < m_genes.length; i++) {
-          b.append(GSTART);
-          b.append(encode(m_genes[i].getPersistentRepresentation()));
-          b.append(GEND);
+          gene = m_genes[i];
+          b.append(GENE_DELIMITER_HEADING);
+          b.append(
+           encode
+           (
+            gene.getClass().getName()+
+            GENE_DELIMITER+
+            gene.getPersistentRepresentation())
+           );
+          b.append(GENE_DELIMITER_CLOSING);
         }
         return b.toString();
     }
 
     /**
-     * Sets the value and internal state of this Gene from the string
-     * representation returned by a previous invocation of the
-     * getPersistentRepresentation() method.
-     * Calls getPersistentRepresentation() for all Supergene components.
-     * Supports nested supergenes.
+     * See interface Gene for description
+     * @param a_representation the string representation retrieved from a
+     *        prior call to the getPersistentRepresentation() method.
+     *
+     * @throws UnsupportedRepresentationException
+     *
+     * @author Audrius Meskauskas
+     * @since 1.1
      */
-    public void setValueFromPersistentRepresentation (String a_representation)
-    throws UnsupportedOperationException, UnsupportedRepresentationException {
+    public void setValueFromPersistentRepresentation(String a_representation)
+      throws UnsupportedRepresentationException {
+      if (a_representation != null) {
+        try {
+            /** Remove the old content */
+            ArrayList r = split(a_representation);
+            Iterator iter = r.iterator();
+            m_genes = new Gene [r.size()];
 
-        ArrayList r = split(a_representation);
-        if (r.size()!=m_genes.length) throw new
-         UnsupportedRepresentationException("Supergene size, "+m_genes.length+
-          " mismatch the record number, "+r.size());
+            StringTokenizer st;
+            String clas;
+            String representation;
+            String g;
+            Gene gene;
 
-        for (int i = 0; i < m_genes.length; i++) {
-            m_genes[i].setValueFromPersistentRepresentation(
-             (String) r.get(i));
+           for (int i = 0; i < m_genes.length; i++)
+            {
+                g = decode ((String) iter.next());
+                st = new StringTokenizer(g, GENE_DELIMITER);
+                if (st.countTokens()!=2)
+                 throw new UnsupportedRepresentationException("In "+g+", "+
+                  "expecting two tokens, separated by "+GENE_DELIMITER);
+                clas = st.nextToken();
+                representation = st.nextToken();
+                gene = createGene(clas, representation);
+                m_genes [i] = gene;
+            }
         }
-
+        catch (Exception ex) {
+          ex.printStackTrace();
+          throw new UnsupportedRepresentationException(ex.getCause().
+              getMessage());
+        }
+      }
     }
+
+    /** Creates a new instance of gene. */
+    protected Gene createGene(String a_geneClassName,
+     String a_persistentRepresentation) throws Exception
+     {
+          Class geneClass = Class.forName (a_geneClassName);
+          Gene gene = (Gene) geneClass.newInstance ();
+          gene.setValueFromPersistentRepresentation (a_persistentRepresentation);
+          return gene;
+     }
+
 
     /** Calls cleanup() for each subgene. */
     public void cleanup() {
@@ -441,4 +504,19 @@ public abstract class abstractSupergene implements Supergene, Serializable {
           }
          return a;
        }
+
+    /** Append a new gene to the gene array. */
+    public void addGene(Gene g)
+     {
+         if (m_genes == null)
+                 m_genes = new Gene [] { g };
+          else
+              {
+                 Gene [] genes = new Gene [m_genes.length+1];
+                 System.arraycopy(m_genes, 0, genes, 0, m_genes.length);
+                 genes [m_genes.length] = g;
+                 m_genes = genes;
+              }
+
+     }
 }
