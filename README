@@ -35,9 +35,9 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP 1.0 was compiled and tested with Java 1.4 on Linux and Mac OS X,
-although the authors believe that Java 1.2 on any platform should be
-sufficient for its use.
+JGAP 1.0 was compiled and tested with Java 1.4 on Linux, Mac OS X,
+and Windows XP although the authors believe that Java 1.2 on any
+platform should be sufficient for its use.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
