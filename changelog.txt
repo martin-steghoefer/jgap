@@ -2,6 +2,7 @@
 ----------
 * Fixed error in deprecated method 
   Configuration.getNaturalSelector()
+* Fixed error in method FixedBinaryGene.setToRandomValue
 * Improved method Chromosome.cleanup()
 * Provided javadocs for packages forgotten before
 * Introduced abstract base class for all org.jgap.Gene
