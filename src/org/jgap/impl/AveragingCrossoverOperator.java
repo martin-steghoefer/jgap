@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -47,9 +47,24 @@ public class AveragingCrossoverOperator
   private RandomGenerator crossoverGenerator;
 
   /**
+   * The current crossover rate used by this crossover operator.
+   */
+  protected int m_crossoverRate;
+
+  /**
    * Cache for alreadycrandomized loci for crossing over
    */
   private Map loci;
+
+  /**
+   * Calculator for dynamically determining the crossover rate. If set to
+   * null the value of m_crossoverRate will be used instead.
+   */
+  private IUniversalRateCalculator m_crossoverRateCalc;
+
+  private void init() {
+    loci = new Hashtable();
+  }
 
   /**
    * Using the same random generator for randomizing the loci for crossing
@@ -59,7 +74,9 @@ public class AveragingCrossoverOperator
    * @since 2.0
    */
   public AveragingCrossoverOperator() {
-    this(null);
+    init();
+    crossoverGenerator = null;
+    m_crossoverRate = 2;
   }
 
   /**
@@ -71,8 +88,35 @@ public class AveragingCrossoverOperator
    * @since 2.0
    */
   public AveragingCrossoverOperator(RandomGenerator generatorForAveraging) {
+    init();
     crossoverGenerator = generatorForAveraging;
-    loci = new Hashtable();
+    m_crossoverRate = 2;
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with a specified
+   * crossover rate calculator, which results in dynamic crossover being turned
+   * on.
+   * @param a_crossoverRateCalculator calculator for dynamic crossover rate
+   *        computation
+   *
+   * @author Klaus Meffert (copied from CrossoverOperator)
+   * @since 2.0
+   */
+  public AveragingCrossoverOperator(IUniversalRateCalculator a_crossoverRateCalculator) {
+    this();
+    setCrossoverRateCalc(a_crossoverRateCalculator);
+  }
+
+  /**
+   * Sets the crossover rate calculator
+   * @param a_crossoverRateCalculator The new calculator
+   *
+   * @author Klaus Meffert  (copied from CrossoverOperator)
+   * @since 2.0
+   */
+  private void setCrossoverRateCalc(IUniversalRateCalculator a_crossoverRateCalculator){
+      m_crossoverRateCalc = a_crossoverRateCalculator;
   }
 
   /**
@@ -91,7 +135,15 @@ public class AveragingCrossoverOperator
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-    int numCrossovers = a_population.size() / 2;
+    // Work out the number of crossovers that should be performed
+    int numCrossovers = 0;
+    if (m_crossoverRateCalc == null){
+        numCrossovers = a_population.size() / m_crossoverRate;
+    }
+    else{
+        numCrossovers = a_population.size() / m_crossoverRateCalc.calculateCurrentRate();
+    }
+
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     if (crossoverGenerator == null) {
       crossoverGenerator = generator;
