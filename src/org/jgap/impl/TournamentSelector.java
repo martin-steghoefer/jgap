@@ -34,7 +34,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -91,7 +91,7 @@ public class TournamentSelector
       // choose [tournament size] individuals from the population at random
       tournament.clear();
       for (int j = 0; j < m_tournament_size; j++) {
-        k = rn.nextInt(size - 1);
+        k = rn.nextInt(size);
         tournament.add(m_chromosomes.get(k));
       }
       Collections.sort(tournament, m_fitnessValueComparator);
