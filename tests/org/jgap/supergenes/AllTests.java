@@ -19,10 +19,9 @@ public class AllTests
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
-    suite.addTestSuite(org.jgap.supergenes.testSupergeneInternalParser.class);
-    suite.addTestSuite(org.jgap.supergenes.
-                      testSupergenePersistentRepresentation.class);
-    suite.addTestSuite(org.jgap.supergenes.testSupergeneSampleApplication.class);
+    suite.addTestSuite(org.jgap.supergenes.SupergeneInternalParserTest.class);
+    suite.addTestSuite(org.jgap.supergenes.SupergenePersistentRepresentationTest.class);
+    suite.addTestSuite(org.jgap.supergenes.SupergeneSampleApplicationTest.class);
     return suite;
   }
 }
