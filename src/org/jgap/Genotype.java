@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * The current active Configuration instance.
@@ -481,12 +481,7 @@ public class Genotype
       int m_single_selection_size = m_population_size / selectorSize;
 
       Population m_new_population;
-//      if (selectorSize > 1) {
         m_new_population = new Population(m_population_size);
-//      }
-//      else {
-//       m_new_population = null;
-//      }
 
       NaturalSelector selector;
       // Repopulate the population of chromosomes with those selected
@@ -497,35 +492,18 @@ public class Genotype
         selector = m_activeConfiguration.getNaturalSelector(
             processBeforeGeneticOperators, i);
 
-        // Add the chromosomes pool to the natural selector
-        // (of type BestChromosomesSelector, WeightedRouletteSelector...).
-        // ----------------------------------------------------------------
-//        Iterator iterator1 = m_population.iterator();
-//        while (iterator1.hasNext()) {
-//          Chromosome currentChromosome = (Chromosome) iterator1.next();
-//          selector.add(currentChromosome);
-//        }
-
         if (i == selectorSize - 1 && i > 0) {
           // Ensure the last NaturalSelector adds the remaining Chromosomes
           // --------------------------------------------------------------
-//          m_single_selection_size = m_population_size - m_new_population.size();
           m_single_selection_size = m_population_size - m_population.size();
         }
-        m_single_selection_size = m_population_size;/**@todo obiges löschen*/
+        else {
+          m_single_selection_size = m_population_size;
+        }
 
         // Do selection of Chromosomes
         // ---------------------------
-        if (selectorSize > 1) {
-          /**@todo OK to input the chroms to be selected from instead of using
-           * method add? */
-          selector.select(m_single_selection_size,  m_population, m_new_population);
-        }
-        else {
-          // Optimized procedure for single NaturalSelector.
-          // -----------------------------------------------
-          selector.select(m_single_selection_size, m_population, m_new_population);
-        }
+        selector.select(m_single_selection_size, m_population, m_new_population);
         // Clean up the natural selector.
         // ------------------------------
         selector.empty();
@@ -533,10 +511,6 @@ public class Genotype
 
       m_population = new Population();
       m_population.addChromosomes(m_new_population);
-//      m_new_population.getChromosomes().clear();
-//      if (selectorSize > 1) {
-//        m_population = m_new_population;
-//      }
     }
 
   }
