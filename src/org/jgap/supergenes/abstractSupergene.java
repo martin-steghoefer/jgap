@@ -38,6 +38,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.IOException;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /** Supergene implementation, supporting the most of the methods, except
@@ -51,7 +53,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     final static String CVS_REVISION = "0.0.1 alpha-explosive";
 
     /** Holds the genes of this supergene. */
-    private Gene[] genes;
+    private Gene[] m_genes;
 
     /**
      * Get the array of genes - components of this supergene.
@@ -59,14 +61,28 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      */
     public Gene[] getGenes()
      {
-         return genes;
+         return m_genes;
      }
+
+     /**
+      * Returns the Gene at the given index (locus) within the Chromosome. The
+      * first gene is at index zero and the last gene is at the index equal to
+      * the size of this Chromosome - 1.
+      *
+      * @param a_desiredLocus: The index of the gene value to be returned.
+      * @return The Gene at the given index.
+      */
+     public Gene getGene(int a_index)
+      {
+          return m_genes[a_index];
+      };
+
 
     /** Constructs abstract supergene with the given gene list.
      * @param a_genes array of genes for this Supergene
      */
     public abstractSupergene(Gene [] a_genes) {
-        genes = a_genes;
+        m_genes = a_genes;
     }
 
     /**
@@ -77,7 +93,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * constructor need not (and cannot) assign the private
      * <code>genes</code> array.
      */
-    protected abstractSupergene() {
+    public abstractSupergene() {
     }
 
 
@@ -100,16 +116,16 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * abstract supergene will be instantiated
      * (not the instance of abstractSupergene itself. */
     public Gene newGene(Configuration a_activeConfiguration) {
-        Gene [] g = new Gene[genes.length];
-        for (int i = 0; i < genes.length; i++) {
-            g[i] = genes[i].newGene(a_activeConfiguration);
+        Gene [] g = new Gene[m_genes.length];
+        for (int i = 0; i < m_genes.length; i++) {
+            g[i] = m_genes[i].newGene(a_activeConfiguration);
         }
 
         try {
             abstractSupergene age =
                 (abstractSupergene) getClass ().newInstance ();
 
-            age.genes = g;
+            age.m_genes = g;
             return age;
         }
         catch (Exception ex) {
@@ -123,7 +139,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     /** Maximal number of retries for applyMutation and setToRandomValue.
      * If the valid supergen cannot be created after this number of iterations,
      * the error message is printed and the unchanged instance is returned. */
-    public static int MAX_RETRIES = 1000000;
+    public static int MAX_RETRIES = 1000;
 
     /**
      * Applies a mutation of a given intensity (percentage) onto the gene
@@ -134,27 +150,39 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      */
     public void applyMutation(int index, double a_percentage) {
 
+        // Return immediately the current value is found in
+        // the list of immutable alleles for this position.
+        // ---------------------------------------------------
+        if ( index<m_immutable.length )
+         if ( m_immutable [index] !=null )
+          {
+           synchronized (m_immutable)
+            {
+              if ( m_immutable [index] .contains(this) ) return;
+            }
+          };
+
+        if ( !isValid() ) throw new Error("Should be valid on entry");
         try {
             /** Get the old value for backup using serialization */
             ByteArrayOutputStream bout = new ByteArrayOutputStream ();
             ObjectOutputStream oout = new ObjectOutputStream (bout);
-            oout.writeObject (genes[index]);
+            oout.writeObject (m_genes[index]);
             oout.close ();
-
-            ObjectInputStream backup = new ObjectInputStream (new
-                ByteArrayInputStream (bout.toByteArray ()));
-            backup.mark(bout.size());
+            byte [] boa = bout.toByteArray();
 
             for (int i = 0; i < MAX_RETRIES; i++) {
-                genes[i].applyMutation (0, a_percentage);
-                if (isValid ()) {
-                    return;
-                }
-                else {
-                  backup.reset();
-                  genes [i] = (Gene) backup.readObject();
-                }
+                m_genes [index] .applyMutation (0, a_percentage);
+                if (isValid ())  return;
             }
+
+            // restore the gene as it was
+            // --------------------------
+             ObjectInputStream backup = new ObjectInputStream (new
+               ByteArrayInputStream (boa));
+              m_genes [index] = (Gene) backup.readObject();
+
+             markImmutable(index);
         }
         catch (ClassNotFoundException ex) {
             throw new Error("This should never happen");
@@ -163,6 +191,36 @@ public abstract class abstractSupergene implements Supergene, Serializable {
             throw new Error("Unable to mutate", ex);
         }
     }
+
+    /** Maximal number of notes about immutable genes per
+     * single gene position */
+    public static int MAX_IMMUTABLE_GENES = 100000;
+
+    /** @todo: Implement protection against overgrowing of this
+     * data block.
+     */
+    private void markImmutable(int a_index)
+     {
+         synchronized (m_immutable)
+         {
+             if (m_immutable.length<=a_index)
+              {
+                  /** Extend the array (double length). */
+                  Set [] r = new Set [2*m_immutable.length];
+                  System.arraycopy(m_immutable, 0, r, 0, m_immutable.length);
+                  m_immutable = r;
+              }
+
+              if (m_immutable [a_index] == null)
+               m_immutable [a_index] = new TreeSet();
+
+              if (m_immutable [a_index] .size()<MAX_IMMUTABLE_GENES)
+               m_immutable [a_index].add(this);
+         };
+     }
+
+    /** Set of supergene allele values that cannot mutate. */
+    static Set [] m_immutable = new Set[1];
 
     /**
      * Sets the value of this Gene to a random legal value for the
@@ -176,15 +234,15 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      */
     public void setToRandomValue(RandomGenerator a_numberGenerator) {
         /** set all to random value first */
-        for (int i = 0; i < genes.length; i++) {
-            genes[i].setToRandomValue(a_numberGenerator);
+        for (int i = 0; i < m_genes.length; i++) {
+            m_genes[i].setToRandomValue(a_numberGenerator);
         }
         if (isValid()) return;
 
         for (int i = 0; i < MAX_RETRIES; i++) {
-            for (int j = 0; j < genes.length; j++) {
+            for (int j = 0; j < m_genes.length; j++) {
                 /* mutate only one gene at time. */
-                genes[j].setToRandomValue(a_numberGenerator);
+                m_genes[j].setToRandomValue(a_numberGenerator);
                 if (isValid()) return;
             }
         }
@@ -197,10 +255,10 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      */
     public void setAllele(Object a_superAllele) {
         Object[] a = (Object[]) a_superAllele;
-        if (a.length!=genes.length) throw new
-         ClassCastException("Record length, "+a.length+" != "+genes.length);
-        for (int i = 0; i < genes.length; i++) {
-            genes[i].setAllele(a[i]);
+        if (a.length!=m_genes.length) throw new
+         ClassCastException("Record length, "+a.length+" != "+m_genes.length);
+        for (int i = 0; i < m_genes.length; i++) {
+            m_genes[i].setAllele(a[i]);
         }
      }
 
@@ -209,9 +267,9 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * @return array of objects, each matching the subgene in this Supergene
      */
     public Object getAllele() {
-        Object [] o = new Object[genes.length];
-        for (int i = 0; i < genes.length; i++) {
-            o[i] = genes[i].getAllele();
+        Object [] o = new Object [m_genes.length];
+        for (int i = 0; i < m_genes.length; i++) {
+            o[i] = m_genes[i].getAllele();
         }
         return o;
     }
@@ -223,9 +281,9 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     public String getPersistentRepresentation()
       throws UnsupportedOperationException {
         StringBuffer b = new StringBuffer();
-        for (int i = 0; i < genes.length; i++) {
+        for (int i = 0; i < m_genes.length; i++) {
           b.append(GSTART);
-          b.append(encode(genes[i].getPersistentRepresentation()));
+          b.append(encode(m_genes[i].getPersistentRepresentation()));
           b.append(GEND);
         }
         return b.toString();
@@ -241,12 +299,12 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     throws UnsupportedOperationException, UnsupportedRepresentationException {
 
         ArrayList r = split(a_representation);
-        if (r.size()!=genes.length) throw new
-         UnsupportedRepresentationException("Supergene size, "+genes.length+
+        if (r.size()!=m_genes.length) throw new
+         UnsupportedRepresentationException("Supergene size, "+m_genes.length+
           " mismatch the record number, "+r.size());
 
-        for (int i = 0; i < genes.length; i++) {
-            genes[i].setValueFromPersistentRepresentation(
+        for (int i = 0; i < m_genes.length; i++) {
+            m_genes[i].setValueFromPersistentRepresentation(
              (String) r.get(i));
         }
 
@@ -254,8 +312,8 @@ public abstract class abstractSupergene implements Supergene, Serializable {
 
     /** Calls cleanup() for each subgene. */
     public void cleanup() {
-        for (int i = 0; i < genes.length; i++) {
-            genes[i].cleanup();
+        for (int i = 0; i < m_genes.length; i++) {
+            m_genes[i].cleanup();
         }
     }
 
@@ -266,9 +324,9 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     public String toString() {
         StringBuffer b = new StringBuffer();
         b.append("Supergene "+getClass().getName()+ " {");
-        for (int i = 0; i < genes.length; i++) {
+        for (int i = 0; i < m_genes.length; i++) {
             b.append(" ");
-            b.append(genes[i].toString());
+            b.append(m_genes[i].toString());
         }
         b.append("}");
         return b.toString();
@@ -276,7 +334,7 @@ public abstract class abstractSupergene implements Supergene, Serializable {
 
     /** Returns the number of the genes-components of this supergene. */
     public int size() {
-        return genes.length;
+        return m_genes.length;
     }
 
     /** Calls compareTo of subgenes. The passed parameter must be
@@ -284,31 +342,33 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     public int compareTo(Object o) {
         abstractSupergene q = (abstractSupergene) o;
 
-        int c = genes.length-q.genes.length;
+        int c = m_genes.length-q.m_genes.length;
         if (c!=0) return c;
 
-        for (int i = 0; i < genes.length; i++) {
-            c = genes[i].compareTo(q.genes[i]);
+        for (int i = 0; i < m_genes.length; i++) {
+            c = m_genes[i].compareTo(q.m_genes[i]);
             if (c!=0) return c;
         }
-        return 0;
+        if (getClass().equals(o.getClass())) return 0;
+
+        return getClass().getName().compareTo(o.getClass().getName());
     }
 
     /** Calls equals() for each pair of genes. If the supplied object is
-     * not an instance of supergene, returns false. */
+     * an instance of the different class, returns false. */
     public boolean equals(Object a_gene) {
-        if (a_gene==null || ! (a_gene instanceof abstractSupergene))
+        if (a_gene==null || ! (a_gene.getClass().equals(getClass())))
          return false;
 
         abstractSupergene age = (abstractSupergene) a_gene;
-        return Arrays.equals(genes, age.genes);
+        return Arrays.equals(m_genes, age.m_genes);
     }
 
     /** Returns sum of hashCode() of the genes-components. */
     public int hashCode() {
         long s = 0;
-        for (int i = 0; i < genes.length; i++) {
-            s+=genes[i].hashCode();
+        for (int i = 0; i < m_genes.length; i++) {
+            s+=m_genes[i].hashCode();
         }
         return (int) ( s % Integer.MAX_VALUE);
     }

@@ -46,7 +46,7 @@ import org.jgap.Gene;
 public interface Supergene extends Gene {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "0.0.1 alpha-explosive";
+    final static String CVS_REVISION = "0.0.1 alpha-explosive, not for user";
 
     /**
      * Test the allele combination of this supergene for validity.
@@ -60,5 +60,15 @@ public interface Supergene extends Gene {
      * The supergene components may be supergenes itself.
      */
     Gene [] getGenes();
+
+    /**
+     * Returns the Gene at the given index (locus) within the Chromosome. The
+     * first gene is at index zero and the last gene is at the index equal to
+     * the size of this Chromosome - 1.
+     *
+     * @param a_desiredLocus: The index of the gene value to be returned.
+     * @return The Gene at the given index.
+     */
+    Gene getGene(int index);
 
 }
