@@ -29,14 +29,15 @@ import java.io.Serializable;
  * Without a proper implementation of equals(), some genetic operations will
  * fail to work properly.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public interface Gene
     extends Comparable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
