@@ -25,7 +25,7 @@ public class GreedyCrossoverTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public GreedyCrossoverTest() {
   }
@@ -316,7 +316,7 @@ public class GreedyCrossoverTest
   }
 
   /**
-   * Tests if population size does not change after two consecutive calls.
+   * Tests if population size grows expectedly after two consecutive calls.
    * @throws Exception
    *
    * @author Klaus Meffert

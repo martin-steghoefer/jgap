@@ -24,7 +24,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public GaussianMutationOperatorTest() {
   }
@@ -197,7 +197,7 @@ public class GaussianMutationOperatorTest
   }
 
   /**
-   * Tests if population size does not change after two consecutive calls.
+   * Tests if population size grows expectedly after two consecutive calls.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -243,10 +243,10 @@ public class GaussianMutationOperatorTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3, chroms.size());
+    assertEquals(3+2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3, chroms.size());
+    assertEquals(3+2+2, chroms.size());
   }
 
   /**

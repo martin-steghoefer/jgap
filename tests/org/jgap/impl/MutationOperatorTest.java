@@ -25,7 +25,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public MutationOperatorTest() {
   }
@@ -119,7 +119,7 @@ public class MutationOperatorTest
 
 
   /**
-   * Tests if population size does not change after two consecutive calls.
+   * Tests if population size grows expectedly after two consecutive calls.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -132,7 +132,7 @@ public class MutationOperatorTest
     conf.addGeneticOperator(op);
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
-    rand.setNextInt(1);
+    rand.setNextInt(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene sampleGene = new IntegerGene(1, 10);
@@ -165,10 +165,10 @@ public class MutationOperatorTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3, chroms.size());
+    assertEquals(3+2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3, chroms.size());
+    assertEquals(3+2+2, chroms.size());
   }
 }
 

@@ -24,7 +24,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public SwappingMutationOperatorTest() {
   }
@@ -156,7 +156,7 @@ public class SwappingMutationOperatorTest
   }
 
   /**
-   * Tests if population size does not change after two consecutive calls.
+   * Tests if population size grows expectedly after two consecutive calls.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -165,11 +165,13 @@ public class SwappingMutationOperatorTest
   public void testOperate_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    GeneticOperator op = new SwappingMutationOperator();
+    SwappingMutationOperator op = new SwappingMutationOperator();
+    op.setStartOffset(0);
     conf.addGeneticOperator(op);
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextDouble(0.45d);
+    rand.setNextInt(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene sampleGene = new IntegerGene(1, 10);
@@ -202,10 +204,10 @@ public class SwappingMutationOperatorTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3, chroms.size());
+    assertEquals(3+2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3, chroms.size());
+    assertEquals(3+2+2, chroms.size());
   }
 
   /**
