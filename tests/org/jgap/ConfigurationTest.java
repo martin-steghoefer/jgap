@@ -25,7 +25,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public ConfigurationTest() {
   }
@@ -280,8 +280,8 @@ public class ConfigurationTest
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -311,6 +311,20 @@ public class ConfigurationTest
       ;//this is OK
     }
   }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testGetNaturalSelector_4() throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new BestChromosomesSelector();
+    conf.addNaturalSelector(selector, false);
+    assertEquals(selector,conf.getNaturalSelector(false,0));
+  }
+
 
   public void testAddNaturalSelector_0() throws Exception {
     Configuration conf = new Configuration();
