@@ -39,7 +39,7 @@ public interface NaturalSelector extends java.io.Serializable {
    * @param chromosome: The specimen to add to the pool.
    * @param fitness: The specimen's fitness value.
    */
-  public void add(Configuration gaConf, Chromosome chromosome, int fitness);
+  public void add(Configuration gaConf, Chromosome chromosome, long fitness);
 
 
   /**

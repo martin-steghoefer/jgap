@@ -40,11 +40,11 @@ import java.util.*;
  */
 public class WeightedRouletteSelector implements NaturalSelector {
   private HashMap population = new HashMap();
-  private int totalInstances = 0;
+  private long totalInstances = 0;
 
 
   public synchronized void add(Configuration gaConf, Chromosome chromosome,
-                               int fitness) {
+                               long fitness) {
     if(population.containsKey(chromosome)) {
       ((Counter) population.get(chromosome)).increment(fitness);
     }
@@ -59,10 +59,10 @@ public class WeightedRouletteSelector implements NaturalSelector {
   public synchronized Chromosome[] select(Configuration gaConf, int howMany) {
     RandomGenerator generator = gaConf.getRandomGenerator();
     Chromosome[] selections = new Chromosome[howMany];
-    int[] selectedIndices = new int[howMany];
+    long[] selectedIndices = new long[howMany];
 
     for(int i = 0; i < howMany; i++) {
-      selectedIndices[i] = generator.nextInt(totalInstances);
+      selectedIndices[i] = generator.nextLong() % totalInstances;
     }
 
     Arrays.sort(selectedIndices);
@@ -70,7 +70,7 @@ public class WeightedRouletteSelector implements NaturalSelector {
     Iterator iterator = population.keySet().iterator();
     int currentSelection = 0;
     int currentIndex = 0;
-    int currentCount = 0;
+    long currentCount = 0;
 
     Chromosome currentChromosome;
  
@@ -100,10 +100,10 @@ public class WeightedRouletteSelector implements NaturalSelector {
 
 
 class Counter {
-  private int count;
+  private long count;
 
 
-  public Counter(int initialCount) {
+  public Counter(long initialCount) {
     count = initialCount;
   }
 
@@ -118,12 +118,12 @@ class Counter {
   }
 
 
-  public void increment(int howMany) {
+  public void increment(long howMany) {
     count += howMany;
   }
 
 
-  public int getCount() {
+  public long getCount() {
     return count;
   }
 

@@ -91,11 +91,11 @@ public class Genotype implements java.io.Serializable {
     }
 
     Chromosome fittestChromosome = chromosomes[0];
-    int fittestValue = 
+    long fittestValue = 
       gaConf.getFitnessFunction().evaluate(fittestChromosome); 
 
     for( int i = 1; i < chromosomes.length; i++) {
-      int fitnessValue = gaConf.getFitnessFunction().evaluate(chromosomes[i]);
+      long fitnessValue = gaConf.getFitnessFunction().evaluate(chromosomes[i]);
       if (fitnessValue > fittestValue)
       {
         fittestChromosome = chromosomes[i];
