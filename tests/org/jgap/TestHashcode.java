@@ -16,10 +16,11 @@ import java.util.*;
  * Class used to help in the testing of the hashCode() method.
  *
  * @author John Serri
+ * @since 2.1
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Determines if object should output debug information.
