@@ -32,13 +32,14 @@ public class RandomGeneratorForTest
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   private long m_nextLong;
   private double m_nextDouble;
   private float m_nextFloat;
   private boolean m_nextBoolean;
   private int[] m_nextIntSequence;
+  private double m_nextGaussian;
   private int m_intIndex;
   public RandomGeneratorForTest() {
   }
@@ -88,6 +89,10 @@ public class RandomGeneratorForTest
     return m_nextDouble;
   }
 
+  public double nextGaussian() {
+    return m_nextGaussian;
+  }
+
   public float nextFloat() {
     return m_nextFloat;
   }
@@ -102,6 +107,10 @@ public class RandomGeneratorForTest
 
   public void setNextDouble(double a_nextDouble) {
     m_nextDouble = a_nextDouble % 1.0d;
+  }
+
+  public void setNextGaussian(double a_nextDouble) {
+    m_nextGaussian = a_nextDouble;
   }
 
   public void setNextFloat(float a_nextFloat) {
