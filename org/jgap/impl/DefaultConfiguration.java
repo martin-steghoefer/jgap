@@ -31,7 +31,6 @@ import org.jgap.*;
  * those who wish to specify other custom values.
  */
 public class DefaultConfiguration extends Configuration {
-  protected static final int DEFAULT_MUTATION_RATE = 100;
 
   public DefaultConfiguration() {
     super();
@@ -41,7 +40,7 @@ public class DefaultConfiguration extends Configuration {
       setRandomGenerator(new StockRandomGenerator());
       addGeneticOperator(new ReproductionOperator());
       addGeneticOperator(new CrossoverOperator());
-      addGeneticOperator(new MutationOperator(DEFAULT_MUTATION_RATE));
+      addGeneticOperator(new MutationOperator());
     }
     catch(InvalidConfigurationException e) {
       throw new RuntimeException(

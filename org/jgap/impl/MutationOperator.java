@@ -30,7 +30,12 @@ import java.util.*;
  * are added to the list of candidate Chromosomes.
  */
 public class MutationOperator implements GeneticOperator {
-  protected int mutationRate;
+  protected int mutationRate = 0;
+  protected boolean dynamicMutationRate = false;
+
+  public MutationOperator() {
+    dynamicMutationRate = true; 
+  }
 
   public MutationOperator(int desiredMutationRate) {
     mutationRate = desiredMutationRate;
@@ -38,10 +43,13 @@ public class MutationOperator implements GeneticOperator {
 
   public void operate(final Configuration gaConf, final Chromosome[] population,
                       List candidateChromosomes) {
-    if (mutationRate == 0) {
+    if (mutationRate == 0 && !dynamicMutationRate ) {
       return;
     }
-
+    
+    int currentRate = dynamicMutationRate ? gaConf.getChromosomeSize() * 10 :
+                        mutationRate;
+    
     RandomGenerator generator = gaConf.getRandomGenerator();
 
     // It would be inefficient to create copies of each Chromosome just
@@ -54,7 +62,7 @@ public class MutationOperator implements GeneticOperator {
       Chromosome copyOfChromosome = null;
 
       for(int j = 0 ; j < numberOfGenes; j++) {
-        if(generator.nextInt(mutationRate) == 0) {
+        if(generator.nextInt(currentRate) == 0) {
           // Now that we want to actually modify the Chromosome, let's
           // make a copy of it and modify the copy.
           if (copyOfChromosome == null) {
