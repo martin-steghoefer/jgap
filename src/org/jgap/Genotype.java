@@ -36,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The current active Configuration instance.
@@ -264,7 +264,7 @@ public class Genotype
     // Set the best fitness value to that of the first chromosome.
     // Then loop over the rest of the chromosomes and see if any has
     // a better fitness value.
-    // The decision whether a fitness value if better than another is
+    // The decision whether a fitness value is better than another is
     // delegated to a FitnessEvaluator
     // --------------------------------------------------------------
     Chromosome fittestChromosome = m_population.getChromosome(0);
