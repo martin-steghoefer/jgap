@@ -21,7 +21,7 @@
 package org.jgap;
 
 import org.jgap.event.EventManager;
-import org.jgap.impl.AllelePool;
+import org.jgap.impl.ChromosomePool;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,7 +87,7 @@ public class Configuration implements java.io.Serializable
      * Allele instances so that they may be recycled later, thereby saving
      * memory.
      */
-    private AllelePool m_allelePool = null;
+    private ChromosomePool m_chromosomePool = null;
 
 
     /**
@@ -415,35 +415,38 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Sets the AllelPool that is to be associated with this configuration.
-     * The AllelePool is used to pool unused Allele instances so that they
-     * may be recycled later, thereby saving memory. The presence of an
-     * AllelePool is optional.
+     * Sets the ChromosomePool that is to be associated with this 
+     * configuration. The ChromosomePool is used to pool unused Chromosome
+     * instances so that they may be recycled later, thereby saving time and
+     * memory. The presence of a ChromosomePool is optional. If none exists,
+     * then a new Chromosome will be constructed each time one is needed.
      *
-     * @param a_allelePoolToSet The AllelePool instance to use.
+     * @param a_chromosomePoolToSet The ChromosomePool instance to use.
      * @throws InvalidConfigurationException if this object is locked.
      */
-    public void setAllelePool( AllelePool a_allelePoolToSet )
+    public void setChromosomePool( ChromosomePool a_chromosomePoolToSet )
                 throws InvalidConfigurationException
     {
         verifyChangesAllowed();
 
-        m_allelePool = a_allelePoolToSet;
+        m_chromosomePool = a_chromosomePoolToSet;
     }
 
 
     /**
-     * Retrieves the AllelePool instance, if any, that is associated with
-     * this configuration.  The AllelePool is used to pool unused Allele
-     * instances so that they may be recycled later, thereby saving memory.
-     * The presence of an AllelePool instance is optional.
+     * Retrieves the ChromosomePool instance, if any, that is associated with
+     * this configuration.  The ChromosomePool is used to pool unused 
+     * Chromosome instances so that they may be recycled later, thereby 
+     * saving time and memory. The presence of a ChromosomePool instance is
+     * optional. If none exists, then new Chromosomes will be constructed
+     * each time one is needed.
      *
-     * @return The AllelePool instance associated this configuration, or
+     * @return The ChromosomePool instance associated this configuration, or
      *         null if none has been set.
      */
-    public AllelePool getAllelePool()
+    public ChromosomePool getChromosomePool()
     {
-        return m_allelePool;
+        return m_chromosomePool;
     }
 
 
@@ -479,7 +482,6 @@ public class Configuration implements java.io.Serializable
                 Collections.unmodifiableList( m_geneticOperators );
 
             m_settingsLocked = true;
-            m_allelePool.initialize( this );
         }
     }
 

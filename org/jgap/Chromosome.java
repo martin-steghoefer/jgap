@@ -20,7 +20,7 @@
 
 package org.jgap;
 
-import org.jgap.impl.AllelePool;
+import org.jgap.impl.ChromosomePool;
 
 
 /**
@@ -169,41 +169,47 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
     /**
      * Returns a copy of this Chromosome. The returned instance can evolve
-     * independently of this instance.
+     * independently of this instance. Note that, if possible, this method
+     * will first attempt to acquire a Chromosome instance from the active
+     * ChromosomePool (if any) and set its value appropriately before
+     * returning it. If that is not possible, then a new Chromosome instance
+     * will be constructed and its value set appropriately before returning.
      *
      * @return A copy of this Chromosome.
      */
     public synchronized Object clone()
     {
-        // First make a copy of each of the Alleles. We explicity use the
-        // Allele at each respective gene location (locus) to create the
-        // new Allele that is to occupy that locus in the new Chromosome.
-        // --------------------------------------------------------------
-        Allele[] copyOfGenes = new Allele[ m_genes.length ];
-        AllelePool pool = m_activeConfiguration.getAllelePool();
-
-        for( int i = 0; i < m_genes.length; i++ )
+        // First see if we can pull a Chromosome from the pool and just
+        // set its allele values appropriately.
+        // ------------------------------------------------------------
+        ChromosomePool pool = m_activeConfiguration.getChromosomePool();
+        if( pool != null )
         {
-            // Try to pull the new allele from the allele pool to save on
-            // memory. If the pool is not available, or if there is no
-            // appropriate Allele in the pool, then create a fresh Allele.
-            // -----------------------------------------------------------
-            Allele copy = null;
-            if( pool != null )
+            Chromosome copy = pool.acquireChromosome();
+            if( copy != null )
             {
-                copy = pool.acquireAllele( i );
-            }
+                Allele[] genes = copy.getGenes();
+                for( int i = 0; i < genes.length; i++ )
+                {
+                    genes[ i ].setValue( m_genes[ i ].getValue() );
+                }
 
-            if( copy == null )
-            {
-                copy = m_genes[i].newAllele( m_activeConfiguration );
+                return copy;
             }
+        }
 
-            // Set the value of the copy equal to the value of the original
-            // and then add it to the copyOfGenes array.
-            // ------------------------------------------------------------
-            copy.setValue( m_genes[i].getValue() );
-            copyOfGenes[i] = copy;
+        // We couldn't fetch a Chromosome from the pool, so we need to
+        // create a new one.  First we make a copy of each of the Alleles.
+        //  We explicity use the Allele at each respective gene location
+        // (locus) to create the new Allele that is to occupy that same
+        // locus in the new Chromosome.
+        // ---------------------------------------------------------------
+        Allele[] copyOfGenes = new Allele[ m_genes.length ];
+
+        for( int i = 0; i < copyOfGenes.length; i++ )
+        {
+            copyOfGenes[ i ] = m_genes[i].newAllele( m_activeConfiguration );
+            copyOfGenes[ i ].setValue(  m_genes[i].getValue() );
         }
 
         // Now construct a new Chromosome with the copies of the genes and
@@ -313,14 +319,14 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
 
     /**
-     * Convenience method that returns a newly constructed Chromosome
-     * setup according to the settings in the given Configuration
-     * instance and assigned random gene values.
+     * Convenience method that returns a new Chromosome instance with random
+     * allele values. Note that, if possible, this method will acquire a
+     * Chromosome instance from the active ChromosomePool (if any) and then
+     * randomize its allele values before returning it. If a Chromosome
+     * cannot be acquired from the pool, then a new instance will be
+     * constructed and its allele values randomized before returning it.
      *
-     * @param a_activeConfiguration A Configuration instance that controls the
-     *               execution of this GA. Note that it must be
-     *               in a valid state at the time of this invocation,
-     *               or an InvalidConfigurationException will be thrown.
+     * @param a_activeConfiguration The current active configuration.
      *
      * @throws InvalidConfigurationException if the given Configuration
      *         instance is null or invalid.
@@ -342,12 +348,31 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         // ------------------------------------------------------------------
         a_activeConfiguration.lockSettings();
 
-        // Next we need to create all of the random alleles for the
-        // Chromosome. To do this, we fetch the sample Chromosome instance from
-        // the active configuration, run through its alleles, and invoke their
-        // respective newAllele() methods to create fresh Alleles. We then call
-        // their setToRandomValue() methods to initialize them to random values.
-        // ---------------------------------------------------------------------
+        // First see if we can get a Chromosome instance from the pool.
+        // If we can, we'll randomize its alleles and then return it.
+        // ------------------------------------------------------------
+        ChromosomePool pool = a_activeConfiguration.getChromosomePool();
+        if( pool != null )
+        {
+            Chromosome randomChromosome = pool.acquireChromosome();
+            if( randomChromosome != null )
+            {
+                Allele[] genes = randomChromosome.getGenes();
+                RandomGenerator generator = 
+                    a_activeConfiguration.getRandomGenerator();
+
+                for( int i = 0; i < genes.length; i++ )
+                {
+                    genes[ i ].setToRandomValue( generator );
+                }
+
+                return randomChromosome;
+            }
+        }
+
+        // We weren't able to get a Chromosome from the pool, so we have
+        // to construct a new instance and build it from scratch.
+        // -------------------------------------------------------------
         Chromosome sampleChromosome =
             a_activeConfiguration.getSampleChromosome();
 
@@ -355,34 +380,26 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         int numberOfGenes = sampleChromosome.size();
 
         Allele[] newGenes = new Allele[ numberOfGenes ];
-        AllelePool pool = a_activeConfiguration.getAllelePool();
+        RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
 
         for ( int i = 0; i < numberOfGenes; i++ )
         {
-            // Try to pull the new allele from the allele pool to save on
-            // memory. If the pool is not available, or if there is no
-            // appropriate Allele in the pool, then create a fresh Allele.
+            // We ues the newAllele() method on each of the alleles in the
+            // sample Chromosome to generate our new Allele instances for
+            // the Chromosome we're turning. This guarantees that the
+            // new Alleles are setup with all of the correct internal state
+            // for the respective gene position they're going to inhabit.
             // -----------------------------------------------------------
-            newGenes[i] = null;
-            if( pool != null )
-            {
-                newGenes[i] = pool.acquireAllele( i );
-            }
-
-            if( newGenes[i] == null )
-            {
-                newGenes[i] = sampleGenes[i].newAllele( a_activeConfiguration );
-            }
+            newGenes[ i ] = sampleGenes[ i ].newAllele( a_activeConfiguration );
 
             // Set the allele to a random value.
             // -------------------------------
-            newGenes[i].setToRandomValue(
-                a_activeConfiguration.getRandomGenerator() );
+            newGenes[i].setToRandomValue( generator );
         }
 
-        // Finally, construct the new chromosome with the generated newGenes
-        // and return it.
-        // --------------------------------------------------------------
+        // Finally, construct the new chromosome with the new random
+        // genes and return it.
+        // ---------------------------------------------------------
         return new Chromosome( a_activeConfiguration, newGenes );
     }
 
@@ -517,20 +534,34 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
     /**
      * Invoked when this Chromosome is no longer needed and should perform
-     * any necessary cleanup.
+     * any necessary cleanup. Note that this method will attempt to release
+     * this Chromosome instance to the active ChromosomePool, if any.
      */
     public void cleanup()
     {
-        // If an AllelePool is setup in the active configuration, then
-        // release each of the alleles to the pool so that they can be
-        // later reused, thereby saving some memory.
-        // -----------------------------------------------------------
-        AllelePool pool = m_activeConfiguration.getAllelePool();
+        // First, reset our internal state.
+        // --------------------------------
+        m_fitnessValue = -1;
+        m_isSelected = false;
+
+        // If a ChromosomePool is setup in the active configuration, then
+        // release this Chromosome to the pool, thereby saving some
+        // memory.
+        // --------------------------------------------------------------
+        ChromosomePool pool = m_activeConfiguration.getChromosomePool();
         if( pool != null )
         {
+            // The pool will take care of any allele cleanup for us.
+            // -----------------------------------------------------
+            pool.releaseChromosome( this );
+        }
+        else
+        {
+            // We need to manually cleanup our alleles.
+            // ----------------------------------------
             for( int i = 0; i < m_genes.length; i++ )
             {
-                pool.releaseAllele( m_genes[i], i );
+                m_genes[ i ].cleanup();
             }
         }
     }
