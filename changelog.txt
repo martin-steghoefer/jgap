@@ -1,5 +1,7 @@
 2.2
 ----------
+* Introduced abstract base class for all org.jgap.Gene
+  implementations: org.jgap.BaseGene
 * Added example: Formula Finder
 * Improved Genotype.evolve
 * Fixed bug with BulkFitnessFunction in Genotype.evolve
