@@ -25,7 +25,7 @@ public class PermutingConfiguration
 //  private static int index;
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private List m_randomGeneratorSlots;
 
@@ -251,12 +251,7 @@ public class PermutingConfiguration
   }
 
   private boolean bitSet(int number, int bitIndex) {
-    if ( (number & (int) Math.pow(2, (bitIndex))) > 0) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return ( (number & (int) Math.pow(2, (bitIndex))) > 0);
   }
 
   public boolean hasNext() {
