@@ -38,6 +38,9 @@ import java.util.List;
  * clean state when they are released to the pool; it's up to the user to
  * reset any necessary state in the object prior to the release call (or
  * just after the acquire call).
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class Pool
 {

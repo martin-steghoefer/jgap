@@ -40,6 +40,9 @@ import java.util.List;
  * calculated based on the size of the Chromosomes in the population such
  * that, on average, one gene will be mutated for every ten Chromosomes
  * processed by this operator.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class MutationOperator implements GeneticOperator
 {

@@ -6,6 +6,8 @@
   circumstances, resulted in a fatal "logic error" exception.
 * Updated the sample fitness function to ensure that it never
   returns a non-positive fitness value.
+* Added author and since tags to the class-level javadoc of each 
+  class.
 
 1.0-RC2
 ----------

@@ -26,6 +26,9 @@ package org.jgap;
  * object before all required settings have been provided, or an attempt is
  * made to alter a setting in a Configuration object after it has been
  * successfully locked.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class InvalidConfigurationException extends Exception
 {

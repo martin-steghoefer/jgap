@@ -25,6 +25,9 @@ package org.jgap.xml;
  * parsed but is found to be structured improperly or missing required data.
  * The error message should be consulted for the exact reason the exception
  * is being thrown.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class ImproperXMLException extends Exception
 {

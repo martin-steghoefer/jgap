@@ -44,6 +44,9 @@ import java.util.List;
  * for each of the respective mutator methods to determine whether
  * it is required to provide a value for that setting, and what the
  * setting will default to if not.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class Configuration
 {

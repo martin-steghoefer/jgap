@@ -25,6 +25,9 @@ package org.jgap.event;
  * event type with the EventManager, an object implementing this interface will
  * be notified each time a genetic event of that type is fired (until it is
  * unsubscribed).
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public interface GeneticEventListener
 {

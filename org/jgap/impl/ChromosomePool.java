@@ -27,6 +27,9 @@ import org.jgap.Gene;
  * Provides a pooling mechanism for Chromosome instances so that
  * discarded Chromosome instances can be recycled, thus saving memory and the
  * overhead of constructing new ones from scratch each time.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class ChromosomePool
 {

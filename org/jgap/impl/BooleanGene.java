@@ -35,6 +35,9 @@ import org.jgap.UnsupportedRepresentationException;
  * this Gene (if it has a value). As a result, it may be desirable to
  * use a higher overall mutation rate when this Gene implementation
  * is in use.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class BooleanGene implements Gene, java.io.Serializable
 {

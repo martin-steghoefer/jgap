@@ -31,6 +31,9 @@ import java.util.StringTokenizer;
  * A Gene implementation that supports a integer values for its allele.
  * Upper and lower bounds may optionally be provided to restrict the range
  * of legal values allowed by this Gene instance.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class IntegerGene implements Gene, java.io.Serializable
 {

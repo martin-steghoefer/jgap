@@ -31,6 +31,9 @@ import org.jgap.event.EventManager;
  * the sample Chromosome, population size, and desired fitness function.
  * All other settings may also be changed in the normal fashion for
  * those who wish to specify other custom values.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class DefaultConfiguration extends Configuration
 {

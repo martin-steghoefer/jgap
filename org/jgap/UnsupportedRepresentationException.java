@@ -26,6 +26,9 @@ package org.jgap;
  * to process the string representation it has been given, either because that
  * representation is not supported by that Gene implementation or because
  * the representation is corrupt.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class UnsupportedRepresentationException extends Exception
 {

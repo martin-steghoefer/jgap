@@ -25,6 +25,9 @@ import java.util.EventObject;
  * Represents events that are fired via the EventManager when various
  * genetic events occur. The specific kind of event is conveyed through the
  * event name. Standard event names are provided as constants in this class.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class GeneticEvent extends EventObject
 {

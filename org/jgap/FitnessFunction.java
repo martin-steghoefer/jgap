@@ -35,6 +35,9 @@ package org.jgap;
  * <p>
  * Note: Two Chromosomes with equivalent sets of genes should always be
  * assigned the same fitness value by any implementation of this interface.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public abstract class FitnessFunction implements java.io.Serializable
 {

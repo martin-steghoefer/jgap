@@ -30,6 +30,9 @@ import java.io.Serializable;
  * implementations of this interface also implement the equals() method.
  * Without a proper implementation of equals(), some genetic operations will
  * fail to work properly.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public interface Gene extends Comparable, Serializable
 {

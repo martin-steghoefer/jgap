@@ -39,6 +39,9 @@ import java.util.Set;
  * Chromosomes have been selected. Since Chromosomes with higher fitness
  * values get more slots on the wheel, there's a higher statistical probability
  * that they'll be chosen, but it's not guaranteed.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class WeightedRouletteSelector implements NaturalSelector
 {

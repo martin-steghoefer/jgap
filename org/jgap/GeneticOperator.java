@@ -29,6 +29,9 @@ import java.util.List;
  * This interface contains only one method--operate()--which is responsible
  * for performing the genetic operation on the current population of
  * Chromosomes.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public interface GeneticOperator extends java.io.Serializable
 {
