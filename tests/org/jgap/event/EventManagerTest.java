@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,28 +15,26 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.event;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
-
+import junit.framework.*;
+import junitx.util.*;
 
 /**
- * Tests for Chromosome class
+ * Tests for EventManager class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
-
-public class EventManagerTest extends TestCase {
-
+public class EventManagerTest
+    extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public EventManagerTest() {
-
   }
 
   public static Test suite() {
@@ -46,34 +42,35 @@ public class EventManagerTest extends TestCase {
     return suite;
   }
 
-  public void testAddEventListener_0() throws Exception {
+  public void testAddEventListener_0()
+      throws Exception {
     EventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
-    Map listeners = (Map)PrivateAccessor.getField(man, "m_listeners");
+    Map listeners = (Map) PrivateAccessor.getField(man, "m_listeners");
     assertTrue(listeners.isEmpty());
     man.addEventListener("testeventname", listener);
-    List listenersList =(List)listeners.get("testeventname");
+    List listenersList = (List) listeners.get("testeventname");
     assertEquals(listener, listenersList.get(0));
   }
 
-  public void testRemoveEventListener_0() throws Exception {
+  public void testRemoveEventListener_0()
+      throws Exception {
     EventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
-    Map listeners = (Map)PrivateAccessor.getField(man, "m_listeners");
+    Map listeners = (Map) PrivateAccessor.getField(man, "m_listeners");
     man.addEventListener("testeventname", listener);
-    List listenersList =(List)listeners.get("testeventname");
-    man.removeEventListener("notfound",listener);
+    List listenersList = (List) listeners.get("testeventname");
+    man.removeEventListener("notfound", listener);
     assertEquals(listener, listenersList.get(0));
-    man.removeEventListener("testeventname",null);
+    man.removeEventListener("testeventname", null);
     assertEquals(listener, listenersList.get(0));
-    man.removeEventListener("testeventname",listener);
-    assertTrue(((List)listeners.get("testeventname")).size()==0);
+    man.removeEventListener("testeventname", listener);
+    assertTrue( ( (List) listeners.get("testeventname")).size() == 0);
   }
 
-  private class EventListener implements  GeneticEventListener {
-
+  private class EventListener
+      implements GeneticEventListener {
     public void geneticEventFired(GeneticEvent a_firedEvent) {
     }
   }
-
 }

@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -54,6 +52,9 @@ public class GeneticEvent extends EventObject
      *                 event name). It may not be null.
      *
      * @throws IllegalArgumentException if the given source object is null.
+     *
+     * @author Neil Rotstan
+     * @since 1.0
      */
     public GeneticEvent( String a_eventName, Object a_source )
     {
@@ -67,6 +68,9 @@ public class GeneticEvent extends EventObject
      * type of event.
      *
      * @return the name of this GeneticEvent instance.
+     *
+     * @author Neil Rotstan
+     * @since 1.0
      */
     public String getEventName()
     {

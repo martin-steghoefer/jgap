@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -19,7 +17,6 @@
  */
 package org.jgap.event;
 
-
 /**
  * Represents objects that process genetic events. Once subscribed to an
  * event type with the EventManager, an object implementing this interface will
@@ -29,15 +26,19 @@ package org.jgap.event;
  * @author Neil Rotstan
  * @since 1.0
  */
-public interface GeneticEventListener
-{
-    /**
-     * Notify this GeneticEventListener that an event has been fired of a type
-     * to which this listener is subscribed.
-     *
-     * @param a_firedEvent The event object that was fired. The type of event
-     *                     can be determined by the GeneticEvent's name.
-     */
-    void geneticEventFired( GeneticEvent a_firedEvent );
-}
+public interface GeneticEventListener {
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
+  /**
+   * Notify this GeneticEventListener that an event has been fired of a type
+   * to which this listener is subscribed.
+   *
+   * @param a_firedEvent The event object that was fired. The type of event
+   *                     can be determined by the GeneticEvent's name.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
+   */
+  void geneticEventFired(GeneticEvent a_firedEvent);
+}
