@@ -31,7 +31,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public GaussianMutationOperatorTest() {
   }
@@ -48,11 +48,11 @@ public class GaussianMutationOperatorTest
   public void testOperate_0()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    GeneticOperator op = new GaussianMutationOperator(0.05d);
+    GeneticOperator op = new GaussianMutationOperator(0.15d);
     conf.addGeneticOperator(op);
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
-    rand.setNextGaussian(0.3d);
+    rand.setNextDouble(0.45d);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene sampleGene = new IntegerGene(1, 10);
@@ -65,7 +65,7 @@ public class GaussianMutationOperatorTest
         cgene1};
     Chromosome chrom1 = new Chromosome(genes1);
     Gene cgene2 = new IntegerGene(1, 10);
-    cgene2.setAllele(new Integer(8));
+    cgene2.setAllele(new Integer(9));
     Gene[] genes2 = new Gene[] {
         cgene2};
     Chromosome chrom2 = new Chromosome(genes2);
@@ -83,11 +83,13 @@ public class GaussianMutationOperatorTest
     chroms.add(gene3);
     assertEquals(3, chroms.size());
     op.operate(new Population(population), chroms);
-    assertEquals(3+2, chroms.size());
+    assertEquals(3 + 2, chroms.size());
     Chromosome target = (Chromosome) chroms.get(4);
-    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
+    assertEquals(Math.round( (10 - 1) * (0.45d * 0.15d) + 9),
+                 ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
-    assertEquals(8, ( (Integer) target.getGene(0).getAllele()).intValue());
+    assertEquals(Math.round( (10 - 1) * (0.45d * 0.15d) + 6),
+                 ( (Integer) target.getGene(0).getAllele()).intValue());
   }
 
   /**
