@@ -20,6 +20,7 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.event.*;
 
 /**
@@ -36,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The current active Configuration instance.
