@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -246,11 +246,7 @@ public class IntegerGene
    * @since 1.0
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = new Integer(a_numberGenerator.nextInt());
-    // If the value isn't between the upper and lower bounds of this
-    // IntegerGene, map it to a value within those bounds.
-    // -------------------------------------------------------------
-    mapValueToWithinBounds();
+    m_value = new Integer((int)((m_upperBounds-m_lowerBounds)*a_numberGenerator.nextDouble()+m_lowerBounds));
   }
 
   /**
