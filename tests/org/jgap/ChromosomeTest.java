@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public ChromosomeTest() {
   }
@@ -724,23 +724,104 @@ public class ChromosomeTest
     assertFalse(chrom2.compareTo(chrom) == 0);
   }
 
-  public void testRandomInitialChromosome_0() throws Exception {
+  public void testRandomInitialChromosome_0()
+      throws Exception {
     try {
       Chromosome.randomInitialChromosome();
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
-  public void testCleanUp_0() throws Exception {
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testRandomInitialChromosome_1()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    conf.setChromosomePool(new ChromosomePool());
+    conf.setRandomGenerator(new RandomGeneratorForTest(true));
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    //The BooleanGene comes from the sample chrom set in ConfigurationForTest
+    assertTrue( ( (BooleanGene) chrom.getGene(0)).booleanValue());
+    try {
+      conf.setRandomGenerator(new RandomGeneratorForTest(true));
+      fail();
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testRandomInitialChromosome_2()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    conf.setChromosomePool(new ChromosomePool());
+    conf.setRandomGenerator(new RandomGeneratorForTest(false));
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    //The BooleanGene comes from the sample chrom set in ConfigurationForTest
+    assertFalse( ( (BooleanGene) chrom.getGene(0)).booleanValue());
+  }
+
+  public void testCleanUp_0()
+      throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
     Chromosome chrom = Chromosome.randomInitialChromosome();
     chrom.cleanup();
   }
 
-  public void testSetCompareApplicationData_0() throws Exception {
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCleanUp_1()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    Genotype.setConfiguration(null);
+    try {
+      chrom.cleanup();
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCleanUp_2()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    conf.setChromosomePool(new ChromosomePool());
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    chrom.cleanup();
+  }
+
+  public void testSetCompareApplicationData_0()
+      throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
     Chromosome chrom = Chromosome.randomInitialChromosome();
