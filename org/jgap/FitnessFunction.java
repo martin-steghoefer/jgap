@@ -35,6 +35,9 @@ package org.jgap;
  * <p>
  * Note: Two Chromosomes with equivalent sets of genes should always be
  * assigned the same fitness value by any implementation of this interface.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public abstract class FitnessFunction implements java.io.Serializable
 {
@@ -49,10 +52,19 @@ public abstract class FitnessFunction implements java.io.Serializable
     public final int getFitnessValue( Chromosome a_subject )
     {
         // Delegate to the evaluate() method to actually compute the
-        // fitness value. We use the Math.max function to guarantee
-        // that the value is always > 0.
+        // fitness value. If the returned value is less than one,
+        // then we throw a runtime exception.
         // ---------------------------------------------------------
-        return Math.max( 1, evaluate( a_subject ) );
+        int fitnessValue = evaluate( a_subject );
+
+        if( fitnessValue < 1 )
+        {
+            throw new RuntimeException(
+                "Fitness values must be positive! Received value: " +
+                fitnessValue );
+        }
+
+        return fitnessValue;
     }
 
 
@@ -64,7 +76,8 @@ public abstract class FitnessFunction implements java.io.Serializable
      * @param a_subject: The Chromosome instance to evaluate.
      *
      * @return A positive integer reflecting the fitness rating of the given
-     *         Chromosome.
+     *         Chromosome. Note that if a non-positive integer is returned,
+     *         a RuntimeException will be generated.
      */
     protected abstract int evaluate( Chromosome a_subject );
 }

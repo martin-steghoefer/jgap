@@ -1,22 +1,27 @@
 
-Thank-you for trying JGAP 1.0 Release Candidate 2 (1.0-RC2 for short).
-We are very interested in any feedback you might have, including details
-of how you're using JGAP, what you like about it, and what you think
-needs improvement. You can leave this feedback on the user's mailing
-list at jgap-users@lists.sourceforge.net or, if you prefer to keep
-these details private, you can email the JGAP project administrator
-at mrblah@users.sourceforge.net. The more feedback we get, the more
-we can improve JGAP to better meet the needs of our users. Thanks 
-for your support!
+Thank-you for trying JGAP 1.0! We are very interested in any feedback
+you might have, including details of how you're using JGAP, what you
+like about it, and what you think needs improvement. You can leave this
+feedback on the user's mailing list at jgap-users@lists.sourceforge.net
+or, if you prefer to keep these details private, you can email the JGAP
+project administrator at mrblah@users.sourceforge.net. The more feedback
+we get, the more we can improve JGAP to better meet the needs of our 
+users. Thanks for your support!
 
 ------------------------------------------------------------------------
 About This Release:
 
-This represents the second beta release of JGAP, the Java Genetic Algorithms
-Package, which means it may contain bugs. It is, however, considered to
-be feature complete (for version 1.0) and the API is considered frozen. 
-For a general list of changes, fixes, and enhancements in this version, 
-please see the CHANGELOG file.
+This represents the first production release of JGAP, the Java Genetic
+Algorithms Package. After two years of development, testing, and public
+alpha and beta releases, we finally feel that JGAP has reached an
+acceptable level of stability for the current feature set. Work has
+already begun on JGAP version 1.1, which include some much-requested
+features including support for real values, a richer selection of
+stock gene types, pluggable "fitness evaluators," and various small
+enhancements. 
+
+For a general list of changes, fixes, and enhancements that have been
+included in version 1.0, please see the CHANGELOG file.
 
 This software is OSI Certified Open Source Software. OSI Certified is
 a certification mark of the Open Source Initiative.
@@ -30,9 +35,9 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP 1.0-RC2 was compiled and tested with Java 1.4 on Linux and Mac OS X,
-although the authors believe that Java 1.2 on any platform should be
-sufficient for its use.
+JGAP 1.0 was compiled and tested with Java 1.4 on Linux, Mac OS X,
+and Windows XP although the authors believe that Java 1.2 on any
+platform should be sufficient for its use.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
@@ -50,7 +55,7 @@ the JGAP mailing list manager at:
 
 Mailing list archives are also available for each of the lists.
 
-Thanks for trying out JGAP!
+Thanks again for trying out JGAP!
 --The JGAP team
 
 ------------------------------------------------------------------------
@@ -69,7 +74,7 @@ examples, then also add the jgap-examples.jar to your classpath.
 3. Finally, if you wish to view or modify the source code, it can
 be found in the src/ directory of the archive. For convenience, an Ant
 build script is included. For more information on Ant, please see the
-Ant home page at http://jakarta.apache.org/ant/
+Ant home page at http://ant.apache.org
 
 4. Javadocs can be found in the javadocs/ directory. Other documentation,
 including basic documents to help you get started, can be found in the
@@ -89,7 +94,9 @@ Special Thanks:
 Thanks go to everyone who has been using JGAP, especially those who
 have provided feedback and bug reports! Your support is invaluable.
 
-Thanks also to the folks at Sourceforge who kindly host the JGAP
-project. For more information on SourceForge, please visit
+Thanks also to Nghia Le, who designed the new JGAP logo.
+
+And finally, thanks to the folks at Sourceforge who kindly host the
+JGAP project. For more information on SourceForge, please visit
 http://www.sourceforge.net.
 

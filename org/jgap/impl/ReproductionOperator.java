@@ -34,6 +34,9 @@ import java.util.List;
  * reproduction operator is not included in the list of configured genetic
  * operators, then Chromosomes in the genotype population may not become
  * candidates for natural selection.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class ReproductionOperator implements GeneticOperator
 {

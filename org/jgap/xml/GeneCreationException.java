@@ -29,6 +29,9 @@ package org.jgap.xml;
  * some reason, or if the class does not support the methods related to
  * XML persistence. Consult the error message for details on the specific
  * reason for failure.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class GeneCreationException extends Exception
 {

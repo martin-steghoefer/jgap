@@ -39,6 +39,9 @@ import java.util.Set;
  * Chromosomes have been selected. Since Chromosomes with higher fitness
  * values get more slots on the wheel, there's a higher statistical probability
  * that they'll be chosen, but it's not guaranteed.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class WeightedRouletteSelector implements NaturalSelector
 {
@@ -113,8 +116,6 @@ public class WeightedRouletteSelector implements NaturalSelector
             counter.reset( a_chromosomeToAdd.getFitnessValue() );
             m_wheel.put( a_chromosomeToAdd, counter );
         }
-
-        m_totalNumberOfUsedSlots += a_chromosomeToAdd.getFitnessValue();
     }
 
 
@@ -153,6 +154,7 @@ public class WeightedRouletteSelector implements NaturalSelector
         long[] counterValues = new long[ numberOfEntries ];
         Chromosome[] chromosomes = new Chromosome[ numberOfEntries ];
 
+        m_totalNumberOfUsedSlots = 0;
         Iterator entryIterator = entries.iterator();
         for( int i = 0; i < numberOfEntries; i++ )
         {
@@ -167,6 +169,11 @@ public class WeightedRouletteSelector implements NaturalSelector
             fitnessValues[ i ] = currentCounter.getFitnessValue();
             counterValues[ i ] = currentCounter.getCounterValue();
             chromosomes[ i ] = currentChromosome;
+
+            // We're also keeping track of the total number of slots,
+            // which is the sum of all the counter values.
+            // ------------------------------------------------------
+            m_totalNumberOfUsedSlots += counterValues[ i ];
         }
 
         // To select each chromosome, we just "spin" the wheel and grab
@@ -262,7 +269,9 @@ public class WeightedRouletteSelector implements NaturalSelector
         throw new RuntimeException( "Logic Error. This code should never " +
                 "be reached. Please report this as a bug to the " +
                 "JGAP team: selected slot " + selectedSlot + " " +
-                "exceeded " + totalSlotsLeft + " number of slots left." );
+                "exceeded " + totalSlotsLeft + " number of slots left. " +
+                "We thought there were " + m_totalNumberOfUsedSlots +
+                " slots left." );
     }
 
 

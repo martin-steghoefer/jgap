@@ -32,6 +32,9 @@ import java.util.Map;
  * addEventListener() method. To unsubscribe, use the removeEventListener()
  * method. To generate a genetic event, use the fireGeneticEvent() method,
  * which will take care of notifying the appropriate subscribers.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class EventManager
 {

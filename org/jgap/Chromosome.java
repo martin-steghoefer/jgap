@@ -33,6 +33,9 @@ import java.io.Serializable;
  * Chromosomes within a single population (genotype). In other words, gene 1
  * in a chromosome must share the same concrete implementation as gene 1 in all
  * other chromosomes in the population.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class Chromosome implements Comparable, Cloneable, Serializable
 {

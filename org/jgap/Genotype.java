@@ -34,6 +34,9 @@ import java.util.List;
  * may be constructed normally, whereby an array of Chromosomes must be
  * provided, or the static randomInitialGenotype() method can be used to
  * generate a Genotype with a randomized Chromosome population.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class Genotype implements Serializable
 {

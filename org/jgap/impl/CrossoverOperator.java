@@ -35,6 +35,9 @@ import java.util.List;
  * Chromosomes. The two modified Chromosomes are then added to the
  * list of candidate Chromosomes. This operation is performed half
  * as many times as there are Chromosomes in the population.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class CrossoverOperator implements GeneticOperator
 {

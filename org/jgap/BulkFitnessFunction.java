@@ -30,6 +30,9 @@ package org.jgap;
  * evaluateChromosomes() method implemented to evaluate each of the
  * Chromosomes given in an array and set their fitness values prior
  * to returning.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public abstract class BulkFitnessFunction implements java.io.Serializable
 {

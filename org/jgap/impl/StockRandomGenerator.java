@@ -28,6 +28,9 @@ import java.util.Random;
  * The stock random generator uses the java.util.Random class to
  * provide a simple implementation of the RandomGenerator interface.
  * No actual code is provided here.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class StockRandomGenerator extends Random implements RandomGenerator
 {

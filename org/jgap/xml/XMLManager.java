@@ -43,6 +43,9 @@ import java.util.List;
  * (such as Chromosomes and Genotypes) to XML representations of those
  * entities, as well as unmarshalling. All of the methods in this class are
  * static, so no construction is required (or allowed).
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public class XMLManager
 {

@@ -89,7 +89,9 @@ public class MinimizingMakeChangeFitnessFunction extends FitnessFunction
             fitness += 100 - ( 10 * totalCoins );
         }
 
-        return fitness;
+        // Make sure fitness value is always positive.
+        // -------------------------------------------
+        return Math.max( 1, fitness );
     }
 
 

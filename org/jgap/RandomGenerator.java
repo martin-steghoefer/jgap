@@ -24,6 +24,9 @@ package org.jgap;
  * The RandomGenerator interface provides an abstraction for the random
  * number implementation so that more rigorous or alternative implementations
  * can be provided as desired.
+ *
+ * @author Neil Rotstan
+ * @since 1.0
  */
 public interface RandomGenerator
 {
