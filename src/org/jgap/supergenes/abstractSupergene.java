@@ -115,10 +115,10 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      * genes, calling newGene for each subgene. The class, derived from this
      * abstract supergene will be instantiated
      * (not the instance of abstractSupergene itself. */
-    public Gene newGene(Configuration a_activeConfiguration) {
+    public Gene newGene() {
         Gene [] g = new Gene[m_genes.length];
         for (int i = 0; i < m_genes.length; i++) {
-            g[i] = m_genes[i].newGene(a_activeConfiguration);
+            g[i] = m_genes[i].newGene();
         }
 
         try {
