@@ -19,6 +19,7 @@
 package org.jgap.impl;
 
 import junit.framework.*;
+import org.jgap.impl.salesman.*;
 
 /**
  * Test suite for all tests of package org.jgap.impl
@@ -30,7 +31,7 @@ public class AllImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public AllImplTests() {
   }
@@ -62,6 +63,8 @@ public class AllImplTests
     suite.addTest(TournamentSelectorTest.suite());
     suite.addTest(ThresholdSelectorTest.suite());
     suite.addTest(WeightedRouletteSelectorTest.suite());
+
+    suite.addTest(AllSalesmanTests.suite());
     return suite;
   }
 }
