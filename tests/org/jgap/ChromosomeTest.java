@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -344,17 +344,20 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(20));
-    Chromosome chrom2 = new Chromosome(genes);
-    conf.setSampleChromosome(chrom2);
+    Chromosome chrom3 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom3);
     conf.setPopulationSize(5);
     Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(genes);
-    chrom2 = (Chromosome) chrom.clone();
+    Chromosome chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom.hashCode(), chrom2.hashCode());
     assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), 0.0000001d);
     assertEquals(chrom.isSelectedForNextGeneration(),
                  chrom2.isSelectedForNextGeneration());
     assertEquals(chrom.size(), chrom2.size());
+    assertEquals(chrom.getGene(0), chrom2.getGene(0));
+    assertEquals(chrom.getGene(1), chrom2.getGene(1));
+    assertEquals(chrom.getGenes(), chrom2.getGenes());
     assertEquals(chrom.toString(), chrom2.toString());
     assertTrue(chrom.equals(chrom2));
   }
