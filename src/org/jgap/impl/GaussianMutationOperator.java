@@ -15,7 +15,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static Random RANDOM = new Random();
 
@@ -96,7 +96,6 @@ public class GaussianMutationOperator
     for (int k = 0; k < a_gene.size(); k++) {
       // Mutate atomic element by given percentage.
       // ------------------------------------------
-      System.err.println(a_percentage);
       a_gene.applyMutation(k, a_percentage);
     }
   }
