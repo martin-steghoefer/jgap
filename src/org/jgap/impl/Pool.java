@@ -34,13 +34,14 @@ import java.util.*;
  * reset any necessary state in the object prior to the release call (or
  * just after the acquire call).
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class Pool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The List of Objects currently in the pool.
@@ -62,6 +63,8 @@ public class Pool {
    *
    * @return An Object instance from the pool or null if no
    *         Object instances are available in the pool.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized Object acquirePooledObject() {
@@ -84,6 +87,8 @@ public class Pool {
    *
    * @param a_objectToPool The Object instance to be released into
    *                       the pool.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized void releaseObject(Object a_objectToPool) {
@@ -97,6 +102,8 @@ public class Pool {
    *
    * @param a_objectsToPool The Collection of objects to release into
    *                        the pool.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized void releaseAllObjects(Collection a_objectsToPool) {
@@ -109,6 +116,8 @@ public class Pool {
    * Retrieves the number of objects currently available in this pool.
    *
    * @return the number of objects in this pool.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized int size() {
@@ -117,6 +126,8 @@ public class Pool {
 
   /**
    * Empties out this pool of all objects.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized void clear() {

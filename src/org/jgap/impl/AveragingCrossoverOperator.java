@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -54,6 +54,9 @@ public class AveragingCrossoverOperator
   /**
    * Using the same random generator for randomizing the loci for crossing
    * over as for selecting the genes to be crossed over
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public AveragingCrossoverOperator() {
     this(null);
@@ -63,6 +66,9 @@ public class AveragingCrossoverOperator
    * Using a different random generator for randomizing the loci for
    * crossing over than for selecting the genes to be crossed over
    * @param generatorForAveraging RandomGenerator
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public AveragingCrossoverOperator(RandomGenerator generatorForAveraging) {
     crossoverGenerator = generatorForAveraging;

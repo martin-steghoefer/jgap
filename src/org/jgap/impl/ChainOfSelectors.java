@@ -18,12 +18,9 @@
 
 package org.jgap.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.NaturalSelector;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * Ordered chain of NaturalSelectors. With this container you can plugin
@@ -37,12 +34,14 @@ import org.jgap.NaturalSelector;
  */
 public class ChainOfSelectors {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
   /**
    * Ordered list holding the NaturalSelector's.
    * Intentionally used as a decorator and not via inheritance!
    */
   private List selectors;
+
   public ChainOfSelectors() {
     selectors = new Vector();
   }
@@ -52,9 +51,11 @@ public class ChainOfSelectors {
    * @param a_selector the selector to be added
    * @throws InvalidConfigurationException
    *
+   * @author Klaus Meffert
    * @since 1.1 (previously part of class Configuration)
    */
-  public void addNaturalSelector(NaturalSelector a_selector) throws
+  public void addNaturalSelector(NaturalSelector a_selector)
+      throws
       InvalidConfigurationException {
     if (a_selector == null) {
       throw new InvalidConfigurationException(
@@ -64,7 +65,16 @@ public class ChainOfSelectors {
     selectors.add(a_selector);
   }
 
-  public void addAll(Collection c) throws InvalidConfigurationException {
+  /**
+   *
+   * @param c Collection
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  public void addAll(Collection c)
+      throws InvalidConfigurationException {
     Iterator it = c.iterator();
     while (it.hasNext()) {
       NaturalSelector selector = (NaturalSelector) it.next();
@@ -72,10 +82,22 @@ public class ChainOfSelectors {
     }
   }
 
+  /**
+   * @return number of selectors in list
+   *
+   * @author Klaus Meffert
+   * @since 1.1 (previously part of class Configuration)
+   */
   public int size() {
     return selectors.size();
   }
 
+  /**
+   * @return true if number of selectors is zero
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public boolean isEmpty() {
     return size() == 0;
   }
@@ -84,18 +106,46 @@ public class ChainOfSelectors {
     return selectors.hashCode();
   }
 
+  /**
+   *
+   * @param o Object
+   * @return boolean
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public boolean equals(Object o) {
     return selectors.equals(o);
   }
 
+  /**
+   * Returns a Selector with specific index in the list
+   * @param index the index of the Selector to read from the list
+   * @return NaturalSelector
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public NaturalSelector get(int index) {
     return (NaturalSelector) selectors.get(index);
   }
 
+  /**
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   *
+   */
   public void clear() {
     selectors.clear();
   }
 
+  /**
+   * @return Iterator for iterating over list of selectors
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public Iterator iterator() {
     return selectors.iterator();
   }

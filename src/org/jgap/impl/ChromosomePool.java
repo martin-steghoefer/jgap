@@ -25,13 +25,13 @@ import org.jgap.*;
  * discarded Chromosome instances can be recycled, thus saving memory and the
  * overhead of constructing new ones from scratch each time.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class ChromosomePool {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The internal pool in which the Chromosomes are stored.
@@ -40,6 +40,8 @@ public class ChromosomePool {
 
   /**
    * Constructor.
+   *
+   * @author Neil Rostan
    * @since 1.0
    */
   public ChromosomePool() {
@@ -53,6 +55,8 @@ public class ChromosomePool {
    *
    * @return A Chromosome instance from the pool or null if no
    *         Chromosome instances are available in the pool.
+   *
+   * @author Neil Rostan
    * @since 1.0
    */
   public synchronized Chromosome acquireChromosome() {
@@ -66,6 +70,8 @@ public class ChromosomePool {
    * genes prior to adding it back to the pool.
    *
    * @param a_chromosome The Chromosome instance to be released into the pool.
+   *
+   * @author Neil Rostan
    * @since 1.0
    */
   public synchronized void releaseChromosome(Chromosome a_chromosome) {

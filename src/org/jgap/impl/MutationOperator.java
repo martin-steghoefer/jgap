@@ -19,7 +19,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -41,9 +40,8 @@ import org.jgap.*;
  */
 public class MutationOperator
     implements GeneticOperator {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -52,6 +50,7 @@ public class MutationOperator
    * disabled mutation entirely.
    */
   protected int m_mutationRate;
+
   /**
    * Calculator for dynamically determining the mutation rate. If set to
    * null the value of m_mutationRate will be used.
@@ -64,6 +63,9 @@ public class MutationOperator
    * mutation rate, which results in dynamic mutation being turned on. This
    * means that the mutation rate will be automatically determined by this
    * operator based upon the number of genes present in the chromosomes.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public MutationOperator() {
     setMutationRateCalc(new DefaultMutationRateCalculator());
@@ -75,6 +77,8 @@ public class MutationOperator
    * on.
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    *        computation
+   *
+   * @author Klaus Meffert
    * @since 1.1
    */
   public MutationOperator(MutationRateCalculator a_mutationRateCalculator) {
@@ -90,6 +94,8 @@ public class MutationOperator
    *                              For example, 1000 would result in 1/1000
    *                              genes being mutated on average. A mutation
    *                              rate of zero disables mutation entirely.
+   *
+   * @author Neil Rotstan
    * @since 1.1
    */
   public MutationOperator(int a_desiredMutationRate) {
@@ -121,6 +127,7 @@ public class MutationOperator
    *                               modified copies of Chromosomes to this
    *                               list if it's desired for them to be
    *                               considered for natural selection.
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
@@ -138,7 +145,7 @@ public class MutationOperator
     // calculate it based upon the number of genes in the chromosome.
     // Otherwise, go with the mutation rate set upon construction.
     // --------------------------------------------------------------
-  int currentRate;
+    int currentRate;
     if (m_mutationRateCalc != null) {
       currentRate = m_mutationRateCalc.calculateCurrentRate(
           a_activeConfiguration);
@@ -239,6 +246,7 @@ public class MutationOperator
    * Sets the MutationRateCalculator to be used for determining the strengt of
    * mutation
    * @param m_mutationRateCalc MutationRateCalculator
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
