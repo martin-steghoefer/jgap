@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -54,6 +54,11 @@ public class IntegerGene
    */
   protected int m_lowerBounds;
 
+  /**
+   * Holds the configuration object associated with the Gene. The configuration
+   * object is important to obtain referenced objects from it, like the
+   * RandomGenerator.
+   */
   private Configuration m_configuration;
 
   /**
