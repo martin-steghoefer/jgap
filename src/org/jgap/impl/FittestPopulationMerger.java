@@ -38,7 +38,7 @@ import org.jgap.distr.IPopulationMerger;
 public class FittestPopulationMerger implements IPopulationMerger {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     /* The method that merges the Populations.
      * @see org.jgap.distr.IPopulationMerger#mergePopulations(org.jgap.Population, org.jgap.Population, int)
@@ -80,7 +80,6 @@ public class FittestPopulationMerger implements IPopulationMerger {
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
         public int compare(Object o1, Object o2) {
-          /**@todo use FitnessEvaluator instead of static comparation!*/
             //The two objects passed are always
             //Chromosomes, so a cast must be made.
             Chromosome chr1 = (Chromosome) o1;
