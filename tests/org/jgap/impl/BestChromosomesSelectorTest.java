@@ -25,7 +25,7 @@ import junitx.util.*;
 public class BestChromosomesSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -62,6 +62,10 @@ public class BestChromosomesSelectorTest
     assertTrue(selector.getDoubletteChromosomesAllowed());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @throws Exception
+   */
   public void testAdd_0()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector();
@@ -91,6 +95,8 @@ public class BestChromosomesSelectorTest
 
   /**
    * Test if below functionality available without error
+   *
+   * @author Klaus Meffert
    * @throws Exception
    */
   public void testSelect_0()
@@ -112,6 +118,10 @@ public class BestChromosomesSelectorTest
     selector.select(1,null,new Population());
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testSelect_1()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
@@ -158,6 +168,10 @@ public class BestChromosomesSelectorTest
     assertEquals(thirdBestChrom, bestChroms[2]);
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testSelect_2()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
@@ -200,6 +214,7 @@ public class BestChromosomesSelectorTest
   /**
    * Ensure that selected Chromosome's are not equal to added Chromosome's.
    * @throws Exception
+   * @author Klaus Meffert
    */
   public void testSelect_3()
       throws Exception {
@@ -231,6 +246,10 @@ public class BestChromosomesSelectorTest
     assertFalse(bestChroms.equals(chromosomes));
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testEmpty_0()
       throws Exception {
     BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
@@ -251,6 +270,7 @@ public class BestChromosomesSelectorTest
   /**
    * Test if clear()-method does not affect original Population
    * @throws Exception
+   * @author Klaus Meffert
    */
   public void testEmpty_1()
       throws Exception {
@@ -272,6 +292,7 @@ public class BestChromosomesSelectorTest
   /**
    * Test if clear()-method does not affect return value
    * @throws Exception
+   * @author Klaus Meffert
    */
   public void testEmpty_2()
       throws Exception {
