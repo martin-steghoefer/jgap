@@ -19,9 +19,9 @@
  */
 package org.jgap;
 
-import org.jgap.impl.ChromosomePool;
-
 import java.io.Serializable;
+
+import org.jgap.impl.ChromosomePool;
 
 /**
  * Chromosomes represent potential solutions and consist of a fixed-length
@@ -50,7 +50,7 @@ public class Chromosome
      * in the fitness function. JGAP completely ignores the data, aside
      * from allowing it to be set and retrieved.
      */
-    private Object m_applicationData = null;
+    private Object m_applicationData;
 
     /**
      * The array of Genes contained in this Chromosome.
@@ -75,7 +75,7 @@ public class Chromosome
      * Stores the hash-code of this Chromosome so that it doesn't need
      * to be recalculated each time.
      */
-    private int m_hashCode = 0;
+    private int m_hashCode;
 
     /**
      * Constructs a Chromosome of the given size separate from any specific
@@ -542,15 +542,17 @@ public class Chromosome
      */
     public boolean equals (Object other)
     {
-        // If class is not equal, return false. If we would not do this here,
-        // a problem arises in the compareTo-method which only works correctly
-        // with chromosomes of the same class
-        // ------------------------------------------------------------------
-        if (other != null &&
+        // If class is not equal, return false. Therefor catch
+        // ClasscastException's. The cleaner way (commented out below) would
+        // be too slow, indeed.
+        // -----------------------------------------------------------------
+        /*
+            if (other != null &&
             !this.getClass ().getName ().equals (other.getClass ().getName ()))
-        {
-            return false;
-        }
+            {
+                return false;
+            }
+         */
         try
         {
             return compareTo (other) == 0;
