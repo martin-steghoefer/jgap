@@ -38,7 +38,11 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     implements NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
+  //delta for distinguishing whether a value is to be interpreted as zero
+  private static final double DELTA = 0.000001;
+
   private static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0.0);
   /**
    * Represents the "roulette wheel." Each key in the Map is a Chromosome
@@ -211,7 +215,7 @@ public class WeightedRouletteSelector
       // selected slot.
       // ----------------------------------------------------------
       currentSlot += a_counterValues[i];
-      if (currentSlot > selectedSlot) {
+      if (currentSlot > selectedSlot - DELTA) {
         // Remove one instance of the chromosome from the wheel by
         // decrementing the slot counter by the fitness value.
         // --------------------------------------------------------
