@@ -2,9 +2,14 @@
 ----------
 * Added new NaturalSelector: class TournamentSelector (see request 1066342)
 * Added new class GaussianMutationOperator (see request 708772)
+* Added DeltaFitnessEvaluator interpreting fitness values a defect rates
 * Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
   set it and Genotype.getConfiguration() to obtain it.
 * Introduced overall performance test to ensure performance
+* Introduced new example in packeg examples.simpleBoolean
+* Introduced new example for Travelling Salesman Problem (TSP)
+  in package org.jgap.impl.salesman
+* Introduced org.jgap.supergenes.Supergene
 * Changed return type Chromosome[] to Population containing list of Chromosomes
 * Added new unit tests
 * Class Chromosome: made attribute "Gene[] m_genes" private
@@ -16,7 +21,6 @@
   always the first one computed
 * Fixed design flaw in Genes' methods mapValueToWithinBounds()
 * Genes now can hold a Configuration object
-* Added DeltaFitnessEvaluator interpreting fitness values a defect rates
 
 Swarm Intelligence
 
