@@ -17,18 +17,19 @@
  */
 package examples;
 
-import org.jgap.FitnessFunction;
-import org.jgap.Chromosome;
+import org.jgap.*;
 
 /**
  * Sample fitness function for the MakeChange example.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
   private final int m_targetAmount;
+
   public MinimizingMakeChangeFitnessFunction(int a_targetAmount) {
     if (a_targetAmount < 1 || a_targetAmount > 99) {
       throw new IllegalArgumentException(
