@@ -12,6 +12,7 @@
 * Improved compareTo method considering app. data only
   when opting in to it
 * Optimized Chromosome.getFitnessValue()
+* Removed m_doNotEmpty in BestChromosomesSelector
 * Added example: Formula Finder
 * Added class ConfigurationForTest (preinitialized
   Configuration object) as a basis for writing tests more
@@ -31,6 +32,7 @@
 * Added tests for Population
 * Added tests for CrossoverOperator
 * Added tests for ChainOfSelectors
+* Added tests for EventManager
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request
   1084383)
