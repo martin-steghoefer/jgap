@@ -25,7 +25,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public ConfigurationTest() {
   }
@@ -94,6 +94,7 @@ public class ConfigurationTest
     conf.setSampleChromosome(new Chromosome(gene, 5));
     try {
       conf.verifyStateIsValid();
+      fail();
     }
     catch (InvalidConfigurationException invex) {
       ; //this is OK
@@ -110,6 +111,7 @@ public class ConfigurationTest
     conf.addNaturalSelector(new WeightedRouletteSelector(), false);
     try {
       conf.verifyStateIsValid();
+      fail();
     }
     catch (InvalidConfigurationException invex) {
       ; //this is OK
@@ -127,6 +129,7 @@ public class ConfigurationTest
     conf.setRandomGenerator(new StockRandomGenerator());
     try {
       conf.verifyStateIsValid();
+      fail();
     }
     catch (InvalidConfigurationException invex) {
       ; //this is OK
@@ -145,6 +148,7 @@ public class ConfigurationTest
     conf.setEventManager(new EventManager());
     try {
       conf.verifyStateIsValid();
+      fail();
     }
     catch (InvalidConfigurationException invex) {
       ; //this is OK
@@ -164,6 +168,7 @@ public class ConfigurationTest
     conf.addGeneticOperator(new MutationOperator());
     try {
       conf.verifyStateIsValid();
+      fail();
     }
     catch (InvalidConfigurationException invex) {
       ; //this is OK
@@ -184,6 +189,27 @@ public class ConfigurationTest
     conf.addGeneticOperator(new MutationOperator());
     conf.setPopulationSize(1);
     conf.verifyStateIsValid();
+  }
+
+  public void testVerifyStateIsValid_7() throws
+      InvalidConfigurationException {
+    Configuration conf = new Configuration();
+    assertEquals(false, conf.isLocked());
+    conf.setFitnessFunction(new StaticFitnessFunction(2));
+    Gene gene = new BooleanGene();
+    conf.setSampleChromosome(new Chromosome(gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    conf.setRandomGenerator(new StockRandomGenerator());
+    conf.setEventManager(new EventManager());
+    conf.addGeneticOperator(new MutationOperator());
+    conf.setPopulationSize(1);
+    try {
+      conf.verifyStateIsValid();
+      fail();
+    }
+    catch (IllegalArgumentException illex) {
+      ; //this is OK
+    }
   }
 
   public void testIsLocked_0() throws InvalidConfigurationException {
@@ -251,6 +277,19 @@ public class ConfigurationTest
     Configuration conf = new Configuration();
     NaturalSelector selector = conf.getNaturalSelector();
     assertEquals(null, selector);
+  }
+
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testGetNaturalSelector_1() throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new BestChromosomesSelector();
+    conf.addNaturalSelector(selector, false);
+    assertEquals(selector,conf.getNaturalSelector());
   }
 
   public void testAddNaturalSelector_0() throws Exception {
@@ -360,6 +399,28 @@ public class ConfigurationTest
     catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
+  }
+
+  public void testSetRandomGenerator_0() {
+      Configuration conf = new Configuration();
+      try {
+        conf.setRandomGenerator(null);
+        fail();
+      }
+      catch (InvalidConfigurationException invex) {
+        ; //this is OK
+      }
+  }
+
+  public void testSetEventManager_0() {
+      Configuration conf = new Configuration();
+      try {
+        conf.setEventManager(null);
+        fail();
+      }
+      catch (InvalidConfigurationException invex) {
+        ; //this is OK
+      }
   }
 
   public void testLock_0() throws Exception {

@@ -23,7 +23,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public GenotypeTest() {
   }
@@ -38,8 +38,6 @@ public class GenotypeTest
   }
 
   /**
-   * @throws Exception
-   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -50,6 +48,23 @@ public class GenotypeTest
     }
     catch (InvalidConfigurationException invex) {
       ; //this is OK
+    }
+    catch (IllegalArgumentException invex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void testConstruct_1() throws Exception {
+    try {
+      Population pop = null;
+      new Genotype(new DefaultConfiguration(), pop);
+      fail();
     }
     catch (IllegalArgumentException invex) {
       ; //this is OK
@@ -383,6 +398,7 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @author John Serri
    * @since 2.1
    */
   public void testHashcode_0()
@@ -499,5 +515,30 @@ public class GenotypeTest
     // A lot of temporary objects where created in this test so do a quick
     // garbage collect.
     System.gc();
+  }
+
+  public void testSetActiveConfiguration_0() throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new ConfigurationForTest();
+    Genotype genotype = new Genotype(conf, chroms);
+    genotype.setActiveConfiguration(conf);
+    genotype.setActiveConfiguration(null);
+  }
+
+  public void testSetActiveConfiguration_1() throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new ConfigurationForTest();
+    Genotype genotype = new Genotype(conf, chroms);
+    Genotype.setConfiguration(null);
+    try {
+      genotype.setActiveConfiguration(null);
+      fail();
+    }catch (InvalidConfigurationException iex) {
+      ;//this is OK
+    }
   }
 }
