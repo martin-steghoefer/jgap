@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,10 +15,10 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import java.util.List;
-
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.Gene;
@@ -41,215 +39,190 @@ import org.jgap.RandomGenerator;
  * that, on average, one gene will be mutated for every ten Chromosomes
  * processed by this operator.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public class MutationOperator
-    implements GeneticOperator
-{
-    /**
-     * The current mutation rate used by this MutationOperator, expressed as
-     * the denominator in the 1 / X ratio. For example, a value of 1000 would
-     * mean that, on average, 1 / 1000 genes would be mutated. A value of zero
-     * disabled mutation entirely.
-     */
-    protected int m_mutationRate;
+    implements GeneticOperator {
 
-    /**
-     * Calculator for dynamically determining the mutation rate. If set to
-     * null the value of m_mutationRate will be used.
-     * Replaces the previously used boolean m_dynamicMutationRate
-     * @since 1.1
-     */
-    private MutationRateCalculator m_mutationRateCalc;
+  /**
+   * The current mutation rate used by this MutationOperator, expressed as
+   * the denominator in the 1 / X ratio. For example, a value of 1000 would
+   * mean that, on average, 1 / 1000 genes would be mutated. A value of zero
+   * disabled mutation entirely.
+   */
+  protected int m_mutationRate;
+  /**
+   * Calculator for dynamically determining the mutation rate. If set to
+   * null the value of m_mutationRate will be used.
+   * Replaces the previously used boolean m_dynamicMutationRate
+   * @since 1.1
+   */
+  private MutationRateCalculator m_mutationRateCalc;
+  /**
+   * Constructs a new instance of this MutationOperator without a specified
+   * mutation rate, which results in dynamic mutation being turned on. This
+   * means that the mutation rate will be automatically determined by this
+   * operator based upon the number of genes present in the chromosomes.
+   */
+  public MutationOperator() {
+    setMutationRateCalc(new DefaultMutationRateCalculator());
+  }
 
-    /**
-     * Constructs a new instance of this MutationOperator without a specified
-     * mutation rate, which results in dynamic mutation being turned on. This
-     * means that the mutation rate will be automatically determined by this
-     * operator based upon the number of genes present in the chromosomes.
-     */
-    public MutationOperator ()
-    {
-        setMutationRateCalc (new DefaultMutationRateCalculator ());
+  /**
+   * Constructs a new instance of this MutationOperator with a specified
+   * mutation rate calculator, which results in dynamic mutation being turned
+   * on.
+   * @param a_mutationRateCalculator calculator for dynamic mutation rate
+   *        computation
+   */
+  public MutationOperator(MutationRateCalculator a_mutationRateCalculator) {
+    setMutationRateCalc(a_mutationRateCalculator);
+  }
+
+  /**
+   * Constructs a new instance of this MutationOperator with the given
+   * mutation rate.
+   *
+   * @param a_desiredMutationRate The desired rate of mutation, expressed
+   *                              as the denominator of the 1 / X fraction.
+   *                              For example, 1000 would result in 1/1000
+   *                              genes being mutated on average. A mutation
+   *                              rate of zero disables mutation entirely.
+   */
+  public MutationOperator(int a_desiredMutationRate) {
+    m_mutationRate = a_desiredMutationRate;
+    setMutationRateCalc(null);
+  }
+
+  /**
+   * The operate method will be invoked on each of the genetic operators
+   * referenced by the current Configuration object during the evolution
+   * phase. Operators are given an opportunity to run in the order that
+   * they are added to the Configuration. Implementations of this method
+   * may reference the population of Chromosomes as it was at the beginning
+   * of the evolutionary phase and/or they may instead reference the
+   * candidate Chromosomes, which are the results of prior genetic operators.
+   * In either case, only Chromosomes added to the list of candidate
+   * chromosomes will be considered for natural selection. Implementations
+   * should never modify the original population, but should first make copies
+   * of the Chromosomes selected for modification and operate upon the copies.
+   *
+   * @param a_activeConfiguration The current active genetic configuration.
+   * @param a_population The population of chromosomes from the current
+   *                     evolution prior to exposure to any genetic operators.
+   *                     Chromosomes in this array should never be modified.
+   * @param a_candidateChromosomes The pool of chromosomes that are candidates
+   *                               for the next evolved population. Only these
+   *                               chromosomes will go to the natural
+   *                               phase, so it's important to add any
+   *                               modified copies of Chromosomes to this
+   *                               list if it's desired for them to be
+   *                               considered for natural selection.
+   */
+  public void operate(final Configuration a_activeConfiguration,
+                      final Chromosome[] a_population,
+                      List a_candidateChromosomes) {
+    // If the mutation rate is set to zero and dynamic mutation rate is
+    // disabled, then we don't perform any mutation.
+    // ----------------------------------------------------------------
+    if (m_mutationRate == 0 && m_mutationRateCalc == null) {
+      return;
     }
+    // Determine the mutation rate. If dynamic rate is enabled, then
+    // calculate it based upon the number of genes in the chromosome.
+    // Otherwise, go with the mutation rate set upon construction.
+    // --------------------------------------------------------------
+    int currentRate = m_mutationRateCalc != null ?
+        m_mutationRateCalc.calculateCurrentRate(a_activeConfiguration) :
+        m_mutationRate;
+    RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+    // It would be inefficient to create copies of each Chromosome just
+    // to decide whether to mutate them. Instead, we only make a copy
+    // once we've positively decided to perform a mutation.
+    // ----------------------------------------------------------------
+    for (int i = 0; i < a_population.length; i++) {
+      Gene[] genes = a_population[i].getGenes();
+      Chromosome copyOfChromosome = null;
+      // For each Chromosome in the population...
 
-    /**
-     * Constructs a new instance of this MutationOperator with a specified
-     * mutation rate calculator, which results in dynamic mutation being turned
-     * on.
-     * @param a_mutationRateCalculator calculator for dynamic mutation rate
-     *        computation
-     */
-    public MutationOperator (MutationRateCalculator a_mutationRateCalculator)
-    {
-        setMutationRateCalc (a_mutationRateCalculator);
-    }
+      // ----------------------------------------
+      for (int j = 0; j < genes.length; j++) {
+        // Ensure probability of 1/currentRate for applying mutation
 
-    /**
-     * Constructs a new instance of this MutationOperator with the given
-     * mutation rate.
-     *
-     * @param a_desiredMutationRate The desired rate of mutation, expressed
-     *                              as the denominator of the 1 / X fraction.
-     *                              For example, 1000 would result in 1/1000
-     *                              genes being mutated on average. A mutation
-     *                              rate of zero disables mutation entirely.
-     */
-    public MutationOperator (int a_desiredMutationRate)
-    {
-        m_mutationRate = a_desiredMutationRate;
-        setMutationRateCalc (null);
-    }
-
-    /**
-     * The operate method will be invoked on each of the genetic operators
-     * referenced by the current Configuration object during the evolution
-     * phase. Operators are given an opportunity to run in the order that
-     * they are added to the Configuration. Implementations of this method
-     * may reference the population of Chromosomes as it was at the beginning
-     * of the evolutionary phase and/or they may instead reference the
-     * candidate Chromosomes, which are the results of prior genetic operators.
-     * In either case, only Chromosomes added to the list of candidate
-     * chromosomes will be considered for natural selection. Implementations
-     * should never modify the original population, but should first make copies
-     * of the Chromosomes selected for modification and operate upon the copies.
-     *
-     * @param a_activeConfiguration The current active genetic configuration.
-     * @param a_population The population of chromosomes from the current
-     *                     evolution prior to exposure to any genetic operators.
-     *                     Chromosomes in this array should never be modified.
-     * @param a_candidateChromosomes The pool of chromosomes that are candidates
-     *                               for the next evolved population. Only these
-     *                               chromosomes will go to the natural
-     *                               phase, so it's important to add any
-     *                               modified copies of Chromosomes to this
-     *                               list if it's desired for them to be
-     *                               considered for natural selection.
-     */
-    public void operate (final Configuration a_activeConfiguration,
-        final Chromosome[] a_population,
-        List a_candidateChromosomes)
-    {
-        // If the mutation rate is set to zero and dynamic mutation rate is
-        // disabled, then we don't perform any mutation.
-        // ----------------------------------------------------------------
-        if (m_mutationRate == 0 && m_mutationRateCalc == null)
-        {
-            return;
-        }
-
-        // Determine the mutation rate. If dynamic rate is enabled, then
-        // calculate it based upon the number of genes in the chromosome.
-        // Otherwise, go with the mutation rate set upon construction.
-        // --------------------------------------------------------------
-        int currentRate = m_mutationRateCalc != null ?
-            m_mutationRateCalc.calculateCurrentRate (a_activeConfiguration) :
-            m_mutationRate;
-
-        RandomGenerator generator = a_activeConfiguration.getRandomGenerator ();
-
-        // It would be inefficient to create copies of each Chromosome just
-        // to decide whether to mutate them. Instead, we only make a copy
-        // once we've positively decided to perform a mutation.
-        // ----------------------------------------------------------------
-        for (int i = 0; i < a_population.length; i++)
-        {
-            Gene[] genes = a_population[i].getGenes ();
-            Chromosome copyOfChromosome = null;
-
-            // For each Chromosome in the population...
+        // ---------------------------------------------------------
+        if (generator.nextInt(currentRate) == 0) {
+          // Now that we want to actually modify the Chromosome,
+          // let's make a copy of it (if we haven't already) and
+          // add it to the candidate chromosomes so that it will
+          // be considered for natural selection during the next
+          // phase of evolution. Then we'll set the gene's value
+          // to a random value as the implementation of our
+          // "mutation" of the gene.
+          // ---------------------------------------------------
+          if (copyOfChromosome == null) {
+            // ...take a copy of it...
+            // -----------------------
+            copyOfChromosome = (Chromosome) a_population[i].clone();
+            // ...add it to the candidate pool...
+            // ----------------------------------
+            a_candidateChromosomes.add(copyOfChromosome);
+            // ...then Gaussian mutate all its genes...
             // ----------------------------------------
-            for (int j = 0; j < genes.length; j++)
-            {
-                // Ensure probability of 1/currentRate for applying mutation
-                // ---------------------------------------------------------
-                if (generator.nextInt (currentRate) == 0)
-                {
-                    // Now that we want to actually modify the Chromosome,
-                    // let's make a copy of it (if we haven't already) and
-                    // add it to the candidate chromosomes so that it will
-                    // be considered for natural selection during the next
-                    // phase of evolution. Then we'll set the gene's value
-                    // to a random value as the implementation of our
-                    // "mutation" of the gene.
-                    // ---------------------------------------------------
-                    if (copyOfChromosome == null)
-                    {
-                        // ...take a copy of it...
-                        // -----------------------
-                        copyOfChromosome = (Chromosome) a_population[i].clone ();
+            genes = copyOfChromosome.getGenes();
+          }
+          // Significant architectural changes made here due to
+          // request 708772 (also changed Gene classes)
+          // --------------------------------------------------
 
-                        // ...add it to the candidate pool...
-                        // ----------------------------------
-                        a_candidateChromosomes.add (copyOfChromosome);
-
-                        // ...then Gaussian mutate all its genes...
-                        // ----------------------------------------
-                        genes = copyOfChromosome.getGenes ();
-
-                    }
-                    // Significant architectural changes made here due to
-                    // request 708772 (also changed Gene classes)
-                    // --------------------------------------------------
-
-                    // Process all atomic elements in the gene. For a StringGene
-                    // this would be the length of the string, for an
-                    // IntegerGene, it is always one element
-                    // ---------------------------------------------------------
-                    if (genes[j] instanceof CompositeGene)
-                    {
-                        CompositeGene compositeGene = (CompositeGene) genes[j];
-                        for (int k = 0; k < compositeGene.size (); k++)
-                        {
-                            mutateGene (compositeGene.geneAt (k), generator);
-                        }
-                    }
-                    else
-                    {
-                        mutateGene (genes[j], generator);
-                    }
-                    // End of changed for request 708772
-                }
+          // Process all atomic elements in the gene. For a StringGene
+          // this would be the length of the string, for an
+          // IntegerGene, it is always one element
+          // ---------------------------------------------------------
+          if (genes[j] instanceof CompositeGene) {
+            CompositeGene compositeGene = (CompositeGene) genes[j];
+            for (int k = 0; k < compositeGene.size(); k++) {
+              mutateGene(compositeGene.geneAt(k), generator);
             }
+          }
+          else {
+            mutateGene(genes[j], generator);
+          }
+          // End of changed for request 708772
         }
+      }
     }
+  }
 
-    /**
-     * Helper: mutate all atomic elements of a gene
-     * @param a_gene the gene to be mutated
-     * @param a_generator the generator delivering amount of mutation
-     *
-     * @author Klaus Meffert
-     * @since 1.1
-     */
-    private void mutateGene (Gene a_gene, RandomGenerator a_generator)
-    {
-        for (int k = 0; k < a_gene.size (); k++)
-        {
-            // Retrieve value between 0 and 1 (not included) from
-            // generator. Then map this value to range -1 and 1
-            // (-1 included, 1 not)
-            // --------------------------------------------------
-            double percentage = -1 + a_generator.nextDouble () * 2;
-
-            // Mutate atomic element by calculated percentage
-            // ----------------------------------------------
-            a_gene.applyMutation (k, percentage);
-        }
+  /**
+   * Helper: mutate all atomic elements of a gene
+   * @param a_gene the gene to be mutated
+   * @param a_generator the generator delivering amount of mutation
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  private void mutateGene(Gene a_gene, RandomGenerator a_generator) {
+    for (int k = 0; k < a_gene.size(); k++) {
+      // Retrieve value between 0 and 1 (not included) from
+      // generator. Then map this value to range -1 and 1
+      // (-1 included, 1 not)
+      // --------------------------------------------------
+      double percentage = -1 + a_generator.nextDouble() * 2;
+      // Mutate atomic element by calculated percentage
+      // ----------------------------------------------
+      a_gene.applyMutation(k, percentage);
     }
+  }
 
-    public MutationRateCalculator getMutationRateCalc ()
-    {
-        return m_mutationRateCalc;
-    }
+  public MutationRateCalculator getMutationRateCalc() {
+    return m_mutationRateCalc;
+  }
 
-    public void setMutationRateCalc (MutationRateCalculator m_mutationRateCalc)
-    {
-        this.m_mutationRateCalc = m_mutationRateCalc;
-        if (m_mutationRateCalc != null)
-        {
-            m_mutationRate = 0;
-        }
+  public void setMutationRateCalc(MutationRateCalculator m_mutationRateCalc) {
+    this.m_mutationRateCalc = m_mutationRateCalc;
+    if (m_mutationRateCalc != null) {
+      m_mutationRate = 0;
     }
+  }
 }
