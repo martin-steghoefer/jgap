@@ -15,10 +15,10 @@ import org.jgap.*;
 import org.jgap.distr.*;
 
 /**
- * A implementation of the IPopulationMerger interface that
- * merges two populations as specified based on the fitness
- * function, that is, the n fittest chromosomes are returned
- * in the new population, where n is supplied by parameter.
+ * A implementation of the IPopulationMerger interface that merges two
+ * populations as specified based on the fitness function, that is, the n
+ * fittest chromosomes are returned in the new population, where n is supplied
+ * by parameter.
  *
  * @author Henrique Goulart
  * @since 2.0
@@ -26,7 +26,7 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /*
    * The method that merges the Populations.
