@@ -40,7 +40,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private int m_length;
 
@@ -492,27 +492,19 @@ public class FixedBinaryGene
         return -1;
       }
     }
-    // Count number of 1's for this Gene
-    int this1s = 0;
+    boolean b1, b2;
     for (int i = 0; i < thisLen; i++) {
-      if (getBit(i)) {
-        this1s++;
-      }
-    }
-
-    // Count number of 1's for other Gene
-    int other1s = 0;
-    for (int i = 0; i < thisLen; i++) {
-      if (otherGene.getBit(i)) {
-        other1s++;
-      }
-    }
-    if (this1s != other1s) {
-      if (this1s > other1s) {
-        return 1;
+      b1 = getBit(i);
+      b2 = otherGene.getBit(i);
+      if (b1) {
+        if (!b2) {
+          return 1;
+        }
       }
       else {
-        return -1;
+        if (b2) {
+          return -1;
+        }
       }
     }
     // Determine int value of binary representation
