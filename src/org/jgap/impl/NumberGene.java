@@ -31,7 +31,7 @@ public abstract class NumberGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -42,6 +42,7 @@ public abstract class NumberGene
   /**
    * Executed by the genetic engine when this Gene instance is no
    * longer needed and should perform any necessary resource cleanup.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -58,6 +59,7 @@ public abstract class NumberGene
    * @param other the object to compare to this IntegerGene for equality.
    * @return true if this Gene is equal to the given object,
    *         false otherwise.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -77,6 +79,7 @@ public abstract class NumberGene
    * Retrieves the hash code value for this IntegerGene.
    *
    * @return this IntegerGene's hash code.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -104,6 +107,7 @@ public abstract class NumberGene
    *
    * @throws ClassCastException if the specified object's type prevents it
    *         from being compared to this IntegerGene.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -142,6 +146,7 @@ public abstract class NumberGene
    * @return a negative integer, zero, or a positive integer as this object
    *	       is less than, equal to, or greater than the object provided for
    *         comparison.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -152,6 +157,7 @@ public abstract class NumberGene
    * may be useful for display purposes.
    *
    * @return a string representation of this IntegerGene's value.
+  *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -171,6 +177,7 @@ public abstract class NumberGene
    * mappped to within the allowable range.
    *
    * @param a_newValue the new value of this Gene instance.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -187,6 +194,7 @@ public abstract class NumberGene
    * returned by this class will be Integer instances.
    *
    * @return the Integer value of this Gene.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -213,6 +221,7 @@ public abstract class NumberGene
    * integer max and min, then the resulting value will be about halfway
    * between the upper bounds and lower bounds). If the value is null or
    * is already within the bounds, it will be left unchanged.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -221,11 +230,14 @@ public abstract class NumberGene
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
    * element at given index (NumberGenes only have one atomic element)
+   *
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    *        than 1).
-  * @author Klaus Meffert
-  * @since 1.1
+   *
+   * @author Klaus Meffert
+   * @since 1.1
    */
   public abstract void applyMutation(int index, double a_percentage);
+
 }
