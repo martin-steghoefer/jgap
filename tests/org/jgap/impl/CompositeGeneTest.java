@@ -33,12 +33,13 @@ public class CompositeGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001d;
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public CompositeGeneTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -80,6 +81,10 @@ public class CompositeGeneTest
     catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  public void testAddGene_2() {
+    /**@todo test the strict parameter of addGene(..)*/
   }
 
   public void testToString_0() {
@@ -276,6 +281,21 @@ public class CompositeGeneTest
     gene1.addGene(new StringGene(2, 5), false);
     gene0 = new StringGene(6, 11, "ABC");
     gene0.setAllele("BBCBCCA");
+    gene1.addGene(gene0, false);
+    String pres1 = gene1.getPersistentRepresentation();
+    CompositeGene gene2 = new CompositeGene();
+    gene2.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene2.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+  }
+
+  public void testPersistentPresentation_1() throws Exception {
+    CompositeGene gene1 = new CompositeGene();
+    Gene gene0 = new StringGene(5,10);
+    gene0.setAllele("HALLO");
+    gene1.addGene(gene0);
+    gene0 = new StringGene(6, 11, "ABC"+CompositeGene.GENE_DELIMITER);
+    gene0.setAllele("BBCBCCA"+CompositeGene.GENE_DELIMITER);
     gene1.addGene(gene0, false);
     String pres1 = gene1.getPersistentRepresentation();
     CompositeGene gene2 = new CompositeGene();
