@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -153,7 +153,8 @@ public class CoinsExample {
 //            else {
 //              d = fitness;
 //            }
-            eval.setValue(permutation,run,fitness, "Perm " + permutation, s);
+            eval.setValue(permutation, run, fitness, ""+permutation, s);
+            eval.store(permutation, run, population);
 //            eval.setValue(permutation,run,fitness, new Integer(0), s);
           }
         }
@@ -201,7 +202,7 @@ public class CoinsExample {
       for (int jj=0;jj<myDataset.getRowCount();jj++) {
         dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
                                             myDataset.getColumnKey(ii)),
-                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
+                         "Perm "+myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
       }
     }
 

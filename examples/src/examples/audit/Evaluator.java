@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Each data has its own data container
@@ -232,5 +232,19 @@ public class Evaluator {
       }
     }
     return null;
+  }
+
+  /**
+   * Stores information contained in the given genotype, like:
+   * average fitness, maximum fitness...
+   * @param a_permutation int
+   * @param a_run int
+   * @param genotype Genotype
+   */
+  public void store(int a_permutation, int a_run, Genotype genotype) {
+    /**@todo implement*/
+    // average and maximum fitness value
+
+    //
   }
 }
