@@ -22,10 +22,7 @@ import org.jgap.*;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001;
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private double m_scale;
 

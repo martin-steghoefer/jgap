@@ -26,7 +26,7 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /*
    * The method that merges the Populations.
@@ -46,9 +46,10 @@ public class FittestPopulationMerger
     Chromosome[] chromosomes = (Chromosome[]) allChromosomes.toArray(new
         Chromosome[0]);
     Population mergedPopulation = new Population(a_new_population_size);
-    for (int i = 0; i < a_new_population_size && i < chromosomes.length; i++)
+    for (int i = 0; i < a_new_population_size && i < chromosomes.length; i++) {
       mergedPopulation.addChromosome(chromosomes[i]);
-      //The merged population is then returned.
+    }
+    //The merged population is then returned.
     return mergedPopulation;
   }
 
@@ -81,11 +82,15 @@ public class FittestPopulationMerger
       Chromosome chr1 = (Chromosome) o1;
       Chromosome chr2 = (Chromosome) o2;
       //Reverse comparison.
-      if (fEvaluator.isFitter(chr2.getFitnessValue(), chr1.getFitnessValue()))
+      if (fEvaluator.isFitter(chr2.getFitnessValue(), chr1.getFitnessValue())) {
         return 1;
-      else if (fEvaluator.isFitter(chr1.getFitnessValue(), chr2.getFitnessValue()))
+      }
+      else if (fEvaluator.isFitter(chr1.getFitnessValue(), chr2.getFitnessValue())) {
         return -1;
-      else return 0;
+      }
+      else {
+        return 0;
+      }
     }
   }
 }

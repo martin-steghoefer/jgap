@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * This field separates gene class name from
@@ -656,10 +656,13 @@ public class CompositeGene
         (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
 
     while (st.hasMoreTokens()) {
-      if (!st.nextToken().equals(GENE_DELIMITER_HEADING))
+      if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
         throw new UnsupportedRepresentationException(a_string + " no open tag");
+      }
       String n = st.nextToken();
-      if (n.equals(GENE_DELIMITER_CLOSING)) a.add(""); /* Empty token */
+      if (n.equals(GENE_DELIMITER_CLOSING)) {
+        a.add(""); /* Empty token */
+      }
       else {
         a.add(n);
         if (!st.nextToken().equals(GENE_DELIMITER_CLOSING))

@@ -30,7 +30,7 @@ public class BooleanGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -50,15 +50,6 @@ public class BooleanGene
    * References the internal boolean value of this Gene.
    */
   protected Boolean m_value = null;
-
-  /**
-   * Constructs a new BooleanGene with default settings.
-   *
-   * @author Neil Rotstan
-   * @author Klaus Meffert
-   */
-  public BooleanGene() {
-  }
 
   /**
    * Provides an implementation-independent means for creating new Gene
