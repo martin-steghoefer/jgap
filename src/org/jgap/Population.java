@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -47,6 +47,13 @@ public class Population {
    */
   private boolean m_changed;
 
+  /*
+   * Constructs the Population from a list of Chromosomes
+   * @param chromosomes the Chromosome's to be used for building the Population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Population(Chromosome[] chromosomes) {
     this();
     for (int i = 0; i < chromosomes.length; i++) {
@@ -55,10 +62,22 @@ public class Population {
     setChanged(true);
   }
 
+  /*
+   * Constructs an empty Population with the given size
+   * @param size the size of the empty Population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Population(int size) {
     m_chromosomes = new ArrayList(size);
   }
 
+  /*
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Population() {
     m_chromosomes = new ArrayList(100);
   }
@@ -83,34 +102,66 @@ public class Population {
    * Adds all the Chromosomes in the given Population.
    * Does nothing on null or an empty Population.
    *
-   * @param p the Population to add
+   * @param a_population the Population to add
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void addChromosomes(Population toAdd) {
-    if (toAdd != null) {
-      m_chromosomes.addAll(toAdd.getChromosomes());
+  public void addChromosomes(Population a_population) {
+    if (a_population != null) {
+      m_chromosomes.addAll(a_population.getChromosomes());
       setChanged(true);
     }
   }
 
+  /**
+   * @return the list of Chromosome's in the Population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public List getChromosomes() {
     return m_chromosomes;
   }
 
+  /**
+   * Returns a Chromosome at given index in the Population
+   * @param index the index of the Chromosome to be returned
+   * @return Chromosome at given index in the Population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Chromosome getChromosome(int index) {
     return (Chromosome) m_chromosomes.get(index);
   }
 
+  /**
+   * @return number of Chromosome's in the Population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public int size() {
     return m_chromosomes.size();
   }
 
+  /**
+   * @return Iterator for the Chromosome list in the Population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Iterator iterator() {
     return m_chromosomes.iterator();
   }
 
+  /**
+   * @return the Population converted into a list of Chromosome's
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public Chromosome[] toChromosomes() {
     Chromosome[] result = new Chromosome[m_chromosomes.size()];
     for (int i = 0; i < m_chromosomes.size(); i++) {
@@ -134,7 +185,7 @@ public class Population {
     Iterator it = m_chromosomes.iterator();
     double bestFitness = -1.0d;
     while (it.hasNext()) {
-      Chromosome chrom = (Chromosome)it.next();
+      Chromosome chrom = (Chromosome) it.next();
       double fitness = chrom.getFitnessValue();
       if (fitness > bestFitness || m_fittestChromosome == null) {
         m_fittestChromosome = chrom;
