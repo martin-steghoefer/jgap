@@ -16,7 +16,7 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
 */
-package tests.org.jgap.supergenes;
+package org.jgap.supergenes;
 
 import org.jgap.Genotype;
 import org.jgap.Chromosome;

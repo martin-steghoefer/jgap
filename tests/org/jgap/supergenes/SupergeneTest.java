@@ -17,7 +17,7 @@
  *
  */
 
-package tests.org.jgap.supergenes;
+package org.jgap.supergenes;
 
 import org.jgap.*;
 import org.jgap.impl.*;

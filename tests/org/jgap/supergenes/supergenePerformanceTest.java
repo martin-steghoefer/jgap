@@ -1,4 +1,4 @@
-package tests.org.jgap.supergenes;
+package org.jgap.supergenes;
 
 import org.jgap.supergenes.abstractSupergene;
 import java.util.Set;

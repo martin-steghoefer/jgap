@@ -1,4 +1,4 @@
-package tests.org.jgap.supergenes;
+package org.jgap.supergenes;
 
 /** Solve the change problem using force method. This class was used to
  * verify if the solution exists in general.
