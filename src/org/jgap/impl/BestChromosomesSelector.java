@@ -32,7 +32,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -74,10 +74,14 @@ public class BestChromosomesSelector
    * @since 1.1
    */
   public BestChromosomesSelector() {
+    this(1.0d);
+  }
+
+  public BestChromosomesSelector(double a_originalRate) {
     super();
     m_chromosomes = new Population();
     m_needsSorting = false;
-    setOriginalRate(1.0d);
+    setOriginalRate(a_originalRate);
     m_fitnessValueComparator = new FitnessValueComparator();
   }
 
@@ -92,7 +96,7 @@ public class BestChromosomesSelector
     // If opted-in: Check if chromosome already added
     // This speeds up the process by orders of magnitude but could lower the
     // quality of evolved results because of fewer Chromosome's used!!!
-   if (!m_doublettesAllowed &&
+    if (!m_doublettesAllowed &&
         m_chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
       return;
     }
@@ -204,10 +208,12 @@ public class BestChromosomesSelector
       Chromosome chrom1 = (Chromosome) first;
       Chromosome chrom2 = (Chromosome) second;
 
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.getFitnessValue(),chrom1.getFitnessValue())) {
+      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
+          getFitnessValue(), chrom1.getFitnessValue())) {
         return 1;
       }
-      else if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom1.getFitnessValue(),chrom2.getFitnessValue())) {
+      else if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
+          chrom1.getFitnessValue(), chrom2.getFitnessValue())) {
         return -1;
       }
       else {
