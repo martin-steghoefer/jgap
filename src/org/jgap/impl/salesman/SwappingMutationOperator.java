@@ -49,17 +49,22 @@ import org.jgap.impl.StockRandomGenerator;
 
 public class SwappingMutationOperator extends MutationOperator {
 
+    /** {@inheritDoc} */
     public SwappingMutationOperator() {
     }
 
-    public SwappingMutationOperator(MutationRateCalculator a_mutationRateCalculator) {
+    /** {@inheritDoc} */
+    public SwappingMutationOperator
+    (MutationRateCalculator a_mutationRateCalculator) {
         super(a_mutationRateCalculator);
     }
 
+    /** {@inheritDoc} */
     public SwappingMutationOperator(int a_desiredMutationRate) {
         super(a_desiredMutationRate);
     }
 
+    /** {@inheritDoc} */
     public void operate(final Population a_population,
                         List a_candidateChromosomes) {
 
@@ -103,7 +108,7 @@ public class SwappingMutationOperator extends MutationOperator {
   {
       Chromosome chromosome = null;
       // ----------------------------------------
-      for (int j = 0; j < a_x.size(); j++) {
+      for (int j = m_startOffset; j < a_x.size(); j++) {
         // Ensure probability of 1/currentRate for applying mutation
         // ---------------------------------------------------------
         if (generator.nextInt(a_rate) == 0) {
@@ -113,7 +118,8 @@ public class SwappingMutationOperator extends MutationOperator {
           // swap this gene with the other one now:
           //  mutateGene(genes[j], generator);
           // ------------------------------------
-          int other = generator.nextInt( genes.length );
+          int other = m_startOffset +
+            generator.nextInt( genes.length-m_startOffset );
           Gene t = genes [j];
           genes [j] = genes [other];
           genes [other] = t;
@@ -126,6 +132,28 @@ public class SwappingMutationOperator extends MutationOperator {
       }
       return chromosome;
   }
+
+    private int m_startOffset = 1;
+
+    /** Sets a number of genes at the start of chromosome, that are
+     * excluded from the swapping. In the Salesman task, the first city
+     * in the list should (where the salesman leaves from) probably should
+     * not change as it is part of the list. The default value is 1.
+     */
+    public void setStartOffset (int a_offset)
+    {
+        m_startOffset = a_offset;
+    }
+
+    /** Gets a number of genes at the start of chromosome, that are
+     * excluded from the swapping. In the Salesman task, the first city
+     * in the list should (where the salesman leaves from) probably should
+     * not change as it is part of the list. The default value is 1.
+     */
+    public int getStartOffset ()
+    {
+        return m_startOffset;
+    }
 
     public static void main(String[] args) {
       test();
@@ -140,7 +168,7 @@ public class SwappingMutationOperator extends MutationOperator {
         System.out.println(a);
 
         new SwappingMutationOperator().
-         operate (a, 10, new StockRandomGenerator());
+         operate (a, 1, new StockRandomGenerator());
 
         System.out.println(a);
 
@@ -163,6 +191,8 @@ public class SwappingMutationOperator extends MutationOperator {
 
         return g;
     }
+
+
 
 
 }

@@ -68,8 +68,11 @@ public abstract class Salesman {
    /**
     * Override this method to create a single sample chromosome, representing
     * al list of "cities". Each gene corresponds a single "city" and
-    * can appear only once. The genes will be shuffled to create the
-    * initial random population.
+    * can appear only once. By default, the first gene corresponds
+    * a "city" where the salesman starts the journey.
+    * It never changes its position. This can be changed by setting other
+    * start offset with setStartOffset( ).  Other genes will be shuffled to
+    * create the initial random population.
     *
     * @param initial_data The same object as was passed to findOptimalPath.
     * It can be used to specify the task more precisely if the class is
@@ -254,11 +257,37 @@ public abstract class Salesman {
         Gene t;
         // shuffle:
         for (int r = 0; r < 10 * a_genes.length; r++)
-        for (int i = 0; i < a_genes.length; i++) {
-            int p = m_conf.getRandomGenerator().nextInt(a_genes.length);
+        for (int i = m_startOffset; i < a_genes.length; i++) {
+            int p =
+              m_startOffset +
+              m_conf.getRandomGenerator().
+               nextInt(a_genes.length-m_startOffset);
             t = a_genes [i];
             a_genes [i] = a_genes [p];
             a_genes [p] = t;
         }
     }
+
+    private int m_startOffset = 1;
+
+    /** Sets a number of genes at the start of chromosome, that are
+     * excluded from the swapping. In the Salesman task, the first city
+     * in the list should (where the salesman leaves from) probably should
+     * not change as it is part of the list. The default value is 1.
+     */
+    public void setStartOffset (int a_offset)
+    {
+        m_startOffset = a_offset;
+    }
+
+    /** Gets a number of genes at the start of chromosome, that are
+     * excluded from the swapping. In the Salesman task, the first city
+     * in the list should (where the salesman leaves from) probably should
+     * not change as it is part of the list. The default value is 1.
+     */
+    public int getStartOffset ()
+    {
+        return m_startOffset;
+    }
+
 }

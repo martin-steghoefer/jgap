@@ -122,8 +122,8 @@ public class GreedyCrossover implements GeneticOperator {
        LinkedList out = new LinkedList();
        TreeSet not_picked = new TreeSet();
 
-       out.add(g1[0]);
-       for (int j = 1; j < n; j++) { // g[0] picked
+       out.add(g1[m_startOffset]);
+       for (int j = m_startOffset+1; j < n; j++) { // g[m_startOffset] picked
            not_picked.add( g1 [j] );
        }
 
@@ -132,9 +132,9 @@ public class GreedyCrossover implements GeneticOperator {
            if (g1.length!=g2.length)
             throw new Error ("Chromosome sizes must be equal");
 
-           for (int j = 0; j < n; j++)
+           for (int j = m_startOffset; j < n; j++)
             if ( !not_picked.contains( g2 [j] ) )
-             if ( ! g1[0].equals( g2[j] ) )
+             if ( ! g1[m_startOffset].equals( g2[j] ) )
              {
                System.err.println( new Chromosome (g1) );
                System.err.println( new Chromosome (g2) );
@@ -187,7 +187,11 @@ public class GreedyCrossover implements GeneticOperator {
        Gene [] g = new Gene [ n ];
        Iterator gi = out.iterator();
 
-       for (int i = 0; i < g.length; i++) {
+       for (int i = 0; i < m_startOffset; i++) {
+           g [i] = g1 [i];
+       }
+
+       for (int i = m_startOffset; i < g.length; i++) {
            g [i] = (Gene) gi.next();
        }
 
@@ -197,7 +201,7 @@ public class GreedyCrossover implements GeneticOperator {
 
    Gene findNext ( Gene [] g, Gene x)
        {
-           for (int i = 0; i < g.length-1; i++) {
+           for (int i = m_startOffset; i < g.length-1; i++) {
                if ( g[i].equals(x) )
                 return g[i+1];
            }
@@ -214,9 +218,9 @@ public class GreedyCrossover implements GeneticOperator {
    public static void test()
    {
        Chromosome a = new Chromosome(
-        mga("9 1 5 3 4 2 0 6 8 7"));
+        mga("1 9 5 3 4 2 0 6 8 7"));
        Chromosome b = new Chromosome(
-        mga("4 1 3 2 0 5 6 9 7 8"));
+        mga("1 4 3 2 0 5 6 9 7 8"));
 
        System.out.println(a);
        System.out.println(b);
@@ -246,6 +250,28 @@ public class GreedyCrossover implements GeneticOperator {
        }
 
        return g;
+   }
+
+   private int m_startOffset = 1;
+
+   /** Sets a number of genes at the start of chromosome, that are
+    * excluded from the swapping. In the Salesman task, the first city
+    * in the list should (where the salesman leaves from) probably should
+    * not change as it is part of the list. The default value is 1.
+    */
+   public void setStartOffset (int a_offset)
+   {
+       m_startOffset = a_offset;
+   }
+
+   /** Gets a number of genes at the start of chromosome, that are
+    * excluded from the swapping. In the Salesman task, the first city
+    * in the list should (where the salesman leaves from) probably should
+    * not change as it is part of the list. The default value is 1.
+    */
+   public int getStartOffset ()
+   {
+       return m_startOffset;
    }
 
 }
