@@ -19,5 +19,5 @@ for details about the example.
 
 Especially read the Getting Started section on the page!
 
-Klaus Meffert, 2004-11-17
+Klaus Meffert, 2005-01-01
 klausikm@users.sourceforge.net
