@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -71,11 +71,11 @@ public class IntegerGene
    * than the standard range of integer values.
    *
    * @author Neil Rostan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public IntegerGene() {
-    m_lowerBounds = Integer.MIN_VALUE;
-    m_upperBounds = Integer.MAX_VALUE;
+    this(Integer.MIN_VALUE, Integer.MAX_VALUE);
     calculateBoundsUnitsToIntegerUnitsRatio();
   }
 
