@@ -33,9 +33,8 @@ import junitx.util.PrivateAccessor;
  */
 public class DoubleGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -50,8 +49,22 @@ public class DoubleGeneTest
 
   public void testConstruct_0() {
     Gene gene = new DoubleGene(1.1d, 100.1d);
-    //following should be possible without exception
-    gene.setAllele(new Double(101.1d));
+    try {
+      gene.setAllele(new Double(101.1d));
+      fail();
+    }catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
+  }
+
+  public void testConstruct_1() {
+    Gene gene = new DoubleGene();
+    gene.setAllele(new Double(Double.MAX_VALUE));
+  }
+
+  public void testConstruct_2() {
+    Gene gene = new DoubleGene();
+    gene.setAllele(new Double(- (Double.MAX_VALUE/2)));
   }
 
   public void testToString_0() {
@@ -61,10 +74,9 @@ public class DoubleGeneTest
   }
 
   public void testToString_1() {
-    Gene gene = new DoubleGene(1.0d, 100.0d);
-    gene.setAllele(new Double(102));
-    double toString = Double.parseDouble(gene.toString());
-    assertTrue(toString >= 1 && toString <= 100);
+    Gene gene = new DoubleGene(-100.0d, 100.0d);
+    gene.setAllele(new Double(-88.75286d));
+    assertEquals("-88.75286", gene.toString());
   }
 
   public void testGetAllele_0() {
@@ -151,7 +163,8 @@ public class DoubleGeneTest
     }
   }
 
-  public void testNewGene_0() throws Exception {
+  public void testNewGene_0()
+      throws Exception {
     Gene gene1 = new DoubleGene(1.0d, 10000.0d);
     gene1.setAllele(new Double(4711.0d));
     Double lower1 = (Double) PrivateAccessor.getField(gene1,
@@ -167,7 +180,8 @@ public class DoubleGeneTest
     assertEquals(upper1, upper2);
   }
 
-  public void testPersistentRepresentation_0() throws Exception {
+  public void testPersistentRepresentation_0()
+      throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
     gene1.setAllele(new Double(4.5d));
     String pres1 = gene1.getPersistentRepresentation();
@@ -220,15 +234,15 @@ public class DoubleGeneTest
     Gene gene1 = new DoubleGene(1.3d, 6.5d);
     gene1.setAllele(new Double(5.9d));
     Gene gene2 = new DoubleGene(5.3d, 6.7d);
-    gene2.setAllele(new Double( -5.9d));
+    gene2.setAllele(new Double( 5.4d));
     assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
                  gene1.compareTo(gene2));
   }
 
   public void testCompareToNative_4() {
-    Gene gene1 = new DoubleGene(1.3d, 6.5d);
+    Gene gene1 = new DoubleGene(-1.3d, 6.5d);
     gene1.setAllele(new Double(0.0d));
-    Gene gene2 = new DoubleGene(5.3d, 6.7d);
+    Gene gene2 = new DoubleGene(-5.3d, 6.7d);
     gene2.setAllele(new Double( -0.0d));
     assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
                  gene1.compareTo(gene2));
@@ -241,4 +255,5 @@ public class DoubleGeneTest
   public void testApplyMutation_0() {
     /**@todo implement*/
   }
+
 }
