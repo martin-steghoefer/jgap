@@ -1,5 +1,6 @@
 2.1
 ----------
+* Fixed a severe bugb in GaussianMutationOperator
 * Added new Mutation Operator: SwappingMutationOperator
 * Modified hashcode function in class Chromosome to be as
   in java.util.AbstractList
@@ -25,6 +26,7 @@
 * Changed input type of Chromosome.setFitnessValue from int to
   double
 * Marked org.jgap.impl.ReproductionOperator as deprecated
+* General code improvements, e.g. Genotype.getFittestChromosome()
 
 2.0
 ----------
