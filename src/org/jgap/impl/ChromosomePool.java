@@ -18,8 +18,7 @@
 
 package org.jgap.impl;
 
-import org.jgap.Chromosome;
-import org.jgap.Gene;
+import org.jgap.*;
 
 /**
  * Provides a pooling mechanism for Chromosome instances so that
@@ -32,7 +31,7 @@ import org.jgap.Gene;
 public class ChromosomePool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The internal pool in which the Chromosomes are stored.
@@ -41,6 +40,7 @@ public class ChromosomePool {
 
   /**
    * Constructor.
+   * @since 1.0
    */
   public ChromosomePool() {
     m_chromosomePool = new Pool();
@@ -53,6 +53,7 @@ public class ChromosomePool {
    *
    * @return A Chromosome instance from the pool or null if no
    *         Chromosome instances are available in the pool.
+   * @since 1.0
    */
   public synchronized Chromosome acquireChromosome() {
     return (Chromosome) m_chromosomePool.acquirePooledObject();
@@ -65,6 +66,7 @@ public class ChromosomePool {
    * genes prior to adding it back to the pool.
    *
    * @param a_chromosome The Chromosome instance to be released into the pool.
+   * @since 1.0
    */
   public synchronized void releaseChromosome(Chromosome a_chromosome) {
     // First cleanup the chromosome's genes before returning it back
