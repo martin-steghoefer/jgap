@@ -38,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class XMLManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -461,7 +461,7 @@ public class XMLManager {
                                              genesElement);
     // Construct the new Chromosome with the genes and return it.
     // ----------------------------------------------------------
-    return new Chromosome(a_activeConfiguration, geneAlleles);
+    return new Chromosome(geneAlleles);
   }
 
   /**
