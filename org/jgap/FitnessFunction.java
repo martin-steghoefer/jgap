@@ -49,10 +49,19 @@ public abstract class FitnessFunction implements java.io.Serializable
     public final int getFitnessValue( Chromosome a_subject )
     {
         // Delegate to the evaluate() method to actually compute the
-        // fitness value. We use the Math.max function to guarantee
-        // that the value is always > 0.
+        // fitness value. If the returned value is less than one,
+        // then we throw a runtime exception.
         // ---------------------------------------------------------
-        return Math.max( 1, evaluate( a_subject ) );
+        int fitnessValue = evaluate( a_subject );
+
+        if( fitnessValue < 1 )
+        {
+            throw new RuntimeException(
+                "Fitness values must be positive! Received value: " +
+                fitnessValue );
+        }
+
+        return fitnessValue;
     }
 
 
