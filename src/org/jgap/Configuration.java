@@ -38,7 +38,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -391,7 +391,7 @@ public class Configuration {
    *             call the chain's get(index) method
    */
   public NaturalSelector getNaturalSelector() {
-    if (m_sizeNaturalSelectorsPre < 1) {
+    if (m_sizeNaturalSelectorsPost < 1) {
       return null;
     }
     return getNaturalSelectors(false).get(0);
@@ -408,7 +408,7 @@ public class Configuration {
    */
   public NaturalSelector getNaturalSelector(boolean processBeforeGeneticOperators, int index) {
     if (processBeforeGeneticOperators) {
-      if (m_sizeNaturalSelectorsPre < index) {
+      if (m_sizeNaturalSelectorsPre <= index) {
         throw new IllegalArgumentException("Index of NaturalSelector out of bounds");
       }
       else {
@@ -416,7 +416,7 @@ public class Configuration {
       }
     }
     else {
-      if (m_sizeNaturalSelectorsPost < index) {
+      if (m_sizeNaturalSelectorsPost <= index) {
         throw new IllegalArgumentException("Index of NaturalSelector out of bounds");
       }
       else {
@@ -822,8 +822,7 @@ public class Configuration {
    */
   public void addNaturalSelector(NaturalSelector a_selector,
                                  boolean processBeforeGeneticOperators)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     if (processBeforeGeneticOperators) {
       m_preSelectors.addNaturalSelector(a_selector);
