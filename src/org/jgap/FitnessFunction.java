@@ -40,7 +40,9 @@ public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  private static double NO_FITNESS_VALUE = -1.0000000d;
 
   /**
    * Retrieves the fitness value of the given Chromosome. The fitness
@@ -57,7 +59,7 @@ public abstract class FitnessFunction
     // then we throw a runtime exception.
     // ---------------------------------------------------------
     double fitnessValue = evaluate(a_subject);
-    if (fitnessValue < 1.00000000d) {
+    if (fitnessValue < 0.00000000d) {
       throw new RuntimeException(
           "Fitness values must be positive! Received value: " +
           fitnessValue);
@@ -79,5 +81,11 @@ public abstract class FitnessFunction
    */
   protected abstract double evaluate(Chromosome a_subject);
 
-
+  /**
+   * @return the double value that indicated that there is no fitness value
+   * assigned yet
+   */
+  public double getNoFitnessValue() {
+    return NO_FITNESS_VALUE;
+  }
 }
