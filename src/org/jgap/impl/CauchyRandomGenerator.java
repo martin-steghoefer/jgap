@@ -18,55 +18,41 @@
 
 package org.jgap.impl;
 
-import java.util.Random;
-import org.jgap.RandomGenerator;
+import java.util.*;
 
-/**@todo not ready yet*/
-
+import org.jgap.*;
 
 /**
  * Cauchy probability density function
  * @see http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm
+ * (cumulative distribution function)
  *
  * @author Klaus Meffert
  * @since 1.1
  */
 public class CauchyRandomGenerator
     implements RandomGenerator {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
 
-  private double m_standardDistribution;
-  private Random rn = new Random();
+  private double m_scale;
+  private double m_location;
+
+  private Random rn;
+
   public CauchyRandomGenerator() {
-    this(1);
+    this(0.0d, 1.0d);
   }
 
-  public CauchyRandomGenerator(double a_standardDistribution) {
-    m_standardDistribution = a_standardDistribution;
-  }
+  public CauchyRandomGenerator(double a_location, double a_scale) {
+    m_location = a_location;
+    m_scale = a_scale;
 
-  /**
-   * Calculates a random density of the cauchy distribution
-   * @return calculated density
-   *
-   * @since 1.1
-   */
-  private int calculateDensity() {
-    //compute (standard) cauchy distribution:
-    //f(x) = (1/[pi(1+x²)])
-    //----------------------------
-    int result;
-    double rate;
-    double v1 = 10 * nextDouble() - 5; // between -5 and 5
-    //invert the result as higher values indicate less probable mutation ???
-    //------------------------------------------------------------------
-    rate = /*1 / */ (Math.PI * (1 + v1 * v1));
-    result = (int) Math.round(rate);
-    return result;
+    rn = new Random();
   }
 
   public int nextInt() {
@@ -97,15 +83,17 @@ public class CauchyRandomGenerator
     return nextCauchy() >= 0.5d;
   }
 
+  /**
+  * Calculate Cumulative Cauchy distribution function.
+  * @return the probability that a stochastic variable x is less than X
+  */
   public double nextCauchy() {
-    return calculateDensity(); // * getGaussianStdDeviation ();
-  }
-
-  public void setCauchyStandardDeviation(double a_standardDeviation) {
-    m_standardDistribution = a_standardDeviation;
+     return 0.5 + Math.atan( (rn.nextDouble() - m_location) / m_scale) / Math.PI;
   }
 
   public double getCauchyStandardDeviation() {
-    return m_standardDistribution;
+     return m_scale;
   }
+
+
 }
