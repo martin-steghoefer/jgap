@@ -40,35 +40,6 @@ package org.jgap;
 public abstract class FitnessFunction implements java.io.Serializable
 {
     /**
-     * Keeps track of the highest fitness value that has been returned during
-     * this genetic run. This can be useful to track for the
-     * "auto-exaggeration" feature.
-     */
-    private int m_mostFitValueThisGeneticRun = Integer.MIN_VALUE;
-
-    /**
-     * Keeps track of the lowest fitness value that has been returned during
-     * this genetic run. This can be useful to track for the
-     * "auto-exaggeration" feature.
-     */
-    private int m_leastFitValueThisGeneticRun = Integer.MAX_VALUE;
-
-    /**
-     * Keeps track of the highest fitness value that has been returned during
-     * this specific cycle of evolution. This can be useful to track for the
-     * "auto-exaggeration" feature.
-     */
-    private int m_mostFitValueThisEvolutionCycle;
-
-    /**
-     * Keeps track of the lowest fitness value that has been returned during
-     * this specific cycle of evolution. This can be useful to track for the
-     * "auto-exaggeration" feature.
-     */
-    private int m_leastFitValueThisEvolutionCycle;
-
-
-    /**
      * Retrieves the fitness value of the given Chromosome.
      *
      * @param a_subject the Chromosome for which to compute and return the
@@ -81,95 +52,7 @@ public abstract class FitnessFunction implements java.io.Serializable
         // fitness value. We use the Math.max function to guarantee
         // that the value is always > 0.
         // ---------------------------------------------------------
-        int fitness = Math.max( 1, evaluate( a_subject ) );
-
-        // Now update our most fit and least fit instance variables
-        // as appropriate.
-        // --------------------------------------------------------
-        if( fitness > m_mostFitValueThisEvolutionCycle )
-        {
-            m_mostFitValueThisEvolutionCycle = fitness;
-
-            if( fitness > m_mostFitValueThisGeneticRun )
-            {
-                m_mostFitValueThisGeneticRun = fitness;
-            }
-        }
-
-        if( fitness < m_leastFitValueThisEvolutionCycle )
-        {
-            m_leastFitValueThisEvolutionCycle = fitness;
-
-            if( fitness < m_leastFitValueThisGeneticRun )
-            {
-                m_leastFitValueThisGeneticRun = fitness;
-            }
-        }
-
-        return fitness;
-    }
-
-
-    /**
-     * Retrieves the highest fitness value that was computed during this
-     * genetic run.
-     *
-     * @return the highest fitness value computed so far during this genetic
-     *         run.
-     */
-    public final int getMostFitValueThisGeneticRun()
-    {
-        return m_mostFitValueThisGeneticRun;
-    }
-
-
-    /**
-     * Retrieves the lowest fitness value that was computed during this
-     * genetic run.
-     *
-     * @return the lowest fitness value computed so far during this genetic
-     *         run.
-     */
-    public final int getLeastFitValueThisGeneticRun()
-    {
-        return m_leastFitValueThisGeneticRun;
-    }
-
-
-    /**
-     * Retrieves the highest fitness value that was computed during this
-     * specific evolution cycle.
-     *
-     * @return the highest fitness value computed so far during this specific
-     *         evolution cycle.
-     */
-    public final int getMostFitValueThisEvolutionCycle()
-    {
-        return m_mostFitValueThisEvolutionCycle;
-    }
-
-
-    /**
-     * Retrieves the lowest fitness value that was computed during this
-     * specific evolution cycle.
-     *
-     * @return the lowest fitness value computed so far during this specific
-     *         evolution cycle.
-     */
-    public final int getLeastFitValueThisEvolutionCycle()
-    {
-        return m_leastFitValueThisEvolutionCycle;
-    }
-
-
-    /**
-     * Resets the most fit and least fit values that are tracked for this
-     * specific evolution cycle.
-     */
-    public final void resetValuesForThisEvolutionCycle()
-    {
-        m_mostFitValueThisEvolutionCycle = Integer.MIN_VALUE;
-        m_leastFitValueThisEvolutionCycle = Integer.MAX_VALUE;
+        return Math.max( 1, evaluate( a_subject ) );
     }
 
 

@@ -66,13 +66,6 @@ public class MinimizingMakeChange
 
         conf.setFitnessFunction( myFunc );
 
-        // Since this problem may need to distinguish between very close
-        // solutions, we'll flip on the "auto-exaggeration" feature to
-        // provide a little help.
-        // -------------------------------------------------------------
-        conf.setAutoExaggerationEnabled( true );
-
-
         // Now we need to tell the Configuration object how we want our
         // Chromosomes to be setup. We do that by actually creating a
         // sample Chromosome and then setting it on the Configuration

@@ -45,7 +45,6 @@ public class TestGenetics
 
         int numEvolutions = Integer.parseInt( args[ 2 ] );
         Configuration gaConf = new DefaultConfiguration();
-        gaConf.setAutoExaggerationEnabled( true );
         Genotype genotype = null;
 
         try
@@ -91,7 +90,7 @@ public class TestGenetics
         Chromosome fittest = genotype.getFittestChromosome();
         System.out.println( "------------------------------------" );
         System.out.println( "Fittest Chromosome has value " +
-            gaConf.getFitnessFunction().getFitnessValue( fittest ) + ":" );
+            fittest.getFitnessValue() );
     }
 }
 

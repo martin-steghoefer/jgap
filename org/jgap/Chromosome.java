@@ -46,6 +46,18 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      */
     protected final Allele[] m_genes;
 
+    /**
+     * Keeps track of whether or not this Chromosome has been selected by
+     * the natural selector to move on to the next generation.
+     */
+    protected boolean m_isSelected = false;
+
+    /**
+     * Stores the fitness value of this Chromosome as determined by the
+     * active fitness function.
+     */
+    protected int m_fitnessValue = -1;
+
 
     /**
      * Constructs a Chromosome of the given size separate from any specific
@@ -249,6 +261,26 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
 
     /**
+     * Retrieves the fitness value of this Chromosome, as determined by the
+     * active fitness function.
+     *
+     * @return a positive integer value representing the fitness of this
+     *         Chromosome.
+     */
+    public int getFitnessValue()
+    {
+        if( m_fitnessValue < 0 )
+        {
+            m_fitnessValue =
+                m_activeConfiguration.getFitnessFunction().
+                    getFitnessValue( this );
+        }
+
+        return m_fitnessValue;
+    }
+
+
+    /**
      * Returns a string representation of this Chromosome, useful
      * for debugging purposes.
      *
@@ -388,7 +420,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      */
     public int hashCode()
     {
-        return m_genes.hashCode();
+        return getFitnessValue();
     }
 
 
@@ -441,6 +473,31 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         // the shorter chromosome will be the "lesser" chromosome.
         // ---------------------------------------------------------------
         return m_genes.length - otherGenes.length;
+    }
+
+
+    /**
+     * Sets whether this Chromosome has been selected by the natural selector
+     * to continue to the next generation.
+     *
+     * @param a_isSelected true if this Chromosome has been selected, false
+     *                     otherwise.
+     */
+    public void setIsSelected( boolean a_isSelected )
+    {
+        m_isSelected = a_isSelected;
+    }
+
+
+    /**
+     * Retrieves whether this Chromosome has been selected by the natural
+     * selector to continue to the next generation.
+     *
+     * @return true if this Chromosome has been selected, false otherwise.
+     */
+    public boolean isSelected()
+    {
+        return m_isSelected;
     }
 
 

@@ -1,4 +1,4 @@
-0.3 (in progress)
+0.3
 ----------
 * Changed NaturalSelector.add() method to accept an int for the fitness
   value instead of a long.

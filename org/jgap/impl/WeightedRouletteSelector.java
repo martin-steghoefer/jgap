@@ -31,7 +31,7 @@ import java.util.Map;
 
 
 /**
- * A basic implementation of NaturalSelector that models a  roulette wheel.
+ * A basic implementation of NaturalSelector that models a roulette wheel.
  * When a Chromosome is added, it gets a number of "slots" on the wheel equal
  * to its fitness value. When the select method is invoked, the wheel is
  * "spun" and the Chromosome occupying the spot on which it lands is selected.
@@ -85,6 +85,10 @@ public class WeightedRouletteSelector implements NaturalSelector
         }
         else
         {
+            // First, reset the Chromosome's isSelected flag to false.
+            // -------------------------------------------------------
+            a_chromosomeToAdd.setIsSelected( false );
+
             m_wheel.put( a_chromosomeToAdd,
                          new SlotCounter( a_chromosomeFitnessValue ) );
         }
@@ -115,10 +119,13 @@ public class WeightedRouletteSelector implements NaturalSelector
         // ------------------------------------------------------------
         RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
         Chromosome[] selections = new Chromosome[ a_howManyToSelect ];
+        Chromosome selectedChromosome;
 
         for ( int i = 0; i < a_howManyToSelect; i++ )
         {
-            selections[ i ] = spinWheel( generator );
+            selectedChromosome = spinWheel( generator );
+            selectedChromosome.setIsSelected( true );
+            selections[ i ] = selectedChromosome;
         }
 
         return selections;

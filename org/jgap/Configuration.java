@@ -101,17 +101,6 @@ public class Configuration implements java.io.Serializable
     private int m_populationSize = 0;
 
     /**
-     * Determines whether or not the "auto-exaggeration" feature is enabled.
-     * This feature exaggerates the difference between very close fitness
-     * values to give them a larger statistical difference and thus enhance
-     * the chances that the fitter chromosomes will be selected. Without this
-     * feature, some kinds of problems may require a lot of tweaking of the
-     * fitness function to get just right for statistically close fitness
-     * values.
-     */
-    private boolean m_autoExaggerationEnabled = false;
-
-    /**
      * Indicates whether the settings of this Configuration instance have
      * been locked. Prior to locking, the settings may be set and reset
      * as desired. Once this flag is set to true, no settings may be
@@ -413,47 +402,6 @@ public class Configuration implements java.io.Serializable
     public EventManager getEventManager()
     {
         return m_eventManager;
-    }
-
-
-    /**
-     * Enables or disables the "auto-exaggeration" feature. This feature
-     * exaggerates the difference between very close fitness values to give
-     * them a larger statistical difference and thus enhance the chances that
-     * the fitter chromosomes will be selected. Without this feature, some
-     * kinds of problems may require a lot of tweaking of the fitness function
-     * to get just right for statistically close fitness values.
-     * <p>
-     * In general, if you find that the genetic engine is having difficulty
-     * picking the optimal solution from among a few very good solutions,
-     * then enabling this feature may help. However, it does add a little bit
-     * of overhead to the natural selection process and so it is disabled by
-     * default.
-     *
-     * @param a_enabledSwitch true to enable the auto-exaggeration feature,
-     *                        or false to disabled it.
-     */
-    public void setAutoExaggerationEnabled( boolean a_enabledSwitch )
-    {
-        m_autoExaggerationEnabled = a_enabledSwitch;
-    }
-
-
-    /**
-     * Retrieves the status of the "auto-exaggeration" feature switch.
-     * This feature exaggerates the difference between very close fitness
-     * values to give them a larger statistical difference and thus enhance
-     * the chances that the fitter chromosomes will be selected. Without this
-     * feature, some kinds of problems may require a lot of tweaking of the
-     * fitness function to get just right for statistically close fitness
-     * values.
-     *
-     * @return true if the auto-exaggeration feature is enabled, false
-     *         if it is disabled.
-     */
-    public boolean isAutoExaggerationEnabled()
-    {
-        return m_autoExaggerationEnabled;
     }
 
 
