@@ -23,23 +23,27 @@ import org.jgap.Allele;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
+/**
+ * Provides a pooling mechanism for Chromosome instances so that
+ * existing Chromosome instances can be recycled over and over again,
+ * thus saving memory and the overhead of constructing new ones each 
+ * time.
+ */
 public class ChromosomePool
 {
     /**
-     * The List of Chromosomes currently in the pool.
+     * The internal pool in which the Chromosomes are stored.
      */
-    private List m_chromosomePool;
+    private Pool m_chromosomePool;
+
 
     /**
      * Constructor.
      */
     public ChromosomePool()
     {
-        m_chromosomePool = new ArrayList();
+        m_chromosomePool = new Pool();
     }
 
 
@@ -53,21 +57,8 @@ public class ChromosomePool
      */
     public synchronized Chromosome acquireChromosome()
     {
-        if( m_chromosomePool.isEmpty() )
-        {
-            return null;
-        }
-        else
-        {
-            // Remove the last chromosome in the pool and return it.
-            // Note that removing the last chromosome (as opposed to the first
-            // one) is an optimization because it prevents the ArrayList
-            // from resizing itself.
-            // -----------------------------------------------------------
-            return (Chromosome) m_chromosomePool.remove( 
-                m_chromosomePool.size() - 1 );
-        }
-     }
+        return (Chromosome) m_chromosomePool.acquirePooledObject();
+    } 
 
 
     /**
@@ -92,7 +83,7 @@ public class ChromosomePool
 
         // Now add it to the pool.
         // -----------------------
-        m_chromosomePool.add( a_chromosome );
+        m_chromosomePool.releaseObject( a_chromosome );
     }
 }
 

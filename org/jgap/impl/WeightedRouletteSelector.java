@@ -56,6 +56,13 @@ public class WeightedRouletteSelector implements NaturalSelector
      */
     private long m_totalNumberOfUsedSlots = 0;
 
+    /**
+     * An internal pool in which old SlotCounter instances can be stored
+     * so that they can be reused over and over again, thus saving memory
+     * and the overhead of constructing new ones each time.
+     */
+    private Pool m_counterPool = new Pool();
+
 
     /**
      * Add a Chromosome instance and corresponding fitness value to this
@@ -90,8 +97,17 @@ public class WeightedRouletteSelector implements NaturalSelector
             // -------------------------------------------------------
             a_chromosomeToAdd.setIsSelected( false );
 
-            m_wheel.put( a_chromosomeToAdd,
-                         new SlotCounter( a_chromosomeFitnessValue ) );
+            // We're going to need a SlotCounter. See if we can get one
+            // from the pool. If not, construct a new one.
+            // --------------------------------------------------------
+            counter = (SlotCounter) m_counterPool.acquirePooledObject();
+            if( counter == null )
+            {
+                counter = new SlotCounter();
+            }
+
+            counter.reset( a_chromosomeFitnessValue );
+            m_wheel.put( a_chromosomeToAdd, counter );
         }
 
         m_totalNumberOfUsedSlots += a_chromosomeFitnessValue;
@@ -253,6 +269,13 @@ public class WeightedRouletteSelector implements NaturalSelector
      */
     public synchronized void empty()
     {
+        // Put all of the old SlotCounters into the pool so that we can
+        // reuse them later instead of constructing new ones.
+        // ------------------------------------------------------------
+        m_counterPool.releaseAllObjects( m_wheel.values() );
+
+        // Now clear the wheel and reset the internal state.
+        // -------------------------------------------------
         m_wheel.clear();
         m_totalNumberOfUsedSlots = 0;
     }
@@ -268,17 +291,17 @@ public class WeightedRouletteSelector implements NaturalSelector
  */
 class SlotCounter
 {
-    private final int m_fitnessValue;
-    private long m_count;
+    private int m_fitnessValue = 0;
+    private long m_count = 0;
 
 
     /**
-     * Constructs an instance of this class.
+     * Resets the internal state of this SlotCounter instance.
      *
      * @param a_initialFitness The fitness value of the Chromosome for which
      *                         this instance is acting as a counter.
-     */
-    public SlotCounter( int a_initialFitness )
+     */ 
+    public void reset( int a_initialFitness )
     {
         m_fitnessValue = a_initialFitness;
         m_count = a_initialFitness;

@@ -9,15 +9,19 @@
   and reduce memory consumption.
 * Removed extraneous Class tracking from AllelePool that was simply adding
   extra overhead without providing any real benefit.
-* Modified XMLManager to always create fresh Alleles, rather than trying to
-  pull them from the pool, when recreating genetic entities from an XML 
-  document.
+* Switched pooling from Alleles to Chromosomes. Removed AllelePool class
+  and added ChromosomePool class. Also added generic Pool class, which
+  ChromosomePool uses.
+* WeightedRouletteSelector now pools its internal SlotCounter instances
+  to save memory.
 * Updated various Javadocs and comments that were dated, less helpful, or 
   simply wrong.
 * Made various minor code changes to increase efficiency or improve 
   readability.
 * Modified TestGenetics to only display the most fit Chromosome at the
   end, rather than dumping the entire Genotype.
+* Added "debug" target to Ant build script so that debug versions of the
+  JGAP classes can be easily built.
 * Updated the copyright statements on all files.
 
 
