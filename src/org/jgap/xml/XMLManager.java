@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -49,6 +47,10 @@ import java.util.List;
  */
 public class XMLManager
 {
+
+    /** String containing the CVS revision. Read out via reflection!*/
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
+
     /**
      * Constant representing the name of the genotype XML element tag.
      */
@@ -664,4 +666,3 @@ public class XMLManager
         return getChromosomeFromElement( a_activeConfiguration, rootElement );
     }
 }
-
