@@ -34,7 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -244,11 +244,11 @@ public class DoubleGene
    * @since 1.1
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = new Double(a_numberGenerator.nextDouble());
+    m_value = new Double((m_upperBounds-m_lowerBounds)*a_numberGenerator.nextDouble()+m_lowerBounds);
     // If the value isn't between the upper and lower bounds of this
     // DoubleGene, map it to a value within those bounds.
     // -------------------------------------------------------------
-    mapValueToWithinBounds();
+//    mapValueToWithinBounds();
   }
 
   /**
