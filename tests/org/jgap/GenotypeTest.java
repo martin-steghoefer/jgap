@@ -35,6 +35,9 @@ public class GenotypeTest
     extends TestCase
 {
 
+    /** String containing the CVS revision. Read out via reflection!*/
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
+
     public GenotypeTest ()
     {
 
@@ -42,11 +45,8 @@ public class GenotypeTest
 
     public static Test suite ()
     {
-
         TestSuite suite = new TestSuite (GenotypeTest.class);
-
         return suite;
-
     }
 
     public void testConstruct_0 ()
@@ -197,7 +197,7 @@ public class GenotypeTest
 
     /**
      * This test fails intentionally.
-     * Reason: Chromosome.m_activeConfiguration is final but there is an easy way to
+         * Reason: Chromosome.m_activeConfiguration is final but there is an easy way to
      * construct a Chromosome without giving a configuration (see below)!
      * @throws Exception
      */
@@ -255,8 +255,18 @@ public class GenotypeTest
         assertEquals (false, genotype.equals (null));
         Genotype genotype2 = new Genotype (conf, chroms);
         assertTrue (genotype.equals (genotype2));
-        /**@todo following still fails, also see testToString_0()*/
-//    assertEquals(genotype.toString(), genotype2.toString());
+        try
+        {
+            //provoce an exception because active configuration not yet set
+            assertEquals (genotype.toString (), genotype2.toString ());
+            fail();
+        }
+        catch (IllegalStateException iex)
+        {
+            ; //this is OK
+        }
+        chroms[0].setActiveConfiguration (conf);
+        assertEquals (genotype.toString (), genotype2.toString ());
     }
 
 }
