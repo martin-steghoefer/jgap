@@ -9,8 +9,8 @@
  */
 package org.jgap;
 
+import java.util.*;
 import org.jgap.impl.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -22,9 +22,8 @@ import junitx.util.*;
  */
 public class GenotypeTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public GenotypeTest() {
   }
@@ -63,7 +62,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_2() throws Exception {
+  public void testConstruct_2()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -85,7 +85,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_3() throws Exception {
+  public void testConstruct_3()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -104,7 +105,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_4() throws Exception {
+  public void testConstruct_4()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -125,7 +127,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_5() throws Exception {
+  public void testConstruct_5()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -147,7 +150,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_6() throws Exception {
+  public void testConstruct_6()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -166,13 +170,14 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_7() throws Exception {
+  public void testConstruct_7()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     try {
-      new Genotype(conf, new Chromosome[]{null});
+      new Genotype(conf, new Chromosome[] {null});
       fail();
     }
     catch (IllegalArgumentException illex) {
@@ -186,7 +191,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_8() throws Exception {
+  public void testConstruct_8()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -204,7 +210,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_9() throws Exception {
+  public void testConstruct_9()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
@@ -225,7 +232,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testGetChromosomes_0() throws Exception {
+  public void testGetChromosomes_0()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     Chromosome[] chroms = new Chromosome[1];
@@ -245,7 +253,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testGetFittestChromosome_0() throws Exception {
+  public void testGetFittestChromosome_0()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     Chromosome[] chroms = new Chromosome[1];
@@ -265,7 +274,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testGetFittestChromosome_1() throws Exception {
+  public void testGetFittestChromosome_1()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     Chromosome[] chroms = new Chromosome[1];
@@ -281,7 +291,7 @@ public class GenotypeTest
 
   public void testEvolve_0() {
     /**@todo implement*/
-    /**@todo check for correcctness of method when NaturalSelctors missing*/
+    /**@todo check for correcctness of method when NaturalSelectors missing*/
   }
 
   /**
@@ -290,7 +300,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testToString_0() throws Exception {
+  public void testToString_0()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     Chromosome[] chroms = new Chromosome[1];
@@ -310,9 +321,10 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testRandomInitialGenotype_0() throws Exception {
+  public void testRandomInitialGenotype_0()
+      throws Exception {
     try {
-      Genotype genotype = Genotype.randomInitialGenotype(null);
+      Genotype.randomInitialGenotype(null);
       fail();
     }
     catch (IllegalArgumentException illex) {
@@ -326,7 +338,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testRandomInitialGenotype_1() throws Exception {
+  public void testRandomInitialGenotype_1()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     Chromosome chrom = new Chromosome(new Gene[] {
                                       new IntegerGene(1, 9999)});
@@ -343,7 +356,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testEquals_0() throws Exception {
+  public void testEquals_0()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -367,7 +381,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testHashcode_0() throws Exception {
+  public void testHashcode_0()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -379,7 +394,107 @@ public class GenotypeTest
     genotype.hashcode();
   }
 
-  public void testHashcode_1() throws Exception {
-    /**@todo implement*/
+  final int MAX_CHROMOSOME_TO_TEST = 1000;
+
+  final int MAX_GENES_TO_TEST = 25;
+
+  final int MAX_GENES_TYPES = 6;
+
+  public void testHashcode_1()
+      throws Exception {
+    int Count;
+    int NumGenes;
+    int GeneCount;
+    int GeneType;
+    Gene[] genes;
+    Chromosome chrom;
+    TestHashcode thc = new TestHashcode();
+    List UniqueChromosome = new ArrayList();
+    List EqualChromosome = new ArrayList();
+    Genotype geno;
+
+    //Build Random Chromosomes
+    for (Count = 0; Count < MAX_CHROMOSOME_TO_TEST; Count++) {
+      NumGenes = (int) (Math.random() * MAX_GENES_TO_TEST) + 1;
+      genes = new Gene[NumGenes];
+      for (GeneCount = 0; GeneCount < NumGenes; GeneCount++) {
+        GeneType = (int) (Math.random() * MAX_GENES_TYPES);
+        switch (GeneType) {
+          case 0:
+            genes[GeneCount] = new IntegerGene();
+            break;
+          case 1:
+            genes[GeneCount] = new BooleanGene();
+            break;
+          case 2:
+            genes[GeneCount] = new CompositeGene();
+            break;
+          case 3:
+            genes[GeneCount] = new DoubleGene();
+            break;
+          case 4:
+            genes[GeneCount] = new FixedBinaryGene(5);
+            break;
+          case 5:
+            genes[GeneCount] = new StringGene();
+            break;
+        }
+      }
+      chrom = new Chromosome(genes);
+      Population pop = new Population();
+      pop.addChromosome(chrom);
+      Configuration conf = new DefaultConfiguration();
+      conf.setFitnessFunction(new StaticFitnessFunction(0.5d));
+      conf.setSampleChromosome(chrom);
+      conf.setPopulationSize(5);
+      geno = new Genotype(conf, pop);
+      //We only want to add unique object, since equal object will return the same hashcode
+      if (UniqueChromosome.contains(geno) == false)
+        UniqueChromosome.add(geno);
+    }
+
+    //Test to see if enough hashcodes are unique
+    thc.setFractionUnique(.95);
+    if (thc.testHashCodeUniqueness(UniqueChromosome) == false) {
+      System.out.print(
+          "testHashCodeUniqueness failed\n Actual Percent unique = " +
+          thc.getActualFractionUnique());
+      fail();
+    }
+
+    //Test mathematical average and dispersion of hashcode
+    //I am not sure of the value of this test since boundry values are pretty much arbitrary
+
+//    thc.setAverageMax(16500000);
+//    thc.setAverageMin(14000000);
+//    thc.setStdDevMax(11000000);
+//    thc.setStdDevMin(9000000);
+//    if(thc.testDispersion(UniqueChromosome)==false)
+//    {
+//            fail();
+//    }
+
+    //Build identical Chromosome
+    for (Count = 0; Count < 3; Count++) {
+      genes = new Gene[1];
+      genes[0] = new IntegerGene();
+      chrom = new Chromosome(genes);
+      Population pop = new Population();
+      pop.addChromosome(chrom);
+      Configuration conf = new DefaultConfiguration();
+      conf.setFitnessFunction(new StaticFitnessFunction(0.5d));
+      conf.setSampleChromosome(chrom);
+      conf.setPopulationSize(5);
+      geno = new Genotype(conf, pop);
+      EqualChromosome.add(geno);
+    }
+    //If an object is equal it must have the same hashcode
+    if (thc.testHashCodeEquality(EqualChromosome) == false) {
+      fail();
+    }
+
+    // A lot of temporary objects where created in this test so do a quick
+    // garbage collect.
+    System.gc();
   }
 }
