@@ -34,7 +34,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -75,14 +75,23 @@ public class ThresholdSelector
   private FitnessValueComparator m_fitnessValueComparator;
 
   /**
-   *
+   * Select a given number of Chromosomes from the pool that will move on
+   * to the next generation population. This selection will be guided by the
+   * fitness values. The chromosomes with the best fitness value win.
+
    * @param a_howManyToSelect The number of Chromosomes to select.
-   * @return The selected Chromosomes.
+   * @param a_from_pop the population the Chromosomes will be selected from.
+   * @param a_to_pop the population the Chromosomes will be added to.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population select(int a_howManyToSelect) {
+  public void select(int a_howManyToSelect, Population  a_from_pop, Population a_to_pop) {
+    if (a_from_pop != null) {
+      for (int i = 0; i < a_from_pop.size(); i++) {
+        add(a_from_pop.getChromosome(i));
+      }
+    }
     // Sort the collection of chromosomes previously added for evaluation.
     // Only do this if necessary.
     // -------------------------------------------------------------------
@@ -91,12 +100,11 @@ public class ThresholdSelector
       m_needsSorting = false;
     }
 
-    Population pop = new Population(a_howManyToSelect);
     // Select the best chromosomes for granted
     int bestToBeSelected = (int) Math.round(a_howManyToSelect *
                                             m_bestChroms_Percentage);
     for (int i = 0; i < bestToBeSelected; i++) {
-      pop.addChromosome((Chromosome)m_chromosomes.get(i));
+      a_to_pop.addChromosome((Chromosome)m_chromosomes.get(i));
     }
 
     // Fill up the rest by randomly selecting chromosomes
@@ -106,9 +114,8 @@ public class ThresholdSelector
     int size = m_chromosomes.size();
     for (int i = 0; i < missing; i++) {
       index = rn.nextInt(size);
-      pop.addChromosome((Chromosome)m_chromosomes.get(index));
+      a_to_pop.addChromosome((Chromosome)m_chromosomes.get(index));
     }
-    return pop;
   }
 
   /**
@@ -132,7 +139,7 @@ public class ThresholdSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void add(Chromosome a_chromosomeToAdd) {
+  protected void add(Chromosome a_chromosomeToAdd) {
     m_chromosomes.add(a_chromosomeToAdd);
   }
 

@@ -38,7 +38,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -85,9 +85,10 @@ public class WeightedRouletteSelector
    * @param a_chromosomeToAdd The specimen to add to the pool.
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized void add(Chromosome a_chromosomeToAdd) {
+  protected synchronized void add(Chromosome a_chromosomeToAdd) {
     // The "roulette wheel" is represented by a Map. Each key is a
     // Chromosome and each value is an instance of the SlotCounter inner
     // class. The counter keeps track of the total number of slots that
@@ -133,14 +134,21 @@ public class WeightedRouletteSelector
    * guaranteed.
    *
    * @param a_howManyToSelect The number of Chromosomes to select.
-   *
-   * @return An array of the selected Chromosomes.
+   * @param a_from_pop the population the Chromosomes will be selected from.
+   * @param a_to_pop the population the Chromosomes will be added to.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized Population select(int a_howManyToSelect) {
+  public synchronized void select(int a_howManyToSelect, Population a_from_pop,
+                                  Population a_to_pop) {
+    if (a_from_pop != null) {
+      for (int i = 0; i < a_from_pop.size(); i++) {
+        add(a_from_pop.getChromosome(i));
+      }
+    }
+
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
@@ -176,7 +184,6 @@ public class WeightedRouletteSelector
     if (a_howManyToSelect > numberOfEntries && !getDoubletteChromosomesAllowed()) {
       a_howManyToSelect = numberOfEntries;
     }
-    Population population = new Population(a_howManyToSelect);
     // To select each chromosome, we just "spin" the wheel and grab
     // whichever chromosome it lands on.
     // ------------------------------------------------------------
@@ -187,9 +194,8 @@ public class WeightedRouletteSelector
                                      counterValues,
                                      chromosomes);
       selectedChromosome.setIsSelectedForNextGeneration(true);
-      population.addChromosome(selectedChromosome);
+      a_to_pop.addChromosome(selectedChromosome);
     }
-    return population;
   }
 
   /**

@@ -34,7 +34,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -73,16 +73,24 @@ public class TournamentSelector
   }
 
   /**
+   * Select a given number of Chromosomes from the pool that will move on
+   * to the next generation population. This selection will be guided by the
+   * fitness values. The chromosomes with the best fitness value win.
    *
    * @param a_howManyToSelect int
-   * @return Population
+   * @param a_from_pop the population the Chromosomes will be selected from.
+   * @param a_to_pop the population the Chromosomes will be added to.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population select(int a_howManyToSelect) {
+  public void select(int a_howManyToSelect, Population  a_from_pop, Population a_to_pop) {
+    if (a_from_pop != null) {
+      for (int i = 0; i < a_from_pop.size(); i++) {
+        add(a_from_pop.getChromosome(i));
+      }
+    }
 
-    Population pop = new Population(a_howManyToSelect);
     List tournament = new Vector();
     RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
     int size = m_chromosomes.size();
@@ -108,9 +116,8 @@ public class TournamentSelector
         }
       }
       while (index < m_tournament_size - 1);
-      pop.addChromosome( (Chromosome) tournament.get(index));
+      a_to_pop.addChromosome( (Chromosome) tournament.get(index));
     }
-    return pop;
   }
 
   /**
@@ -134,7 +141,7 @@ public class TournamentSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void add(Chromosome a_chromosomeToAdd) {
+  protected void add(Chromosome a_chromosomeToAdd) {
     m_chromosomes.add(a_chromosomeToAdd);
   }
 
