@@ -13,6 +13,7 @@
 * Simplified tests for WeightedRouletteSelector
 * Added tests for Configuration exposing a previous bug
 * Added tests to validate equals() methods better
+* Added tests for StringGene.setToRandomValue
 * Fixed an error in GaussianRandomGenerator
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request

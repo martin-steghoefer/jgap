@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -24,9 +22,8 @@ import junitx.util.*;
  */
 public class StringGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public StringGeneTest() {
   }
@@ -45,13 +42,13 @@ public class StringGeneTest
     //following should be possible without exception
     gene.setAllele("ABC");
     assertEquals(null, gene.getAlphabet());
-    assertEquals(1,gene.getMinLength());
-    assertEquals(100,gene.getMaxLength());
+    assertEquals(1, gene.getMinLength());
+    assertEquals(100, gene.getMaxLength());
   }
 
   public void testConstruct_1() {
     try {
-      Gene gene = new StringGene(2, 1);
+      new StringGene(2, 1);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -61,7 +58,7 @@ public class StringGeneTest
 
   public void testConstruct_2() {
     try {
-      Gene gene = new StringGene( -1, 3);
+      new StringGene( -1, 3);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -85,24 +82,6 @@ public class StringGeneTest
       gene.setAllele(new Double(2.3d));
     }
     catch (ClassCastException castex) {
-      ; //this is OK
-    }
-  }
-
-  /**
-   * This feature is now implemented,
-   * the persistend delimiters are allowed in the alphabet.
-   * The block in StringGene is removed.
-   * @todo Consider removing this test
-   * @author Audrius Meskauskas (of commenting "fail") out
-   */
-      public void testSetAlphabet_0() {
-    StringGene gene = new StringGene(3, 5);
-    try {
-      gene.setAlphabet("1" + Gene.PERSISTENT_FIELD_DELIMITER);
-      // fail();
-    }
-    catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -167,9 +146,22 @@ public class StringGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  public void testEquals_6() {
+    Gene gene1 = new StringGene(2, 5);
+    Gene gene2 = new DoubleGene(1, 5);
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_7() {
+    Gene gene1 = new StringGene(2, 5);
+    Gene gene2 = new BooleanGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
   /**
    * Set Allele to null, no exception should occur
-
    */
   public void testSetAllele_0() {
     Gene gene1 = new StringGene(0, 10000);
@@ -286,7 +278,8 @@ public class StringGeneTest
 
   public void testPersistentRepresentation_5()
       throws Exception {
-    StringGene gene1 = new StringGene(2, 10, "ABCDE"+CompositeGene.GENE_DELIMITER);
+    StringGene gene1 = new StringGene(2, 10,
+                                      "ABCDE" + CompositeGene.GENE_DELIMITER);
     gene1.setAllele(new String("BABE"));
     String pres1 = gene1.getPersistentRepresentation();
     StringGene gene2 = new StringGene();
@@ -350,7 +343,7 @@ public class StringGeneTest
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
     gene1.applyMutation(0, 0.0d);
-    assertEquals(gene1.getAllele(),"ijklmn");
+    assertEquals(gene1.getAllele(), "ijklmn");
   }
 
   public void testSetMinMaxLength_0()
@@ -358,12 +351,75 @@ public class StringGeneTest
     StringGene gene = new StringGene();
     gene.setMinLength(4);
     gene.setMaxLength(3);
-    assertEquals(4,gene.getMinLength());
-    assertEquals(3,gene.getMaxLength());
+    assertEquals(4, gene.getMinLength());
+    assertEquals(3, gene.getMaxLength());
   }
 
   public void testSetToRandomValue_0() {
-    /**@todo implement*/
+    StringGene gene = new StringGene(1, 6, StringGene.ALPHABET_CHARACTERS_UPPER);
+
+    gene.setToRandomValue(new RandomGeneratorForTest(2));
+    assertEquals("CCC", gene.getAllele());
+    gene.setToRandomValue(new RandomGeneratorForTest(1));
+    assertEquals("BB", gene.getAllele());
+    gene.setToRandomValue(new RandomGeneratorForTest(0));
+    assertEquals("A", gene.getAllele());
+  }
+
+  public void testSetToRandomValue_1() {
+    Gene gene = new StringGene(1, 6, StringGene.ALPHABET_CHARACTERS_UPPER);
+    gene.setAllele("XYZA"); // should not matter here
+    gene.setToRandomValue(new RandomGeneratorForTest(3));
+    assertEquals("DDDD", gene.getAllele());
+  }
+
+  public void testSetToRandomValue_2() {
+    Gene gene = new StringGene(1, 6, "ABC");
+    gene.setToRandomValue(new RandomGeneratorForTest(3));
+    assertEquals("AAAA", gene.getAllele());
+  }
+
+  public void testSetToRandomValue_3()
+      throws Exception {
+    StringGene gene = new StringGene(1, 7, "DEF");
+
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+
+    gene.setToRandomValue(new RandomGeneratorForTest(2));
+    assertEquals("FFF", gene.getAllele());
+  }
+
+  public void testSetToRandomValue_4()
+      throws Exception {
+    StringGene gene = new StringGene(1, 7, "DEF");
+    gene.setAllele("EEFD");
+
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+
+    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    // set random generator to produce
+    // 1) length of new allele (-1)
+    // 2) first character out of alphabet ("DEF"), starting from 0
+    // 3) second character out of alphabet
+    // 4) third character out of alphabet
+    // 5) fourth character out of alphabet
+    rn.setNextIntSequence(new int[]{3,2,1,0,2});
+    gene.setToRandomValue(rn);
+    assertEquals("FEDF", gene.getAllele());
+  }
+
+  public void testSetToRandomValue_5() {
+    StringGene gene = new StringGene(1, 8,StringGene.ALPHABET_CHARACTERS_LOWER);
+    gene.setToRandomValue(new StockRandomGenerator());
+
+    for (int i=0;i<gene.size();i++) {
+      if ( ( (String) gene.getAllele()).charAt(i) < 'a' ||
+          ( (String) gene.getAllele()).charAt(i) > 'z') {
+        fail();
+      }
+    }
   }
 
 }
