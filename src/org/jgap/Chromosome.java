@@ -38,7 +38,7 @@ public class Chromosome
     implements Comparable, Cloneable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -52,7 +52,8 @@ public class Chromosome
    * in the fitness function. JGAP completely ignores the data, aside
    * from allowing it to be set and retrieved.
    */
-  private Object m_applicationData;
+  private IApplicationData m_applicationData;
+
   /**
    * The array of Genes contained in this Chromosome.
    */
@@ -227,8 +228,11 @@ public class Chromosome
    * will be constructed and its value set appropriately before returning.
    *
    * @return A copy of this Chromosome.
+   * @since 1.0
    */
-  public synchronized Object clone() {
+  public synchronized Object clone()  {
+    /**@todo what about the application data?*/
+
     // Before doing anything, make sure that a Configuration object
     // has been set on this Chromosome. If not, then throw an
     // IllegalStateException.
@@ -249,7 +253,17 @@ public class Chromosome
         for (int i = 0; i < genes.length; i++) {
           genes[i].setAllele(m_genes[i].getAllele());
         }
-        return copy;
+        // Also clone the IApplicationData object.
+        // ---------------------------------------
+        try {
+          copy.setApplicationData( (IApplicationData) getApplicationData().
+                                  clone());
+          return copy;
+        } catch (CloneNotSupportedException cex) {
+          // rethrow as RuntimeException to be backward compatible and have
+          // a more convenient handling
+          throw new IllegalStateException(cex.getMessage());
+        }
       }
     }
     // If we get this far, then we couldn't fetch a Chromosome from the
@@ -264,10 +278,19 @@ public class Chromosome
       copyOfGenes[i].setAllele(m_genes[i].getAllele());
     }
     // Now construct a new Chromosome with the copies of the genes and
-    // return it.
+    // return it. Also clone the IApplicationData object.
     // ---------------------------------------------------------------
     try {
-      return new Chromosome(m_activeConfiguration, copyOfGenes);
+      Chromosome ret = new Chromosome(m_activeConfiguration, copyOfGenes);
+      if (getApplicationData() != null) {
+        ret.setApplicationData( (IApplicationData) getApplicationData().clone());
+      }
+      return ret;
+    }
+    catch (CloneNotSupportedException cex) {
+      // rethrow as RuntimeException to be backward compatible and have
+      // a more convenient handling
+      throw new IllegalStateException(cex.getMessage());
     }
     catch (InvalidConfigurationException e) {
       // This should never happen because the configuration has already
@@ -389,6 +412,7 @@ public class Chromosome
     representation.append(m_genes[m_genes.length - 1].toString());
     representation.append(" ]");
     return representation.toString();
+    /**@todo what about the IApplicationData object?*/
   }
 
   /**
@@ -545,6 +569,21 @@ public class Chromosome
         return comparison;
       }
     }
+
+    // Compare application data
+    // ------------------------
+    if (getApplicationData() == null) {
+      if (otherChromosome.getApplicationData() != null) {
+        return -1;
+      }
+    }
+    else if (otherChromosome.getApplicationData() == null) {
+      return 1;
+    }
+    else {
+      return getApplicationData().compareTo(otherChromosome.getApplicationData());
+    }
+
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
@@ -623,7 +662,7 @@ public class Chromosome
    * @param a_newData The new application-specific data to attach to this
    *                  Chromosome.
    */
-  public void setApplicationData(final Object a_newData) {
+  public void setApplicationData(IApplicationData a_newData) {
     m_applicationData = a_newData;
   }
 
@@ -636,7 +675,7 @@ public class Chromosome
    * @return The application-specific data previously attached to this
    *         Chromosome, or null if there is no attached data.
    */
-  public Object getApplicationData() {
+  public IApplicationData getApplicationData() {
     return m_applicationData;
   }
 }
