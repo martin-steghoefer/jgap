@@ -34,7 +34,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -120,12 +120,14 @@ public class CrossoverOperator
                       final List a_candidateChromosomes) {
 
     // Work out the number of crossovers that should be performed
+    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+                        a_population.size());
     int numCrossovers = 0;
     if (m_crossoverRateCalc == null){
-        numCrossovers = a_population.size() / m_crossoverRate;
+        numCrossovers = size / m_crossoverRate;
     }
     else{
-        numCrossovers = a_population.size() / m_crossoverRateCalc.calculateCurrentRate();
+        numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
 
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
@@ -135,9 +137,10 @@ public class CrossoverOperator
     // the two chromosomes.
     // --------------------------------------------------------------
     int index1, index2;
+
     for (int i = 0; i < numCrossovers; i++) {
-      index1 = generator.nextInt(a_population.size());
-      index2 = generator.nextInt(a_population.size());
+      index1 = generator.nextInt(size);
+      index2 = generator.nextInt(size);
       Chromosome chrom1 = a_population.getChromosome(index1);
       Chromosome chrom2 = a_population.getChromosome(index2);
       Chromosome firstMate = (Chromosome)chrom1.clone();

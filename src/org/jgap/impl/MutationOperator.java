@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -142,7 +142,9 @@ public class MutationOperator
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
     // ----------------------------------------------------------------
-    for (int i = 0; i < a_population.size(); i++) {
+    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+                        a_population.size());
+    for (int i = 0; i < size; i++) {
       Gene[] genes = a_population.getChromosome(i).getGenes();
       Chromosome copyOfChromosome = null;
       // For each Chromosome in the population...

@@ -58,7 +58,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -82,23 +82,25 @@ public class GreedyCrossover implements GeneticOperator {
 
     public void operate(final Population a_population,
                          final List a_candidateChromosomes) {
-       int numCrossovers = a_population.size() / 2;
+       int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+                           a_population.size());
+       int numCrossovers = size / 2;
 
        RandomGenerator generator
          = Genotype.getConfiguration().getRandomGenerator();
 
        // For each crossover, grab two random chromosomes and do what
-       // Grefenstette et al says
+       // Grefenstette et al say.
        // --------------------------------------------------------------
        for (int i = 0; i < numCrossovers; i++) {
 
          Chromosome firstMate = (Chromosome)
              a_population.getChromosome(generator.
-             nextInt(a_population.size())).clone();
+             nextInt(size)).clone();
 
          Chromosome secondMate = (Chromosome)
              a_population.getChromosome(generator.
-             nextInt(a_population.size())).clone();
+             nextInt(size)).clone();
 
          operate(firstMate, secondMate);
 
@@ -260,7 +262,7 @@ public class GreedyCrossover implements GeneticOperator {
     * excluded from the swapping. In the Salesman task, the first city
     * in the list should (where the salesman leaves from) probably should
     * not change as it is part of the list. The default value is 1.
-    * @param a_offset int
+    * @param a_offset the start offset to use
     */
    public void setStartOffset (int a_offset)
    {
@@ -272,7 +274,7 @@ public class GreedyCrossover implements GeneticOperator {
     * excluded from the swapping. In the Salesman task, the first city
     * in the list should (where the salesman leaves from) probably should
     * not change as it is part of the list. The default value is 1.
-    * @return the offset
+    * @return the start offset used
     */
    public int getStartOffset ()
    {
