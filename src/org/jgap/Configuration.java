@@ -47,7 +47,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -754,6 +754,10 @@ public class Configuration {
       throw new InvalidConfigurationException(
           "A genotype size greater than zero must be specified in " +
           "the active configuration.");
+    }
+    if (m_fitnessEvaluator == null) {
+      throw new IllegalArgumentException(
+          "The fitness evaluator may not be null.");
     }
     // Next, it's critical that each Gene implementation in the sample
     // Chromosome has a working equals() method, or else the genetic

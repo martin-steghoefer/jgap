@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * The current active Configuration instance.
@@ -98,58 +98,17 @@ public class Genotype
    * when this method is invoked, or a InvalidconfigurationException
    * will be thrown.
    *
-   * @param a_activeConfiguration Configuration
-   * @param a_population Population
+   * @param a_activeConfiguration The current active Configuration object.
+   * @param a_population The Chromosome population to be managed by this
+   *        Genotype instance.
    * @throws InvalidConfigurationException
    *
+   * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 2.0
    */
   public Genotype(Configuration a_activeConfiguration,
                   Population a_population)
-      throws InvalidConfigurationException {
-    this(a_activeConfiguration, a_population, new DefaultFitnessEvaluator());
-  }
-
-  /**
-   * Same as constructor without parameter of type FitnessEvaluator.
-   * Additionally a specific fitnessEvaluator can be specified here. See
-   * interface class FitnessEvaluator for details.
-   * @param a_activeConfiguration The current active Configuration object.
-   * @param a_initialChromosomes The Chromosome population to be
-   *                             managed by this Genotype instance.
-   * @param a_fitnessEvaluator a specific fitness value evaluator
-   * @throws InvalidConfigurationException
-   *
-   * @author Neil Rotstan
-   * @author Klaus Meffert
-   * @since 1.1
-   * @deprecated use Genotype(Configuration, Population, FitnessEvaluator) instead
-   */
-  public Genotype(Configuration a_activeConfiguration,
-                  Chromosome[] a_initialChromosomes,
-                  FitnessEvaluator a_fitnessEvaluator)
-      throws InvalidConfigurationException {
-    this(a_activeConfiguration, new Population(a_initialChromosomes),
-         a_fitnessEvaluator);
-  }
-
-  /**
-   * Same as constructor without parameter of type FitnessEvaluator.
-   * Additionally a specific fitnessEvaluator can be specified here. See
-   * interface class FitnessEvaluator for details.
-   * @param a_activeConfiguration The current active Configuration object.
-   * @param a_population The Chromosome population to be managed by this
-   *        Genotype instance.
-   * @param a_fitnessEvaluator a specific fitness value evaluator
-   * @throws InvalidConfigurationException
-   *
-   * @author Neil Rotstan
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public Genotype(Configuration a_activeConfiguration,
-                  Population a_population, FitnessEvaluator a_fitnessEvaluator)
       throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
@@ -161,10 +120,6 @@ public class Genotype
     if (a_population == null) {
       throw new IllegalArgumentException(
           "The Population may not be null.");
-    }
-    if (a_fitnessEvaluator == null) {
-      throw new IllegalArgumentException(
-          "The fitness evaluator may not be null.");
     }
     for (int i = 0; i < a_population.size(); i++) {
       if (a_population.getChromosome(i) == null) {
@@ -180,7 +135,6 @@ public class Genotype
     a_activeConfiguration.lockSettings();
     m_population = a_population;
     m_activeConfiguration = a_activeConfiguration;
-    m_activeConfiguration.setFitnessEvaluator(a_fitnessEvaluator);
     m_workingPool = new ArrayList();
   }
 
