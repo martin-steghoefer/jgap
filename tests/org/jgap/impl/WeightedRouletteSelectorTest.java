@@ -32,7 +32,7 @@ import junitx.util.*;
 public class WeightedRouletteSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public WeightedRouletteSelectorTest() {
   }
@@ -81,7 +81,7 @@ public class WeightedRouletteSelectorTest
     thirdBestChrom.setFitnessValue(10);
     selector.add(null, thirdBestChrom);
     try {
-      selector.select(null, 1).toChromosomes();
+      selector.select(null, 1);
       fail();
     }
     catch (NullPointerException nex) {
@@ -196,7 +196,7 @@ public class WeightedRouletteSelectorTest
     Population pop = new Population(1);
     pop.addChromosome(chrom);
     selector.add(conf, chrom);
-    pop = selector.select(conf, 1);
+    selector.select(conf, 1);
     selector.empty();
     assertEquals(1, pop.size());
   }
