@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public FixedBinaryGeneTest() {
   }
@@ -372,6 +372,27 @@ public class FixedBinaryGeneTest
       }
     });
     gene1.setAllele(new int[] {0, 0, 1});
+    assertFalse(gene1.getBit(0));
+    assertFalse(gene1.getBit(1));
+    assertFalse(gene1.getBit(2));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_7() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(3);
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return true;
+      }
+    });
+    gene1.setAllele(new int[] {0, 0, 1});
+    assertFalse(gene1.getBit(0));
+    assertFalse(gene1.getBit(1));
+    assertTrue(gene1.getBit(2));
   }
 
   /**
