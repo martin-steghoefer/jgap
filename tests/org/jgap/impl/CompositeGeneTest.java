@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -167,6 +167,15 @@ public class CompositeGeneTest
     gene.addGene(newGene2, false);
     assertEquals("(" + newGene1.toString() + gene.GENE_DELIMITER +
                  newGene2.toString() + ")", gene.toString());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testToString_1() {
+    CompositeGene gene = new CompositeGene();
+    assertEquals("null", gene.toString());
   }
 
   public void testGetAllele_0() {
@@ -527,5 +536,21 @@ public class CompositeGeneTest
     CompositeGene gene = new CompositeGene();
     gene.cleanup();
     assertEquals(0, gene.size());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetConstraintChecker_0() {
+    CompositeGene gene = new CompositeGene();
+    assertNull(gene.getConstraintChecker());
+    gene.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    assertNotNull(gene.getConstraintChecker());
   }
 }
