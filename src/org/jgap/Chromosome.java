@@ -63,7 +63,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -493,20 +493,21 @@ public class Chromosome
    * @return the hash code of this Chromosome.
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public int hashCode() {
-    // Take the hash codes of the genes and XOR them all together.
-    // I'm not really sure how effective this is, but I notice that's
-    // what the java.lang.Long class does (albeit with only two
-    // hashcode values).
-    // --------------------------------------------------------------
-    if (m_hashCode == 0) {
-      for (int i = 0; i < m_genes.length; i++) {
-        m_hashCode ^= m_genes[i].hashCode();
-      }
+    // Take the hash codes of the genes and XOR them all together, using
+    // a prime multiplier of 31 additionally. This is what
+    // java.util.AbstractList does
+    // -----------------------------------------------------------------
+    int geneHashcode;
+    int hashCode = 1;
+    for (int i = 0; i < m_genes.length; i++) {
+        geneHashcode = m_genes[i].hashCode();
+        hashCode = 31*hashCode + geneHashcode;
     }
-    return m_hashCode;
+    return hashCode;
   }
 
   /**
