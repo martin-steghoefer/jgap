@@ -32,7 +32,7 @@ import junitx.util.*;
 public class BestChromosomesSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -212,6 +212,7 @@ public class BestChromosomesSelectorTest
     selector.select(conf, 1);
     selector.empty();
     assertEquals(1, pop.size());
+    assertNotNull(pop.getChromosome(0));
   }
 
   /**
@@ -230,5 +231,6 @@ public class BestChromosomesSelectorTest
     pop = selector.select(conf, 1);
     selector.empty();
     assertEquals(1, pop.size());
+    assertNotNull(pop.getChromosome(0));
   }
 }
