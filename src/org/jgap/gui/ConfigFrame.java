@@ -7,22 +7,28 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-
 package org.jgap.gui;
 
 import java.util.*;
-import javax.swing.*;
-import org.jgap.*;
-import info.clearthought.layout.*;
+
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+
+import org.jgap.*;
+
+import info.clearthought.layout.*;
 
 /**
  * GUI for the JGAP Configurator.
+ *
  * @author Siddhartha Azad.
  */
 public class ConfigFrame extends JFrame implements IConfigInfo {
-	
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
 	/**
 	 * Constructor
 	 * @param title The title of the frame.
@@ -36,10 +42,10 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		textGroups = new ArrayList();
 		cbl = new ConfigButtonListener(this);
 	}
-	
+
 	/**
 	 * Does the initial setup of the JFrame and shows it.
-	 * @param _conHandler The configuration handler from which this 
+	 * @param _conHandler The configuration handler from which this
 	 * ConfigFrame
 	 * would get information.
 	 * @author Siddhartha Azad.
@@ -47,7 +53,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 	public void createAndShowGUI(ConfigurationHandler _conHandler) {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		conHandler = _conHandler;
-		
+
 		// display
 		this.pack();
 		this.setVisible(true);
@@ -60,7 +66,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 
 	/**
 	 * Getter for the Configuration Information on this frame.
-	 * @return The ConfigData object containing the configuration 
+	 * @return The ConfigData object containing the configuration
 	 * information
 	 * on this frame.
 	 * */
@@ -80,7 +86,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 				}
 				cd.addListData(lg.getProp().getName(), values);
 			}
-			
+
 			// add textFields
 			TextGroup tg;
 			for(Iterator tIter = textGroups.iterator(); tIter.hasNext();) {
@@ -104,9 +110,9 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		if(fName.equals(""))
 			fName = "jgap.con";
 		return fName;
-	} 
-	
-	
+	}
+
+
 	/**
 	 * Setup the GUI.
 	 * There are 3 maximum panels at this time. The first one contains JLists if
@@ -155,8 +161,8 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		// add the appropriate number of panels
 		addWidgets(numPanels, numLists, numTexts);
 	}
-	
-	
+
+
 	/**
 	 * Add the widgets to the frame.
 	 * @param numPanels Number of panels to add.
@@ -204,7 +210,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 				panels.add(listPanel);
 				listPanel.setLayout(new TableLayout(panelSize));
 				this.getContentPane().add(listPanel, new TableLayoutConstraints(
-						0, panelsAdded, 0, panelsAdded, 
+						0, panelsAdded, 0, panelsAdded,
 						TableLayout.FULL, TableLayout.FULL));
 				// increment number of panels added
 				panelsAdded++;
@@ -218,15 +224,15 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 					prop = (ConfigProperty)iter.next();
 					lg.setProp(prop);
 					listPanel.add(lg.getListScroller(),
-							new TableLayoutConstraints(3*itr1, 0, 3*itr1, 0, 
+							new TableLayoutConstraints(3*itr1, 0, 3*itr1, 0,
 							TableLayout.CENTER, TableLayout.CENTER));
 					// add the button to move data from outlist back to list
 					listPanel.add(lg.getLButton(),
-							new TableLayoutConstraints(3*itr1+1, 0, 3*itr1+1, 0, 
+							new TableLayoutConstraints(3*itr1+1, 0, 3*itr1+1, 0,
 							TableLayout.CENTER, TableLayout.TOP));
 					// add the button to move data from list to outlist
 					listPanel.add(lg.getRButton(),
-							new TableLayoutConstraints(3*itr1+1, 0, 3*itr1+1, 0, 
+							new TableLayoutConstraints(3*itr1+1, 0, 3*itr1+1, 0,
 							TableLayout.CENTER, TableLayout.BOTTOM));
 					// added the item values to the list
 					valIter = prop.getValuesIter();
@@ -234,13 +240,13 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 						lg.getListModel().addElement(valIter.next());
 					listPanel.add(lg.getOutListScroller(),
 							new TableLayoutConstraints(3*itr1 + 2 , 0,
-							3*itr1 + 2, 0, 
+							3*itr1 + 2, 0,
 							TableLayout.CENTER, TableLayout.CENTER));
 				}
 			}
-			
+
 			// add the textFields
-			
+
 			if(numTexts > 0) {
 				double panelSize[][];
 				int numCols = numTexts*2;
@@ -258,7 +264,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 				panels.add(textPanel);
 				textPanel.setLayout(new TableLayout(panelSize));
 				this.getContentPane().add(textPanel, new TableLayoutConstraints(
-						0, panelsAdded, 0, panelsAdded, 
+						0, panelsAdded, 0, panelsAdded,
 						TableLayout.FULL, TableLayout.FULL));
 				panelsAdded++;
 				// add the text fields to the panel
@@ -273,10 +279,10 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 					JLabel label = tg.getLabel();
 					label.setText(prop.getName());
 					textPanel.add(label,
-							new TableLayoutConstraints(itr1, 0, itr1, 0, 
+							new TableLayoutConstraints(itr1, 0, itr1, 0,
 							TableLayout.RIGHT, TableLayout.CENTER));
 					textPanel.add(tg.getTextField(),
-							new TableLayoutConstraints(itr1+1, 0, itr1+1, 0, 
+							new TableLayoutConstraints(itr1+1, 0, itr1+1, 0,
 							TableLayout.LEFT, TableLayout.CENTER));
 				}
 			}
@@ -292,19 +298,19 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 			panels.add(configPanel);
 			configPanel.setLayout(new TableLayout(panelSize));
 			this.getContentPane().add(configPanel, new TableLayoutConstraints(
-					0, panelsAdded, 0, panelsAdded, 
+					0, panelsAdded, 0, panelsAdded,
 					TableLayout.FULL, TableLayout.FULL));
 			// add the textfield for the config file name
 			fileName = new JTextField("jgap.con");
 			configPanel.add(fileName,
-					new TableLayoutConstraints(0, 0, 0, 0, 
+					new TableLayoutConstraints(0, 0, 0, 0,
 					TableLayout.RIGHT, TableLayout.CENTER));
 			configButton = new JButton("Generate");
 			configButton.addActionListener(cbl);
 			configPanel.add(configButton,
-					new TableLayoutConstraints(1, 0, 1, 0, 
+					new TableLayoutConstraints(1, 0, 1, 0,
 					TableLayout.LEFT, TableLayout.CENTER));
-			
+
 		}
 		catch(Exception ex) {
 			JOptionPane.showMessageDialog( null ,
@@ -314,7 +320,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This class groups the property data structure along with the JLists
 	 * associated with it.
@@ -334,7 +340,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 			list.setVisibleRowCount(-1);
 			listScroller = new JScrollPane(list);
 			listScroller.setPreferredSize(new Dimension(250, 80));
-	
+
 			// create the output list
 			outListModel = new DefaultListModel();
 			outList= new JList(outListModel);
@@ -343,7 +349,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 			outList.setVisibleRowCount(-1);
 			outListScroller = new JScrollPane(outList);
 			outListScroller.setPreferredSize(new Dimension(250, 80));
-			
+
 			// The buttons to move data to/from outList
 			listBL = new ListButtonListener(this);
 			lButton = new JButton("<-");
@@ -351,7 +357,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 			rButton = new JButton("->");
 			rButton.addActionListener(listBL);
 		}
-		
+
 		/**
 		 * Getter for the ConfigProperty object associated with this ListGroup.
 		 * @return The ConfigProperty object associated with this ListGroup.
@@ -359,8 +365,8 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		 * */
 		public ConfigProperty getProp() {
 			return prop;
-		} 
-		
+		}
+
 		/**
 		 * Setter for the ConfigProperty object associated with this ListGroup.
 		 * This object is used to retrieve the values that the list is initialized
@@ -371,7 +377,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public void setProp(ConfigProperty _prop) {
 			prop = _prop;
 		}
-		
+
 		/**
 		 * Getter for the list.
 		 * @return The JList containing the items to select from.
@@ -380,7 +386,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public JList getList() {
 			return list;
 		}
-		
+
 		/**
 		 * Getter for the list's associated model.
 		 * @return DefaultListModel for the list.
@@ -389,7 +395,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public DefaultListModel getListModel() {
 			return listModel;
 		}
-		
+
 		/**
 		 * Getter for the scroller for the list.
 		 * @return scroller for the list.
@@ -398,7 +404,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public JScrollPane getListScroller() {
 			return listScroller;
 		}
-			
+
 		/**
 		 * Getter for the output list
 		 * @return Output JList.
@@ -407,7 +413,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public JList getOutList() {
 			return outList;
 		}
-		
+
 		/**
 		 * Getter for the output list's associated model.
 		 * @return DefaultListModel for the output list.
@@ -416,7 +422,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public DefaultListModel getOutListModel() {
 			return outListModel;
 		}
-		
+
 		/**
 		 * Getter for the scroller for the output list.
 		 * @return scroller for the output list.
@@ -425,7 +431,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public JScrollPane getOutListScroller() {
 			return outListScroller;
 		}
-		
+
 		/**
 		 * Return left button for this ListGroup
 		 * @return The button to move items from outlist to list.
@@ -434,7 +440,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public JButton getLButton() {
 			return lButton;
 		}
-		
+
 		/**
 		 * Return right button for this ListGroup
 		 * @return The button to move items from list to outlist.
@@ -443,7 +449,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		public JButton getRButton() {
 			return rButton;
 		}
-		
+
 		/**
 		 * Move selected items from the output list back to the list.
 		 * @author Siddhartha Azad.
@@ -455,7 +461,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 				listModel.addElement(removed);
 			}
 		}
-		
+
 		/**
 		 * Move selected items from list to the output list.
 		 * @author Siddhartha Azad.
@@ -467,7 +473,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 				outListModel.addElement(removed);
 			}
 		}
-		
+
 		// list that will display the available items
 		private JList list;
 		// model for list
@@ -484,9 +490,9 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 		// property object associated with this ListGroup
 		private ConfigProperty prop;
 		private ListButtonListener listBL;
-		
+
 	}
-	
+
 	/**
 	 * This class groups the property data structure along with the JLists
 	 * associated with it.
@@ -495,30 +501,30 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 	class TextGroup {
 		TextGroup() {
 			textField = new JTextField(20);
-			label = new JLabel(); 
+			label = new JLabel();
 		}
-		
+
 		public ConfigProperty getProp() {
 			return prop;
-		} 
-		
+		}
+
 		public void setProp(ConfigProperty _prop) {
 			prop = _prop;
 		}
-		
+
 		public JTextField getTextField() {
 			return textField;
 		}
-		
+
 		public JLabel getLabel() {
 			return label;
 		}
-		
+
 		private JTextField textField;
 		private JLabel label;
 		private ConfigProperty prop;
 	}
-	
+
 	class ConfigButtonListener implements ActionListener {
 		ConfigButtonListener(ConfigFrame _frame) {
 			frame = _frame;
@@ -528,9 +534,9 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 			ConfigWriter.instance().write(frame);
 		}
 		ConfigFrame frame;
-		
+
 	}
-	
+
 	public class ListButtonListener implements ActionListener {
 		ListButtonListener(ListGroup _lg) {
 			lg = _lg;
@@ -545,12 +551,12 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 				// from list to outList
 				lg.rightButtonPressed();
 			}
-			
+
 		}
 		private ListGroup lg;
-		
+
 	}
-	
+
 	// data memebers of class ConfigFrame
 	private ConfigurationHandler conHandler;
 	// list of JPanel objects added in this frame
