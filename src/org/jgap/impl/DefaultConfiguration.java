@@ -49,7 +49,7 @@ public class DefaultConfiguration extends Configuration
 
         try
         {
-            addNaturalSelector( new WeightedRouletteSelector(), false );
+            addNaturalSelector( new BestChromosomesSelector() , true );
             setRandomGenerator( new StockRandomGenerator() );
             setEventManager( new EventManager() );
             setChromosomePool( new ChromosomePool() );
