@@ -18,7 +18,7 @@ import java.util.*;
  * */
 public class ConfigData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public ConfigData() {
     listData = new ArrayList();
@@ -90,10 +90,35 @@ public class ConfigData {
     TextData ld = (TextData) textData.get(index);
     return ld.getValue();
   }
+  
+  /**
+   * Set the namespace of the Configurable for which this ConfigData is being
+   * used.
+   * @author Siddhartha Azad.
+   * @param _ns The namespace of the Configurable to be used while writing the
+   * config file.
+   * */
+  public void setNS(String _ns) {
+  	ns = _ns;
+  }
+  
+  /**
+   * Get the namespace of the Configurable for which this ConfigData is being
+   * used.
+   * @author Siddhartha Azad.
+   * @return The namespace of the Configurable to be used while writing the
+   * config file.
+   * */
+  public String getNS() {
+  	return ns;
+  }
 
   ArrayList listData;
 
   ArrayList textData;
+  
+  // The namespace for the properties file
+  String ns;
   /**
    * Data associated with the lists on the GUI.
    * @author Siddhartha Azad.

@@ -20,7 +20,7 @@ import javax.swing.*;
  * */
 public class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Method to create and access the Singleton ConfigWriter instance.
@@ -49,6 +49,7 @@ public class ConfigWriter {
   public void write(IConfigInfo cInfo) {
     try {
       ConfigData cd = cInfo.getConfigData();
+      String nsPrefix = cd.getNS()+".";
       String name;
       ArrayList values;
       // construct name-value pairs from the information in the lists
@@ -59,14 +60,16 @@ public class ConfigWriter {
         for (Iterator iter = values.iterator(); iter.hasNext(); idx++) {
           // append an index for same key elements
           String tmpName = name + "[" + idx + "]";
+          tmpName = nsPrefix + tmpName;
           config.setProperty(tmpName, (String) iter.next());
         }
       }
-      String value = "";
+      String value = "", tmpName = "";
       for (int i = 0; i < cd.getNumTexts(); i++) {
       	name = cd.getTextNameAt(i);
       	value = cd.getTextValueAt(i);
-      	config.setProperty(name, value);
+      	tmpName = nsPrefix + name;
+      	config.setProperty(tmpName, value);
       }
       
     }
@@ -98,10 +101,21 @@ public class ConfigWriter {
   }
 
   /**
+   * Set the namespace to be used in the config file for writing properties.
+   * @author Siddhartha Azad.
+   * @param _ns The namepsace of the Configurable.
+   * */
+  public void setNS(String _ns) {
+  	ns = _ns;
+  }
+  
+  /**
    * Singleton Instance of ConfigWriter
    */
   private static ConfigWriter cWriter;
 
   // The configuration stored as Properties
   private Properties config;
+  // namespace for the properties being written
+  private String ns;
 }

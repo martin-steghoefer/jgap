@@ -18,12 +18,12 @@ import java.util.*;
  * */
 public class MockIConfigInfo implements IConfigInfo {
 	
-	final static String CVS_REVISION = "$Revision: 1.1 $";
+	final static String CVS_REVISION = "$Revision: 1.2 $";
 	
 	public MockIConfigInfo() {
 		conData = new ConfigData();
 		// populate the ConfigData instance
-		
+		conData.setNS("Configurable");
 		// add the TextField properties
 		conData.addTextData("text1", "text1_value");
 		conData.addTextData("text2", "text2_value");

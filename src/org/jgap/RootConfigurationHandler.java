@@ -20,7 +20,10 @@ import java.util.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  
+  // Namespae
+  private final static String CONFIG_NAMESPACE = "Configuration";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -59,14 +62,50 @@ public class RootConfigurationHandler
     cp.addValue("org.jgap.impl.GaussianMutationOperator");
     cp.addValue("org.jgap.impl.MutationOperator");
     cProps.add(cp);
-    // Just a test property for testing JTextFields on the GUI
 
-    /**@todo Remove this later*/
+    // The population size
     cp = new ConfigProperty();
-    cp.setName("TestProps");
+    cp.setName("m_populationSize");
     cp.setType("int");
     cp.setWidget("JTextField");
     cProps.add(cp);
     return cProps;
   }
+  
+  
+  /**
+   * Get the namespace to be used in the config file for the Configurable
+   * this ConfigurationHandler belongs to.
+   * @author Siddhartha Azad.
+   * @return The namepsace of the Configurable
+   * */
+  public String getNS() {
+  	return CONFIG_NAMESPACE;
+  }
+  
+  /**
+   * Method that will populate an Configurable with the properties in the
+   * config file.
+   * @author Siddhartha Azad.
+   * */
+  public void readConfig() throws ConfigException,
+  	InvalidConfigurationException {
+  	ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
+	String value = ConfigFileReader.instance().getValue("m_populationSize");
+	if(value != null)
+		configurable.setConfigProperty("m_populationSize", value);
+	
+  }
+  
+  /**
+   * Set the Configurable to which this ConfigurationHandler belongs.
+   * @author Siddhartha Azad.
+   * @param _configurable The Configurable to which this ConfigurationHandler
+   * belongs. 
+   * */
+  public void setConfigurable(Configurable _configurable) {
+  	configurable = _configurable;
+  }
+  
+  Configurable configurable;
 }

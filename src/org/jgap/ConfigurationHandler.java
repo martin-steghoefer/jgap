@@ -19,7 +19,7 @@ import java.util.*;
 public interface ConfigurationHandler {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -33,4 +33,28 @@ public interface ConfigurationHandler {
    * @return A list of ConfigProperty objects.
    * */
   ArrayList getConfigProperties();
+  
+  /**
+   * Method that will populate an Configurable with the properties in the
+   * config file.
+   * @author Siddhartha Azad.
+   * */
+  void readConfig()  throws ConfigException,
+	InvalidConfigurationException ;
+  
+  /**
+   * Get the namespace to be used in the config file for the Configurable
+   * this ConfigurationHandler belongs to.
+   * @author Siddhartha Azad.
+   * @return The namepsace of the Configurable
+   * */
+  String getNS();
+  
+  /**
+   * Set the Configurable to which this ConfigurationHandler belongs.
+   * @author Siddhartha Azad.
+   * @param _configurable The Configurable to which this ConfigurationHandler
+   * belongs. 
+   * */
+  void setConfigurable(Configurable _configurable);
 }

@@ -66,6 +66,7 @@ public class ConfigFrame extends JFrame implements IConfigInfo {
 	 * */
 	public ConfigData getConfigData() {
 		ConfigData cd = new ConfigData();
+		cd.setNS(conHandler.getNS());
 		// add lists
 		ArrayList values;
 		try {

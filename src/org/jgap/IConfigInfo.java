@@ -14,7 +14,7 @@ package org.jgap;
  * @author Siddhartha Azad.
  * */
 public interface IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   ConfigData getConfigData();
 
@@ -23,4 +23,5 @@ public interface IConfigInfo {
    * @return The config file name to write to.
    */
   String getFileName();
+  
 }

@@ -38,7 +38,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -182,7 +182,7 @@ public class Configuration
    * The Configuration Handler for this Configurable.
    * @author Siddhartha Azad
    */
-  private RootConfigurationHandler conHandler;
+  protected RootConfigurationHandler conHandler;
 
   /**
    * @author Neil Rotstan
@@ -196,6 +196,7 @@ public class Configuration
     m_sizeNaturalSelectorsPost = 0;
     m_geneticOperators = new ArrayList();
     conHandler = new RootConfigurationHandler();
+    conHandler.setConfigurable(this);
   }
 
   /**
@@ -924,5 +925,36 @@ public class Configuration
     if (conHandler == null)
       conHandler = new RootConfigurationHandler();
     return conHandler;
+  }
+  
+  /**
+   * Pass the name and value of a property to be set.
+   * @author Siddhartha Azad.
+   * @param name The name of the property.
+   * @param value The value of the property.
+   * */
+  public void setConfigProperty(String name, String value) throws
+  	ConfigException, InvalidConfigurationException  {
+  	if(name.equals("m_populationSize")) {
+  		try {
+  			Integer popSize = new Integer(value);
+  	  		this.setPopulationSize(popSize.intValue());
+  		}
+  		catch(NumberFormatException numEx) {
+  			throw new ConfigException("Value for property "+name+" must be an "+
+  					"Integer, value is "+value);
+  		}
+  	}
+  }
+  
+  /**
+   * Pass the name and values of a property to be set.
+   * @author Siddhartha Azad.
+   * @param name The name of the property.
+   * @param values The different values of the property.
+   * */
+  public void setConfigMultiProperty(String name, ArrayList values)  throws
+  	ConfigException, InvalidConfigurationException  {
+  	
   }
 }
