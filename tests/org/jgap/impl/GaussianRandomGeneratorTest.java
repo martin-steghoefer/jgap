@@ -32,7 +32,7 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -102,7 +102,6 @@ public class GaussianRandomGeneratorTest
     int res;
     for (int i=0;i<100;i++) {
       res = calc.nextInt(5);
-      System.err.println(res);
       assertTrue(res < 5.00d);
       assertTrue(res >= 0.000d);
     }
@@ -111,9 +110,35 @@ public class GaussianRandomGeneratorTest
   public void testNextInt_1() throws Exception {
     GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
     int res;
+    int resOld = 0;
     for (int i=0;i<100;i++) {
       res = calc.nextInt();
-      System.err.println(res);
+      if (i > 0) {
+        if (resOld == res) {
+          fail("Two consecutive calls produced same value: "+res);
+        }
+        else {
+          resOld = res;
+        }
+      }
+      assertTrue(res >= 0.000d);
+    }
+  }
+
+  public void testNextLong_0() throws Exception {
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    long res;
+    long resOld = 0;
+    for (int i=0;i<100;i++) {
+      res = calc.nextLong();
+      if (i > 0) {
+        if (resOld == res) {
+          fail("Two consecutive calls produced same value: "+res);
+        }
+        else {
+          resOld = res;
+        }
+      }
       assertTrue(res >= 0.000d);
     }
   }
@@ -121,9 +146,17 @@ public class GaussianRandomGeneratorTest
   public void testNextDouble_0() throws Exception {
     GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
     double res;
+    double resOld = 0.0000d;
     for (int i=0;i<100;i++) {
       res = calc.nextDouble();
-      System.err.println(res);
+      if (i > 0) {
+        if (Math.abs(resOld - res) < DELTA) {
+          fail("Two consecutive calls produced same value: " + res);
+        }
+        else {
+          resOld = res;
+        }
+      }
       assertTrue(res >= 0.000d);
     }
   }
