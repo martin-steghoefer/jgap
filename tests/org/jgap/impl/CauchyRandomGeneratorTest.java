@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,6 +15,7 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import org.jgap.Configuration;
@@ -31,40 +30,41 @@ import junit.framework.TestSuite;
  * @author Klaus Meffert
  * @since 1.1
  */
-
 public class CauchyRandomGeneratorTest
-    extends TestCase
-{
+    extends TestCase {
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.1 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
-    private static final double DELTA = 0.000001;
+  //delta for distinguishing whether a value is to be interpreted as zero
+  private static final double DELTA = 0.000001d;
 
-    public CauchyRandomGeneratorTest ()
-    {
+  public CauchyRandomGeneratorTest() {
+  }
 
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);
+    return suite;
+  }
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (CauchyRandomGeneratorTest.class);
-        return suite;
-    }
+  /**
+   * Check if construction and calculation in general possible
+   */
+  public void testGeneral() {
+    Configuration conf = new DefaultConfiguration();
+    RandomGenerator calc = new CauchyRandomGenerator();
+    calc.nextInt();
+    calc.nextBoolean();
+    calc.nextDouble();
+    calc.nextFloat();
+    calc.nextInt();
+    calc.nextLong();
+  }
 
-    /**@todo implement tests*/
-
-    public void testCalculateCurrentRate_0() {
-        Configuration conf = new DefaultConfiguration();
-        RandomGenerator calc = new CauchyRandomGenerator();
-        /**@todo finish*/
-    }
-
-    public void testCalculateCurrentRate_1() throws Exception {
-        Configuration conf = new DefaultConfiguration();
-        final double stdDeriv = 0.04d;
-        RandomGenerator calc = new CauchyRandomGenerator (stdDeriv);
-        /**@todo finish*/
-    }
-
+  public void testNextCauchy_0() throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    final double stdDeriv = 0.04d;
+    CauchyRandomGenerator calc = new CauchyRandomGenerator(0.0d, stdDeriv);
+    calc.nextCauchy();
+  }
 }

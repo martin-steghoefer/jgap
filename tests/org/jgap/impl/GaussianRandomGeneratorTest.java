@@ -33,11 +33,12 @@ import junit.framework.TestSuite;
  */
 public class GaussianRandomGeneratorTest
     extends TestCase {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001;
+  private static final double DELTA = 0.000001d;
 
   public GaussianRandomGeneratorTest() {
   }
@@ -47,29 +48,31 @@ public class GaussianRandomGeneratorTest
     return suite;
   }
 
-  /**@todo implement tests*/
-  public void testCalculateCurrentRate_0() {
+  /**
+   * Check if construction and calculation in general possible
+   */
+  public void testGeneral() {
     Configuration conf = new DefaultConfiguration();
     GaussianRandomGenerator calc = new GaussianRandomGenerator();
-    try {
-      /**@todo finish*/
-//            calc.calculateCurrentRate (conf);
-//            fail();
-    }
-    catch (IllegalStateException iex) {
-      ; //this is OK
-    }
+    calc.nextInt();
+    calc.nextBoolean();
+    calc.nextDouble();
+    calc.nextFloat();
+    calc.nextInt();
+    calc.nextLong();
   }
 
-  public void testCalculateCurrentRate_1() throws Exception {
+  public void testGetGaussianStdDeviation_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     final double stdDeriv = 0.04d;
     GaussianRandomGenerator calc = new GaussianRandomGenerator(
         stdDeriv);
     assertEquals(stdDeriv, calc.getGaussianStdDeviation(), DELTA);
-    Gene gene = new IntegerGene(1, 5);
-    Chromosome chrom = new Chromosome(gene, 50);
-    conf.setSampleChromosome(chrom);
+//    Gene gene = new IntegerGene(1, 5);
+//    Chromosome chrom = new Chromosome(gene, 50);
+//    conf.setSampleChromosome(chrom);
     /**@todo finish*/
   }
+
+  /**@todo add further tests*/
 }
