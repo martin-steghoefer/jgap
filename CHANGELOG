@@ -1,14 +1,15 @@
-1.0-RC2 (in progress)
+1.0-RC2
 ----------
-* Added new BulkFitnessFunction interface, which can be used to create
+* Added new BulkFitnessFunction class, which can be used to create
   fitness functions that evaluate an entire working pool of chromosomes
   all at once.
-* Fixed hashCode() in Chromosome class so that it's no longer dependent
+* Fixed hashCode() in Chromosome class so that it is no longer dependent
   on the fitness function.
-* Restructured Chromosome class slightly so that it will serialize
-  properly using Java serialization.
+* Java serialization of Genotypes and Chromosomes is now working properly.
+* Added a FAQ document.
 * Updated various documentation.
- 
+* Updated the README file. 
+
 
 1.0-RC1
 ----------
