@@ -19,6 +19,9 @@ import java.io.Serializable;
  * implementations of this interface also implement the equals() method.
  * Without a proper implementation of equals(), some genetic operations will
  * fail to work properly.
+ * <p>
+ * When implementing a new Gene type, extend it from
+ * {@link org.jgap.BaseGene}!
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -27,7 +30,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -161,7 +164,7 @@ public interface Gene
    * element at given index (NumberGenes only have one atomic element)
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1).
    *
    * @since 1.1
    */
