@@ -18,8 +18,6 @@
 
 package org.jgap.distr;
 
-import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -29,6 +27,7 @@ import org.jgap.*;
  * <p>
  * A breeder is part of a fractal structure (fractal because each Breeder can
  * be parent and/or child of other Breeder's).
+*
  * @author Klaus Meffert
  * @since 2.0
  * @see wodka project for similar implementation
@@ -57,48 +56,16 @@ public abstract class Breeder
 
   private transient MeanBuffer meanBuffer = new MeanBuffer(40);
 
-  private transient Collection listeners = new Vector();
-
-  private transient ExceptionHandler exHandler;
-
-  public int categoryCount() {
-    return 7;
-  }
-
-  public String getCategoryName(int index) {
-    switch (index) {
-      case 0:
-        return "General";
-      case 1:
-        return "Genotype";
-      case 2:
-        return "Selection Policy";
-      case 3:
-        return "Racer";
-      case 4:
-        return "Fitness Function";
-      case 5:
-        return "Terrain Manager";
-      case 6:
-        return "All";
-      default:
-        throw new Error("getCategoryName>> Invalid index: " + index);
-    }
-  }
-
   public Breeder() {
     super();
   }
 
-  public void setExceptionHandler(ExceptionHandler handler) {
-    this.exHandler = handler;
-  }
-
-/*
-  public void addListener(BreederListener listener) {
-    listeners.add(listener);
-  }
-*/
+  /**
+   * Runs the evolution.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void run() {
     try {
       stopped = false;
@@ -117,29 +84,40 @@ public abstract class Breeder
     catch (Throwable t) {
       stopped = true;
       running = false;
-      if (exHandler != null) {
-        exHandler.handleThrowable(t);
-      }
+//      if (exHandler != null) {
+//        exHandler.handleThrowable(t);
+//      }
     }
   }
 
+  /**
+   * Evaluate one generation and memorize the time needed. This is important
+   * for load balancing and calculating the performance of a system
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   private void evalOneGeneration()
       throws Exception {
     long begin = System.currentTimeMillis();
     genotype.evolve(1);
-//    informListeners();
+    informParent();
     meanBuffer.add( (int) (System.currentTimeMillis() - begin));
   }
 
-/*
-  private void informListeners() {
-    Iterator iter = listeners.iterator();
-    while (iter.hasNext()) {
-      BreederListener listener = (BreederListener) iter.next();
-      listener.performEvaluationOfStepFinished(this.genAlgo);
-    }
+  protected void informParent() {
+    /**@todo implement*/
   }
-*/
+
+  /**
+   * Pauses the Breeder. This is important if a user providing a system for
+   * running the GA does not want to make available 100% of his CPU resources.
+   * @param milliSec int
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   private synchronized void pause(int milliSec) {
     try {
       this.wait(milliSec);
