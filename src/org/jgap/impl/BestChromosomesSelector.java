@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -50,13 +50,6 @@ public class BestChromosomesSelector
    * would always return the original input as output
    */
   private double m_originalRate;
-
-  /**
-   * Internal: Indicated whether we pass the input unchanged to the output.
-   * If so, then we must not empty the list of Chromosomes because we would
-   * then empty the output list.
-   */
-  private boolean m_doNotEmpty;
 
   /**
    * Constructor
@@ -128,14 +121,11 @@ public class BestChromosomesSelector
 
     int neededSize = a_howManyToSelect;
     if (m_originalRate < 1.0d) {
-      int oldCanBeSelected = canBeSelected;
-      canBeSelected = (int) (canBeSelected * m_originalRate);
+      canBeSelected = (int)Math.round((double)canBeSelected * m_originalRate);
       if (canBeSelected < 1) {
-        canBeSelected = oldCanBeSelected;
+        canBeSelected = 1;
       }
     }
-
-    m_doNotEmpty = false;
 
     // Sort the collection of chromosomes previously added for evaluation.
     // Only do this if necessary.
@@ -164,8 +154,8 @@ public class BestChromosomesSelector
         else {
           loopCount = toAdd;
         }
-        // Add existing Chromosome's by cloning them to fill up the return result
-        // to contain the desired number of Chromosome's
+        // Add existing Chromosome's by cloning them to fill up the return
+        // result to contain the desired number of Chromosome's
         for (int i = 0; i < loopCount; i++) {
           selectedChromosome = m_chromosomes.getChromosome(i);
           selectedChromosome.setIsSelectedForNextGeneration(true);
@@ -185,9 +175,7 @@ public class BestChromosomesSelector
   public synchronized void empty() {
     // clear the list of chromosomes
     // -----------------------------
-    if (!m_doNotEmpty) {
-      m_chromosomes.getChromosomes().clear();
-    }
+    m_chromosomes.getChromosomes().clear();
     m_needsSorting = false;
   }
 
