@@ -24,10 +24,12 @@ import org.jgap.Configuration;
 import org.jgap.NaturalSelector;
 import org.jgap.RandomGenerator;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Random;
 
 
 /**
@@ -45,6 +47,9 @@ import java.util.Set;
  */
 public class WeightedRouletteSelector implements NaturalSelector
 {
+    private static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal( 0.0 );
+
+
     /**
      * Represents the "roulette wheel." Each key in the Map is a Chromosome
      * and each value is an instance of the SlotCounter inner class, which
@@ -57,7 +62,7 @@ public class WeightedRouletteSelector implements NaturalSelector
      * roulette wheel. This is equal to the combined fitness values of
      * all Chromosome instances that have been added to this wheel.
      */
-    private long m_totalNumberOfUsedSlots = 0;
+    private double m_totalNumberOfUsedSlots = 0.0;
 
     /**
      * An internal pool in which discarded SlotCounter instances can be stored
@@ -91,7 +96,7 @@ public class WeightedRouletteSelector implements NaturalSelector
         {
             // The Chromosome is already in the map.
             // -------------------------------------
-            counter.incrementByFitness();
+            counter.increment();
         }
         else
         {
@@ -140,6 +145,8 @@ public class WeightedRouletteSelector implements NaturalSelector
         RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
         Chromosome[] selections = new Chromosome[ a_howManyToSelect ];
 
+        scaleFitnessValues();
+
         // Build three arrays from the key/value pairs in the wheel map: one
         // that contains the fitness values for each chromosome, one that
         // contains the total number of occupied slots on the wheel for each
@@ -150,11 +157,11 @@ public class WeightedRouletteSelector implements NaturalSelector
         // -------------------------------------------------------------------
         Set entries = m_wheel.entrySet();
         int numberOfEntries = entries.size();
-        int[] fitnessValues = new int[ numberOfEntries ];
-        long[] counterValues = new long[ numberOfEntries ];
+        double[] fitnessValues = new double[ numberOfEntries ];
+        double[] counterValues = new double[ numberOfEntries ];
         Chromosome[] chromosomes = new Chromosome[ numberOfEntries ];
 
-        m_totalNumberOfUsedSlots = 0;
+        m_totalNumberOfUsedSlots = 0.0;
         Iterator entryIterator = entries.iterator();
         for( int i = 0; i < numberOfEntries; i++ )
         {
@@ -167,7 +174,8 @@ public class WeightedRouletteSelector implements NaturalSelector
                 (SlotCounter) chromosomeEntry.getValue();
 
             fitnessValues[ i ] = currentCounter.getFitnessValue();
-            counterValues[ i ] = currentCounter.getCounterValue();
+            counterValues[ i ] = currentCounter.getFitnessValue() *
+                                 currentCounter.getCounterValue();
             chromosomes[ i ] = currentChromosome;
 
             // We're also keeping track of the total number of slots,
@@ -198,21 +206,27 @@ public class WeightedRouletteSelector implements NaturalSelector
 
     /**
      * This method "spins" the wheel and returns the Chromosome that is
-     * "landed upon." Each time a chromosome is selected, once instance of it
-     *  is removed from the wheel so that it can not be selected again.
+     * "landed upon." Each time a chromosome is selected, one instance of it
+     * is removed from the wheel so that it cannot be selected again.
      *
      * @param a_generator The random number generator to be used during the
      *                    spinning process.
+     * @param a_fitnessValues An array of fitness values of the respective
+     *                        Chromosomes.
+     * @param a_counterValues An array of total counter values of the
+     *                        respective Chromosomes.
+     * @param a_chromosomes The respective Chromosome instances from which
+     *                      selection is to occur.
      */
     private Chromosome spinWheel( RandomGenerator a_generator,
-                                  int[] a_fitnessValues,
-                                  long[] a_counterValues,
+                                  double[] a_fitnessValues,
+                                  double[] a_counterValues,
                                   Chromosome[] a_chromosomes )
     {
         // Randomly choose a slot on the wheel.
         // ------------------------------------
-        long selectedSlot =
-            Math.abs( a_generator.nextLong() % m_totalNumberOfUsedSlots );
+        double selectedSlot =
+            Math.abs( a_generator.nextDouble() * m_totalNumberOfUsedSlots );
 
         // Loop through the wheel until we find our selected slot. Here's
         // how this works: we have three arrays, one with the fitness values
@@ -230,7 +244,7 @@ public class WeightedRouletteSelector implements NaturalSelector
         // reaches or exceeds the chosen slot number. When that happenes,
         // we've found the chromosome sitting in that slot and we return it.
         // ------------------------------------------------------------------
-        long currentSlot = 0;
+        double currentSlot = 0.0;
 
         for( int i = 0; i < a_counterValues.length; i++ )
         {
@@ -290,6 +304,49 @@ public class WeightedRouletteSelector implements NaturalSelector
         m_wheel.clear();
         m_totalNumberOfUsedSlots = 0;
     }
+
+
+    private void scaleFitnessValues()
+    {
+        // First, add up all the fitness values. While we're doing this,
+        // keep track of the largest fitness value we encounter.
+        // -------------------------------------------------------------
+        double largestFitnessValue = 0.0;
+        BigDecimal totalFitness = ZERO_BIG_DECIMAL;
+
+        Iterator counterIterator = m_wheel.values().iterator();
+        while( counterIterator.hasNext() )
+        {
+            SlotCounter counter = (SlotCounter) counterIterator.next();
+            if( counter.getFitnessValue() > largestFitnessValue )
+            {
+                largestFitnessValue = counter.getFitnessValue();
+            }
+
+            BigDecimal counterFitness =
+                new BigDecimal( counter.getFitnessValue() );
+            totalFitness = totalFitness.add(
+                counterFitness.multiply(
+                    new BigDecimal( counter.getCounterValue() ) ) );
+        }
+
+        // Now divide the total fitness by the largest fitness value to
+        // compute the scaling factor.
+        // ------------------------------------------------------------
+        double scalingFactor =
+                totalFitness.divide( new BigDecimal( largestFitnessValue ),
+                                     BigDecimal.ROUND_HALF_UP ).doubleValue();
+
+        // Now divide each of the fitness values by the scaling factor to
+        // scale them down.
+        // --------------------------------------------------------------
+        counterIterator = m_wheel.values().iterator();
+        while( counterIterator.hasNext() )
+        {
+            SlotCounter counter = (SlotCounter) counterIterator.next();
+            counter.scaleFitnessValue( scalingFactor );
+        }
+    }
 }
 
 
@@ -312,12 +369,12 @@ class SlotCounter
      * reused for other Chromosomes, thus saving some memory and the overhead
      * of constructing them from scratch.
      */
-    private int m_fitnessValue = 0;
+    private double m_fitnessValue = 0.0;
 
     /**
-     * The current number of slots occupied by our associated Chromosome.
+     * The current number of Chromosomes represented by this counter.
      */
-    private long m_count = 0;
+    private int m_count = 0;
 
 
     /**
@@ -327,10 +384,10 @@ class SlotCounter
      * @param a_initialFitness The fitness value of the Chromosome for which
      *                         this instance is acting as a counter.
      */ 
-    public void reset( int a_initialFitness )
+    public void reset( double a_initialFitness )
     {
         m_fitnessValue = a_initialFitness;
-        m_count = a_initialFitness;
+        m_count = 1;
     }
 
 
@@ -340,7 +397,7 @@ class SlotCounter
      *
      * @return The fitness value that was passed in at reset time.
      */
-    public int getFitnessValue()
+    public double getFitnessValue()
     {
         return m_fitnessValue;
     }
@@ -350,9 +407,9 @@ class SlotCounter
      * Increments the value of this counter by the fitness value that was
      * passed in at reset time.
      */
-    public void incrementByFitness()
+    public void increment()
     {
-        m_count += m_fitnessValue;
+        m_count++;
     }
 
 
@@ -363,9 +420,21 @@ class SlotCounter
      *
      * @return the current value of this counter.
      */
-    public long getCounterValue()
+    public int getCounterValue()
     {
         return m_count;
+    }
+
+
+    /**
+     * Scales this SlotCounter's fitness value by the given scaling factor.
+     *
+     * @param a_scalingFactor The factor by which the fitness value is to be
+     *                        scaled.
+     */
+    public void scaleFitnessValue( double a_scalingFactor )
+    {
+        m_fitnessValue /= a_scalingFactor;
     }
 }
 
