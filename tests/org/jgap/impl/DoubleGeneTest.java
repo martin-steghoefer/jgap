@@ -29,6 +29,9 @@ import junitx.util.PrivateAccessor;
 
 /**
  * Tests for DoubleGene class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class DoubleGeneTest
     extends TestCase
@@ -184,4 +187,13 @@ public class DoubleGeneTest
         assertEquals (upper1, upper2);
     }
 
+    public void testPersistentRepresentation_0() throws Exception {
+        Gene gene1 = new DoubleGene (2.05d, 7.53d);
+        gene1.setAllele(new Double(4.5d));
+        String pres1 = gene1.getPersistentRepresentation();
+        Gene gene2 = new DoubleGene ();
+        gene2.setValueFromPersistentRepresentation(pres1);
+        String pres2 = gene2.getPersistentRepresentation();
+        assertEquals(pres1, pres2);
+    }
 }
