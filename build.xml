@@ -26,4 +26,13 @@
       </fileset>
     </delete>
   </target>
+
+  <target name="javadoc">
+    <javadoc sourcepath="${src}"
+             destdir="javadocs/"
+             Public="true"
+             packagenames="org.jgap, org.jgap.impl">
+    </javadoc>
+  </target>
+
 </project>
