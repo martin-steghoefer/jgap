@@ -4,6 +4,8 @@
 * Removed variable m_workingPool in class Genotype
 * Introduced generation number in class Configuration.
   It is incremented automatically in Genotype.evolve()
+* Added javadocs for salesman related classes
+* Simplified tests for WeightedRouletteSelector
 
 
 2.1
