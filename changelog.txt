@@ -1,8 +1,11 @@
 2.1
 ----------
+* Added new Mutation Operator: SwappingMutationOperator
 * Modified hashcode function in class Chromosome to be as
   in java.util.AbstractList
 * Made GaussianMutationOperator work with CompositeGene
+* Made AveragingCrossoverOperator work with CompositeGene
+* Made CrossoverOperator work with CompositeGene
 * Fixed an error in TournamentSelector with tournament size = 1
 * Added constraint checks in constructor of class TournamentSelector
 * Added utility class for general testing of hashcode function
@@ -13,6 +16,8 @@
 * Added tests for PopulationHistory (see request 1075163)
 * Added tests for GaussianMutationOperator (see request 1072059)
 * Added tests for SwappingMutationOperator (see request 1093233)
+* Added tests for AveragingCrossoverOperator (see request 1083644)
+* Added tests for GreedyCrossover (see request 1093231)
 * Fixed javadocs of several classes
 * Moved FitnessValueComparator from BestChromosomesSelector and made
   public
@@ -27,6 +32,7 @@
 * Made add(Chromosome) method protected by moving from
   INaturalSelector to NaturalSelector
 * Added new class GaussianMutationOperator (see request 708772)
+* Added new class GreedyCrossover
 * Added DeltaFitnessEvaluator interpreting fitness values as
   defect rates
 * Added new package org.jgap.impl.salesman containing classes
