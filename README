@@ -1,31 +1,31 @@
 
 ------------------------------------------------------------------------
-About JGAP 0.21:
+About JGAP 0.3:
 
-Important Note about JGAP 0.2x:
+Important Note about backward compatibility:
 
-   In an attempt to make JGAP more modular, some of the API
-   has changed and is not backward compatible with version 0.1.
-   If you have used version 0.1, it is recommended that you
-   read the "Brief Introduction to Working with JGAP 0.2x"
-   section of this README, as well as the updated Javadocs. For
-   a general list of changes and enhancements, please see the
-   CHANGELOG file.
+   JGAP 0.3 adds a number of new features, including support for custom
+   alleles. As a result, the API has changed in some places and is not
+   backward compatible with the 0.2x APIs. That being said, converting
+   to the new APIs should be pretty easy and will provide a great deal
+   of convenience and flexibility.
 
 This represents an alpha release of JGAP, the Java Genetic Algorithms
 Package, which means it is not feature complete, is not optimized, and
 probably contains bugs. The APIs are also considered a work in progress
-and are subject to change.
+and are subject to change. For a general list of changes, fixes, and
+enhancements in this version, please see the CHANGELOG file.
 
 This software is OSI Certified Open Source Software. OSI Certified is
 a certification mark of the Open Source Initiative.
 
-Any existing documentation, including Javadocs, can be found on the JGAP
-home page at http://jgap.sourceforge.net. Javadocs can also be found in
-the javadocs/ directory of the JGAP distribution. A basic introduction to
-the contents of the JGAP package is also provided in this file, below.
+Any existing documentation, including Javadocs and a new tutorial, can 
+be found on the JGAP home page at http://jgap.sourceforge.net. Javadocs 
+can also be found in the javadocs/ directory of the JGAP distribution. 
+For a basic introduction to using JGAP, we highly recommend reading the
+tutorial that can be found on the JGAP website.
 
-JGAP 0.2x requires Java 1.2 or above.
+JGAP 0.3 requires Java 1.2 or above.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP development mailing list at jgap-devl@lists.sourceforge.net
@@ -52,92 +52,10 @@ be found in the src/ directory of the archive. For convenience, an Ant
 build script is included. For more information on Ant, please see the
 Ant home page at jakarta.apache.org/ant/
 
-4. Javadocs can be found in the javadocs/ directory.
+4. Javadocs can be found in the javadocs/ directory. For a basic
+introduction to JGAP, we highly recommend reading the tutorial that
+can be found on the JGAP website.
 
-If you encounter any problems during installation, please send a note
-to the JGAP developers list at jgap-devl@lists.sourceforge.net
-
-
-------------------------------------------------------------------------
-Brief Introduction to Working with JGAP 0.2x:
-
-JGAP is a Java package that provides basic genetic algorithms
-functionality. As this version is an alpha release, it is not feature
-complete, is not optimized, and probably contains bugs. However, basic
-functionality is present and has been found to serve adequately for the
-needs of the authors.
-
-To use JGAP 0.2x in a particular application, you need to write a class
-that implements the org.jgap.FitnessFunction interface. Implementations
-of this interface are used during the natural selection process to
-determine each Chromosome's fitness for survival. Since this function is
-completely dependent on the problem you're trying to solve, it's up to
-you to provide an implementation of it. For an example of a fitness
-function, see the MaxFunction class in the examples/ directory. That
-particular function treats the bits in a Chromosome as a binary number
-and returns their corresponding numeric value as the fitness function of
-the Chromosome (thereby assigning a higher fitness value to Chromosomes
-whose bits happen to represent a larger binary number). Documentation on
-fitness functions can be found in the Javadocs of the 
-org.jgap.FitnessFunction interface.
-
-JGAP 0.2x is designed to be highly modular so that, if desired, you can
-also provide your own implementation of other components of the genetic
-algorithm, including the natural selector, random number generator, and
-genetic operators. Usually, however, the stock components will suffice.
-For more information on providing your own implementation of these other
-components, please see the Javadocs for the NaturalSelector,
-RandomNumberGenerator, and GeneticOperator interfaces, all of which can
-be found in the org.jgap package.
-
-Once you've implemented your fitness function and, optionally, any other
-genetic components, you just need to setup a Configuration object to
-convey your desired settings to JGAP, build a population of Chromosomes
-(a Genotype), and start evolving them. The easiest way to create a
-Configuration object is to take advantage of the
-org.jgap.impl.DefaultConfiguration class, which provides default values
-for most of the settings. All that is required is that you set the
-number of genes you'd like to use in each Chromosome, the number of
-Chromosomes you'd like to include in the population, and the instance
-of the fitness function you'd like to use during the natural selection
-process. See the TestGenetics.java class in the examples/ directory for
-an example.
-
-Once you've setup your Configuration object, the easiest way to create
-your population is to take advantage of the static
-Genotype.randomInitialGenotype() method.  You simply need to pass it
-the Configuration object you created and the method will create a Genotype
-for you with a randomly generated population according to the settings in
-the Configuration object. If you prefer, you can also manually construct
-the Genotype yourself, passing it an array of Chromosomes that you have
-previously created (the Chromosome class also has a static
-randomInitialChromosome() method to make generation of individual
-Chromosomes easier, if desired).
-
-After you've created an instance of a Genotype, you simply invoke its
-evolve() method as many times as desired. With each invocation, the
-population of Chromosomes is passed through each of the genetic operators
-setup in the current Configuration, and then through the process of
-natural selection. After each call to evolve, the getChromosomes() method
-can be used to retrieve the updated population, or you can use the
-getFittestChromosome() method to retrieve the Chromosome with the highest
-fitness value. Or, if you like, just keep evolving! :-)
-
-For a simple example of a program that makes use of the JGAP 0.2x package,
-see the TestGenetics.java file in the examples/ directory. It uses the
-DefaultConfiguration class to setup a Configuration instance, creates a
-Genotype using the randomInitialGenotype() method, evolves it a number
-of times specified as a command-line argument to the program, and then
-writes the resulting population of Chromosomes in human-readable format
-to standard out, along with the Chromosome possessing the highest
-fitness value.
-
-For more details on all of the above, you are highly encouraged to read
-through the Javadocs found on the JGAP home page or in the javadocs/
-directory. There are not very many classes and interfaces in
-the package, and the documentation attempts to be simple and
-straight-forward. Other documentation may be found at the JGAP home page
-at http://jgap.sourceforge.net
 
 If you have any questions, or run into any problems, please feel free
 to send a message to the JGAP developers mailing list at
@@ -146,5 +64,4 @@ jgap-devl@lists.sourceforge.net
 ------------------------------------------------------------------------
 JGAP is kindly hosted by the folks at SourceForge. For more information
 on SourceForge, please visit http://www.sourceforge.net
-
 

@@ -35,6 +35,7 @@
   the EventManager.fireGeneticEvent() method. Event listeners
   must now provide the names of events they wish to subscribe to
   and will only be notified when those kinds of events are fired.
+* Updated the README file.
 
 
 0.21
