@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -219,7 +219,7 @@ public class Chromosome
           return copy;
         }
         catch (CloneNotSupportedException cex) {
-          // rethrow as RuntimeException to be backward compatible and have
+          // rethrow as IllegalStateException to be backward compatible and have
           // a more convenient handling
           throw new IllegalStateException(cex.getMessage());
         }
