@@ -23,9 +23,10 @@ import org.jgap.*;
 
 /**
  * A Gene implementation that supports a string for its allele. The valid
- * alphabet as well as the minimum and maximum length of the string can be specified.
- * An alphabet == null indicates that all characters are seen to be valid.
- * An alphabet == "" indicates that no character is seen to be valid.
+ * alphabet as well as the minimum and maximum length of the string can be
+ * specified.<p>
+ * An alphabet == null indicates that all characters are seen as valid.<br>
+ * An alphabet == "" indicates that no character is seen to be valid.<p>
  * Partly copied from IntegerGene.
  *
  * @author Klaus Meffert
@@ -33,7 +34,6 @@ import org.jgap.*;
  */
 public class StringGene
     implements Gene {
-
   //Constants for ready-to-use alphabets or serving as part of concetenation
   public static final String ALPHABET_CHARACTERS_UPPER =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private int m_minLength;
 
@@ -195,7 +195,8 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setValueFromPersistentRepresentation(String a_representation) throws
+  public void setValueFromPersistentRepresentation(String a_representation)
+      throws
       UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
@@ -292,7 +293,8 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public String getPersistentRepresentation() throws
+  public String getPersistentRepresentation()
+      throws
       UnsupportedOperationException {
     // The persistent representation includes the value, minimum length,
     // maximum length and valid alphabet. Each is separated by a colon.
@@ -626,16 +628,46 @@ public class StringGene
    */
   public void applyMutation(int index, double a_percentage) {
     String s = stringValue();
-    int ch = s.charAt(index);
-    char newValue = (char) Math.round(ch * (1.0d + a_percentage));
-    // Set mutated character by concatenating the String by using "ch"
+    int index2 = -1;
+    boolean randomize;
+    int len = 0;
+    if (m_alphabet != null) {
+      len = m_alphabet.length();
+      if (len < 1) {
+        randomize = true;
+      }
+      else {
+        randomize = false;
+      }
+    }
+    else {
+      randomize = true;
+    }
+    char newValue;
+    if (!randomize) {
+      int indexC = m_alphabet.indexOf(s.charAt(index));
+      index2 = indexC + (int) Math.round(len * a_percentage);
+      // If index of new character out of bounds then randomly choose a new
+      // character. This randomness helps in the process of evolution
+      // ------------------------------------------------------------------
+      if (index2 < 0 || index2 >= len) {
+        index2 = rn.nextInt(len);
+      }
+      newValue = m_alphabet.charAt(index2);
+    }
+    else {
+      index2 = rn.nextInt(256);
+      newValue = (char)index2;
+    }
+    // Set mutated character by concatenating the String with it
     // ---------------------------------------------------------------
-    s = s.substring(0, index) + newValue + s.substring(index + 1);
+    if (s == null) {
+      s = ""+newValue;
+    }
+    else {
+      s = s.substring(0, index) + newValue + s.substring(index + 1);
+    }
     setAllele(s);
-    // If the value isn't in the alphabet of this Gene,
-    // map it to a value within the alphabet closest to wanted value.
-    // -------------------------------------------------------------
-
-    /**@todo implement       mapValueToWithinBounds ();*/
   }
+
 }
