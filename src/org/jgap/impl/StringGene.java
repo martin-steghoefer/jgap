@@ -34,13 +34,22 @@ import org.jgap.UnsupportedRepresentationException;
 /**
  * A Gene implementation that supports a string for its allele. The valid alphabet
  * as well as the minimum and maximum length of the string can be specified.
+ * Partly copied from IntegerGene.
  */
 public class StringGene
     implements Gene
 {
 
+    //Constants for ready-to-use alphabets or serving as part of concetenation
+    public static final String ALPHABET_CHARACTERS_UPPER =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String ALPHABET_CHARACTERS_LOWER =
+        "abcdefghijklmnopqrstuvwxyz";
+    public static final String ALPHABET_CHARACTERS_DIGITS = "0123456789";
+    public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
+
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     private int m_minLength;
     private int m_maxLength;
@@ -65,9 +74,21 @@ public class StringGene
 
     public StringGene (int a_minLength, int a_maxLength, String a_alphabet)
     {
+        if (a_minLength < 0)
+        {
+            throw new IllegalArgumentException (
+                "minimum length must be greater than"
+                + " zero!");
+        }
+        if (a_maxLength < a_minLength)
+        {
+            throw new IllegalArgumentException (
+                "minimum length must be smaller than"
+                + " or equal to maximum length!");
+        }
         m_minLength = a_minLength;
         m_maxLength = a_maxLength;
-        m_alphabet = a_alphabet;
+        setAlphabet (a_alphabet);
     }
 
     /**
@@ -262,14 +283,16 @@ public class StringGene
      */
     public void setAllele (Object a_newValue)
     {
-        String temp = (String) a_newValue;
-        if (temp == null || temp.length () < m_minLength ||
-            temp.length () > m_maxLength)
-        {
-            throw new IllegalArgumentException (
-                "The given String is too short or too long!");
+        if (a_newValue != null) {
+            String temp = (String) a_newValue;
+            if (temp.length () < m_minLength ||
+                temp.length () > m_maxLength)
+            {
+                throw new IllegalArgumentException (
+                    "The given String is too short or too long!");
+            }
+            /**@todo check for validity of alphabet*/
         }
-        /**@todo check for validity of alphabet*/
 
         m_value = (String) a_newValue;
     }
@@ -331,7 +354,6 @@ public class StringGene
         }
         else
         {
-            /**@todo perhaps handle strings with different lengths differently*/
             try
             {
                 return m_value.compareTo (otherStringGene.m_value);
@@ -371,7 +393,69 @@ public class StringGene
 
     public void setAlphabet (String m_alphabet)
     {
+            /**@todo check if one character is equal to the PERSISTENT_FIELD_DELIMITER*/
         this.m_alphabet = m_alphabet;
+    }
+
+    /**
+     * Retrieves a string representation of this StringGene's value that
+     * may be useful for display purposes.
+     *
+     * @return a string representation of this StringGene's value.
+     */
+    public String toString ()
+    {
+        if (m_value == null)
+        {
+            return "null";
+        }
+        else
+        {
+            return m_value.toString ();
+        }
+    }
+
+    /**
+     * Compares this DoubleGene with the given object and returns true if
+     * the other object is a DoubleGene and has the same value (allele) as
+     * this DoubleGene. Otherwise it returns false.
+     *
+     * @param other the object to compare to this DoubleGene for equality.
+     * @return true if this DoubleGene is equal to the given object,
+     *         false otherwise.
+     */
+    public boolean equals (Object other)
+    {
+        try
+        {
+            return compareTo (other) == 0;
+        }
+        catch (ClassCastException e)
+        {
+            // If the other object isn't a StringGene, then we're not equal.
+            // -------------------------------------------------------------
+            return false;
+        }
+    }
+
+    /**
+     * Retrieves the hash code value for this StringGene.
+     *
+     * @return this StringGene's hash code.
+     */
+    public int hashCode ()
+    {
+        // If our internal Double is null, then return zero. Otherwise,
+        // just return the hash code of the String.
+        // -------------------------------------------------------------
+        if (m_value == null)
+        {
+            return 0;
+        }
+        else
+        {
+            return m_value.hashCode ();
+        }
     }
 
 }
