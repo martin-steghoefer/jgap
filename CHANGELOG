@@ -18,6 +18,7 @@
 * Fixed compareTo() method in IntegerGene.
 * Added hashCode() method to IntegerGene and BooleanGene.
 * Made various other minor fixes.
+* Removed the TestGenetics and TestXML examples.
 * Updated introductory documentation.
 * Updated various javadocs to increase clarity and accuracy.
 * Updated the README file.
