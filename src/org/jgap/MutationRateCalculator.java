@@ -21,14 +21,18 @@ package org.jgap;
 
 /**
  * Interface for a calculator that determines the mutation rate dynamically
+ *
  * @author Klaus Meffert
  * @since 1.1
  */
 public interface MutationRateCalculator
 {
     /**
+     * Calculates the mutation rate
+     * @param a_activeConfiguration current active configuration
      * @return the currently applying mutation rate. It is calculated
      * dynamically
+     *
      * @since 1.1
      */
     int calculateCurrentRate(Configuration a_activeConfiguration);
