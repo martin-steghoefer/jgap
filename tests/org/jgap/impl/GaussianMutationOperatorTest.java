@@ -31,7 +31,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public GaussianMutationOperatorTest() {
   }
@@ -52,8 +52,7 @@ public class GaussianMutationOperatorTest
     conf.addGeneticOperator(op);
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
-    rand.setNextIntSequence(new int[] {
-                            0, 1, 0, 1, 2});
+    rand.setNextGaussian(0.3d);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene sampleGene = new IntegerGene(1, 10);
