@@ -23,7 +23,7 @@ import org.jgap.impl.IntegerGene;
 import org.jgap.supergenes.abstractSupergene;
 import org.jgap.Gene;
 
-/** Supergene to hold quarters and nickels. Valid if the number of
+/** Supergene to hold pennies and nickels. Valid if the number of
  * nickels and pennies is either both odd or both even.
  * @author Audrius Meskauskas
  */

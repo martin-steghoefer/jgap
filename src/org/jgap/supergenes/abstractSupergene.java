@@ -41,9 +41,6 @@ import org.jgap.Gene;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
 
-
-
-
 /**
  * Combined implementation of both Supergene and SupergeneValidator.
  * A working supergene can be easily created from this class just by
@@ -57,9 +54,6 @@ import org.jgap.UnsupportedRepresentationException;
 public abstract class abstractSupergene
     implements Supergene, supergeneValidator, Serializable
  {
-
-    /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "0.0.2 alpha-explosive";
 
     /**
      * This field separates gene class name from
