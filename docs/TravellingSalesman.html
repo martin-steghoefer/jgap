@@ -4,7 +4,6 @@
 <head>
 <meta http-equiv="Content-Type"
 content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 2.0">
 <title>Traveling salesman problem</title>
 </head>
 
@@ -40,8 +39,7 @@ even remote database to get the travel costs or distance between
 the cities. To specify the needed algorithm, you must override
 the method Salesman.<strong>distance</strong>:</p>
 
-<p><em>abstract</em> double <b>distance</b>(Gene&nbsp;a_from,
-Gene&nbsp;a_to)</p>
+<pre><font color="#000080"><strong>abstract double</strong></font> <b>distance</b>(Gene&nbsp;a_from, Gene&nbsp;a_to)</pre>
 
 <p>You also need to specify the cities we need to visit, and from
 which city the journey should begin. This is done by representing
@@ -50,7 +48,7 @@ correct, but need not be even close to the optimal one. The
 sample solution must be presented in as a <em>Chromosome</em>
 that can be easily constructed from the gene array.</p>
 
-<p>a<em>bstract </em>Chromosome <b>createSampleChromosome</b>(Object<em>&nbsp;an_initial_data</em>)</p>
+<pre><font color="#000080"><strong>abstract</strong><em><strong> </strong></em></font>Chromosome <b>createSampleChromosome</b>(Object<em>&nbsp;an_initial_data</em>)</pre>
 
 <p>For more precise control on the solution you may also need to
 override several other methods and use the parameter <em>an_initial_data.
@@ -61,8 +59,7 @@ documentation for details.</p>
 by overriding the two mentioned methods, the task solution can be
 obtained just by calling </p>
 
-<p>Chromosome <b>findOptimalPath</b>(Object&nbsp;<em>an_initial_data</em>)
-</p>
+<pre>Chromosome <b>findOptimalPath</b>(Object&nbsp;<em>an_initial_data</em>) </pre>
 
 <p>The parameter <em>an_initial_data </em>is later passed to <b>createSampleChromosome.
 </b>This is how you can solve multiple tasks with the same class,
