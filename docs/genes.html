@@ -97,7 +97,7 @@
 <i><font color=#808080> * which case the value (allele) of this Gene will never exceed that</font></i>
 <i><font color=#808080> * maximum.</font></i>
 <i><font color=#808080> */</font></i>
-<b><font color=#000080>public</font></b> <b><font color=#000080>class</font></b> <font color=#000000>QuarterGene</font> <b><font color=#000080>implements</font></b> <font color=#000000>Gene</font>
+<b><font color=#000080>public</font></b> <b><font color=#000080>class</font></b> <font color=#000000>QuarterGene</font> <b><font color=#000080>implements</font></b> <font color=#000000>Gene, java.io.Serializable</font>
 <font color=#000000>{</font>
     <b><font color=#000080>private</font></b> <b><font color=#000080>static</font></b> <b><font color=#000080>final</font></b> <font color=#000000>String</font> <font color=#000000>TOKEN_SEPARATOR</font> <font color=#000000>=</font> <b><font color=#009900>":"</font></b><font color=#000000>;</font>
 
@@ -355,6 +355,18 @@
         <b><font color=#000080>return</font></b> <font color=#000000>otherQuarterGene</font> <b><font color=#000080>instanceof</font></b> <font color=#000000>QuarterGene && </font>
                <font color=#000000>compareTo</font><font color=#000000>(</font> <font color=#000000>otherQuarterGene</font> <font color=#000000>)</font> <font color=#000000>=</font><font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font>
     <font color=#000000>}</font>
+
+
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Calculates the hash-code for this QuarterGene.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @return the hash-code of this QuarterGene</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>int</fon
+t></b> <font color=#000000>hashCode</font><font color=#000000>()</font>
+    <font color=#000000>{</font>
+        <b><font color=#000080>return</font></b> <font color=#000000>m_numberOfQuarters</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
 <font color=#000000>}</font>
 
 </tt>
@@ -416,10 +428,30 @@
       The final three methods are cleanup(), which is invoked by JGAP
       when this Gene is no longer needed; compareTo(), which compares
       this QuarterGene to another one and determines which is the
-      "greater" of the two; and equals(), which compares this QuarterGene
-      to another one and determines if they are equal. All of these should
-      be self-explanatory.
+      "greater" of the two; equals(), which compares this QuarterGene
+      to another one and determines if they are equal; and, finally,
+      hashCode(), which generates a hash-code. All of these should
+      be self-explanatory. Note that it's very important to include
+      working equals() and hashCode() methods, and not to simply
+      rely on the default implementations in java.lang.Object.
     </p>
+
+    <h3 class="subheader">A Note about Serialization</h3>
+
+    <p>
+      As mentioned in the previous section, JGAP supports marshalling and
+      unmarshalling genetic components to/from XML. It also supports the
+      standard Java serialization mechanism, allowing Genotypes and Chromosomes
+      to be serialied. In order for this to work properly, two things are
+      required of your Gene implementation: first, it must implement the
+      java.io.Serializable interface. Second, it must declare any fields
+      transient that are not an actual part of the Gene state. For example,
+      if your Gene maintains a reference to the active Configuration object,
+      then this reference must be declared transient. Ideally, your Gene
+      implementations should simply avoid instance fields that aren't a
+      part of the Gene state.
+    </p>
+
 
     <h3 class="subheader">Conclusion</h3>
 

@@ -30,7 +30,10 @@ import java.util.List;
  * The reproduction operator loops through each of the Chromosomes in the
  * population and adds them to the list of candidate chromosomes. This
  * guarantees that each Chromosome in the current population remains a
- * candidate for selection for the next population.
+ * candidate for selection for the next population. Note that if a
+ * reproduction operator is not included in the list of configured genetic
+ * operators, then Chromosomes in the genotype population may not become
+ * candidates for natural selection.
  */
 public class ReproductionOperator implements GeneticOperator
 {

@@ -21,11 +21,11 @@ package org.jgap;
 
 import org.jgap.event.GeneticEvent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.io.Serializable;
 
 
 /**
@@ -40,7 +40,7 @@ public class Genotype implements Serializable
     /**
      * The current active Configuration instance.
      */
-    protected Configuration m_activeConfiguration;
+    transient protected Configuration m_activeConfiguration;
 
     /**
      * The array of Chromosomes that makeup thie Genotype's population.
@@ -57,7 +57,7 @@ public class Genotype implements Serializable
      * go on to the next generation and which will be discarded. It is wiped
      * clean after each cycle of evolution.
      */
-    protected List m_workingPool;
+    transient protected List m_workingPool;
 
 
     /**
@@ -119,6 +119,63 @@ public class Genotype implements Serializable
 
 
     /**
+     * Sets the active Configuration object on this Genotype and its
+     * member Chromosomes. This method should be invoked immediately following
+     * deserialization of this Genotype. If an active Configuration has already
+     * been set on this Genotype, then this method will do nothing.
+     *
+     * @param a_activeConfiguration The current active Configuration object
+     *                              that is to be referenced internally by
+     *                              this Genotype and its member Chromosome
+     *                              instances.
+     *
+     * @throws InvalidConfigurationException if the Configuration object is
+     *         null or cannot be locked because it is in an invalid or
+     *         incomplete state.
+     */
+    public void setActiveConfiguration( Configuration a_activeConfiguration )
+        throws InvalidConfigurationException
+    {
+        // Only assign the given Configuration object if we don't already
+        // have one.
+        // --------------------------------------------------------------
+        if( m_activeConfiguration == null )
+        {
+            if( a_activeConfiguration == null )
+            {
+                throw new InvalidConfigurationException(
+                    "The given Configuration object may not be null." );
+            }
+            else
+            {
+                // Make sure the Configuration object is locked and cannot be
+                // changed.
+                // ----------------------------------------------------------
+                a_activeConfiguration.lockSettings();
+
+                m_activeConfiguration = a_activeConfiguration;
+
+                // Since this method is invoked following deserialization of
+                // this Genotype, the constructor hasn't been invoked. So make
+                // sure any other transient fields are initialized properly.
+                // -----------------------------------------------------------
+                m_workingPool = new ArrayList();
+
+                // Now set this Configuration on each of the member
+                // Chromosome instances.
+                // ------------------------------------------------
+                for( int i = 0; i < m_chromosomes.length; i++ )
+                {
+                    m_chromosomes[ i ].setActiveConfiguration(
+                                           m_activeConfiguration );
+                }
+            }
+        }
+    }
+
+
+
+    /**
      * Retrieves the array of Chromosomes that make up the population of this
      * Genotype instance.
      *
@@ -173,6 +230,8 @@ public class Genotype implements Serializable
      */
     public synchronized void evolve()
     {
+        verifyConfigurationAvailable();
+
         // Execute all of the Genetic Operators.
         // -------------------------------------
         List geneticOperators = m_activeConfiguration.getGeneticOperators();
@@ -381,5 +440,23 @@ public class Genotype implements Serializable
             return false;
         }
     }
+
+
+    /**
+     * Verifies that a Configuration object has been properly set on this
+     * Genotype instance. If not, then an IllegalStateException is thrown.
+     * In general, this method should be invoked by any operation on this
+     * Genotype that makes use of the Configuration instance.
+     */
+    private void verifyConfigurationAvailable()
+    {
+        if( m_activeConfiguration == null )
+        {
+            throw new IllegalStateException(
+                "The active Configuration object must be set on this " +
+                "Genotype prior to invocation of other operations." );
+        }
+    }
+
 }
 

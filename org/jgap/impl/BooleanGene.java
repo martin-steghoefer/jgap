@@ -36,7 +36,7 @@ import org.jgap.UnsupportedRepresentationException;
  * use a higher overall mutation rate when this Gene implementation
  * is in use.
  */
-public class BooleanGene implements Gene
+public class BooleanGene implements Gene, java.io.Serializable
 {
     /**
      * Shared constant representing the "true" boolean value. Shared constants
@@ -57,10 +57,6 @@ public class BooleanGene implements Gene
      */
     protected Boolean m_value = null;
 
-    /**
-     * The current active configuration that is in use.
-     */
-    protected Configuration m_activeConfiguration = null;
 
 
     /**
@@ -68,18 +64,6 @@ public class BooleanGene implements Gene
      */
     public BooleanGene()
     {
-    }
-
-
-    /**
-     * Constructs a new BooleanGene according to the given active
-     * configuration.
-     *
-     * @param a_activeConfiguration The current active configuration.
-     */
-    public BooleanGene( Configuration a_activeConfiguration )
-    {
-        m_activeConfiguration = a_activeConfiguration;
     }
 
 
@@ -104,7 +88,7 @@ public class BooleanGene implements Gene
      */
     public Gene newGene( Configuration a_activeConfiguration )
     {
-        return new BooleanGene( a_activeConfiguration );
+        return new BooleanGene();
     }
 
 

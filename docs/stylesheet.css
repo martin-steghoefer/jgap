@@ -59,6 +59,16 @@
   margin-right: auto;
 }
 
+.question {
+  font-family: sans-serif;
+  font-size: 12pt;
+  color: green;
+}
+
+.answer {
+}
+
+
 .copyright {
   text-align: center;
   color: green;
