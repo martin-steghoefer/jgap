@@ -54,6 +54,8 @@ public class EventManager
    */
   public void fireGenotypeEvolvedEvent( GenotypeEvent event )
   {
+    if ( listeners.size() < 1 ) return;
+ 
     List currentListeners = new ArrayList();
     synchronized( this )
     {
