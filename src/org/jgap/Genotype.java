@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * The current active Configuration instance.
@@ -248,7 +248,7 @@ public class Genotype
    * configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population. Note
    * that the population size not always remains constant (dependent on the
-   * NaturalSelector's used!).
+   * NaturalSelectors used!).
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -264,7 +264,7 @@ public class Genotype
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
-      /**@todo allow GeneticOperator's working on the result produced by
+      /**@todo allow GeneticOperators working on the result produced by
        * a previous GeneticOperator*/
       ( (GeneticOperator) operatorIterator.next()).operate(m_population,
           m_workingPool);
@@ -486,10 +486,10 @@ public class Genotype
   }
 
   /**
-   * Applies all NaturalSelector's registered with the Configuration
-   * @param processBeforeGeneticOperators true apply NaturalSelector's
-   *   applicable before GeneticOperator's, false: apply the ones applicable
-   *   after GeneticOperator's
+   * Applies all NaturalSelectors registered with the Configuration
+   * @param processBeforeGeneticOperators true apply NaturalSelectors
+   * applicable before GeneticOperators, false: apply the ones applicable
+   * after GeneticOperators
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -531,13 +531,13 @@ public class Genotype
         }
 
         if (i == selectorSize - 1 && i > 0) {
-          // Ensure the last NaturalSelector adds the remaining Chromosome's
-          // ---------------------------------------------------------------
+          // Ensure the last NaturalSelector adds the remaining Chromosomes
+          // --------------------------------------------------------------
           m_single_selection_size = m_population_size - m_new_population.size();
         }
 
-        // Do selection of Chromosome's
-        // ----------------------------
+        // Do selection of Chromosomes
+        // ---------------------------
         if (selectorSize > 1) {
           Population m_partial_result = selector.select(m_single_selection_size);
           m_new_population.addChromosomes(m_partial_result);
