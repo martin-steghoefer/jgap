@@ -36,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * The current active Configuration instance.
@@ -542,6 +542,22 @@ public class Genotype
    */
   public FitnessEvaluator getFitnessEvaluator() {
     return m_fitnessEvaluator;
+  }
+
+  /**
+   * Set the fitness evaluator (deciding if a given fitness value is better when
+   * it's higher or better when it's lower).
+   * @param a_fitnessEvaluator the FitnessEvaluator to be used
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setFitnessEvaluator(FitnessEvaluator a_fitnessEvaluator) {
+    if (a_fitnessEvaluator == null) {
+      throw new IllegalStateException(
+          "The fitness evaluator object must not be null!");
+    }
+    m_fitnessEvaluator = a_fitnessEvaluator;
   }
 
   /**
