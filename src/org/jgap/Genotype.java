@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * The current active Configuration instance.
@@ -210,27 +210,7 @@ public class Genotype
    * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
-    int len = m_population.size();
-    if (len == 0) {
-      return null;
-    }
-    // Set the best fitness value to that of the first chromosome.
-    // Then loop over the rest of the chromosomes and see if any has
-    // a better fitness value.
-    // The decision whether a fitness value is better than another is
-    // delegated to a FitnessEvaluator
-    // --------------------------------------------------------------
-    Chromosome fittestChromosome = m_population.getChromosome(0);
-    double fittestValue = fittestChromosome.getFitnessValue();
-    for (int i = 1; i < len; i++) {
-      if (m_activeConfiguration.getFitnessEvaluator().isFitter(m_population.getChromosome(i).
-                                      getFitnessValue(),
-                                      fittestValue)) {
-        fittestChromosome = m_population.getChromosome(i);
-        fittestValue = fittestChromosome.getFitnessValue();
-      }
-    }
-    return fittestChromosome;
+    return m_population.determineFittestChromosome();
   }
 
   /**
