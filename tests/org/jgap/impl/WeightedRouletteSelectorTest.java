@@ -23,7 +23,7 @@ import junitx.util.*;
 public class WeightedRouletteSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -151,7 +151,7 @@ public class WeightedRouletteSelectorTest
     bestChrom.setFitnessValue(12);
     toAddFrom.addChromosome(bestChrom);
     // add third chromosome
-    // ---------------------
+    // --------------------
     gene = new IntegerGene();
     gene.setAllele(new Integer(444));
     Chromosome secondBestChrom = new Chromosome(gene, 2);
@@ -175,6 +175,50 @@ public class WeightedRouletteSelectorTest
     selector.select(4, toAddFrom, popNew);
     bestChroms = popNew.toChromosomes();
     assertEquals(3, bestChroms.length);
+  }
+
+  /**
+   * Ensure the scaling of fitness value works without error (division by zero)
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSelect_3()
+      throws Exception {
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    selector.setDoubletteChromosomesAllowed(false);
+    Population toAddFrom = new Population();
+    // add first chromosome
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 4);
+    thirdBestChrom.setFitnessValue(0);
+    toAddFrom.addChromosome(thirdBestChrom);
+    // add second chromosome
+    // ---------------------
+    gene = new DoubleGene();
+    gene.setAllele(new Double(2.3d));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(1.0d);
+    toAddFrom.addChromosome(bestChrom);
+    // add third chromosome
+    // ---------------------
+    gene = new IntegerGene();
+    gene.setAllele(new Integer(444));
+    Chromosome secondBestChrom = new Chromosome(gene, 2);
+    secondBestChrom.setFitnessValue(-1.0d);
+    toAddFrom.addChromosome(secondBestChrom);
+    // receive top 3 chromosomes, no error should occur
+    // ------------------------------------------------
+    DefaultConfiguration conf = new DefaultConfiguration();
+    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    randgen.setNextDouble(0.0d);
+    conf.setRandomGenerator(randgen);
+    Population popNew = new Population();
+    selector.select(3, toAddFrom, popNew);
   }
 
   public void testEmpty_0()
