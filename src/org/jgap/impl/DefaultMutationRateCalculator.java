@@ -18,8 +18,7 @@
 
 package org.jgap.impl;
 
-import org.jgap.MutationRateCalculator;
-import org.jgap.Configuration;
+import org.jgap.*;
 
 /**
  * Default implementation of a mutation rate calculcator
@@ -30,7 +29,8 @@ import org.jgap.Configuration;
 public class DefaultMutationRateCalculator
     implements MutationRateCalculator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
   public DefaultMutationRateCalculator() {
   }
 
@@ -39,6 +39,7 @@ public class DefaultMutationRateCalculator
    * @param a_activeConfiguration current active configuration
    * @return calculated divisor of mutation rate probability (dividend is 1)
    *
+   * @author Klaus Meffert
    * @since 1.1 (same functionality since earlier, but not encapsulated)
    */
   public int calculateCurrentRate(Configuration a_activeConfiguration) {
