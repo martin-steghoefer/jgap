@@ -25,7 +25,7 @@ import junitx.util.*;
 public class BestChromosomesSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -39,6 +39,10 @@ public class BestChromosomesSelectorTest
     return suite;
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testConstruct_0()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector();
@@ -47,10 +51,17 @@ public class BestChromosomesSelectorTest
     assertEquals(Boolean.FALSE, needsSorting);
     assertTrue(selector.returnsUniqueChromosomes());
     assertFalse(selector.getDoubletteChromosomesAllowed());
+    Object m_fitnessValueComparator = PrivateAccessor.getField(selector,
+        "m_fitnessValueComparator");
+    assertTrue(m_fitnessValueComparator != null);
   }
 
-
-  public void testDoubletteChromosomesAllowed_0() throws Exception {
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
+  public void testDoubletteChromosomesAllowed_0()
+      throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector();
     selector.setDoubletteChromosomesAllowed(true);
     assertTrue(selector.getDoubletteChromosomesAllowed());
@@ -63,8 +74,8 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * @author Klaus Meffert
    * @throws Exception
+   * @author Klaus Meffert
    */
   public void testAdd_0()
       throws Exception {
@@ -94,17 +105,17 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Test if below functionality available without error
+   * Test if below functionality available without error.
    *
-   * @author Klaus Meffert
    * @throws Exception
+   * @author Klaus Meffert
    */
   public void testSelect_0()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
 
-    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
+    BestChromosomesSelector selector = new BestChromosomesSelector();
     Gene gene = new IntegerGene();
     gene.setAllele(new Integer(444));
     Chromosome secondBestChrom = new Chromosome(gene, 3);
@@ -213,6 +224,7 @@ public class BestChromosomesSelectorTest
 
   /**
    * Ensure that selected Chromosome's are not equal to added Chromosome's.
+   *
    * @throws Exception
    * @author Klaus Meffert
    */
@@ -252,7 +264,7 @@ public class BestChromosomesSelectorTest
    */
   public void testEmpty_0()
       throws Exception {
-    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
+    BestChromosomesSelector selector = new BestChromosomesSelector();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -268,13 +280,14 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Test if clear()-method does not affect original Population
+   * Test if clear()-method does not affect original Population.
+   *
    * @throws Exception
    * @author Klaus Meffert
    */
   public void testEmpty_1()
       throws Exception {
-    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
+    BestChromosomesSelector selector = new BestChromosomesSelector();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -290,13 +303,14 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Test if clear()-method does not affect return value
+   * Test if clear()-method does not affect return value.
+   *
    * @throws Exception
    * @author Klaus Meffert
    */
   public void testEmpty_2()
       throws Exception {
-    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
+    BestChromosomesSelector selector = new BestChromosomesSelector();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -312,10 +326,4 @@ public class BestChromosomesSelectorTest
     assertNotNull(pop.getChromosome(0));
   }
 
-}
-
-class BestChromosomesSelectorForTest extends BestChromosomesSelector {
-  public void add(Chromosome toAdd) {
-    super.add(toAdd);
-  }
 }
