@@ -26,6 +26,7 @@ import junit.framework.TestSuite;
 
 /**
  * Tests for DefaultMutationRateCalculator class
+ *
  * @author Klaus Meffert
  * @since 1.1
  */
@@ -35,7 +36,7 @@ public class DefaultMutationRateCalculatorTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.1 $";
+    private static final String CVS_REVISION = "$Revision: 1.2 $";
 
     public DefaultMutationRateCalculatorTest ()
     {
@@ -55,11 +56,11 @@ public class DefaultMutationRateCalculatorTest
        Chromosome chrom = new Chromosome(gene, 50);
        conf.setSampleChromosome(chrom);
        int rate = calc.calculateCurrentRate(conf);
-       assertEquals (conf.getChromosomeSize () * 10, rate);
+       assertEquals (conf.getChromosomeSize (), rate);
        chrom = new Chromosome(gene, 30);
        conf.setSampleChromosome(chrom);
        rate = calc.calculateCurrentRate(conf);
-       assertEquals (conf.getChromosomeSize () * 10, rate);
+       assertEquals (conf.getChromosomeSize (), rate);
    }
 
 }
