@@ -24,7 +24,7 @@ public class GenotypeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public GenotypeTest() {
   }
@@ -34,9 +34,19 @@ public class GenotypeTest
     return suite;
   }
 
+  public void setUp() {
+    Genotype.setConfiguration(null);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_0() {
     try {
-      Genotype genotype = new Genotype(null, new Population(0));
+      new Genotype(null, new Population(0));
       fail();
     }
     catch (InvalidConfigurationException invex) {
@@ -47,12 +57,18 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_2() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
     try {
-      Genotype genotype = new Genotype(null, chroms);
+      new Genotype(null, chroms);
       fail();
     }
     catch (InvalidConfigurationException invex) {
@@ -63,13 +79,18 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_3() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
     try {
-      Genotype genotype = new Genotype(new DefaultConfiguration(),
-                                       chroms);
+      new Genotype(new DefaultConfiguration(), chroms);
       fail();
     }
     catch (InvalidConfigurationException invex) {
@@ -77,6 +98,12 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_4() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
@@ -84,7 +111,7 @@ public class GenotypeTest
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     try {
-      Genotype genotype = new Genotype(conf, chroms);
+      new Genotype(conf, chroms);
       fail();
     }
     catch (InvalidConfigurationException invex) {
@@ -92,6 +119,12 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_5() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
@@ -100,7 +133,7 @@ public class GenotypeTest
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     try {
-      Genotype genotype = new Genotype(conf, chroms);
+      new Genotype(conf, chroms);
       fail();
     }
     catch (InvalidConfigurationException invex) {
@@ -108,6 +141,12 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_6() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
@@ -121,13 +160,19 @@ public class GenotypeTest
                DefaultFitnessEvaluator);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_7() throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     try {
-      Genotype genotype = new Genotype(conf, new Chromosome[]{null});
+      new Genotype(conf, new Chromosome[]{null});
       fail();
     }
     catch (IllegalArgumentException illex) {
@@ -135,6 +180,12 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_8() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
@@ -144,9 +195,15 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
-    Genotype genotype = new Genotype(conf, chroms);
+    new Genotype(conf, chroms);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testConstruct_9() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     Configuration conf = new DefaultConfiguration();
@@ -154,7 +211,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     try {
-      Genotype genotype = new Genotype(conf, chroms);
+      new Genotype(conf, chroms);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -162,6 +219,12 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testGetChromosomes_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
@@ -176,6 +239,12 @@ public class GenotypeTest
     assertEquals(chrom, genotype.getChromosomes()[0]);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testGetFittestChromosome_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
@@ -190,6 +259,12 @@ public class GenotypeTest
     assertEquals(null, genotype.getFittestChromosome());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testGetFittestChromosome_1() throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
@@ -199,7 +274,6 @@ public class GenotypeTest
     chroms[0] = chrom;
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
-//    chrom.setActiveConfiguration(conf);
     Genotype genotype = new Genotype(conf, chroms);
     Chromosome chrom2 = genotype.getFittestChromosome();
     assertEquals(chrom, chrom2);
@@ -210,6 +284,12 @@ public class GenotypeTest
     /**@todo check for correcctness of method when NaturalSelctors missing*/
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testToString_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
@@ -219,12 +299,17 @@ public class GenotypeTest
     chroms[0] = chrom;
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
-//    chrom.setActiveConfiguration(conf);
     Genotype genotype = new Genotype(conf, chroms);
     assertTrue(genotype.toString() != null);
     assertTrue(genotype.toString().length() > 0);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testRandomInitialGenotype_0() throws Exception {
     try {
       Genotype genotype = Genotype.randomInitialGenotype(null);
@@ -235,6 +320,12 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testRandomInitialGenotype_1() throws Exception {
     Configuration conf = new DefaultConfiguration();
     Chromosome chrom = new Chromosome(new Gene[] {
@@ -246,6 +337,12 @@ public class GenotypeTest
     assertEquals(7777, genotype.getChromosomes().length);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testEquals_0() throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
@@ -258,10 +355,31 @@ public class GenotypeTest
     assertEquals(false, genotype.equals(null));
     Genotype genotype2 = new Genotype(conf, chroms);
     assertTrue(genotype.equals(genotype2));
-    //active configuration not yet set
     assertEquals(genotype.toString(), genotype2.toString());
-    //now set active configuration
-//    chroms[0].setActiveConfiguration(conf);
     assertEquals(genotype.toString(), genotype2.toString());
+  }
+
+  /**
+   * Test if hashcode working in general
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
+  public void testHashcode_0() throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(5));
+    conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
+    conf.setPopulationSize(99999);
+    Genotype genotype = new Genotype(conf, chroms);
+    genotype.hashcode();
+  }
+
+  public void testHashcode_1() throws Exception {
+    /**@todo implement*/
   }
 }
