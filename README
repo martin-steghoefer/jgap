@@ -1,5 +1,3 @@
-
-------------------------------------------------------------------------
 About JGAP 0.3:
 
 Important Note about backward compatibility:
@@ -61,7 +59,15 @@ If you have any questions, or run into any problems, please feel free
 to send a message to the JGAP developers mailing list at
 jgap-devl@lists.sourceforge.net
 
+
 ------------------------------------------------------------------------
-JGAP is kindly hosted by the folks at SourceForge. For more information
-on SourceForge, please visit http://www.sourceforge.net
+Special Thanks:
+
+Thanks go to Jan Sabak for reporting bugs, and to Mike Crowe for 
+submitting some prototyping work for the new custom alleles. Mike 
+has since joined the JGAP team.
+
+Thanks also to the folks at Sourceforge, who kindly host the JGAP
+project. For more information on SourceForge, please visit
+http://www.sourceforge.net
 
