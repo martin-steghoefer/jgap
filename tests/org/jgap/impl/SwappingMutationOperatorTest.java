@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public SwappingMutationOperatorTest() {
   }
@@ -204,10 +202,10 @@ public class SwappingMutationOperatorTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2, chroms.size());
+    assertEquals(3 + 2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2+2, chroms.size());
+    assertEquals(3 + 2 + 2, chroms.size());
   }
 
   /**
@@ -219,45 +217,59 @@ public class SwappingMutationOperatorTest
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public void testOperate_4() throws Exception {
-      Configuration conf = new DefaultConfiguration();
-      conf.setFitnessFunction(new TestFitnessFunction());
-      Genotype.setConfiguration(conf);
+  public void testOperate_4()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Genotype.setConfiguration(conf);
 
-      int n_iterations = 20;
+    int n_iterations = 20;
 
-      RandomGenerator generator = new StockRandomGenerator();
-      SwappingMutationOperator mutOp = new SwappingMutationOperator();
-      mutOp.setStartOffset(0);
+    RandomGenerator generator = new StockRandomGenerator();
+    SwappingMutationOperator mutOp = new SwappingMutationOperator();
+    mutOp.setStartOffset(0);
 
-      for (int n_genes = 0; n_genes < 20; n_genes++) {
+    for (int n_genes = 0; n_genes < 20; n_genes++) {
 
-      Gene [] genes = new IntegerGene [ n_genes ];
+      Gene[] genes = new IntegerGene[n_genes];
       for (int i = 0; i < genes.length; i++) {
-          genes [i] = new IntegerGene(-1000,1000);
-          genes [i].setToRandomValue(generator);
+        genes[i] = new IntegerGene( -1000, 1000);
+        genes[i].setToRandomValue(generator);
       }
 
-      final long checksum = checksum (genes);
-      Gene [] prev = new Gene [genes.length];
+      final long checksum = checksum(genes);
+      Gene[] prev = new Gene[genes.length];
 
       for (int i = 0; i < n_iterations; i++)
-       for (int gene = 0; gene < genes.length; gene++) {
-           System.arraycopy( genes, 0, prev, 0, genes.length);
-           genes = mutOp.operate( generator, gene, genes );
-           // checksum constant:
-           assertEquals( checksum, checksum (genes) );
-       }
-      }
+        for (int gene = 0; gene < genes.length; gene++) {
+          System.arraycopy(genes, 0, prev, 0, genes.length);
+          genes = mutOp.operate(generator, gene, genes);
+          // checksum constant:
+          assertEquals(checksum, checksum(genes));
+        }
+    }
   }
 
- private long checksum( Gene [] a_genes )
- {
-     long s = 0;
-     for (int i = 0; i < a_genes.length; i++) {
-         s += ( (IntegerGene) a_genes [i] ).intValue();
-     }
-     return s;
- }
+  private long checksum(Gene[] a_genes) {
+    long s = 0;
+    for (int i = 0; i < a_genes.length; i++) {
+      s += ( (IntegerGene) a_genes[i]).intValue();
+    }
+    return s;
+  }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testStartoffset_0() {
+    SwappingMutationOperator op = new SwappingMutationOperator();
+    assertEquals(1, op.getStartOffset());
+    op.setStartOffset(2);
+    assertEquals(2, op.getStartOffset());
+    op.setStartOffset(1);
+    assertEquals(1, op.getStartOffset());
+    op.setStartOffset(0);
+    assertEquals(0, op.getStartOffset());
+  }
 }
