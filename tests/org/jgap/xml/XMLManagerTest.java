@@ -18,6 +18,7 @@
 
 package org.jgap.xml;
 
+import java.io.*;
 import javax.xml.parsers.*;
 
 import org.jgap.*;
@@ -37,7 +38,9 @@ public class XMLManagerTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
   public XMLManagerTest() {
   }
@@ -67,6 +70,9 @@ public class XMLManagerTest
     chrom = new Chromosome(genes);
     conf.setSampleChromosome(chrom);
     genotype = new Genotype(conf, new Chromosome[]{chrom});
+
+    // delete file perhaps created during test
+    new File(FILENAME_WRITE).delete();
 
     CHROMOSOME_TAG = (String) PrivateAccessor.getField(XMLManager.class,
         "CHROMOSOME_TAG");
@@ -180,4 +186,40 @@ public class XMLManagerTest
     Element elem  = XMLManager.representGenotypeAsElement(genotype, doc);
     assertEquals(GENOTYPE_TAG, elem.getTagName());
   }
+
+  public void testReadFile_0() throws Exception {
+    new File(FILENAME_WRITE).delete();
+    try {
+      Document doc = XMLManager.readFile(new File(FILENAME_WRITE));
+      fail();
+    } catch (Exception ex) {
+      ;//this is OK
+    }
+  }
+
+  public void testReadFile_1() throws Exception {
+    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    XMLManager.writeFile(XMLManager.representGenotypeAsDocument(genotype),
+                         new File(FILENAME_WRITE));
+    Document doc2 = XMLManager.readFile(new File(FILENAME_WRITE));
+    Genotype population = XMLManager.getGenotypeFromDocument(conf, doc);
+    assertEquals(genotype, population);
+  }
+
+  public void testWriteFile_0() throws Exception {
+    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    XMLManager.writeFile(XMLManager.representGenotypeAsDocument(genotype),
+                         new File(FILENAME_WRITE));
+  }
+
+  /**
+   * Do the same as above test to verify that overriding existin file works
+   * @throws Exception
+   */
+  public void testWriteFile_1() throws Exception {
+    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    XMLManager.writeFile(XMLManager.representGenotypeAsDocument(genotype),
+                         new File(FILENAME_WRITE));
+  }
+
 }
