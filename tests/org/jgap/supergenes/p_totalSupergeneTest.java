@@ -25,10 +25,10 @@ import java.io.*;
 /**
  * Total test of the supported Supergene classes. Due slow run it is not
  * included into AllTests
+*
  * @author Audrius Meskauskas
- * @version 1.0
+ * @since 2.0
  */
-
 class p_totalSupergeneTest {
 
     /** Test supported Supegene features, including performance tests.
