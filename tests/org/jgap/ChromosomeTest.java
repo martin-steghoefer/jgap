@@ -38,7 +38,7 @@ public class ChromosomeTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public ChromosomeTest ()
     {
@@ -424,15 +424,10 @@ public class ChromosomeTest
         genes[1] = new IntegerGene ();
         Chromosome chrom = new Chromosome (genes);
         assertFalse (chrom.equals (null));
-        try
-        {
-            assertFalse (chrom.equals (genes));
-            fail ();
-        }
-        catch (ClassCastException castex)
-        {
-            ; //this is OK
-        }
+
+        // no ClassCastException is expected next!
+        // ---------------------------------------
+        assertFalse (chrom.equals (genes));
     }
 
     public void testGetFitnessValue_0 () throws Exception
