@@ -31,10 +31,8 @@ import junit.framework.TestSuite;
  */
 public class DefaultMutationRateCalculatorTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
-
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
   public DefaultMutationRateCalculatorTest() {
   }
 
@@ -55,5 +53,18 @@ public class DefaultMutationRateCalculatorTest
     conf.setSampleChromosome(chrom);
     rate = calc.calculateCurrentRate(conf);
     assertEquals(conf.getChromosomeSize(), rate);
+  }
+
+  /**
+   * If there are zero chromosomes in the config., the mutation rate
+   * nevertheless should be 1, because Random needs positive integers as input
+   * (see MutationOperator.operate for calling Random class)
+   * @throws Exception
+   */
+  public void testCalculateCurrentRate_1() throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    MutationRateCalculator calc = new DefaultMutationRateCalculator();
+    int rate = calc.calculateCurrentRate(conf);
+    assertEquals(1, rate);
   }
 }
