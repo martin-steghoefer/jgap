@@ -26,7 +26,7 @@ public class ThresholdSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -80,6 +80,7 @@ public class ThresholdSelectorTest
   /**
    * @author Klaus Meffert
    * @throws Exception
+   * @since 2.1
    */
   public void testAdd_0()
       throws Exception {
@@ -106,6 +107,7 @@ public class ThresholdSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testSelect_0()
       throws Exception {
@@ -129,6 +131,7 @@ public class ThresholdSelectorTest
   /**
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testSelect_1()
       throws Exception {
@@ -180,6 +183,7 @@ public class ThresholdSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testSelect_2()
       throws Exception {
@@ -223,6 +227,7 @@ public class ThresholdSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testSelect_3()
       throws Exception {
@@ -260,6 +265,7 @@ public class ThresholdSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testSelect_4()
       throws Exception {
@@ -292,6 +298,7 @@ public class ThresholdSelectorTest
   /**
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testEmpty_0()
       throws Exception {
@@ -311,9 +318,11 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Test if clear()-method does not affect original Population
+   * Test if clear()-method does not affect original Population.
+   *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testEmpty_1()
       throws Exception {
@@ -337,6 +346,7 @@ public class ThresholdSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 2.1
    */
   public void testEmpty_2()
       throws Exception {
