@@ -27,13 +27,11 @@ import org.jgap.Gene;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
 
-/**@todo not ready yet*/
-/**@todo not ready yet*/
-/**@todo not ready yet*/
-
 /**
- * A Gene implementation that supports a string for its allele. The valid alphabet
- * as well as the minimum and maximum length of the string can be specified.
+ * A Gene implementation that supports a string for its allele. The valid
+ * alphabet as well as the minimum and maximum length of the string can be specified.
+ * An alphabet == null indicates that all characters are seen to be valid.
+ * An alphabet == "" indicates that no character is seen to be valid.
  * Partly copied from IntegerGene.
  *
  * @author Klaus Meffert
@@ -52,7 +50,7 @@ public class StringGene
     public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     private int m_minLength;
     private int m_maxLength;
@@ -72,8 +70,8 @@ public class StringGene
 
     /**
      *
-     * @param a_minLength
-     * @param a_maxLength
+     * @param a_minLength minimum valid length of allele
+     * @param a_maxLength maximum valid length of allele
      *
      * @author Klaus Meffert
      * @since 1.1
@@ -85,9 +83,9 @@ public class StringGene
 
     /**
      *
-     * @param a_minLength
-     * @param a_maxLength
-     * @param a_alphabet
+     * @param a_minLength minimum valid length of allele
+     * @param a_maxLength maximum valid length of allele
+     * @param a_alphabet valid aplhabet for allele
      *
      * @author Klaus Meffert
      * @since 1.1
@@ -128,7 +126,7 @@ public class StringGene
      * valid alphabet and boundaries of length
      *
      * @param a_numberGenerator The random number generator that should be
-         *                          used to create any random values. It's important
+     *                          used to create any random values. It's important
      *                          to use this generator to maintain the user's
      *                          flexibility to configure the genetic engine
      *                          to use the random number generator of their
@@ -200,14 +198,15 @@ public class StringGene
      * @author Klaus Meffert
      * @since 1.1
      */
-    public void setValueFromPersistentRepresentation (String a_representation) throws
+    public void setValueFromPersistentRepresentation (String a_representation)
+        throws
         UnsupportedRepresentationException
     {
         if (a_representation != null)
         {
             StringTokenizer tokenizer =
                 new StringTokenizer (a_representation,
-                                     PERSISTENT_FIELD_DELIMITER);
+                PERSISTENT_FIELD_DELIMITER);
             // Make sure the representation contains the correct number of
             // fields. If not, throw an exception.
             // -----------------------------------------------------------
@@ -221,16 +220,7 @@ public class StringGene
             String minLengthRepresentation = tokenizer.nextToken ();
             String maxLengthRepresentation = tokenizer.nextToken ();
             String alphabetRepresentation = tokenizer.nextToken ();
-            // First parse and set the representation of the value.
-            // ----------------------------------------------------
-            if (valueRepresentation.equals ("null"))
-            {
-                m_value = null;
-            }
-            else
-            {
-                m_value = valueRepresentation;
-            }
+
             // Now parse and set the minimum length.
             // ----------------------------------
             try
@@ -258,12 +248,45 @@ public class StringGene
                     "is not recognized: field 3 does not appear to be " +
                     "an integer value.");
             }
-            // Now set the alphabet valid
-            // --------------------------
-            m_alphabet = alphabetRepresentation;
 
-            /**@todo check if minLength and maxLength are violated
-                 /**@todo check if all characters are within the alphabet*/
+            String tempValue;
+            // Parse and set the representation of the value.
+            // ----------------------------------------------------
+            if (valueRepresentation.equals ("null"))
+            {
+                tempValue = null;
+            }
+            else
+            {
+                tempValue = valueRepresentation;
+            }
+
+            //check if minLength and maxLength are violated
+            //---------------------------------------------
+            if (m_minLength > valueRepresentation.length ())
+            {
+                throw new UnsupportedRepresentationException ("The value given"
+                    + " is shorter than the allowed maximum length.");
+            }
+            if (m_maxLength < valueRepresentation.length ())
+            {
+                throw new UnsupportedRepresentationException ("The value given"
+                    + " is longer than the allowed maximum length.");
+            }
+
+            //check if all characters are within the alphabet
+            //-----------------------------------------------
+            if (!isValidAlphabet (tempValue, alphabetRepresentation))
+            {
+                throw new UnsupportedRepresentationException ("The value given"
+                    + " contains invalid characters.");
+            }
+
+            m_value = tempValue;
+
+            // Now set the alphabet that should be valid
+            // -----------------------------------------
+            m_alphabet = alphabetRepresentation;
 
         }
     }
@@ -284,7 +307,8 @@ public class StringGene
      * @author Klaus Meffert
      * @since 1.1
      */
-    public String getPersistentRepresentation () throws
+    public String getPersistentRepresentation ()
+        throws
         UnsupportedOperationException
     {
         // The persistent representation includes the value, minimum length,
@@ -321,15 +345,22 @@ public class StringGene
      */
     public void setAllele (Object a_newValue)
     {
-        if (a_newValue != null) {
+        if (a_newValue != null)
+        {
             String temp = (String) a_newValue;
             if (temp.length () < m_minLength ||
                 temp.length () > m_maxLength)
             {
                 throw new IllegalArgumentException (
-                    "The given String is too short or too long!");
+                    "The given value is too short or too long!");
             }
-            /**@todo check for validity of alphabet*/
+            //check for validity of alphabet
+            //------------------------------
+            if (!isValidAlphabet (temp, m_alphabet))
+            {
+                throw new IllegalArgumentException ("The given value contains"
+                    + " at least one invalid character.");
+            }
         }
 
         m_value = (String) a_newValue;
@@ -436,8 +467,8 @@ public class StringGene
     }
 
     /**
-     *
-     * @param m_alphabet
+     * Sets the valid alphabet of the StringGene
+     * @param a_alphabet valid aplhabet for allele
      *
      * @author Klaus Meffert
      * @since 1.1
@@ -447,12 +478,15 @@ public class StringGene
         //check if a substring is equal to the PERSISTENT_FIELD_DELIMITER
         //which is not allowed currently
         //---------------------------------------------------------------
-        if (containsString(m_alphabet,PERSISTENT_FIELD_DELIMITER)) {
-        throw new IllegalArgumentException ("The alphabet may not contain a"
-            + " substring equal to the persistent field delimiter (which is "
-            +PERSISTENT_FIELD_DELIMITER
-            +" currently).");
+        if (containsString (m_alphabet, PERSISTENT_FIELD_DELIMITER))
+        {
+            throw new IllegalArgumentException ("The alphabet may not contain a"
+                +
+                " substring equal to the persistent field delimiter (which is "
+                + PERSISTENT_FIELD_DELIMITER
+                + " currently).");
         }
+        /**@todo optionally check if alphabet contains doublettes*/
         this.m_alphabet = m_alphabet;
     }
 
@@ -527,18 +561,60 @@ public class StringGene
     }
 
     /**
-     *
-     * @param totalString
-     * @param subString
-     * @return
+     * Checks whether a substring is contained within another string
+     * @param totalString the total string to examine
+     * @param subString the substring to look for
+     * @return true: the totalString contains the subString
      *
      * @author Klaus Meffert
      * @since 1.1
      */
-    private boolean containsString(String totalString, String subString) {
-        if (totalString == null || subString == null) {
+    private boolean containsString (String totalString, String subString)
+    {
+        if (totalString == null || subString == null)
+        {
             return false;
         }
-        return totalString.indexOf(subString) >= 0;
+        return totalString.indexOf (subString) >= 0;
     }
+
+    /**
+     * Checks whether a string value is valid concerning a given alphabet
+     * @param a_value the value to check
+     * @param a_alphabet the valid alphabet to check against
+     * @return true: given string value is valid
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    private boolean isValidAlphabet (String a_value, String a_alphabet)
+    {
+        if (a_value == null || a_value.length () < 1)
+        {
+            return true;
+        }
+        if (a_alphabet == null)
+        {
+            return true;
+        }
+        if (a_alphabet.length () < 1)
+        {
+            return false;
+        }
+
+        //loop over all characters of a_value
+        //-----------------------------------
+        int length = a_value.length ();
+        char c;
+        for (int i = 0; i < length; i++)
+        {
+            c = a_value.charAt (i);
+            if (a_alphabet.indexOf (c) < 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
