@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -48,10 +48,10 @@ public class Population {
   }
 
   /**
-   * Adds all the <code>Cell</code>s in the given <code>Population</code>.
-   * Does nothing on <code>null</code> or an empty <code>Population</code>.
+   * Adds all the Chromosomes in the given Population.
+   * Does nothing on null or an empty Population.
    *
-   * @param p	the <code>Population</code> to add
+   * @param p	the Population to add
    */
   public void addChromosomes(Population toAdd) {
     if (toAdd != null) {
