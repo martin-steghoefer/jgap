@@ -27,7 +27,8 @@ import org.jgap.*;
  * Upper and lower bounds may optionally be provided to restrict the range
  * of legal values allowed by this Gene instance.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class IntegerGene
@@ -35,7 +36,7 @@ public class IntegerGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Represents the constant range of values supported by integers.

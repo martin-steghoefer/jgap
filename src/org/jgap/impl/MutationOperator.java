@@ -35,14 +35,15 @@ import org.jgap.*;
  * that, on average, one gene will be mutated for every ten Chromosomes
  * processed by this operator.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class MutationOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -135,9 +136,14 @@ public class MutationOperator
     // calculate it based upon the number of genes in the chromosome.
     // Otherwise, go with the mutation rate set upon construction.
     // --------------------------------------------------------------
-    int currentRate = m_mutationRateCalc != null ?
-        m_mutationRateCalc.calculateCurrentRate(a_activeConfiguration) :
-        m_mutationRate;
+  int currentRate;
+    if (m_mutationRateCalc != null) {
+      currentRate = m_mutationRateCalc.calculateCurrentRate(
+          a_activeConfiguration);
+    }
+    else {
+      currentRate = m_mutationRate;
+    }
     RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
