@@ -19,10 +19,6 @@
 package org.jgap.distr;
 
 import org.jgap.*;
-import java.io.*;
-import java.util.*;
-import org.jgap.event.*;
-import org.jgap.impl.*;
 
 /**
  * Genotype that is running on one of many servers computing a population.
@@ -35,7 +31,7 @@ import org.jgap.impl.*;
 public class DistributedGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public DistributedGenotype(Configuration a_activeConfiguration,
                              Population a_population)
