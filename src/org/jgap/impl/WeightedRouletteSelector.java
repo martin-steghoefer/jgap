@@ -38,7 +38,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -82,8 +82,6 @@ public class WeightedRouletteSelector
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *
-   * @param a_activeConfigurator The current active Configuration to be used
-   *                              during the add process.
    * @param a_chromosomeToAdd The specimen to add to the pool.
    *
    * @author Neil Rotstan
@@ -134,8 +132,6 @@ public class WeightedRouletteSelector
    * be selected than those with lower fitness values, but it should not be
    * guaranteed.
    *
-   * @param a_activeConfiguration The current active Configuration that is
-   *                               to be used during the selection process.
    * @param a_howManyToSelect The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.

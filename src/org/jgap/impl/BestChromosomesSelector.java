@@ -32,7 +32,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -83,8 +83,6 @@ public class BestChromosomesSelector
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
-   * @param a_activeConfigurator The current active Configuration to be used
-   *                              during the add process.
    * @param a_chromosomeToAdd The specimen to add to the pool.
    *
    * @author Klaus Meffert
@@ -110,8 +108,6 @@ public class BestChromosomesSelector
    * Select a given number of Chromosomes from the pool that will move on
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
-   * @param a_activeConfiguration The current active Configuration that is
-   *                               to be used during the selection process.
    * @param a_howManyToSelect The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
@@ -138,6 +134,7 @@ public class BestChromosomesSelector
     }
 
     if (a_howManyToSelect >= chromosomes.size() && false) {
+      /**@todo resolve this to a clean solution*/
       //return original!
       m_doNotEmpty = true;
       return chromosomes;

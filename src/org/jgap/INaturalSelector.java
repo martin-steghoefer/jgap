@@ -32,13 +32,11 @@ package org.jgap;
  */
 public interface INaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *
-   * @param a_activeConfigurator The current active Configuration to be used
-   *                              during the add process.
    * @param a_chromosomeToAdd The specimen to add to the pool.
    *
    * @author Neil Rotstan
@@ -55,8 +53,6 @@ public interface INaturalSelector {
    * be selected than those with lower fitness values, but it should not be
    * guaranteed.
    *
-   * @param a_activeConfiguration The current active Configuration that is
-   *                               to be used during the selection process.
    * @param a_howManyToSelect The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
