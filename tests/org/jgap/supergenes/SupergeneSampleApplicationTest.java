@@ -16,12 +16,14 @@ import junit.framework.*;
 * supergene and non-supergene versions. Both must return a zero error.
 * Performance is not verified.
 * @return true if the Supergene tests succeded.
+*
+* @author Meskauskas Audrius
+* @since 2.0
 */
-
 public class SupergeneSampleApplicationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public void testSupergeneTotal()
   {
