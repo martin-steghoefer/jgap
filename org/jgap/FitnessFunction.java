@@ -73,7 +73,8 @@ public abstract class FitnessFunction implements java.io.Serializable
      * @param a_subject: The Chromosome instance to evaluate.
      *
      * @return A positive integer reflecting the fitness rating of the given
-     *         Chromosome.
+     *         Chromosome. Note that if a non-positive integer is returned,
+     *         a RuntimeException will be generated.
      */
     protected abstract int evaluate( Chromosome a_subject );
 }

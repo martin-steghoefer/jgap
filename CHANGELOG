@@ -1,3 +1,12 @@
+1.0
+----------
+* A RuntimeException is now thrown if a fitness function attempts to
+  return a non-positive fitness value.
+* Fixed a bug in the WeightedRouletteSelector that, under certain
+  circumstances, resulted in a fatal "logic error" exception.
+* Updated the sample fitness function to ensure that it never
+  returns a non-positive fitness value.
+
 1.0-RC2
 ----------
 * Added new BulkFitnessFunction class, which can be used to create
