@@ -19,9 +19,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -33,9 +31,8 @@ import junitx.util.*;
  */
 public class IntegerGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public IntegerGeneTest() {
   }
@@ -148,7 +145,8 @@ public class IntegerGeneTest
     }
   }
 
-  public void testNewGene_0() throws Exception {
+  public void testNewGene_0()
+      throws Exception {
     Gene gene1 = new IntegerGene(1, 10000);
     gene1.setAllele(new Integer(4711));
     Integer lower1 = (Integer) PrivateAccessor.getField(gene1,
@@ -172,7 +170,8 @@ public class IntegerGeneTest
     assertEquals(copy, gene);
   }
 
-  public void testPersistentRepresentation_0() throws Exception {
+  public void testPersistentRepresentation_0()
+      throws Exception {
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     String pres1 = gene1.getPersistentRepresentation();
@@ -239,58 +238,65 @@ public class IntegerGeneTest
     assertEquals(50, gene.intValue());
   }
 
-  public void testApplyMutation_1() {
-    IntegerGene gene = new IntegerGene(0, 100);
+  public void testApplyMutation_1()
+      throws Exception {
+    DefaultConfiguration config = new DefaultConfiguration();
+    config.setRandomGenerator(new RandomGeneratorForTest(15));
+    IntegerGene gene = new IntegerGene(0, 100, config);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.5d);
-    assertEquals(Math.round(50 * 1.5d), gene.intValue());
+    assertEquals(Math.round(50 + (100 - 0) * 0.5d), gene.intValue());
   }
 
-  public void testApplyMutation_2() {
-    IntegerGene gene = new IntegerGene(0, 100);
+  public void testApplyMutation_2()
+      throws Exception {
+    DefaultConfiguration config = new DefaultConfiguration();
+    config.setRandomGenerator(new RandomGeneratorForTest(15));
+    IntegerGene gene = new IntegerGene(44, 100, config);
     gene.setAllele(new Integer(50));
-    gene.applyMutation(0, 0.9d);
-    assertEquals(Math.round(50 * 1.9d), gene.intValue());
+    gene.applyMutation(0, 0.3d);
+    assertEquals(Math.round(50 + (100 - 44) * 0.3d), gene.intValue());
   }
 
-  public void testApplyMutation_3() {
-    IntegerGene gene = new IntegerGene(0, 100);
+  public void testApplyMutation_3()
+      throws Exception {
+    DefaultConfiguration config = new DefaultConfiguration();
+    config.setRandomGenerator(new RandomGeneratorForTest(15));
+    IntegerGene gene = new IntegerGene(33, 100, config);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 1.9d);
-    assertEquals(Math.round(50), gene.intValue());
+    assertEquals(Math.round(33 + 15), gene.intValue());
   }
 
-  public void testApplyMutation_4() {
-    IntegerGene gene = new IntegerGene(0, 100);
+  public void testApplyMutation_4()
+      throws Exception {
+    DefaultConfiguration config = new DefaultConfiguration();
+    config.setRandomGenerator(new RandomGeneratorForTest(15));
+    IntegerGene gene = new IntegerGene(2, 100, config);
     gene.setAllele(new Integer(60));
-    /**@todo this is a curious behavior, isn't it?
-     * Also see previous test case where same result occurs with different
-     * input.
-     * It seems that the huge numbers (MAXINT and MININT) are responsible for
-     * this!*/
     gene.applyMutation(0, 1.9d);
-    assertEquals(Math.round(50), gene.intValue());
+    assertEquals(Math.round(2 + 15), gene.intValue());
   }
 
-  public void testApplyMutation_5() {
-    IntegerGene gene = new IntegerGene(0, 100);
+  public void testApplyMutation_5()
+      throws Exception {
+    DefaultConfiguration config = new DefaultConfiguration();
+    config.setRandomGenerator(new RandomGeneratorForTest(15));
+    IntegerGene gene = new IntegerGene(0, 100, config);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -1.0d);
-    assertEquals(Math.round(0), gene.intValue());
+    assertEquals(Math.round(0 + 15), gene.intValue());
   }
 
   public void testApplyMutation_6() {
     IntegerGene gene = new IntegerGene(0, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -0.4d);
-    assertEquals(Math.round(60 * (1 - 0.4d)), gene.intValue());
+    assertEquals(Math.round(60 + (100 * ( -0.4d))), gene.intValue());
   }
 
   public void testSetToRandomValue_0() {
     /**@todo implement*/
   }
 
-  public void testCalculateBoundsUnitsToIntegerUnitsRatio_0() {
-    /**@todo implement*/
-  }
 }
