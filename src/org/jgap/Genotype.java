@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * The current active Configuration instance.
@@ -513,4 +513,30 @@ public class Genotype
   public static void setConfiguration(Configuration a_configuration) {
     m_activeConfiguration = a_configuration;
   }
+
+  /***
+   * Hashcode fucntion for the genotype, tries to create a unique invalue for
+   * the chromosomes within the population. The logic for the hashcode is
+   *
+   * 2^0*hash_code1 + 2^1*hash_code2............
+   *
+   * Each hash_code is like a digit and the binary equivalent is computed and
+   * reported.
+   * @return the computed hashcode
+   *
+   * @author vamsi
+   * @since 2.1
+   */
+  public int hashcode() {
+    int i, size = m_population.size();
+    Chromosome s;
+    int twopower = 1;
+    int localHashCode = 0;
+    for (i = 0; i < size; i++, twopower = 2 * twopower) {
+      s = this.m_population.getChromosome(i);
+      localHashCode += twopower * s.hashCode();
+    }
+    return localHashCode;
+  }
+
 }
