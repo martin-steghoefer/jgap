@@ -18,9 +18,14 @@
 
 package examples;
 
-import org.jgap.*;
-import org.jgap.impl.*;
+import java.io.*;
 
+import org.jgap.*;
+import org.jgap.data.*;
+import org.jgap.impl.*;
+import org.jgap.xml.*;
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
 
 /**
  * This class provides an implementation of the classic "Make change" problem
@@ -37,13 +42,14 @@ import org.jgap.impl.*;
  * running this example, the genetic algorithm still will get the correct
  * answer virtually everytime.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class MinimizingMakeChange {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -106,7 +112,13 @@ public class MinimizingMakeChange {
     // Here we also could read in a previous run via XMLManager.readFile(..)
     // ------------------------------------------------
     Genotype population;
-    population = Genotype.randomInitialGenotype(conf);
+    try {
+     Document doc = XMLManager.readFile(new File("testJGAP.xml"));
+     population = XMLManager.getGenotypeFromDocument(conf, doc);
+    }
+    catch (FileNotFoundException fex) {
+      population = Genotype.randomInitialGenotype(conf);
+    }
 
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
@@ -114,6 +126,20 @@ public class MinimizingMakeChange {
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
     }
+
+    // represent Genotype as tree with elements Chromomes and Genes
+    DataTreeBuilder builder = DataTreeBuilder.getInstance();
+    IDataCreators doc2 = builder.representGenotypeAsDocument(population);
+
+    // create XML document from generated tree
+    DocumentBuilder m_documentCreator;
+    m_documentCreator =
+        DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document XMLDoc2 = m_documentCreator.newDocument();
+    DocumentBuilderBase docbuilder = new XMLDocumentBuilder();
+    Document xmlDoc = (Document) docbuilder.buildDocument(doc2, XMLDoc2);
+    XMLManager.writeFile(xmlDoc, new File("testJGAP.xml"));
+
     // Display the best solution we found.
     // -----------------------------------
     Chromosome bestSolutionSoFar = population.getFittestChromosome();
