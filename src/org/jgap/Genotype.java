@@ -36,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The current active Configuration instance.
@@ -567,7 +567,7 @@ public class Genotype
       int m_single_selection_size = m_population_size / selectorSize;
       Population m_new_population;
       if (selectorSize > 1) {
-        /**@todo following very time consuming!*/
+        /**@todo following is very time consuming!*/
         m_new_population = new Population(m_population_size);
       }
       else {
@@ -597,30 +597,27 @@ public class Genotype
           // ---------------------------------------------------------------
           m_single_selection_size = m_population_size - m_new_population.size();
         }
+
+        // Do selection of Chromosome's
+        // ----------------------------
         if (selectorSize > 1) {
           Population m_partial_result = selector.select(m_activeConfiguration,
               m_single_selection_size);
           m_new_population.addChromosomes(m_partial_result);
         }
         else {
-          m_population = selector.select(m_activeConfiguration,
-              m_single_selection_size);
+          // Optimized procedure for single NaturalSelector
+          // ----------------------------------------------
+//          m_population.getChromosomes().clear();
+//          m_population.addChromosomes(selector.select(m_activeConfiguration, m_single_selection_size));
+
+//          m_population.setChromosomes(selector.select(m_activeConfiguration, m_single_selection_size).getChromosomes());
+
+          m_population = selector.select(m_activeConfiguration, m_single_selection_size);
         }
         // Clean up the natural selector.
         // ------------------------------
         selector.empty();
-
-        // Add output from previous selector to input of next selector, if any
-        // -------------------------------------------------------------------
-//        if (i < selectorSize - 1) {
-//          selector = m_activeConfiguration.getNaturalSelector(
-//              processBeforeGeneticOperators, i + 1);
-//          iterator1 = m_population.iterator();
-//          while (iterator1.hasNext()) {
-//            Chromosome currentChromosome = (Chromosome) iterator1.next();
-//            selector.add(m_activeConfiguration, currentChromosome);
-//          }
-//        }
       }
       if (selectorSize > 1) {
         m_population = m_new_population;
