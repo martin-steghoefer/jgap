@@ -18,40 +18,48 @@
 
 package org.jgap.supergenes;
 
-import org.jgap.Gene;
-import org.jgap.Configuration;
-import org.jgap.UnsupportedRepresentationException;
-import org.jgap.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.StringTokenizer;
 import java.util.Iterator;
+import java.util.Arrays;
 
 import java.net.URLEncoder;
 import java.net.URLDecoder;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import java.io.Serializable;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.io.IOException;
-import java.util.Set;
-import java.util.TreeSet;
+import java.io.UnsupportedEncodingException;
+
+import org.jgap.Gene;
+import org.jgap.RandomGenerator;
+import org.jgap.UnsupportedRepresentationException;
 
 
-/** Supergene implementation, supporting the most of the methods, except
- * {@link org.jgap.supergenes.Supergene#isValid(Gene [] genes)} To make any sense of
- * using supergenes, you must always override isValid (Gene []).
+
+
+/**
+ * Combined implementation of both Supergene and SupergeneValidator.
+ * A working supergene can be easily created from this class just by
+ * adding genes and overriding
+ * {@link org.jgap.supergenes.abstractSupergene#isValid(Gene [] a_case,
+ *  Supergene a_forSupergene) isValid (Gene [], Supergene)}
+ *  method. For more complex cases, you may need to set your own
+ * {@link org.jgap.supergenes.Validator Validator}.
  */
 
-public abstract class abstractSupergene implements Supergene, Serializable
+public abstract class abstractSupergene
+    implements Supergene, supergeneValidator, Serializable
  {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "0.0.1 alpha-explosive";
+    final static String CVS_REVISION = "0.0.2 alpha-explosive";
 
     /**
      * This field separates gene class name from
@@ -123,15 +131,13 @@ public abstract class abstractSupergene implements Supergene, Serializable
     /**
      * Test the allele combination of this supergene for validity.
      * This method calls isValid for the current gene list.
-     * @return true only if the supergene allele combination is valid or
-     * the validation is switched off by calling
-     * {@link org.jgap.supergenes.abstractSupergene#setValidateWhenMutating
-     * setValidateWhenMutating (<i>false</i>) }
+     * @return true only if the supergene allele combination is valid
+     * or the setValidator (<i>null</i>) has been previously called.
      */
     public boolean isValid()
     {
-        if (!validation_on) return true;
-        return isValid (m_genes);
+        if (m_validator==null) return true;
+        return m_validator.isValid (m_genes, this);
     }
 
     /**
@@ -142,18 +148,28 @@ public abstract class abstractSupergene implements Supergene, Serializable
      * combinations represents too small part of all possible combinations,
      * it can take too long to find the suitable mutation that does not brake
      * a supergene. If you face this problem, try to split the supergene into
-     * several sub-supergenes. setValidateWhenMutating has no effect on this
-     * method.
+     * several sub-supergenes.
+     *
+     * This method is only called if you have not set any alternative
+     * validator (including <i>null</i>.
+     *
      * </p>
      * @return true only if the supergene allele combination is valid.
+     * @throws Error by default. If you do not set external validator,
+     * you should always override this method.
      */
-    public abstract boolean isValid(Gene [] a_case);
+    public boolean isValid(Gene [] a_case, Supergene a_forSupergene)
+    {
+        throw new Error ("For "+getClass().getName()+", override "+
+        " isValid (Gene[], Supergene) or set an external validator.");
+    }
 
 
     /** Creates a new instance of this Supergene class with the same number of
      * genes, calling newGene() for each subgene. The class, derived from this
      * abstract supergene will be instantiated
-     * (not the instance of abstractSupergene itself).
+     * (not the instance of abstractSupergene itself). If the external
+     * validator is set, the same validator will be set for the new gene.
      * @throws Error if the instance of <i>this</i> cannot be instantiated
      * (for example, if it is not public or  the parameterless constructor is
      * not provided).
@@ -168,7 +184,8 @@ public abstract class abstractSupergene implements Supergene, Serializable
             abstractSupergene age =
                 (abstractSupergene) getClass ().newInstance ();
 
-            age.validation_on = validation_on;
+            if (m_validator!=this)
+             age.setValidator(m_validator);
 
             age.m_genes = g;
             return age;
@@ -331,6 +348,32 @@ public abstract class abstractSupergene implements Supergene, Serializable
      throws  UnsupportedOperationException {
         StringBuffer b = new StringBuffer();
 
+        // Write validator:
+        String validator = null;
+        String v_representation = "";
+        supergeneValidator v = getValidator();
+
+        if (v==null) validator = "null";
+         else
+        if (v==this) validator = "this";
+         else
+          {
+              validator = v.getClass().getName();
+              v_representation = v.getPersistent();
+          }
+
+
+        b.append(GENE_DELIMITER_HEADING);
+        b.append(
+         encode
+         (
+          validator+
+          GENE_DELIMITER+
+          v_representation)
+         );
+        b.append(GENE_DELIMITER_CLOSING);
+
+        // Write genes:
         Gene gene;
         for (int i = 0; i < m_genes.length; i++) {
           gene = m_genes[i];
@@ -348,9 +391,16 @@ public abstract class abstractSupergene implements Supergene, Serializable
     }
 
     /**
-     * See interface Gene for description
+     * Sets the value and internal state of this Gene from the string
+     * representation returned by a previous invocation of the
+     * getPersistentRepresentation() method.
+     *
+     * If the validator is not THIS and not null, a new validator is
+     * created using Class.forName(..).newInstance.
+     *
      * @param a_representation the string representation retrieved from a
      *        prior call to the getPersistentRepresentation() method.
+     *
      *
      * @throws UnsupportedRepresentationException
      *
@@ -364,13 +414,18 @@ public abstract class abstractSupergene implements Supergene, Serializable
             /** Remove the old content */
             ArrayList r = split(a_representation);
             Iterator iter = r.iterator();
-            m_genes = new Gene [r.size()];
+
+            m_genes = new Gene [r.size()-1];
+             // the first member in array is a validator representation
 
             StringTokenizer st;
             String clas;
             String representation;
             String g;
             Gene gene;
+
+           String validator = (String) iter.next();
+           setValidator( createValidator(decode(validator)) );
 
            for (int i = 0; i < m_genes.length; i++)
             {
@@ -391,6 +446,37 @@ public abstract class abstractSupergene implements Supergene, Serializable
               getMessage());
         }
       }
+    }
+
+    /** Create validator from the string representation. */
+    protected supergeneValidator createValidator(String a_rep)
+    {
+        try {
+              StringTokenizer vo = new StringTokenizer
+               (a_rep, GENE_DELIMITER, true);
+              if (vo.countTokens()!=2) throw new Error
+               ("In "+a_rep+", expecting two tokens, separated by "+
+                GENE_DELIMITER);
+
+              String clas = vo.nextToken();
+
+              supergeneValidator sv;
+
+              if (clas.equals("this")) sv = this;
+              else
+              if (clas.equals("null")) sv = null;
+              else sv = (supergeneValidator)
+               Class.forName(clas).newInstance();
+
+              if (sv!=null) sv.setFromPersistent(decode(vo.nextToken()));
+              return sv;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Error
+             ("Unable to crate validator from '"+a_rep+"' for "+
+             getClass().getName());
+        }
     }
 
     /** Creates a new instance of gene. */
@@ -422,6 +508,10 @@ public abstract class abstractSupergene implements Supergene, Serializable
             b.append(" ");
             b.append(m_genes[i].toString());
         }
+
+        if (m_validator==null) b.append(" non validating ");
+        else
+         if (m_validator!=this) b.append(m_validator.toString());
         b.append("}");
         return b.toString();
     }
@@ -448,13 +538,23 @@ public abstract class abstractSupergene implements Supergene, Serializable
         return getClass().getName().compareTo(o.getClass().getName());
     }
 
-    /** Calls equals() for each pair of genes. If the supplied object is
-     * an instance of the different class, returns false. */
+    /**
+     * Calls equals() for each pair of genes. If the supplied object is
+     * an instance of the different class, returns false. Also, the
+     * genes are assumed to be different if they have different validator
+     * classes (or only one of the validators is set to null).
+     */
     public boolean equals(Object a_gene) {
         if (a_gene==null || ! (a_gene.getClass().equals(getClass())))
          return false;
 
         abstractSupergene age = (abstractSupergene) a_gene;
+
+        if (m_validator!=age.m_validator)
+        if (m_validator!=null && age.m_immutable!=null)
+         if (! m_validator.getClass().equals(age.m_validator.getClass()) )
+          return false;
+
         return Arrays.equals(m_genes, age.m_genes);
     }
 
@@ -538,13 +638,39 @@ public abstract class abstractSupergene implements Supergene, Serializable
      }
 
      /**
-      * {@inheritDoc}
+      * Sets an object, responsible for deciding if the Supergene allele
+      * combination is valid. If it is set to null, no validation is performed
+      * (all combinations are assumed to be valid). If no validator is
+      * set, the method <code>isValid (Gene [] ) </code>is called.
       */
-     public void setValidateWhenMutating(boolean a_validate)
-     {
-         validation_on = a_validate;
-     }
+      public void setValidator(supergeneValidator a_validator)
+      {
+          m_validator = a_validator;
+      }
 
-     protected boolean validation_on = true;
+      /**
+       * Gets an object, responsible for deciding if the Supergene allele
+       * combination is valid. If no external validator was set and the
+       * class uses its own internal validation method, it returns <i>this</i>
+       */
+       public supergeneValidator getValidator()
+       {
+           return m_validator;
+       }
+
+       /** A validator (initially set to <i>this</i> */
+       protected supergeneValidator m_validator = this;
+
+       /** {@inheritDoc}
+        * The default implementation returns an empty string. */
+       public String getPersistent() {
+           return "";
+       }
+
+       /** {@inheritDoc}
+        * The default implementation does nothing. */
+       public void setFromPersistent(String a_from) {
+       }
+
 
 }

@@ -49,19 +49,14 @@ public interface Supergene extends Gene {
 
     /**
      * Test the allele combination of this supergene for validity.
-     * The default implementation usually calls isValid(getGenes());
+     * If a validator was previously set be calling setValidator(),
+     * the decission is delegated to this validator. The derived
+     * classes may have internal default validator for the case
+     * when no external validator is set.
      * @see Note in the interface header. *
      * @return true only if the supergene allele combination is valid.
      */
     boolean isValid();
-
-    /**
-     * Test the given allele combination for validity, using this supergene
-     * validation method. You should always implement this method.
-     * @see Note in the interface header.
-     * @return true only if the supergene allele combination is valid.
-     */
-    boolean isValid(Gene [] a_case);
 
     /**
      * Get the array of genes - components of this supergene.
@@ -70,27 +65,32 @@ public interface Supergene extends Gene {
     Gene [] getGenes();
 
     /**
-     * Returns the Gene at the given index (locus) within the Chromosome. The
+     * Returns the Gene at the given index (locus) within the Supergene. The
      * first gene is at index zero and the last gene is at the index equal to
-     * the size of this Chromosome - 1.
+     * the size of this Supergene - 1.
      *
      * @param a_desiredLocus: The index of the gene value to be returned.
      * @return The Gene at the given index.
      */
     Gene getGene(int index);
 
-    /** Sets if the Supergene can mutate in the way it becomes invalid.
-     * By default, the Supergene only mutates in the was it stays valid.
-     * This control can be switched of if the Supergene is used in
-     * algorithms that call
-     * {@link org.jgap.supergenes.Supergene#isValid isValid(Gene [] a_case)}
-     * instead.
-     * @param a_validate true (default) if all mutations and setting to
-     * random value must result a valid supergene.
+    /**
+     * Sets an object, responsible for deciding if the Supergene allele
+     * combination is valid. If it is set to null, no validation is performed
+     * (all combinations are assumed to be valid). The derived
+     * classes may have internal default validator for the case
+     * when no external validator is set.
      */
+     void setValidator(supergeneValidator a_validator);
 
-    void setValidateWhenMutating(boolean a_validate);
-
+     /**
+      * Gets an object, responsible for deciding if the Supergene allele
+      * combination is valid. If no external validator was set and the
+      * class uses its own internal validation method, it still must be
+      * able to return a validator, using the same method (typicallly,
+      * such classes just return <i>this</i>.
+      */
+      supergeneValidator getValidator();
 
 
 }
