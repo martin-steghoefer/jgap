@@ -20,7 +20,7 @@ import java.util.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -36,7 +36,9 @@ public class RootConfigurationHandler
    * @return A list of ConfigProperty objects.
    * */
   public ArrayList getConfigProperties() {
-    /**@todo: This list could be cached after the first call.*/
+    /**@todo This list could be cached after the first call.*/
+    /**@todo we could scan all classes in the classpath for implementing
+     * the INaturalSelector interface*/
     ArrayList cProps = new ArrayList();
     // NaturalSelectors available. This information will be renders as a JList.
     ConfigProperty cp;
@@ -48,6 +50,8 @@ public class RootConfigurationHandler
     cp.addValue("org.jgap.impl.TournamentSelector");
     cProps.add(cp);
     // GeneticOperators available. This information will be renders as a JList.
+    /**@todo we could scan all classes in the classpath for implementing
+     * the GeneticOperator interface*/
     cp = new ConfigProperty();
     cp.setName("GeneticOperators");
     cp.setType("Class");
@@ -57,7 +61,7 @@ public class RootConfigurationHandler
     cProps.add(cp);
     // Just a test property for testing JTextFields on the GUI
 
-    /**@todo: Remove this later*/
+    /**@todo Remove this later*/
     cp = new ConfigProperty();
     cp.setName("TestProps");
     cp.setType("int");
