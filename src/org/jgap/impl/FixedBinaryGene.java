@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private int m_length;
 
@@ -457,18 +457,14 @@ public class FixedBinaryGene
 
   /**
    * Modified hashCode() function to return different hashcodes for differently
-   * ordered genes in a chromosome
-   * @return -4 of no allele set, otherwise value return by BaseGene.hashCode()
+   * ordered genes in a chromosome --> does not work as internal value always
+   * initialized!
+   * @return -value returned by BaseGene.hashCode()
    *
    * @author Klaus Meffert
    * @since 2.2
    */
   public int hashCode() {
-    if (getInternalValue() == null) {
-      return -4;
-    }
-    else {
-      return super.hashCode();
-    }
+    return super.hashCode();
   }
 }
