@@ -27,12 +27,14 @@ import junit.framework.TestSuite;
 
 /**
  * Tests for DefaultConfiguration class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
-
 public class DefaultConfigurationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public DefaultConfigurationTest() {
 
@@ -46,7 +48,7 @@ public class DefaultConfigurationTest extends TestCase {
   public void testConstruct_0() {
     Configuration conf = new DefaultConfiguration();
     assertEquals(EventManager.class,conf.getEventManager().getClass());
-    assertEquals(WeightedRouletteSelector.class,conf.getNaturalSelector().getClass());
+    assertEquals(WeightedRouletteSelector.class,conf.getNaturalSelectors(false).get(0).getClass());
     assertEquals(StockRandomGenerator.class,conf.getRandomGenerator().getClass());
     assertEquals(ChromosomePool.class,conf.getChromosomePool().getClass());
     assertEquals(3, conf.getGeneticOperators().size());
