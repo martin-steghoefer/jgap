@@ -25,7 +25,7 @@ import junit.framework.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public PopulationTest() {
   }
@@ -217,5 +217,19 @@ public class PopulationTest extends TestCase {
     Chromosome c = new Chromosome(g, 5);
     p.addChromosome(c);
     assertTrue(it.hasNext());
+  }
+
+  public void testContains_0() {
+    Gene g = new DoubleGene();
+    Chromosome c = new Chromosome(g,10);
+    c.setFitnessValue(45);
+
+    Population p1 = new Population();
+    assertFalse(p1.contains(c));
+    assertFalse(p1.contains(null));
+    p1.addChromosome(c);
+    assertTrue(p1.contains(c));
+    assertFalse(p1.contains(null));
+    assertFalse(p1.contains(new Chromosome(g,5)));
   }
 }
