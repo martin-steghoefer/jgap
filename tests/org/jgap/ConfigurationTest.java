@@ -26,7 +26,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public ConfigurationTest() {
   }
@@ -220,8 +220,6 @@ public class ConfigurationTest
     conf.setEventManager(evMan);
     GeneticOperator mutOp = new MutationOperator();
     conf.addGeneticOperator(mutOp);
-    GeneticOperator repOp = new ReproductionOperator();
-    conf.addGeneticOperator(repOp);
     GeneticOperator croOp = new CrossoverOperator();
     conf.addGeneticOperator(croOp);
     conf.setPopulationSize(7);
@@ -231,10 +229,9 @@ public class ConfigurationTest
     assertEquals(sample, conf.getSampleChromosome());
     assertEquals(evMan, conf.getEventManager());
     assertEquals(7, conf.getPopulationSize());
-    assertEquals(3, conf.getGeneticOperators().size());
+    assertEquals(2, conf.getGeneticOperators().size());
     assertEquals(mutOp, conf.getGeneticOperators().get(0));
-    assertEquals(repOp, conf.getGeneticOperators().get(1));
-    assertEquals(croOp, conf.getGeneticOperators().get(2));
+    assertEquals(croOp, conf.getGeneticOperators().get(1));
   }
 
   /**
