@@ -18,15 +18,12 @@
 
 package org.jgap.impl;
 
-import java.util.List;
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.NaturalSelector;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
+import java.util.*;
+
+import org.jgap.*;
+
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for BestChromosomesSelector class
@@ -38,7 +35,7 @@ public class BestChromosomesSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public BestChromosomesSelectorTest() {
   }
