@@ -12,7 +12,7 @@ public class AllTests
 
     public static Test suite () {
         TestSuite suite = new TestSuite ();
-        suite.addTestSuite (org.jgap.impl.salesman.testTravellingSalesman.class);
+        suite.addTestSuite (org.jgap.impl.salesman.SalesmanClassGroupTest.class);
         return suite;
     }
 }
