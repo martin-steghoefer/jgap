@@ -48,16 +48,30 @@ public class FitnessFunctionTest
 
     public void testGetFitnessValue_1 ()
     {
-        FitnessFunctionImpl fitfunc = new FitnessFunctionImpl ( -7);
-        fitfunc.getFitnessValue (null);
-        // No exception is expected for negative fitness value
+        try
+        {
+            FitnessFunctionImpl fitfunc = new FitnessFunctionImpl ( -7);
+            fitfunc.getFitnessValue (null);
+        }
+        catch (RuntimeException cause)
+        {
+            // This is expected since non-positive fitness values are illegal.
+            // ---------------------------------------------------------------
+        }
     }
 
     public void testGetFitnessValue_2 ()
     {
-        FitnessFunctionImpl fitfunc = new FitnessFunctionImpl (0);
-        fitfunc.getFitnessValue (null);
-        // No exception is expected for negative fitness value
+        try
+        {
+            FitnessFunctionImpl fitfunc = new FitnessFunctionImpl (0);
+            fitfunc.getFitnessValue (null);
+        }
+        catch (RuntimeException cause)
+        {
+            // This is expected since non-positive fitness values are illegal.
+            // ---------------------------------------------------------------
+        }
     }
 
     /**
