@@ -50,22 +50,27 @@ public class StringGene
     public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.5 $";
+    private final static String CVS_REVISION = "$Revision: 1.6 $";
 
     private int m_minLength;
     private int m_maxLength;
 
     private String m_alphabet;
 
-    private static Random rn = new Random ();
+    private Random rn;
 
     /**
      * References the internal String value (allele) of this Gene.
      */
     protected String m_value = null;
 
+    private void init() {
+        rn = new Random ();
+    }
+
     public StringGene ()
     {
+        init();
     }
 
     /**
@@ -104,6 +109,7 @@ public class StringGene
                 "minimum length must be smaller than"
                 + " or equal to maximum length!");
         }
+        init();
         m_minLength = a_minLength;
         m_maxLength = a_maxLength;
         setAlphabet (a_alphabet);
@@ -450,6 +456,10 @@ public class StringGene
         }
     }
 
+    public int size() {
+        return m_value.length();
+
+    }
     public int getMaxLength ()
     {
         return m_maxLength;
@@ -629,6 +639,18 @@ public class StringGene
             }
         }
         return true;
+    }
+
+    /**
+     * Applies a mutation of a given intensity (percentage) onto the atomic
+     * element at given index (NumberGenes only have one atomic element)
+     * @param index index of atomic element, between 0 and size()-1
+     * @param a_percentage percentage of mutation (greater than -1 and smaller
+     * than 1).
+     */
+    public void applyMutation (int index, double a_percentage)
+    {
+        /**@todo implement*/
     }
 
 }

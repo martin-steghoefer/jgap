@@ -38,7 +38,6 @@ public abstract class NumberGene
      */
     protected Object m_value = null;
 
-
     /**
      * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
@@ -129,7 +128,7 @@ public abstract class NumberGene
         {
             try
             {
-                return compareToNative(m_value, otherGene.m_value);
+                return compareToNative (m_value, otherGene.m_value);
             }
             catch (ClassCastException e)
             {
@@ -149,7 +148,7 @@ public abstract class NumberGene
      *	       is less than, equal to, or greater than the object provided for
      *         comparison.
      */
-    protected abstract int compareToNative(Object o1, Object o2);
+    protected abstract int compareToNative (Object o1, Object o2);
 
     /**
      * Retrieves a string representation of this IntegerGene's value that
@@ -199,6 +198,16 @@ public abstract class NumberGene
     }
 
     /**
+     * @return the size of the gene, i.e the number of atomic elements.
+     *         Always 1 for numbers
+     *
+     * @since 1.1
+     */
+    public int size() {
+        return 1;
+    }
+
+    /**
      * Maps the value of this IntegerGene to within the bounds specified by
      * the m_upperBounds and m_lowerBounds instance variables. The value's
      * relative position within the integer range will be preserved within the
@@ -209,7 +218,12 @@ public abstract class NumberGene
      */
     protected abstract void mapValueToWithinBounds ();
 
-    public void applyMutation(double a_percentage) {
-
-    }
+    /**
+     * Applies a mutation of a given intensity (percentage) onto the atomic
+     * element at given index (NumberGenes only have one atomic element)
+     * @param index index of atomic element, between 0 and size()-1
+     * @param a_percentage percentage of mutation (greater than -1 and smaller
+     *        than 1).
+     */
+    public abstract void applyMutation (int index, double a_percentage);
 }
