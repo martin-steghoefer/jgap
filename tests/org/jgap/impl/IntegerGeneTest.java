@@ -26,7 +26,7 @@ public class IntegerGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public IntegerGeneTest() {
   }
@@ -104,6 +104,13 @@ public class IntegerGeneTest
     Gene gene2 = new IntegerGene(1, 99);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
+  }
+
+  public void testEquals_5() {
+    Gene gene1 = new IntegerGene(1, 100);
+    Gene gene2 = new DoubleGene(1, 99);
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
   }
 
   public void testIntValue_0() {

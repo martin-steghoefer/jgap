@@ -26,7 +26,7 @@ public class DoubleGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -116,6 +116,27 @@ public class DoubleGeneTest
     Gene gene2 = new DoubleGene(1.2d, 99.5d);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
+  }
+
+  public void testEquals_5() {
+    Gene gene1 = new FixedBinaryGene(5);
+    Gene gene2 = new DoubleGene(1, 99);
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_6() {
+    Gene gene1 = new DoubleGene(1, 99);
+    Gene gene2 = new BooleanGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_7() {
+    Gene gene1 = new DoubleGene(1, 99);
+    Gene gene2 = new IntegerGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
   }
 
   public void testDoubleValue_0() {
