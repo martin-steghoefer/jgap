@@ -1,10 +1,112 @@
-This represents a pre-alpha release of JGAP, the Java Genetic
-Algorithms Package. Since it's pre-alpha, it's not feature
-complete and probably contains bugs.
+------------------------------------------------------------------------
+About this Release:
 
-For more information, please visit the JGAP home page at
-jgap.sourceforge.net.
+This represents a pre-alpha release of JGAP, the Java Genetic Algorithms
+Package. Since it's pre-alpha, it's not feature complete and probably
+contains bugs.
 
-Please direct any questions or inquiries to the JGAP development
-mailing list at jgap-devl@lists.sourceforge.net.
+Any existing documentation, including Javadocs, can be found on the JGAP
+home page at jgap.sourceforge.net. A basic introduction to the contents
+of the JGAP package is also provided below.
+
+Please direct any questions, comments, problems, or inquiries to the
+JGAP development mailing list at jgap-devl@lists.sourceforge.net
+
+Thanks for trying out JGAP!
+--The JGAP team
+
+
+------------------------------------------------------------------------
+Installation:
+
+1. If you haven't already, untar or unzip the jgap archive into your
+directory of choice.
+
+2. Simply add the jgap.jar to your classpath. If you wish to use any 
+of the examples, then add the jgap-examples.jar to your classpath as
+well.
+
+3. Finally, if you wish to view or modify the source code, simply unjar
+the jgap-source.jar to the desired location. For convenience, an Ant
+build script is included in the source jar. For more information on Ant,
+please see its home page at jakarta.apache.org/ant/
+
+If you encounter any problems during installation, please send a note
+to the JGAP developers list at jgap-devl@lists.sourceforge.net
+
+
+------------------------------------------------------------------------
+Brief Introduction to Working with JGAP:
+
+JGAP is a Java package that provides basic genetic algorithms
+functionality. As this version is a pre-alpha, it's not feature complete
+and probably contains bugs. However, basic functionality is present and
+has been found to serve adequately for the needs of the authors.
+
+To use JGAP in a particular application, you need to write a class that
+implements the org.jgap.FitnessFunction interface. Implementations of
+this interface are used during the natural selection process to
+determine each Chromosome's fitness for survival. Since this function is
+completely dependent on the problem you're trying to solve, it's up to
+you to provide an implementation of it. For an example of a fitness
+function, see the MaxFunction class in the examples/ directory. That
+particular function treats the bits in a Chromosome as a binary number
+and returns their corresponding numeric value as the fitness function of
+the Chromosome (thereby assigning a higher fitness value to Chromosomes
+whose bits happen to represent a larger binary number).
+
+If desired, you can also provide your own implementation of the
+org.jgap.NaturalSelector interface, but this usually isn't necessary as
+the WeightedRouletteSelector implementation that is included with JGAP
+should be sufficient for most needs. The NaturalSelector is
+responsible for actually choosing a subset of a population that will
+"survive" and move on to the next round of evolution. Typically,
+chromosomes are selected based on their fitness value (as determined by
+the FitnessFunction implementation), although it's generally
+considered good practice to consider this value only a statistical
+chance of survival, and not a guaranteed chance.
+
+Once you've implemented your fitness function and, optionally, your
+natural selector, you just need to build a population of Chromosomes
+(a Genotype) and start evolving them. The easiest way to do that is to
+take advantage of the Genotype.randomInitialGenotype() static method.
+You simply need to specify the desired size of the population of
+Chromosomes, the number of genes (bits) in each Chromosome, an instance
+of the desired fitness function, and, optionally, a statistical mutation
+rate. The method will create a Genotype for you with a randomly
+generated population according to your specifications. If you prefer,
+you can also manually construct the Genotype yourself, passing it an
+array of Chromosomes that you have previously created yourself (the
+Chromosome class also has a randomInitialChromosome() method to make
+generation of Chromosomes easier, if desired).
+
+After you've created an instance of a Genotype, you simply invoke its
+evolve() method as many times as desired. With each invocation, the
+population of Chromosomes goes through the process of evolution and
+natural selection. The getChromosomes() method can be used to retrieve
+the population, or you can use the getFittestChromosome() method to
+retrieve the Chromosome with the highest fitness value.
+
+For a simple example of a program that makes use of the JGAP package,
+see the TestGenetics class in the examples/ directory. It creates a
+Genotype using the randomInitialGenotype() method, evolves it a number
+of times specified as a command-line argument to the program, and then
+writes the resulting population of Chromosomes in human- readable format
+to standard out, along with the Chromosome possessing the highest
+fitness value.
+
+For more details on all of the above, you are highly encouraged to read
+through the Javadocs that can be found on the JGAP home page at
+jgap.sourceforge.net. There are a very limited number of classes in the
+package, and the documentation attempts to be simple and straight-
+forward.
+
+If you have any questions, or run into any problems, please feel free
+to send a message to the JGAP developers mailing list at
+jgap-devl@lists.sourceforge.net
+
+------------------------------------------------------------------------
+JGAP is kindly hosted by the folks at SourceForge. For more information
+on SourceForge, please visit www.sourceforge.net
+
 

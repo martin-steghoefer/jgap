@@ -23,9 +23,18 @@ import org.jgap.*;
 public class MaxFunction implements FitnessFunction
 {
   /**
-   * This example implementation calculates the fitness
-   * value to be the numeric value of the bits. In other
-   * words, it optimizes the numeric value of the bit set.
+   * This example implementation calculates the fitness  value to be
+   * the numeric binary value of the bits. In other words, it optimizes
+   * the numeric value of the bit set. It should be noted that, for
+   * clarity, this function literally returns the binary value of the
+   * Chromosome's bits. However, it would be better to return the value
+   * raised to a fixed power to exaggerate the difference
+   * between the higher values. For example, the difference between 254
+   * and 255 is only about .04%, which isn't much incentive for the
+   * selector to choose 255 over 254. However, if you square the values,
+   * you then get 64516 and 65025, which is a difference of 0.8%--twice
+   * as much and, therefore, twice the incentive to select the higher
+   * value.
    */
   public int evaluate( Chromosome subject )
   {

@@ -38,10 +38,12 @@ public class TestGenetics
     int chromosomeSize = Integer.parseInt( args[0] );
     int populationSize = Integer.parseInt( args[1] );
     int numEvolutions = Integer.parseInt( args[2] );
+  
+    FitnessFunction binaryValueMaximizer = new MaxFunction();
 
-    Genotype genotype = Genotype.randomInitialGenotype( populationSize,
-                                                        chromosomeSize,
-                                                        new MaxFunction() );
+    Genotype genotype = Genotype.randomInitialGenotype( 
+      populationSize, chromosomeSize, binaryValueMaximizer,
+      new WeightedRouletteSelector() );
 
     for( int i = 0; i < numEvolutions; i++ )
     {
@@ -49,5 +51,9 @@ public class TestGenetics
     }
 
     System.out.println( genotype.toString() );
+
+    Chromosome fittest = genotype.getFittestChromosome();
+    System.out.println( "Fittest Chromosome is " + fittest.toString() +
+      " with a fitness value of " + binaryValueMaximizer.evaluate( fittest ) );
   }
 }  

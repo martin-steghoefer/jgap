@@ -32,11 +32,12 @@ import java.util.*;
  */
 public class Genotype
 {
-  private static Random generator = new Random();
+  protected static Random generator = new Random();
 
-  private Chromosome[] chromosomes;
-  private final FitnessFunction objectiveFunction;
-  private List workingPool;
+  protected Chromosome[] chromosomes;
+  protected final FitnessFunction objectiveFunction;
+  protected final NaturalSelector populationSelector;
+  protected List workingPool;
 
   /**
    * Constructs a new Genotype instance with the given array
@@ -48,12 +49,17 @@ public class Genotype
    *                            managed by this Genotype instance.
    * @param fitnessFunc: The fitness function to be used during
    *                     the natural selection process.
+   * @param selector: The natural selector that is to be used to
+   *                  determine which Chromosomes will "survive"
+   *                  and continue on to the next round of evolution. 
    */
   public Genotype( Chromosome[] initialChromosomes,
-                   FitnessFunction fitnessFunc )
+                   FitnessFunction fitnessFunc,
+                   NaturalSelector selector )
   {
     chromosomes = initialChromosomes;
     objectiveFunction = fitnessFunc;
+    populationSelector = selector;
 
     workingPool = new ArrayList();
   }
@@ -68,6 +74,36 @@ public class Genotype
   public Chromosome[] getChromosomes()
   {
     return chromosomes;
+  }
+
+
+  /**
+   * Retrieve the Chromosome in the population with the highest
+   * fitness value.
+   *
+   * @return The Chromosome with the highest fitness value.
+   */
+  public Chromosome getFittestChromosome()
+  {
+    if (chromosomes.length == 0)
+    {
+      return null;
+    }
+
+    Chromosome fittestChromosome = chromosomes[0];
+    int fittestValue = objectiveFunction.evaluate(fittestChromosome);
+
+    for( int i = 1; i < chromosomes.length; i++)
+    {
+      int fitnessValue = objectiveFunction.evaluate(chromosomes[i]);
+      if (fitnessValue > fittestValue)
+      {
+        fittestChromosome = chromosomes[i];
+        fittestValue = fitnessValue;
+      }
+    }
+
+    return fittestChromosome;
   }
 
 
@@ -112,8 +148,6 @@ public class Genotype
     }
 
 
-    NaturalSelector selector = new WeightedRouletteSelector();
-
     Iterator iterator = workingPool.iterator();
 
     while( iterator.hasNext() )
@@ -124,12 +158,12 @@ public class Genotype
       currentChromosome.mutate();
 
       // Step 4.
-      selector.add( currentChromosome,
-                    objectiveFunction.evaluate( currentChromosome ) );
+      populationSelector.add( currentChromosome,
+                              objectiveFunction.evaluate( currentChromosome ) );
     }
 
     // Step 5.
-    chromosomes = selector.select( chromosomes.length );
+    chromosomes = populationSelector.select( chromosomes.length );
   }
 
 
@@ -166,12 +200,16 @@ public class Genotype
    *                        in the Genotype should possess.
    * @param fitnessFunc:    The fitness function to be used during the
    *                        natural selection process.
+   * @param selector:       The natural selector that is to be used to
+   *                        determine which Chromosomes will "survive"
+   *                         and continue on to the next round of evolution. 
    *
    * @return A newly constructed Genotype instance.
    */
    public static Genotype randomInitialGenotype( int populationSize,
                                                  int chromosomeSize,
-                                                 FitnessFunction fitnessFunc )
+                                                 FitnessFunction fitnessFunc,
+                                                 NaturalSelector selector )
    {
      Chromosome[] chromosomes = new Chromosome[ populationSize ];
 
@@ -180,7 +218,7 @@ public class Genotype
        chromosomes[i] = Chromosome.randomInitialChromosome( chromosomeSize );
      }
 
-     return new Genotype( chromosomes, fitnessFunc );
+     return new Genotype( chromosomes, fitnessFunc, selector );
    }
   
   
@@ -195,23 +233,28 @@ public class Genotype
    *                        in the Genotype should possess.
    * @param fitnessFunc:    The fitness function to be used during the
    *                        natural selection process.
+   * @param selector:       The natural selector that is to be used to
+   *                        determine which Chromosomes will "survive"
+   *                        and continue on to the next round of evolution. 
    *
    * @return A newly constructed Genotype instance.
    */
   public static Genotype randomInitialGenotype( int populationSize,
                                                 int chromosomeSize,
                                                 int mutationRate,
-                                                FitnessFunction fitnessFunc )
+                                                FitnessFunction fitnessFunc,
+                                                NaturalSelector selector )
   
   {
     Chromosome[] chromosomes = new Chromosome[ populationSize ];
 
     for( int i = 0; i < populationSize; i++ )
     {
-      chromosomes[i] =
+      chromosomes[i] = 
         Chromosome.randomInitialChromosome( chromosomeSize, mutationRate );
     }
 
-    return new Genotype( chromosomes, fitnessFunc );
+    return new Genotype( chromosomes, fitnessFunc, selector );
   }
-}  
+} 
+ 
