@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private int m_length;
 
@@ -421,12 +421,6 @@ public class FixedBinaryGene
     // ----------------------------------------------------------------
     if (otherGene == null) {
       return 1;
-    }
-    else if (otherGene.m_value == null) {
-      // If our value is also null, then we're the same. Otherwise,
-      // we're the greater gene.
-      // ----------------------------------------------------------
-      return m_value == null ? 0 : 1;
     }
     int thisLen = getLength();
     int otherLen = otherGene.getLength();
