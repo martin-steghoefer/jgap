@@ -20,6 +20,9 @@ import junit.framework.*;
 
 public class SupergeneSampleApplicationTest extends TestCase {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
   public void testSupergeneTotal()
   {
     int E_s = Integer.MAX_VALUE;

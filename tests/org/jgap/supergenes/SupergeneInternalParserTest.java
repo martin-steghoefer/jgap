@@ -20,6 +20,9 @@ import junit.framework.*;
 public class SupergeneInternalParserTest extends TestCase
 {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
+
   class test extends abstractSupergene
   {
 
