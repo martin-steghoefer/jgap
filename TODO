@@ -1,14 +1,6 @@
 Things to do for JGAP (in no particular order):
 
-* Simplify configuration through use of a Configuration object rather
-  than specifying everything in the Genotype constructor. This will
-  move configuration-specific code out of the Genotype (where it doesn't
-  belong), help stableize the Genotype interface, and isolate all
-  configuration needs to a single class and point of control.
-
-* Increase modularity by creating interfaces for an Evolver and
-  GeneticOperator. Currently, the steps and functionality of the
-  evolution process are implemented in the Genotype.evolve() method.
+* Build JUnit test harness for classes in jgap
 
 * Add events that may be broadcast throughout execution of the GA to
   make possible the creation of graphical interfaces or other status
@@ -17,8 +9,6 @@ Things to do for JGAP (in no particular order):
 * Add the ability to persist the state of the current population to an
   XML file for later use. The XML file should ideally contain everything
   needed to restore a GA to its exact state at the time of persistence.
-
-* Make JGAP thread-safe.
 
 * Make it possible for genes to be represented by user-defined objects,
   rather than just bits, to make it easier for applications that want
