@@ -24,7 +24,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   private double m_deviation;
 
@@ -33,6 +33,9 @@ public class GaussianMutationOperator
   /**
    * Constructs a GaussianMutationOperator with a default
    * deviation of 0.05.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public GaussianMutationOperator() {
     this(0.05d);
@@ -83,7 +86,7 @@ public class GaussianMutationOperator
         double diff = nextGaussian * m_deviation;
         // Process all atomic elements in the gene. For a StringGene this
         // would be the length of the string, for an IntegerGene, it is
-        // always one element
+        // always one element.
         // --------------------------------------------------------------
         if (genes[j] instanceof CompositeGene) {
           CompositeGene compositeGene = (CompositeGene) genes[j];
@@ -94,7 +97,6 @@ public class GaussianMutationOperator
         else {
           mutateGene(genes[j], diff);
         }
-//        mutateGene(genes[j], diff);
       }
     }
   }
