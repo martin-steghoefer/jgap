@@ -63,79 +63,83 @@
       more fortunate is that it's very simple to use. Here's the code:
     </p>
 
-    <pre class="code">
-/**
- * Saves the given population to the given filename as an XML
- * file. The population can later be reconstructed from the
- * XML file through a call to the getSavedStrategyState() method.
- *
- * @param a_currentPopulation The population to save.
- * @param a_saveToFilename The full path to the file where the
- *                         XML representation should be saved.
- */
-public static saveStrategyState( Genotype a_currentPopulation,
-                                 string a_saveToFilename )
-              throws Exception
-{
-    // Convert the Genotype to a DOM object.
-    // -------------------------------------
-    Document xmlRepresentation =
-        XMLManager.representGenotypeAsDocument( a_currentPopulation );
 
-    // Now write that DOM to disk as an XML file. This is all
-    // parser-specific. We're assuming the use of the Xerces Java 2
-    // parser for this example.
-    // ------------------------------------------------------------
-    Writer documentWriter = new FileWriter( a_saveToFilename );
+<pre>
+<tt>
+<i><font color=#808080>/**</font></i>
+<i><font color=#808080> * Saves the given population to the given filename as an XML</font></i>
+<i><font color=#808080> * file. The population can later be reconstructed from the</font></i>
+<i><font color=#808080> * XML file through a call to the getSavedStrategyState() method.</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * @param a_currentPopulation The population to save.</font></i>
+<i><font color=#808080> * @param a_saveToFilename The full path to the file where the</font></i>
+<i><font color=#808080> *                         XML representation should be saved.</font></i>
+<i><font color=#808080> */</font></i>
+<b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <font color=#000000>saveStrategyState</font><font color=#000000>(</font> <font color=#000000>Genotype</font> <font color=#000000>a_currentPopulation</font><font color=#000000>,</font>
+                                 <font color=#000000>string</font> <font color=#000000>a_saveToFilename</font> <font color=#000000>)</font>
+              <b><font color=#000080>throws</font></b> <font color=#000000>Exception</font>
+<font color=#000000>{</font>
+    <i><font color=#808080>// Convert the Genotype to a DOM object.</font></i>
+    <i><font color=#808080>// -------------------------------------</font></i>
+    <font color=#000000>Document</font> <font color=#000000>xmlRepresentation</font> <font color=#000000>=</font>
+        <font color=#000000>XMLManager</font><font color=#000000>.</font><font color=#000000>representGenotypeAsDocument</font><font color=#000000>(</font> <font color=#000000>a_currentPopulation</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-    OutputFormat formatting =
-        new OutputFormat( genotypeDoc, "UTF-8", true );
+    <i><font color=#808080>// Now write that DOM to disk as an XML file. This is all</font></i>
+    <i><font color=#808080>// parser-specific. We're assuming the use of the Xerces Java 2</font></i>
+    <i><font color=#808080>// parser for this example.</font></i>
+    <i><font color=#808080>// ------------------------------------------------------------</font></i>
+    <font color=#000000>Writer</font> <font color=#000000>documentWriter</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>FileWriter</font><font color=#000000>(</font> <font color=#000000>a_saveToFilename</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-    SerializerFactory factory =
-        SerializerFactory.getSerializerFactory( Method.XML );
+    <font color=#000000>OutputFormat</font> <font color=#000000>formatting</font> <font color=#000000>=</font>
+        <b><font color=#000080>new</font></b> <font color=#000000>OutputFormat</font><font color=#000000>(</font> <font color=#000000>genotypeDoc</font><font color=#000000>,</font> <b><font color=#009900>"UTF-8"</font></b><font color=#000000>,</font> <font color=#000000>true</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-    Serializer genericSerializer =
-        factory.makeSerializer( documentWriter, formatting );
+    <font color=#000000>SerializerFactory</font> <font color=#000000>factory</font> <font color=#000000>=</font>
+        <font color=#000000>SerializerFactory</font><font color=#000000>.</font><font color=#000000>getSerializerFactory</font><font color=#000000>(</font> <font color=#000000>Method</font><font color=#000000>.</font><font color=#000000>XML</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-    DOMSerializer documentSerializer = 
-        genericSerializer.asDOMSerializer();
+    <font color=#000000>Serializer</font> <font color=#000000>genericSerializer</font> <font color=#000000>=</font>
+        <font color=#000000>factory</font><font color=#000000>.</font><font color=#000000>makeSerializer</font><font color=#000000>(</font> <font color=#000000>documentWriter</font><font color=#000000>,</font> <font color=#000000>formatting</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-    documentSerializer.serialize( genotypeDoc );
-    documentWriter.close();
-}
+    <font color=#000000>DOMSerializer</font> <font color=#000000>documentSerializer</font> <font color=#000000>=</font>
+        <font color=#000000>genericSerializer</font><font color=#000000>.</font><font color=#000000>asDOMSerializer</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
 
-
-/**
- * Recreates a population that was earlier saved to an XML file through
- * the saveStrategyState() method.
- *
- * @param a_activeConfiguration The current active Configuration object.
- * @param a_savedToFilename The full path of the file where the XML
- *                          representation was saved.
- *
- * @return A new Genotype instance that is populated from the XML
- *         representation found in the given file.
- */
-public static Genotype getSavedStrategyState( 
-                           Configuration a_activeConfiguration,
-                           String a_savedToFilename )
-                       throws Exception
-{
-    // Read the saved xml file into a DOM object.
-    // ------------------------------------------
-    Reader documentReader = new FileReader( a_savedToFilename );
-    InputSource documentSource = new InputSource( documentReader );
-    DocumentBuilder builder =
-        DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    Document genotypeDocument = builder.parse( documentSource );
+    <font color=#000000>documentSerializer</font><font color=#000000>.</font><font color=#000000>serialize</font><font color=#000000>(</font> <font color=#000000>genotypeDoc</font> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>documentWriter</font><font color=#000000>.</font><font color=#000000>close</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+<font color=#000000>}</font>
 
 
-    // Convert the DOM object back to a Genotype
-    // -----------------------------------------
-    return XMLManager.getGenotypeFromDocument( a_activeConfiguration,
-                                               genotypeDocument );
-}
-    </pre>
+<i><font color=#808080>/**</font></i>
+<i><font color=#808080> * Recreates a population that was earlier saved to an XML file through</font></i>
+<i><font color=#808080> * the saveStrategyState() method.</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * @param a_activeConfiguration The current active Configuration object.</font></i>
+<i><font color=#808080> * @param a_savedToFilename The full path of the file where the XML</font></i>
+<i><font color=#808080> *                          representation was saved.</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * @return A new Genotype instance that is populated from the XML</font></i>
+<i><font color=#808080> *         representation found in the given file.</font></i>
+<i><font color=#808080> */</font></i>
+<b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <font color=#000000>Genotype</font> <font color=#000000>getSavedStrategyState</font><font color=#000000>(</font>
+                           <font color=#000000>Configuration</font> <font color=#000000>a_activeConfiguration</font><font color=#000000>,</font>
+                           <font color=#000000>String</font> <font color=#000000>a_savedToFilename</font> <font color=#000000>)</font>
+                       <b><font color=#000080>throws</font></b> <font color=#000000>Exception</font>
+<font color=#000000>{</font>
+    <i><font color=#808080>// Read the saved xml file into a DOM object.</font></i>
+    <i><font color=#808080>// ------------------------------------------</font></i>
+    <font color=#000000>Reader</font> <font color=#000000>documentReader</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>FileReader</font><font color=#000000>(</font> <font color=#000000>a_savedToFilename</font> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>InputSource</font> <font color=#000000>documentSource</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>InputSource</font><font color=#000000>(</font> <font color=#000000>documentReader</font> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>DocumentBuilder</font> <font color=#000000>builder</font> <font color=#000000>=</font>
+        <font color=#000000>DocumentBuilderFactory</font><font color=#000000>.</font><font color=#000000>newInstance</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>.</font><font color=#000000>newDocumentBuilder</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>Document</font> <font color=#000000>genotypeDocument</font> <font color=#000000>=</font> <font color=#000000>builder</font><font color=#000000>.</font><font color=#000000>parse</font><font color=#000000>(</font> <font color=#000000>documentSource</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+
+    <i><font color=#808080>// Convert the DOM object back to a Genotype</font></i>
+    <i><font color=#808080>// -----------------------------------------</font></i>
+    <b><font color=#000080>return</font></b> <font color=#000000>XMLManager</font><font color=#000000>.</font><font color=#000000>getGenotypeFromDocument</font><font color=#000000>(</font> <font color=#000000>a_activeConfiguration</font><font color=#000000>,</font>
+                                               <font color=#000000>genotypeDocument</font> <font color=#000000>)</font><font color=#000000>;</font>
+<font color=#000000>}</font>
+
+</tt>
+</pre>
 
     <p>
         As can be seen from the above, interaction with the JGAP

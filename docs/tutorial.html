@@ -108,161 +108,166 @@
     </p>
 
     <p>
-    <pre class="code">
-package examples;
-
-import org.jgap.Chromosome;
-import org.jgap.FitnessFunction;
-
-/**
- * This class provides an implementation of the classic "Make change" problem
- * using a genetic algorithm. The goal of the problem is to provide a
- * specified amount of change (from a cash purchase) in the fewest coins
- * possible. This example implementation uses American currency (quarters,
- * dimes, nickels, and pennies).
- * 
- * This example may be seen as somewhat significant because it demonstrates
- * the use of a genetic algorithm in a less-than-optimal problem space.
- * The genetic algorithm does best when there is a smooth slope of fitness
- * over the problem space towards the optimum solution. This problem exhibits
- * a more choppy space with more local optima. However, as can be seen from
- * running this example, the genetic algorithm still will get the correct
- * answer virtually everytime.
- */
-public class MinimizingMakeChangeFitnessFunction extends FitnessFunction
-{
-    private final int m_targetAmount;
-
-    /**
-     * Constructs this MinimizingMakeChangeFitnessFunction with the desired
-     * amount of change to make.
-     *
-     * @param a_targetAmount The desired amount of change, in cents. This
-     *                       value must be between 1 and 99 cents.
-     */
-    public MinimizingMakeChangeFitnessFunction( int a_targetAmount )
-    {
-        if( a_targetAmount < 1 || a_targetAmount > 99 )
-        {
-            throw new IllegalArgumentException(
-                "Change amount must be between 1 and 99 cents." );
-        }
-
-        m_targetAmount = a_targetAmount;
-    }
 
 
-    /**
-     * Determine the fitness of the given Chromosome instance. The higher the
-     * return value, the more fit the instance. This method should always
-     * return the same fitness value for two equivalent Chromosome instances.
-     *
-     * @param a_subject: The Chromosome instance to evaluate.
-     *
-     * @return A positive integer reflecting the fitness rating of the given
-     *         Chromosome.
-     */
-    public int evaluate( Chromosome a_subject )
-    {
-        // The fitness value measures both how close the value is to the
-        // target amount supplied by the user and the total number of coins
-        // represented by the solution. We do this in two steps: first,
-        // we consider only the represented amount of change vs. the target
-        // amount of change and calculate higher fitness values for amounts
-        // closer to the target, and lower fitness values for amounts further
-        // away from the target. If the amount equals the target, then we go
-        // to step 2, which adjusts the fitness to a higher value for
-        // solutions representing fewer total coins, and lower fitness
-        // values for solutions representing a larger total number of coins.
-        // ------------------------------------------------------------------
-        int changeAmount = amountOfChange( a_subject );
-        int totalCoins = getTotalNumberOfCoins( a_subject );
-        int changeDifference = Math.abs( m_targetAmount - changeAmount );
+<pre>
+<tt>
+<b><font color=#000080>package</font></b> <font color=#000000>examples</font><font color=#000000>;</font>
 
-        // Step 1: Determine the distance of the amount represented by the
-        // solution from the target amount. Since we know the maximum amount
-        // of change is 99 cents, we'll subtract from that the difference
-        // between the solution amount and the target amount. That will give
-        // the desired effect of returning higher values for amounts close
-        // to the target amount and lower values for amounts further away
-        // from the target amount.
-        // ------------------------------------------------------------------
-        int fitness = ( 99 - changeDifference );
+<b><font color=#000080>import</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>Chromosome</font><font color=#000000>;</font>
+<b><font color=#000080>import</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>FitnessFunction</font><font color=#000000>;</font>
 
-        // Step 2: If the solution amount equals the target amount, then
-        // we add additional fitness points for solutions representing fewer
-        // total coins.
-        // -----------------------------------------------------------------
-        if( changeAmount == m_targetAmount )
-        {
-            fitness += 100 - ( 10 * totalCoins );
-        }
+<i><font color=#808080>/**</font></i>
+<i><font color=#808080> * This class provides an implementation of the classic "Make change" problem</font></i>
+<i><font color=#808080> * using a genetic algorithm. The goal of the problem is to provide a</font></i>
+<i><font color=#808080> * specified amount of change (from a cash purchase) in the fewest coins</font></i>
+<i><font color=#808080> * possible. This example implementation uses American currency (quarters,</font></i>
+<i><font color=#808080> * dimes, nickels, and pennies).</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * This example may be seen as somewhat significant because it demonstrates</font></i>
+<i><font color=#808080> * the use of a genetic algorithm in a less-than-optimal problem space.</font></i>
+<i><font color=#808080> * The genetic algorithm does best when there is a smooth slope of fitness</font></i>
+<i><font color=#808080> * over the problem space towards the optimum solution. This problem exhibits</font></i>
+<i><font color=#808080> * a more choppy space with more local optima. However, as can be seen from</font></i>
+<i><font color=#808080> * running this example, the genetic algorithm still will get the correct</font></i>
+<i><font color=#808080> * answer virtually everytime.</font></i>
+<i><font color=#808080> */</font></i>
+<b><font color=#000080>public</font></b> <b><font color=#000080>class</font></b> <font color=#000000>MinimizingMakeChangeFitnessFunction</font> <b><font color=#000080>extends</font></b> <font color=#000000>FitnessFunction</font>
+<font color=#000000>{</font>
+    <b><font color=#000080>private</font></b> <b><font color=#000080>final</font></b> <b><font color=#000080>int</font></b> <font color=#000000>m_targetAmount</font><font color=#000000>;</font>
 
-        return fitness;
-    }
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Constructs this MinimizingMakeChangeFitnessFunction with the desired</font></i>
+<i><font color=#808080>     * amount of change to make.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @param a_targetAmount The desired amount of change, in cents. This</font></i>
+<i><font color=#808080>     *                       value must be between 1 and 99 cents.</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>(</font> <b><font color=#000080>int</font></b> <font color=#000000>a_targetAmount</font> <font color=#000000>)</font>
+    <font color=#000000>{</font>
+        <b><font color=#000080>if</font></b><font color=#000000>(</font> <font color=#000000>a_targetAmount</font> <font color=#000000>&lt;</font> <font color=#0000FF>1</font> <font color=#000000>|</font><font color=#000000>|</font> <font color=#000000>a_targetAmount</font> <font color=#000000>&gt;</font> <font color=#0000FF>99</font> <font color=#000000>)</font>
+        <font color=#000000>{</font>
+            <b><font color=#000080>throw</font></b> <b><font color=#000080>new</font></b> <font color=#000000>IllegalArgumentException</font><font color=#000000>(</font>
+                <b><font color=#009900>"Change amount must be between 1 and 99 cents."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+        <font color=#000000>}</font>
+
+        <font color=#000000>m_targetAmount</font> <font color=#000000>=</font> <font color=#000000>a_targetAmount</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
 
 
-    /**
-     * Calculates the total amount of change (in cents) represented by
-     * the given chromosome and returns that amount.
-     *
-     * @param a_potentialSolution The potential solution to evaluate.
-     * @return The total amount of change (in cents) represented by the
-     *         given solution.
-     */
-    public static int amountOfChange( Chromosome a_potentialSolution )
-    {
-        int numQuarters = getNumberOfCoinsAtGene( a_potentialSolution, 0 );
-        int numDimes = getNumberOfCoinsAtGene( a_potentialSolution, 1 );
-        int numNickels = getNumberOfCoinsAtGene( a_potentialSolution, 2 );
-        int numPennies = getNumberOfCoinsAtGene( a_potentialSolution, 3 );
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Determine the fitness of the given Chromosome instance. The higher the</font></i>
+<i><font color=#808080>     * return value, the more fit the instance. This method should always</font></i>
+<i><font color=#808080>     * return the same fitness value for two equivalent Chromosome instances.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @param a_subject: The Chromosome instance to evaluate.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @return A positive integer reflecting the fitness rating of the given</font></i>
+<i><font color=#808080>     *         Chromosome.</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>int</font></b> <font color=#000000>evaluate</font><font color=#000000>(</font> <font color=#000000>Chromosome</font> <font color=#000000>a_subject</font> <font color=#000000>)</font>
+    <font color=#000000>{</font>
+        <i><font color=#808080>// The fitness value measures both how close the value is to the</font></i>
+        <i><font color=#808080>// target amount supplied by the user and the total number of coins</font></i>
+        <i><font color=#808080>// represented by the solution. We do this in two steps: first,</font></i>
+        <i><font color=#808080>// we consider only the represented amount of change vs. the target</font></i>
+        <i><font color=#808080>// amount of change and calculate higher fitness values for amounts</font></i>
+        <i><font color=#808080>// closer to the target, and lower fitness values for amounts further</font></i>
+        <i><font color=#808080>// away from the target. If the amount equals the target, then we go</font></i>
+        <i><font color=#808080>// to step 2, which adjusts the fitness to a higher value for</font></i>
+        <i><font color=#808080>// solutions representing fewer total coins, and lower fitness</font></i>
+        <i><font color=#808080>// values for solutions representing a larger total number of coins.</font></i>
+        <i><font color=#808080>// ------------------------------------------------------------------</font></i>
+        <b><font color=#000080>int</font></b> <font color=#000000>changeAmount</font> <font color=#000000>=</font> <font color=#000000>amountOfChange</font><font color=#000000>(</font> <font color=#000000>a_subject</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>totalCoins</font> <font color=#000000>=</font> <font color=#000000>getTotalNumberOfCoins</font><font color=#000000>(</font> <font color=#000000>a_subject</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>changeDifference</font> <font color=#000000>=</font> <font color=#000000>Math</font><font color=#000000>.</font><font color=#000000>abs</font><font color=#000000>(</font> <font color=#000000>m_targetAmount</font> <font color=#000000>-</font> <font color=#000000>changeAmount</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-        return ( numQuarters * 25 ) + ( numDimes * 10 ) + ( numNickels * 5 ) +
-               numPennies;
-    }
+        <i><font color=#808080>// Step 1: Determine the distance of the amount represented by the</font></i>
+        <i><font color=#808080>// solution from the target amount. Since we know the maximum amount</font></i>
+        <i><font color=#808080>// of change is 99 cents, we'll subtract from that the difference</font></i>
+        <i><font color=#808080>// between the solution amount and the target amount. That will give</font></i>
+        <i><font color=#808080>// the desired effect of returning higher values for amounts close</font></i>
+        <i><font color=#808080>// to the target amount and lower values for amounts further away</font></i>
+        <i><font color=#808080>// from the target amount.</font></i>
+        <i><font color=#808080>// ------------------------------------------------------------------</font></i>
+        <b><font color=#000080>int</font></b> <font color=#000000>fitness</font> <font color=#000000>=</font> <font color=#000000>(</font> <font color=#0000FF>99</font> <font color=#000000>-</font> <font color=#000000>changeDifference</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+        <i><font color=#808080>// Step 2: If the solution amount equals the target amount, then</font></i>
+        <i><font color=#808080>// we add additional fitness points for solutions representing fewer</font></i>
+        <i><font color=#808080>// total coins.</font></i>
+        <i><font color=#808080>// -----------------------------------------------------------------</font></i>
+        <b><font color=#000080>if</font></b><font color=#000000>(</font> <font color=#000000>changeAmount</font> <font color=#000000>=</font><font color=#000000>=</font> <font color=#000000>m_targetAmount</font> <font color=#000000>)</font>
+        <font color=#000000>{</font>
+            <font color=#000000>fitness</font> <font color=#000000>+</font><font color=#000000>=</font> <font color=#0000FF>100</font> <font color=#000000>-</font> <font color=#000000>(</font> <font color=#0000FF>10</font> <font color=#000000>*</font> <font color=#000000>totalCoins</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <font color=#000000>}</font>
+
+        <b><font color=#000080>return</font></b> <font color=#000000>fitness</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
 
 
-    /**
-     * Retrieves the number of coins represented by the given potential
-     * solution at the given gene position.
-     *
-     * @param a_potentialSolution The potential solution to evaluate.
-     * @param a_position The gene position to evaluate.
-     * @return the number of coins represented by the potential solution
-     *         at the given gene position.
-     */
-    public static int getNumberOfCoinsAtGene( Chromosome a_potentialSolution,
-                                              int a_position )
-    {
-        Integer numCoins = 
-          (Integer) a_potentialSolution.getAllele( a_position ).getValue();
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Calculates the total amount of change (in cents) represented by</font></i>
+<i><font color=#808080>     * the given chromosome and returns that amount.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @param a_potentialSolution The potential solution to evaluate.</font></i>
+<i><font color=#808080>     * @return The total amount of change (in cents) represented by the</font></i>
+<i><font color=#808080>     *         given solution.</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <b><font color=#000080>int</font></b> <font color=#000000>amountOfChange</font><font color=#000000>(</font> <font color=#000000>Chromosome</font> <font color=#000000>a_potentialSolution</font> <font color=#000000>)</font>
+    <font color=#000000>{</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>numQuarters</font> <font color=#000000>=</font> <font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>a_potentialSolution</font><font color=#000000>,</font> <font color=#0000FF>0</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>numDimes</font> <font color=#000000>=</font> <font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>a_potentialSolution</font><font color=#000000>,</font> <font color=#0000FF>1</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>numNickels</font> <font color=#000000>=</font> <font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>a_potentialSolution</font><font color=#000000>,</font> <font color=#0000FF>2</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>numPennies</font> <font color=#000000>=</font> <font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>a_potentialSolution</font><font color=#000000>,</font> <font color=#0000FF>3</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-        return numCoins.intValue();
-    }
+        <b><font color=#000080>return</font></b> <font color=#000000>(</font> <font color=#000000>numQuarters</font> <font color=#000000>*</font> <font color=#0000FF>25</font> <font color=#000000>)</font> <font color=#000000>+</font> <font color=#000000>(</font> <font color=#000000>numDimes</font> <font color=#000000>*</font> <font color=#0000FF>10</font> <font color=#000000>)</font> <font color=#000000>+</font> <font color=#000000>(</font> <font color=#000000>numNickels</font> <font color=#000000>*</font> <font color=#0000FF>5</font> <font color=#000000>)</font> <font color=#000000>+</font>
+               <font color=#000000>numPennies</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
 
 
-    /**
-     * Returns the total number of coins represented by all of the genes in
-     * the given chromosome.
-     *
-     * @param a_potentialsolution The potential solution to evaluate.
-     * @return The total number of coins represented by the given Chromosome.
-     */
-    public static int getTotalNumberOfCoins( Chromosome a_potentialsolution )
-    {
-        int totalCoins = 0;
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Retrieves the number of coins represented by the given potential</font></i>
+<i><font color=#808080>     * solution at the given gene position.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @param a_potentialSolution The potential solution to evaluate.</font></i>
+<i><font color=#808080>     * @param a_position The gene position to evaluate.</font></i>
+<i><font color=#808080>     * @return the number of coins represented by the potential solution</font></i>
+<i><font color=#808080>     *         at the given gene position.</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <b><font color=#000080>int</font></b> <font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>Chromosome</font> <font color=#000000>a_potentialSolution</font><font color=#000000>,</font>
+                                              <b><font color=#000080>int</font></b> <font color=#000000>a_position</font> <font color=#000000>)</font>
+    <font color=#000000>{</font>
+        <font color=#000000>Integer</font> <font color=#000000>numCoins</font> <font color=#000000>=</font>
+          <font color=#000000>(</font><font color=#000000>Integer</font><font color=#000000>)</font> <font color=#000000>a_potentialSolution</font><font color=#000000>.</font><font color=#000000>getAllele</font><font color=#000000>(</font> <font color=#000000>a_position</font> <font color=#000000>)</font><font color=#000000>.</font><font color=#000000>getValue</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
 
-        int numberOfGenes = a_potentialsolution.size();
-        for( int i = 0; i < numberOfGenes; i++ )
-        {
-            totalCoins += getNumberOfCoinsAtGene( a_potentialsolution, i );
-        }
+        <b><font color=#000080>return</font></b> <font color=#000000>numCoins</font><font color=#000000>.</font><font color=#000000>intValue</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
 
-        return totalCoins;
-    }
 
-}
-    </pre>
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Returns the total number of coins represented by all of the genes in</font></i>
+<i><font color=#808080>     * the given chromosome.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @param a_potentialsolution The potential solution to evaluate.</font></i>
+<i><font color=#808080>     * @return The total number of coins represented by the given Chromosome.</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <b><font color=#000080>int</font></b> <font color=#000000>getTotalNumberOfCoins</font><font color=#000000>(</font> <font color=#000000>Chromosome</font> <font color=#000000>a_potentialsolution</font> <font color=#000000>)</font>
+    <font color=#000000>{</font>
+        <b><font color=#000080>int</font></b> <font color=#000000>totalCoins</font> <font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font>
+
+        <b><font color=#000080>int</font></b> <font color=#000000>numberOfGenes</font> <font color=#000000>=</font> <font color=#000000>a_potentialsolution</font><font color=#000000>.</font><font color=#000000>size</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>for</font></b><font color=#000000>(</font> <b><font color=#000080>int</font></b> <font color=#000000>i</font> <font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font> <font color=#000000>i</font> <font color=#000000>&lt;</font> <font color=#000000>numberOfGenes</font><font color=#000000>;</font> <font color=#000000>i</font><font color=#000000>+</font><font color=#000000>+</font> <font color=#000000>)</font>
+        <font color=#000000>{</font>
+            <font color=#000000>totalCoins</font> <font color=#000000>+</font><font color=#000000>=</font> <font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>a_potentialsolution</font><font color=#000000>,</font> <font color=#000000>i</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <font color=#000000>}</font>
+
+        <b><font color=#000080>return</font></b> <font color=#000000>totalCoins</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
+<font color=#000000>}</font>
+
+</tt>
+</pre>
+
     </p>
 
     <p>
@@ -370,53 +375,58 @@ public class MinimizingMakeChangeFitnessFunction extends FitnessFunction
     </p>
 
     <p>
-    <pre class="code">
-// Start with a DefaultConfiguration, which comes setup with the
-// most common settings.
-// -------------------------------------------------------------
-Configuration conf = new DefaultConfiguration();
 
-// Set the fitness function we want to use, which is our
-// MinimizingMakeChangeFitnessFunction that we created earlier.
-// We construct it with the target amount of change provided
-// by the user.
-// ------------------------------------------------------------
-FitnessFunction myFunc = 
-    new MinimizingMakeChangeFitnessFunction( targetAmount );
+<pre>
+<tt>
+<i><font color=#808080>// Start with a DefaultConfiguration, which comes setup with the</font></i>
+<i><font color=#808080>// most common settings.</font></i>
+<i><font color=#808080>// -------------------------------------------------------------</font></i>
+<font color=#000000>Configuration</font> <font color=#000000>conf</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>DefaultConfiguration</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
 
-conf.setFitnessFunction( myFunc );
+<i><font color=#808080>// Set the fitness function we want to use, which is our</font></i>
+<i><font color=#808080>// MinimizingMakeChangeFitnessFunction that we created earlier.</font></i>
+<i><font color=#808080>// We construct it with the target amount of change provided</font></i>
+<i><font color=#808080>// by the user.</font></i>
+<i><font color=#808080>// ------------------------------------------------------------</font></i>
+<font color=#000000>FitnessFunction</font> <font color=#000000>myFunc</font> <font color=#000000>=</font>
+    <b><font color=#000080>new</font></b> <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>(</font> <font color=#000000>targetAmount</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-// Now we need to tell the Configuration object how we want our
-// Chromosomes to be setup. We do that by actually creating a
-// sample Chromosome and then setting it on the Configuration
-// object. As mentioned earlier, we want our Chromosomes to
-// each have four genes, one for each of the coin types. We
-// want the values of those genes to be integers, which represent
-// how many coins of that type we have. We therefore use the
-// IntegerGene class to represent each of the genes. That class
-// also lets us specify a lower and upper bound, which we set
-// to sensible values for each coin type.
-// --------------------------------------------------------------
-Gene[] sampleGenes = new Gene[ 4 ];
+<font color=#000000>conf</font><font color=#000000>.</font><font color=#000000>setFitnessFunction</font><font color=#000000>(</font> <font color=#000000>myFunc</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-sampleGenes[0] = new IntegerGene( 0, 3 );  // Quarters
-sampleGenes[1] = new IntegerGene( 0, 2 );  // Dimes
-sampleGenes[2] = new IntegerGene( 0, 1 );  // Nickels
-sampleGenes[3] = new IntegerGene( 0, 4 );  // Pennies
+<i><font color=#808080>// Now we need to tell the Configuration object how we want our</font></i>
+<i><font color=#808080>// Chromosomes to be setup. We do that by actually creating a</font></i>
+<i><font color=#808080>// sample Chromosome and then setting it on the Configuration</font></i>
+<i><font color=#808080>// object. As mentioned earlier, we want our Chromosomes to</font></i>
+<i><font color=#808080>// each have four genes, one for each of the coin types. We</font></i>
+<i><font color=#808080>// want the values of those genes to be integers, which represent</font></i>
+<i><font color=#808080>// how many coins of that type we have. We therefore use the</font></i>
+<i><font color=#808080>// IntegerGene class to represent each of the genes. That class</font></i>
+<i><font color=#808080>// also lets us specify a lower and upper bound, which we set</font></i>
+<i><font color=#808080>// to sensible values for each coin type.</font></i>
+<i><font color=#808080>// --------------------------------------------------------------</font></i>
+<font color=#000000>Gene</font><font color=#000000>[</font><font color=#000000>]</font> <font color=#000000>sampleGenes</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>Gene</font><font color=#000000>[</font> <font color=#0000FF>4</font> <font color=#000000>]</font><font color=#000000>;</font>
 
-Chromosome sampleChromosome = new Chromosome( sampleGenes );
+<font color=#000000>sampleGenes</font><font color=#000000>[</font><font color=#0000FF>0</font><font color=#000000>]</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>IntegerGene</font><font color=#000000>(</font> <font color=#0000FF>0</font><font color=#000000>,</font> <font color=#0000FF>3</font> <font color=#000000>)</font><font color=#000000>;</font>  <i><font color=#808080>// Quarters</font></i>
+<font color=#000000>sampleGenes</font><font color=#000000>[</font><font color=#0000FF>1</font><font color=#000000>]</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>IntegerGene</font><font color=#000000>(</font> <font color=#0000FF>0</font><font color=#000000>,</font> <font color=#0000FF>2</font> <font color=#000000>)</font><font color=#000000>;</font>  <i><font color=#808080>// Dimes</font></i>
+<font color=#000000>sampleGenes</font><font color=#000000>[</font><font color=#0000FF>2</font><font color=#000000>]</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>IntegerGene</font><font color=#000000>(</font> <font color=#0000FF>0</font><font color=#000000>,</font> <font color=#0000FF>1</font> <font color=#000000>)</font><font color=#000000>;</font>  <i><font color=#808080>// Nickels</font></i>
+<font color=#000000>sampleGenes</font><font color=#000000>[</font><font color=#0000FF>3</font><font color=#000000>]</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>IntegerGene</font><font color=#000000>(</font> <font color=#0000FF>0</font><font color=#000000>,</font> <font color=#0000FF>4</font> <font color=#000000>)</font><font color=#000000>;</font>  <i><font color=#808080>// Pennies</font></i>
 
-conf.setSampleChromosome( sampleChromosome );
+<font color=#000000>Chromosome</font> <font color=#000000>sampleChromosome</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>Chromosome</font><font color=#000000>(</font> <font color=#000000>sampleGenes</font> <font color=#000000>)</font><font color=#000000>;</font>
 
-// Finally, we need to tell the Configuration object how many
-// Chromosomes we want in our population. The more Chromosomes,
-// the larger the number of potential solutions (which is good
-// for finding the answer), but the longer it will take to evolve
-// the population each round. We'll set the population size to
-// 500 here.
-// --------------------------------------------------------------
-conf.setPopulationSize( 500 );
-    </pre>
+<font color=#000000>conf</font><font color=#000000>.</font><font color=#000000>setSampleChromosome</font><font color=#000000>(</font> <font color=#000000>sampleChromosome</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+<i><font color=#808080>// Finally, we need to tell the Configuration object how many</font></i>
+<i><font color=#808080>// Chromosomes we want in our population. The more Chromosomes,</font></i>
+<i><font color=#808080>// the larger the number of potential solutions (which is good</font></i>
+<i><font color=#808080>// for finding the answer), but the longer it will take to evolve</font></i>
+<i><font color=#808080>// the population each round. We'll set the population size to</font></i>
+<i><font color=#808080>// 500 here.</font></i>
+<i><font color=#808080>// --------------------------------------------------------------</font></i>
+<font color=#000000>conf</font><font color=#000000>.</font><font color=#000000>setPopulationSize</font><font color=#000000>(</font> <font color=#0000FF>500</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+</tt>
+</pre>
+
     </p>
 
     <p>
@@ -484,9 +494,14 @@ conf.setPopulationSize( 500 );
     </p>
 
     <p>
-    <pre class="code">
-Genotype population = Genotype.randomInitialGenotype( conf );
-    </pre>
+
+<pre>
+<tt>
+<font color=#000000>Genotype</font> <font color=#000000>population</font> <font color=#000000>=</font> <font color=#000000>Genotype</font><font color=#000000>.</font><font color=#000000>randomInitialGenotype</font><font color=#000000>(</font> <font color=#000000>conf</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+</tt>
+</pre>
+
     </p>
 
     <p>
@@ -510,9 +525,14 @@ Genotype population = Genotype.randomInitialGenotype( conf );
     </p>
 
     <p>
-    <pre class="code">
-population.evolve();
-    </pre>
+
+<pre>
+<tt>
+<font color=#000000>population</font><font color=#000000>.</font><font color=#000000>evolve</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+
+</tt>
+</pre>
+
     </p>
 
     <p>
@@ -523,9 +543,12 @@ population.evolve();
     </p>
 
     <p>
-    <pre class="code">
-Chromosome bestSolutionSoFar = population.getFittestChromosome();
-    </pre>
+<pre>
+<tt>
+<font color=#000000>Chromosome</font> <font color=#000000>bestSolutionSoFar</font> <font color=#000000>=</font> <font color=#000000>population</font><font color=#000000>.</font><font color=#000000>getFittestChromosome</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+
+</tt>
+</pre>
     </p>
 
     <p>
@@ -538,38 +561,41 @@ Chromosome bestSolutionSoFar = population.getFittestChromosome();
     </p>
 
     <p>
-    <pre class="code">
-Chromosome bestSolutionSoFar;
+<pre>
+<tt>
+<font color=#000000>Chromosome</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>;</font>
 
-for( int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++ )
-{
-    population.evolve();
-}
+<b><font color=#000080>for</font></b><font color=#000000>(</font> <b><font color=#000080>int</font></b> <font color=#000000>i</font> <font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font> <font color=#000000>i</font> <font color=#000000>&lt;</font> <font color=#000000>MAX_ALLOWED_EVOLUTIONS</font><font color=#000000>;</font> <font color=#000000>i</font><font color=#000000>+</font><font color=#000000>+</font> <font color=#000000>)</font>
+<font color=#000000>{</font>
+    <font color=#000000>population</font><font color=#000000>.</font><font color=#000000>evolve</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+<font color=#000000>}</font>
 
-System.out.println( "The best solution contained the following: " );
+<font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font> <b><font color=#009900>"The best solution contained the following: "</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
-System.out.println( 
-    MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene( bestSolutionSoFar, 0 ) +
-    " quarters." );
+<font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>0</font> <font color=#000000>)</font> <font color=#000000>+</font>
+    <b><font color=#009900>" quarters."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
-System.out.println(
-    MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene( bestSolutionSoFar, 1 ) +
-    " dimes." );
+<font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>1</font> <font color=#000000>)</font> <font color=#000000>+</font>
+    <b><font color=#009900>" dimes."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
-System.out.println(
-    MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene( bestSolutionSoFar, 2 ) +
-    " nickels." );
+<font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>2</font> <font color=#000000>)</font> <font color=#000000>+</font>
+    <b><font color=#009900>" nickels."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
-System.out.println(
-    MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene( bestSolutionSoFar, 3 ) +
-    " pennies." );
+<font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getNumberOfCoinsAtGene</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font><font color=#000000>,</font> <font color=#0000FF>3</font> <font color=#000000>)</font> <font color=#000000>+</font>
+    <b><font color=#009900>" pennies."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
 
-System.out.println( "For a total of " +
-    MinimizingMakeChangeFitnessFunction.amountOfChange( bestSolutionSoFar ) +
-    " cents in " + 
-    MinimizingMakeChangeFitnessFunction.getTotalNumberOfCoins( bestSolutionSoFar ) +
-    " coins." );
-    </pre>
+<font color=#000000>System</font><font color=#000000>.</font><font color=#000000>out</font><font color=#000000>.</font><font color=#000000>println</font><font color=#000000>(</font> <b><font color=#009900>"For a total of "</font></b> <font color=#000000>+</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>amountOfChange</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font> <font color=#000000>)</font> <font color=#000000>+</font>
+    <b><font color=#009900>" cents in "</font></b> <font color=#000000>+</font>
+    <font color=#000000>MinimizingMakeChangeFitnessFunction</font><font color=#000000>.</font><font color=#000000>getTotalNumberOfCoins</font><font color=#000000>(</font> <font color=#000000>bestSolutionSoFar</font> <font color=#000000>)</font> <font color=#000000>+</font>
+    <b><font color=#009900>" coins."</font></b> <font color=#000000>)</font><font color=#000000>;</font>
+
+</tt>
+</pre>
     </p>
 
     <p>

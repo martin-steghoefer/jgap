@@ -42,63 +42,66 @@
       ReproductionOperator:
     </p>
 
-    <pre class="code">
-package org.jgap.impl;
+<pre>
+<tt>
+<b><font color=#000080>package</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>impl</font><font color=#000000>;</font>
 
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.GeneticOperator;
+<b><font color=#000080>import</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>Chromosome</font><font color=#000000>;</font>
+<b><font color=#000080>import</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>Configuration</font><font color=#000000>;</font>
+<b><font color=#000080>import</font></b> <font color=#000000>org</font><font color=#000000>.</font><font color=#000000>jgap</font><font color=#000000>.</font><font color=#000000>GeneticOperator</font><font color=#000000>;</font>
 
-import java.util.List;
+<b><font color=#000080>import</font></b> <font color=#000000>java</font><font color=#000000>.</font><font color=#000000>util</font><font color=#000000>.</font><font color=#000000>List</font><font color=#000000>;</font>
 
 
-/**
- * The reproduction operator makes a copy of each Chromosome in the
- * population and adds it to the list of candidate chromosomes. This
- * essentially guarantees that each Chromosome in the current population
- * remains a candidate for selection for the next population.
- */
-public class ReproductionOperator implements GeneticOperator
-{
-    /**
-     * The operate method will be invoked on each of the genetic operators
-     * referenced by the current Configuration object during the evolution
-     * phase. Operators are given an opportunity to run in the order that
-     * they are added to the Configuration. Implementations of this method
-     * may reference the population of Chromosomes as it was at the beginning
-     * of the evolutionary phase or the candidate Chromosomes, which are the
-     * results of prior genetic operators. In either case, only Chromosomes
-     * added to the list of candidate chromosomes will be considered for
-     * natural selection. Implementations should never modify the original
-     * population.
-     *
-     * @param a_activeConfiguration The current active genetic configuration.
-     * @param a_population The population of chromosomes from the current
-     *                     evolution prior to exposure to any genetic operators.
-     *                     Chromosomes in this array should never be modified.
-     * @param a_candidateChromosomes The pool of chromosomes that are candidates
-     *                               for the next evolved population. Any
-     *                               chromosomes that are modified by this
-     *                               genetic operator that should be considered
-     *                               for natural selection should be added to
-     *                               the candidate chromosomes.
-     */
-    public void operate( final Configuration a_activeConfiguration,
-                         final Chromosome[] a_population,
-                         final List a_candidateChromosomes )
-    {
-        // Just loop over the chromosomes in the population, make a copy of
-        // each one, and then add that copy to the candidate chromosomes
-        // pool so that it'll be considered for natural selection during the
-        // next phase of evolution.
-        // -----------------------------------------------------------------
-        for ( int i = 0; i < a_population.length; i++ )
-        {
-            a_candidateChromosomes.add( a_population[ i ].clone() );
-        }
-    }
-}
-    </pre>
+<i><font color=#808080>/**</font></i>
+<i><font color=#808080> * The reproduction operator makes a copy of each Chromosome in the</font></i>
+<i><font color=#808080> * population and adds it to the list of candidate chromosomes. This</font></i>
+<i><font color=#808080> * essentially guarantees that each Chromosome in the current population</font></i>
+<i><font color=#808080> * remains a candidate for selection for the next population.</font></i>
+<i><font color=#808080> */</font></i>
+<b><font color=#000080>public</font></b> <b><font color=#000080>class</font></b> <font color=#000000>ReproductionOperator</font> <b><font color=#000080>implements</font></b> <font color=#000000>GeneticOperator</font>
+<font color=#000000>{</font>
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * The operate method will be invoked on each of the genetic operators</font></i>
+<i><font color=#808080>     * referenced by the current Configuration object during the evolution</font></i>
+<i><font color=#808080>     * phase. Operators are given an opportunity to run in the order that</font></i>
+<i><font color=#808080>     * they are added to the Configuration. Implementations of this method</font></i>
+<i><font color=#808080>     * may reference the population of Chromosomes as it was at the beginning</font></i>
+<i><font color=#808080>     * of the evolutionary phase or the candidate Chromosomes, which are the</font></i>
+<i><font color=#808080>     * results of prior genetic operators. In either case, only Chromosomes</font></i>
+<i><font color=#808080>     * added to the list of candidate chromosomes will be considered for</font></i>
+<i><font color=#808080>     * natural selection. Implementations should never modify the original</font></i>
+<i><font color=#808080>     * population.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @param a_activeConfiguration The current active genetic configuration.</font></i>
+<i><font color=#808080>     * @param a_population The population of chromosomes from the current</font></i>
+<i><font color=#808080>     *                     evolution prior to exposure to any genetic operators.</font></i>
+<i><font color=#808080>     *                     Chromosomes in this array should never be modified.</font></i>
+<i><font color=#808080>     * @param a_candidateChromosomes The pool of chromosomes that are candidates</font></i>
+<i><font color=#808080>     *                               for the next evolved population. Any</font></i>
+<i><font color=#808080>     *                               chromosomes that are modified by this</font></i>
+<i><font color=#808080>     *                               genetic operator that should be considered</font></i>
+<i><font color=#808080>     *                               for natural selection should be added to</font></i>
+<i><font color=#808080>     *                               the candidate chromosomes.</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>void</font></b> <font color=#000000>operate</font><font color=#000000>(</font> <b><font color=#000080>final</font></b> <font color=#000000>Configuration</font> <font color=#000000>a_activeConfiguration</font><font color=#000000>,</font>
+                         <b><font color=#000080>final</font></b> <font color=#000000>Chromosome</font><font color=#000000>[</font><font color=#000000>]</font> <font color=#000000>a_population</font><font color=#000000>,</font>
+                         <b><font color=#000080>final</font></b> <font color=#000000>List</font> <font color=#000000>a_candidateChromosomes</font> <font color=#000000>)</font>
+    <font color=#000000>{</font>
+        <i><font color=#808080>// Just loop over the chromosomes in the population, make a copy of</font></i>
+        <i><font color=#808080>// each one, and then add that copy to the candidate chromosomes</font></i>
+        <i><font color=#808080>// pool so that it'll be considered for natural selection during the</font></i>
+        <i><font color=#808080>// next phase of evolution.</font></i>
+        <i><font color=#808080>// -----------------------------------------------------------------</font></i>
+        <b><font color=#000080>for</font></b> <font color=#000000>(</font> <b><font color=#000080>int</font></b> <font color=#000000>i</font> <font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font> <font color=#000000>i</font> <font color=#000000>&lt;</font> <font color=#000000>a_population</font><font color=#000000>.</font><font color=#000000>length</font><font color=#000000>;</font> <font color=#000000>i</font><font color=#000000>+</font><font color=#000000>+</font> <font color=#000000>)</font>
+        <font color=#000000>{</font>
+            <font color=#000000>a_candidateChromosomes</font><font color=#000000>.</font><font color=#000000>add</font><font color=#000000>(</font> <font color=#000000>a_population</font><font color=#000000>[</font> <font color=#000000>i</font> <font color=#000000>]</font><font color=#000000>.</font><font color=#000000>clone</font><font color=#000000>(</font><font color=#000000>)</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <font color=#000000>}</font>
+    <font color=#000000>}</font>
+<font color=#000000>}</font>
+
+</tt>
+</pre>
 
     <p>
       The purpose of this operator is simply to create a copy of each of the
@@ -124,12 +127,14 @@ public class ReproductionOperator implements GeneticOperator
       just requires a single additional call to the Configuration object
       during your normal setup phase:
     </p>
-     
-<pre class="code"> 
-              Configuration conf = new DefaultConfiguration();
-              conf.addGeneticOperator( new ReproductionOperator() );
-</pre>
     
+<pre>
+<tt>
+              <font color=#000000>Configuration</font> <font color=#000000>conf</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>DefaultConfiguration</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+              <font color=#000000>conf</font><font color=#000000>.</font><font color=#000000>addGeneticOperator</font><font color=#000000>(</font> <b><font color=#000080>new</font></b> <font color=#000000>ReproductionOperator</font><font color=#000000>(</font><font color=#000000>)</font> <font color=#000000>)</font><font color=#000000>;</font>
+</tt>
+</pre>
+
     <p>
       The genetic engine will run the population of Chromosomes through
       each of the active genetic operators in the order in which they 
