@@ -37,7 +37,7 @@ public class GenotypeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public GenotypeTest() {
   }
@@ -288,14 +288,9 @@ public class GenotypeTest
     assertEquals(false, genotype.equals(null));
     Genotype genotype2 = new Genotype(conf, chroms);
     assertTrue(genotype.equals(genotype2));
-    try {
-      //provoke an exception because active configuration not yet set
-      assertEquals(genotype.toString(), genotype2.toString());
-      fail();
-    }
-    catch (IllegalStateException iex) {
-      ; //this is OK
-    }
+    //active configuration not yet set
+    assertEquals(genotype.toString(), genotype2.toString());
+    //now set active configuration
     chroms[0].setActiveConfiguration(conf);
     assertEquals(genotype.toString(), genotype2.toString());
   }
