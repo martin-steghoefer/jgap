@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -61,8 +61,8 @@ public class Population {
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(int size) {
-    m_chromosomes = new ArrayList(size);
+  public Population(int a_size) {
+    m_chromosomes = new ArrayList(a_size);
   }
 
   /*
@@ -208,7 +208,14 @@ public class Population {
     return m_fittestChromosome;
   }
 
-  private void setChanged(boolean a_changed) {
+  /**
+   *
+   * @param a_changed boolean
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  protected void setChanged(boolean a_changed) {
     m_changed = a_changed;
   }
 
