@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -24,9 +22,8 @@ import junitx.util.*;
  */
 public class NumberGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public NumberGeneTest() {
   }
@@ -40,18 +37,30 @@ public class NumberGeneTest
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testConstruct_0() {
     Gene gene = new NumberGeneImpl(1, 100);
     //following should be possible without exception
     gene.setAllele(new Integer(101));
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testToString_0() {
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(47));
     assertEquals("47", gene.toString());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testToString_1() {
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(102));
@@ -59,30 +68,50 @@ public class NumberGeneTest
     assertTrue(toString >= 1 && toString <= 100);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testGetAllele_0() {
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(33));
     assertEquals(new Integer(33), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testGetAllele_1() {
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(1));
     assertEquals(new Integer(1), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testGetAllele_2() {
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(100));
     assertEquals(new Integer(100), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testHashCode_0() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     Gene gene2 = new NumberGeneImpl(1, 100);
     assertEquals(gene1.hashCode(), gene2.hashCode());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testHashCode_1() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     gene1.setAllele(new Integer(43));
@@ -91,6 +120,10 @@ public class NumberGeneTest
     assertEquals(gene1.hashCode(), gene2.hashCode());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testHashCode_2() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     gene1.setAllele(new Integer(55));
@@ -99,6 +132,10 @@ public class NumberGeneTest
     assertFalse(gene1.hashCode() == gene2.hashCode());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testEquals_0() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     Gene gene2 = new NumberGeneImpl(1, 100);
@@ -106,21 +143,37 @@ public class NumberGeneTest
     assertEquals(gene2, gene1);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testEquals_1() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     assertFalse(gene1.equals(null));
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testEquals_2() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     assertFalse(gene1.equals(new BooleanGene()));
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testEquals_3() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     assertFalse(gene1.equals(new Vector()));
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testEquals_4() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     Gene gene2 = new NumberGeneImpl(1, 99);
@@ -130,12 +183,19 @@ public class NumberGeneTest
 
   /**
    * Set Allele to null, no exception should occur
+   *
+   * @author Klaus Meffert
+   * @since 1.1
    */
   public void testSetAllele_0() {
     Gene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setAllele(null);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testSetAllele_1() {
     Gene gene1 = new NumberGeneImpl(1, 10000);
     try {
@@ -147,7 +207,30 @@ public class NumberGeneTest
     }
   }
 
-  public void testNewGene_0() throws Exception {
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_2() {
+    NumberGene gene1 = new NumberGeneImpl(1, 10000);
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    }
+    );
+    gene1.setAllele("22");
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  public void testNewGene_0()
+      throws Exception {
     Gene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setAllele(new Integer(4711));
     Integer lower1 = (Integer) PrivateAccessor.getField(gene1,
@@ -164,6 +247,43 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_0()
+      throws Exception {
+    Gene gene1 = new NumberGeneImpl(1, 10000);
+    gene1.setAllele(new Integer(4711));
+    Gene gene2 = gene1.newGene();
+    assertEquals(0, gene1.compareTo(gene1));
+    assertEquals(1, gene1.compareTo(gene2));
+    gene2.setAllele(new Integer(4711));
+    assertEquals(0, gene1.compareTo(gene2));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_1()
+      throws Exception {
+    Gene gene1 = new NumberGeneImpl(1, 10000);
+    gene1.setAllele(new Integer(4711));
+    Gene gene2 = new DoubleGene();
+    try {
+      assertEquals(0, gene1.compareTo(gene2));
+      fail();
+    }
+    catch (ClassCastException cex) {
+      ; //this is OK
+    }
+  }
+
+  /**
    * Test implementation of NumberGene, based on IntegerGene
    *
    * @author Klaus Meffert
@@ -173,9 +293,13 @@ public class NumberGeneTest
       extends NumberGene {
     protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
         (long) Integer.MIN_VALUE;
+
     protected int m_upperBounds;
+
     protected int m_lowerBounds;
+
     protected long m_boundsUnitsToIntegerUnits;
+
     public NumberGeneImpl(int a_lowerBounds, int a_upperBounds) {
       m_lowerBounds = a_lowerBounds;
       m_upperBounds = a_upperBounds;
@@ -186,14 +310,16 @@ public class NumberGeneTest
       return new NumberGeneImpl(m_lowerBounds, m_upperBounds);
     }
 
-    public String getPersistentRepresentation() throws
+    public String getPersistentRepresentation()
+        throws
         UnsupportedOperationException {
       return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
           PERSISTENT_FIELD_DELIMITER + m_upperBounds;
     }
 
     public void setValueFromPersistentRepresentation(String
-        a_representation) throws UnsupportedRepresentationException {
+        a_representation)
+        throws UnsupportedRepresentationException {
       // not implemented here!
       // ---------------------
     }
@@ -253,5 +379,4 @@ public class NumberGeneTest
       }
     }
   }
-
 }
