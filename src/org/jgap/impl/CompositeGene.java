@@ -55,7 +55,7 @@ public class CompositeGene
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     /**
      * Represents the delimiter that is used to separate genes in the
@@ -198,19 +198,43 @@ public class CompositeGene
         {
             StringTokenizer tokenizer =
                 new StringTokenizer (a_representation,GENE_DELIMITER);
-            Gene gene;
-            String single_representation;
-            /**@todo read type for every gene and then newly construct it*/
 
-            //now work with the freshly constructed genes
-            // ------------------------------------------
-            for (int i = 0; i < genes.size (); i++)
+            int numberGenes = tokenizer.countTokens();
+            String singleGene;
+            String geneTypeClass;
+            try
             {
-                gene = (Gene) genes.get (i);
-                single_representation = tokenizer.nextToken ();
-                gene.setValueFromPersistentRepresentation (
-                    single_representation);
+                for (int i = 0; i < numberGenes; i++)
+                {
+                    singleGene = tokenizer.nextToken ();
+                    StringTokenizer geneTypeTokenizer =
+                        new StringTokenizer (singleGene,Gene.PERSISTENT_FIELD_DELIMITER);
+
+                    //read type for every gene and then newly construct it
+                    //----------------------------------------------------
+                    geneTypeClass = geneTypeTokenizer.nextToken ();
+                    Class clazz = Class.forName (geneTypeClass);
+                    Gene gene = (Gene)clazz.newInstance();
+
+                    //now work with the freshly constructed genes
+                    // ------------------------------------------
+                    String rep = "";
+                    while (geneTypeTokenizer.hasMoreTokens()) {
+                        if (rep.length() > 0) {
+                            rep += Gene.PERSISTENT_FIELD_DELIMITER;
+                        }
+                        rep += geneTypeTokenizer.nextToken();
+                    }
+                    gene.setValueFromPersistentRepresentation(rep);
+                    addGene(gene);
+                }
+
             }
+            catch (Exception ex)
+            {
+                throw new UnsupportedRepresentationException (ex.getMessage());
+            }
+
         }
     }
 
@@ -229,16 +253,21 @@ public class CompositeGene
         for (int i = 0; i < genes.size (); i++)
         {
             gene = (Gene) genes.get (i);
+
+            //save type with every gene to make the process reversible
+            //--------------------------------------------------------
+            result += gene.getClass().getName();
+            result += gene.PERSISTENT_FIELD_DELIMITER;
+
+            //get persistent representation from each gene itself
             result += gene.getPersistentRepresentation ();
+
             if (i < genes.size () - 1)
             {
                 result += GENE_DELIMITER;
-                /**@todo if GENE_DELIMITER occurs in a StringGene (e.g.)
+                /**@todo if GENE_DELIMITER occurs in a gene (e.g. StringGene)
                  * undertake actions to maintain consistency
                  */
-
-                /**@todo save type with every gene to make the process
-                 * reversible*/
             }
         }
         return result;
