@@ -63,7 +63,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -345,7 +345,7 @@ public class Chromosome
   /**
    * Sets the fitness value of this Chromosome. This method is for use
    * by bulk fitness functions and should not be invokved from anything
-   * else.
+   * else (except test cases).
    *
    * @param a_newFitnessValue a positive integer representing the fitness
    *                          of this Chromosome.
@@ -353,7 +353,7 @@ public class Chromosome
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setFitnessValue(int a_newFitnessValue) {
+  public void setFitnessValue(double a_newFitnessValue) {
     if (a_newFitnessValue > 0) {
       m_fitnessValue = a_newFitnessValue;
     }
