@@ -146,6 +146,8 @@ public class Genotype implements Serializable
         m_chromosomes = a_initialChromosomes;
         m_activeConfiguration = a_activeConfiguration;
 
+        m_fitnessEvaluator = a_fitnessEvaluator;
+
         m_workingPool = new ArrayList();
     }
 
@@ -508,6 +510,11 @@ public class Genotype implements Serializable
                 "The active Configuration object must be set on this " +
                 "Genotype prior to invocation of other operations." );
         }
+    }
+
+    public FitnessEvaluator getFitnessEvaluator()
+    {
+        return m_fitnessEvaluator;
     }
 
 }
