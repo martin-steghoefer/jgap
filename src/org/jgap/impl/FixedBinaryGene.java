@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private int m_length;
 
@@ -189,7 +189,7 @@ public class FixedBinaryGene
       throw new IllegalArgumentException("Length of values must be > 0");
     int len = checkSubLength(from, to);
     int iV = 0;
-    for (int i = from; i < to; i++, iV++) {
+    for (int i = from; i <= to; i++, iV++) {
       if (iV >= values.getLength())
         iV = 0;
       setUnchecked(i, values.getUnchecked(iV));
@@ -199,7 +199,7 @@ public class FixedBinaryGene
   public FixedBinaryGene substring(int m_from, int m_to) {
     int len = checkSubLength(m_from, m_to);
     FixedBinaryGene substring = new FixedBinaryGene(len);
-    for (int i = m_from; i < m_to; i++)
+    for (int i = m_from; i <= m_to; i++)
       substring.setUnchecked(i - m_from, getUnchecked(i));
     return substring;
   }
@@ -217,7 +217,7 @@ public class FixedBinaryGene
       throws IndexOutOfBoundsException {
     checkIndex(from);
     checkIndex(to - 1);
-    int sublen = to - from;
+    int sublen = to - from + 1;
     if (0 > sublen)
       throw new IllegalArgumentException("must have 'from' <= 'to', but has "
                                          + from + " > " + to);
