@@ -34,7 +34,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -140,7 +140,7 @@ public class TournamentSelector
 
   /**
    * Comparator regarding only the fitness value. Best fitness value will
-   * be on first position of resulted sorted list
+   * be on first position of resulting sorted list
    *
    * @author Klaus Meffert
    * @since 2.0
