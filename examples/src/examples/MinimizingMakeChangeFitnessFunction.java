@@ -30,12 +30,17 @@ public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
   private final int m_targetAmount;
 
-  public MinimizingMakeChangeFitnessFunction(int a_targetAmount) {
-    if (a_targetAmount < 1 || a_targetAmount > 99) {
-      throw new IllegalArgumentException(
-          "Change amount must be between 1 and 99 cents.");
-    }
-    m_targetAmount = a_targetAmount;
+  public static final int MAX_BOUND = 1000;
+
+  public MinimizingMakeChangeFitnessFunction( int a_targetAmount )
+  {
+      if( a_targetAmount < 1 || a_targetAmount >= MAX_BOUND )
+      {
+          throw new IllegalArgumentException(
+              "Change amount must be between 1 and "+MAX_BOUND+" cents." );
+      }
+
+      m_targetAmount = a_targetAmount;
   }
 
   /**
@@ -43,7 +48,7 @@ public class MinimizingMakeChangeFitnessFunction
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject: The Chromosome instance to evaluate.
+   * @param a_subject The Chromosome instance to evaluate.
    *
    * @return A positive integer reflecting the fitness rating of the given
    *         Chromosome.
@@ -64,6 +69,7 @@ public class MinimizingMakeChangeFitnessFunction
     int changeAmount = amountOfChange(a_subject);
     int totalCoins = getTotalNumberOfCoins(a_subject);
     int changeDifference = Math.abs(m_targetAmount - changeAmount);
+
     // Step 1: Determine distance of amount represented by solution from
     // the target amount. Since we know  the maximum amount of change is
     // 99 cents, we'll subtract the difference in change between the
@@ -72,14 +78,17 @@ public class MinimizingMakeChangeFitnessFunction
     // closer to the target amount and lower values for amounts
     // further away from the target amount.
     // -----------------------------------------------------------------
-    int fitness = (99 - changeDifference);
+    int fitness = ( MAX_BOUND-1 - changeDifference );
+
     // Step 2: If the solution amount equals the target amount, then
     // we add additional fitness points for solutions representing fewer
     // total coins.
     // -----------------------------------------------------------------
-    if (changeAmount == m_targetAmount) {
-      fitness += 100 - (10 * totalCoins);
+    if( changeDifference == 0 )
+    {
+        fitness += MAX_BOUND - ( (MAX_BOUND/100) * totalCoins );
     }
+
     // Make sure fitness value is always positive.
     // -------------------------------------------
     return Math.max(1, fitness);
