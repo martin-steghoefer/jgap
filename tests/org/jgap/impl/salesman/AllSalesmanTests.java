@@ -21,11 +21,7 @@ public class AllSalesmanTests
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
-  public AllSalesmanTests(String s) {
-    super(s);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
