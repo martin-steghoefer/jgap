@@ -31,9 +31,8 @@ package org.jgap;
  * @since 1.0
  */
 public interface NaturalSelector {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -41,6 +40,9 @@ public interface NaturalSelector {
    * @param a_activeConfigurator: The current active Configuration to be used
    *                              during the add process.
    * @param a_chromosomeToAdd: The specimen to add to the pool.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void add(Configuration a_activeConfigurator,
                   Chromosome a_chromosomeToAdd);
@@ -59,14 +61,21 @@ public interface NaturalSelector {
    * @param a_howManyToSelect: The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
   public Population select(Configuration a_activeConfiguration,
-                             int a_howManyToSelect);
+                           int a_howManyToSelect);
 
   /**
    * Empty out the working pool of Chromosomes. This will be invoked after
    * each evolution cycle so that the natural selector can be reused for
    * the next one.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void empty();
 }
