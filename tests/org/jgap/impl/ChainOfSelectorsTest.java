@@ -34,7 +34,7 @@ public class ChainOfSelectorsTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     public ChainOfSelectorsTest ()
     {
@@ -48,6 +48,10 @@ public class ChainOfSelectorsTest
 
     public void testConstruct_0 ()
     {
+        /**todo implement*/
+    }
+
+    public void testClear_0() {
         /**todo implement*/
     }
 
