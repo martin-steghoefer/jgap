@@ -46,7 +46,7 @@ public class CrossoverOperator implements GeneticOperator {
 
       BitSet firstGenes = firstMate.getGenes();
       BitSet secondGenes = secondMate.getGenes();
-      int numberOfGenes = firstGenes.length();
+      int numberOfGenes = firstMate.size();
       int locus = generator.nextInt(numberOfGenes);
       boolean currentAllele;
  

@@ -40,7 +40,7 @@ public class MutationOperator implements GeneticOperator {
 
     for (int i = 0; i < population.length; i++) {
       BitSet genes = population[i].getGenes();
-      int numberOfGenes = genes.length();
+      int numberOfGenes = population[i].size();
 
       for(int j = 0 ; j < numberOfGenes; j++) {
         if(generator.nextInt(mutationRate) == 0) {
