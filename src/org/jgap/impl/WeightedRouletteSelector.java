@@ -19,7 +19,6 @@ package org.jgap.impl;
 
 import java.math.*;
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -32,14 +31,14 @@ import org.jgap.*;
  * values get more slots on the wheel, there's a higher statistical probability
  * that they'll be chosen, but it's not guaranteed.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class WeightedRouletteSelector
     implements NaturalSelector {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -73,6 +72,8 @@ public class WeightedRouletteSelector
    * @param a_activeConfigurator: The current active Configuration to be used
    *                              during the add process.
    * @param a_chromosomeToAdd: The specimen to add to the pool.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized void add(Configuration a_activeConfigurator,
@@ -126,10 +127,13 @@ public class WeightedRouletteSelector
    * @param a_howManyToSelect: The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized Chromosome[] select(Configuration a_activeConfiguration,
-                                          int a_howManyToSelect) {
+  public synchronized Population select(Configuration a_activeConfiguration,
+                                        int a_howManyToSelect) {
     RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
@@ -165,7 +169,7 @@ public class WeightedRouletteSelector
     if (a_howManyToSelect > numberOfEntries) {
       a_howManyToSelect = numberOfEntries;
     }
-    Chromosome[] selections = new Chromosome[a_howManyToSelect];
+    Population population = new Population(a_howManyToSelect);
     // To select each chromosome, we just "spin" the wheel and grab
     // whichever chromosome it lands on.
     // ------------------------------------------------------------
@@ -176,9 +180,9 @@ public class WeightedRouletteSelector
                                      counterValues,
                                      chromosomes);
       selectedChromosome.setIsSelectedForNextGeneration(true);
-      selections[i] = selectedChromosome;
+      population.addChromosome(selectedChromosome);
     }
-    return selections;
+    return population;
   }
 
   /**
@@ -260,6 +264,8 @@ public class WeightedRouletteSelector
 
   /**
    * Empty out the working pool of Chromosomes.
+   *
+   * @author Neil Rotstan
    * @since 1.0
    */
   public synchronized void empty() {
@@ -297,7 +303,7 @@ public class WeightedRouletteSelector
     double scalingFactor =
         totalFitness.divide(new BigDecimal(largestFitnessValue),
                             BigDecimal.ROUND_HALF_UP).doubleValue();
-    // Now divide each of the fitness values by the scaling factor to
+    // Divide each of the fitness values by the scaling factor to
     // scale them down.
     // --------------------------------------------------------------
     counterIterator = m_wheel.values().iterator();
@@ -317,6 +323,8 @@ public class WeightedRouletteSelector
  * the initial fitness value of the Chromosome for which this SlotCounter is
  * to be associated. The reset() method may be reinvoked to begin counting
  * slots for a new Chromosome.
+ *
+ * @author Neil Rotstan
  * @since 1.0
  */
 class SlotCounter {
@@ -328,10 +336,12 @@ class SlotCounter {
    * of constructing them from scratch.
    */
   private double m_fitnessValue = 0.0;
+
   /**
    * The current number of Chromosomes represented by this counter.
    */
   private int m_count = 0;
+
   /**
    * Resets the internal state of this SlotCounter instance so that it can
    * be used to count slots for a new Chromosome.

@@ -17,12 +17,9 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Gene;
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.GeneticOperator;
-import org.jgap.RandomGenerator;
-import java.util.List;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * The crossover operator randomly selects two Chromosomes from the
@@ -32,14 +29,15 @@ import java.util.List;
  * list of candidate Chromosomes. This operation is performed half
  * as many times as there are Chromosomes in the population.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -68,9 +66,9 @@ public class CrossoverOperator
    * @since 1.0
    */
   public void operate(final Configuration a_activeConfiguration,
-                      final Chromosome[] a_population,
+                      final Population a_population,
                       final List a_candidateChromosomes) {
-    int numCrossovers = a_population.length / 2;
+    int numCrossovers = a_population.size() / 2;
     RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
@@ -79,9 +77,9 @@ public class CrossoverOperator
     // --------------------------------------------------------------
     for (int i = 0; i < numCrossovers; i++) {
       Chromosome firstMate = (Chromosome)
-          a_population[generator.nextInt(a_population.length)].clone();
+          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
       Chromosome secondMate = (Chromosome)
-          a_population[generator.nextInt(a_population.length)].clone();
+          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = generator.nextInt(firstGenes.length);

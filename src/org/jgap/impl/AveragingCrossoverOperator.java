@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -80,11 +80,14 @@ public class AveragingCrossoverOperator
    * @param a_activeConfiguration Configuration
    * @param a_population Chromosome[]
    * @param a_candidateChromosomes List
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public void operate(final Configuration a_activeConfiguration,
-                      final Chromosome[] a_population,
+                      final Population a_population,
                       final List a_candidateChromosomes) {
-    int numCrossovers = a_population.length / 2;
+    int numCrossovers = a_population.size() / 2;
     RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
     if (crossoverGenerator == null) {
       crossoverGenerator = generator;
@@ -96,9 +99,9 @@ public class AveragingCrossoverOperator
     // --------------------------------------------------------------
     for (int i = 0; i < numCrossovers; i++) {
       Chromosome firstMate = (Chromosome)
-          a_population[generator.nextInt(a_population.length)].clone();
+          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
       Chromosome secondMate = (Chromosome)
-          a_population[generator.nextInt(a_population.length)].clone();
+          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = getLocus(crossoverGenerator, i, firstGenes.length);
@@ -127,6 +130,9 @@ public class AveragingCrossoverOperator
    * @param index the index of the crossover operation
    * @param max upper boundary for random generator
    * @return crossover location for a given index
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   protected int getLocus(RandomGenerator generator, int index, int max) {
     Integer locus = (Integer)loci.get(new Integer(index));

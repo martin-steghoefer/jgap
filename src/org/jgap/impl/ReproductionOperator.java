@@ -17,11 +17,9 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.GeneticOperator;
+import java.util.*;
 
-import java.util.List;
+import org.jgap.*;
 
 
 /**
@@ -33,7 +31,8 @@ import java.util.List;
  * operators, then Chromosomes in the genotype population may not become
  * candidates for natural selection.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class ReproductionOperator implements GeneticOperator
@@ -62,9 +61,12 @@ public class ReproductionOperator implements GeneticOperator
      *                               modified copies of Chromosomes to this
      *                               list if it's desired for them to be
      *                               considered for natural selection.
+     * @author Neil Rotstan
+     * @author Klaus Meffert
+     * @since 1.0
      */
     public void operate( final Configuration a_activeConfiguration,
-                         final Chromosome[] a_population,
+                         final Population a_population,
                          final List a_candidateChromosomes )
     {
         // Loop over the chromosomes in the population and add each one to
@@ -73,10 +75,7 @@ public class ReproductionOperator implements GeneticOperator
         // refraining from making copies here of every Chromosome will save
         // significant time and memory.
         // ----------------------------------------------------------------
-        for ( int i = 0; i < a_population.length; i++ )
-        {
-            a_candidateChromosomes.add( a_population[ i ] );
-        }
+        a_candidateChromosomes.addAll( a_population.getChromosomes());
     }
 }
 

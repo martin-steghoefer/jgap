@@ -43,7 +43,7 @@ public class MutationOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -121,10 +121,12 @@ public class MutationOperator
    *                               modified copies of Chromosomes to this
    *                               list if it's desired for them to be
    *                               considered for natural selection.
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public void operate(final Configuration a_activeConfiguration,
-                      final Chromosome[] a_population,
+                      final Population a_population,
                       List a_candidateChromosomes) {
     // If the mutation rate is set to zero and dynamic mutation rate is
     // disabled, then we don't perform any mutation.
@@ -149,8 +151,8 @@ public class MutationOperator
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
     // ----------------------------------------------------------------
-    for (int i = 0; i < a_population.length; i++) {
-      Gene[] genes = a_population[i].getGenes();
+    for (int i = 0; i < a_population.size(); i++) {
+      Gene[] genes = a_population.getChromosome(i).getGenes();
       Chromosome copyOfChromosome = null;
       // For each Chromosome in the population...
 
@@ -171,7 +173,7 @@ public class MutationOperator
           if (copyOfChromosome == null) {
             // ...take a copy of it...
             // -----------------------
-            copyOfChromosome = (Chromosome) a_population[i].clone();
+            copyOfChromosome = (Chromosome) a_population.getChromosome(i).clone();
             // ...add it to the candidate pool...
             // ----------------------------------
             a_candidateChromosomes.add(copyOfChromosome);
@@ -224,8 +226,9 @@ public class MutationOperator
   }
 
   /**
+   * @return the MutationRateCalculator used
    *
-   * @return MutationRateCalculator
+   * @author Klaus Meffert
    * @since 1.1
    */
   public MutationRateCalculator getMutationRateCalc() {
@@ -233,8 +236,10 @@ public class MutationOperator
   }
 
   /**
-   *
+   * Sets the MutationRateCalculator to be used for determining the strengt of
+   * mutation
    * @param m_mutationRateCalc MutationRateCalculator
+   * @author Klaus Meffert
    * @since 1.1
    */
   public void setMutationRateCalc(MutationRateCalculator m_mutationRateCalc) {
