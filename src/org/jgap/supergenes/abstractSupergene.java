@@ -1,45 +1,20 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-
 package org.jgap.supergenes;
 
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.StringTokenizer;
-import java.util.Iterator;
-import java.util.Arrays;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import java.net.URLEncoder;
-import java.net.URLDecoder;
-
-import java.io.Serializable;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
-import org.jgap.Gene;
-import org.jgap.RandomGenerator;
-import org.jgap.UnsupportedRepresentationException;
+import org.jgap.*;
 
 /**
  * Combined implementation of both Supergene and SupergeneValidator.
@@ -49,11 +24,15 @@ import org.jgap.UnsupportedRepresentationException;
  *  Supergene a_forSupergene) isValid (Gene [], Supergene)}
  *  method. For more complex cases, you may need to set your own
  * {@link org.jgap.supergenes.Validator Validator}.
+ *
+ * @author Audrius Meskauskas
+ * @since 2.0
  */
-
 public abstract class abstractSupergene
-    implements Supergene, supergeneValidator, Serializable
- {
+    implements Supergene, supergeneValidator, Serializable {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
     /**
      * This field separates gene class name from
@@ -399,7 +378,7 @@ public abstract class abstractSupergene
      * @throws UnsupportedRepresentationException
      *
      * @author Audrius Meskauskas
-     * @since 1.1
+     * @since 2.0
      */
     public void setValueFromPersistentRepresentation(String a_representation)
       throws UnsupportedRepresentationException {
@@ -665,6 +644,5 @@ public abstract class abstractSupergene
         * The default implementation does nothing. */
        public void setFromPersistent(String a_from) {
        }
-
 
 }

@@ -20,6 +20,9 @@ import org.jgap.*;
 
 public abstract class Validator implements supergeneValidator {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
     /** {@inheritDoc} */
     public abstract boolean isValid(Gene[] genes, Supergene for_supergene);
 
