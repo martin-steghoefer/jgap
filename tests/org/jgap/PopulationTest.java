@@ -19,30 +19,31 @@
 package org.jgap;
 
 import junit.framework.*;
+import junitx.util.*;
 
 /**
- * Test suite for all tests of package org.jgap
-*
+ * Tests for Population class
+ *
  * @author Klaus Meffert
- * @since 1.1
+ * @since 2.0
  */
-public class AllBaseTests
-    extends TestSuite {
+public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
-  public AllBaseTests() {
+  public PopulationTest() {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
-    suite.addTest(ChromosomeTest.suite());
-    suite.addTest(ConfigurationTest.suite());
-    suite.addTest(DefaultFitnessEvaluatorTest.suite());
-    suite.addTest(FitnessFunctionTest.suite());
-    suite.addTest(GenotypeTest.suite());
-    suite.addTest(PopulationTest.suite());
+    TestSuite suite = new TestSuite(PopulationTest.class);
     return suite;
   }
+
+  public void testConstruct_0() {
+    /**@todo implement*/
+  }
+
+  /**@todo add further tests*/
+
 }
