@@ -50,7 +50,7 @@ public class StringGene
     public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.6 $";
+    private final static String CVS_REVISION = "$Revision: 1.7 $";
 
     private int m_minLength;
     private int m_maxLength;
@@ -64,13 +64,14 @@ public class StringGene
      */
     protected String m_value = null;
 
-    private void init() {
+    private void init ()
+    {
         rn = new Random ();
     }
 
     public StringGene ()
     {
-        init();
+        init ();
     }
 
     /**
@@ -109,7 +110,7 @@ public class StringGene
                 "minimum length must be smaller than"
                 + " or equal to maximum length!");
         }
-        init();
+        init ();
         m_minLength = a_minLength;
         m_maxLength = a_maxLength;
         setAlphabet (a_alphabet);
@@ -264,17 +265,20 @@ public class StringGene
             }
             else
             {
-                if (valueRepresentation.equals(("\"\""))) {
+                if (valueRepresentation.equals ( ("\"\"")))
+                {
                     tempValue = "";
                 }
-                else {
+                else
+                {
                     tempValue = valueRepresentation;
                 }
             }
 
             //check if minLength and maxLength are violated
             //---------------------------------------------
-            if (tempValue != null) {
+            if (tempValue != null)
+            {
                 if (m_minLength > tempValue.length ())
                 {
                     throw new UnsupportedRepresentationException (
@@ -456,10 +460,12 @@ public class StringGene
         }
     }
 
-    public int size() {
-        return m_value.length();
+    public int size ()
+    {
+        return m_value.length ();
 
     }
+
     public int getMaxLength ()
     {
         return m_maxLength;
@@ -492,21 +498,21 @@ public class StringGene
      * @author Klaus Meffert
      * @since 1.1
      */
-    public void setAlphabet (String m_alphabet)
+    public void setAlphabet (String a_alphabet)
     {
         //check if a substring is equal to the PERSISTENT_FIELD_DELIMITER
         //which is not allowed currently
         //---------------------------------------------------------------
-        if (containsString (m_alphabet, PERSISTENT_FIELD_DELIMITER))
+        if (containsString (a_alphabet, PERSISTENT_FIELD_DELIMITER))
         {
-            throw new IllegalArgumentException ("The alphabet may not contain a"
-                +
-                " substring equal to the persistent field delimiter (which is "
+            throw new IllegalArgumentException (
+                "The alphabet may not contain a "
+                + "substring equal to the persistent field delimiter (which is "
                 + PERSISTENT_FIELD_DELIMITER
                 + " currently).");
         }
         /**@todo optionally check if alphabet contains doublettes*/
-        this.m_alphabet = m_alphabet;
+        this.m_alphabet = a_alphabet;
     }
 
     /**
@@ -526,22 +532,24 @@ public class StringGene
         }
         else
         {
-            if (m_value.equals("")) {
-             return "\"\"";
+            if (m_value.equals (""))
+            {
+                return "\"\"";
             }
-            else {
+            else
+            {
                 return m_value.toString ();
             }
         }
     }
 
     /**
-     * Compares this DoubleGene with the given object and returns true if
-     * the other object is a DoubleGene and has the same value (allele) as
-     * this DoubleGene. Otherwise it returns false.
+     * Compares this Gene with the given object and returns true if
+         * the other object is a Gene of this type and has the same value (allele) as
+     * this Gene. Otherwise it returns false.
      *
-     * @param other the object to compare to this DoubleGene for equality.
-     * @return true if this DoubleGene is equal to the given object,
+     * @param other the object to compare to this Gene for equality.
+     * @return true if this Gene is equal to the given object,
      *         false otherwise.
      *
      * @author Klaus Meffert
@@ -582,6 +590,19 @@ public class StringGene
         {
             return m_value.hashCode ();
         }
+    }
+
+    /**
+     * Retrieves the String value of this Gene, which may be more convenient in
+     * some cases than the more general getAllele() method.
+     *
+     * @return the String value of this Gene.
+     *
+     * @since 1.1
+     */
+    public String stringValue ()
+    {
+        return (String) m_value;
     }
 
     /**
@@ -646,11 +667,27 @@ public class StringGene
      * element at given index (NumberGenes only have one atomic element)
      * @param index index of atomic element, between 0 and size()-1
      * @param a_percentage percentage of mutation (greater than -1 and smaller
-     * than 1).
+     *        than 1).
+     *
+     * @author Klaus Meffert
+     * @since 1.1
      */
     public void applyMutation (int index, double a_percentage)
     {
-        /**@todo implement*/
+        String s = stringValue ();
+        int ch = s.charAt (index);
+        int newValue = (int) Math.round (ch * (1.0d + a_percentage));
+
+        // Set mutated character by concatenating the String by using "ch"
+        // ---------------------------------------------------------------
+        s = s.substring (0, index) + ch + s.substring (index + 1);
+
+        setAllele (s);
+
+        // If the value isn't in the alphabet of this Gene
+        //  Gene, map it to a value within the alphabet closest to wanted value.
+        // -------------------------------------------------------------
+        /**@todo implement       mapValueToWithinBounds ();*/
     }
 
 }
