@@ -19,7 +19,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -34,15 +33,13 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene
     implements Gene {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Represents the constant range of values supported by doubles.
    */
-  protected final static double DOUBLE_RANGE = Double.MAX_VALUE -
-      Double.MIN_VALUE;
+  protected final static double DOUBLE_RANGE = Double.MAX_VALUE;
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -75,7 +72,7 @@ public class DoubleGene
    * @since 1.1
    */
   public DoubleGene() {
-    m_lowerBounds = Double.MIN_VALUE;
+    m_lowerBounds = - ( Double.MAX_VALUE / 2);
     m_upperBounds = Double.MAX_VALUE;
     calculateBoundsUnitsToDoubleUnitsRatio();
   }
@@ -139,7 +136,8 @@ public class DoubleGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public String getPersistentRepresentation() throws
+  public String getPersistentRepresentation()
+      throws
       UnsupportedOperationException {
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
@@ -169,7 +167,8 @@ public class DoubleGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setValueFromPersistentRepresentation(String a_representation) throws
+  public void setValueFromPersistentRepresentation(String a_representation)
+      throws
       UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
@@ -306,12 +305,20 @@ public class DoubleGene
       // -----------------------------------------------------------------
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
+/*
+        double mult = (DOUBLE_RANGE - d_value.doubleValue())
+            / DOUBLE_RANGE;
+        m_value = new Double( (m_upperBounds - m_lowerBounds) * mult +
+                             m_lowerBounds);
+        double m = ( (Double) m_value).doubleValue();
+*/
         double differenceFromDoubleMin = Double.MIN_VALUE +
             d_value.doubleValue();
         double differenceFromBoundsMin =
             (differenceFromDoubleMin / m_boundsUnitsToDoubleUnits);
         m_value =
             new Double(m_upperBounds + differenceFromBoundsMin);
+        System.err.println("XXXXXXXXXX");
       }
     }
   }
@@ -351,5 +358,24 @@ public class DoubleGene
   public void applyMutation(int index, double a_percentage) {
     double newValue = doubleValue() * (1 + a_percentage);
     setAllele(new Double(newValue));
+  }
+
+  public void setAllele(Object a_newValue) {
+    Double d = (Double) a_newValue;
+    if (a_newValue != null) {
+      double fromD = d.doubleValue();
+      if (fromD < m_lowerBounds || fromD > m_upperBounds) {
+        throw new IllegalArgumentException(
+            "Allele must be a double value matching"
+            + " the lower and upper bounds of the"
+            + " chromosome ["
+            +m_lowerBounds
+            +", "
+            +m_upperBounds
+            +"] !");
+      }
+    }
+    m_value = a_newValue;
+    mapValueToWithinBounds();
   }
 }
