@@ -16,16 +16,12 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package perf;
+package org.jgap.perf;
 
-import org.jgap.Gene;
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.Genotype;
-import org.jgap.FitnessFunction;
-import org.jgap.impl.DefaultConfiguration;
-import org.jgap.impl.*;
 import java.util.*;
+
+import org.jgap.*;
+import org.jgap.impl.*;
 
 /**
  * This class provides an implementation of an overall performance test.
