@@ -114,7 +114,8 @@ public abstract class abstractSupergene implements Supergene, Serializable {
     /** Creates a new instance of this Supergene class with the same number of
      * genes, calling newGene for each subgene. The class, derived from this
      * abstract supergene will be instantiated
-     * (not the instance of abstractSupergene itself. */
+     * (not the instance of abstractSupergene itself.
+     * */
     public Gene newGene() {
         Gene [] g = new Gene[m_genes.length];
         for (int i = 0; i < m_genes.length; i++) {
@@ -133,7 +134,6 @@ public abstract class abstractSupergene implements Supergene, Serializable {
             throw new Error("This should not happen. Is the parameterless "+
             "constructor provided fo "+getClass().getName()+"?");
         }
-
     }
 
     /** Maximal number of retries for applyMutation and setToRandomValue.
@@ -220,7 +220,19 @@ public abstract class abstractSupergene implements Supergene, Serializable {
      }
 
     /** Set of supergene allele values that cannot mutate. */
-    static Set [] m_immutable = new Set[1];
+    private static Set [] m_immutable = new Set[1];
+
+    /**
+     * Discards all internal caches, ensuring correct repetetive tests
+     * of performance. Differently from cleanup(), discards also static
+     * references, that are assumed to be useful for the multiple instances
+     * of the Supergene.
+     * Clears the set of the alleles that are known to be immutable.
+     */
+    public static void reset()
+     {
+         m_immutable = new Set[1];
+     }
 
     /**
      * Sets the value of this Gene to a random legal value for the

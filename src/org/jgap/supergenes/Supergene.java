@@ -46,7 +46,7 @@ import org.jgap.Gene;
 public interface Supergene extends Gene {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "0.0.1 alpha-explosive, not for user";
+    final static String CVS_REVISION = "0.0.1 alpha-pre";
 
     /**
      * Test the allele combination of this supergene for validity.
