@@ -20,25 +20,29 @@
 package org.jgap.impl;
 
 import java.util.Random;
-import org.jgap.*;
-import org.jgap.Configuration;
 
-//
+import org.jgap.RandomGenerator;
+
+/**@todo not ready yet*/
+/**@todo not ready yet*/
+/**@todo not ready yet*/
+
+
 /**
  * Gaussian deviation serving as basis for randomly finding a number
  *
  * @author Klaus Meffert
- * @version 1.0
+ * @since 1.1
  */
 public class GaussianRandomGenerator
     implements RandomGenerator
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     private static final double DELTA = 0.0000001;
 
-    private Random rn = new Random();
+    private Random rn = new Random ();
 
     /**
      * Mean of the gaussian deviation
@@ -83,15 +87,15 @@ public class GaussianRandomGenerator
     }
 
     /**
-     * Calculates the mutation rate according to the gaussian derivation.
-     * @param a_activeConfiguration current active configuration
-     * @return calculated mutation rate
+     * Calculates the density of the gaussian derivation for a given input
+     * @param a_x input for computation
+     * @return calculated density
      *
      * @see http://tracer.lcc.uma.es/tws/cEA/GMut.htm
      * @see http://hyperphysics.phy-astr.gsu.edu/hbase/math/gaufcn.html
      * @since 1.1 (same functionality since earlier, but not encapsulated)
      */
-    public int calculateDensity (double x)
+    private int calculateDensity (double a_x)
     {
         if (Math.abs (m_standardDeviation) < DELTA)
         {
@@ -111,9 +115,9 @@ public class GaussianRandomGenerator
 
         rate = (1 / Math.sqrt (2 * Math.PI * m_standardDeviation *
             m_standardDeviation));
-        rate2 = Math.exp ( ( - (x -0.5d)*(x-0.5d)) / (2 * m_standardDeviation *
+        rate2 = Math.exp ( ( - (a_x - 0.5d) * (a_x -
+            0.5d)) / (2 * m_standardDeviation *
             m_standardDeviation));
-        System.err.println ("rate: " + rate + ", rate2: " + rate2 + ", x=" + x);
         rate = rate * rate2;
 
         //width of the curve is approx. 6*m_standardDeviation
@@ -128,33 +132,32 @@ public class GaussianRandomGenerator
 
     public int nextInt ()
     {
-        return rn.nextInt();
+        return rn.nextInt ();
     }
 
     public int nextInt (int ceiling)
     {
-        return nextInt() % ceiling;
+        return nextInt () % ceiling;
     }
 
     public long nextLong ()
     {
-        return rn.nextLong();
+        return rn.nextLong ();
     }
 
     public double nextDouble ()
     {
-        return rn.nextDouble();
+        return rn.nextDouble ();
     }
 
     public float nextFloat ()
     {
-        return rn.nextFloat();
+        return rn.nextFloat ();
     }
 
     public boolean nextBoolean ()
     {
-        return rn.nextBoolean();
+        return rn.nextBoolean ();
     }
-
 
 }
