@@ -15,11 +15,11 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private final static Random RANDOM = new Random();
 
-  private double m_deviation = 0.05;
+  private double m_deviation;
 
   private RandomGenerator m_rg;
 
@@ -28,6 +28,7 @@ public class GaussianMutationOperator
    * deviation of 0.05.
    */
   public GaussianMutationOperator() {
+    this(0.05d);
   }
 
   /**
@@ -56,6 +57,7 @@ public class GaussianMutationOperator
     if (rn instanceof GaussianRandomGenerator) {
       setRandomGenerator((GaussianRandomGenerator)rn);
     }
+    /**@todo resolve the following to not reference a test class*/
     else if (rn instanceof RandomGeneratorForTest) {
       setRandomGenerator(rn);
     }
@@ -88,7 +90,7 @@ public class GaussianMutationOperator
    * @param a_percentage the percentage the gene is to be mutated with
    *
    * @author Klaus Meffert
-   * @since 1.1
+   * @since 2.0
    */
   private void mutateGene(Gene a_gene, double a_percentage) {
     for (int k = 0; k < a_gene.size(); k++) {

@@ -41,7 +41,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -132,7 +132,7 @@ public class MutationOperator
    * @since 1.0
    */
   public void operate(final Population a_population,
-                      List a_candidateChromosomes) {
+                      final List a_candidateChromosomes) {
     // If the mutation rate is set to zero and dynamic mutation rate is
     // disabled, then we don't perform any mutation.
     // ----------------------------------------------------------------
@@ -143,7 +143,6 @@ public class MutationOperator
     // calculate it using the IUniversalRateCalculator instance.
     // Otherwise, go with the mutation rate set upon construction.
     // --------------------------------------------------------------
-    int currentRate;
     boolean mutate = false;
 
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
@@ -156,10 +155,8 @@ public class MutationOperator
       Gene[] genes = a_population.getChromosome(i).getGenes();
       Chromosome copyOfChromosome = null;
       // For each Chromosome in the population...
-
       // ----------------------------------------
       for (int j = 0; j < genes.length; j++) {
-        mutate = false;
 
         if (m_mutationRateCalc != null) {
           // If it's a dynamic mutation rate then let the calculator decide
@@ -188,14 +185,11 @@ public class MutationOperator
             // ...add it to the candidate pool...
             // ----------------------------------
             a_candidateChromosomes.add(copyOfChromosome);
-            // ...then Gaussian mutate all its genes...
-            // ----------------------------------------
+            // ...then mutate all its genes...
+            // -------------------------------
             genes = copyOfChromosome.getGenes();
-          }
-          // Significant architectural changes made here due to
-          // request 708772 (also changed Gene classes)
-          // --------------------------------------------------
 
+          }
           // Process all atomic elements in the gene. For a StringGene
           // this would be the length of the string, for an
           // IntegerGene, it is always one element
@@ -209,7 +203,6 @@ public class MutationOperator
           else {
             mutateGene(genes[j], generator);
           }
-          // End of changed for request 708772
         }
       }
     }
