@@ -18,11 +18,12 @@
 
 package org.jgap;
 
-import org.jgap.event.AllEventTests;
-import org.jgap.impl.AllImplTests;
-import org.jgap.xml.AllXMLTests;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.jgap.data.*;
+import org.jgap.event.*;
+import org.jgap.impl.*;
+import org.jgap.xml.*;
+
+import junit.framework.*;
 
 /**
  * Test suite for all test cases.
@@ -38,16 +39,17 @@ public class AllTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public AllTests() {
   }
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
-    suite.addTest(AllImplTests.suite());
     suite.addTest(AllBaseTests.suite());
+    suite.addTest(AllDataTests.suite());
     suite.addTest(AllEventTests.suite());
+    suite.addTest(AllImplTests.suite());
     suite.addTest(AllXMLTests.suite());
     return suite;
   }
