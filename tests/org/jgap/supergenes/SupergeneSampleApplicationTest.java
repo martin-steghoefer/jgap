@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SupergeneSampleApplicationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public void testSupergeneTotal()
   {
@@ -40,7 +40,9 @@ public class SupergeneSampleApplicationTest extends TestCase {
       abstractSupergene.reset ();
       E_s = new p_SupergeneTest().test ();
 
-      if (E_s == 0) break Test;
+      if (E_s == 0) {
+        break Test;
+      }
 
       assertTrue("Correctness of solution: supergene "+E_s, E_s <3);
 

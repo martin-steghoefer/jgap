@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private int m_length;
 
@@ -58,8 +58,9 @@ public class FixedBinaryGene
     }
     m_length = a_length;
     int bufSize = m_length / 32;
-    if (0 != m_length % 32)
+    if (0 != m_length % 32) {
       ++bufSize;
+    }
     m_value = new int[bufSize];
     for (int i = 0; i < bufSize; i++) {
       m_value[i] = 0;
@@ -185,13 +186,15 @@ public class FixedBinaryGene
   }
 
   public void setBit(int from, int to, FixedBinaryGene values) {
-    if (values.getLength() == 0)
+    if (values.getLength() == 0) {
       throw new IllegalArgumentException("Length of values must be > 0");
-    int len = checkSubLength(from, to);
+    }
+    checkSubLength(from, to);
     int iV = 0;
     for (int i = from; i <= to; i++, iV++) {
-      if (iV >= values.getLength())
+      if (iV >= values.getLength()) {
         iV = 0;
+      }
       setUnchecked(i, values.getUnchecked(iV));
     }
   }
@@ -217,18 +220,20 @@ public class FixedBinaryGene
     checkIndex(from);
     checkIndex(to);
     int sublen = to - from + 1;
-    if (0 >= sublen)
+    if (0 >= sublen) {
       throw new IllegalArgumentException("must have 'from' <= 'to', but has "
                                          + from + " > " + to);
+    }
     return sublen;
   }
 
   protected void checkIndex(int index)
       throws IndexOutOfBoundsException {
-    if (index < 0 || index >= getLength())
+    if (index < 0 || index >= getLength()) {
       throw new IndexOutOfBoundsException("index is " + index
                                           + ", but must be in [0, "
                                           + (getLength() - 1) + "]");
+    }
   }
 
   protected boolean getUnchecked(int index) {

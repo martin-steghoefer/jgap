@@ -25,10 +25,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
-
-  public ConfigurationTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -540,7 +537,7 @@ public class ConfigurationTest
   public void testSetSampleChromosome_0() throws Exception {
     Configuration conf = new Configuration();
     Gene gene = new BooleanGene();
-    Chromosome sample = new Chromosome(gene, 55);
+    new Chromosome(gene, 55);
     try {
       conf.setSampleChromosome(null);
       fail();

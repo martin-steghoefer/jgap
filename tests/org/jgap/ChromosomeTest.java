@@ -23,10 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
-
-  public ChromosomeTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -294,8 +291,9 @@ public class ChromosomeTest
       chrom = new Chromosome(genes);
       // We only want to add unique object, since equal object will
       // return the same hashcode
-      if (!uniqueChromosome.contains(chrom))
+      if (!uniqueChromosome.contains(chrom)) {
         uniqueChromosome.add(chrom);
+      }
     }
 
     //Test to see if enough hashcodes are unique

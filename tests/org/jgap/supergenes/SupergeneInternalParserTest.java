@@ -21,7 +21,7 @@ public class SupergeneInternalParserTest extends TestCase
 {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   class test extends abstractSupergene
   {
@@ -69,7 +69,7 @@ public class SupergeneInternalParserTest extends TestCase
        if (a_t.indexOf(GENE_DELIMITER_HEADING)<0)
         {
           String p = a_ident+"'"+a_t+"'";
-          if (a_print) System.out.println(p);
+          if (a_print) {System.out.println(p);}
           a_buffer.append(p);
         }
        else

@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Determines if object should output debug information.
@@ -134,9 +134,10 @@ public class TestHashcode {
    * @see testHashCodeUniqueness
    */
   public void setFractionUnique(double a_fractionUnique) {
-    if ( (a_fractionUnique < 0.0) || (a_fractionUnique > 1.0))
+    if ( (a_fractionUnique < 0.0) || (a_fractionUnique > 1.0)) {
       throw new IllegalArgumentException(
           "fractionUnique must be between 0.0 and 1.0");
+    }
     m_fractionUnique = a_fractionUnique;
   }
 
@@ -174,10 +175,12 @@ public class TestHashcode {
       }
     }
     m_actualFractionUnique = ( (double) hashCodes.size() / (double) numObjects);
-    if (m_actualFractionUnique < m_fractionUnique)
+    if (m_actualFractionUnique < m_fractionUnique) {
       result = false;
-    else
+    }
+    else {
       result = true;
+    }
     return result;
   }
 
@@ -193,12 +196,14 @@ public class TestHashcode {
     int hashCode;
     long numObjects = a_ObjectList.size();
 
-    if (numObjects < 2)
+    if (numObjects < 2) {
       return false;
+    }
     hashCode = a_ObjectList.get(0).hashCode();
     for (index = 1; index < numObjects; index++) {
-      if (hashCode != a_ObjectList.get(index).hashCode())
+      if (hashCode != a_ObjectList.get(index).hashCode()) {
         return false;
+      }
     }
     return true;
   }

@@ -22,7 +22,7 @@ import java.io.*;
 class p_totalSupergeneTest {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     /** Test supported Supegene features, including performance tests.
      * @return true if the Supergene tests succeded.
@@ -118,6 +118,7 @@ class p_totalSupergeneTest {
             System.in.read ();
         }
         catch (IOException ex) {
+          ;
         }
     }
 

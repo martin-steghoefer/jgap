@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 abstract class p_abstractSupergeneTest {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
     /** Gene index for the dimes gene */
     public static final int DIMES = 0;
@@ -95,7 +95,9 @@ abstract class p_abstractSupergeneTest {
 
         Chromosome bestSolutionSoFar = population.getFittestChromosome ();
 
-        if (!REPORT_ENABLED) return bestSolutionSoFar;
+        if (!REPORT_ENABLED) {
+          return bestSolutionSoFar;
+        }
 
         System.out.println ("\nThe best solution has a fitness value of " +
                             bestSolutionSoFar.getFitnessValue ());
@@ -144,9 +146,11 @@ abstract class p_abstractSupergeneTest {
             try {
                 if (REPORT_ENABLED)
                  System.out.println ("EXCANGING " + amount+" ");
-                // do not solve cases without solutions
-                if (EXISTING_SOLUTIONS_ONLY)
-                 if (!p_Force.solve(amount)) continue Test;
+                 // do not solve cases without solutions
+               if (EXISTING_SOLUTIONS_ONLY)
+                 if (!p_Force.solve(amount)) {
+                   continue Test;
+                 }
 
                 //Force.solve(amount);
 

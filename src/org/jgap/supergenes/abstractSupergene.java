@@ -32,7 +32,7 @@ public abstract class abstractSupergene
     implements Supergene, supergeneValidator, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
     /**
      * This field separates gene class name from
@@ -107,10 +107,13 @@ public abstract class abstractSupergene
      * @return true only if the supergene allele combination is valid
      * or the setValidator (<i>null</i>) has been previously called.
      */
-    public boolean isValid()
-    {
-        if (m_validator==null) return true;
-        return m_validator.isValid (m_genes, this);
+    public boolean isValid() {
+      if (m_validator == null) {
+        return true;
+      }
+      else {
+        return m_validator.isValid(m_genes, this);
+      }
     }
 
     /**
@@ -194,16 +197,18 @@ public abstract class abstractSupergene
         // Return immediately the current value is found in
         // the list of immutable alleles for this position.
         // ---------------------------------------------------
-        if ( index<m_immutable.length )
-         if ( m_immutable [index] !=null )
-          {
-           synchronized (m_immutable)
-            {
-              if ( m_immutable [index] .contains(this) ) return;
+        if ( index<m_immutable.length ) {
+          if (m_immutable[index] != null) {
+            synchronized (m_immutable) {
+              if (m_immutable[index].contains(this))
+                return;
             }
-          };
+          }
+        }
 
-        if ( !isValid() ) throw new Error("Should be valid on entry");
+        if (!isValid()) {
+          throw new Error("Should be valid on entry");
+        }
 
         Object backup = m_genes [index].getAllele();
 
@@ -237,11 +242,13 @@ public abstract class abstractSupergene
                   m_immutable = r;
               }
 
-              if (m_immutable [a_index] == null)
-               m_immutable [a_index] = new TreeSet();
+              if (m_immutable [a_index] == null) {
+                m_immutable[a_index] = new TreeSet();
+              }
 
-              if (m_immutable [a_index] .size()<MAX_IMMUTABLE_GENES)
-               m_immutable [a_index].add(this);
+              if (m_immutable [a_index] .size()<MAX_IMMUTABLE_GENES) {
+                m_immutable[a_index].add(this);
+              }
          };
      }
 

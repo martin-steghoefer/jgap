@@ -22,7 +22,7 @@ class p_withoutSupergeneChangeFitnessFunction
     extends p_SupergeneChangeFitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public p_withoutSupergeneChangeFitnessFunction(int a_targetAmount) {
         super(a_targetAmount);
@@ -45,10 +45,12 @@ class p_withoutSupergeneChangeFitnessFunction
         // valid = true; // uncomment for testing without the condition above
 
         double r;
-        if (!valid) r = 0;
-        else        r = super.evaluate(a_subject);
+        if (!valid) {
+          r = 0;
+        }
+        else {
+          r = super.evaluate(a_subject);
+        }
         return r;
-    }
-
-
+      }
 }
