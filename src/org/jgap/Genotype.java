@@ -37,7 +37,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * The current active Configuration instance.
@@ -264,6 +264,8 @@ public class Genotype
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
+      /**@todo allow GeneticOperator's working on the result produced by
+       * a previous GeneticOperator*/
       ( (GeneticOperator) operatorIterator.next()).operate(m_population,
           m_workingPool);
     }
