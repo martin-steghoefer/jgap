@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -169,6 +169,18 @@ public class Chromosome
       }
     }
     m_genes = a_initialGenes;
+  }
+
+  /**
+   *
+   * @param a_size
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public Chromosome(int a_size) {
+    /**@todo add test case*/
+    m_genes = new Gene[a_size];
   }
 
   /**
