@@ -18,15 +18,11 @@
 
 package org.jgap.impl;
 
-import java.util.Vector;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.RandomGenerator;
-import org.jgap.UnsupportedRepresentationException;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
+import java.util.*;
+
+import org.jgap.*;
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for (abstract) NumberGene class
@@ -38,7 +34,7 @@ public class NumberGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public NumberGeneTest() {
   }
@@ -85,11 +81,33 @@ public class NumberGeneTest
     assertEquals(new Integer(100), gene.getAllele());
   }
 
+  public void testHashCode_0() {
+    Gene gene1 = new NumberGeneImpl(1, 100);
+    Gene gene2 = new NumberGeneImpl(1, 100);
+    assertEquals(gene1.hashCode(), gene2.hashCode());
+  }
+
+  public void testHashCode_1() {
+    Gene gene1 = new NumberGeneImpl(1, 100);
+    gene1.setAllele(new Integer(43));
+    Gene gene2 = new NumberGeneImpl(1, 100);
+    gene2.setAllele(new Integer(43));
+    assertEquals(gene1.hashCode(), gene2.hashCode());
+  }
+
+  public void testHashCode_2() {
+    Gene gene1 = new NumberGeneImpl(1, 100);
+    gene1.setAllele(new Integer(55));
+    Gene gene2 = new NumberGeneImpl(1, 100);
+    gene1.setAllele(new Integer(43));
+    assertFalse(gene1.hashCode() == gene2.hashCode());
+  }
+
   public void testEquals_0() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     Gene gene2 = new NumberGeneImpl(1, 100);
-    assertTrue(gene1.equals(gene2));
-    assertTrue(gene2.equals(gene1));
+    assertEquals(gene1, gene2);
+    assertEquals(gene2, gene1);
   }
 
   public void testEquals_1() {
@@ -110,8 +128,8 @@ public class NumberGeneTest
   public void testEquals_4() {
     Gene gene1 = new NumberGeneImpl(1, 100);
     Gene gene2 = new NumberGeneImpl(1, 99);
-    assertTrue(gene1.equals(gene2));
-    assertTrue(gene2.equals(gene1));
+    assertEquals(gene1, gene2);
+    assertEquals(gene2, gene1);
   }
 
   /**
@@ -230,4 +248,5 @@ public class NumberGeneTest
       return ( (Integer) o1).compareTo(o2);
     }
   }
+
 }
