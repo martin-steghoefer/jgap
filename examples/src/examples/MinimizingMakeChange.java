@@ -19,13 +19,12 @@
 package examples;
 
 import java.io.*;
-
+import javax.xml.parsers.*;
 import org.jgap.*;
 import org.jgap.data.*;
 import org.jgap.impl.*;
 import org.jgap.xml.*;
 import org.w3c.dom.*;
-import javax.xml.parsers.*;
 
 /**
  * This class provides an implementation of the classic "Make change" problem
@@ -47,14 +46,14 @@ import javax.xml.parsers.*;
  * @since 1.0
  */
 public class MinimizingMakeChange {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
    */
   private static final int MAX_ALLOWED_EVOLUTIONS = 50;
+
   /**
    * Executes the genetic algorithm to determine the minimum number of
    * coins necessary to make up the given target amount of change. The
@@ -63,25 +62,28 @@ public class MinimizingMakeChange {
    * @param a_targetChangeAmount The target amount of change for which this
    *                             method is attempting to produce the minimum
    *                             number of coins.
-   *
    * @throws Exception
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
-  public static void makeChangeForAmount(int a_targetChangeAmount) throws
+  public static void makeChangeForAmount(int a_targetChangeAmount)
+      throws
       Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
+
     // Set the fitness function we want to use, which is our
-
     // MinimizingMakeChangeFitnessFunction. We construct it with
-
     // the target amount of change passed in to this method.
-
     // ---------------------------------------------------------
     FitnessFunction myFunc =
         new MinimizingMakeChangeFitnessFunction(a_targetChangeAmount);
     conf.setFitnessFunction(myFunc);
+
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
@@ -100,6 +102,7 @@ public class MinimizingMakeChange {
     sampleGenes[3] = new IntegerGene(0, 4); // Pennies
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
+
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -112,9 +115,10 @@ public class MinimizingMakeChange {
     // Here we also could read in a previous run via XMLManager.readFile(..)
     // ------------------------------------------------
     Genotype population;
+
     try {
-     Document doc = XMLManager.readFile(new File("testJGAP.xml"));
-     population = XMLManager.getGenotypeFromDocument(conf, doc);
+      Document doc = XMLManager.readFile(new File("testJGAP.xml"));
+      population = XMLManager.getGenotypeFromDocument(conf, doc);
     }
     catch (FileNotFoundException fex) {
       population = Genotype.randomInitialGenotype(conf);
@@ -133,8 +137,7 @@ public class MinimizingMakeChange {
 
     // create XML document from generated tree
     DocumentBuilder m_documentCreator;
-    m_documentCreator =
-        DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    m_documentCreator = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     Document XMLDoc2 = m_documentCreator.newDocument();
     DocumentBuilderBase docbuilder = new XMLDocumentBuilder();
     Document xmlDoc = (Document) docbuilder.buildDocument(doc2, XMLDoc2);
@@ -176,6 +179,9 @@ public class MinimizingMakeChange {
    * cents).
    *
    * @param args the command-line arguments.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public static void main(String[] args) {
     if (args.length != 1) {
