@@ -33,7 +33,7 @@ public class CompositeGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -233,6 +233,13 @@ public class CompositeGeneTest
     }
   }
 
+  /**
+   * Set Allele to empty LinkedList, no exception should occur
+   */
+  public void testSetAllele_4() {
+    Gene gene1 = new CompositeGene();
+    gene1.setAllele(new LinkedList());
+  }
   public void testNewGene_0() throws Exception {
     CompositeGene gene1 = new CompositeGene();
     gene1.addGene(new DoubleGene(2.05d, 7.53d), false);
