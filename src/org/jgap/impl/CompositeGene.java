@@ -46,7 +46,7 @@ import org.jgap.*;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Represents the delimiter that is used to separate genes in the
@@ -73,23 +73,62 @@ public class CompositeGene
    */
   private IGeneConstraintChecker m_geneAlleleChecker;
 
+  /**
+   * Holds the configuration object associated with the Gene. The configuration
+   * object is important to obtain referenced objects from it, like the
+   * RandomGenerator.
+   */
+  private Configuration m_configuration;
+
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public CompositeGene() {
-    genes = new Vector();
+    this(new DefaultConfiguration());
   }
 
   /**
-   * Allows to specify which Gene implementation is allowed to be added to the
-   * CompositeGene.
-   *
-   * @param geneTypeAllowed the class of Genes to be allowed to be added to the
-   * CompositeGene
+   * @param a_configuration
    *
    * @author Klaus Meffert
    * @since 2.0
    */
+  public CompositeGene(Configuration a_configuration) {
+    this(null, a_configuration);
+  }
+
+  /**
+   * Allows to specify which Gene implementation is allowed to be added to the
+   * CompositeGene. Uses the DefaultConfiguration.
+   *
+   * @param a_geneTypeAllowed the class of Genes to be allowed to be added to
+   * the CompositeGene.
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public CompositeGene(Gene a_geneTypeAllowed) {
-    this();
-    m_geneTypeAllowed = a_geneTypeAllowed;
+    this(a_geneTypeAllowed, new DefaultConfiguration());
+  }
+
+  /**
+   * Allows to specify which Gene implementation is allowed to be added to the
+   * CompositeGene. Uses the specified Configuration.
+   *
+   * @param a_geneTypeAllowed the class of Genes to be allowed to be added to
+   * the CompositeGene.
+   * @param a_configuration sic.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public CompositeGene(Gene a_geneTypeAllowed, Configuration a_configuration) {
+    m_configuration = a_configuration;
+    genes = new Vector();
+    if (a_geneTypeAllowed != null) {
+      m_geneTypeAllowed = a_geneTypeAllowed;
+    }
   }
 
   public void addGene(Gene a_gene) {
@@ -387,7 +426,7 @@ public class CompositeGene
    * @since 1.1
    */
   public Gene newGene(Configuration a_activeConfiguration) {
-    CompositeGene compositeGene = new CompositeGene();
+    CompositeGene compositeGene = new CompositeGene(a_activeConfiguration);
     Gene gene;
     int geneSize = genes.size();
     for (int i = 0; i < geneSize; i++) {

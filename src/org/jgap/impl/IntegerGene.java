@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -347,7 +347,6 @@ public class IntegerGene
    */
   public void applyMutation(int index, double a_percentage) {
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
-//    int newValue = (int) Math.round(intValue() * (1.0d + a_percentage));
     int newValue = (int) Math.round(intValue() + range);
     setAllele(new Integer(newValue));
   }

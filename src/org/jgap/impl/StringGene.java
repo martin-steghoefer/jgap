@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private int m_minLength;
 
@@ -54,7 +54,12 @@ public class StringGene
 
   private String m_alphabet;
 
-  private Random rn;
+  /**
+   * Holds the configuration object associated with the Gene. The configuration
+   * object is important to obtain referenced objects from it, like the
+   * RandomGenerator.
+   */
+  private Configuration m_configuration;
 
   /**
    * Optional helper class for checking if a given allele value to be set
@@ -67,16 +72,12 @@ public class StringGene
    */
   private String m_value;
 
-  private void init() {
-    rn = new Random();
-  }
-
   /**
    * @author Klaus Meffert
    * @since 1.1
    */
   public StringGene() {
-    init();
+    this(0,0);
   }
 
   /**
@@ -88,7 +89,20 @@ public class StringGene
    * @since 1.1
    */
   public StringGene(int a_minLength, int a_maxLength) {
-    this(a_minLength, a_maxLength, null);
+    this(a_minLength, a_maxLength, new DefaultConfiguration());
+  }
+
+  /**
+   *
+   * @param a_minLength int
+   * @param a_maxLength int
+   * @param a_configuration Configuration
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public StringGene(int a_minLength, int a_maxLength, Configuration a_configuration) {
+    this(a_minLength, a_maxLength,  null, a_configuration);
   }
 
   /**
@@ -96,11 +110,12 @@ public class StringGene
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
    * @param a_alphabet valid aplhabet for allele
+   * @param a_configuration
    *
    * @author Klaus Meffert
-   * @since 1.1
+   * @since 2.0
    */
-  public StringGene(int a_minLength, int a_maxLength, String a_alphabet) {
+  public StringGene(int a_minLength, int a_maxLength, String a_alphabet, Configuration a_configuration) {
     if (a_minLength < 0) {
       throw new IllegalArgumentException(
           "minimum length must be greater than"
@@ -111,10 +126,23 @@ public class StringGene
           "minimum length must be smaller than"
           + " or equal to maximum length!");
     }
-    init();
     m_minLength = a_minLength;
     m_maxLength = a_maxLength;
+    m_configuration = a_configuration;
     setAlphabet(a_alphabet);
+  }
+
+  /**
+   *
+   * @param a_minLength int
+   * @param a_maxLength int
+   * @param a_alphabet String
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  public StringGene(int a_minLength, int a_maxLength, String a_alphabet) {
+    this(a_minLength, a_maxLength, a_alphabet, new DefaultConfiguration());
   }
 
   /**
@@ -399,7 +427,12 @@ public class StringGene
    * @since 1.1
    */
   public Gene newGene(Configuration a_activeConfiguration) {
-    return new StringGene(m_minLength, m_maxLength, m_alphabet);
+    if (a_activeConfiguration == null) {
+      return new StringGene(m_minLength, m_maxLength, m_alphabet);
+    }
+    else {
+      return new StringGene(m_minLength, m_maxLength, m_alphabet, a_activeConfiguration);
+    }
   }
 
   /**
@@ -651,12 +684,12 @@ public class StringGene
       // character. This randomness helps in the process of evolution
       // ------------------------------------------------------------------
       if (index2 < 0 || index2 >= len) {
-        index2 = rn.nextInt(len);
+        index2 = m_configuration.getRandomGenerator().nextInt(len);
       }
       newValue = m_alphabet.charAt(index2);
     }
     else {
-      index2 = rn.nextInt(256);
+      index2 = m_configuration.getRandomGenerator().nextInt(256);
       newValue = (char)index2;
     }
     // Set mutated character by concatenating the String with it
