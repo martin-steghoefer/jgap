@@ -25,55 +25,55 @@ import java.util.EventObject;
  * event name. Standard event names are provided as constants in this class.
  *
  * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
-public class GeneticEvent extends EventObject
-{
-    /**
-     * Public constant representing the name of the event that is fired each
-     * time a Genotype is finished with a single evolution cycle.
-     */
-    public static final String GENOTYPE_EVOLVED_EVENT =
-        "genotype_evolved_event";
+public class GeneticEvent
+    extends EventObject {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-    /**
-     * References the name of this event instance.
-     */
-    private final String m_eventName;
+  /**
+   * Public constant representing the name of the event that is fired each
+   * time a Genotype is finished with a single evolution cycle.
+   */
+  public static final String GENOTYPE_EVOLVED_EVENT =
+      "genotype_evolved_event";
 
+  /**
+   * References the name of this event instance.
+   */
+  private final String m_eventName;
 
-    /**
-     * Constructs a new GeneticEvent of the given name.
-     *
-     * @param a_eventName The name of the event.
-     * @param a_source The genetic object that acted as the source of the
-     *                 event. The type of this object will be dependent on
-     *                 the kind of event (which can be identified by the
-     *                 event name). It may not be null.
-     *
-     * @throws IllegalArgumentException if the given source object is null.
-     *
-     * @author Neil Rotstan
-     * @since 1.0
-     */
-    public GeneticEvent( String a_eventName, Object a_source )
-    {
-        super( a_source );
-        m_eventName = a_eventName;
-    }
+  /**
+   * Constructs a new GeneticEvent of the given name.
+   *
+   * @param a_eventName The name of the event.
+   * @param a_source The genetic object that acted as the source of the
+   *                 event. The type of this object will be dependent on
+   *                 the kind of event (which can be identified by the
+   *                 event name). It may not be null.
+   *
+   * @throws IllegalArgumentException if the given source object is null.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
+   */
+  public GeneticEvent(String a_eventName, Object a_source) {
+    super(a_source);
+    m_eventName = a_eventName;
+  }
 
-
-    /**
-     * Retrieves the name of this event, which can be used to identify the
-     * type of event.
-     *
-     * @return the name of this GeneticEvent instance.
-     *
-     * @author Neil Rotstan
-     * @since 1.0
-     */
-    public String getEventName()
-    {
-        return m_eventName;
-    }
+  /**
+   * Retrieves the name of this event, which can be used to identify the
+   * type of event.
+   *
+   * @return the name of this GeneticEvent instance.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
+   */
+  public String getEventName() {
+    return m_eventName;
+  }
 }
