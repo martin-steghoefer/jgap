@@ -34,7 +34,7 @@ import junitx.util.*;
 public class DoubleGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -257,10 +257,6 @@ public class DoubleGeneTest
     gene2.setAllele(new Double( -0.0d));
     assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
                  gene1.compareTo(gene2));
-  }
-
-  public void testCalculateBoundsUnitsToDoubleUnitsRatio_0() {
-    /**@todo implement*/
   }
 
   public void testApplyMutation_0() {
