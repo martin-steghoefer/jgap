@@ -32,7 +32,7 @@ import junitx.util.*;
 public class IntegerGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public IntegerGeneTest() {
   }
@@ -300,6 +300,54 @@ public class IntegerGeneTest
   }
 
   public void testSetToRandomValue_0() {
-    /**@todo implement*/
+    Gene gene = new IntegerGene(1, 6);
+    gene.setAllele(new Integer(5));
+
+    gene.setToRandomValue(new RandomGeneratorForTest(0.2d));
+    assertEquals(new Integer((int)(0.2d * (6 - 1) + 1)), gene.getAllele());
+  }
+
+  public void testSetToRandomValue_1() throws Exception {
+    Gene gene = new IntegerGene( -1, 7);
+    gene.setAllele(new Integer(4));
+
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+
+    gene.setToRandomValue(new RandomGeneratorForTest(0.3d));
+    assertEquals(new Integer((int)(0.3d * (7 + 1) - 1)), gene.getAllele());
+  }
+
+   public void testSetToRandomValue_2() throws Exception {
+     Gene gene = new IntegerGene( -2, -1);
+     gene.setAllele(new Integer(4));
+
+     Configuration conf = new DefaultConfiguration();
+     Genotype.setConfiguration(conf);
+
+     gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
+     assertEquals(new Integer((int)(0.8d * ( -1 + 2) - 2)), gene.getAllele());
+  }
+
+  public void testSetToRandomValue_3(){
+    IntegerGene gene = new IntegerGene(0, 8);
+    gene.setAllele(new Integer(5));
+    gene.setToRandomValue(new RandomGeneratorForTest(4));
+
+    if (gene.intValue() < 0 ||
+        gene.intValue() > 8) {
+      fail();
+    }
+  }
+
+  public void testSetToRandomValue_4(){
+    IntegerGene gene = new IntegerGene(1, 6);
+    gene.setAllele(new Integer(2));
+    gene.setToRandomValue(new RandomGeneratorForTest(3));
+
+    if (gene.intValue() < 1 ||
+        gene.intValue() > 6) {
+      fail();
+    }
   }
 }
