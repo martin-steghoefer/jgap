@@ -34,7 +34,7 @@ import junit.framework.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public PopulationTest() {
   }
@@ -203,5 +203,28 @@ public class PopulationTest extends TestCase {
     assertEquals(p.determineFittestChromosome(), fittest);
   }
 
-}
+  public void testSize_0() {
+    Population p = new Population(10);
+    // size only counts number of "real" chromosomes not placeholders
+    assertEquals(0, p.size());
+    Gene g = new DoubleGene();
+    Chromosome c = new Chromosome(g, 5);
+    p.addChromosome(c);
+    assertEquals(1, p.size());
+    c = new Chromosome(g, 3);
+    p.addChromosome(c);
+    assertEquals(2, p.size());
+  }
 
+  public void testIterator_0() {
+    Population p = new Population(10);
+    Iterator it = p.iterator();
+    assertFalse(it.hasNext());
+    // size only counts number of "real" chromosomes not placeholders
+    assertEquals(0, p.size());
+    Gene g = new DoubleGene();
+    Chromosome c = new Chromosome(g, 5);
+    p.addChromosome(c);
+    assertTrue(it.hasNext());
+  }
+}
