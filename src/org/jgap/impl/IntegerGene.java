@@ -344,4 +344,25 @@ public class IntegerGene extends NumberGene
             m_boundsUnitsToIntegerUnits = INTEGER_RANGE / divisor;
         }
     }
+
+    /**
+     * See interface Gene for description
+     * @param index must always be 1 (because there is only 1 atomic element)
+     * @param a_percentage percentage of mutation (greater than -1 and smaller
+     *        than 1).
+     *
+     * @author Klaus Meffert
+     * @since 1.1
+     */
+    public void applyMutation (int index, double a_percentage)
+    {
+        int newValue = (int) Math.round (intValue () * (1.0d + a_percentage));
+        setAllele (new Integer (newValue));
+
+        // If the value isn't between the upper and lower bounds of this
+       //  Gene, map it to a value within those bounds.
+       // -------------------------------------------------------------
+       mapValueToWithinBounds ();
+   }
+
 }
