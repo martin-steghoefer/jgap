@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * This field separates gene class name from
@@ -215,6 +215,9 @@ public class CompositeGene
    * @since 1.1
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
+    if (a_numberGenerator == null) {
+      throw new IllegalArgumentException("Random generatoe must not be null!");
+    }
     Gene gene;
     for (int i = 0; i < genes.size(); i++) {
       gene = (Gene) genes.get(i);
