@@ -22,12 +22,9 @@ import junit.framework.*;
 public class EvaluatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static double DELTA = 0.00000001d;
-
-  public EvaluatorTest() {
-  }
 
   public void setUp() {
     Genotype.setConfiguration(null);

@@ -15,10 +15,7 @@ import junit.framework.*;
 public class PermutingConfigurationTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
-
-  public PermutingConfigurationTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
