@@ -37,7 +37,7 @@ public class IntegerGeneTest
     extends TestCase
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     public IntegerGeneTest ()
     {
@@ -193,70 +193,129 @@ public class IntegerGeneTest
     public void testCleanup ()
     {
         //cleanup should do nothing!
-        Gene gene = new IntegerGene(1,6);
-        Gene copy = gene.newGene(null);
-        gene.cleanup();
-        assertEquals(copy, gene);
+        Gene gene = new IntegerGene (1, 6);
+        Gene copy = gene.newGene (null);
+        gene.cleanup ();
+        assertEquals (copy, gene);
     }
 
-    public void testPersistentRepresentation_0() throws Exception {
+    public void testPersistentRepresentation_0 ()
+        throws Exception
+    {
         Gene gene1 = new IntegerGene (2, 753);
-        gene1.setAllele(new Integer(45));
-        String pres1 = gene1.getPersistentRepresentation();
+        gene1.setAllele (new Integer (45));
+        String pres1 = gene1.getPersistentRepresentation ();
         Gene gene2 = new IntegerGene ();
-        gene2.setValueFromPersistentRepresentation(pres1);
-        String pres2 = gene2.getPersistentRepresentation();
-        assertEquals(pres1, pres2);
+        gene2.setValueFromPersistentRepresentation (pres1);
+        String pres2 = gene2.getPersistentRepresentation ();
+        assertEquals (pres1, pres2);
     }
 
     public void testCompareToNative_0 ()
     {
         Gene gene1 = new IntegerGene (13, 65);
-        gene1.setAllele(new Integer(58));
+        gene1.setAllele (new Integer (58));
         Gene gene2 = new IntegerGene (53, 67);
-        gene2.setAllele(new Integer(59));
-        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
-            gene1.compareTo(gene2));
+        gene2.setAllele (new Integer (59));
+        assertEquals ( ( (Integer) gene1.getAllele ()).compareTo (gene2.
+            getAllele ()),
+            gene1.compareTo (gene2));
     }
 
     public void testCompareToNative_1 ()
     {
         Gene gene1 = new IntegerGene (13, 65);
-        gene1.setAllele(new Integer(58));
+        gene1.setAllele (new Integer (58));
         Gene gene2 = new IntegerGene (53, 67);
-        gene2.setAllele(new Integer(58));
-        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
-            gene1.compareTo(gene2));
+        gene2.setAllele (new Integer (58));
+        assertEquals ( ( (Integer) gene1.getAllele ()).compareTo (gene2.
+            getAllele ()),
+            gene1.compareTo (gene2));
     }
 
     public void testCompareToNative_2 ()
     {
         Gene gene1 = new IntegerGene (13, 65);
-        gene1.setAllele(new Integer(59));
+        gene1.setAllele (new Integer (59));
         Gene gene2 = new IntegerGene (53, 67);
-        gene2.setAllele(new Integer(58));
-        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
-            gene1.compareTo(gene2));
+        gene2.setAllele (new Integer (58));
+        assertEquals ( ( (Integer) gene1.getAllele ()).compareTo (gene2.
+            getAllele ()),
+            gene1.compareTo (gene2));
     }
 
     public void testCompareToNative_3 ()
     {
         Gene gene1 = new IntegerGene (13, 65);
-        gene1.setAllele(new Integer(59));
+        gene1.setAllele (new Integer (59));
         Gene gene2 = new IntegerGene (53, 67);
-        gene2.setAllele(new Integer(-59));
-        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
-            gene1.compareTo(gene2));
+        gene2.setAllele (new Integer ( -59));
+        assertEquals ( ( (Integer) gene1.getAllele ()).compareTo (gene2.
+            getAllele ()),
+            gene1.compareTo (gene2));
     }
 
     public void testCompareToNative_4 ()
     {
         Gene gene1 = new IntegerGene (13, 65);
-        gene1.setAllele(new Integer(0));
+        gene1.setAllele (new Integer (0));
         Gene gene2 = new IntegerGene (53, 67);
-        gene2.setAllele(new Integer(-0));
-        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
-            gene1.compareTo(gene2));
+        gene2.setAllele (new Integer ( -0));
+        assertEquals ( ( (Integer) gene1.getAllele ()).compareTo (gene2.
+            getAllele ()),
+            gene1.compareTo (gene2));
+    }
+
+    public void testApplyMutation_0() {
+        IntegerGene gene = new IntegerGene (0,100);
+        gene.setAllele (new Integer (50));
+        gene.applyMutation(0, 0.0d);
+        assertEquals(50, gene.intValue());
+    }
+
+    public void testApplyMutation_1() {
+        IntegerGene gene = new IntegerGene (0,100);
+        gene.setAllele (new Integer (50));
+        gene.applyMutation(0, 0.5d);
+        assertEquals(Math.round(50*1.5d), gene.intValue());
+    }
+
+    public void testApplyMutation_2() {
+        IntegerGene gene = new IntegerGene (0,100);
+        gene.setAllele (new Integer (50));
+        gene.applyMutation(0, 0.9d);
+        assertEquals(Math.round(50*1.9d), gene.intValue());
+    }
+
+    public void testApplyMutation_3() {
+        IntegerGene gene = new IntegerGene (0,100);
+        gene.setAllele (new Integer (50));
+        gene.applyMutation(0, 1.9d);
+        assertEquals(Math.round(50), gene.intValue());
+    }
+
+    public void testApplyMutation_4() {
+        IntegerGene gene = new IntegerGene (0, 100);
+        gene.setAllele (new Integer (60));
+        /**@todo this is a curious behavior, isn't it?
+         * Also see previous test case where same result occurs with different
+         * input!*/
+        gene.applyMutation(0, 1.9d);
+        assertEquals(Math.round(50), gene.intValue());
+    }
+
+    public void testApplyMutation_5() {
+        IntegerGene gene = new IntegerGene (0, 100);
+        gene.setAllele (new Integer (60));
+        gene.applyMutation(0, -1.0d);
+        assertEquals(Math.round(0), gene.intValue());
+    }
+
+    public void testApplyMutation_6() {
+        IntegerGene gene = new IntegerGene (0, 100);
+        gene.setAllele (new Integer (60));
+        gene.applyMutation(0, -0.4d);
+        assertEquals(Math.round(60*(1-0.4d)), gene.intValue());
     }
 
     public void testSetToRandomValue_0 ()
