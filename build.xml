@@ -1,0 +1,12 @@
+<project name="jgap" default="jar" basedir=".">
+  <property name="src" value="."/>
+
+  <target name="compile">
+    <javac srcdir="${src}"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar jarfile="jgap.jar" basedir="${src}" 
+         includes="LICENSE, org/jgap/*.class"/>
+  </target>
+</project>
