@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,11 +15,15 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jgap.*;
+import java.util.*;
+import junitx.util.PrivateAccessor;
 
 /**
  * Tests for WeightedRouletteSelector class
@@ -30,24 +32,114 @@ import junit.framework.TestSuite;
  * @author Klaus Meffert
  */
 public class WeightedRouletteSelectorTest
-    extends TestCase
-{
+    extends TestCase {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  public WeightedRouletteSelectorTest() {
+  }
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+  public static Test suite() {
+    TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
+    return suite;
+  }
 
-    public WeightedRouletteSelectorTest ()
-    {
+  /**
+   * Test if construction possible without failure
+   */
+  public void testConstruct_0() {
+    new WeightedRouletteSelector();
+  }
+
+  public void testAdd_0() throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    Configuration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(5);
+    chrom.setActiveConfiguration(conf);
+    selector.add(conf, chrom);
+    Map chromosomes = (Map) PrivateAccessor.getField(selector,
+        "m_wheel");
+    assertEquals(1, chromosomes.size());
+    Iterator it = chromosomes.keySet().iterator();
+    assertEquals(chrom, it.next());
+    selector.add(null, chrom);
+    assertEquals(1, chromosomes.size());
+    it = chromosomes.keySet().iterator();
+    assertEquals(chrom, it.next());
+  }
+
+  public void testSelect_00() throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    thirdBestChrom.setFitnessValue(10);
+    selector.add(null, thirdBestChrom);
+    try {
+      Chromosome[] bestChroms = selector.select(null, 1);
+      fail();
     }
-
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (WeightedRouletteSelectorTest.class);
-        return suite;
+    catch (NullPointerException nex) {
+      ;//this is OK
     }
+  }
 
-    public void testConstruct_0() {
-        /**todo implement*/
-    }
+  public void testSelect_0() throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    // add first chromosome
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 4);
+    thirdBestChrom.setFitnessValue(10);
+    selector.add(null, thirdBestChrom);
+    // add second chromosome
+    // ---------------------
+    gene = new DoubleGene();
+    gene.setAllele(new Double(2.3d));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(12);
+    selector.add(null, bestChrom);
+    // add third chromosome
+    // ---------------------
+    gene = new IntegerGene();
+    gene.setAllele(new Integer(444));
+    Chromosome secondBestChrom = new Chromosome(gene, 2);
+    secondBestChrom.setFitnessValue(11);
+    selector.add(null, secondBestChrom);
+    // receive top 1 (= best) chromosome
+    // ---------------------------------
+    DefaultConfiguration conf = new DefaultConfiguration();
+    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    randgen.setNextDouble(0.9d);
+    conf.setRandomGenerator(randgen);
+    Chromosome[] bestChroms = selector.select(conf, 1);
+    assertEquals(1, bestChroms.length);
+    assertEquals(thirdBestChrom, bestChroms[0]);
+    // now select top two chromosomes
+    // ------------------------------
+    bestChroms = selector.select(conf, 2);
+    assertEquals(2, bestChroms.length);
+  }
 
+  public void testEmpty_0() throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    Configuration conf = new DefaultConfiguration();
+    conf.setPopulationSize(7);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    conf.setSampleChromosome(chrom);
+    chrom.setActiveConfiguration(conf);
+    selector.add(conf, chrom);
+    selector.empty();
+    Map chromosomes = (Map) PrivateAccessor.getField(selector,
+        "m_wheel");
+    assertEquals(0, chromosomes.size());
+  }
 }
+
