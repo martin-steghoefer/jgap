@@ -1,6 +1,7 @@
 <project name="jgap" default="jar" basedir=".">
-  <property name="src" value="."/>
+  <property name="src" value="./src"/>
   <property name="test" value="./tests"/>
+  <property name="examples" value="./examples"/>
   <property name="lib" value="./lib"/>
   <property name="classDir" value="./classes"/>
   <property name="allTests" value="org.jgap.AllTests" />
@@ -22,6 +23,10 @@
            classpathref="classpathCompile">
     </javac>
     <javac srcdir="${test}"
+           destdir="${classDir}"
+           classpathref="classpathCompile">
+    </javac>
+    <javac srcdir="${examples}"
            destdir="${classDir}"
            classpathref="classpathCompile">
     </javac>
@@ -55,6 +60,7 @@
        <include name="org/jgap/gp/*.class"/>
        <include name="org/jgap/impl/*.class"/>
        <include name="org/jgap/perf/*.class"/>
+       <include name="org/jgap/supergenes/*.class"/>
        <include name="org/jgap/xml/*.class"/>
     </jar>
 
@@ -70,7 +76,7 @@
 
   <target name="clean">
     <delete>
-      <fileset dir="${src}">
+      <fileset dir="${classDir}">
         <include name="jgap.jar"/>
         <include name="jgap-examples.jar"/>
         <include name="org/jgap/*.class"/>
@@ -82,6 +88,7 @@
         <include name="org/jgap/gp/*.class"/>
         <include name="org/jgap/impl/*.class"/>
         <include name="org/jgap/perf/*.class"/>
+        <include name="org/jgap/supergenes/*.class"/>
         <include name="org/jgap/xml/*.class"/>
         <include name="examples/*.class"/>
       </fileset>
@@ -92,7 +99,7 @@
     <javadoc sourcepath="${src}"
              destdir="javadocs/"
              Public="true"
-             packagenames="org.jgap, org.jgap.data, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.impl, org.jgap.xml, org.jgap.event">
+             packagenames="org.jgap, org.jgap.data, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.impl, org.jgap.xml, org.jgap.event, org.jgap.supergenes">
     </javadoc>
   </target>
 
