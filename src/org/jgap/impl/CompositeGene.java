@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * This field separates gene class name from
@@ -283,7 +283,13 @@ public class CompositeGene
     }
   }
 
-  /** Creates a new instance of gene. */
+  /**
+   * Creates a new instance of gene.
+   * @param a_geneClassName String
+   * @param a_persistentRepresentation String
+   * @throws Exception
+   * @return Gene
+   */
   protected Gene createGene(String a_geneClassName,
    String a_persistentRepresentation) throws Exception
    {
@@ -635,13 +641,16 @@ public class CompositeGene
 
   /**
    * Encode string, doubling the separators.
-   * @param The string to encode (arbitrary characters)
+   * @param a_string The string to encode (arbitrary characters)
    * @return The string, containing only characters, valid in URL's
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
-  protected static final String encode(String a_x)
+  protected static final String encode(String a_string)
    {
       try {
-          return URLEncoder.encode (a_x, "UTF-8");
+          return URLEncoder.encode (a_string, "UTF-8");
       }
       catch (UnsupportedEncodingException ex) {
           throw new Error("This should never happen!");
@@ -649,13 +658,16 @@ public class CompositeGene
    }
 
    /** Decode string, undoubling the separators.
-    * @param the URL-encoded string with restricted character set.
+    * @param a_encoded the URL-encoded string with restricted character set.
     * @return decoded string
+    *
+    * @author Audrius Meskauskas
+    * @since 2.0
     */
-   protected static final String decode(String a_x)
+   protected static final String decode(String a_encoded)
    {
       try {
-          return URLDecoder.decode (a_x, "UTF-8");
+          return URLDecoder.decode (a_encoded, "UTF-8");
       }
       catch (UnsupportedEncodingException ex) {
           throw new Error("This should never happen!");
@@ -664,24 +676,27 @@ public class CompositeGene
 
    /**
     * Splits the string a_x into individual gene representations
-    * @author Audrius Meskauskas
-    * @param a_x The string to split.
+    * @param a_string The string to split.
     * @return The elements of the returned array are the
     * persistent representation strings of the genes - components.
+    * @throws UnsupportedRepresentationException
+    *
+    * @author Audrius Meskauskas
+    * @since 2.0
     */
-   protected static final ArrayList split(String a_x)
+   protected static final ArrayList split(String a_string)
     throws UnsupportedRepresentationException
      {
        ArrayList a = new ArrayList();
 
        StringTokenizer st = new StringTokenizer
-       (a_x,GENE_DELIMITER_HEADING+ GENE_DELIMITER_CLOSING, true);
+       (a_string,GENE_DELIMITER_HEADING+ GENE_DELIMITER_CLOSING, true);
 
        while (st.hasMoreTokens())
         {
            if (!st.nextToken().equals(GENE_DELIMITER_HEADING))
             throw new UnsupportedRepresentationException
-              (a_x+" no open tag");
+              (a_string+" no open tag");
            String n = st.nextToken();
            if (n.equals(GENE_DELIMITER_CLOSING)) a.add(""); /* Empty token */
            else
@@ -689,7 +704,7 @@ public class CompositeGene
               a.add(n);
               if (!st.nextToken().equals(GENE_DELIMITER_CLOSING))
               throw new UnsupportedRepresentationException
-               (a_x+" no close tag");
+               (a_string+" no close tag");
             }
         }
        return a;
