@@ -19,7 +19,6 @@ package org.jgap.impl;
 
 import java.math.*;
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -39,7 +38,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -72,7 +71,6 @@ public class WeightedRouletteSelector
    */
   private boolean m_doublettesAllowed;
 
-
   /**
    * @author Klaus Meffert
    * @since 2.0 (prior: existent thru super class)
@@ -91,8 +89,7 @@ public class WeightedRouletteSelector
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void add(Configuration a_activeConfigurator,
-                               Chromosome a_chromosomeToAdd) {
+  public synchronized void add(Chromosome a_chromosomeToAdd) {
     // The "roulette wheel" is represented by a Map. Each key is a
     // Chromosome and each value is an instance of the SlotCounter inner
     // class. The counter keeps track of the total number of slots that
@@ -147,9 +144,8 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized Population select(Configuration a_activeConfiguration,
-                                        int a_howManyToSelect) {
-    RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
+  public synchronized Population select(int a_howManyToSelect) {
+    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
     // that contains the fitness values for each chromosome, one that
@@ -241,7 +237,7 @@ public class WeightedRouletteSelector
     // (the counter value) to an ongoing total until that total
     // reaches or exceeds the chosen slot number. When that happenes,
     // we've found the chromosome sitting in that slot and we return it.
-    // ------------------------------------------------------------------
+    // --------------------------------------------------------------------
     double currentSlot = 0.0;
     for (int i = 0; i < a_counterValues.length; i++) {
       // Increment our ongoing total and see if we've landed on the
@@ -342,30 +338,28 @@ public class WeightedRouletteSelector
   }
 
   /**
- * Determines whether doublette chromosomes may be added to the selector or
- * will be ignored.
- * @param a_doublettesAllowed true: doublette chromosomes allowed to be
- *       added to the selector. FALSE: doublettes will be ignored and not
- *       added
- *
- * @author Klaus Meffert
- * @since 2.0
- */
-public void setDoubletteChromosomesAllowed(boolean a_doublettesAllowed) {
-  m_doublettesAllowed = a_doublettesAllowed;
-}
+   * Determines whether doublette chromosomes may be added to the selector or
+   * will be ignored.
+   * @param a_doublettesAllowed true: doublette chromosomes allowed to be
+   *       added to the selector. FALSE: doublettes will be ignored and not
+   *       added
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setDoubletteChromosomesAllowed(boolean a_doublettesAllowed) {
+    m_doublettesAllowed = a_doublettesAllowed;
+  }
 
-/**
- * @return TRUE: doublette chromosomes allowed to be added to the selector
- *
- * @author Klaus Meffert
- * @since 2.0
- */
-public boolean getDoubletteChromosomesAllowed() {
-  return m_doublettesAllowed;
-}
-
-
+  /**
+   * @return TRUE: doublette chromosomes allowed to be added to the selector
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public boolean getDoubletteChromosomesAllowed() {
+    return m_doublettesAllowed;
+  }
 }
 
 /**
@@ -458,5 +452,4 @@ class SlotCounter {
   public void scaleFitnessValue(double a_scalingFactor) {
     m_fitnessValue /= a_scalingFactor;
   }
-
 }

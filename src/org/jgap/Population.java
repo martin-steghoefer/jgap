@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -189,10 +189,11 @@ public class Population {
     }
     Iterator it = m_chromosomes.iterator();
     double bestFitness = -1.0d;
+    FitnessEvaluator evaluator = Genotype.getConfiguration().getFitnessEvaluator();
     while (it.hasNext()) {
       Chromosome chrom = (Chromosome) it.next();
       double fitness = chrom.getFitnessValue();
-      if (fitness > bestFitness || m_fittestChromosome == null) {
+      if (evaluator.isFitter(fitness, bestFitness) || m_fittestChromosome == null) {
         m_fittestChromosome = chrom;
         bestFitness = fitness;
       }

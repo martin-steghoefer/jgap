@@ -39,14 +39,9 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static final double DELTA = 0.000000001d;
-
-  /**
-   * The current active genetic configuration.
-   */
-  transient protected Configuration m_activeConfiguration = null;
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -119,7 +114,6 @@ public class Chromosome
     for (int i = 0; i < m_genes.length; i++) {
       m_genes[i] = a_sampleGene.newGene(null);
     }
-    m_activeConfiguration = null;
   }
 
   /**
@@ -149,7 +143,6 @@ public class Chromosome
       }
     }
     m_genes = a_initialGenes;
-    m_activeConfiguration = null;
   }
 
   /**
@@ -175,6 +168,7 @@ public class Chromosome
   public Chromosome(Configuration a_activeConfiguration,
                     Gene[] a_initialGenes)
       throws InvalidConfigurationException {
+    /**@todo remove configuration object from here*/
     // Sanity checks: make sure the parameters are all valid.
     // ------------------------------------------------------
     if (a_initialGenes == null) {
@@ -197,45 +191,7 @@ public class Chromosome
     // now on, and then populate our instance variables.
     // ------------------------------------------------------------------
     a_activeConfiguration.lockSettings();
-    m_activeConfiguration = a_activeConfiguration;
     m_genes = a_initialGenes;
-  }
-
-  /**
-   * Sets the active Configuration object on this Chromosome. This method
-   * should be invoked immediately following deserialization of this
-   * Chromosome. If an active Configuration has already been set on this
-   * Chromosome, then this method will do nothing.
-   *
-   * @param a_activeConfiguration The current active Configuration object
-   *                              that is to be referenced internally by
-   *                              this Chromosome instance.
-   *
-   * @throws InvalidConfigurationException if the Configuration object is
-   *         null or cannot be locked because it is in an invalid or
-   *         incomplete state.
-   *
-   * @author Neil Rotstan
-   * @since 1.0
-   */
-  public void setActiveConfiguration(Configuration a_activeConfiguration)
-      throws InvalidConfigurationException {
-    // Only assign the given Configuration object if we don't already
-    // have one.
-    // --------------------------------------------------------------
-    if (m_activeConfiguration == null) {
-      if (a_activeConfiguration == null) {
-        throw new InvalidConfigurationException(
-            "The given Configuration object may not be null.");
-      }
-      else {
-        // Make sure the Configuration object is locked and cannot be
-        // changed.
-        // ----------------------------------------------------------
-        a_activeConfiguration.lockSettings();
-        m_activeConfiguration = a_activeConfiguration;
-      }
-    }
   }
 
   /**
@@ -258,7 +214,7 @@ public class Chromosome
     // has been set on this Chromosome. If not, then throw an
     // IllegalStateException.
     // ------------------------------------------------------------
-    if (m_activeConfiguration == null) {
+    if (Genotype.getConfiguration() == null) {
       throw new IllegalStateException(
           "The active Configuration object must be set on this " +
           "Chromosome prior to invocation of the clone() method.");
@@ -266,7 +222,7 @@ public class Chromosome
     // Now, first see if we can pull a Chromosome from the pool and just
     // set its gene values (alleles) appropriately.
     // ------------------------------------------------------------
-    ChromosomePool pool = m_activeConfiguration.getChromosomePool();
+    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       Chromosome copy = pool.acquireChromosome();
       if (copy != null) {
@@ -300,14 +256,14 @@ public class Chromosome
     // -------------------------------------------------------------------
     Gene[] copyOfGenes = new Gene[m_genes.length];
     for (int i = 0; i < copyOfGenes.length; i++) {
-      copyOfGenes[i] = m_genes[i].newGene(m_activeConfiguration);
+      copyOfGenes[i] = m_genes[i].newGene(Genotype.getConfiguration());
       copyOfGenes[i].setAllele(m_genes[i].getAllele());
     }
     // Now construct a new Chromosome with the copies of the genes and
     // return it. Also clone the IApplicationData object.
     // ---------------------------------------------------------------
     try {
-      Chromosome ret = new Chromosome(m_activeConfiguration, copyOfGenes);
+      Chromosome ret = new Chromosome(Genotype.getConfiguration(), copyOfGenes);
       if (getApplicationData() != null) {
         /**@todo support Cloneable interface, i.e. look for public clone()
          * method via introspection
@@ -409,14 +365,14 @@ public class Chromosome
    * @since 2.0 (until 1.1: return type int)
    */
   public double getFitnessValue() {
-    if (m_activeConfiguration != null) {
+      if (Genotype.getConfiguration() != null) {
       FitnessFunction normalFitnessFunction =
-          m_activeConfiguration.getFitnessFunction();
+          Genotype.getConfiguration().getFitnessFunction();
       if (normalFitnessFunction != null) {
-          // Grab the "normal" fitness function and ask it to calculate our
-          // fitness value.
-          // --------------------------------------------------------------
-          m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
+        // Grab the "normal" fitness function and ask it to calculate our
+        // fitness value.
+        // --------------------------------------------------------------
+        m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
         }
     }
     return m_fitnessValue;
@@ -690,8 +646,7 @@ public class Chromosome
   public void cleanup() {
     // First, reset our internal state.
     // --------------------------------
-    m_fitnessValue = m_activeConfiguration.getFitnessFunction().
-        getNoFitnessValue();
+    m_fitnessValue = Genotype.getConfiguration().getFitnessFunction().getNoFitnessValue();
     m_hashCode = 0;
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool
@@ -700,7 +655,7 @@ public class Chromosome
     // have to make sure the active Configuration has been set on this
     // Chromosome or else throw an IllegalStateException.
     // ------------------------------------------------------------------
-    if (m_activeConfiguration == null) {
+    if (Genotype.getConfiguration() == null) {
       throw new IllegalStateException(
           "The active Configuration object must be set on this " +
           "Chromosome prior to invocation of the cleanup() method.");
@@ -708,7 +663,7 @@ public class Chromosome
     // Now fetch the active ChromosomePool from the Configuration object
     // and, if the pool exists, release this Chromosome to it.
     // -----------------------------------------------------------------
-    ChromosomePool pool = m_activeConfiguration.getChromosomePool();
+    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       // Note that the pool will take care of any gene cleanup for us,
       // so we don't need to worry about it here.

@@ -32,7 +32,7 @@ package org.jgap;
  */
 public interface INaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -44,8 +44,7 @@ public interface INaturalSelector {
    * @author Neil Rotstan
    * @since 1.0
    */
-  void add(Configuration a_activeConfigurator,
-           Chromosome a_chromosomeToAdd);
+  void add(Chromosome a_chromosomeToAdd);
 
   /**
    * Select a given number of Chromosomes from the pool that will move on
@@ -66,8 +65,7 @@ public interface INaturalSelector {
    * @author Klaus Meffert
    * @since 2.0 (since 1.0 with different return type)
    */
-  Population select(Configuration a_activeConfiguration,
-                    int a_howManyToSelect);
+  Population select(int a_howManyToSelect);
 
   /**
    * Empty out the working pool of Chromosomes. This will be invoked after

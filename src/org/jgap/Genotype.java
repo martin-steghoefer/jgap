@@ -20,6 +20,7 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.event.*;
 
 /**
@@ -36,13 +37,13 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * The current active Configuration instance.
    * @since 1.0
    */
-  transient protected Configuration m_activeConfiguration;
+  transient protected static Configuration m_activeConfiguration;
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -62,12 +63,6 @@ public class Genotype
    * @since 1.0
    */
   transient protected List m_workingPool;
-
-  /**
-   * The fitness evaluator. See interface class FitnessEvaluator for details
-   * @since 1.1
-   */
-  private FitnessEvaluator m_fitnessEvaluator;
 
   /**
    * Constructs a new Genotype instance with the given array of
@@ -93,8 +88,7 @@ public class Genotype
   public Genotype(Configuration a_activeConfiguration,
                   Chromosome[] a_initialChromosomes)
       throws InvalidConfigurationException {
-    this(a_activeConfiguration, new Population(a_initialChromosomes),
-         new DefaultFitnessEvaluator());
+    this(a_activeConfiguration, new Population(a_initialChromosomes));
   }
 
   /**
@@ -186,7 +180,7 @@ public class Genotype
     a_activeConfiguration.lockSettings();
     m_population = a_population;
     m_activeConfiguration = a_activeConfiguration;
-    m_fitnessEvaluator = a_fitnessEvaluator;
+    m_activeConfiguration.setFitnessEvaluator(a_fitnessEvaluator);
     m_workingPool = new ArrayList();
   }
 
@@ -230,13 +224,6 @@ public class Genotype
         // sure any other transient fields are initialized properly.
         // -----------------------------------------------------------
         m_workingPool = new ArrayList();
-        // Now set this Configuration on each of the member
-        // Chromosome instances.
-        // ------------------------------------------------
-        for (int i = 0; i < m_population.size(); i++) {
-          m_population.getChromosome(i).setActiveConfiguration(
-              m_activeConfiguration);
-        }
       }
     }
   }
@@ -291,7 +278,7 @@ public class Genotype
     Chromosome fittestChromosome = m_population.getChromosome(0);
     double fittestValue = fittestChromosome.getFitnessValue();
     for (int i = 1; i < len; i++) {
-      if (m_fitnessEvaluator.isFitter(m_population.getChromosome(i).
+      if (m_activeConfiguration.getFitnessEvaluator().isFitter(m_population.getChromosome(i).
                                       getFitnessValue(),
                                       fittestValue)) {
         fittestChromosome = m_population.getChromosome(i);
@@ -453,8 +440,7 @@ public class Genotype
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static Genotype randomInitialGenotype(Configuration
-                                               a_activeConfiguration)
+  public static Genotype randomInitialGenotype(Configuration a_activeConfiguration)
       throws InvalidConfigurationException {
     if (a_activeConfiguration == null) {
       throw new IllegalArgumentException(
@@ -546,32 +532,6 @@ public class Genotype
   }
 
   /**
-   * @return the assigned FitnessEvaluator
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public FitnessEvaluator getFitnessEvaluator() {
-    return m_fitnessEvaluator;
-  }
-
-  /**
-   * Set the fitness evaluator (deciding if a given fitness value is better when
-   * it's higher or better when it's lower).
-   * @param a_fitnessEvaluator the FitnessEvaluator to be used
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public void setFitnessEvaluator(FitnessEvaluator a_fitnessEvaluator) {
-    if (a_fitnessEvaluator == null) {
-      throw new IllegalStateException(
-          "The fitness evaluator object must not be null!");
-    }
-    m_fitnessEvaluator = a_fitnessEvaluator;
-  }
-
-  /**
    * Applies all NaturalSelector's registered with the Configuration
    * @param processBeforeGeneticOperators true apply NaturalSelector's
    *   applicable before GeneticOperator's, false: apply the ones applicable
@@ -613,7 +573,7 @@ public class Genotype
         Iterator iterator1 = m_population.iterator();
         while (iterator1.hasNext()) {
           Chromosome currentChromosome = (Chromosome) iterator1.next();
-          selector.add(m_activeConfiguration, currentChromosome);
+          selector.add(currentChromosome);
         }
 
         if (i == selectorSize - 1 && i > 0) {
@@ -625,8 +585,7 @@ public class Genotype
         // Do selection of Chromosome's
         // ----------------------------
         if (selectorSize > 1) {
-          Population m_partial_result = selector.select(m_activeConfiguration,
-              m_single_selection_size);
+          Population m_partial_result = selector.select(m_single_selection_size);
           m_new_population.addChromosomes(m_partial_result);
         }
         else {
@@ -636,7 +595,7 @@ public class Genotype
 //          m_population.addChromosomes(selector.select(m_activeConfiguration, m_single_selection_size));
 
 //          m_population.setChromosomes(selector.select(m_activeConfiguration, m_single_selection_size).getChromosomes());
-          m_population = selector.select(m_activeConfiguration, m_single_selection_size);
+          m_population = selector.select(m_single_selection_size);
         }
         // Clean up the natural selector.
         // ------------------------------
@@ -647,5 +606,13 @@ public class Genotype
       }
     }
 
+  }
+
+  public static Configuration getConfiguration() {
+    return m_activeConfiguration;
+  }
+
+  public static void setConfiguration(Configuration a_configuration) {
+    m_activeConfiguration = a_configuration;
   }
 }
