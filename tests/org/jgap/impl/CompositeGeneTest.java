@@ -33,7 +33,7 @@ public class CompositeGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public CompositeGeneTest() {
   }
@@ -92,12 +92,12 @@ public class CompositeGeneTest
     Gene newGene1 = new DoubleGene();
     newGene1.setAllele(new Double(47.123d));
     gene.addGene(newGene1, false);
-    assertEquals(newGene1.toString(), gene.toString());
+    assertEquals("("+newGene1.toString()+")", gene.toString());
     Gene newGene2 = new IntegerGene();
     newGene2.setAllele(new Integer(23456));
     gene.addGene(newGene2, false);
-    assertEquals(newGene1.toString() + gene.GENE_DELIMITER +
-                 newGene2.toString(), gene.toString());
+    assertEquals("("+newGene1.toString() + gene.GENE_DELIMITER +
+                 newGene2.toString()+")", gene.toString());
   }
 
   public void testGetAllele_0() {
