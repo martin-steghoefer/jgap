@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -111,6 +111,14 @@ public class CoinsExample {
 //    pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
 
     pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(a_targetChangeAmount));
+
+    /**@todo class Evaluator:
+     * input: + PermutingConfiguration
+     *        + Number of evaluation runs pers config (to turn off randomness
+     *          as much as possible)
+     *        + output facility (data container)
+     *        + optional: event subscribers
+     */
 
     int k=0;
     while (pconf.hasNext()) {

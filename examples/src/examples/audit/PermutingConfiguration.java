@@ -25,7 +25,7 @@ public class PermutingConfiguration
 //  private static int index;
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private List m_randomGeneratorSlots;
 
@@ -103,10 +103,18 @@ public class PermutingConfiguration
     m_randomGeneratorSlots.add(a_randomGenerator);
   }
 
+  public void addNaturalSelector(NaturalSelector a_naturalSelector, boolean egal) {
+    throw new UnsupportedOperationException("Use addNaturalSelectorSlot instead!");
+  }
+
   public void addNaturalSelectorSlot(NaturalSelector a_naturalSelector) {
     m_naturalSelectorSlots.add(a_naturalSelector);
   }
 
+  public void addGeneticOperator(GeneticOperator a_geneticOperator) {
+    throw new UnsupportedOperationException("Use addGeneticOperatorSlot instead!");
+
+  }
   public void addGeneticOperatorSlot(GeneticOperator a_geneticOperator) {
     m_geneticOperatorSlots.add(a_geneticOperator);
   }
