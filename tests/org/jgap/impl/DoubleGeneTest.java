@@ -26,7 +26,7 @@ public class DoubleGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -213,6 +213,78 @@ public class DoubleGeneTest
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     assertEquals(pres1, pres2);
+  }
+
+  public void testPersistentRepresentation_1()
+      throws Exception {
+    Gene gene1 = new DoubleGene(2.05d, 7.53d);
+    gene1.setValueFromPersistentRepresentation(null);
+  }
+
+  public void testPersistentRepresentation_2()
+      throws Exception {
+    Gene gene1 = new DoubleGene(2.05d, 7.53d);
+    try {
+      gene1.setValueFromPersistentRepresentation("2.3");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  public void testPersistentRepresentation_3()
+      throws Exception {
+    Gene gene1 = new DoubleGene(2.05d, 7.53d);
+    try {
+      gene1.setValueFromPersistentRepresentation("2.3" +
+                                                 DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "4.6" +
+                                                 DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "6,5");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  public void testPersistentRepresentation_4()
+      throws Exception {
+    Gene gene1 = new DoubleGene(2.05d, 7.53d);
+    try {
+      gene1.setValueFromPersistentRepresentation("2.3" +
+                                                 DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "b" +
+                                                 DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "a");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  public void testPersistentRepresentation_5()
+      throws Exception {
+    Gene gene1 = new DoubleGene(2.05d, 7.53d);
+    try {
+      gene1.setValueFromPersistentRepresentation("a" +
+                                                 DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "b" +
+                                                 DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "a");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
   }
 
   public void testCleanup_0() {
