@@ -45,7 +45,7 @@ import org.jgap.impl.*;
 public abstract class Salesman {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
    /**
     * Override this method to compute the distance between "cities",
@@ -247,8 +247,9 @@ public abstract class Salesman {
         for (int i = 0; i < max_evolution; i++) {
          population.evolve();
          best = population.getFittestChromosome();
-         if ( best.getFitnessValue() >= getAcceptableCost() )
-          break Evolution;
+         if ( best.getFitnessValue() >= getAcceptableCost() ) {
+           break Evolution;
+         }
         }
         // Return the best solution we found.
         // -----------------------------------
@@ -259,15 +260,16 @@ public abstract class Salesman {
     {
         Gene t;
         // shuffle:
-        for (int r = 0; r < 10 * a_genes.length; r++)
-        for (int i = m_startOffset; i < a_genes.length; i++) {
+        for (int r = 0; r < 10 * a_genes.length; r++) {
+          for (int i = m_startOffset; i < a_genes.length; i++) {
             int p =
-              m_startOffset +
-              m_conf.getRandomGenerator().
-               nextInt(a_genes.length-m_startOffset);
-            t = a_genes [i];
-            a_genes [i] = a_genes [p];
-            a_genes [p] = t;
+                m_startOffset +
+                m_conf.getRandomGenerator().
+                nextInt(a_genes.length - m_startOffset);
+            t = a_genes[i];
+            a_genes[i] = a_genes[p];
+            a_genes[p] = t;
+          }
         }
     }
 
