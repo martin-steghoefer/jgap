@@ -25,12 +25,15 @@ import junit.framework.TestSuite;
 
 /**
  * Test suite for all tests of package org.jgap
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 
 public class AllBaseTests extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public AllBaseTests() {
 
@@ -42,6 +45,7 @@ public class AllBaseTests extends TestSuite {
     suite.addTest(ConfigurationTest.suite());
     suite.addTest(FitnessFunctionTest.suite());
     suite.addTest(GenotypeTest.suite());
+    suite.addTest(DefaultFitnessEvaluatorTest.suite());
     return suite;
   }
 
