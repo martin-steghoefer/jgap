@@ -23,7 +23,7 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public StringGeneTest() {
   }
@@ -208,6 +208,42 @@ public class StringGeneTest
     gene1.setAllele("");
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_5() {
+    StringGene gene1 = new StringGene(0, 4, "ABC");
+    //following should be possible
+    gene1.setAllele("A");
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    gene1.setAllele("B");
+    assertEquals("A", gene1.stringValue());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_6() {
+    StringGene gene1 = new StringGene(0, 4, "ABC");
+    //following should be possible
+    gene1.setAllele("A");
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return true;
+      }
+    });
+    gene1.setAllele("B");
+    assertEquals("B", gene1.stringValue());
+  }
+
   public void testNewGene_0()
       throws Exception {
     StringGene gene1 = new StringGene(1, 4);
@@ -303,6 +339,31 @@ public class StringGeneTest
     StringGene gene1 = new StringGene(2, 10, "ABCDE");
     gene1.setAllele(null);
 
+    assertEquals("null:2:10:ABCDE", gene1.getPersistentRepresentation());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_8() {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+    try {
+      gene1.setValueFromPersistentRepresentation("null:2:ABCDE");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_9() {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
     assertEquals("null:2:10:ABCDE", gene1.getPersistentRepresentation());
   }
 
@@ -452,6 +513,22 @@ public class StringGeneTest
   public void testSetToRandomValue_7() {
     Gene gene = new StringGene(1, 6, null);
     try {
+      gene.setToRandomValue(new StockRandomGenerator());
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetToRandomValue_8() {
+    StringGene gene = new StringGene(2, 6, "ABC");
+    try {
+      gene.setMaxLength(1);
       gene.setToRandomValue(new StockRandomGenerator());
       fail();
     }
