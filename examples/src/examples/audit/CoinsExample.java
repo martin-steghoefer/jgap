@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -127,17 +127,27 @@ public class CoinsExample {
       // ------------------------------------------------
       Genotype population = Genotype.randomInitialGenotype(pconf.next());
 
-      // Evolve the population. Since we don't know what the best answer
-      // is going to be, we just evolve the max number of times.
-      // ---------------------------------------------------------------
-      for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
-        population.evolve();
-        // add current best fitness to chart
-        double fitness = population.getFittestChromosome().getFitnessValue();
-        if (i % 3 == 0) {
-//          String s = String.valueOf(k)+"_"+
-          String s = String.valueOf(i);
-          dataset.setValue(fitness, "Fitness "+k, s);
+      for (int run=0;run<5;run++) {
+        // Evolve the population. Since we don't know what the best answer
+        // is going to be, we just evolve the max number of times.
+        // ---------------------------------------------------------------
+        for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
+          population.evolve();
+          // add current best fitness to chart
+          double fitness = population.getFittestChromosome().getFitnessValue();
+          if (i % 3 == 0) {
+            String s = String.valueOf(i);
+            Number n = dataset.getValue("Fitness " + k, s);
+            double d;
+            if (n != null) {
+              // calculate historical average
+              d = n.doubleValue() + fitness/(run+1);
+            }
+            else {
+              d = fitness;
+            }
+            dataset.setValue(d, "Fitness " + k, s);
+          }
         }
       }
 

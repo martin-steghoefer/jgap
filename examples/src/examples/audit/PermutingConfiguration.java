@@ -25,7 +25,7 @@ public class PermutingConfiguration
 //  private static int index;
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private List m_randomGeneratorSlots;
 
@@ -148,6 +148,11 @@ public class PermutingConfiguration
 
     List list;
     Iterator it;
+    /**@todo make permutation below computed dynamically and not statically*/
+    /**@todo introduce new parameters: populationSize, setPreservFittestIndividual,
+     * MAX_ALLOWED_EVOLUTIONS
+     */
+
     // Permute GeneticOperator's.
     // --------------------------
     if (m_geneticOperatorIndex >= Math.pow(2, m_geneticOperatorSlots.size())-1) {
