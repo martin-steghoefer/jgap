@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   /**
    * The current active Configuration instance.
@@ -166,8 +166,8 @@ public class Genotype
    * @deprecated uses getPopulation() instead
    */
   public synchronized Chromosome[] getChromosomes() {
-    Iterator it = m_population.iterator();
-    Chromosome[] result = new Chromosome[m_population.size()];
+    Iterator it = getPopulation().iterator();
+    Chromosome[] result = new Chromosome[getPopulation().size()];
     int i = 0;
     while (it.hasNext()) {
       result[i++] = (Chromosome) it.next();
@@ -191,7 +191,7 @@ public class Genotype
    * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
-    return m_population.determineFittestChromosome();
+    return getPopulation().determineFittestChromosome();
   }
 
   /**
@@ -224,8 +224,8 @@ public class Genotype
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
-      ( (GeneticOperator) operatorIterator.next()).operate(m_population,
-          m_population.getChromosomes());
+      ( (GeneticOperator) operatorIterator.next()).operate(getPopulation(),
+          getPopulation().getChromosomes());
     }
 
     // Apply NaturalSelectors after GeneticOperators have been applied.
@@ -237,7 +237,7 @@ public class Genotype
     BulkFitnessFunction bulkFunction =
         m_activeConfiguration.getBulkFitnessFunction();
     if (bulkFunction != null) {
-      bulkFunction.evaluate(m_population);
+      bulkFunction.evaluate(getPopulation());
     }
 
     // Fill up population randomly if size dropped below 10% of original size.
@@ -246,12 +246,12 @@ public class Genotype
       int minSize = (int) (m_activeConfiguration.getPopulationSize() *
                            m_activeConfiguration.getMinimumPopSizePercent() /
                            100);
-      if (m_population.size() < minSize) {
+      if (getPopulation().size() < minSize) {
         Chromosome newChrom;
         try {
-          while (m_population.size() < minSize) {
+          while (getPopulation().size() < minSize) {
             newChrom = Chromosome.randomInitialChromosome();
-            m_population.addChromosome(newChrom);
+            getPopulation().addChromosome(newChrom);
           }
         }
         catch (InvalidConfigurationException invex) {
@@ -261,10 +261,10 @@ public class Genotype
     }
 
     if (getConfiguration().isPreserveFittestIndividual()) {
-      if (!m_population.contains(fittest)) {
+      if (!getPopulation().contains(fittest)) {
         // Re-add fittest chromosome to current population.
         // ------------------------------------------------
-        m_population.addChromosome(fittest);
+        getPopulation().addChromosome(fittest);
       }
     }
 
@@ -306,10 +306,10 @@ public class Genotype
    */
   public String toString() {
     StringBuffer buffer = new StringBuffer();
-    for (int i = 0; i < m_population.size(); i++) {
-      buffer.append(m_population.getChromosome(i).toString());
+    for (int i = 0; i < getPopulation().size(); i++) {
+      buffer.append(getPopulation().getChromosome(i).toString());
       buffer.append(" [");
-      buffer.append(m_population.getChromosome(i).getFitnessValue());
+      buffer.append(getPopulation().getChromosome(i).getFitnessValue());
       buffer.append(']');
       buffer.append('\n');
     }
@@ -387,7 +387,7 @@ public class Genotype
       // First, make sure the other Genotype has the same number of
       // chromosomes as this one.
       // ----------------------------------------------------------
-      if (m_population.size() != otherGenotype.m_population.size()) {
+      if (getPopulation().size() != otherGenotype.getPopulation().size()) {
         return false;
       }
       // Next, prepare to compare the chromosomes of the other Genotype
@@ -397,11 +397,11 @@ public class Genotype
       // genetic algorithm (it doesn't care about the order), but makes
       // it much easier to perform the comparison here.
       // --------------------------------------------------------------
-      Collections.sort(m_population.getChromosomes());
+      Collections.sort(getPopulation().getChromosomes());
       Collections.sort(otherGenotype.getPopulation().getChromosomes());
-      for (int i = 0; i < m_population.size(); i++) {
-        if (! (m_population.getChromosome(i).equals(
-            otherGenotype.m_population.getChromosome(i)))) {
+      for (int i = 0; i < getPopulation().size(); i++) {
+        if (! (getPopulation().getChromosome(i).equals(
+            otherGenotype.getPopulation().getChromosome(i)))) {
           return false;
         }
       }
@@ -465,7 +465,7 @@ public class Genotype
         if (i == selectorSize - 1 && i > 0) {
           // Ensure the last NaturalSelector adds the remaining Chromosomes.
           // ---------------------------------------------------------------
-          m_single_selection_size = m_population_size - m_population.size();
+          m_single_selection_size = m_population_size - getPopulation().size();
         }
         else {
           m_single_selection_size = m_population_size;
@@ -473,14 +473,14 @@ public class Genotype
 
         // Do selection of Chromosomes.
         // ----------------------------
-        selector.select(m_single_selection_size, m_population, m_new_population);
+        selector.select(m_single_selection_size, getPopulation(), m_new_population);
         // Clean up the natural selector.
         // ------------------------------
         selector.empty();
       }
 
       m_population = new Population();
-      m_population.addChromosomes(m_new_population);
+      getPopulation().addChromosomes(m_new_population);
     }
 
   }
@@ -512,12 +512,12 @@ public class Genotype
    * @since 2.1
    */
   public int hashCode() {
-    int i, size = m_population.size();
+    int i, size = getPopulation().size();
     Chromosome s;
     int twopower = 1;
     int localHashCode = 0;
     for (i = 0; i < size; i++, twopower = 2 * twopower) {
-      s = m_population.getChromosome(i);
+      s = getPopulation().getChromosome(i);
       localHashCode = 31 * localHashCode + s.hashCode();
     }
     return localHashCode;
