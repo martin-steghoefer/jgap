@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public BooleanGeneTest() {
   }
@@ -280,6 +280,7 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_1()
@@ -290,6 +291,7 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_2()
@@ -300,6 +302,7 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_3()
