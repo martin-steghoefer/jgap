@@ -9,12 +9,11 @@
  */
 package org.jgap;
 
-import java.util.*;
-
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
 import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for Configuration class
@@ -26,7 +25,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public ConfigurationTest() {
   }
@@ -284,6 +283,30 @@ public class ConfigurationTest
     catch (Exception ex) {
       ; //this is OK
     }
+  }
+
+  public void testAddNaturalSelector_3()
+      throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new WeightedRouletteSelector();
+    conf.addNaturalSelector(selector, false);
+    conf.getNaturalSelectors(false).clear();
+    conf.addNaturalSelector(selector, false);
+    Integer i = (Integer) PrivateAccessor.getField(conf,
+        "m_sizeNaturalSelectorsPost");
+    assertEquals(1, i.intValue());
+  }
+
+  public void testAddNaturalSelector_4()
+      throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new WeightedRouletteSelector();
+    conf.addNaturalSelector(selector, true);
+    conf.getNaturalSelectors(true).clear();
+    conf.addNaturalSelector(selector, true);
+    Integer i = (Integer) PrivateAccessor.getField(conf,
+        "m_sizeNaturalSelectorsPre");
+    assertEquals(1, i.intValue());
   }
 
   public void setFitnessFunction_0() {
