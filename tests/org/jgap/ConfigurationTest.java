@@ -18,6 +18,8 @@
 
 package org.jgap;
 
+import java.util.*;
+
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
@@ -33,7 +35,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public ConfigurationTest() {
   }
@@ -421,6 +423,6 @@ class TestFitnessFunction
 
 class TestBulkFitnessFunction
     extends BulkFitnessFunction {
-  public void evaluate(Chromosome[] a_subjects) {
+  public void evaluate(List a_subjects) {
   }
 }
