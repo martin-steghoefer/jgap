@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * This field separates gene class name from
@@ -157,22 +157,19 @@ public class CompositeGene
    * @since 1.1
    */
   public boolean removeGeneByIdentity(Gene gene) {
-    boolean result;
     int size = size();
     if (size < 1) {
-      result = false;
+      return false;
     }
     else {
-      result = false;
       for (int i = 0; i < size; i++) {
         if (geneAt(i) == gene) {
           genes.remove(i);
-          result = true;
-          break;
+          return true;
         }
       }
     }
-    return result;
+    return false;
   }
 
   /**
@@ -265,13 +262,7 @@ public class CompositeGene
       }
       catch (Exception ex) {
         ex.printStackTrace();
-        if (ex.getCause() != null) {
-          throw new UnsupportedRepresentationException(ex.getCause().
-              getMessage());
-        }
-        else {
-          throw new UnsupportedRepresentationException(ex.getMessage());
-        }
+        throw new UnsupportedRepresentationException(ex.getMessage());
       }
     }
   }
