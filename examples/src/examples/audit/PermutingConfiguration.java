@@ -25,7 +25,7 @@ public class PermutingConfiguration
   private static int index;
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private List m_randomGeneratorSlots;
 
@@ -151,7 +151,7 @@ public class PermutingConfiguration
 //      m_randomGeneratorIndex = 0;
 //      m_fitnessFunctionIndex = 0;
     }
-    System.err.print(m_geneticOperatorIndex+" ");
+//    System.err.print(m_geneticOperatorIndex+" ");
     list = nextList(m_geneticOperatorIndex++, m_geneticOperatorSlots);
     it = list.iterator();
     GeneticOperator op;
@@ -170,7 +170,7 @@ public class PermutingConfiguration
       m_randomGeneratorIndex++;
 //      m_fitnessFunctionIndex = 0;
     }
-    System.err.print(m_naturalSelectorIndex+" ");
+//    System.err.print(m_naturalSelectorIndex+" ");
     list = nextList(m_naturalSelectorIndex, m_naturalSelectorSlots);
     it = list.iterator();
     NaturalSelector ns;
@@ -189,7 +189,7 @@ public class PermutingConfiguration
         m_fitnessFunctionIndex++;
       }
     }
-    System.err.print(m_randomGeneratorIndex+" ");
+//    System.err.print(m_randomGeneratorIndex+" ");
     RandomGenerator rg = (RandomGenerator) m_randomGeneratorSlots.get(
         m_randomGeneratorIndex);
     m_configuration.setRandomGenerator(rg);
@@ -202,7 +202,7 @@ public class PermutingConfiguration
         m_fitnessFunctionIndex = 0;
       }
     }
-    System.err.println(m_fitnessFunctionIndex+" / "+index++);
+//    System.err.println(m_fitnessFunctionIndex+" / "+index++);
     FitnessFunction ff = (FitnessFunction) m_fitnessFunctionSlots.get(
         m_fitnessFunctionIndex);
     m_configuration.setFitnessFunction(ff);
