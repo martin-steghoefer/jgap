@@ -19,7 +19,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 import junit.framework.*;
 import junitx.util.*;
@@ -32,9 +31,8 @@ import junitx.util.*;
  */
 public class StringGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public StringGeneTest() {
   }
@@ -101,7 +99,8 @@ public class StringGeneTest
     }
   }
 
-  public void testSetAlphabet_1() throws Exception {
+  public void testSetAlphabet_1()
+      throws Exception {
     StringGene gene = new StringGene(3, 5);
     final String ALPHABET = "1234";
     gene.setAlphabet(ALPHABET);
@@ -208,7 +207,8 @@ public class StringGeneTest
     gene1.setAllele("");
   }
 
-  public void testNewGene_0() throws Exception {
+  public void testNewGene_0()
+      throws Exception {
     StringGene gene1 = new StringGene(1, 4);
     gene1.setAllele("XYZ");
     int minLength1 = gene1.getMinLength();
@@ -220,7 +220,8 @@ public class StringGeneTest
     assertEquals(maxLength1, maxLength2);
   }
 
-  public void testPersistentRepresentation_0() throws Exception {
+  public void testPersistentRepresentation_0()
+      throws Exception {
     Gene gene1 = new StringGene(2, 10, "ABCDE");
     gene1.setAllele(new String("BABE"));
     String pres1 = gene1.getPersistentRepresentation();
@@ -241,7 +242,8 @@ public class StringGeneTest
     }
   }
 
-  public void testPersistentRepresentation_2() throws Exception {
+  public void testPersistentRepresentation_2()
+      throws Exception {
     Gene gene1 = new StringGene(0, 10);
     gene1.setAllele("");
     String pres1 = gene1.getPersistentRepresentation();
@@ -251,7 +253,8 @@ public class StringGeneTest
     assertEquals(pres1, pres2);
   }
 
-  public void testPersistentRepresentation_3() throws Exception {
+  public void testPersistentRepresentation_3()
+      throws Exception {
     Gene gene1 = new StringGene();
     gene1.setAllele("");
     String pres1 = gene1.getPersistentRepresentation();
@@ -261,7 +264,8 @@ public class StringGeneTest
     assertEquals(pres1, pres2);
   }
 
-  public void testPersistentRepresentation_4() throws Exception {
+  public void testPersistentRepresentation_4()
+      throws Exception {
     Gene gene1 = new StringGene();
     gene1.setAllele(null);
     String pres1 = gene1.getPersistentRepresentation();
@@ -269,5 +273,30 @@ public class StringGeneTest
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     assertEquals(pres1, pres2);
+  }
+
+  public void testApplyMutation_0() {
+    Gene gene1 = new StringGene(5, 5);
+    gene1.setAllele("12345");
+    gene1.applyMutation(0, 0.99d);
+    gene1.applyMutation(4, -0.99d);
+  }
+
+  public void testApplyMutation_1() {
+    Gene gene1 = new StringGene(1, 1);
+    gene1.setAllele("1");
+    gene1.applyMutation(0, 0.99d);
+  }
+
+  public void testApplyMutation_2() {
+    Gene gene1 = new StringGene(1, 1);
+    gene1.setAllele("1");
+    try {
+      gene1.applyMutation(1, 0.99d);
+      fail();
+    }
+    catch (StringIndexOutOfBoundsException sex) {
+      ; //this is OK
+    }
   }
 }
