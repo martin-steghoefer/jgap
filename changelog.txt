@@ -20,12 +20,14 @@
 * Added tests for AveragingCrossoverOperator (see request 1083644)
 * Added tests for GreedyCrossover (see request 1093231)
 * Fixed javadocs of several classes
-* Moved FitnessValueComparator from BestChromosomesSelector and made
-  public
+* Moved FitnessValueComparator from BestChromosomesSelector and
+  made the class public
 * Completed unit tests for existing classes
 * Changed input type of Chromosome.setFitnessValue from int to
   double
 * Marked org.jgap.impl.ReproductionOperator as deprecated
+* Added convenience method contains(Chromosome) in
+  org.jgap.Population
 * General code improvements, e.g. Genotype.getFittestChromosome()
 
 2.0
