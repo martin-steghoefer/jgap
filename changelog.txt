@@ -1,11 +1,13 @@
 2.1
 ----------
 * Modified hashcode function in class Chromosome to be as in java.util.AbstractList
+* Made GaussianMutationOperator work with CompositeGene
 * Added utility class for general testing of hashcode function
 * Added tests for hashcode function in class Chromosome
 * Added tests for ThresholdSelector (see request 1083587)
 * Added tests for FittesPopulationMerger (see request 1084425)
 * Added tests for PopulationHistory (see request 1075163)
+* Added tests for GaussianMutationOperator (see request 1072059)
 * Fixed javadocs of several classes
 * Moved FitnessValueComparator from BestChromosomesSelector and made public
 * Completed unit tests for existing classes
