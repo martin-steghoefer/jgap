@@ -34,7 +34,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -147,11 +147,31 @@ public class CrossoverOperator
       int locus = generator.nextInt(firstGenes.length);
       // Swap the genes.
       // ---------------
+      Gene gene1;
+      Gene gene2;
       Object firstAllele;
       for (int j = locus; j < firstGenes.length; j++) {
-        firstAllele = firstGenes[j].getAllele();
-        firstGenes[j].setAllele(secondGenes[j].getAllele());
-        secondGenes[j].setAllele(firstAllele);
+        //Make a distinction to CompositeGene for the first gene
+        if (firstGenes[j] instanceof CompositeGene) {
+          //randomly determine gene to be considered
+          index1 = generator.nextInt(firstGenes[j].size());
+          gene1 = ((CompositeGene)firstGenes[j]).geneAt(index1);
+        }
+        else {
+          gene1 = firstGenes[j];
+        }
+        //Make a distinction to CompositeGene fot the second gene
+        if (secondGenes[j] instanceof CompositeGene) {
+          //randomly determine gene to be considered
+          index2 = generator.nextInt(secondGenes[j].size());
+          gene2 = ((CompositeGene)secondGenes[j]).geneAt(index2);
+        }
+        else {
+          gene2 = secondGenes[j];
+        }
+        firstAllele = gene1.getAllele();
+        gene1.setAllele(gene2.getAllele());
+        gene2.setAllele(firstAllele);
       }
       // Add the modified chromosomes to the candidate pool so that
       // they'll be considered for natural selection during the next
