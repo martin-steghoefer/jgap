@@ -29,7 +29,7 @@ import junit.framework.*;
 public class DataTreeBuilderTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public DataTreeBuilderTest() {
   }
@@ -37,5 +37,9 @@ public class DataTreeBuilderTest
   public static Test suite() {
     TestSuite suite = new TestSuite(DataTreeBuilderTest.class);
     return suite;
+  }
+
+  public void testRepresentGenotypeAsDocument_0() {
+      /*@todo implement*/
   }
 }
