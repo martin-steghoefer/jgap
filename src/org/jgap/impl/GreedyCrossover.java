@@ -58,7 +58,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -216,7 +216,7 @@ public class GreedyCrossover implements GeneticOperator {
             not_picked.remove(picked);
        }
 
-       if (ASSERTIONS && not_picked.size()!=1) throw new Error();
+       if (ASSERTIONS && not_picked.size()!=1) throw new Error("Unknown Error!");
 
        out.add( not_picked.last());
 
