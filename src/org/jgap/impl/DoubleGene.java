@@ -40,12 +40,6 @@ public class DoubleGene
         Double.MIN_VALUE;
 
     /**
-     * Represents the delimiter that is used to separate fields in the
-     * persistent representation of DoubleGene instances.
-     */
-    protected final static String PERSISTENT_FIELD_DELIMITER = ":";
-
-    /**
      * References the internal double value (allele) of this Gene.
      */
     protected Double m_value = null;

@@ -36,6 +36,14 @@ import java.io.Serializable;
  */
 public interface Gene extends Comparable, Serializable
 {
+
+    /**
+    * Represents the delimiter that is used to separate fields in the
+    * persistent representation of DoubleGene instances.
+    */
+   final static String PERSISTENT_FIELD_DELIMITER = ":";
+
+
     /**
      * Provides an implementation-independent means for creating new Gene
      * instances. The new instance that is created and returned should be

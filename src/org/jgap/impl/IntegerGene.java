@@ -44,12 +44,6 @@ public class IntegerGene implements Gene, java.io.Serializable
                                                 (long) Integer.MIN_VALUE;
 
     /**
-     * Represents the delimiter that is used to separate fields in the
-     * persistent representation of IntegerGene instances.
-     */
-    protected final static String PERSISTENT_FIELD_DELIMITER = ":";
-
-    /**
      * References the internal integer value (allele) of this Gene.
      */
     protected Integer m_value = null;
