@@ -24,7 +24,7 @@ public class DefaultConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public DefaultConfigurationTest() {
   }
@@ -52,9 +52,9 @@ public class DefaultConfigurationTest
       if (op instanceof MutationOperator) {
         code = code ^ 1;
       }
-      else if (op instanceof ReproductionOperator) {
-        code = code ^ 2;
-      }
+//      else if (op instanceof ReproductionOperator) {
+//        code = code ^ 2;
+//      }
       else if (op instanceof CrossoverOperator) {
         code = code ^ 4;
       }

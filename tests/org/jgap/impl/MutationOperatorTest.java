@@ -25,7 +25,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   public MutationOperatorTest() {
   }
@@ -170,6 +170,18 @@ public class MutationOperatorTest
     assertEquals(2, pop.size());
     assertEquals(3+2+2, chroms.size());
   }
+
+  public void testOperate_5() throws Exception {
+    MutationOperator mutOp = new MutationOperator();
+    Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
+    Configuration conf = new Configuration();
+    conf.setRandomGenerator(new StockRandomGenerator());
+    Genotype.setConfiguration(conf);
+    Population pop = new Population(population);
+    mutOp.operate(pop, pop.getChromosomes());
+    assertEquals(2,pop.getChromosomes().size());/**@todo make that it does not fail!*/
+  }
+
 }
 
 class TestFitnessFunction

@@ -26,7 +26,7 @@ public class WeightedRouletteSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public WeightedRouletteSelectorTest() {
   }
@@ -169,25 +169,6 @@ public class WeightedRouletteSelectorTest
     selector.select(1, null, popNew);
     selector.empty();
     assertEquals(1, popNew.size());
-  }
-
-  public void testEmpty_11()
-      throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
-    Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
-    Population pop = new Population(1);
-    pop.addChromosome(chrom);
-    selector.add(chrom);
-    try {
-      selector.select(1, null, new Population());
-      fail();
-    } catch (RuntimeException rex) {
-      ;//this is OK (because no fitness value set on Chromosome)
-    }
-
   }
 
   /**

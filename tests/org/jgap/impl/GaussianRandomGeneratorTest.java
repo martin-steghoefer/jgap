@@ -23,7 +23,7 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -162,11 +162,28 @@ public class GaussianRandomGeneratorTest
         }
       }
       assertTrue(res >= 0.000d);
+      if (res >= 1.0d) {
+        System.err.println(res);
+        assertTrue(res < 1.000d);
+      }
     }
   }
 
   public void testNextFloat_0() throws Exception {
     GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+//    double min=-5.57979044;double max=5.7904768;
+//    for (int i=0;i<100000000;i++) {
+//      double g = calc.nextDouble();
+//      if(g < min) {
+//        min = g;
+//      }
+//      if (g > max) {
+//        max = g;
+//      }
+//    }
+//    System.err.println("MIN: "+min);
+//    System.err.println("MAX: "+max);
+//    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
     float res;
     float resOlf = 0.0000f;
     for (int i=0;i<100;i++) {
