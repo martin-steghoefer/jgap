@@ -18,12 +18,11 @@
 
 package org.jgap.impl;
 
-import java.util.Vector;
-import org.jgap.Gene;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
+import java.util.*;
+
+import org.jgap.*;
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for StringGene class
@@ -35,7 +34,7 @@ public class StringGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public StringGeneTest() {
   }

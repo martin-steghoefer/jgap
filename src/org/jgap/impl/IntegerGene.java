@@ -35,6 +35,10 @@ import org.jgap.UnsupportedRepresentationException;
 public class IntegerGene
     extends NumberGene
     implements Gene {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
+
   /**
    * Represents the constant range of values supported by integers.
    */
@@ -64,6 +68,7 @@ public class IntegerGene
    * Constructs a new IntegerGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
    * than the standard range of integer values.
+   * @since 1.0
    */
   public IntegerGene() {
     m_lowerBounds = Integer.MIN_VALUE;
@@ -79,6 +84,7 @@ public class IntegerGene
    *                      inclusive.
    * @param a_upperBounds The highest value that this Gene may possess,
    *                      inclusive.
+   * @since 1.0
    */
   public IntegerGene(int a_lowerBounds, int a_upperBounds) {
     m_lowerBounds = a_lowerBounds;
@@ -104,6 +110,7 @@ public class IntegerGene
    * @param a_activeConfiguration ignored here
    * @return A new Gene instance of the same type and with the same
    *         setup as this concrete Gene.
+   * @since 1.0
    */
   public Gene newGene(Configuration a_activeConfiguration) {
     return new IntegerGene(m_lowerBounds, m_upperBounds);
@@ -121,6 +128,7 @@ public class IntegerGene
    * @return A string representation of this Gene's current state.
    * @throws UnsupportedOperationException to indicate that no implementation
    *         is provided for this method.
+   * @since 1.0
    */
   public String getPersistentRepresentation() throws
       UnsupportedOperationException {
@@ -147,6 +155,7 @@ public class IntegerGene
    *         is provided for this method.
    * @throws UnsupportedRepresentationException if this Gene implementation
    *         does not support the given string representation.
+   * @since 1.0
    */
   public void setValueFromPersistentRepresentation(String a_representation) throws
       UnsupportedRepresentationException {
@@ -220,6 +229,7 @@ public class IntegerGene
    * some cases than the more general getAllele() method.
    *
    * @return the int value of this Gene.
+   * @since 1.0
    */
   public int intValue() {
     return ( (Integer) m_value).intValue();
@@ -235,6 +245,7 @@ public class IntegerGene
    *                          flexibility to configure the genetic engine
    *                          to use the random number generator of their
    *                          choice.
+   * @since 1.0
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
     m_value = new Integer(a_numberGenerator.nextInt());
@@ -253,6 +264,7 @@ public class IntegerGene
    * @return a negative integer, zero, or a positive integer as this object
    *	       is less than, equal to, or greater than the object provided for
    *         comparison.
+   * @since 1.0
    */
   protected int compareToNative(Object o1, Object o2) {
     return ( (Integer) o1).compareTo(o2);
@@ -266,6 +278,7 @@ public class IntegerGene
    * integer max and min, then the resulting value will be about halfway
    * between the upper bounds and lower bounds). If the value is null or
    * is already within the bounds, it will be left unchanged.
+   * @since 1.0
    */
   protected void mapValueToWithinBounds() {
     if (m_value != null) {
@@ -297,6 +310,7 @@ public class IntegerGene
    * field would therefore be 2. This mapping unit is used to map illegal
    * allele values that are outside of the bounds to legal allele values that
    * are within the bounds.
+   * @since 1.0
    */
   protected void calculateBoundsUnitsToIntegerUnitsRatio() {
     int divisor = m_upperBounds - m_lowerBounds + 1;
