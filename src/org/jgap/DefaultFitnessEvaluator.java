@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -31,7 +29,7 @@ public class DefaultFitnessEvaluator implements FitnessEvaluator
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     public DefaultFitnessEvaluator()
     {

@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,6 +15,7 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap;
 
 /**
@@ -25,15 +24,18 @@ package org.jgap;
  * @author Klaus Meffert
  * @since 1.1
  */
-public interface MutationRateCalculator
-{
-    /**
-     * Calculates the mutation rate
-     * @param a_activeConfiguration current active configuration
-     * @return the currently applying mutation rate. It is calculated
-     * dynamically
-     *
-     * @since 1.1
-     */
-    int calculateCurrentRate(Configuration a_activeConfiguration);
+public interface MutationRateCalculator {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.3 $";
+
+  /**
+   * Calculates the mutation rate
+   * @param a_activeConfiguration current active configuration
+   * @return the currently applying mutation rate. It is calculated
+   * dynamically
+   *
+   * @since 1.1
+   */
+  int calculateCurrentRate(Configuration a_activeConfiguration);
 }
