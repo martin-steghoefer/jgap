@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Each data has its own data container
@@ -289,11 +289,11 @@ public class Evaluator {
     // gather data of Chromosomes
     Chromosome chrom;
     ChromosomeData chromData;
-    for (int i=0;i<popSize;i++) {
+    for (int i = 0; i < popSize; i++) {
       chrom = pop.getChromosome(i);
       chromData = new ChromosomeData();
       chromData.fitnessValue = chrom.getFitnessValue();
-      chromData.size= chrom.size();
+      chromData.size = chrom.size();
       chromData.index = i;
       data.chromosomeData[i] = chromData;
     }
@@ -314,11 +314,12 @@ public class Evaluator {
    * average fitness, maximum fitness...
    * @param a_permutation the permutation to compute the performance metrics
    * for
+   * @return computed statistical data
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void calcPerformance(int a_permutation) {
+  public GenotypeDataAvg calcPerformance(int a_permutation) {
     int numRuns = getNumberOfRuns(a_permutation);
     GenotypeData data;
 
@@ -341,31 +342,32 @@ public class Evaluator {
     int size;
     ChromosomeData chrom;
 
-    for (int i=0;i<numRuns;i++) {
+    for (int i = 0; i < numRuns; i++) {
       data = retrieveGenotype(a_permutation, i);
 
       // generation the genotype data represents
-      if (i==0) {
+      if (i == 0) {
         dataAvg.generation = data.generation;
       }
 
       // average number of chromosomes
-      sizeAvg += data.size/numRuns;
+      sizeAvg += data.size / numRuns;
 
       size = data.size;
       fitnessAvgChroms = 0.0d;
       fitnessDiversity = 0.0d;
-      for (int j=0;i<size;j++) {
+      for (int j = 0; j < size; j++) {
         chrom = data.chromosomeData[j];
         fitness = chrom.fitnessValue;
         // diversity of fitness values over all chromosomes
-        if (j>0) {
-          fitnessDiversity += Math.abs(fitness - fitnessDiversityChromsOld)/size;
+        if (j > 0) {
+          fitnessDiversity += Math.abs(fitness - fitnessDiversityChromsOld) /
+              (size - 1);
         }
         fitnessDiversityChromsOld = fitness;
 
         // average fitness value for generation over all Chromosomes
-        fitnessAvgChroms += fitness/size;
+        fitnessAvgChroms += fitness / size;
 
         // fittest chromosome in generation
         if (fitnessBest < fitness) {
@@ -376,14 +378,14 @@ public class Evaluator {
 
       }
       // average fitness value for generation over all runs
-      fitnessAvg += fitnessAvgChroms/numRuns;
+      fitnessAvg += fitnessAvgChroms / numRuns;
 
       // average fitness delta value for generation over all runs
-      fitnessDiversityAvg += fitnessDiversity/numRuns;
+      fitnessDiversityAvg += fitnessDiversity / numRuns;
 
       // absolute delta between two adjacent best fitness values
-      if (i>0) {
-        fitnessBestDeltaAvg += Math.abs(fitnessBest-fitnessBestOld)/numRuns;
+      if (i > 0) {
+        fitnessBestDeltaAvg += Math.abs(fitnessBest - fitnessBestOld) / numRuns;
       }
       fitnessBestOld = fitnessBest;
     }
@@ -397,6 +399,7 @@ public class Evaluator {
 
     //store computed (averaged) data
     m_genotypeDataAvg.add(dataAvg);
+    return dataAvg;
   }
 
   /**
@@ -404,25 +407,37 @@ public class Evaluator {
    */
   public class GenotypeDataAvg {
     public int permutation;
+
     public int generation;
+
     public double sizeAvg;
+
     public double bestFitnessValue;
+
     public double avgFitnessValue;
+
     public int bestFitnessValueGeneration;
+
     public double avgDiversityFitnessValue;
+
     public double avgBestDeltaFitnessValue;
   }
 
   public class GenotypeData {
     public int generation;
+
     public int hashCode;
+
     public int size;
+
     public ChromosomeData[] chromosomeData;
   }
 
   public class ChromosomeData {
     public int index;
+
     public int size;
+
     public double fitnessValue;
   }
 }
