@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Each data has its own data container
@@ -201,10 +201,10 @@ public class Evaluator {
 
   /**
    * Calculates average fitness value improvement per generation.
-   * @param a_generation int
+   * @param a_permutation int
    * @return DefaultKeyedValues2D
    */
-  public DefaultKeyedValues2D calcAvgFitnessImpr(int a_generation) {
+  public DefaultKeyedValues2D calcAvgFitnessImpr(int a_permutation) {
     return null;
   }
 }
