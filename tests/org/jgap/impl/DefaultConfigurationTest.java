@@ -24,7 +24,7 @@ public class DefaultConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public DefaultConfigurationTest() {
   }
@@ -37,6 +37,7 @@ public class DefaultConfigurationTest
   public void testConstruct_0() {
     Configuration conf = new DefaultConfiguration();
     assertEquals(EventManager.class, conf.getEventManager().getClass());
+    assertEquals(DefaultFitnessEvaluator.class, conf.getFitnessEvaluator().getClass());
     assertEquals(BestChromosomesSelector.class,
                  conf.getNaturalSelectors(true).get(0).getClass());
     assertEquals(StockRandomGenerator.class,
