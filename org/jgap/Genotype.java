@@ -73,7 +73,7 @@ public class Genotype implements java.io.Serializable {
    *
    * @return The chromosomes that make up this Genotype.
    */
-  public Chromosome[] getChromosomes()
+  public synchronized Chromosome[] getChromosomes()
   {
     return chromosomes;
   }
@@ -85,7 +85,7 @@ public class Genotype implements java.io.Serializable {
    *
    * @return The Chromosome with the highest fitness value.
    */
-  public Chromosome getFittestChromosome() {
+  public synchronized Chromosome getFittestChromosome() {
     if (chromosomes.length == 0) {
       return null;
     }
@@ -115,7 +115,7 @@ public class Genotype implements java.io.Serializable {
    * included in the next population. Note that the population
    * size always remains constant.
    */
-  public void evolve() {
+  public synchronized void evolve() {
     workingPool.removeAll(workingPool);
 
     // Execute all of the Genetic Operators
@@ -152,7 +152,7 @@ public class Genotype implements java.io.Serializable {
    *
    * @return A string representation of this Genotype instance.
    */
-  public String toString() {
+  public synchronized String toString() {
     StringBuffer buffer = new StringBuffer();
 
     for(int i = 0; i < chromosomes.length; i++) {

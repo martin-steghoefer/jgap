@@ -43,7 +43,8 @@ public class WeightedRouletteSelector implements NaturalSelector {
   private int totalInstances = 0;
 
 
-  public void add(Configuration gaConf, Chromosome chromosome, int fitness) {
+  public synchronized void add(Configuration gaConf, Chromosome chromosome,
+                               int fitness) {
     if(population.containsKey(chromosome)) {
       ((Counter) population.get(chromosome)).increment(fitness);
     }
@@ -55,7 +56,7 @@ public class WeightedRouletteSelector implements NaturalSelector {
   }
 
  
-  public Chromosome[] select(Configuration gaConf, int howMany) {
+  public synchronized Chromosome[] select(Configuration gaConf, int howMany) {
     RandomGenerator generator = gaConf.getRandomGenerator();
     Chromosome[] selections = new Chromosome[howMany];
     int[] selectedIndices = new int[howMany];
@@ -91,7 +92,7 @@ public class WeightedRouletteSelector implements NaturalSelector {
   }
 
 
-  public void empty() {
+  public synchronized void empty() {
     population.clear();
     totalInstances = 0;
   }

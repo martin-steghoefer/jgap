@@ -3,7 +3,6 @@
 * Added this CHANGELOG file
 * Added a TODO file
 * Made appropriate classes and interfaces serializable.
-* Updated the brace and indentation style.
 * Created an algorithm configuration mechanism, via the
   org.jgap.Configuration class, that provides a central point of
   control over the various configuration settings.
@@ -14,6 +13,8 @@
   are now stored
 * Fixed bug wherein BitSet.length() was occasionally being used instead
   of Chromosome.size(), resulting in less desirable behavior.
+* Made thread-safe.
+* Updated the brace and indentation style.
 * Updated README file
 
 

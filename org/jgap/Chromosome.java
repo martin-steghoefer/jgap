@@ -87,7 +87,7 @@ public class Chromosome implements Cloneable, java.io.Serializable {
    *
    * @return A copy of this Chromosome.
    */
-  public Object clone() {
+  public synchronized Object clone() {
     try {
       return new Chromosome(gaConf, (BitSet) genes.clone());
     }
@@ -113,7 +113,7 @@ public class Chromosome implements Cloneable, java.io.Serializable {
    * @param locus: The index of the gene value to be returned.
    * @return The boolean value of the indicated gene.
    */
-  public boolean getAllele(int locus) {
+  public synchronized boolean getAllele(int locus) {
     return genes.get(locus);
   }
 
@@ -125,7 +125,7 @@ public class Chromosome implements Cloneable, java.io.Serializable {
    *
    * @return a BitSet of genes.
    */
-  public BitSet getGenes() {
+  public synchronized BitSet getGenes() {
     return genes;
   }
 
@@ -147,7 +147,7 @@ public class Chromosome implements Cloneable, java.io.Serializable {
    *
    * @return A string representation of this Chromosome.
    */
-  public String toString() {
+  public synchronized String toString() {
     return genes.toString();
   }
 
