@@ -30,7 +30,7 @@ public class BooleanGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -225,6 +225,9 @@ public class BooleanGene
       // we're the greater gene.
       // ----------------------------------------------------------
       return m_value == null ? 0 : 1;
+    }
+    else if (m_value == null) {
+      return otherBooleanGene.m_value == null ? 0 : -1;
     }
     // The Boolean class doesn't implement the Comparable interface, so
     // we have to do the comparison ourselves.
