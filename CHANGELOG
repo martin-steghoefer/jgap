@@ -22,8 +22,8 @@
   end, rather than dumping the entire Genotype.
 * Added "debug" target to Ant build script so that debug versions of the
   JGAP classes can be easily built.
-* Updated the copyright statements on all files.
-
+* Updated the copyright notices on all files.
+* Updated the README file.
 
 0.31
 ----------

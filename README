@@ -2,35 +2,31 @@ About JGAP 0.3x:
 
 Important notes about backward compatibility:
 
-   * The JGAP 0.31 API is slightly incompatible with the 0.3 API with
-     regard to the Allele interface and XMLManager class. Please see
-     the CHANGELOG for an overview of changes.
-
-   * JGAP 0.3x adds a number of new features over version 0.2, including
+     JGAP 0.3x adds a number of new features over version 0.2, including
      support for custom alleles. As a result, the API has changed in
      some places and is not backward compatible with the 0.2x APIs. That
      being said, converting to the new APIs should be pretty easy and
      will provide a great deal of convenience and flexibility.
 
 This represents an alpha release of JGAP, the Java Genetic Algorithms
-Package, which means it is not feature complete, is not optimized, and
-probably contains bugs. The APIs are also considered a work in progress
-and are subject to change. For a general list of changes, fixes, and
-enhancements in this version, please see the CHANGELOG file.
+Package, which means it is not feature complete and probably contains 
+bugs. The APIs are also considered a work in progress and are subject to
+change. For a general list of changes, fixes, and enhancements in this
+version, please see the CHANGELOG file.
 
 This software is OSI Certified Open Source Software. OSI Certified is
 a certification mark of the Open Source Initiative.
 
-Any existing documentation, including Javadocs and some basic
-introductory documents to help get you started, can be found on the 
-JGAP home page at http://jgap.sourceforge.net. Javadocs 
-can also be found in the javadocs/ directory of the JGAP distribution,
-and other documentation can be found in the docs/ directory of the
-distribution. For a basic introduction to using JGAP, we highly 
-recommend reading the tutorial that can be found both on the JGAP 
-website and in the docs/ directory.
+Any existing documentation, including Javadocs and some basic introductory
+documents to help get you started, can be found on the JGAP home page at
+http://jgap.sourceforge.net. Javadocs can also be found in the javadocs/
+directory of the JGAP distribution, and other documentation can be found
+in the docs/ directory of the distribution. For a basic introduction to 
+using JGAP, we highly recommend reading the tutorial that can be found 
+both on the JGAP website and in the docs/ directory.
 
-JGAP 0.3x requires Java 1.2 or above.
+JGAP 0.3x was compiled and tested with Java 1.4 on Linux and Windows,
+although the authors believe that Java 1.2 should be sufficient.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
@@ -40,9 +36,9 @@ JGAP users mailing list at:
 or to the JGAP developers mailing list at jgap-devl@lists.sourceforge.net.
 
 Public announcements concerning JGAP, including any new release
-announcements, are made on the jgap-announce mailing list. If you
-would like to subscribe to this list, or to any other JGAP list,
-please visit the JGAP mailing list manager at:
+announcements, are made on the jgap-announce mailing list. If you would
+like to subscribe to this list, or to any other JGAP list, please visit 
+the JGAP mailing list manager at:
 
     http://sourceforge.net/mail/?group_id=11618
 
