@@ -30,6 +30,10 @@ package org.jgap;
  * @since 1.0
  */
 public interface NaturalSelector {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.3 $";
+
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *

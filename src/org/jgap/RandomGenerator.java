@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -25,11 +23,16 @@ package org.jgap;
  * number implementation so that more rigorous or alternative implementations
  * can be provided as desired.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public interface RandomGenerator
 {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.2 $";
+
+
     /**
      * Returns the next pseudorandom, uniformly distributed int value
      * from this random number generator's sequence. The general contract

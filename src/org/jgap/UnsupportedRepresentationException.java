@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,8 +15,8 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.jgap;
 
+package org.jgap;
 
 /**
  * This exception is typically thrown when the
@@ -30,17 +28,20 @@ package org.jgap;
  * @author Neil Rotstan
  * @since 1.0
  */
-public class UnsupportedRepresentationException extends Exception
-{
-    /**
-     * Constructs a new UnsupportedRepresentationException instance with the
-     * given error message.
-     *
-     * @param a_message An error message describing the reason this exception
-     *                  is being thrown.
-     */
-    public UnsupportedRepresentationException( String a_message )
-    {
-        super( a_message );
-    }
+public class UnsupportedRepresentationException
+    extends Exception {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**
+   * Constructs a new UnsupportedRepresentationException instance with the
+   * given error message.
+   *
+   * @param a_message An error message describing the reason this exception
+   *                  is being thrown.
+   */
+  public UnsupportedRepresentationException(String a_message) {
+    super(a_message);
+  }
 }
