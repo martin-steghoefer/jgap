@@ -46,7 +46,7 @@ public class Genotype implements Serializable
     transient protected Configuration m_activeConfiguration;
 
     /**
-     * The array of Chromosomes that makeup thie Genotype's population.
+     * The array of Chromosomes that makeup the Genotype's population.
      */
     protected Chromosome[] m_chromosomes;
 
@@ -62,6 +62,11 @@ public class Genotype implements Serializable
      */
     transient protected List m_workingPool;
 
+    /**
+     * The fitness evaluator. See interface class FitnessEvaluator for details
+     * @since 1.1
+     */
+    private FitnessEvaluator m_fitnessEvaluator;
 
     /**
      * Constructs a new Genotype instance with the given array of
@@ -83,6 +88,26 @@ public class Genotype implements Serializable
                      Chromosome[] a_initialChromosomes )
            throws InvalidConfigurationException
     {
+        this (a_activeConfiguration, a_initialChromosomes,
+              new DefaultFitnessEvaluator ());
+    }
+
+    /**
+     * Same as constructor without parameter of type FitnessEvaluator.
+     * Additionally a specific fitnessEvaluator can be specified here. See
+     * interface class FitnessEvaluator for details.
+     * @param a_activeConfiguration The current active Configuration object.
+     * @param a_initialChromosomes The Chromosome population to be
+     *                             managed by this Genotype instance.
+     * @param a_fitnessEvaluator a specific fitness value evaluator
+     * @throws InvalidConfigurationException
+     * @since 1.1
+     */
+    public Genotype (Configuration a_activeConfiguration,
+                     Chromosome[] a_initialChromosomes,
+                     FitnessEvaluator a_fitnessEvaluator)
+        throws InvalidConfigurationException
+    {
         // Sanity checks: Make sure neither the Configuration, the array
         // of Chromosomes, nor any of the Genes inside the array are null.
         // ---------------------------------------------------------------
@@ -98,6 +123,10 @@ public class Genotype implements Serializable
                 "The array of Chromosomes may not be null." );
         }
 
+        if (a_fitnessEvaluator == null) {
+            throw new IllegalArgumentException (
+                "The fitness evaluator may not be null.");
+        }
         for( int i = 0; i < a_initialChromosomes.length; i++ )
         {
             if( a_initialChromosomes[ i ] == null )
@@ -204,19 +233,22 @@ public class Genotype implements Serializable
             return null;
         }
 
-        // Set the highest fitness value to that of the first chromosome.
+        // Set the best fitness value to that of the first chromosome.
         // Then loop over the rest of the chromosomes and see if any has
-        // a higher fitness value.
+        // a better fitness value.
+        // The decision whether a fitness value if better than another is
+        // delegated to a FitnessEvaluator
         // --------------------------------------------------------------
         Chromosome fittestChromosome = m_chromosomes[ 0 ];
         int fittestValue = fittestChromosome.getFitnessValue();
 
         for ( int i = 1; i < m_chromosomes.length; i++ )
         {
-            if ( m_chromosomes[ i ].getFitnessValue() > fittestValue )
+            if (m_fitnessEvaluator.isFitter (m_chromosomes[i].getFitnessValue (),
+                                             fittestValue))
             {
-                fittestChromosome = m_chromosomes[ i ];
-                fittestValue = fittestChromosome.getFitnessValue();
+                fittestChromosome = m_chromosomes[i];
+                fittestValue = fittestChromosome.getFitnessValue ();
             }
         }
 
@@ -248,7 +280,7 @@ public class Genotype implements Serializable
 
         // If a bulk fitness function has been provided, then convert the
         // working pool to an array and pass it to the bulk fitness
-        // function so that it can evaluate and assign fitness values to 
+        // function so that it can evaluate and assign fitness values to
         // each of the Chromosomes.
         // --------------------------------------------------------------
         BulkFitnessFunction bulkFunction =
@@ -258,9 +290,9 @@ public class Genotype implements Serializable
         {
             Chromosome[] candidateChromosomes = (Chromosome[])
                 m_workingPool.toArray( new Chromosome[ m_workingPool.size() ] );
-         
+
             bulkFunction.evaluate( candidateChromosomes );
-        } 
+        }
 
         // Add the chromosomes in the working pool to the natural selector.
         // ----------------------------------------------------------------
