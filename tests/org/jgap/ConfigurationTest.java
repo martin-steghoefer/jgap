@@ -42,7 +42,7 @@ public class ConfigurationTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     public ConfigurationTest ()
     {
@@ -141,7 +141,7 @@ public class ConfigurationTest
         conf.setFitnessFunction (new StaticFitnessFunction (2));
         Gene gene = new BooleanGene ();
         conf.setSampleChromosome (new Chromosome (gene, 5));
-        conf.setNaturalSelector (new WeightedRouletteSelector ());
+        conf.addNaturalSelector (new WeightedRouletteSelector (), false);
         try
         {
             conf.verifyStateIsValid ();
@@ -161,7 +161,7 @@ public class ConfigurationTest
         conf.setFitnessFunction (new StaticFitnessFunction (2));
         Gene gene = new BooleanGene ();
         conf.setSampleChromosome (new Chromosome (gene, 5));
-        conf.setNaturalSelector (new WeightedRouletteSelector ());
+        conf.addNaturalSelector (new WeightedRouletteSelector (), true);
         conf.setRandomGenerator (new StockRandomGenerator ());
         try
         {
@@ -182,7 +182,7 @@ public class ConfigurationTest
         conf.setFitnessFunction (new StaticFitnessFunction (2));
         Gene gene = new BooleanGene ();
         conf.setSampleChromosome (new Chromosome (gene, 5));
-        conf.setNaturalSelector (new WeightedRouletteSelector ());
+        conf.addNaturalSelector (new WeightedRouletteSelector (), false);
         conf.setRandomGenerator (new StockRandomGenerator ());
         conf.setEventManager (new EventManager ());
         try
@@ -204,7 +204,7 @@ public class ConfigurationTest
         conf.setFitnessFunction (new StaticFitnessFunction (2));
         Gene gene = new BooleanGene ();
         conf.setSampleChromosome (new Chromosome (gene, 5));
-        conf.setNaturalSelector (new WeightedRouletteSelector ());
+        conf.addNaturalSelector (new WeightedRouletteSelector (), true);
         conf.setRandomGenerator (new StockRandomGenerator ());
         conf.setEventManager (new EventManager ());
         conf.addGeneticOperator (new MutationOperator ());
@@ -227,7 +227,7 @@ public class ConfigurationTest
         conf.setFitnessFunction (new StaticFitnessFunction (2));
         Gene gene = new BooleanGene ();
         conf.setSampleChromosome (new Chromosome (gene, 5));
-        conf.setNaturalSelector (new WeightedRouletteSelector ());
+        conf.addNaturalSelector (new WeightedRouletteSelector (), true);
         conf.setRandomGenerator (new StockRandomGenerator ());
         conf.setEventManager (new EventManager ());
         conf.addGeneticOperator (new MutationOperator ());
@@ -243,7 +243,7 @@ public class ConfigurationTest
         conf.setFitnessFunction (new StaticFitnessFunction (2));
         Gene gene = new BooleanGene ();
         conf.setSampleChromosome (new Chromosome (gene, 5));
-        conf.setNaturalSelector (new WeightedRouletteSelector ());
+        conf.addNaturalSelector (new WeightedRouletteSelector (), false);
         conf.setRandomGenerator (new StockRandomGenerator ());
         conf.setEventManager (new EventManager ());
         conf.addGeneticOperator (new MutationOperator ());
@@ -264,7 +264,7 @@ public class ConfigurationTest
         Chromosome sample = new Chromosome (gene, 55);
         conf.setSampleChromosome (sample);
         NaturalSelector natSel = new WeightedRouletteSelector ();
-        conf.setNaturalSelector (natSel);
+        conf.addNaturalSelector (natSel, false);
         RandomGenerator randGen = new StockRandomGenerator ();
         conf.setRandomGenerator (randGen);
         EventManager evMan = new EventManager ();
@@ -277,7 +277,7 @@ public class ConfigurationTest
         conf.addGeneticOperator (croOp);
         conf.setPopulationSize (7);
         assertEquals (fitFunc, conf.getFitnessFunction ());
-        assertEquals (natSel, conf.getNaturalSelector ());
+        assertEquals (natSel, conf.getNaturalSelectors (false).get(0));
         assertEquals (randGen, conf.getRandomGenerator ());
         assertEquals (sample, conf.getSampleChromosome ());
         assertEquals (evMan, conf.getEventManager ());
@@ -288,4 +288,21 @@ public class ConfigurationTest
         assertEquals (croOp, conf.getGeneticOperators ().get (2));
     }
 
+    /**
+     * Tests a deprecated function!
+     */
+    public void testSetNaturalSelector_0() {
+        /**@todo implement*/
+    }
+
+    /**
+     * Tests a deprecated function!
+     */
+    public void testGetNaturalSelector_0() {
+        /**@todo implement*/
+    }
+
+    public void testAddNaturalSelector_0() {
+        /**@todo implement*/
+    }
 }
