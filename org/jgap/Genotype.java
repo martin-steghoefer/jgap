@@ -21,7 +21,7 @@
 package org.jgap;
 
 import java.util.*;
-
+import org.jgap.event.*;
 
 /**
  * Genotypes represent fixed-length collections or "populations" of
@@ -146,6 +146,10 @@ public class Genotype implements java.io.Serializable {
 
     // Clean up
     gaConf.getNaturalSelector().empty();
+
+    // Fire Done Event
+    gaConf.getEventManager().fireGenotypeEvolvedEvent( 
+      new GenotypeEvent( this ) );
   }
 
 

@@ -20,6 +20,7 @@
 
 package org.jgap;
 
+import org.jgap.event.EventManager;
 import java.util.*;
 
 /**
@@ -41,14 +42,15 @@ import java.util.*;
  * setting will default to if not.
  */
 public class Configuration implements java.io.Serializable {
-  protected FitnessFunction objectiveFunction = null;
-  protected NaturalSelector populationSelector = null;
-  protected RandomGenerator random = null;
-  protected List geneticOperators = new ArrayList();
-  protected int chromosomeSize = 0;
-  protected int populationSize = 0;
-  protected boolean settingsLocked = false;
+  private FitnessFunction objectiveFunction = null;
+  private NaturalSelector populationSelector = null;
+  private RandomGenerator random = null;
+  private List geneticOperators = new ArrayList();
+  private int chromosomeSize = 0;
+  private int populationSize = 0;
+  private boolean settingsLocked = false;
 
+  private EventManager eventManager = new EventManager();
 
   /**
    * Set the fitness function to be used for this genetic algorithm.
@@ -261,6 +263,15 @@ public class Configuration implements java.io.Serializable {
     return populationSize;
   }
 
+ 
+  /**
+   * Retrieves the EventManager associated with this configuration.
+   * The EventManager can be used to listen for events such as 
+   * GenotypeEvolvedEvent.
+   */
+  public EventManager getEventManager() {
+    return eventManager;
+  }
 
   /**
    * Lock all of the settings in this configuration object. Once
