@@ -37,37 +37,43 @@ import org.jgap.*;
  */
 public class WeightedRouletteSelector
     implements NaturalSelector {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
 
   private static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0.0);
+
   /**
    * Represents the "roulette wheel." Each key in the Map is a Chromosome
    * and each value is an instance of the SlotCounter inner class, which
    * keeps track of how many slots on the wheel each Chromosome is occupying.
    */
   private Map m_wheel = new HashMap();
+
   /**
    * Keeps track of the total number of slots that are in use on the
    * roulette wheel. This is equal to the combined fitness values of
    * all Chromosome instances that have been added to this wheel.
    */
   private double m_totalNumberOfUsedSlots = 0.0;
+
   /**
    * An internal pool in which discarded SlotCounter instances can be stored
    * so that they can be reused over and over again, thus saving memory
    * and the overhead of constructing new ones each time.
    */
   private Pool m_counterPool = new Pool();
+
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *
    * @param a_activeConfigurator: The current active Configuration to be used
    *                              during the add process.
    * @param a_chromosomeToAdd: The specimen to add to the pool.
+   * @since 1.0
    */
   public synchronized void add(Configuration a_activeConfigurator,
                                Chromosome a_chromosomeToAdd) {
@@ -120,11 +126,11 @@ public class WeightedRouletteSelector
    * @param a_howManyToSelect: The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
+   * @since 1.0
    */
   public synchronized Chromosome[] select(Configuration a_activeConfiguration,
                                           int a_howManyToSelect) {
     RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
-    Chromosome[] selections = new Chromosome[a_howManyToSelect];
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
     // that contains the fitness values for each chromosome, one that
@@ -156,6 +162,10 @@ public class WeightedRouletteSelector
       // ------------------------------------------------------
       m_totalNumberOfUsedSlots += counterValues[i];
     }
+    if (a_howManyToSelect > numberOfEntries) {
+      a_howManyToSelect = numberOfEntries;
+    }
+    Chromosome[] selections = new Chromosome[a_howManyToSelect];
     // To select each chromosome, we just "spin" the wheel and grab
     // whichever chromosome it lands on.
     // ------------------------------------------------------------
@@ -184,6 +194,7 @@ public class WeightedRouletteSelector
    *                        respective Chromosomes.
    * @param a_chromosomes The respective Chromosome instances from which
    *                      selection is to occur.
+   * @since 1.0
    */
   private Chromosome spinWheel(RandomGenerator a_generator,
                                double[] a_fitnessValues,
@@ -249,6 +260,7 @@ public class WeightedRouletteSelector
 
   /**
    * Empty out the working pool of Chromosomes.
+   * @since 1.0
    */
   public synchronized void empty() {
     // Put all of the old SlotCounters into the pool so that we can
@@ -305,6 +317,7 @@ public class WeightedRouletteSelector
  * the initial fitness value of the Chromosome for which this SlotCounter is
  * to be associated. The reset() method may be reinvoked to begin counting
  * slots for a new Chromosome.
+ * @since 1.0
  */
 class SlotCounter {
   /**
