@@ -26,7 +26,7 @@ public class IntegerGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public IntegerGeneTest() {
   }
@@ -184,6 +184,108 @@ public class IntegerGeneTest
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     assertEquals(pres1, pres2);
+  }
+
+  /**
+   * Should be possible without exception
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_1()
+      throws Exception {
+    Gene gene1 = new IntegerGene(2, 753);
+    gene1.setAllele(new Integer(45));
+    gene1.setValueFromPersistentRepresentation(null);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_2()
+      throws Exception {
+    Gene gene1 = new IntegerGene(2, 753);
+    gene1.setAllele(new Integer(45));
+    gene1.setValueFromPersistentRepresentation("2" +
+                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               "3" +
+                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               "4");
+    assertEquals(2,((Integer)gene1.getAllele()).intValue());
+    assertEquals(3,((Integer) PrivateAccessor.getField(gene1,
+        "m_lowerBounds")).intValue());
+    assertEquals(4,((Integer) PrivateAccessor.getField(gene1,
+        "m_upperBounds")).intValue());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_3()
+      throws Exception {
+    Gene gene1 = new IntegerGene(2, 753);
+    gene1.setAllele(new Integer(45));
+    gene1.setValueFromPersistentRepresentation("null" +
+                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               "3" +
+                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               "4");
+    assertNull(gene1.getAllele());
+    assertEquals(3,((Integer) PrivateAccessor.getField(gene1,
+        "m_lowerBounds")).intValue());
+    assertEquals(4,((Integer) PrivateAccessor.getField(gene1,
+        "m_upperBounds")).intValue());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_4()
+       {
+    Gene gene1 = new IntegerGene(2, 753);
+    gene1.setAllele(new Integer(45));
+    try {
+      gene1.setValueFromPersistentRepresentation("null" +
+                                                 IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "3.5" +
+                                                 IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "4");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ;//this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentRepresentation_5()
+      {
+    Gene gene1 = new IntegerGene(2, 753);
+    gene1.setAllele(new Integer(45));
+    try {
+      gene1.setValueFromPersistentRepresentation("null" +
+                                                 IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "3" +
+                                                 IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER +
+                                                 "a");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ;//this is OK
+    }
   }
 
   public void testCompareToNative_0() {
