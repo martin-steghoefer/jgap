@@ -19,11 +19,10 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Gene;
 import org.jgap.Configuration;
+import org.jgap.Gene;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
-
 
 /**
  * A Gene implementation that supports two possible values (alleles) for each
@@ -39,36 +38,34 @@ import org.jgap.UnsupportedRepresentationException;
  * @author Neil Rotstan
  * @since 1.0
  */
-public class BooleanGene implements Gene, java.io.Serializable
+public class BooleanGene
+    implements Gene
 {
     /**
      * Shared constant representing the "true" boolean value. Shared constants
      * are used to save memory so that a new Boolean object doesn't have to
      * be constructed each time.
      */
-    protected static final Boolean TRUE_BOOLEAN = new Boolean( true );
+    protected static final Boolean TRUE_BOOLEAN = new Boolean (true);
 
     /**
      * Shared constant representing the "false" boolean value. Shared constants
      * are used to save memory so that a new Boolean object doesn't have to
      * be constructed each time.
      */
-    protected static final Boolean FALSE_BOOLEAN = new Boolean( false );
+    protected static final Boolean FALSE_BOOLEAN = new Boolean (false);
 
     /**
      * References the internal boolean value of this Gene.
      */
     protected Boolean m_value = null;
 
-
-
     /**
      * Constructs a new BooleanGene with default settings.
      */
-    public BooleanGene()
+    public BooleanGene ()
     {
     }
-
 
     /**
      * Provides an implementation-independent means for creating new Gene
@@ -89,11 +86,10 @@ public class BooleanGene implements Gene, java.io.Serializable
      * @return A new Gene instance of the same type and with the same
      *         setup as this concrete Gene.
      */
-    public Gene newGene( Configuration a_activeConfiguration )
+    public Gene newGene (Configuration a_activeConfiguration)
     {
-        return new BooleanGene();
+        return new BooleanGene ();
     }
-
 
     /**
      * Sets the value of this Gene to the new given value. This class
@@ -101,11 +97,10 @@ public class BooleanGene implements Gene, java.io.Serializable
      *
      * @param a_newValue the new value of this Gene instance.
      */
-    public void setAllele( Object a_newValue )
+    public void setAllele (Object a_newValue)
     {
         m_value = (Boolean) a_newValue;
     }
-
 
     /**
      * Retrieves a string representation of this Gene that includes any
@@ -120,12 +115,11 @@ public class BooleanGene implements Gene, java.io.Serializable
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
      */
-    public String getPersistentRepresentation()
-                  throws UnsupportedOperationException
+    public String getPersistentRepresentation ()
+        throws UnsupportedOperationException
     {
-        return toString();
+        return toString ();
     }
-
 
     /**
      * Sets the value and internal state of this Gene from the string
@@ -144,32 +138,31 @@ public class BooleanGene implements Gene, java.io.Serializable
      * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
      */
-    public void setValueFromPersistentRepresentation( String a_representation )
-                throws UnsupportedRepresentationException
+    public void setValueFromPersistentRepresentation (String a_representation)
+        throws UnsupportedRepresentationException
     {
-        if( a_representation != null )
+        if (a_representation != null)
         {
-            if( a_representation.equals( "null") )
+            if (a_representation.equals ("null"))
             {
                 m_value = null;
             }
-            else if( a_representation.equals( "true" ) )
+            else if (a_representation.equals ("true"))
             {
                 m_value = TRUE_BOOLEAN;
             }
-            else if( a_representation.equals( "false" ) )
+            else if (a_representation.equals ("false"))
             {
                 m_value = FALSE_BOOLEAN;
             }
             else
             {
-                throw new UnsupportedRepresentationException(
+                throw new UnsupportedRepresentationException (
                     "Unknown boolean gene representation: " +
-                    a_representation );
+                    a_representation);
             }
         }
     }
-
 
     /**
      * Retrieves the value represented by this Gene. All values returned
@@ -177,11 +170,10 @@ public class BooleanGene implements Gene, java.io.Serializable
      *
      * @return the Boolean value of this Gene.
      */
-    public Object getAllele()
+    public Object getAllele ()
     {
         return m_value;
     }
-
 
     /**
      * Retrieves the boolean value of this Gene. This may be more convenient
@@ -189,11 +181,10 @@ public class BooleanGene implements Gene, java.io.Serializable
      *
      * @return the boolean value of this Gene.
      */
-    public boolean booleanValue()
+    public boolean booleanValue ()
     {
-        return m_value.booleanValue();
+        return m_value.booleanValue ();
     }
-
 
     /**
      * Sets the value (allele) of this Gene to a random legal value. This
@@ -213,9 +204,9 @@ public class BooleanGene implements Gene, java.io.Serializable
      *                          to use the random number generator of their
      *                          choice.
      */
-    public void setToRandomValue( RandomGenerator a_numberGenerator )
+    public void setToRandomValue (RandomGenerator a_numberGenerator)
     {
-        if( a_numberGenerator.nextBoolean() == true )
+        if (a_numberGenerator.nextBoolean () == true)
         {
             m_value = TRUE_BOOLEAN;
         }
@@ -224,7 +215,6 @@ public class BooleanGene implements Gene, java.io.Serializable
             m_value = FALSE_BOOLEAN;
         }
     }
-
 
     /**
      * Compares this BooleanGene with the specified object for order. A
@@ -238,17 +228,17 @@ public class BooleanGene implements Gene, java.io.Serializable
      * @throws ClassCastException if the specified object's type prevents it
      *         from being compared to this BooleanGene.
      */
-    public int compareTo( Object other )
+    public int compareTo (Object other)
     {
         BooleanGene otherBooleanGene = (BooleanGene) other;
 
         // First, if the other gene is null, then this is the greater gene.
         // ----------------------------------------------------------------
-        if( otherBooleanGene == null )
+        if (otherBooleanGene == null)
         {
             return 1;
         }
-        else if( otherBooleanGene.m_value == null )
+        else if (otherBooleanGene.m_value == null)
         {
             // If our value is also null, then we're the same. Otherwise,
             // we're the greater gene.
@@ -259,9 +249,9 @@ public class BooleanGene implements Gene, java.io.Serializable
         // The Boolean class doesn't implement the Comparable interface, so
         // we have to do the comparison ourselves.
         // ----------------------------------------------------------------
-        if( m_value.booleanValue() == false )
+        if (m_value.booleanValue () == false)
         {
-            if( otherBooleanGene.m_value.booleanValue() == false )
+            if (otherBooleanGene.m_value.booleanValue () == false)
             {
                 // Both are false and therefore the same. Return zero.
                 // ---------------------------------------------------
@@ -275,7 +265,7 @@ public class BooleanGene implements Gene, java.io.Serializable
                 return -1;
             }
         }
-        else if( otherBooleanGene.m_value.booleanValue() == true )
+        else if (otherBooleanGene.m_value.booleanValue () == true)
         {
             // Both alleles are true and therefore the same. Return zero.
             // ----------------------------------------------------------
@@ -290,7 +280,6 @@ public class BooleanGene implements Gene, java.io.Serializable
         }
     }
 
-
     /**
      * Compares this BooleanGene with the given object and returns true if
      * the other object is a BooleanGene and has the same value as this
@@ -300,13 +289,13 @@ public class BooleanGene implements Gene, java.io.Serializable
      * @return true if this BooleanGene is equal to the given object,
      *         false otherwise.
      */
-    public boolean equals( Object other )
+    public boolean equals (Object other)
     {
         try
         {
-            return compareTo( other ) == 0;
+            return compareTo (other) == 0;
         }
-        catch( ClassCastException e )
+        catch (ClassCastException e)
         {
             // If the other object isn't a BooleanGene, then we're not equal.
             // --------------------------------------------------------------
@@ -314,27 +303,25 @@ public class BooleanGene implements Gene, java.io.Serializable
         }
     }
 
-
     /**
      * Retrieves the hash code value of this BooleanGene.
      *
      * @return this BooleanGene's hash code.
      */
-    public int hashCode()
+    public int hashCode ()
     {
         // If the internal Boolean hasn't been set, return zero. Otherwise,
         // just return the Boolean's hash code.
         // ----------------------------------------------------------------
-        if( m_value == null )
+        if (m_value == null)
         {
             return 0;
         }
         else
         {
-            return m_value.hashCode();
+            return m_value.hashCode ();
         }
     }
-
 
     /**
      * Retrieves a string representation of this BooleanGene's value that
@@ -342,26 +329,66 @@ public class BooleanGene implements Gene, java.io.Serializable
      *
      * @return a string representation of this BooleanGene's value.
      */
-    public String toString()
+    public String toString ()
     {
-        if( m_value == null )
+        if (m_value == null)
         {
             return "null";
         }
         else
         {
-            return m_value.toString();
+            return m_value.toString ();
         }
     }
-
 
     /**
      * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
      */
-    public void cleanup()
+    public void cleanup ()
     {
         // No specific cleanup is necessary for this implementation.
         // ---------------------------------------------------------
     }
+
+    /**
+     * @return the size of the gene, i.e the number of atomic elements.
+     *         Always 1 for BooleanGene
+     *
+     * @since 1.1
+     */
+    public int size ()
+    {
+        return 1;
+    }
+
+    /**
+     * Applies a mutation of a given intensity (percentage) onto the atomic
+     * element at given index (NumberGenes only have one atomic element)
+     * @param index index of atomic element, between 0 and size()-1
+     * @param a_percentage percentage of mutation (greater than -1 and smaller
+     * than 1).
+     */
+    public void applyMutation (int index, double a_percentage)
+    {
+        if (a_percentage >= 0)
+        {
+            // change to TRUE
+            // ---------------
+            if (!m_value.booleanValue ())
+            {
+                m_value = new Boolean (true);
+            }
+        }
+        else
+        {
+            // change to FALSE
+            // ---------------
+            if (m_value.booleanValue ())
+            {
+                m_value = new Boolean (false);
+            }
+        }
+    }
+
 }
