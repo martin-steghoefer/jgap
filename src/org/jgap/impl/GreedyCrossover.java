@@ -58,7 +58,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -112,8 +112,7 @@ public class GreedyCrossover implements GeneticOperator {
      }
 
    /**
-    * Perfroms a greedy crossover for the two given chromosoms.
-    * The explaining error message is written to System.err.
+    * Performs a greedy crossover for the two given chromosoms.
     *
     * @param a_firstMate the first chromosome to crossover on
     * @param a_secondMate the second chromosome to crossover on
@@ -256,7 +255,8 @@ public class GreedyCrossover implements GeneticOperator {
 
    private int m_startOffset = 1;
 
-   /** Sets a number of genes at the start of chromosome, that are
+   /**
+    * Sets a number of genes at the start of chromosome, that are
     * excluded from the swapping. In the Salesman task, the first city
     * in the list should (where the salesman leaves from) probably should
     * not change as it is part of the list. The default value is 1.
@@ -267,7 +267,8 @@ public class GreedyCrossover implements GeneticOperator {
        m_startOffset = a_offset;
    }
 
-   /** Gets a number of genes at the start of chromosome, that are
+   /**
+    * Gets a number of genes at the start of chromosome, that are
     * excluded from the swapping. In the Salesman task, the first city
     * in the list should (where the salesman leaves from) probably should
     * not change as it is part of the list. The default value is 1.
