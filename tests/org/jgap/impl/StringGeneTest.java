@@ -32,7 +32,7 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public StringGeneTest() {
   }
@@ -288,6 +288,9 @@ public class StringGeneTest
     gene1.applyMutation(0, 0.99d);
   }
 
+  /**
+   * Invalid index specified
+   */
   public void testApplyMutation_2() {
     Gene gene1 = new StringGene(1, 1);
     gene1.setAllele("1");
@@ -299,4 +302,33 @@ public class StringGeneTest
       ; //this is OK
     }
   }
+
+  /**
+   * No allele set
+   */
+  public void testApplyMutation_3() {
+    Gene gene1 = new StringGene(1, 1);
+    gene1.applyMutation(0, 0.99d);
+  }
+
+  public void testApplyMutation_4() {
+    Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
+    gene1.setAllele("ijklmn");
+    gene1.applyMutation(0, 0.3d);
+    assertFalse(gene1.getAllele().equals("ijklmn"));
+    gene1.setAllele("ijklmn");
+    gene1.applyMutation(4, -0.3d);
+    assertFalse(gene1.getAllele().equals("ijklmn"));
+  }
+
+  /**
+   * Mutation 0.0 should not change anything
+   */
+  public void testApplyMutation_5() {
+    Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
+    gene1.setAllele("ijklmn");
+    gene1.applyMutation(0, 0.0d);
+    assertEquals(gene1.getAllele(),"ijklmn");
+  }
+
 }
