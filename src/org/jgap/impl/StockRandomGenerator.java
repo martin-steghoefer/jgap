@@ -18,9 +18,7 @@
 package org.jgap.impl;
 
 import org.jgap.RandomGenerator;
-
 import java.util.Random;
-
 
 /**
  * The stock random generator uses the java.util.Random class to
@@ -30,7 +28,9 @@ import java.util.Random;
  * @author Neil Rotstan
  * @since 1.0
  */
-public class StockRandomGenerator extends Random implements RandomGenerator
-{
+public class StockRandomGenerator
+    extends Random
+    implements RandomGenerator {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 }
-

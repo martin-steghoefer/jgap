@@ -19,6 +19,7 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
 
 /**
@@ -41,7 +42,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
