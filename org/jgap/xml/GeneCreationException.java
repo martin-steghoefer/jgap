@@ -21,34 +21,25 @@ package org.jgap.xml;
 
 
 /**
- * The AlleleCreationException is a bit of a catch-all exception for
- * representing problems encountered during the creation of an Allele
- * object to manage an allele representation found in an XML file.
+ * The GeneCreationException is a bit of a catch-all exception for
+ * representing problems encountered during the creation of a Gene
+ * object with a value (allele) representation found in an XML document.
  * Typically, this exception will be thrown if the concrete class
  * indicated in the XML file cannot be found or instantiated for
- * some reason. Consult the error message for details on the specific
+ * some reason, or if the class does not support the methods related to
+ * XML persistence. Consult the error message for details on the specific
  * reason for failure.
  */
-public class AlleleCreationException extends Exception
+public class GeneCreationException extends Exception
 {
     /**
-     * Constructs a new AlleleCreationException instance. No error message
-     * will be available.
-     */
-    public AlleleCreationException()
-    {
-        super();
-    }
-
-
-    /**
-     * Constructs a new AlleleCreationException instance with the given error
+     * Constructs a new GeneCreationException instance with the given error
      * message.
      *
      * @param a_message An error message describing the reason this exception
      *                  is being thrown.
      */
-    public AlleleCreationException( String a_message )
+    public GeneCreationException( String a_message )
     {
         super( a_message );
     }

@@ -19,16 +19,14 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Allele;
 import org.jgap.Chromosome;
-import org.jgap.Configuration;
+import org.jgap.Gene;
 
 
 /**
  * Provides a pooling mechanism for Chromosome instances so that
- * existing Chromosome instances can be recycled over and over again,
- * thus saving memory and the overhead of constructing new ones each 
- * time.
+ * discarded Chromosome instances can be recycled, thus saving memory and the
+ * overhead of constructing new ones from scratch each time.
  */
 public class ChromosomePool
 {
@@ -50,9 +48,9 @@ public class ChromosomePool
     /**
      * Attempts to acquire an Chromosome instance from the chromosome pool.
      * It should be noted that nothing is guaranteed about the value of the
-     * Chromosome's alleles and they should be treated as undefined.
+     * Chromosome's genes and they should be treated as undefined.
      *
-     * @return An Chromosome instance from the pool or null if no 
+     * @return A Chromosome instance from the pool or null if no
      *         Chromosome instances are available in the pool.
      */
     public synchronized Chromosome acquireChromosome()
@@ -65,17 +63,16 @@ public class ChromosomePool
      * Releases a Chromosome to the pool. It's not required that the Chromosome
      * originated from the pool--any Chromosome can be released to it. This
      * method will invoke the cleanup() method on each of the Chromosome's
-     * alleles prior to adding it back to the pool.
+     * genes prior to adding it back to the pool.
      *
-     * @param a_chromosomeToRelease The Chromosome instance to be released 
-     *                              into the pool.
+     * @param a_chromosome The Chromosome instance to be released into the pool.
      */
     public synchronized void releaseChromosome( Chromosome a_chromosome )
     {
-        // First cleanup the chromosome's alleles before returning it back
+        // First cleanup the chromosome's genes before returning it back
         // to the pool.
         // ---------------------------------------------------------------
-        Allele[] genes = a_chromosome.getGenes();
+        Gene[] genes = a_chromosome.getGenes();
         for( int i = 0; i < genes.length; i++ )
         {
             genes[ i ].cleanup();

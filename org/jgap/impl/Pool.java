@@ -20,18 +20,32 @@
 package org.jgap.impl;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 
+/**
+ * A simple, generic pool class that can be used to pool any kind of object.
+ * Objects can be released to this pool, either individually or as a
+ * Collection, and then later acquired again. It is not necessary for an
+ * object to have been originally acquired from the pool in order for it to
+ * be released to the pool. If there are no objects present in the pool,
+ * an attempt to acquire one will return null. The number of objects
+ * available in the pool can be determined with the size() method. Finally,
+ * it should be noted that the pool does not attempt to perform any kind
+ * of cleanup or re-initialization on the objects to restore them to some
+ * clean state when they are released to the pool; it's up to the user to
+ * reset any necessary state in the object prior to the release call (or
+ * just after the acquire call).
+ */
 public class Pool
 {
     /**
      * The List of Objects currently in the pool.
      */
     private List m_pooledObjects;
+
 
     /**
      * Constructor.
@@ -84,7 +98,7 @@ public class Pool
 
     /**
      * Releases a Collection of objects to the pool. It's not required that
-     * the objects in the collection originated from the pool--any objects
+     * the objects in the Collection originated from the pool--any objects
      * can be released to it.
      *
      * @param a_objectsToPool The Collection of objects to release into
@@ -94,17 +108,13 @@ public class Pool
     {
         if( a_objectsToPool != null )
         {
-            Iterator objectIterator = a_objectsToPool.iterator();
-            while( objectIterator.hasNext() )
-            {
-                m_pooledObjects.add( objectIterator.next() );
-            }
+            m_pooledObjects.addAll( a_objectsToPool );
         }
     }
 
 
     /**
-     * Retrieves the number of objects currently in this pool.
+     * Retrieves the number of objects currently available in this pool.
      *
      * @return the number of objects in this pool.
      */

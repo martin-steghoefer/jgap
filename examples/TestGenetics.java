@@ -23,7 +23,7 @@ import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.Genotype;
 import org.jgap.InvalidConfigurationException;
-import org.jgap.impl.BooleanAllele;
+import org.jgap.impl.BooleanGene;
 import org.jgap.impl.DefaultConfiguration;
 
 
@@ -58,7 +58,7 @@ public class TestGenetics
             }
 
             gaConf.setSampleChromosome(
-                new Chromosome( new BooleanAllele(), chromeSize ) );
+                new Chromosome( new BooleanGene(), chromeSize ) );
             gaConf.setPopulationSize( Integer.parseInt( args[ 1 ] ) );
             gaConf.setFitnessFunction( new MaxFunction() );
 

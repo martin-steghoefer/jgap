@@ -17,7 +17,6 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 
@@ -29,28 +28,27 @@ package org.jgap;
  * fitness values are more likely to survive than those with lesser fitness
  * values, but it's not guaranteed.
  */
-public interface NaturalSelector extends java.io.Serializable
+public interface NaturalSelector
 {
     /**
-     * Add a Chromosome instance and corresponding fitness value to this
-     * selector's working pool of Chromosomes.
+     * Add a Chromosome instance to this selector's working pool of Chromosomes.
      *
      * @param a_activeConfigurator: The current active Configuration to be used
      *                              during the add process.
      * @param a_chromosomeToAdd: The specimen to add to the pool.
-     * @param a_chromosomeFitnessValue: The specimen's fitness value.
      */
     public void add( Configuration a_activeConfigurator,
-                     Chromosome a_chromosomeToAdd,
-                     int a_chromosomeFitnessValue );
+                     Chromosome a_chromosomeToAdd );
+
 
     /**
-     * Select a given number of Chromosomes from the pool that will continue
-     * to survive. This selection should be guided by the fitness values, but
-     * fitness should be treated as a statistical probability of survival,
-     * not as the sole determining factor. In other words, Chromosomes with
-     * higher fitness values are more likely to be selected than those with
-     * lower fitness values, but it's not guaranteed.
+     * Select a given number of Chromosomes from the pool that will move on
+     * to the next generation population. This selection should be guided by
+     * the fitness values, but fitness should be treated as a statistical
+     * probability of survival, not as the sole determining factor. In other
+     * words, Chromosomes with higher fitness values should be more likely to
+     * be selected than those with lower fitness values, but it should not be
+     * guaranteed.
      *
      * @param a_activeConfiguration: The current active Configuration that is
      *                               to be used during the selection process.
@@ -63,7 +61,9 @@ public interface NaturalSelector extends java.io.Serializable
 
 
     /**
-     * Empty out the working pool of Chromosomes.
+     * Empty out the working pool of Chromosomes. This will be invoked after
+     * each evolution cycle so that the natural selector can be reused for
+     * the next one.
      */
     public void empty();
 }

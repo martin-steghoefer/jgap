@@ -23,19 +23,21 @@ import org.jgap.Chromosome;
 import org.jgap.FitnessFunction;
 
 /**
- * The MakeChangeFitnessFunction evaluates Chromosomes with
- * four genes which represent the four denominations of
- * American coins: quarters, dimes, nickels, and pennies.
- * Each gene is represented by an IntegerAllele, and the
- * value of that allele is the number of coins for the coin
- * type assigned to that gene. The fitness function adds up
- * the total value of the coinage and returns a fitness
- * value that measures how close the value of the coins is
+ * The MakeChangeFitnessFunction evaluates Chromosomes with four genes which
+ * represent the four denominations of American coins: quarters, dimes,
+ * nickels, and pennies. Each gene is represented by an IntegerGene, and the
+ * value of that allele is the number of coins for the coin type assigned to
+ * that gene. The fitness function adds up the total value of the coinage and
+ * returns a fitness value that measures how close the value of the coins is
  * to a target amount supplied by the user.
  */
 public class MakeChangeFitnessFunction extends FitnessFunction
 {
+    /**
+     * The target amount of change that we're looking to create.
+     */
     private final int m_targetAmount;
+
 
     /**
      * Constructs this MakeChangeFitnessFunction with the desired amount
@@ -55,11 +57,13 @@ public class MakeChangeFitnessFunction extends FitnessFunction
         m_targetAmount = a_targetAmount;
     }
 
+
     /**
      * This is the method we must define for our fitness function. It
      * should evaluate the presented potential solution and return a
-     * measurement of its fitness as an integer value. The higher the value,
-     * the better the solution. The lower the value, the worse the solution.
+     * measurement of its fitness as a positive integer value. The higher the
+     * value,the better the solution. The lower the value, the worse the
+     * solution.
      *
      * @param a_potentialSolution The potential solution to evaluate.
      * @return the fitness measurement of the potential solution.
@@ -116,7 +120,7 @@ public class MakeChangeFitnessFunction extends FitnessFunction
                                         int a_position )
     {
         Integer numCoins =
-          (Integer) a_potentialSolution.getAllele( a_position ).getValue();
+          (Integer) a_potentialSolution.getGene( a_position ).getAllele();
 
         return numCoins.intValue();
     }

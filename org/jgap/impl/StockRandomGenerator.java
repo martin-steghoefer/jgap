@@ -17,7 +17,6 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap.impl;
 
 import org.jgap.RandomGenerator;
@@ -28,6 +27,7 @@ import java.util.Random;
 /**
  * The stock random generator uses the java.util.Random class to
  * provide a simple implementation of the RandomGenerator interface.
+ * No actual code is provided here.
  */
 public class StockRandomGenerator extends Random implements RandomGenerator
 {

@@ -17,7 +17,6 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 
@@ -25,22 +24,23 @@ package org.jgap;
  * Fitness functions are used to determine how optimal a particular solution
  * is relative to other solutions. This abstract class should be extended and
  * the evaluate() method implemented. The fitness function is given a Chromosome
- * to evaluate and should return its fitness value. The higher the value, the
- * more fit the Chromosome. The actual range of fitness values isn't important
- * (other than the fact that the values must be of type int): it's the
- * relative difference as a percentage that matters. So in other words, two
- * Chromosomes with respective fitness values of 1 and 100 have the same
+ * to evaluate and should return a positive integer that reflects its fitness
+ * value. The higher the value, the more fit the Chromosome. The actual range
+ * of fitness values isn't important (other than the fact that they must be
+ * positive integers): it's the relative difference as a percentage that
+ * tends to determine the success or failure of a Chromosome. So in other words,
+ * two Chromosomes with respective fitness values of 1 and 100 have the same
  * relative fitness to each other as two Chromosomes with respective fitness
  * values of 10 and 1000 (in each case, the first is 1% as fit as the second).
  * <p>
- * Note: Two Chromosomes of the same size and with equivalent sets of genes
- * should always be assigned the same fitness value by any implementation of
- * this interface.
+ * Note: Two Chromosomes with equivalent sets of genes should always be
+ * assigned the same fitness value by any implementation of this interface.
  */
 public abstract class FitnessFunction implements java.io.Serializable
 {
     /**
-     * Retrieves the fitness value of the given Chromosome.
+     * Retrieves the fitness value of the given Chromosome. The fitness
+     * value will be a positive integer.
      *
      * @param a_subject the Chromosome for which to compute and return the
      *                  fitness value.
@@ -63,7 +63,8 @@ public abstract class FitnessFunction implements java.io.Serializable
      *
      * @param a_subject: The Chromosome instance to evaluate.
      *
-     * @return The fitness rating of the given Chromosome.
+     * @return A positive integer reflecting the fitness rating of the given
+     *         Chromosome.
      */
     protected abstract int evaluate( Chromosome a_subject );
 }

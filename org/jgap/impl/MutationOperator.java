@@ -17,10 +17,9 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap.impl;
 
-import org.jgap.Allele;
+import org.jgap.Gene;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.GeneticOperator;
@@ -30,10 +29,17 @@ import java.util.List;
 
 
 /**
- * The mutation operator runs through the genes in each of the Chromosome
- * in the population and mutates them in statistical accordance to the given
- * given mutation rate. Mutated Chromosomes are added to the list of candidate
- * Chromosomes.
+ * The mutation operator runs through the genes in each of the Chromosomes
+ * in the population and mutates them in statistical accordance to the
+ * given mutation rate. Mutated Chromosomes are then added to the list of
+ * candidate Chromosomes destined for the natural selection process.
+ * <p>
+ * This MutationOperator supports both fixed and dynamic mutation rates.
+ * A fixed rate is one specified at construction time by the user. A dynamic
+ * rate is one determined by this class if no fixed rate is provided, and is
+ * calculated based on the size of the Chromosomes in the population such
+ * that, on average, one gene will be mutated for every ten Chromosomes
+ * processed by this operator.
  */
 public class MutationOperator implements GeneticOperator
 {
@@ -90,22 +96,24 @@ public class MutationOperator implements GeneticOperator
      * phase. Operators are given an opportunity to run in the order that
      * they are added to the Configuration. Implementations of this method
      * may reference the population of Chromosomes as it was at the beginning
-     * of the evolutionary phase or the candidate Chromosomes, which are the
-     * results of prior genetic operators. In either case, only Chromosomes
-     * added to the list of candidate chromosomes will be considered for
-     * natural selection. Implementations should never modify the original
-     * population.
+     * of the evolutionary phase and/or they may instead reference the
+     * candidate Chromosomes, which are the results of prior genetic operators.
+     * In either case, only Chromosomes added to the list of candidate
+     * chromosomes will be considered for natural selection. Implementations
+     * should never modify the original population, but should first make copies
+     * of the Chromosomes selected for modification and operate upon the copies.
      *
      * @param a_activeConfiguration The current active genetic configuration.
      * @param a_population The population of chromosomes from the current
      *                     evolution prior to exposure to any genetic operators.
      *                     Chromosomes in this array should never be modified.
      * @param a_candidateChromosomes The pool of chromosomes that are candidates
-     *                               for the next evolved population. Any
-     *                               chromosomes that are modified by this
-     *                               genetic operator that should be considered
-     *                               for natural selection should be added to
-     *                               the candidate chromosomes.
+     *                               for the next evolved population. Only these
+     *                               chromosomes will go to the natural
+     *                               phase, so it's important to add any
+     *                               modified copies of Chromosomes to this
+     *                               list if it's desired for them to be
+     *                               considered for natural selection.
      */
     public void operate( final Configuration a_activeConfiguration,
                          final Chromosome[] a_population,
@@ -135,7 +143,7 @@ public class MutationOperator implements GeneticOperator
         // ----------------------------------------------------------------
         for ( int i = 0; i < a_population.length; i++ )
         {
-            Allele[] genes = a_population[ i ].getGenes();
+            Gene[] genes = a_population[ i ].getGenes();
             Chromosome copyOfChromosome = null;
 
             for ( int j = 0; j < genes.length; j++ )
@@ -147,18 +155,19 @@ public class MutationOperator implements GeneticOperator
                     // add it to the candidate chromosomes so that it will
                     // be considered for natural selection during the next
                     // phase of evolution. Then we'll set the gene's value
-                    // to a random value.
+                    // to a random value as the implementation of our
+                    // "mutation" of the gene.
                     // ---------------------------------------------------
                     if ( copyOfChromosome == null )
                     {
                         copyOfChromosome =
                             (Chromosome) a_population[ i ].clone();
+
                         a_candidateChromosomes.add( copyOfChromosome );
                         genes = copyOfChromosome.getGenes();
                     }
 
-                    genes[ j ].setToRandomValue(
-                        a_activeConfiguration.getRandomGenerator() );
+                    genes[ j ].setToRandomValue( generator );
                 }
             }
         }

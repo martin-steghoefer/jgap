@@ -17,7 +17,6 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 import org.jgap.event.GeneticEvent;
@@ -26,46 +25,90 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.io.Serializable;
 
 
 /**
- * Genotypes represent fixed-length collections or "populations" of
- * Chromosomes. As an instance of a genotype is evolved, all of its
- * Chromosomes are also evolved.
+ * Genotypes are fixed-length populations of chromosomes. As an instance of
+ * a Genotype is evolved, all of its Chromosomes are also evolved. A Genotype
+ * may be constructed normally, whereby an array of Chromosomes must be
+ * provided, or the static randomInitialGenotype() method can be used to
+ * generate a Genotype with a randomized Chromosome population.
  */
-public class Genotype implements java.io.Serializable
+public class Genotype implements Serializable
 {
+    /**
+     * The current active Configuration instance.
+     */
     protected Configuration m_activeConfiguration;
+
+    /**
+     * The array of Chromosomes that makeup thie Genotype's population.
+     */
     protected Chromosome[] m_chromosomes;
+
+    /**
+     * The working pool of Chromosomes, which is where Chromosomes that are
+     * to be candidates for the next natural selection process are deposited.
+     * This list is passed to each of the genetic operators as they are
+     * invoked during each phase of evolution so that they can add the
+     * Chromosomes they operated upon to it, and then it is eventually passed
+     * to the NaturalSelector so that it can choose which Chromosomes will
+     * go on to the next generation and which will be discarded. It is wiped
+     * clean after each cycle of evolution.
+     */
     protected List m_workingPool;
 
 
     /**
-     * Constructs a new Genotype instance with the given array
-     * of Chromosomes and the given a_activeConfiguration settings. Note
-     * that the Configuration instance must be in a valid state
+     * Constructs a new Genotype instance with the given array of
+     * Chromosomes and the given active Configuration instance. Note
+     * that the Configuration object must be in a valid state
      * when this method is invoked, or a InvalidconfigurationException
      * will be thrown.
      *
-     * @param a_activeConfiguration: An instance of a Configuration object
-     *                       that will control the behavior of this
-     *                       GA execution.
+     * @param a_activeConfiguration: The current active Configuration object.
      * @param a_initialChromosomes: The Chromosome population to be
-     *                            managed by this Genotype instance.
-     *
-     * @throws InvalidConfigurationException if the given Configuration
-     *         is null or in an invalid state.
+     *                              managed by this Genotype instance.
+     * @throws IllegalArgumentException if either the given Configuration object
+     *         or the array of Chromosomes is null, or if any of the Genes
+     *         in the array of Chromosomes is null.
+     * @throws InvalidConfigurationException if the given Configuration object
+     *         is in an invalid state.
      */
     public Genotype( Configuration a_activeConfiguration,
                      Chromosome[] a_initialChromosomes )
            throws InvalidConfigurationException
     {
+        // Sanity checks: Make sure neither the Configuration, the array
+        // of Chromosomes, nor any of the Genes inside the array are null.
+        // ---------------------------------------------------------------
         if ( a_activeConfiguration == null )
         {
-            throw new InvalidConfigurationException(
-                    "The Configuration instance must not be null." );
+            throw new IllegalArgumentException(
+                "The Configuration instance may not be null." );
         }
 
+        if( a_initialChromosomes == null )
+        {
+            throw new IllegalArgumentException(
+                "The array of Chromosomes may not be null." );
+        }
+
+        for( int i = 0; i < a_initialChromosomes.length; i++ )
+        {
+            if( a_initialChromosomes[ i ] == null )
+            {
+                throw new IllegalArgumentException(
+                    "The Gene instance at index " + i + " of the array of " +
+                    "Chromosomes is null. No Gene instance in this array " +
+                    "may be null." );
+            }
+        }
+
+        // Lock the settings of the Configuration object so that the cannot
+        // be altered.
+        // ----------------------------------------------------------------
         a_activeConfiguration.lockSettings();
 
         m_chromosomes = a_initialChromosomes;
@@ -76,9 +119,10 @@ public class Genotype implements java.io.Serializable
 
 
     /**
-     * Retrieve the array of Chromosomes that make up this Genotype instance.
+     * Retrieves the array of Chromosomes that make up the population of this
+     * Genotype instance.
      *
-     * @return The chromosomes that make up this Genotype.
+     * @return The population of Chromosomes.
      */
     public synchronized Chromosome[] getChromosomes()
     {
@@ -87,7 +131,8 @@ public class Genotype implements java.io.Serializable
 
 
     /**
-     * Retrieve the Chromosome in the population with the highest fitnes value.
+     * Retrieves the Chromosome in the population with the highest fitness
+     * value.
      *
      * @return The Chromosome with the highest fitness value, or null if
      *         there are no chromosomes in this Genotype.
@@ -120,11 +165,11 @@ public class Genotype implements java.io.Serializable
 
 
     /**
-     * Evolve the collection of Chromosomes within this Genotype. This will
+     * Evolve the population of Chromosomes within this Genotype. This will
      * execute all of the genetic operators added to the present active
      * Configuration and then invoke the natural selector to choose which
-     * chromosomes will be included in the next population. Note that the
-     * population size always remains constant.
+     * chromosomes will be included in the next generation population. Note
+     * that the population size always remains constant.
      */
     public synchronized void evolve()
     {
@@ -149,8 +194,7 @@ public class Genotype implements java.io.Serializable
 
             m_activeConfiguration.getNaturalSelector().add(
                     m_activeConfiguration,
-                    currentChromosome,
-                    currentChromosome.getFitnessValue() );
+                    currentChromosome );
         }
 
         // Repopulate the population of chromosomes with those selected
@@ -165,21 +209,23 @@ public class Genotype implements java.io.Serializable
         m_activeConfiguration.getEventManager().fireGeneticEvent(
                 new GeneticEvent( GeneticEvent.GENOTYPE_EVOLVED_EVENT, this ) );
 
-        // Iterate over the Chromosomes in the working pool. For those that
-        // haven't been selected to go on to the next generation, clean them
-        // up.
-        // -----------------------------------------------------------------
+        // Iterate over the Chromosomes in the working pool. Clean up any that
+        // haven't been selected to go on to the next generation.
+        // -------------------------------------------------------------------
         Iterator workingPoolIterator = m_workingPool.iterator();
         Chromosome currentChromosome;
         while( workingPoolIterator.hasNext() )
         {
             currentChromosome = (Chromosome) workingPoolIterator.next();
-            if( !currentChromosome.isSelected() )
+            if( !currentChromosome.isSelectedForNextGeneration() )
             {
                 currentChromosome.cleanup();
             }
         }
 
+        // Clear out the working pool in preparation for the next evolution
+        // cycle.
+        // ----------------------------------------------------------------
         m_workingPool.clear();
 
         // Clean up the natural selector.
@@ -190,7 +236,7 @@ public class Genotype implements java.io.Serializable
 
     /**
      * Return a string representation of this Genotype instance,
-     * useful for debugging purposes.
+     * useful for dispaly purposes.
      *
      * @return A string representation of this Genotype instance.
      */
@@ -214,7 +260,9 @@ public class Genotype implements java.io.Serializable
     /**
      * Convenience method that returns a newly constructed Genotype
      * instance configured according to the given Configuration instance.
-     * The population of Chromosomes will be randomly generated.
+     * The population of Chromosomes will created according to the setup of
+     * the sample Chromosome in the Configuration object, but the gene values
+     * (alleles) will be set to random legal values.
      * <p>
      * Note that the given Configuration instance must be in a valid state
      * at the time this method is invoked, or an InvalidConfigurationException
@@ -222,8 +270,10 @@ public class Genotype implements java.io.Serializable
      *
      * @return A newly constructed Genotype instance.
      *
+     * @throws IllegalArgumentException if the given Configuration object is
+     *         null.
      * @throws InvalidConfigurationException if the given Configuration
-     *         instance is null or invalid.
+     *         instance not in a valid state.
      */
     public static Genotype randomInitialGenotype(
                                Configuration a_activeConfiguration )
@@ -231,16 +281,19 @@ public class Genotype implements java.io.Serializable
     {
         if ( a_activeConfiguration == null )
         {
-            throw new InvalidConfigurationException(
-                    "The Configuration instance must not be null." );
+            throw new IllegalArgumentException(
+                    "The Configuration instance may not be null." );
         }
 
         a_activeConfiguration.lockSettings();
 
         // Create an array of chromosomes equal to the desired size in the
-        // active Configuration and then populate that array with randomly
-        // initialized Chromosome instances.
-        // ---------------------------------------------------------------
+        // active Configuration and then populate that array with Chromosome
+        // instances constructed according to the setup in the sample
+        // Chromosome, but with random gene values (alleles). The Chromosome
+        // class' randomInitialChromosome() method will take care of that for
+        // us.
+        // ------------------------------------------------------------------
         int populationSize = a_activeConfiguration.getPopulationSize();
         Chromosome[] chromosomes = new Chromosome[ populationSize ];
 
@@ -256,11 +309,11 @@ public class Genotype implements java.io.Serializable
 
     /**
      * Compares this Genotype against the specified object. The result is true
-     * if and only if the argument is an instance of the Genotype class, has
-     * exactly the same number of chromosomes as the given Genotype, and, for
-     * each chromosome in this Genotype, there is an equal chromosome in the
+     * if the argument is an instance of the Genotype class, has exactly the
+     * same number of chromosomes as the given Genotype, and, for each
+     * Chromosome in this Genotype, there is an equal chromosome in the
      * given Genotype. The chromosomes do not need to appear in the same order
-     * within the population.
+     * within the populations.
      *
      * @param other The object to compare against.
      * @return true if the objects are the same, false otherwise.
@@ -269,6 +322,13 @@ public class Genotype implements java.io.Serializable
     {
         try
         {
+            // First, if the other Genotype is null, then they're not equal.
+            // -------------------------------------------------------------
+            if( other == null )
+            {
+                return false;
+            }
+
             Genotype otherGenotype = (Genotype) other;
 
             // First, make sure the other Genotype has the same number of
@@ -284,7 +344,7 @@ public class Genotype implements java.io.Serializable
             // simpler, we first sort the chromosomes in both this Genotype
             // and the one we're comparing against. This won't affect the
             // genetic algorithm (it doesn't care about the order), but makes
-            // our life much easier here.
+            // it much easier to perform the comparison here.
             // --------------------------------------------------------------
             Arrays.sort( m_chromosomes );
             Arrays.sort( otherGenotype.m_chromosomes );

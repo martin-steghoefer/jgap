@@ -19,57 +19,69 @@
  */
 package org.jgap;
 
+import java.io.Serializable;
+
 
 /**
- * Alleles represent the values of genes. This interface exists so that
- * custom allele implementations can be easily plugged-in to make creation
- * of certain fitness functions less cumbersome. Note that it's very important
- * that implementations of this interface also implement the equals() method.
+ * Genes represent the discrete components of a potential solution
+ * (the Chromosome). This interface exists so that custom gene implementations
+ * can be easily plugged-in, which can add a great deal of flexibility and
+ * convenience for many applications. Note that it's very important that
+ * implementations of this interface also implement the equals() method.
  * Without a proper implementation of equals(), some genetic operations will
  * fail to work properly.
  */
-public interface Allele extends Comparable
+public interface Gene extends Comparable, Serializable
 {
     /**
-     * Provides an implementation-independent means for creating new Allele
+     * Provides an implementation-independent means for creating new Gene
      * instances. The new instance that is created and returned should be
-     * setup with any implementation-dependent configuration that this Allele
+     * setup with any implementation-dependent configuration that this Gene
      * instance is setup with (aside from the actual value, of course). For
-     * example, if this Allele were setup with bounds on its value, then the
-     * Allele instance returned from this method should also be setup with
+     * example, if this Gene were setup with bounds on its value, then the
+     * Gene instance returned from this method should also be setup with
      * those same bounds. This is important, as the JGAP core will invoke this
-     * method on each Allele in the sample Chromosome in order to create each
-     * new Allele in the same respective gene position for a new Chromosome.
+     * method on each Gene in the sample Chromosome in order to create each
+     * new Gene in the same respective gene position for a new Chromosome.
      * <p>
      * It should be noted that nothing is guaranteed about the actual value
-     * of the returned Allele and it should therefore be considered to be
+     * of the returned Gene and it should therefore be considered to be
      * undefined.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @return A new Allele instance of the same type and with the same
-     *         setup as this concrete Allele.
+     * @return A new Gene instance of the same type and with the same
+     *         setup as this concrete Gene.
      */
-    public Allele newAllele( Configuration a_activeConfiguration );
+    public Gene newGene( Configuration a_activeConfiguration );
 
     /**
-     * Sets the value of this Allele to the new given value. The actual
+     * Sets the value of this Gene to the new given value. The actual
      * type of the value is implementation-dependent.
      *
-     * @param a_newValue the new value of this Allele instance.
+     * @param a_newValue the new value of this Gene instance.
      */
-    public void setValue( Object a_newValue );
+    public void setAllele( Object a_newValue );
 
 
     /**
-     * Retrieves a string representation of this Allele that includes any
-     * information required to reconstruct it at a later time, such as its
-     * value and internal state. This string will be used to represent this
-     * Allele in XML persistence. This is an optional method but, if not
-     * implemented, XML persistence and possibly other features will not be
-     * available. An UnsupportedOperationException should be thrown if no
-     * implementation is provided.
+     * Retrieves the value represented by this Gene. The actual type
+     * of the value is implementation-dependent.
      *
-     * @return A string representation of this Allele's current state.
+     * @return the value of this Gene.
+     */
+    public Object getAllele();
+
+
+    /**
+     * Retrieves a string representation of the value of this Gene instance
+     * that includes any information required to reconstruct it at a later
+     * time, such as its value and internal state. This string will be used to
+     * represent this Gene instance in XML persistence. This is an optional
+     * method but, if not implemented, XML persistence and possibly other
+     * features will not be available. An UnsupportedOperationException should
+     * be thrown if no implementation is provided.
+     *
+     * @return A string representation of this Gene's current state.
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
      */
@@ -77,7 +89,7 @@ public interface Allele extends Comparable
                   throws UnsupportedOperationException;
 
     /**
-     * Sets the value and internal state of this Allele from the string
+     * Sets the value and internal state of this Gene from the string
      * representation returned by a previous invocation of the
      * getPersistentRepresentation() method. This is an optional method but,
      * if not implemented, XML persistence and possibly other features will not
@@ -90,25 +102,15 @@ public interface Allele extends Comparable
      *
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
-     * @throws UnsupportedRepresentationException if this Allele implementation
+     * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
      */
     public void setValueFromPersistentRepresentation( String a_representation )
                 throws UnsupportedOperationException,
                        UnsupportedRepresentationException;
 
-
     /**
-     * Retrieves the value represented by this Allele. The actual type
-     * of the value is implementation-dependent.
-     *
-     * @return the value of this Allele.
-     */
-    public Object getValue();
-
-
-    /**
-     * Sets the value of this Allele to a random legal value for the
+     * Sets the value of this Gene to a random legal value for the
      * implementation. This method exists for the benefit of mutation and other
      * operations that simply desire to randomize the value of a gene.
      *
@@ -123,7 +125,7 @@ public interface Allele extends Comparable
 
 
     /**
-     * Executed by the genetic engine when this Allele instance is no
+     * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
      */
     public void cleanup();

@@ -24,7 +24,7 @@ import java.util.EventObject;
 /**
  * Represents events that are fired via the EventManager when various
  * genetic events occur. The specific kind of event is conveyed through the
- * event name.
+ * event name. Standard event names are provided as constants in this class.
  */
 public class GeneticEvent extends EventObject
 {
@@ -48,7 +48,9 @@ public class GeneticEvent extends EventObject
      * @param a_source The genetic object that acted as the source of the
      *                 event. The type of this object will be dependent on
      *                 the kind of event (which can be identified by the
-     *                 event name).
+     *                 event name). It may not be null.
+     *
+     * @throws IllegalArgumentException if the given source object is null.
      */
     public GeneticEvent( String a_eventName, Object a_source )
     {

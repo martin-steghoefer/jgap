@@ -1,3 +1,16 @@
+1.0RC1 (in progress)
+----------
+* Added new document on using the XMLManager to marshall populations
+  into XML representations that can be used for persistence, transmission,
+  etc.
+* Renamed Allele class to Gene class and updated all of the source files
+  accordingly to fix source and documentation.
+* Renamed Gene.setValue() and Gene.getValue() methods to Gene.setAllele()
+  and Gene.getAllele(), respectively.
+* Made various minor fixes.
+* Updated various javadocs to increase clarity and accuracy.
+
+
 0.32
 ----------
 * Added new document on creating custom Alleles in the docs/ subdirectory.

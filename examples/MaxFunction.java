@@ -19,7 +19,7 @@
  */
 package examples;
 
-import org.jgap.Allele;
+import org.jgap.Gene;
 import org.jgap.Chromosome;
 import org.jgap.FitnessFunction;
 
@@ -28,7 +28,7 @@ public class MaxFunction extends FitnessFunction
 {
     /**
      * This example implementation calculates the fitness value of Chromosomes
-     * using BooleanAllele implementations. It simply returns a fitness value
+     * using BooleanGene implementations. It simply returns a fitness value
      * equal to the numeric binary value of the bits. In other words, it
      * optimizes the numeric value of the genes interpreted as bits. It should
      * be noted that, for clarity, this function literally returns the binary
@@ -47,8 +47,8 @@ public class MaxFunction extends FitnessFunction
 
         for ( int i = 0; i < a_subject.size(); i++ )
         {
-            Allele value = a_subject.getAllele( a_subject.size() - ( i + 1 ) );
-            if ( ((Boolean) value.getValue()).booleanValue() )
+            Gene value = a_subject.getGene( a_subject.size() - ( i + 1 ) );
+            if ( ((Boolean) value.getAllele()).booleanValue() )
             {
                 total += Math.pow( 2.0, (double) i );
             }

@@ -21,22 +21,13 @@ package org.jgap.xml;
 
 
 /**
- * An ImproperXMLException will be thrown if an XML document or element is
- * parsed for genetic data, but is found to be structured improperly or
- * missing required data.
+ * An ImproperXMLException will be thrown when an XML document or element is
+ * parsed but is found to be structured improperly or missing required data.
+ * The error message should be consulted for the exact reason the exception
+ * is being thrown.
  */
 public class ImproperXMLException extends Exception
 {
-    /**
-     * Constructs a new ImproperXMLException instance. No error message
-     * will be available.
-     */
-    public ImproperXMLException()
-    {
-        super();
-    }
-
-
     /**
      * Constructs a new ImproperXMLException instance with the given error
      * message.

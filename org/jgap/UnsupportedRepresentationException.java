@@ -17,29 +17,18 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 
 /**
  * This exception is typically thrown when the
- * setValueFromPersistentRepresentation() method of an Allele class is unable
+ * setValueFromPersistentRepresentation() method of a Gene class is unable
  * to process the string representation it has been given, either because that
- * representation is not supported by that Allele implementation or because
+ * representation is not supported by that Gene implementation or because
  * the representation is corrupt.
  */
 public class UnsupportedRepresentationException extends Exception
 {
-    /**
-     * Constructs a new UnsupportedRepresentationException instance. No error
-     * message will be available.
-     */
-    public UnsupportedRepresentationException()
-    {
-        super();
-    }
-
-
     /**
      * Constructs a new UnsupportedRepresentationException instance with the
      * given error message.

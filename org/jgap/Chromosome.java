@@ -17,23 +17,24 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 import org.jgap.impl.ChromosomePool;
 
+import java.io.Serializable;
+
 
 /**
- * Chromosomes represent fixed-length collections of genes. In the current
- * implementation, this is the lowest level class since genes are, themselves,
- * represented as individual bits. Each gene can have two values (true or
- * false). This should be suitable for most applications, but it's always
- * possible for a fitness function to consider multiple genes as a single unit
- * if more than two possible values are desired. In the future, a Gene class
- * and Allele interface may be created that will allow more flexibility in this
- * regard.
+ * Chromosomes represent potential solutions and consist of a fixed-length
+ * collection of genes. Each gene represents a discrete part of the solution.
+ * Each gene in the Chromosome may be backed by a different concrete
+ * implementation of the Gene interface, but all genes in a respective
+ * position (locus) must share the same concrete implementation across
+ * Chromosomes within a single population (genotype). In other words, gene 1
+ * in a chromosome must share the same concrete implementation as gene 1 in all
+ * other chromosomes in the population.
  */
-public class Chromosome implements Cloneable, java.io.Serializable, Comparable
+public class Chromosome implements Comparable, Cloneable, Serializable
 {
     /**
      * The current active genetic configuration.
@@ -41,56 +42,63 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
     protected final Configuration m_activeConfiguration;
 
     /**
-     * The array of Alleles that represent the values of the genes in this
-     * Chromosome.
+     * The array of Genes contained in this Chromosome.
      */
-    protected final Allele[] m_genes;
+    protected final Gene[] m_genes;
 
     /**
      * Keeps track of whether or not this Chromosome has been selected by
      * the natural selector to move on to the next generation.
      */
-    protected boolean m_isSelected = false;
+    protected boolean m_isSelectedForNextGeneration = false;
 
     /**
      * Stores the fitness value of this Chromosome as determined by the
-     * active fitness function.
+     * active fitness function. A value of -1 indicates that this field
+     * has not yet been set with this Chromosome's fitness values (valid
+     * fitness values are always positive).
      */
     protected int m_fitnessValue = -1;
 
 
     /**
      * Constructs a Chromosome of the given size separate from any specific
-     * Configuration. This constructor will use the given sample Allele to
-     * create an Allele representation for each of its genes. This can be
-     * useful for constructing sample chromosomes that use the same Allele
-     * type for all of their genes and that are to be used to setup a
-     * Configuration object.
+     * Configuration. This constructor will use the given sample Gene to
+     * construct a new Chromosome instance containing genes all of the same
+     * type as the sample Gene. This can be useful for constructing sample
+     * chromosomes that use the same Gene type for all of their genes and that
+     * are to be used to setup a Configuration object.
      *
-     * @param a_sampleAllele A sample concrete Allele instance representative
-     *                       of the Alleles that should represent all genes
-     *                       in this Chromosome instance.
+     * @param a_sampleGene A sample concrete Gene instance that will be used
+     *                       as a template for all of the genes in this
+     *                       Chromosome.
      * @param a_desiredSize The desired size (number of genes) of this
      *                      Chromosome.
      */
-    public Chromosome( Allele a_sampleAllele, int a_desiredSize )
+    public Chromosome( Gene a_sampleGene, int a_desiredSize )
     {
-        if( a_sampleAllele == null )
+        // Do some sanity checking to make sure the parameters we were
+        // given are valid.
+        // -----------------------------------------------------------
+        if( a_sampleGene == null )
         {
             throw new IllegalArgumentException(
-                "Sample Allele cannot be null." );
+                "Sample Gene cannot be null." );
         }
 
         if( a_desiredSize <= 0 )
         {
             throw new IllegalArgumentException(
-                "Chromosome size must be greater than zero." );
+                "Chromosome size must be positive." );
         }
 
-        m_genes = new Allele[ a_desiredSize ];
+        // Create the array of Genes and populate it with new Gene
+        // instances created from the sample gene.
+        // -------------------------------------------------------
+        m_genes = new Gene[ a_desiredSize ];
         for( int i = 0; i < m_genes.length; i++ )
         {
-            m_genes[i] = a_sampleAllele.newAllele( null );
+            m_genes[i] = a_sampleGene.newGene( null );
         }
 
         m_activeConfiguration = null;
@@ -104,13 +112,26 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      *
      * @param a_initialGenes The genes of this Chromosome.
      */
-    public Chromosome( Allele[] a_initialGenes )
+    public Chromosome( Gene[] a_initialGenes )
     {
-        // Sanity check: make sure the genes aren't null.
-        // ----------------------------------------------
+        // Sanity checks: make sure the genes array isn't null and
+        // that none of the genes contained within it are null.
+        // -------------------------------------------------------
         if ( a_initialGenes == null )
         {
-            throw new IllegalArgumentException( "Genes cannot be null." );
+            throw new IllegalArgumentException(
+                "The given array of genes cannot be null." );
+        }
+
+        for( int i = 0; i < a_initialGenes.length; i++ )
+        {
+            if( a_initialGenes[ i ] == null )
+            {
+                throw new IllegalArgumentException(
+                    "The gene at index " + i + " in the given array of " +
+                    "genes was found to be null. No genes in the array " +
+                    "may be null." );
+            }
         }
 
         m_genes = a_initialGenes;
@@ -120,35 +141,42 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
     /**
      * Constructs this Chromosome instance with the given array of gene values.
-     * Each gene is represented by a single allele in the array. For
-     * convenience, the randomInitialChromosome method is provided
+     * For convenience, the randomInitialChromosome method is provided
      * that will take care of generating a Chromosome instance of a
      * specified size. This constructor exists in case it's desirable
-     * to initialize Chromosomes with specific gene values.
+     * to initialize Chromosomes with genes that contain specific values
+     * (alleles).
      *
-     * @param a_activeConfiguration A Configuration instance that controls
-     *                              the behavior of this GA run. Note that
-     *                              it must be in a valid state at the time
-     *                              of invocation, or an
-     *                              InvalidConfigurationException
-     *                              will be thrown.
-     * @param a_initialGenes The set of alleles representing the values of
-     *                       the genes with which to initialize this
-     *                       Chromosome instance. Each allele represents the
-     *                       value of a single gene.
+     * @param a_activeConfiguration The current, active Configuration object.
+     * @param a_initialGenes The array of genes that are to be contained
+     *                       within this Chromosome instance.
      *
      * @throws InvalidConfigurationException if the given Configuration
      *         instance is null or invalid.
+     * @throws IllegalArgumentException if any of the given parameters are
+     *         invalid, such as a null genes array or element.
      */
     public Chromosome( Configuration a_activeConfiguration,
-                       Allele[] a_initialGenes )
+                       Gene[] a_initialGenes )
            throws InvalidConfigurationException
     {
-        // Sanity checks: make sure the parameters aren't null.
-        // ----------------------------------------------------
+        // Sanity checks: make sure the parameters are all valid.
+        // ------------------------------------------------------
         if ( a_initialGenes == null )
         {
-            throw new IllegalArgumentException( "Genes cannot be null." );
+            throw new IllegalArgumentException(
+                "The given array of genes cannot be null." );
+        }
+
+        for( int i = 0; i < a_initialGenes.length; i++ )
+        {
+            if( a_initialGenes[ i ] == null )
+            {
+                throw new IllegalArgumentException(
+                    "The gene at index " + i + " in the given array of " +
+                    "genes was found to be null. No genes in the array " +
+                    "may be null." );
+            }
         }
 
         if ( a_activeConfiguration == null )
@@ -180,7 +208,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
     public synchronized Object clone()
     {
         // First see if we can pull a Chromosome from the pool and just
-        // set its allele values appropriately.
+        // set its gene values (alleles) appropriately.
         // ------------------------------------------------------------
         ChromosomePool pool = m_activeConfiguration.getChromosomePool();
         if( pool != null )
@@ -188,28 +216,28 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             Chromosome copy = pool.acquireChromosome();
             if( copy != null )
             {
-                Allele[] genes = copy.getGenes();
+                Gene[] genes = copy.getGenes();
                 for( int i = 0; i < genes.length; i++ )
                 {
-                    genes[ i ].setValue( m_genes[ i ].getValue() );
+                    genes[ i ].setAllele( m_genes[ i ].getAllele() );
                 }
 
                 return copy;
             }
         }
 
-        // We couldn't fetch a Chromosome from the pool, so we need to
-        // create a new one.  First we make a copy of each of the Alleles.
-        //  We explicity use the Allele at each respective gene location
-        // (locus) to create the new Allele that is to occupy that same
+        // If we get this far, then we couldn't fetch a Chromosome from the
+        // pool, so we need to create a new one. First we make a copy of each
+        // of the Genes. We explicity use the Gene at each respective gene
+        // location (locus) to create the new Gene that is to occupy that same
         // locus in the new Chromosome.
-        // ---------------------------------------------------------------
-        Allele[] copyOfGenes = new Allele[ m_genes.length ];
+        // -------------------------------------------------------------------
+        Gene[] copyOfGenes = new Gene[ m_genes.length ];
 
         for( int i = 0; i < copyOfGenes.length; i++ )
         {
-            copyOfGenes[ i ] = m_genes[i].newAllele( m_activeConfiguration );
-            copyOfGenes[ i ].setValue(  m_genes[i].getValue() );
+            copyOfGenes[ i ] = m_genes[ i ].newGene( m_activeConfiguration );
+            copyOfGenes[ i ].setAllele(  m_genes[ i ].getAllele() );
         }
 
         // Now construct a new Chromosome with the copies of the genes and
@@ -235,14 +263,14 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
 
     /**
-     * Returns the Allele representing the value of the gene at the given locus
-     * (index) within the Chromosome. The first gene is at locus zero and the
-     * last gene is at the locus equal to the size of this Chromosome - 1.
+     * Returns the Gene at the given index (locus) within the Chromosome. The
+     * first gene is at index zero and the last gene is at the index equal to
+     * the size of this Chromosome - 1.
      *
      * @param a_desiredLocus: The index of the gene value to be returned.
-     * @return The Allele representing the value of the indicated gene.
+     * @return The Gene at the given index.
      */
-    public synchronized Allele getAllele( int a_desiredLocus )
+    public synchronized Gene getGene( int a_desiredLocus )
     {
         return m_genes[ a_desiredLocus ];
     }
@@ -253,19 +281,19 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      * exists primarily for the benefit of GeneticOperators that require the
      * ability to manipulate Chromosomes at a low level.
      *
-     * @return a BitSet of genes.
+     * @return an array of the Genes contained within this Chromosome.
      */
-    public synchronized Allele[] getGenes()
+    public synchronized Gene[] getGenes()
     {
         return m_genes;
     }
 
 
     /**
-     * Returns the size of this Chromosome (the number of genes).
+     * Returns the size of this Chromosome (the number of genes it contains).
      * A Chromosome's size is constant and will never change.
      *
-     * @return The number of genes in this Chromosome instance.
+     * @return The number of genes contained within this Chromosome instance.
      */
     public int size()
     {
@@ -295,7 +323,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
     /**
      * Returns a string representation of this Chromosome, useful
-     * for debugging purposes.
+     * for some display purposes.
      *
      * @return A string representation of this Chromosome.
      */
@@ -311,7 +339,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             representation.append( m_genes[i].toString() );
             representation.append( ", " );
         }
-        representation.append( m_genes[m_genes.length - 1].toString() );
+        representation.append( m_genes[ m_genes.length - 1 ].toString() );
         representation.append( " ]");
 
         return representation.toString();
@@ -319,17 +347,19 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
 
     /**
-     * Convenience method that returns a new Chromosome instance with random
-     * allele values. Note that, if possible, this method will acquire a
-     * Chromosome instance from the active ChromosomePool (if any) and then
-     * randomize its allele values before returning it. If a Chromosome
-     * cannot be acquired from the pool, then a new instance will be
-     * constructed and its allele values randomized before returning it.
+     * Convenience method that returns a new Chromosome instance with its
+     * genes values (alleles) randomized. Note that, if possible, this method
+     * will acquire a Chromosome instance from the active ChromosomePool
+     * (if any) and then randomize its gene values before returning it. If a
+     * Chromosome cannot be acquired from the pool, then a new instance will
+     * be constructed and its gene values randomized before returning it.
      *
      * @param a_activeConfiguration The current active configuration.
      *
      * @throws InvalidConfigurationException if the given Configuration
-     *         instance is null or invalid.
+     *         instance is invalid.
+     * @throws IllegalArgumentException if the given Configuration instance
+     *         is null.
      */
     public static Chromosome randomInitialChromosome(
                                  Configuration a_activeConfiguration )
@@ -339,17 +369,18 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         // -----------------------------------------------------------
         if ( a_activeConfiguration == null )
         {
-            throw new InvalidConfigurationException(
+            throw new IllegalArgumentException(
                     "Configuration instance must not be null" );
         }
 
-        // Lock the configuration settings so that they can't be changed from
-        // now on.
-        // ------------------------------------------------------------------
+        // Lock the configuration settings so that they can't be changed
+        // from now on.
+        // -------------------------------------------------------------
         a_activeConfiguration.lockSettings();
 
         // First see if we can get a Chromosome instance from the pool.
-        // If we can, we'll randomize its alleles and then return it.
+        // If we can, we'll randomize its gene values (alleles) and then
+        // return it.
         // ------------------------------------------------------------
         ChromosomePool pool = a_activeConfiguration.getChromosomePool();
         if( pool != null )
@@ -357,7 +388,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             Chromosome randomChromosome = pool.acquireChromosome();
             if( randomChromosome != null )
             {
-                Allele[] genes = randomChromosome.getGenes();
+                Gene[] genes = randomChromosome.getGenes();
                 RandomGenerator generator = 
                     a_activeConfiguration.getRandomGenerator();
 
@@ -370,35 +401,35 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             }
         }
 
-        // We weren't able to get a Chromosome from the pool, so we have
-        // to construct a new instance and build it from scratch.
-        // -------------------------------------------------------------
+        // If we got this far, then we weren't able to get a Chromosome from
+        // the pool, so we have to construct a new instance and build it from
+        // scratch.
+        // ------------------------------------------------------------------
         Chromosome sampleChromosome =
             a_activeConfiguration.getSampleChromosome();
 
-        Allele[] sampleGenes = sampleChromosome.getGenes();
-        int numberOfGenes = sampleChromosome.size();
+        Gene[] sampleGenes = sampleChromosome.getGenes();
 
-        Allele[] newGenes = new Allele[ numberOfGenes ];
+        Gene[] newGenes = new Gene[ sampleGenes.length ];
         RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
 
-        for ( int i = 0; i < numberOfGenes; i++ )
+        for ( int i = 0; i < newGenes.length; i++ )
         {
-            // We ues the newAllele() method on each of the alleles in the
-            // sample Chromosome to generate our new Allele instances for
-            // the Chromosome we're turning. This guarantees that the
-            // new Alleles are setup with all of the correct internal state
+            // We use the newGene() method on each of the genes in the
+            // sample Chromosome to generate our new Gene instances for
+            // the Chromosome we're returning. This guarantees that the
+            // new Genes are setup with all of the correct internal state
             // for the respective gene position they're going to inhabit.
             // -----------------------------------------------------------
-            newGenes[ i ] = sampleGenes[ i ].newAllele( a_activeConfiguration );
+            newGenes[ i ] = sampleGenes[ i ].newGene( a_activeConfiguration );
 
-            // Set the allele to a random value.
-            // -------------------------------
+            // Set the gene's value (allele) to a random value.
+            // ------------------------------------------------
             newGenes[i].setToRandomValue( generator );
         }
 
         // Finally, construct the new chromosome with the new random
-        // genes and return it.
+        // genes values and return it.
         // ---------------------------------------------------------
         return new Chromosome( a_activeConfiguration, newGenes );
     }
@@ -406,7 +437,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
     /**
      * Compares this Chromosome against the specified object. The result is
-     * true if and only if the argument is an instance of the Chromosome class
+     * true if and the argument is an instance of the Chromosome class
      * and has a set of genes equal to this one.
      *
      * @param other The object to compare against.
@@ -414,33 +445,7 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      */
     public boolean equals( Object other )
     {
-        try
-        {
-            Chromosome otherChromosome = (Chromosome) other;
-
-            // Run through all of the genes in this Chromosome and compare
-            // them against the genes of the other Chromosome.
-            // -----------------------------------------------------------
-            Allele[] otherGenes = otherChromosome.m_genes;
-
-            for( int i = 0; i < m_genes.length; i++ )
-            {
-                if( !( m_genes[i].equals( otherGenes[i] ) ) )
-                {
-                    return false;
-                }
-            }
-
-            // All of the genes are the same, so return true.
-            // ----------------------------------------------
-            return true;
-        }
-        catch ( ClassCastException e )
-        {
-            // If the given object is not a Chromosome, return false.
-            // ------------------------------------------------------
-            return false;
-        }
+        return compareTo( other ) == 0;
     }
 
 
@@ -457,10 +462,9 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
     /**
      * Compares the given Chromosome to this Chromosome. This chromosome is
-     * considered to be "less than" the given chromosome if any of its genes
-     * are less than their corresponding genes in the other chromosome or,
-     * if all of the comparisons are equal, if this chromosome contains fewer
-     * genes than the other chromosome.
+     * considered to be "less than" the given chromosome if it has a fewer
+     * number of genes or if any of its gene values (alleles) are less than
+     * their corresponding gene values in the other chromosome.
      *
      * @param other The Chromosome against which to compare this chromosome.
      * @return a negative number if this chromosome is "less than" the given
@@ -469,28 +473,32 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      */
     public int compareTo( Object other )
     {
-        Chromosome otherChromosome = (Chromosome) other;
-
         // First, if the other Chromosome is null, then this chromosome is
         // automatically the "greater" Chromosome.
         // ---------------------------------------------------------------
-        if( otherChromosome == null )
+        if( other == null )
         {
             return 1;
         }
 
-        // First we compare as many genes as possible for differences. If
+        Chromosome otherChromosome = (Chromosome) other;
+        Gene[] otherGenes = otherChromosome.m_genes;
+
+        // If the other Chromosome doesn't have the same number of genes,
+        // then whichever has more is the "greater" Chromosome.
+        // --------------------------------------------------------------
+        if( otherGenes.length != m_genes.length )
+        {
+            return m_genes.length - otherGenes.length;
+        }
+
+        // Next, compare the gene values (alleles) for differences. If
         // one of the genes is not equal, then we return the result of its
         // comparison.
         // ---------------------------------------------------------------
-        Allele[] otherGenes = otherChromosome.m_genes;
-
-        int numberOfGenesToCompare =
-            Math.min( m_genes.length, otherGenes.length );
-
-        for( int i = 0; i < numberOfGenesToCompare; i++ )
+        for( int i = 0; i < m_genes.length; i++ )
         {
-            int comparison = m_genes[i].compareTo( otherGenes[i] );
+            int comparison = m_genes[ i ].compareTo( otherGenes[ i ] );
 
             if( comparison != 0 )
             {
@@ -498,12 +506,9 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             }
         }
 
-        // All of the compared genes were equal to each other. So now we
-        // just do the comparison based on the length of the chromosomes.
-        // If they are of equal length, then they will be equal. Otherwise
-        // the shorter chromosome will be the "lesser" chromosome.
-        // ---------------------------------------------------------------
-        return m_genes.length - otherGenes.length;
+        // Everything is equal. Return zero.
+        // ---------------------------------
+        return 0;
     }
 
 
@@ -514,9 +519,9 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      * @param a_isSelected true if this Chromosome has been selected, false
      *                     otherwise.
      */
-    public void setIsSelected( boolean a_isSelected )
+    public void setIsSelectedForNextGeneration( boolean a_isSelected )
     {
-        m_isSelected = a_isSelected;
+        m_isSelectedForNextGeneration = a_isSelected;
     }
 
 
@@ -526,9 +531,9 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      *
      * @return true if this Chromosome has been selected, false otherwise.
      */
-    public boolean isSelected()
+    public boolean isSelectedForNextGeneration()
     {
-        return m_isSelected;
+        return m_isSelectedForNextGeneration;
     }
 
 
@@ -542,22 +547,22 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         // First, reset our internal state.
         // --------------------------------
         m_fitnessValue = -1;
-        m_isSelected = false;
+        m_isSelectedForNextGeneration = false;
 
         // If a ChromosomePool is setup in the active configuration, then
-        // release this Chromosome to the pool, thereby saving some
-        // memory.
+        // release this Chromosome to the pool so it can be recycled later,
+        // thereby saving some memory.
         // --------------------------------------------------------------
         ChromosomePool pool = m_activeConfiguration.getChromosomePool();
         if( pool != null )
         {
-            // The pool will take care of any allele cleanup for us.
+            // The pool will take care of any gene cleanup for us.
             // -----------------------------------------------------
             pool.releaseChromosome( this );
         }
         else
         {
-            // We need to manually cleanup our alleles.
+            // We need to manually cleanup our genes.
             // ----------------------------------------
             for( int i = 0; i < m_genes.length; i++ )
             {

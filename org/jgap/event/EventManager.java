@@ -19,18 +19,18 @@
  */
 package org.jgap.event;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
  * Manages event notification in the system. Observers that desire to be
  * notified of genetic events should subscribe to this class via the
  * addEventListener() method. To unsubscribe, use the removeEventListener()
- * method. To generate a genetic event, use the fireGeneticEvent method,
+ * method. To generate a genetic event, use the fireGeneticEvent() method,
  * which will take care of notifying the appropriate subscribers.
  */
 public class EventManager
@@ -60,7 +60,7 @@ public class EventManager
 
         if( eventListeners == null )
         {
-            eventListeners = new ArrayList();
+            eventListeners = new LinkedList();
             m_listeners.put( a_eventName, eventListeners );
         }
 
@@ -92,48 +92,27 @@ public class EventManager
 
 
     /**
-     * Fires a Genotype Evolved Event. All subscribers will be notified
-     * of the event.
+     * Fires a genetic event. All subscribers of that particular event type
+     * (as determined by the name of the event) will be notified of it
+     * having been fired.
      *
      * @param a_eventToFire The representation of the GeneticEvent to fire.
      */
-    public void fireGeneticEvent( GeneticEvent a_eventToFire )
+    public synchronized void fireGeneticEvent( GeneticEvent a_eventToFire )
     {
-        List eventListeners;
-        List workingCopyOfEventListeners;
+        List eventListeners =
+            (List) m_listeners.get( a_eventToFire.getEventName() );
 
-        synchronized( this )
+        if ( eventListeners != null )
         {
-            eventListeners =
-                (List) m_listeners.get( a_eventToFire.getEventName() );
-
-            if ( eventListeners == null )
+            // Iterate over the listeners and notify each one of the event.
+            // ------------------------------------------------------------
+            Iterator listenerIterator = eventListeners.iterator();
+            while( listenerIterator.hasNext() )
             {
-                // If there are no listeners, there's nothing to do.
-                // -------------------------------------------------
-                return;
+                ( (GeneticEventListener) listenerIterator.next() ).
+                    geneticEventFired( a_eventToFire );
             }
-            else
-            {
-                // Make a copy of the list of current subscribers. Otherwise,
-                // we have to synchronize and lock everyone out while we
-                // perform notifications, which could really slow things down
-                // since we have no idea what each of the listeners is going
-                // to do. This way, worst case is that there may be a bit of a
-                // delay before other subscribers are notified.
-                // -----------------------------------------------------------
-                workingCopyOfEventListeners = new ArrayList();
-                workingCopyOfEventListeners.addAll( eventListeners );
-            }
-        }
-
-        // Iterate over the listeners and notify each one of the event.
-        // ------------------------------------------------------------
-        Iterator listenerIterator = workingCopyOfEventListeners.iterator();
-        while( listenerIterator.hasNext() )
-        {
-            ( (GeneticEventListener) listenerIterator.next() ).
-                geneticEventFired( a_eventToFire );
         }
     }
 }

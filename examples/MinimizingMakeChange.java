@@ -19,13 +19,13 @@
  */
 package examples;
 
-import org.jgap.Allele;
+import org.jgap.Gene;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.Genotype;
 import org.jgap.FitnessFunction;
 import org.jgap.impl.DefaultConfiguration;
-import org.jgap.impl.IntegerAllele;
+import org.jgap.impl.IntegerGene;
 
 
 /**
@@ -73,16 +73,16 @@ public class MinimizingMakeChange
         // each have four genes, one for each of the coin types. We
         // want the values of those genes to be integers, which represent
         // how many coins of that type we have. We therefore use the
-        // IntegerAllele class to represent each of the genes. That class
+        // IntegerGene class to represent each of the genes. That class
         // also lets us specify a lower and upper bound, which we set
         // to sensible values for each coin type.
         // --------------------------------------------------------------
-        Allele[] sampleGenes = new Allele[4];
+        Gene[] sampleGenes = new Gene[4];
 
-        sampleGenes[0] = new IntegerAllele( 0, 3 );  // Quarters
-        sampleGenes[1] = new IntegerAllele( 0, 2 );  // Dimes
-        sampleGenes[2] = new IntegerAllele( 0, 1 );  // Nickels
-        sampleGenes[3] = new IntegerAllele( 0, 4 );  // Pennies
+        sampleGenes[0] = new IntegerGene( 0, 3 );  // Quarters
+        sampleGenes[1] = new IntegerGene( 0, 2 );  // Dimes
+        sampleGenes[2] = new IntegerGene( 0, 1 );  // Nickels
+        sampleGenes[3] = new IntegerGene( 0, 4 );  // Pennies
 
         Chromosome sampleChromosome = new Chromosome( sampleGenes );
 

@@ -17,7 +17,6 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 import org.jgap.event.EventManager;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  * The Configuration class represents the current configuration of
  * plugins and flags necessary to execute the genetic algorithm (such
- * as fitness function, natural selector, mutation rate, and so on).
+ * as fitness function, natural selector, genetic operators, and so on).
  * <p>
  * Note that, while during setup, the settings, flags, and other
  * values may be set multiple times. But once the lockSettings() method
@@ -62,10 +61,9 @@ public class Configuration implements java.io.Serializable
     private NaturalSelector m_populationSelector = null;
 
     /**
-     * References a Chromosome that serves as a sample of the Allele setup
+     * References a Chromosome that serves as a sample of the Gene setup
      * that is to be used. Each gene in the Chromosome should be represented
-     * with the desired Allele type. Note that this value is mutually
-     * exclusive with the sample allele--only one may be set at a time.
+     * with the desired Gene type.
      */
     private Chromosome m_sampleChromosome = null;
 
@@ -83,18 +81,17 @@ public class Configuration implements java.io.Serializable
     private EventManager m_eventManager = null;
 
     /**
-     * References the AllelePool, if any, that is to be used to pool unused
-     * Allele instances so that they may be recycled later, thereby saving
-     * memory.
+     * References the chromosome pool, if any, that is to be used to pool
+     * discarded Chromosome instances so that they may be recycled later,
+     * thereby saving memory and the time to construct them from scratch.
      */
     private ChromosomePool m_chromosomePool = null;
-
 
     /**
      * Stores all of the GeneticOperator implementations that are to be used
      * to operate upon the chromosomes of a population prior to natural
-     * selection. In general, operators will be executed in the order that
-     * they are added to this list.
+     * selection. Operators will be executed in the order that they are
+     * added to this list.
      */
     private List m_geneticOperators = new ArrayList();
 
@@ -119,30 +116,31 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Set the fitness function to be used for this genetic algorithm.
+     * Sets the fitness function to be used for this genetic algorithm.
      * The fitness function is responsible for evaluating a given
-     * Chromosome and returning an integer that represents its
-     * worth as a candidate solution. These values are typically
-     * used by the natural selector to determine which Chromosome
-     * instances will be allowed to move on to the next round
-     * of evolution, and which will instead be eliminated.
-     *
+     * Chromosome and returning a positive integer that represents its
+     * worth as a candidate solution. These values are used as a guide by the
+     * natural to determine which Chromosome instances will be allowed to move
+     * on to the next round of evolution, and which will instead be eliminated.
      * This setting is required.
      *
      * @param a_functionToSet: The fitness function to be used.
      *
      * @throws InvalidConfigurationException if the fitness function
-     *         is not satisfactory or if this object is locked.
+     *         is null or if this Configuration object is locked.
      */
-    public synchronized void setFitnessFunction( FitnessFunction a_functionToSet )
+    public synchronized void setFitnessFunction(
+                                 FitnessFunction a_functionToSet )
                              throws InvalidConfigurationException
     {
         verifyChangesAllowed();
 
+        // Sanity check: Make sure that the given fitness function isn't null.
+        // -------------------------------------------------------------------
         if ( a_functionToSet == null )
         {
             throw new InvalidConfigurationException(
-                "FitnessFunction instance may not be null." );
+                "The FitnessFunction instance may not be null." );
         }
 
         m_objectiveFunction = a_functionToSet;
@@ -150,9 +148,10 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Retrieve the fitness function being used by this genetic algorithm.
+     * Retrieves the fitness function previously setup in this Configuration
+     * object.
      *
-     * @return The fitness function used by this genetic algorithm.
+     * @return The fitness function.
      */
     public FitnessFunction getFitnessFunction()
     {
@@ -162,22 +161,22 @@ public class Configuration implements java.io.Serializable
 
     /**
      * Sets the sample Chromosome that is to be used as a guide for the
-     * construction of other Chromosomes. The Chromosome should be constructed
-     * with each gene represented by the Allele desired Allele type for that
-     * locus. Those types will be maintained for genes at those respective
-     * locations in all Chromosomes generated with this Configuration.
+     * construction of other Chromosomes. The Chromosome should be setup
+     * with each gene represented by the desired concrete Gene implementation
+     * for that gene position (locus). Anytime a new Chromosome is created,
+     * it will be constructed with the same Gene setup as that provided in
+     * this sample Chromosome.
      *
      * @param a_sampleChromosomeToSet The Chromosome to be used as the sample.
-     * @throws InvalidConfigurationException if the given Chromosome is not
-     *         satisfactory, this Configuration is locked, or the sample
-     *         Allele has already been set.
+     * @throws InvalidConfigurationException if the given Chromosome is null
+     *         or this Configuration object is locked.
      */
     public void setSampleChromosome( Chromosome a_sampleChromosomeToSet )
                 throws InvalidConfigurationException
     {
         verifyChangesAllowed();
 
-        // Sanity check: Make sure that the given instance isn't null.
+        // Sanity check: Make sure that the given chromosome isn't null.
         // -----------------------------------------------------------
         if( a_sampleChromosomeToSet == null )
         {
@@ -185,15 +184,14 @@ public class Configuration implements java.io.Serializable
                 "The sample Chromosome instance may not be null." );
         }
 
-        // Everything appears to be ok, so assign the instance variables.
-        // --------------------------------------------------------------
         m_sampleChromosome = a_sampleChromosomeToSet;
         m_chromosomeSize = m_sampleChromosome.size();
     }
 
+
     /**
-     * Retrieves the sample Chromosome that contains the desired Allele
-     * types at each respective gene location (locus).
+     * Retrieves the sample Chromosome that contains the desired Gene setup
+     * for each respective gene position (locus).
      *
      * @return the sample Chromosome instance.
      */
@@ -204,133 +202,7 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Set the natural selector to be used for this genetic algorithm.
-     * The natural selector is responsible for actually selecting
-     * which Chromosome instances are allowed to move on to the next
-     * round of evolution (usually based on the fitness values
-     * provided by the fitness function).
-     *
-     * This setting is required.
-     *
-     * @param a_selectorToSet The natural selector to be used.
-     *
-     * @throws InvalidConfigurationException if the natural selector
-     *         is not satisfactory or this object is locked.
-     */
-    public synchronized void setNaturalSelector( NaturalSelector a_selectorToSet )
-                             throws InvalidConfigurationException
-    {
-        verifyChangesAllowed();
-
-        if ( a_selectorToSet == null )
-        {
-            throw new InvalidConfigurationException(
-                    "Natural Selector instance may not be null." );
-        }
-
-        m_populationSelector = a_selectorToSet;
-    }
-
-
-    /**
-     * Retrieve the natural selector being used by this genetic
-     * algorithm.
-     *
-     * @return The natural selector used by this genetic algorithm.
-     */
-    public NaturalSelector getNaturalSelector()
-    {
-        return m_populationSelector;
-    }
-
-
-    /**
-     * Set the random generator to be used for this genetic algorithm.
-     * The random generator is responsible for generating random numbers,
-     * which are used throughout the process of genetic evolution and
-     * selection.
-     *
-     * This setting is required.
-     *
-     * @param a_generatorToSet The random generator to be used.
-     *
-     * @throws InvalidConfigurationException if the random generator
-     *         is not satisfactory or this object is locked.
-     */
-    public synchronized void setRandomGenerator( RandomGenerator a_generatorToSet )
-                             throws InvalidConfigurationException
-    {
-        verifyChangesAllowed();
-
-        if ( a_generatorToSet == null )
-        {
-            throw new InvalidConfigurationException(
-                    "RandomGenerator instance may not be null." );
-        }
-
-        m_randomGenerator = a_generatorToSet;
-    }
-
-
-    /**
-     * Retrieve the random generator being used by this genetic
-     * algorithm.
-     *
-     * @return The random generator used by this genetic algorithm.
-     */
-    public RandomGenerator getRandomGenerator()
-    {
-        return m_randomGenerator;
-    }
-
-
-    /**
-     * Add a genetic operator for use in this algorithm. Genetic operators
-     * represent evolutionary steps that, when combined, make up the
-     * evolutionary process. Examples of genetic operators are reproduction,
-     * crossover, and mutation. During the evolution process, all of the
-     * genetic operators added via this method are invoked in the order
-     * they were added.
-     *
-     * At least one genetic operator must be provided.
-     *
-     * @param a_operatorToAdd The genetic operator to be added.
-     *
-     * @throws InvalidConfigurationException if the genetic operator
-     *         is null a_operatorToAdd this robject is locked.
-     */
-    public synchronized void addGeneticOperator( GeneticOperator a_operatorToAdd )
-                             throws InvalidConfigurationException
-    {
-        verifyChangesAllowed();
-
-        if ( a_operatorToAdd == null )
-        {
-            throw new InvalidConfigurationException(
-                    "GeneticOperator instance may not be null." );
-        }
-
-        m_geneticOperators.add( a_operatorToAdd );
-    }
-
-
-    /**
-     * Retrieve the genetic operators added for this genetic algorithm.
-     * Note that once this Configuration instance is locked, a new,
-     * immutable list of operators is used and any lists previously
-     * retrieved with this method will no longer reflect the actual
-     * list in use.
-     *
-     * @return The list of genetic operators added to this Configuration
-     */
-    public List getGeneticOperators()
-    {
-        return m_geneticOperators;
-    }
-
-
-    /**
-     * Retrieve the chromosome size being used by this genetic
+     * Retrieves the chromosome size being used by this genetic
      * algorithm. This value is set automatically when the sample Chromosome
      * is provided.
      *
@@ -343,31 +215,164 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Set the population size to be used for this genetic algorithm.
-     * The population size is a fixed value that represntes the
-     * number of Chromosomes represented in a Genotype.
+     * Sets the natural selector to be used for this genetic algorithm.
+     * The natural selector is responsible for actually selecting
+     * which Chromosome instances are allowed to move on to the next
+     * round of evolution (usually guided by the fitness values
+     * provided by the fitness function). This setting is required.
      *
+     * @param a_selectorToSet The natural selector to be used.
+     *
+     * @throws InvalidConfigurationException if the natural selector
+     *         is null or this Configuration object is locked.
+     */
+    public synchronized void setNaturalSelector(
+                                 NaturalSelector a_selectorToSet )
+                             throws InvalidConfigurationException
+    {
+        verifyChangesAllowed();
+
+        // Sanity check: Make sure that the given natural selector isn't null.
+        // -------------------------------------------------------------------
+        if ( a_selectorToSet == null )
+        {
+            throw new InvalidConfigurationException(
+                    "The Natural Selector instance may not be null." );
+        }
+
+        m_populationSelector = a_selectorToSet;
+    }
+
+
+    /**
+     * Retrieve the natural selector setup in this Configuration instance.
+     *
+     * @return The natural selector.
+     */
+    public NaturalSelector getNaturalSelector()
+    {
+        return m_populationSelector;
+    }
+
+
+    /**
+     * Sets the random generator to be used for this genetic algorithm.
+     * The random generator is responsible for generating random numbers,
+     * which are used throughout the process of genetic evolution and
+     * selection. This setting is required.
+     *
+     * @param a_generatorToSet The random generator to be used.
+     *
+     * @throws InvalidConfigurationException if the random generator
+     *         is null or this object is locked.
+     */
+    public synchronized void setRandomGenerator(
+                                 RandomGenerator a_generatorToSet )
+                             throws InvalidConfigurationException
+    {
+        verifyChangesAllowed();
+
+        // Sanity check: Make sure that the given random generator isn't null.
+        // -------------------------------------------------------------------
+        if ( a_generatorToSet == null )
+        {
+            throw new InvalidConfigurationException(
+                    "The RandomGenerator instance may not be null." );
+        }
+
+        m_randomGenerator = a_generatorToSet;
+    }
+
+
+    /**
+     * Retrieves the random generator setup in this Configuration instance.
+     *
+     * @return The random generator.
+     */
+    public RandomGenerator getRandomGenerator()
+    {
+        return m_randomGenerator;
+    }
+
+
+    /**
+     * Adds a genetic operator for use in this algorithm. Genetic operators
+     * represent evolutionary steps that, when combined, make up the
+     * evolutionary process. Examples of genetic operators are reproduction,
+     * crossover, and mutation. During the evolution process, all of the
+     * genetic operators added via this method are invoked in the order
+     * they were added. At least one genetic operator must be provided.
+     *
+     * @param a_operatorToAdd The genetic operator to add.
+     *
+     * @throws InvalidConfigurationException if the genetic operator
+     *         is null of if this Configuration object is locked.
+     */
+    public synchronized void addGeneticOperator(
+                                 GeneticOperator a_operatorToAdd )
+                             throws InvalidConfigurationException
+    {
+        verifyChangesAllowed();
+
+        // Sanity check: Make sure that the given genetic operator isn't null.
+        // -------------------------------------------------------------------
+        if ( a_operatorToAdd == null )
+        {
+            throw new InvalidConfigurationException(
+                    "The GeneticOperator instance may not be null." );
+        }
+
+        m_geneticOperators.add( a_operatorToAdd );
+    }
+
+
+    /**
+     * Retrieves the genetic operators setup in this Configuration instance.
+     * Note that once this Configuration instance is locked, a new,
+     * immutable list of operators is used and any lists previously
+     * retrieved with this method will no longer reflect the actual
+     * list in use.
+     *
+     * @return The list of genetic operators.
+     */
+    public List getGeneticOperators()
+    {
+        return m_geneticOperators;
+    }
+
+
+    /**
+     * Sets the population size to be used for this genetic algorithm.
+     * The population size is a fixed value that represents the
+     * number of Chromosomes contained within the Genotype (population).
      * This setting is required.
      *
      * @param a_sizeOfPopulation The population size to be used.
      *
      * @throws InvalidConfigurationException if the population size
-     *         is not satisfactory or this object is locked.
+     *         is not positive or this object is locked.
      */
     public synchronized void setPopulationSize( int a_sizeOfPopulation )
                              throws InvalidConfigurationException
     {
         verifyChangesAllowed();
 
+        // Sanity check: Make sure the population size is positive.
+        // --------------------------------------------------------
+        if( a_sizeOfPopulation < 1 )
+        {
+            throw new InvalidConfigurationException(
+                    "The population size must be positive." );
+
+        }
         m_populationSize = a_sizeOfPopulation;
     }
 
 
     /**
-     * Retrieve the population size being used by this genetic
-     * algorithm.
+     * Retrieves the population size setup in this Configuration instance.
      *
-     * @return The population size used by this genetic algorithm.
+     * @return The population size.
      */
     public int getPopulationSize()
     {
@@ -383,14 +388,16 @@ public class Configuration implements java.io.Serializable
      * @param a_eventManagerToSet the EventManager instance to use in this
      *                            configuration.
      *
-     * @throws InvalidConfigurationException if the population size
-     *         is not satisfactory or this object is locked.
+     * @throws InvalidConfigurationException if the event manager is null
+     *         or this Configuration object is locked.
      */
     public void setEventManager( EventManager a_eventManagerToSet )
                 throws InvalidConfigurationException
     {
         verifyChangesAllowed();
 
+        // Sanity check: Make sure that the given event manager isn't null.
+        // ----------------------------------------------------------------
         if( a_eventManagerToSet == null )
         {
             throw new InvalidConfigurationException(
@@ -416,10 +423,11 @@ public class Configuration implements java.io.Serializable
 
     /**
      * Sets the ChromosomePool that is to be associated with this 
-     * configuration. The ChromosomePool is used to pool unused Chromosome
-     * instances so that they may be recycled later, thereby saving time and
-     * memory. The presence of a ChromosomePool is optional. If none exists,
-     * then a new Chromosome will be constructed each time one is needed.
+     * configuration. The ChromosomePool is used to pool discarded Chromosome
+     * instances so that they may be recycled later, thereby memory and the
+     * time to construct them from scratch. The presence of a ChromosomePool
+     * is optional. If none exists, then a new Chromosome will be constructed
+     * each time one is needed.
      *
      * @param a_chromosomePoolToSet The ChromosomePool instance to use.
      * @throws InvalidConfigurationException if this object is locked.
@@ -435,14 +443,14 @@ public class Configuration implements java.io.Serializable
 
     /**
      * Retrieves the ChromosomePool instance, if any, that is associated with
-     * this configuration.  The ChromosomePool is used to pool unused 
+     * this configuration. The ChromosomePool is used to pool discarded
      * Chromosome instances so that they may be recycled later, thereby 
-     * saving time and memory. The presence of a ChromosomePool instance is
-     * optional. If none exists, then new Chromosomes will be constructed
-     * each time one is needed.
+     * saving memory and the time to construct them from scratch. The presence
+     * of a ChromosomePool instance is optional. If none exists, then new
+     * Chromosomes should be constructed each time one is needed.
      *
      * @return The ChromosomePool instance associated this configuration, or
-     *         null if none has been set.
+     *         null if none has been provided.
      */
     public ChromosomePool getChromosomePool()
     {
@@ -451,7 +459,7 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Lock all of the settings in this configuration object. Once
+     * Locks all of the settings in this configuration object. Once
      * this method is successfully invoked, none of the settings may
      * be changed. There is no way to unlock this object once it is locked.
      * <p>
@@ -463,11 +471,11 @@ public class Configuration implements java.io.Serializable
      * It's possible to test whether is object is locked through the
      * isLocked() method.
      * <p>
-     * It is ok to lock an object more than once. In this case, this method
+     * It is ok to lock an object more than once. In that case, this method
      * does nothing and simply returns.
      *
-     * @throws InvalidConfigurationException if the object is in an invalid
-     *         state at the time of invocation.
+     * @throws InvalidConfigurationException if this Configuration object is
+     *         in an invalid state at the time of invocation.
      */
     public synchronized void lockSettings()
                              throws InvalidConfigurationException
@@ -487,7 +495,7 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Retrieve the lock status of this object.
+     * Retrieves the lock status of this object.
      *
      * @return true if this object has been locked by a previous successful
      *         call to the lockSettings() method, false otherwise.
@@ -499,10 +507,10 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Test the state of this object to make sure it's valid. This generally
-     * consists of verifying that required settings have, in fact, been set.
-     * If this object is not in a valid state, then an exception will be
-     * thrown detailing the reason the state is not valid.
+     * Tests the state of this Configuration object to make sure it's valid.
+     * This generally consists of verifying that required settings have, in
+     * fact, been set. If this object is not in a valid state, then an
+     * exception will be thrown detailing the reason the state is not valid.
      *
      * @throws InvalidConfigurationException if the state of this Configuration
      *         is not valid. The error message in the exception will detail
@@ -570,38 +578,40 @@ public class Configuration implements java.io.Serializable
                 "the active configuration." );
         }
 
-        // Next, it's critical that each Allele implementation in the sample
+        // Next, it's critical that each Gene implementation in the sample
         // Chromosome has a working equals() method, or else the genetic
         // engine will end up failing in mysterious and unpredictable ways.
-        // We therefore verify right here that this method is working properly.
+        // We therefore verify right here that this method is working properly
+        // in each of the Gene implementations used in the sample Chromosome.
         // -------------------------------------------------------------------
-        Allele[] sampleGenes = m_sampleChromosome.getGenes();
+        Gene[] sampleGenes = m_sampleChromosome.getGenes();
         for( int i = 0; i < sampleGenes.length; i++ )
         {
-            Allele sampleCopy = sampleGenes[i].newAllele( this );
-            sampleCopy.setValue( sampleGenes[i].getValue() );
+            Gene sampleCopy = sampleGenes[i].newGene( this );
+            sampleCopy.setAllele( sampleGenes[i].getAllele() );
 
             if( !( sampleCopy.equals( sampleGenes[i] ) ) )
             {
                 throw new InvalidConfigurationException(
-                    "The sample Allele at gene position (locus) " + i +
+                    "The sample Gene at gene position (locus) " + i +
                     " does not appear to have a working equals() method. " +
                     "When tested, the method returned false when comparing " +
-                    "the sample allele with an allele of the same type " +
-                    "possessing the same value." );
+                    "the sample gene with a gene of the same type and " +
+                    "possessing the same value (allele)." );
             }
         }
     }
 
 
     /**
-     * Makes sure that this object isn't locked. If it is, then an
-     * exception is thrown with an appropriate message indicating
+     * Makes sure that this Configuration object isn't locked. If it is, then
+     * an exception is thrown with an appropriate message indicating
      * that settings in this object may not be altered. This method
      * should be invoked by any mutator method in this object prior
      * to making any state alterations.
      *
-     * @throws InvalidConfigurationException if this object is locked.
+     * @throws InvalidConfigurationException if this Configuration object is
+     *         locked.
      */
     protected void verifyChangesAllowed()
                    throws InvalidConfigurationException

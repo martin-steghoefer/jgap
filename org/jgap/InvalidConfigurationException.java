@@ -17,27 +17,18 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap;
 
 
 /**
  * This exception is typically thrown when an invalid value has been
- * passed to a Configuration object, or when an attempt is made to
- * alter a value in a Configuration object after it has been locked.
+ * passed to a Configuration object, an attempt is made to lock a Configuration
+ * object before all required settings have been provided, or an attempt is
+ * made to alter a setting in a Configuration object after it has been
+ * successfully locked.
  */
 public class InvalidConfigurationException extends Exception
 {
-    /**
-     * Constructs a new InvalidConfigurationException instance. No error
-     * message will be available.
-     */
-    public InvalidConfigurationException()
-    {
-        super();
-    }
-
-
     /**
      * Constructs a new InvalidConfigurationException instance with the
      * given error message.

@@ -19,13 +19,13 @@
  */
 package examples;
 
-import org.jgap.Allele;
+import org.jgap.Gene;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.Genotype;
 import org.jgap.FitnessFunction;
 import org.jgap.impl.DefaultConfiguration;
-import org.jgap.impl.IntegerAllele;
+import org.jgap.impl.IntegerGene;
 
 
 /**
@@ -64,16 +64,16 @@ public class MakeChange
         // each have four genes, one for each of the coin types. We
         // want the values of those genes to be integers, which represent
         // how many coins of that type we have. We therefore use the
-        // IntegerAllele class to represent each of the genes. That class
+        // IntegerGene class to represent each of the genes. That class
         // also lets us specify a lower and upper bound, which we set
         // to sensible values for each coin type.
         // --------------------------------------------------------------
-        Allele[] sampleGenes = new Allele[4];
+        Gene[] sampleGenes = new Gene[4];
 
-        sampleGenes[0] = new IntegerAllele( 0, 3 );  // Quarters
-        sampleGenes[1] = new IntegerAllele( 0, 2 );  // Dimes
-        sampleGenes[2] = new IntegerAllele( 0, 1 );  // Nickels
-        sampleGenes[3] = new IntegerAllele( 0, 4 );  // Pennies
+        sampleGenes[0] = new IntegerGene( 0, 3 );  // Quarters
+        sampleGenes[1] = new IntegerGene( 0, 2 );  // Dimes
+        sampleGenes[2] = new IntegerGene( 0, 1 );  // Nickels
+        sampleGenes[3] = new IntegerGene( 0, 4 );  // Pennies
 
         Chromosome sampleChromosome = new Chromosome( sampleGenes );
 
@@ -84,7 +84,7 @@ public class MakeChange
         // the larger number of potential solutions (which is good for
         // finding the answer), but the longer it will take to evolve
         // the population (which could be seen as bad). We'll just set
-        // the population size to 100 here.
+        // the population size to 1000 here.
         // ------------------------------------------------------------
         conf.setPopulationSize( 1000 );
 
@@ -142,7 +142,7 @@ public class MakeChange
 
     /**
      * Main method. A single command-line argument is expected, which is
-     * the amount of change to create (in other words, 75 would be 75
+     * the amount of change to create (in other words, 75 would be equal to 75
      * cents).
      *
      * @param args the command-line arguments.
@@ -158,10 +158,10 @@ public class MakeChange
             try
             {
                 int amount = Integer.parseInt( args[0] );
-                if( amount >= 100 )
+                if( amount < 1 || amount > 99 )
                 {
                     System.out.println(
-                        "The <amount> argument must be less than 100 ");
+                        "The <amount> argument must be between 1 and 99." );
                 }
                 else
                 {
@@ -178,7 +178,7 @@ public class MakeChange
             catch( NumberFormatException e )
             {
                 System.out.println(
-                    "The <amount> argument must be a valid integer value" );
+                    "The <amount> argument must be a valid integer value." );
             }
         }
     }

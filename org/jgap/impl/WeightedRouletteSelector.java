@@ -45,7 +45,7 @@ public class WeightedRouletteSelector implements NaturalSelector
     /**
      * Represents the "roulette wheel." Each key in the Map is a Chromosome
      * and each value is an instance of the SlotCounter inner class, which
-     * keeps track of how many slots on the wheel that Chromosome is using.
+     * keeps track of how many slots on the wheel each Chromosome is occupying.
      */
     private Map m_wheel = new HashMap();
 
@@ -57,7 +57,7 @@ public class WeightedRouletteSelector implements NaturalSelector
     private long m_totalNumberOfUsedSlots = 0;
 
     /**
-     * An internal pool in which old SlotCounter instances can be stored
+     * An internal pool in which discarded SlotCounter instances can be stored
      * so that they can be reused over and over again, thus saving memory
      * and the overhead of constructing new ones each time.
      */
@@ -65,22 +65,19 @@ public class WeightedRouletteSelector implements NaturalSelector
 
 
     /**
-     * Add a Chromosome instance and corresponding fitness value to this
-     * selector's working pool of Chromosomes.
+     * Add a Chromosome instance to this selector's working pool of Chromosomes.
      *
      * @param a_activeConfigurator: The current active Configuration to be used
      *                              during the add process.
      * @param a_chromosomeToAdd: The specimen to add to the pool.
-     * @param a_chromosomeFitnessValue: The specimen's fitness value.
      */
     public synchronized void add( Configuration a_activeConfigurator,
-                                  Chromosome a_chromosomeToAdd,
-                                  int a_chromosomeFitnessValue )
+                                  Chromosome a_chromosomeToAdd )
     {
         // The "roulette wheel" is represented by a Map. Each key is a
         // Chromosome and each value is an instance of the SlotCounter inner
         // class. The counter keeps track of the total number of slots that
-        // each chromosome is using on the wheel (which is equal to the
+        // each chromosome is occupying on the wheel (which is equal to the
         // combined total of their fitness values). If the Chromosome is
         // already in the Map, then we just increment its number of slots
         // by its fitness value. Otherwise we add it to the Map.
@@ -89,13 +86,20 @@ public class WeightedRouletteSelector implements NaturalSelector
 
         if( counter != null )
         {
+            // The Chromosome is already in the map.
+            // -------------------------------------
             counter.incrementByFitness();
         }
         else
         {
-            // First, reset the Chromosome's isSelected flag to false.
-            // -------------------------------------------------------
-            a_chromosomeToAdd.setIsSelected( false );
+            // We need to add this Chromosome and an associated SlotCounter
+            // to the map. First, we reset the Chromosome's
+            // isSelectedForNextGeneration flag to false. Later, if the
+            // Chromosome is actually selected to move on to the next
+            // generation population by the select() method, then it will
+            // be set to true.
+            // ------------------------------------------------------------
+            a_chromosomeToAdd.setIsSelectedForNextGeneration( false );
 
             // We're going to need a SlotCounter. See if we can get one
             // from the pool. If not, construct a new one.
@@ -106,21 +110,22 @@ public class WeightedRouletteSelector implements NaturalSelector
                 counter = new SlotCounter();
             }
 
-            counter.reset( a_chromosomeFitnessValue );
+            counter.reset( a_chromosomeToAdd.getFitnessValue() );
             m_wheel.put( a_chromosomeToAdd, counter );
         }
 
-        m_totalNumberOfUsedSlots += a_chromosomeFitnessValue;
+        m_totalNumberOfUsedSlots += a_chromosomeToAdd.getFitnessValue();
     }
 
 
     /**
-     * Select a given number of Chromosomes from the pool that will continue
-     * to survive. This selection should be guided by the fitness values, but
-     * fitness should be treated as a statistical probability of survival,
-     * not as the sole determining factor. In other words, Chromosomes with
-     * higher fitness values are more likely to be selected than those with
-     * lower fitness values, but it's not guaranteed.
+     * Select a given number of Chromosomes from the pool that will move on
+     * to the next generation population. This selection should be guided by
+     * the fitness values, but fitness should be treated as a statistical
+     * probability of survival, not as the sole determining factor. In other
+     * words, Chromosomes with higher fitness values should be more likely to
+     * be selected than those with lower fitness values, but it should not be
+     * guaranteed.
      *
      * @param a_activeConfiguration: The current active Configuration that is
      *                               to be used during the selection process.
@@ -134,23 +139,22 @@ public class WeightedRouletteSelector implements NaturalSelector
         RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
         Chromosome[] selections = new Chromosome[ a_howManyToSelect ];
 
-        // Build three arrays from the sorted set: one that contains the
-        // fitness values for each chromosome, one that contains the total
-        // number of "slots on the wheel" for each chromosome, and one that
-        // contains the chromosomes themselves. The array indices can be
-        // used to associate the fitness values, counter values, and
-        // chromosomes with each other (eg, if a chromosome is at index 5,
-        // then its fitness value and counter values are also at index 5
-        // of their respective arrays).
-        // -----------------------------------------------------------------
+        // Build three arrays from the key/value pairs in the wheel map: one
+        // that contains the fitness values for each chromosome, one that
+        // contains the total number of occupied slots on the wheel for each
+        // chromosome, and one that contains the chromosomes themselves. The
+        // array indices are used to associate the values of the three arrays
+        // together (eg, if a chromosome is at index 5, then its fitness value
+        // and counter values are also at index 5 of their respective arrays).
+        // -------------------------------------------------------------------
         Set entries = m_wheel.entrySet();
-        int[] fitnessValues = new int[ entries.size() ];
-        long[] counterValues = new long[ entries.size() ];
-        Chromosome[] chromosomes = new Chromosome[ entries.size() ];
+        int numberOfEntries = entries.size();
+        int[] fitnessValues = new int[ numberOfEntries ];
+        long[] counterValues = new long[ numberOfEntries ];
+        Chromosome[] chromosomes = new Chromosome[ numberOfEntries ];
 
-        int currentIndex = 0;
         Iterator entryIterator = entries.iterator();
-        while( entryIterator.hasNext() )
+        for( int i = 0; i < numberOfEntries; i++ )
         {
             Map.Entry chromosomeEntry = (Map.Entry) entryIterator.next();
 
@@ -160,11 +164,9 @@ public class WeightedRouletteSelector implements NaturalSelector
             SlotCounter currentCounter =
                 (SlotCounter) chromosomeEntry.getValue();
 
-            fitnessValues[ currentIndex ] = currentCounter.getFitnessValue();
-            counterValues[ currentIndex ] = currentCounter.getCounterValue();
-            chromosomes[ currentIndex ] = currentChromosome;
-
-            currentIndex++;
+            fitnessValues[ i ] = currentCounter.getFitnessValue();
+            counterValues[ i ] = currentCounter.getCounterValue();
+            chromosomes[ i ] = currentChromosome;
         }
 
         // To select each chromosome, we just "spin" the wheel and grab
@@ -179,7 +181,7 @@ public class WeightedRouletteSelector implements NaturalSelector
                                             counterValues,
                                             chromosomes );
 
-            selectedChromosome.setIsSelected( true );
+            selectedChromosome.setIsSelectedForNextGeneration( true );
             selections[ i ] = selectedChromosome;
         }
 
@@ -189,8 +191,8 @@ public class WeightedRouletteSelector implements NaturalSelector
 
     /**
      * This method "spins" the wheel and returns the Chromosome that is
-     * "landed upon." Each time a chromosome is selected from the wheel it
-     * is removed from the wheel so that it can not be selected again.
+     * "landed upon." Each time a chromosome is selected, once instance of it
+     *  is removed from the wheel so that it can not be selected again.
      *
      * @param a_generator The random number generator to be used during the
      *                    spinning process.
@@ -216,8 +218,8 @@ public class WeightedRouletteSelector implements NaturalSelector
         //
         // We've already chosen a random slot number on the wheel from which
         // we want to select the Chromosome. We loop through each of the
-        // array indices and, for each one, we add the number of slots it's
-        // consuming (its counter value) to an ongoing total until that total
+        // array indices and, for each one, we add the number of occupied slots
+        // (the counter value) to an ongoing total until that total
         // reaches or exceeds the chosen slot number. When that happenes,
         // we've found the chromosome sitting in that slot and we return it.
         // ------------------------------------------------------------------
@@ -258,8 +260,8 @@ public class WeightedRouletteSelector implements NaturalSelector
         }
 
         throw new RuntimeException( "Logic Error. This code should never " +
-                "be reached. Please report this to the " +
-                "jgap team: selected slot " + selectedSlot + " " +
+                "be reached. Please report this as a bug to the " +
+                "JGAP team: selected slot " + selectedSlot + " " +
                 "exceeded " + totalSlotsLeft + " number of slots left." );
     }
 
@@ -286,17 +288,32 @@ public class WeightedRouletteSelector implements NaturalSelector
  * Implements a counter that is used to keep track of the total number of
  * slots that a single Chromosome is occupying in the roulette wheel. Since
  * all equal copies of a chromosome have the same fitness value, the increment
- * and decrement methods always add/subtract the fitness value of the
- * chromosome, which is provided during construction of this class.
+ * method always adds the fitness value of the chromosome. Following
+ * construction of this class, the reset() method must be invoked to provide
+ * the initial fitness value of the Chromosome for which this SlotCounter is
+ * to be associated. The reset() method may be reinvoked to begin counting
+ * slots for a new Chromosome.
  */
 class SlotCounter
 {
+    /**
+     * The fitness value of the Chromosome for which we are keeping count of
+     * roulette wheel slots. Although this value is constant for a Chromosome,
+     * it's not declared final here so that the slots can be reset and later
+     * reused for other Chromosomes, thus saving some memory and the overhead
+     * of constructing them from scratch.
+     */
     private int m_fitnessValue = 0;
+
+    /**
+     * The current number of slots occupied by our associated Chromosome.
+     */
     private long m_count = 0;
 
 
     /**
-     * Resets the internal state of this SlotCounter instance.
+     * Resets the internal state of this SlotCounter instance so that it can
+     * be used to count slots for a new Chromosome.
      *
      * @param a_initialFitness The fitness value of the Chromosome for which
      *                         this instance is acting as a counter.
@@ -312,7 +329,7 @@ class SlotCounter
      * Retrieves the fitness value of the chromosome for which this instance
      * is acting as a counter.
      *
-     * @return The fitness value that was passed in at construction time.
+     * @return The fitness value that was passed in at reset time.
      */
     public int getFitnessValue()
     {
@@ -322,7 +339,7 @@ class SlotCounter
 
     /**
      * Increments the value of this counter by the fitness value that was
-     * passed in at construction time.
+     * passed in at reset time.
      */
     public void incrementByFitness()
     {
@@ -331,17 +348,9 @@ class SlotCounter
 
 
     /**
-     * Decrements the value of this counter by the fitness value that was
-     * passed in at construction time.
-     */
-    public void decrementByFitness()
-    {
-        m_count -= m_fitnessValue;
-    }
-
-
-    /**
-     * Retrieves the current value of this counter.
+     * Retrieves the current value of this counter: ie, the number of slots
+     * on the roulette wheel that are  currently occupied by the Chromosome
+     * associated with this SlotCounter instance.
      *
      * @return the current value of this counter.
      */

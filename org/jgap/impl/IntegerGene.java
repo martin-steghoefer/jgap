@@ -19,7 +19,7 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Allele;
+import org.jgap.Gene;
 import org.jgap.Configuration;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
@@ -28,59 +28,64 @@ import java.util.StringTokenizer;
 
 
 /**
- * An Allele implementation that provides an integer value to represent
- * each gene. Upper and lower bounds may optionally be provided to restrict
- * the range of values.
+ * A Gene implementation that supports a integer values for its allele.
+ * Upper and lower bounds may optionally be provided to restrict the range
+ * of legal values allowed by this Gene instance.
  */
-public class IntegerAllele implements Allele
+public class IntegerGene implements Gene
 {
     /**
      * Represents the constant range of values supported by integers.
      */
     protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
-                                               (long) Integer.MIN_VALUE;
+                                                (long) Integer.MIN_VALUE;
 
     /**
      * Represents the delimiter that is used to separate fields in the
-     * persistent representation of IntegerAllele instances.
+     * persistent representation of IntegerGene instances.
      */
     protected final static String PERSISTENT_FIELD_DELIMITER = ":";
 
     /**
-     * References the internal integer value of this Allele.
+     * References the internal integer value (allele) of this Gene.
      */
     protected Integer m_value = null;
 
     /**
-     * The upper bounds of values represented by this Allele.
+     * The upper bounds of values represented by this Gene. If not explicitly
+     * provided by the user, this should be set to Integer.MAX_VALUE.
      */
     protected int m_upperBounds;
 
     /**
-     * The lower bounds of values represented by this Allele.
+     * The lower bounds of values represented by this Gene. If not explicitly
+     * provided by the user, this should be set to Integer.MIN_VALUE
      */
     protected int m_lowerBounds;
-
 
     /**
      * Stores the number of integer range units that a single bounds-range
      * unit represents. For example, if the integer range is -2 billion to
      * +2 billion and the bounds range is -1 billion to +1 billion, then
      * each unit in the bounds range would map to 2 units in the integer
-     * range. The value of this variable would therefore be 2.
+     * range. The value of this variable would therefore be 2. This mapping
+     * unit is used to map illegal allele values that are outside of the
+     * bounds to legal allele values that are within the bounds.
      */
     protected long m_boundsUnitsToIntegerUnits;
-
 
     /**
      * The current active configuration that is in use.
      */
     protected Configuration m_activeConfiguration = null;
 
+
     /**
-     * Constructs a new IntegerAllele with default settings.
+     * Constructs a new IntegerGene with default settings. No bounds will
+     * be put into effect for values (alleles) of this Gene instance, other
+     * than the standard range of integer values.
      */
-    public IntegerAllele()
+    public IntegerGene()
     {
         m_lowerBounds = Integer.MIN_VALUE;
         m_upperBounds = Integer.MAX_VALUE;
@@ -89,15 +94,15 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Constructs a new IntegerAllele with the specified lower and upper
-     * bounds for values represented by this Allele.
+     * Constructs a new IntegerGene with the specified lower and upper
+     * bounds for values (alleles) of this Gene instance.
      *
-     * @param a_lowerBounds The lowest value that this Allele may represent,
+     * @param a_lowerBounds The lowest value that this Gene may possess,
      *                      inclusive.
-     * @param a_upperBounds The highest value that this Allele may represent,
+     * @param a_upperBounds The highest value that this Gene may possess,
      *                      inclusive.
      */
-    public IntegerAllele( int a_lowerBounds, int a_upperBounds )
+    public IntegerGene( int a_lowerBounds, int a_upperBounds )
     {
         m_lowerBounds = a_lowerBounds;
         m_upperBounds = a_upperBounds;
@@ -106,12 +111,12 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Constructs a new IntegerAllele according to the given active
+     * Constructs a new IntegerGene according to the given active
      * configuration.
      *
      * @param a_activeConfiguration The current active configuration.
      */
-    public IntegerAllele( Configuration a_activeConfiguration )
+    public IntegerGene( Configuration a_activeConfiguration )
     {
         m_activeConfiguration = a_activeConfiguration;
 
@@ -122,17 +127,17 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Constructs a new IntegerAllele with the given active configuration and
+     * Constructs a new IntegerGene with the given active configuration and
      * the specified lower and upper bounds for values represented by this
-     * Allele.
+     * Gene.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @param a_lowerBounds The lowest value that this Allele may represent,
+     * @param a_lowerBounds The lowest value that this Gene may represent,
      *                      inclusive.
-     * @param a_upperBounds The highest value that this Allele may represent,
+     * @param a_upperBounds The highest value that this Gene may represent,
      *                      inclusive.
      */
-    public IntegerAllele( Configuration a_activeConfiguration,
+    public IntegerGene( Configuration a_activeConfiguration,
                           int a_lowerBounds, int a_upperBounds )
     {
         m_activeConfiguration = a_activeConfiguration;
@@ -144,60 +149,60 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Provides an implementation-independent means for creating new Allele
+     * Provides an implementation-independent means for creating new Gene
      * instances. The new instance that is created and returned should be
-     * setup with any implementation-dependent configuration that this Allele
+     * setup with any implementation-dependent configuration that this Gene
      * instance is setup with (aside from the actual value, of course). For
-     * example, if this Allele were setup with bounds on its value, then the
-     * Allele instance returned from this method should also be setup with
+     * example, if this Gene were setup with bounds on its value, then the
+     * Gene instance returned from this method should also be setup with
      * those same bounds. This is important, as the JGAP core will invoke this
-     * method on each Allele in the sample Chromosome in order to create each
-     * new Allele in the same respective gene position for a new Chromosome.
+     * method on each Gene in the sample Chromosome in order to create each
+     * new Gene in the same respective gene position for a new Chromosome.
      * <p>
      * It should be noted that nothing is guaranteed about the actual value
-     * of the returned Allele and it should therefore be considered to be
+     * of the returned Gene and it should therefore be considered to be
      * undefined.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @return A new Allele instance of the same type and with the same
-     *         setup as this concrete Allele.
+     * @return A new Gene instance of the same type and with the same
+     *         setup as this concrete Gene.
      */
-    public Allele newAllele( Configuration a_activeConfiguration )
+    public Gene newGene( Configuration a_activeConfiguration )
     {
-        return new IntegerAllele( a_activeConfiguration,
-                                  m_lowerBounds, m_upperBounds );
+        return new IntegerGene( a_activeConfiguration,
+                                m_lowerBounds, m_upperBounds );
     }
 
 
     /**
-     * Sets the value of this Allele to the new given value. This class
+     * Sets the value (allele) of this Gene to the new given value. This class
      * expects the value to be an Integer instance. If the value is above
-     * or below the upper or lower bounds, it will be mod'ed to be within
+     * or below the upper or lower bounds, it will be mappped to within
      * the allowable range.
      *
-     * @param a_newValue the new value of this Allele instance.
+     * @param a_newValue the new value of this Gene instance.
      */
-    public void setValue( Object a_newValue )
+    public void setAllele( Object a_newValue )
     {
         m_value = (Integer) a_newValue;
 
         // If the value isn't between the upper and lower bounds of this
-        // IntegerAllele, map it to a value within those bounds.
+        // IntegerGene, map it to a value within those bounds.
         // -------------------------------------------------------------
         mapValueToWithinBounds();
     }
 
 
     /**
-     * Retrieves a string representation of this Allele that includes any
+     * Retrieves a string representation of this Gene that includes any
      * information required to reconstruct it at a later time, such as its
      * value and internal state. This string will be used to represent this
-     * Allele in XML persistence. This is an optional method but, if not
+     * Gene in XML persistence. This is an optional method but, if not
      * implemented, XML persistence and possibly other features will not be
      * available. An UnsupportedOperationException should be thrown if no
      * implementation is provided.
      *
-     * @return A string representation of this Allele's current state.
+     * @return A string representation of this Gene's current state.
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
      */
@@ -213,7 +218,7 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Sets the value and internal state of this Allele from the string
+     * Sets the value and internal state of this Gene from the string
      * representation returned by a previous invocation of the
      * getPersistentRepresentation() method. This is an optional method but,
      * if not implemented, XML persistence and possibly other features will not
@@ -226,7 +231,7 @@ public class IntegerAllele implements Allele
      *
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
-     * @throws UnsupportedRepresentationException if this Allele implementation
+     * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
      */
     public void setValueFromPersistentRepresentation( String a_representation )
@@ -314,22 +319,22 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Retrieves the value represented by this Allele. All values returned
-     * by this class will be Integer instances.
+     * Retrieves the value (allele) represented by this Gene. All values
+     * returned by this class will be Integer instances.
      *
-     * @return the Integer value of this Allele.
+     * @return the Integer value of this Gene.
      */
-    public Object getValue()
+    public Object getAllele()
     {
         return m_value;
     }
 
 
     /**
-     * Retrieves the value represented by this Allele as an int, which may
-     * be more convenient in some cases.
+     * Retrieves the int value of this Gene, which may be more convenient in
+     * some cases than the more general getAllele() method.
      *
-     * @return the int value of this Allele.
+     * @return the int value of this Gene.
      */
     public int intValue()
     {
@@ -337,8 +342,8 @@ public class IntegerAllele implements Allele
     }
 
     /**
-     * Sets the value of this Allele to a random Integer value between the
-     * lower and upper bounds (if any) of this Allele.
+     * Sets the value (allele) of this Gene to a random Integer value between
+     * the lower and upper bounds (if any) of this Gene.
      *
      * @param a_numberGenerator The random number generator that should be
      *                          used to create any random values. It's important
@@ -352,82 +357,98 @@ public class IntegerAllele implements Allele
         m_value = new Integer( a_numberGenerator.nextInt() );
 
         // If the value isn't between the upper and lower bounds of this
-        // IntegerAllele, map it to a value within those bounds.
+        // IntegerGene, map it to a value within those bounds.
         // -------------------------------------------------------------
         mapValueToWithinBounds();
     }
 
 
     /**
-     * Compares this IntegerAllele with the specified object (which must also
-     * be an IntegerAllele) for order, which is determined by the integer
-     * value of this Allele compared to the one provided for comparison.
+     * Compares this IntegerGene with the specified object (which must also
+     * be an IntegerGene) for order, which is determined by the integer
+     * value of this Gene compared to the one provided for comparison.
      *
-     * @param  other the IntegerAllele to be compared to this IntegerAllele.
+     * @param  other the IntegerGene to be compared to this IntegerGene.
      * @return a negative integer, zero, or a positive integer as this object
      *		   is less than, equal to, or greater than the object provided for
-     *        comparison.
+     *         comparison.
      *
      * @throws ClassCastException if the specified object's type prevents it
-     *         from being compared to this IntegerAllele.
+     *         from being compared to this IntegerGene.
      */
     public int compareTo( Object other )
     {
-        IntegerAllele otherIntegerAllele = (IntegerAllele) other;
+        IntegerGene otherIntegerGene = (IntegerGene) other;
 
-        // First, if the other allele (or its value) is null, then this is
+        // First, if the other gene (or its value) is null, then this is
         // the greater allele. Otherwise, just use the Integer's compareTo
         // method to perform the comparison.
         // ---------------------------------------------------------------
-        if( otherIntegerAllele == null || otherIntegerAllele.m_value == null )
+        if( otherIntegerGene == null )
         {
             return 1;
         }
+        else if( otherIntegerGene.m_value == null )
+        {
+            // If our value is also null, then we're the same. Otherwise,
+            // this is the greater gene.
+            // ----------------------------------------------------------
+            return m_value == null ? 0 : 1;
+        }
         else
         {
-            return m_value.compareTo( other );
+            try
+            {
+                return m_value.compareTo( otherIntegerGene.m_value );
+            }
+            catch( ClassCastException e )
+            {
+                e.printStackTrace();
+                throw e;
+            }
         }
     }
 
 
     /**
-     * Compares this IntegerAllele with the given object and returns true if
-     * the other object is a IntegerAllele and has the same value as this
-     * IntegerAllele. Otherwise it returns false.
+     * Compares this IntegerGene with the given object and returns true if
+     * the other object is a IntegerGene and has the same value (allele) as
+     * this IntegerGene. Otherwise it returns false.
      *
-     * @param other the object to compare to this IntegerAllele for equality.
-     * @return true if this IntegerAllele is equal to the given object,
+     * @param other the object to compare to this IntegerGene for equality.
+     * @return true if this IntegerGene is equal to the given object,
      *         false otherwise.
      */
     public boolean equals( Object other )
     {
         try
         {
-            IntegerAllele otherIntegerAllele = (IntegerAllele) other;
+            IntegerGene otherIntegerGene = (IntegerGene) other;
 
-            if( otherIntegerAllele == null )
+            if( otherIntegerGene == null )
             {
-                // If the other allele is null, we're not equal.
+                // If the other gene is null, we're not equal.
                 // ---------------------------------------------
                 return false;
             }
             else if ( m_value == null )
             {
-                // If our internal value is null, then we're only equal if
-                // their internal value is also null.
-                // -------------------------------------------------------
-                return otherIntegerAllele.m_value == null;
+                // If our value is null, then we're only equal if their
+                // value is also null.
+                // ----------------------------------------------------
+                return otherIntegerGene.m_value == null;
             }
             else
             {
-                // Just compare the internal values.
-                // ---------------------------------
-                return m_value.equals( otherIntegerAllele.m_value );
+                // Just compare the gene values using the Integer.equals()
+                // method.
+                // -----------------------------------------------------------
+                return m_value.equals( otherIntegerGene.m_value );
             }
         }
         catch( ClassCastException e )
         {
-            // If the other object isn't an IntegerAllele, then we're not
+            // If the other object isn't an IntegerGene, then we're not
             // equal.
             // ----------------------------------------------------------
             return false;
@@ -436,10 +457,10 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Retrieves a string representation of this IntegerAllele's value that
+     * Retrieves a string representation of this IntegerGene's value that
      * may be useful for display purposes.
      *
-     * @return a string representation of this IntegerAllele's value.
+     * @return a string representation of this IntegerGene's value.
      */
     public String toString()
     {
@@ -455,7 +476,7 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Executed by the genetic engine when this Allele instance is no
+     * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
      */
     public void cleanup()
@@ -466,7 +487,7 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Maps the value of this IntegerAllele to within the bounds specified by
+     * Maps the value of this IntegerGene to within the bounds specified by
      * the m_upperBounds and m_lowerBounds instance variables. The value's
      * relative position within the integer range will be preserved within the
      * bounds range (in other words, if the value is about halfway between the
@@ -480,9 +501,9 @@ public class IntegerAllele implements Allele
         {
             // If the value exceeds either the upper or lower bounds, then
             // map the value to within the legal range. To do this, we basically
-            // calculate the distance between the value and the integer max,
-            // determine how many bounds units that represents, and then
-            // subtract that number of units from the bounds max.
+            // calculate the distance between the value and the integer min,
+            // determine how many bounds units that represents, and then add
+            // that number of units to the upper bound.
             // -----------------------------------------------------------------
             if( m_value.intValue() > m_upperBounds ||
                 m_value.intValue() < m_lowerBounds )
@@ -500,8 +521,14 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Calculates and sets the bounds units to integer units ration based
-     * on the current lower and upper bounds of this IntegerAllele.
+     * Calculates and sets the m_boundsUnitsToIntegerUnits field based
+     * on the current lower and upper bounds of this IntegerGene. For example,
+     * if the integer range is -2 billion to +2 billion and the bounds range
+     * is -1 billion to +1 billion, then each unit in the bounds range would
+     * map to 2 units in the integer range. The m_boundsUnitsToIntegerUnits
+     * field would therefore be 2. This mapping unit is used to map illegal
+     * allele values that are outside of the bounds to legal allele values that
+     * are within the bounds.
      */
     protected void calculateBoundsUnitsToIntegerUnitsRatio()
     {

@@ -22,7 +22,7 @@ package examples;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.Genotype;
-import org.jgap.impl.BooleanAllele;
+import org.jgap.impl.BooleanGene;
 import org.jgap.impl.DefaultConfiguration;
 import org.jgap.xml.XMLManager;
 import org.w3c.dom.Document;
@@ -37,7 +37,7 @@ public class TestXML
             Configuration activeConfiguration = new DefaultConfiguration();
 
             activeConfiguration.setSampleChromosome(
-                new Chromosome( new BooleanAllele(), 8 ) );
+                new Chromosome( new BooleanGene(), 8 ) );
             activeConfiguration.setPopulationSize( 10 );
             activeConfiguration.setFitnessFunction( new MaxFunction() );
 
