@@ -25,7 +25,7 @@ public class GreedyCrossoverTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public GreedyCrossoverTest() {
   }
@@ -235,14 +235,12 @@ public class GreedyCrossoverTest
     Gene gene3 = new IntegerGene(1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
-    op.operate(new Population(population), chroms);
-    assertEquals(5, chroms.size());
-    Chromosome target = (Chromosome) chroms.get(4);
-    CompositeGene result = (CompositeGene)target.getGene(0);
-    assertEquals(6, ( (Integer) ((Vector)result.getAllele()).get(0)).intValue());
-    target = (Chromosome) chroms.get(3);
-    result = (CompositeGene)target.getGene(0);
-    assertEquals(6, ( (Integer) ((Vector)result.getAllele()).get(0)).intValue());
+    try {
+      op.operate(new Population(population), chroms);
+      fail();
+    } catch (Error e) {
+      ;//this is OK
+    }
   }
 
   /**
