@@ -33,14 +33,15 @@ package org.jgap;
  * Note: Two Chromosomes with equivalent sets of genes should always be
  * assigned the same fitness value by any implementation of this interface.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -77,6 +78,7 @@ public abstract class FitnessFunction
    * @return A positive double reflecting the fitness rating of the given
    *         Chromosome. Note that if a non-positive double is returned,
    *         a RuntimeException should be generated.
+   *
    * @since 2.0 (until 1.1: return type int)
    */
   protected abstract double evaluate(Chromosome a_subject);
