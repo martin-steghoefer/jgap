@@ -36,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The current active Configuration instance.
@@ -155,8 +155,7 @@ public class Genotype
    * @since 2.0
    */
   public Genotype(Configuration a_activeConfiguration,
-                  Population a_population,
-                  FitnessEvaluator a_fitnessEvaluator)
+                  Population a_population, FitnessEvaluator a_fitnessEvaluator)
       throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
@@ -211,8 +210,7 @@ public class Genotype
    * @since 1.0
    */
   public void setActiveConfiguration(Configuration a_activeConfiguration)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     // Only assign the given Configuration object if we don't already
     // have one.
     // --------------------------------------------------------------
@@ -224,7 +222,6 @@ public class Genotype
       else {
         // Make sure the Configuration object is locked and cannot be
         // changed.
-
         // ----------------------------------------------------------
         a_activeConfiguration.lockSettings();
         m_activeConfiguration = a_activeConfiguration;
@@ -612,7 +609,6 @@ public class Genotype
 //          m_population.addChromosomes(selector.select(m_activeConfiguration, m_single_selection_size));
 
 //          m_population.setChromosomes(selector.select(m_activeConfiguration, m_single_selection_size).getChromosomes());
-
           m_population = selector.select(m_activeConfiguration, m_single_selection_size);
         }
         // Clean up the natural selector.
