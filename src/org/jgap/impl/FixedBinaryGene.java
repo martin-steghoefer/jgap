@@ -40,7 +40,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_length;
 
@@ -269,7 +269,7 @@ public class FixedBinaryGene
    * @since 2.0
    */
   private boolean isValidRepresentation(String a_representation) {
-    /*@todo implement*/
+    /**@todo implement*/
     return true;
   }
 
