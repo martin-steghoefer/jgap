@@ -19,7 +19,7 @@
 package org.jgap.impl.salesman;
 
 import org.jgap.impl.MutationOperator;
-import org.jgap.MutationRateCalculator;
+import org.jgap.IUniversalRateCalculator;
 import org.jgap.Population;
 import org.jgap.RandomGenerator;
 import org.jgap.Chromosome;
@@ -55,7 +55,7 @@ public class SwappingMutationOperator extends MutationOperator {
 
     /** {@inheritDoc} */
     public SwappingMutationOperator
-    (MutationRateCalculator a_mutationRateCalculator) {
+    (IUniversalRateCalculator a_mutationRateCalculator) {
         super(a_mutationRateCalculator);
     }
 
@@ -69,7 +69,7 @@ public class SwappingMutationOperator extends MutationOperator {
                         List a_candidateChromosomes) {
 
       // this was a private variable, now it is local reference.
-      final MutationRateCalculator m_mutationRateCalc = getMutationRateCalc();
+      final IUniversalRateCalculator m_mutationRateCalc = getMutationRateCalc();
 
       // If the mutation rate is set to zero and dynamic mutation rate is
       // disabled, then we don't perform any mutation.
