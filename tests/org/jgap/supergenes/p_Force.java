@@ -16,6 +16,9 @@ package org.jgap.supergenes;
 
 class p_Force {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
     /** Check the existence of soulution.
      * @return true if the change can be expressed in coins,
      * satisfying pennies mod 2 = nickels mod 2 .

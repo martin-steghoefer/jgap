@@ -1,17 +1,28 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.supergenes;
 
-import org.jgap.impl.IntegerGene;
-import org.jgap.supergenes.Supergene;
-import org.jgap.Chromosome;
-import org.jgap.Gene;
+import org.jgap.*;
 
 /** Fitness function for a version where Supergene is used
- * @author Neil Rotstan, Klaus Meffert
+ *
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @author Audrius Meskauskas (subsequent adaptation)
+ * @since 2.0
  */
+class p_SupergeneChangeFitnessFunction
+    extends p_abstractChangFitnessFunction {
 
-class p_SupergeneChangeFitnessFunction extends
- p_abstractChangFitnessFunction {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     public p_SupergeneChangeFitnessFunction(int a_targetAmount) {
         super(a_targetAmount);
