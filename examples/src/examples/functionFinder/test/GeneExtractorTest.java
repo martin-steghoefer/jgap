@@ -18,7 +18,7 @@ import examples.functionFinder.*;
 public class GeneExtractorTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int numberOfFunctions;
   private static int numberOfConstants;
@@ -48,8 +48,8 @@ public class GeneExtractorTest extends TestCase {
     final int opNr = 2;
     genes[ 1 ] = new TestGene(opNr);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getFunctions().elementAt(3), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().elementAt(opNr)).charAt(0)
+    assertEquals(Repository.getFunctions().get(3), elem.termName);
+    assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0)
         ,elem.operator);
   }
 
@@ -61,8 +61,8 @@ public class GeneExtractorTest extends TestCase {
     genes[ 0 ] = new TestGene(numberOfFunctions + 0);
     genes[ 1 ] = new TestGene(2);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getConstants().elementAt(0), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().elementAt(2)).charAt(0),elem.operator);
+    assertEquals(Repository.getConstants().get(0), elem.termName);
+    assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),elem.operator);
   }
 
   /**
@@ -74,8 +74,8 @@ public class GeneExtractorTest extends TestCase {
                  + numberOfFunctions));
     genes[ 1 ] = new TestGene(2);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getConstants().elementAt(0), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().elementAt(2)).charAt(0),elem.operator);
+    assertEquals(Repository.getConstants().get(0), elem.termName);
+    assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),elem.operator);
   }
 
   /**
@@ -87,8 +87,8 @@ public class GeneExtractorTest extends TestCase {
     final int opNr = 1;
     genes[ 1 ] = new TestGene(numberOfOperators * 24 + opNr);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getFunctions().elementAt(3), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().elementAt(opNr)).charAt(0)
+    assertEquals(Repository.getFunctions().get(3), elem.termName);
+    assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0)
         ,elem.operator);
   }
 
@@ -117,8 +117,8 @@ public class GeneExtractorTest extends TestCase {
     genes[ 0 ] = comp;
     Vector elems = constructTerms(genes);
     Term elem = (Term)elems.elementAt(0);
-    assertEquals(Repository.getFunctions().elementAt(fktNr), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().elementAt(opNr)).charAt(0),
+    assertEquals(Repository.getFunctions().get(fktNr), elem.termName);
+    assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0),
         elem.operator);
   }
 
@@ -219,19 +219,19 @@ public class GeneExtractorTest extends TestCase {
     int type;
     if (fktNr >= numberOfFunctions) {
       //Konstante auslesen
-      fktName = (String) Repository.getConstants().elementAt(fktNr - numberOfFunctions);
+      fktName = (String) Repository.getConstants().get(fktNr - numberOfFunctions);
       type = 1;
     }
     else {
       //Funktion auslesen
-      fktName = (String) Repository.getFunctions().elementAt(fktNr);
+      fktName = (String) Repository.getFunctions().get(fktNr);
       type = 2;
     }
 
     allele = (Integer) op.getAllele();
     int opNr = allele.intValue();
     opNr = opNr % numberOfOperators;
-    char opCh = ( (String) Repository.getOperators().elementAt(opNr)).charAt(0);
+    char opCh = ( (String) Repository.getOperators().get(opNr)).charAt(0);
     Term elem = new Term(type, fktName, 1, opCh);
     return elem;
   }
