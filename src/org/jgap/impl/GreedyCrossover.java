@@ -58,7 +58,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -113,6 +113,7 @@ public class GreedyCrossover implements GeneticOperator {
 
    /** Perfroms a greedy crossover for the two given chromosoms.
     * @throws error if the gene set in the chromosomes is not identical.
+    * The explaining error message is written to System.err.
     */
    public void operate (Chromosome a_firstMate, Chromosome a_secondMate) throws
         Error {
@@ -120,8 +121,23 @@ public class GreedyCrossover implements GeneticOperator {
         Gene[] g1 = a_firstMate.getGenes();
         Gene[] g2 = a_secondMate.getGenes();
 
-        Gene[] c1 = operate (g1, g2);
-        Gene[] c2 = operate (g2, g1);
+        Gene [] c1, c2;
+
+        try {
+         c1 = operate (g1, g2);
+         c2 = operate (g2, g1);
+        }
+        catch ( Error err )
+        {
+            System.err.println("An error occured while operating on:");
+            System.err.println(a_firstMate+" and ");
+            System.err.println(a_secondMate);
+            System.err.println(err.getMessage());
+            System.err.println("First "+m_startOffset+" genes were excluded "+
+            "from crossover. ");
+            System.err.println();
+            throw err;
+        }
 
         a_firstMate.setGenes(c1);
         a_secondMate.setGenes(c2);
@@ -136,6 +152,10 @@ public class GreedyCrossover implements GeneticOperator {
 
        out.add(g1[m_startOffset]);
        for (int j = m_startOffset+1; j < n; j++) { // g[m_startOffset] picked
+           if (ASSERTIONS && not_picked.contains( g1[j] ) )
+            throw new Error("All genes must be different for "+
+            getClass().getName()+". The gene "+g1[j]+"["+j+"] occurs more "+
+            "than once in one of the chromosomes. ");
            not_picked.add( g1 [j] );
        }
 
@@ -201,6 +221,15 @@ public class GreedyCrossover implements GeneticOperator {
 
        for (int i = 0; i < m_startOffset; i++) {
            g [i] = g1 [i];
+       }
+
+       if (ASSERTIONS)
+       {
+           if (out.size()!=g.length-m_startOffset)
+            throw new Error("Unexpected internal error. "+
+            "These two must be equal: "+out.size()+
+            " and "+(g.length-m_startOffset)+", g.length "+
+            g.length+", start offset "+m_startOffset);
        }
 
        for (int i = m_startOffset; i < g.length; i++) {
