@@ -1,4 +1,4 @@
-1.0-RC1 (in progress)
+1.0-RC1
 ----------
 * Added new document on using the XMLManager to marshall populations
   into XML representations that can be used for persistence, transmission,
@@ -9,12 +9,16 @@
   and Gene.getAllele(), respectively.
 * Renamed IntegerAllele to IntegerGene, BooleanAllele to BooleanGene,
   and AlleleCreationException to GeneCreationException.
-* Updated introductory documentation.
 * Removed the MakeChange.java and MakeChangeFitnessFunction.java files
   from the examples directory, as they added very little value given
   the presence of the MinimizingMakeChange.java and 
   MinimizingMakeChangeFitnessFunction.java files.
-* Made various minor fixes.
+* Fixed default constructor in IntegerGene so that it will no longer
+  result in an ArithmeticException.
+* Fixed compareTo() method in IntegerGene.
+* Added hashCode() method to IntegerGene and BooleanGene.
+* Made various other minor fixes.
+* Updated introductory documentation.
 * Updated various javadocs to increase clarity and accuracy.
 * Updated the README file.
 
