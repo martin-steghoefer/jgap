@@ -10,6 +10,8 @@
 * Fixed NullPointerException when throwing Exception
   in CompositeGene.setValueFromPersistentRepresentation
 * Fixed error in FixedBinaryGene.setBit(int from, int to,..)
+* Fixed small error in TournamentSelector.select
+* Fixed error in BooleanGene.compareTo
 * Provided javadocs for packages forgotten before
 * Introduced abstract base class for all org.jgap.Gene
   implementations: org.jgap.BaseGene
