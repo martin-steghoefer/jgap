@@ -47,7 +47,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -58,6 +58,11 @@ public class Configuration {
    * @since 1.0
    */
   private FitnessFunction m_objectiveFunction;
+
+  /**
+   * Minimum size guaranteed for population. If zero or below then no ensurance
+   */
+  private int m_minPercentageSizePopulation;
 
   /**
    * References the current bulk fitness function that will be used to
@@ -185,7 +190,7 @@ public class Configuration {
    * fitness function. Although one or the other must be set, the two are
    * mutually exclusive.
    *
-   * @param a_functionToSet: The fitness function to be used.
+   * @param a_functionToSet The fitness function to be used.
    *
    * @throws InvalidConfigurationException if the fitness function
    *         is null, a bulk fitness function has already been set,
@@ -239,7 +244,7 @@ public class Configuration {
    * normal fitness function. Although one or the other is required, the
    * two are mutually exclusive.
    *
-   * @param a_functionToSet: The bulk fitness function to be used.
+   * @param a_functionToSet The bulk fitness function to be used.
    *
    * @throws InvalidConfigurationException if the bulk fitness function
    *         is null, the normal fitness function has already been set,
@@ -813,4 +818,13 @@ public class Configuration {
       m_sizeNaturalSelectorsPost++;
     }
   }
+
+  public void setMinimumSizePopulation(int a_minimumSizeGuaranteed) {
+    m_minPercentageSizePopulation = a_minimumSizeGuaranteed;
+  }
+
+  public int getMinimumSizePopulation() {
+    return m_minPercentageSizePopulation;
+  }
+
 }
