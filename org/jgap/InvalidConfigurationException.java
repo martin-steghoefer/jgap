@@ -26,12 +26,12 @@ package org.jgap;
  * passed to a Configuration object, or when an attempt is made to
  * alter a value in a Configuration object after it has been locked.
  */
-public class InvalidConfigurationChangeException extends Exception {
-  public InvalidConfigurationChangeException() {
+public class InvalidConfigurationException extends Exception {
+  public InvalidConfigurationException() {
     super();
   }
 
-  public InvalidConfigurationChangeException(String message) {
+  public InvalidConfigurationException(String message) {
     super(message);
   }
 }

@@ -1,0 +1,15 @@
+0.1.1 (in progress)
+-----------
+* Added this CHANGELOG file
+* Added a TODO file
+* Made appropriate classes and interfaces serializable.
+* Updated the brace and indentation style.
+* Created and added support for a Configuration class that maintains
+  centralized control over the various configuration settings.
+* Updated README file
+
+
+0.1
+------------
+Initial Release
+

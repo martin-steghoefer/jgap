@@ -42,8 +42,7 @@ package org.jgap;
  *
  * @author Neil Rotstan (neil at bluesock.org)
  */
-public interface FitnessFunction
-{
+public interface FitnessFunction extends java.io.Serializable {
   /**
    * Determine the fitness of the given Chromosome instance.
    * The higher the return value, the more fit the instance.
@@ -54,5 +53,6 @@ public interface FitnessFunction
    *
    * @return The fitness rating of the given Chromosome.
    */
-  public int evaluate( Chromosome subject );
-}  
+  public int evaluate(Chromosome subject);
+} 
+ 

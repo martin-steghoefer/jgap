@@ -20,8 +20,7 @@
 
 import org.jgap.*;
 
-public class MaxFunction implements FitnessFunction
-{
+public class MaxFunction implements FitnessFunction {
   /**
    * This example implementation calculates the fitness  value to be
    * the numeric binary value of the bits. In other words, it optimizes
@@ -36,15 +35,12 @@ public class MaxFunction implements FitnessFunction
    * as much and, therefore, twice the incentive to select the higher
    * value.
    */
-  public int evaluate( Chromosome subject )
-  {
+  public int evaluate(Chromosome subject) {
     int total = 0;
     
-    for( int i = 0; i < subject.size(); i++ )
-    {
-      if( subject.getAllele( subject.size() - (i + 1) ) )
-      {
-        total += Math.pow( 2.0, (double) i );
+    for(int i = 0; i < subject.size(); i++) {
+      if(subject.getAllele(subject.size() - (i + 1))) {
+        total += Math.pow(2.0, (double) i);
       }
     }
 

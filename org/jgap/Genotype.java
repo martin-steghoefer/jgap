@@ -30,36 +30,40 @@ import java.util.*;
  *
  * @author Neil Rotstan (neil at bluesock.org)
  */
-public class Genotype
-{
+public class Genotype implements java.io.Serializable {
   protected static Random generator = new Random();
 
+  protected Configuration gaConf;
   protected Chromosome[] chromosomes;
-  protected final FitnessFunction objectiveFunction;
-  protected final NaturalSelector populationSelector;
   protected List workingPool;
 
   /**
    * Constructs a new Genotype instance with the given array
-   * of Chromosomes and the given fitness function. The fitness
-   * function will be used during evolution to implement natural
-   * selection.
+   * of Chromosomes and the given configuration settings. Note
+   * that the Configuration instance must be in a valid state
+   * when this method is invoked, or a InvalidconfigurationException
+   * will be thrown.
    *
+   * @param configuration: An instance of a Configuration object
+   *                       that will control the behavior of this
+   *                       GA execution.
    * @param initialChromosomes: The Chromosome population to be
    *                            managed by this Genotype instance.
-   * @param fitnessFunc: The fitness function to be used during
-   *                     the natural selection process.
-   * @param selector: The natural selector that is to be used to
-   *                  determine which Chromosomes will "survive"
-   *                  and continue on to the next round of evolution. 
+   *
+   * @throws InvalidConfigurationException if the given Configuration
+   *         is null or in an invalid state.
    */
-  public Genotype( Chromosome[] initialChromosomes,
-                   FitnessFunction fitnessFunc,
-                   NaturalSelector selector )
-  {
+  public Genotype(Configuration configuration,
+                  Chromosome[] initialChromosomes)
+         throws InvalidConfigurationException {
+    if (configuration == null) {
+      throw new InvalidConfigurationException(
+        "The Configuration instance must not be null.");
+    }
+
+    configuration.lockSettings();
     chromosomes = initialChromosomes;
-    objectiveFunction = fitnessFunc;
-    populationSelector = selector;
+    gaConf = configuration;
 
     workingPool = new ArrayList();
   }
@@ -83,19 +87,17 @@ public class Genotype
    *
    * @return The Chromosome with the highest fitness value.
    */
-  public Chromosome getFittestChromosome()
-  {
-    if (chromosomes.length == 0)
-    {
+  public Chromosome getFittestChromosome() {
+    if (chromosomes.length == 0) {
       return null;
     }
 
     Chromosome fittestChromosome = chromosomes[0];
-    int fittestValue = objectiveFunction.evaluate(fittestChromosome);
+    int fittestValue = 
+      gaConf.getFitnessFunction().evaluate(fittestChromosome); 
 
-    for( int i = 1; i < chromosomes.length; i++)
-    {
-      int fitnessValue = objectiveFunction.evaluate(chromosomes[i]);
+    for( int i = 1; i < chromosomes.length; i++) {
+      int fitnessValue = gaConf.getFitnessFunction().evaluate(chromosomes[i]);
       if (fitnessValue > fittestValue)
       {
         fittestChromosome = chromosomes[i];
@@ -125,45 +127,43 @@ public class Genotype
    *     managed by this Genotype. These instances become the new
    *     population managed by this Genotype instance.
    */
-  public void evolve()
-  {
-    workingPool.removeAll( workingPool );
+  public void evolve() {
+    workingPool.removeAll(workingPool);
 
-    for( int i = 0; i < chromosomes.length; i++ )
-    {
+    for(int i = 0; i < chromosomes.length; i++) {
       // Step 1.
-      workingPool.add( chromosomes[i].reproduce() );
+      workingPool.add(chromosomes[i].reproduce());
 
       // Step 2.
       Chromosome firstMate =
-        chromosomes[ generator.nextInt( chromosomes.length ) ];
+        chromosomes[generator.nextInt(chromosomes.length)];
         
       Chromosome secondMate =   
-        chromosomes[ generator.nextInt( chromosomes.length ) ];
+        chromosomes[generator.nextInt(chromosomes.length)];
 
-      firstMate.crossover( secondMate );
+      firstMate.crossover(secondMate);
 
-      workingPool.add( firstMate );
-      workingPool.add( secondMate );
+      workingPool.add(firstMate);
+      workingPool.add(secondMate);
     }
 
 
     Iterator iterator = workingPool.iterator();
 
-    while( iterator.hasNext() )
-    {
+    while(iterator.hasNext()) {
       Chromosome currentChromosome = (Chromosome) iterator.next();
 
       // Step 3.
       currentChromosome.mutate();
 
       // Step 4.
-      populationSelector.add( currentChromosome,
-                              objectiveFunction.evaluate( currentChromosome ) );
+      gaConf.getNaturalSelector().add(
+        currentChromosome,
+        gaConf.getFitnessFunction().evaluate(currentChromosome));
     }
 
     // Step 5.
-    chromosomes = populationSelector.select( chromosomes.length );
+    chromosomes = gaConf.getNaturalSelector().select(chromosomes.length);
   }
 
 
@@ -173,17 +173,15 @@ public class Genotype
    *
    * @return A string representation of this Genotype instance.
    */
-  public String toString()
-  {
+  public String toString() {
     StringBuffer buffer = new StringBuffer();
 
-    for( int i = 0; i < chromosomes.length; i++ )
-    {
-      buffer.append( chromosomes[i].toString() );
-      buffer.append( " [" );
-      buffer.append( objectiveFunction.evaluate( chromosomes[i] ) );
-      buffer.append( "]" );
-      buffer.append( '\n' );
+    for(int i = 0; i < chromosomes.length; i++) {
+      buffer.append(chromosomes[i].toString());
+      buffer.append(" [" );
+      buffer.append(gaConf.getFitnessFunction().evaluate(chromosomes[i]));
+      buffer.append("]");
+      buffer.append('\n');
     }
 
     return buffer.toString();
@@ -191,70 +189,36 @@ public class Genotype
 
   /**
    * Convenience method that returns a newly constructed Genotype
-   * instance consisting of the given number of Chromosomes of the
-   * given size and instantiated with the given fitness function.
+   * instance configured according to the given Configuration instance.
+   * The population of Chromosomes will be randomly generated.
    *
-   * @param populationSize: The desired number of Chromosomes in
-   *                        the Genotype instance.
-   * @param chromosomeSize: The number of genes each Chromosome instance
-   *                        in the Genotype should possess.
-   * @param fitnessFunc:    The fitness function to be used during the
-   *                        natural selection process.
-   * @param selector:       The natural selector that is to be used to
-   *                        determine which Chromosomes will "survive"
-   *                         and continue on to the next round of evolution. 
+   * Note that the given Configuration instance must be in a valid state
+   * at the time this method is invoked, or an InvalidConfigurationException
+   * will be thrown.
    *
    * @return A newly constructed Genotype instance.
+   *
+   * @throws InvalidConfigurationException if the given Configuration
+   *         instance is null or invalid.
    */
-   public static Genotype randomInitialGenotype( int populationSize,
-                                                 int chromosomeSize,
-                                                 FitnessFunction fitnessFunc,
-                                                 NaturalSelector selector )
-   {
-     Chromosome[] chromosomes = new Chromosome[ populationSize ];
-
-     for( int i = 0; i < populationSize; i++ )
-     {
-       chromosomes[i] = Chromosome.randomInitialChromosome( chromosomeSize );
+   public static Genotype randomInitialGenotype(Configuration gaConf)
+                          throws InvalidConfigurationException {
+     if (gaConf == null) {
+       throw new InvalidConfigurationException(
+         "The Configuration instance must not be null.");
      }
 
-     return new Genotype( chromosomes, fitnessFunc, selector );
+     gaConf.lockSettings();
+
+     int populationSize = gaConf.getPopulationSize();
+     int chromosomeSize = gaConf.getChromosomeSize();
+     Chromosome[] chromosomes = new Chromosome[populationSize];
+
+     for(int i = 0; i < populationSize; i++) {
+       chromosomes[i] = Chromosome.randomInitialChromosome(gaConf);
+     }
+
+     return new Genotype(gaConf, chromosomes);
    }
-  
-  
-  /**
-   * Convenience method that returns a newly constructed Genotype with
-   * the given fitness function and consisting of the given number of
-   * Chromosomes instantiated with the given size and mutation rate.
-   *
-   * @param populationSize: The desired number of Chromosomes in
-   *                        the Genotype instance.
-   * @param chromosomeSize: The number of genes each Chromosome instance
-   *                        in the Genotype should possess.
-   * @param fitnessFunc:    The fitness function to be used during the
-   *                        natural selection process.
-   * @param selector:       The natural selector that is to be used to
-   *                        determine which Chromosomes will "survive"
-   *                        and continue on to the next round of evolution. 
-   *
-   * @return A newly constructed Genotype instance.
-   */
-  public static Genotype randomInitialGenotype( int populationSize,
-                                                int chromosomeSize,
-                                                int mutationRate,
-                                                FitnessFunction fitnessFunc,
-                                                NaturalSelector selector )
-  
-  {
-    Chromosome[] chromosomes = new Chromosome[ populationSize ];
+}
 
-    for( int i = 0; i < populationSize; i++ )
-    {
-      chromosomes[i] = 
-        Chromosome.randomInitialChromosome( chromosomeSize, mutationRate );
-    }
-
-    return new Genotype( chromosomes, fitnessFunc, selector );
-  }
-} 
- 

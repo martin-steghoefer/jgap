@@ -23,37 +23,43 @@ import org.jgap.*;
 /**
  * Simple test class that demonstrates basic usage of JGAP.
  */
-public class TestGenetics
-{
-  public static void main( String[] args )
-  {
-    if( args.length < 3 )
-    {
-      System.err.println( "Syntax: java TestGenetics <chromosome size> " +
-                          "<population size> <num evolutions>" );
+public class TestGenetics {
 
-      System.exit( -1 );
+  public static void main(String[] args) {
+    if(args.length < 3) {
+      System.err.println("Syntax: java TestGenetics <chromosome size> " +
+                         "<population size> <num evolutions>");
+
+      System.exit(-1);
     }
 
-    int chromosomeSize = Integer.parseInt( args[0] );
-    int populationSize = Integer.parseInt( args[1] );
-    int numEvolutions = Integer.parseInt( args[2] );
-  
-    FitnessFunction binaryValueMaximizer = new MaxFunction();
+    int numEvolutions = Integer.parseInt(args[2]);
+    Configuration gaConf = new Configuration();
+    Genotype genotype = null;
 
-    Genotype genotype = Genotype.randomInitialGenotype( 
-      populationSize, chromosomeSize, binaryValueMaximizer,
-      new WeightedRouletteSelector() );
+    try {
+      gaConf.setChromosomeSize(Integer.parseInt(args[0]));
+      gaConf.setPopulationSize(Integer.parseInt(args[1]));
+      gaConf.setFitnessFunction(new MaxFunction());
+      gaConf.setNaturalSelector(new WeightedRouletteSelector());
 
-    for( int i = 0; i < numEvolutions; i++ )
-    {
+      genotype = Genotype.randomInitialGenotype(gaConf); 
+    }
+    catch (InvalidConfigurationException e) {
+      e.printStackTrace();
+      System.exit(-2);
+    }
+
+    for(int i = 0; i < numEvolutions; i++) {
       genotype.evolve();
     }
 
-    System.out.println( genotype.toString() );
+    System.out.println(genotype.toString());
 
     Chromosome fittest = genotype.getFittestChromosome();
-    System.out.println( "Fittest Chromosome is " + fittest.toString() +
-      " with a fitness value of " + binaryValueMaximizer.evaluate( fittest ) );
+    System.out.println("Fittest Chromosome is " + fittest.toString() +
+      " with a fitness value of " + 
+      gaConf.getFitnessFunction().evaluate(fittest));
   }
-}  
+} 
+ 

@@ -41,13 +41,11 @@ import java.util.*;
  *
  * @author Neil Rotstan (neil at bluesock.org)
  */
-public class Chromosome
-{
-  private static final int DEFAULT_MUTATION_RATE = 1000;
-
-  private final int mutationRate;
-  private final BitSet genes;
-  private final int numberOfGenes;
+public class Chromosome implements java.io.Serializable {
+  protected final Configuration gaConf;
+  protected final int numberOfGenes;
+  protected int mutationRate;
+  protected final BitSet genes;
 
   private static Random generator = new Random();
 
@@ -64,63 +62,23 @@ public class Chromosome
    *                      this Chromosome instance. Each bit in the
    *                      BitSet represents a single gene.
    */
-  public Chromosome( BitSet initialGenes, int chromosomeLength )
-  {
-    if( initialGenes == null )
-    {
+  public Chromosome(Configuration configuration, BitSet initialGenes)
+         throws InvalidConfigurationException {
+    if(initialGenes == null) {
       throw new IllegalArgumentException( "Genes cannot be null." );
     }
 
-    else if( chromosomeLength <= 0 )
-    {
-      throw new IllegalArgumentException( 
-        "Chromosome length must be positive" );
+    if (configuration == null) {
+      throw new InvalidConfigurationException(
+        "Configuration instance must not be null");
     }
+
+    configuration.lockSettings();
+    gaConf = configuration;
 
     genes = initialGenes;
-    numberOfGenes = chromosomeLength;
-    mutationRate = DEFAULT_MUTATION_RATE;
-  }
-
-
-  /**
-   * Constructs this Chromosome instance with the given set of genes
-   * and the given mutation rate. Each gene is represented by a
-   * single bit in the BitSet. For convenience, 
-   * the randomInitialChromosome method is provided that will take
-   * care of generating a Chromosome instance of a specified size.
-   * This constructor exists in case it's desirable to initialize
-   * Chromosomes with specific gene values.
-   *
-   * @param initialGenes  The set of genes with which to initialize
-   *                      this Chromosome instance. Each bit in the
-   *                      BitSet represents a single gene.
-   *
-   * @param desiredMutationRate  The desired chances of mutation
-   *                             expressed as the fraction 1/n where
-   *                             n is this parameter. For example, if
-   *                             1000 were given, then statistically
-   *                             one out of every thousand genes 
-   *                             processed would incur mutation during
-   *                             evolution.
-   */
-  public Chromosome( BitSet initialGenes, int chromosomeLength,
-                     int desiredMutationRate )
-  {
-    if( initialGenes == null )
-    {
-      throw new IllegalArgumentException( "Genes cannot be null." );
-    }
-
-    else if( chromosomeLength <= 0 )
-    {
-      throw new IllegalArgumentException(
-        "Chromosomes must have a positive length" );
-    }
-
-    genes = initialGenes;
-    numberOfGenes = chromosomeLength;
-    mutationRate = desiredMutationRate;
+    numberOfGenes = gaConf.getChromosomeSize();
+    mutationRate = gaConf.getMutationRate();
   }
 
 
@@ -130,10 +88,20 @@ public class Chromosome
    *
    * @return A copy of this Chromosome.
    */
-  public Chromosome reproduce()
-  {
-    return new Chromosome( 
-      (BitSet) genes.clone(), numberOfGenes, mutationRate );
+  public Chromosome reproduce() {
+    try {
+      return new Chromosome(gaConf, (BitSet) genes.clone());
+    }
+    catch (InvalidConfigurationException e) {
+      // This should never happen because the configuration has already
+      // been validated and locked for this instance of the Chromosome,
+      // and the configuration given to the new instance should be
+      // identical.
+      throw new RuntimeException(
+        "Fatal Error: reproduce operation produced an " +
+        "InvalidConfigurationException. This should never happen." +
+        "Please report this as a bug.");
+    }
   }
 
 
@@ -160,33 +128,27 @@ public class Chromosome
    *         Chromosome is not the same as the size of this
    *         Chromosome.
    */
-  public void crossover( Chromosome mate )
-  {
-    int locus = generator.nextInt( numberOfGenes );
+  public void crossover(Chromosome mate) {
+    int locus = generator.nextInt(numberOfGenes);
     boolean currentAllele;
 
-    for( int i = locus; i < numberOfGenes; i++ )
-    {
-      currentAllele = genes.get( i );
+    for(int i = locus; i < numberOfGenes; i++) {
+      currentAllele = genes.get(i);
       
-      if( mate.genes.get( i ) )
-      {
-        genes.set( i );
+      if(mate.genes.get(i)) {
+        genes.set(i);
       }
 
-      else
-      {
-        genes.clear( i );
+      else {
+        genes.clear(i);
       }
 
-      if( currentAllele )
-      {
-        mate.genes.set( i );
+      if(currentAllele) {
+        mate.genes.set(i);
       }
 
-      else
-      {
-        mate.genes.clear( i );
+      else {
+        mate.genes.clear(i);
       }
     }
   }
@@ -199,20 +161,18 @@ public class Chromosome
    * (or the default rate if none was provided). If the value of
    * the random number is 0, then the gene's bit will be flipped.
    */
-  public void mutate()
-  {
-    for( int i = 0 ; i < numberOfGenes; i++ )
-    {
-      if( generator.nextInt( mutationRate ) == 0 )
-      {
-        if( genes.get( i ) )
-        {
-          genes.clear( i );
+  public void mutate() {
+    if (mutationRate == 0) {
+      return;
+    }
+
+    for(int i = 0 ; i < numberOfGenes; i++) {
+      if(generator.nextInt(mutationRate) == 0) {
+        if(genes.get(i)) {
+          genes.clear(i);
         }
-  
-        else
-        {
-          genes.set( i );
+        else {
+          genes.set(i);
         }
       }
     }
@@ -228,9 +188,8 @@ public class Chromosome
    * @param locus: The index of the gene value to be returned.
    * @return The boolean value of the indicated gene.
    */
-  public boolean getAllele( int locus )
-  {
-    return genes.get( locus );
+  public boolean getAllele(int locus) {
+    return genes.get(locus);
   }
 
 
@@ -240,8 +199,7 @@ public class Chromosome
    *
    * @return The number of genes in this Chromosome instance.
    */
-  public int size()
-  {
+  public int size() {
     return numberOfGenes;
   }
 
@@ -252,23 +210,8 @@ public class Chromosome
    *
    * @return A string representation of this Chromosome.
    */
-  public String toString()
-  {
+  public String toString() {
     return genes.toString();
-  }
-
-
-  /**
-   * Convenience method that returns a newly constructed Chromosome
-   * instance of the given size with a random population of genes.
-   * This method will instantiate the Chromosome with the default
-   * mutation rate.
-   *
-   * @param size: The number of genes the Chromosome should contain.
-   */
-  public static Chromosome randomInitialChromosome( int size )
-  {
-    return randomInitialChromosome( size, DEFAULT_MUTATION_RATE );
   }
 
 
@@ -281,24 +224,27 @@ public class Chromosome
    * @param mutationRate: The desired mutation rate for this
    *                      Chromosome.
    */
-  public static Chromosome randomInitialChromosome( int size,
-                                                    int mutationRate )
-  {
-    BitSet genes = new BitSet( size );
-    
-    for( int i = 0; i < size; i++ )
-    {
-      if( generator.nextInt( 2 ) == 0 )
-      {
-        genes.set( i );
-      }
+  public static Chromosome randomInitialChromosome(Configuration gaConf)
+                           throws InvalidConfigurationException {
+    if (gaConf == null) {
+      throw new InvalidConfigurationException(
+        "Configuration instance must not be null");
+    }
 
-      else
-      {
-        genes.clear( i );
+    gaConf.lockSettings();
+    int size = gaConf.getChromosomeSize();
+
+    BitSet genes = new BitSet(size);
+    
+    for(int i = 0; i < size; i++) {
+      if(generator.nextInt(2) == 0) {
+        genes.set(i);
+      }
+      else {
+        genes.clear(i);
       }
     }
 
-    return new Chromosome( genes, size, mutationRate );
+    return new Chromosome(gaConf, genes);
   }
 }  

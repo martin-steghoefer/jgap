@@ -31,8 +31,7 @@ package org.jgap;
  *
  * @author Neil Rotstan (neil at bluesock.org)
  */
-public interface NaturalSelector
-{
+public interface NaturalSelector extends java.io.Serializable {
   /**
    * Add a Chromosome instance and corresponding fitness
    * value to this selector's working pool of Chromosomes.
@@ -40,7 +39,7 @@ public interface NaturalSelector
    * @param chromosome: The specimen to add to the pool.
    * @param fitness: The specimen's fitness value.
    */
-  public void add( Chromosome chromosome, int fitness );
+  public void add(Chromosome chromosome, int fitness);
 
 
   /**
@@ -57,11 +56,12 @@ public interface NaturalSelector
    * 
    * @return An array of the selected Chromosomes.
    */
-  public Chromosome[] select( int howMany );
+  public Chromosome[] select(int howMany);
 
 
   /**
    * Empty out the working pool of Chromosomes.
    */
   public void empty();
-}  
+} 
+ 

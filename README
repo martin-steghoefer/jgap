@@ -1,14 +1,15 @@
 ------------------------------------------------------------------------
 About this Release:
 
-This represents a pre-alpha release of JGAP, the Java Genetic Algorithms
-Package. Since it's pre-alpha, it's not feature complete and probably
-contains bugs.
+This represents an alpha release of JGAP, the Java Genetic Algorithms
+Package. Since it's an alpha release, it's not feature complete and
+probably contains bugs. The APIs are also considered a work in progress
+and are subject to change.
 
 Any existing documentation, including Javadocs, can be found on the JGAP
 home page at http://jgap.sourceforge.net. Javadocs can also be found in
 the javadocs/ directory of the JGAP distribution. A basic introduction to
-the contents of the JGAP package is also provided below.
+the contents of the JGAP package is also provided in this file, below.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP development mailing list at jgap-devl@lists.sourceforge.net

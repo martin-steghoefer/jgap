@@ -32,10 +32,16 @@ package org.jgap;
  * once a Configuration object is passed to a Genotype, it cannot
  * be subsequently modified. There is no mechanism for unlocking
  * the settings once they are locked.
+ *
+ * Not all configuration options are required. See the documentation
+ * for each of the respective mutrator methods to determine whether
+ * it is required to provide a value for that setting, and what the
+ * setting will default to if not.
  */
-public class Configuration {
+public class Configuration implements java.io.Serializable {
   protected FitnessFunction objectiveFunction = null;
   protected NaturalSelector populationSelector = null;
+  protected int chromosomeSize = 0;
   protected int populationSize = 0;
   protected int mutationRate = 0;
   protected boolean settingsLocked = false;
@@ -50,12 +56,14 @@ public class Configuration {
    * instances will be allowed to move on to the next round
    * of evolution, and which will instead be eliminated.
    *
+   * This setting is required.
+   *
    * @param f:   The fitness function to be used.
-   * @throws InvalidConfigurationChangeException if the fitness function
+   * @throws InvalidConfigurationException if the fitness function
    *         is not satisfactory or if this object is locked.
    */
-  public void setFitnessFunction(FitnessFunction f)
-                                 throws InvalidConfigurationChangeException {
+  public synchronized void setFitnessFunction(FitnessFunction f)
+                           throws InvalidConfigurationException {
     verifyChangesAllowed();
 
     objectiveFunction = f;
@@ -80,12 +88,14 @@ public class Configuration {
    * round of evolution (usually based on the fitness values
    * provided by the fitness function).
    *
+   * This setting is required.
+   *
    * @param s   The natural selector to be used.
-   * @throws InvalidConfigurationChangeException if the natural selector
+   * @throws InvalidConfigurationException if the natural selector
    *         is not satisfactory or this object is locked.
    */
-  public void setNaturalSelector(NaturalSelector s)
-                                 throws InvalidConfigurationChangeException {
+  public synchronized void setNaturalSelector(NaturalSelector s)
+                           throws InvalidConfigurationException {
     verifyChangesAllowed();
     
     populationSelector = s;
@@ -104,16 +114,47 @@ public class Configuration {
 
 
   /**
+   * Set the chromosome size to be used for this genetic algorithm.
+   * The chromosome size is a fixed value that represntes the
+   * number of genes represented by each Chromosome.
+   *
+   * This setting is required.
+   *
+   * @param s   The chromosome size to be used.
+   * @throws InvalidConfigurationException if the chromosome size
+   *         is not satisfactory or this object is locked.
+   */
+  public synchronized void setChromosomeSize(int s)
+                           throws InvalidConfigurationException {
+    verifyChangesAllowed();
+
+    chromosomeSize = s;
+  }
+
+  /**
+   * Retrieve the chromosome size being used by this genetic
+   * algorithm.
+   *
+   * @return The chromosome size used by this genetic algorithm.
+   */
+  public int getChromosomeSize() {
+    return chromosomeSize;
+  }
+
+
+  /**
    * Set the population size to be used for this genetic algorithm.
    * The population size is a fixed value that represntes the
    * number of Chromosomes represented in a Genotype.
    *
+   * This setting is required.
+   *
    * @param s   The population size to be used.
-   * @throws InvalidConfigurationChangeException if the population size
+   * @throws InvalidConfigurationException if the population size
    *         is not satisfactory or this object is locked.
    */
-  public void setPopulationSize(int s)
-                                throws InvalidConfigurationChangeException {
+  public synchronized void setPopulationSize(int s)
+                           throws InvalidConfigurationException {
     verifyChangesAllowed();
 
     populationSize = s;
@@ -129,6 +170,8 @@ public class Configuration {
     return populationSize;
   }
 
+
+
   /**
    * Set the mutation rate to be used for this genetic algorithm.
    * The mutation rate should reflect the desired chances of a
@@ -136,12 +179,14 @@ public class Configuration {
    * provided, then there would be a statistical 1/1000 chance
    * of each Chromosome being mutated.
    *
+   * This setting is optional. If not set, mutation will be turned off.
+   *
    * @param r   The mutation rate to be used.
-   * @throws InvalidConfigurationChangeException if the mutation rate
+   * @throws InvalidConfigurationException if the mutation rate
    *         is not satisfactory or this object is locked.
    */
-  public void setMutationRate(int r) 
-                              throws InvalidConfigurationChangeException {  
+  public synchronized void setMutationRate(int r) 
+                           throws InvalidConfigurationException {  
     verifyChangesAllowed();
 
     mutationRate = r;
@@ -160,11 +205,62 @@ public class Configuration {
 
   /**
    * Lock all of the settings in this configuration object. Once
-   * this method is invoked, none of the settings may be changed.
-   * There is no way to unlock this object once it is locked.
+   * this method is successfully invoked, none of the settings may
+   * be changed. There is no way to unlock this object once it is locked.
+   *
+   * Prior to returning successfully, this method will first invoke the
+   * hasValidState() method to make sure that any required configuration
+   * options have been properly set. If it detects a problem, it will
+   * throw an InvalidConfigurationException and leave the object unlocked. 
+   *
+   * It's possible to test whether is object is locked through the
+   * isLocked() method.
+   *
+   * It is ok to lock an object more than once. In this case, this method
+   * does nothing and simply returns.
+   *
+   * @throws InvalidConfigurationException if the object is in an invalid
+   *         state at the time of invocation.
    */
-  public void lockSettings() {
-    settingsLocked = true;
+  public synchronized void lockSettings() 
+                           throws InvalidConfigurationException {
+    if (!settingsLocked) {
+      if (!hasValidState()) {
+        throw new InvalidConfigurationException(
+          "Attempt to lock a Configuration object in an invalid state. " +
+          "Make sure that you have set all of the required settings.");
+      }
+
+      settingsLocked = true;
+    }
+  }
+
+
+  /**
+   * Retrieve the lock status of this object.
+   *
+   * @return true if this object has been locked by a previous successful
+   *         call to the lockSettings() method, false otherwise.
+   */
+  public boolean isLocked() {
+    return settingsLocked;
+  }
+
+
+  /**
+   * Test the state of this object to make sure it's valid. This generally
+   * consists of verifying that required settings have, in fact, been set.
+   * If this object is not in a valid state (meaning this method returns
+   * false), then an attempt to lock the object via the lockSettings()
+   * method will fail.
+   *
+   * @return true if this object is in a valid state, false otherwise.
+   */
+  public synchronized boolean hasValidState() {
+    return objectiveFunction != null &&
+           populationSelector != null &&
+           chromosomeSize > 0 &&
+           populationSize > 0;
   }
 
 
@@ -175,12 +271,12 @@ public class Configuration {
    * should be invoked by any mutator method in this object prior
    * to making any state alterations.
    *
-   * @throws InvalidConfigurationChangeException if this object is locked.
+   * @throws InvalidConfigurationException if this object is locked.
    */
   protected void verifyChangesAllowed()
-                 throws InvalidConfigurationChangeException {
+                 throws InvalidConfigurationException {
     if (settingsLocked) {
-      throw new InvalidConfigurationChangeException(
+      throw new InvalidConfigurationException(
         "This Configuration object is locked. Settings may not be altered.");
     }
   }

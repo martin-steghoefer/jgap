@@ -37,41 +37,34 @@ import java.util.*;
  *
  * @author Neil Rotstan (neil at bluesock.org)
  */
-public class WeightedRouletteSelector implements NaturalSelector
-{
+public class WeightedRouletteSelector implements NaturalSelector {
   private static Random generator = new Random();
 
   private HashMap population = new HashMap();
   private int totalInstances = 0;
 
 
-  public void add( Chromosome chromosome, int fitness )
-  {
-    if( population.containsKey( chromosome ) )
-    {
-      ((Counter) population.get( chromosome )).increment( fitness );
+  public void add(Chromosome chromosome, int fitness) {
+    if(population.containsKey(chromosome)) {
+      ((Counter) population.get(chromosome)).increment(fitness);
     }
-
-    else
-    {
-      population.put( chromosome, new Counter( fitness ) );
+    else {
+      population.put(chromosome, new Counter(fitness));
     }
 
     totalInstances += fitness;
   }
 
  
-  public Chromosome[] select( int howMany )
-  {
-    Chromosome[] selections = new Chromosome[ howMany ];
-    int[] selectedIndices = new int[ howMany ];
+  public Chromosome[] select(int howMany) {
+    Chromosome[] selections = new Chromosome[howMany];
+    int[] selectedIndices = new int[howMany];
 
-    for( int i = 0; i < howMany; i++ )
-    {
-      selectedIndices[i] = generator.nextInt( totalInstances );
+    for(int i = 0; i < howMany; i++) {
+      selectedIndices[i] = generator.nextInt(totalInstances);
     }
 
-    Arrays.sort( selectedIndices );
+    Arrays.sort(selectedIndices);
 
     Iterator iterator = population.keySet().iterator();
     int currentSelection = 0;
@@ -80,17 +73,13 @@ public class WeightedRouletteSelector implements NaturalSelector
 
     Chromosome currentChromosome;
  
-    while( iterator.hasNext() &&
-           currentIndex < selectedIndices.length )
-    {
-      currentChromosome = (Chromosome ) iterator.next();
+    while(iterator.hasNext() && currentIndex < selectedIndices.length) {
+      currentChromosome = (Chromosome) iterator.next();
 
-      currentCount +=
-        ((Counter) population.get( currentChromosome )).getCount();
+      currentCount += ((Counter) population.get(currentChromosome)).getCount();
 
-      while( currentIndex < selectedIndices.length &&
-             currentCount >= selectedIndices[currentIndex] )
-      {
+      while(currentIndex < selectedIndices.length &&
+            currentCount >= selectedIndices[currentIndex]) {
         selections[currentSelection] = currentChromosome;
 
         currentSelection++;
@@ -102,51 +91,43 @@ public class WeightedRouletteSelector implements NaturalSelector
   }
 
 
-  public void empty()
-  {
+  public void empty() {
     population.clear();
     totalInstances = 0;
   }
 }  
 
 
-class Counter
-{
+class Counter {
   private int count;
 
 
-  public Counter( int initialCount )
-  {
+  public Counter(int initialCount) {
     count = initialCount;
   }
 
 
-  public Counter()
-  {
-    this( 0 );
+  public Counter() {
+    this(0);
   }
 
 
-  public void increment()
-  {
+  public void increment() {
     count++;
   }
 
 
-  public void increment( int howMany )
-  {
+  public void increment(int howMany) {
     count += howMany;
   }
 
 
-  public int getCount()
-  {
+  public int getCount() {
     return count;
   }
 
 
-  public void reset()
-  {
+  public void reset() {
     count = 0;
   }
 }
