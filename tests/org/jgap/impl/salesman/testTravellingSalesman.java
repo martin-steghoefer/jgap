@@ -115,21 +115,8 @@ public class testTravellingSalesman extends TestCase {
             }
 
             Chromosome sample = new Chromosome (genes);
-
-            System.out.println("Optimal way "+sample);
-            System.out.println("Score "+
-             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
-              .getFitnessValue(sample)));
-
             RandomGenerator g = new StockRandomGenerator();
-
             shuffle (genes);
-
-            System.out.println("Sample chromosome "+sample);
-            System.out.println("Score "+
-             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
-              .getFitnessValue(sample)));
-
             return sample;
         }
 
@@ -165,7 +152,6 @@ public class testTravellingSalesman extends TestCase {
                     }
                 }
                 if (oks >= 6) {
-                    System.out.println("OK "+oks);
                     return true;
                 }
             }
