@@ -49,7 +49,7 @@ public class XMLManager
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     /**
      * Constant representing the name of the genotype XML element tag.
@@ -110,7 +110,6 @@ public class XMLManager
         }
     }
 
-
     /**
      * Private constructor. All methods in this class are static, so no
      * construction is allowed.
@@ -118,7 +117,6 @@ public class XMLManager
     private XMLManager()
     {
     }
-
 
     /**
      * Marshall a Chromosome instance to an XML Document representation,
@@ -147,7 +145,6 @@ public class XMLManager
         return chromosomeDocument;
     }
 
-
     /**
      * Marshall a Genotype to an XML Document representation, including its
      * population of Chromosome instances.
@@ -174,7 +171,6 @@ public class XMLManager
         genotypeDocument.appendChild( genotypeElement );
         return genotypeDocument;
     }
-
 
     /**
      * Marshall an array of Genes to an XML Element representation.
@@ -225,7 +221,6 @@ public class XMLManager
         return genesElement;
     }
 
-
     /**
      * Marshall a Chromosome instance to an XML Element representation,
      * including its contained Genes as sub-elements. This may be useful in
@@ -265,7 +260,6 @@ public class XMLManager
 
         return chromosomeElement;
     }
-
 
     /**
      * Marshall a Genotype instance into an XML Element representation,
@@ -308,7 +302,6 @@ public class XMLManager
 
         return genotypeTag;
     }
-
 
     /**
      * Unmarshall a Chromosome instance from a given XML Element
@@ -435,7 +428,6 @@ public class XMLManager
 
         return (Gene[]) genes.toArray( new Gene[ genes.size() ] );
     }
-
 
     /**
      * Unmarshall a Chromosome instance from a given XML Element
