@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001-2003, Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -20,9 +20,9 @@
 
 package org.jgap.impl;
 
-import org.jgap.*;
+import org.jgap.RandomGenerator;
 
-import java.util.*;
+import java.util.Random;
 
 
 /**

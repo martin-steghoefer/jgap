@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -107,7 +107,7 @@ public class IntegerAllele implements Allele
 
     /**
      * Constructs a new IntegerAllele according to the given active
-     *            configuration.
+     * configuration.
      *
      * @param a_activeConfiguration The current active configuration.
      */
@@ -145,12 +145,22 @@ public class IntegerAllele implements Allele
 
     /**
      * Provides an implementation-independent means for creating new Allele
-     * instances. It should be noted that nothing is guaranteed about the
-     * value of the returned Allele and it should therefore be considered
-     * to be undefined.
+     * instances. The new instance that is created and returned should be
+     * setup with any implementation-dependent configuration that this Allele
+     * instance is setup with (aside from the actual value, of course). For
+     * example, if this Allele were setup with bounds on its value, then the
+     * Allele instance returned from this method should also be setup with
+     * those same bounds. This is important, as the JGAP core will invoke this
+     * method on each Allele in the sample Chromosome in order to create each
+     * new Allele in the same respective gene position for a new Chromosome.
+     * <p>
+     * It should be noted that nothing is guaranteed about the actual value
+     * of the returned Allele and it should therefore be considered to be
+     * undefined.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @return A
+     * @return A new Allele instance of the same type and with the same
+     *         setup as this concrete Allele.
      */
     public Allele newAllele( Configuration a_activeConfiguration )
     {
@@ -179,12 +189,43 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Sets the value of this Allele from the string representation returned
-     * by a previous invocation of the toString() method.
+     * Retrieves a string representation of this Allele that includes any
+     * information required to reconstruct it at a later time, such as its
+     * value and internal state. This string will be used to represent this
+     * Allele in XML persistence. This is an optional method but, if not
+     * implemented, XML persistence and possibly other features will not be
+     * available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
+     *
+     * @return A string representation of this Allele's current state.
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
+     */
+    public String getPersistentRepresentation() throws
+                  UnsupportedOperationException
+    {
+        // The persistent representation includes the value, lower bound,
+        // and upper bound. Each is separated by a colon.
+        // --------------------------------------------------------------
+        return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
+                            PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+    }
+
+
+    /**
+     * Sets the value and internal state of this Allele from the string
+     * representation returned by a previous invocation of the
+     * getPersistentRepresentation() method. This is an optional method but,
+     * if not implemented, XML persistence and possibly other features will not
+     * be available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
      *
      * @param a_representation the string representation retrieved from a
-     *                         previous call to the toString() method.
+     *                         prior call to the getPersistentRepresentation()
+     *                         method.
      *
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
      * @throws UnsupportedRepresentationException if this Allele implementation
      *         does not support the given string representation.
      */
@@ -296,15 +337,8 @@ public class IntegerAllele implements Allele
     }
 
     /**
-     * Sets the value of this Allele to a random legal value. This method
-     * exists for the benefit of mutation and other operations that simply
-     * desire to randomize the value of a gene.
-     * <p>
-     * NOTE: Since this Allele implementation only supports two different
-     * values (true and false), there's only a 50% chance that invocation
-     * of this method will actually change the value of this Allele (if
-     * it has a value). As a result, it may be desirable to use a higher
-     * overall mutation rate when this Allele implementation is in use.
+     * Sets the value of this Allele to a random Integer value between the
+     * lower and upper bounds (if any) of this Allele.
      *
      * @param a_numberGenerator The random number generator that should be
      *                          used to create any random values. It's important
@@ -325,13 +359,14 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Compares this IntegerAllele with the specified object for order. A
-     * false value is considered to be less than a true value. A null value
-     * is considered to be less than any non-null value.
+     * Compares this IntegerAllele with the specified object (which must also
+     * be an IntegerAllele) for order, which is determined by the integer
+     * value of this Allele compared to the one provided for comparison.
      *
-     * @param  other the IntegerAllele to be compared.
-     * @return  a negative integer, zero, or a positive integer as this object
-     *		is less than, equal to, or greater than the specified object.
+     * @param  other the IntegerAllele to be compared to this IntegerAllele.
+     * @return a negative integer, zero, or a positive integer as this object
+     *		   is less than, equal to, or greater than the object provided for
+     *        comparison.
      *
      * @throws ClassCastException if the specified object's type prevents it
      *         from being compared to this IntegerAllele.
@@ -401,31 +436,8 @@ public class IntegerAllele implements Allele
 
 
     /**
-     * Retrieves a string representation of this Allele that includes any
-     * information required to reconstruct it at a later time, such as its
-     * value and internal state. This string will be used to represent this
-     * Allele in XML persistence. This is an optional method bug, if not
-     * implemented, XML persistence and possibly other features will not be
-     * available. An UnsupportedOperationException should be thrown if no
-     * implementation is provided.
-     *
-     * @return A string representation of this Allele's current state.
-     * @throws UnsupportedOperationException to indicate that no implementation
-     *         is provided for this method.
-     */
-    public String getPersistentRepresentation() throws
-                  UnsupportedOperationException
-    {
-        // The persistent representation includes the value, lower bound,
-        // and upper bound, each separated by a colon.
-        // --------------------------------------------------------------
-        return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
-                            PERSISTENT_FIELD_DELIMITER + m_upperBounds;
-    }
-
-
-    /**
-     * Retrieves a string representation of this IntegerAllele's value.
+     * Retrieves a string representation of this IntegerAllele's value that
+     * may be useful for display purposes.
      *
      * @return a string representation of this IntegerAllele's value.
      */

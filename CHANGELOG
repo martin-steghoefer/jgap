@@ -1,3 +1,26 @@
+0.32 (in progress)
+----------
+* Modified WeightedRouletteSelector to represent the "wheel" as an array
+  just prior to selection of Chromosomes in order to increase iteration 
+  speed.
+* Modified ReproductionOperator to simply add the Chromosomes from the 
+  population directly into the pool of candidate chromosomes, rather than
+  making a copy of each one and adding the copy, in order to increase speed
+  and reduce memory consumption.
+* Removed extraneous Class tracking from AllelePool that was simply adding
+  extra overhead without providing any real benefit.
+* Modified XMLManager to always create fresh Alleles, rather than trying to
+  pull them from the pool, when recreating genetic entities from an XML 
+  document.
+* Updated various Javadocs and comments that were dated, less helpful, or 
+  simply wrong.
+* Made various minor code changes to increase efficiency or improve 
+  readability.
+* Modified TestGenetics to only display the most fit Chromosome at the
+  end, rather than dumping the entire Genotype.
+* Updated the copyright statements on all files.
+
+
 0.31
 ----------
 * Fixed AllelePool to discriminate between alleles intended for different

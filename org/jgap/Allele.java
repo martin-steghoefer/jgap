@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -32,12 +32,22 @@ public interface Allele extends Comparable
 {
     /**
      * Provides an implementation-independent means for creating new Allele
-     * instances. It should be noted that nothing is guaranteed about the
-     * value of the returned Allele and it should therefore be considered
-     * to be undefined.
+     * instances. The new instance that is created and returned should be
+     * setup with any implementation-dependent configuration that this Allele
+     * instance is setup with (aside from the actual value, of course). For
+     * example, if this Allele were setup with bounds on its value, then the
+     * Allele instance returned from this method should also be setup with
+     * those same bounds. This is important, as the JGAP core will invoke this
+     * method on each Allele in the sample Chromosome in order to create each
+     * new Allele in the same respective gene position for a new Chromosome.
+     * <p>
+     * It should be noted that nothing is guaranteed about the actual value
+     * of the returned Allele and it should therefore be considered to be
+     * undefined.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @return A new Allele instance of the same type as this concrete Allele.
+     * @return A new Allele instance of the same type and with the same
+     *         setup as this concrete Allele.
      */
     public Allele newAllele( Configuration a_activeConfiguration );
 
@@ -54,7 +64,7 @@ public interface Allele extends Comparable
      * Retrieves a string representation of this Allele that includes any
      * information required to reconstruct it at a later time, such as its
      * value and internal state. This string will be used to represent this
-     * Allele in XML persistence. This is an optional method bug, if not
+     * Allele in XML persistence. This is an optional method but, if not
      * implemented, XML persistence and possibly other features will not be
      * available. An UnsupportedOperationException should be thrown if no
      * implementation is provided.
@@ -67,15 +77,16 @@ public interface Allele extends Comparable
                   throws UnsupportedOperationException;
 
     /**
-     * Sets the value of this Allele from the string representation returned
-     * by a previous invocation of the getPersistentRepresentation() method.
-     * This is an optional method but, if not implemented, XML persistence and
-     * possibly other features will not be available. An
-     * UnsupportedOperationException should be thrown if no implementation is
-     * provided.
+     * Sets the value and internal state of this Allele from the string
+     * representation returned by a previous invocation of the
+     * getPersistentRepresentation() method. This is an optional method but,
+     * if not implemented, XML persistence and possibly other features will not
+     * be available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
      *
      * @param a_representation the string representation retrieved from a
-     *                         previous call to the toString() method.
+     *                         prior call to the getPersistentRepresentation()
+     *                         method.
      *
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
@@ -97,9 +108,9 @@ public interface Allele extends Comparable
 
 
     /**
-     * Sets the value of this Allele to a random legal value. This method
-     * exists for the benefit of mutation and other operations that simply
-     * desire to randomize the value of a gene.
+     * Sets the value of this Allele to a random legal value for the
+     * implementation. This method exists for the benefit of mutation and other
+     * operations that simply desire to randomize the value of a gene.
      *
      * @param a_numberGenerator The random number generator that should be
      *                          used to create any random values. It's important

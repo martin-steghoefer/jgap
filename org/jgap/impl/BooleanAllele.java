@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -80,12 +80,22 @@ public class BooleanAllele implements Allele
 
     /**
      * Provides an implementation-independent means for creating new Allele
-     * instances. It should be noted that nothing is guaranteed about the
-     * value of the returned Allele and it should therefore be considered
-     * to be undefined.
+     * instances. The new instance that is created and returned should be
+     * setup with any implementation-dependent configuration that this Allele
+     * instance is setup with (aside from the actual value, of course). For
+     * example, if this Allele were setup with bounds on its value, then the
+     * Allele instance returned from this method should also be setup with
+     * those same bounds. This is important, as the JGAP core will invoke this
+     * method on each Allele in the sample Chromosome in order to create each
+     * new Allele in the same respective gene position for a new Chromosome.
+     * <p>
+     * It should be noted that nothing is guaranteed about the actual value
+     * of the returned Allele and it should therefore be considered to be
+     * undefined.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @return A
+     * @return A new Allele instance of the same type and with the same
+     *         setup as this concrete Allele.
      */
     public Allele newAllele( Configuration a_activeConfiguration )
     {
@@ -109,7 +119,7 @@ public class BooleanAllele implements Allele
      * Retrieves a string representation of this Allele that includes any
      * information required to reconstruct it at a later time, such as its
      * value and internal state. This string will be used to represent this
-     * Allele in XML persistence. This is an optional method bug, if not
+     * Allele in XML persistence. This is an optional method but, if not
      * implemented, XML persistence and possibly other features will not be
      * available. An UnsupportedOperationException should be thrown if no
      * implementation is provided.
@@ -126,12 +136,19 @@ public class BooleanAllele implements Allele
 
 
     /**
-     * Sets the value of this Allele from the string representation returned
-     * by a previous invocation of the toString() method.
+     * Sets the value and internal state of this Allele from the string
+     * representation returned by a previous invocation of the
+     * getPersistentRepresentation() method. This is an optional method but,
+     * if not implemented, XML persistence and possibly other features will not
+     * be available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
      *
      * @param a_representation the string representation retrieved from a
-     *                         previous call to the toString() method.
+     *                         prior call to the getPersistentRepresentation()
+     *                         method.
      *
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
      * @throws UnsupportedRepresentationException if this Allele implementation
      *         does not support the given string representation.
      */
@@ -144,11 +161,11 @@ public class BooleanAllele implements Allele
             {
                 m_value = null;
             }
-            else if( a_representation.equals( "1" ) )
+            else if( a_representation.equals( "true" ) )
             {
                 m_value = TRUE_BOOLEAN;
             }
-            else if( a_representation.equals( "0" ) )
+            else if( a_representation.equals( "false" ) )
             {
                 m_value = FALSE_BOOLEAN;
             }
@@ -320,7 +337,8 @@ public class BooleanAllele implements Allele
     }
 
     /**
-     * Retrieves a string representation of this BooleanAllele's value.
+     * Retrieves a string representation of this BooleanAllele's value that
+     * may be useful for display purposes.
      *
      * @return a string representation of this BooleanAllele's value.
      */
@@ -330,13 +348,9 @@ public class BooleanAllele implements Allele
         {
             return "null";
         }
-        else if( m_value.booleanValue() == true )
-        {
-            return "1";
-        }
         else
         {
-            return "0";
+            return m_value.toString();
         }
     }
 

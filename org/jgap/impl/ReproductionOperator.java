@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -62,14 +62,18 @@ public class ReproductionOperator implements GeneticOperator
                          final Chromosome[] a_population,
                          final List a_candidateChromosomes )
     {
-        // Just loop over the chromosomes in the population, make a copy of
-        // each one, and then add that copy to the candidate chromosomes
-        // pool so that it'll be considered for natural selection during the
-        // next phase of evolution.
-        // -----------------------------------------------------------------
+        // Loop over the chromosomes in the population and add each one to
+        // the candidate chromosomes pool so that they'll be considered for
+        // the next phase of evolution. This should be safe (versus creating
+        // a copy of each Chromosome) since genetic operators are not allowed
+        // to modify the original Chromosomes from the population, but instead
+        // must themselves make copies and then modify the copies. Refraining
+        // from making copies here of every Chromosome will save time and
+        // memory.
+        // -------------------------------------------------------------------
         for ( int i = 0; i < a_population.length; i++ )
         {
-            a_candidateChromosomes.add( a_population[ i ].clone() );
+            a_candidateChromosomes.add( a_population[ i ] );
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *

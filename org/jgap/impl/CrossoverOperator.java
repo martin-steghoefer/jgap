@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -84,17 +84,16 @@ public class CrossoverOperator implements GeneticOperator
 
             Allele[] firstGenes = firstMate.getGenes();
             Allele[] secondGenes = secondMate.getGenes();
-            int numberOfGenes = firstMate.size();
-            int locus = generator.nextInt( numberOfGenes );
+            int locus = generator.nextInt( firstGenes.length );
 
             // Swap the genes.
             // ---------------
             Object firstValue;
-            for ( int j = locus; j < numberOfGenes; j++ )
+            for ( int j = locus; j < firstGenes.length; j++ )
             {
-                firstValue = firstGenes[j].getValue();
-                firstGenes[j].setValue( secondGenes[j].getValue() );
-                secondGenes[j].setValue( firstValue );
+                firstValue = firstGenes[ j ].getValue();
+                firstGenes[ j ].setValue( secondGenes[ j ].getValue() );
+                secondGenes[ j ].setValue( firstValue );
             }
 
             // Add the modified chromosomes to the candidate pool so that

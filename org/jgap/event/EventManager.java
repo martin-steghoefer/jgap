@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -30,10 +30,8 @@ import java.util.HashMap;
  * Manages event notification in the system. Observers that desire to be
  * notified of genetic events should subscribe to this class via the
  * addEventListener() method. To unsubscribe, use the removeEventListener()
- * method.
- * <p>
- * To generate a genetic event, one of the fire*() methods should be used.
- * These will take care of notifying all appropriate subscribers.
+ * method. To generate a genetic event, use the fireGeneticEvent method,
+ * which will take care of notifying the appropriate subscribers.
  */
 public class EventManager
 {

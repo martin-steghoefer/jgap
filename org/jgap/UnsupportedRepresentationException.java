@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -22,9 +22,9 @@ package org.jgap;
 
 
 /**
- * This exception is typically thrown when a the
- * setValueFromPersistentRepresentation() method of an Allele class is unable to
- * process the string representation it has been given, either because that
+ * This exception is typically thrown when the
+ * setValueFromPersistentRepresentation() method of an Allele class is unable
+ * to process the string representation it has been given, either because that
  * representation is not supported by that Allele implementation or because
  * the representation is corrupt.
  */

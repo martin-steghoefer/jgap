@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -67,6 +67,7 @@ public class Genotype implements java.io.Serializable
         }
 
         a_activeConfiguration.lockSettings();
+
         m_chromosomes = a_initialChromosomes;
         m_activeConfiguration = a_activeConfiguration;
 

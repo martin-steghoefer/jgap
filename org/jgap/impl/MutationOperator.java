@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -136,10 +136,9 @@ public class MutationOperator implements GeneticOperator
         for ( int i = 0; i < a_population.length; i++ )
         {
             Allele[] genes = a_population[ i ].getGenes();
-            int numberOfGenes = a_population[ i ].size();
             Chromosome copyOfChromosome = null;
 
-            for ( int j = 0; j < numberOfGenes; j++ )
+            for ( int j = 0; j < genes.length; j++ )
             {
                 if ( generator.nextInt( currentRate ) == 0 )
                 {
@@ -158,7 +157,7 @@ public class MutationOperator implements GeneticOperator
                         genes = copyOfChromosome.getGenes();
                     }
 
-                    genes[j].setToRandomValue(
+                    genes[ j ].setToRandomValue(
                         a_activeConfiguration.getRandomGenerator() );
                 }
             }

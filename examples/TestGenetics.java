@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, 2002 Neil Rotstan
+ * Copyright 2001-2003 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -85,10 +85,7 @@ public class TestGenetics
             }
         }
 
-        System.out.println( genotype.toString() );
-
         Chromosome fittest = genotype.getFittestChromosome();
-        System.out.println( "------------------------------------" );
         System.out.println( "Fittest Chromosome has value " +
             fittest.getFitnessValue() );
     }
