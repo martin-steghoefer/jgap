@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -21,9 +20,8 @@ import junit.framework.*;
  */
 public class CauchyRandomGeneratorTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -40,7 +38,6 @@ public class CauchyRandomGeneratorTest
    * Check if construction and calculation in general possible
    */
   public void testGeneral() {
-    Configuration conf = new DefaultConfiguration();
     RandomGenerator calc = new CauchyRandomGenerator();
     calc.nextInt();
     calc.nextBoolean();
@@ -50,10 +47,20 @@ public class CauchyRandomGeneratorTest
     calc.nextLong();
   }
 
-  public void testNextCauchy_0() throws Exception {
-    Configuration conf = new DefaultConfiguration();
-    final double stdDeriv = 0.04d;
-    CauchyRandomGenerator calc = new CauchyRandomGenerator(0.0d, stdDeriv);
+  public void testNextCauchy_0()
+      throws Exception {
+    final double stdDev = 0.04d;
+    CauchyRandomGenerator calc = new CauchyRandomGenerator(0.0d, stdDev);
     calc.nextCauchy();
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testGetCauchyStdDeviation_0() {
+    final double stdDev = 0.04d;
+    CauchyRandomGenerator calc = new CauchyRandomGenerator(0.0d, stdDev);
+    assertEquals(stdDev, calc.getCauchyStandardDeviation(), DELTA);
   }
 }
