@@ -38,7 +38,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -67,11 +67,16 @@ public class WeightedRouletteSelector
   private Pool m_counterPool = new Pool();
 
   /**
+   * Allows or disallows doublette chromosomes to be added to the selector
+   */
+  private boolean m_doublettesAllowed;
+
+  /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *
-   * @param a_activeConfigurator: The current active Configuration to be used
+   * @param a_activeConfigurator The current active Configuration to be used
    *                              during the add process.
-   * @param a_chromosomeToAdd: The specimen to add to the pool.
+   * @param a_chromosomeToAdd The specimen to add to the pool.
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -122,9 +127,9 @@ public class WeightedRouletteSelector
    * be selected than those with lower fitness values, but it should not be
    * guaranteed.
    *
-   * @param a_activeConfiguration: The current active Configuration that is
+   * @param a_activeConfiguration The current active Configuration that is
    *                               to be used during the selection process.
-   * @param a_howManyToSelect: The number of Chromosomes to select.
+   * @param a_howManyToSelect The number of Chromosomes to select.
    *
    * @return An array of the selected Chromosomes.
    *
@@ -166,7 +171,7 @@ public class WeightedRouletteSelector
       // ------------------------------------------------------
       m_totalNumberOfUsedSlots += counterValues[i];
     }
-    if (a_howManyToSelect > numberOfEntries) {
+    if (a_howManyToSelect > numberOfEntries && !getDoubletteChromosomesAllowed()) {
       a_howManyToSelect = numberOfEntries;
     }
     Population population = new Population(a_howManyToSelect);
@@ -198,6 +203,7 @@ public class WeightedRouletteSelector
    *                        respective Chromosomes.
    * @param a_chromosomes The respective Chromosome instances from which
    *                      selection is to occur.
+   * @return selected Chromosome from the roulette wheel
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -293,25 +299,25 @@ public class WeightedRouletteSelector
       if (counter.getFitnessValue() > largestFitnessValue) {
         largestFitnessValue = counter.getFitnessValue();
       }
-      BigDecimal counterFitness =
-          new BigDecimal(counter.getFitnessValue());
-      totalFitness = totalFitness.add(
-          counterFitness.multiply(
+      BigDecimal counterFitness = new BigDecimal(counter.getFitnessValue());
+      totalFitness = totalFitness.add(counterFitness.multiply(
           new BigDecimal(counter.getCounterValue())));
     }
     // Now divide the total fitness by the largest fitness value to
     // compute the scaling factor.
     // ------------------------------------------------------------
-    double scalingFactor =
-        totalFitness.divide(new BigDecimal(largestFitnessValue),
-                            BigDecimal.ROUND_HALF_UP).doubleValue();
-    // Divide each of the fitness values by the scaling factor to
-    // scale them down.
-    // --------------------------------------------------------------
-    counterIterator = m_wheel.values().iterator();
-    while (counterIterator.hasNext()) {
-      SlotCounter counter = (SlotCounter) counterIterator.next();
-      counter.scaleFitnessValue(scalingFactor);
+    if (largestFitnessValue > 0.000000d) {
+      double scalingFactor =
+          totalFitness.divide(new BigDecimal(largestFitnessValue),
+                              BigDecimal.ROUND_HALF_UP).doubleValue();
+      // Divide each of the fitness values by the scaling factor to
+      // scale them down.
+      // --------------------------------------------------------------
+      counterIterator = m_wheel.values().iterator();
+      while (counterIterator.hasNext()) {
+        SlotCounter counter = (SlotCounter) counterIterator.next();
+        counter.scaleFitnessValue(scalingFactor);
+      }
     }
   }
 
@@ -324,6 +330,32 @@ public class WeightedRouletteSelector
   public boolean returnsUniqueChromosomes() {
     return false;
   }
+
+  /**
+ * Determines whether doublette chromosomes may be added to the selector or
+ * will be ignored.
+ * @param a_doublettesAllowed true: doublette chromosomes allowed to be
+ *       added to the selector. FALSE: doublettes will be ignored and not
+ *       added
+ *
+ * @author Klaus Meffert
+ * @since 2.0
+ */
+public void setDoubletteChromosomesAllowed(boolean a_doublettesAllowed) {
+  m_doublettesAllowed = a_doublettesAllowed;
+}
+
+/**
+ * @return TRUE: doublette chromosomes allowed to be added to the selector
+ *
+ * @author Klaus Meffert
+ * @since 2.0
+ */
+public boolean getDoubletteChromosomesAllowed() {
+  return m_doublettesAllowed;
+}
+
+
 }
 
 /**
@@ -404,4 +436,5 @@ class SlotCounter {
   public void scaleFitnessValue(double a_scalingFactor) {
     m_fitnessValue /= a_scalingFactor;
   }
+
 }
