@@ -31,7 +31,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public FixedBinaryGeneTest() {
   }
@@ -490,12 +490,11 @@ public class FixedBinaryGeneTest
   public void testSetValueFromPersistentRepresentation_2()
       throws Exception {
     FixedBinaryGene gene = new FixedBinaryGene(4);
-    try {
-      gene.setValueFromPersistentRepresentation("[1,1,1,1]");
-    }
-    catch (UnsupportedRepresentationException uex) {
-      /*Unsupported Exception*/
-    }
+    gene.setValueFromPersistentRepresentation("[1,1,1,1]");
+    assertTrue(gene.getBit(0));
+    assertTrue(gene.getBit(1));
+    assertTrue(gene.getBit(2));
+    assertTrue(gene.getBit(3));
   }
 
   /**
@@ -506,11 +505,42 @@ public class FixedBinaryGeneTest
   public void testSetValueFromPersistentRepresentation_3()
       throws Exception {
     FixedBinaryGene gene = new FixedBinaryGene(4);
+    gene.setValueFromPersistentRepresentation("[0,0,0,0]");
+    assertFalse(gene.getBit(0));
+    assertFalse(gene.getBit(1));
+    assertFalse(gene.getBit(2));
+    assertFalse(gene.getBit(3));
+  }
+
+  /**
+   * @author vamsi
+   * @since 2.0
+   * @throws Exception
+   */
+  public void testSetValueFromPersistentRepresentation_4()
+      throws Exception {
+    FixedBinaryGene gene = new FixedBinaryGene(5);
+    gene.setValueFromPersistentRepresentation("[0,1,1,0,0]");
+    assertFalse(gene.getBit(0));
+    assertTrue(gene.getBit(1));
+    assertTrue(gene.getBit(2));
+    assertFalse(gene.getBit(3));
+    assertFalse(gene.getBit(4));
+  }
+
+  /**
+   * @since 2.0
+   * @author Klaus Meffert
+   * @throws Exception
+   */
+  public void testSetValueFromPersistentRepresentation_5()
+      throws Exception {
+    FixedBinaryGene gene = new FixedBinaryGene(5);
     try {
-      gene.setValueFromPersistentRepresentation("[0,0,0,0]");
-    }
-    catch (UnsupportedRepresentationException uex) {
-      /*Unsupported Exception*/
+      gene.setValueFromPersistentRepresentation("[0,1,1,0]");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ;//this is OK
     }
   }
 
@@ -518,8 +548,7 @@ public class FixedBinaryGeneTest
    * @author vamsi
    * @since 2.0
    */
-  public void testSetValueFromPersistentRepresentation_4() {
-
+  public void testSetValueFromPersistentRepresentation_6() {
     FixedBinaryGene gene = new FixedBinaryGene(1);
     try {
       gene.setValueFromPersistentRepresentation("X");
