@@ -175,5 +175,11 @@ public class testTravellingSalesman extends TestCase {
         }
     }
 
+    public static Test suite() {
+      TestSuite suite = new TestSuite(testTravellingSalesman.class);
+      return suite;
+    }
+
+
 
 }
