@@ -36,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The current active Configuration instance.
@@ -326,6 +326,17 @@ public class Genotype
       ( (GeneticOperator) operatorIterator.next()).operate(
           m_activeConfiguration, m_population, m_workingPool);
     }
+
+    // Add the chromosomes in the working pool to the population.
+    // ----------------------------------------------------------
+    Iterator iterator = m_workingPool.iterator();
+
+    while ( iterator.hasNext() )
+    {
+        Chromosome currentChromosome = (Chromosome) iterator.next();
+        m_population.addChromosome(currentChromosome);
+    }
+
     // If a bulk fitness function has been provided, then convert the
     // working pool to an array and pass it to the bulk fitness
     // function so that it can evaluate and assign fitness values to
