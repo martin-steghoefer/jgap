@@ -38,7 +38,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -392,6 +392,9 @@ class SlotCounter {
    *
    * @param a_initialFitness The fitness value of the Chromosome for which
    *                         this instance is acting as a counter.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void reset(double a_initialFitness) {
     m_fitnessValue = a_initialFitness;
@@ -403,6 +406,9 @@ class SlotCounter {
    * is acting as a counter.
    *
    * @return The fitness value that was passed in at reset time.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public double getFitnessValue() {
     return m_fitnessValue;
@@ -411,6 +417,9 @@ class SlotCounter {
   /**
    * Increments the value of this counter by the fitness value that was
    * passed in at reset time.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void increment() {
     m_count++;
@@ -432,6 +441,9 @@ class SlotCounter {
    *
    * @param a_scalingFactor The factor by which the fitness value is to be
    *                        scaled.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void scaleFitnessValue(double a_scalingFactor) {
     m_fitnessValue /= a_scalingFactor;
