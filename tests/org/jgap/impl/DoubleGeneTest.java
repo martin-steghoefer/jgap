@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -24,9 +22,8 @@ import junitx.util.*;
  */
 public class DoubleGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -303,7 +300,8 @@ public class DoubleGeneTest
     assertEquals(new Double(0.789d * (6.5d - 1.3d) + 1.3d), gene.getAllele());
   }
 
-  public void testSetToRandomValue_1() throws Exception {
+  public void testSetToRandomValue_1()
+      throws Exception {
     Gene gene = new DoubleGene( -1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
 
@@ -315,19 +313,20 @@ public class DoubleGeneTest
     assertEquals(new Double(0.014d * (6.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
-   public void testSetToRandomValue_2() throws Exception {
-     Gene gene = new DoubleGene( -1.3d, -0.5d);
-     gene.setAllele(new Double(5.8d));
+  public void testSetToRandomValue_2()
+      throws Exception {
+    Gene gene = new DoubleGene( -1.3d, -0.5d);
+    gene.setAllele(new Double(5.8d));
 
-     Configuration conf = new DefaultConfiguration();
-     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-     Genotype.setConfiguration(conf);
+    Configuration conf = new DefaultConfiguration();
+    conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
+    Genotype.setConfiguration(conf);
 
-     gene.setToRandomValue(new RandomGeneratorForTest(0.83d));
-     assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
+    gene.setToRandomValue(new RandomGeneratorForTest(0.83d));
+    assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
-  public void testSetToRandomValue_3(){
+  public void testSetToRandomValue_3() {
     DoubleGene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
@@ -338,7 +337,7 @@ public class DoubleGeneTest
     }
   }
 
-  public void testSetToRandomValue_4(){
+  public void testSetToRandomValue_4() {
     DoubleGene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
@@ -468,8 +467,34 @@ public class DoubleGeneTest
     try {
       gene.applyMutation(0, -0.4d);
       fail();
-    } catch (NullPointerException nex) {
-      ;//this is OK
     }
+    catch (NullPointerException nex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetConstraintChecker_0() {
+    DoubleGene gene = new DoubleGene(0, 100);
+    assertNull(gene.getConstraintChecker());
+    gene.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    assertNotNull(gene.getConstraintChecker());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testHashCode_0() {
+    DoubleGene gene = new DoubleGene(0, 100);
+    assertEquals(-3, gene.hashCode());
   }
 }
