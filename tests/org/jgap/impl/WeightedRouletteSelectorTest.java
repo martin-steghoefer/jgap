@@ -19,14 +19,14 @@ import junitx.util.*;
 /**
  * Tests for WeightedRouletteSelector class
  *
- * @since 1.1
  * @author Klaus Meffert
+ * @since 1.1
  */
 public class WeightedRouletteSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public WeightedRouletteSelectorTest() {
   }
@@ -118,11 +118,11 @@ public class WeightedRouletteSelectorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
-    randgen.setNextDouble(0.9d);
+    randgen.setNextDouble(1.0d);
     conf.setRandomGenerator(randgen);
     Population popNew = new Population();
-        selector.select(1, null, popNew);
-        Chromosome[] bestChroms = popNew.toChromosomes();
+    selector.select(1, null, popNew);
+    Chromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)
