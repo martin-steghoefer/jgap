@@ -1,27 +1,21 @@
-
-Thank-you for trying JGAP 1.0! We are very interested in any feedback
+Thank you for trying JGAP 2.0! We are very interested in any feedback
 you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
 feedback on the user's mailing list at jgap-users@lists.sourceforge.net
 or, if you prefer to keep these details private, you can email the JGAP
-project administrator at mrblah@users.sourceforge.net. The more feedback
+project administrator at klausikm@users.sourceforge.net. The more feedback
 we get, the more we can improve JGAP to better meet the needs of our 
 users. Thanks for your support!
 
 ------------------------------------------------------------------------
+
 About This Release:
 
-This represents the first production release of JGAP, the Java Genetic
-Algorithms Package. After two years of development, testing, and public
-alpha and beta releases, we finally feel that JGAP has reached an
-acceptable level of stability for the current feature set. Work has
-already begun on JGAP version 1.1, which include some much-requested
-features including support for real values, a richer selection of
-stock gene types, pluggable "fitness evaluators," and various small
-enhancements. 
+This represents the second big production release of JGAP, the Java Genetic
+Algorithms Package. 
 
 For a general list of changes, fixes, and enhancements that have been
-included in version 1.0, please see the CHANGELOG file.
+included in version 2.0, please see the changelog.txt file.
 
 This software is OSI Certified Open Source Software. OSI Certified is
 a certification mark of the Open Source Initiative.
@@ -35,9 +29,9 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP 1.0 was compiled and tested with Java 1.4 on Linux, Mac OS X,
-and Windows XP although the authors believe that Java 1.2 on any
-platform should be sufficient for its use.
+JGAP 2.0 was compiled and tested with Java 1.4 on Windows 2000.
+Prior versions of JGAP have been testes with Linux, MacOS and Windows XP
+as well.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
@@ -56,7 +50,7 @@ the JGAP mailing list manager at:
 Mailing list archives are also available for each of the lists.
 
 Thanks again for trying out JGAP!
---The JGAP team
+--Klaus Meffert for the JGAP team
 
 ------------------------------------------------------------------------
 Installation:
@@ -87,16 +81,3 @@ to send a message to the JGAP users mailing list at:
      jgap-users@lists.sourceforge.net
 
 or to the developers mailing list at jgap-devl@lists.sourceforge.net.
-
-------------------------------------------------------------------------
-Special Thanks:
-
-Thanks go to everyone who has been using JGAP, especially those who
-have provided feedback and bug reports! Your support is invaluable.
-
-Thanks also to Nghia Le, who designed the new JGAP logo.
-
-And finally, thanks to the folks at Sourceforge who kindly host the
-JGAP project. For more information on SourceForge, please visit
-http://www.sourceforge.net.
-
