@@ -17,6 +17,9 @@ Algorithms Package.
 For a general list of changes, fixes, and enhancements that have been
 included in version 2.1, please see the changelog.txt file.
 
+The Directory "doc" included with this release contains the documentation
+you could find at the JGAP homepage http://jgap.sourceforge.net
+
 This software is OSI Certified Open Source Software. OSI Certified is
 a certification mark of the Open Source Initiative.
 

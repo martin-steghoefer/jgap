@@ -1,5 +1,7 @@
 2.1
 ----------
+* Extended JGAP documentation heavily (also see JGAP homepage at
+  http://jgap.sourceforge.net)
 * Fixed a severe bugb in GaussianMutationOperator
 * Added new Mutation Operator: SwappingMutationOperator
 * Added methods setPreserveFittestIndividual(..) and 
