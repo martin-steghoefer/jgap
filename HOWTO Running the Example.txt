@@ -14,7 +14,7 @@ java -classpath ".;jgap-examples.jar;jgap.jar" examples.MinimizingMakeChange 89
 or use (for Windows) the batch file start_example.bat
 
 Also see the JGAP homepage at
-http://jgap.sourceforg.net
+http://jgap.sourceforge.net
 for details about the example.
 
 Especially read the Getting Started section on the page!
