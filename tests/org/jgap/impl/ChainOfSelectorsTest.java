@@ -9,6 +9,10 @@
  */
 package org.jgap.impl;
 
+import java.util.*;
+
+import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -19,9 +23,8 @@ import junit.framework.*;
  */
 public class ChainOfSelectorsTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public ChainOfSelectorsTest() {
   }
@@ -31,12 +34,93 @@ public class ChainOfSelectorsTest
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testConstruct_0() {
-    /**todo implement*/
+    new ChainOfSelectors();
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testClear_0() {
-    /**todo implement*/
+    ChainOfSelectors c = new ChainOfSelectors();
+    assertTrue(c.isEmpty());
+    c.clear();
+    assertTrue(c.isEmpty());
   }
-  /**@todo implement more tests*/
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testClear_1()
+      throws Exception {
+    ChainOfSelectors c = new ChainOfSelectors();
+    assertEquals(0, c.size());
+    c.addNaturalSelector(new BestChromosomesSelector());
+    assertEquals(1, c.size());
+    assertFalse(c.isEmpty());
+    c.clear();
+    assertTrue(c.isEmpty());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testClear_2()
+      throws Exception {
+    ChainOfSelectors c = new ChainOfSelectors();
+    Collection l = new Vector();
+    l.add(new BestChromosomesSelector());
+    l.add(new WeightedRouletteSelector());
+    c.addAll(l);
+    assertEquals(2, c.size());
+    c.clear();
+    assertTrue(c.isEmpty());
+    assertEquals(0, c.size());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testIterator_0()
+      throws Exception {
+    ChainOfSelectors c = new ChainOfSelectors();
+    Collection l = new Vector();
+    l.add(new BestChromosomesSelector());
+    l.add(new WeightedRouletteSelector());
+    c.addAll(l);
+    Iterator it = c.iterator();
+    assertTrue(it.hasNext());
+    assertNotNull(it.next());
+    assertTrue(it.hasNext());
+    assertNotNull(it.next());
+    assertFalse(it.hasNext());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddNaturalSelector_0()
+      throws Exception {
+    ChainOfSelectors c = new ChainOfSelectors();
+    try {
+      c.addNaturalSelector(null);
+      fail();
+    }
+    catch (InvalidConfigurationException inex) {
+      ; //this is OK
+    }
+  }
 }

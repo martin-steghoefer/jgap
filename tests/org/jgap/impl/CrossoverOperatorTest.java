@@ -25,7 +25,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   public CrossoverOperatorTest() {
   }
@@ -33,6 +33,34 @@ public class CrossoverOperatorTest
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
     return suite;
+  }
+
+  public void testConstruct_0() {
+    new CrossoverOperator(null);
+    new CrossoverOperator(new DefaultMutationRateCalculator());
+    new CrossoverOperator(2);
+    new CrossoverOperator(1);
+    new CrossoverOperator(50);
+  }
+
+  public void testConstruct_1() {
+    try {
+      new CrossoverOperator(0);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  public void testConstruct_2() {
+    try {
+      new CrossoverOperator(-3);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
   }
 
   /**

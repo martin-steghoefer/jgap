@@ -21,9 +21,8 @@ import junit.framework.*;
  */
 public class FixedBinaryGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public FixedBinaryGeneTest() {
   }
@@ -38,16 +37,16 @@ public class FixedBinaryGeneTest
   }
 
   public void testConstruct_0() {
-    //following should be possible without exception
-    FixedBinaryGene gene = new FixedBinaryGene(1);
-    gene = new FixedBinaryGene(10);
-    gene = new FixedBinaryGene(1000);
-    gene = new FixedBinaryGene(100000);
+    // following should be possible without exception
+    new FixedBinaryGene(1);
+    new FixedBinaryGene(10);
+    new FixedBinaryGene(1000);
+    new FixedBinaryGene(100000);
   }
 
   public void testConstruct_1() {
     try {
-      Gene gene = new FixedBinaryGene(0);
+      new FixedBinaryGene(0);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -57,7 +56,7 @@ public class FixedBinaryGeneTest
 
   public void testConstruct_2() {
     try {
-      Gene gene = new FixedBinaryGene( -5);
+      new FixedBinaryGene( -5);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -69,7 +68,6 @@ public class FixedBinaryGeneTest
    * @author vamsi
    */
   public void testConstruct_3() {
-    //following should be possible without exception
     int i = 0;
     FixedBinaryGene gene = new FixedBinaryGene(5);
     for (i = 0; i < 4; i++) {
@@ -102,6 +100,15 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testConstruct_6() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(1);
+    FixedBinaryGene gene2 = new FixedBinaryGene(gene1);
+  }
+
+  /**
    * @author vamsi
    */
   public void testToString_0() {
@@ -127,9 +134,9 @@ public class FixedBinaryGeneTest
     int[] value = new int[] {
         0};
     gene.setAllele(value);
-    assertEquals(value.length,((int[])gene.getAllele()).length);
-    for (int i=0;i<value.length;i++) {
-      assertEquals(value[i], ((int[])gene.getAllele())[i]);
+    assertEquals(value.length, ( (int[]) gene.getAllele()).length);
+    for (int i = 0; i < value.length; i++) {
+      assertEquals(value[i], ( (int[]) gene.getAllele())[i]);
     }
   }
 
@@ -144,6 +151,21 @@ public class FixedBinaryGeneTest
     }
     catch (ClassCastException classex) {
       ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testGetAllele_2() {
+    Gene gene = new FixedBinaryGene(1);
+    int[] value = new int[] {
+        1};
+    gene.setAllele(value);
+    assertEquals(value.length, ( (int[]) gene.getAllele()).length);
+    for (int i = 0; i < value.length; i++) {
+      assertEquals(value[i], ( (int[]) gene.getAllele())[i]);
     }
   }
 
@@ -326,11 +348,41 @@ public class FixedBinaryGeneTest
     catch (Exception e) {
       /*This is ok.*/
     }
-
   }
 
   /**
-   *Comparision should return 0 if same, -1 if less 1 if more
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_6() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(3);
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    gene1.setAllele(new int[] {0, 0, 1});
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetConstraintChecker_0() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(3);
+    assertNull(gene1.getConstraintChecker());
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    assertNotNull(gene1.getConstraintChecker());
+  }
+
+  /**
+   * Comparision should return 0 if same, -1 if less 1 if more
    * @author vamsi
    */
   public void testCompareTo_0() {
@@ -497,7 +549,8 @@ public class FixedBinaryGeneTest
     try {
       gene.setValueFromPersistentRepresentation("null");
       fail();
-    }catch (UnsupportedRepresentationException uex) {
+    }
+    catch (UnsupportedRepresentationException uex) {
       //this is OK
     }
   }
@@ -559,8 +612,9 @@ public class FixedBinaryGeneTest
     try {
       gene.setValueFromPersistentRepresentation("[0,1,1,0]");
       fail();
-    } catch (UnsupportedRepresentationException uex) {
-      ;//this is OK
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
     }
   }
 
@@ -592,18 +646,24 @@ public class FixedBinaryGeneTest
   /**
    * @throws Exception
    * @author vamsi
-   * @since 2.0
-   */
-  public void testGetPersistentRepresentation_1()
-      throws Exception {
-    FixedBinaryGene gene = new FixedBinaryGene(3);
-    try {
-      gene.setValueFromPersistentRepresentation(null);
-      fail();
-    }catch (UnsupportedRepresentationException uex) {
-      ;//this is OK
-    }
-  }
+
+
+     /**
+    * @throws Exception
+    * @author vamsi
+    * @since 2.0
+    */
+   public void testGetPersistentRepresentation_1()
+       throws Exception {
+     FixedBinaryGene gene = new FixedBinaryGene(3);
+     try {
+       gene.setValueFromPersistentRepresentation(null);
+       fail();
+     }
+     catch (UnsupportedRepresentationException uex) {
+       ; //this is OK
+     }
+   }
 
   /**
    * @throws Exception
@@ -617,4 +677,67 @@ public class FixedBinaryGeneTest
     assertEquals("[0,0,0]", s);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testClone_9() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(1);
+    FixedBinaryGene gene2 = (FixedBinaryGene) gene1.clone();
+    assertEquals(gene1, gene2);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetBit_0() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    gene1.setAllele(new int[] {1,1,0,0,1,0,1});
+    assertTrue(gene1.getBit(0));
+    gene1.setBit(0,false);
+    assertFalse(gene1.getBit(0));
+    gene1.setBit(1,true);
+    assertTrue(gene1.getBit(1));
+    gene1.setBit(4,false);
+    assertFalse(gene1.getBit(0));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetBit_1() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    gene1.setAllele(new int[] {1,1,0,0,1,0,1});
+    gene1.setBit(2,4,true);
+    assertTrue(gene1.getBit(0));
+    assertTrue(gene1.getBit(0));
+    assertTrue(gene1.getBit(0));
+    assertTrue(gene1.getBit(0));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetToRandomValue_0() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    try {
+      gene1.setToRandomValue(null);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetToRandomValue_1() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    gene1.setToRandomValue(new StockRandomGenerator());
+  }
 }
