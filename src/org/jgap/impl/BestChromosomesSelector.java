@@ -34,12 +34,17 @@ public class BestChromosomesSelector
     implements NaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
    */
   private List chromosomes;
+
+  /**
+   * Allows or disallows doublette chromosomes to be added to the selector
+   */
+  private boolean m_doublettesAllowed;
 
   /**
    * Indicated whether the list of added chromosomes needs sorting
@@ -70,7 +75,7 @@ public class BestChromosomesSelector
                                Chromosome a_chromosomeToAdd) {
     // Check if chromosome already added
     // This speeds up the process by orders of magnitude!!!
-    if (chromosomes.contains(a_chromosomeToAdd)) {
+    if (!m_doublettesAllowed && chromosomes.contains(a_chromosomeToAdd)) {
       return;
     }
     // New chromosome, insert it into the sorted collection of chromosomes
@@ -153,5 +158,28 @@ public class BestChromosomesSelector
         return 0;
       }
     }
+  }
+
+  /**
+   * Determines whether doublette chromosomes may be added to the selector or
+   * will be ignored.
+   * @param a_doublettesAllowed true: doublette chromosomes allowed to be
+   *       added to the selector. FALSE: doublettes will be ignored and not
+   *       added
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setDoubletteChromosomesAllowed(boolean a_doublettesAllowed) {
+    m_doublettesAllowed = a_doublettesAllowed;
+  }
+
+  /**
+   * @return TRUE: doublette chromosomes allowed to be added to the selector
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public boolean getDoubletteChromosomesAllowed() {
+    return m_doublettesAllowed;
   }
 }
