@@ -18,8 +18,9 @@
 
 package org.jgap.impl;
 
-import java.util.Random;
-import org.jgap.RandomGenerator;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * Gaussian deviation serving as basis for randomly finding a number.
@@ -33,7 +34,7 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -88,7 +89,7 @@ public class GaussianRandomGenerator
   }
 
   /**
-   * @return positive integer
+   * @return positive integer value
    */
   public int nextInt() {
     return Math.abs(Math.min(Integer.MAX_VALUE - 1,
@@ -96,16 +97,19 @@ public class GaussianRandomGenerator
   }
 
   /**
-   * @return positive integer between 0 and ceiling
+   * @return positive integer value between 0 and ceiling
    */
   public int nextInt(int ceiling) {
     return Math.min(ceiling - 1,
                     (int) Math.round(nextGaussian() * ceiling));
   }
 
+  /**
+   * @return positive long value between 0 and ceiling
+   */
   public long nextLong() {
     return Math.min(Long.MAX_VALUE - 1,
-                    Math.round(nextGaussian() * Long.MAX_VALUE));
+                    (long)Math.round(nextGaussian() * Long.MAX_VALUE));
   }
 
   public double nextDouble() {
