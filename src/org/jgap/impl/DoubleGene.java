@@ -34,12 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
-  /**
-   * Represents the constant range of values supported by doubles.
-   */
-  protected final static double DOUBLE_RANGE = Double.MAX_VALUE;
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -54,38 +49,35 @@ public class DoubleGene
   protected double m_lowerBounds;
 
   /**
-   * Stores the number of double range units that a single bounds-range
-   * unit represents. For example, if the double range is -2 billion to
-   * +2 billion and the bounds range is -1 billion to +1 billion, then
-   * each unit in the bounds range would map to 2 units in the double
-   * range. The value of this variable would therefore be 2. This mapping
-   * unit is used to map illegal allele values that are outside of the
-   * bounds to legal allele values that are within the bounds.
-   */
-  protected double m_boundsUnitsToDoubleUnits;
-
-  /**
    * Optional helper class for checking if a given allele value to be set
    * is valid. If not the allele value may not be set for the gene!
    */
   private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
+   * Holds the configuration object associated with the Gene. The configuration
+   * object is important to obtain referenced objects from it, like the
+   * RandomGenerator.
+   */
+  private Configuration m_configuration;
+
+  /**
    * Constructs a new DoubleGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
    * than the standard range of double values.
    *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.1
    */
   public DoubleGene() {
-    m_lowerBounds = - ( Double.MAX_VALUE / 2);
-    m_upperBounds = Double.MAX_VALUE;
-    calculateBoundsUnitsToDoubleUnitsRatio();
+    this(- ( Double.MAX_VALUE / 2),Double.MAX_VALUE);
   }
 
   /**
    * Constructs a new DoubleGene with the specified lower and upper
-   * bounds for values (alleles) of this Gene instance.
+   * bounds for values (alleles) of this Gene instance. Uses the
+   * DefaultConfiguration.
    *
    * @param a_lowerBounds The lowest value that this Gene may possess,
    *                      inclusive.
@@ -95,9 +87,27 @@ public class DoubleGene
    * @since 1.1
    */
   public DoubleGene(double a_lowerBounds, double a_upperBounds) {
+    this(a_lowerBounds, a_upperBounds, new DefaultConfiguration());
+  }
+
+  /**
+   * Constructs a new DoubleGene with the specified lower and upper
+   * bounds for values (alleles) of this Gene instance. Uses the specified
+   * configuration.
+   *
+   * @param a_lowerBounds The lowest value that this Gene may possess,
+   *                      inclusive.
+   * @param a_upperBounds The highest value that this Gene may possess,
+   *                      inclusive.
+   * @param a_configuration sic
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public DoubleGene(double a_lowerBounds, double a_upperBounds, Configuration a_configuration) {
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
-    calculateBoundsUnitsToDoubleUnitsRatio();
+    m_configuration = a_configuration;
   }
 
   /**
@@ -232,11 +242,6 @@ public class DoubleGene
             "is not recognized: field 3 does not appear to be " +
             "a double value.");
       }
-      // We need to recalculate the bounds units to double units
-      // ratio since our lower and upper bounds have probably just
-      // been changed.
-      // -------------------------------------------------------------
-      calculateBoundsUnitsToDoubleUnitsRatio();
     }
   }
 
@@ -297,6 +302,7 @@ public class DoubleGene
    * between the upper bounds and lower bounds). If the value is null or
    * is already within the bounds, it will be left unchanged.
    *
+   * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -311,49 +317,15 @@ public class DoubleGene
       // -----------------------------------------------------------------
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
-/*
-        double mult = (DOUBLE_RANGE - d_value.doubleValue())
-            / DOUBLE_RANGE;
-        m_value = new Double( (m_upperBounds - m_lowerBounds) * mult +
-                             m_lowerBounds);
-        double m = ( (Double) m_value).doubleValue();
-*/
-        double differenceFromDoubleMin = Double.MIN_VALUE +
-            d_value.doubleValue();
-        double differenceFromBoundsMin =
-            (differenceFromDoubleMin / m_boundsUnitsToDoubleUnits);
-        m_value =
-            new Double(m_upperBounds + differenceFromBoundsMin);
+        m_value = new Double(m_configuration.getRandomGenerator().nextDouble()
+            *(m_upperBounds - m_lowerBounds) + m_lowerBounds);
       }
     }
   }
 
   /**
-   * Calculates and sets the m_boundsUnitsToDoubleUnits field based
-   * on the current lower and upper bounds of this DoubleGene. For example,
-   * if the double range is -2 billion to +2 billion and the bounds range
-   * is -1 billion to +1 billion, then each unit in the bounds range would
-   * map to 2 units in the double range. The m_boundsUnitsToDoubleUnits
-   * field would therefore be 2. This mapping unit is used to map illegal
-   * allele values that are outside of the bounds to legal allele values that
-   * are within the bounds.
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  protected void calculateBoundsUnitsToDoubleUnitsRatio() {
-    double divisor = m_upperBounds - m_lowerBounds + 1.0d;
-    if (divisor == 0) {
-      m_boundsUnitsToDoubleUnits = DOUBLE_RANGE;
-    }
-    else {
-      m_boundsUnitsToDoubleUnits = DOUBLE_RANGE / divisor;
-    }
-  }
-
-  /**
    * See interface Gene for description
-   * @param index must always be 1 (because there is only 1 atomic element)
+   * @param index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    *        than 1).
    *
@@ -361,7 +333,8 @@ public class DoubleGene
    * @since 1.1
    */
   public void applyMutation(int index, double a_percentage) {
-    double newValue = doubleValue() * (1 + a_percentage);
+    double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+    double newValue = doubleValue() + range;
     setAllele(new Double(newValue));
   }
 
@@ -373,20 +346,6 @@ public class DoubleGene
    * @since 1.1
    */
   public void setAllele(Object a_newValue) {
-    Double d = (Double) a_newValue;
-    if (a_newValue != null) {
-      double fromD = d.doubleValue();
-      if (fromD < m_lowerBounds || fromD > m_upperBounds) {
-        throw new IllegalArgumentException(
-            "Allele must be a double value matching"
-            + " the lower and upper bounds of the"
-            + " chromosome ["
-            +m_lowerBounds
-            +", "
-            +m_upperBounds
-            +"] !");
-      }
-    }
     if (m_geneAlleleChecker != null) {
       if (!m_geneAlleleChecker.verify(this, a_newValue)) {
         return;
