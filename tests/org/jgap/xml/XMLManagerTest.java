@@ -18,12 +18,14 @@
 
 package org.jgap.xml;
 
+import javax.xml.parsers.*;
+
 import org.jgap.*;
 import org.jgap.impl.*;
-import junit.framework.*;
 import org.w3c.dom.*;
-import junitx.util.PrivateAccessor;
 
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for XMLManager class
@@ -35,7 +37,7 @@ public class XMLManagerTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public XMLManagerTest() {
   }
@@ -50,6 +52,8 @@ public class XMLManagerTest
   private Gene[] genes;
   private Genotype genotype;
   private String CHROMOSOME_TAG;
+  private String GENES_TAG;
+  private String GENOTYPE_TAG;
 
   public void setUp() throws Exception {
     conf = new DefaultConfiguration();
@@ -66,10 +70,13 @@ public class XMLManagerTest
 
     CHROMOSOME_TAG = (String) PrivateAccessor.getField(XMLManager.class,
         "CHROMOSOME_TAG");
+    GENES_TAG = (String) PrivateAccessor.getField(XMLManager.class,
+        "GENES_TAG");
+    GENOTYPE_TAG = (String) PrivateAccessor.getField(XMLManager.class,
+        "GENOTYPE_TAG");
   }
 
   public void testGetChromosomeFromDocument_0() throws Exception {
-    /***@todo implement*/
     try {
       XMLManager.getChromosomeFromDocument(conf, null);
       fail();
@@ -101,24 +108,17 @@ public class XMLManagerTest
     Document doc = XMLManager.representChromosomeAsDocument(chrom);
     Element elem = doc.getDocumentElement();
     Chromosome chrom2 = XMLManager.getChromosomeFromElement(conf, elem);
-    assertTrue(chrom.equals(chrom2));
-  }
-
-  public void testGetDocumentElement_0() throws Exception {
-    Document doc = XMLManager.representChromosomeAsDocument(chrom);
-    Element elem = doc.getDocumentElement();
-    XMLManager.getChromosomeFromElement(conf, elem);
-    assertEquals(CHROMOSOME_TAG, elem.getTagName());
+    assertEquals(chrom, chrom2);
   }
 
   public void testGetGenesFromElement_0() throws Exception {
     Document doc = XMLManager.representChromosomeAsDocument(chrom);
     Element elem = doc.getDocumentElement();
-    NodeList chromElems = elem.getElementsByTagName("genes");
+    NodeList chromElems = elem.getElementsByTagName(GENES_TAG);
     Gene[] genes2 = XMLManager.getGenesFromElement(conf, (Element)chromElems.item(0));
     assertEquals(genes.length, genes2.length);
     for(int i=0;i<genes.length;i++) {
-      assertTrue(genes[i].equals(genes2[i]));
+      assertEquals(genes[i], genes2[i]);
     }
   }
 
@@ -135,30 +135,49 @@ public class XMLManagerTest
 
   public void testGetGenotypeFromDocument_1() throws Exception {
     Document doc = XMLManager.representGenotypeAsDocument(genotype);
-    Genotype genotype = XMLManager.getGenotypeFromDocument(conf, doc);
+    Genotype genotype2 = XMLManager.getGenotypeFromDocument(conf, doc);
+    assertTrue(genotype.equals(genotype2));
+    assertEquals(genotype, genotype2);
   }
 
   public void testGetGenotypeFromElement_0() throws Exception {
-    /***@todo implement*/
+    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    Element elem = doc.getDocumentElement();
+    Genotype genotype2 = XMLManager.getGenotypeFromElement(conf, elem);
+    assertEquals(genotype, genotype2);
   }
 
   public void testRepresentChromosomeAsDocument_0() throws Exception {
-    /***@todo implement*/
+    Document doc = XMLManager.representChromosomeAsDocument(chrom);
+    Element elem = doc.getDocumentElement();
+    assertEquals(CHROMOSOME_TAG, elem.getTagName());
   }
 
   public void testRepresentChromosomeAsElement_0() throws Exception {
-    /***@todo implement*/
+    DocumentBuilder docCreator =
+            DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document doc = docCreator.newDocument();
+    Element elem = XMLManager.representChromosomeAsElement(chrom, doc);
+    assertEquals(CHROMOSOME_TAG, elem.getTagName());
   }
 
   public void testRepresentGenesAsElement_0() throws Exception {
-    /***@todo implement*/
+    Document doc = XMLManager.representChromosomeAsDocument(chrom);
+    Element elem  = XMLManager.representGenesAsElement(genes, doc);
+    assertEquals(GENES_TAG, elem.getTagName());
   }
 
   public void testRepresentGenotypeAsDocument_0() throws Exception {
-    /***@todo implement*/
+    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    Element elem = doc.getDocumentElement();
+    assertEquals(GENOTYPE_TAG, elem.getTagName());
   }
 
   public void testRepresentGenotypeAsElement_0() throws Exception {
-    /***@todo implement*/
+    DocumentBuilder docCreator =
+            DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document doc = docCreator.newDocument();
+    Element elem  = XMLManager.representGenotypeAsElement(genotype, doc);
+    assertEquals(GENOTYPE_TAG, elem.getTagName());
   }
 }
