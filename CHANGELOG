@@ -1,6 +1,6 @@
 0.32
 ----------
-* Added new document on creating custom Alleles.
+* Added new document on creating custom Alleles in the docs/ subdirectory.
 * Modified WeightedRouletteSelector to represent the "wheel" as an array
   just prior to selection of Chromosomes in order to increase iteration 
   speed.
@@ -8,8 +8,6 @@
   population directly into the pool of candidate chromosomes, rather than
   making a copy of each one and adding the copy, in order to increase speed
   and reduce memory consumption.
-* Removed extraneous Class tracking from AllelePool that was simply adding
-  extra overhead without providing any real benefit.
 * Switched pooling from Alleles to Chromosomes. Removed AllelePool class
   and added ChromosomePool class. Also added generic Pool class, which
   ChromosomePool uses.
@@ -25,6 +23,7 @@
   JGAP classes can be easily built.
 * Updated the copyright notices on all files.
 * Updated the README file.
+
 
 0.31
 ----------
