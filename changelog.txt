@@ -1,5 +1,8 @@
 2.2
 ----------
+* Fixed error in deprecated method 
+  Configuration.getNaturalSelector()
+* Improved method Chromosome.cleanup()
 * Provided javadocs for packages forgotten before
 * Introduced abstract base class for all org.jgap.Gene
   implementations: org.jgap.BaseGene
