@@ -21,13 +21,13 @@ import com.eteks.parser.*;
 public class Repository
     extends Term {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  private static Vector constants;
+  private static List constants;
 
-  private static Vector operators;
+  private static List operators;
 
-  private static Vector functions;
+  private static List functions;
 
   private static Syntax syntax;
 
@@ -107,15 +107,15 @@ public class Repository
 //    functions.add("Math.abs");
   }
 
-  public static Vector getConstants() {
+  public static List getConstants() {
     return constants;
   }
 
-  public static Vector getFunctions() {
+  public static List getFunctions() {
     return functions;
   }
 
-  public static Vector getOperators() {
+  public static List getOperators() {
     return operators;
   }
 
@@ -123,20 +123,20 @@ public class Repository
    * Makes sure to only apply functions being valid for the given input values.
    * @param truthTable Wertetabelle
    */
-  public static void apply(Vector truthTable) {
+  public static void apply(List truthTable) {
     MatchAgainstTruthTable.Tupel tupel;
     int j = 0;
     String formula;
     String s;
     while (j < getFunctions().size()) {
-      s = (String) getFunctions().elementAt(j);
+      s = (String) getFunctions().get(j);
       if (s.startsWith("/")) {
         j++;
         continue;
       }
       formula = "F(X)=" + s + "(X)";
       for (int i = 0; i < truthTable.size(); i++) {
-        tupel = (MatchAgainstTruthTable.Tupel) truthTable.elementAt(i);
+        tupel = (MatchAgainstTruthTable.Tupel) truthTable.get(i);
         try {
           evaluate(formula, tupel.getInputValue());
         }

@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  */
 public class Utility {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int numberOfFunctions;
 
@@ -47,8 +47,8 @@ public class Utility {
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static Vector constructTerms(Gene[] genes) {
-    Vector result = new Vector();
+  public static List constructTerms(Gene[] genes) {
+    List result = new Vector();
     Term term;
     Gene[] geneTupel;
     CompositeGene comp;
@@ -84,26 +84,26 @@ public class Utility {
     int type;
     if (fktNr >= numberOfFunctions) {
       // Read out constant
-      fktName = (String) Repository.getConstants().elementAt(fktNr -
+      fktName = (String) Repository.getConstants().get(fktNr -
           numberOfFunctions);
       type = 1;
     }
     else {
       // Read out function
-      fktName = (String) Repository.getFunctions().elementAt(fktNr);
+      fktName = (String) Repository.getFunctions().get(fktNr);
       type = 2;
     }
 
     allele = (Integer) op.getAllele();
     int opNr = allele.intValue();
     opNr = opNr % numberOfOperators;
-    char opCh = ( (String) Repository.getOperators().elementAt(opNr)).charAt(0);
+    char opCh = ( (String) Repository.getOperators().get(opNr)).charAt(0);
     Term elem = new Term(type, fktName, 1, opCh);
     return elem;
   }
 
   public static String getFormulaFromChromosome(Chromosome chromosome) {
-    Vector terms = constructTerms(chromosome.getGenes());
+    List terms = constructTerms(chromosome.getGenes());
     return getFormula(terms);
   }
 
@@ -116,7 +116,7 @@ public class Utility {
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static String getFormula(Vector elements) {
+  public static String getFormula(List elements) {
     if (elements == null || elements.isEmpty()) {
       return "";
     }
@@ -144,11 +144,11 @@ public class Utility {
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected static String getFormula_int(Vector elements, String previous) {
+  protected static String getFormula_int(List elements, String previous) {
     if (elements.size() < 1) {
       return "";
     }
-    Term element = (Term) elements.elementAt(0);
+    Term element = (Term) elements.get(0);
     element = replaceSubstitute(element);
     String result = "";
     // Ignore illegal operator specification

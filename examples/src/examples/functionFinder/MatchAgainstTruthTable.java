@@ -22,9 +22,9 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  private Vector truthTable;
+  private List truthTable;
 
   private int currentFitness;
 
@@ -52,8 +52,8 @@ public class MatchAgainstTruthTable
    * @author Klaus Meffert
    * @since 2.2
    */
-  public MatchAgainstTruthTable(Vector truthTable) {
-    this.truthTable = truthTable;
+  public MatchAgainstTruthTable(List a_truthTable) {
+    this.truthTable = a_truthTable;
     syntax = new JavaSyntax();
     parser = new ExpressionParser(syntax, null);
     Repository.init();
@@ -144,7 +144,7 @@ public class MatchAgainstTruthTable
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static int calcFitness(String formula, Vector truthTable)
+  public static int calcFitness(String formula, List truthTable)
       throws CompilationException {
     if (formula == null || formula.length() < 6) {
       // Minimal length of 6 because the minmimum prefix "F(x)=" has a length
@@ -169,7 +169,7 @@ public class MatchAgainstTruthTable
     float delta;
     float deltaAbs;
     for (int i = 0; i < truthTable.size(); i++) {
-      tupel = (Tupel) truthTable.elementAt(i);
+      tupel = (Tupel) truthTable.get(i);
       inputValue = tupel.getInputValue();
       input = new double[] {
           inputValue};
