@@ -41,7 +41,7 @@ public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -52,6 +52,9 @@ public abstract class FitnessFunction
    * @param a_subject the Chromosome for which to compute and return the
    *                  fitness value.
    * @return the fitness value of the given Chromosome.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
   public final double getFitnessValue(Chromosome a_subject) {
@@ -79,6 +82,8 @@ public abstract class FitnessFunction
    *         Chromosome. Note that if a non-positive double is returned,
    *         a RuntimeException should be generated.
    *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
   protected abstract double evaluate(Chromosome a_subject);
