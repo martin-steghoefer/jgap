@@ -1,32 +1,38 @@
-About JGAP 0.3x:
 
-Important notes about backward compatibility:
+Thank-you for trying JGAP 1.0 Release Candidate 1. We are very 
+interested in any feedback you might have, including details of
+how you're using JGAP, what you like about it, and what you think
+needs improvement. You can leave this feedback on the user's mailing
+list at jgap-users@lists.sourceforge.net or, if you prefer to keep
+these details private, you can email the JGAP project administrator
+at mrblah@users.sourceforge.net. The more feedback we get, the more
+we can improve JGAP to better meet the needs of our users. Thanks 
+for your support!
 
-     JGAP 0.3x adds a number of new features over version 0.2, including
-     support for custom alleles. As a result, the API has changed in
-     some places and is not backward compatible with the 0.2x APIs. That
-     being said, converting to the new APIs should be pretty easy and
-     will provide a great deal of convenience and flexibility.
+------------------------------------------------------------------------
+About This Release:
 
-This represents an alpha release of JGAP, the Java Genetic Algorithms
-Package, which means it is not feature complete and probably contains 
-bugs. The APIs are also considered a work in progress and are subject to
-change. For a general list of changes, fixes, and enhancements in this
-version, please see the CHANGELOG file.
+This represents the first beta release of JGAP, the Java Genetic Algorithms
+Package, which means it may contain bugs. It is, however, considered to
+be feature complete (for version 1.0) and the API is considered frozen. 
+For a general list of changes, fixes, and enhancements in this version, 
+please see the CHANGELOG file.
 
 This software is OSI Certified Open Source Software. OSI Certified is
 a certification mark of the Open Source Initiative.
 
-Any existing documentation, including Javadocs and some basic introductory
+JGAP documentation, including Javadocs and some basic introductory
 documents to help get you started, can be found on the JGAP home page at
 http://jgap.sourceforge.net. Javadocs can also be found in the javadocs/
 directory of the JGAP distribution, and other documentation can be found
 in the docs/ directory of the distribution. For a basic introduction to 
 using JGAP, we highly recommend reading the tutorial that can be found 
-both on the JGAP website and in the docs/ directory.
+both on the JGAP website and in the docs/ directory. Finally, a few 
+examples are also available in the src/examples directory.
 
-JGAP 0.3x was compiled and tested with Java 1.4 on Linux and Windows,
-although the authors believe that Java 1.2 should be sufficient.
+JGAP 1.0-RC1 was compiled and tested with Java 1.4 on Linux and Windows XP,
+although the authors believe that Java 1.2 on any platform should be 
+sufficient for its use.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
@@ -42,7 +48,7 @@ the JGAP mailing list manager at:
 
     http://sourceforge.net/mail/?group_id=11618
 
-Mailing list archives are also available.
+Mailing list archives are also available for each of the lists.
 
 Thanks for trying out JGAP!
 --The JGAP team
@@ -68,7 +74,8 @@ Ant home page at http://jakarta.apache.org/ant/
 
 4. Javadocs can be found in the javadocs/ directory. Other documentation,
 including some basic documents to help you get started, can be found
-both on the JGAP web site and in the docs/ directory.
+both on the JGAP web site and in the docs/ directory. A few examples
+can be found in the src/examples directory.
 
 
 If you have any questions, or run into any problems, please feel free
@@ -83,7 +90,7 @@ or to the developers mailing list at jgap-devl@lists.sourceforge.net.
 Special Thanks:
 
 Thanks go to Alexandre Freire and Jan Sabak for their bug reports, and
-to Mike Crowe for his prototyping work on the new custom alleles. Mike
+to Mike Crowe for his prototyping work on the custom genes. Mike
 has since joined the JGAP team.
 
 Thanks also to the folks at Sourceforge who kindly host the JGAP
