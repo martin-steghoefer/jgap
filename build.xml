@@ -7,6 +7,9 @@
 
   <target name="jar" depends="compile">
     <jar jarfile="jgap.jar" basedir="${src}" 
-         includes="LICENSE, org/jgap/*.class"/>
+         includes="org/jgap/*.class"/>
+
+    <jar jarfile="jgap-examples.jar" basedir="${src}/examples"
+         includes="*.class"/>
   </target>
 </project>

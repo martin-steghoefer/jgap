@@ -6,8 +6,9 @@ Package. Since it's pre-alpha, it's not feature complete and probably
 contains bugs.
 
 Any existing documentation, including Javadocs, can be found on the JGAP
-home page at jgap.sourceforge.net. A basic introduction to the contents
-of the JGAP package is also provided below.
+home page at http://jgap.sourceforge.net. Javadocs can also be found in
+the javadocs/ directory of the JGAP distribution. A basic introduction to
+the contents of the JGAP package is also provided below.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP development mailing list at jgap-devl@lists.sourceforge.net
@@ -26,10 +27,12 @@ directory of choice.
 of the examples, then add the jgap-examples.jar to your classpath as
 well.
 
-3. Finally, if you wish to view or modify the source code, simply unjar
-the jgap-source.jar to the desired location. For convenience, an Ant
-build script is included in the source jar. For more information on Ant,
-please see its home page at jakarta.apache.org/ant/
+3. Finally, if you wish to view or modify the source code, it can
+be found in the src/ directory of the archive. For convenience, an Ant
+build script is included. For more information on Ant, please see its
+home page at jakarta.apache.org/ant/
+
+4. Javadocs can be found in the javadocs/ directory.
 
 If you encounter any problems during installation, please send a note
 to the JGAP developers list at jgap-devl@lists.sourceforge.net
@@ -96,10 +99,10 @@ to standard out, along with the Chromosome possessing the highest
 fitness value.
 
 For more details on all of the above, you are highly encouraged to read
-through the Javadocs that can be found on the JGAP home page at
-jgap.sourceforge.net. There are a very limited number of classes in the
-package, and the documentation attempts to be simple and straight-
-forward.
+through the Javadocs found in the javadocs/ directory. There are a very
+limited number of classes in the package, and the documentation attempts
+to be simple and straight-forward. Other documentation may be found at
+the JGAP home page at http://jgap.sourceforge.net
 
 If you have any questions, or run into any problems, please feel free
 to send a message to the JGAP developers mailing list at
@@ -107,6 +110,6 @@ jgap-devl@lists.sourceforge.net
 
 ------------------------------------------------------------------------
 JGAP is kindly hosted by the folks at SourceForge. For more information
-on SourceForge, please visit www.sourceforge.net
+on SourceForge, please visit http://www.sourceforge.net
 
 
