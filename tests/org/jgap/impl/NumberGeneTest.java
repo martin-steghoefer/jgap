@@ -23,10 +23,7 @@ import junitx.util.*;
 public class NumberGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
-  public NumberGeneTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
