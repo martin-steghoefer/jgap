@@ -73,12 +73,22 @@ public class WeightedRouletteSelector implements NaturalSelector
     return selections;
   }
 
+  /**
+   * This method spins the wheel and finds the appropriate chromsome to return.
+   * Each time a chromosome is selected from the wheel it is removed from 
+   * the wheel so that it can not be selected again. Chromosomes are grouped
+   * by their uniqueness for optimization.
+   */
+   
   private Chromosome spinWheel(RandomGenerator generator) 
   {
+    // Randomly choose slot to select
     long selectedSlot = Math.abs(generator.nextLong() % totalInstances);
  
     Iterator iterator = wheel.entrySet().iterator();
     int currentSlot = 0;
+    
+    // Iterate through the wheel until we find our selected slot
     while( iterator.hasNext() )
     {
       Map.Entry chromosomeEntry = (Map.Entry) iterator.next();
@@ -88,18 +98,26 @@ public class WeightedRouletteSelector implements NaturalSelector
       currentSlot += chromoCounter.getCount();
       long fitness = chromoCounter.getStartCount();
 
+      // We found our selected Slot on the wheel
       if ( currentSlot > selectedSlot)
       {
-        ((Counter)wheel.get(chromo)).decrement(fitness);  
-        
-        if (((Counter)chromosomeEntry.getValue()).getCount() <= 0 )
-          wheel.remove( chromo );
-        
+        // Remove 1 chromosome (it's fitness) from the wheel
+        chromoCounter.decrement(fitness);  
         totalInstances -= fitness;
+       
+        // If the unique chromosome is no longer on the wheel we remove it
+        // completely. 
+        if (chromoCounter.getCount() <= 0 )
+          iterator.remove();
+      
+        // Now return our selected Chromosome 
         return chromo;
       }
     } 
 
+    // If we have reached here, it means we have not found any chromosomes to
+    // select and something is wrong with our logic. For some reason the 
+    // selected slot has exceeded the slots on our wheel.
     throw new RuntimeException( "Logic Error. This code should  never " +
                                 "be reached. Please report this to the " +
                                 "jgap team: SelectedSlot exceeded max value." );

@@ -18,8 +18,8 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import org.w3c.dom.Document;
-import org.apache.xml.serialize.*;
+//import org.w3c.dom.Document;
+//import org.apache.xml.serialize.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.xml.*;
@@ -74,33 +74,13 @@ public class TestGenetics {
         System.out.print( progress + "% " );
       }
     }
-
-    try {
-      Document xml = XMLManager.getGenotypeAsDocument(genotype);
-      XMLSerializer serializer = 
-        new XMLSerializer(System.out, new OutputFormat(xml, "UTF-8", true));
-      serializer.serialize(xml);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
-//    System.out.println(genotype.toString());
+    
+    System.out.println(genotype.toString());
 
     Chromosome fittest = genotype.getFittestChromosome();
     System.out.println("---------------------------------------------");
     System.out.println("Fittest Chromosome has value " +
       gaConf.getFitnessFunction().evaluate(fittest) + ":");
-
-    try {
-      Document xml = XMLManager.getChromosomeAsDocument(fittest);
-      XMLSerializer serializer =
-      new XMLSerializer(System.out, new OutputFormat(xml, "UTF-8", true));
-      serializer.serialize(xml);
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
   }
 } 
  
