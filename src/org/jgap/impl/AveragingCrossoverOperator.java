@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -133,9 +133,9 @@ public class AveragingCrossoverOperator
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void operate(final Population a_population,
-                      final List a_candidateChromosomes) {
-    // Work out the number of crossovers that should be performed
+  public void operate(Population a_population,
+                      List a_candidateChromosomes) {
+    // Determine the number of crossovers that should be performed
     int numCrossovers = 0;
     if (m_crossoverRateCalc == null){
         numCrossovers = a_population.size() / m_crossoverRate;
@@ -153,11 +153,12 @@ public class AveragingCrossoverOperator
     // to the "right" (those with greater loci) of that gene between
     // the two chromosomes.
     // --------------------------------------------------------------
+    int index1, index2;
     for (int i = 0; i < numCrossovers; i++) {
-      Chromosome firstMate = (Chromosome)
-          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
-      Chromosome secondMate = (Chromosome)
-          a_population.getChromosome(generator.nextInt(a_population.size())).clone();
+      index1 = generator.nextInt(a_population.size());
+      index2 = generator.nextInt(a_population.size());
+      Chromosome firstMate = (Chromosome) a_population.getChromosome(index1);
+      Chromosome secondMate = (Chromosome) a_population.getChromosome(index2);
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = getLocus(crossoverGenerator, i, firstGenes.length);
