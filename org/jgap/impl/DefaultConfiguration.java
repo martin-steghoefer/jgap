@@ -31,7 +31,7 @@ import org.jgap.*;
  * those who wish to specify other custom values.
  */
 public class DefaultConfiguration extends Configuration {
-  protected static final int DEFAULT_MUTATION_RATE = 1000;
+  protected static final int DEFAULT_MUTATION_RATE = 100;
 
   public DefaultConfiguration() {
     super();
