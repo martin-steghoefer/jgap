@@ -32,7 +32,7 @@ import org.jgap.*;
  */
 public class DataTreeBuilder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -202,7 +202,7 @@ public class DataTreeBuilder {
    * is undesirable, such as when the representation of this Chromosome is to
    * be combined with other elements in a single document.
    *
-   * @param a_subject The chromosome to represent as an XML element.
+   * @param a_subject The chromosome to represent
    * @throws Exception
    *
    * @return an element object representing the given Chromosome.
