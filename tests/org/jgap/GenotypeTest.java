@@ -33,7 +33,7 @@ public class GenotypeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public GenotypeTest() {
   }
@@ -45,7 +45,7 @@ public class GenotypeTest
 
   public void testConstruct_0() {
     try {
-      Genotype genotype = new Genotype(null, null);
+      Genotype genotype = new Genotype(null, new Population(0));
       fail();
     }
     catch (InvalidConfigurationException invex) {
@@ -136,7 +136,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     try {
-      Genotype genotype = new Genotype(conf, null);
+      Genotype genotype = new Genotype(conf, new Chromosome[]{null});
       fail();
     }
     catch (IllegalArgumentException illex) {
