@@ -19,6 +19,7 @@
 package org.jgap.impl;
 
 import junit.framework.*;
+import org.jgap.*;
 
 /**
  * Tests for ChromosomePool class
@@ -29,7 +30,7 @@ import junit.framework.*;
 public class ChromosomePoolTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
   public ChromosomePoolTest() {
   }
 
@@ -45,4 +46,29 @@ public class ChromosomePoolTest
     new ChromosomePool();
   }
 
+  public void testAquireChromosome_0() {
+    assertEquals(null, new ChromosomePool().acquireChromosome());
+  }
+
+  public void testReleaseChromosome_0() {
+    try {
+      new ChromosomePool().releaseChromosome(null);
+      fail();
+    }
+    catch (NullPointerException nex) {
+      ;//this is OK
+    }
+  }
+
+  public void testReleaseChromosome_1() throws Exception {
+    ChromosomePool pool = new ChromosomePool();
+    Configuration conf = new DefaultConfiguration();
+    Gene[] genes = new Gene[]{};
+    conf.setFitnessFunction(new TestFitnessFunction());
+    conf.setPopulationSize(5);
+    Gene sampleGene = new IntegerGene(1, 10);
+    Chromosome chrom = new Chromosome(sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    pool.releaseChromosome(chrom);
+  }
 }
