@@ -1,0 +1,171 @@
+<html>
+  <head>
+    <link rel=stylesheet href="stylesheet.css" type="text/css">
+    <title>Marshalling Populations to XML</title>
+  </head>
+
+  <body class="documentText">
+    <h1 class="docTitle">Marshalling Populations to XML</h1>
+    <center><a class="homeLink" href="../index.html">[JGAP Home]</a></center>
+    <hr>
+
+    <a name="top">
+    <p>
+      For many applications, some sort of marshalling mechanism 
+      can be very useful. Perhaps it's desirable to save the 
+      current population to disk for later so that evolution can continue
+      at another time, or perhaps it's necessary to send populations
+      over a network as part of a distributed application. JGAP
+      comes with facilities for representing genotypes, chromosomes, and
+      even individual genes as 
+      <a href="http://www.w3.org/XML/">XML</a> documents and/or elements.
+      This process is called marshalling. And, of course, JGAP can later
+      unmarshall those objects from their respective XML representations.
+      This document discusses the org.jgap.xml.XMLManager class, which is
+      responsible for these facilities, and provides an example of its use. 
+    </p>
+
+    <h3 class="subheader">Parser-specific Implementations</h3>
+    <p>
+      As a bit of an aside, it should be noted that, while the
+      creation and traversing of an XML document object (DOM) has 
+      been standardized by the <a href="http://www.w3.org">W3C</a>, the actual 
+      generation of an XML file or other representation from a DOM object
+      will not be standardized until the 
+      <a href="http://www.w3.org/TR/DOM-Level-3-Core/">DOM Level 3</a>
+      specification is finalized. Until then, each XML parser provides its
+      own implementation-specific mechanism. As a result, JGAP will generate
+      a DOM object for you from a genetic entity, but the actual process of
+      rendering that DOM object to a file or other medium is up to you.
+      An example of this process is provided in this document using the 
+      <a href="http://xml.apache.org/xerces2-j">Xerces Java 2</a> parser,
+      which is a free, open-source XML parser provided by the 
+      <a href="http://www.apache.org/">Apache foundation</a>.
+    </p>
+
+    <h3 class="subheader">An Example</h3>
+    <p>
+      Let us say, for our example, that we are creating a chess
+      program that, as one of its many selling points, will evolve
+      its strategy to match any opponent. To implement this in our
+      hypothetical program, we have of course decided to use JGAP 
+      to create a genetic algorithm that manages the chess AI. It's
+      not enough, however, for us to simply evolve the AI strategy 
+      to some acceptable point at the factory and then ship out the
+      program with a frozen strategy. Since we've promised that our
+      AI will adapt to its opponents, it's necessary for the AI 
+      strategy to continue evolving as the game is played. This 
+      inevitably means that we need some mechanism for storing our
+      current genetic state in between program runs. Fortunately,
+      JGAP provides the XMLManager class to help us out with this. Even
+      more fortunate is that it's very simple to use. Here's the code:
+    </p>
+
+
+<pre class="code">
+<tt>
+<i><font color=#808080>/**</font></i>
+<i><font color=#808080> * Saves the given population to the given filename as an XML</font></i>
+<i><font color=#808080> * file. The population can later be reconstructed from the</font></i>
+<i><font color=#808080> * XML file through a call to the getSavedStrategyState() method.</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * @param a_currentPopulation The population to save.</font></i>
+<i><font color=#808080> * @param a_saveToFilename The full path to the file where the</font></i>
+<i><font color=#808080> *                         XML representation should be saved.</font></i>
+<i><font color=#808080> */</font></i>
+<b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <font color=#000000>saveStrategyState</font><font color=#000000>(</font> <font color=#000000>Genotype</font> <font color=#000000>a_currentPopulation</font><font color=#000000>,</font>
+                                 <font color=#000000>string</font> <font color=#000000>a_saveToFilename</font> <font color=#000000>)</font>
+              <b><font color=#000080>throws</font></b> <font color=#000000>Exception</font>
+<font color=#000000>{</font>
+    <i><font color=#808080>// Convert the Genotype to a DOM object.</font></i>
+    <i><font color=#808080>// -------------------------------------</font></i>
+    <font color=#000000>Document</font> <font color=#000000>xmlRepresentation</font> <font color=#000000>=</font>
+        <font color=#000000>XMLManager</font><font color=#000000>.</font><font color=#000000>representGenotypeAsDocument</font><font color=#000000>(</font> <font color=#000000>a_currentPopulation</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+    <i><font color=#808080>// Now write that DOM to disk as an XML file. This is all</font></i>
+    <i><font color=#808080>// parser-specific. We're assuming the use of the Xerces Java 2</font></i>
+    <i><font color=#808080>// parser for this example.</font></i>
+    <i><font color=#808080>// ------------------------------------------------------------</font></i>
+    <font color=#000000>Writer</font> <font color=#000000>documentWriter</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>FileWriter</font><font color=#000000>(</font> <font color=#000000>a_saveToFilename</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+    <font color=#000000>OutputFormat</font> <font color=#000000>formatting</font> <font color=#000000>=</font>
+        <b><font color=#000080>new</font></b> <font color=#000000>OutputFormat</font><font color=#000000>(</font> <font color=#000000>genotypeDoc</font><font color=#000000>,</font> <b><font color=#009900>"UTF-8"</font></b><font color=#000000>,</font> <font color=#000000>true</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+    <font color=#000000>SerializerFactory</font> <font color=#000000>factory</font> <font color=#000000>=</font>
+        <font color=#000000>SerializerFactory</font><font color=#000000>.</font><font color=#000000>getSerializerFactory</font><font color=#000000>(</font> <font color=#000000>Method</font><font color=#000000>.</font><font color=#000000>XML</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+    <font color=#000000>Serializer</font> <font color=#000000>genericSerializer</font> <font color=#000000>=</font>
+        <font color=#000000>factory</font><font color=#000000>.</font><font color=#000000>makeSerializer</font><font color=#000000>(</font> <font color=#000000>documentWriter</font><font color=#000000>,</font> <font color=#000000>formatting</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+    <font color=#000000>DOMSerializer</font> <font color=#000000>documentSerializer</font> <font color=#000000>=</font>
+        <font color=#000000>genericSerializer</font><font color=#000000>.</font><font color=#000000>asDOMSerializer</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+
+    <font color=#000000>documentSerializer</font><font color=#000000>.</font><font color=#000000>serialize</font><font color=#000000>(</font> <font color=#000000>genotypeDoc</font> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>documentWriter</font><font color=#000000>.</font><font color=#000000>close</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+<font color=#000000>}</font>
+
+
+<i><font color=#808080>/**</font></i>
+<i><font color=#808080> * Recreates a population that was earlier saved to an XML file through</font></i>
+<i><font color=#808080> * the saveStrategyState() method.</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * @param a_activeConfiguration The current active Configuration object.</font></i>
+<i><font color=#808080> * @param a_savedToFilename The full path of the file where the XML</font></i>
+<i><font color=#808080> *                          representation was saved.</font></i>
+<i><font color=#808080> *</font></i>
+<i><font color=#808080> * @return A new Genotype instance that is populated from the XML</font></i>
+<i><font color=#808080> *         representation found in the given file.</font></i>
+<i><font color=#808080> */</font></i>
+<b><font color=#000080>public</font></b> <b><font color=#000080>static</font></b> <font color=#000000>Genotype</font> <font color=#000000>getSavedStrategyState</font><font color=#000000>(</font>
+                           <font color=#000000>Configuration</font> <font color=#000000>a_activeConfiguration</font><font color=#000000>,</font>
+                           <font color=#000000>String</font> <font color=#000000>a_savedToFilename</font> <font color=#000000>)</font>
+                       <b><font color=#000080>throws</font></b> <font color=#000000>Exception</font>
+<font color=#000000>{</font>
+    <i><font color=#808080>// Read the saved xml file into a DOM object.</font></i>
+    <i><font color=#808080>// ------------------------------------------</font></i>
+    <font color=#000000>Reader</font> <font color=#000000>documentReader</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>FileReader</font><font color=#000000>(</font> <font color=#000000>a_savedToFilename</font> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>InputSource</font> <font color=#000000>documentSource</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>InputSource</font><font color=#000000>(</font> <font color=#000000>documentReader</font> <font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>DocumentBuilder</font> <font color=#000000>builder</font> <font color=#000000>=</font>
+        <font color=#000000>DocumentBuilderFactory</font><font color=#000000>.</font><font color=#000000>newInstance</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>.</font><font color=#000000>newDocumentBuilder</font><font color=#000000>(</font><font color=#000000>)</font><font color=#000000>;</font>
+    <font color=#000000>Document</font> <font color=#000000>genotypeDocument</font> <font color=#000000>=</font> <font color=#000000>builder</font><font color=#000000>.</font><font color=#000000>parse</font><font color=#000000>(</font> <font color=#000000>documentSource</font> <font color=#000000>)</font><font color=#000000>;</font>
+
+
+    <i><font color=#808080>// Convert the DOM object back to a Genotype</font></i>
+    <i><font color=#808080>// -----------------------------------------</font></i>
+    <b><font color=#000080>return</font></b> <font color=#000000>XMLManager</font><font color=#000000>.</font><font color=#000000>getGenotypeFromDocument</font><font color=#000000>(</font> <font color=#000000>a_activeConfiguration</font><font color=#000000>,</font>
+                                               <font color=#000000>genotypeDocument</font> <font color=#000000>)</font><font color=#000000>;</font>
+<font color=#000000>}</font>
+
+</tt>
+</pre>
+
+    <p>
+        As can be seen from the above, interaction with the JGAP
+        XMLManager to create a DOM object from a Genotype--or recreate
+        a Genotype from a DOM object--can typically be confined to a
+        line or two of code. Most of the work involves getting that
+        DOM to disk (and back again), which may be easier or more difficult
+        depending on which parser you use. When the DOM Level 3 standard
+        is finalized, it is likely that the facilities of the XMLManager 
+        class will be expanded to encompass this entire process.
+    </p>
+
+    <p class="copyright">
+      Copyright &copy 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights reserved.
+    </p>
+
+    <hr>
+    <center><a class="homeLink" href="../index.html">[JGAP Home]</a></center>
+    <br>
+
+    <center>
+      <A href="http://sourceforge.net/projects/jgap"> <IMG src="http://sourceforge.net/s
+flogo.php?group_id=11618&amp;type=5"
+         width="210" height="62" border="0" alt="SourceForge Logo"></A>
+    </center>
+  </body>
+</html>
+
+
+
+

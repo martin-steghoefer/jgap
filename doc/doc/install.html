@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Installing JGAP</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">Installing JGAP</h1>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> </p>
+
+<hr>
+<h3 class="subheader">Introduction</h3>
+<p>JGAP is a framework written in Java. It is not an application you can run
+like an executable. But there is an example provided with JGAP you can run by
+using the command line (or a batch file, preferrably).&nbsp;As I am running
+Windows as operating system, the following description is somewhat orientated on
+that. But JGAP is a&nbsp; piece of Java and therefor able to be run on other
+systems as well! </p>
+
+<h3 class="subheader">Laying ground</h3>
+
+<p>First, download the JGAP package from the sourceforge site. You can use <a href="http://sourceforge.net/project/showfiles.php?group_id=11618" target="_blank"> this
+link </a>to get to the list of available JGAP files. Make shure you get the full
+installation (JGAP_FULL), not only the source code as the source would need to
+be compiled before executing anything! If you know how to compile Java source,
+then do it. This is a simple tutorial. </p>
+
+<p>After that, extract the files to a directory of your choice, say to directory
+named <font face="Courier New">jgap-current</font> somewhere on your harddrive. </p>
+
+<p>Open this directory in a file manager of your choice, like Windows Explorer
+for Windows systems or another one for *NIX systems. </p>
+
+<p>There is no need for registry entries, and no entry will be created in the
+start-menu of Windows. </p>
+
+<p>In the directory you put JGAP in and opened in your explorer, there should be
+three files ending with <font face="Courier New">.jar</font>. These files
+contain the compiled JGAP distribution and that is all we need for now. </p>
+
+<h3 class="subheader">Running the example</h3>
+<p>Windows: Start the example by executing the batch file <font face="Courier New">start_example.bat</font>. </p>
+
+<p>Other operating systems: Go to the command line and change your working
+directory to <font face="Courier New">jgap-current</font>. Now type the
+following: </p>
+
+<p align="center"><font face="Courier New">java -classpath ".;jgap-examples.jar;jgap.jar" examples.MinimizingMakeChange 89</font> </p>
+
+<p>That's it! On your console there should appear something like (an example,
+your output may vary as a Genetic Algorithm involves randomness):</p>
+
+<font
+color="#000080">
+
+<p><font face="Courier New">The best solution has a fitness value of 1599.0<br>
+It contained the following:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 quarters.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 dimes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 nickels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4 pennies.<br>
+For a total of 89 cents in 8 coins.</font></p>
+
+<h3 class="subheader">Still problems?</h3>
+
+</font>
+
+<p>If you still have problems running the JGAP example or getting JGAP up and
+running in general, don't hesitate posting your question to the JGAP forum <a href="http://sourceforge.net/forum/?group_id=11618" target="_blank">here</a>!
+Or look at the <a href="http://jgap.sourceforge.net">main page of this site </a>to
+get further contact information </p>
+
+<font
+color="#000080">
+
+<p class="copyright">Copyright © 2005 Klaus Meffert. All rights
+reserved.</p>
+
+<hr>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> <br>
+<a href="http://sourceforge.net/projects/jgap"><img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
+border="0" alt="SourceForge Logo"></a> </p>
+</font>
+</body>
+</html>

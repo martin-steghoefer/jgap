@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<title>Brief summary of coding style and practice used in JGAP</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">Brief Summary of Coding Style and Practices used in JGAP </h1>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> </p>
+
+<hr>
+
+<p>The following is a short list of guidelines to follow when contributing code or patches
+to the JGAP project. Before we commit any code to the CVS respository, we need to make it
+follow these guidelines (for protection of our own sanity), so it's a lot easier on us if
+your code simply adheres to the guidelines when you submit it :-) Thanks! 
+
+<ol>
+  <li>Indent 4 spaces. No tabs, please. </li>
+  <li>Lines of code should not exceed 79 characters in length. </li>
+  <li>Braces go on the next line, no extra indentation. For example: <br>
+    <pre>
+          public void foo()
+          {
+              doSomeWork();
+          }
+        </pre>
+  </li>
+  <li>Add the lines <br>
+    <pre>
+        /** String containing the CVS revision. Read out via reflection!*/
+        private static final String CVS_REVISION = "$Revision: 1.1 $";</pre>
+    After each class declaratin line at top of the class file. For interfaces omit the "private" statement.
+  </li>
+  <li>Class and instance variables, other than constants, should start with &quot;m_&quot;.
+    For example, <br>
+    <pre>
+          private int m_myField;
+          </pre>
+  </li>
+  <li>Method arguments should begin with &quot;a_&quot;. For example, <br>
+    <pre>  
+          public void foo( int a_someValue );
+          </pre>
+  </li>
+  <li>Constants should be in all capitals. For example, <br>
+    <pre>
+          private static final int MY_CONSTANT_VALUE = 1;      
+          </pre>
+  </li>
+  <li>All classes, methods, and fields require javadocs, including private methods and fields.
+  </li>
+  <li>All in-line comments should be &quot;underlined.&quot; For example: <br>
+    <pre>
+          // This is an in-line comment.
+          // Notice that it is underlined.
+          // -----------------------------
+          doSomeWork();
+          </pre>
+  </li>
+  <li>In general, favor descriptive method and variable names over in-line comments. For
+    example, instead of: <br>
+    <pre>
+          // Calculate area of circle
+          // ------------------------
+          x = 2 * PI * r * r;
+          </pre>
+    <p>Do: </p>
+    <pre>
+          // Calculate area of circle
+          // ------------------------
+          areaOfCircle = getAreaOfCircle( circleRadius );
+          </pre>
+  </li>
+  <li>Favor clean, readable, maintainable code over optimized code. Let a profiler determine
+    where the bottlenecks exist and then optimize as little as possible to achieve desired
+    performance. When you do optimize, please leave a very detailed comment explaining that
+    the code has been optimized and what it is doing. </li>
+  <li>All new code files must have a copyright statement at the top that reads: <pre>
+         /*
+          * This file is part of JGAP.
+          *
+          * JGAP offers a dual license model containing the LGPL as well as the MPL.
+          *
+          * For licencing information please see the file license.txt included with JGAP
+          * or have a look at the top of class org.jgap.Chromosome which representatively
+          * includes the JGAP license policy applicable for any file delivered with JGAP.
+          */
+         </pre>
+    <p>You should substitute your own name in the copyright statement and update the year as
+    appropriate. </p>
+  </li>
+  <li>Currently, we are <em>not</em> using Java 1.4 assertions in the JGAP code. We may begin
+    doing so in the future, but for now please leave them out. </li>
+  <li>If you end up creating a new package, please also create a package.html file that
+    explains the purpose of that package. Javadoc will use this file to generate a package
+    description. </li>
+  <li>For developers, it's ok to commit in-progress code to CVS that doesn't work, but please
+    try to avoid committing code that doesn't compile or that completely breaks everything. If
+    you're going to be doing a lot of work that will likely break everything, we can consider
+    creating a branch for you to work on until your code is at least semi-stable. </li>
+  <li>Finally, you may find JGAP code that doesn't adhere to one of the rules. That doesn't
+    mean it's ok to disregard them in your code! ;-) </li>
+</ol>
+
+<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+reserved. </p>
+
+<hr>
+<a class="homeLink" href="../index.html"><div align="center"><center>
+
+<pre>[JGAP Home]</a>
+    
+
+
+    
+      <a href="http://sourceforge.net/projects/jgap"> <img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
+border="0" alt="SourceForge Logo"></a>
+    
+  </pre>
+</center></div>
+</body>
+</html>

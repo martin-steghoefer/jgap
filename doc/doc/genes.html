@@ -1,0 +1,666 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<title>Creating Custom Genes</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">Creating Custom Genes</h1>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> </p>
+
+<hr>
+<a name="top">
+
+<p>Genes represent the discrete components of a problem solution (chromosome) that can
+vary independently of each other throughout the evolution process. Just as genes control
+various independent features within our own genetic makeup, such as sex or eye color, so
+too do genes in JGAP control various aspects of the overall makeup of a solution. JGAP
+comes with a couple of standard Gene implementations that are useful for genes that are to
+be represented with boolean or integer values. But many applications can benefit from more
+specialized representations, and that's where custom gene implementations can come in
+handy. They're also easy to create, as we'll soon see. </p>
+
+<h3 class="subheader">How Genes are Used</h3>
+
+<p>First, let's talk about what genes are and how genes are created and used by JGAP.
+Simply put, a gene represents some characteristic of a solution that can be varied
+indepedently from the other characteristics of that solution. For example, let's assume
+that a solution (chromosome) represents a pile of American change. Then the genes in that
+solution might represent the various coin denominations that make up the pile, such as
+quarters, dimes, nickels, and pennies. The value of those genes (called alleles) would be
+the actual number of coins of each respective denomination present in that particular
+solution. In JGAP, genes are represented by classes that implement the Gene interface.
+Each gene in a chromosome may use a different Gene implementation to manage its values,
+but those implementations must be consistent across chromosomes. For example, if gene
+number 1 in chromosome A is using a particular implementation, say a QuarterGene, then
+gene number 1 in all other chromosomes in that population must also use a QuarterGene. But
+Gene number 2 in all of those chromosomes may be using some completely different
+implementation, such as a DimeGene. Of course, all of the genes in a Chromosome may also
+use the exact same Gene implementation if that's desirable. </p>
+
+<p>You convey your desired Gene settings to JGAP by creating a sample Chromosome instance
+that is setup just the way you want all of the chromosomes in your population setup. You
+then pass that sample Chromosome to the active Configuration object. Each time JGAP needs
+to create a new Chromosome, it will reference the sample Chromosome to see how it's set
+up, and then will setup the new Chromosome exactly like it. In fact, JGAP actually takes
+advantage of a newGene() method in each of the Gene instances in the sample Chromosome to
+create the new Gene instances for the new Chromosome. So to create the Gene for gene
+number 1 in the new Chromosome, JGAP will invoke the newGene() method on gene number 1 of
+the sample chromosome. For gene number 2, it will invoke the newGene() method on gene
+number 2 of the sample Chromosome, and so on. This guarantees that the new Genes can be
+setup exactly like the Genes in the sample Chromosome. </p>
+
+<h3 class="subheader">QuarterGene: an Example</h3>
+
+<p>As an example of a custom Gene implementation, we'll create a QuarterGene class which
+could be used to represent the number of quarters in a pile of change. Before diving in,
+we should say that if we were implementing this in the real world, we would have extended
+the IntegerGene class to save ourselves most of the effort. But since this is supposed to
+be a demonstrative example, we'll implement it here from scratch. First the code: </p>
+<!-- What follows is the source-highlighted code -->
+
+<pre class="code">
+<tt>
+<b><font color="#000080">package</font></b> <font color="#000000">hypothetical.examples;</font>
+
+<b><font
+color="#000080">import</font></b> <font color="#000000">org.jgap.Gene;</font>
+<b><font
+color="#000080">import</font></b> <font color="#000000">org.jgap.Configuration;</font>
+<b><font
+color="#000080">import</font></b> <font color="#000000">org.jgap.UnsupportedRepresentationException;</font>
+<b><font
+color="#000080">import</font></b> <font color="#000000">org.jgap.RandomGenerator;</font>
+
+<b><font
+color="#000080">import</font></b> <font color="#000000">java.util.StringTokenizer;</font>
+
+
+<i><font
+color="#808080">/**</font></i>
+<i><font color="#808080"> * A Gene that can be used to represent the quarters in a pile of change.</font></i>
+<i><font
+color="#808080"> * An optional maximum number of quarters may be provided, in</font></i>
+<i><font
+color="#808080"> * which case the value (allele) of this Gene will never exceed that</font></i>
+<i><font
+color="#808080"> * maximum.</font></i>
+<i><font color="#808080"> */</font></i>
+<b><font
+color="#000080">public</font></b> <b><font color="#000080">class</font></b> <font
+color="#000000">QuarterGene</font> <b><font color="#000080">implements</font></b> <font
+color="#000000">Gene, java.io.Serializable</font>
+<font color="#000000">{</font>
+    <b><font
+color="#000080">private</font></b> <b><font color="#000080">static</font></b> <b><font
+color="#000080">final</font></b> <font color="#000000">String</font> <font color="#000000">TOKEN_SEPARATOR</font> <font
+color="#000000">=</font> <b><font color="#009900">&quot;:&quot;</font></b><font
+color="#000000">;</font>
+
+    <b><font color="#000080">private</font></b> <b><font
+color="#000080">int</font></b> <font color="#000000">m_maxNumberOfQuarters;</font>
+    <b><font
+color="#000080">private</font></b> <font color="#000000">Integer</font> <font
+color="#000000">m_numberOfQuarters;</font>
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Constructs a new QuarterGene with no maximum number of quarters that</font></i>
+<i><font
+color="#808080">     * can be represented (other than Integer.MAX_VALUE, of course).</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000000">QuarterGene()</font>
+    <font color="#000000">{</font>
+        <font
+color="#000000">m_maxNumberOfQuarters</font> <font color="#000000">=</font> <font
+color="#000000">Integer.MAX_VALUE;</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Constructs a new QuarterGene with a constraint on the maximum number</font></i>
+<i><font
+color="#808080">     * of quarters that may be represented by this QuarterGene.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @param a_maxNumberOfQuarters The maximum number of quarters that this</font></i>
+<i><font
+color="#808080">     *                              QuarterGene may represent. This value</font></i>
+<i><font
+color="#808080">     *                              must be non-negative.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @throws IllegalArgumentException if the given maximum value is negative.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000000">QuarterGene(</font> <b><font color="#000080">int</font></b> <font
+color="#000000">a_maxNumberOfQuarters</font> <font color="#000000">)</font>
+    <font
+color="#000000">{</font>
+        <i><font color="#808080">// Make sure the given maximum is non-negative.</font></i>
+        <i><font
+color="#808080">// --------------------------------------------</font></i>
+        <b><font
+color="#000080">if</font></b><font color="#000000">(</font> <font color="#000000">a_maxNumberOfQuarters</font> <font
+color="#000000">&lt;</font> <font color="#0000FF">0</font> <font color="#000000">)</font>
+        <font
+color="#000000">{</font>
+            <b><font color="#000080">throw</font></b> <b><font
+color="#000080">new</font></b> <font color="#000000">IllegalArgumentException(</font>
+                <b><font
+color="#009900">&quot;The maximum number of quarters must be non-negative.&quot;</font></b> <font
+color="#000000">);</font>
+        <font color="#000000">}</font>
+
+        <font
+color="#000000">m_maxNumberOfQuarters</font> <font color="#000000">=</font> <font
+color="#000000">a_maxNumberOfQuarters;</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Provides an implementation-independent means for creating new Gene</font></i>
+<i><font
+color="#808080">     * instances. The new instance that is created and returned should be</font></i>
+<i><font
+color="#808080">     * setup with any implementation-dependent configuration that this Gene</font></i>
+<i><font
+color="#808080">     * instance is setup with (aside from the actual value, of course). For</font></i>
+<i><font
+color="#808080">     * example, if this Gene were setup with bounds on its value, then the</font></i>
+<i><font
+color="#808080">     * Gene instance returned from this method should also be setup with</font></i>
+<i><font
+color="#808080">     * those same bounds. This is important, as the JGAP core will invoke this</font></i>
+<i><font
+color="#808080">     * method on each Gene in the sample Chromosome in order to create each</font></i>
+<i><font
+color="#808080">     * new Gene in the same respective gene position for a new Chromosome.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * It should be noted that nothing is guaranteed about the actual value</font></i>
+<i><font
+color="#808080">     * of the returned Gene and it should therefore be considered to be</font></i>
+<i><font
+color="#808080">     * undefined.</font></i>
+<i><font color="#808080">     *</font></i>
+<i><font
+color="#808080">     * @return A new Gene instance of the same type and with the same</font></i>
+<i><font
+color="#808080">     *         setup as this concrete Gene.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000000">Gene</font> <font color="#000000">newGene(</font> <font color="#000000">)</font>
+    <font
+color="#000000">{</font>
+        <i><font color="#808080">// We construct the new QuarterGene with the same maximum number</font></i>
+        <i><font
+color="#808080">// of quarters that this Gene was constructed with.</font></i>
+        <i><font
+color="#808080">// -------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">return</font></b> <b><font color="#000080">new</font></b> <font
+color="#000000">QuarterGene(</font> <font color="#000000">m_maxNumberOfQuarters</font> <font
+color="#000000">);</font>
+    <font color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Sets the value of this Gene to the new given value. The actual</font></i>
+<i><font
+color="#808080">     * type of the value is implementation-dependent.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @param a_newValue the new value of this Gene instance.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <b><font
+color="#000080">void</font></b> <font color="#000000">setAllele(</font> <font
+color="#000000">Object</font> <font color="#000000">a_newValue</font> <font
+color="#000000">)</font>
+    <font color="#000000">{</font>
+        <font color="#000000">m_numberOfQuarters</font> <font
+color="#000000">=</font> <font color="#000000">(Integer)</font> <font color="#000000">a_newValue;</font>
+    <font
+color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Retrieves the value represented by this Gene. The actual type</font></i>
+<i><font
+color="#808080">     * of the value is implementation-dependent.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @return the value of this Gene.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000000">Object</font> <font color="#000000">getAllele()</font>
+    <font
+color="#000000">{</font>
+        <b><font color="#000080">return</font></b> <font
+color="#000000">m_numberOfQuarters;</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Sets the value of this Gene to a random legal value for the</font></i>
+<i><font
+color="#808080">     * implementation. This method exists for the benefit of mutation and other</font></i>
+<i><font
+color="#808080">     * operations that simply desire to randomize the value of a gene.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @param a_numberGenerator The random number generator that should be</font></i>
+<i><font
+color="#808080">     *                          used to create any random values. It's important</font></i>
+<i><font
+color="#808080">     *                          to use this generator to maintain the user's</font></i>
+<i><font
+color="#808080">     *                          flexibility to configure the genetic engine</font></i>
+<i><font
+color="#808080">     *                          to use the random number generator of their</font></i>
+<i><font
+color="#808080">     *                          choice.</font></i>
+<i><font color="#808080">     */</font></i>
+    <b><font
+color="#000080">public</font></b> <b><font color="#000080">void</font></b> <font
+color="#000000">setToRandomValue(</font> <font color="#000000">RandomGenerator</font> <font
+color="#000000">a_numberGenerator</font> <font color="#000000">)</font>
+    <font
+color="#000000">{</font>
+        <i><font color="#808080">// Pick a random number between 0 and the maximum number</font></i>
+        <i><font
+color="#808080">// of quarters we're allowed to represent.</font></i>
+        <i><font
+color="#808080">// -----------------------------------------------------</font></i>
+        <font
+color="#000000">m_numberOfQuarters</font> <font color="#000000">=</font> <b><font
+color="#000080">new</font></b> <font color="#000000">Integer(</font>
+            <font
+color="#000000">a_numberGenerator.nextInt(</font> <font color="#000000">m_maxNumberOfQuarters)</font> <font
+color="#000000">);</font>
+    <font color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Retrieves a string representation of the value of this Gene instance</font></i>
+<i><font
+color="#808080">     * that includes any information required to reconstruct it at a later</font></i>
+<i><font
+color="#808080">     * time, such as its value and internal state. This string will be used to</font></i>
+<i><font
+color="#808080">     * represent this Gene instance in XML persistence. This is an optional</font></i>
+<i><font
+color="#808080">     * method but, if not implemented, XML persistence and possibly other</font></i>
+<i><font
+color="#808080">     * features will not be available. An UnsupportedOperationException should</font></i>
+<i><font
+color="#808080">     * be thrown if no implementation is provided.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @return A string representation of this Gene's current state.</font></i>
+<i><font
+color="#808080">     * @throws UnsupportedOperationException to indicate that no implementation</font></i>
+<i><font
+color="#808080">     *         is provided for this method.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000000">String</font> <font color="#000000">getPersistentRepresentation()</font>
+                  <b><font
+color="#000080">throws</font></b> <font color="#000000">UnsupportedOperationException</font>
+    <font
+color="#000000">{</font>
+        <i><font color="#808080">// We want to represent both the maximum number of quarters that</font></i>
+        <i><font
+color="#808080">// can be represented by this Gene and its actual current value.</font></i>
+        <i><font
+color="#808080">// We'll separate the two with colons.</font></i>
+        <i><font
+color="#808080">// ---------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">return</font></b> <b><font color="#000080">new</font></b> <font
+color="#000000">Integer(</font> <font color="#000000">m_maxNumberOfQuarters</font> <font
+color="#000000">).toString()</font> <font color="#000000">+</font>
+                   <font
+color="#000000">TOKEN_SEPARATOR</font> <font color="#000000">+</font> <font
+color="#000000">m_numberOfQuarters.toString();</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Sets the value and internal state of this Gene from the string</font></i>
+<i><font
+color="#808080">     * representation returned by a previous invocation of the</font></i>
+<i><font
+color="#808080">     * getPersistentRepresentation() method. This is an optional method but,</font></i>
+<i><font
+color="#808080">     * if not implemented, XML persistence and possibly other features will not</font></i>
+<i><font
+color="#808080">     * be available. An UnsupportedOperationException should be thrown if no</font></i>
+<i><font
+color="#808080">     * implementation is provided.</font></i>
+<i><font color="#808080">     *</font></i>
+<i><font
+color="#808080">     * @param a_representation the string representation retrieved from a</font></i>
+<i><font
+color="#808080">     *                         prior call to the getPersistentRepresentation()</font></i>
+<i><font
+color="#808080">     *                         method.</font></i>
+<i><font color="#808080">     *</font></i>
+<i><font
+color="#808080">     * @throws UnsupportedOperationException to indicate that no implementation</font></i>
+<i><font
+color="#808080">     *         is provided for this method.</font></i>
+<i><font
+color="#808080">     * @throws UnsupportedRepresentationException if this Gene implementation</font></i>
+<i><font
+color="#808080">     *         does not support the given string representation.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <b><font
+color="#000080">void</font></b> <font color="#000000">setValueFromPersistentRepresentation(</font> <font
+color="#000000">String</font> <font color="#000000">a_representation</font> <font
+color="#000000">)</font>
+                <b><font color="#000080">throws</font></b> <font
+color="#000000">UnsupportedOperationException,</font>
+                       <font
+color="#000000">UnsupportedRepresentationException</font>
+    <font color="#000000">{</font>
+        <i><font
+color="#808080">// We're expecting to find the maximum number of quarters that this</font></i>
+        <i><font
+color="#808080">// Gene can represent, followed by a colon, followed by the actual</font></i>
+        <i><font
+color="#808080">// number of quarters currently represented.</font></i>
+        <i><font
+color="#808080">// -----------------------------------------------------------------</font></i>
+        <font
+color="#000000">StringTokenizer</font> <font color="#000000">tokenizer</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">StringTokenizer(</font> <font
+color="#000000">a_representation,</font>
+                                                         <font
+color="#000000">TOKEN_SEPARATOR</font> <font color="#000000">);</font>
+        <i><font
+color="#808080">// Make sure there are exactly two tokens.</font></i>
+        <i><font
+color="#808080">// ---------------------------------------</font></i>
+        <b><font
+color="#000080">if</font></b><font color="#000000">(</font> <font color="#000000">tokenizer.countTokens()</font> <font
+color="#000000">!=</font> <font color="#0000FF">2</font> <font color="#000000">)</font>
+        <font
+color="#000000">{</font>
+            <b><font color="#000080">throw</font></b> <b><font
+color="#000080">new</font></b> <font color="#000000">UnsupportedRepresentationException(</font>
+                <b><font
+color="#009900">&quot;Unknown representation format: Two tokens expected.&quot;</font></b> <font
+color="#000000">);</font>
+        <font color="#000000">}</font>
+
+        <b><font
+color="#000080">try</font></b>
+        <font color="#000000">{</font>
+            <i><font
+color="#808080">// Parse the two tokens as integers.</font></i>
+            <i><font
+color="#808080">// ---------------------------------</font></i>
+            <font
+color="#000000">m_maxNumberOfQuarters</font> <font color="#000000">=</font> <font
+color="#000000">Integer.parseInt(</font> <font color="#000000">tokenizer.nextToken()</font> <font
+color="#000000">);</font>
+            <font color="#000000">m_numberOfQuarters</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">Integer(</font> <font
+color="#000000">tokenizer.nextToken()</font> <font color="#000000">);</font>
+        <font
+color="#000000">}</font>
+        <b><font color="#000080">catch</font></b><font
+color="#000000">(</font> <font color="#000000">NumberFormatException</font> <font
+color="#000000">e</font> <font color="#000000">)</font>
+        <font color="#000000">{</font>
+            <b><font
+color="#000080">throw</font></b> <b><font color="#000080">new</font></b> <font
+color="#000000">UnsupportedRepresentationException(</font>
+                <b><font
+color="#009900">&quot;Unknown representation format: Expecting integer values.&quot;</font></b> <font
+color="#000000">);</font>
+        <font color="#000000">}</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Executed by the genetic engine when this Gene instance is no</font></i>
+<i><font
+color="#808080">     * longer needed and should perform any necessary resource cleanup.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <b><font
+color="#000080">void</font></b> <font color="#000000">cleanup()</font>
+    <font
+color="#000000">{</font>
+        <i><font color="#808080">// There's no cleanup necessary for this implementation.</font></i>
+        <i><font
+color="#808080">// -----------------------------------------------------</font></i>
+    <font
+color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Compares this Gene with the specified object for order.  Returns a</font></i>
+<i><font
+color="#808080">     * negative integer, zero, or a positive integer as this object is less</font></i>
+<i><font
+color="#808080">     * than, equal to, or greater than the specified object. The given object</font></i>
+<i><font
+color="#808080">     * must be a QuarterGene.</font></i>
+<i><font color="#808080">     *</font></i>
+<i><font
+color="#808080">     * @param   a_otherQuarterGene the Object to be compared.</font></i>
+<i><font
+color="#808080">     * @return  a negative integer, zero, or a positive integer as this object</font></i>
+<i><font
+color="#808080">     *              is less than, equal to, or greater than the specified object.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @throws ClassCastException if the specified object's type prevents it</font></i>
+<i><font
+color="#808080">     *         from being compared to this Object.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <b><font
+color="#000080">int</font></b> <font color="#000000">compareTo(</font> <font
+color="#000000">Object</font> <font color="#000000">a_otherQuarterGene</font> <font
+color="#000000">)</font>
+    <font color="#000000">{</font>
+        <i><font color="#808080">// If the other allele is null, we're bigger.</font></i>
+        <i><font
+color="#808080">// ------------------------------------------</font></i>
+        <b><font
+color="#000080">if</font></b><font color="#000000">(</font> <font color="#000000">a_otherQuarterGene</font> <font
+color="#000000">==</font> <b><font color="#000080">null</font></b> <font color="#000000">)</font>
+        <font
+color="#000000">{</font>
+            <b><font color="#000080">return</font></b> <font
+color="#0000FF">1</font><font color="#000000">;</font>
+        <font color="#000000">}</font>
+
+        <i><font
+color="#808080">// If our allele is null, then we're either the same as the given</font></i>
+        <i><font
+color="#808080">// QuarterGene if its allele is also null, or less than it if</font></i>
+        <i><font
+color="#808080">// its allele is not null.</font></i>
+        <i><font color="#808080">// -------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">if</font></b><font color="#000000">(</font> <font color="#000000">m_numberOfQuarters</font> <font
+color="#000000">==</font> <b><font color="#000080">null</font></b> <font color="#000000">)</font>
+        <font
+color="#000000">{</font>
+            <b><font color="#000080">if</font></b> <font
+color="#000000">(</font> <font color="#000000">((QuarterGene)</font> <font color="#000000">a_otherQuarterGene).m_numberOfQuarters</font> <font
+color="#000000">==</font> <b><font color="#000080">null</font></b> <font color="#000000">)</font>
+            <font
+color="#000000">{</font>
+                <b><font color="#000080">return</font></b> <font
+color="#0000FF">0</font><font color="#000000">;</font>
+            <font color="#000000">}</font>
+            <b><font
+color="#000080">else</font></b>
+            <font color="#000000">{</font>
+                <b><font
+color="#000080">return</font></b> <font color="#000000">-</font><font color="#0000FF">1</font><font
+color="#000000">;</font>
+            <font color="#000000">}</font>
+        <font
+color="#000000">}</font>
+
+        <i><font color="#808080">// Otherwise, we just take advantage of the Integer.compareTo()</font></i>
+        <i><font
+color="#808080">// method.</font></i>
+        <i><font color="#808080">// ------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">return</font></b> <font color="#000000">m_numberOfQuarters.compareTo(</font>
+            <font
+color="#000000">(</font> <font color="#000000">(QuarterGene)</font> <font color="#000000">a_otherQuarterGene</font> <font
+color="#000000">).m_numberOfQuarters</font> <font color="#000000">);</font>
+    <font
+color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Determines if this QuarterGene is equal to the given QuarterGene.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @return true if this QuarterGene is equal to the given QuarterGene,</font></i>
+<i><font
+color="#808080">     *         false otherwise.</font></i>
+<i><font color="#808080">     */</font></i>
+    <b><font
+color="#000080">public</font></b> <b><font color="#000080">boolean</font></b> <font
+color="#000000">equals(</font> <font color="#000000">Object</font> <font color="#000000">otherQuarterGene</font> <font
+color="#000000">)</font>
+    <font color="#000000">{</font>
+        <b><font color="#000080">return</font></b> <font
+color="#000000">otherQuarterGene</font> <b><font color="#000080">instanceof</font></b> <font
+color="#000000">QuarterGene &amp;&amp; </font>
+               <font color="#000000">compareTo(</font> <font
+color="#000000">otherQuarterGene</font> <font color="#000000">)</font> <font
+color="#000000">==</font> <font color="#0000FF">0</font><font color="#000000">;</font>
+    <font
+color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Calculates the hash-code for this QuarterGene.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @return the hash-code of this QuarterGene</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000080"><b>int</fon></b> <font color="#000000">hashCode()</font>
+    <font
+color="#000000">{</font>
+        <b><font color="#000080">return</font></b> <font
+color="#000000">m_numberOfQuarters;</font>
+    <font color="#000000">}</font>
+<font
+color="#000000">}</font>
+
+</tt>
+</pre>
+
+<p>Hopefully most of the methods and code in the example above are pretty self-explanatory
+once the javadocs and comments are consulted. We start off with a couple of constructors,
+one of which lets the user specify an upper bound on the number of quarters that this
+specific QuarterGene instance may represent. We then move onto the newGene() method, which
+was mentioned earlier, but deserves a second look. </p>
+
+<p>The most important thing to note about the newGene() method is that it should return a
+new Gene that is setup with the same internal configuration as this Gene. The actual value
+of the returned Gene doesn't matter, but you'll notice that we make sure to pass on the
+same upper bound as our current QuarterGene instance. This is worth noting because JGAP
+uses this method to create new Genes for new Chromosomes, and it's important that the
+Genes in the new Chromosome are setup exactly the same way as the Genes in earlier
+Chromosomes. By invoking the newGene() method on each of the Genes in a Chromosome, JGAP
+can be sure that the Genes in the new Chromosome will be setup the same way each time. </p>
+
+<p>Next come the setAllele() and getAllele() calls, which aren't very interesting. Values
+(alleles) in Genes are represented as Objects, in order to be as flexible as possible, and
+so we use an Integer object in our QuarterGene implementation to represent the number of
+quarters. Following these is the setRandomValue() method, which sets the value of our
+QuarterGene to a legal random value--in this case, an Integer between zero and the upper
+bound. </p>
+
+<p>The next two methods deal with XML marshalling and are optional. (For more information
+on XML marshalling, please see the </a><a href="marshalling.html">Marshalling Populations
+to XML</a> document.) We've implemented them here to provide an example. The
+getPersistentRepresentation() method returns a String that represents not only the current
+value of our QuarterGene, but also the upper bound, so that this QuarterGene can be later
+reconstructed with exactly the same state that it has currently. To do this, we just
+convert our two integer values to strings and separate them with a colon. Simple enough!
+The setValueFromPersistentRepresentation() method does the opposite: it takes a String
+representation, parses it, and then sets the internal state of this QuarterGene
+accordingly. If there's anything wrong with the representation, an
+UnsupportedRepresentationException is thrown. </p>
+
+<p>The final three methods are cleanup(), which is invoked by JGAP when this Gene is no
+longer needed; compareTo(), which compares this QuarterGene to another one and determines
+which is the &quot;greater&quot; of the two; equals(), which compares this QuarterGene to
+another one and determines if they are equal; and, finally, hashCode(), which generates a
+hash-code. All of these should be self-explanatory. Note that it's very important to
+include working equals() and hashCode() methods, and not to simply rely on the default
+implementations in java.lang.Object. </p>
+
+<h3 class="subheader">A Note about Serialization</h3>
+
+<p>As mentioned in the previous section, JGAP supports marshalling and unmarshalling
+genetic components to/from XML. It also supports the standard Java serialization
+mechanism, allowing Genotypes and Chromosomes to be serialied. In order for this to work
+properly, two things are required of your Gene implementation: first, it must implement
+the java.io.Serializable interface. Second, it must declare any fields transient that are
+not an actual part of the Gene state. For example, if your Gene maintains a reference to
+the active Configuration object, then this reference must be declared transient. Ideally,
+your Gene implementations should simply avoid instance fields that aren't a part of the
+Gene state. </p>
+
+<h3 class="subheader">Conclusion</h3>
+
+<p>As can be seen from the above example, creating custom genes is an easy and
+straight-forward process. We hope that you'll create your own Gene implementations
+whenever you feel the stock genes aren't exactly what you need. And hey--if you create a
+custom gene that you think might be useful to others, please feel free to post it on the
+jgap-users mailing list so that others can benefit from your work! </p>
+
+<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+reserved.</p>
+
+<hr>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> <br>
+<a href="http://sourceforge.net/projects/jgap"><img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
+border="0" alt="SourceForge Logo"></a> </p>
+</font>
+</body>
+</html>
