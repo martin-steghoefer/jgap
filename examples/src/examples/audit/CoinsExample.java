@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -192,8 +192,8 @@ public class CoinsExample {
       permutation++;
     }
 
-    // Create chart: fitness values history.
-    // -------------------------------------
+    // Create chart: fitness values average over all permutations.
+    // -----------------------------------------------------------
 
     // construct JFreeChart Dataset.
     // -----------------------------
@@ -216,6 +216,32 @@ public class CoinsExample {
     BufferedImage image = chart.createBufferedImage(640, 480);
     FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
     ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
+
+    // Create chart: fitness values average for first permutations.
+    // -----------------------------------------------------------
+
+    // construct JFreeChart Dataset.
+    // -----------------------------
+    myDataset = eval.calcAvgFitness(0);
+    dataset = new DefaultCategoryDataset();
+    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
+      for (int jj=0;jj<myDataset.getRowCount();jj++) {
+        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
+                                            myDataset.getColumnKey(ii)),
+                         myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
+      }
+    }
+
+    chart = ChartFactory.createLineChart(
+        "JGAP: Evolution progress",
+        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
+        true
+        /*tooltips*/
+        , false /*urls*/);
+    image = chart.createBufferedImage(640, 480);
+    fo = new FileOutputStream("c:\\JGAP_chart_fitness_values_1.jpg");
+    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
+
   }
 
   public static void main(String[] args) {

@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Each data has its own data container
@@ -74,16 +74,17 @@ public class Evaluator {
       createKey(a_permutation, a_run));
     if (a_data == null) {
       a_data = new DefaultKeyedValues2D();
-      Map v = new Hashtable();
-      v.put(new Integer(a_run), null);
-      m_permutationRuns.put(new Integer(a_permutation), v);
-      m_permutationData.put(new Integer(a_permutation), a_data);
+      m_permutationData.put(createKey(a_permutation, a_run), a_data);
     }
-    else {
-      //add run-number (index)
-      Map v = (Map)m_permutationRuns.get(new Integer(a_permutation));
-      v.put(new Integer(a_run), null);
+    // Add run-number (index).
+    // -----------------------
+    Map v = (Map)m_permutationRuns.get(new Integer(a_permutation));
+    if (v == null) {
+      v = new Hashtable();
     }
+    v.put(new Integer(a_run), new Integer(a_run));
+    m_permutationRuns.put(new Integer(a_permutation),v);
+
     a_data.setValue(new Double(a_value), a_rowKey, a_columnKey);
   }
 
@@ -96,7 +97,7 @@ public class Evaluator {
 
   public Number getAvgValue(int a_permutation, Comparable rowKey,
                             Comparable columnKey) {
-    return null;
+    return null;/**@todo*/
   }
 
   public DefaultKeyedValues2D getData() {
@@ -119,10 +120,10 @@ public class Evaluator {
    */
   public DefaultKeyedValues2D calcAvgFitness(int a_permutation) {
     if (a_permutation == -1) {
-      Iterator it = m_permutationData.keySet().iterator();
+      Iterator it = m_permutationRuns.keySet().iterator();
       Integer permNumberI;
       int permNumber;
-      DefaultKeyedValues2D result = null;
+      DefaultKeyedValues2D result = new DefaultKeyedValues2D();
       while (it.hasNext()) {
         permNumberI = (Integer)it.next();
         permNumber = permNumberI.intValue();
@@ -131,13 +132,13 @@ public class Evaluator {
       return result;
     }
     else {
-      DefaultKeyedValues2D a_data = null;
+      DefaultKeyedValues2D a_data = new DefaultKeyedValues2D();
       calcAvgFitnessHelper(a_permutation, a_data);
       return a_data;
     }
   }
 
-  protected void calcAvgFitnessHelper(int a_permutation, DefaultKeyedValues2D result) {
+  protected void calcAvgFitnessHelper(int a_permutation, final DefaultKeyedValues2D result) {
     // determine run-numbers of given permutation
     Map runNumbers = (Map)m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
@@ -149,9 +150,6 @@ public class Evaluator {
     Iterator it = runNumbers.keySet().iterator();
     int numRuns = runNumbers.keySet().size();
     Integer runI;
-    if (result == null) {
-      result = new DefaultKeyedValues2D();
-    }
     while (it.hasNext()) {
       runI = (Integer)it.next();
       // determine dataset of given permutation
