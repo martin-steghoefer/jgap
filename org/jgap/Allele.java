@@ -51,17 +51,40 @@ public interface Allele extends Comparable
 
 
     /**
+     * Retrieves a string representation of this Allele that includes any
+     * information required to reconstruct it at a later time, such as its
+     * value and internal state. This string will be used to represent this
+     * Allele in XML persistence. This is an optional method bug, if not
+     * implemented, XML persistence and possibly other features will not be
+     * available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
+     *
+     * @return A string representation of this Allele's current state.
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
+     */
+    public String getPersistentRepresentation()
+                  throws UnsupportedOperationException;
+
+    /**
      * Sets the value of this Allele from the string representation returned
-     * by a previous invocation of the toString() method.
+     * by a previous invocation of the getPersistentRepresentation() method.
+     * This is an optional method but, if not implemented, XML persistence and
+     * possibly other features will not be available. An
+     * UnsupportedOperationException should be thrown if no implementation is
+     * provided.
      *
      * @param a_representation the string representation retrieved from a
      *                         previous call to the toString() method.
      *
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
      * @throws UnsupportedRepresentationException if this Allele implementation
      *         does not support the given string representation.
      */
-    public void setValueFromStringRepresentation( String a_representation )
-                throws UnsupportedRepresentationException;
+    public void setValueFromPersistentRepresentation( String a_representation )
+                throws UnsupportedOperationException,
+                       UnsupportedRepresentationException;
 
 
     /**

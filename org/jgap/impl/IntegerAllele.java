@@ -24,6 +24,8 @@ import org.jgap.Configuration;
 import org.jgap.RandomGenerator;
 import org.jgap.UnsupportedRepresentationException;
 
+import java.util.StringTokenizer;
+
 
 /**
  * An Allele implementation that provides an integer value to represent
@@ -35,22 +37,29 @@ public class IntegerAllele implements Allele
     /**
      * Represents the constant range of values supported by integers.
      */
-    private final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
-                                              (long) Integer.MIN_VALUE;
+    protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
+                                               (long) Integer.MIN_VALUE;
+
+    /**
+     * Represents the delimiter that is used to separate fields in the
+     * persistent representation of IntegerAllele instances.
+     */
+    protected final static String PERSISTENT_FIELD_DELIMITER = ":";
+
     /**
      * References the internal integer value of this Allele.
      */
-    Integer m_value = null;
+    protected Integer m_value = null;
 
     /**
      * The upper bounds of values represented by this Allele.
      */
-    final int m_upperBounds;
+    protected int m_upperBounds;
 
     /**
      * The lower bounds of values represented by this Allele.
      */
-    final int m_lowerBounds;
+    protected int m_lowerBounds;
 
 
     /**
@@ -60,13 +69,13 @@ public class IntegerAllele implements Allele
      * each unit in the bounds range would map to 2 units in the integer
      * range. The value of this variable would therefore be 2.
      */
-    final long m_boundsUnitsToIntegerUnits;
+    protected long m_boundsUnitsToIntegerUnits;
 
 
     /**
      * The current active configuration that is in use.
      */
-    Configuration m_activeConfiguration = null;
+    protected Configuration m_activeConfiguration = null;
 
     /**
      * Constructs a new IntegerAllele with default settings.
@@ -75,7 +84,7 @@ public class IntegerAllele implements Allele
     {
         m_lowerBounds = Integer.MIN_VALUE;
         m_upperBounds = Integer.MAX_VALUE;
-        m_boundsUnitsToIntegerUnits = INTEGER_RANGE / ( m_upperBounds - m_lowerBounds + 1 );
+        calculateBoundsUnitsToIntegerUnitsRatio();
     }
 
 
@@ -92,8 +101,7 @@ public class IntegerAllele implements Allele
     {
         m_lowerBounds = a_lowerBounds;
         m_upperBounds = a_upperBounds;
-        m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds + 1 );
+        calculateBoundsUnitsToIntegerUnitsRatio();
     }
 
 
@@ -109,8 +117,7 @@ public class IntegerAllele implements Allele
 
         m_lowerBounds = Integer.MIN_VALUE;
         m_upperBounds = Integer.MAX_VALUE;
-        m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds + 1 );
+        calculateBoundsUnitsToIntegerUnitsRatio();
     }
 
 
@@ -132,8 +139,7 @@ public class IntegerAllele implements Allele
 
         m_lowerBounds = a_lowerBounds;
         m_upperBounds = a_upperBounds;
-        m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds + 1 );
+        calculateBoundsUnitsToIntegerUnitsRatio();
     }
 
 
@@ -182,12 +188,32 @@ public class IntegerAllele implements Allele
      * @throws UnsupportedRepresentationException if this Allele implementation
      *         does not support the given string representation.
      */
-    public void setValueFromStringRepresentation( String a_representation )
+    public void setValueFromPersistentRepresentation( String a_representation )
                 throws UnsupportedRepresentationException
     {
         if( a_representation != null )
         {
-            if( a_representation.equals( "null") )
+            StringTokenizer tokenizer =
+                new StringTokenizer( a_representation,
+                                     PERSISTENT_FIELD_DELIMITER );
+
+            // Make sure the representation contains the correct number of
+            // fields. If not, throw an exception.
+            // -----------------------------------------------------------
+            if( tokenizer.countTokens() != 3 )
+            {
+                throw new UnsupportedRepresentationException(
+                    "The format of the given persistent representation " +
+                    "is not recognized: it does not contain three tokens." );
+            }
+
+            String valueRepresentation = tokenizer.nextToken();
+            String lowerBoundRepresentation = tokenizer.nextToken();
+            String upperBoundRepresentation = tokenizer.nextToken();
+
+            // First parse and set the representation of the value.
+            // ----------------------------------------------------
+            if( valueRepresentation.equals( "null") )
             {
                 m_value = null;
             }
@@ -196,15 +222,52 @@ public class IntegerAllele implements Allele
                 try
                 {
                     m_value =
-                        new Integer( Integer.parseInt( a_representation ) );
+                        new Integer( Integer.parseInt( valueRepresentation ) );
                 }
                 catch( NumberFormatException e )
                 {
                     throw new UnsupportedRepresentationException(
-                        "Unknown integer allele representation: " +
-                        a_representation );
+                        "The format of the given persistent representation " +
+                        "is not recognized: field 1 does not appear to be " +
+                        "an integer value.");
                 }
             }
+
+            // Now parse and set the lower bound.
+            // ----------------------------------
+            try
+            {
+                m_lowerBounds =
+                    Integer.parseInt( lowerBoundRepresentation );
+            }
+            catch( NumberFormatException e )
+            {
+                throw new UnsupportedRepresentationException(
+                    "The format of the given persistent representation " +
+                    "is not recognized: field 2 does not appear to be " +
+                    "an integer value.");
+            }
+
+            // Now parse and set the upper bound.
+            // ----------------------------------
+            try
+            {
+                m_upperBounds =
+                    Integer.parseInt( upperBoundRepresentation );
+            }
+            catch( NumberFormatException e )
+            {
+                throw new UnsupportedRepresentationException(
+                    "The format of the given persistent representation " +
+                    "is not recognized: field 3 does not appear to be " +
+                    "an integer value.");
+            }
+
+            // We need to recalculate the bounds units to integer units
+            // ratio since our lower and upper bounds have probably just
+            // been changed.
+            // -------------------------------------------------------------
+            calculateBoundsUnitsToIntegerUnitsRatio();
         }
     }
 
@@ -336,6 +399,31 @@ public class IntegerAllele implements Allele
         }
     }
 
+
+    /**
+     * Retrieves a string representation of this Allele that includes any
+     * information required to reconstruct it at a later time, such as its
+     * value and internal state. This string will be used to represent this
+     * Allele in XML persistence. This is an optional method bug, if not
+     * implemented, XML persistence and possibly other features will not be
+     * available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
+     *
+     * @return A string representation of this Allele's current state.
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
+     */
+    public String getPersistentRepresentation() throws
+                  UnsupportedOperationException
+    {
+        // The persistent representation includes the value, lower bound,
+        // and upper bound, each separated by a colon.
+        // --------------------------------------------------------------
+        return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
+                            PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+    }
+
+
     /**
      * Retrieves a string representation of this IntegerAllele's value.
      *
@@ -374,7 +462,7 @@ public class IntegerAllele implements Allele
      * between the upper bounds and lower bounds). If the value is null or
      * is already within the bounds, it will be left unchanged.
      */
-    private void mapValueToWithinBounds()
+    protected void mapValueToWithinBounds()
     {
         if( m_value != null )
         {
@@ -387,14 +475,6 @@ public class IntegerAllele implements Allele
             if( m_value.intValue() > m_upperBounds ||
                 m_value.intValue() < m_lowerBounds )
             {
-       /*         long differenceFromIntMax = (long) Integer.MAX_VALUE -
-                                            (long) m_value.intValue();
-                int differenceFromBoundsMax =
-                    (int) ( differenceFromIntMax / m_boundsUnitsToIntegerUnits );
-
-                m_value =
-                    new Integer( m_upperBounds - differenceFromBoundsMax );
-        */
                 long differenceFromIntMin = (long) Integer.MIN_VALUE +
                                             (long) m_value.intValue();
                 int differenceFromBoundsMin =
@@ -402,8 +482,18 @@ public class IntegerAllele implements Allele
 
                 m_value =
                     new Integer( m_upperBounds + differenceFromBoundsMin );
-
             }
         }
+    }
+
+
+    /**
+     * Calculates and sets the bounds units to integer units ration based
+     * on the current lower and upper bounds of this IntegerAllele.
+     */
+    protected void calculateBoundsUnitsToIntegerUnitsRatio()
+    {
+        m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
+                                      ( m_upperBounds - m_lowerBounds + 1 );
     }
 }

@@ -43,9 +43,10 @@ public class DefaultConfiguration extends Configuration
             setNaturalSelector( new WeightedRouletteSelector() );
             setRandomGenerator( new StockRandomGenerator() );
             setEventManager( new EventManager() );
+            setAllelePool( new AllelePool( this ) );
             addGeneticOperator( new ReproductionOperator() );
             addGeneticOperator( new CrossoverOperator() );
-            addGeneticOperator( new MutationOperator() );
+            addGeneticOperator( new MutationOperator( ) );
         }
         catch ( InvalidConfigurationException e )
         {

@@ -20,18 +20,20 @@
 package org.jgap.impl;
 
 import org.jgap.Allele;
+import org.jgap.Configuration;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
  * Manages a pool of Allele instances from which alleles may be acquired and
  * released, thus allowing them to be easily resused to save on the number
- * of transient objects that would otherwise be created. All of the methods
- * in this class are static, so it's unnecessary (and impossible) to create
- * an instance of this class.
+ * of transient objects that would otherwise be created. Each instance of
+ * this class is tied to a specific Configuration, which must be supplied
+ * at construction time.
  */
 public class AllelePool
 {
@@ -40,60 +42,107 @@ public class AllelePool
      * of the pooled alleles, and the value is an ArrayList containing the
      * pool of those alleles.
      */
-    private static final Map m_allelePools = new HashMap();
+    private final Map m_allelePools;
 
 
     /**
-     * Private constructor that should never be used since the methods in this
-     * class are all static.
+     * References the current active Configuration object.
      */
-    private AllelePool()
+    private final Configuration m_activeConfiguration;
+
+
+    /**
+     * Constructs a new AllelePool instance with the given active
+     * Configuration.
+     */
+    public AllelePool( Configuration a_activeConfiguration )
     {
+        m_allelePools = new HashMap();
+        m_activeConfiguration = a_activeConfiguration;
     }
 
 
     /**
-     * Attempts to acquire an Allele instance from the allele pool. It should
+     * Attempts to acquire an Allele instance from the allele pool of the
+     * given class and intended for the given gene position. It should
      * be noted that nothing is guaranteed about the value of the Allele and
      * it should be treated as undefined.
+     *
+     * @param a_alleleType The Class of the desired allele.
+     * @param a_locus The gene position for which the allele is destined.
      *
      * @return An Allele instance from the pool (with an undefined value), or
      *         null if no allele instances are available in the pool.
      */
-    public static synchronized Allele acquireAllele( Class a_alleleType )
+    public synchronized Allele acquireAllele( Class a_alleleType,
+                                              int a_locus )
     {
-        ArrayList pool = (ArrayList) m_allelePools.get( a_alleleType );
-        if( pool == null || pool.size() == 0 )
+        // First pull out all the Alleles of the given class type.
+        // -------------------------------------------------------
+        List[] classPool = (List[]) m_allelePools.get( a_alleleType );
+        if( classPool == null )
         {
             return null;
         }
         else
         {
-            // Fetch from the tail of the pool to avoid element
-            // shifting within the ArrayList.
-            // ------------------------------------------------
-            return (Allele) pool.remove( pool.size() - 1);
+            // Now pull out all of the Alleles associated with the given
+            // gene position.
+            // ---------------------------------------------------------
+            List locusPool = classPool[ a_locus ];
+            if( locusPool == null || locusPool.isEmpty() )
+            {
+                return null;
+            }
+            else
+            {
+                // Remove the last allele in the pool and return it.
+                // Note that removing the last allele (as opposed to the first
+                // one) is an optimization because it prevents the ArrayList
+                // from resizing itself.
+                // -----------------------------------------------------------
+                return (Allele) locusPool.remove( locusPool.size() - 1 );
+            }
         }
      }
+
 
     /**
      * Releases an Allele to the pool. It's not required that the Allele
      * originated from the pool--any Allele can be released to it. This
      * method will invoke the cleanup() method on the Allele prior to
      * adding it back to the pool.
+     *
+     * @param a_alleleToRelease The Allele instance to be released back into
+     *                          the pool.
+     * @param a_locus The gene position at which the Allele was used.
      */
-    public static synchronized void releaseAllele( Allele a_alleleToRelease )
+    public synchronized void releaseAllele( Allele a_alleleToRelease,
+                                            int a_locus )
     {
+        // First cleanup the allele before returning it back to the pool.
+        // --------------------------------------------------------------
         a_alleleToRelease.cleanup();
+
+        // Now add it to the pool appropriate for both its class and locus.
+        // If no such pool exists, we create it.
+        // ----------------------------------------------------------------
         Class alleleType = a_alleleToRelease.getClass();
 
-        ArrayList pool = (ArrayList) m_allelePools.get( alleleType );
-        if( pool == null )
+        List[] classPool = (List[]) m_allelePools.get( alleleType );
+        if( classPool == null )
         {
-            pool = new ArrayList();
-            m_allelePools.put( alleleType, pool );
+            classPool = new List[ m_activeConfiguration.getChromosomeSize() ];
+            m_allelePools.put( alleleType, classPool );
         }
 
-        pool.add( a_alleleToRelease );
+        List locusPool = classPool[ a_locus ];
+        if( locusPool == null )
+        {
+            locusPool = new ArrayList();
+            classPool[ a_locus ] = locusPool;
+        }
+
+        locusPool.add( a_alleleToRelease );
     }
 }

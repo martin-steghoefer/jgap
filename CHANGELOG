@@ -1,3 +1,32 @@
+0.31
+----------
+* Fixed AllelePool to discriminate between alleles intended for different
+  gene positions so that position-specific configurations will be preserved.
+  Thanks to Alexandre Freire for reporting this bug.
+* AllelePool is no longer a static class.
+* The Configuration object now supports the AllelePool as an optional
+  configurable option, and the various JGAP components now access the pool
+  instance via the active Configuration. The DefaultConfiguration utility
+  class automatically sets up an AllelePool instance.
+* The Allele.setValueFromStringRepresentation() method has been renamed to
+  setValueFromPersistentRepresentation() and may now throw an
+  UnsupportedOperationException for users who do not wish to take advantage
+  of XML persistence and do not want to bother providing an implementation 
+  for this method.
+* An Allele.getPersistentRepresentation() method has been added to the Allele
+  interface and should be implemented to provide a String representation of
+  the Allele that is suitable for XML persistence and could be later used to
+  reconstruct the Allele. Previously, the toString() method was used for 
+  this purpose.
+* IntegerAllele and BooleanAllele have been updated to conform to the changes
+  to the Allele interface.
+* The XMLManager.getGenesFromElement() method now requires that the active 
+  Configuration object be passed in.
+* Made minor Javadoc fixes and code formatting changes, and removed some dead
+  code.
+* Updated the README file.
+
+
 0.3
 ----------
 * Changed NaturalSelector.add() method to accept an int for the fitness

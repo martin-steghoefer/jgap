@@ -21,6 +21,7 @@
 package org.jgap;
 
 import org.jgap.event.EventManager;
+import org.jgap.impl.AllelePool;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,6 +81,14 @@ public class Configuration implements java.io.Serializable
      * of genetic events and the management of event subscribers.
      */
     private EventManager m_eventManager = null;
+
+    /**
+     * References the AllelePool, if any, that is to be used to pool unused
+     * Allele instances so that they may be recycled later, thereby saving
+     * memory.
+     */
+    private AllelePool m_allelePool = null;
+
 
     /**
      * Stores all of the GeneticOperator implementations that are to be used
@@ -402,6 +411,39 @@ public class Configuration implements java.io.Serializable
     public EventManager getEventManager()
     {
         return m_eventManager;
+    }
+
+
+    /**
+     * Sets the AllelPool that is to be associated with this configuration.
+     * The AllelePool is used to pool unused Allele instances so that they
+     * may be recycled later, thereby saving memory. The presence of an
+     * AllelePool is optional.
+     *
+     * @param a_allelePoolToSet The AllelePool instance to use.
+     * @throws InvalidConfigurationException if this object is locked.
+     */
+    public void setAllelePool( AllelePool a_allelePoolToSet )
+                throws InvalidConfigurationException
+    {
+        verifyChangesAllowed();
+
+        m_allelePool = a_allelePoolToSet;
+    }
+
+
+    /**
+     * Retrieves the AllelePool instance, if any, that is associated with
+     * this configuration.  The AllelePool is used to pool unused Allele
+     * instances so that they may be recycled later, thereby saving memory.
+     * The presence of an AllelePool instance is optional.
+     *
+     * @return The AllelePool instance associated this configuration, or
+     *         null if none has been set.
+     */
+    public AllelePool getAllelePool()
+    {
+        return m_allelePool;
     }
 
 

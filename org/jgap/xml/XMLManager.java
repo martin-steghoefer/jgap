@@ -204,8 +204,8 @@ public class XMLManager
 
             // Create a text node to contain its string representation.
             // --------------------------------------------------------
-            Text alleleRepresentation =
-                a_xmlDocument.createTextNode( a_geneValues[i].toString() );
+            Text alleleRepresentation = a_xmlDocument.createTextNode(
+                a_geneValues[i].getPersistentRepresentation() );
 
             // And now add the text node to the allele element, and then
             // add the allele element to the genes element.
@@ -316,11 +316,15 @@ public class XMLManager
      * @throws UnsupportedRepresentationException if the actively configured
      *         Allele implementation does not support the string representation
      *         of the alleles used in the given XML document.
+     * @throws AlleleCreationException if there is a problem creating or
+     *                                 populating an Allele instance.
      */
-    public static Allele[] getGenesFromElement( Element a_xmlElement )
-            throws ImproperXMLException,
-                   UnsupportedRepresentationException,
-                   AlleleCreationException
+    public static Allele[] getGenesFromElement(
+                               Configuration a_activeConfiguration,
+                               Element a_xmlElement )
+                           throws ImproperXMLException,
+                                  UnsupportedRepresentationException,
+                                  AlleleCreationException
     {
         // Do some sanity checking. Make sure the XML Element isn't null and
         // that in fact represents an allele.
@@ -363,16 +367,22 @@ public class XMLManager
             String alleleClassName =
                 thisAlleleElement.getAttribute( CLASS_ATTRIBUTE );
 
-            // First try to fetch an Allele instance from the pool.
-            // ----------------------------------------------------
+            // Try to pull the new allele from the allele pool to save on
+            // memory. If the pool is not available, or if there is no
+            // appropriate Allele in the pool, then create a fresh Allele.
+            // -----------------------------------------------------------
+            AllelePool pool = a_activeConfiguration.getAllelePool();
             Allele thisAlleleObject;
             try
             {
-                thisAlleleObject = AllelePool.acquireAllele(
-                    Class.forName( alleleClassName ) );
+                thisAlleleObject = null;
 
-                // If nothing was available in the pool, create a new instance.
-                // ------------------------------------------------------------
+                if( pool != null )
+                {
+                    thisAlleleObject = pool.acquireAllele(
+                        Class.forName( alleleClassName ), i );
+                }
+
                 if( thisAlleleObject == null )
                 {
                     thisAlleleObject =
@@ -414,8 +424,17 @@ public class XMLManager
             // Now set the value of the allele to that reflect the
             // string representation.
             // ---------------------------------------------------
-            thisAlleleObject.setValueFromStringRepresentation(
-                alleleRepresentation );
+            try
+            {
+                thisAlleleObject.setValueFromPersistentRepresentation(
+                    alleleRepresentation );
+            }
+            catch( UnsupportedOperationException e )
+            {
+                throw new AlleleCreationException(
+                    "Unable to build Allele because it does not support the " +
+                    "setValueFromPersistentRepresentation() method." );
+            }
 
             // Finally, add the current allele object to the list of genes.
             // ------------------------------------------------------------
@@ -446,6 +465,8 @@ public class XMLManager
      * @throws UnsupportedRepresentationException if the actively configured
      *         Allele implementation does not support the string representation
      *         of the alleles used in the given XML document.
+     * @throws AlleleCreationException if there is a problem creating or
+     *                                 populating an Allele instance.
      */
     public static Chromosome getChromosomeFromElement(
                                  Configuration a_activeConfiguration,
@@ -480,7 +501,8 @@ public class XMLManager
 
         // Construct the genes from their representations.
         // -----------------------------------------------
-        Allele[] geneAlleles = getGenesFromElement( genesElement );
+        Allele[] geneAlleles = getGenesFromElement( a_activeConfiguration,
+                                                    genesElement );
 
         // Construct the new Chromosome with the genes and return it.
         // ----------------------------------------------------------
@@ -510,6 +532,8 @@ public class XMLManager
      * @throws UnsupportedRepresentationException if the actively configured
      *         Allele implementation does not support the string representation
      *         of the alleles used in the given XML document.
+     * @throws AlleleCreationException if there is a problem creating or
+     *                                 populating an Allele instance.
      */
     public static Genotype getGenotypeFromElement( Configuration a_activeConfiguration,
                                                    Element a_xmlElement )
@@ -572,9 +596,12 @@ public class XMLManager
      * @throws UnsupportedRepresentationException if the actively configured
      *         Allele implementation does not support the string representation
      *         of the alleles used in the given XML document.
+     * @throws AlleleCreationException if there is a problem creating or
+     *                                 populating an Allele instance.
      */
-    public static Genotype getGenotypeFromDocument( Configuration a_activeConfiguration,
-                                                    Document a_xmlDocument )
+    public static Genotype getGenotypeFromDocument(
+                               Configuration a_activeConfiguration,
+                               Document a_xmlDocument )
             throws ImproperXMLException,
                    InvalidConfigurationException,
                    UnsupportedRepresentationException,
@@ -619,6 +646,8 @@ public class XMLManager
      * @throws UnsupportedRepresentationException if the actively configured
      *         Allele implementation does not support the string representation
      *         of the alleles used in the given XML document.
+     * @throws AlleleCreationException if there is a problem creating or
+     *                                 populating an Allele instance.
      */
     public static Chromosome getChromosomeFromDocument( Configuration a_activeConfiguration,
                                                         Document a_xmlDocument )

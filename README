@@ -1,12 +1,16 @@
-About JGAP 0.3:
+About JGAP 0.3x:
 
-Important Note about backward compatibility:
+Important notes about backward compatibility:
 
-   JGAP 0.3 adds a number of new features, including support for custom
-   alleles. As a result, the API has changed in some places and is not
-   backward compatible with the 0.2x APIs. That being said, converting
-   to the new APIs should be pretty easy and will provide a great deal
-   of convenience and flexibility.
+   * The JGAP 0.31 API is slightly incompatible with the 0.3 API with
+     regard to the Allele interface and XMLManager class. Please see
+     the CHANGELOG for an overview of changes.
+
+   * JGAP 0.3x adds a number of new features over version 0.2, including
+     support for custom alleles. As a result, the API has changed in
+     some places and is not backward compatible with the 0.2x APIs. That
+     being said, converting to the new APIs should be pretty easy and
+     will provide a great deal of convenience and flexibility.
 
 This represents an alpha release of JGAP, the Java Genetic Algorithms
 Package, which means it is not feature complete, is not optimized, and
@@ -26,15 +30,23 @@ distribution. For a basic introduction to using JGAP, we highly
 recommend reading the tutorial that can be found both on the JGAP 
 website and in the docs/ directory.
 
-JGAP 0.3 requires Java 1.2 or above.
+JGAP 0.3x requires Java 1.2 or above.
 
 Please direct any questions, comments, problems, or inquiries to the
-JGAP development mailing list at jgap-devl@lists.sourceforge.net
+JGAP users mailing list at:
+
+    jgap-users@lists.sourceforge.net
+
+or to the JGAP developers mailing list at jgap-devl@lists.sourceforge.net.
 
 Public announcements concerning JGAP, including any new release
 announcements, are made on the jgap-announce mailing list. If you
-would like to subscribe to this list, please visit the JGAP mailing
-list manager at: http://sourceforge.net/mail/?group_id=11618
+would like to subscribe to this list, or to any other JGAP list,
+please visit the JGAP mailing list manager at:
+
+    http://sourceforge.net/mail/?group_id=11618
+
+Mailing list archives are also available.
 
 Thanks for trying out JGAP!
 --The JGAP team
@@ -47,7 +59,7 @@ Please note that the latest public release of JGAP can always be found
 by following the "Download" link on the JGAP home page. The home page 
 is located at http://jgap.sourceforge.net
 
-1. If you haven't already, untar or unzip the jgap archive into your
+1. If you haven't already, untar or unzip the JGAP archive into your
 directory of choice.
 
 2. Simply add the jgap.jar to your classpath. If you wish to use any 
@@ -64,18 +76,21 @@ both on the JGAP web site and in the docs/ directory.
 
 
 If you have any questions, or run into any problems, please feel free
-to send a message to the JGAP developers mailing list at
-jgap-devl@lists.sourceforge.net
+to send a message to the JGAP users mailing list at:
+
+     jgap-users@lists.sourceforge.net
+
+or to the developers mailing list at jgap-devl@lists.sourceforge.net.
 
 
 ------------------------------------------------------------------------
 Special Thanks:
 
-Thanks go to Jan Sabak for his bug reports, and to Mike Crowe for 
-his prototyping work on the new custom alleles. Mike has since joined 
-the JGAP team.
+Thanks go to Alexandre Freire and Jan Sabak for their bug reports, and
+to Mike Crowe for his prototyping work on the new custom alleles. Mike
+has since joined the JGAP team.
 
-Thanks also to the folks at Sourceforge, who kindly host the JGAP
+Thanks also to the folks at Sourceforge who kindly host the JGAP
 project. For more information on SourceForge, please visit
-http://www.sourceforge.net
+http://www.sourceforge.net.
 

@@ -23,7 +23,7 @@ package org.jgap;
 
 /**
  * This exception is typically thrown when a the
- * setValueFromStringRepresentation() method of an Allele class is unable to
+ * setValueFromPersistentRepresentation() method of an Allele class is unable to
  * process the string representation it has been given, either because that
  * representation is not supported by that Allele implementation or because
  * the representation is corrupt.

@@ -180,13 +180,20 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         // new Allele that is to occupy that locus in the new Chromosome.
         // --------------------------------------------------------------
         Allele[] copyOfGenes = new Allele[ m_genes.length ];
+        AllelePool pool = m_activeConfiguration.getAllelePool();
 
         for( int i = 0; i < m_genes.length; i++ )
         {
             // Try to pull the new allele from the allele pool to save on
-            // memory. If none is available, then create one.
-            // ----------------------------------------------------------
-            Allele copy = AllelePool.acquireAllele( m_genes[i].getClass() );
+            // memory. If the pool is not available, or if there is no
+            // appropriate Allele in the pool, then create a fresh Allele.
+            // -----------------------------------------------------------
+            Allele copy = null;
+            if( pool != null )
+            {
+                copy = pool.acquireAllele( m_genes[i].getClass(), i );
+            }
+
             if( copy == null )
             {
                 copy = m_genes[i].newAllele( m_activeConfiguration );
@@ -348,13 +355,21 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         int numberOfGenes = sampleChromosome.size();
 
         Allele[] newGenes = new Allele[ numberOfGenes ];
+        AllelePool pool = a_activeConfiguration.getAllelePool();
 
         for ( int i = 0; i < numberOfGenes; i++ )
         {
-            // First try to fetch an allele from the allele pool. If none is
-            // available, then create a new one.
-            // -------------------------------------------------------------
-            newGenes[i] = AllelePool.acquireAllele( sampleGenes[i].getClass() );
+            // Try to pull the new allele from the allele pool to save on
+            // memory. If the pool is not available, or if there is no
+            // appropriate Allele in the pool, then create a fresh Allele.
+            // -----------------------------------------------------------
+            newGenes[i] = null;
+            if( pool != null )
+            {
+                newGenes[i] =
+                    pool.acquireAllele( sampleGenes[i].getClass(), i );
+            }
+
             if( newGenes[i] == null )
             {
                 newGenes[i] = sampleGenes[i].newAllele( a_activeConfiguration );
@@ -507,12 +522,17 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      */
     public void cleanup()
     {
-        // Release each of the alleles to the allele pool so that can be
-        // later reused.
-        // -------------------------------------------------------------
-        for( int i = 0; i < m_genes.length; i++ )
+        // If an AllelePool is setup in the active configuration, then
+        // release each of the alleles to the pool so that they can be
+        // later reused, thereby saving some memory.
+        // -----------------------------------------------------------
+        AllelePool pool = m_activeConfiguration.getAllelePool();
+        if( pool != null )
         {
-            AllelePool.releaseAllele( m_genes[i] );
+            for( int i = 0; i < m_genes.length; i++ )
+            {
+                pool.releaseAllele( m_genes[i], i );
+            }
         }
     }
 }
