@@ -20,7 +20,6 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.event.*;
 
 /**
@@ -37,7 +36,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The current active Configuration instance.
@@ -74,8 +73,8 @@ public class Genotype
    * when this method is invoked, or a InvalidconfigurationException
    * will be thrown.
    *
-   * @param a_activeConfiguration: The current active Configuration object.
-   * @param a_initialChromosomes: The Chromosome population to be
+   * @param a_activeConfiguration The current active Configuration object.
+   * @param a_initialChromosomes The Chromosome population to be
    *                              managed by this Genotype instance.
    * @throws IllegalArgumentException if either the given Configuration object
    *         or the array of Chromosomes is null, or if any of the Genes
@@ -86,13 +85,27 @@ public class Genotype
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
+   * @deprecated use Genotype(Configuration, Population) instead
    */
   public Genotype(Configuration a_activeConfiguration,
                   Chromosome[] a_initialChromosomes)
-      throws
-      InvalidConfigurationException {
-    this(a_activeConfiguration, a_initialChromosomes,
+      throws InvalidConfigurationException {
+    this(a_activeConfiguration, new Population(a_initialChromosomes),
          new DefaultFitnessEvaluator());
+  }
+
+  /**
+   *
+   * @param a_activeConfiguration Configuration
+   * @param a_population Population
+   * @throws InvalidConfigurationException
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public Genotype(Configuration a_activeConfiguration,
+                  Population a_population)
+      throws InvalidConfigurationException {
+    this(a_activeConfiguration, a_population, new DefaultFitnessEvaluator());
   }
 
   /**
@@ -112,8 +125,15 @@ public class Genotype
   public Genotype(Configuration a_activeConfiguration,
                   Chromosome[] a_initialChromosomes,
                   FitnessEvaluator a_fitnessEvaluator)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
+    this(a_activeConfiguration, new Population(a_initialChromosomes),
+         a_fitnessEvaluator);
+  }
+
+  public Genotype(Configuration a_activeConfiguration,
+                  Population a_population,
+                  FitnessEvaluator a_fitnessEvaluator)
+      throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
     // ---------------------------------------------------------------
@@ -121,19 +141,19 @@ public class Genotype
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
     }
-    if (a_initialChromosomes == null) {
+    if (a_population == null) {
       throw new IllegalArgumentException(
-          "The array of Chromosomes may not be null.");
+          "The Population may not be null.");
     }
     if (a_fitnessEvaluator == null) {
       throw new IllegalArgumentException(
           "The fitness evaluator may not be null.");
     }
-    for (int i = 0; i < a_initialChromosomes.length; i++) {
-      if (a_initialChromosomes[i] == null) {
+    for (int i = 0; i < a_population.size(); i++) {
+      if (a_population.getChromosome(i) == null) {
         throw new IllegalArgumentException(
-            "The Gene instance at index " + i + " of the array of " +
-            "Chromosomes is null. No Gene instance in this array " +
+            "The Chromosome instance at index " + i + " of the array of " +
+            "Chromosomes is null. No Chromosomes instance in this array " +
             "may be null.");
       }
     }
@@ -141,7 +161,7 @@ public class Genotype
     // be altered.
     // ----------------------------------------------------------------
     a_activeConfiguration.lockSettings();
-    m_population = new Population(a_initialChromosomes);
+    m_population = a_population;
     m_activeConfiguration = a_activeConfiguration;
     m_fitnessEvaluator = a_fitnessEvaluator;
     m_workingPool = new ArrayList();
@@ -216,7 +236,7 @@ public class Genotype
     Chromosome[] result = new Chromosome[m_population.size()];
     int i = 0;
     while (it.hasNext()) {
-      result[i++] = (Chromosome)it.next();
+      result[i++] = (Chromosome) it.next();
     }
     return result;
   }
@@ -250,7 +270,8 @@ public class Genotype
     Chromosome fittestChromosome = m_population.getChromosome(0);
     double fittestValue = fittestChromosome.getFitnessValue();
     for (int i = 1; i < len; i++) {
-      if (m_fitnessEvaluator.isFitter(m_population.getChromosome(i).getFitnessValue(),
+      if (m_fitnessEvaluator.isFitter(m_population.getChromosome(i).
+                                      getFitnessValue(),
                                       fittestValue)) {
         fittestChromosome = m_population.getChromosome(i);
         fittestValue = fittestChromosome.getFitnessValue();
@@ -281,7 +302,7 @@ public class Genotype
       // Add the chromosomes pool to the natural selector.
       // Iterate over all natural selectors!
       // ----------------------------------------------------------------
-      Iterator iterator1 = m_population.iterator();// Arrays.asList(m_chromosomes).iterator();
+      Iterator iterator1 = m_population.iterator(); // Arrays.asList(m_chromosomes).iterator();
       while (iterator1.hasNext()) {
         Chromosome currentChromosome = (Chromosome) iterator1.next();
         for (int i = 0; i < selectorSize; i++) {
@@ -421,6 +442,7 @@ public class Genotype
    * at the time this method is invoked, or an InvalidConfigurationException
    * will be thrown.
    *
+   * @param a_activeConfiguration The current active Configuration object.
    * @return A newly constructed Genotype instance.
    *
    * @throws IllegalArgumentException if the given Configuration object is
@@ -431,8 +453,8 @@ public class Genotype
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static Genotype randomInitialGenotype(
-      Configuration a_activeConfiguration)
+  public static Genotype randomInitialGenotype(Configuration
+                                               a_activeConfiguration)
       throws InvalidConfigurationException {
     if (a_activeConfiguration == null) {
       throw new IllegalArgumentException(
