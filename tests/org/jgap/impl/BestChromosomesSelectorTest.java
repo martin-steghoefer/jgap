@@ -38,7 +38,7 @@ public class BestChromosomesSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -73,7 +73,26 @@ public class BestChromosomesSelectorTest
     assertEquals(chrom, chromosomes.get(0));
   }
 
+  /**
+   * Test if below functionality available without error
+   * @throws Exception
+   */
   public void testSelect_0() throws Exception {
+    NaturalSelector selector = new BestChromosomesSelector();
+    Gene gene = new IntegerGene();
+    gene.setAllele(new Integer(444));
+    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    secondBestChrom.setFitnessValue(11);
+    selector.add(null, secondBestChrom);
+    gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(12);
+    selector.add(null, bestChrom);
+    Chromosome[] bestChroms = selector.select(null, 1);
+  }
+
+  public void testSelect_1() throws Exception {
     NaturalSelector selector = new BestChromosomesSelector();
     // add first chromosome
     // --------------------
@@ -110,7 +129,7 @@ public class BestChromosomesSelectorTest
     assertEquals(thirdBestChrom, bestChroms[2]);
   }
 
-  public void testSelect_1() throws Exception {
+  public void testSelect_2() throws Exception {
     NaturalSelector selector = new BestChromosomesSelector();
     // add first chromosome
     // --------------------
