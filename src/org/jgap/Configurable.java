@@ -9,19 +9,19 @@
  */
 package org.jgap;
 
-import java.util.*;
-
-
 /**
  * This interface must be implemented for any class to be Configurable.
  * @author Siddhartha Azad.
  * */
 public interface Configurable {
-	
-	/**
-	 * Return a ConfigurationHandler specific to the concrete class implementing
-	 * this interface.
-	 * @return A Concrete ConfigurationHandler.
-	 * */
-	ConfigurationHandler getConfigurationHandler();
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**
+   * Return a ConfigurationHandler specific to the concrete class implementing
+   * this interface.
+   * @return A Concrete ConfigurationHandler.
+   * */
+  ConfigurationHandler getConfigurationHandler();
 }

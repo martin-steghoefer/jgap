@@ -17,6 +17,10 @@ import java.util.*;
  * @author Siddhartha Azad.
  * */
 public interface ConfigurationHandler {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.3 $";
+
   /**
    * Return the name of this Configuration Object to be used in the properties
    * file.

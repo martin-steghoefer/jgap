@@ -9,18 +9,18 @@
  */
 package org.jgap;
 
-import java.util.*;
-
-
 /**
  * Interface a ConfigWriter uses to get the information from a ConfigFrame.
  * @author Siddhartha Azad.
  * */
 public interface IConfigInfo {
-	ConfigData getConfigData();
-	/**
-	 * Get the config file to write to.
-	 * @return The config file name to write to.
-	 */
-	String getFileName();
+  final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  ConfigData getConfigData();
+
+  /**
+   * Get the config file to write to.
+   * @return The config file name to write to.
+   */
+  String getFileName();
 }
