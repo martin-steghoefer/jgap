@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Each data has its own data container
@@ -187,6 +187,16 @@ public class Evaluator {
         }
       }
     }
+  }
+
+
+  /**
+   * Returns a list of lists (i.e. a matrix) to use for output as a table
+   * @param a_data DefaultKeyedValues2D
+   * @return List
+   */
+  public List getTable(DefaultKeyedValues2D a_data) {
+    return null;
   }
 
   /**
