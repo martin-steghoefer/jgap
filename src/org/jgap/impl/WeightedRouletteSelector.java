@@ -30,12 +30,12 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001;
+  private static final double DELTA = 0.000001d;
 
-  private static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0.0);
+  private static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0.0d);
 
   /**
    * Represents the "roulette wheel." Each key in the Map is a Chromosome
@@ -49,7 +49,7 @@ public class WeightedRouletteSelector
    * roulette wheel. This is equal to the combined fitness values of
    * all Chromosome instances that have been added to this wheel.
    */
-  private double m_totalNumberOfUsedSlots = 0.0;
+  private double m_totalNumberOfUsedSlots;
 
   /**
    * An internal pool in which discarded SlotCounter instances can be stored
