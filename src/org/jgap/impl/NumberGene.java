@@ -21,7 +21,7 @@ public abstract class NumberGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -73,6 +73,10 @@ public abstract class NumberGene
     }
     else {
       try {
+        if (!otherGene.getClass().equals(this.getClass())) {
+          throw new ClassCastException(
+              "Comparison not possible: different types!");
+        }
         return compareToNative(m_value, otherGene.m_value);
       }
       catch (ClassCastException e) {
