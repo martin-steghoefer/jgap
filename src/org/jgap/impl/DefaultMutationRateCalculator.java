@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,6 +15,7 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import org.jgap.MutationRateCalculator;
@@ -29,26 +28,24 @@ import org.jgap.Configuration;
  * @since 1.1
  */
 public class DefaultMutationRateCalculator
-    implements MutationRateCalculator
-{
-    /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.4 $";
+    implements MutationRateCalculator {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  public DefaultMutationRateCalculator() {
+  }
 
-    public DefaultMutationRateCalculator ()
-    {
-
+  /**
+   * Calculates the mutation rate
+   * @param a_activeConfiguration current active configuration
+   * @return calculated divisor of mutation rate probability (dividend is 1)
+   *
+   * @since 1.1 (same functionality since earlier, but not encapsulated)
+   */
+  public int calculateCurrentRate(Configuration a_activeConfiguration) {
+    int size = a_activeConfiguration.getChromosomeSize();
+    if (size < 1) {
+      size = 1;
     }
-
-    /**
-     * Calculates the mutation rate
-     * @param a_activeConfiguration current active configuration
-     * @return calculated divisor of mutation rate probability (dividend is 1)
-     *
-     * @since 1.1 (same functionality since earlier, but not encapsulated)
-     */
-    public int calculateCurrentRate (Configuration a_activeConfiguration)
-    {
-        return a_activeConfiguration.getChromosomeSize();
-    }
-
+    return size;
+  }
 }
