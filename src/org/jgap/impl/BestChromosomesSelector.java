@@ -34,7 +34,7 @@ public class BestChromosomesSelector
     implements NaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -69,9 +69,9 @@ public class BestChromosomesSelector
   public synchronized void add(Configuration a_activeConfigurator,
                                Chromosome a_chromosomeToAdd) {
     // Check if chromosome already added
-    if (chromosomes.contains(a_chromosomeToAdd)) {
-      return;
-    }
+//    if (chromosomes.contains(a_chromosomeToAdd)) {
+//      return;
+//    }
     // New chromosome, insert it into the sorted collection of chromosomes
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
     chromosomes.add(a_chromosomeToAdd);
