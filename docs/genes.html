@@ -1,0 +1,450 @@
+<html>
+  <head>
+    <link rel=stylesheet href="stylesheet.css" type="text/css">
+    <title>Creating Custom Genes</title>
+  </head>
+
+  <body class="documentText">
+    <h1 class="docTitle">Creating Custom Genes</h1>
+    <center>
+      <a class="homeLink" href="./index.html">[Documentation Index]</a>
+    </center>
+    <hr>
+
+    <a name="top">
+    <p>
+      Genes represent the discrete components of a problem solution
+      (chromosome) that can vary independently of each other throughout
+      the evolution process. Just as genes control various independent
+      features within our own genetic makeup, such as sex or eye color,
+      so too do genes in JGAP control various aspects of the overall
+      makeup of a solution. JGAP comes with a couple of standard Gene 
+      implementations that are useful for genes that are to be represented
+      with boolean or integer values. But many applications can benefit 
+      from more specialized representations, and that's where custom 
+      gene implementations can come in handy. They're also easy to create,
+      as we'll soon see.
+    </p>
+
+    <h3 class="subheader">How Genes are Used</h3> 
+    <p> 
+      First, let's talk about what genes are and how genes are created and 
+      used by JGAP. Simply put, a gene represents some characteristic of
+      a solution that can be varied indepedently from the other
+      characteristics of that solution. For example, let's assume that
+      a solution (chromosome) represents a pile of American change. Then the
+      genes in that solution might represent the various coin denominations
+      that make up the pile, such as quarters, dimes, nickels, and pennies.
+      The value of those genes (called alleles) would be the actual number
+      of coins of each respective denomination present in that particular
+      solution. In JGAP, genes are represented by classes that implement the
+      Gene interface. Each gene in a chromosome may use a different 
+      Gene implementation to manage its values, but those implementations
+      must be consistent across chromosomes. For example, if gene number 1
+      in chromosome A is using a particular implementation, say a
+      QuarterGene, then gene number 1 in all other chromosomes in that 
+      population must also use a QuarterGene. But Gene number 2 in all of
+      those chromosomes may be using some completely different implementation,
+      such as a DimeGene. Of course, all of the genes in a Chromosome may also
+      use the exact same Gene implementation if that's desirable.
+    </p>
+     
+    <p> 
+      You convey your desired Gene settings to JGAP by creating a sample
+      Chromosome instance that is setup just the way you want all of the
+      chromosomes in your population setup. You then pass that sample 
+      Chromosome to the active Configuration object. Each time JGAP needs
+      to create a new Chromosome, it will reference the sample Chromosome
+      to see how it's set up, and then will setup the new Chromosome exactly 
+      like it. In fact, JGAP actually takes advantage of a newGene() method
+      in each of the Gene instances in the sample Chromosome to create the
+      new Gene instances for the new Chromosome. So to create the Gene
+      for gene number 1 in the new Chromosome, JGAP will invoke the 
+      newGene() method on gene number 1 of the sample chromosome. For gene
+      number 2, it will invoke the newGene() method on gene number 2 of the
+      sample Chromosome, and so on. This guarantees that the new Genes can
+      be setup exactly like the Genes in the sample Chromosome.
+    </p>
+    
+    <h3 class="subheader">QuarterGene: an Example</h3> 
+    <p> 
+      As an example of a custom Gene implementation, we'll create a
+      QuarterGene class which could be used to represent the number of 
+      quarters in a pile of change. Before diving in, we should say that 
+      if we were implementing this in the real world, we would have
+      extended the IntegerGene class to save ourselves most of the effort.
+      But since this is supposed to be a demonstrative example, we'll 
+      implement it here from scratch. First the code:
+    </p>
+
+    <pre class="code">
+package hypothetical.examples;
+
+import org.jgap.Gene;
+import org.jgap.Configuration;
+import org.jgap.UnsupportedRepresentationException;
+import org.jgap.RandomGenerator;
+
+import java.util.StringTokenizer;
+
+
+/**
+ * A Gene that can be used to represent the quarters in a pile of change.
+ * An optional maximum number of quarters may be provided, in
+ * which case the value (allele) of this Gene will never exceed that
+ * maximum.
+ */
+public class QuarterGene implements Gene
+{
+    private static final String TOKEN_SEPARATOR = ":";
+
+    private int m_maxNumberOfQuarters;
+    private Integer m_numberOfQuarters;
+
+    /**
+     * Constructs a new QuarterGene with no maximum number of quarters that
+     * can be represented (other than Integer.MAX_VALUE, of course).
+     */
+    public QuarterGene()
+    {
+        m_maxNumberOfQuarters = Integer.MAX_VALUE;
+        m_numberOfQuarters = null;
+    }
+
+
+    /**
+     * Constructs a new QuarterGene with a constraint on the maximum number
+     * of quarters that may be represented by this QuarterGene.
+     *
+     * @param a_maxNumberOfQuarters The maximum number of quarters that this
+     *                              QuarterGene may represent. This value
+     *                              must be non-negative.
+     *
+     * @throws IllegalArgumentException if the given maximum value is negative.
+     */
+    public QuarterGene( int a_maxNumberOfQuarters )
+    {
+        // Make sure the given maximum is non-negative.
+        // --------------------------------------------
+        if( a_maxNumberOfQuarters < 0 )
+        {
+            throw new IllegalArgumentException(
+                "The maximum number of quarters must be non-negative." );
+        }
+
+        m_maxNumberOfQuarters = a_maxNumberOfQuarters;
+        m_numberOfQuarters = null;
+    }
+
+
+    /**
+     * Provides an implementation-independent means for creating new Gene
+     * instances. The new instance that is created and returned should be
+     * setup with any implementation-dependent configuration that this Gene
+     * instance is setup with (aside from the actual value, of course). For
+     * example, if this Gene were setup with bounds on its value, then the
+     * Gene instance returned from this method should also be setup with
+     * those same bounds. This is important, as the JGAP core will invoke this
+     * method on each Gene in the sample Chromosome in order to create each
+     * new Gene in the same respective gene position for a new Chromosome.
+     * <p>
+     * It should be noted that nothing is guaranteed about the actual value
+     * of the returned Gene and it should therefore be considered to be
+     * undefined.
+     *
+     * @param a_activeConfiguration The current active configuration.
+     * @return A new Gene instance of the same type and with the same
+     *         setup as this concrete Gene.
+     */
+    public Gene newGene( Configuration a_activeConfiguration )
+    {
+        // We construct the new QuarterGene with the same maximum number
+        // of quarters that this Gene was constructed with.
+        // -------------------------------------------------------------
+        return new QuarterGene( m_maxNumberOfQuarters );
+    }
+
+
+    /**
+     * Sets the value of this Gene to the new given value. The actual
+     * type of the value is implementation-dependent.
+     *
+     * @param a_newValue the new value of this Gene instance.
+     */
+    public void setAllele( Object a_newValue )
+    {
+        m_numberOfQuarters = (Integer) a_newValue;
+    }
+
+
+    /**
+     * Retrieves the value represented by this Gene. The actual type
+     * of the value is implementation-dependent.
+     *
+     * @return the value of this Gene.
+     */
+    public Object getAllele()
+    {
+        return m_numberOfQuarters;
+    }
+
+
+    /**
+     * Sets the value of this Gene to a random legal value for the
+     * implementation. This method exists for the benefit of mutation and other
+     * operations that simply desire to randomize the value of a gene.
+     *
+     * @param a_numberGenerator The random number generator that should be
+     *                          used to create any random values. It's important
+     *                          to use this generator to maintain the user's
+     *                          flexibility to configure the genetic engine
+     *                          to use the random number generator of their
+     *                          choice.
+     */
+    public void setToRandomValue( RandomGenerator a_numberGenerator )
+    {
+        // Pick a random number between 0 and the maximum number
+        // of quarters we're allowed to represent.
+        // -----------------------------------------------------
+        m_numberOfQuarters = new Integer(
+            a_numberGenerator.nextInt( m_maxNumberOfQuarters) );
+    }
+
+
+    /**
+     * Retrieves a string representation of the value of this Gene instance
+     * that includes any information required to reconstruct it at a later
+     * time, such as its value and internal state. This string will be used to
+     * represent this Gene instance in XML persistence. This is an optional
+     * method but, if not implemented, XML persistence and possibly other
+     * features will not be available. An UnsupportedOperationException should
+     * be thrown if no implementation is provided.
+     *
+     * @return A string representation of this Gene's current state.
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
+     */
+    public String getPersistentRepresentation()
+        throws UnsupportedOperationException
+    {
+        // We want to represent both the maximum number of quarters that
+        // can be represented by this Gene and its actual current value.
+        // We'll separate the two with colons.
+        // ---------------------------------------------------------------
+        return new Integer( m_maxNumberOfQuarters ).toString() +
+                   TOKEN_SEPARATOR + m_numberOfQuarters.toString();
+    }
+
+
+    /**
+     * Sets the value and internal state of this Gene from the string
+     * representation returned by a previous invocation of the
+     * getPersistentRepresentation() method. This is an optional method but,
+     * if not implemented, XML persistence and possibly other features will not
+     * be available. An UnsupportedOperationException should be thrown if no
+     * implementation is provided.
+     *
+     * @param a_representation the string representation retrieved from a
+     *                         prior call to the getPersistentRepresentation()
+     *                         method.
+     *
+     * @throws UnsupportedOperationException to indicate that no implementation
+     *         is provided for this method.
+     * @throws UnsupportedRepresentationException if this Gene implementation
+     *         does not support the given string representation.
+     */
+    public void setValueFromPersistentRepresentation( String a_representation )
+        throws UnsupportedOperationException,
+        UnsupportedRepresentationException
+    {
+        // We're expecting to find the maximum number of quarters that this
+        // Gene can represent, followed by a colon, followed by the actual
+        // number of quarters currently represented.
+        // -----------------------------------------------------------------
+        StringTokenizer tokenizer = new StringTokenizer( a_representation,
+                                                         TOKEN_SEPARATOR );
+        // Make sure there are exactly two tokens.
+        // ---------------------------------------
+        if( tokenizer.countTokens() != 2 )
+        {
+            throw new UnsupportedRepresentationException(
+                "Unknown representation format: Two tokens expected." );
+        }
+
+        try
+        {
+            // Parse the two tokens as integers.
+            // ---------------------------------
+            m_maxNumberOfQuarters = Integer.parseInt( tokenizer.nextToken() );
+            m_numberOfQuarters = new Integer( tokenizer.nextToken() );
+        }
+        catch( NumberFormatException e )
+        {
+            throw new UnsupportedRepresentationException(
+                "Unknown representation format: Expecting integer values." );
+        }
+    }
+
+
+    /**
+     * Executed by the genetic engine when this Gene instance is no
+     * longer needed and should perform any necessary resource cleanup.
+     */
+    public void cleanup()
+    {
+        // There's no cleanup necessary for this implementation.
+        // -----------------------------------------------------
+    }
+
+
+    /**
+     * Compares this Gene with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object. The given object
+     * must be a QuarterGene.
+     *
+     * @param   a_otherQuarterGene the Object to be compared.
+     * @return  a negative integer, zero, or a positive integer as this object
+     *		    is less than, equal to, or greater than the specified object.
+     *
+     * @throws ClassCastException if the specified object's type prevents it
+     *         from being compared to this Object.
+     */
+    public int compareTo( Object a_otherQuarterGene )
+    {
+        // If the other allele is null, we're bigger.
+        // ------------------------------------------
+        if( a_otherQuarterGene == null )
+        {
+            return 1;
+        }
+
+        // If our allele is null, then we're either the same as the given
+        // QuarterGene if its allele is also null, or less than it if
+        // its allele is not null.
+        // -------------------------------------------------------------
+        if( m_numberOfQuarters == null )
+        {
+            if ( ((QuarterGene) a_otherQuarterGene).m_numberOfQuarters == null )
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        // Otherwise, we just take advantage of the Integer.compareTo()
+        // method.
+        // ------------------------------------------------------------
+        return m_numberOfQuarters.compareTo(
+            ( (QuarterGene) a_otherQuarterGene ).m_numberOfQuarters );
+    }
+
+
+    /**
+     * Determines if this QuarterGene is equal to the given QuarterGene.
+     *
+     * @return true if this QuarterGene is equal to the given QuarterGene,
+     *         false otherwise.
+     */
+    public boolean equals( Object otherQuarterGene )
+    {
+        return compareTo( otherQuarterGene ) == 0;
+    }
+}
+    </pre>
+
+    <p>
+      Hopefully most of the methods and code in the example above are
+      pretty self-explanatory once the javadocs and comments are
+      consulted. We start off with a couple of constructors, one of
+      which lets the user specify an upper bound on the number of
+      quarters that this specific QuarterGene instance may
+      represent. We then move onto the newGene() method, which was
+      mentioned earlier, but deserves a second look.
+    </p>
+
+    <p>
+      The most important thing to note about the newGene() method is
+      that it should return a new Gene that is setup with the same
+      internal configuration as this Gene. The actual value of the returned
+      Gene doesn't matter, but you'll notice that we make sure to
+      pass on the same upper bound as our current QuarterGene instance.
+      This is worth noting because JGAP uses this method to create new
+      Genes for new Chromosomes, and it's important that the Genes
+      in the new Chromosome are setup exactly the same way as the Genes
+      in earlier Chromosomes. By invoking the newGene() method on each
+      of the Genes in a Chromosome, JGAP can be sure that the Genes
+      in the new Chromosome will be setup the same way each time.
+    </p>
+
+    <p>
+      Next come the setAllele() and getAllele() calls, which aren't very
+      interesting. Values (alleles) in Genes are represented as Objects,
+      in order to be as flexible as possible, and so we use an Integer
+      object in our QuarterGene implementation to represent the number
+      of quarters. Following these is the setRandomValue() method, which
+      sets the value of our QuarterGene to a legal random value--in
+      this case, an Integer between zero and the upper bound.
+    </p>
+
+    <p>
+      The next two methods deal with XML marshalling and are optional.
+      (For more information on XML marshalling, please see the
+      <a href="marshalling.html">Marshalling Populations to XML</a>
+      document.) We've implemented them here to provide an example. The
+      getPersistentRepresentation() method returns a String that
+      represents not only the current value of our QuarterGene, but
+      also the upper bound, so that this QuarterGene can be later 
+      reconstructed with exactly the same state that it has currently. 
+      To do this, we just convert our two integer values to strings and
+      separate them with a colon. Simple enough! The 
+      setValueFromPersistentRepresentation() method does the opposite: 
+      it takes a String representation, parses it, and then sets the 
+      internal state of this QuarterGene accordingly. If there's anything
+      wrong with the representation, an UnsupportedRepresentationException
+      is thrown.
+    </p>
+
+    <p>
+      The final three methods are cleanup(), which is invoked by JGAP
+      when this Gene is no longer needed; compareTo(), which compares
+      this QuarterGene to another one and determines which is the
+      "greater" of the two; and equals(), which compares this QuarterGene
+      to another one and determines if they are equal. All of these should
+      be self-explanatory.
+    </p>
+
+    <h3 class="subheader">Conclusion</h3>
+
+    <p>
+      As can be seen from the above example, creating custom genes
+      is an easy and straight-forward process. We hope that you'll
+      create your own Gene implementations whenever you feel the stock 
+      genes aren't exactly what you need. And hey--if you create a 
+      custom gene that you think might be useful to others, please feel
+      free to post it on the jgap-users mailing list so that others can
+      benefit from your work!
+    </p>
+
+    <p class="copyright">
+      Copyright &copy 2002, 2003 Neil Rotstan. All rights reserved.
+    </p>
+
+    <hr>
+    <center>
+      <a class="homeLink" href="./index.html">[Documentation Index]</a>
+    </center>
+    <br>
+
+    <center>
+      <A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/s
+flogo.php?group_id=11618&amp;type=5"
+         width="210" height="62" border="0" alt="SourceForge Logo"></A>
+    </center>
+  </body>
+</html>
+
+

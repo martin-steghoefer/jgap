@@ -1,0 +1,205 @@
+<html>
+  <head>
+    <link rel=stylesheet href="stylesheet.css" type="text/css">
+    <title>Creating Custom Genetic Operators</title>
+  </head>
+
+  <body class="documentText">
+    <h1 class="docTitle">Creating Custom Genetic Operators</h1>
+    <center>
+      <a class="homeLink" href="./index.html">[Documentation Index]</a>
+    </center>
+    <hr>
+
+    <p>
+      Customizing JGAP is intended to be easy and straight-forward. 
+      JGAP supports a Configuration mechanism that easily allows
+      you to add your own genetic operators to the mix, as well as
+      replace certain components such as the natural selector,
+      the random number generator, and the event manager.
+    </p>
+     
+    <p> 
+      Creating a new genetic operator is probably the most common
+      form of JGAP customization. We'll look at an existing operator,
+      the ReproductionOperator, as an example of how to create your
+      own genetic operator. As you'll see, it's extremly simple.
+    </p>
+
+      
+    <h3 class="subheader">Step 1: Implement GeneticOperator</h3>
+
+    <p>      
+      To create your own genetic operator, you'll need to implement
+      the org.jgap.GeneticOperator interface. This interface only
+      has one method, operate(), which is the method that will be
+      invoked by the genetic engine when it's time for your genetic
+      operator to do its work. Let's look at the source for the
+      ReproductionOperator:
+    </p>
+
+    <pre class="code">
+package org.jgap.impl;
+
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.GeneticOperator;
+
+import java.util.List;
+
+
+/**
+ * The reproduction operator makes a copy of each Chromosome in the
+ * population and adds it to the list of candidate chromosomes. This
+ * essentially guarantees that each Chromosome in the current population
+ * remains a candidate for selection for the next population.
+ */
+public class ReproductionOperator implements GeneticOperator
+{
+    /**
+     * The operate method will be invoked on each of the genetic operators
+     * referenced by the current Configuration object during the evolution
+     * phase. Operators are given an opportunity to run in the order that
+     * they are added to the Configuration. Implementations of this method
+     * may reference the population of Chromosomes as it was at the beginning
+     * of the evolutionary phase or the candidate Chromosomes, which are the
+     * results of prior genetic operators. In either case, only Chromosomes
+     * added to the list of candidate chromosomes will be considered for
+     * natural selection. Implementations should never modify the original
+     * population.
+     *
+     * @param a_activeConfiguration The current active genetic configuration.
+     * @param a_population The population of chromosomes from the current
+     *                     evolution prior to exposure to any genetic operators.
+     *                     Chromosomes in this array should never be modified.
+     * @param a_candidateChromosomes The pool of chromosomes that are candidates
+     *                               for the next evolved population. Any
+     *                               chromosomes that are modified by this
+     *                               genetic operator that should be considered
+     *                               for natural selection should be added to
+     *                               the candidate chromosomes.
+     */
+    public void operate( final Configuration a_activeConfiguration,
+                         final Chromosome[] a_population,
+                         final List a_candidateChromosomes )
+    {
+        // Just loop over the chromosomes in the population, make a copy of
+        // each one, and then add that copy to the candidate chromosomes
+        // pool so that it'll be considered for natural selection during the
+        // next phase of evolution.
+        // -----------------------------------------------------------------
+        for ( int i = 0; i < a_population.length; i++ )
+        {
+            a_candidateChromosomes.add( a_population[ i ].clone() );
+        }
+    }
+}
+    </pre>
+
+    <p>
+      The purpose of this operator is simply to create a copy of each of the
+      Chromosomes in the population. This is done to ensure that the original
+      Chromosomes will have a chance to be selected, in addition to their
+      offspring. As can be seen from the code, the operate() method accepts
+      three parameters: the active Configuration object, an array of 
+      Chromosomes that make up the current population, and a List of candidate
+      chromosomes that will ultimately go to the natural selection phase. The 
+      population array should never be modified--it is intended to represent
+      the population as it was before any genetic operators have been invoked.
+      If you wish to alter a Chromosome, you should first make a copy of it
+      and then alter the copy. Any altered Chromosomes that you wish to go on
+      to the natural selection phase must be added to the list of candidate
+      chromosomes.
+    </p>
+
+   
+    <h3 class="subheader">Step 2: Add the Operator to the Configuration</h3>
+    
+    <p>  
+      Now that we've written our operator, we need to tell JGAP to use it. This
+      just requires a single additional call to the Configuration object
+      during your normal setup phase:
+    </p>
+     
+<pre class="code"> 
+              Configuration conf = new DefaultConfiguration();
+              conf.addGeneticOperator( new ReproductionOperator() );
+</pre>
+    
+    <p>
+      The genetic engine will run the population of Chromosomes through
+      each of the active genetic operators in the order in which they 
+      were added to the Configuration object. It's worth noting that there
+      is no way to remove an operator from the Configuration object, which
+      means that if you want to replace an existing operator with your own
+      implementation, or place your genetic operator in "front" of an
+      existing operator, you won't be able to rely on the DefaultConfiguration
+      convenience class, since it automatically adds all of the stock genetic
+      operators. Intead, you'll need to setup your Configuration from scratch,
+      which isn't all that daunting a task. Just have a look at the 
+      DefaultConfiguration class to see what it does. If you're just adding
+      new genetic operators (and not replacing existing ones) and are content
+      with them being at the end of the operator chain, then you should be
+      able to continue using the DefaultConfiguration class.
+    </p>
+
+    <h3 class="subheader">Other Customizations</h3>
+
+    <p>
+      As mentioned above, it's also possible to replace the JGAP natural
+      selector, random number generator, and event manager. Details of
+      these customizations are beyond the scope of this document, but
+      performing them follows a similar process to creating a new
+      genetic operator: first, the new implementation must be written
+      and implement the appropriate interface; and second, the
+      Configuration object must be setup to use your new implementation.
+      Unlike genetic operators, the Configuration object allows these
+      other components to be replaced, so you can continue using the
+      DefaultConfiguration convenience class if desired.
+    </p>
+
+    <p>
+      The appropriate interfaces to implement for the various customizations
+      are as follows:
+    </p>
+
+    <ul>
+      <li>
+        To create your own natural selector, implement the 
+        org.jgap.NaturalSelector interface.
+      </li>
+
+      <li>
+        To create your own random number generator, implement the
+        org.jgap.RandomGenerator interface.
+      </li>
+
+      <li>
+        To create your own event manager, subclass the
+        org.jgap.event.EventManager class.
+      </li>
+    </ul>
+
+    <p>
+      Please see the javadocs for each of the above for further
+      information on what is required for each implementation.
+    </p>
+
+    <p class="copyright">
+      Copyright &copy 2002, 2003 Neil Rotstan. All rights reserved.
+    </p>
+
+    <hr>
+    <center>
+      <a class="homeLink" href="./index.html">[Documentation Index]</a>
+    </center>
+    <br>
+
+    <center>
+      <A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/s
+flogo.php?group_id=11618&amp;type=5"
+         width="210" height="62" border="0" alt="SourceForge Logo"></A>
+    </center>
+  </body>
+</html>
+
