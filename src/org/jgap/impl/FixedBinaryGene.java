@@ -18,6 +18,7 @@
 
 package org.jgap.impl;
 
+import java.util.*;
 import org.jgap.*;
 
 /**
@@ -40,7 +41,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private int m_length;
 
@@ -285,12 +286,21 @@ public class FixedBinaryGene
       throws UnsupportedOperationException, UnsupportedRepresentationException {
     if (a_representation != null) {
       if (isValidRepresentation(a_representation)) {
-        /**@todo implement*/
+        a_representation = a_representation.substring(1,a_representation.length()-1);
+        StringTokenizer st = new StringTokenizer(a_representation, ",");
+        int index = 0;
+        while (st.hasMoreTokens()) {
+          int i = Integer.parseInt(st.nextToken());
+          setBit(index++, i);
+        }
+        if (index < getLength()) {
+          throw new UnsupportedRepresentationException(
+              "Invalid gene representation: " + a_representation);
+        }
       }
       else {
         throw new UnsupportedRepresentationException(
-            "Invalid gene representation: " +
-            a_representation);
+            "Invalid gene representation: " + a_representation);
       }
     }
     else {
@@ -301,13 +311,19 @@ public class FixedBinaryGene
 
   /**
    * Verifies if the String is a valid representation of this Gene type
+   * in general (bit values will not be checked)
    * @param a_representation String
    * @return boolean
    * @author Klaus Meffert
    * @since 2.0
    */
   private boolean isValidRepresentation(String a_representation) {
-    /**@todo implement*/
+    if (a_representation == null) {
+      return false;
+    }
+    if (!a_representation.startsWith("[") || !a_representation.endsWith("]") ) {
+      return false;
+    }
     return true;
   }
 
