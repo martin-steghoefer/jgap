@@ -19,13 +19,14 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Gene;
+import java.util.List;
+
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
+import org.jgap.Gene;
 import org.jgap.GeneticOperator;
+import org.jgap.MutationRateCalculator;
 import org.jgap.RandomGenerator;
-
-import java.util.List;
 
 
 /**
@@ -55,12 +56,12 @@ public class MutationOperator implements GeneticOperator
     protected int m_mutationRate;
 
     /**
-     * Indicates whether dynamic mutation rate determination is enabled or
-     * not. If enabled, then the mutation rate will be determined automatically
-     * based upon the number of genes present in the chromosomes. If disabled,
-     * then the value of m_mutationRate will be used.
+     * Calculator for dynamically determining the mutation rate. If set to
+     * null the value of m_mutationRate will be used.
+     * Replaces the previously used boolean m_dynamicMutationRate
+     * @since 1.1
      */
-    protected boolean m_dynamicMutationRate;
+    private MutationRateCalculator m_mutationRateCalc;
 
 
     /**
@@ -71,8 +72,19 @@ public class MutationOperator implements GeneticOperator
      */
     public MutationOperator()
     {
-        m_mutationRate = 0;
-        m_dynamicMutationRate = true;
+        setMutationRateCalc(new DefaultMutationRateCalculator());
+    }
+
+    /**
+     * Constructs a new instance of this MutationOperator with a specified
+     * mutation rate calculator, which results in dynamic mutation being turned
+     * on.
+     * @param a_mutationRateCalculator calculator for dynamic mutation rate
+     *        computation
+     */
+    public MutationOperator(MutationRateCalculator a_mutationRateCalculator)
+    {
+        setMutationRateCalc(a_mutationRateCalculator);
     }
 
 
@@ -89,7 +101,7 @@ public class MutationOperator implements GeneticOperator
     public MutationOperator( int a_desiredMutationRate )
     {
         m_mutationRate = a_desiredMutationRate;
-        m_dynamicMutationRate = false;
+        setMutationRateCalc(null);
     }
 
 
@@ -125,7 +137,7 @@ public class MutationOperator implements GeneticOperator
         // If the mutation rate is set to zero and dynamic mutation rate is
         // disabled, then we don't perform any mutation.
         // ----------------------------------------------------------------
-        if ( m_mutationRate == 0 && !m_dynamicMutationRate )
+        if ( m_mutationRate == 0 && m_mutationRateCalc == null)
         {
             return;
         }
@@ -134,8 +146,8 @@ public class MutationOperator implements GeneticOperator
         // calculate it based upon the number of genes in the chromosome.
         // Otherwise, go with the mutation rate set upon construction.
         // --------------------------------------------------------------
-        int currentRate = m_dynamicMutationRate ?
-                              a_activeConfiguration.getChromosomeSize() * 10 :
+        int currentRate = m_mutationRateCalc != null ?
+            m_mutationRateCalc.calculateCurrentRate(a_activeConfiguration):
                               m_mutationRate;
 
         RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
@@ -173,6 +185,18 @@ public class MutationOperator implements GeneticOperator
                     genes[ j ].setToRandomValue( generator );
                 }
             }
+        }
+    }
+
+    public MutationRateCalculator getMutationRateCalc()
+    {
+        return m_mutationRateCalc;
+    }
+    public void setMutationRateCalc(MutationRateCalculator m_mutationRateCalc)
+    {
+        this.m_mutationRateCalc = m_mutationRateCalc;
+        if (m_mutationRateCalc != null) {
+            m_mutationRate = 0;
         }
     }
 }
