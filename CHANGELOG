@@ -29,6 +29,12 @@
   genetic engine now uses the getFitnessValue() method, which
   delegates to the evaluate() method and adds some additional logic
   of its own.
+* The event system has been made more generic. The GenotypeEvent
+  class has been replaced with a GeneticEvent class, and the
+  EventManager.fireGenotypeEvent() method has been replaced with
+  the EventManager.fireGeneticEvent() method. Event listeners
+  must now provide the names of events they wish to subscribe to
+  and will only be notified when those kinds of events are fired.
 
 
 0.21
