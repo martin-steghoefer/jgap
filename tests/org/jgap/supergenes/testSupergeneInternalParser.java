@@ -52,7 +52,7 @@ public class testSupergeneInternalParser extends abstractSupergene
     String a_ident, boolean a_print)
      throws UnsupportedRepresentationException
      {
-       if (a_t.indexOf(GSTART)<0)
+       if (a_t.indexOf(GENE_DELIMITER_HEADING)<0)
         {
           String p = a_ident+"'"+a_t+"'";
           if (a_print) System.out.println(p);
@@ -69,7 +69,7 @@ public class testSupergeneInternalParser extends abstractSupergene
         }
      }
 
-    public boolean isValid() {
+    public boolean isValid(Gene [] a) {
         throw new Error("Should never be called.");
     }
 

@@ -245,5 +245,4 @@ public abstract class abstractSupergeneTest {
         return s;
     }
 
-
 }

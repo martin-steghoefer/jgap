@@ -28,7 +28,7 @@ public class testSupergenePersistentRepresentation {
 
     public static class instantiableSupergene extends abstractSupergene
      {
-         public boolean isValid() { return true; };
+         public boolean isValid(Gene [] a) { return true; };
      }
 
     public static boolean testRepresentation()

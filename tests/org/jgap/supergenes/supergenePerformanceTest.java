@@ -58,26 +58,18 @@ public class supergenePerformanceTest {
                         long d_without = System.currentTimeMillis () -
                             s_started;
 
-                        System.out.println
-                        ("With " + d_supergene + " (" + E_s +
-                        "), " +  "without " + d_without + " (" + E_w +
-                        ")");
-
                         t_s += d_supergene;
                         t_w += d_without;
                         e_s += E_s;
                         e_w += E_w;
                     }
 
-                    System.out.println ("FINAL: With " + t_s + " (" + e_s +
-                                        "), " +
-                                        "without " + t_w + " (" + e_w +
-                                        "), performance increase " +
-                                        (100 - 100 * t_s / t_w) + " % ");
-
-                    out.println (popsize + "\t " + maxiter + "\t " + t_s +
+                    String r = (popsize + "\t " + maxiter + "\t " + t_s +
                                  "\t " + t_w +
                                  "\t " + e_s + "\t " + e_w);
+
+                     out.println(r);
+                     System.out.println(r);
                 }
             }
             out.flush();

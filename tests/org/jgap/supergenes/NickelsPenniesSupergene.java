@@ -37,10 +37,10 @@ public class NickelsPenniesSupergene extends abstractSupergene {
          super(a_genes);
      }
 
-    public boolean isValid()
+    public boolean isValid(Gene [] genes)
     {
-         IntegerGene nickels = (IntegerGene) getGenes()[0];
-         IntegerGene pennies  = (IntegerGene) getGenes()[1];
+         IntegerGene nickels = (IntegerGene)  genes[0];
+         IntegerGene pennies  = (IntegerGene) genes[1];
          boolean valid = nickels.intValue() % 2 == pennies.intValue() % 2;
          return valid;
 
