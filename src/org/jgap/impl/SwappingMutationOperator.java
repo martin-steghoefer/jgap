@@ -1,38 +1,21 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-
 package org.jgap.impl;
 
-import java.util.StringTokenizer;
-import java.util.List;
-import org.jgap.IUniversalRateCalculator;
-import org.jgap.Population;
-import org.jgap.Chromosome;
-import org.jgap.RandomGenerator;
-import org.jgap.Genotype;
-import org.jgap.Gene;
+import java.util.*;
+
+import org.jgap.*;
 
 /**
  * Swaps the genes instead of mutating them. This kind of operator is
  * required by Traveling Salesman Problem.
- * @author Audrius Meskauskas
- * @author <font size=-1>Neil Rotstan, Klaus Meffert (reused code
- * from {@link org.jgap.impl.MutationOperator MutationOperator})</font>
  *
  * @see J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
  *  <i>Genetic algorithms for the traveling salesman problem</i>.
@@ -41,10 +24,15 @@ import org.jgap.Gene;
  * and also {@link http://ecsl.cs.unr.edu/docs/techreports/gong/node3.html
  * Sushil J. Louis & Gong Li  }
  *
- * @version 1.0
+ * @author Audrius Meskauskas
+ * @author <font size=-1>Neil Rotstan, Klaus Meffert (reused code
+ * from {@link org.jgap.impl.MutationOperator MutationOperator})</font>
+ * @since 2.0
  */
-
 public class SwappingMutationOperator extends MutationOperator {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     /** {@inheritDoc} */
     public SwappingMutationOperator() {

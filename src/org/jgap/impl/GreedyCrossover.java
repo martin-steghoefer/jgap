@@ -1,37 +1,17 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
-import org.jgap.Gene;
+import java.util.*;
 
-import org.jgap.Population;
-import org.jgap.RandomGenerator;
-import org.jgap.Genotype;
-import org.jgap.Chromosome;
-import org.jgap.GeneticOperator;
-
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.TreeSet;
-import java.util.StringTokenizer;
-import java.util.Iterator;
+import org.jgap.*;
 
 /**
  * Greedy crossover can be best explained in the terms of the
@@ -53,10 +33,12 @@ import java.util.Iterator;
  * @author Audrius Meskauskas
  * @author <font size=-1>Neil Rotstan, Klaus Meffert (reused code
  * from {@link org.jgap.impl.CrossoverOperator CrossoverOperator})</font>
- * @version 1.0
+ * @since 2.0
  */
-
 public class GreedyCrossover implements GeneticOperator {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -65,8 +47,12 @@ public class GreedyCrossover implements GeneticOperator {
      * given genes. The default method expects the genes to be a
      * IntegerGenes's and returns they absolute difference, that
      * makes sense only for tests.
+     *
+     * @param a_from Object
+     * @param a_to Object
+     * @return double
      */
-   public double distance(Object a_from, Object a_to)
+    public double distance(Object a_from, Object a_to)
      {
          IntegerGene from = (IntegerGene) a_from;
          IntegerGene to   = (IntegerGene) a_to;
@@ -214,6 +200,7 @@ public class GreedyCrossover implements GeneticOperator {
     * excluded from the swapping. In the Salesman task, the first city
     * in the list should (where the salesman leaves from) probably should
     * not change as it is part of the list. The default value is 1.
+    * @param a_offset int
     */
    public void setStartOffset (int a_offset)
    {
@@ -224,6 +211,7 @@ public class GreedyCrossover implements GeneticOperator {
     * excluded from the swapping. In the Salesman task, the first city
     * in the list should (where the salesman leaves from) probably should
     * not change as it is part of the list. The default value is 1.
+    * @return the offset
     */
    public int getStartOffset ()
    {

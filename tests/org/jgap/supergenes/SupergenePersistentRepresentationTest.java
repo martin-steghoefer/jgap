@@ -17,15 +17,22 @@
  */
 package org.jgap.supergenes;
 
-import org.jgap.Gene;
-import org.jgap.impl.IntegerGene;
-import org.jgap.impl.DoubleGene;
-import org.jgap.impl.CompositeGene;
+import org.jgap.*;
+import org.jgap.impl.*;
 
 import junit.framework.*;
 
-/** Test persistent representation of the abstractSupergene. */
+/**
+ * Test persistent representation of the abstractSupergene.
+ *
+ * @author Meskauskas Audrius
+ * @since 2.0
+ */
 public class SupergenePersistentRepresentationTest extends TestCase {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
 
     public static class instantiableSupergene extends abstractSupergene
      {
@@ -96,16 +103,16 @@ public class SupergenePersistentRepresentationTest extends TestCase {
             String representation =
                 gene.getPersistentRepresentation ();
 
-            System.out.println ("Old representation: " + representation);
+//            System.out.println ("Old representation: " + representation);
 
             instantiableSupergene restored = new instantiableSupergene ();
             restored.setValueFromPersistentRepresentation (representation);
 
-            System.out.println ("New representation: " +
-                                restored.getPersistentRepresentation ());
+//            System.out.println ("New representation: " +
+//                                restored.getPersistentRepresentation ());
 
-            System.out.println("Old gene "+gene);
-            System.out.println("New gene "+restored);
+//            System.out.println("Old gene "+gene);
+//            System.out.println("New gene "+restored);
 
             return gene.equals (restored);
         }
@@ -114,12 +121,6 @@ public class SupergenePersistentRepresentationTest extends TestCase {
             return false;
         }
      };
-
-     public static void main(String[] args) {
-         System.out.println(
-          testRepresentation()
-          );
-     }
 
      public static Test suite() {
        TestSuite suite =
@@ -140,7 +141,5 @@ public class SupergenePersistentRepresentationTest extends TestCase {
          boolean actualReturn = testRepresentation();
          assertEquals("return value", expectedReturn, actualReturn);
      }
-
-
 
 }

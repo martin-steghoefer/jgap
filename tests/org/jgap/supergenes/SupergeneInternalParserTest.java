@@ -40,7 +40,7 @@ public class SupergeneInternalParserTest extends TestCase
 
         StringBuffer b = new StringBuffer();
         try {
-          splitRecursive (s, b, "", true);
+          splitRecursive (s, b, "", false);
         }
         catch (UnsupportedRepresentationException ex) {
             ex.printStackTrace();
