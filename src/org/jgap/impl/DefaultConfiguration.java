@@ -21,7 +21,6 @@ import org.jgap.Configuration;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.event.EventManager;
 
-
 /**
  * The DefaultConfiguration class simplifies the JGAP configuration
  * process by providing default configuration values for many of the
@@ -30,37 +29,34 @@ import org.jgap.event.EventManager;
  * All other settings may also be changed in the normal fashion for
  * those who wish to specify other custom values.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
-public class DefaultConfiguration extends Configuration
-{
-    /**
-     * Constructs a new DefaultConfiguration instance with a number of
-     * Configuration settings set to default values. It is still necessary
-     * to set the sample Chromosome, population size, and desired fitness
-     * function. Other settings may optionally be altered as desired.
-     */
-    public DefaultConfiguration()
-    {
-        super();
-
-        try
-        {
-            addNaturalSelector( new BestChromosomesSelector() , true );
-            setRandomGenerator( new StockRandomGenerator() );
-            setEventManager( new EventManager() );
-            setChromosomePool( new ChromosomePool() );
-            addGeneticOperator( new ReproductionOperator() );
-            addGeneticOperator( new AveragingCrossoverOperator() );
-            addGeneticOperator( new MutationOperator( ) );
-        }
-        catch ( InvalidConfigurationException e )
-        {
-            throw new RuntimeException(
-                "Fatal error: DefaultConfiguration class could not use its " +
-                "own stock configuration values. This should never happen. " +
-                "Please report this as a bug to the JGAP team." );
-        }
+public class DefaultConfiguration
+    extends Configuration {
+  /**
+   * Constructs a new DefaultConfiguration instance with a number of
+   * Configuration settings set to default values. It is still necessary
+   * to set the sample Chromosome, population size, and desired fitness
+   * function. Other settings may optionally be altered as desired.
+   */
+  public DefaultConfiguration() {
+    super();
+    try {
+      addNaturalSelector(new BestChromosomesSelector(), true);
+      setRandomGenerator(new StockRandomGenerator());
+      setEventManager(new EventManager());
+      setChromosomePool(new ChromosomePool());
+      addGeneticOperator(new ReproductionOperator());
+      addGeneticOperator(new AveragingCrossoverOperator());
+      addGeneticOperator(new MutationOperator());
     }
+    catch (InvalidConfigurationException e) {
+      throw new RuntimeException(
+          "Fatal error: DefaultConfiguration class could not use its " +
+          "own stock configuration values. This should never happen. " +
+          "Please report this as a bug to the JGAP team.");
+    }
+  }
 }
