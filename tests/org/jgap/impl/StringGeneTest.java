@@ -53,7 +53,7 @@ public class StringGeneTest
     {
         try
         {
-            Gene gene = new StringGene (1, 0);
+            Gene gene = new StringGene (2, 1);
             fail ();
         }
         catch (IllegalArgumentException iex)
@@ -196,6 +196,42 @@ public class StringGeneTest
         }
     }
 
+    public void testSetAllele_2 ()
+    {
+        Gene gene1 = new StringGene (3, 4,"ABCDEFHI");
+        try
+        {
+            gene1.setAllele ("ABDG");
+            fail ();
+        }
+        catch (IllegalArgumentException iex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testSetAllele_3 ()
+    {
+        Gene gene1 = new StringGene (3, 4, "EGAL");
+        try
+        {
+            //length of allele to short
+            gene1.setAllele ("");
+            fail ();
+        }
+        catch (IllegalArgumentException iex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testSetAllele_4 ()
+    {
+        Gene gene1 = new StringGene (0, 4, "");
+        //following should be possible
+        gene1.setAllele ("");
+    }
+
     public void testNewGene_0 () throws Exception
     {
         StringGene gene1 = new StringGene (1, 4);
@@ -207,6 +243,16 @@ public class StringGeneTest
         int maxLength2 = gene2.getMaxLength();
         assertEquals (minLength1, minLength2);
         assertEquals (maxLength1, maxLength2);
+    }
+
+    public void testPersistentRepresentation_0() throws Exception {
+        Gene gene1 = new StringGene (2, 10,"ABCDE");
+        gene1.setAllele(new String("BABE"));
+        String pres1 = gene1.getPersistentRepresentation();
+        Gene gene2 = new StringGene ();
+        gene2.setValueFromPersistentRepresentation(pres1);
+        String pres2 = gene2.getPersistentRepresentation();
+        assertEquals(pres1, pres2);
     }
 
 }
