@@ -22,10 +22,10 @@ import java.util.*;
 public class PermutingConfiguration
     extends Configuration {
 
-  private static int index;
+//  private static int index;
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private List m_randomGeneratorSlots;
 
@@ -207,7 +207,7 @@ public class PermutingConfiguration
         m_fitnessFunctionIndex);
     m_configuration.setFitnessFunction(ff);
 
-//    m_componentIndex++;
+    m_componentIndex++;
 
     return m_configuration;
   }
@@ -251,6 +251,6 @@ public class PermutingConfiguration
         *(m_fitnessFunctionSlots.size())
         *(Math.pow(2,m_naturalSelectorSlots.size())-1)
         *(Math.pow(2,m_geneticOperatorSlots.size())-1);
-    return index < r;
+    return m_componentIndex < r;
   }
 }

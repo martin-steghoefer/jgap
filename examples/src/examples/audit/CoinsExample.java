@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -102,13 +102,15 @@ public class CoinsExample {
 
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     pconf.addGeneticOperatorSlot(new CrossoverOperator());
-    pconf.addGeneticOperator(new MutationOperator());
+    pconf.addGeneticOperatorSlot(new MutationOperator());
 
     pconf.addNaturalSelectorSlot(new BestChromosomesSelector());
     pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
 
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
-    pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
+//    pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
+
+    pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(a_targetChangeAmount));
 
     int k=0;
     while (pconf.hasNext()) {
@@ -125,8 +127,9 @@ public class CoinsExample {
         // add current best fitness to chart
         double fitness = population.getFittestChromosome().getFitnessValue();
         if (i % 3 == 0) {
-          String s = String.valueOf(k)+"_"+String.valueOf(i);
-          dataset.setValue(fitness, "Fitness", s);
+//          String s = String.valueOf(k)+"_"+
+          String s = String.valueOf(i);
+          dataset.setValue(fitness, "Fitness "+k, s);
         }
       }
 
