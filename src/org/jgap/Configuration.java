@@ -49,8 +49,7 @@ import org.jgap.impl.ChromosomePool;
 public class Configuration {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * References the current fitness function that will be used to evaluate

@@ -38,6 +38,10 @@ package org.jgap;
  */
 public abstract class FitnessFunction
     implements java.io.Serializable {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
   /**
    * Retrieves the fitness value of the given Chromosome. The fitness
    * value will be a positive integer.

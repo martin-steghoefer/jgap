@@ -30,6 +30,10 @@ import junit.framework.TestSuite;
  */
 public class FitnessFunctionTest
     extends TestCase {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
   public FitnessFunctionTest() {
   }
 

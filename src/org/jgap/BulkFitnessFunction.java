@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -19,7 +17,6 @@
  */
 package org.jgap;
 
-
 /**
  * Bulk fitness functions are used to determine how optimal a group of
  * solutions are relative to each other. Bulk fitness functions can be
@@ -34,15 +31,18 @@ package org.jgap;
  * @author Neil Rotstan
  * @since 1.0
  */
-public abstract class BulkFitnessFunction implements java.io.Serializable
-{
-    /**
-     * Calculates and sets the fitness values on each of the given
-     * Chromosomes via their setFitnessValue() method.
-     *
-     * @param a_subjects the Chromosomes for which the fitness values
-     *                   must be computed and set.
-     */
-    public abstract void evaluate( Chromosome[] a_subjects );
-}
+public abstract class BulkFitnessFunction
+    implements java.io.Serializable {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**
+   * Calculates and sets the fitness values on each of the given
+   * Chromosomes via their setFitnessValue() method.
+   *
+   * @param a_subjects the Chromosomes for which the fitness values
+   *                   must be computed and set.
+   */
+  public abstract void evaluate(Chromosome[] a_subjects);
+}
