@@ -24,16 +24,18 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/*
+/**
  * Test class for BooleanGene class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
-
 public class BooleanGeneTest
     extends TestCase
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public BooleanGeneTest ()
     {
@@ -213,6 +215,48 @@ public class BooleanGeneTest
         gene2.setAllele (new Boolean (false));
         assertEquals (1, gene1.compareTo (gene2));
         assertEquals ( -1, gene2.compareTo (gene1));
+    }
+
+    public void testApplyMutation_0() {
+        BooleanGene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        gene.applyMutation(0, 0.0d);
+        assertEquals(true, gene.booleanValue());
+    }
+
+    public void testApplyMutation_1() {
+        BooleanGene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        gene.applyMutation(1, 0.000001d);//index 1 should be ignored
+        assertEquals(true, gene.booleanValue());
+    }
+
+    public void testApplyMutation_2() {
+        BooleanGene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        gene.applyMutation(333, -0.000001d);//index 333 should be ignored
+        assertEquals(false, gene.booleanValue());
+    }
+
+    public void testApplyMutation_3() {
+        BooleanGene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        gene.applyMutation(0, -1.0d);
+        assertEquals(false, gene.booleanValue());
+    }
+
+    public void testApplyMutation_4() {
+        BooleanGene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        gene.applyMutation(0, -2.0d);
+        assertEquals(false, gene.booleanValue());
+    }
+
+    public void testApplyMutation_5() {
+        BooleanGene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        gene.applyMutation(0, 2.0d);
+        assertEquals(true, gene.booleanValue());
     }
 
 }
