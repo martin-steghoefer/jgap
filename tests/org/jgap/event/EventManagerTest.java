@@ -23,7 +23,7 @@ import junitx.util.*;
 public class EventManagerTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public EventManagerTest() {
   }
@@ -33,6 +33,12 @@ public class EventManagerTest
     return suite;
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testAddEventListener_0()
       throws Exception {
     EventManager man = new EventManager();
@@ -44,6 +50,29 @@ public class EventManagerTest
     assertEquals(listener, listenersList.get(0));
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testAddEventListener_1()
+      throws Exception {
+    EventManager man = new EventManager();
+    GeneticEventListener listener = new EventListener();
+    Map listeners = (Map) PrivateAccessor.getField(man, "m_listeners");
+    man.addEventListener("testeventname", listener);
+    man.addEventListener("testeventname", listener);
+    List listenersList = (List) listeners.get("testeventname");
+    assertEquals(listener, listenersList.get(0));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
   public void testRemoveEventListener_0()
       throws Exception {
     EventManager man = new EventManager();
@@ -59,9 +88,45 @@ public class EventManagerTest
     assertTrue( ( (List) listeners.get("testeventname")).size() == 0);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testFireGeneticeEvent_0()
+      throws Exception {
+    EventManager man = new EventManager();
+    GeneticEventListener listener = new EventListener();
+    man.addEventListener("testeventname", listener);
+    GeneticEvent genEvent = new GeneticEvent("wrong_name",this);
+    man.fireGeneticEvent(genEvent);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testFireGeneticeEvent_1()
+      throws Exception {
+    EventManager man = new EventManager();
+    EventListener listener = new EventListener();
+    man.addEventListener("testeventname", listener);
+    GeneticEvent genEvent = new GeneticEvent("testeventname",this);
+    man.fireGeneticEvent(genEvent);
+    assertTrue(listener.fired);
+    assertEquals(genEvent,listener.event);
+  }
+
   private class EventListener
       implements GeneticEventListener {
+    public boolean fired;
+    public GeneticEvent event;
     public void geneticEventFired(GeneticEvent a_firedEvent) {
+      fired = true;
+      event = a_firedEvent;
     }
   }
 }
