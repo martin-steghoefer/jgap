@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private int m_length;
 
@@ -216,7 +216,7 @@ public class FixedBinaryGene
   protected int checkSubLength(int from, int to)
       throws IndexOutOfBoundsException {
     checkIndex(from);
-    checkIndex(to - 1);
+    checkIndex(to);
     int sublen = to - from + 1;
     if (0 > sublen)
       throw new IllegalArgumentException("must have 'from' <= 'to', but has "
@@ -323,14 +323,9 @@ public class FixedBinaryGene
     if (a_numberGenerator == null) {
       throw new IllegalArgumentException("Random Generator must not be null!");
     }
-    int len = size();
+    int len = getLength();
     for (int i = 0; i < len; i++) {
-      if (a_numberGenerator.nextBoolean() == true) {
-        m_value[i] = 1;
-      }
-      else {
-        m_value[i] = 0;
-      }
+      setBit(i,a_numberGenerator.nextBoolean());
     }
   }
 
