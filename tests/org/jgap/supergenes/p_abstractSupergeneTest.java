@@ -13,13 +13,16 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /** Abstract class for testing Supergene performance.
- * @author Neil Rotstan, Klaus Meffert
+*
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @author Audrius Meskauskas (subsequent adaptation)
+ * @since 2.0
  * */
 abstract class p_abstractSupergeneTest {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
     /** Gene index for the dimes gene */
     public static final int DIMES = 0;
