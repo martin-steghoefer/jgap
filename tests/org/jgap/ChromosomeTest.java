@@ -18,15 +18,10 @@
 
 package org.jgap;
 
-import org.jgap.impl.BooleanGene;
-import org.jgap.impl.DefaultConfiguration;
-import org.jgap.impl.IntegerGene;
-import org.jgap.impl.RandomFitnessFunction;
-import org.jgap.impl.StaticFitnessFunction;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
+import org.jgap.impl.*;
+
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for Chromosome class
@@ -38,7 +33,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public ChromosomeTest() {
   }
@@ -326,7 +321,7 @@ public class ChromosomeTest
   }
 
   /**
-   * Test clone with set application data, where cloning not supported
+   * Test clone with set application data implementing interface Cloneable
    */
   public void testClone_2() throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
@@ -338,15 +333,9 @@ public class ChromosomeTest
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
     Chromosome chrom = new Chromosome(conf, genes);
-    IApplicationData appObj = new MyAppObject();
+    Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
-    try {
-      chrom2 = (Chromosome) chrom.clone();
-      fail();
-    }
-    catch (IllegalStateException iex) {
-      ;//this is OK
-    }
+    chrom2 = (Chromosome) chrom.clone();
   }
 
   /**
@@ -362,7 +351,7 @@ public class ChromosomeTest
     conf.setSampleChromosome(chrom2);
     conf.setPopulationSize(5);
     Chromosome chrom = new Chromosome(conf, genes);
-    IApplicationData appObj = new MyAppObject2();
+    Object appObj = new MyAppObject2();
     chrom.setApplicationData(appObj);
     chrom2 = (Chromosome) chrom.clone();
     assertTrue(chrom.equals(chrom2));
@@ -556,7 +545,7 @@ public class ChromosomeTest
   }
 }
 
-class MyAppObject extends TestFitnessFunction implements IApplicationData {
+class MyAppObject extends TestFitnessFunction implements Cloneable {
   public int compareTo(Object o) {
     return 0;
   }
