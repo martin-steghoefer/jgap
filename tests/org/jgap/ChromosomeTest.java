@@ -10,7 +10,9 @@
 package org.jgap;
 
 import java.util.*;
+
 import org.jgap.impl.*;
+
 import junit.framework.*;
 import junitx.util.*;
 
@@ -23,7 +25,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public ChromosomeTest() {
   }
@@ -515,10 +517,11 @@ public class ChromosomeTest
     chrom = new Chromosome(genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
                  0.0000001d);
-    //set fitness value to a different one
+    // set fitness value to a different one (should not affect first set value
+    // as no computation is performed once the fitness is known in the
+    // chromosome.
     ff.setStaticFitnessValue(44.235d);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
-                 0.0000001d);
+    assertEquals(20, chrom.getFitnessValue(),0.0000001d);
   }
 
   public void testSize_0()
