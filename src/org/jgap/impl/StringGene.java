@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   private int m_minLength;
 
@@ -465,7 +465,7 @@ public class StringGene
    */
   public void setAlphabet(String a_alphabet) {
     /**@todo optionally check if alphabet contains doublettes*/
-    this.m_alphabet = a_alphabet;
+    m_alphabet = a_alphabet;
   }
 
   /**
