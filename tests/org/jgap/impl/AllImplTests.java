@@ -24,13 +24,16 @@ import junit.framework.TestSuite;
 
 /**
  * Test suite for all tests of package org.jgap.impl
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class AllImplTests
     extends TestSuite
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.4 $";
+    private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     public AllImplTests ()
     {
@@ -43,6 +46,7 @@ public class AllImplTests
         suite.addTest (IntegerGeneTest.suite ());
         suite.addTest (DoubleGeneTest.suite ());
         suite.addTest (StringGeneTest.suite ());
+        suite.addTest (CompositeGeneTest.suite ());
         suite.addTest (BooleanGeneTest.suite ());
         suite.addTest (MutationOperatorTest.suite ());
         suite.addTest (CrossoverOperatorTest.suite ());
