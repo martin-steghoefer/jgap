@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -164,7 +164,7 @@ public class Chromosome
       if (a_initialGenes[i] == null) {
         throw new IllegalArgumentException(
             "The gene at index " + i + " in the given array of " +
-            "genes was found to be null. No genes in the array " +
+            "genes was found to be null. No gene in the array " +
             "may be null.");
       }
     }
