@@ -32,7 +32,7 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -110,15 +110,15 @@ public class GaussianRandomGeneratorTest
   public void testNextInt_1() throws Exception {
     GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
     int res;
-    int resOld = 0;
+    int resOli = 0;
     for (int i=0;i<100;i++) {
       res = calc.nextInt();
       if (i > 0) {
-        if (resOld == res) {
+        if (resOli == res) {
           fail("Two consecutive calls produced same value: "+res);
         }
         else {
-          resOld = res;
+          resOli = res;
         }
       }
       assertTrue(res >= 0.000d);
@@ -128,15 +128,15 @@ public class GaussianRandomGeneratorTest
   public void testNextLong_0() throws Exception {
     GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
     long res;
-    long resOld = 0;
+    long resOll = 0;
     for (int i=0;i<100;i++) {
       res = calc.nextLong();
       if (i > 0) {
-        if (resOld == res) {
+        if (resOll == res) {
           fail("Two consecutive calls produced same value: "+res);
         }
         else {
-          resOld = res;
+          resOll = res;
         }
       }
       assertTrue(res >= 0.000d);
@@ -155,6 +155,24 @@ public class GaussianRandomGeneratorTest
         }
         else {
           resOld = res;
+        }
+      }
+      assertTrue(res >= 0.000d);
+    }
+  }
+
+  public void testNextFloat_0() throws Exception {
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    float res;
+    float resOlf = 0.0000f;
+    for (int i=0;i<100;i++) {
+      res = calc.nextFloat();
+      if (i > 0) {
+        if (Math.abs(resOlf - res) < DELTA) {
+          fail("Two consecutive calls produced same value: " + res);
+        }
+        else {
+          resOlf = res;
         }
       }
       assertTrue(res >= 0.000d);
