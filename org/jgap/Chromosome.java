@@ -303,21 +303,45 @@ public class Chromosome implements Comparable, Cloneable, Serializable
 
     /**
      * Retrieves the fitness value of this Chromosome, as determined by the
-     * active fitness function.
+     * active fitness function. If a bulk fitness function is in use and
+     * has not yet assigned a fitnes value to this Chromosome, then -1 is
+     * returned.
      *
      * @return a positive integer value representing the fitness of this
-     *         Chromosome.
+     *         Chromosome, or -1 if a bulk fitness function is in use and has
+     *         not yet assigned a fitness value to this Chromosome.
      */
     public int getFitnessValue()
     {
         if( m_fitnessValue < 0 )
         {
-            m_fitnessValue =
-                m_activeConfiguration.getFitnessFunction().
-                    getFitnessValue( this );
+            FitnessFunction normalFitnessFunction =
+                m_activeConfiguration.getFitnessFunction();
+
+            if( normalFitnessFunction != null )
+            {
+                m_fitnessValue = normalFitnessFunction.getFitnessValue( this );
+            }
         }
 
         return m_fitnessValue;
+    }
+
+
+    /**
+     * Sets the fitness value of this Chromosome. This method is for use
+     * by bulk fitness functions and should not be invokved from anything
+     * else.
+     *
+     * @param a_newFitnessValue a positive integer representing the fitness
+     *                          of this Chromosome.
+     */
+    public void setFitnessValue( int a_newFitnessValue )
+    {
+        if( a_newFitnessValue > 0 )
+        {
+            m_fitnessValue = a_newFitnessValue;
+        }
     }
 
 

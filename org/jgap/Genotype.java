@@ -184,6 +184,22 @@ public class Genotype implements Serializable
                     m_activeConfiguration, m_chromosomes, m_workingPool );
         }
 
+        // If a bulk fitness function has been provided, then convert the
+        // working pool to an array and pass it to the bulk fitness
+        // function so that it can evaluate and assign fitness values to 
+        // each of the Chromosomes.
+        // --------------------------------------------------------------
+        BulkFitnessFunction bulkFunction =
+            m_activeConfiguration.getBulkFitnessFunction();
+
+        if( bulkFunction != null )
+        {
+            Chromosome[] candidateChromosomes = (Chromosome[])
+                m_workingPool.toArray( new Chromosome[ m_workingPool.size() ] );
+         
+            bulkFunction.evaluate( candidateChromosomes );
+        } 
+
         // Add the chromosomes in the working pool to the natural selector.
         // ----------------------------------------------------------------
         Iterator iterator = m_workingPool.iterator();

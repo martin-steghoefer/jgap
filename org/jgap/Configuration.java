@@ -49,9 +49,18 @@ public class Configuration implements java.io.Serializable
 {
     /**
      * References the current fitness function that will be used to evaluate
-     * chromosomes during the natural selection process.
+     * chromosomes during the natural selection process. Note that only this
+     * or the bulk fitness function may be set--the two are mutually exclusive.
      */
     private FitnessFunction m_objectiveFunction = null;
+
+    /**
+     * References the current bulk fitness function that will be used to
+     * evaluate chromosomes (in bulk) during the natural selection
+     * process. Note that only this or the normal fitness function
+     * may be set--the two are mutually exclusive.
+     */
+    private BulkFitnessFunction m_bulkObjectiveFunction = null;
 
     /**
      * References the NaturalSelector implementation that will be used to
@@ -122,12 +131,16 @@ public class Configuration implements java.io.Serializable
      * worth as a candidate solution. These values are used as a guide by the
      * natural to determine which Chromosome instances will be allowed to move
      * on to the next round of evolution, and which will instead be eliminated.
-     * This setting is required.
+     * <p>
+     * Note that it is illegal to set both this fitness function and a bulk
+     * fitness function. Although one or the other must be set, the two are
+     * mutually exclusive.
      *
      * @param a_functionToSet: The fitness function to be used.
      *
      * @throws InvalidConfigurationException if the fitness function
-     *         is null or if this Configuration object is locked.
+     *         is null, a bulk fitness function has already been set,  
+     *         or if this Configuration object is locked.
      */
     public synchronized void setFitnessFunction(
                                  FitnessFunction a_functionToSet )
@@ -143,6 +156,15 @@ public class Configuration implements java.io.Serializable
                 "The FitnessFunction instance may not be null." );
         }
 
+        // Make sure the bulk fitness function hasn't already been set.
+        // ------------------------------------------------------------
+        if( m_bulkObjectiveFunction != null )
+        {
+            throw new InvalidConfigurationException(
+                "The bulk fitness function and normal fitness function " +
+                "may not both be set." );
+        }
+
         m_objectiveFunction = a_functionToSet;
     }
 
@@ -156,6 +178,64 @@ public class Configuration implements java.io.Serializable
     public FitnessFunction getFitnessFunction()
     {
         return m_objectiveFunction;
+    }
+
+
+    /**
+     * Sets the bulk fitness function to be used for this genetic algorithm.
+     * The bulk fitness function may be used to evaluate and assign fitness
+     * values to the entire group of candidate Chromosomes in a single batch.
+     * This can be useful in cases where it's difficult to assign fitness
+     * values to a Chromosome in isolation from the other candidate
+     * Chromosomes.
+     * <p>
+     * Note that it is illegal to set both a bulk fitness function and a
+     * normal fitness function. Although one or the other is required, the
+     * two are mutually exclusive.
+     *
+     * @param a_functionToSet: The bulk fitness function to be used.
+     *
+     * @throws InvalidConfigurationException if the bulk fitness function
+     *         is null, the normal fitness function has already been set,
+     *         or if this Configuration object is locked.
+     */
+    public synchronized void setBulkFitnessFunction(
+                                 BulkFitnessFunction a_functionToSet )
+                             throws InvalidConfigurationException
+    {
+        verifyChangesAllowed();
+
+        // Sanity check: Make sure that the given bulk fitness function 
+        // isn't null.
+        // ------------------------------------------------------------
+        if ( a_functionToSet == null )
+        {
+            throw new InvalidConfigurationException(
+                "The BulkFitnessFunction instance may not be null." );
+        }
+
+        // Make sure a normal fitness function hasn't already been set.
+        // ------------------------------------------------------------
+        if( m_objectiveFunction != null )
+        {
+            throw new InvalidConfigurationException(
+                "The bulk fitness function and normal fitness function " +
+                "may not both be set." );
+        }
+
+        m_bulkObjectiveFunction = a_functionToSet;
+    }
+
+
+    /**
+     * Retrieves the bulk fitness function previously setup in this 
+     * Configuration object.
+     *
+     * @return The bulk fitness function.
+     */
+    public BulkFitnessFunction getBulkFitnessFunction()
+    {
+        return m_bulkObjectiveFunction;
     }
 
 
@@ -522,11 +602,11 @@ public class Configuration implements java.io.Serializable
         // First, make sure all of the required fields have been set to
         // appropriate values.
         // ------------------------------------------------------------
-        if( m_objectiveFunction == null )
+        if( m_objectiveFunction == null && m_bulkObjectiveFunction == null )
         {
             throw new InvalidConfigurationException(
-                "A desired fitness function must be specified in the active " +
-                "configuration." );
+                "A desired fitness function or bulk fitness function must " +
+                "be specified in the active configuration." );
         }
 
         if( m_sampleChromosome == null )
