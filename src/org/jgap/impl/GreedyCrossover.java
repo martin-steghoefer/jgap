@@ -58,7 +58,7 @@ import org.jgap.*;
 public class GreedyCrossover implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
    /** Switches assertions on. Must be true during tests and debugging. */
    public static boolean ASSERTIONS = true;
@@ -111,9 +111,16 @@ public class GreedyCrossover implements GeneticOperator {
        }
      }
 
-   /** Perfroms a greedy crossover for the two given chromosoms.
-    * @throws error if the gene set in the chromosomes is not identical.
+   /**
+    * Perfroms a greedy crossover for the two given chromosoms.
     * The explaining error message is written to System.err.
+    *
+    * @param a_firstMate the first chromosome to crossover on
+    * @param a_secondMate the second chromosome to crossover on
+    * @throws Error if the gene set in the chromosomes is not identical.
+    *
+    * @author Audrius Meskauskas
+    * @since 2.1
     */
    public void operate (Chromosome a_firstMate, Chromosome a_secondMate) throws
         Error {
@@ -126,21 +133,19 @@ public class GreedyCrossover implements GeneticOperator {
         try {
          c1 = operate (g1, g2);
          c2 = operate (g2, g1);
+         a_firstMate.setGenes(c1);
+         a_secondMate.setGenes(c2);
         }
         catch ( Error err )
         {
-            System.err.println("An error occured while operating on:");
-            System.err.println(a_firstMate+" and ");
-            System.err.println(a_secondMate);
-            System.err.println(err.getMessage());
-            System.err.println("First "+m_startOffset+" genes were excluded "+
-            "from crossover. ");
-            System.err.println();
-            throw err;
+          throw new Error("Error occured while operating on:"
+                          + a_firstMate + " and "
+                          + a_secondMate
+                          + ". First " + m_startOffset + " genes were excluded " +
+                          "from crossover. Error message: "
+                          + err.getMessage());
         }
 
-        a_firstMate.setGenes(c1);
-        a_secondMate.setGenes(c2);
     }
 
    Gene [] operate(Gene[] g1, Gene[] g2)
@@ -168,9 +173,9 @@ public class GreedyCrossover implements GeneticOperator {
             if ( !not_picked.contains( g2 [j] ) )
              if ( ! g1[m_startOffset].equals( g2[j] ) )
              {
-               System.err.println( new Chromosome (g1) );
-               System.err.println( new Chromosome (g2) );
-               throw new Error("Chromosome gene sets must be identical");
+               throw new Error("Chromosome gene sets must be identical."
+                               + " First Chrom: " + new Chromosome(g1)
+                               + ". Second Chrom: " + new Chromosome(g2));
              }
        }
 
