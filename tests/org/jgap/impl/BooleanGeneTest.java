@@ -18,10 +18,8 @@
 
 package org.jgap.impl;
 
-import org.jgap.Gene;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.jgap.*;
+import junit.framework.*;
 
 /**
  * Test class for BooleanGene class
@@ -31,9 +29,8 @@ import junit.framework.TestSuite;
  */
 public class BooleanGeneTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public BooleanGeneTest() {
   }
@@ -153,6 +150,22 @@ public class BooleanGeneTest
     }
   }
 
+  /**
+   * Set Allele to boolean value, no exception should occur
+   */
+  public void testSetAllele_2() {
+    Gene gene1 = new BooleanGene();
+    gene1.setAllele(new Boolean(true));
+  }
+
+  /**
+   * Set Allele to boolean value, no exception should occur
+   */
+  public void testSetAllele_3() {
+    Gene gene1 = new BooleanGene();
+    gene1.setAllele(new Boolean(false));
+  }
+
   public void testCompareTo_0() {
     Gene gene1 = new BooleanGene();
     assertEquals(1, gene1.compareTo(null));
@@ -228,4 +241,139 @@ public class BooleanGeneTest
     gene.applyMutation(0, 2.0d);
     assertEquals(true, gene.booleanValue());
   }
+
+  public void testApplyMutation_6() {
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    gene.applyMutation(0, 2.0d);
+    assertEquals(true, gene.booleanValue());
+  }
+
+  public void testApplyMutation_7() {
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    gene.applyMutation(0, -1.0d);
+    assertEquals(false, gene.booleanValue());
+  }
+
+  public void testApplyMutation_8() {
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    gene.applyMutation(22, -0.5d);//22 should be ignored
+    assertEquals(false, gene.booleanValue());
+  }
+
+  public void testApplyMutation_9() {
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    gene.applyMutation(22, 0.5d);//22 should be ignored
+    assertEquals(true, gene.booleanValue());
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_0() {
+    BooleanGene gene = new BooleanGene();
+    try {
+      gene.setValueFromPersistentRepresentation(null);
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_1()
+      throws Exception {
+    BooleanGene gene = new BooleanGene();
+    gene.setValueFromPersistentRepresentation("null");
+    assertEquals(null, gene.getAllele());
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_2()
+      throws Exception {
+    BooleanGene gene = new BooleanGene();
+    gene.setValueFromPersistentRepresentation("true");
+    assertEquals(Boolean.TRUE, gene.getAllele());
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_3()
+      throws Exception {
+    BooleanGene gene = new BooleanGene();
+    gene.setValueFromPersistentRepresentation("false");
+    assertEquals(Boolean.FALSE, gene.getAllele());
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_4() {
+    BooleanGene gene = new BooleanGene();
+    try {
+      gene.setValueFromPersistentRepresentation("True");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_5() {
+    BooleanGene gene = new BooleanGene();
+    try {
+      gene.setValueFromPersistentRepresentation("False");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @since 2.0
+   */
+  public void testSetValueFromPersistentRepresentation_6() {
+    BooleanGene gene = new BooleanGene();
+    try {
+      gene.setValueFromPersistentRepresentation("X");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  public void testGetPersistentRepresentation_0() {
+     BooleanGene gene = new BooleanGene();
+     gene.setAllele(new Boolean(true));
+     String s = gene.getPersistentRepresentation();
+     assertEquals("true",s);
+  }
+
+  public void testGetPersistentRepresentation_1() {
+     BooleanGene gene = new BooleanGene();
+     gene.setAllele(new Boolean(false));
+     String s = gene.getPersistentRepresentation();
+     assertEquals("false",s);
+  }
+
+  public void testGetPersistentRepresentation_2() {
+     BooleanGene gene = new BooleanGene();
+     String s = gene.getPersistentRepresentation();
+     assertEquals("null",s);
+  }
+
 }
