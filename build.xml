@@ -5,6 +5,10 @@
     <javac srcdir="${src}"/>
   </target>
 
+  <target name="compile-debug">
+    <javac debug="on" srcdir="${src}"/>
+  </target>
+
   <target name="jar" depends="compile">
     <jar jarfile="jgap.jar" basedir="${src}"> 
        <include name="org/jgap/*.class"/>
@@ -16,6 +20,12 @@
     <jar jarfile="jgap-examples.jar" basedir="${src}"
          includes="examples/*.class"/>
   </target>
+
+  <target name="jar-debug" depends="compile-debug">
+    <antcall target="jar"/>
+  </target>
+
+  <target name="debug" depends="jar-debug"/>
 
   <target name="clean">
     <delete>
