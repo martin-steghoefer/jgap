@@ -32,7 +32,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -95,7 +95,7 @@ public class BestChromosomesSelector
     // If opted-in: Check if chromosome already added
     // This speeds up the process by orders of magnitude but could lower the
     // quality of evolved results because of fewer Chromosome's used!!!
-    if (!m_doublettesAllowed &&
+   if (!m_doublettesAllowed &&
         chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
       return;
     }
@@ -263,7 +263,9 @@ public class BestChromosomesSelector
 
   /**
    *
-   * @param a_originalRate double
+   * @param a_originalRate the rate of how many of the original chromosomes
+   * will be selected according to BestChromosomeSelector's strategy. The rest
+   * (non-original) of the chromosomes is addest as duplicates
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -278,7 +280,7 @@ public class BestChromosomesSelector
 
   /**
    *
-   * @return double
+   * @return see setOriginalRate
    *
    * @author Klaus Meffert
    * @since 2.0
