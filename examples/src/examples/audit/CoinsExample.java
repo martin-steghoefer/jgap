@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -153,8 +153,8 @@ public class CoinsExample {
 //            else {
 //              d = fitness;
 //            }
-//            eval.setValue(permutation,run,fitness, "Fitness " + permutation, s);
-            eval.setValue(permutation,run,fitness, new Integer(0), s);
+            eval.setValue(permutation,run,fitness, "Perm " + permutation, s);
+//            eval.setValue(permutation,run,fitness, new Integer(0), s);
           }
         }
       }
