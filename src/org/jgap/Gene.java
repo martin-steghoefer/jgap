@@ -21,7 +21,6 @@ package org.jgap;
 
 import java.io.Serializable;
 
-
 /**
  * Genes represent the discrete components of a potential solution
  * (the Chromosome). This interface exists so that custom gene implementations
@@ -34,15 +33,15 @@ import java.io.Serializable;
  * @author Neil Rotstan
  * @since 1.0
  */
-public interface Gene extends Comparable, Serializable
+public interface Gene
+    extends Comparable, Serializable
 {
 
     /**
-    * Represents the delimiter that is used to separate fields in the
-    * persistent representation of DoubleGene instances.
-    */
-   final static String PERSISTENT_FIELD_DELIMITER = ":";
-
+     * Represents the delimiter that is used to separate fields in the
+     * persistent representation of DoubleGene instances.
+     */
+    final static String PERSISTENT_FIELD_DELIMITER = ":";
 
     /**
      * Provides an implementation-independent means for creating new Gene
@@ -63,7 +62,7 @@ public interface Gene extends Comparable, Serializable
      * @return A new Gene instance of the same type and with the same
      *         setup as this concrete Gene.
      */
-    public Gene newGene( Configuration a_activeConfiguration );
+    Gene newGene (Configuration a_activeConfiguration);
 
     /**
      * Sets the value of this Gene to the new given value. The actual
@@ -71,8 +70,7 @@ public interface Gene extends Comparable, Serializable
      *
      * @param a_newValue the new value of this Gene instance.
      */
-    public void setAllele( Object a_newValue );
-
+    void setAllele (Object a_newValue);
 
     /**
      * Retrieves the value represented by this Gene. The actual type
@@ -80,8 +78,7 @@ public interface Gene extends Comparable, Serializable
      *
      * @return the value of this Gene.
      */
-    public Object getAllele();
-
+    Object getAllele ();
 
     /**
      * Retrieves a string representation of the value of this Gene instance
@@ -96,8 +93,8 @@ public interface Gene extends Comparable, Serializable
      * @throws UnsupportedOperationException to indicate that no implementation
      *         is provided for this method.
      */
-    public String getPersistentRepresentation()
-                  throws UnsupportedOperationException;
+    String getPersistentRepresentation ()
+        throws UnsupportedOperationException;
 
     /**
      * Sets the value and internal state of this Gene from the string
@@ -116,9 +113,9 @@ public interface Gene extends Comparable, Serializable
      * @throws UnsupportedRepresentationException if this Gene implementation
      *         does not support the given string representation.
      */
-    public void setValueFromPersistentRepresentation( String a_representation )
-                throws UnsupportedOperationException,
-                       UnsupportedRepresentationException;
+    void setValueFromPersistentRepresentation (String a_representation)
+        throws UnsupportedOperationException,
+        UnsupportedRepresentationException;
 
     /**
      * Sets the value of this Gene to a random legal value for the
@@ -132,12 +129,18 @@ public interface Gene extends Comparable, Serializable
      *                          to use the random number generator of their
      *                          choice.
      */
-    public void setToRandomValue( RandomGenerator a_numberGenerator );
-
+    void setToRandomValue (RandomGenerator a_numberGenerator);
 
     /**
      * Executed by the genetic engine when this Gene instance is no
      * longer needed and should perform any necessary resource cleanup.
      */
-    public void cleanup();
+    void cleanup ();
+
+    /**
+     * @return a string representation of the gene
+     * @since 1.1 (in the interface)
+     */
+    String toString ();
+
 }
