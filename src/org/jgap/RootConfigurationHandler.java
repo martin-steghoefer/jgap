@@ -14,13 +14,13 @@ import java.util.*;
 /**
  * The ConfigurationHandler for the Configuration class itself. This is the
  * entry point for a Configuration.
- * In other words this if for configuring a Configuration.
+ * In other words this is for configuring a Configuration.
  * @author Siddhartha Azad.
  * */
 public class RootConfigurationHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
