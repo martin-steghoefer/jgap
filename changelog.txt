@@ -4,6 +4,8 @@
 * Introduced abstract base class for all org.jgap.Gene
   implementations: org.jgap.BaseGene
 * Improved hashCode() functions of Gene implementations
+* Improved compareTo method considering app. data only
+  when opting in to it
 * Added example: Formula Finder
 * Added class ConfigurationForTest (preinitialized
   Configuration object) as a basis for writing tests more
