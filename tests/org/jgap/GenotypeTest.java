@@ -36,7 +36,7 @@ public class GenotypeTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.3 $";
+    private final static String CVS_REVISION = "$Revision: 1.4 $";
 
     public GenotypeTest ()
     {
@@ -67,7 +67,8 @@ public class GenotypeTest
         }
     }
 
-    public void testConstruct_2 () throws Exception
+    public void testConstruct_2 ()
+        throws Exception
     {
         Chromosome[] chroms = new Chromosome[1];
         chroms[0] = new Chromosome (new Gene[]
@@ -87,7 +88,8 @@ public class GenotypeTest
         }
     }
 
-    public void testConstruct_3 () throws Exception
+    public void testConstruct_3 ()
+        throws Exception
     {
         Chromosome[] chroms = new Chromosome[1];
         chroms[0] = new Chromosome (new Gene[]
@@ -104,7 +106,8 @@ public class GenotypeTest
         }
     }
 
-    public void testConstruct_4 () throws Exception
+    public void testConstruct_4 ()
+        throws Exception
     {
         Chromosome[] chroms = new Chromosome[1];
         chroms[0] = new Chromosome (new Gene[]
@@ -122,7 +125,8 @@ public class GenotypeTest
         }
     }
 
-    public void testConstruct_5 () throws Exception
+    public void testConstruct_5 ()
+        throws Exception
     {
         Chromosome[] chroms = new Chromosome[1];
         chroms[0] = new Chromosome (new Gene[]
@@ -141,7 +145,8 @@ public class GenotypeTest
         }
     }
 
-    public void testConstruct_6 () throws Exception
+    public void testConstruct_6 ()
+        throws Exception
     {
         Chromosome[] chroms = new Chromosome[1];
         chroms[0] = new Chromosome (new Gene[]
@@ -153,7 +158,8 @@ public class GenotypeTest
         Genotype genotype = new Genotype (conf, chroms);
     }
 
-    public void testConstruct_7 () throws Exception
+    public void testConstruct_7 ()
+        throws Exception
     {
         Configuration conf = new DefaultConfiguration ();
         conf.setFitnessFunction (new StaticFitnessFunction (5));
@@ -170,7 +176,43 @@ public class GenotypeTest
         }
     }
 
-    public void testGetChromosomes_0 () throws Exception
+    public void testConstruct_8 ()
+        throws Exception
+    {
+        Chromosome[] chroms = new Chromosome[1];
+        chroms[0] = new Chromosome (new Gene[]
+                                    {new IntegerGene (1, 5)});
+        Configuration conf = new DefaultConfiguration ();
+        conf.setFitnessFunction (new StaticFitnessFunction (5));
+        conf.setSampleChromosome (new Chromosome (new BooleanGene (), 9));
+        conf.setPopulationSize (7);
+        try
+        {
+            Genotype genotype = new Genotype (conf, chroms, null);
+            fail ();
+        }
+        catch (IllegalArgumentException iex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testConstruct_9 ()
+        throws Exception
+    {
+        Chromosome[] chroms = new Chromosome[1];
+        chroms[0] = new Chromosome (new Gene[]
+                                    {new IntegerGene (1, 5)});
+        Configuration conf = new DefaultConfiguration ();
+        conf.setFitnessFunction (new StaticFitnessFunction (5));
+        conf.setSampleChromosome (new Chromosome (new BooleanGene (), 9));
+        conf.setPopulationSize (7);
+        Genotype genotype = new Genotype (conf, chroms,
+                                          new DefaultFitnessEvaluator ());
+    }
+
+    public void testGetChromosomes_0 ()
+        throws Exception
     {
         Configuration conf = new DefaultConfiguration ();
         conf.setFitnessFunction (new StaticFitnessFunction (5));
@@ -201,7 +243,8 @@ public class GenotypeTest
      * construct a Chromosome without giving a configuration (see below)!
      * @throws Exception
      */
-    public void testToString_0 () throws Exception
+    public void testToString_0 ()
+        throws Exception
     {
         Configuration conf = new DefaultConfiguration ();
         conf.setFitnessFunction (new StaticFitnessFunction (5));
@@ -217,7 +260,8 @@ public class GenotypeTest
         assertTrue (genotype.toString ().length () > 0);
     }
 
-    public void testRandomInitialGenotype_0 () throws Exception
+    public void testRandomInitialGenotype_0 ()
+        throws Exception
     {
         try
         {
@@ -230,7 +274,8 @@ public class GenotypeTest
         }
     }
 
-    public void testRandomInitialGenotype_1 () throws Exception
+    public void testRandomInitialGenotype_1 ()
+        throws Exception
     {
         Configuration conf = new DefaultConfiguration ();
         Chromosome chrom = new Chromosome (new Gene[]
@@ -242,7 +287,8 @@ public class GenotypeTest
         assertEquals (7777, genotype.getChromosomes ().length);
     }
 
-    public void testEquals_0 () throws Exception
+    public void testEquals_0 ()
+        throws Exception
     {
         Chromosome[] chroms = new Chromosome[1];
         chroms[0] = new Chromosome (new Gene[]
@@ -257,9 +303,9 @@ public class GenotypeTest
         assertTrue (genotype.equals (genotype2));
         try
         {
-            //provoce an exception because active configuration not yet set
+            //provoke an exception because active configuration not yet set
             assertEquals (genotype.toString (), genotype2.toString ());
-            fail();
+            fail ();
         }
         catch (IllegalStateException iex)
         {
