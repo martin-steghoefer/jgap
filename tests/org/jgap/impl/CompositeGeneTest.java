@@ -288,13 +288,21 @@ public class CompositeGeneTest
 
     public void testPersistentPresentation_0() throws Exception {
         CompositeGene gene1 = new CompositeGene ();
-        gene1.addGene(new DoubleGene(2.05d, 7.53d), false);
+        Gene gene0 = new DoubleGene(2.05d, 7.53d);
+        gene0.setAllele(new Double(7.52d));
+        gene1.addGene(gene0, false);
         gene1.addGene(new DoubleGene(128.35d, 155.90d), false);
-        gene1.addGene(new IntegerGene(3, 8), false);
-        gene1.addGene(new BooleanGene(), false);
+        gene0 = new IntegerGene(3, 8);
+        gene0.setAllele(new Integer(5));
+        gene1.addGene(gene0, false);
+        gene0 = new BooleanGene();
+        gene0.setAllele(new Boolean(true));
+        gene1.addGene(gene0, false);
         gene1.addGene(new StringGene(), false);
         gene1.addGene(new StringGene(2,5), false);
-        gene1.addGene(new StringGene(6,11,"ABC"), false);
+        gene0 = new StringGene(6,11,"ABC");
+        gene0.setAllele("BBCBCCA");
+        gene1.addGene(gene0, false);
         String pres1 = gene1.getPersistentRepresentation();
         CompositeGene gene2 = new CompositeGene ();
         gene2.setValueFromPersistentRepresentation(pres1);
