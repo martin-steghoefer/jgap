@@ -23,9 +23,8 @@ import junit.framework.*;
  */
 public class MutationOperatorTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   public MutationOperatorTest() {
   }
@@ -64,13 +63,14 @@ public class MutationOperatorTest
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
 
-  public void testOperate_0() throws Exception {
+  public void testOperate_0()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
     Genotype.setConfiguration(conf);
     MutationOperator mutOp = new MutationOperator();
     List candChroms = new Vector();
-    Chromosome[] population = new Chromosome[]{};
+    Chromosome[] population = new Chromosome[] {};
     mutOp.operate(new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
     candChroms.clear();
@@ -78,26 +78,30 @@ public class MutationOperatorTest
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
     Genotype.setConfiguration(conf);
-    Chromosome c1 = new Chromosome(new BooleanGene(),9);
+    Chromosome c1 = new Chromosome(new BooleanGene(), 9);
     conf.setSampleChromosome(c1);
-    conf.addNaturalSelector(new BestChromosomesSelector(),true);
+    conf.addNaturalSelector(new BestChromosomesSelector(), true);
     conf.setPopulationSize(5);
-    for (int i=0;i<c1.getGenes().length;i++) {
+    for (int i = 0; i < c1.getGenes().length; i++) {
       c1.getGene(i).setAllele(Boolean.TRUE);
     }
-    Chromosome c2 = new Chromosome(new IntegerGene(),4);
-    for (int i=0;i<c2.getGenes().length;i++) {
+    Chromosome c2 = new Chromosome(new IntegerGene(), 4);
+    for (int i = 0; i < c2.getGenes().length; i++) {
       c2.getGene(i).setAllele(new Integer(27));
     }
-    population = new Chromosome[]{c1,c2};
+    population = new Chromosome[] {
+        c1, c2};
     mutOp.operate(new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
   }
 
-  public void testOperate_1() throws Exception {
+  public void testOperate_1()
+      throws Exception {
     MutationOperator mutOp = new MutationOperator();
     List candChroms = new Vector();
-    Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
+    Chromosome[] population = new Chromosome[] {
+        new Chromosome(new BooleanGene(), 9),
+        (new Chromosome(new IntegerGene(), 4))};
     Configuration conf = new Configuration();
     conf.setRandomGenerator(new StockRandomGenerator());
     Genotype.setConfiguration(conf);
@@ -107,16 +111,17 @@ public class MutationOperatorTest
   public void testOperate_2() {
     MutationOperator mutOp = new MutationOperator();
     List candChroms = new Vector();
-    Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
+    Chromosome[] population = new Chromosome[] {
+        new Chromosome(new BooleanGene(), 9),
+        (new Chromosome(new IntegerGene(), 4))};
     try {
       mutOp.operate(new Population(population), candChroms);
       fail();
     }
     catch (NullPointerException nex) {
-        ;//this is OK
+      ; //this is OK
     }
   }
-
 
   /**
    * Tests if population size grows expectedly after two consecutive calls.
@@ -165,28 +170,29 @@ public class MutationOperatorTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2, chroms.size());
+    assertEquals(3 + 2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2+2, chroms.size());
+    assertEquals(3 + 2 + 2, chroms.size());
   }
 
-  public void testOperate_5() throws Exception {
+  public void testOperate_5()
+      throws Exception {
     MutationOperator mutOp = new MutationOperator();
-    Chromosome[] population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
+    Chromosome[] population = new Chromosome[] {
+        new Chromosome(new BooleanGene(), 9),
+        (new Chromosome(new IntegerGene(), 4))};
     Configuration conf = new Configuration();
     conf.setRandomGenerator(new StockRandomGenerator());
     Genotype.setConfiguration(conf);
     Population pop = new Population(population);
     mutOp.operate(pop, pop.getChromosomes());
-    assertEquals(2,pop.getChromosomes().size());/**@todo make that it does not fail!*/
+    assertEquals(2, pop.getChromosomes().size());
   }
-
 }
 
 class TestFitnessFunction
     extends FitnessFunction {
-
   /**
    * @param a_subject Chromosome
    * @return double
@@ -196,6 +202,5 @@ class TestFitnessFunction
     //result does not matter here
     return 1.000000d;
   }
-
-    /**@todo test against CompositeGene*/
+  /**@todo test against CompositeGene*/
 }
