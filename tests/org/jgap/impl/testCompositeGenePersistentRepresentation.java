@@ -93,12 +93,15 @@ public class testCompositeGenePersistentRepresentation {
 
         Gene nn1 = new IntegerGene (1, 1000);
         Gene nn2 = new DoubleGene  (0, 1000);
+        Gene nn3 = new StringGene(1, 10,StringGene.ALPHABET_CHARACTERS_UPPER+CompositeGene.GENE_DELIMITER);
 
         nn1.setAllele(new Integer(22+seed));
         nn2.setAllele(new Double(44+seed));
+        nn3.setAllele("ABCCBA"+CompositeGene.GENE_DELIMITER);
 
         nested2.addGene(nn1);
         nested2.addGene(nn2);
+        nested2.addGene(nn3);
 
         gene.addGene(nested2);
 
