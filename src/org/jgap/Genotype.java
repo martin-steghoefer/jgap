@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   /**
    * The current active Configuration instance.
@@ -228,6 +228,12 @@ public class Genotype
   public synchronized void evolve() {
     verifyConfigurationAvailable();
 
+    //determine the fittest chromosome in the population
+    Chromosome fittest = null;
+    if (getConfiguration().isPreserveFittestIndividual()) {
+      fittest = getPopulation().determineFittestChromosome();
+    }
+
     // Apply NaturalSelectors before GeneticOperators will be applied.
     // ---------------------------------------------------------------
     applyNaturalSelectors(true);
@@ -272,6 +278,14 @@ public class Genotype
         catch (InvalidConfigurationException invex) {
           invex.printStackTrace();
         }
+      }
+    }
+
+    if (getConfiguration().isPreserveFittestIndividual()) {
+      if (!m_population.contains(fittest)) {
+        // Re-add fittest chromosome to current population.
+        // ------------------------------------------------
+        m_population.addChromosome(fittest);
       }
     }
 
@@ -456,24 +470,23 @@ public class Genotype
 
       NaturalSelector selector;
       // Repopulate the population of chromosomes with those selected
-      // by the natural selector.
-      // Iterate over all natural selectors.
+      // by the natural selector. Iterate over all natural selectors.
       // ------------------------------------------------------------
       for (int i = 0; i < selectorSize; i++) {
         selector = m_activeConfiguration.getNaturalSelector(
             processBeforeGeneticOperators, i);
 
         if (i == selectorSize - 1 && i > 0) {
-          // Ensure the last NaturalSelector adds the remaining Chromosomes
-          // --------------------------------------------------------------
+          // Ensure the last NaturalSelector adds the remaining Chromosomes.
+          // ---------------------------------------------------------------
           m_single_selection_size = m_population_size - m_population.size();
         }
         else {
           m_single_selection_size = m_population_size;
         }
 
-        // Do selection of Chromosomes
-        // ---------------------------
+        // Do selection of Chromosomes.
+        // ----------------------------
         selector.select(m_single_selection_size, m_population, m_new_population);
         // Clean up the natural selector.
         // ------------------------------
@@ -498,7 +511,12 @@ public class Genotype
    * Hashcode fucntion for the genotype, tries to create a unique invalue for
    * the chromosomes within the population. The logic for the hashcode is
    *
-   * 2^0*hash_code1 + 2^1*hash_code2............
+   * Step  Result
+   * ----  ------
+   *    1  31*0      + hashcode_0 = y(1)
+   *    2  31*y(1)   + hashcode_1 = y(2)
+   *    3  31*y(2)   + hashcode_2 = y(3)
+   *    n  31*y(n-1) + hashcode_n-1 = y(n)
    *
    * Each hash_code is like a digit and the binary equivalent is computed and
    * reported.
@@ -507,7 +525,7 @@ public class Genotype
    * @author vamsi
    * @since 2.1
    */
-  public int hashcode() {
+  public int hashCode() {
     int i, size = m_population.size();
     Chromosome s;
     int twopower = 1;
