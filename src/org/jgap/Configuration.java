@@ -334,7 +334,7 @@ public class Configuration
     }
 
     /**
-     * Retrieve the natural selector setup in this Configuration instance.
+     * Retrieves the natural selector setup in this Configuration instance.
      *
      * @return The natural selector.
      * @deprecated use getNaturalSelectors(true) or getNaturalSelectors(false)
@@ -343,6 +343,10 @@ public class Configuration
      */
     public NaturalSelector getNaturalSelector ()
     {
+        ChainOfSelectors chain = getNaturalSelectors(false);
+        if (chain == null || chain.size() < 1) {
+            return null;
+        }
         return getNaturalSelectors(false).get(0);
     }
 
