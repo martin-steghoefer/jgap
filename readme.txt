@@ -1,4 +1,4 @@
-Thank you for trying JGAP 2.1! We are very interested in any feedback
+Thank you for trying JGAP 2.2! We are very interested in any feedback
 you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
 feedback on the user's mailing list at jgap-users@lists.sourceforge.net
@@ -15,7 +15,7 @@ This represents the second big production release of JGAP, the Java Genetic
 Algorithms Package. 
 
 For a general list of changes, fixes, and enhancements that have been
-included in version 2.1, please see the changelog.txt file.
+included in version 2.2, please see the changelog.txt file.
 
 The Directory "doc" included with this release contains the documentation
 you could find at the JGAP homepage http://jgap.sourceforge.net
@@ -32,7 +32,7 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP 2.1 was compiled and tested with Java 1.4 on Windows 2000.
+JGAP 2.2 was compiled and tested with Java 1.4 on Windows 2000.
 Prior versions of JGAP have been testes with Linux, MacOS and Windows XP
 as well.
 
