@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -20,235 +20,390 @@
 
 package org.jgap;
 
-import java.util.*;
+import org.jgap.impl.AllelePool;
 
 
 /**
- * Chromosomes represent fixed-length collections of genes.
- * In the current implementation, this is the lowest
- * level class since genes are, themselves, represented
- * as individual bits. Each gene can have two values
- * (true or false). This should be suitable for most
- * applications, but it's always possible for a fitness
- * function to consider multiple genes as a single unit
- * if more than two possible values are desired.
- * In the future, a Gene class and Allele interface may be
- * created that will allow more flexibility in this regard.
- *
- * @author Neil Rotstan
+ * Chromosomes represent fixed-length collections of genes. In the current
+ * implementation, this is the lowest level class since genes are, themselves,
+ * represented as individual bits. Each gene can have two values (true or
+ * false). This should be suitable for most applications, but it's always
+ * possible for a fitness function to consider multiple genes as a single unit
+ * if more than two possible values are desired. In the future, a Gene class
+ * and Allele interface may be created that will allow more flexibility in this
+ * regard.
  */
-public class Chromosome implements Cloneable, java.io.Serializable,
-                                   Comparable
+public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 {
-  protected final Configuration gaConf;
-  protected final int numberOfGenes;
-  protected final BitSet genes;
+    /**
+     * The current active genetic configuration.
+     */
+    protected final Configuration m_activeConfiguration;
 
-  /**
-   * Constructs this Chromosome instance with the given set of genes.
-   * Each gene is represented by a single bit in the BitSet. For
-   * convenience, the randomInitialChromosome method is provided
-   * that will take care of generating a Chromosome instance of a
-   * specified size. This constructor exists in case it's desirable
-   * to initialize Chromosomes with specific gene values.
-   *
-   * @param configuration A configuration instance that controls
-   *                      the behavior of this GA run. Note that
-   *                      it must be in a valid state at the time
-   *                      of invocation, or an InvalidConfigurationException
-   *                      will be thrown.
-   * @param initialGenes  The set of genes with which to initialize
-   *                      this Chromosome instance. Each bit in the
-   *                      BitSet represents a single gene.
-   *
-   * @throws InvalidConfigurationException if the given Configuration
-   *         instance is null or invalid.
-   */
-  public Chromosome(Configuration configuration, BitSet initialGenes)
-         throws InvalidConfigurationException {
-    if(initialGenes == null) {
-      throw new IllegalArgumentException( "Genes cannot be null." );
-    }
-
-    if (configuration == null) {
-      throw new InvalidConfigurationException(
-        "Configuration instance must not be null");
-    }
-
-    configuration.lockSettings();
-    gaConf = configuration;
-
-    genes = initialGenes;
-    numberOfGenes = gaConf.getChromosomeSize();
-  }
+    /**
+     * The array of Alleles that represent the values of the genes in this
+     * Chromosome.
+     */
+    protected final Allele[] m_genes;
 
 
-  /**
-   * Returns a copy of this Chromosome. The returned instance can
-   * evolve independently of this instance.
-   *
-   * @return A copy of this Chromosome.
-   */
-  public synchronized Object clone() {
-    try {
-      return new Chromosome(gaConf, (BitSet) genes.clone());
-    }
-    catch (InvalidConfigurationException e) {
-      // This should never happen because the configuration has already
-      // been validated and locked for this instance of the Chromosome,
-      // and the configuration given to the new instance should be
-      // identical.
-      throw new RuntimeException(
-        "Fatal Error: reproduce operation produced an " +
-        "InvalidConfigurationException. This should never happen." +
-        "Please report this as a bug.");
-    }
-  }
-
-
-  /**
-   * Returns the allele (value) of the gene at the given locus
-   * (index) within the Chromosome. The first gene is at locus
-   * zero and the last gene is at the locus equal to the size
-   * of this Chromosome - 1.
-   *
-   * @param locus: The index of the gene value to be returned.
-   * @return The boolean value of the indicated gene.
-   */
-  public synchronized boolean getAllele(int locus) {
-    return genes.get(locus);
-  }
-
-
-  /**
-   * Retrieves the set of genes that make up this Chromosome.
-   * This method exists primarily for the benefit of GeneticOperators
-   * that require the ability to manipulate Chromosomes at a low leve.
-   *
-   * @return a BitSet of genes.
-   */
-  public synchronized BitSet getGenes() {
-    return genes;
-  }
-
-  
-  /**
-   * Returns the size of this Chromosome (the number of genes).
-   * A Chromosome's size is constant and will never change.
-   *
-   * @return The number of genes in this Chromosome instance.
-   */
-  public int size() {
-    return numberOfGenes;
-  }
-
-
-  /**
-   * Returns a string representation of this Chromosome, useful
-   * for debugging purposes.
-   *
-   * @return A string representation of this Chromosome.
-   */
-  public String toString() {
-    return genes.toString();
-  }
-
-
-  /**
-   * Convenience method that returns a newly constructed Chromosome
-   * setup according to the settings in the given Configuration
-   * instance and assigned random gene values.
-   *
-   * @param gaConf A Configuration instance that controls the
-   *               execution of this GA. Note that it must be
-   *               in a valid state at the time of this invocation,
-   *               or an InvalidConfigurationException will be thrown.
-   *
-   * @throws InvalidConfigurationException if the given Configuration
-   *         instance is null or invalid.
-   */
-  public static Chromosome randomInitialChromosome(Configuration gaConf)
-                           throws InvalidConfigurationException {
-    if (gaConf == null) {
-      throw new InvalidConfigurationException(
-        "Configuration instance must not be null");
-    }
-
-    gaConf.lockSettings();
-    int size = gaConf.getChromosomeSize();
-
-    BitSet genes = new BitSet(size);
-    
-    for(int i = 0; i < size; i++) {
-      // Java 1.4 provides a Bitset.set() method that accepts a boolean,
-      // which would clean up the following code a little bit. But
-      // slightly cleaner code doesn't seem an adequate reason to create
-      // a dependency on version 1.4.
-      if(gaConf.getRandomGenerator().nextBoolean()) {
-        genes.set(i);
-      }
-      else {
-        genes.clear(i);
-      }
-    }
-
-    return new Chromosome(gaConf, genes);
-  }
-
-
-  /**
-   * Compares this Chromosome against the specified object. The
-   * result is true if and only if the argument is an instance
-   * of the Chromosome class and has a BitSet equal to this
-   * Chromosome's BitSet.
-   *
-   * @param other The object to compare against.
-   * @return true if the objects are the same, false otherwise.
-   */
-  public boolean equals(Object other)
-  {
-    try
+    /**
+     * Constructs this Chromosome instance with the given array of gene values.
+     * Each gene is represented by a single allele in the array. For
+     * convenience, the randomInitialChromosome method is provided
+     * that will take care of generating a Chromosome instance of a
+     * specified size. This constructor exists in case it's desirable
+     * to initialize Chromosomes with specific gene values.
+     *
+     * @param a_activeConfiguration A Configuration instance that controls
+     *                              the behavior of this GA run. Note that
+     *                              it must be in a valid state at the time
+     *                              of invocation, or an
+     *                              InvalidConfigurationException
+     *                              will be thrown.
+     * @param a_initialGenes The set of alleles representing the values of
+     *                       the genes with which to initialize this
+     *                       Chromosome instance. Each allele represents the
+     *                       value of a single gene.
+     *
+     * @throws InvalidConfigurationException if the given Configuration
+     *         instance is null or invalid.
+     */
+    public Chromosome( Configuration a_activeConfiguration,
+                       Allele[] a_initialGenes )
+           throws InvalidConfigurationException
     {
-      Chromosome otherChromosome = (Chromosome) other;
+        // Sanity checks: make sure the parameters aren't null.
+        // ----------------------------------------------------
+        if ( a_initialGenes == null )
+        {
+            throw new IllegalArgumentException( "Genes cannot be null." );
+        }
 
-      return genes.equals(otherChromosome.genes);
+        if ( a_activeConfiguration == null )
+        {
+            throw new InvalidConfigurationException(
+                "Configuration instance must not be null" );
+        }
+
+        // Make sure the declared number of genes in the active configuration
+        // matches the actual number passed in.
+        // ------------------------------------------------------------------
+        if( a_activeConfiguration.getChromosomeSize() != a_initialGenes.length )
+        {
+            throw new InvalidConfigurationException(
+                "The declared chromosome size must match the actual number " +
+                "of genes passed into the chromosomes." );
+        }
+
+        // Lock the configuration settings so that they can't be changed from
+        // now on, and then populate our instance variables.
+        // ------------------------------------------------------------------
+        a_activeConfiguration.lockSettings();
+        m_activeConfiguration = a_activeConfiguration;
+
+        m_genes = a_initialGenes;
     }
 
-    catch (ClassCastException e)
+
+    /**
+     * Returns a copy of this Chromosome. The returned instance can evolve
+     * independently of this instance.
+     *
+     * @return A copy of this Chromosome.
+     */
+    public synchronized Object clone()
     {
-      return false;
+        // First make a copy of each of the Alleles.
+        // -----------------------------------------
+        Allele[] copyOfGenes = new Allele[ m_genes.length ];
+
+        for( int i = 0; i < m_genes.length; i++ )
+        {
+            // Try to pull the new allele from the allele pool to save on
+            // memory. If none is available, then create one.
+            // ----------------------------------------------------------
+            Allele copy = AllelePool.acquireAllele();
+            if( copy == null )
+            {
+                copy = m_activeConfiguration.getSampleAllele().newAllele(
+                         m_activeConfiguration );
+            }
+
+            // Set the value of the copy equal to the value of the original
+            // and then add it to the copyOfGenes array.
+            // ------------------------------------------------------------
+            copy.setValue( m_genes[i].getValue() );
+            copyOfGenes[i] = copy;
+        }
+
+        // Now construct a new Chromosome with the copies of the genes and
+        // return it.
+        // ---------------------------------------------------------------
+        try
+        {
+            return new Chromosome( m_activeConfiguration, copyOfGenes );
+        }
+        catch ( InvalidConfigurationException e )
+        {
+            // This should never happen because the configuration has already
+            // been validated and locked for this instance of the Chromosome,
+            // and the configuration given to the new instance should be
+            // identical.
+            // --------------------------------------------------------------
+            throw new RuntimeException(
+                    "Fatal Error: clone method produced an " +
+                    "InvalidConfigurationException. This should never happen." +
+                    "Please report this as a bug to the JGAP team." );
+        }
     }
-  }
 
 
-  /**
-   * Retrieve a hash code for this Chromosome. The hash code
-   * used is simply that of the internal BitSet.
-   *
-   * @return the hash code of this Chromosome.
-   */
-  public int hashCode()
-  {
-    return genes.hashCode();
-  }
-
-
-  public int compareTo(Object other)
-  {
-    Chromosome otherChromosome = (Chromosome) other;
-
-    if (genes.hashCode() < otherChromosome.genes.hashCode())
+    /**
+     * Returns the Allele representing the value of the gene at the given locus
+     * (index) within the Chromosome. The first gene is at locus zero and the
+     * last gene is at the locus equal to the size of this Chromosome - 1.
+     *
+     * @param a_desiredLocus: The index of the gene value to be returned.
+     * @return The Allele representing the value of the indicated gene.
+     */
+    public synchronized Allele getAllele( int a_desiredLocus )
     {
-      return -1;
+        return m_genes[ a_desiredLocus ];
     }
-    else if (genes.hashCode() > otherChromosome.genes.hashCode())
+
+
+    /**
+     * Retrieves the set of genes that make up this Chromosome. This method
+     * exists primarily for the benefit of GeneticOperators that require the
+     * ability to manipulate Chromosomes at a low level.
+     *
+     * @return a BitSet of genes.
+     */
+    public synchronized Allele[] getGenes()
     {
-      return 1;
+        return m_genes;
     }
-    else
+
+
+    /**
+     * Returns the size of this Chromosome (the number of genes).
+     * A Chromosome's size is constant and will never change.
+     *
+     * @return The number of genes in this Chromosome instance.
+     */
+    public int size()
     {
-      return 0;
+        return m_genes.length;
     }
-  }
+
+
+    /**
+     * Returns a string representation of this Chromosome, useful
+     * for debugging purposes.
+     *
+     * @return A string representation of this Chromosome.
+     */
+    public String toString()
+    {
+        StringBuffer representation = new StringBuffer();
+        representation.append( "[ " );
+
+        // Append the representations of each of the gene Alleles.
+        // -------------------------------------------------------
+        for( int i = 0; i < m_genes.length - 1; i++ )
+        {
+            representation.append( m_genes[i].toString() );
+            representation.append( ", " );
+        }
+        representation.append( m_genes[m_genes.length - 1].toString() );
+        representation.append( " ]");
+
+        return representation.toString();
+    }
+
+
+    /**
+     * Convenience method that returns a newly constructed Chromosome
+     * setup according to the settings in the given Configuration
+     * instance and assigned random gene values.
+     *
+     * @param a_activeConfiguration A Configuration instance that controls the
+     *               execution of this GA. Note that it must be
+     *               in a valid state at the time of this invocation,
+     *               or an InvalidConfigurationException will be thrown.
+     *
+     * @throws InvalidConfigurationException if the given Configuration
+     *         instance is null or invalid.
+     */
+    public static Chromosome randomInitialChromosome(
+                                 Configuration a_activeConfiguration )
+                             throws InvalidConfigurationException
+    {
+        // Sanity check: make sure the given configuration isn't null.
+        // -----------------------------------------------------------
+        if ( a_activeConfiguration == null )
+        {
+            throw new InvalidConfigurationException(
+                    "Configuration instance must not be null" );
+        }
+
+        // Lock the configuration settings so that they can't be changed from
+        // now on.
+        // ------------------------------------------------------------------
+        a_activeConfiguration.lockSettings();
+
+        // Next we need to create all of the random alleles for the
+        // Chromosome. To do this, we fetch the sample Allele instance from
+        // the active configuration and invoke its newAllele() method to
+        // create fresh Alleles. We then call their setToRandomValue() methods
+        // to initialize them to a random value.
+        // -------------------------------------------------------------------
+        Allele sampleAllele = a_activeConfiguration.getSampleAllele();
+        int numberOfGenes = a_activeConfiguration.getChromosomeSize();
+
+        Allele[] genes = new Allele[ numberOfGenes ];
+
+        for ( int i = 0; i < numberOfGenes; i++ )
+        {
+            // First try to fetch an allele from the allele pool. If none is
+            // available, then create a new one.
+            // -------------------------------------------------------------
+            genes[i] = AllelePool.acquireAllele();
+            if( genes[i] == null )
+            {
+                genes[i] = sampleAllele.newAllele( a_activeConfiguration );
+            }
+
+            // Set the allele to a random value.
+            // -------------------------------
+            genes[i].setToRandomValue(
+                a_activeConfiguration.getRandomGenerator() );
+        }
+
+        // Finally, construct the new chromosome with the generated genes
+        // and return it.
+        // --------------------------------------------------------------
+        return new Chromosome( a_activeConfiguration, genes );
+    }
+
+
+    /**
+     * Compares this Chromosome against the specified object. The result is
+     * true if and only if the argument is an instance of the Chromosome class
+     * and has a set of genes equal to this one.
+     *
+     * @param other The object to compare against.
+     * @return true if the objects are the same, false otherwise.
+     */
+    public boolean equals( Object other )
+    {
+        try
+        {
+            Chromosome otherChromosome = (Chromosome) other;
+
+            // Run through all of the genes in this Chromosome and compare
+            // them against the genes of the other Chromosome.
+            // -----------------------------------------------------------
+            Allele[] otherGenes = otherChromosome.m_genes;
+
+            for( int i = 0; i < m_genes.length; i++ )
+            {
+                if( !( m_genes[i].equals( otherGenes[i] ) ) )
+                {
+                    return false;
+                }
+            }
+
+            // All of the genes are the same, so return true.
+            // ----------------------------------------------
+            return true;
+        }
+        catch ( ClassCastException e )
+        {
+            // If the given object is not a Chromosome, return false.
+            // ------------------------------------------------------
+            return false;
+        }
+    }
+
+
+    /**
+     * Retrieve a hash code for this Chromosome.
+     *
+     * @return the hash code of this Chromosome.
+     */
+    public int hashCode()
+    {
+        return m_genes.hashCode();
+    }
+
+
+    /**
+     * Compares the given Chromosome to this Chromosome. This chromosome is
+     * considered to be "less than" the given chromosome if any of its genes
+     * are less than their corresponding genes in the other chromosome or,
+     * if all of the comparisons are equal, if this chromosome contains fewer
+     * genes than the other chromosome.
+     *
+     * @param other The Chromosome against which to compare this chromosome.
+     * @return a negative number if this chromosome is "less than" the given
+     *         chromosome, zero if they are equal to each other, and a positive
+     *         number if this chromosome is "greater than" the given chromosome.
+     */
+    public int compareTo( Object other )
+    {
+        Chromosome otherChromosome = (Chromosome) other;
+
+        // First, if the other Chromosome is null, then this chromosome is
+        // automatically the "greater" Chromosome.
+        // ---------------------------------------------------------------
+        if( otherChromosome == null )
+        {
+            return 1;
+        }
+
+        // First we compare as many genes as possible for differences. If
+        // one of the genes is not equal, then we return the result of its
+        // comparison.
+        // ---------------------------------------------------------------
+        Allele[] otherGenes = otherChromosome.m_genes;
+
+        int numberOfGenesToCompare =
+            Math.min( m_genes.length, otherGenes.length );
+
+        for( int i = 0; i < numberOfGenesToCompare; i++ )
+        {
+            int comparison = m_genes[i].compareTo( otherGenes[i] );
+
+            if( comparison != 0 )
+            {
+                return comparison;
+            }
+        }
+
+        // All of the compared genes were equal to each other. So now we
+        // just do the comparison based on the length of the chromosomes.
+        // If they are of equal length, then they will be equal. Otherwise
+        // the shorter chromosome will be the "lesser" chromosome.
+        // ---------------------------------------------------------------
+        return m_genes.length - otherGenes.length;
+    }
+
+
+    /**
+     * Invoked when this Chromosome is no longer needed and should perform
+     * any necessary cleanup.
+     */
+    public void cleanup()
+    {
+        // Release each of the alleles to the allele pool so that can be
+        // later reused.
+        // -------------------------------------------------------------
+        for( int i = 0; i < m_genes.length; i++ )
+        {
+            AllelePool.releaseAllele( m_genes[i] );
+        }
+    }
 }
-  
+

@@ -1,30 +1,52 @@
+/*
+ * Copyright 2001, 2002 Neil Rotstan
+ *
+ * This file is part of JGAP.
+ *
+ * JGAP is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * JGAP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser Public License
+ * along with JGAP; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 package org.jgap.xml;
 
+
 /**
- * An ImproperXMLException will be thrown if an XML document
- * or element is parsed for genetic data, but is found to
- * be structured improperly or missing required data.
+ * An ImproperXMLException will be thrown if an XML document or element is
+ * parsed for genetic data, but is found to be structured improperly or
+ * missing required data.
  */
 public class ImproperXMLException extends Exception
 {
-  /**
-   * Constructor.
-   */
-  public ImproperXMLException()
-  {
-    super();
-  }
+    /**
+     * Constructs a new ImproperXMLException instance. No error message
+     * will be available.
+     */
+    public ImproperXMLException()
+    {
+        super();
+    }
 
 
-  /**
-   * Constructor.
-   *
-   * @param message An error message describing the reason
-   *                this exception was thrown.
-   */
-  public ImproperXMLException(String message)
-  {
-    super(message);
-  }
+    /**
+     * Constructs a new ImproperXMLException instance with the given error
+     * message.
+     *
+     * @param a_message An error message describing the reason this exception
+     *                  is being thrown.
+     */
+    public ImproperXMLException( String a_message )
+    {
+        super( a_message );
+    }
 }
 

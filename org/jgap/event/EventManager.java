@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -19,53 +19,89 @@
  */
 package org.jgap.event;
 
-import org.jgap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+
 
 /**
- * Manages event notification in the system.
+ * Manages event notification in the system. Observers that desire to be
+ * notified of genetic events should subscribe to this class via the
+ * addEventListener() method. To unsubscribe, use the removeEventListener()
+ * method.
+ * <p>
+ * To generate a genetic event, one of the fire*() methods should be used.
+ * These will take care of notifying all appropriate subscribers.
  */
 public class EventManager
 {
-  private List listeners = new ArrayList();
+    private List listeners = new ArrayList();
 
-  /**
-   * Adds a new listener that will be notified when
-   * Genetic Events happen.
-   */
-  public synchronized void addEventListener( GeneticEventListener e )
-  {
-    listeners.add( e );
-  }
 
-  /**
-   * Removes a listener.
-   */
-  public synchronized void removeEventListener( GeneticEventListener e )
-  {
-    if ( listeners.contains( e ) )
+    /**
+     * Adds a new listener that will be notified when genetic events occur.
+     *
+     * @param a_eventListenerToAdd the genetic listener to subscribe to the
+     *                             genetic event notifications.
+     */
+    public synchronized void addEventListener(
+                                 GeneticEventListener a_eventListenerToAdd )
     {
-      listeners.remove( e );
-    }
-  }
-
-  /**
-   * Fires a Genotype Evolved Event.
-   */
-  public void fireGenotypeEvolvedEvent( GenotypeEvent event )
-  {
-    if ( listeners.size() < 1 ) return;
- 
-    List currentListeners = new ArrayList();
-    synchronized( this )
-    {
-      currentListeners.addAll( listeners );
+        listeners.add( a_eventListenerToAdd );
     }
 
-    for ( int i = 0; i < listeners.size(); i++ )
-    {
-      ((GeneticEventListener)currentListeners.get(i)).genotypeEvolved( event );
-    }
-  }
 
+    /**
+     * Removes the given listener from the event subscribers. The listener
+     * will no longer be notified when genetic events occur.
+     *
+     * @param a_eventListenerToRemove the genetic listener to unsubscribe from
+     *                                genetic event notifications.
+     */
+    public synchronized void removeEventListener(
+                                 GeneticEventListener a_eventListenerToRemove )
+    {
+        if ( listeners.contains( a_eventListenerToRemove ) )
+        {
+            listeners.remove( a_eventListenerToRemove );
+        }
+    }
+
+
+    /**
+     * Fires a Genotype Evolved Event. All subscribers will be notified
+     * of the event.
+     *
+     * @param a_eventToFire The representation of the GenotypeEvent to fire.
+     */
+    public void fireGenotypeEvolvedEvent( GenotypeEvent a_eventToFire )
+    {
+        // If there are no listeners, there's nothing to do.
+        // -------------------------------------------------
+        if ( listeners.isEmpty() )
+        {
+            return;
+        }
+
+        // Make a copy of the list of current subscribers. Otherwise, we have
+        // to synchronize and lock everyone out while we perform notifications,
+        // which could really slow things down since we have no idea what each
+        // of the listeners is going to do. This way, worst case is that there
+        // may be a bit of a delay before other subscribers are notified.
+        // --------------------------------------------------------------------
+        List currentListeners = new ArrayList();
+        synchronized( this )
+        {
+            currentListeners.addAll( listeners );
+        }
+
+        // Iterate over the listeners and notify each one of the event.
+        // ------------------------------------------------------------
+        Iterator listenerIterator = currentListeners.iterator();
+        while( listenerIterator.hasNext() )
+        {
+            ( (GeneticEventListener) listenerIterator.next() ).genotypeEvolved(
+                                         a_eventToFire );
+        }
+    }
 }

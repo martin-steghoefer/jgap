@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -19,8 +19,20 @@
  */
 package org.jgap.event;
 
+
+/**
+ * Represents objects that process genetic events. Once subscribed to an
+ * EventManager, an object implementing this interface will be notified
+ * via the appropriate method each time a genetic event is fired.
+ */
 public interface GeneticEventListener
 {
-  void genotypeEvolved( GenotypeEvent e );
+    /**
+     * Notify this GeneticEventListener that a genotype has been evolved.
+     *
+     * @param a_evolutionEvent The event object representing the evolution
+     *                         of a Genotype.
+     */
+    void genotypeEvolved( GenotypeEvent a_evolutionEvent );
 }
- 
+

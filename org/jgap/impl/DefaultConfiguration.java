@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -17,10 +17,12 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.jgap.impl;
 
-import org.jgap.*;
+import org.jgap.Configuration;
+import org.jgap.InvalidConfigurationException;
+import org.jgap.event.EventManager;
+
 
 /**
  * The DefaultConfiguration class simplifies the GA configuration
@@ -30,23 +32,27 @@ import org.jgap.*;
  * All other settings may also be changed in the normal fashion for
  * those who wish to specify other custom values.
  */
-public class DefaultConfiguration extends Configuration {
+public class DefaultConfiguration extends Configuration
+{
+    public DefaultConfiguration()
+    {
+        super();
 
-  public DefaultConfiguration() {
-    super();
-
-    try {
-      setNaturalSelector(new WeightedRouletteSelector());
-      setRandomGenerator(new StockRandomGenerator());
-      addGeneticOperator(new ReproductionOperator());
-      addGeneticOperator(new CrossoverOperator());
-      addGeneticOperator(new MutationOperator());
+        try
+        {
+            setNaturalSelector( new WeightedRouletteSelector() );
+            setRandomGenerator( new StockRandomGenerator() );
+            setEventManager( new EventManager() );
+            addGeneticOperator( new ReproductionOperator() );
+            addGeneticOperator( new CrossoverOperator() );
+            addGeneticOperator( new MutationOperator() );
+        }
+        catch ( InvalidConfigurationException e )
+        {
+            throw new RuntimeException(
+                "Fatal error: DefaultConfiguration class could not use its " +
+                "own stock configuration values. This should never happen. " +
+                "Please report this as a bug." );
+        }
     }
-    catch(InvalidConfigurationException e) {
-      throw new RuntimeException(
-        "Fatal error: DefaultConfiguration class could not use its own " +
-        "stock configuration values. This should never happen. Please " +
-        "report this as a bug.");
-    }
-  }
 }

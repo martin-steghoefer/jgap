@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -20,8 +20,14 @@
 
 package org.jgap.impl;
 
-import org.jgap.*;
-import java.util.*;
+import org.jgap.Allele;
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.GeneticOperator;
+import org.jgap.RandomGenerator;
+
+import java.util.List;
+
 
 /**
  * The crossover operator randomly selects two Chromosomes from the
@@ -31,52 +37,73 @@ import java.util.*;
  * list of candidate Chromosomes. This operation is performed half
  * as many times as there are Chromosomes in the population.
  */
-public class CrossoverOperator implements GeneticOperator {
-  public void operate(final Configuration gaConf, final Chromosome[] population,
-                      List candidateChromosomes) {
-    int numCrossovers = population.length / 2;
-    RandomGenerator generator = gaConf.getRandomGenerator();
+public class CrossoverOperator implements GeneticOperator
+{
+    /**
+     * The operate method will be invoked on each of the genetic operators
+     * referenced by the current Configuration object during the evolution
+     * phase. Operators are given an opportunity to run in the order that
+     * they are added to the Configuration. Implementations of this method
+     * may reference the population of Chromosomes as it was at the beginning
+     * of the evolutionary phase or the candidate Chromosomes, which are the
+     * results of prior genetic operators. In either case, only Chromosomes
+     * added to the list of candidate chromosomes will be considered for
+     * natural selection. Implementations should never modify the original
+     * population.
+     *
+     * @param a_activeConfiguration The current active genetic configuration.
+     * @param a_population The population of chromosomes from the current
+     *                     evolution prior to exposure to any genetic operators.
+     *                     Chromosomes in this array should never be modified.
+     * @param a_candidateChromosomes The pool of chromosomes that are candidates
+     *                               for the next evolved population. Any
+     *                               chromosomes that are modified by this
+     *                               genetic operator that should be considered
+     *                               for natural selection should be added to
+     *                               the candidate chromosomes.
+     */
+    public void operate( final Configuration a_activeConfiguration,
+                         final Chromosome[] a_population,
+                         final List a_candidateChromosomes )
+    {
+        int numCrossovers = a_population.length / 2;
+        RandomGenerator generator = a_activeConfiguration.getRandomGenerator();
 
-    for (int i = 0; i < numCrossovers; i++) {
-      Chromosome firstMate = (Chromosome)
-        population[generator.nextInt(population.length)].clone();
-  
-      Chromosome secondMate = (Chromosome)
-        population[generator.nextInt(population.length)].clone();
+        // For each crossover, grab two random chromosomes, pick a random
+        // locus (gene location), and then swap that gene and all genes
+        // to the "right" (those with greater loci) of that gene between
+        // the two chromosomes.
+        // --------------------------------------------------------------
+        for ( int i = 0; i < numCrossovers; i++ )
+        {
+            Chromosome firstMate = (Chromosome)
+                a_population[ generator.nextInt( a_population.length ) ].clone();
 
-      BitSet firstGenes = firstMate.getGenes();
-      BitSet secondGenes = secondMate.getGenes();
-      int numberOfGenes = firstMate.size();
-      int locus = generator.nextInt(numberOfGenes);
-      boolean currentAllele;
- 
-      for(int j = locus; j < numberOfGenes; j++) {
-        // java 1.4 introduced some new BitSet methods that would clean
-        // up the code below a bit (like a set() that accepts a boolean
-        // value), but that would make JGAP dependent on Java 1.4, and
-        // slightly cleaner code seems like a silly reason to require
-        // that.
-        currentAllele = firstGenes.get(j);
-      
-        if(secondGenes.get(j)) {
-          firstGenes.set(j);
-        }
-        else {
-          firstGenes.clear(j);
-        }
-  
-        if(currentAllele) {
-          secondGenes.set(j);
-        }
-  
-        else {
-          secondGenes.clear(j);
-        }
-      }
+            Chromosome secondMate = (Chromosome)
+                a_population[ generator.nextInt( a_population.length ) ].clone();
 
-      candidateChromosomes.add(firstMate);
-      candidateChromosomes.add(secondMate);
+            Allele[] firstGenes = firstMate.getGenes();
+            Allele[] secondGenes = secondMate.getGenes();
+            int numberOfGenes = firstMate.size();
+            int locus = generator.nextInt( numberOfGenes );
+
+            // Swap the genes.
+            // ---------------
+            Object firstValue;
+            for ( int j = locus; j < numberOfGenes; j++ )
+            {
+                firstValue = firstGenes[j].getValue();
+                firstGenes[j].setValue( secondGenes[j].getValue() );
+                secondGenes[j].setValue( firstValue );
+            }
+
+            // Add the modified chromosomes to the candidate pool so that
+            // they'll be considered for natural selection during the next
+            // phase of evolution.
+            // -----------------------------------------------------------
+            a_candidateChromosomes.add( firstMate );
+            a_candidateChromosomes.add( secondMate );
+        }
     }
-  }
 }
 

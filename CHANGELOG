@@ -1,3 +1,26 @@
+0.3 (in progress)
+----------
+* Changed NaturalSelector.add() method to accept an int for the fitness
+  value instead of a long.
+* Fixed some bugs in WeightedRouletteSelector related to overflow of
+  ints.
+* Reformatted the code and touched up the comments & javadocs.
+* Replaced BitSet representation of genes with Allele interface.
+  Desired Allele implementation must be specified in Configuration.
+* Added object pooling for the Allele instances.
+* Did away with "representation" attribute in XML format.
+* The various "get" methods in XMLManager now throw new
+  UnsupportedRepresentationException used to indicate that the
+  active Allele implementation does not support the string
+  representations of the alleles in the XML file being parsed.
+* A desired EventManager instance must now be specified in the
+  active configuration. The DefaultConfiguration class automatically
+  includes this in its setup.
+* Added specific error messages for each of the failure conditions
+  in the Configuration validity check to help make identification of
+  setup problems easier.
+
+
 0.21
 ----------
 * Added equals and hashcode methods to Chromosome and Genotype

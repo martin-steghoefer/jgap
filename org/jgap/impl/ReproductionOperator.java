@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -20,8 +20,12 @@
 
 package org.jgap.impl;
 
-import org.jgap.*;
-import java.util.*;
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.GeneticOperator;
+
+import java.util.List;
+
 
 /**
  * The reproduction operator makes a copy of each Chromosome in the
@@ -29,12 +33,44 @@ import java.util.*;
  * essentially guarantees that each Chromosome in the current population
  * remains a candidate for selection for the next population.
  */
-public class ReproductionOperator implements GeneticOperator {
-  public void operate(final Configuration gaConf, final Chromosome[] population,
-                      List candidateChromosomes) {
-    for (int i = 0; i < population.length; i++) {
-      candidateChromosomes.add(population[i].clone());
+public class ReproductionOperator implements GeneticOperator
+{
+    /**
+     * The operate method will be invoked on each of the genetic operators
+     * referenced by the current Configuration object during the evolution
+     * phase. Operators are given an opportunity to run in the order that
+     * they are added to the Configuration. Implementations of this method
+     * may reference the population of Chromosomes as it was at the beginning
+     * of the evolutionary phase or the candidate Chromosomes, which are the
+     * results of prior genetic operators. In either case, only Chromosomes
+     * added to the list of candidate chromosomes will be considered for
+     * natural selection. Implementations should never modify the original
+     * population.
+     *
+     * @param a_activeConfiguration The current active genetic configuration.
+     * @param a_population The population of chromosomes from the current
+     *                     evolution prior to exposure to any genetic operators.
+     *                     Chromosomes in this array should never be modified.
+     * @param a_candidateChromosomes The pool of chromosomes that are candidates
+     *                               for the next evolved population. Any
+     *                               chromosomes that are modified by this
+     *                               genetic operator that should be considered
+     *                               for natural selection should be added to
+     *                               the candidate chromosomes.
+     */
+    public void operate( final Configuration a_activeConfiguration,
+                         final Chromosome[] a_population,
+                         final List a_candidateChromosomes )
+    {
+        // Just loop over the chromosomes in the population, make a copy of
+        // each one, and then add that copy to the candidate chromosomes
+        // pool so that it'll be considered for natural selection during the
+        // next phase of evolution.
+        // -----------------------------------------------------------------
+        for ( int i = 0; i < a_population.length; i++ )
+        {
+            a_candidateChromosomes.add( a_population[ i ].clone() );
+        }
     }
-  }
 }
 

@@ -1,0 +1,143 @@
+/*
+ * Copyright 2001, 2002 Neil Rotstan
+ *
+ * This file is part of JGAP.
+ *
+ * JGAP is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * JGAP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser Public License
+ * along with JGAP; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+package examples;
+
+import org.jgap.Allele;
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.Genotype;
+import org.jgap.impl.DefaultConfiguration;
+import org.jgap.impl.IntegerAllele;
+
+
+/**
+ * This class provides an implementation of the classic "Make change" problem
+ * using a genetic algorithm. The goal of the problem is to provide a
+ * specified amount of change (from a cash purchase) in the fewest coins
+ * possible. This example implementation uses American currency (quarters,
+ * dimes, nickels, and pennies).
+ * <p>
+ * This example may be seen as somewhat significant because it demonstrates
+ * the use of a genetic algorithm in a less-than-optimal problem space.
+ * The genetic algorithm does best when there is a smooth slope of fitness
+ * over the problem space towards the optimum solution. This problem exhibits
+ * a more choppy space with more local optima. However, as can be seen from
+ * running the example, the genetic algorith still does quite well with it
+ * due to its relatively large coverage of the problem space (one of the
+ * advantages of the genetic algorithm).
+ */
+public class MakeChange
+{
+    private static final int MAX_EVOLUTIONS = 100;
+
+    public static int calculateChangeAmount( Chromosome a_chromosome )
+    {
+        Allele[] genes = a_chromosome.getGenes();
+        int quarters = ((Integer) genes[0].getValue() ).intValue();
+        int dimes = ((Integer) genes[1].getValue() ).intValue();
+        int nickels = ((Integer) genes[2].getValue() ).intValue();
+        int pennies = ((Integer) genes[3].getValue() ).intValue();
+
+        return ( quarters * 25 ) + ( dimes * 10 ) + ( nickels * 5 ) + pennies;
+    }
+
+
+    public static int calculateNumberOfCoins( Chromosome a_chromosome )
+    {
+        Allele[] genes = a_chromosome.getGenes();
+        int quarters = ((Integer) genes[0].getValue() ).intValue();
+        int dimes = ((Integer) genes[1].getValue() ).intValue();
+        int nickels = ((Integer) genes[2].getValue() ).intValue();
+        int pennies = ((Integer) genes[3].getValue() ).intValue();
+
+        return quarters + dimes + nickels + pennies;
+    }
+
+
+    private static void calculateMinimumCoinsForChange( int a_changeValue )
+                        throws Exception
+    {
+        Configuration activeConfiguration = new DefaultConfiguration();
+        activeConfiguration.setFitnessFunction(
+            new MakeChangeFitnessFunction( a_changeValue ) );
+        activeConfiguration.setChromosomeSize( 4 );
+        activeConfiguration.setPopulationSize( 1000 );
+        activeConfiguration.setSampleAllele( new IntegerAllele( 0, 99 ));
+
+        Genotype population =
+            Genotype.randomInitialGenotype( activeConfiguration );
+
+        for( int i = 0; i < MAX_EVOLUTIONS; i++ )
+        {
+            population.evolve();
+        }
+
+        Chromosome fittestChromosome = population.getFittestChromosome();
+        System.out.println( "Best answer is " +
+            calculateChangeAmount( fittestChromosome ) + " cents with " +
+            calculateNumberOfCoins( fittestChromosome ) + " coins." );
+    }
+
+
+    /**
+     * Main method. A single command-line argument is expected, which is
+     * the amount of change to create (in other words, 75 would be 75
+     * cents).
+     *
+     * @param args the command-line arguments.
+     */
+    public static void main( String[] args )
+    {
+        if( args.length != 1 )
+        {
+            System.out.println( "Syntax: MakeChange <amount>" );
+        }
+        else
+        {
+            try
+            {
+                int amount = Integer.parseInt( args[0] );
+                if( amount >= 100 )
+                {
+                    System.out.println(
+                        "The <amount> argument must be less than 100 ");
+                }
+                else
+                {
+                    try
+                    {
+                        calculateMinimumCoinsForChange( amount );
+                    }
+                    catch( Exception e )
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            catch( NumberFormatException e )
+            {
+                System.out.println(
+                    "The <amount> argument must be a valid integer value" );
+            }
+        }
+    }
+
+
+}

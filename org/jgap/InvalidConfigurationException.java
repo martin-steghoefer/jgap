@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -26,12 +26,27 @@ package org.jgap;
  * passed to a Configuration object, or when an attempt is made to
  * alter a value in a Configuration object after it has been locked.
  */
-public class InvalidConfigurationException extends Exception {
-  public InvalidConfigurationException() {
-    super();
-  }
+public class InvalidConfigurationException extends Exception
+{
+    /**
+     * Constructs a new InvalidConfigurationException instance. No error
+     * message will be available.
+     */
+    public InvalidConfigurationException()
+    {
+        super();
+    }
 
-  public InvalidConfigurationException(String message) {
-    super(message);
-  }
+
+    /**
+     * Constructs a new InvalidConfigurationException instance with the
+     * given error message.
+     *
+     * @param a_message An error message describing the reason this exception
+     *                  is being thrown.
+     */
+    public InvalidConfigurationException( String a_message )
+    {
+        super( a_message );
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -20,239 +20,296 @@
 
 package org.jgap;
 
-import java.util.*;
-import org.jgap.event.*;
+import org.jgap.event.GenotypeEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
 
 /**
  * Genotypes represent fixed-length collections or "populations" of
  * Chromosomes. As an instance of a genotype is evolved, all of its
  * Chromosomes are also evolved.
- *
- * @author Neil Rotstan (neil at bluesock.org)
  */
-public class Genotype implements java.io.Serializable {
-  protected Configuration gaConf;
-  protected Chromosome[] chromosomes;
-  protected List workingPool;
+public class Genotype implements java.io.Serializable
+{
+    protected Configuration m_activeConfiguration;
+    protected Chromosome[] m_chromosomes;
+    protected List m_workingPool;
 
-  /**
-   * Constructs a new Genotype instance with the given array
-   * of Chromosomes and the given configuration settings. Note
-   * that the Configuration instance must be in a valid state
-   * when this method is invoked, or a InvalidconfigurationException
-   * will be thrown.
-   *
-   * @param configuration: An instance of a Configuration object
-   *                       that will control the behavior of this
-   *                       GA execution.
-   * @param initialChromosomes: The Chromosome population to be
-   *                            managed by this Genotype instance.
-   *
-   * @throws InvalidConfigurationException if the given Configuration
-   *         is null or in an invalid state.
-   */
-  public Genotype(Configuration configuration,
-                  Chromosome[] initialChromosomes)
-         throws InvalidConfigurationException {
-    if (configuration == null) {
-      throw new InvalidConfigurationException(
-        "The Configuration instance must not be null.");
+
+    /**
+     * Constructs a new Genotype instance with the given array
+     * of Chromosomes and the given a_activeConfiguration settings. Note
+     * that the Configuration instance must be in a valid state
+     * when this method is invoked, or a InvalidconfigurationException
+     * will be thrown.
+     *
+     * @param a_activeConfiguration: An instance of a Configuration object
+     *                       that will control the behavior of this
+     *                       GA execution.
+     * @param a_initialChromosomes: The Chromosome population to be
+     *                            managed by this Genotype instance.
+     *
+     * @throws InvalidConfigurationException if the given Configuration
+     *         is null or in an invalid state.
+     */
+    public Genotype( Configuration a_activeConfiguration,
+                     Chromosome[] a_initialChromosomes )
+           throws InvalidConfigurationException
+    {
+        if ( a_activeConfiguration == null )
+        {
+            throw new InvalidConfigurationException(
+                    "The Configuration instance must not be null." );
+        }
+
+        a_activeConfiguration.lockSettings();
+        m_chromosomes = a_initialChromosomes;
+        m_activeConfiguration = a_activeConfiguration;
+
+        m_workingPool = new ArrayList();
     }
 
-    configuration.lockSettings();
-    chromosomes = initialChromosomes;
-    gaConf = configuration;
 
-    workingPool = new ArrayList();
-  }
-
-
-  /**
-   * Retrieve the array of Chromosomes that make up this
-   * Genotype instance.
-   *
-   * @return The chromosomes that make up this Genotype.
-   */
-  public synchronized Chromosome[] getChromosomes()
-  {
-    return chromosomes;
-  }
-
-
-  /**
-   * Retrieve the Chromosome in the population with the highest
-   * fitness value.
-   *
-   * @return The Chromosome with the highest fitness value.
-   */
-  public synchronized Chromosome getFittestChromosome() {
-    if (chromosomes.length == 0) {
-      return null;
+    /**
+     * Retrieve the array of Chromosomes that make up this Genotype instance.
+     *
+     * @return The chromosomes that make up this Genotype.
+     */
+    public synchronized Chromosome[] getChromosomes()
+    {
+        return m_chromosomes;
     }
 
-    Chromosome fittestChromosome = chromosomes[0];
-    long fittestValue = 
-      gaConf.getFitnessFunction().evaluate(fittestChromosome); 
 
-    for( int i = 1; i < chromosomes.length; i++) {
-      long fitnessValue = gaConf.getFitnessFunction().evaluate(chromosomes[i]);
-      if (fitnessValue > fittestValue)
-      {
-        fittestChromosome = chromosomes[i];
-        fittestValue = fitnessValue;
-      }
+    /**
+     * Retrieve the Chromosome in the population with the highest fitnes value.
+     *
+     * @return The Chromosome with the highest fitness value, or null if
+     *         there are no chromosomes in this Genotype.
+     */
+    public synchronized Chromosome getFittestChromosome()
+    {
+        if ( m_chromosomes.length == 0 )
+        {
+            return null;
+        }
+
+        // Set the highest fitness value to that of the first chromosome.
+        // Then loop over the rest of the chromosomes and see if any has
+        // a higher fitness value.
+        // --------------------------------------------------------------
+        Chromosome fittestChromosome = m_chromosomes[ 0 ];
+        long fittestValue =
+            m_activeConfiguration.getFitnessFunction().evaluate(
+                                      fittestChromosome );
+
+        for ( int i = 1; i < m_chromosomes.length; i++ )
+        {
+            long fitnessValue =
+                m_activeConfiguration.getFitnessFunction().evaluate(
+                                          m_chromosomes[ i ] );
+
+            if ( fitnessValue > fittestValue )
+            {
+                fittestChromosome = m_chromosomes[ i ];
+                fittestValue = fitnessValue;
+            }
+        }
+
+        return fittestChromosome;
     }
 
-    return fittestChromosome;
-  }
 
+    /**
+     * Evolve the collection of Chromosomes within this Genotype. This will
+     * execute all of the genetic operators added to the present active
+     * Configuration and then invoke the natural selector to choose which
+     * chromosomes will be included in the next population. Note that the
+     * population size always remains constant.
+     */
+    public synchronized void evolve()
+    {
+        // Execute all of the Genetic Operators.
+        // -------------------------------------
+        List geneticOperators = m_activeConfiguration.getGeneticOperators();
+        Iterator operatorIterator = geneticOperators.iterator();
 
-  /**
-   * Evolve the collection of Chromosomes within this
-   * Genotype. This will execute all of the genetic operators
-   * added to the present Configuration and then invoke the
-   * natural selector to choose which chromosomes will be
-   * included in the next population. Note that the population
-   * size always remains constant.
-   */
-  public synchronized void evolve() {
-    workingPool.removeAll(workingPool);
+        while ( operatorIterator.hasNext() )
+        {
+            ( (GeneticOperator) operatorIterator.next() ).operate(
+                    m_activeConfiguration, m_chromosomes, m_workingPool );
+        }
 
-    // Execute all of the Genetic Operators
-    List geneticOperators = gaConf.getGeneticOperators();
-    Iterator operatorIterator = geneticOperators.iterator();
+        // Add the chromosomes in the working pool to the natural selector.
+        // ----------------------------------------------------------------
+        Iterator iterator = m_workingPool.iterator();
 
-    while (operatorIterator.hasNext()) {
-      ((GeneticOperator) operatorIterator.next()).operate(
-        gaConf, chromosomes, workingPool);
+        while ( iterator.hasNext() )
+        {
+            Chromosome currentChromosome = (Chromosome) iterator.next();
+
+            m_activeConfiguration.getNaturalSelector().add(
+                    m_activeConfiguration,
+                    currentChromosome,
+                    m_activeConfiguration.getFitnessFunction().evaluate(
+                                              currentChromosome ) );
+        }
+
+        // Repopulate the population of chromosomes with those selected
+        // by the natural selector.
+        // ------------------------------------------------------------
+        m_chromosomes = m_activeConfiguration.getNaturalSelector().select(
+                                                  m_activeConfiguration,
+                                                  m_chromosomes.length );
+
+        // Fire an event to indicate we've performed an evolution.
+        // -------------------------------------------------------
+        m_activeConfiguration.getEventManager().fireGenotypeEvolvedEvent(
+                new GenotypeEvent( this ) );
+
+        // Remove the selected chromosomes from the working pool and then
+        // cleanup up any that are leftover in the pool and no longer needed.
+        // ------------------------------------------------------------------
+        for( int i = 0; i < m_chromosomes.length; i++ )
+        {
+            m_workingPool.remove( m_chromosomes[i] );
+        }
+
+        Iterator leftoverChromosomeIterator = m_workingPool.iterator();
+        while( leftoverChromosomeIterator.hasNext() )
+        {
+            ( (Chromosome) leftoverChromosomeIterator.next() ).cleanup();
+        }
+
+        m_workingPool.clear();
+
+        // Clean up the natural selector.
+        // ------------------------------
+        m_activeConfiguration.getNaturalSelector().empty();
     }
-    
-    // Add the chromosomes in the working pool to the natural selector
-    Iterator iterator = workingPool.iterator();
 
-    while(iterator.hasNext()) {
-      Chromosome currentChromosome = (Chromosome) iterator.next();
 
-      gaConf.getNaturalSelector().add(
-        gaConf,
-        currentChromosome,
-        gaConf.getFitnessFunction().evaluate(currentChromosome));
+    /**
+     * Return a string representation of this Genotype instance,
+     * useful for debugging purposes.
+     *
+     * @return A string representation of this Genotype instance.
+     */
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer();
+
+        for ( int i = 0; i < m_chromosomes.length; i++ )
+        {
+            buffer.append( m_chromosomes[ i ].toString() );
+            buffer.append( " [" );
+            buffer.append( m_activeConfiguration.getFitnessFunction().evaluate(
+                                                     m_chromosomes[ i ] ) );
+            buffer.append( ']' );
+            buffer.append( '\n' );
+        }
+
+        return buffer.toString();
     }
 
-    // Repopulate the chromosomes with those selected by the natural
-    // selector
-    chromosomes = gaConf.getNaturalSelector().select(gaConf,
-                                                     chromosomes.length);
 
-    // Clean up
-    gaConf.getNaturalSelector().empty();
+    /**
+     * Convenience method that returns a newly constructed Genotype
+     * instance configured according to the given Configuration instance.
+     * The population of Chromosomes will be randomly generated.
+     * <p>
+     * Note that the given Configuration instance must be in a valid state
+     * at the time this method is invoked, or an InvalidConfigurationException
+     * will be thrown.
+     *
+     * @return A newly constructed Genotype instance.
+     *
+     * @throws InvalidConfigurationException if the given Configuration
+     *         instance is null or invalid.
+     */
+    public static Genotype randomInitialGenotype(
+                               Configuration a_activeConfiguration )
+                           throws InvalidConfigurationException
+    {
+        if ( a_activeConfiguration == null )
+        {
+            throw new InvalidConfigurationException(
+                    "The Configuration instance must not be null." );
+        }
 
-    // Fire Done Event
-    gaConf.getEventManager().fireGenotypeEvolvedEvent( 
-      new GenotypeEvent( this ) );
-  }
+        a_activeConfiguration.lockSettings();
 
+        // Create an array of chromosomes equal to the desired size in the
+        // active Configuration and then populate that array with randomly
+        // initialized Chromosome instances.
+        // ---------------------------------------------------------------
+        int populationSize = a_activeConfiguration.getPopulationSize();
+        Chromosome[] chromosomes = new Chromosome[ populationSize ];
 
-  /**
-   * Return a string representation of this Genotype instance,
-   * useful for debugging purposes.
-   *
-   * @return A string representation of this Genotype instance.
-   */
-  public String toString() {
-    StringBuffer buffer = new StringBuffer();
+        for ( int i = 0; i < populationSize; i++ )
+        {
+            chromosomes[ i ] =
+                Chromosome.randomInitialChromosome( a_activeConfiguration );
+        }
 
-    for(int i = 0; i < chromosomes.length; i++) {
-      buffer.append(chromosomes[i].toString());
-      buffer.append(" [" );
-      buffer.append(gaConf.getFitnessFunction().evaluate(chromosomes[i]));
-      buffer.append("]");
-      buffer.append('\n');
+        return new Genotype( a_activeConfiguration, chromosomes );
     }
 
-    return buffer.toString();
-  }
 
+    /**
+     * Compares this Genotype against the specified object. The result is true
+     * if and only if the argument is an instance of the Genotype class, has
+     * exactly the same number of chromosomes as the given Genotype, and, for
+     * each chromosome in this Genotype, there is an equal chromosome in the
+     * given Genotype. The chromosomes do not need to appear in the same order
+     * within the population.
+     *
+     * @param other The object to compare against.
+     * @return true if the objects are the same, false otherwise.
+     */
+    public boolean equals( Object other )
+    {
+        try
+        {
+            Genotype otherGenotype = (Genotype) other;
 
-  /**
-   * Convenience method that returns a newly constructed Genotype
-   * instance configured according to the given Configuration instance.
-   * The population of Chromosomes will be randomly generated.
-   *
-   * Note that the given Configuration instance must be in a valid state
-   * at the time this method is invoked, or an InvalidConfigurationException
-   * will be thrown.
-   *
-   * @return A newly constructed Genotype instance.
-   *
-   * @throws InvalidConfigurationException if the given Configuration
-   *         instance is null or invalid.
-   */
-   public static Genotype randomInitialGenotype(Configuration gaConf)
-                          throws InvalidConfigurationException {
-     if (gaConf == null) {
-       throw new InvalidConfigurationException(
-         "The Configuration instance must not be null.");
-     }
+            // First, make sure the other Genotype has the same number of
+            // chromosomes as this one.
+            // ----------------------------------------------------------
+            if ( m_chromosomes.length != otherGenotype.m_chromosomes.length )
+            {
+                return false;
+            }
 
-     gaConf.lockSettings();
+            // Next, prepare to compare the chromosomes of the other Genotype
+            // against the chromosomes of this Genotype. To make this a lot
+            // simpler, we first sort the chromosomes in both this Genotype
+            // and the one we're comparing against. This won't affect the
+            // genetic algorithm (it doesn't care about the order), but makes
+            // our life much easier here.
+            // --------------------------------------------------------------
+            Arrays.sort( m_chromosomes );
+            Arrays.sort( otherGenotype.m_chromosomes );
 
-     int populationSize = gaConf.getPopulationSize();
-     int chromosomeSize = gaConf.getChromosomeSize();
-     Chromosome[] chromosomes = new Chromosome[populationSize];
+            for ( int i = 0; i < m_chromosomes.length; i++ )
+            {
+                if ( !( m_chromosomes[ i ].equals(
+                            otherGenotype.m_chromosomes[ i ] ) ) )
+                {
+                    return false;
+                }
+            }
 
-     for(int i = 0; i < populationSize; i++) {
-       chromosomes[i] = Chromosome.randomInitialChromosome(gaConf);
-     }
-
-     return new Genotype(gaConf, chromosomes);
-   }
-
-
-   /**
-    * Compares this Genotype against the specified object. The
-    * result is true if and only if the argument is an instance
-    * of the Genotype class, has exactly the same number of
-    * chromosomes as the given Genotype, and, for each chromosome 
-    * in this Genotype, there is an equal chromosome in the
-    * given Genotype. The chromosomes do not need to appear in
-    * the same order within the population.
-    *
-    * @param other The object to compare against.
-    * @return true if the objects are the same, false otherwise.
-    */
-   public boolean equals(Object other)
-   {
-     try
-     {
-       Genotype otherGenotype = (Genotype) other;
-
-       if (chromosomes.length != otherGenotype.chromosomes.length)
-       {
-         return false;
-       }
-
-       // Sorting the chromosomes won't affect the genetic
-       // algorithm, and makes this operation more
-       // efficient and less memory intensive.
-       Arrays.sort(chromosomes);
-       Arrays.sort(otherGenotype.chromosomes);
-
-       for (int i = 0; i < chromosomes.length; i++)
-       {
-         if (!(chromosomes[i].equals(otherGenotype.chromosomes[i])))
-         {
-           return false;
-         }
-       }
-
-       return true;
-     }
-
-     catch(ClassCastException e)
-     {
-       return false;
-     }
-   }
+            return true;
+        }
+        catch ( ClassCastException e )
+        {
+            return false;
+        }
+    }
 }
 

@@ -1,52 +1,86 @@
-import org.jgap.*;
-import org.jgap.impl.*;
-import org.jgap.xml.*;
-import org.w3c.dom.*;
+/*
+ * Copyright 2001, 2002 Neil Rotstan
+ *
+ * This file is part of JGAP.
+ *
+ * JGAP is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * JGAP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser Public License
+ * along with JGAP; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+package examples;
+
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.Genotype;
+import org.jgap.impl.BooleanAllele;
+import org.jgap.impl.DefaultConfiguration;
+import org.jgap.xml.XMLManager;
+import org.w3c.dom.Document;
+
 
 public class TestXML
 {
-  public static void main(String[] args)
-  {
-    try
+    public static void main( String[] args )
     {
-      Configuration gaConf = new DefaultConfiguration();
-    
-      gaConf.setChromosomeSize(8);
-      gaConf.setPopulationSize(10);
-      gaConf.setFitnessFunction(new MaxFunction());
+        try
+        {
+            Configuration activeConfiguration = new DefaultConfiguration();
 
-      // Test Chromsome manipulation methods
-      Chromosome chromosome = Chromosome.randomInitialChromosome(gaConf);
-      Document chromosomeDoc = XMLManager.getChromosomeAsDocument(chromosome);
-      Chromosome chromosomeFromXML =
-        XMLManager.getChromosomeFromDocument(gaConf, chromosomeDoc);
+            activeConfiguration.setChromosomeSize( 8 );
+            activeConfiguration.setPopulationSize( 10 );
+            activeConfiguration.setFitnessFunction( new MaxFunction() );
+            activeConfiguration.setSampleAllele( new BooleanAllele() );
 
-      if (!(chromosomeFromXML.equals(chromosome)))
-      {
-        System.out.println("Chromosome test failed.");
-        System.exit(-1);
-      }
+            // Test Chromsome manipulation methods
+            Chromosome chromosome =
+                Chromosome.randomInitialChromosome( activeConfiguration );
 
-      // Test Genotype manipulation methods
-      Genotype genotype = Genotype.randomInitialGenotype(gaConf);
-    
-      Document genotypeDoc = XMLManager.getGenotypeAsDocument(genotype);
-      Genotype genotypeFromXML = 
-        XMLManager.getGenotypeFromDocument(gaConf, genotypeDoc);
+            Document chromosomeDoc =
+                XMLManager.representChromosomeAsDocument( chromosome );
 
-      if (!(genotypeFromXML.equals(genotype)))
-      {
-        System.out.println("Genotype test failed.");
-        System.exit(-1);
-      }
+            Chromosome chromosomeFromXML =
+                XMLManager.getChromosomeFromDocument( activeConfiguration,
+                                                      chromosomeDoc );
+
+            if ( !( chromosomeFromXML.equals( chromosome ) ) )
+            {
+                System.out.println( "Chromosome test failed." );
+                System.exit( -1 );
+            }
+
+            // Test Genotype manipulation methods
+            Genotype genotype =
+                Genotype.randomInitialGenotype( activeConfiguration );
+
+            Document genotypeDoc =
+                XMLManager.representGenotypeAsDocument( genotype );
+
+            Genotype genotypeFromXML =
+                XMLManager.getGenotypeFromDocument( activeConfiguration, genotypeDoc );
+
+            if ( !( genotypeFromXML.equals( genotype ) ) )
+            {
+                System.out.println( "Genotype test failed." );
+                System.exit( -1 );
+            }
+        }
+        catch ( Exception e )
+        {
+            System.out.println( "Test failed due to error:" );
+            e.printStackTrace();
+        }
+
+        System.out.println( "Tests successful." );
     }
-    catch (Exception e)
-    { 
-      System.out.println("Test failed due to error:");
-      e.printStackTrace();
-    }
-
-    System.out.println("Tests successful.");
-  }
 }
 

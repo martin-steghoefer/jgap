@@ -1,5 +1,5 @@
 /*
- * Copyright 2001, Neil Rotstan
+ * Copyright 2001, 2002 Neil Rotstan
  *
  * This file is part of JGAP.
  *
@@ -20,13 +20,25 @@
 package org.jgap.event;
 
 import org.jgap.Genotype;
+
 import java.util.EventObject;
 
+/**
+ * Serves as events that are fired via an EventManager when various
+ * events related to Genotypes occur. The specific kind of event is
+ * conveyed through the specific EventManager method that is used to
+ * fire the event.
+ */
 public class GenotypeEvent extends EventObject
 {
-  public GenotypeEvent( Genotype source )
-  {
-    super( source );
-  }
-
+    /**
+     * Constructs a new GenotypeEvent that is related to the given
+     * Genotype object.
+     *
+     * @param a_source The Genotype that acted as the source of the event.
+     */
+    public GenotypeEvent( Genotype a_source )
+    {
+        super( a_source );
+    }
 }

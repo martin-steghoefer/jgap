@@ -21,12 +21,15 @@
 package org.jgap.impl;
 
 import org.jgap.*;
+
 import java.util.*;
+
 
 /**
  * The stock random generator uses the java.util.Random class to
  * provide a simple implementation of the RandomGenerator interface.
  */
-public class StockRandomGenerator extends Random implements RandomGenerator {
+public class StockRandomGenerator extends Random implements RandomGenerator
+{
 }
 
