@@ -75,9 +75,9 @@ public abstract class abstractSupergeneTest {
     /**
      * The total number of times we'll let the population evolve.
      */
-    public static final int MAX_ALLOWED_EVOLUTIONS = 200;
+    public static  int MAX_ALLOWED_EVOLUTIONS = 200;
     /** Chromosome size. */
-    public static final int CHROMOSOME_SIZE = 2000;
+    public static  int POPULATION_SIZE = 2000;
     /**
      * Executes the genetic algorithm to determine the minimum number of
      * coins necessary to make up the given target amount of change. The
@@ -142,15 +142,18 @@ public abstract class abstractSupergeneTest {
         Test:
         for (int amount = 20; amount < 100; amount++) {
             try {
-                System.out.println ("EXCANGING " + amount+" ");
+                if (REPORT_ENABLED)
+                 System.out.println ("EXCANGING " + amount+" ");
                 // do not solve cases without solutions
-                if (!Force.solve(amount)) continue Test;
+                //if (!Force.solve(amount)) continue Test;
                 //Force.solve(amount);
 
                 e = makeChangeForAmount (amount);
-                System.out.println(" err "+e);
-
-                 if (REPORT_ENABLED) System.out.println("---------------");
+                if (REPORT_ENABLED)
+                 {
+                  System.out.println(" err "+e);
+                  System.out.println("---------------");
+                 }
 
                 S = S + e;
             }
@@ -159,7 +162,8 @@ public abstract class abstractSupergeneTest {
                 S+=1000;
             }
         }
-        System.out.println("Sum of errors "+S);
+        if (REPORT_ENABLED)
+         System.out.println("Sum of errors "+S);
         return S;
     }
 
@@ -214,7 +218,7 @@ public abstract class abstractSupergeneTest {
         // the population (which could be seen as bad). We'll just set
         // the population size to 500 here.
         // ------------------------------------------------------------
-        conf.setPopulationSize (CHROMOSOME_SIZE);
+        conf.setPopulationSize (POPULATION_SIZE);
         // Create random initial population of Chromosomes.
         // ------------------------------------------------
         Genotype population;
@@ -230,7 +234,7 @@ public abstract class abstractSupergeneTest {
              getFittestChromosome ())
              -a_targetChangeAmount);
              if (s==0) break Evolution;
-             System.out.print(s+".");
+             // System.out.print(s+".");
         }
         // Display the best solution we found.
         // -----------------------------------
