@@ -27,7 +27,7 @@ import org.jgap.impl.*;
 /**
  * Genotype that is running on one of many servers computing a population.
  * This type of Genotype knows his companions (other servers to contact for
- * dirstributed calculating of populations).
+ * distributed calculating of populations).
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -35,7 +35,7 @@ import org.jgap.impl.*;
 public class DistributedGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public DistributedGenotype(Configuration a_activeConfiguration,
                              Population a_population,
