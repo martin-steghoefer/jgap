@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public FixedBinaryGeneTest() {
   }
@@ -453,11 +453,22 @@ public class FixedBinaryGeneTest
 
     try {
       gene1.compareTo(new Integer(3));
-
+      fail();
     }
     catch (Exception e) {
       /*Should compare only FixedBinary Gene's*/
     }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_4() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(3);
+    FixedBinaryGene gene2 = new FixedBinaryGene(4);
+    assertEquals( -1, gene1.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene1));
   }
 
   /***
@@ -751,6 +762,22 @@ public class FixedBinaryGeneTest
     gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
     try {
       gene1.setBit(2, -1);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetBit_4() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
+    try {
+      gene1.setBit(2, 1, false);
       fail();
     }
     catch (IllegalArgumentException iex) {
