@@ -208,7 +208,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /*
    * Replace this member by the Configuration as
@@ -283,7 +283,7 @@ public class BulkFitnessOffsetRemover
       curFitness = a_Chromosome.getFitnessValue();
       if (curFitness < 0) {
         // OK, get it from our fitness function.
-        curFitness = this.ff.getFitnessValue(a_Chromosome);
+        curFitness = ff.getFitnessValue(a_Chromosome);
         // And store it to avoid evaluation of the same Chromosome again:
         a_Chromosome.setFitnessValue(curFitness);
       }
@@ -295,7 +295,7 @@ public class BulkFitnessOffsetRemover
          * Else these Chromosomes would be the unfittest and
          * additionally disallow cutting a huge offset from the others.
          */
-        curFitness += this.previousOffset;
+        curFitness += previousOffset;
         a_Chromosome.setFitnessValue(curFitness);
       }
       // search for the offset that is to be cut:
@@ -317,7 +317,7 @@ public class BulkFitnessOffsetRemover
      * that every Chromosome may survive...
      */
     offset--;
-    this.previousOffset = offset;
+    previousOffset = offset;
     // offset cannot be <0... thx to fitness value policy of jgap.
     // finally remove the offset from every fitness value:
     itChromosomes = a_chromosomes.iterator();
@@ -417,7 +417,7 @@ public class BulkFitnessOffsetRemover
     double fitness = individuum.getFitnessValue();
     if (fitness < 0.0) {
       // OK, get it from our fitness function.
-      fitness = this.ff.getFitnessValue(individuum);
+      fitness = ff.getFitnessValue(individuum);
       // And store it to avoid evaluation of the same Chromosome again:
       individuum.setFitnessValue(fitness);
     }
@@ -429,7 +429,7 @@ public class BulkFitnessOffsetRemover
        * Else these Chromosomes would be the unfittest and
        * additionally disallow cutting a huge offset from the others.
        */
-      fitness += this.previousOffset;
+      fitness += previousOffset;
     }
     return fitness;
   }
