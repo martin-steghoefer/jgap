@@ -34,9 +34,13 @@ public class NumberGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public NumberGeneTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -158,7 +162,7 @@ public class NumberGeneTest
         "m_lowerBounds");
     Integer upper1 = (Integer) PrivateAccessor.getField(gene1,
         "m_upperBounds");
-    Gene gene2 = gene1.newGene(new DefaultConfiguration());
+    Gene gene2 = gene1.newGene();
     Integer lower2 = (Integer) PrivateAccessor.getField(gene2,
         "m_lowerBounds");
     Integer upper2 = (Integer) PrivateAccessor.getField(gene2,
@@ -186,7 +190,7 @@ public class NumberGeneTest
       calculateBoundsUnitsToIntegerUnitsRatio();
     }
 
-    public Gene newGene(Configuration a_activeConfiguration) {
+    public Gene newGene() {
       return new NumberGeneImpl(m_lowerBounds, m_upperBounds);
     }
 

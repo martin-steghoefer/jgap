@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -112,7 +112,7 @@ public class Chromosome
     // -------------------------------------------------------
     m_genes = new Gene[a_desiredSize];
     for (int i = 0; i < m_genes.length; i++) {
-      m_genes[i] = a_sampleGene.newGene(null);
+      m_genes[i] = a_sampleGene.newGene();
     }
   }
 
@@ -207,7 +207,7 @@ public class Chromosome
     // -------------------------------------------------------------------
     Gene[] copyOfGenes = new Gene[m_genes.length];
     for (int i = 0; i < copyOfGenes.length; i++) {
-      copyOfGenes[i] = m_genes[i].newGene(Genotype.getConfiguration());
+      copyOfGenes[i] = m_genes[i].newGene();
       copyOfGenes[i].setAllele(m_genes[i].getAllele());
     }
     // Now construct a new Chromosome with the copies of the genes and
@@ -422,7 +422,7 @@ public class Chromosome
       // new Genes are setup with all of the correct internal state
       // for the respective gene position they're going to inhabit.
       // -----------------------------------------------------------
-      newGenes[i] = sampleGenes[i].newGene(Genotype.getConfiguration());
+      newGenes[i] = sampleGenes[i].newGene();
       // Set the gene's value (allele) to a random value.
       // ------------------------------------------------
       newGenes[i].setToRandomValue(generator);

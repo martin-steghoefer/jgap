@@ -19,7 +19,9 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 import junitx.util.*;
 
@@ -32,9 +34,13 @@ import junitx.util.*;
 public class IntegerGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public IntegerGeneTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -153,7 +159,7 @@ public class IntegerGeneTest
         "m_lowerBounds");
     Integer upper1 = (Integer) PrivateAccessor.getField(gene1,
         "m_upperBounds");
-    Gene gene2 = gene1.newGene(new DefaultConfiguration());
+    Gene gene2 = gene1.newGene();
     Integer lower2 = (Integer) PrivateAccessor.getField(gene2,
         "m_lowerBounds");
     Integer upper2 = (Integer) PrivateAccessor.getField(gene2,
@@ -165,7 +171,7 @@ public class IntegerGeneTest
   public void testCleanup() {
     //cleanup should do nothing!
     Gene gene = new IntegerGene(1, 6);
-    Gene copy = gene.newGene(null);
+    Gene copy = gene.newGene();
     gene.cleanup();
     assertEquals(copy, gene);
   }
@@ -242,7 +248,8 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(0, 100, config);
+    Genotype.setConfiguration(config);
+    IntegerGene gene = new IntegerGene(0, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.5d);
     assertEquals(Math.round(50 + (100 - 0) * 0.5d), gene.intValue());
@@ -252,7 +259,8 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(44, 100, config);
+    Genotype.setConfiguration(config);
+    IntegerGene gene = new IntegerGene(44, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.3d);
     assertEquals(Math.round(50 + (100 - 44) * 0.3d), gene.intValue());
@@ -262,7 +270,8 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(33, 100, config);
+    Genotype.setConfiguration(config);
+    IntegerGene gene = new IntegerGene(33, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 1.9d);
     assertEquals(Math.round(33 + 15), gene.intValue());
@@ -272,7 +281,8 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(2, 100, config);
+    Genotype.setConfiguration(config);
+    IntegerGene gene = new IntegerGene(2, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, 1.9d);
     assertEquals(Math.round(2 + 15), gene.intValue());
@@ -282,7 +292,8 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(0, 100, config);
+    Genotype.setConfiguration(config);
+    IntegerGene gene = new IntegerGene(0, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -1.0d);
     assertEquals(Math.round(0 + 15), gene.intValue());

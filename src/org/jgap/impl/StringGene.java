@@ -46,20 +46,13 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private int m_minLength;
 
   private int m_maxLength;
 
   private String m_alphabet;
-
-  /**
-   * Holds the configuration object associated with the Gene. The configuration
-   * object is important to obtain referenced objects from it, like the
-   * RandomGenerator.
-   */
-  private transient Configuration m_configuration;
 
   /**
    * Optional helper class for checking if a given allele value to be set
@@ -89,20 +82,7 @@ public class StringGene
    * @since 1.1
    */
   public StringGene(int a_minLength, int a_maxLength) {
-    this(a_minLength, a_maxLength, new DefaultConfiguration());
-  }
-
-  /**
-   *
-   * @param a_minLength int
-   * @param a_maxLength int
-   * @param a_configuration Configuration
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public StringGene(int a_minLength, int a_maxLength, Configuration a_configuration) {
-    this(a_minLength, a_maxLength,  null, a_configuration);
+    this(a_minLength, a_maxLength,  null);
   }
 
   /**
@@ -110,12 +90,11 @@ public class StringGene
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
    * @param a_alphabet valid aplhabet for allele
-   * @param a_configuration
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public StringGene(int a_minLength, int a_maxLength, String a_alphabet, Configuration a_configuration) {
+  public StringGene(int a_minLength, int a_maxLength, String a_alphabet) {
     if (a_minLength < 0) {
       throw new IllegalArgumentException(
           "minimum length must be greater than"
@@ -128,21 +107,7 @@ public class StringGene
     }
     m_minLength = a_minLength;
     m_maxLength = a_maxLength;
-    m_configuration = a_configuration;
     setAlphabet(a_alphabet);
-  }
-
-  /**
-   *
-   * @param a_minLength int
-   * @param a_maxLength int
-   * @param a_alphabet String
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public StringGene(int a_minLength, int a_maxLength, String a_alphabet) {
-    this(a_minLength, a_maxLength, a_alphabet, new DefaultConfiguration());
   }
 
   /**
@@ -419,20 +384,14 @@ public class StringGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @param a_activeConfiguration The current active configuration.
    * @return A new Gene instance of the same type and with the same
    *         setup as this concrete Gene.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public Gene newGene(Configuration a_activeConfiguration) {
-    if (a_activeConfiguration == null) {
-      return new StringGene(m_minLength, m_maxLength, m_alphabet);
-    }
-    else {
-      return new StringGene(m_minLength, m_maxLength, m_alphabet, a_activeConfiguration);
-    }
+  public Gene newGene() {
+    return new StringGene(m_minLength, m_maxLength, m_alphabet);
   }
 
   /**
@@ -681,19 +640,19 @@ public class StringGene
       int indexC = m_alphabet.indexOf(s.charAt(index));
       index2 = indexC + (int) Math.round(len * a_percentage);
       // If index of new character out of bounds then randomly choose a new
-      // character. This randomness helps in the process of evolution
+      // character. This randomness helps in the process of evolution.
       // ------------------------------------------------------------------
       if (index2 < 0 || index2 >= len) {
-        index2 = m_configuration.getRandomGenerator().nextInt(len);
+        index2 = Genotype.getConfiguration().getRandomGenerator().nextInt(len);
       }
       newValue = m_alphabet.charAt(index2);
     }
     else {
-      index2 = m_configuration.getRandomGenerator().nextInt(256);
-      newValue = (char)index2;
+      index2 = Genotype.getConfiguration().getRandomGenerator().nextInt(256);
+      newValue = (char) index2;
     }
-    // Set mutated character by concatenating the String with it
-    // ---------------------------------------------------------------
+    // Set mutated character by concatenating the String with it.
+    // ----------------------------------------------------------
     if (s == null) {
       s = ""+newValue;
     }

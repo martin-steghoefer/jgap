@@ -33,7 +33,7 @@ public class CompositeGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -249,8 +249,7 @@ public class CompositeGeneTest
     gene1.addGene(new StringGene(), false);
     gene1.addGene(new StringGene(2, 5), false);
     gene1.addGene(new StringGene(6, 11, "ABC"), false);
-    CompositeGene gene2 = (CompositeGene) gene1.newGene(new
-        DefaultConfiguration());
+    CompositeGene gene2 = (CompositeGene) gene1.newGene();
     assertTrue(gene1.equals(gene2));
     //Remove all genes from gene2 that are contained in gene1.
     //Because they should be equal, gene2 should then be empty.

@@ -34,7 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -55,13 +55,6 @@ public class DoubleGene
   private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
-   * Holds the configuration object associated with the Gene. The configuration
-   * object is important to obtain referenced objects from it, like the
-   * RandomGenerator.
-   */
-  private transient Configuration m_configuration;
-
-  /**
    * Constructs a new DoubleGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
    * than the standard range of double values.
@@ -76,38 +69,19 @@ public class DoubleGene
 
   /**
    * Constructs a new DoubleGene with the specified lower and upper
-   * bounds for values (alleles) of this Gene instance. Uses the
-   * DefaultConfiguration.
+   * bounds for values (alleles) of this Gene instance.
    *
    * @param a_lowerBounds The lowest value that this Gene may possess,
    *                      inclusive.
    * @param a_upperBounds The highest value that this Gene may possess,
    *                      inclusive.
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public DoubleGene(double a_lowerBounds, double a_upperBounds) {
-    this(a_lowerBounds, a_upperBounds, new DefaultConfiguration());
-  }
-
-  /**
-   * Constructs a new DoubleGene with the specified lower and upper
-   * bounds for values (alleles) of this Gene instance. Uses the specified
-   * configuration.
-   *
-   * @param a_lowerBounds The lowest value that this Gene may possess,
-   *                      inclusive.
-   * @param a_upperBounds The highest value that this Gene may possess,
-   *                      inclusive.
-   * @param a_configuration sic
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public DoubleGene(double a_lowerBounds, double a_upperBounds, Configuration a_configuration) {
+  public DoubleGene(double a_lowerBounds, double a_upperBounds) {
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
-    m_configuration = a_configuration;
   }
 
   /**
@@ -125,20 +99,14 @@ public class DoubleGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @param a_activeConfiguration ignored here.
    * @return A new Gene instance of the same type and with the same
    *         setup as this concrete Gene.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public Gene newGene(Configuration a_activeConfiguration) {
-    if (a_activeConfiguration == null) {
-      return new DoubleGene(m_lowerBounds, m_upperBounds);
-    }
-    else {
-      return new DoubleGene(m_lowerBounds, m_upperBounds, a_activeConfiguration);
-    }
+  public Gene newGene() {
+    return new DoubleGene(m_lowerBounds, m_upperBounds);
   }
 
   /**
@@ -322,7 +290,7 @@ public class DoubleGene
       // -----------------------------------------------------------------
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
-        m_value = new Double(m_configuration.getRandomGenerator().nextDouble()
+        m_value = new Double(Genotype.getConfiguration().getRandomGenerator().nextDouble()
             *(m_upperBounds - m_lowerBounds) + m_lowerBounds);
       }
     }

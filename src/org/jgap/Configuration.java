@@ -47,7 +47,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -767,7 +767,7 @@ public class Configuration {
     // -------------------------------------------------------------------
     Gene[] sampleGenes = m_sampleChromosome.getGenes();
     for (int i = 0; i < sampleGenes.length; i++) {
-      Gene sampleCopy = sampleGenes[i].newGene(this);
+      Gene sampleCopy = sampleGenes[i].newGene();
       sampleCopy.setAllele(sampleGenes[i].getAllele());
       if (! (sampleCopy.equals(sampleGenes[i]))) {
         throw new InvalidConfigurationException(

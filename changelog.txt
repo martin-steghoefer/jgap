@@ -13,6 +13,8 @@
   always the first one computed
 * Fixed design flaw in Genes' methods mapValueToWithinBounds()
 * Genes now can hold a Configuration object
+* Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
+  set it and Genotype.getConfiguration() to obtain it.
 
 Swarm Intelligence
 

@@ -19,7 +19,9 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 import junitx.util.*;
 
@@ -32,9 +34,13 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public StringGeneTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -213,7 +219,7 @@ public class StringGeneTest
     gene1.setAllele("XYZ");
     int minLength1 = gene1.getMinLength();
     int maxLength1 = gene1.getMaxLength();
-    StringGene gene2 = (StringGene) gene1.newGene(new DefaultConfiguration());
+    StringGene gene2 = (StringGene) gene1.newGene();
     int minLength2 = gene2.getMinLength();
     int maxLength2 = gene2.getMaxLength();
     assertEquals(minLength1, minLength2);

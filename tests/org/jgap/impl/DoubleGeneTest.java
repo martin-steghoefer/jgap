@@ -19,7 +19,9 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 import junitx.util.*;
 
@@ -32,12 +34,16 @@ import junitx.util.*;
 public class DoubleGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
 
   public DoubleGeneTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
@@ -176,7 +182,7 @@ public class DoubleGeneTest
         "m_lowerBounds");
     Double upper1 = (Double) PrivateAccessor.getField(gene1,
         "m_upperBounds");
-    Gene gene2 = gene1.newGene(new DefaultConfiguration());
+    Gene gene2 = gene1.newGene();
     Double lower2 = (Double) PrivateAccessor.getField(gene2,
         "m_lowerBounds");
     Double upper2 = (Double) PrivateAccessor.getField(gene2,
@@ -199,7 +205,7 @@ public class DoubleGeneTest
   public void testCleanup_0() {
     //cleanup should do nothing!
     Gene gene = new DoubleGene(1.3d, 6.5d);
-    Gene copy = gene.newGene(null);
+    Gene copy = gene.newGene();
     gene.cleanup();
     assertEquals(copy, gene);
   }
@@ -268,7 +274,8 @@ public class DoubleGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15.0d));
-    DoubleGene gene = new DoubleGene(0, 100, config);
+    Genotype.setConfiguration(config);
+    DoubleGene gene = new DoubleGene(0, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 0.5d);
     assertEquals(50 + (100 - 0) * 0.5d, gene.doubleValue(), DELTA);
@@ -278,7 +285,8 @@ public class DoubleGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15.0d));
-    DoubleGene gene = new DoubleGene(44, 100, config);
+    Genotype.setConfiguration(config);
+    DoubleGene gene = new DoubleGene(44, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 0.3d);
     assertEquals(50 + (100 - 44) * 0.3d, gene.doubleValue(), DELTA);
@@ -288,7 +296,8 @@ public class DoubleGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(0.5d));
-    DoubleGene gene = new DoubleGene(33, 100, config);
+    Genotype.setConfiguration(config);
+    DoubleGene gene = new DoubleGene(33, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 1.9d);
     assertEquals(33 + 0.5d * (100 - 33), gene.doubleValue(), DELTA);
@@ -298,7 +307,8 @@ public class DoubleGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(0.4d));
-    DoubleGene gene = new DoubleGene(2, 100, config);
+    Genotype.setConfiguration(config);
+    DoubleGene gene = new DoubleGene(2, 100);
     gene.setAllele(new Double(60));
     gene.applyMutation(0, 1.9d);
     assertEquals(2 + 0.4d * (100 - 2), gene.doubleValue(), DELTA);
@@ -308,7 +318,8 @@ public class DoubleGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(0.8d));
-    DoubleGene gene = new DoubleGene(0, 100, config);
+    Genotype.setConfiguration(config);
+    DoubleGene gene = new DoubleGene(0, 100);
     gene.setAllele(new Double(60));
     gene.applyMutation(0, -1.0d);
     assertEquals(0 + 0.8d * (100 - 0), gene.doubleValue(), DELTA);

@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -55,13 +55,6 @@ public class IntegerGene
   protected int m_lowerBounds;
 
   /**
-   * Holds the configuration object associated with the Gene. The configuration
-   * object is important to obtain referenced objects from it, like the
-   * RandomGenerator.
-   */
-  private transient Configuration m_configuration;
-
-  /**
    * Constructs a new IntegerGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
    * than the standard range of integer values.
@@ -76,41 +69,19 @@ public class IntegerGene
 
   /**
    * Constructs a new IntegerGene with the specified lower and upper
-   * bounds for values (alleles) of this Gene instance. Uses the
-   * DefaultConfiguration.
+   * bounds for values (alleles) of this Gene instance.
    *
    * @param a_lowerBounds The lowest value that this Gene may possess,
    *                      inclusive.
    * @param a_upperBounds The highest value that this Gene may possess,
    *                      inclusive.
-   *
-   * @author Neil Rostan
-   * @author Klaus Meffert
-   * @since 1.0
-   */
-  public IntegerGene(int a_lowerBounds, int a_upperBounds) {
-    this(a_lowerBounds, a_upperBounds, new DefaultConfiguration());
-  }
-
-  /**
-   * Constructs a new IntegerGene with the specified lower and upper
-   * bounds for values (alleles) of this Gene instance. Uses the specified
-   * configuration.
-   *
-   * @param a_lowerBounds The lowest value that this Gene may possess,
-   *                      inclusive.
-   * @param a_upperBounds The highest value that this Gene may possess,
-   *                      inclusive.
-   * @param a_configuration sic.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IntegerGene(int a_lowerBounds, int a_upperBounds,
-                     Configuration a_configuration) {
+  public IntegerGene(int a_lowerBounds, int a_upperBounds) {
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
-    m_configuration = a_configuration;
   }
 
   /**
@@ -128,21 +99,14 @@ public class IntegerGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @param a_activeConfiguration ignored here
    * @return A new Gene instance of the same type and with the same
    *         setup as this concrete Gene.
    *
    * @author Neil Rostan
    * @since 1.0
    */
-  public Gene newGene(Configuration a_activeConfiguration) {
-    if (a_activeConfiguration == null) {
-      return new IntegerGene(m_lowerBounds, m_upperBounds);
-    }
-    else {
-      return new IntegerGene(m_lowerBounds, m_upperBounds,
-                             a_activeConfiguration);
-    }
+  public Gene newGene() {
+    return new IntegerGene(m_lowerBounds, m_upperBounds);
   }
 
   /**
@@ -330,7 +294,7 @@ public class IntegerGene
       // -----------------------------------------------------------------
       if (i_value.intValue() > m_upperBounds ||
           i_value.intValue() < m_lowerBounds) {
-        m_value = new Integer(m_configuration.getRandomGenerator().nextInt(
+        m_value = new Integer(Genotype.getConfiguration().getRandomGenerator().nextInt(
             m_upperBounds - m_lowerBounds) + m_lowerBounds);
       }
     }

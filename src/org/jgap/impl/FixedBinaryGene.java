@@ -40,18 +40,11 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_length;
 
   private int[] m_value;
-
-  /**
-   * Holds the configuration object associated with the Gene. The configuration
-   * object is important to obtain referenced objects from it, like the
-   * RandomGenerator.
-   */
-  private transient Configuration m_configuration;
 
   /**
    * Optional helper class for checking if a given allele value to be set
@@ -67,22 +60,9 @@ public class FixedBinaryGene
    * @since 2.0
    */
   public FixedBinaryGene(int a_length) {
-    this(a_length, new DefaultConfiguration());
-  }
-
-  /**
-   *
-   * @param a_length
-   * @param a_configuration
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public FixedBinaryGene(int a_length, Configuration a_configuration) {
     if (a_length < 1) {
       throw new IllegalArgumentException("Length must be greater than zero!");
     }
-    m_configuration = a_configuration;
     m_length = a_length;
     int bufSize = m_length / 32;
     if (0 != m_length % 32)
@@ -91,8 +71,8 @@ public class FixedBinaryGene
     for (int i = 0; i < bufSize; m_value[i++] = 0);
   }
 
-  public Gene newGene(Configuration a_activeConfiguration) {
-    return new FixedBinaryGene(m_length, a_activeConfiguration);
+  public Gene newGene() {
+    return new FixedBinaryGene(m_length);
   }
 
   public FixedBinaryGene(final FixedBinaryGene toCopy) {
@@ -113,7 +93,7 @@ public class FixedBinaryGene
   }
 
   public Object clone() {
-    FixedBinaryGene copy = new FixedBinaryGene(getLength(), m_configuration);
+    FixedBinaryGene copy = new FixedBinaryGene(getLength());
     System.arraycopy(m_value, 0, copy.getValue(), 0, copy.getLength());
     return copy;
   }

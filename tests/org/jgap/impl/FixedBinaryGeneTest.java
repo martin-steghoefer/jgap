@@ -19,6 +19,7 @@
 package org.jgap.impl;
 
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -33,9 +34,13 @@ public class FixedBinaryGeneTest
 /*@todo implement testcases by modifying the below tests copied from BooleanGene*/
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public FixedBinaryGeneTest() {
+  }
+
+  public void setUp() {
+    Genotype.setConfiguration(null);
   }
 
   public static Test suite() {
