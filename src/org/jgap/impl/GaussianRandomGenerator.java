@@ -23,7 +23,7 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -119,12 +119,8 @@ public class GaussianRandomGenerator
    * deviation, will be greater/equal zero
    */
   private double nextGaussian() {
-    /**@todo this is not satisfying! We need an algorithm where boundaries
-     * are known to then scale to 0..1*/
-    double r = (rn.nextGaussian() + 2.8284271247d ) / 2;
-    if (r < DELTA) {
-      r = 0.0000001d;
-    }
+    //scale to [0..1[
+    double r = (rn.nextGaussian() + 5.8d ) / (5.8d*2.0d);
     return r;
   }
 }
