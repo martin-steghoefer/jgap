@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -368,7 +368,6 @@ public class Chromosome
    * Chromosome cannot be acquired from the pool, then a new instance will
    * be constructed and its gene values randomized before returning it.
    *
-   * @param a_activeConfiguration The current active configuration.
    * @return randomly initialized Chromosome
    * @throws InvalidConfigurationException if the given Configuration
    *         instance is invalid.
