@@ -12,16 +12,16 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * Base class for all Genes based on numbers.<br>
+ * Base class for all Genes based on numbers.
  *
  * @author Klaus Meffert
  * @since 1.1 (most code moved and adapted from IntegerGene)
  */
-public abstract class NumberGene extends BaseGene
+public abstract class NumberGene
+    extends BaseGene
     implements Gene {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * References the internal value (allele) of this Gene
