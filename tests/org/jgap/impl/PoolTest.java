@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,15 +15,16 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
 /**
  * Tests for Pool class
  *
@@ -33,77 +32,67 @@ import junit.framework.TestSuite;
  * @author Klaus Meffert
  */
 public class PoolTest
-    extends TestCase
-{
+    extends TestCase {
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+  /** String containing the CVS revision. Read out via reflection!*/
 
-    public PoolTest ()
-    {
-    }
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  public PoolTest() {
+  }
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (PoolTest.class);
-        return suite;
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite(PoolTest.class);
+    return suite;
+  }
 
-    public void testConstruct_0 ()
-    {
-        Pool pool = new Pool ();
-    }
+  public void testConstruct_0() {
+    Pool pool = new Pool();
+  }
 
-    public void testClear_0 ()
-    {
-        /**@todo implement*/
-        Pool pool = new Pool ();
-        assertEquals (0, pool.size ());
-        pool.clear ();
-        assertEquals (0, pool.size ());
-        pool.releaseObject (new Object ());
-        assertEquals (1, pool.size ());
-        pool.releaseObject (new Object ());
-        assertEquals (2, pool.size ());
-        pool.clear ();
-        assertEquals (0, pool.size ());
-    }
+  public void testClear_0() {
+    Pool pool = new Pool();
+    assertEquals(0, pool.size());
+    pool.clear();
+    assertEquals(0, pool.size());
+    pool.releaseObject(new Object());
+    assertEquals(1, pool.size());
+    pool.releaseObject(new Object());
+    assertEquals(2, pool.size());
+    pool.clear();
+    assertEquals(0, pool.size());
+  }
 
-    public void testAcquirePooledObject_0 ()
-    {
-        Pool pool = new Pool ();
-        assertEquals (null, pool.acquirePooledObject ());
-        Vector obj = new Vector();
-        pool.releaseObject(obj);
-        assertEquals(1, pool.size());
-        Object obj2 = pool.acquirePooledObject();
-        assertEquals(obj, obj2);
-        assertEquals(0, pool.size());
-    }
+  public void testAcquirePooledObject_0() {
+    Pool pool = new Pool();
+    assertEquals(null, pool.acquirePooledObject());
+    Vector obj = new Vector();
+    pool.releaseObject(obj);
+    assertEquals(1, pool.size());
+    Object obj2 = pool.acquirePooledObject();
+    assertEquals(obj, obj2);
+    assertEquals(0, pool.size());
+  }
 
-    public void testReleaseAllObjects_0 ()
-    {
-        Pool pool = new Pool ();
-        pool.releaseAllObjects(null);
-        assertEquals(0, pool.size());
-    }
+  public void testReleaseAllObjects_0() {
+    Pool pool = new Pool();
+    pool.releaseAllObjects(null);
+    assertEquals(0, pool.size());
+  }
 
-    public void testReleaseAllObjects_1 ()
-    {
-        Pool pool = new Pool ();
-        Collection coll = new Vector();
-        coll.add(new HashMap());
-        coll.add(new Vector());
-        pool.releaseAllObjects(coll);
-        assertEquals(2, pool.size());
-        coll.add(new Object());
-        pool.releaseAllObjects(coll);
-        assertEquals(5, pool.size());
-    }
+  public void testReleaseAllObjects_1() {
+    Pool pool = new Pool();
+    Collection coll = new Vector();
+    coll.add(new HashMap());
+    coll.add(new Vector());
+    pool.releaseAllObjects(coll);
+    assertEquals(2, pool.size());
+    coll.add(new Object());
+    pool.releaseAllObjects(coll);
+    assertEquals(5, pool.size());
+  }
 
-    public void testSize_0 ()
-    {
-        Pool pool = new Pool ();
-        assertEquals (0, pool.size ());
-    }
+  public void testSize_0() {
+    Pool pool = new Pool();
+    assertEquals(0, pool.size());
+  }
 }

@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,26 +15,24 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 /**
  * Test suite for all tests of package org.jgap
- *
  * @author Klaus Meffert
  * @since 1.1
  */
-
-public class AllBaseTests extends TestSuite {
+public class AllBaseTests
+    extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public AllBaseTests() {
-
   }
 
   public static Test suite() {
@@ -48,5 +44,4 @@ public class AllBaseTests extends TestSuite {
     suite.addTest(DefaultFitnessEvaluatorTest.suite());
     return suite;
   }
-
 }

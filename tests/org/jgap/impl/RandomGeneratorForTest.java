@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -21,7 +19,6 @@
 package org.jgap.impl;
 
 import java.util.List;
-
 import org.jgap.RandomGenerator;
 
 /**
@@ -32,89 +29,72 @@ import org.jgap.RandomGenerator;
  * @author Klaus Meffert
  * @since 1.1
  */
-
 public class RandomGeneratorForTest
-    implements RandomGenerator
-{
+    implements RandomGenerator {
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.4 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
-    private int m_nextInt;
-    private long m_nextLong;
-    private double m_nextDouble;
-    private float m_nextFloat;
-    private boolean m_nextBoolean;
-    private int[] m_nextIntSequence;
-    private int m_intIndex;
+  private int m_nextInt;
+  private long m_nextLong;
+  private double m_nextDouble;
+  private float m_nextFloat;
+  private boolean m_nextBoolean;
+  private int[] m_nextIntSequence;
+  private int m_intIndex;
+  public RandomGeneratorForTest() {
+  }
 
-    public RandomGeneratorForTest ()
-    {
-
+  public int nextInt() {
+    int result = m_nextIntSequence[m_intIndex++];
+    if (m_intIndex >= m_nextIntSequence.length) {
+      m_intIndex = 0;
     }
+    return result;
+  }
 
-    public int nextInt ()
-    {
-        int result = m_nextIntSequence[m_intIndex++];
-        if (m_intIndex >= m_nextIntSequence.length) {
-            m_intIndex = 0;
-        }
-        return result;
-    }
+  public int nextInt(int ceiling) {
+    return nextInt() % ceiling;
+  }
 
-    public int nextInt (int ceiling)
-    {
-        return nextInt() % ceiling;
-    }
+  public long nextLong() {
+    return m_nextLong;
+  }
 
-    public long nextLong ()
-    {
-        return m_nextLong;
-    }
+  public double nextDouble() {
+    return m_nextDouble;
+  }
 
-    public double nextDouble ()
-    {
-        return m_nextDouble;
-    }
+  public float nextFloat() {
+    return m_nextFloat;
+  }
 
-    public float nextFloat ()
-    {
-        return m_nextFloat;
-    }
+  public boolean nextBoolean() {
+    return m_nextBoolean;
+  }
 
-    public boolean nextBoolean ()
-    {
-        return m_nextBoolean;
-    }
+  public void setNextBoolean(boolean a_nextBoolean) {
+    m_nextBoolean = a_nextBoolean;
+  }
 
-    public void setNextBoolean (boolean a_nextBoolean)
-    {
-        m_nextBoolean = a_nextBoolean;
-    }
+  public void setNextDouble(double a_nextDouble) {
+    m_nextDouble = a_nextDouble;
+  }
 
-    public void setNextDouble (double a_nextDouble)
-    {
-        m_nextDouble = a_nextDouble;
-    }
+  public void setNextFloat(float a_nextFloat) {
+    m_nextFloat = a_nextFloat;
+  }
 
-    public void setNextFloat (float a_nextFloat)
-    {
-        m_nextFloat = a_nextFloat;
-    }
+  public void setNextInt(int a_nextInt) {
+    setNextIntSequence(new int[] {a_nextInt});
+  }
 
-    public void setNextInt (int a_nextInt)
-    {
-        setNextIntSequence(new int[]{a_nextInt});
-    }
+  public void setNextLong(long a_nextLong) {
+    m_nextLong = a_nextLong;
+  }
 
-    public void setNextLong (long a_nextLong)
-    {
-        m_nextLong = a_nextLong;
-    }
-
-    public void setNextIntSequence(int[] a_sequence) {
-        m_intIndex = 0;
-        m_nextIntSequence = a_sequence;
-    }
-
+  public void setNextIntSequence(int[] a_sequence) {
+    m_intIndex = 0;
+    m_nextIntSequence = a_sequence;
+  }
 }

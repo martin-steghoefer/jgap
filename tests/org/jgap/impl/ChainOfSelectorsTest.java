@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,6 +15,7 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import junit.framework.Test;
@@ -30,30 +29,25 @@ import junit.framework.TestSuite;
  * @author Klaus Meffert
  */
 public class ChainOfSelectorsTest
-    extends TestCase
-{
+    extends TestCase {
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-    public ChainOfSelectorsTest ()
-    {
-    }
+  public ChainOfSelectorsTest() {
+  }
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (ChainOfSelectorsTest.class);
-        return suite;
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);
+    return suite;
+  }
 
-    public void testConstruct_0 ()
-    {
-        /**todo implement*/
-    }
+  public void testConstruct_0() {
+    /**todo implement*/
+  }
 
-    public void testClear_0() {
-        /**todo implement*/
-    }
-
-    /**@todo implement more tests*/
+  public void testClear_0() {
+    /**todo implement*/
+  }
+  /**@todo implement more tests*/
 }

@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,6 +15,7 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import org.jgap.*;
@@ -30,37 +29,31 @@ import junit.framework.TestSuite;
  * @author Klaus Meffert
  * @since 1.1
  */
-
 public class DefaultMutationRateCalculatorTest
-    extends TestCase
-{
+    extends TestCase {
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.2 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
-    public DefaultMutationRateCalculatorTest ()
-    {
+  public DefaultMutationRateCalculatorTest() {
+  }
 
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite(DefaultMutationRateCalculatorTest.class);
+    return suite;
+  }
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (DefaultMutationRateCalculatorTest.class);
-        return suite;
-    }
-
-   public void testCalculateCurrentRate_0() throws Exception {
-       Configuration conf = new DefaultConfiguration ();
-       MutationRateCalculator calc = new DefaultMutationRateCalculator ();
-       Gene gene = new IntegerGene(1,5);
-       Chromosome chrom = new Chromosome(gene, 50);
-       conf.setSampleChromosome(chrom);
-       int rate = calc.calculateCurrentRate(conf);
-       assertEquals (conf.getChromosomeSize (), rate);
-       chrom = new Chromosome(gene, 30);
-       conf.setSampleChromosome(chrom);
-       rate = calc.calculateCurrentRate(conf);
-       assertEquals (conf.getChromosomeSize (), rate);
-   }
-
+  public void testCalculateCurrentRate_0() throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    MutationRateCalculator calc = new DefaultMutationRateCalculator();
+    Gene gene = new IntegerGene(1, 5);
+    Chromosome chrom = new Chromosome(gene, 50);
+    conf.setSampleChromosome(chrom);
+    int rate = calc.calculateCurrentRate(conf);
+    assertEquals(conf.getChromosomeSize(), rate);
+    chrom = new Chromosome(gene, 30);
+    conf.setSampleChromosome(chrom);
+    rate = calc.calculateCurrentRate(conf);
+    assertEquals(conf.getChromosomeSize(), rate);
+  }
 }
