@@ -38,7 +38,9 @@ public class Chromosome
     implements Comparable, Cloneable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
+  public static final double DELTA = 0.000000001d;
 
   /**
    * The current active genetic configuration.
@@ -324,27 +326,30 @@ public class Chromosome
    *         not yet assigned a fitness value to this Chromosome.
    */
   public double getFitnessValue() {
-    if (m_fitnessValue < 0) {
-      // We don't have a fitness value yet. We'll see if there's a
-      // "normal" fitness function configured (as opposed to a bulk
-      // fitness function) and, if so, then we'll use it to determine
-      // our fitness so that we can return it. First, though, we have
-      // to make sure that a Configuration object has been set on this
-      // Chromosome or else throw an IllegalStateException.
-      // -------------------------------------------------------------
-      if (m_activeConfiguration == null) {
-        throw new IllegalStateException(
-            "The active Configuration object must be set on this " +
-            "Chromosome prior to invocation of the getFitnessValue() " +
-            "method.");
-      }
-      // Now grab the "normal" fitness function and, if one exists,
-      // ask it to calculate our fitness value.
-      // ----------------------------------------------------------
+    if (m_activeConfiguration != null) {
       FitnessFunction normalFitnessFunction =
           m_activeConfiguration.getFitnessFunction();
       if (normalFitnessFunction != null) {
-        m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
+        if (Math.abs(m_fitnessValue - normalFitnessFunction.getNoFitnessValue()) <
+            DELTA) {
+          // We don't have a fitness value yet. We'll see if there's a
+          // "normal" fitness function configured (as opposed to a bulk
+          // fitness function) and, if so, then we'll use it to determine
+          // our fitness so that we can return it. First, though, we have
+          // to make sure that a Configuration object has been set on this
+          // Chromosome or else throw an IllegalStateException.
+          // -------------------------------------------------------------
+          if (m_activeConfiguration == null) {
+            throw new IllegalStateException(
+                "The active Configuration object must be set on this " +
+                "Chromosome prior to invocation of the getFitnessValue() " +
+                "method.");
+          }
+          // Now grab the "normal" fitness function and, if one exists,
+          // ask it to calculate our fitness value.
+          // ----------------------------------------------------------
+          m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
+        }
       }
     }
     return m_fitnessValue;
@@ -572,7 +577,7 @@ public class Chromosome
   public void cleanup() {
     // First, reset our internal state.
     // --------------------------------
-    m_fitnessValue = -1;
+    m_fitnessValue = m_activeConfiguration.getFitnessFunction().getNoFitnessValue();
     m_hashCode = 0;
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool
