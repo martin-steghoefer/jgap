@@ -317,35 +317,37 @@ public class BooleanGene implements Gene
     {
         try
         {
-            BooleanGene otherBooleanGene = (BooleanGene) other;
-
-            if( otherBooleanGene == null )
-            {
-                // If the other gene is null, we're not equal.
-                // ---------------------------------------------
-                return false;
-            }
-            else if ( m_value == null )
-            {
-                // If our internal value is null, then we're only equal if
-                // their internal value is also null.
-                // -------------------------------------------------------
-                return otherBooleanGene.m_value == null;
-            }
-            else
-            {
-                // Just compare the internal values.
-                // ---------------------------------
-                return m_value.equals( otherBooleanGene.m_value );
-            }
+            return compareTo( other ) == 0;
         }
         catch( ClassCastException e )
         {
             // If the other object isn't a BooleanGene, then we're not equal.
-            // ----------------------------------------------------------------
+            // --------------------------------------------------------------
             return false;
         }
     }
+
+
+    /**
+     * Retrieves the hash code value of this BooleanGene.
+     *
+     * @return this BooleanGene's hash code.
+     */
+    public int hashCode()
+    {
+        // If the internal Boolean hasn't been set, return zero. Otherwise,
+        // just return the Boolean's hash code.
+        // ----------------------------------------------------------------
+        if( m_value == null )
+        {
+            return 0;
+        }
+        else
+        {
+            return m_value.hashCode();
+        }
+    }
+
 
     /**
      * Retrieves a string representation of this BooleanGene's value that

@@ -423,28 +423,7 @@ public class IntegerGene implements Gene
     {
         try
         {
-            IntegerGene otherIntegerGene = (IntegerGene) other;
-
-            if( otherIntegerGene == null )
-            {
-                // If the other gene is null, we're not equal.
-                // ---------------------------------------------
-                return false;
-            }
-            else if ( m_value == null )
-            {
-                // If our value is null, then we're only equal if their
-                // value is also null.
-                // ----------------------------------------------------
-                return otherIntegerGene.m_value == null;
-            }
-            else
-            {
-                // Just compare the gene values using the Integer.equals()
-                // method.
-                // -----------------------------------------------------------
-                return m_value.equals( otherIntegerGene.m_value );
-            }
+            return compareTo( other ) == 0;
         }
         catch( ClassCastException e )
         {
@@ -452,6 +431,27 @@ public class IntegerGene implements Gene
             // equal.
             // ----------------------------------------------------------
             return false;
+        }
+    }
+
+
+    /**
+     * Retrieves the hash code value for this IntegerGene.
+     *
+     * @return this IntegerGene's hash code.
+     */
+    public int hashCode()
+    {
+        // If our internal Integer is null, then return zero. Otherwise,
+        // just return the hash code of the Integer.
+        // -------------------------------------------------------------
+        if( m_value == null )
+        {
+            return 0;
+        }
+        else
+        {
+            return m_value.hashCode();
         }
     }
 
@@ -532,7 +532,15 @@ public class IntegerGene implements Gene
      */
     protected void calculateBoundsUnitsToIntegerUnitsRatio()
     {
-        m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds + 1 );
+        int divisor = m_upperBounds - m_lowerBounds + 1;
+
+        if( divisor == 0 )
+        {
+            m_boundsUnitsToIntegerUnits = INTEGER_RANGE;
+        }
+        else
+        {
+            m_boundsUnitsToIntegerUnits = INTEGER_RANGE / divisor;
+        }
     }
 }

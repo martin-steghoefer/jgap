@@ -126,19 +126,19 @@ public class MinimizingMakeChange
         Chromosome bestSolutionSoFar = population.getFittestChromosome();
         System.out.println( "The best solution contained the following: " );
 
-        System.out.println(
+        System.out.println( "\t" +
             MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 0 ) + " quarters." );
 
-        System.out.println(
+        System.out.println( "\t" + 
             MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 1 ) + " dimes." );
 
-        System.out.println(
+        System.out.println( "\t" +
             MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 2 ) + " nickels." );
 
-        System.out.println(
+        System.out.println( "\t" + 
             MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(
                 bestSolutionSoFar, 3 ) + " pennies." );
 
@@ -146,7 +146,7 @@ public class MinimizingMakeChange
             MinimizingMakeChangeFitnessFunction.amountOfChange(
                 bestSolutionSoFar ) + " cents in " +
             MinimizingMakeChangeFitnessFunction.getTotalNumberOfCoins(
-                bestSolutionSoFar ) );
+                bestSolutionSoFar ) + " coins.");
     }
 
 
