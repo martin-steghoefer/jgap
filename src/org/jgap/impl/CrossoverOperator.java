@@ -25,23 +25,24 @@ import org.jgap.*;
  * population and "mates" them by randomly picking a gene and then
  * swapping that gene and all subsequent genes between the two
  * Chromosomes. The two modified Chromosomes are then added to the
- * list of candidate Chromosomes. 
+ * list of candidate Chromosomes.
  *
  * This CrossoverOperator supports both fixed and dynamic crossover rates.
- * A fixed rate is one specified at construction time by the user. This 
- * operation is performed 1/m_crossoverRate as many times as there are 
- * Chromosomes in the population. A dynamic rate is one determined by 
- * this class if no fixed rate is provided. 
+ * A fixed rate is one specified at construction time by the user. This
+ * operation is performed 1/m_crossoverRate as many times as there are
+ * Chromosomes in the population. A dynamic rate is one determined by
+ * this class if no fixed rate is provided.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
+ * @author Chris Knowles
  * @since 1.0
  */
 public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -69,7 +70,7 @@ public class CrossoverOperator
   }
 
   /**
-   * Constructs a new instance of this MutationOperator with a specified
+   * Constructs a new instance of this CrossoverOperator with a specified
    * crossover rate calculator, which results in dynamic crossover being turned
    * on.
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
@@ -125,7 +126,7 @@ public class CrossoverOperator
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-    
+
     // Work out the number of crossovers that should be performed
     int numCrossovers = 0;
     if (m_crossoverRateCalc == null){
@@ -134,7 +135,7 @@ public class CrossoverOperator
     else{
         numCrossovers = a_population.size() / m_crossoverRateCalc.calculateCurrentRate();
     }
-    
+
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
@@ -165,7 +166,7 @@ public class CrossoverOperator
       a_candidateChromosomes.add(secondMate);
     }
   }
-  
+
   /**
    * Sets the crossover rate calculator
    * @param a_crossoverRateCalculator The new calculator
