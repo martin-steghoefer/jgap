@@ -16,7 +16,7 @@
 * Changed return type Chromosome[] to Population containing list of Chromosomes
 * Added new unit tests
 * Class Chromosome: made attribute "Gene[] m_genes" private
-* Class Chromosome: added csupport for application data object in method clone()
+* Class Chromosome: added support for application data object in method clone()
 * Renamed interface NaturalSelector to INaturalSelector, introduced abstract base
   class NaturalSelector implementing INaturalSelector (see request 1075249)
 * Interface INaturalSelector: Introduced new method boolean returnsUniqueChromosomes()
