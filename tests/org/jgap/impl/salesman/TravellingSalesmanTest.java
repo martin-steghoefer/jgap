@@ -23,7 +23,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     private m_testTravellingSalesman m_testTravellingSalesman;
 
@@ -116,7 +116,7 @@ public class TravellingSalesmanTest extends TestCase {
 //             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
 //              .getFitnessValue(sample)));
 
-            RandomGenerator g = new StockRandomGenerator();
+//            RandomGenerator g = new StockRandomGenerator();
 
             shuffle (genes);
 
@@ -143,13 +143,17 @@ public class TravellingSalesmanTest extends TestCase {
             int A = a.intValue();
             int B = b.intValue();
 
-            if ( A == 0 && B == CITIES-1) return 1;
-            if ( B == 0 && A == CITIES-1) return 1;
+            if (A == 0 && B == CITIES - 1) {
+              return 1;
+            }
+            if (B == 0 && A == CITIES - 1) {
+              return 1;
+            }
 
-            return Math.abs( A - B );
-        }
+            return Math.abs(A - B);
+          }
 
-        public boolean runTest()
+          public boolean runTest()
         {
             // With 7 cities, should find the best solution with score 7
             try {

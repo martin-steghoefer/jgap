@@ -59,7 +59,7 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman extends Salesman {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
     /** The number of cities to visit, 7 by default. */
     public static final int CITIES = 7;
@@ -85,7 +85,7 @@ public class TravellingSalesman extends Salesman {
          (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
           .getFitnessValue(sample)));
 
-        RandomGenerator g = new StockRandomGenerator();
+//        RandomGenerator g = new StockRandomGenerator();
 
         shuffle (genes);
 
@@ -113,8 +113,12 @@ public class TravellingSalesman extends Salesman {
         int A = a.intValue();
         int B = b.intValue();
 
-        if ( A == 0 && B == CITIES-1) return 1;
-        if ( B == 0 && A == CITIES-1) return 1;
+        if (A == 0 && B == CITIES - 1) {
+          return 1;
+        }
+        if (B == 0 && A == CITIES - 1) {
+          return 1;
+        }
 
         return Math.abs( A - B );
     }
