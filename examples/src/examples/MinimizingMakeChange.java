@@ -47,7 +47,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -143,6 +143,8 @@ public class MinimizingMakeChange {
     XMLDocumentBuilder docbuilder = new XMLDocumentBuilder();
     Document xmlDoc = (Document) docbuilder.buildDocument(doc2);
     XMLManager.writeFile(xmlDoc, new File("testJGAP.xml"));
+
+
 
     // Display the best solution we found.
     // -----------------------------------
