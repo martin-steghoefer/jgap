@@ -28,6 +28,7 @@
 * Added tests for Chromosome
 * Added tests for Population
 * Added tests for CrossoverOperator
+* Added tests for ChainOfSelectors
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request
   1084383)
