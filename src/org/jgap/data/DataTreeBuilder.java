@@ -23,42 +23,41 @@ import org.jgap.*;
 /**
  * Builds a tree structure from Genes, Chrosomes or from a Genotype.
  * <p>
- * Generated result is the basis for concrete persistence strategies, including
- * XML documents, writing an object to a file or stream etc.
+ * Generated result is generic data type usable for concrete persistence
+ * strategies, including XML documents, writing an object to a file or
+ * stream etc.
  *
  * @author Klaus Meffert
  * @since 2.0
  */
 public class DataTreeBuilder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
-   * Constant representing the name of the genotype XML element tag.
+   * Constant representing the name of the genotype element tag.
    */
   private static final String GENOTYPE_TAG = "genotype";
 
   /**
-   * Constant representing the name of the chromosome XML element tag.
+   * Constant representing the name of the chromosome element tag.
    */
   private static final String CHROMOSOME_TAG = "chromosome";
 
   /**
-   * Constant representing the name of the gene XML element tag.
+   * Constant representing the name of the gene element tag.
    */
   private static final String GENES_TAG = "genes";
 
   /**
-   * Constant representing the name of the gene XML element tag.
+   * Constant representing the name of the gene element tag.
    */
   private static final String GENE_TAG = "gene";
-
-  private static final String ALLELE_ATTRIBUTE = "allele";
 
   private static final String ALLELE_TAG = "allele";
 
   /**
-   * Constant representing the name of the size XML attribute that is
+   * Constant representing the name of the size attribute that is
    * added to genotype and chromosome elements to describe their size.
    */
   private static final String SIZE_ATTRIBUTE = "size";
@@ -70,12 +69,6 @@ public class DataTreeBuilder {
   private static final String CLASS_ATTRIBUTE = "class";
 
   /**
-   * Shared DocumentBuilder, which is used to create new DOM Document
-   * instances.
-   */
-  private IDataCreators m_documentCreator;
-
-  /**
    * Shared lock object used for synchronization purposes.
    */
   private final Object m_lock = new Object();
@@ -83,13 +76,15 @@ public class DataTreeBuilder {
   private static DataTreeBuilder instance;
 
   /**
+   * @return the singleton instance of this class
+   *
+   * @author Klaus Meffert
    * @since 2.0
    */
-  public static DataTreeBuilder getInstance(IDataCreators document) {
+  public static DataTreeBuilder getInstance() {
     if (instance == null) {
       instance = new DataTreeBuilder();
     }
-    instance.m_documentCreator = document;
     return instance;
   }
 
@@ -104,23 +99,25 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Marshall a Genotype to an XML Document representation, including its
+   * Represent a Genotype as a generic data type document, including its
    * population of Chromosome instances.
    *
-   * @param a_subject The genotype to represent as an XML document.
+   * @param a_subject The genotype to represent
+   * @throws Exception
    *
-   * @return a Document object representing the given Genotype.
-   * @since 1.0
+   * @return a generic document object representing the given Genotype.
+   * @author Klaus Meffert
+   * @since 2.0
    */
-  public IDataCreators representGenotypeAsDocument(Genotype a_subject,
-      IDataCreators a_document)
+  public IDataCreators representGenotypeAsDocument(Genotype a_subject)
       throws Exception {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
     // -------------------------------------------------------------
     IDataCreators genotypeDocument;
     synchronized (m_lock) {
-      genotypeDocument = a_document.newDocument();
+      genotypeDocument = new DataElementsDocument();
+      genotypeDocument.setTree(createTree());
     }
     IDataElement genotypeElement = representGenotypeAsElement(a_subject);
     genotypeDocument.appendChild(genotypeElement);
@@ -128,20 +125,21 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Marshall a Genotype instance into an XML Element representation,
-   * including its population of Chromosome instances as sub-elements.
+   * Represent a Genotype as a generic data type element, including its
+   * population of Chromosome instances.
+   *
    * This may be useful in scenarios where representation as an
-   * entire Document is undesirable, such as when the representation
+   * entire document is undesirable, such as when the representation
    * of this Genotype is to be combined with other elements in a
-   * single Document.
+   * single document.
    *
-   * @param a_subject The genotype to represent as an XML element.
-   * @param a_xmlDocument A Document instance that will be used to create
-   *                      the Element instance. Note that the element will
-   *                      NOT be added to the document by this method.
+   * @param a_subject The genotype to represent
+   * @throws Exception
    *
-   * @return an Element object representing the given Genotype.
-   * @since 1.0
+   * @return an element object representing the given Genotype.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public IDataElement representGenotypeAsElement(Genotype a_subject)
       throws Exception {
@@ -165,13 +163,16 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Marshall a Chromosome instance to an XML Document representation,
-   * including its contained Gene instances.
+   * Represent a Chromosome as a generic data type document, including its
+   * contained Gene instances.
    *
-   * @param a_subject The chromosome to represent as an XML document.
+   * @param a_subject The chromosome to represent
+   * @throws Exception
    *
-   * @return a Document object representing the given Chromosome.
-   * @since 1.0
+   * @return a document object representing the given Chromosome.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public IDataCreators representChromosomeAsDocument(Chromosome a_subject)
       throws Exception {
@@ -195,19 +196,19 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Marshall a Chromosome instance to an XML Element representation,
-   * including its contained Genes as sub-elements. This may be useful in
-   * scenarios where representation as an entire Document is undesirable,
-   * such as when the representation of this Chromosome is to be combined
-   * with other elements in a single Document.
+   * Represent a Chromosome as a generic data type element, including its
+   * contained Gene instances.
+   * This may be useful in scenarios where representation as an entire document
+   * is undesirable, such as when the representation of this Chromosome is to
+   * be combined with other elements in a single document.
    *
    * @param a_subject The chromosome to represent as an XML element.
-   * @param a_xmlDocument A Document instance that will be used to create
-   *                      the Element instance. Note that the element will
-   *                      NOT be added to the document by this method.
+   * @throws Exception
    *
-   * @return an Element object representing the given Chromosome.
-   * @since 1.0
+   * @return an element object representing the given Chromosome.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public IDataElement representChromosomeAsElement(Chromosome a_subject)
       throws Exception {
@@ -230,15 +231,15 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Marshall an array of Genes to an XML Element representation.
+   * Represent Genes as a generic data type element.
+   * @throws Exception
    *
-   * @param a_geneValues The genes to represent as an XML element.
-   * @param a_xmlDocument A Document instance that will be used to create
-   *                      the Element instance. Note that the element will
-   *                      NOT be added to the document by this method.
+   * @param a_geneValues The genes to represent
    *
-   * @return an Element object representing the given genes.
-   * @since 1.0
+   * @return an element object representing the given genes.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public IDataElement representGenesAsElement(Gene[] a_geneValues)
       throws Exception {
@@ -255,7 +256,17 @@ public class DataTreeBuilder {
     return genesElement;
   }
 
-  public IDataElement representGeneAsElement(Gene gene)
+  /**
+   * Represent a Gene as a generic data type element.
+   * @param a_gene The Gene to represent
+   * @throws Exception
+   *
+   * @return an element object representing the given gene.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public IDataElement representGeneAsElement(Gene a_gene)
       throws Exception {
     // Create the allele element for this gene.
     // ----------------------------------------
@@ -264,18 +275,17 @@ public class DataTreeBuilder {
     // name of the concrete class representing the current Gene.
     // ---------------------------------------------------------
     geneElement.setAttribute(CLASS_ATTRIBUTE,
-                             gene.getClass().getName());
+                             a_gene.getClass().getName());
     // Create a text node to contain the string representation of
     // the gene's value (allele).
     // ----------------------------------------------------------
-    geneElement.appendChild(representAlleleAsElement(gene));
+    geneElement.appendChild(representAlleleAsElement(a_gene));
     return geneElement;
   }
 
   private IDataElement representAlleleAsElement(Gene gene)
       throws Exception {
     IDataElement alleleElement = new DataElement(ALLELE_TAG);
-//      alleleElement.setAttribute("class",gene.getClass().getName());
     alleleElement.setAttribute("value", gene.getPersistentRepresentation());
     return alleleElement;
   }
