@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   private int m_minLength;
 
@@ -173,8 +173,7 @@ public class StringGene
    * @since 1.1
    */
   public void setValueFromPersistentRepresentation(String a_representation)
-      throws
-      UnsupportedRepresentationException {
+      throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
           new StringTokenizer(a_representation,
@@ -286,19 +285,20 @@ public class StringGene
    * @since 1.1
    */
   public String getPersistentRepresentation()
-      throws
-      UnsupportedOperationException {
+      throws UnsupportedOperationException {
     try {
-        String s = toString(); if (s==null) s = "null";
+        String s = toString();
+        if (s == null) {
+          s = "null";
+        }
         // The persistent representation includes the value, minimum length,
         // maximum length and valid alphabet. Each is separated by a colon.
         // ----------------------------------------------------------------
-        return
-            URLEncoder.encode ( ""+toString (), "UTF-8") +
+        return URLEncoder.encode("" + toString(), "UTF-8") +
             PERSISTENT_FIELD_DELIMITER + m_minLength +
             PERSISTENT_FIELD_DELIMITER + m_maxLength +
             PERSISTENT_FIELD_DELIMITER +
-            URLEncoder.encode( ""+m_alphabet, "UTF-8");
+            URLEncoder.encode("" + m_alphabet, "UTF-8");
     }
     catch (UnsupportedEncodingException ex) {
         throw new Error ("UTF-8 encoding should be supported");
@@ -501,22 +501,6 @@ public class StringGene
    */
   public String stringValue() {
     return (String) m_value;
-  }
-
-  /**
-   * Checks whether a substring is contained within another string
-   * @param totalString the total string to examine
-   * @param subString the substring to look for
-   * @return true: the totalString contains the subString
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  private boolean containsString(String totalString, String subString) {
-    if (totalString == null || subString == null) {
-      return false;
-    }
-    return totalString.indexOf(subString) >= 0;
   }
 
   /**
