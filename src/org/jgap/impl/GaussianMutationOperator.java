@@ -23,7 +23,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   private double m_deviation;
 
@@ -64,11 +64,7 @@ public class GaussianMutationOperator
                         a_population.size());
 
     RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
-    /**@todo resolve this more clearly!*/
-    if (rn instanceof GaussianRandomGenerator) {
-      setRandomGenerator( (GaussianRandomGenerator) rn);
-    }
-    else if (rn instanceof RandomGenerator) {
+    if (rn instanceof RandomGenerator) {
       setRandomGenerator(rn);
     }
     else {
