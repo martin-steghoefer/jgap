@@ -32,7 +32,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -77,7 +77,7 @@ public class BestChromosomesSelector
     super();
     chromosomes = new Population();
     needsSorting = false;
-    setOriginalRate(0.5d);
+    setOriginalRate(1.0d);
     fitnessValueComparator = new FitnessValueComparator();
   }
 
@@ -92,8 +92,9 @@ public class BestChromosomesSelector
    */
   public synchronized void add(Configuration a_activeConfigurator,
                                Chromosome a_chromosomeToAdd) {
-    // Check if chromosome already added
-    // This speeds up the process by orders of magnitude!!!
+    // If opted-in: Check if chromosome already added
+    // This speeds up the process by orders of magnitude but could lower the
+    // quality of evolved results because of fewer Chromosome's used!!!
     if (!m_doublettesAllowed &&
         chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
       return;
@@ -121,16 +122,24 @@ public class BestChromosomesSelector
    */
   public synchronized Population select(Configuration a_activeConfiguration,
                                         int a_howManyToSelect) {
+    int canBeSelected;
     if (a_howManyToSelect > chromosomes.size()) {
-      a_howManyToSelect = chromosomes.size();
+      canBeSelected = chromosomes.size();
+    }
+    else {
+      canBeSelected = a_howManyToSelect;
     }
 
     int neededSize = a_howManyToSelect;
     if (m_originalRate < 1.0d) {
-      a_howManyToSelect = (int) (a_howManyToSelect * m_originalRate);
+      int oldCanBeSelected = canBeSelected;
+      canBeSelected = (int) (canBeSelected * m_originalRate);
+      if (canBeSelected < 1) {
+        canBeSelected = oldCanBeSelected;
+      }
     }
 
-    if (a_howManyToSelect >= chromosomes.size()) {
+    if (a_howManyToSelect >= chromosomes.size() && false) {
       //return original!
       m_doNotEmpty = true;
       return chromosomes;
@@ -145,21 +154,36 @@ public class BestChromosomesSelector
       Collections.sort(chromosomes.getChromosomes(), fitnessValueComparator);
       needsSorting = false;
     }
-    Population population = new Population(a_howManyToSelect);
+    Population population = new Population(canBeSelected);
     // To select a chromosome, we just go thru the sorted list.
     // --------------------------------------------------------
     Chromosome selectedChromosome;
-    for (int i = 0; i < a_howManyToSelect; i++) {
+    for (int i = 0; i < canBeSelected; i++) {
       selectedChromosome = chromosomes.getChromosome(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);
       population.addChromosome(selectedChromosome);
     }
-    // Add existing Chromosome's by cloning them to fill up the return result
-    // to contain the desired number of Chromosome's
-    for (int i = 0; i < (neededSize - a_howManyToSelect); i++) {
-      selectedChromosome = chromosomes.getChromosome(i);
-      selectedChromosome.setIsSelectedForNextGeneration(true);
-      population.addChromosome(selectedChromosome);
+
+    if (getDoubletteChromosomesAllowed()) {
+      int toAdd;
+      do {
+        toAdd = neededSize - population.size();
+        int loopCount;
+        if (toAdd > a_howManyToSelect) {
+          loopCount = a_howManyToSelect;
+        }
+        else {
+          loopCount = toAdd;
+        }
+        // Add existing Chromosome's by cloning them to fill up the return result
+        // to contain the desired number of Chromosome's
+        for (int i = 0; i < loopCount; i++) {
+          selectedChromosome = chromosomes.getChromosome(i);
+          selectedChromosome.setIsSelectedForNextGeneration(true);
+          population.addChromosome(selectedChromosome);
+        }
+      }
+      while (toAdd > 0);
     }
     return population;
   }
