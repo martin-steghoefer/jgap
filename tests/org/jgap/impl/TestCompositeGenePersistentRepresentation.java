@@ -12,8 +12,13 @@ package org.jgap.impl;
 import org.jgap.*;
 import java.util.List;
 
-/** Test persistent representation of the CompositeGene. */
-public class testCompositeGenePersistentRepresentation {
+/**
+* Test persistent representation of the CompositeGene.
+*
+* @author Audrius Meskauskas
+* @since 2.1
+*/
+public class TestCompositeGenePersistentRepresentation {
 
     public static boolean testRepresentation()
      {
