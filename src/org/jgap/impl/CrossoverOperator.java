@@ -39,7 +39,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -65,6 +65,7 @@ public class CrossoverOperator
    *                               modified copies of Chromosomes to this
    *                               list if it's desired for them to be
    *                               considered for natural selection.
+   * @since 1.0
    */
   public void operate(final Configuration a_activeConfiguration,
                       final Chromosome[] a_population,
