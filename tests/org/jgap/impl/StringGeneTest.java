@@ -34,7 +34,7 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public StringGeneTest() {
   }
@@ -97,11 +97,18 @@ public class StringGeneTest
     }
   }
 
-  public void testSetAlphabet_0() {
+  /**
+   * This feature is now implemented,
+   * the persistend delimiters are allowed in the alphabet.
+   * The block in StringGene is removed.
+   * @todo Consider removing this test
+   * @author Audrius Meskauskas (of commenting "fail") out
+   */
+      public void testSetAlphabet_0() {
     StringGene gene = new StringGene(3, 5);
     try {
       gene.setAlphabet("1" + Gene.PERSISTENT_FIELD_DELIMITER);
-      fail();
+      // fail();
     }
     catch (IllegalArgumentException iex) {
       ; //this is OK
