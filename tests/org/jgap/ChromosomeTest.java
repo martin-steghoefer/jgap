@@ -38,7 +38,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public ChromosomeTest() {
   }
@@ -269,7 +269,7 @@ public class ChromosomeTest
   /**
    * Test clone without setting a configuration
    */
-  public void testClone_0() {
+  public void testClone_0() throws InvalidConfigurationException {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
@@ -305,6 +305,50 @@ public class ChromosomeTest
     assertEquals(chrom.toString(), chrom2.toString());
     assertTrue(chrom.equals(chrom2));
   }
+
+  /**
+   * Test clone with set application data, where cloning not supported
+   */
+  public void testClone_2() throws InvalidConfigurationException {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Chromosome chrom = new Chromosome(conf, genes);
+    IApplicationData appObj = new MyAppObject();
+    chrom.setApplicationData(appObj);
+    try {
+      chrom2 = (Chromosome) chrom.clone();
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ;//this is OK
+    }
+  }
+
+  /**
+   * Test clone with set application data, where cloning supported
+   */
+  public void testClone_3() throws InvalidConfigurationException {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Chromosome chrom = new Chromosome(conf, genes);
+    IApplicationData appObj = new MyAppObject2();
+    chrom.setApplicationData(appObj);
+    chrom2 = (Chromosome) chrom.clone();
+    assertTrue(chrom.equals(chrom2));
+  }
+
 
   public void testEquals_0() {
     Gene[] genes = new IntegerGene[2];
@@ -490,5 +534,29 @@ public class ChromosomeTest
     Chromosome chrom2 = new Chromosome(genes2);
     assertTrue(chrom.compareTo(chrom2) == 0);
     assertTrue(chrom2.compareTo(chrom) == 0);
+  }
+}
+
+class MyAppObject extends TestFitnessFunction implements IApplicationData {
+  public int compareTo(Object o) {
+    return 0;
+  }
+
+  public Object clone() throws CloneNotSupportedException {
+    return null;
+  }
+}
+
+class MyAppObject2 extends TestFitnessFunction implements IApplicationData {
+  public boolean equals(Object o2) {
+    return compareTo(o2) == 0;
+  }
+
+  public int compareTo(Object o) {
+    return 0;
+  }
+
+  public Object clone() throws CloneNotSupportedException {
+    return new MyAppObject2();
   }
 }
