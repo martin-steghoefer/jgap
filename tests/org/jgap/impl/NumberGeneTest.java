@@ -26,7 +26,7 @@ public class NumberGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public NumberGeneTest() {
   }
@@ -242,6 +242,15 @@ public class NumberGeneTest
 
     protected int compareToNative(Object o1, Object o2) {
       return ( (Integer) o1).compareTo(o2);
+    }
+
+    public boolean equals(Object other) {
+      try {
+        return compareTo(other) == 0;
+      }
+      catch (ClassCastException e) {
+        return false;
+      }
     }
   }
 

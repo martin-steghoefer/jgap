@@ -23,7 +23,7 @@ public class FixedBinaryGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public FixedBinaryGeneTest() {
   }
@@ -182,6 +182,34 @@ public class FixedBinaryGeneTest
   public void testEquals_3() {
     Gene gene1 = new FixedBinaryGene(5);
     assertFalse(gene1.equals(new IntegerGene()));
+  }
+
+  public void testEquals_4() {
+    Gene gene1 = new FixedBinaryGene(1);
+    Gene gene2 = new IntegerGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_5() {
+    Gene gene1 = new FixedBinaryGene(1);
+    Gene gene2 = new DoubleGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_6() {
+    Gene gene1 = new FixedBinaryGene(1);
+    Gene gene2 = new BooleanGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_7() {
+    Gene gene1 = new FixedBinaryGene(1);
+    Gene gene2 = new StringGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
   }
 
   /**
