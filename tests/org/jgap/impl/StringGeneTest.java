@@ -34,7 +34,7 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public StringGeneTest() {
   }
@@ -49,9 +49,12 @@ public class StringGeneTest
   }
 
   public void testConstruct_0() {
-    Gene gene = new StringGene(1, 100);
+    StringGene gene = new StringGene(1, 100);
     //following should be possible without exception
     gene.setAllele("ABC");
+    assertEquals(null, gene.getAlphabet());
+    assertEquals(1,gene.getMinLength());
+    assertEquals(100,gene.getMaxLength());
   }
 
   public void testConstruct_1() {
@@ -112,6 +115,7 @@ public class StringGeneTest
     gene.setAlphabet(ALPHABET);
     String alphabet = (String) PrivateAccessor.getField(gene, "m_alphabet");
     assertEquals(ALPHABET, alphabet);
+    assertEquals(alphabet, gene.getAlphabet());
   }
 
   public void testToString_0() {
@@ -348,6 +352,19 @@ public class StringGeneTest
     gene1.setAllele("ijklmn");
     gene1.applyMutation(0, 0.0d);
     assertEquals(gene1.getAllele(),"ijklmn");
+  }
+
+  public void testSetMinMaxLength_0()
+      throws Exception {
+    StringGene gene = new StringGene();
+    gene.setMinLength(4);
+    gene.setMaxLength(3);
+    assertEquals(4,gene.getMinLength());
+    assertEquals(3,gene.getMaxLength());
+  }
+
+  public void testSetToRandomValue_0() {
+    /**@todo implement*/
   }
 
 }
