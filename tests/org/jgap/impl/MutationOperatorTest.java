@@ -25,7 +25,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   public MutationOperatorTest() {
   }
@@ -117,10 +117,58 @@ public class MutationOperatorTest
     }
   }
 
-  public void testOperate_3() {
-  /**@todo implement.
-   * E.g. we could check if something has changed. For that use a
-   * RandomGeneratorForTest*/
+
+  /**
+   * Tests if population size does not change after two consecutive calls.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
+  public void testOperate_3()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    GeneticOperator op = new MutationOperator();
+    conf.addGeneticOperator(op);
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    rand.setNextInt(1);
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(1, 10);
+    Chromosome chrom = new Chromosome(sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    Gene cgene1 = new IntegerGene(1, 10);
+    cgene1.setAllele(new Integer(6));
+    Gene[] genes1 = new Gene[] {
+        cgene1};
+    Chromosome chrom1 = new Chromosome(genes1);
+    Gene cgene2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(9));
+    Gene[] genes2 = new Gene[] {
+        cgene2};
+    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome[] population = new Chromosome[] {
+        chrom1, chrom2};
+    List chroms = new Vector();
+    Gene gene1 = new IntegerGene(1, 10);
+    gene1.setAllele(new Integer(5));
+    chroms.add(gene1);
+    Gene gene2 = new IntegerGene(1, 10);
+    gene2.setAllele(new Integer(7));
+    chroms.add(gene2);
+    Gene gene3 = new IntegerGene(1, 10);
+    gene3.setAllele(new Integer(4));
+    chroms.add(gene3);
+    assertEquals(3, chroms.size());
+    Population pop = new Population(population);
+    op.operate(pop, chroms);
+    assertEquals(2, pop.size());
+    assertEquals(3, chroms.size());
+    op.operate(pop, chroms);
+    assertEquals(2, pop.size());
+    assertEquals(3, chroms.size());
   }
 }
 
