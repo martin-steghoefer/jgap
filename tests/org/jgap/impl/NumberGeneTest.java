@@ -23,7 +23,7 @@ import junitx.util.*;
 public class NumberGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public NumberGeneTest() {
   }
@@ -224,6 +224,28 @@ public class NumberGeneTest
   }
 
   /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetAllele_3() {
+    NumberGene gene1 = new NumberGeneImpl(1, 10000);
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return true;
+      }
+    }
+    );
+    try {
+      gene1.setAllele("22");
+      fail();
+    }
+    catch (ClassCastException classex) {
+      ; //this is OK
+    }
+  }
+
+  /**
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -283,6 +305,38 @@ public class NumberGeneTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_2()
+      throws Exception {
+    Gene gene1 = new NumberGeneImpl(1, 10000);
+    gene1.setAllele(new Integer(4711));
+    Gene gene2 = new DoubleGene();
+    gene2.setAllele(new Double(4711.0d));
+    try {
+      assertEquals(0, gene1.compareTo(gene2));
+      fail();
+    }
+    catch (ClassCastException cex) {
+      ; //this is OK
+    }
+  }
+
+  public void testSetConstraintChecker_0() {
+    NumberGene gene1 = new NumberGeneImpl(1,3);
+    gene1.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    }
+    );
+    assertNotNull(gene1.getConstraintChecker());
+  }
   /**
    * Test implementation of NumberGene, based on IntegerGene
    *
