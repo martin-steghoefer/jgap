@@ -20,9 +20,7 @@ package org.jgap.impl;
 
 import java.util.List;
 import java.util.Vector;
-import org.jgap.Chromosome;
-import org.jgap.FitnessFunction;
-import org.jgap.Gene;
+import org.jgap.*;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -36,7 +34,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public CrossoverOperatorTest() {
   }
@@ -89,10 +87,3 @@ public class CrossoverOperatorTest
   }
 }
 
-class TestFitnessFunction
-    extends FitnessFunction {
-  protected int evaluate(Chromosome a_subject) {
-    //result does not matter here
-    return 1;
-  }
-}
