@@ -25,6 +25,7 @@ import org.jgap.Gene;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import junitx.util.PrivateAccessor;
 
 /**
  * Tests for StringGene class
@@ -116,6 +117,16 @@ public class StringGeneTest
         {
             ; //this is OK
         }
+    }
+
+    public void testSetAlphabet_1 ()
+        throws Exception
+    {
+        StringGene gene = new StringGene (3, 5);
+        final String ALPHABET = "1234";
+        gene.setAlphabet (ALPHABET);
+        String alphabet = (String) PrivateAccessor.getField (gene, "m_alphabet");
+        assertEquals (ALPHABET, alphabet);
     }
 
     public void testToString_0 ()
