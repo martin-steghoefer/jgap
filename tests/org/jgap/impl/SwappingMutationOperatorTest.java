@@ -24,7 +24,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public SwappingMutationOperatorTest() {
   }
@@ -160,4 +160,51 @@ public class SwappingMutationOperatorTest
      * E.g. we could check if something has changed (and in an expected manner).
      * For that use a RandomGeneratorForTest*/
   }
+
+  /** Check if none of the genes is lost during swapping.
+   * The checksum must stay the same. This step tests the swapping part,
+   * not the the whole operator.
+   * @author Audrius Meskauskas
+   */
+  public void testOperate_4() throws Exception {
+      Configuration conf = new DefaultConfiguration();
+      conf.setFitnessFunction(new TestFitnessFunction());
+      Genotype.setConfiguration(conf);
+
+      int n_iterations = 20;
+
+      RandomGenerator generator = new StockRandomGenerator();
+      SwappingMutationOperator mutOp = new SwappingMutationOperator();
+      mutOp.setStartOffset(0);
+
+      for (int n_genes = 0; n_genes < 20; n_genes++) {
+
+      Gene [] genes = new IntegerGene [ n_genes ];
+      for (int i = 0; i < genes.length; i++) {
+          genes [i] = new IntegerGene(-1000,1000);
+          genes [i].setToRandomValue(generator);
+      }
+
+      final long checksum = checksum (genes);
+      Gene [] prev = new Gene [genes.length];
+
+      for (int i = 0; i < n_iterations; i++)
+       for (int gene = 0; gene < genes.length; gene++) {
+           System.arraycopy( genes, 0, prev, 0, genes.length);
+           genes = mutOp.operate( generator, gene, genes );
+           // checksum constant:
+           assertEquals( checksum, checksum (genes) );
+       }
+      }
+  }
+
+ private long checksum( Gene [] a_genes )
+ {
+     long s = 0;
+     for (int i = 0; i < a_genes.length; i++) {
+         s += ( (IntegerGene) a_genes [i] ).intValue();
+     }
+     return s;
+ }
+
 }
