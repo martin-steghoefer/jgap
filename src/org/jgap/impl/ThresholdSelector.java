@@ -13,11 +13,8 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- * Implementation of a NaturalSelector that plays tournaments to determine
- * the chromosomes to be taken to the next generation.
- * <p>
- * The tournament size can be adjusted as well as the probability for selecting
- * an individual.
+ * Implementation of a NaturalSelector that ensures a certain threshold of the
+ * best chromosomes are taken to the next generation.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -25,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
