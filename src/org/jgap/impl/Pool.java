@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,13 +15,10 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import java.util.*;
 
 /**
  * A simple, generic pool class that can be used to pool any kind of object.
@@ -39,100 +34,92 @@ import java.util.List;
  * reset any necessary state in the object prior to the release call (or
  * just after the acquire call).
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
-public class Pool
-{
-    /**
-     * The List of Objects currently in the pool.
-     */
-    private List m_pooledObjects;
+public class Pool {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-    /**
-     * Constructor.
-     */
-    public Pool()
-    {
-        m_pooledObjects = new ArrayList();
+  /**
+   * The List of Objects currently in the pool.
+   */
+  private List m_pooledObjects;
+
+  /**
+   * Constructor.
+   */
+  public Pool() {
+    m_pooledObjects = new ArrayList();
+  }
+
+  /**
+   * Attempts to acquire an Object instance from the pool. It should
+   * be noted that no cleanup or re-initialization occurs on these
+   * objects, so it's up to the caller to reset the state of the
+   * returned Object if that's desirable.
+   *
+   * @return An Object instance from the pool or null if no
+   *         Object instances are available in the pool.
+   * @since 1.0
+   */
+  public synchronized Object acquirePooledObject() {
+    if (m_pooledObjects.isEmpty()) {
+      return null;
     }
-
-
-    /**
-     * Attempts to acquire an Object instance from the pool. It should
-     * be noted that no cleanup or re-initialization occurs on these
-     * objects, so it's up to the caller to reset the state of the
-     * returned Object if that's desirable.
-     *
-     * @return An Object instance from the pool or null if no 
-     *         Object instances are available in the pool.
-     */
-    public synchronized Object acquirePooledObject()
-    {
-        if( m_pooledObjects.isEmpty() )
-        {
-            return null;
-        }
-        else
-        {
-            // Remove the last Object in the pool and return it.
-            // Note that removing the last Object (as opposed to the first
-            // one) is an optimization because it prevents the ArrayList
-            // from resizing itself.
-            // -----------------------------------------------------------
-            return m_pooledObjects.remove( m_pooledObjects.size() - 1 );
-        }
-     }
-
-
-    /**
-     * Releases an Object to the pool. It's not required that the Object
-     * originated from the pool--any Object can be released to it.
-     *
-     * @param a_objectToPool The Object instance to be released into
-     *                       the pool.
-     */
-    public synchronized void releaseObject( Object a_objectToPool )
-    {
-        m_pooledObjects.add( a_objectToPool );
+    else {
+      // Remove the last Object in the pool and return it.
+      // Note that removing the last Object (as opposed to the first
+      // one) is an optimization because it prevents the ArrayList
+      // from resizing itself.
+      // -----------------------------------------------------------
+      return m_pooledObjects.remove(m_pooledObjects.size() - 1);
     }
+  }
 
+  /**
+   * Releases an Object to the pool. It's not required that the Object
+   * originated from the pool--any Object can be released to it.
+   *
+   * @param a_objectToPool The Object instance to be released into
+   *                       the pool.
+   * @since 1.0
+   */
+  public synchronized void releaseObject(Object a_objectToPool) {
+    m_pooledObjects.add(a_objectToPool);
+  }
 
-    /**
-     * Releases a Collection of objects to the pool. It's not required that
-     * the objects in the Collection originated from the pool--any objects
-     * can be released to it.
-     *
-     * @param a_objectsToPool The Collection of objects to release into
-     *                        the pool.
-     */
-    public synchronized void releaseAllObjects( Collection a_objectsToPool )
-    {
-        if( a_objectsToPool != null )
-        {
-            m_pooledObjects.addAll( a_objectsToPool );
-        }
+  /**
+   * Releases a Collection of objects to the pool. It's not required that
+   * the objects in the Collection originated from the pool--any objects
+   * can be released to it.
+   *
+   * @param a_objectsToPool The Collection of objects to release into
+   *                        the pool.
+   * @since 1.0
+   */
+  public synchronized void releaseAllObjects(Collection a_objectsToPool) {
+    if (a_objectsToPool != null) {
+      m_pooledObjects.addAll(a_objectsToPool);
     }
+  }
 
+  /**
+   * Retrieves the number of objects currently available in this pool.
+   *
+   * @return the number of objects in this pool.
+   * @since 1.0
+   */
+  public synchronized int size() {
+    return m_pooledObjects.size();
+  }
 
-    /**
-     * Retrieves the number of objects currently available in this pool.
-     *
-     * @return the number of objects in this pool.
-     */
-    public synchronized int size()
-    {
-        return m_pooledObjects.size();
-    }
-
-
-    /**
-     * Empties out this pool of all objects.
-     */
-    public synchronized void clear()
-    {
-        m_pooledObjects.clear();
-    }
+  /**
+   * Empties out this pool of all objects.
+   * @since 1.0
+   */
+  public synchronized void clear() {
+    m_pooledObjects.clear();
+  }
 }
-
