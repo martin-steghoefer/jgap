@@ -6,6 +6,7 @@
 * Improved hashCode() functions of Gene implementations
 * Improved compareTo method considering app. data only
   when opting in to it
+* Optimized Chromosome.getFitnessValue()
 * Added example: Formula Finder
 * Added class ConfigurationForTest (preinitialized
   Configuration object) as a basis for writing tests more
