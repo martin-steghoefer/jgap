@@ -17,6 +17,7 @@
 * Improved compareTo method considering app. data only
   when opting in to it
 * Improved method FixedBinaryGene.toString()
+* Improved method FixedBinaryGene.compareTo
 * Optimized Chromosome.getFitnessValue()
 * Removed m_doNotEmpty in BestChromosomesSelector
 * Added example: Formula Finder
