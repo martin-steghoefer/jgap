@@ -18,12 +18,9 @@
 
 package org.jgap.impl;
 
-import org.jgap.Chromosome;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.jgap.*;
+
+import junit.framework.*;
 
 /**
  * Tests for GaussianRandomGenerator class
@@ -35,7 +32,7 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -62,6 +59,32 @@ public class GaussianRandomGeneratorTest
     calc.nextLong();
   }
 
+  public void testConstruct_0() {
+    Configuration conf = new DefaultConfiguration();
+    try {
+      GaussianRandomGenerator calc = new GaussianRandomGenerator(0.0d);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
+  }
+
+  public void testConstruct_1() {
+    Configuration conf = new DefaultConfiguration();
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    int i = calc.nextInt();
+    if (Math.abs(i) < DELTA) {
+      i = calc.nextInt();
+      if (Math.abs(i) < DELTA) {
+        i = calc.nextInt();
+        if (Math.abs(i) < DELTA) {
+          fail();
+        }
+      }
+    }
+  }
+
   public void testGetGaussianStdDeviation_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     final double stdDeriv = 0.04d;
@@ -72,6 +95,37 @@ public class GaussianRandomGeneratorTest
 //    Chromosome chrom = new Chromosome(gene, 50);
 //    conf.setSampleChromosome(chrom);
     /**@todo finish*/
+  }
+
+  public void testNextInt_0() throws Exception {
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    int res;
+    for (int i=0;i<100;i++) {
+      res = calc.nextInt(5);
+      System.err.println(res);
+      assertTrue(res < 5.00d);
+      assertTrue(res >= 0.000d);
+    }
+  }
+
+  public void testNextInt_1() throws Exception {
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    int res;
+    for (int i=0;i<100;i++) {
+      res = calc.nextInt();
+      System.err.println(res);
+      assertTrue(res >= 0.000d);
+    }
+  }
+
+  public void testNextDouble_0() throws Exception {
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    double res;
+    for (int i=0;i<100;i++) {
+      res = calc.nextDouble();
+      System.err.println(res);
+      assertTrue(res >= 0.000d);
+    }
   }
 
   /**@todo add further tests*/
