@@ -22,7 +22,7 @@ public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private final int m_targetAmount;
 
@@ -68,11 +68,10 @@ public class MinimizingMakeChangeFitnessFunction
 
     // Step 1: Determine distance of amount represented by solution from
     // the target amount. Since we know  the maximum amount of change is
-    // 99 cents, we'll subtract the difference in change between the
-    // solution amount and the target amount from 99. That will give
-    // the desired effect of returning higher values for amounts
-    // closer to the target amount and lower values for amounts
-    // further away from the target amount.
+    // 999 cents, we'll subtract the difference in change between the
+    // solution amount and the target amount. That will give the desired effect
+    // of returning higher values for amounts closer to the target amount and
+    // lower values for amounts further away from the target amount.
     // -----------------------------------------------------------------
     int fitness = ( MAX_BOUND-1 - changeDifference );
 
@@ -82,8 +81,11 @@ public class MinimizingMakeChangeFitnessFunction
     // -----------------------------------------------------------------
     if( changeDifference == 0 )
     {
-        fitness += MAX_BOUND - ( (MAX_BOUND/100) * totalCoins );
-    }
+        fitness += MAX_BOUND - ( (MAX_BOUND*0.05d) * totalCoins );
+        /**@todo the lower the number of coins the faster the fitness value
+         * should rise (and not in a linear manner!);
+         */
+        }
 
     // Make sure fitness value is always positive.
     // -------------------------------------------
