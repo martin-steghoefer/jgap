@@ -1,5 +1,6 @@
-0.32 (in progress)
+0.32
 ----------
+* Added new document on creating custom Alleles.
 * Modified WeightedRouletteSelector to represent the "wheel" as an array
   just prior to selection of Chromosomes in order to increase iteration 
   speed.
