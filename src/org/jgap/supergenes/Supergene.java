@@ -20,11 +20,11 @@ package org.jgap.supergenes;
 import org.jgap.Gene;
 
 /**
- * <p>Supergene represents several loci, which usually control closely
+ * <p>Supergene represents several genes, which usually control closely
  * related aspects of the phenotype. The Supergene mutates
- * only in such way, that the allele combination remains valid
- * (mutations, that make allele combination invalid, are rejected
- * inside applyMutation method. Supergene components can also be
+ * only in such way, that the allele combination remains valid.
+ * Mutations, that make allele combination invalid, are rejected
+ * inside {@link org.jgap.Gene#applyMutation } method. Supergene components can also be
  * a Supergenes, creating the tree-like structures in this way.
  *</p><p>
  * In biology, the invalid combinations
@@ -49,10 +49,19 @@ public interface Supergene extends Gene {
 
     /**
      * Test the allele combination of this supergene for validity.
-     * @see Note in the interface header.
+     * The default implementation usually calls isValid(getGenes());
+     * @see Note in the interface header. *
      * @return true only if the supergene allele combination is valid.
      */
     boolean isValid();
+
+    /**
+     * Test the given allele combination for validity, using this supergene
+     * validation method. You should always implement this method.
+     * @see Note in the interface header.
+     * @return true only if the supergene allele combination is valid.
+     */
+    boolean isValid(Gene [] a_case);
 
     /**
      * Get the array of genes - components of this supergene.
@@ -69,5 +78,19 @@ public interface Supergene extends Gene {
      * @return The Gene at the given index.
      */
     Gene getGene(int index);
+
+    /** Sets if the Supergene can mutate in the way it becomes invalid.
+     * By default, the Supergene only mutates in the was it stays valid.
+     * This control can be switched of if the Supergene is used in
+     * algorithms that call
+     * {@link org.jgap.supergenes.Supergene#isValid isValid(Gene [] a_case)}
+     * instead.
+     * @param a_validate true (default) if all mutations and setting to
+     * random value must result a valid supergene.
+     */
+
+    void setValidateWhenMutating(boolean a_validate);
+
+
 
 }

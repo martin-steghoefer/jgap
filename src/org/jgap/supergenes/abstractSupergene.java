@@ -43,8 +43,8 @@ import java.util.TreeSet;
 
 
 /** Supergene implementation, supporting the most of the methods, except
- * isValid. To make any sense of using supergenes, you must always override
- * isValid methods.
+ * {@link org.jgap.supergenes.Supergene#isValid(Gene [] genes)} To make any sense of
+ * using supergenes, you must always override isValid (Gene []).
  */
 
 public abstract class abstractSupergene implements Supergene, Serializable
@@ -88,10 +88,14 @@ public abstract class abstractSupergene implements Supergene, Serializable
       * first gene is at index zero and the last gene is at the index equal to
       * the size of this Chromosome - 1.
       *
+      * This seems to be one of the bottlenecks, so it is declared final.
+      * I cannot imagine the reason for overriding this trivial single line
+      * method.
+      *
       * @param a_desiredLocus: The index of the gene value to be returned.
       * @return The Gene at the given index.
       */
-     public Gene getGene(int a_index)
+     public final Gene getGene(int a_index)
       {
           return m_genes[a_index];
       };
@@ -118,17 +122,33 @@ public abstract class abstractSupergene implements Supergene, Serializable
 
     /**
      * Test the allele combination of this supergene for validity.
-     *<p>
+     * This method calls isValid for the current gene list.
+     * @return true only if the supergene allele combination is valid or
+     * the validation is switched off by calling
+     * {@link org.jgap.supergenes.abstractSupergene#setValidateWhenMutating
+     * setValidateWhenMutating (<i>false</i>) }
+     */
+    public boolean isValid()
+    {
+        if (!validation_on) return true;
+        return isValid (m_genes);
+    }
+
+    /**
+     * Test the given gene list for validity. The genes must exactly the same
+     * as inside this supergene.
      * At <i>least about 5 % of the randomly
      * generated Supergene suparallele values should be valid.</i> If the valid
      * combinations represents too small part of all possible combinations,
      * it can take too long to find the suitable mutation that does not brake
      * a supergene. If you face this problem, try to split the supergene into
-     * several sub-supergenes.
+     * several sub-supergenes. setValidateWhenMutating has no effect on this
+     * method.
      * </p>
      * @return true only if the supergene allele combination is valid.
      */
-    public abstract boolean isValid();
+    public abstract boolean isValid(Gene [] a_case);
+
 
     /** Creates a new instance of this Supergene class with the same number of
      * genes, calling newGene() for each subgene. The class, derived from this
@@ -147,6 +167,8 @@ public abstract class abstractSupergene implements Supergene, Serializable
         try {
             abstractSupergene age =
                 (abstractSupergene) getClass ().newInstance ();
+
+            age.validation_on = validation_on;
 
             age.m_genes = g;
             return age;
@@ -170,6 +192,13 @@ public abstract class abstractSupergene implements Supergene, Serializable
      * gene, indexed by <code>index</code>.
      * @see org.jgap.supergenes.abstractSupergene.isValid()
      */
+    /**
+     * Applies a mutation of a given intensity (percentage) onto the gene
+     * at the given index. Retries while isValid() returns true for the
+     * supergene. The method is delegated to the first element [0] of the
+     * gene, indexed by <code>index</code>.
+     * @see org.jgap.supergenes.abstractSupergene.isValid()
+     */
     public void applyMutation(int index, double a_percentage) {
 
         // Return immediately the current value is found in
@@ -185,33 +214,18 @@ public abstract class abstractSupergene implements Supergene, Serializable
           };
 
         if ( !isValid() ) throw new Error("Should be valid on entry");
-        try {
-            /** Get the old value for backup using serialization */
-            ByteArrayOutputStream bout = new ByteArrayOutputStream ();
-            ObjectOutputStream oout = new ObjectOutputStream (bout);
-            oout.writeObject (m_genes[index]);
-            oout.close ();
-            byte [] boa = bout.toByteArray();
 
-            for (int i = 0; i < MAX_RETRIES; i++) {
-                m_genes [index] .applyMutation (0, a_percentage);
-                if (isValid ())  return;
-            }
+        Object backup = m_genes [index].getAllele();
 
-            // restore the gene as it was
-            // --------------------------
-             ObjectInputStream backup = new ObjectInputStream (new
-               ByteArrayInputStream (boa));
-              m_genes [index] = (Gene) backup.readObject();
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            m_genes [index] .applyMutation (0, a_percentage);
+            if (isValid ())  return;
+        }
 
-             markImmutable(index);
-        }
-        catch (ClassNotFoundException ex) {
-            throw new Error("This should never happen");
-        }
-        catch (IOException ex) {
-            throw new Error("Unable to mutate", ex);
-        }
+        // restore the gene as it was
+        m_genes [index]. setAllele(backup);
+        markImmutable(index);
+
     }
 
     /** Maximal number of notes about immutable genes per
@@ -446,17 +460,12 @@ public abstract class abstractSupergene implements Supergene, Serializable
 
     /** Returns sum of hashCode() of the genes-components. */
     public int hashCode() {
-        long s = 0;
-        for (int i = 0; i < m_genes.length; i++) {
+        int s = 0;
+        for (int i = m_genes.length-1; i>=0; i--) {
             s+=m_genes[i].hashCode();
         }
-        return (int) ( s % Integer.MAX_VALUE);
+        return s;
     }
-
-    /** Char used to start gene data in string representations. */
-    protected static final String GSTART = "<";
-    /** Char used to end gene data in string representations. */
-    protected static final String GEND   = ">";
 
     /* Encode string, doubling the separators. */
     protected static final String encode(String a_x)
@@ -480,24 +489,32 @@ public abstract class abstractSupergene implements Supergene, Serializable
         }
      }
 
-     /** Splits the string x into individual gene representations */
+     /**
+      * Splits the string a_x into individual gene representations
+      * @author Audrius Meskauskas
+      * @param a_x The string to split.
+      * @return The elements of the returned array are the
+      * persistent representation strings of the genes - components.
+      */
      protected static final ArrayList split(String a_x)
       throws UnsupportedRepresentationException
        {
          ArrayList a = new ArrayList();
 
-         StringTokenizer st = new StringTokenizer(a_x,GSTART+GEND, true);
+         StringTokenizer st = new StringTokenizer
+         (a_x,GENE_DELIMITER_HEADING+ GENE_DELIMITER_CLOSING, true);
+
          while (st.hasMoreTokens())
           {
-             if (!st.nextToken().equals(GSTART))
+             if (!st.nextToken().equals(GENE_DELIMITER_HEADING))
               throw new UnsupportedRepresentationException
                 (a_x+" no open tag");
              String n = st.nextToken();
-             if (n.equals(GEND)) a.add(""); /* Empty token */
+             if (n.equals(GENE_DELIMITER_CLOSING)) a.add(""); /* Empty token */
              else
               {
                 a.add(n);
-                if (!st.nextToken().equals(GEND))
+                if (!st.nextToken().equals(GENE_DELIMITER_CLOSING))
                 throw new UnsupportedRepresentationException
                  (a_x+" no close tag");
               }
@@ -519,4 +536,15 @@ public abstract class abstractSupergene implements Supergene, Serializable
               }
 
      }
+
+     /**
+      * {@inheritDoc}
+      */
+     public void setValidateWhenMutating(boolean a_validate)
+     {
+         validation_on = a_validate;
+     }
+
+     protected boolean validation_on = true;
+
 }

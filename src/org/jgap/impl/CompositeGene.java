@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * This field separates gene class name from
@@ -663,7 +663,7 @@ public class CompositeGene
    }
 
    /**
-    * Splits the string x into individual gene representations
+    * Splits the string a_x into individual gene representations
     * @author Audrius Meskauskas
     * @param a_x The string to split.
     * @return The elements of the returned array are the
