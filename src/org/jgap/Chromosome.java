@@ -18,8 +18,8 @@
 
 package org.jgap;
 
-import java.io.Serializable;
-import org.jgap.impl.ChromosomePool;
+import java.io.*;
+import org.jgap.impl.*;
 
 /**
  * Chromosomes represent potential solutions and consist of a fixed-length
@@ -31,14 +31,14 @@ import org.jgap.impl.ChromosomePool;
  * in a chromosome must share the same concrete implementation as gene 1 in all
  * other chromosomes in the population.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -46,6 +46,7 @@ public class Chromosome
    * The current active genetic configuration.
    */
   transient protected Configuration m_activeConfiguration = null;
+
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -58,11 +59,13 @@ public class Chromosome
    * The array of Genes contained in this Chromosome.
    */
   protected Gene[] m_genes = null;
+
   /**
    * Keeps track of whether or not this Chromosome has been selected by
    * the natural selector to move on to the next generation.
    */
   protected boolean m_isSelectedForNextGeneration = false;
+
   /**
    * Stores the fitness value of this Chromosome as determined by the
    * active fitness function. A value of -1 indicates that this field
@@ -71,12 +74,14 @@ public class Chromosome
    *
    * @since 2.0 (until 1.1: type int)
    */
-  protected double m_fitnessValue = -1.00000d;
+  protected double m_fitnessValue = -1.0000000d;
+
   /**
    * Stores the hash-code of this Chromosome so that it doesn't need
    * to be recalculated each time.
    */
   private int m_hashCode;
+
   /**
    * Constructs a Chromosome of the given size separate from any specific
    * Configuration. This constructor will use the given sample Gene to
@@ -158,7 +163,8 @@ public class Chromosome
    *         invalid, such as a null genes array or element.
    */
   public Chromosome(Configuration a_activeConfiguration,
-                    Gene[] a_initialGenes) throws InvalidConfigurationException {
+                    Gene[] a_initialGenes)
+      throws InvalidConfigurationException {
     // Sanity checks: make sure the parameters are all valid.
     // ------------------------------------------------------
     if (a_initialGenes == null) {
@@ -199,7 +205,8 @@ public class Chromosome
    *         null or cannot be locked because it is in an invalid or
    *         incomplete state.
    */
-  public void setActiveConfiguration(Configuration a_activeConfiguration) throws
+  public void setActiveConfiguration(Configuration a_activeConfiguration)
+      throws
       InvalidConfigurationException {
     // Only assign the given Configuration object if we don't already
     // have one.
@@ -230,7 +237,7 @@ public class Chromosome
    * @return A copy of this Chromosome.
    * @since 1.0
    */
-  public synchronized Object clone()  {
+  public synchronized Object clone() {
     /**@todo what about the application data?*/
 
     // Before doing anything, make sure that a Configuration object
@@ -258,12 +265,13 @@ public class Chromosome
         try {
           if (getApplicationData() != null) {
             if (getApplicationData() instanceof IApplicationData) {
-              copy.setApplicationData( ((IApplicationData) getApplicationData()).
+              copy.setApplicationData( ( (IApplicationData) getApplicationData()).
                                       clone());
             }
           }
           return copy;
-        } catch (CloneNotSupportedException cex) {
+        }
+        catch (CloneNotSupportedException cex) {
           // rethrow as RuntimeException to be backward compatible and have
           // a more convenient handling
           throw new IllegalStateException(cex.getMessage());
@@ -291,16 +299,17 @@ public class Chromosome
          * method via introspection
          */
         if (getApplicationData() instanceof IApplicationData) {
-          IApplicationData clonedAppData = (IApplicationData) ((IApplicationData)
+          IApplicationData clonedAppData = (IApplicationData) ( (
+              IApplicationData)
               getApplicationData()).clone();
-/*
-          if (clonedAppData == null || !clonedAppData.equals(getApplicationData())) {
-            throw new CloneNotSupportedException(
-                "ApplicationData object attached"
-                + " to Chromosome clones not "
-                + "correctly!");
-          }
- */
+          /*
+           if (clonedAppData == null || !clonedAppData.equals(getApplicationData())) {
+                      throw new CloneNotSupportedException(
+                          "ApplicationData object attached"
+                          + " to Chromosome clones not "
+                          + "correctly!");
+                    }
+           */
           ret.setApplicationData(clonedAppData);
         }
         else {
@@ -455,7 +464,8 @@ public class Chromosome
    *         is null.
    */
   public static Chromosome randomInitialChromosome(
-      Configuration a_activeConfiguration) throws InvalidConfigurationException {
+      Configuration a_activeConfiguration)
+      throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
     if (a_activeConfiguration == null) {
@@ -593,7 +603,6 @@ public class Chromosome
         return comparison;
       }
     }
-
     // Compare application data
     // ------------------------
     if (getApplicationData() == null) {
@@ -606,11 +615,10 @@ public class Chromosome
     }
     else {
       if (getApplicationData() instanceof Comparable) {
-        return ((Comparable)getApplicationData()).compareTo(otherChromosome.
-                                              getApplicationData());
+        return ( (Comparable) getApplicationData()).compareTo(otherChromosome.
+            getApplicationData());
       }
     }
-
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
@@ -618,7 +626,7 @@ public class Chromosome
 
   /**
    * Sets whether this Chromosome has been selected by the natural selector
-   * to continue to the next generation.
+   * to continue to the next generation or manually (e.g. via an add-method).
    *
    * @param a_isSelected true if this Chromosome has been selected, false
    *                     otherwise.
@@ -645,7 +653,8 @@ public class Chromosome
   public void cleanup() {
     // First, reset our internal state.
     // --------------------------------
-    m_fitnessValue = m_activeConfiguration.getFitnessFunction().getNoFitnessValue();
+    m_fitnessValue = m_activeConfiguration.getFitnessFunction().
+        getNoFitnessValue();
     m_hashCode = 0;
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool

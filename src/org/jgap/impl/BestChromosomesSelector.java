@@ -19,6 +19,7 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
 
 /**
@@ -31,20 +32,25 @@ import org.jgap.*;
  */
 public class BestChromosomesSelector
     implements NaturalSelector {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
+
   /**
    * Stores the chromosomes to be taken into account for selection
    */
   private List chromosomes;
+
   /**
    * Indicated whether the list of added chromosomes needs sorting
    */
   private boolean needsSorting;
+
   /**
    * Comparator that is only concerned about fitness values
    */
   private FitnessValueComparator fitnessValueComparator;
+
   public BestChromosomesSelector() {
     chromosomes = new Vector();
     needsSorting = false;
@@ -113,6 +119,8 @@ public class BestChromosomesSelector
 
   /**
    * Empty out the working pool of Chromosomes.
+   *
+   * @author Klaus Meffert
    * @since 1.1
    */
   public synchronized void empty() {
