@@ -23,7 +23,7 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public StringGeneTest() {
   }
@@ -290,6 +290,22 @@ public class StringGeneTest
     assertEquals(gene1.getAlphabet(), gene2.getAlphabet());
   }
 
+  public void testPersistentRepresentation_6()
+      throws Exception {
+    Gene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(new String("BABE"));
+    gene1.setValueFromPersistentRepresentation(null);
+    assertEquals("BABE", gene1.getAllele());
+  }
+
+  public void testPersistentRepresentation_7()
+      throws Exception {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+
+    assertEquals("null:2:10:ABCDE", gene1.getPersistentRepresentation());
+  }
+
   public void testApplyMutation_0() {
     Gene gene1 = new StringGene(5, 5);
     gene1.setAllele("12345");
@@ -405,16 +421,16 @@ public class StringGeneTest
     // 3) second character out of alphabet
     // 4) third character out of alphabet
     // 5) fourth character out of alphabet
-    rn.setNextIntSequence(new int[]{3,2,1,0,2});
+    rn.setNextIntSequence(new int[] {3, 2, 1, 0, 2});
     gene.setToRandomValue(rn);
     assertEquals("FEDF", gene.getAllele());
   }
 
   public void testSetToRandomValue_5() {
-    StringGene gene = new StringGene(1, 8,StringGene.ALPHABET_CHARACTERS_LOWER);
+    StringGene gene = new StringGene(1, 8, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene.setToRandomValue(new StockRandomGenerator());
 
-    for (int i=0;i<gene.size();i++) {
+    for (int i = 0; i < gene.size(); i++) {
       if ( ( (String) gene.getAllele()).charAt(i) < 'a' ||
           ( (String) gene.getAllele()).charAt(i) > 'z') {
         fail();
@@ -422,4 +438,48 @@ public class StringGeneTest
     }
   }
 
+  public void testSetToRandomValue_6() {
+    Gene gene = new StringGene(1, 6, "");
+    try {
+      gene.setToRandomValue(new StockRandomGenerator());
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ; //this is OK
+    }
+  }
+
+  public void testSetToRandomValue_7() {
+    Gene gene = new StringGene(1, 6, null);
+    try {
+      gene.setToRandomValue(new StockRandomGenerator());
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ; //this is OK
+    }
+  }
+
+  public void testSetConstraintChecker_0() {
+    StringGene gene = new StringGene(1, 6, "ABC");
+    assertNull(gene.getConstraintChecker());
+    gene.setConstraintChecker(new IGeneConstraintChecker() {
+      public boolean verify(Gene a_gene, Object a_alleleValue)
+          throws RuntimeException {
+        return false;
+      }
+    });
+    assertNotNull(gene.getConstraintChecker());
+  }
+
+  public void testIsValidAlphabet_0() {
+    StringGene gene = new StringGene(1, 6, "");
+    try {
+      gene.setAllele("HALLO");
+      fail();
+    }
+    catch (IllegalArgumentException ilex) {
+      ; //this is OK
+    }
+  }
 }

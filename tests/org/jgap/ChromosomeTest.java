@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public ChromosomeTest() {
   }
@@ -569,6 +569,46 @@ public class ChromosomeTest
     chrom.setCompareApplicationData(true);
     assertTrue(chrom.compareTo(chrom2) == 0);
     assertTrue(chrom2.compareTo(chrom) == 0);
+  }
+
+  public void testCompareTo_0_3()
+      throws Exception {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes);
+    chrom2.setCompareApplicationData(true);
+    chrom2.setApplicationData(new Object());
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    chrom.setCompareApplicationData(true);
+    chrom.setApplicationData(null);
+    assertFalse(chrom.compareTo(chrom2) == 0);
+    assertFalse(chrom2.compareTo(chrom) == 0);
+  }
+
+  public void testCompareTo_0_4()
+      throws Exception {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom2 = new Chromosome(genes);
+    chrom2.setCompareApplicationData(true);
+    chrom2.setApplicationData(new Object());
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    chrom.setCompareApplicationData(true);
+    chrom.setApplicationData(new Date());
+    assertFalse(chrom.compareTo(chrom2) == 0);
+    assertFalse(chrom2.compareTo(chrom) == 0);
   }
 
   public void testCompareTo_1()
