@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * The current active Configuration instance.
@@ -533,8 +533,8 @@ public class Genotype
     int twopower = 1;
     int localHashCode = 0;
     for (i = 0; i < size; i++, twopower = 2 * twopower) {
-      s = this.m_population.getChromosome(i);
-      localHashCode += twopower * s.hashCode();
+      s = m_population.getChromosome(i);
+      localHashCode = 31 * localHashCode + s.hashCode();
     }
     return localHashCode;
   }
