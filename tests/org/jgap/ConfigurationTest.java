@@ -25,7 +25,7 @@ public class ConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public ConfigurationTest() {
   }
@@ -292,6 +292,26 @@ public class ConfigurationTest
     assertEquals(selector,conf.getNaturalSelector());
   }
 
+  public void testGetNaturalSelector_2() throws Exception {
+    Configuration conf = new Configuration();
+    try {
+      conf.getNaturalSelector(true, 0);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
+  }
+
+  public void testGetNaturalSelector_3() throws Exception {
+    Configuration conf = new Configuration();
+    try {
+      conf.getNaturalSelector(false, 0);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
+  }
+
   public void testAddNaturalSelector_0() throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector = new WeightedRouletteSelector();
@@ -348,7 +368,7 @@ public class ConfigurationTest
     assertEquals(1, i.intValue());
   }
 
-  public void setFitnessFunction_0() {
+  public void testSetFitnessFunction_0() {
     Configuration conf = new Configuration();
     try {
       conf.setFitnessFunction(null);
@@ -359,7 +379,36 @@ public class ConfigurationTest
     }
   }
 
-  public void setBulkFitnessFunction_0() {
+  public void testSetFitnessEvaluator_0() {
+    Configuration conf = new Configuration();
+    try {
+      conf.setFitnessEvaluator(null);
+      fail();
+    }
+    catch (IllegalStateException istex) {
+      ; //this is OK
+    }
+  }
+
+  public void testSetPreserveFittestIndividual_0() {
+    Configuration conf = new Configuration();
+    assertFalse(conf.isPreserveFittestIndividual());
+    conf.setPreservFittestIndividual(true);
+    assertTrue(conf.isPreserveFittestIndividual());
+    conf.setPreservFittestIndividual(false);
+    assertFalse(conf.isPreserveFittestIndividual());
+  }
+
+  public void testGenerationNr_0() {
+    Configuration conf = new Configuration();
+    assertEquals(0,conf.getGenerationNr());
+    conf.incrementGenerationNr();
+    assertEquals(1,conf.getGenerationNr());
+    conf.incrementGenerationNr();
+    conf.incrementGenerationNr();
+    assertEquals(3,conf.getGenerationNr());
+  }
+  public void testSetBulkFitnessFunction_0() {
     Configuration conf = new Configuration();
     try {
       conf.setBulkFitnessFunction(null);
@@ -370,7 +419,7 @@ public class ConfigurationTest
     }
   }
 
-  public void setBulkFitnessFunction_1() throws Exception {
+  public void testSetBulkFitnessFunction_1() throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new TestFitnessFunction());
     try {
@@ -380,6 +429,23 @@ public class ConfigurationTest
     catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
+  }
+
+  public void testSetBulkFitnessFunction_2() throws Exception {
+    Configuration conf = new Configuration();
+    conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
+    try {
+      conf.setFitnessFunction(new TestFitnessFunction());
+      fail();
+    }
+    catch (InvalidConfigurationException invex) {
+      ; //this is OK
+    }
+  }
+
+  public void testSetBulkFitnessFunction_3() throws Exception {
+    Configuration conf = new Configuration();
+    conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
   }
 
   public void testGetPopulationSize_0() throws Exception {
