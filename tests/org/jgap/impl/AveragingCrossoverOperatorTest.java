@@ -34,7 +34,7 @@ public class AveragingCrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public AveragingCrossoverOperatorTest() {
   }
@@ -48,6 +48,12 @@ public class AveragingCrossoverOperatorTest
     return suite;
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testOperate_0() throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new AveragingCrossoverOperator();
@@ -95,6 +101,9 @@ public class AveragingCrossoverOperatorTest
   /**
    * Tests if crossing over produces same results for two operate-runs
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public void testOperate_1() throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
