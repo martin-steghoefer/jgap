@@ -38,7 +38,7 @@ public class BestChromosomesSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -56,7 +56,7 @@ public class BestChromosomesSelectorTest
   }
 
   public void testAdd_0() throws Exception {
-    NaturalSelector selector = new BestChromosomesSelector();
+    BestChromosomesSelector selector = new BestChromosomesSelector();
     Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
@@ -69,10 +69,14 @@ public class BestChromosomesSelectorTest
     assertEquals(1, chromosomes.size());
     assertEquals(chrom, chromosomes.get(0));
     selector.add(null, chrom);
+    assertEquals(chrom, chromosomes.get(0));
     // if BestChromosomesSelector adds non-unique chroms, then we have a count
     // of two then after the add(..), else a count of 1
+    selector.setDoubletteChromosomesAllowed(false);
     assertEquals(1, chromosomes.size());
-    assertEquals(chrom, chromosomes.get(0));
+    selector.setDoubletteChromosomesAllowed(true);
+    selector.add(null, chrom);
+    assertEquals(2, chromosomes.size());
   }
 
   /**
