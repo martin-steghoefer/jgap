@@ -47,7 +47,7 @@ import java.io.*;
 public class XMLManager
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.4 $";
+    private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     /**
      * Constant representing the name of the genotype XML element tag.
@@ -238,476 +238,408 @@ public class XMLManager
      *
      * @return an Element object representing the given Chromosome.
      * @since 1.0
-     */
-    public static Element representChromosomeAsElement( Chromosome a_subject,
-                                                        Document a_xmlDocument )
-    {
-        // Start by creating an element for the chromosome and its size
-        // attribute, which represents the number of genes in the chromosome.
-        // ------------------------------------------------------------------
-        Element chromosomeElement =
-            a_xmlDocument.createElement( CHROMOSOME_TAG );
+   */
+  public static Element representChromosomeAsElement(Chromosome a_subject,
+      Document a_xmlDocument) {
+    // Start by creating an element for the chromosome and its size
+    // attribute, which represents the number of genes in the chromosome.
+    // ------------------------------------------------------------------
+    Element chromosomeElement =
+        a_xmlDocument.createElement(CHROMOSOME_TAG);
+    chromosomeElement.setAttribute(SIZE_ATTRIBUTE,
+                                   Integer.toString(a_subject.size()));
+    // Next create the genes element with its nested gene elements,
+    // which will contain string representations of the alleles.
+    // --------------------------------------------------------------
+    Element genesElement = representGenesAsElement(a_subject.getGenes(),
+        a_xmlDocument);
+    // Add the new genes element to the chromosome element and then
+    // return the chromosome element.
+    // -------------------------------------------------------------
+    chromosomeElement.appendChild(genesElement);
+    return chromosomeElement;
+  }
 
-        chromosomeElement.setAttribute( SIZE_ATTRIBUTE,
-                                        Integer.toString( a_subject.size() ) );
-
-        // Next create the genes element with its nested gene elements,
-        // which will contain string representations of the alleles.
-        // --------------------------------------------------------------
-        Element genesElement = representGenesAsElement( a_subject.getGenes(),
-                                                        a_xmlDocument );
-
-        // Add the new genes element to the chromosome element and then
-        // return the chromosome element.
-        // -------------------------------------------------------------
-        chromosomeElement.appendChild( genesElement );
-
-        return chromosomeElement;
+  /**
+   * Marshall a Genotype instance into an XML Element representation,
+   * including its population of Chromosome instances as sub-elements.
+   * This may be useful in scenarios where representation as an
+   * entire Document is undesirable, such as when the representation
+   * of this Genotype is to be combined with other elements in a
+   * single Document.
+   *
+   * @param a_subject The genotype to represent as an XML element.
+   * @param a_xmlDocument A Document instance that will be used to create
+   *                      the Element instance. Note that the element will
+   *                      NOT be added to the document by this method.
+   *
+   * @return an Element object representing the given Genotype.
+   * @since 1.0
+   */
+  public static Element representGenotypeAsElement(Genotype a_subject,
+      Document a_xmlDocument) {
+    Chromosome[] population = a_subject.getChromosomes();
+    // Start by creating the genotype element and its size attribute,
+    // which represents the number of chromosomes present in the
+    // genotype.
+    // --------------------------------------------------------------
+    Element genotypeTag = a_xmlDocument.createElement(GENOTYPE_TAG);
+    genotypeTag.setAttribute(SIZE_ATTRIBUTE,
+                             Integer.toString(population.length));
+    // Next, add nested elements for each of the chromosomes in the
+    // genotype.
+    // ------------------------------------------------------------
+    for (int i = 0; i < population.length; i++) {
+      Element chromosomeElement =
+          representChromosomeAsElement(population[i], a_xmlDocument);
+      genotypeTag.appendChild(chromosomeElement);
     }
+    return genotypeTag;
+  }
 
-    /**
-     * Marshall a Genotype instance into an XML Element representation,
-     * including its population of Chromosome instances as sub-elements.
-     * This may be useful in scenarios where representation as an
-     * entire Document is undesirable, such as when the representation
-     * of this Genotype is to be combined with other elements in a
-     * single Document.
-     *
-     * @param a_subject The genotype to represent as an XML element.
-     * @param a_xmlDocument A Document instance that will be used to create
-     *                      the Element instance. Note that the element will
-     *                      NOT be added to the document by this method.
-     *
-     * @return an Element object representing the given Genotype.
-     * @since 1.0
-     */
-    public static Element representGenotypeAsElement( Genotype a_subject,
-                                                      Document a_xmlDocument )
-    {
-        Chromosome[] population = a_subject.getChromosomes();
-
-        // Start by creating the genotype element and its size attribute,
-        // which represents the number of chromosomes present in the
-        // genotype.
-        // --------------------------------------------------------------
-        Element genotypeTag = a_xmlDocument.createElement( GENOTYPE_TAG );
-        genotypeTag.setAttribute( SIZE_ATTRIBUTE,
-                Integer.toString( population.length ) );
-
-        // Next, add nested elements for each of the chromosomes in the
-        // genotype.
-        // ------------------------------------------------------------
-        for ( int i = 0; i < population.length; i++ )
-        {
-            Element chromosomeElement =
-                representChromosomeAsElement( population[ i ], a_xmlDocument );
-
-            genotypeTag.appendChild( chromosomeElement );
-        }
-
-        return genotypeTag;
+  /**
+   * Unmarshall a Chromosome instance from a given XML Element
+   * representation.
+   *
+   * @param a_xmlElement The XML Element representation of the Chromosome.
+   *
+   * @return A new Chromosome instance setup with the data from the XML
+   *         Element representation.
+   *
+   * @throws ImproperXMLException if the given Element is improperly
+   *         structured or missing data.
+   * @throws UnsupportedRepresentationException if the actively configured
+   *         Gene implementation does not support the string representation
+   *         of the alleles used in the given XML document.
+   * @throws GeneCreationException if there is a problem creating or
+   *                                 populating an Gene instance.
+   * @since 1.0
+   */
+  public static Gene[] getGenesFromElement(
+      Configuration a_activeConfiguration, Element a_xmlElement)
+      throws ImproperXMLException, UnsupportedRepresentationException,
+      GeneCreationException {
+    // Do some sanity checking. Make sure the XML Element isn't null and
+    // that it in fact represents a set of genes.
+    // -----------------------------------------------------------------
+    if (a_xmlElement == null ||
+        ! (a_xmlElement.getTagName().equals(GENES_TAG))) {
+      throw new ImproperXMLException(
+          "Unable to build Chromosome instance from XML Element: " +
+          "given Element is not a 'genes' element.");
     }
-
-    /**
-     * Unmarshall a Chromosome instance from a given XML Element
-     * representation.
-     *
-     * @param a_xmlElement The XML Element representation of the Chromosome.
-     *
-     * @return A new Chromosome instance setup with the data from the XML
-     *         Element representation.
-     *
-     * @throws ImproperXMLException if the given Element is improperly
-     *         structured or missing data.
-     * @throws UnsupportedRepresentationException if the actively configured
-     *         Gene implementation does not support the string representation
-     *         of the alleles used in the given XML document.
-     * @throws GeneCreationException if there is a problem creating or
-     *                                 populating an Gene instance.
-     * @since 1.0
-     */
-    public static Gene[] getGenesFromElement(
-                               Configuration a_activeConfiguration,
-                               Element a_xmlElement )
-                           throws ImproperXMLException,
-                                  UnsupportedRepresentationException,
-                                  GeneCreationException
-    {
-        // Do some sanity checking. Make sure the XML Element isn't null and
-        // that it in fact represents a set of genes.
-        // -----------------------------------------------------------------
-        if ( a_xmlElement == null ||
-             !( a_xmlElement.getTagName().equals( GENES_TAG ) ) )
-        {
-            throw new ImproperXMLException(
-                "Unable to build Chromosome instance from XML Element: " +
-                "given Element is not a 'genes' element." );
-        }
-
-        List genes = new ArrayList();
-
-        // Extract the nested gene elements.
-        // ---------------------------------------------------------
-        NodeList geneElements = a_xmlElement.getElementsByTagName( GENE_TAG );
-
-        if ( geneElements == null )
-        {
-          throw new ImproperXMLException(
-              "Unable to build Gene instances from XML Element: " +
-              "'" + GENE_TAG + "'" +
-              " sub-elements not found.");
-        }
-
-        // For each gene, get the class attribute so we know what class
-        // to instantiate to represent the gene instance, and then find
-        // the child text node, which is where the string representation
-        // of the allele is located, and extract the representation.
-        // --------------------------------------------------------------
-        int numberOfGeneNodes = geneElements.getLength();
-        for( int i = 0; i < numberOfGeneNodes; i++ )
-        {
-            Element thisGeneElement = (Element) geneElements.item( i );
-            thisGeneElement.normalize();
-
-            // Fetch the class attribute and create an instance of that
-            // class to represent the current gene.
-            // --------------------------------------------------------
-            String geneClassName =
-                thisGeneElement.getAttribute( CLASS_ATTRIBUTE );
-
-            Gene thisGeneObject;
-            try
-            {
-                thisGeneObject =
-                    (Gene) Class.forName( geneClassName ).newInstance();
-            }
-            catch( Exception e )
-            {
-                throw new GeneCreationException( e.getMessage() );
-            }
-
-            // Find the text node and fetch the string representation of
-            // the allele.
-            // ---------------------------------------------------------
-            NodeList children = thisGeneElement.getChildNodes();
-            int childrenSize = children.getLength();
-            String alleleRepresentation = null;
-
-            for ( int j = 0; j < childrenSize; j++ )
-            {
-                if ( children.item( j ).getNodeType() == Node.TEXT_NODE )
-                {
-                    // We found the text node. Extract the representation.
-                    // ------------------------------------------------------
-                    alleleRepresentation = children.item( j ).getNodeValue();
-                    break;
-                }
-            }
-
-            // Sanity check: Make sure the representation isn't null.
-            // ------------------------------------------------------
-            if( alleleRepresentation == null )
-            {
-                throw new ImproperXMLException(
-                    "Unable to build Gene instance from XML Element: " +
-                    "value (allele) is missing representation." );
-            }
-
-            // Now set the value of the gene to that reflect the
-            // string representation.
-            // ---------------------------------------------------
-            try
-            {
-                thisGeneObject.setValueFromPersistentRepresentation(
-                    alleleRepresentation );
-            }
-            catch( UnsupportedOperationException e )
-            {
-                throw new GeneCreationException(
-                    "Unable to build Gene because it does not support the " +
-                    "setValueFromPersistentRepresentation() method." );
-            }
-
-            // Finally, add the current gene object to the list of genes.
-            // ------------------------------------------------------------
-            genes.add( thisGeneObject );
-        }
-
-        return (Gene[]) genes.toArray( new Gene[ genes.size() ] );
+    List genes = new ArrayList();
+    // Extract the nested gene elements.
+    // ---------------------------------------------------------
+    NodeList geneElements = a_xmlElement.getElementsByTagName(GENE_TAG);
+    if (geneElements == null) {
+      throw new ImproperXMLException(
+          "Unable to build Gene instances from XML Element: " +
+          "'" + GENE_TAG + "'" +
+          " sub-elements not found.");
     }
-
-    /**
-     * Unmarshall a Chromosome instance from a given XML Element
-     * representation.
-     *
-     * @param a_activeConfiguration The current active Configuration object
-     *                              that is to be used during construction of
-     *                              the Chromosome.
-     *
-     * @param a_xmlElement The XML Element representation of the Chromosome.
-     *
-     * @return A new Chromosome instance setup with the data from the XML
-     *         Element representation.
-     *
-     * @throws ImproperXMLException if the given Element is improperly
-     *         structured or missing data.
-     * @throws InvalidConfigurationException if the given Configuration is in
-     *         an inconsistent state.
-     * @throws UnsupportedRepresentationException if the actively configured
-     *         Gene implementation does not support the string representation
-     *         of the alleles used in the given XML document.
-     * @throws GeneCreationException if there is a problem creating or
-     *                                 populating an Gene instance.
-     * @since 1.0
-     */
-    public static Chromosome getChromosomeFromElement(
-                                 Configuration a_activeConfiguration,
-                                 Element a_xmlElement )
-            throws ImproperXMLException,
-                   InvalidConfigurationException,
-                   UnsupportedRepresentationException,
-                   GeneCreationException
-    {
-        // Do some sanity checking. Make sure the XML Element isn't null and
-        // that in fact represents a chromosome.
-        // -----------------------------------------------------------------
-        if ( a_xmlElement == null ||
-             !( a_xmlElement.getTagName().equals( CHROMOSOME_TAG ) ) )
-        {
-            throw new ImproperXMLException(
-                "Unable to build Chromosome instance from XML Element: " +
-                "given Element is not a 'chromosome' element." );
-        }
-
-        // Extract the nested genes element and make sure it exists.
-        // ---------------------------------------------------------
-        Element genesElement = (Element)
-            a_xmlElement.getElementsByTagName( GENES_TAG ).item( 0 );
-
-        if ( genesElement == null )
-        {
-            throw new ImproperXMLException(
-                "Unable to build Chromosome instance from XML Element: " +
-                "'genes' sub-element not found." );
-        }
-
-        // Construct the genes from their representations.
-        // -----------------------------------------------
-        Gene[] geneAlleles = getGenesFromElement( a_activeConfiguration,
-                                                  genesElement );
-
-        // Construct the new Chromosome with the genes and return it.
-        // ----------------------------------------------------------
-        return new Chromosome( a_activeConfiguration, geneAlleles );
-    }
-
-
-    /**
-     * Unmarshall a Genotype instance from a given XML Element representation.
-     * Its population of Chromosomes will be unmarshalled from the Chromosome
-     * sub-elements.
-     *
-     * @param a_activeConfiguration The current active Configuration object
-     *                              that is to be used during construction of
-     *                              the Genotype and Chromosome instances.
-     *
-     * @param a_xmlElement The XML Element representation of the Genotype
-     *
-     * @return A new Genotype instance, complete with a population
-     *         of Chromosomes, setup with the data from the XML
-     *         Element representation.
-     *
-     * @throws ImproperXMLException if the given Element is improperly
-     *         structured or missing data.
-     * @throws InvalidConfigurationException if the given Configuration is in
-     *         an inconsistent state.
-     * @throws UnsupportedRepresentationException if the actively configured
-     *         Gene implementation does not support the string representation
-     *         of the alleles used in the given XML document.
-     * @throws GeneCreationException if there is a problem creating or
-     *         populating an Gene instance.
-     * @since 1.0
-     */
-    public static Genotype getGenotypeFromElement( Configuration a_activeConfiguration,
-                                                   Element a_xmlElement )
-            throws ImproperXMLException,
-                   InvalidConfigurationException,
-                   UnsupportedRepresentationException,
-                   GeneCreationException
-    {
-        // Sanity check. Make sure the XML element isn't null and that it
-        // actually represents a genotype.
-        // --------------------------------------------------------------
-        if ( a_xmlElement == null ||
-             !( a_xmlElement.getTagName().equals( GENOTYPE_TAG ) ) )
-        {
-            throw new ImproperXMLException(
-                "Unable to build Genotype instance from XML Element: " +
-                "given Element is not a 'genotype' element." );
-        }
-
-        // Fetch all of the nested chromosome elements and convert them
-        // into Chromosome instances.
-        // ------------------------------------------------------------
-        NodeList chromosomes =
-            a_xmlElement.getElementsByTagName( CHROMOSOME_TAG );
-        int numChromosomes = chromosomes.getLength();
-
-        Chromosome[] population = new Chromosome[ numChromosomes ];
-
-        for ( int i = 0; i < numChromosomes; i++ )
-        {
-            population[ i ] = getChromosomeFromElement( a_activeConfiguration,
-                    (Element) chromosomes.item( i ) );
-        }
-
-        // Construct a new Genotype with the chromosomes and return it.
-        // ------------------------------------------------------------
-        return new Genotype( a_activeConfiguration, population );
-    }
-
-
-    /**
-     * Unmarshall a Genotype instance from a given XML Document representation.
-     * Its population of Chromosomes will be unmarshalled from the Chromosome
-     * sub-elements.
-     *
-     * @param a_activeConfiguration The current active Configuration object
-     *                              that is to be used during construction of
-     *                              the Genotype and Chromosome instances.
-     *
-     * @param a_xmlDocument The XML Document representation of the Genotype.
-     *
-     * @return A new Genotype instance, complete with a population of
-     *         Chromosomes, setup with the data from the XML Document
-     *         representation.
-     *
-     * @throws ImproperXMLException if the given Document is improperly
-     *         structured or missing data.
-     * @throws InvalidConfigurationException if the given Configuration is in
-     *         an inconsistent state.
-     * @throws UnsupportedRepresentationException if the actively configured
-     *         Gene implementation does not support the string representation
-     *         of the alleles used in the given XML document.
-     * @throws GeneCreationException if there is a problem creating or
-     *         populating an Gene instance.
-     * @since 1.0
-     */
-    public static Genotype getGenotypeFromDocument(
-                               Configuration a_activeConfiguration,
-                               Document a_xmlDocument )
-            throws ImproperXMLException,
-                   InvalidConfigurationException,
-                   UnsupportedRepresentationException,
-                   GeneCreationException
-    {
-        // Extract the root element, which should be a genotype element.
-        // After verifying that the root element is not null and that it
-        // in fact is a genotype element, then convert it into a Genotype
-        // instance.
-        // --------------------------------------------------------------
-        Element rootElement = a_xmlDocument.getDocumentElement();
-
-        if ( rootElement == null ||
-             !( rootElement.getTagName().equals( GENOTYPE_TAG ) ) )
-        {
-            throw new ImproperXMLException(
-                "Unable to build Genotype from XML Document: " +
-                "'genotype' element must be at root of document." );
-        }
-
-        return getGenotypeFromElement( a_activeConfiguration, rootElement );
-    }
-
-
-    /**
-     * Unmarshall a Chromosome instance from a given XML Document
-     * representation. Its genes will be unmarshalled from the gene
-     * sub-elements.
-     *
-     * @param a_activeConfiguration The current active Configuration object
-     *                              that is to be used during construction of
-     *                              the Chromosome instances.
-     *
-     * @param a_xmlDocument The XML Document representation of the Chromosome.
-     *
-     * @return A new Chromosome instance setup with the data from the XML
-     *         Document representation.
-     *
-     * @throws ImproperXMLException if the given Document is improperly
-     *         structured or missing data.
-     * @throws InvalidConfigurationException if the given Configuration is in
-     *         an inconsistent state.
-     * @throws UnsupportedRepresentationException if the actively configured
-     *         Gene implementation does not support the string representation
-     *         of the alleles used in the given XML document.
-     * @throws GeneCreationException if there is a problem creating or
-     *         populating an Gene instance.
-     * @since 1.0
-     */
-    public static Chromosome getChromosomeFromDocument( Configuration a_activeConfiguration,
-                                                        Document a_xmlDocument )
-            throws ImproperXMLException,
-                   InvalidConfigurationException,
-                   UnsupportedRepresentationException,
-                   GeneCreationException
-    {
-        // Extract the root element, which should be a chromosome element.
-        // After verifying that the root element is not null and that it
-        // in fact is a chromosome element, then convert it into a Chromosome
-        // instance.
-        // ------------------------------------------------------------------
-        Element rootElement = a_xmlDocument.getDocumentElement();
-        if ( rootElement == null ||
-             !( rootElement.getTagName().equals( CHROMOSOME_TAG ) ) )
-        {
-            throw new ImproperXMLException(
-                "Unable to build Chromosome instance from XML Document: " +
-                "'chromosome' element must be at root of Document." );
-        }
-
-        return getChromosomeFromElement( a_activeConfiguration, rootElement );
-    }
-
-    /**
-     * Reads in an XML file and returns a Document object
-     * @param file the file to be read in
-     * @throws IOException
-     * @throws SAXException
-     * @return Document
-     * @author Klaus Meffert
-     * @since 2.0
-     */
-    public static Document readFile(File file) throws IOException, org.xml.sax.SAXException {
-      return m_documentCreator.parse(file);
-    }
-
-    /**
-     * Writes an XML file from a Document object
-     * @param doc the Document object to be written to file
-     * @param file the file to be written
-     * @throws IOException
-     * @author Klaus Meffert
-     * @since 2.0
-     */
-    public static void writeFile(Document doc, File file) throws IOException {
-         // Use a Transformer for output
-        TransformerFactory tFactory =
-            TransformerFactory.newInstance();
-        Transformer transformer;
-        try {
-          transformer = tFactory.newTransformer();
-        }
-        catch (TransformerConfigurationException tex) {
-          throw new IOException(tex.getMessage());
-        }
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new FileOutputStream(file));
-        try {
-          transformer.transform(source, result);
-        }
-        catch (TransformerException tex) {
-          throw new IOException(tex.getMessage());
+    // For each gene, get the class attribute so we know what class
+    // to instantiate to represent the gene instance, and then find
+    // the child text node, which is where the string representation
+    // of the allele is located, and extract the representation.
+    // --------------------------------------------------------------
+    int numberOfGeneNodes = geneElements.getLength();
+    for (int i = 0; i < numberOfGeneNodes; i++) {
+      Element thisGeneElement = (Element) geneElements.item(i);
+      thisGeneElement.normalize();
+      // Fetch the class attribute and create an instance of that
+      // class to represent the current gene.
+      // --------------------------------------------------------
+      String geneClassName =
+          thisGeneElement.getAttribute(CLASS_ATTRIBUTE);
+      Gene thisGeneObject;
+      try {
+        thisGeneObject =
+            (Gene) Class.forName(geneClassName).newInstance();
+      }
+      catch (Exception e) {
+        throw new GeneCreationException(e.getMessage());
+      }
+      // Find the text node and fetch the string representation of
+      // the allele.
+      // ---------------------------------------------------------
+      NodeList children = thisGeneElement.getChildNodes();
+      int childrenSize = children.getLength();
+      String alleleRepresentation = null;
+      for (int j = 0; j < childrenSize; j++) {
+        if (children.item(j).getNodeType() == Node.TEXT_NODE) {
+          // We found the text node. Extract the representation.
+          // ------------------------------------------------------
+          alleleRepresentation = children.item(j).getNodeValue();
+          break;
         }
       }
+      // Sanity check: Make sure the representation isn't null.
+      // ------------------------------------------------------
+      if (alleleRepresentation == null) {
+        throw new ImproperXMLException(
+            "Unable to build Gene instance from XML Element: " +
+            "value (allele) is missing representation.");
+      }
+      // Now set the value of the gene to that reflect the
+      // string representation.
+      // ---------------------------------------------------
+      try {
+        thisGeneObject.setValueFromPersistentRepresentation(
+            alleleRepresentation);
+      }
+      catch (UnsupportedOperationException e) {
+        throw new GeneCreationException(
+            "Unable to build Gene because it does not support the " +
+            "setValueFromPersistentRepresentation() method.");
+      }
+      // Finally, add the current gene object to the list of genes.
+      // ------------------------------------------------------------
+      genes.add(thisGeneObject);
+    }
+    return (Gene[]) genes.toArray(new Gene[genes.size()]);
+  }
+
+  /**
+   * Unmarshall a Chromosome instance from a given XML Element
+   * representation.
+   *
+   * @param a_activeConfiguration The current active Configuration object
+   *                              that is to be used during construction of
+   *                              the Chromosome.
+   *
+   * @param a_xmlElement The XML Element representation of the Chromosome.
+   *
+   * @return A new Chromosome instance setup with the data from the XML
+   *         Element representation.
+   *
+   * @throws ImproperXMLException if the given Element is improperly
+   *         structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is in
+   *         an inconsistent state.
+   * @throws UnsupportedRepresentationException if the actively configured
+   *         Gene implementation does not support the string representation
+   *         of the alleles used in the given XML document.
+   * @throws GeneCreationException if there is a problem creating or
+   *                                 populating an Gene instance.
+   * @since 1.0
+   */
+  public static Chromosome getChromosomeFromElement(
+      Configuration a_activeConfiguration, Element a_xmlElement)
+      throws ImproperXMLException, InvalidConfigurationException,
+      UnsupportedRepresentationException, GeneCreationException {
+    // Do some sanity checking. Make sure the XML Element isn't null and
+    // that in fact represents a chromosome.
+    // -----------------------------------------------------------------
+    if (a_xmlElement == null ||
+        ! (a_xmlElement.getTagName().equals(CHROMOSOME_TAG))) {
+      throw new ImproperXMLException(
+          "Unable to build Chromosome instance from XML Element: " +
+          "given Element is not a 'chromosome' element.");
+    }
+    // Extract the nested genes element and make sure it exists.
+    // ---------------------------------------------------------
+    Element genesElement = (Element)
+        a_xmlElement.getElementsByTagName(GENES_TAG).item(0);
+    if (genesElement == null) {
+      throw new ImproperXMLException(
+          "Unable to build Chromosome instance from XML Element: " +
+          "'genes' sub-element not found.");
+    }
+    // Construct the genes from their representations.
+    // -----------------------------------------------
+    Gene[] geneAlleles = getGenesFromElement(a_activeConfiguration,
+                                             genesElement);
+    // Construct the new Chromosome with the genes and return it.
+    // ----------------------------------------------------------
+    return new Chromosome(a_activeConfiguration, geneAlleles);
+  }
+
+  /**
+   * Unmarshall a Genotype instance from a given XML Element representation.
+   * Its population of Chromosomes will be unmarshalled from the Chromosome
+   * sub-elements.
+   *
+   * @param a_activeConfiguration The current active Configuration object
+   *                              that is to be used during construction of
+   *                              the Genotype and Chromosome instances.
+   *
+   * @param a_xmlElement The XML Element representation of the Genotype
+   *
+   * @return A new Genotype instance, complete with a population
+   *         of Chromosomes, setup with the data from the XML
+   *         Element representation.
+   *
+   * @throws ImproperXMLException if the given Element is improperly
+   *         structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is in
+   *         an inconsistent state.
+   * @throws UnsupportedRepresentationException if the actively configured
+   *         Gene implementation does not support the string representation
+   *         of the alleles used in the given XML document.
+   * @throws GeneCreationException if there is a problem creating or
+   *         populating an Gene instance.
+   * @since 1.0
+   */
+  public static Genotype getGenotypeFromElement(
+      Configuration a_activeConfiguration, Element a_xmlElement)
+      throws ImproperXMLException, InvalidConfigurationException,
+      UnsupportedRepresentationException, GeneCreationException {
+    // Sanity check. Make sure the XML element isn't null and that it
+    // actually represents a genotype.
+    // --------------------Genotype------------------------------------------
+    if (a_xmlElement == null ||
+        ! (a_xmlElement.getTagName().equals(GENOTYPE_TAG))) {
+      throw new ImproperXMLException(
+          "Unable to build Genotype instance from XML Element: " +
+          "given Element is not a 'genotype' element.");
+    }
+    // Fetch all of the nested chromosome elements and convert them
+    // into Chromosome instances.
+    // ------------------------------------------------------------
+    NodeList chromosomes =
+        a_xmlElement.getElementsByTagName(CHROMOSOME_TAG);
+    int numChromosomes = chromosomes.getLength();
+    Chromosome[] population = new Chromosome[numChromosomes];
+    for (int i = 0; i < numChromosomes; i++) {
+      population[i] = getChromosomeFromElement(a_activeConfiguration,
+                                               (Element) chromosomes.item(i));
+    }
+    // Construct a new Genotype with the chromosomes and return it.
+    // ------------------------------------------------------------
+    return new Genotype(a_activeConfiguration, population);
+  }
+
+  /**
+   * Unmarshall a Genotype instance from a given XML Document representation.
+   * Its population of Chromosomes will be unmarshalled from the Chromosome
+   * sub-elements.
+   *
+   * @param a_activeConfiguration The current active Configuration object
+   *                              that is to be used during construction of
+   *                              the Genotype and Chromosome instances.
+   *
+   * @param a_xmlDocument The XML Document representation of the Genotype.
+   *
+   * @return A new Genotype instance, complete with a population of
+   *         Chromosomes, setup with the data from the XML Document
+   *         representation.
+   *
+   * @throws ImproperXMLException if the given Document is improperly
+   *         structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is in
+   *         an inconsistent state.
+   * @throws UnsupportedRepresentationException if the actively configured
+   *         Gene implementation does not support the string representation
+   *         of the alleles used in the given XML document.
+   * @throws GeneCreationException if there is a problem creating or
+   *         populating an Gene instance.
+   * @since 1.0
+   */
+  public static Genotype getGenotypeFromDocument(
+      Configuration a_activeConfiguration, Document a_xmlDocument)
+      throws ImproperXMLException, InvalidConfigurationException,
+      UnsupportedRepresentationException, GeneCreationException {
+    // Extract the root element, which should be a genotype element.
+    // After verifying that the root element is not null and that it
+    // in fact is a genotype element, then convert it into a Genotype
+    // instance.
+    // --------------------------------------------------------------
+    Element rootElement = a_xmlDocument.getDocumentElement();
+    if (rootElement == null ||
+        ! (rootElement.getTagName().equals(GENOTYPE_TAG))) {
+      throw new ImproperXMLException(
+          "Unable to build Genotype from XML Document: " +
+          "'genotype' element must be at root of document.");
+    }
+    return getGenotypeFromElement(a_activeConfiguration, rootElement);
+  }
+
+  /**
+   * Unmarshall a Chromosome instance from a given XML Document
+   * representation. Its genes will be unmarshalled from the gene
+   * sub-elements.
+   *
+   * @param a_activeConfiguration The current active Configuration object
+   *                              that is to be used during construction of
+   *                              the Chromosome instances.
+   *
+   * @param a_xmlDocument The XML Document representation of the Chromosome.
+   *
+   * @return A new Chromosome instance setup with the data from the XML
+   *         Document representation.
+   *
+   * @throws ImproperXMLException if the given Document is improperly
+   *         structured or missing data.
+   * @throws InvalidConfigurationException if the given Configuration is in
+   *         an inconsistent state.
+   * @throws UnsupportedRepresentationException if the actively configured
+   *         Gene implementation does not support the string representation
+   *         of the alleles used in the given XML document.
+   * @throws GeneCreationException if there is a problem creating or
+   *         populating an Gene instance.
+   * @since 1.0
+   */
+  public static Chromosome getChromosomeFromDocument(Configuration
+      a_activeConfiguration, Document a_xmlDocument)
+      throws ImproperXMLException, InvalidConfigurationException,
+      UnsupportedRepresentationException, GeneCreationException {
+    // Extract the root element, which should be a chromosome element.
+    // After verifying that the root element is not null and that it
+    // in fact is a chromosome element, then convert it into a Chromosome
+    // instance.
+    // ------------------------------------------------------------------
+    Element rootElement = a_xmlDocument.getDocumentElement();
+    if (rootElement == null ||
+        ! (rootElement.getTagName().equals(CHROMOSOME_TAG))) {
+      throw new ImproperXMLException(
+          "Unable to build Chromosome instance from XML Document: " +
+          "'chromosome' element must be at root of Document.");
+    }
+    return getChromosomeFromElement(a_activeConfiguration, rootElement);
+  }
+
+  /**
+   * Reads in an XML file and returns a Document object
+   * @param file the file to be read in
+   * @throws IOException
+   * @throws SAXException
+   * @return Document
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public static Document readFile(File file)
+      throws IOException, org.xml.sax.SAXException {
+    return m_documentCreator.parse(file);
+  }
+
+  /**
+   * Writes an XML file from a Document object
+   * @param doc the Document object to be written to file
+   * @param file the file to be written
+   * @throws IOException
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public static void writeFile(Document doc, File file)
+      throws IOException {
+    // Use a Transformer for output
+    TransformerFactory tFactory =
+        TransformerFactory.newInstance();
+    Transformer transformer;
+    try {
+      transformer = tFactory.newTransformer();
+    }
+    catch (TransformerConfigurationException tex) {
+      throw new IOException(tex.getMessage());
+    }
+    DOMSource source = new DOMSource(doc);
+    StreamResult result = new StreamResult(new FileOutputStream(file));
+    try {
+      transformer.transform(source, result);
+    }
+    catch (TransformerException tex) {
+      throw new IOException(tex.getMessage());
+    }
+  }
 }
