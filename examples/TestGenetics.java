@@ -50,8 +50,18 @@ public class TestGenetics {
       System.exit(-2);
     }
 
+    int progress = 0;
+    int percentEvolution = numEvolutions / 100;
+
     for(int i = 0; i < numEvolutions; i++) {
       genotype.evolve();
+      
+      // print progress
+      if ( percentEvolution > 0 &&  i % percentEvolution == 0 )
+      {
+        progress++;
+        System.out.print( progress + "% " );
+      }
     }
 
     System.out.println(genotype.toString());
