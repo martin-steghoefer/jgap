@@ -355,6 +355,18 @@
         <b><font color=#000080>return</font></b> <font color=#000000>otherQuarterGene</font> <b><font color=#000080>instanceof</font></b> <font color=#000000>QuarterGene && </font>
                <font color=#000000>compareTo</font><font color=#000000>(</font> <font color=#000000>otherQuarterGene</font> <font color=#000000>)</font> <font color=#000000>=</font><font color=#000000>=</font> <font color=#0000FF>0</font><font color=#000000>;</font>
     <font color=#000000>}</font>
+
+
+    <i><font color=#808080>/**</font></i>
+<i><font color=#808080>     * Calculates the hash-code for this QuarterGene.</font></i>
+<i><font color=#808080>     *</font></i>
+<i><font color=#808080>     * @return the hash-code of this QuarterGene</font></i>
+<i><font color=#808080>     */</font></i>
+    <b><font color=#000080>public</font></b> <b><font color=#000080>int</fon
+t></b> <font color=#000000>hashCode</font><font color=#000000>()</font>
+    <font color=#000000>{</font>
+        <b><font color=#000080>return</font></b> <font color=#000000>m_numberOfQuarters</font><font color=#000000>;</font>
+    <font color=#000000>}</font>
 <font color=#000000>}</font>
 
 </tt>
@@ -416,9 +428,12 @@
       The final three methods are cleanup(), which is invoked by JGAP
       when this Gene is no longer needed; compareTo(), which compares
       this QuarterGene to another one and determines which is the
-      "greater" of the two; and equals(), which compares this QuarterGene
-      to another one and determines if they are equal. All of these should
-      be self-explanatory.
+      "greater" of the two; equals(), which compares this QuarterGene
+      to another one and determines if they are equal; and, finally,
+      hashCode(), which generates a hash-code. All of these should
+      be self-explanatory. Note that it's very important to include
+      working equals() and hashCode() methods, and not to simply
+      rely on the default implementations in java.lang.Object.
     </p>
 
     <h3 class="subheader">Conclusion</h3>
