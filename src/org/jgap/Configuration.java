@@ -43,13 +43,14 @@ import org.jgap.impl.ChromosomePool;
  * it is required to provide a value for that setting, and what the
  * setting will default to if not.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class Configuration {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * References the current fitness function that will be used to evaluate

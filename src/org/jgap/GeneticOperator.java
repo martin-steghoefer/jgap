@@ -27,14 +27,15 @@ import java.util.List;
  * for performing the genetic operation on the current population of
  * Chromosomes.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public interface GeneticOperator
     extends java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
