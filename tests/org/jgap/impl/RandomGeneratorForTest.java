@@ -18,8 +18,7 @@
 
 package org.jgap.impl;
 
-import java.util.List;
-import org.jgap.RandomGenerator;
+import org.jgap.*;
 
 /**
  * A random generator only determined for testing purposes.
@@ -33,7 +32,7 @@ public class RandomGeneratorForTest
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_nextInt;
   private long m_nextLong;

@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -35,7 +33,7 @@ import java.util.List;
  * operators, then Chromosomes in the genotype population may not become
  * candidates for natural selection.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public class ReproductionOperator implements GeneticOperator

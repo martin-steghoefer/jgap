@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003, Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
