@@ -47,12 +47,15 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * References the current fitness function that will be used to evaluate
    * chromosomes during the natural selection process. Note that only this
    * or the bulk fitness function may be set--the two are mutually exclusive.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   private FitnessFunction m_objectiveFunction;
 
@@ -61,6 +64,9 @@ public class Configuration {
    * evaluate chromosomes (in bulk) during the natural selection
    * process. Note that only this or the normal fitness function
    * may be set--the two are mutually exclusive.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   private BulkFitnessFunction m_bulkObjectiveFunction;
 
@@ -68,6 +74,9 @@ public class Configuration {
    * References a Chromosome that serves as a sample of the Gene setup
    * that is to be used. Each gene in the Chromosome should be represented
    * with the desired Gene type.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   private Chromosome m_sampleChromosome;
 
@@ -75,12 +84,18 @@ public class Configuration {
    * References the random number generator implementation that is to be
    * used for the generation of any random numbers during the various
    * genetic operations and processes.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   private RandomGenerator m_randomGenerator;
 
   /**
    * References the EventManager that is to be used for the notification
    * of genetic events and the management of event subscribers.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   private EventManager m_eventManager;
 
@@ -88,6 +103,9 @@ public class Configuration {
    * References the chromosome pool, if any, that is to be used to pool
    * discarded Chromosome instances so that they may be recycled later,
    * thereby saving memory and the time to construct them from scratch.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   private ChromosomePool m_chromosomePool;
 
@@ -96,6 +114,9 @@ public class Configuration {
    * to operate upon the chromosomes of a population prior to natural
    * selection. Operators will be executed in the order that they are
    * added to this list.
+   *
+   * @author Klaus Meffert
+   * @since 1.1
    */
   private List m_geneticOperators = new ArrayList();
 
