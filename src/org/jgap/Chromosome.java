@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -403,6 +403,7 @@ public class Chromosome
    * @return a positive double value representing the fitness of this
    *         Chromosome, or -1 if a bulk fitness function is in use and has
    *         not yet assigned a fitness value to this Chromosome.
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
@@ -412,27 +413,11 @@ public class Chromosome
       FitnessFunction normalFitnessFunction =
           m_activeConfiguration.getFitnessFunction();
       if (normalFitnessFunction != null) {
-        if (Math.abs(m_fitnessValue - normalFitnessFunction.getNoFitnessValue())
-            < DELTA) {
-          // We don't have a fitness value yet. We'll see if there's a
-          // "normal" fitness function configured (as opposed to a bulk
-          // fitness function) and, if so, then we'll use it to determine
-          // our fitness so that we can return it. First, though, we have
-          // to make sure that a Configuration object has been set on this
-          // Chromosome or else throw an IllegalStateException.
-          // -------------------------------------------------------------
-          if (m_activeConfiguration == null) {
-            throw new IllegalStateException(
-                "The active Configuration object must be set on this " +
-                "Chromosome prior to invocation of the getFitnessValue() " +
-                "method.");
-          }
-          // Now grab the "normal" fitness function and, if one exists,
-          // ask it to calculate our fitness value.
-          // ----------------------------------------------------------
+          // Grab the "normal" fitness function and ask it to calculate our
+          // fitness value.
+          // --------------------------------------------------------------
           m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
         }
-      }
     }
     return m_fitnessValue;
   }
