@@ -14,4 +14,16 @@
     <jar jarfile="jgap-examples.jar" basedir="${src}/examples"
          includes="*.class"/>
   </target>
+
+  <target name="clean">
+    <delete>
+      <fileset dir="${src}">
+        <include name="jgap.jar"/>
+        <include name="jgap-examples.jar"/>
+        <include name="org/jgap/*.class"/>
+        <include name="org/jgap/impl/*.class"/>
+        <include name="examples/*.class"/>
+      </fileset>
+    </delete>
+  </target>
 </project>
