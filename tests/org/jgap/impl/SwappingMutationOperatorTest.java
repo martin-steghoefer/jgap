@@ -10,7 +10,9 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -22,7 +24,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public SwappingMutationOperatorTest() {
   }
@@ -36,24 +38,40 @@ public class SwappingMutationOperatorTest
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testConstruct_0() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator(234);
     assertEquals(234, mutOp.m_mutationRate);
     assertNull(mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testConstruct_1() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator();
     assertEquals(0, mutOp.m_mutationRate);
     assertNotNull(mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testConstruct_2() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator(null);
     assertEquals(0, mutOp.m_mutationRate);
     assertNull(mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testConstruct_3() {
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     MutationOperator mutOp = new MutationOperator(calc);
@@ -61,6 +79,12 @@ public class SwappingMutationOperatorTest
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testOperate_0()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
@@ -93,6 +117,12 @@ public class SwappingMutationOperatorTest
     assertEquals(candChroms.size(), population.length);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testOperate_1()
       throws Exception {
     SwappingMutationOperator mutOp = new SwappingMutationOperator();
@@ -106,6 +136,10 @@ public class SwappingMutationOperatorTest
     mutOp.operate(new Population(population), candChroms);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.1
+   */
   public void testOperate_2() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator();
     List candChroms = new Vector();
@@ -123,7 +157,7 @@ public class SwappingMutationOperatorTest
 
   public void testOperate_3() {
     /**@todo implement.
-     * E.g. we could check if something has changed. For that use a
-     * RandomGeneratorForTest*/
+     * E.g. we could check if something has changed (and in an expected manner).
+     * For that use a RandomGeneratorForTest*/
   }
 }
