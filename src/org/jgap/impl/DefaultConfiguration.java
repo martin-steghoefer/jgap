@@ -17,9 +17,8 @@
  */
 package org.jgap.impl;
 
-import org.jgap.Configuration;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.event.EventManager;
+import org.jgap.*;
+import org.jgap.event.*;
 
 /**
  * The DefaultConfiguration class simplifies the JGAP configuration
@@ -35,6 +34,9 @@ import org.jgap.event.EventManager;
  */
 public class DefaultConfiguration
     extends Configuration {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
+
   /**
    * Constructs a new DefaultConfiguration instance with a number of
    * Configuration settings set to default values. It is still necessary

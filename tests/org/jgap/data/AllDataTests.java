@@ -18,8 +18,7 @@
 
 package org.jgap.data;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import junit.framework.*;
 
 /**
  * Test suite for all tests of package org.jgap.data
@@ -31,7 +30,7 @@ public class AllDataTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public AllDataTests() {
   }
