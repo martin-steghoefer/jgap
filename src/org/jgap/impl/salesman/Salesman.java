@@ -45,7 +45,7 @@ import org.jgap.impl.*;
 public abstract class Salesman {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
    /**
     * Override this method to compute the distance between "cities",
@@ -236,7 +236,7 @@ public abstract class Salesman {
               chromosomes [i] = new Chromosome (genes);
         }
 
-        Genotype population = new Genotype (m_conf, chromosomes);
+        Genotype population = new Genotype (m_conf, new Population(chromosomes));
 
         Chromosome best = null;
 
