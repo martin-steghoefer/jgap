@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * The current active Configuration instance.
@@ -41,19 +41,6 @@ public class Genotype
    * @since 2.0
    */
   protected Population m_population;
-
-  /**
-   * The working pool of Chromosomes, which is where Chromosomes that are
-   * to be candidates for the next natural selection process are deposited.
-   * This list is passed to each of the genetic operators as they are
-   * invoked during each phase of evolution so that they can add the
-   * Chromosomes they operated upon to it, and then it is eventually passed
-   * to the NaturalSelector so that it can choose which Chromosomes will
-   * go on to the next generation and which will be discarded. It is wiped
-   * clean after each cycle of evolution.
-   * @since 1.0
-   */
-  transient protected List m_workingPool;
 
   /**
    * Constructs a new Genotype instance with the given array of
@@ -126,7 +113,6 @@ public class Genotype
     a_activeConfiguration.lockSettings();
     m_population = a_population;
     m_activeConfiguration = a_activeConfiguration;
-    m_workingPool = new ArrayList();
   }
 
   /**
@@ -164,11 +150,6 @@ public class Genotype
         // ----------------------------------------------------------
         a_activeConfiguration.lockSettings();
         m_activeConfiguration = a_activeConfiguration;
-        // Since this method is invoked following deserialization of
-        // this Genotype, the constructor hasn't been invoked. So make
-        // sure any other transient fields are initialized properly.
-        // -----------------------------------------------------------
-        m_workingPool = new ArrayList();
       }
     }
   }
@@ -247,15 +228,12 @@ public class Genotype
           m_population.getChromosomes());
     }
 
-    // If a bulk fitness function has been provided, then convert the
-    // working pool to an array and pass it to the bulk fitness
-    // function so that it can evaluate and assign fitness values to
-    // each of the Chromosomes.
-    // --------------------------------------------------------------
+    // If a bulk fitness function has been provided, call it.
+    // ------------------------------------------------------
     BulkFitnessFunction bulkFunction =
         m_activeConfiguration.getBulkFitnessFunction();
     if (bulkFunction != null) {
-      bulkFunction.evaluate(m_workingPool);
+      bulkFunction.evaluate(m_population);
     }
 
     // Apply NaturalSelectors after GeneticOperators have been applied.
@@ -288,6 +266,10 @@ public class Genotype
         m_population.addChromosome(fittest);
       }
     }
+
+    // Increase number of generation.
+    // ------------------------------
+    m_activeConfiguration.incrementGenerationNr();
 
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
