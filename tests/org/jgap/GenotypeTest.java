@@ -18,14 +18,10 @@
 
 package org.jgap;
 
-import org.jgap.impl.BooleanGene;
-import org.jgap.impl.DefaultConfiguration;
-import org.jgap.impl.IntegerGene;
-import org.jgap.impl.StaticFitnessFunction;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
+import org.jgap.impl.*;
+
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for Genotype class
@@ -37,7 +33,7 @@ public class GenotypeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public GenotypeTest() {
   }
@@ -216,7 +212,7 @@ public class GenotypeTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
-    PrivateAccessor.setField(genotype, "m_chromosomes", new Chromosome[0]);
+    PrivateAccessor.setField(genotype, "m_population", new Population(1));
     assertEquals(null, genotype.getFittestChromosome());
   }
 
