@@ -269,6 +269,45 @@ public class Genotype implements Serializable
     {
         verifyConfigurationAvailable();
 
+        // Process all natural selectors applicable before executing the
+        // Genetic Operators.
+//JOONEGAP BEGIN
+        // -------------------------------------------------------------
+        // Add the chromosomes pool to the natural selector.
+        // ----------------------------------------------------------------
+        Iterator iterator1 = Arrays.asList (m_chromosomes).iterator ();
+
+        while (iterator1.hasNext ())
+        {
+            Chromosome currentChromosome = (Chromosome) iterator1.next ();
+
+            m_activeConfiguration.getNaturalSelector ().add (
+                m_activeConfiguration,
+                currentChromosome);
+        }
+
+        // Repopulate the population of chromosomes with those selected
+        // by the natural selector.
+        // ------------------------------------------------------------
+
+        if (m_activeConfiguration.getNaturalSelectors (true).size() > 0) {
+            m_chromosomes = m_activeConfiguration.getNaturalSelectors (true).get (
+                0).select (
+                m_activeConfiguration,
+                m_activeConfiguration.getPopulationSize ());
+
+            // Fire an event to indicate we've performed an evolution.
+            // -------------------------------------------------------
+            m_activeConfiguration.getEventManager ().fireGeneticEvent (
+                new GeneticEvent (GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
+
+            // Clean up the natural selector.
+            // ------------------------------
+            m_activeConfiguration.getNaturalSelectors (true).get (0).empty ();
+        }
+
+//JOONEGAP END
+
         // Execute all of the Genetic Operators.
         // -------------------------------------
         List geneticOperators = m_activeConfiguration.getGeneticOperators();
@@ -296,6 +335,10 @@ public class Genotype implements Serializable
             bulkFunction.evaluate( candidateChromosomes );
         }
 
+        // Process all natural selectors applicable after executing the
+        // Genetic Operators.
+        // -------------------------------------------------------------
+
         // Add the chromosomes in the working pool to the natural selector.
         // ----------------------------------------------------------------
         Iterator iterator = m_workingPool.iterator();
@@ -304,45 +347,48 @@ public class Genotype implements Serializable
         {
             Chromosome currentChromosome = (Chromosome) iterator.next();
 
-            m_activeConfiguration.getNaturalSelector().add(
+            m_activeConfiguration.getNaturalSelectors(false).get(0).add(
                     m_activeConfiguration,
                     currentChromosome );
         }
 
-        // Repopulate the population of chromosomes with those selected
-        // by the natural selector.
-        // ------------------------------------------------------------
-        m_chromosomes = m_activeConfiguration.getNaturalSelector().select(
-                                                  m_activeConfiguration,
-                                                  m_chromosomes.length );
+        if (m_activeConfiguration.getNaturalSelectors (false).size() > 0) {
+            // Repopulate the population of chromosomes with those selected
+            // by the natural selector.
+            // ------------------------------------------------------------
+            m_chromosomes = m_activeConfiguration.getNaturalSelectors (false).
+                get (0).select (
+                m_activeConfiguration,
+                m_chromosomes.length);
 
-        // Fire an event to indicate we've performed an evolution.
-        // -------------------------------------------------------
-        m_activeConfiguration.getEventManager().fireGeneticEvent(
-                new GeneticEvent( GeneticEvent.GENOTYPE_EVOLVED_EVENT, this ) );
+            // Fire an event to indicate we've performed an evolution.
+            // -------------------------------------------------------
+            m_activeConfiguration.getEventManager ().fireGeneticEvent (
+                new GeneticEvent (GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
 
-        // Iterate over the Chromosomes in the working pool. Clean up any that
-        // haven't been selected to go on to the next generation.
-        // -------------------------------------------------------------------
-        Iterator workingPoolIterator = m_workingPool.iterator();
-        Chromosome currentChromosome;
-        while( workingPoolIterator.hasNext() )
-        {
-            currentChromosome = (Chromosome) workingPoolIterator.next();
-            if( !currentChromosome.isSelectedForNextGeneration() )
+            // Iterate over the Chromosomes in the working pool. Clean up any that
+            // haven't been selected to go on to the next generation.
+            // -------------------------------------------------------------------
+            Iterator workingPoolIterator = m_workingPool.iterator ();
+            Chromosome currentChromosome;
+            while (workingPoolIterator.hasNext ())
             {
-                currentChromosome.cleanup();
+                currentChromosome = (Chromosome) workingPoolIterator.next ();
+                if (!currentChromosome.isSelectedForNextGeneration ())
+                {
+                    currentChromosome.cleanup ();
+                }
             }
+
+            // Clear out the working pool in preparation for the next evolution
+            // cycle.
+            // ----------------------------------------------------------------
+            m_workingPool.clear ();
+
+            // Clean up the natural selector.
+            // ------------------------------
+            m_activeConfiguration.getNaturalSelectors (false).get (0).empty ();
         }
-
-        // Clear out the working pool in preparation for the next evolution
-        // cycle.
-        // ----------------------------------------------------------------
-        m_workingPool.clear();
-
-        // Clean up the natural selector.
-        // ------------------------------
-        m_activeConfiguration.getNaturalSelector().empty();
     }
 
 
