@@ -35,19 +35,13 @@ public class TestGenetics {
     }
 
     int numEvolutions = Integer.parseInt(args[2]);
-    Configuration gaConf = new Configuration();
+    Configuration gaConf = new DefaultConfiguration();
     Genotype genotype = null;
 
     try {
       gaConf.setChromosomeSize(Integer.parseInt(args[0]));
       gaConf.setPopulationSize(Integer.parseInt(args[1]));
       gaConf.setFitnessFunction(new MaxFunction());
-      gaConf.setNaturalSelector(new WeightedRouletteSelector());
-      gaConf.setRandomGenerator(new StockRandomGenerator());
-
-      gaConf.addGeneticOperator(new ReproductionOperator());
-      gaConf.addGeneticOperator(new CrossoverOperator());
-      gaConf.addGeneticOperator(new MutationOperator(1000));
 
       genotype = Genotype.randomInitialGenotype(gaConf); 
     }

@@ -4,8 +4,16 @@
 * Added a TODO file
 * Made appropriate classes and interfaces serializable.
 * Updated the brace and indentation style.
-* Created and added support for a Configuration class that maintains
-  centralized control over the various configuration settings.
+* Created an algorithm configuration mechanism, via the
+  org.jgap.Configuration class, that provides a central point of
+  control over the various configuration settings.
+* Increased modularity by abstracting out the genetic operators and
+  the random number generator.
+* Created an org.jgap.impl package where stock implementations of
+  JGAP interfaces, such as genetic operators and natural selectors,
+  are now stored
+* Fixed bug wherein BitSet.length() was occasionally being used instead
+  of Chromosome.size(), resulting in less desirable behavior.
 * Updated README file
 
 
