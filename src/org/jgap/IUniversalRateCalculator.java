@@ -22,7 +22,7 @@ package org.jgap;
  * Interface for a calculator that determines a dynamic rate.
  *
  * @author Chris Knowles
- * @since 1.1
+ * @since 2.0
  */
 public interface IUniversalRateCalculator {
 
@@ -30,15 +30,15 @@ public interface IUniversalRateCalculator {
    * Calculates the required dynamic rate.
    * @return the currently applying mutation rate.
    *
-   * @since 1.1
+   * @since 2.0
    */
   int calculateCurrentRate();
-  
+
    /**
    * Calculates whether a mutation should be carried out.
    * @return flag indicating whether mutation should be performed
    *
-   * @since 1.1
+   * @since 2.0
    */
    boolean toBePermutated();
 }
