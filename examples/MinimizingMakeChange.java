@@ -40,15 +40,27 @@ import org.jgap.impl.IntegerGene;
  * The genetic algorithm does best when there is a smooth slope of fitness
  * over the problem space towards the optimum solution. This problem exhibits
  * a more choppy space with more local optima. However, as can be seen from
- * running the example, the genetic algorith still will get the correct
- * answer relatively often, and will always be at least very close (which
- * raises another point: genetic algorithms are always best suited for
- * problems where "very close" is good enough).
+ * running this example, the genetic algorithm still will get the correct
+ * answer virtually everytime.
  */
 public class MinimizingMakeChange
 {
+    /**
+     * The total number of times we'll let the population evolve.
+     */
     private static final int MAX_ALLOWED_EVOLUTIONS = 50;
 
+    /**
+     * Executes the genetic algorithm to determine the minimum number of
+     * coins necessary to make up the given target amount of change. The
+     * solution will then be written to System.out.
+     *
+     * @param a_targetChangeAmount The target amount of change for which this
+     *                             method is attempting to produce the minimum
+     *                             number of coins.
+     *
+     * @throws Exception
+     */
     public static void makeChangeForAmount( int a_targetChangeAmount )
                        throws Exception
     {
@@ -69,9 +81,9 @@ public class MinimizingMakeChange
         // Now we need to tell the Configuration object how we want our
         // Chromosomes to be setup. We do that by actually creating a
         // sample Chromosome and then setting it on the Configuration
-        // object. As mentioned earlier, we want our Chromosomes to
-        // each have four genes, one for each of the coin types. We
-        // want the values of those genes to be integers, which represent
+        // object. As mentioned earlier, we want our Chromosomes to each
+        // have four genes, one for each of the coin types. We want the
+        // values (alleles) of those genes to be integers, which represent
         // how many coins of that type we have. We therefore use the
         // IntegerGene class to represent each of the genes. That class
         // also lets us specify a lower and upper bound, which we set
@@ -101,7 +113,6 @@ public class MinimizingMakeChange
         // ------------------------------------------------
         Genotype population = Genotype.randomInitialGenotype( conf );
 
-
         // Evolve the population. Since we don't know what the best answer
         // is going to be, we just evolve the max number of times.
         // ---------------------------------------------------------------
@@ -116,30 +127,30 @@ public class MinimizingMakeChange
         System.out.println( "The best solution contained the following: " );
 
         System.out.println(
-            MakeChangeFitnessFunction.getNumberOfCoins( bestSolutionSoFar, 0 ) +
-            " quarters." );
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+                bestSolutionSoFar, 0 ) + " quarters." );
 
         System.out.println(
-            MakeChangeFitnessFunction.getNumberOfCoins( bestSolutionSoFar, 1 ) +
-            " dimes." );
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+                bestSolutionSoFar, 1 ) + " dimes." );
 
         System.out.println(
-            MakeChangeFitnessFunction.getNumberOfCoins( bestSolutionSoFar, 2 ) +
-            " nickels." );
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+                bestSolutionSoFar, 2 ) + " nickels." );
 
         System.out.println(
-            MakeChangeFitnessFunction.getNumberOfCoins( bestSolutionSoFar, 3 ) +
-            " pennies." );
+            MinimizingMakeChangeFitnessFunction.getNumberOfCoins(
+                bestSolutionSoFar, 3 ) + " pennies." );
 
         System.out.println( "For a total of " +
-            MakeChangeFitnessFunction.amountOfChange( bestSolutionSoFar ) +
-            " cents." );
+            MinimizingMakeChangeFitnessFunction.amountOfChange(
+                bestSolutionSoFar ) + " cents." );
     }
 
 
     /**
-     * Main method. A single command-line argument is expected, which is
-     * the amount of change to create (in other words, 75 would be 75
+     * Main method. A single command-line argument is expected, which is the
+     * amount of change to create (in other words, 75 would be equal to 75
      * cents).
      *
      * @param args the command-line arguments.
@@ -155,10 +166,10 @@ public class MinimizingMakeChange
             try
             {
                 int amount = Integer.parseInt( args[0] );
-                if( amount >= 100 )
+                if( amount < 1 || amount > 99 )
                 {
                     System.out.println(
-                        "The <amount> argument must be less than 100 ");
+                        "The <amount> argument must be between 1 and 99." );
                 }
                 else
                 {

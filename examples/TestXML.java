@@ -42,6 +42,7 @@ public class TestXML
             activeConfiguration.setFitnessFunction( new MaxFunction() );
 
             // Test Chromsome manipulation methods
+            // -----------------------------------
             Chromosome chromosome =
                 Chromosome.randomInitialChromosome( activeConfiguration );
 
@@ -59,6 +60,7 @@ public class TestXML
             }
 
             // Test Genotype manipulation methods
+            // ----------------------------------
             Genotype genotype =
                 Genotype.randomInitialGenotype( activeConfiguration );
 

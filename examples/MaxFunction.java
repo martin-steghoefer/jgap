@@ -24,36 +24,46 @@ import org.jgap.Chromosome;
 import org.jgap.FitnessFunction;
 
 
+/**
+ * This example implementation calculates the fitness value of Chromosomes
+ * using BooleanGene implementations. It  treats the booleans as bits,
+ * evaluates those bits taken together as an integer value, and then returns
+ * that integer value as the fitness value. Even better would be if we
+ * first raised the value to a fixed power to exaggerate the difference between
+ * the higher values. For example, the difference  between 254 and 255 is only
+ * about .04%, which isn't much incentive for the natural selector to choose
+ * 255 over 254. However, if we squared the values, we would then get 64516 and
+ * 65025, which is a difference of 0.8%--twice as much and, therefore, twice
+ * the incentive to select the higher value. But we don't do that here.
+ */
 public class MaxFunction extends FitnessFunction
 {
     /**
-     * This example implementation calculates the fitness value of Chromosomes
-     * using BooleanGene implementations. It simply returns a fitness value
-     * equal to the numeric binary value of the bits. In other words, it
-     * optimizes the numeric value of the genes interpreted as bits. It should
-     * be noted that, for clarity, this function literally returns the binary
-     * value of the Chromosome's genes interpreted as bits. However, it would
-     * be better to return the value raised to a fixed power to exaggerate the
-     * difference between the higher values. For example, the difference
-     * between 254 and 255 is only about .04%, which isn't much incentive for
-     * the selector to choose 255 over 254. However, if you square the values,
-     * you then get 64516 and 65025, which is a difference of 0.8%--twice
-     * as much and, therefore, twice the incentive to select the higher
-     * value.
+     * Determine the fitness of the given Chromosome instance. The higher the
+     * return value, the more fit the instance. This method should always
+     * return the same fitness value for two equivalent Chromosome instances.
+     *
+     * @param a_subject: The Chromosome instance to evaluate.
+     *
+     * @return A positive integer reflecting the fitness rating of the given
+     *         Chromosome.
      */
     public int evaluate( Chromosome a_subject )
     {
-        int total = 0;
+        int fitnessValue = 0;
+        Gene[] genes = a_subject.getGenes();
 
-        for ( int i = 0; i < a_subject.size(); i++ )
+        for ( int i = genes.length - 1; i >= 0; i-- )
         {
-            Gene value = a_subject.getGene( a_subject.size() - ( i + 1 ) );
-            if ( ((Boolean) value.getAllele()).booleanValue() )
+            Gene value = genes[ i ];
+            if ( ( (Boolean) value.getAllele() ).booleanValue() == true )
             {
-                total += Math.pow( 2.0, (double) i );
+                // A true value equals a bit value of 1.
+                // -------------------------------------
+                fitnessValue += Math.pow( 2.0, (double) i );
             }
         }
 
-        return total;
+        return fitnessValue;
     }
 }

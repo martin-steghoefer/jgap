@@ -26,10 +26,10 @@ import org.jgap.FitnessFunction;
  * The MakeChangeFitnessFunction evaluates Chromosomes with four genes which
  * represent the four denominations of American coins: quarters, dimes,
  * nickels, and pennies. Each gene is represented by an IntegerGene, and the
- * value of that allele is the number of coins for the coin type assigned to
- * that gene. The fitness function adds up the total value of the coinage and
- * returns a fitness value that measures how close the value of the coins is
- * to a target amount supplied by the user.
+ * value (allele) of that gene is the number of coins for the coin type
+ * assigned to it. The fitness function adds up the total value of the coinage
+ * and returns a fitness value that measures how close the value of the coins
+ * is to a target amount supplied by the user.
  */
 public class MakeChangeFitnessFunction extends FitnessFunction
 {

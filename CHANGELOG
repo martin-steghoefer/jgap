@@ -7,6 +7,8 @@
   accordingly to fix source and documentation.
 * Renamed Gene.setValue() and Gene.getValue() methods to Gene.setAllele()
   and Gene.getAllele(), respectively.
+* Renamed IntegerAllele to IntegerGene, BooleanAllele to BooleanGene,
+  and AlleleCreationException to GeneCreationException.
 * Made various minor fixes.
 * Updated various javadocs to increase clarity and accuracy.
 
