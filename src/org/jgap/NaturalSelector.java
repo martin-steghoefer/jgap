@@ -21,7 +21,7 @@ import java.util.*;
 public abstract class NaturalSelector
     implements INaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -32,10 +32,6 @@ public abstract class NaturalSelector
    * @since 1.0
    */
   protected abstract void add(Chromosome a_chromosomeToAdd);
-
-  public NaturalSelector() {
-
-  }
 
   /**
    * Comparator regarding only the fitness value. Best fitness value will
