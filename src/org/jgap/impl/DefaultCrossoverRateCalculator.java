@@ -19,6 +19,9 @@ import org.jgap.*;
  */
 public class DefaultCrossoverRateCalculator implements IUniversalRateCalculator {
 
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
+
   /**
    * Calculates the dynamic crossover rate. This is chosen to be the chromosome
    * size. As the chromosome gets larger we assume that it is less likely to
