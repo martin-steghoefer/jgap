@@ -45,7 +45,7 @@ import java.util.List;
  * it is required to provide a value for that setting, and what the
  * setting will default to if not.
  */
-public class Configuration implements java.io.Serializable
+public class Configuration
 {
     /**
      * References the current fitness function that will be used to evaluate

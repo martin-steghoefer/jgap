@@ -39,7 +39,7 @@ public class Chromosome implements Comparable, Cloneable, Serializable
     /**
      * The current active genetic configuration.
      */
-    protected transient Configuration m_activeConfiguration = null;
+    transient protected Configuration m_activeConfiguration = null;
 
     /**
      * The array of Genes contained in this Chromosome.
@@ -65,18 +65,6 @@ public class Chromosome implements Comparable, Cloneable, Serializable
      * to be recalculated each time.
      */
     private int m_hashCode = 0;
-
-
-    /**
-     * This default constructor exists solely to support serialization. Using
-     * it directly will probably result in undesired behavior. Note that,
-     * following deserialization, it is imperative that the
-     * setActiveConfiguration() method is invoked prior to any other method
-     * in this class or else IllegalStateExceptions may be thrown.
-     */
-    public Chromosome()
-    {
-    }
 
 
     /**
@@ -214,17 +202,14 @@ public class Chromosome implements Comparable, Cloneable, Serializable
 
 
     /**
-     * Sets the active Configuration object on this Chromosome. The given
-     * Configuration will be used internally from now on. Typically, this
-     * method is invoked after a Chromosome has been deserialized or
-     * retrieved from a Chromosome pool shared amongst multiple genetic
-     * algorithms. Note that changing the active configuration on a Chromosome
-     * while it is still in active use can have unexpected and undesirable
-     * consequences.
+     * Sets the active Configuration object on this Chromosome. This method
+     * should be invoked immediately following deserialization of this
+     * Chromosome. If an active Configuration has already been set on this
+     * Chromosome, then this method will do nothing.
      *
      * @param a_activeConfiguration The current active Configuration object
-     *                              that is to be referenced internally from
-     *                              now on by this Chromosome instance.
+     *                              that is to be referenced internally by
+     *                              this Chromosome instance.
      *
      * @throws InvalidConfigurationException if the Configuration object is
      *         null or cannot be locked because it is in an invalid or
@@ -233,19 +218,25 @@ public class Chromosome implements Comparable, Cloneable, Serializable
     public void setActiveConfiguration( Configuration a_activeConfiguration )
                 throws InvalidConfigurationException
     {
-        if( a_activeConfiguration == null )
+        // Only assign the given Configuration object if we don't already
+        // have one.
+        // --------------------------------------------------------------
+        if( m_activeConfiguration == null )
         {
-            throw new InvalidConfigurationException(
-                "The given Configuration object may not be null." );
-        }
-        else
-        {
-            // Make sure the Configuration object is locked and cannot be
-            // changed.
-            // ----------------------------------------------------------
-            a_activeConfiguration.lockSettings();
+            if( a_activeConfiguration == null )
+            {
+                throw new InvalidConfigurationException(
+                    "The given Configuration object may not be null." );
+            }
+            else
+            {
+                // Make sure the Configuration object is locked and cannot be
+                // changed.
+                // ----------------------------------------------------------
+                a_activeConfiguration.lockSettings();
 
-            m_activeConfiguration = a_activeConfiguration;
+                m_activeConfiguration = a_activeConfiguration;
+            }
         }
     }
 

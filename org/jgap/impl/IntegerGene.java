@@ -32,7 +32,7 @@ import java.util.StringTokenizer;
  * Upper and lower bounds may optionally be provided to restrict the range
  * of legal values allowed by this Gene instance.
  */
-public class IntegerGene implements Gene
+public class IntegerGene implements Gene, java.io.Serializable
 {
     /**
      * Represents the constant range of values supported by integers.
@@ -74,11 +74,6 @@ public class IntegerGene implements Gene
      */
     protected long m_boundsUnitsToIntegerUnits;
 
-    /**
-     * The current active configuration that is in use.
-     */
-    protected Configuration m_activeConfiguration = null;
-
 
     /**
      * Constructs a new IntegerGene with default settings. No bounds will
@@ -111,44 +106,6 @@ public class IntegerGene implements Gene
 
 
     /**
-     * Constructs a new IntegerGene according to the given active
-     * configuration.
-     *
-     * @param a_activeConfiguration The current active configuration.
-     */
-    public IntegerGene( Configuration a_activeConfiguration )
-    {
-        m_activeConfiguration = a_activeConfiguration;
-
-        m_lowerBounds = Integer.MIN_VALUE;
-        m_upperBounds = Integer.MAX_VALUE;
-        calculateBoundsUnitsToIntegerUnitsRatio();
-    }
-
-
-    /**
-     * Constructs a new IntegerGene with the given active configuration and
-     * the specified lower and upper bounds for values represented by this
-     * Gene.
-     *
-     * @param a_activeConfiguration The current active configuration.
-     * @param a_lowerBounds The lowest value that this Gene may represent,
-     *                      inclusive.
-     * @param a_upperBounds The highest value that this Gene may represent,
-     *                      inclusive.
-     */
-    public IntegerGene( Configuration a_activeConfiguration,
-                          int a_lowerBounds, int a_upperBounds )
-    {
-        m_activeConfiguration = a_activeConfiguration;
-
-        m_lowerBounds = a_lowerBounds;
-        m_upperBounds = a_upperBounds;
-        calculateBoundsUnitsToIntegerUnitsRatio();
-    }
-
-
-    /**
      * Provides an implementation-independent means for creating new Gene
      * instances. The new instance that is created and returned should be
      * setup with any implementation-dependent configuration that this Gene
@@ -169,8 +126,7 @@ public class IntegerGene implements Gene
      */
     public Gene newGene( Configuration a_activeConfiguration )
     {
-        return new IntegerGene( a_activeConfiguration,
-                                m_lowerBounds, m_upperBounds );
+        return new IntegerGene( m_lowerBounds, m_upperBounds );
     }
 
 

@@ -24,7 +24,7 @@
     </p>
 
     <p>
-      Creating a new genetic operator is probably the second most common
+      Creating a new genetic operator is probably the second-most common
       form of JGAP customization, after the creation of custom Genes.
       We'll look at an existing operator, the ReproductionOperator, as
       an example of how to create your own genetic operator. As you'll
@@ -114,9 +114,9 @@
       population array should never be modified--it is intended to represent
       the population as it was before any genetic operators have been invoked.
       If you wish to alter a Chromosome, you should first make a copy of it
-      and then alter the copy. Any altered Chromosomes that you wish to go on
-      to the natural selection phase must be added to the list of candidate
-      chromosomes.
+      via the clone() method and then alter the copy. Any altered Chromosomes
+      that you wish to go on to the natural selection phase must be added to
+      the list of candidate chromosomes.
     </p>
 
    
@@ -141,7 +141,7 @@
       were added to the Configuration object. It's worth noting that there
       is no way to remove an operator from the Configuration object, which
       means that if you want to replace an existing operator with your own
-      implementation, or place your genetic operator in "front" of an
+      implementation, or place your genetic operator "in front" of an
       existing operator, you won't be able to rely on the DefaultConfiguration
       convenience class, since it automatically adds all of the stock genetic
       operators. Instead, you'll need to setup your Configuration from scratch,
@@ -150,6 +150,15 @@
       new genetic operators (and not replacing existing ones) and are content
       with them being at the end of the operator chain, then you should be
       able to continue using the DefaultConfiguration class.
+    </p>
+
+    <p>
+      <em>Important Note!</em> When using your own set of genetic operators,
+      please be aware that if you do not include a reproduction operator,
+      then the chromosomes in your population will not automatically become
+      candidates for natural selection. It is the reproduction operator that
+      guarantees that each of the chromosones in the current population become
+      candidates for the next generation.
     </p>
 
     <h3 class="subheader">Other Customizations</h3>
