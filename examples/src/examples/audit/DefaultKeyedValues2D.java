@@ -8,6 +8,10 @@ import org.jfree.data.DefaultKeyedValues;/**@todo do it ourselves*/
 import org.jfree.data.KeyedValues2D;/**@todo do it ourselves*/
 
 public class DefaultKeyedValues2D implements Cloneable, Serializable{
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
+
   /** The row keys. */
   private List rowKeys;
 
@@ -31,11 +35,11 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * Creates a new instance (initially empty).
    * @param sortRowKeys if the row keys should be sorted.
    */
-  public DefaultKeyedValues2D(final boolean sortRowKeys) {
-      this.rowKeys = new java.util.ArrayList();
-      this.columnKeys = new java.util.ArrayList();
-      this.rows = new java.util.ArrayList();
-      this.sortRowKeys = sortRowKeys;
+  public DefaultKeyedValues2D(final boolean a_sortRowKeys) {
+      rowKeys = new java.util.ArrayList();
+      columnKeys = new java.util.ArrayList();
+      rows = new java.util.ArrayList();
+      sortRowKeys = a_sortRowKeys;
   }
 
   /**
@@ -44,7 +48,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the row count.
    */
   public int getRowCount() {
-      return this.rowKeys.size();
+      return rowKeys.size();
   }
 
   /**
@@ -53,7 +57,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the column count.
    */
   public int getColumnCount() {
-      return this.columnKeys.size();
+      return columnKeys.size();
   }
 
   /**
@@ -67,9 +71,9 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
   public Number getValue(final int row, final int column) {
 
       Number result = null;
-      final DefaultKeyedValues rowData = (DefaultKeyedValues) this.rows.get(row);
+      final DefaultKeyedValues rowData = (DefaultKeyedValues) rows.get(row);
       if (rowData != null) {
-          final Comparable columnKey = (Comparable) this.columnKeys.get(column);
+          final Comparable columnKey = (Comparable) columnKeys.get(column);
           if (columnKey != null) {
               result = rowData.getValue(columnKey);
           }
@@ -86,7 +90,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the row index.
    */
   public Comparable getRowKey(final int row) {
-      return (Comparable) this.rowKeys.get(row);
+      return (Comparable) rowKeys.get(row);
   }
 
   /**
@@ -97,11 +101,11 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the row index.
    */
   public int getRowIndex(final Comparable key) {
-      if (this.sortRowKeys) {
-          return Collections.binarySearch(this.rowKeys, key);
+      if (sortRowKeys) {
+          return Collections.binarySearch(rowKeys, key);
       }
       else {
-          return this.rowKeys.indexOf(key);
+          return rowKeys.indexOf(key);
       }
   }
 
@@ -111,7 +115,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the row keys.
    */
   public List getRowKeys() {
-      return Collections.unmodifiableList(this.rowKeys);
+      return Collections.unmodifiableList(rowKeys);
   }
 
   /**
@@ -122,7 +126,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the key.
    */
   public Comparable getColumnKey(final int column) {
-      return (Comparable) this.columnKeys.get(column);
+      return (Comparable) columnKeys.get(column);
   }
 
   /**
@@ -133,7 +137,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the column index.
    */
   public int getColumnIndex(final Comparable key) {
-      return this.columnKeys.indexOf(key);
+      return columnKeys.indexOf(key);
   }
 
   /**
@@ -142,7 +146,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @return the column keys.
    */
   public List getColumnKeys() {
-      return Collections.unmodifiableList(this.columnKeys);
+      return Collections.unmodifiableList(columnKeys);
   }
 
   /**
@@ -159,7 +163,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
       final int row = getRowIndex(rowKey);
 
       if (row >= 0) {
-          final DefaultKeyedValues rowData = (DefaultKeyedValues) this.rows.get(row);
+          final DefaultKeyedValues rowData = (DefaultKeyedValues) rows.get(row);
           result = rowData.getValue(columnKey);
       }
       return result;
@@ -190,25 +194,25 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
       int rowIndex = getRowIndex(rowKey);
 
       if (rowIndex >= 0) {
-          row = (DefaultKeyedValues) this.rows.get(rowIndex);
+          row = (DefaultKeyedValues) rows.get(rowIndex);
       }
       else {
           row = new DefaultKeyedValues();
-          if (this.sortRowKeys) {
+          if (sortRowKeys) {
               rowIndex = -rowIndex - 1;
-              this.rowKeys.add(rowIndex, rowKey);
-              this.rows.add(rowIndex, row);
+              rowKeys.add(rowIndex, rowKey);
+              rows.add(rowIndex, row);
           }
           else {
-              this.rowKeys.add(rowKey);
-              this.rows.add(row);
+              rowKeys.add(rowKey);
+              rows.add(row);
           }
       }
       row.setValue(columnKey, value);
 
-      final int columnIndex = this.columnKeys.indexOf(columnKey);
+      final int columnIndex = columnKeys.indexOf(columnKey);
       if (columnIndex < 0) {
-          this.columnKeys.add(columnKey);
+          columnKeys.add(columnKey);
       }
   }
 
@@ -224,7 +228,7 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
       // 1. check wether the row is now empty.
       boolean allNull = true;
       final int rowIndex = getRowIndex(rowKey);
-      DefaultKeyedValues row = (DefaultKeyedValues) this.rows.get(rowIndex);
+      DefaultKeyedValues row = (DefaultKeyedValues) rows.get(rowIndex);
 
       for (int item = 0, itemCount = row.getItemCount(); item < itemCount; item++) {
           if (row.getValue(item) != null) {
@@ -234,16 +238,16 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
       }
 
       if (allNull) {
-          this.rowKeys.remove(rowIndex);
-          this.rows.remove(rowIndex);
+          rowKeys.remove(rowIndex);
+          rows.remove(rowIndex);
       }
 
       // 2. check wether the column is now empty.
       allNull = true;
       final int columnIndex = getColumnIndex(columnKey);
 
-      for (int item = 0, itemCount = this.rows.size(); item < itemCount; item++) {
-          row = (DefaultKeyedValues) this.rows.get(item);
+      for (int item = 0, itemCount = rows.size(); item < itemCount; item++) {
+          row = (DefaultKeyedValues) rows.get(item);
           if (row.getValue(columnIndex) != null) {
               allNull = false;
               break;
@@ -251,11 +255,11 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
       }
 
       if (allNull) {
-          for (int item = 0, itemCount = this.rows.size(); item < itemCount; item++) {
-              row = (DefaultKeyedValues) this.rows.get(item);
+          for (int item = 0, itemCount = rows.size(); item < itemCount; item++) {
+              row = (DefaultKeyedValues) rows.get(item);
               row.removeValue(columnIndex);
           }
-          this.columnKeys.remove(columnIndex);
+          columnKeys.remove(columnIndex);
       }
   }
 
@@ -265,8 +269,8 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @param rowIndex  the row index.
    */
   public void removeRow(final int rowIndex) {
-      this.rowKeys.remove(rowIndex);
-      this.rows.remove(rowIndex);
+      rowKeys.remove(rowIndex);
+      rows.remove(rowIndex);
   }
 
   /**
@@ -294,21 +298,21 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    * @param columnKey  the column key.
    */
   public void removeColumn(final Comparable columnKey) {
-      final Iterator iterator = this.rows.iterator();
+      final Iterator iterator = rows.iterator();
       while (iterator.hasNext()) {
           final DefaultKeyedValues rowData = (DefaultKeyedValues) iterator.next();
           rowData.removeValue(columnKey);
       }
-      this.columnKeys.remove(columnKey);
+      columnKeys.remove(columnKey);
   }
 
   /**
    * Clears all the data and associated keys.
    */
   public void clear() {
-      this.rowKeys.clear();
-      this.columnKeys.clear();
-      this.rows.clear();
+      rowKeys.clear();
+      columnKeys.clear();
+      rows.clear();
   }
 
   /**
@@ -373,9 +377,9 @@ public class DefaultKeyedValues2D implements Cloneable, Serializable{
    */
   public int hashCode() {
       int result;
-      result = this.rowKeys.hashCode();
-      result = 29 * result + this.columnKeys.hashCode();
-      result = 29 * result + this.rows.hashCode();
+      result = rowKeys.hashCode();
+      result = 29 * result + columnKeys.hashCode();
+      result = 29 * result + rows.hashCode();
       return result;
   }
 
