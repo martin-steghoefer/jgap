@@ -20,6 +20,7 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.event.*;
 
 /**
@@ -36,16 +37,18 @@ public class Genotype
     implements Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The current active Configuration instance.
    */
   transient protected Configuration m_activeConfiguration;
+
   /**
    * The array of Chromosomes that makeup the Genotype's population.
    */
   protected Chromosome[] m_chromosomes;
+
   /**
    * The working pool of Chromosomes, which is where Chromosomes that are
    * to be candidates for the next natural selection process are deposited.
@@ -57,11 +60,13 @@ public class Genotype
    * clean after each cycle of evolution.
    */
   transient protected List m_workingPool;
+
   /**
    * The fitness evaluator. See interface class FitnessEvaluator for details
    * @since 1.1
    */
   private FitnessEvaluator m_fitnessEvaluator;
+
   /**
    * Constructs a new Genotype instance with the given array of
    * Chromosomes and the given active Configuration instance. Note
@@ -77,6 +82,7 @@ public class Genotype
    *         in the array of Chromosomes is null.
    * @throws InvalidConfigurationException if the given Configuration object
    *         is in an invalid state.
+   * @since 1.0
    */
   public Genotype(Configuration a_activeConfiguration,
                   Chromosome[] a_initialChromosomes) throws
@@ -151,6 +157,7 @@ public class Genotype
    * @throws InvalidConfigurationException if the Configuration object is
    *         null or cannot be locked because it is in an invalid or
    *         incomplete state.
+   * @since 1.0
    */
   public void setActiveConfiguration(Configuration a_activeConfiguration) throws
       InvalidConfigurationException {
@@ -192,6 +199,7 @@ public class Genotype
    * Genotype instance.
    *
    * @return The population of Chromosomes.
+   * @since 1.0
    */
   public synchronized Chromosome[] getChromosomes() {
     return m_chromosomes;
@@ -203,6 +211,7 @@ public class Genotype
    *
    * @return The Chromosome with the highest fitness value, or null if
    *         there are no chromosomes in this Genotype.
+   * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
     if (m_chromosomes.length == 0) {
@@ -232,6 +241,7 @@ public class Genotype
    * Configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population. Note
    * that the population size always remains constant.
+   * @since 1.0
    */
   public synchronized void evolve() {
     verifyConfigurationAvailable();
@@ -328,6 +338,7 @@ public class Genotype
    *
    * @param a_numberOfEvolutions The number of times to evolve this Genotype
    *                             before returning.
+   * @since 1.1
    */
   public void evolve(int a_numberOfEvolutions) {
     //done as given by request 708781
@@ -341,6 +352,7 @@ public class Genotype
    * useful for dispaly purposes.
    *
    * @return A string representation of this Genotype instance.
+   * @since 1.0
    */
   public String toString() {
     StringBuffer buffer = new StringBuffer();
@@ -371,6 +383,7 @@ public class Genotype
    *         null.
    * @throws InvalidConfigurationException if the given Configuration
    *         instance not in a valid state.
+   * @since 1.0
    */
   public static Genotype randomInitialGenotype(
       Configuration a_activeConfiguration) throws InvalidConfigurationException {
@@ -380,17 +393,11 @@ public class Genotype
     }
     a_activeConfiguration.lockSettings();
     // Create an array of chromosomes equal to the desired size in the
-
     // active Configuration and then populate that array with Chromosome
-
     // instances constructed according to the setup in the sample
-
     // Chromosome, but with random gene values (alleles). The Chromosome
-
     // class' randomInitialChromosome() method will take care of that for
-
     // us.
-
     // ------------------------------------------------------------------
     int populationSize = a_activeConfiguration.getPopulationSize();
     Chromosome[] chromosomes = new Chromosome[populationSize];
@@ -411,11 +418,11 @@ public class Genotype
    *
    * @param other The object to compare against.
    * @return true if the objects are the same, false otherwise.
+   * @since 1.0
    */
   public boolean equals(Object other) {
     try {
       // First, if the other Genotype is null, then they're not equal.
-
       // -------------------------------------------------------------
       if (other == null) {
         return false;
@@ -423,7 +430,6 @@ public class Genotype
       Genotype otherGenotype = (Genotype) other;
       // First, make sure the other Genotype has the same number of
       // chromosomes as this one.
-
       // ----------------------------------------------------------
       if (m_chromosomes.length != otherGenotype.m_chromosomes.length) {
         return false;
@@ -455,6 +461,7 @@ public class Genotype
    * Genotype instance. If not, then an IllegalStateException is thrown.
    * In general, this method should be invoked by any operation on this
    * Genotype that makes use of the Configuration instance.
+   * @since 1.0
    */
   private void verifyConfigurationAvailable() {
     if (m_activeConfiguration == null) {
@@ -464,6 +471,10 @@ public class Genotype
     }
   }
 
+  /**
+   * @return the assigned FitnessEvaluator
+   * @since 1.1
+   */
   public FitnessEvaluator getFitnessEvaluator() {
     return m_fitnessEvaluator;
   }
