@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Each data has its own data container
@@ -409,6 +409,9 @@ public class Evaluator {
 
   /**
    * Averaged genotype data (computed over all runs of a permutation)
+   *
+   * @author Klaus Meffert
+   * @since 2.2
    */
   public class GenotypeDataAvg {
     public int permutation;
@@ -428,6 +431,12 @@ public class Evaluator {
     public double avgBestDeltaFitnessValue;
   }
 
+  /**
+   * Genotype data for one single run
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public class GenotypeData {
     public int generation;
 
