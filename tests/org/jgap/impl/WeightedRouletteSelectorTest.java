@@ -19,9 +19,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -34,7 +32,7 @@ import junitx.util.*;
 public class WeightedRouletteSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public WeightedRouletteSelectorTest() {
   }
@@ -83,7 +81,7 @@ public class WeightedRouletteSelectorTest
     thirdBestChrom.setFitnessValue(10);
     selector.add(null, thirdBestChrom);
     try {
-      Chromosome[] bestChroms = selector.select(null, 1).toChromosomes();
+      selector.select(null, 1).toChromosomes();
       fail();
     }
     catch (NullPointerException nex) {
@@ -145,5 +143,61 @@ public class WeightedRouletteSelectorTest
     Map chromosomes = (Map) PrivateAccessor.getField(selector,
         "m_wheel");
     assertEquals(0, chromosomes.size());
+  }
+
+  /**
+   * Test if clear()-method does not affect original Population
+   * @throws Exception
+   */
+  public void testEmpty_1()
+      throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    Configuration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    chrom.setFitnessValue(3);
+    Population pop = new Population(1);
+    pop.addChromosome(chrom);
+    selector.add(conf, chrom);
+    selector.select(conf, 1);
+    selector.empty();
+    assertEquals(1, pop.size());
+  }
+
+  public void testEmpty_11()
+      throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    Configuration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    Population pop = new Population(1);
+    pop.addChromosome(chrom);
+    selector.add(conf, chrom);
+    try {
+      selector.select(conf, 1);
+      fail();
+    } catch (RuntimeException rex) {
+      ;//this is OK (because no fitness value set on Chromosome)
+    }
+
+  }
+
+  /**
+   * Test if clear()-method does not affect return value
+   * @throws Exception
+   */
+  public void testEmpty_2()
+      throws Exception {
+    NaturalSelector selector = new WeightedRouletteSelector();
+    Configuration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    chrom.setFitnessValue(7);
+    Population pop = new Population(1);
+    pop.addChromosome(chrom);
+    selector.add(conf, chrom);
+    pop = selector.select(conf, 1);
+    selector.empty();
+    assertEquals(1, pop.size());
   }
 }
