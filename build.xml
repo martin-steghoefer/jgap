@@ -47,8 +47,13 @@
   <target name="jar" depends="compile">
     <jar jarfile="jgap.jar" basedir="${classDir}"> 
        <include name="org/jgap/*.class"/>
-       <include name="org/jgap/impl/*.class"/>
+       <include name="org/jgap/data/*.class"/>
+       <include name="org/jgap/distr/*.class"/>
+       <include name="org/jgap/eval/*.class"/>
        <include name="org/jgap/event/*.class"/>
+       <include name="org/jgap/ext/*.class"/>
+       <include name="org/jgap/impl/*.class"/>
+       <include name="org/jgap/perf/*.class"/>
        <include name="org/jgap/xml/*.class"/>
     </jar>
 
@@ -68,8 +73,13 @@
         <include name="jgap.jar"/>
         <include name="jgap-examples.jar"/>
         <include name="org/jgap/*.class"/>
-        <include name="org/jgap/impl/*.class"/>
+        <include name="org/jgap/data/*.class"/>
+        <include name="org/jgap/distr/*.class"/>
+        <include name="org/jgap/eval/*.class"/>
         <include name="org/jgap/event/*.class"/>
+        <include name="org/jgap/ext/*.class"/>
+        <include name="org/jgap/impl/*.class"/>
+        <include name="org/jgap/perf/*.class"/>
         <include name="org/jgap/xml/*.class"/>
         <include name="examples/*.class"/>
       </fileset>
@@ -80,7 +90,7 @@
     <javadoc sourcepath="${src}"
              destdir="javadocs/"
              Public="true"
-             packagenames="org.jgap, org.jgap.impl, org.jgap.xml, org.jgap.event">
+             packagenames="org.jgap, org.jgap.data, org.jgap.distr, org.jgap.eval, org.jgap.ext, org.jgap.impl, org.jgap.xml, org.jgap.event">
     </javadoc>
   </target>
 
