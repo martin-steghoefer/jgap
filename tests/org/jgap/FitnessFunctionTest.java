@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,6 +15,7 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap;
 
 import junit.framework.Test;
@@ -30,73 +29,55 @@ import junit.framework.TestSuite;
  * @since 1.1
  */
 public class FitnessFunctionTest
-    extends TestCase
-{
+    extends TestCase {
+  public FitnessFunctionTest() {
+  }
 
-    public FitnessFunctionTest ()
-    {
+  public static Test suite() {
+    TestSuite suite = new TestSuite(FitnessFunctionTest.class);
+    return suite;
+  }
+
+  public void testGetFitnessValue_0() {
+    FitnessFunctionImpl fitfunc = new FitnessFunctionImpl(7);
+    assertEquals(7, fitfunc.getFitnessValue(null));
+  }
+
+  public void testGetFitnessValue_1() {
+    try {
+      FitnessFunctionImpl fitfunc = new FitnessFunctionImpl( -7);
+      fitfunc.getFitnessValue(null);
+    }
+    catch (RuntimeException cause) {
+      // This is expected since non-positive fitness values are illegal.
+    }
+  }
+
+  public void testGetFitnessValue_2() {
+    try {
+      FitnessFunctionImpl fitfunc = new FitnessFunctionImpl(0);
+      fitfunc.getFitnessValue(null);
+    }
+    catch (RuntimeException cause) {
+      // This is expected since non-positive fitness values are illegal.
+    }
+  }
+
+  /**
+   * Implementing class of abstract FitnessFunction class
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  private class FitnessFunctionImpl
+      extends FitnessFunction {
+    private int evaluationValue;
+    public FitnessFunctionImpl(int evaluationValue) {
+      this.evaluationValue = evaluationValue;
     }
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (FitnessFunctionTest.class);
-        return suite;
+    protected int evaluate(Chromosome a_subject) {
+      return evaluationValue;
     }
-
-    public void testGetFitnessValue_0 ()
-    {
-        FitnessFunctionImpl fitfunc = new FitnessFunctionImpl (7);
-        assertEquals (7, fitfunc.getFitnessValue (null));
-    }
-
-    public void testGetFitnessValue_1 ()
-    {
-        try
-        {
-            FitnessFunctionImpl fitfunc = new FitnessFunctionImpl ( -7);
-            fitfunc.getFitnessValue (null);
-        }
-        catch (RuntimeException cause)
-        {
-            // This is expected since non-positive fitness values are illegal.
-            // ---------------------------------------------------------------
-        }
-    }
-
-    public void testGetFitnessValue_2 ()
-    {
-        try
-        {
-            FitnessFunctionImpl fitfunc = new FitnessFunctionImpl (0);
-            fitfunc.getFitnessValue (null);
-        }
-        catch (RuntimeException cause)
-        {
-            // This is expected since non-positive fitness values are illegal.
-            // ---------------------------------------------------------------
-        }
-    }
-
-    /**
-     * Implementing class of abstract FitnessFunction class
-     *
-     * @author Klaus Meffert
-     * @since 1.1
-     */
-    private class FitnessFunctionImpl
-        extends FitnessFunction
-    {
-        private int evaluationValue;
-
-        public FitnessFunctionImpl (int evaluationValue)
-        {
-            this.evaluationValue = evaluationValue;
-        }
-
-        protected int evaluate (Chromosome a_subject)
-        {
-            return evaluationValue;
-        }
-    }
-
+  }
 }
