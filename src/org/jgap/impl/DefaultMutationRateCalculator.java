@@ -22,17 +22,30 @@ package org.jgap.impl;
 import org.jgap.MutationRateCalculator;
 import org.jgap.Configuration;
 
+/**
+ * Default implementation of a mutation rate calculcator
+ *
+ * @author Klaus Meffert
+ * @since 1.1
+ */
 public class DefaultMutationRateCalculator
     implements MutationRateCalculator
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     public DefaultMutationRateCalculator ()
     {
 
     }
 
+    /**
+     * Calculates the mutation rate
+     * @param a_activeConfiguration current active configuration
+     * @return calculated mutation rate
+     *
+     * @since 1.1 (same functionality since earlier, but not encapsulated)
+     */
     public int calculateCurrentRate (Configuration a_activeConfiguration)
     {
         return a_activeConfiguration.getChromosomeSize() * 10;
