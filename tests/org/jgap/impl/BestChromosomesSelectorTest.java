@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -25,7 +23,10 @@ import junitx.util.*;
 public class BestChromosomesSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
+
+  //delta for distinguishing whether a value is to be interpreted as zero
+  private static final double DELTA = 0.0000001;
 
   public BestChromosomesSelectorTest() {
   }
@@ -41,7 +42,9 @@ public class BestChromosomesSelectorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testConstruct_0()
       throws Exception {
@@ -58,7 +61,9 @@ public class BestChromosomesSelectorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testDoubletteChromosomesAllowed_0()
       throws Exception {
@@ -75,7 +80,9 @@ public class BestChromosomesSelectorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testAdd_0()
       throws Exception {
@@ -109,6 +116,7 @@ public class BestChromosomesSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testSelect_0()
       throws Exception {
@@ -126,12 +134,16 @@ public class BestChromosomesSelectorTest
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
-    selector.select(1,null,new Population());
+    selector.select(1, null, new Population());
   }
 
   /**
+   * Test selection algorithm
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testSelect_1()
       throws Exception {
@@ -180,8 +192,12 @@ public class BestChromosomesSelectorTest
   }
 
   /**
+   * Test selection algorithm
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testSelect_2()
       throws Exception {
@@ -205,14 +221,14 @@ public class BestChromosomesSelectorTest
     // receive top 1 (= best) chromosome
     // ---------------------------------
     Population pop = new Population();
-    selector.select(1, null,pop);
+    selector.select(1, null, pop);
     Chromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     selector.setOriginalRate(1.0d);
     // receive top 30 chromosomes (select-method should take into account only
     // 2 chroms!)
-    // ----------------------------------
+    // -----------------------------------------------------------------------
     pop.getChromosomes().clear();
     selector.select(30, null, pop);
     bestChroms = pop.toChromosomes();
@@ -227,6 +243,7 @@ public class BestChromosomesSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testSelect_3()
       throws Exception {
@@ -250,17 +267,75 @@ public class BestChromosomesSelectorTest
     selector.setOriginalRate(1.0d);
     // receive top 30 chromosomes (select-method should take into account only
     // 2 chroms!)
-    // ----------------------------------
+    // -----------------------------------------------------------------------
     Population pop = new Population();
-    selector.select(30,null,pop);
+    selector.select(30, null, pop);
     Population bestChroms = pop;
-    Population chromosomes = (Population) PrivateAccessor.getField(selector, "m_chromosomes");
+    Population chromosomes = (Population) PrivateAccessor.getField(selector,
+        "m_chromosomes");
     assertFalse(bestChroms.equals(chromosomes));
   }
 
   /**
+   * Test selection algorithm with allowed doublettes
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
+   */
+  public void testSelect_4()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+
+    BestChromosomesSelector selector = new BestChromosomesSelector();
+    selector.setDoubletteChromosomesAllowed(true);
+    selector.setOriginalRate(0.3d);
+    // add first chromosome
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    thirdBestChrom.setFitnessValue(10);
+    selector.add(thirdBestChrom);
+    // add second chromosome
+    // ---------------------
+    gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(12);
+    selector.add(bestChrom);
+    // add third chromosome
+    // ---------------------
+    gene = new IntegerGene();
+    gene.setAllele(new Integer(444));
+    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    secondBestChrom.setFitnessValue(11);
+    selector.add(secondBestChrom);
+    // receive top 1 (= best) chromosome
+    // ---------------------------------
+    Population pop = new Population();
+    selector.select(1, null, pop);
+    Chromosome[] bestChroms = pop.toChromosomes();
+    assertEquals(1, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    // receive top 3 chromosomes
+    // -------------------------
+    pop.getChromosomes().clear();
+    selector.select(3, null, pop);
+    bestChroms = pop.toChromosomes();
+    assertEquals(3, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    assertEquals(bestChrom, bestChroms[1]);
+    assertEquals(secondBestChrom, bestChroms[2]);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 1.1
    */
   public void testEmpty_0()
       throws Exception {
@@ -284,6 +359,7 @@ public class BestChromosomesSelectorTest
    *
    * @throws Exception
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testEmpty_1()
       throws Exception {
@@ -306,7 +382,9 @@ public class BestChromosomesSelectorTest
    * Test if clear()-method does not affect return value.
    *
    * @throws Exception
+   *
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testEmpty_2()
       throws Exception {
@@ -326,4 +404,58 @@ public class BestChromosomesSelectorTest
     assertNotNull(pop.getChromosome(0));
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetOriginalRate_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    BestChromosomesSelector selector = new BestChromosomesSelector();
+    try {
+      selector.setOriginalRate(1.01d);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetOriginalRate_0_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    BestChromosomesSelector selector = new BestChromosomesSelector();
+    try {
+      selector.setOriginalRate( -0.1d);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetOriginalRate_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    BestChromosomesSelector selector = new BestChromosomesSelector();
+    selector.setOriginalRate(0.3d);
+    assertEquals(0.3d, selector.getOriginalRate(), DELTA);
+  }
 }
