@@ -13,8 +13,8 @@
        <include name="org/jgap/xml/*.class"/>
     </jar>
 
-    <jar jarfile="jgap-examples.jar" basedir="${src}/examples"
-         includes="*.class"/>
+    <jar jarfile="jgap-examples.jar" basedir="${src}"
+         includes="examples/*.class"/>
   </target>
 
   <target name="clean">
