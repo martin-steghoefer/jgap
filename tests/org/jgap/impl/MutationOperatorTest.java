@@ -32,7 +32,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public MutationOperatorTest() {
   }
@@ -143,4 +143,6 @@ class TestFitnessFunction
     //result does not matter here
     return 1.000000d;
   }
+
+    /**@todo test against CompositeGene*/
 }
