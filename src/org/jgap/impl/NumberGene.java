@@ -31,7 +31,7 @@ public abstract class NumberGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -131,7 +131,6 @@ public abstract class NumberGene
         return compareToNative(m_value, otherGene.m_value);
       }
       catch (ClassCastException e) {
-        e.printStackTrace();
         throw e;
       }
     }
