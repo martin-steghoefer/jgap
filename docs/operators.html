@@ -12,21 +12,25 @@
     <hr>
 
     <p>
-      Customizing JGAP is intended to be easy and straight-forward. 
+      It may be you want to experiment around with new or different
+      genetic operators to assess their impact upon the performance
+      of the genetic algorithm. Or maybe you wish to replace the
+      random number generator with a more rigorous implementation.
+      Customizing JGAP is intended to be easy and straight-forward.
       JGAP supports a Configuration mechanism that easily allows
       you to add your own genetic operators to the mix, as well as
       replace certain components such as the natural selector,
       the random number generator, and the event manager.
     </p>
-     
-    <p> 
-      Creating a new genetic operator is probably the most common
-      form of JGAP customization. We'll look at an existing operator,
-      the ReproductionOperator, as an example of how to create your
-      own genetic operator. As you'll see, it's extremly simple.
+
+    <p>
+      Creating a new genetic operator is probably the second most common
+      form of JGAP customization, after the creation of custom Genes.
+      We'll look at an existing operator, the ReproductionOperator, as
+      an example of how to create your own genetic operator. As you'll
+      see, it's extremly simple.
     </p>
 
-      
     <h3 class="subheader">Step 1: Implement GeneticOperator</h3>
 
     <p>      

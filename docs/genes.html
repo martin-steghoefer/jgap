@@ -99,7 +99,7 @@ public class QuarterGene implements Gene
     private static final String TOKEN_SEPARATOR = ":";
 
     private int m_maxNumberOfQuarters;
-    private Integer m_numberOfQuarters;
+    private Integer m_numberOfQuarters = null;
 
     /**
      * Constructs a new QuarterGene with no maximum number of quarters that
@@ -108,7 +108,6 @@ public class QuarterGene implements Gene
     public QuarterGene()
     {
         m_maxNumberOfQuarters = Integer.MAX_VALUE;
-        m_numberOfQuarters = null;
     }
 
 
@@ -133,7 +132,6 @@ public class QuarterGene implements Gene
         }
 
         m_maxNumberOfQuarters = a_maxNumberOfQuarters;
-        m_numberOfQuarters = null;
     }
 
 
@@ -147,7 +145,7 @@ public class QuarterGene implements Gene
      * those same bounds. This is important, as the JGAP core will invoke this
      * method on each Gene in the sample Chromosome in order to create each
      * new Gene in the same respective gene position for a new Chromosome.
-     * <p>
+     * 
      * It should be noted that nothing is guaranteed about the actual value
      * of the returned Gene and it should therefore be considered to be
      * undefined.
