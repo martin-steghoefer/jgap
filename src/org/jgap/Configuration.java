@@ -18,12 +18,10 @@
 
 package org.jgap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.jgap.event.EventManager;
-import org.jgap.impl.ChainOfSelectors;
-import org.jgap.impl.ChromosomePool;
+import java.util.*;
+
+import org.jgap.event.*;
+import org.jgap.impl.*;
 
 /**
  * The Configuration class represents the current configuration of
@@ -48,9 +46,8 @@ import org.jgap.impl.ChromosomePool;
  * @since 1.0
  */
 public class Configuration {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -58,6 +55,7 @@ public class Configuration {
    * or the bulk fitness function may be set--the two are mutually exclusive.
    */
   private FitnessFunction m_objectiveFunction;
+
   /**
    * References the current bulk fitness function that will be used to
    * evaluate chromosomes (in bulk) during the natural selection
@@ -65,6 +63,7 @@ public class Configuration {
    * may be set--the two are mutually exclusive.
    */
   private BulkFitnessFunction m_bulkObjectiveFunction;
+
   /**
    * References the NaturalSelector implementation that will be used to
    * determine which chromosomes are chosen to be a part of the next
@@ -78,23 +77,27 @@ public class Configuration {
    * with the desired Gene type.
    */
   private Chromosome m_sampleChromosome;
+
   /**
    * References the random number generator implementation that is to be
    * used for the generation of any random numbers during the various
    * genetic operations and processes.
    */
   private RandomGenerator m_randomGenerator;
+
   /**
    * References the EventManager that is to be used for the notification
    * of genetic events and the management of event subscribers.
    */
   private EventManager m_eventManager;
+
   /**
    * References the chromosome pool, if any, that is to be used to pool
    * discarded Chromosome instances so that they may be recycled later,
    * thereby saving memory and the time to construct them from scratch.
    */
   private ChromosomePool m_chromosomePool;
+
   /**
    * Stores all of the GeneticOperator implementations that are to be used
    * to operate upon the chromosomes of a population prior to natural
@@ -102,15 +105,18 @@ public class Configuration {
    * added to this list.
    */
   private List m_geneticOperators = new ArrayList();
+
   /**
    * The number of genes that will be stored in each chromosome in the
    * population.
    */
   private int m_chromosomeSize;
+
   /**
    * The number of chromosomes that will be stored in the Genotype.
    */
   private int m_populationSize;
+
   /**
    * Indicates whether the settings of this Configuration instance have
    * been locked. Prior to locking, the settings may be set and reset
@@ -118,6 +124,7 @@ public class Configuration {
    * altered.
    */
   private boolean m_settingsLocked;
+
   /**
    * Ordered chain of NaturalSelector's which will be executed before applying
    * Genetic Operators
@@ -125,6 +132,7 @@ public class Configuration {
    * @since 1.1
    */
   private ChainOfSelectors m_preSelectors;
+
   /**
    * Ordered chain of NaturalSelector's which will be executed after applying
    * Genetic Operators
@@ -132,12 +140,19 @@ public class Configuration {
    * @since 1.1
    */
   private ChainOfSelectors m_postSelectors;
+
+  private int m_sizeNaturalSelectorsPre;
+
+  private int m_sizeNaturalSelectorsPost;
+
   /**
    * @since 1.1
    */
   public Configuration() {
     m_preSelectors = new ChainOfSelectors();
     m_postSelectors = new ChainOfSelectors();
+    m_sizeNaturalSelectorsPre = 0;
+    m_sizeNaturalSelectorsPost = 0;
   }
 
   /**
@@ -159,7 +174,8 @@ public class Configuration {
    *         or if this Configuration object is locked.
    */
   public synchronized void setFitnessFunction(
-      FitnessFunction a_functionToSet) throws InvalidConfigurationException {
+      FitnessFunction a_functionToSet)
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given fitness function isn't null.
     // -------------------------------------------------------------------
@@ -206,7 +222,8 @@ public class Configuration {
    *         or if this Configuration object is locked.
    */
   public synchronized void setBulkFitnessFunction(
-      BulkFitnessFunction a_functionToSet) throws InvalidConfigurationException {
+      BulkFitnessFunction a_functionToSet)
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given bulk fitness function
     // isn't null.
@@ -247,7 +264,8 @@ public class Configuration {
    * @throws InvalidConfigurationException if the given Chromosome is null
    *         or this Configuration object is locked.
    */
-  public void setSampleChromosome(Chromosome a_sampleChromosomeToSet) throws
+  public void setSampleChromosome(Chromosome a_sampleChromosomeToSet)
+      throws
       InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given chromosome isn't null.
@@ -295,7 +313,8 @@ public class Configuration {
    * @deprecated use addNaturalSelector(false) instead
    */
   public synchronized void setNaturalSelector(
-      NaturalSelector a_selectorToSet) throws InvalidConfigurationException {
+      NaturalSelector a_selectorToSet)
+      throws InvalidConfigurationException {
     addNaturalSelector(a_selectorToSet, false);
   }
 
@@ -308,11 +327,30 @@ public class Configuration {
    *             call the chain's get(index) method
    */
   public NaturalSelector getNaturalSelector() {
-    ChainOfSelectors chain = getNaturalSelectors(false);
-    if (chain == null || chain.size() < 1) {
+    if (m_sizeNaturalSelectorsPre < 1) {
       return null;
     }
     return getNaturalSelectors(false).get(0);
+  }
+
+  public NaturalSelector getNaturalSelector(boolean processBeforeGeneticOperators, int index) {
+    if (processBeforeGeneticOperators) {
+      if (m_sizeNaturalSelectorsPre < index) {
+        throw new IllegalArgumentException("Index of NaturalSelector out of bounds");
+      }
+      else {
+        return m_preSelectors.get(index);
+      }
+    }
+    else {
+      if (m_sizeNaturalSelectorsPost < index) {
+        throw new IllegalArgumentException("Index of NaturalSelector out of bounds");
+      }
+      else {
+        return m_postSelectors.get(index);
+      }
+    }
+
   }
 
   public ChainOfSelectors getNaturalSelectors(boolean
@@ -322,6 +360,15 @@ public class Configuration {
     }
     else {
       return m_postSelectors;
+    }
+  }
+
+  public int getNaturalSelectorsSize(boolean processBeforeGeneticOperators) {
+    if (processBeforeGeneticOperators) {
+      return m_sizeNaturalSelectorsPre;
+    }
+    else {
+      return m_sizeNaturalSelectorsPost;
     }
   }
 
@@ -337,7 +384,8 @@ public class Configuration {
    *         is null or this object is locked.
    */
   public synchronized void setRandomGenerator(
-      RandomGenerator a_generatorToSet) throws InvalidConfigurationException {
+      RandomGenerator a_generatorToSet)
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given random generator isn't null.
     // -------------------------------------------------------------------
@@ -371,7 +419,8 @@ public class Configuration {
    *         is null of if this Configuration object is locked.
    */
   public synchronized void addGeneticOperator(
-      GeneticOperator a_operatorToAdd) throws InvalidConfigurationException {
+      GeneticOperator a_operatorToAdd)
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given genetic operator isn't null.
     // -------------------------------------------------------------------
@@ -406,7 +455,8 @@ public class Configuration {
    * @throws InvalidConfigurationException if the population size
    *         is not positive or this object is locked.
    */
-  public synchronized void setPopulationSize(int a_sizeOfPopulation) throws
+  public synchronized void setPopulationSize(int a_sizeOfPopulation)
+      throws
       InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure the population size is positive.
@@ -438,7 +488,8 @@ public class Configuration {
    * @throws InvalidConfigurationException if the event manager is null
    *         or this Configuration object is locked.
    */
-  public void setEventManager(EventManager a_eventManagerToSet) throws
+  public void setEventManager(EventManager a_eventManagerToSet)
+      throws
       InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given event manager isn't null.
@@ -472,7 +523,8 @@ public class Configuration {
    * @param a_chromosomePoolToSet The ChromosomePool instance to use.
    * @throws InvalidConfigurationException if this object is locked.
    */
-  public void setChromosomePool(ChromosomePool a_chromosomePoolToSet) throws
+  public void setChromosomePool(ChromosomePool a_chromosomePoolToSet)
+      throws
       InvalidConfigurationException {
     verifyChangesAllowed();
     m_chromosomePool = a_chromosomePoolToSet;
@@ -511,8 +563,10 @@ public class Configuration {
    *
    * @throws InvalidConfigurationException if this Configuration object is
    *         in an invalid state at the time of invocation.
+   * @since 1.0
    */
-  public synchronized void lockSettings() throws InvalidConfigurationException {
+  public synchronized void lockSettings()
+      throws InvalidConfigurationException {
     if (!m_settingsLocked) {
       verifyStateIsValid();
       // Make genetic operators list immutable.
@@ -528,6 +582,7 @@ public class Configuration {
    *
    * @return true if this object has been locked by a previous successful
    *         call to the lockSettings() method, false otherwise.
+   * @since 1.0
    */
   public boolean isLocked() {
     return m_settingsLocked;
@@ -542,8 +597,10 @@ public class Configuration {
    * @throws InvalidConfigurationException if the state of this Configuration
    *         is not valid. The error message in the exception will detail
    *         the reason for invalidity.
+   * @since 1.0
    */
-  public synchronized void verifyStateIsValid() throws
+  public synchronized void verifyStateIsValid()
+      throws
       InvalidConfigurationException {
     // First, make sure all of the required fields have been set to
     // appropriate values.
@@ -618,8 +675,10 @@ public class Configuration {
    *
    * @throws InvalidConfigurationException if this Configuration object is
    *         locked.
+   * @since 1.0
    */
-  protected void verifyChangesAllowed() throws InvalidConfigurationException {
+  protected void verifyChangesAllowed()
+      throws InvalidConfigurationException {
     if (m_settingsLocked) {
       throw new InvalidConfigurationException(
           "This Configuration object is locked. Settings may not be " +
@@ -640,14 +699,17 @@ public class Configuration {
    * @since 1.1
    */
   public void addNaturalSelector(NaturalSelector a_selector,
-                                 boolean processBeforeGeneticOperators) throws
+                                 boolean processBeforeGeneticOperators)
+      throws
       InvalidConfigurationException {
     verifyChangesAllowed();
     if (processBeforeGeneticOperators) {
       m_preSelectors.addNaturalSelector(a_selector);
+      m_sizeNaturalSelectorsPre++;
     }
     else {
       m_postSelectors.addNaturalSelector(a_selector);
+      m_sizeNaturalSelectorsPost++;
     }
   }
 }
