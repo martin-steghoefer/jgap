@@ -30,12 +30,12 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
    */
-  private RandomGenerator crossoverGenerator;
+  private RandomGenerator m_crossoverGenerator;
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -65,9 +65,7 @@ public class AveragingCrossoverOperator
    * @since 2.0
    */
   public AveragingCrossoverOperator() {
-    init();
-    crossoverGenerator = null;
-    m_crossoverRate = 2;
+    this((RandomGenerator)null);
   }
 
   /**
@@ -80,7 +78,7 @@ public class AveragingCrossoverOperator
    */
   public AveragingCrossoverOperator(RandomGenerator generatorForAveraging) {
     init();
-    crossoverGenerator = generatorForAveraging;
+    m_crossoverGenerator = generatorForAveraging;
     m_crossoverRate = 2;
   }
 
@@ -138,8 +136,8 @@ public class AveragingCrossoverOperator
     }
 
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
-    if (crossoverGenerator == null) {
-      crossoverGenerator = generator;
+    if (m_crossoverGenerator == null) {
+      m_crossoverGenerator = generator;
     }
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
@@ -154,7 +152,7 @@ public class AveragingCrossoverOperator
       Chromosome secondMate = (Chromosome) a_population.getChromosome(index2);
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
-      int locus = getLocus(crossoverGenerator, i, firstGenes.length);
+      int locus = getLocus(m_crossoverGenerator, i, firstGenes.length);
       // Swap the genes.
       // ---------------
       Gene gene1;
