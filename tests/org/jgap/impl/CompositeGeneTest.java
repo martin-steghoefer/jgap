@@ -286,4 +286,19 @@ public class CompositeGeneTest
         assertEquals(0, gene2.size());
     }
 
+    public void testPersistentPresentation_0() throws Exception {
+        CompositeGene gene1 = new CompositeGene ();
+        gene1.addGene(new DoubleGene(2.05d, 7.53d), false);
+        gene1.addGene(new DoubleGene(128.35d, 155.90d), false);
+        gene1.addGene(new IntegerGene(3, 8), false);
+        gene1.addGene(new BooleanGene(), false);
+        gene1.addGene(new StringGene(), false);
+        gene1.addGene(new StringGene(2,5), false);
+        gene1.addGene(new StringGene(6,11,"ABC"), false);
+        String pres1 = gene1.getPersistentRepresentation();
+        CompositeGene gene2 = new CompositeGene ();
+        gene2.setValueFromPersistentRepresentation(pres1);
+        String pres2 = gene2.getPersistentRepresentation();
+        assertEquals(pres1, pres2);
+    }
 }
