@@ -31,7 +31,7 @@ import junit.framework.*;
 public class DefaultMutationRateCalculatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public DefaultMutationRateCalculatorTest() {
   }
@@ -48,7 +48,7 @@ public class DefaultMutationRateCalculatorTest
   public void testCalculateCurrentRate_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-    MutationRateCalculator calc = new DefaultMutationRateCalculator();
+    IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     Gene gene = new IntegerGene(1, 5);
     Chromosome chrom = new Chromosome(gene, 50);
     conf.setSampleChromosome(chrom);
@@ -69,7 +69,7 @@ public class DefaultMutationRateCalculatorTest
   public void testCalculateCurrentRate_1() throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-    MutationRateCalculator calc = new DefaultMutationRateCalculator();
+    IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);
   }

@@ -32,7 +32,7 @@ public class MutationOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   public MutationOperatorTest() {
   }
@@ -65,7 +65,7 @@ public class MutationOperatorTest
   }
 
   public void testConstruct_3() {
-    MutationRateCalculator calc = new DefaultMutationRateCalculator();
+    IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     MutationOperator mutOp = new MutationOperator(calc);
     assertEquals(0, mutOp.m_mutationRate);
     assertEquals(calc, mutOp.getMutationRateCalc());
