@@ -40,7 +40,7 @@ import org.jgap.*;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * This field separates gene class name from
@@ -440,15 +440,19 @@ public class CompositeGene
    * @since 1.1
    */
   public int compareTo(Object other) {
-    CompositeGene otherCompositeGene = (CompositeGene) other;
     // First, if the other gene (or its value) is null, then this is
     // the greater allele. Otherwise, just use the contained genes' compareTo
     // method to perform the comparison.
     // ---------------------------------------------------------------
-    if (otherCompositeGene == null) {
+    if (other == null) {
       return 1;
     }
-    else if (otherCompositeGene.isEmpty()) {
+
+    if (!(other instanceof CompositeGene)) {
+      return this.getClass().getName().compareTo(other.getClass().getName());
+    }
+    CompositeGene otherCompositeGene = (CompositeGene) other;
+    if (otherCompositeGene.isEmpty()) {
       // If our value is also null, then we're the same. Otherwise,
       // this is the greater gene.
       // ----------------------------------------------------------
