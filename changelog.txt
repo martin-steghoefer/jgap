@@ -18,6 +18,7 @@
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request
   1084383)
+* Improved comments througout the whole code basis
 
 
 2.1
