@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Each data has its own data container
@@ -222,6 +222,7 @@ public class Evaluator {
    * @return DefaultKeyedValues2D
    */
   public DefaultKeyedValues2D calcAvgFitnessImpr(int a_permutation) {
+    /**@todo implement*/
     /**@todo is this method used resp. contained in calcPerformance?*/
     Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
