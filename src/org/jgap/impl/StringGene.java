@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   private int m_minLength;
 
@@ -288,9 +288,6 @@ public class StringGene
       throws UnsupportedOperationException {
     try {
         String s = toString();
-        if (s == null) {
-          s = "null";
-        }
         // The persistent representation includes the value, minimum length,
         // maximum length and valid alphabet. Each is separated by a colon.
         // ----------------------------------------------------------------
