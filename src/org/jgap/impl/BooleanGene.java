@@ -34,27 +34,34 @@ import org.jgap.UnsupportedRepresentationException;
  * use a higher overall mutation rate when this Gene implementation
  * is in use.
  *
- * @author Neil Rotstan, Klaus Meffert
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class BooleanGene
     implements Gene {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
   /**
    * Shared constant representing the "true" boolean value. Shared constants
    * are used to save memory so that a new Boolean object doesn't have to
    * be constructed each time.
    */
   protected static final Boolean TRUE_BOOLEAN = new Boolean(true);
+
   /**
    * Shared constant representing the "false" boolean value. Shared constants
    * are used to save memory so that a new Boolean object doesn't have to
    * be constructed each time.
    */
   protected static final Boolean FALSE_BOOLEAN = new Boolean(false);
+
   /**
    * References the internal boolean value of this Gene.
    */
   protected Boolean m_value = null;
+
   /**
    * Constructs a new BooleanGene with default settings.
    */
@@ -107,7 +114,8 @@ public class BooleanGene
    * @throws UnsupportedOperationException to indicate that no implementation
    *         is provided for this method.
    */
-  public String getPersistentRepresentation() throws
+  public String getPersistentRepresentation()
+      throws
       UnsupportedOperationException {
     return toString();
   }
@@ -128,8 +136,13 @@ public class BooleanGene
    *         is provided for this method.
    * @throws UnsupportedRepresentationException if this Gene implementation
    *         does not support the given string representation.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
-  public void setValueFromPersistentRepresentation(String a_representation) throws
+  public void setValueFromPersistentRepresentation(String a_representation)
+      throws
       UnsupportedRepresentationException {
     if (a_representation != null) {
       if (a_representation.equals("null")) {
@@ -146,6 +159,10 @@ public class BooleanGene
             "Unknown boolean gene representation: " +
             a_representation);
       }
+    }
+    else {
+      throw new UnsupportedRepresentationException(
+          "The input parameter must not be null!");
     }
   }
 
@@ -207,6 +224,10 @@ public class BooleanGene
    *
    * @throws ClassCastException if the specified object's type prevents it
    *         from being compared to this BooleanGene.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
   public int compareTo(Object other) {
     BooleanGene otherBooleanGene = (BooleanGene) other;
@@ -274,6 +295,9 @@ public class BooleanGene
    * Retrieves the hash code value of this BooleanGene.
    *
    * @return this BooleanGene's hash code.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public int hashCode() {
     // If the internal Boolean hasn't been set, return zero. Otherwise,
@@ -292,6 +316,9 @@ public class BooleanGene
    * may be useful for display purposes.
    *
    * @return a string representation of this BooleanGene's value.
+   *
+   * @author Klaus Meffert
+   * @since 1.1
    */
   public String toString() {
     if (m_value == null) {
@@ -305,6 +332,9 @@ public class BooleanGene
   /**
    * Executed by the genetic engine when this Gene instance is no
    * longer needed and should perform any necessary resource cleanup.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void cleanup() {
     // No specific cleanup is necessary for this implementation.
@@ -315,7 +345,8 @@ public class BooleanGene
    * @return the size of the gene, i.e the number of atomic elements.
    *         Always 1 for BooleanGene
    *
-   * @since 1.1
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public int size() {
     return 1;
@@ -323,7 +354,7 @@ public class BooleanGene
 
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
-   * element at given index (NumberGenes only have one atomic element)
+   * element at given index
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    *        than 1).
@@ -332,14 +363,14 @@ public class BooleanGene
    * @since 1.1
    */
   public void applyMutation(int index, double a_percentage) {
-    if (a_percentage >= 0) {
+    if (a_percentage > 0) {
       // change to TRUE
       // ---------------
       if (!m_value.booleanValue()) {
         m_value = new Boolean(true);
       }
     }
-    else {
+    else if (a_percentage < 0) {
       // change to FALSE
       // ---------------
       if (m_value.booleanValue()) {
