@@ -18,12 +18,12 @@
 
 package org.jgap.impl;
 
-import java.util.Vector;
-import org.jgap.Gene;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junitx.util.PrivateAccessor;
+import java.util.*;
+
+import org.jgap.*;
+
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for IntegerGene class
@@ -35,7 +35,7 @@ public class IntegerGeneTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public IntegerGeneTest() {
   }
@@ -265,8 +265,9 @@ public class IntegerGeneTest
     gene.setAllele(new Integer(60));
     /**@todo this is a curious behavior, isn't it?
      * Also see previous test case where same result occurs with different
-
-     * input!*/
+     * input.
+     * It seems that the huge numbers (MAXINT and MININT) are responsible for
+     * this!*/
     gene.applyMutation(0, 1.9d);
     assertEquals(Math.round(50), gene.intValue());
   }
