@@ -3,6 +3,10 @@ package examples.audit;
 import java.util.*;
 
 public class Permutator {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
+
   private List list;
 
   private List nextList;
