@@ -38,7 +38,7 @@ public class Chromosome
     implements Comparable, Cloneable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -332,8 +332,8 @@ public class Chromosome
       FitnessFunction normalFitnessFunction =
           m_activeConfiguration.getFitnessFunction();
       if (normalFitnessFunction != null) {
-        if (Math.abs(m_fitnessValue - normalFitnessFunction.getNoFitnessValue()) <
-            DELTA) {
+        if (Math.abs(m_fitnessValue - normalFitnessFunction.getNoFitnessValue())
+            < DELTA) {
           // We don't have a fitness value yet. We'll see if there's a
           // "normal" fitness function configured (as opposed to a bulk
           // fitness function) and, if so, then we'll use it to determine
