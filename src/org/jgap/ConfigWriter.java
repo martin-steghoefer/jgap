@@ -20,7 +20,7 @@ import javax.swing.*;
  * */
 public class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Method to create and access the Singleton ConfigWriter instance.
@@ -62,6 +62,13 @@ public class ConfigWriter {
           config.setProperty(tmpName, (String) iter.next());
         }
       }
+      String value = "";
+      for (int i = 0; i < cd.getNumTexts(); i++) {
+      	name = cd.getTextNameAt(i);
+      	value = cd.getTextValueAt(i);
+      	config.setProperty(name, value);
+      }
+      
     }
     catch (Exception ex) {
       JOptionPane.showMessageDialog(null,

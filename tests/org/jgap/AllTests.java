@@ -18,6 +18,7 @@ import org.jgap.gp.*;
 import org.jgap.impl.*;
 import org.jgap.supergenes.*;
 import org.jgap.xml.*;
+import org.jgap.gui.*;
 
 import junit.framework.*;
 
@@ -35,7 +36,7 @@ public class AllTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
@@ -49,6 +50,7 @@ public class AllTests
     suite.addTest(AllImplTests.suite());
     suite.addTest(AllXMLTests.suite());
     suite.addTest(AllSupergenesTests.suite());
+    suite.addTest(AllGUITests.suite());
     return suite;
   }
 }
