@@ -1,18 +1,20 @@
 package org.jgap.supergenes;
 
-import java.util.Iterator;
-import org.jgap.supergenes.*;
 import org.jgap.*;
+import org.jgap.supergenes.*;
+
+import java.util.Iterator;
+
+import junit.framework.*;
 
 /** Tests the Supergene internal parser. */
-public class testSupergeneInternalParser extends abstractSupergene
+public class testSupergeneInternalParser extends TestCase
 {
 
-    public static void main(String[] args) {
-         System.out.println(testInternalParser());
-     }
+  class test extends abstractSupergene
+  {
 
-    public static boolean testInternalParser() {
+    public boolean testInternalParser() {
         /* Undocumented test statements. */
         String expectedResponse =
             "----'0'"+
@@ -48,7 +50,7 @@ public class testSupergeneInternalParser extends abstractSupergene
     }
 
     /** Used in test only */
-    private static void splitRecursive(String a_t, StringBuffer a_buffer,
+    private void splitRecursive(String a_t, StringBuffer a_buffer,
     String a_ident, boolean a_print)
      throws UnsupportedRepresentationException
      {
@@ -77,6 +79,30 @@ public class testSupergeneInternalParser extends abstractSupergene
         throw new Error("Should never be called.");
     }
 
+  }
 
+  public static Test suite() {
+    TestSuite suite =
+     new TestSuite(testSupergenePersistentRepresentation.class);
+    return suite;
+  }
+
+  test m_test;
+
+  protected void setUp() throws Exception {
+      super.setUp();
+      m_test = new test();
+  }
+
+  protected void tearDown() throws Exception {
+      m_test = null;
+      super.tearDown();
+  }
+
+  public void testSupergeneInternalParser() {
+      boolean expectedReturn = true;
+      boolean actualReturn = m_test.testInternalParser();
+      assertEquals("return value", expectedReturn, actualReturn);
+  }
 
 }

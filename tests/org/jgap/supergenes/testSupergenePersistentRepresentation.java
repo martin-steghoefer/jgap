@@ -17,14 +17,15 @@
  */
 package org.jgap.supergenes;
 
-import org.jgap.*;
 import org.jgap.Gene;
 import org.jgap.impl.IntegerGene;
 import org.jgap.impl.DoubleGene;
 import org.jgap.impl.CompositeGene;
 
+import junit.framework.*;
+
 /** Test persistent representation of the abstractSupergene. */
-public class testSupergenePersistentRepresentation {
+public class testSupergenePersistentRepresentation extends TestCase {
 
     public static class instantiableSupergene extends abstractSupergene
      {
@@ -119,5 +120,27 @@ public class testSupergenePersistentRepresentation {
           testRepresentation()
           );
      }
+
+     public static Test suite() {
+       TestSuite suite =
+        new TestSuite(testSupergenePersistentRepresentation.class);
+       return suite;
+     }
+
+     protected void setUp() throws Exception {
+         super.setUp();
+     }
+
+     protected void tearDown() throws Exception {
+         super.tearDown();
+     }
+
+     public void testRunTest() {
+         boolean expectedReturn = true;
+         boolean actualReturn = testRepresentation();
+         assertEquals("return value", expectedReturn, actualReturn);
+     }
+
+
 
 }

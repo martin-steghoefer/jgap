@@ -23,7 +23,8 @@ import org.jgap.supergenes.*;
 import java.io.*;
 
 /**
- * Total test of the supported Supergene classes.
+ * Total test of the supported Supergene classes. Due slow run it is not
+ * included into AllTests
  * @author Audrius Meskauskas
  * @version 1.0
  */
@@ -54,8 +55,11 @@ public class totalSupergeneTest {
 
         long abe = 0;
 
-        for (int i = 1; i <= 12; i++) {
-            System.out.println("Iteration "+i+" of 12");
+
+        int N = 12;
+
+        for (int i = 1; i <= N; i++) {
+            System.out.println("Iteration "+i+" of "+N);
 
             abstractSupergene.reset ();
 
@@ -85,7 +89,7 @@ public class totalSupergeneTest {
             abe+= benefit;
         }
 
-        abe = abe/12;
+        abe = abe/N;
         assertTrue("Averaged benefit "+abe, abe>=150);
 
 
