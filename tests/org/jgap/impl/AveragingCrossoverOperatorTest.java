@@ -22,10 +22,7 @@ import junit.framework.*;
 public class AveragingCrossoverOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
-
-  public AveragingCrossoverOperatorTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -233,7 +230,7 @@ public class AveragingCrossoverOperatorTest
   public void testConstruct_0() {
     DefaultConfiguration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-    GeneticOperator op = new AveragingCrossoverOperator( (RandomGenerator)null);
+    new AveragingCrossoverOperator( (RandomGenerator)null);
   }
 
   /**
@@ -245,7 +242,6 @@ public class AveragingCrossoverOperatorTest
   public void testConstruct_1() {
     DefaultConfiguration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-    GeneticOperator op = new AveragingCrossoverOperator( (
-        IUniversalRateCalculator)null);
+    new AveragingCrossoverOperator( (IUniversalRateCalculator)null);
   }
 }

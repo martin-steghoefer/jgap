@@ -23,10 +23,7 @@ import junitx.util.*;
 public class StringGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
-
-  public StringGeneTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -260,7 +257,7 @@ public class StringGeneTest
   public void testPersistentRepresentation_0()
       throws Exception {
     Gene gene1 = new StringGene(2, 10, "ABCDE");
-    gene1.setAllele(new String("BABE"));
+    gene1.setAllele("BABE");
     String pres1 = gene1.getPersistentRepresentation();
     Gene gene2 = new StringGene();
     gene2.setValueFromPersistentRepresentation(pres1);
@@ -316,7 +313,7 @@ public class StringGeneTest
       throws Exception {
     StringGene gene1 = new StringGene(2, 10,
                                       "ABCDE" + CompositeGene.GENE_DELIMITER);
-    gene1.setAllele(new String("BABE"));
+    gene1.setAllele("BABE");
     String pres1 = gene1.getPersistentRepresentation();
     StringGene gene2 = new StringGene();
     gene2.setValueFromPersistentRepresentation(pres1);
@@ -329,7 +326,7 @@ public class StringGeneTest
   public void testPersistentRepresentation_6()
       throws Exception {
     Gene gene1 = new StringGene(2, 10, "ABCDE");
-    gene1.setAllele(new String("BABE"));
+    gene1.setAllele("BABE");
     gene1.setValueFromPersistentRepresentation(null);
     assertEquals("BABE", gene1.getAllele());
   }

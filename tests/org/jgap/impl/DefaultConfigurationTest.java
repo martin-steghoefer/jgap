@@ -24,10 +24,7 @@ public class DefaultConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
-  public DefaultConfigurationTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);

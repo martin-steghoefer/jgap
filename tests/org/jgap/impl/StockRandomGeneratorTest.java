@@ -23,13 +23,10 @@ public class StockRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
-
-  public StockRandomGeneratorTest() {
-  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StockRandomGeneratorTest.class);

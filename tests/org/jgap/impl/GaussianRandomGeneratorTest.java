@@ -23,13 +23,10 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
-
-  public GaussianRandomGeneratorTest() {
-  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianRandomGeneratorTest.class);

@@ -24,10 +24,7 @@ import junit.framework.*;
 public class ChainOfSelectorsTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
-  public ChainOfSelectorsTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);

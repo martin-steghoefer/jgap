@@ -4,15 +4,13 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -23,12 +21,8 @@ import junit.framework.*;
  */
 public class GreedyCrossoverTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
-
-  public GreedyCrossoverTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -138,8 +132,9 @@ public class GreedyCrossoverTest
     try {
       op.operate(new Population(population), chroms);
       fail();
-    }catch (Error e) {
-      ;//this is OK
+    }
+    catch (Error e) {
+      ; //this is OK
     }
   }
 
@@ -168,7 +163,7 @@ public class GreedyCrossoverTest
     conf.setPopulationSize(6);
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
-    CompositeGene compGene = new CompositeGene ();
+    CompositeGene compGene = new CompositeGene();
     compGene.addGene(cgene1);
     Gene cgene2 = new IntegerGene(1, 10);
     cgene2.setAllele(new Integer(8));
@@ -189,8 +184,9 @@ public class GreedyCrossoverTest
     try {
       op.operate(new Population(population), chroms);
       fail();
-    } catch (Error e) {
-      ;//this is OK
+    }
+    catch (Error e) {
+      ; //this is OK
     }
   }
 
@@ -220,7 +216,7 @@ public class GreedyCrossoverTest
     conf.setPopulationSize(6);
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
-    CompositeGene compGene = new CompositeGene ();
+    CompositeGene compGene = new CompositeGene();
     compGene.addGene(cgene1);
     Gene cgene2 = new IntegerGene(1, 10);
     cgene2.setAllele(new Integer(8));
@@ -246,8 +242,9 @@ public class GreedyCrossoverTest
     try {
       op.operate(new Population(population), chroms);
       fail();
-    } catch (Error e) {
-      ;//this is OK
+    }
+    catch (Error e) {
+      ; //this is OK
     }
   }
 
@@ -282,16 +279,28 @@ public class GreedyCrossoverTest
         ;
 
         // 4,1 is shorter than 4,5
-        if (a == 1 && b == 4)return 1;
-        if (a == 4 && b == 5)return 2;
+        if (a == 1 && b == 4) {
+          return 1;
+        }
+        if (a == 4 && b == 5) {
+          return 2;
+        }
 
         // 1,2 is shorter that 1,3
-        if (a == 1 && b == 2)return 10;
-        if (a == 1 && b == 3)return 20;
+        if (a == 1 && b == 2) {
+          return 10;
+        }
+        if (a == 1 && b == 3) {
+          return 20;
+        }
 
         // 2,0 is shorter than 2,3
-        if (a == 0 && b == 2)return 100;
-        if (a == 2 && b == 3)return 200;
+        if (a == 0 && b == 2) {
+          return 100;
+        }
+        if (a == 2 && b == 3) {
+          return 200;
+        }
 
         throw new Error
             ("These two should not be compared: " + a + " and " + b);
@@ -374,10 +383,10 @@ public class GreedyCrossoverTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2, chroms.size());
+    assertEquals(3 + 2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2+2, chroms.size());
+    assertEquals(3 + 2 + 2, chroms.size());
   }
 
   /**
@@ -389,14 +398,14 @@ public class GreedyCrossoverTest
    * @author Audrius Meskauskas
    * @since 2.1
    */
-  private Chromosome chromosome ( int [] genes ) throws Exception
-  {
-      IntegerGene [] ig = new IntegerGene [genes.length];
-      for (int i = 0; i < ig.length; i++) {
-          ig [i] = new IntegerGene (0,5);
-          ig [i].setAllele( new Integer (genes [i] ));
-      }
-      return new Chromosome (ig);
+  private Chromosome chromosome(int[] genes)
+      throws Exception {
+    IntegerGene[] ig = new IntegerGene[genes.length];
+    for (int i = 0; i < ig.length; i++) {
+      ig[i] = new IntegerGene(0, 5);
+      ig[i].setAllele(new Integer(genes[i]));
+    }
+    return new Chromosome(ig);
   }
 
   /**
@@ -405,13 +414,13 @@ public class GreedyCrossoverTest
    */
   public void testStartoffset_0() {
     GreedyCrossover op = new GreedyCrossover();
-    assertEquals(1,op.getStartOffset());
+    assertEquals(1, op.getStartOffset());
     op.setStartOffset(2);
-    assertEquals(2,op.getStartOffset());
+    assertEquals(2, op.getStartOffset());
     op.setStartOffset(1);
-    assertEquals(1,op.getStartOffset());
+    assertEquals(1, op.getStartOffset());
     op.setStartOffset(0);
-    assertEquals(0,op.getStartOffset());
+    assertEquals(0, op.getStartOffset());
 
   }
 }

@@ -22,10 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
-
-  public MutationOperatorTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);

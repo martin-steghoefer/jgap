@@ -23,10 +23,7 @@ public class DefaultMutationRateCalculatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
-  public DefaultMutationRateCalculatorTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);

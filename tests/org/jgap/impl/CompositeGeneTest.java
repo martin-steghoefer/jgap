@@ -22,13 +22,10 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
-
-  public CompositeGeneTest() {
-  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -37,7 +34,7 @@ public class CompositeGeneTest
 
   public void testConstruct_0() {
     //following should be possible without exception
-    Gene gene = new CompositeGene();
+    new CompositeGene();
   }
 
   /**

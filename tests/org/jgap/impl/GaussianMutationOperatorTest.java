@@ -24,10 +24,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
-  public GaussianMutationOperatorTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -260,12 +257,7 @@ public class GaussianMutationOperatorTest
   public static boolean isChromosomesEqual(Chromosome[] list1,
                                            Chromosome[] list2) {
     if (list1 == null) {
-      if (list2 == null) {
-        return true;
-      }
-      else {
-        return false;
-      }
+      return (list2 == null);
     }
     else if (list2 == null) {
       return false;

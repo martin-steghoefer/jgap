@@ -23,13 +23,10 @@ import junitx.util.*;
 public class BestChromosomesSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
-
-  public BestChromosomesSelectorTest() {
-  }
 
   public void setUp() {
     Genotype.setConfiguration(null);

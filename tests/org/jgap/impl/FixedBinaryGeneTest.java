@@ -22,10 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
-
-  public FixedBinaryGeneTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -105,7 +102,7 @@ public class FixedBinaryGeneTest
    */
   public void testConstruct_6() {
     FixedBinaryGene gene1 = new FixedBinaryGene(1);
-    FixedBinaryGene gene2 = new FixedBinaryGene(gene1);
+    new FixedBinaryGene(gene1);
   }
 
   /**
@@ -339,9 +336,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      /**
-       *This is ok
-       */
+      ;//this is OK
     }
   }
 
@@ -355,7 +350,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      /*This is ok.*/
+      ;//this is OK
     }
   }
 
@@ -461,7 +456,7 @@ public class FixedBinaryGeneTest
   /**
    * @author vamsi
    */
-  public void testCompareTo_3() {
+  public void testCompareTo_3_1() {
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     BooleanGene gene2 = new BooleanGene();
     try {
@@ -469,15 +464,20 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      /*Should compare only Fixed Binary Genes*/
+      ;//this is OK (should compare only FixedBinaryGene's)
     }
-
+  }
+  /**
+   * @author vamsi
+   */
+  public void testCompareTo_3_2() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(3);
     try {
       gene1.compareTo(new Integer(3));
       fail();
     }
     catch (Exception e) {
-      /*Should compare only FixedBinary Gene's*/
+      ;//this is OK (should compare only FixedBinaryGene's)
     }
   }
 
@@ -525,7 +525,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception E) {
-      /*Fine*/
+      ;//this is OK
     }
   }
 
@@ -592,7 +592,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
-      //this is OK
+      ;//this is OK
     }
   }
 

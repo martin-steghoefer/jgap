@@ -22,10 +22,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
-
-  public SwappingMutationOperatorTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -240,13 +237,14 @@ public class SwappingMutationOperatorTest
       final long checksum = checksum(genes);
       Gene[] prev = new Gene[genes.length];
 
-      for (int i = 0; i < n_iterations; i++)
+      for (int i = 0; i < n_iterations; i++) {
         for (int gene = 0; gene < genes.length; gene++) {
           System.arraycopy(genes, 0, prev, 0, genes.length);
           genes = mutOp.operate(generator, gene, genes);
           // checksum constant:
           assertEquals(checksum, checksum(genes));
         }
+      }
     }
   }
 

@@ -25,10 +25,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
-
-  public CrossoverOperatorTest() {
-  }
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -220,12 +217,7 @@ public class CrossoverOperatorTest
   public static boolean isChromosomesEqual(Chromosome[] list1,
                                            Chromosome[] list2) {
     if (list1 == null) {
-      if (list2 == null) {
-        return true;
-      }
-      else {
-        return false;
-      }
+      return (list2 == null);
     }
     else if (list2 == null) {
       return false;

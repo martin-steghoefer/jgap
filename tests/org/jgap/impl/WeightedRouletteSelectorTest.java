@@ -23,10 +23,7 @@ import junitx.util.*;
 public class WeightedRouletteSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
-
-  public WeightedRouletteSelectorTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);

@@ -23,10 +23,7 @@ public class AllImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
-
-  public AllImplTests() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();

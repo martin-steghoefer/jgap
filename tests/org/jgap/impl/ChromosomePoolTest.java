@@ -23,10 +23,7 @@ public class ChromosomePoolTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
-  public ChromosomePoolTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomePoolTest.class);
@@ -57,7 +54,6 @@ public class ChromosomePoolTest
   public void testReleaseChromosome_1() throws Exception {
     ChromosomePool pool = new ChromosomePool();
     Configuration conf = new DefaultConfiguration();
-    Gene[] genes = new Gene[]{};
     conf.setFitnessFunction(new TestFitnessFunction());
     conf.setPopulationSize(5);
     Gene sampleGene = new IntegerGene(1, 10);

@@ -23,10 +23,7 @@ public class PoolTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
-  public PoolTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PoolTest.class);
@@ -34,7 +31,7 @@ public class PoolTest
   }
 
   public void testConstruct_0() {
-    Pool pool = new Pool();
+    new Pool();
   }
 
   public void testClear_0() {
