@@ -35,7 +35,7 @@ import org.jgap.event.*;
 public class DefaultConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Constructs a new DefaultConfiguration instance with a number of
@@ -50,7 +50,8 @@ public class DefaultConfiguration
   public DefaultConfiguration() {
     super();
     try {
-      BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector();
+      BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
+          1.0d);
       bestChromsSelector.setDoubletteChromosomesAllowed(false);
       addNaturalSelector(bestChromsSelector, true);
       setRandomGenerator(new StockRandomGenerator());
@@ -60,7 +61,7 @@ public class DefaultConfiguration
       setChromosomePool(new ChromosomePool());
       addGeneticOperator(new ReproductionOperator());
       addGeneticOperator(new AveragingCrossoverOperator());
-      addGeneticOperator(new MutationOperator());
+      addGeneticOperator(new MutationOperator(20));
     }
     catch (InvalidConfigurationException e) {
       throw new RuntimeException(
