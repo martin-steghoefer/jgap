@@ -25,7 +25,7 @@ import org.jgap.*;
  */
 public class ChainOfSelectors {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
@@ -46,8 +46,7 @@ public class ChainOfSelectors {
    * @since 1.1 (previously part of class Configuration)
    */
   public void addNaturalSelector(NaturalSelector a_selector)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     if (a_selector == null) {
       throw new InvalidConfigurationException(
           "This Configuration object is locked. Settings may not be " +
