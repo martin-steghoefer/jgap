@@ -40,7 +40,7 @@ public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -84,6 +84,9 @@ public abstract class FitnessFunction
   /**
    * @return the double value that indicated that there is no fitness value
    * assigned yet
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public double getNoFitnessValue() {
     return NO_FITNESS_VALUE;

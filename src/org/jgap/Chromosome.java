@@ -38,7 +38,7 @@ public class Chromosome
     implements Comparable, Cloneable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -324,6 +324,8 @@ public class Chromosome
    * @return a positive double value representing the fitness of this
    *         Chromosome, or -1 if a bulk fitness function is in use and has
    *         not yet assigned a fitness value to this Chromosome.
+   * @author Neil Rotstan, Klaus Meffert
+   * @since 2.0 (until 1.1: return type int)
    */
   public double getFitnessValue() {
     if (m_activeConfiguration != null) {
