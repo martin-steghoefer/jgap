@@ -21,11 +21,7 @@ public class GeneticEventTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
-  public GeneticEventTest() {
-
-  }
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GeneticEventTest.class);

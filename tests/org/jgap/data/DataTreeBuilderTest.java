@@ -25,15 +25,12 @@ public class DataTreeBuilderTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
   // number of genes used in test case
   private final static int NUM_GENES = 2;
-
-  public DataTreeBuilderTest() {
-  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DataTreeBuilderTest.class);

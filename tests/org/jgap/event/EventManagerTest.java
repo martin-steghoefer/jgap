@@ -23,10 +23,7 @@ import junitx.util.*;
 public class EventManagerTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
-  public EventManagerTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(EventManagerTest.class);

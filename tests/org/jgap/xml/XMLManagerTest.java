@@ -29,12 +29,9 @@ public class XMLManagerTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
-
-  public XMLManagerTest() {
-  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite(XMLManagerTest.class);
@@ -90,7 +87,7 @@ public class XMLManagerTest
   }
 
   public void testGetChromosomeFromElement_0() throws Exception {
-    Document doc = XMLManager.representChromosomeAsDocument(chrom);
+    XMLManager.representChromosomeAsDocument(chrom);
     Element elem = null;
     try {
       XMLManager.getChromosomeFromElement(conf, elem);
@@ -122,7 +119,7 @@ public class XMLManagerTest
   public void testGetGenotypeFromDocument_0() throws Exception {
     Document doc = XMLManager.representChromosomeAsDocument(chrom);
     try {
-      Genotype genotype = XMLManager.getGenotypeFromDocument(conf, doc);
+      XMLManager.getGenotypeFromDocument(conf, doc);
       fail();
     }
     catch (ImproperXMLException iex) {
@@ -181,7 +178,7 @@ public class XMLManagerTest
   public void testReadFile_0() throws Exception {
     new File(FILENAME_WRITE).delete();
     try {
-      Document doc = XMLManager.readFile(new File(FILENAME_WRITE));
+      XMLManager.readFile(new File(FILENAME_WRITE));
       fail();
     } catch (Exception ex) {
       ;//this is OK
@@ -192,13 +189,13 @@ public class XMLManagerTest
     Document doc = XMLManager.representGenotypeAsDocument(genotype);
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(genotype),
                          new File(FILENAME_WRITE));
-    Document doc2 = XMLManager.readFile(new File(FILENAME_WRITE));
+    XMLManager.readFile(new File(FILENAME_WRITE));
     Genotype population = XMLManager.getGenotypeFromDocument(conf, doc);
     assertEquals(genotype, population);
   }
 
   public void testWriteFile_0() throws Exception {
-    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    XMLManager.representGenotypeAsDocument(genotype);
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(genotype),
                          new File(FILENAME_WRITE));
   }
