@@ -32,7 +32,7 @@ public class GaussianRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -113,6 +113,24 @@ public class GaussianRandomGeneratorTest
     int resOli = 0;
     for (int i=0;i<100;i++) {
       res = calc.nextInt();
+      if (i > 0) {
+        if (resOli == res) {
+          fail("Two consecutive calls produced same value: "+res);
+        }
+        else {
+          resOli = res;
+        }
+      }
+      assertTrue(res >= 0.000d);
+    }
+  }
+
+  public void testNextInt_2() throws Exception {
+    GaussianRandomGenerator calc = new GaussianRandomGenerator(1.0d);
+    int res;
+    int resOli = 0;
+    for (int i=0;i<100;i++) {
+      res = calc.nextInt(100000);
       if (i > 0) {
         if (resOli == res) {
           fail("Two consecutive calls produced same value: "+res);
