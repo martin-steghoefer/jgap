@@ -20,6 +20,7 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 
+/**@todo this entity may be obsolete now!*/
 /**
  * The reproduction operator loops through each of the Chromosomes in the
  * population and adds them to the list of candidate chromosomes. This
@@ -36,7 +37,7 @@ import org.jgap.*;
 public class ReproductionOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
