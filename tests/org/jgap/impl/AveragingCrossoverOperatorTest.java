@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -23,9 +21,8 @@ import junit.framework.*;
  */
 public class AveragingCrossoverOperatorTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public AveragingCrossoverOperatorTest() {
   }
@@ -45,7 +42,8 @@ public class AveragingCrossoverOperatorTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testOperate_0() throws Exception {
+  public void testOperate_0()
+      throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new AveragingCrossoverOperator();
     conf.addGeneticOperator(op);
@@ -96,7 +94,8 @@ public class AveragingCrossoverOperatorTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testOperate_1() throws Exception {
+  public void testOperate_1()
+      throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new AveragingCrossoverOperator();
     Genotype.setConfiguration(conf);
@@ -145,7 +144,8 @@ public class AveragingCrossoverOperatorTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testOperate_2() throws Exception {
+  public void testOperate_2()
+      throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new AveragingCrossoverOperator();
     conf.addGeneticOperator(op);
@@ -190,11 +190,12 @@ public class AveragingCrossoverOperatorTest
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
-    CompositeGene result = (CompositeGene)target.getGene(0);
-    assertEquals(8, ((Integer)((Vector)result.getAllele()).get(0)).intValue());
+    CompositeGene result = (CompositeGene) target.getGene(0);
+    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0)).intValue());
   }
 
-  public static boolean isChromosomesEqual(Chromosome[] list1, Chromosome[] list2) {
+  public static boolean isChromosomesEqual(Chromosome[] list1,
+                                           Chromosome[] list2) {
     if (list1 == null) {
       if (list2 == null) {
         return true;
@@ -211,9 +212,9 @@ public class AveragingCrossoverOperatorTest
         return false;
       }
       else {
-        for(int i=0;i<list1.length;i++) {
-          Chromosome c1 = (Chromosome)list1[i];
-          Chromosome c2 = (Chromosome)list2[i];
+        for (int i = 0; i < list1.length; i++) {
+          Chromosome c1 = (Chromosome) list1[i];
+          Chromosome c2 = (Chromosome) list2[i];
           if (!c1.equals(c2)) {
             return false;
           }
@@ -223,4 +224,28 @@ public class AveragingCrossoverOperatorTest
     }
   }
 
+  /**
+   * Following should be possible without exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testConstruct_0() {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    GeneticOperator op = new AveragingCrossoverOperator( (RandomGenerator)null);
+  }
+
+  /**
+   * Following should be possible without exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testConstruct_1() {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    GeneticOperator op = new AveragingCrossoverOperator( (
+        IUniversalRateCalculator)null);
+  }
 }
