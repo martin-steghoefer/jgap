@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -24,7 +23,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   private double m_deviation;
 
@@ -64,7 +63,7 @@ public class GaussianMutationOperator
     RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
     /**@todo resolve this more clearly!*/
     if (rn instanceof GaussianRandomGenerator) {
-      setRandomGenerator((GaussianRandomGenerator)rn);
+      setRandomGenerator( (GaussianRandomGenerator) rn);
     }
     else if (rn instanceof RandomGenerator) {
       setRandomGenerator(rn);
@@ -72,18 +71,29 @@ public class GaussianMutationOperator
     else {
       setRandomGenerator(new GaussianRandomGenerator(1.0d));
     }
-    for (int i = 0; i < a_population.size(); i++) {
+    int size = a_population.size();
+    for (int i = 0; i < size; i++) {
       Gene[] genes = a_population.getChromosome(i).getGenes();
-      // clone the Chromosome
-      Chromosome copyOfChromosome = (Chromosome) a_population.getChromosome(i).
-          clone();
-      // Add the Chromosome to the candidate pool
-      a_candidateChromosomes.add(copyOfChromosome);
-      // ...then Gaussian mutate all its genes
-      genes = copyOfChromosome.getGenes();
+      Chromosome copyOfChromosome = null;
+      // For each Chromosome in the population...
+      // ----------------------------------------
       for (int j = 0; j < genes.length; j++) {
         double nextGaussian = m_rg.nextDouble();
         double diff = nextGaussian * m_deviation;
+
+        // ...take a copy of it...
+        // -----------------------
+        if (copyOfChromosome == null) {
+          copyOfChromosome = (Chromosome) a_population.getChromosome(i).clone();
+
+          // ...add it to the candidate pool...
+          // ----------------------------------
+          a_candidateChromosomes.add(copyOfChromosome);
+
+          // ...then Gaussian mutate all its genes
+          genes = copyOfChromosome.getGenes();
+        }
+
         // Process all atomic elements in the gene. For a StringGene this
         // would be the length of the string, for an IntegerGene, it is
         // always one element.
