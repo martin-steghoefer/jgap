@@ -32,7 +32,7 @@ public class FitnessFunctionTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public FitnessFunctionTest() {
   }
@@ -51,6 +51,7 @@ public class FitnessFunctionTest
     try {
       FitnessFunctionImpl fitfunc = new FitnessFunctionImpl( -7);
       fitfunc.getFitnessValue(null);
+      fail();
     }
     catch (RuntimeException cause) {
       // This is expected since non-positive fitness values are illegal.
