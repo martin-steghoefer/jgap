@@ -19,9 +19,16 @@
  */
 package org.jgap.impl;
 
+import java.util.List;
+
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.Gene;
+import org.jgap.NaturalSelector;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import junitx.util.PrivateAccessor;
 
 /**
  * Tests for BestChromosomesSelector class
@@ -34,7 +41,7 @@ public class BestChromosomesSelectorTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     public BestChromosomesSelectorTest ()
     {
@@ -47,7 +54,97 @@ public class BestChromosomesSelectorTest
     }
 
     public void testConstruct_0 ()
+        throws Exception
     {
-        /**todo implement*/
+        NaturalSelector selector = new BestChromosomesSelector ();
+        Boolean needsSorting = (Boolean) PrivateAccessor.getField (selector,
+            "needsSorting");
+        assertEquals (Boolean.FALSE, needsSorting);
+    }
+
+    public void testAdd_0 ()
+        throws Exception
+    {
+        NaturalSelector selector = new BestChromosomesSelector ();
+        Configuration conf = new DefaultConfiguration ();
+        Gene gene = new BooleanGene ();
+        Chromosome chrom = new Chromosome (gene, 5);
+        selector.add (conf, chrom);
+
+        Boolean needsSorting = (Boolean) PrivateAccessor.getField (selector,
+            "needsSorting");
+        assertEquals (Boolean.TRUE, needsSorting);
+
+        List chromosomes = (List) PrivateAccessor.getField (selector,
+            "chromosomes");
+        assertEquals (1, chromosomes.size ());
+        assertEquals (chrom, chromosomes.get (0));
+
+        selector.add (null, chrom);
+        assertEquals (1, chromosomes.size ());
+        assertEquals (chrom, chromosomes.get (0));
+    }
+
+    public void testSelect_0 ()
+        throws Exception
+    {
+        NaturalSelector selector = new BestChromosomesSelector ();
+
+        // add first chromosome
+        // --------------------
+        Gene gene = new BooleanGene ();
+        gene.setAllele (new Boolean (true));
+        Chromosome thirdBestChrom = new Chromosome (gene, 7);
+        thirdBestChrom.setFitnessValue (10);
+        selector.add (null, thirdBestChrom);
+
+        // add second chromosome
+        // ---------------------
+        gene = new BooleanGene ();
+        gene.setAllele (new Boolean (false));
+        Chromosome bestChrom = new Chromosome (gene, 3);
+        bestChrom.setFitnessValue (12);
+        selector.add (null, bestChrom);
+
+        // add third chromosome
+        // ---------------------
+        gene = new IntegerGene ();
+        gene.setAllele (new Integer (444));
+        Chromosome secondBestChrom = new Chromosome (gene, 3);
+        secondBestChrom.setFitnessValue (11);
+        selector.add (null, secondBestChrom);
+
+        // receive top 1 (= best) chromosome
+        // ---------------------------------
+        Chromosome[] bestChroms = selector.select (null, 1);
+
+        assertEquals (1, bestChroms.length);
+        assertEquals (bestChrom, bestChroms[0]);
+
+        // receive top 3 chromosomes
+        // ----------------------------------
+        bestChroms = selector.select (null, 3);
+
+        assertEquals (3, bestChroms.length);
+        assertEquals (bestChrom, bestChroms[0]);
+        assertEquals (secondBestChrom, bestChroms[1]);
+        assertEquals (thirdBestChrom, bestChroms[2]);
+    }
+
+    public void testEmpty_0 ()
+        throws Exception
+    {
+        NaturalSelector selector = new BestChromosomesSelector ();
+        Configuration conf = new DefaultConfiguration ();
+        Gene gene = new BooleanGene ();
+        Chromosome chrom = new Chromosome (gene, 5);
+        selector.add (conf, chrom);
+        selector.empty ();
+        Boolean needsSorting = (Boolean) PrivateAccessor.getField (selector,
+            "needsSorting");
+        assertEquals (Boolean.FALSE, needsSorting);
+        List chromosomes = (List) PrivateAccessor.getField (selector,
+            "chromosomes");
+        assertEquals (0, chromosomes.size ());
     }
 }
