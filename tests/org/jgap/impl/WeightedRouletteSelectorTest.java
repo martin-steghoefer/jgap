@@ -26,7 +26,7 @@ public class WeightedRouletteSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public WeightedRouletteSelectorTest() {
   }
@@ -118,7 +118,7 @@ public class WeightedRouletteSelectorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
-    randgen.setNextDouble(1.0d);
+    randgen.setNextDouble(0.9999d);
     conf.setRandomGenerator(randgen);
     Population popNew = new Population();
     selector.select(1, null, popNew);
