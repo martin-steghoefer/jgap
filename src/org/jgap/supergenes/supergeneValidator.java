@@ -17,32 +17,31 @@ import org.jgap.Gene;
  * supergeneValidator, deciding themselfs about the gene validity.
  * In request to returs a validator, they return <i>this</i>.
  * Other classes may require always to set the external validator.
+ *
  * @author Audrius Meskauskas
+ * @since 2.0
  */
-
 public interface supergeneValidator {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
-    /**
-     * Return true if this gene combination is valid for
-     * the given supergene */
-    boolean isValid (Gene [] a_genes, Supergene a_for_supergene );
+  /**
+   * Return true if this gene combination is valid for
+   * the given supergene */
+  boolean isValid(Gene[] a_genes, Supergene a_for_supergene);
 
-    /**
-     * Get a persistent string representation (if needed) of this validator.
-     * The name is different allowing the same class to implement both
-     * Supergene and supergeneValidator.
-     *  */
-      String getPersistent();
+  /**
+   * Get a persistent string representation (if needed) of this validator.
+   * The name is different allowing the same class to implement both
+   * Supergene and supergeneValidator.
+   *  */
+  String getPersistent();
 
-     /**
-      * Set a persistend string representation (if needed) for this validator.
-      * The name is different allowing the same class to implement both
-      * Supergene and supergeneValidator.
-      */
-      void setFromPersistent(String a_string);
+  /**
+   * Set a persistend string representation (if needed) for this validator.
+   * The name is different allowing the same class to implement both
+   * Supergene and supergeneValidator.
+   */
 
-
+  void setFromPersistent(String a_string);
 }
