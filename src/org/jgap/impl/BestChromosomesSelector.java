@@ -44,7 +44,7 @@ public class BestChromosomesSelector
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     /**
      * Stores the chromosomes to be taken into account for selection
@@ -56,10 +56,16 @@ public class BestChromosomesSelector
      */
     private boolean needsSorting;
 
+    /**
+     * Comparator that is only concerned about fitness values
+     */
+    private FitnessValueComparator fitnessValueComparator;
+
     public BestChromosomesSelector ()
     {
         chromosomes = new Vector ();
         needsSorting = false;
+        fitnessValueComparator = new FitnessValueComparator ();
     }
 
     /**
@@ -111,7 +117,7 @@ public class BestChromosomesSelector
         // -------------------------------------------------------------------
         if (needsSorting)
         {
-            Collections.sort (chromosomes);
+            Collections.sort (chromosomes, fitnessValueComparator);
             needsSorting = false;
         }
 
@@ -145,4 +151,33 @@ public class BestChromosomesSelector
         needsSorting = false;
     }
 
+    /**
+     * Comparator regarding only the fitness value. Best fitness value will
+     * be on first position of resulted sorted list
+     *
+     * @author Klaus Meffert
+     * @version 1.0
+     */
+    private class FitnessValueComparator
+        implements Comparator
+    {
+        public int compare (Object first, Object second)
+        {
+            Chromosome chrom1 = (Chromosome) first;
+            Chromosome chrom2 = (Chromosome) second;
+
+            if (chrom1.getFitnessValue () < chrom2.getFitnessValue ())
+            {
+                return 1;
+            }
+            else if (chrom1.getFitnessValue () > chrom2.getFitnessValue ())
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
 }
