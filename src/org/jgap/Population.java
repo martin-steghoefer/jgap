@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -210,5 +210,17 @@ public class Population {
 
   private void setChanged(boolean a_changed) {
     m_changed = a_changed;
+  }
+
+  /**
+   * Determines whether the given chromosome is contained within the population.
+   * @param a_chromosome the chromosome to check
+   * @return boolean true: chromosome contained within population
+   *
+   * @author Klaus Meffert
+   * @since 2.1
+   */
+  public boolean contains(Chromosome a_chromosome) {
+    return m_chromosomes.contains(a_chromosome);
   }
 }
