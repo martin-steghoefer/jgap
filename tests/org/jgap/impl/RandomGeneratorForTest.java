@@ -23,8 +23,11 @@ package org.jgap.impl;
 import org.jgap.RandomGenerator;
 
 /**
- * A random generator only determined for testing purposes
+ * A random generator only determined for testing purposes.
  * With this, you can specify the next value which will be returned
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 
 public class RandomGeneratorForTest
@@ -32,13 +35,13 @@ public class RandomGeneratorForTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.2 $";
+    private static final String CVS_REVISION = "$Revision: 1.3 $";
 
-    private int _nextInt;
-    private long _nextLong;
-    private double _nextDouble;
-    private float _nextFloat;
-    private boolean _nextBoolean;
+    private int m_nextInt;
+    private long m_nextLong;
+    private double m_nextDouble;
+    private float m_nextFloat;
+    private boolean m_nextBoolean;
 
     public RandomGeneratorForTest ()
     {
@@ -47,57 +50,57 @@ public class RandomGeneratorForTest
 
     public int nextInt ()
     {
-        return _nextInt;
+        return m_nextInt;
     }
 
     public int nextInt (int ceiling)
     {
-        return _nextInt % ceiling;
+        return m_nextInt % ceiling;
     }
 
     public long nextLong ()
     {
-        return _nextLong;
+        return m_nextLong;
     }
 
     public double nextDouble ()
     {
-        return _nextDouble;
+        return m_nextDouble;
     }
 
     public float nextFloat ()
     {
-        return _nextFloat;
+        return m_nextFloat;
     }
 
     public boolean nextBoolean ()
     {
-        return _nextBoolean;
+        return m_nextBoolean;
     }
 
-    public void set_nextBoolean (boolean _nextBoolean)
+    public void setNextBoolean (boolean a_nextBoolean)
     {
-        this._nextBoolean = _nextBoolean;
+        m_nextBoolean = a_nextBoolean;
     }
 
-    public void set_nextDouble (double _nextDouble)
+    public void setNextDouble (double a_nextDouble)
     {
-        this._nextDouble = _nextDouble;
+        m_nextDouble = a_nextDouble;
     }
 
-    public void set_nextFloat (float _nextFloat)
+    public void setNextFloat (float a_nextFloat)
     {
-        this._nextFloat = _nextFloat;
+        m_nextFloat = a_nextFloat;
     }
 
-    public void set_nextInt (int _nextInt)
+    public void setNextInt (int a_nextInt)
     {
-        this._nextInt = _nextInt;
+        m_nextInt = a_nextInt;
     }
 
-    public void set_nextLong (long _nextLong)
+    public void setNextLong (long a_nextLong)
     {
-        this._nextLong = _nextLong;
+        m_nextLong = a_nextLong;
     }
 
 }
