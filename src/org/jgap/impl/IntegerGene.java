@@ -34,7 +34,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -54,16 +54,7 @@ public class IntegerGene
    */
   protected int m_lowerBounds;
 
-  /**
-   * Stores the number of integer range units that a single bounds-range
-   * unit represents. For example, if the integer range is -2 billion to
-   * +2 billion and the bounds range is -1 billion to +1 billion, then
-   * each unit in the bounds range would map to 2 units in the integer
-   * range. The value of this variable would therefore be 2. This mapping
-   * unit is used to map illegal allele values that are outside of the
-   * bounds to legal allele values that are within the bounds.
-   */
-  protected long m_boundsUnitsToIntegerUnits;
+  private Configuration m_configuration;
 
   /**
    * Constructs a new IntegerGene with default settings. No bounds will
@@ -76,12 +67,12 @@ public class IntegerGene
    */
   public IntegerGene() {
     this(Integer.MIN_VALUE, Integer.MAX_VALUE);
-    calculateBoundsUnitsToIntegerUnitsRatio();
   }
 
   /**
    * Constructs a new IntegerGene with the specified lower and upper
-   * bounds for values (alleles) of this Gene instance.
+   * bounds for values (alleles) of this Gene instance. Uses the
+   * DefaultConfiguration.
    *
    * @param a_lowerBounds The lowest value that this Gene may possess,
    *                      inclusive.
@@ -89,12 +80,32 @@ public class IntegerGene
    *                      inclusive.
    *
    * @author Neil Rostan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public IntegerGene(int a_lowerBounds, int a_upperBounds) {
+    this(a_lowerBounds, a_upperBounds, new DefaultConfiguration());
+  }
+
+  /**
+   * Constructs a new IntegerGene with the specified lower and upper
+   * bounds for values (alleles) of this Gene instance. Uses the specified
+   * configuration.
+   *
+   * @param a_lowerBounds The lowest value that this Gene may possess,
+   *                      inclusive.
+   * @param a_upperBounds The highest value that this Gene may possess,
+   *                      inclusive.
+   * @param a_configuration sic.
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public IntegerGene(int a_lowerBounds, int a_upperBounds,
+                     Configuration a_configuration) {
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
-    calculateBoundsUnitsToIntegerUnitsRatio();
+    m_configuration = a_configuration;
   }
 
   /**
@@ -120,7 +131,13 @@ public class IntegerGene
    * @since 1.0
    */
   public Gene newGene(Configuration a_activeConfiguration) {
-    return new IntegerGene(m_lowerBounds, m_upperBounds);
+    if (a_activeConfiguration == null) {
+      return new IntegerGene(m_lowerBounds, m_upperBounds);
+    }
+    else {
+      return new IntegerGene(m_lowerBounds, m_upperBounds,
+                             a_activeConfiguration);
+    }
   }
 
   /**
@@ -229,11 +246,6 @@ public class IntegerGene
             "is not recognized: field 3 does not appear to be " +
             "an integer value.");
       }
-      // We need to recalculate the bounds units to integer units
-      // ratio since our lower and upper bounds have probably just
-      // been changed.
-      // -------------------------------------------------------------
-      calculateBoundsUnitsToIntegerUnitsRatio();
     }
   }
 
@@ -299,6 +311,7 @@ public class IntegerGene
    * is already within the bounds, it will be left unchanged.
    *
    * @author Neil Rostan
+   * @author Klaus Meffert
    * @since 1.0
    */
   protected void mapValueToWithinBounds() {
@@ -312,42 +325,15 @@ public class IntegerGene
       // -----------------------------------------------------------------
       if (i_value.intValue() > m_upperBounds ||
           i_value.intValue() < m_lowerBounds) {
-        long differenceFromIntMin = (long) Integer.MIN_VALUE +
-            (long) i_value.intValue();
-        int differenceFromBoundsMin =
-            (int) (differenceFromIntMin / m_boundsUnitsToIntegerUnits);
-        m_value =
-            new Integer(m_upperBounds + differenceFromBoundsMin);
+        m_value = new Integer(m_configuration.getRandomGenerator().nextInt(
+            m_upperBounds - m_lowerBounds) + m_lowerBounds);
       }
     }
   }
 
   /**
-   * Calculates and sets the m_boundsUnitsToIntegerUnits field based
-   * on the current lower and upper bounds of this IntegerGene. For example,
-   * if the integer range is -2 billion to +2 billion and the bounds range
-   * is -1 billion to +1 billion, then each unit in the bounds range would
-   * map to 2 units in the integer range. The m_boundsUnitsToIntegerUnits
-   * field would therefore be 2. This mapping unit is used to map illegal
-   * allele values that are outside of the bounds to legal allele values that
-   * are within the bounds.
-   *
-   * @author Neil Rostan
-   * @since 1.0
-   */
-  protected void calculateBoundsUnitsToIntegerUnitsRatio() {
-    int divisor = m_upperBounds - m_lowerBounds + 1;
-    if (divisor == 0) {
-      m_boundsUnitsToIntegerUnits = INTEGER_RANGE;
-    }
-    else {
-      m_boundsUnitsToIntegerUnits = INTEGER_RANGE / divisor;
-    }
-  }
-
-  /**
    * See interface Gene for description
-   * @param index must always be 1 (because there is only 1 atomic element)
+   * @param index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    *        than 1).
    *
@@ -355,7 +341,9 @@ public class IntegerGene
    * @since 1.1
    */
   public void applyMutation(int index, double a_percentage) {
-    int newValue = (int) Math.round(intValue() * (1.0d + a_percentage));
+    double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+//    int newValue = (int) Math.round(intValue() * (1.0d + a_percentage));
+    int newValue = (int) Math.round(intValue() + range);
     setAllele(new Integer(newValue));
   }
 }

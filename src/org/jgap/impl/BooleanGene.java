@@ -41,7 +41,7 @@ import org.jgap.UnsupportedRepresentationException;
 public class BooleanGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -62,10 +62,27 @@ public class BooleanGene
    */
   protected Boolean m_value = null;
 
+  private Configuration m_configuration;
+
   /**
    * Constructs a new BooleanGene with default settings.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    */
   public BooleanGene() {
+    this(new DefaultConfiguration());
+  }
+
+  /**
+   * Constructs a new BooleanGene with given Configuration
+   * @param a_configuration sic
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public BooleanGene(Configuration a_configuration) {
+    m_configuration = a_configuration;
   }
 
   /**
@@ -86,9 +103,17 @@ public class BooleanGene
    * @param a_activeConfiguration The current active configuration.
    * @return A new Gene instance of the same type and with the same
    *         setup as this concrete Gene.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    */
   public Gene newGene(Configuration a_activeConfiguration) {
-    return new BooleanGene();
+    if (a_activeConfiguration == null) {
+      return new BooleanGene();
+    }
+    else {
+      return new BooleanGene(a_activeConfiguration);
+    }
   }
 
   /**
