@@ -38,7 +38,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -827,11 +827,11 @@ public class Configuration {
     verifyChangesAllowed();
     if (processBeforeGeneticOperators) {
       m_preSelectors.addNaturalSelector(a_selector);
-      m_sizeNaturalSelectorsPre++;
+      m_sizeNaturalSelectorsPre = m_preSelectors.size();
     }
     else {
       m_postSelectors.addNaturalSelector(a_selector);
-      m_sizeNaturalSelectorsPost++;
+      m_sizeNaturalSelectorsPost = m_postSelectors.size();
     }
   }
 
