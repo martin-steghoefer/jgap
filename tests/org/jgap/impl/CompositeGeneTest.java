@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -552,5 +552,43 @@ public class CompositeGeneTest
       }
     });
     assertNotNull(gene.getConstraintChecker());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetToRandomValue_0() {
+    Gene gene1 = new CompositeGene();
+    try {
+      gene1.setToRandomValue(null);
+      fail();
+    }catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetToRandomValue_1() {
+    CompositeGene gene1 = new CompositeGene();
+    DoubleGene d = new DoubleGene(0.0d,1.0d);
+    gene1.addGene(d);
+    gene1.setToRandomValue(new RandomGeneratorForTest(0.23d));
+    assertEquals(0.23d, d.doubleValue(),DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testSetToRandomValue_2() {
+    CompositeGene gene1 = new CompositeGene();
+    DoubleGene d = new DoubleGene(0.5d,1.8d);
+    gene1.addGene(d);
+    gene1.setToRandomValue(new RandomGeneratorForTest(0.23d));
+    assertEquals((1.8d-0.5d)*0.23d+0.5d, d.doubleValue(),DELTA);
   }
 }
