@@ -196,4 +196,74 @@ public class DoubleGeneTest
         String pres2 = gene2.getPersistentRepresentation();
         assertEquals(pres1, pres2);
     }
+
+    public void testCleanup_0 ()
+    {
+        //cleanup should do nothing!
+        Gene gene = new DoubleGene (1.3d, 6.5d);
+        Gene copy = gene.newGene (null);
+        gene.cleanup();
+        assertEquals(copy, gene);
+    }
+
+    public void testSetToRandomValue_0 ()
+    {
+        /**@todo implement*/
+    }
+
+    public void testCompareToNative_0 ()
+    {
+        Gene gene1 = new DoubleGene (1.3d, 6.5d);
+        gene1.setAllele(new Double(5.8d));
+        Gene gene2 = new DoubleGene (5.3d, 6.7d);
+        gene2.setAllele(new Double(5.9d));
+        assertEquals(((Double)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_1 ()
+    {
+        Gene gene1 = new DoubleGene (1.3d, 6.5d);
+        gene1.setAllele(new Double(5.8d));
+        Gene gene2 = new DoubleGene (5.3d, 6.7d);
+        gene2.setAllele(new Double(5.8d));
+        assertEquals(((Double)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_2 ()
+    {
+        Gene gene1 = new DoubleGene (1.3d, 6.5d);
+        gene1.setAllele(new Double(5.9d));
+        Gene gene2 = new DoubleGene (5.3d, 6.7d);
+        gene2.setAllele(new Double(5.8d));
+        assertEquals(((Double)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_3 ()
+    {
+        Gene gene1 = new DoubleGene (1.3d, 6.5d);
+        gene1.setAllele(new Double(5.9d));
+        Gene gene2 = new DoubleGene (5.3d, 6.7d);
+        gene2.setAllele(new Double(-5.9d));
+        assertEquals(((Double)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_4 ()
+    {
+        Gene gene1 = new DoubleGene (1.3d, 6.5d);
+        gene1.setAllele(new Double(0.0d));
+        Gene gene2 = new DoubleGene (5.3d, 6.7d);
+        gene2.setAllele(new Double(-0.0d));
+        assertEquals(((Double)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCalculateBoundsUnitsToDoubleUnitsRatio_0 ()
+    {
+        /**@todo implement*/
+    }
+
 }

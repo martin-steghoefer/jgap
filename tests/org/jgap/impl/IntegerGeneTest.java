@@ -28,13 +28,16 @@ import junit.framework.TestSuite;
 import junitx.util.PrivateAccessor;
 
 /**
- * <p>Title: Tests for IntegerGene class</p>
+ * Tests for IntegerGene class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class IntegerGeneTest
     extends TestCase
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public IntegerGeneTest ()
     {
@@ -169,7 +172,8 @@ public class IntegerGeneTest
         }
     }
 
-    public void testNewGene_0 () throws Exception
+    public void testNewGene_0 ()
+        throws Exception
     {
         Gene gene1 = new IntegerGene (1, 10000);
         gene1.setAllele (new Integer (4711));
@@ -185,4 +189,84 @@ public class IntegerGeneTest
         assertEquals (lower1, lower2);
         assertEquals (upper1, upper2);
     }
+
+    public void testCleanup ()
+    {
+        //cleanup should do nothing!
+        Gene gene = new IntegerGene(1,6);
+        Gene copy = gene.newGene(null);
+        gene.cleanup();
+        assertEquals(copy, gene);
+    }
+
+    public void testPersistentRepresentation_0() throws Exception {
+        Gene gene1 = new IntegerGene (2, 753);
+        gene1.setAllele(new Integer(45));
+        String pres1 = gene1.getPersistentRepresentation();
+        Gene gene2 = new IntegerGene ();
+        gene2.setValueFromPersistentRepresentation(pres1);
+        String pres2 = gene2.getPersistentRepresentation();
+        assertEquals(pres1, pres2);
+    }
+
+    public void testCompareToNative_0 ()
+    {
+        Gene gene1 = new IntegerGene (13, 65);
+        gene1.setAllele(new Integer(58));
+        Gene gene2 = new IntegerGene (53, 67);
+        gene2.setAllele(new Integer(59));
+        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_1 ()
+    {
+        Gene gene1 = new IntegerGene (13, 65);
+        gene1.setAllele(new Integer(58));
+        Gene gene2 = new IntegerGene (53, 67);
+        gene2.setAllele(new Integer(58));
+        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_2 ()
+    {
+        Gene gene1 = new IntegerGene (13, 65);
+        gene1.setAllele(new Integer(59));
+        Gene gene2 = new IntegerGene (53, 67);
+        gene2.setAllele(new Integer(58));
+        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_3 ()
+    {
+        Gene gene1 = new IntegerGene (13, 65);
+        gene1.setAllele(new Integer(59));
+        Gene gene2 = new IntegerGene (53, 67);
+        gene2.setAllele(new Integer(-59));
+        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testCompareToNative_4 ()
+    {
+        Gene gene1 = new IntegerGene (13, 65);
+        gene1.setAllele(new Integer(0));
+        Gene gene2 = new IntegerGene (53, 67);
+        gene2.setAllele(new Integer(-0));
+        assertEquals(((Integer)gene1.getAllele()).compareTo(gene2.getAllele()),
+            gene1.compareTo(gene2));
+    }
+
+    public void testSetToRandomValue_0 ()
+    {
+        /**@todo implement*/
+    }
+
+    public void testCalculateBoundsUnitsToIntegerUnitsRatio_0 ()
+    {
+        /**@todo implement*/
+    }
+
 }
