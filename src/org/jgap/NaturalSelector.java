@@ -33,7 +33,7 @@ package org.jgap;
 public interface NaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -60,7 +60,7 @@ public interface NaturalSelector {
    *
    * @return An array of the selected Chromosomes.
    */
-  public Chromosome[] select(Configuration a_activeConfiguration,
+  public Population select(Configuration a_activeConfiguration,
                              int a_howManyToSelect);
 
   /**

@@ -20,7 +20,6 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.event.*;
 
 /**
@@ -36,9 +35,8 @@ import org.jgap.event.*;
  */
 public class Genotype
     implements Serializable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The current active Configuration instance.
@@ -48,7 +46,7 @@ public class Genotype
   /**
    * The array of Chromosomes that makeup the Genotype's population.
    */
-  protected Chromosome[] m_chromosomes;
+  protected Population m_population;
 
   /**
    * The working pool of Chromosomes, which is where Chromosomes that are
@@ -86,7 +84,8 @@ public class Genotype
    * @since 1.0
    */
   public Genotype(Configuration a_activeConfiguration,
-                  Chromosome[] a_initialChromosomes) throws
+                  Chromosome[] a_initialChromosomes)
+      throws
       InvalidConfigurationException {
     this(a_activeConfiguration, a_initialChromosomes,
          new DefaultFitnessEvaluator());
@@ -105,12 +104,11 @@ public class Genotype
    */
   public Genotype(Configuration a_activeConfiguration,
                   Chromosome[] a_initialChromosomes,
-                  FitnessEvaluator a_fitnessEvaluator) throws
+                  FitnessEvaluator a_fitnessEvaluator)
+      throws
       InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
-
     // of Chromosomes, nor any of the Genes inside the array are null.
-
     // ---------------------------------------------------------------
     if (a_activeConfiguration == null) {
       throw new IllegalArgumentException(
@@ -133,12 +131,10 @@ public class Genotype
       }
     }
     // Lock the settings of the Configuration object so that the cannot
-
     // be altered.
-
     // ----------------------------------------------------------------
     a_activeConfiguration.lockSettings();
-    m_chromosomes = a_initialChromosomes;
+    m_population = new Population(a_initialChromosomes);
     m_activeConfiguration = a_activeConfiguration;
     m_fitnessEvaluator = a_fitnessEvaluator;
     m_workingPool = new ArrayList();
@@ -160,12 +156,11 @@ public class Genotype
    *         incomplete state.
    * @since 1.0
    */
-  public void setActiveConfiguration(Configuration a_activeConfiguration) throws
+  public void setActiveConfiguration(Configuration a_activeConfiguration)
+      throws
       InvalidConfigurationException {
     // Only assign the given Configuration object if we don't already
-
     // have one.
-
     // --------------------------------------------------------------
     if (m_activeConfiguration == null) {
       if (a_activeConfiguration == null) {
@@ -187,8 +182,8 @@ public class Genotype
         // Now set this Configuration on each of the member
         // Chromosome instances.
         // ------------------------------------------------
-        for (int i = 0; i < m_chromosomes.length; i++) {
-          m_chromosomes[i].setActiveConfiguration(
+        for (int i = 0; i < m_population.size(); i++) {
+          m_population.getChromosome(i).setActiveConfiguration(
               m_activeConfiguration);
         }
       }
@@ -201,9 +196,20 @@ public class Genotype
    *
    * @return The population of Chromosomes.
    * @since 1.0
+   * @deprecated uses getPopulation() instead
    */
   public synchronized Chromosome[] getChromosomes() {
-    return m_chromosomes;
+    Iterator it = m_population.iterator();
+    Chromosome[] result = new Chromosome[m_population.size()];
+    int i = 0;
+    while (it.hasNext()) {
+      result[i++] = (Chromosome)it.next();
+    }
+    return result;
+  }
+
+  public Population getPopulation() {
+    return m_population;
   }
 
   /**
@@ -216,7 +222,8 @@ public class Genotype
    * @since 1.0
    */
   public synchronized Chromosome getFittestChromosome() {
-    if (m_chromosomes.length == 0) {
+    int len = m_population.size();
+    if (len == 0) {
       return null;
     }
     // Set the best fitness value to that of the first chromosome.
@@ -225,12 +232,12 @@ public class Genotype
     // The decision whether a fitness value if better than another is
     // delegated to a FitnessEvaluator
     // --------------------------------------------------------------
-    Chromosome fittestChromosome = m_chromosomes[0];
+    Chromosome fittestChromosome = m_population.getChromosome(0);
     double fittestValue = fittestChromosome.getFitnessValue();
-    for (int i = 1; i < m_chromosomes.length; i++) {
-      if (m_fitnessEvaluator.isFitter(m_chromosomes[i].getFitnessValue(),
+    for (int i = 1; i < len; i++) {
+      if (m_fitnessEvaluator.isFitter(m_population.getChromosome(i).getFitnessValue(),
                                       fittestValue)) {
-        fittestChromosome = m_chromosomes[i];
+        fittestChromosome = m_population.getChromosome(i);
         fittestValue = fittestChromosome.getFitnessValue();
       }
     }
@@ -250,16 +257,16 @@ public class Genotype
     verifyConfigurationAvailable();
     // Process all natural selectors applicable before executing the
     // Genetic Operators.
-    int selectorSize = m_activeConfiguration.getNaturalSelectors(true).size();
+    int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(true);
     if (selectorSize > 0) {
       // Add the chromosomes pool to the natural selector.
       // Iterate over all natural selectors!
       // ----------------------------------------------------------------
-      Iterator iterator1 = Arrays.asList(m_chromosomes).iterator();
+      Iterator iterator1 = m_population.iterator();// Arrays.asList(m_chromosomes).iterator();
       while (iterator1.hasNext()) {
         Chromosome currentChromosome = (Chromosome) iterator1.next();
-        for (int i=0;i<selectorSize;i++) {
-          m_activeConfiguration.getNaturalSelectors(true).get(i).add(
+        for (int i = 0; i < selectorSize; i++) {
+          m_activeConfiguration.getNaturalSelector(true, i).add(
               m_activeConfiguration,
               currentChromosome);
         }
@@ -268,13 +275,13 @@ public class Genotype
       // by the natural selector.
       // Iterate over all natural selectors!
       // ------------------------------------------------------------
-      for (int i=0;i<selectorSize;i++) {
-        m_chromosomes = m_activeConfiguration.getNaturalSelectors(true).get(i).
+      for (int i = 0; i < selectorSize; i++) {
+        m_population = m_activeConfiguration.getNaturalSelector(true, i).
             select(m_activeConfiguration,
                    m_activeConfiguration.getPopulationSize());
         // Clean up the natural selector.
         // ------------------------------
-        m_activeConfiguration.getNaturalSelectors(true).get(i).empty();
+        m_activeConfiguration.getNaturalSelector(true, i).empty();
       }
     }
     // Execute all of the Genetic Operators.
@@ -283,7 +290,7 @@ public class Genotype
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
       ( (GeneticOperator) operatorIterator.next()).operate(
-          m_activeConfiguration, m_chromosomes, m_workingPool);
+          m_activeConfiguration, m_population, m_workingPool);
     }
     // If a bulk fitness function has been provided, then convert the
     // working pool to an array and pass it to the bulk fitness
@@ -297,7 +304,7 @@ public class Genotype
           m_workingPool.toArray(new Chromosome[m_workingPool.size()]);
       bulkFunction.evaluate(candidateChromosomes);
     }
-    selectorSize = m_activeConfiguration.getNaturalSelectors(false).size();
+    selectorSize = m_activeConfiguration.getNaturalSelectorsSize(false);
     if (selectorSize > 0) {
       // Add the chromosomes in the working pool to the natural selector.
       // Iterate over all natural selectors!
@@ -306,8 +313,8 @@ public class Genotype
       NaturalSelector selector;
       while (iterator.hasNext()) {
         Chromosome currentChromosome = (Chromosome) iterator.next();
-        for (int i=0;i<selectorSize;i++) {
-          selector = m_activeConfiguration.getNaturalSelectors(false).get(i);
+        for (int i = 0; i < selectorSize; i++) {
+          selector = m_activeConfiguration.getNaturalSelector(false, i);
           selector.add(m_activeConfiguration,
                        currentChromosome);
         }
@@ -316,14 +323,12 @@ public class Genotype
       // by the natural selector.
       // Iterate over all natural selectors!
       // ------------------------------------------------------------
-      for (int i=0;i<selectorSize;i++) {
-        m_chromosomes = m_activeConfiguration.getNaturalSelectors(false).get(i).
-            select(
-            m_activeConfiguration,
-            m_chromosomes.length);
+      for (int i = 0; i < selectorSize; i++) {
+        m_population = m_activeConfiguration.getNaturalSelector(false, i).
+            select(m_activeConfiguration, m_population.size());
         // Clean up the natural selector.
         // ------------------------------
-        m_activeConfiguration.getNaturalSelectors(false).get(i).empty();
+        m_activeConfiguration.getNaturalSelector(false, i).empty();
       }
     }
     // Fire an event to indicate we've performed an evolution.
@@ -373,10 +378,10 @@ public class Genotype
    */
   public String toString() {
     StringBuffer buffer = new StringBuffer();
-    for (int i = 0; i < m_chromosomes.length; i++) {
-      buffer.append(m_chromosomes[i].toString());
+    for (int i = 0; i < m_population.size(); i++) {
+      buffer.append(m_population.getChromosome(i).toString());
       buffer.append(" [");
-      buffer.append(m_chromosomes[i].getFitnessValue());
+      buffer.append(m_population.getChromosome(i).getFitnessValue());
       buffer.append(']');
       buffer.append('\n');
     }
@@ -404,7 +409,8 @@ public class Genotype
    * @since 1.0
    */
   public static Genotype randomInitialGenotype(
-      Configuration a_activeConfiguration) throws InvalidConfigurationException {
+      Configuration a_activeConfiguration)
+      throws InvalidConfigurationException {
     if (a_activeConfiguration == null) {
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
@@ -449,7 +455,7 @@ public class Genotype
       // First, make sure the other Genotype has the same number of
       // chromosomes as this one.
       // ----------------------------------------------------------
-      if (m_chromosomes.length != otherGenotype.m_chromosomes.length) {
+      if (m_population.size() != otherGenotype.m_population.size()) {
         return false;
       }
       // Next, prepare to compare the chromosomes of the other Genotype
@@ -459,11 +465,11 @@ public class Genotype
       // genetic algorithm (it doesn't care about the order), but makes
       // it much easier to perform the comparison here.
       // --------------------------------------------------------------
-      Arrays.sort(m_chromosomes);
-      Arrays.sort(otherGenotype.m_chromosomes);
-      for (int i = 0; i < m_chromosomes.length; i++) {
-        if (! (m_chromosomes[i].equals(
-            otherGenotype.m_chromosomes[i]))) {
+      Collections.sort(m_population.getChromosomes());
+      Collections.sort(otherGenotype.getPopulation().getChromosomes());
+      for (int i = 0; i < m_population.size(); i++) {
+        if (! (m_population.getChromosome(i).equals(
+            otherGenotype.m_population.getChromosome(i)))) {
           return false;
         }
       }
