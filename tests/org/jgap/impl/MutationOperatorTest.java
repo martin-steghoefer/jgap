@@ -19,12 +19,15 @@
  */
 package org.jgap.impl;
 
+import org.jgap.MutationRateCalculator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
  * Tests for MutationOperator class
+ * @author Klaus Meffert
+ * @since 1.1
  */
 
 public class MutationOperatorTest
@@ -32,7 +35,7 @@ public class MutationOperatorTest
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private static final String CVS_REVISION = "$Revision: 1.2 $";
+    private static final String CVS_REVISION = "$Revision: 1.3 $";
 
     public MutationOperatorTest ()
     {
@@ -49,19 +52,36 @@ public class MutationOperatorTest
     {
         MutationOperator mutOp = new MutationOperator (234);
         assertEquals (234, mutOp.m_mutationRate);
-        assertEquals (false, mutOp.m_dynamicMutationRate);
+        assertNull (mutOp.getMutationRateCalc ());
     }
 
     public void testConstruct_1 ()
     {
         MutationOperator mutOp = new MutationOperator ();
         assertEquals (0, mutOp.m_mutationRate);
-        assertEquals (true, mutOp.m_dynamicMutationRate);
+        assertNotNull (mutOp.getMutationRateCalc ());
+    }
+
+    public void testConstruct_2 ()
+    {
+        MutationOperator mutOp = new MutationOperator (null);
+        assertEquals (0, mutOp.m_mutationRate);
+        assertNull (mutOp.getMutationRateCalc ());
+    }
+
+    public void testConstruct_3 ()
+    {
+        MutationRateCalculator calc = new DefaultMutationRateCalculator ();
+        MutationOperator mutOp = new MutationOperator (calc);
+        assertEquals (0, mutOp.m_mutationRate);
+        assertEquals (calc, mutOp.getMutationRateCalc ());
     }
 
     public void testOperate_0 ()
     {
-        /**@todo implement*/
+        /**@todo implement.
+         * E.g. we could check if something has changed. For that use a
+         * RandomGeneratorForTest*/
     }
 
 }
