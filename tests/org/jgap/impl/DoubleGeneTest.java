@@ -266,4 +266,8 @@ public class DoubleGeneTest
         /**@todo implement*/
     }
 
+    public void testApplyMutation_0() {
+        /**@todo implement*/
+    }
+
 }
