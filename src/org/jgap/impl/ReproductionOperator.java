@@ -25,11 +25,12 @@ import org.jgap.*;
  * @author Neil Rotstan
  * @author Klaus Meffert
  * @since 1.0
+ * @deprecated No need to use it anymore!
  */
 public class ReproductionOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
