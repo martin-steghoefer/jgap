@@ -32,7 +32,7 @@ public class DefaultMutationRateCalculator
     implements MutationRateCalculator
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public DefaultMutationRateCalculator ()
     {
@@ -42,7 +42,7 @@ public class DefaultMutationRateCalculator
     /**
      * Calculates the mutation rate
      * @param a_activeConfiguration current active configuration
-     * @return calculated mutation rate
+     * @return calculated divisor of mutation rate probability (dividend is 1)
      *
      * @since 1.1 (same functionality since earlier, but not encapsulated)
      */
