@@ -24,7 +24,10 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Title: Tests for the FitnessFunction class
+ * Tests for the FitnessFunction class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class FitnessFunctionTest
     extends TestCase
@@ -76,10 +79,10 @@ public class FitnessFunctionTest
 
     /**
      * Implementing class of abstract FitnessFunction class
+     *
      * @author Klaus Meffert
-     * @version 1.0
+     * @since 1.1
      */
-
     private class FitnessFunctionImpl
         extends FitnessFunction
     {

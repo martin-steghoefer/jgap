@@ -33,13 +33,16 @@ import junit.framework.TestSuite;
 
 /**
  * Tests for Configuration class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class ConfigurationTest
     extends TestCase
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+    private final static String CVS_REVISION = "$Revision: 1.3 $";
 
     public ConfigurationTest ()
     {
@@ -81,7 +84,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testAddGeneticOperator_2 () throws
+    public void testAddGeneticOperator_2 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -91,7 +95,8 @@ public class ConfigurationTest
         assertEquals (2, conf.getGeneticOperators ().size ());
     }
 
-    public void testVerifyStateIsValid_0 () throws
+    public void testVerifyStateIsValid_0 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -108,7 +113,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testVerifyStateIsValid_1 () throws
+    public void testVerifyStateIsValid_1 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -126,7 +132,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testVerifyStateIsValid_2 () throws
+    public void testVerifyStateIsValid_2 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -145,7 +152,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testVerifyStateIsValid_3 () throws
+    public void testVerifyStateIsValid_3 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -165,7 +173,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testVerifyStateIsValid_4 () throws
+    public void testVerifyStateIsValid_4 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -186,7 +195,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testVerifyStateIsValid_5 () throws
+    public void testVerifyStateIsValid_5 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -208,7 +218,8 @@ public class ConfigurationTest
         }
     }
 
-    public void testVerifyStateIsValid_6 () throws
+    public void testVerifyStateIsValid_6 ()
+        throws
         InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
@@ -224,7 +235,8 @@ public class ConfigurationTest
         conf.verifyStateIsValid ();
     }
 
-    public void testIsLocked_0 () throws InvalidConfigurationException
+    public void testIsLocked_0 ()
+        throws InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
         assertEquals (false, conf.isLocked ());
@@ -241,7 +253,8 @@ public class ConfigurationTest
         assertEquals (true, conf.isLocked ());
     }
 
-    public void testGetter_0 () throws InvalidConfigurationException
+    public void testGetter_0 ()
+        throws InvalidConfigurationException
     {
         Configuration conf = new Configuration ();
         assertEquals (false, conf.isLocked ());
