@@ -181,7 +181,13 @@ public class MutationOperator implements GeneticOperator
                         a_candidateChromosomes.add( copyOfChromosome );
                         genes = copyOfChromosome.getGenes();
                     }
-
+                    /**@todo modify this to obtain the possibility of using
+                     * Gaussian distribution for mutation (see req. 708772)
+                     *
+                     * Note: we really don't want a random generator here in
+                     * any way. Sometimes yes, but sometimes we would want to
+                     * use a (more or less) deterministic algorithm
+                     */
                     genes[ j ].setToRandomValue( generator );
                 }
             }
