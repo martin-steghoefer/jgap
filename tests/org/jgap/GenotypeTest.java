@@ -23,7 +23,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public GenotypeTest() {
   }
@@ -461,7 +461,7 @@ public class GenotypeTest
     //Test to see if enough hashcodes are unique
     thc.setFractionUnique(.95);
     if (thc.testHashCodeUniqueness(UniqueChromosome) == false) {
-      System.out.print(
+      System.out.println(
           "testHashCodeUniqueness failed\n Actual Percent unique = " +
           thc.getActualFractionUnique());
       fail();
