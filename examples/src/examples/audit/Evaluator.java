@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Each data has its own data container
@@ -328,9 +328,15 @@ public class Evaluator {
     double sizeAvg = 0.0d;
     double fitnessAvg = 0.0d;
     double fitnessBest = -1.0d;
+    double fitnessBestOld = -1.0d;
     double fitness;
     int fitnessBestGen = -1;
     double fitnessAvgChroms;
+    double fitnessDiversityChromsOld = -1.0d;
+    double fitnessDelta;
+    double fitnessBestDeltaAvg = 0.0d;
+    double fitnessDiversity;
+    double fitnessDiversityAvg = 0.0d;
 
     int size;
     ChromosomeData chrom;
@@ -348,9 +354,16 @@ public class Evaluator {
 
       size = data.size;
       fitnessAvgChroms = 0.0d;
+      fitnessDiversity = 0.0d;
       for (int j=0;i<size;j++) {
         chrom = data.chromosomeData[j];
         fitness = chrom.fitnessValue;
+        // diversity of fitness values over all chromosomes
+        if (j>0) {
+          fitnessDiversity += Math.abs(fitness - fitnessDiversityChromsOld)/size;
+        }
+        fitnessDiversityChromsOld = fitness;
+
         // average fitness value for generation over all Chromosomes
         fitnessAvgChroms += fitness/size;
 
@@ -361,18 +374,26 @@ public class Evaluator {
           fitnessBestGen = data.generation;
         }
 
-        // absolute delta between two adjacent best fitness values
-
-        // absolute delta between two adjacent average fitness values
       }
       // average fitness value for generation over all runs
       fitnessAvg += fitnessAvgChroms/numRuns;
+
+      // average fitness delta value for generation over all runs
+      fitnessDiversityAvg += fitnessDiversity/numRuns;
+
+      // absolute delta between two adjacent best fitness values
+      if (i>0) {
+        fitnessBestDeltaAvg += Math.abs(fitnessBest-fitnessBestOld)/numRuns;
+      }
+      fitnessBestOld = fitnessBest;
     }
 
     dataAvg.sizeAvg = sizeAvg;
     dataAvg.avgFitnessValue = fitnessAvg;
     dataAvg.bestFitnessValue = fitnessBest;
     dataAvg.bestFitnessValueGeneration = fitnessBestGen;
+    dataAvg.avgDiversityFitnessValue = fitnessDiversityAvg;
+    dataAvg.avgBestDeltaFitnessValue = fitnessBestDeltaAvg;
 
     //store computed (averaged) data
     m_genotypeDataAvg.add(dataAvg);
@@ -388,6 +409,8 @@ public class Evaluator {
     public double bestFitnessValue;
     public double avgFitnessValue;
     public int bestFitnessValueGeneration;
+    public double avgDiversityFitnessValue;
+    public double avgBestDeltaFitnessValue;
   }
 
   public class GenotypeData {
