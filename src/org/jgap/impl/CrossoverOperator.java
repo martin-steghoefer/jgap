@@ -18,7 +18,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -26,8 +25,13 @@ import org.jgap.*;
  * population and "mates" them by randomly picking a gene and then
  * swapping that gene and all subsequent genes between the two
  * Chromosomes. The two modified Chromosomes are then added to the
- * list of candidate Chromosomes. This operation is performed half
- * as many times as there are Chromosomes in the population.
+ * list of candidate Chromosomes. 
+ *
+ * This CrossoverOperator supports both fixed and dynamic crossover rates.
+ * A fixed rate is one specified at construction time by the user. This 
+ * operation is performed 1/m_crossoverRate as many times as there are 
+ * Chromosomes in the population. A dynamic rate is one determined by 
+ * this class if no fixed rate is provided. 
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -37,7 +41,60 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
+   /**
+   * The current crossover rate used by this crossover operator.
+   */
+  protected int m_crossoverRate;
+
+  /**
+   * Calculator for dynamically determining the crossover rate. If set to
+   * null the value of m_crossoverRate will be used instead.
+   */
+  private IUniversalRateCalculator m_crossoverRateCalc;
+
+   /**
+   * Constructs a new instance of this CrossoverOperator without a specified
+   * crossover rate, this results in dynamic crossover rate being turned off.
+   * This means that the crossover rate will be fixed at populationsize\2.
+   *
+   * @author Chris Knowles
+   * @since 2.0
+   */
+  public CrossoverOperator() {
+      //set the default crossoverRate to be populationsize\2
+      m_crossoverRate = 2;
+      setCrossoverRateCalc(null);
+  }
+
+  /**
+   * Constructs a new instance of this MutationOperator with a specified
+   * crossover rate calculator, which results in dynamic crossover being turned
+   * on.
+   * @param a_crossoverRateCalculator calculator for dynamic crossover rate
+   *        computation
+   *
+   * @author Chris Knowles
+   * @since 2.0
+   */
+  public CrossoverOperator(IUniversalRateCalculator a_crossoverRateCalculator) {
+    setCrossoverRateCalc(a_crossoverRateCalculator);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with the given
+   * crossover rate.
+   *
+   * @param a_desiredCrossoverRate The desired rate of crossover.
+   *
+   * @author Chris Knowles
+   * @since 2.0
+   */
+  public CrossoverOperator(int a_desiredCrossoverRate) {
+    m_crossoverRate = a_desiredCrossoverRate;
+    setCrossoverRateCalc(null);
+  }
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -64,11 +121,20 @@ public class CrossoverOperator
    *                               considered for natural selection.
    * @author Neil Rotstan
    * @author Klaus Meffert
-   * @since 2.0 (earlier versions referenced the Configution object)
+   * @since 2.0 (earlier versions referenced the Configuration object)
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-    int numCrossovers = a_population.size() / 2;
+    
+    // Work out the number of crossovers that should be performed
+    int numCrossovers = 0;
+    if (m_crossoverRateCalc == null){
+        numCrossovers = a_population.size() / m_crossoverRate;
+    }
+    else{
+        numCrossovers = a_population.size() / m_crossoverRateCalc.calculateCurrentRate();
+    }
+    
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
@@ -98,5 +164,16 @@ public class CrossoverOperator
       a_candidateChromosomes.add(firstMate);
       a_candidateChromosomes.add(secondMate);
     }
+  }
+  
+  /**
+   * Sets the crossover rate calculator
+   * @param a_crossoverRateCalculator The new calculator
+   *
+   * @author Chris Knowles
+   * @since 2.0
+   */
+  private void setCrossoverRateCalc(IUniversalRateCalculator a_crossoverRateCalculator){
+      this.m_crossoverRateCalc = a_crossoverRateCalculator;
   }
 }
