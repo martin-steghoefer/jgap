@@ -25,9 +25,9 @@
 <p>JGAP version 2.0 introduced many concepts as well as many architectural
 changes. This was seen necessary to evolve the structure of the product.</p>
 
-<p> If you have versions prior to 2.0 in use (i.e. 1.1 or 1.0), you should
+<p> If you work with a JGAP version prior to 2.0 in use (i.e. 1.1 or 1.0), you should
 read this document. It will guide you thru the process of upgrading to version
-2.0 or 2.1.</p>
+2.0 (and later upcoming versions).</p>
 
 <h2 class="docTitle">Upgrade Instructions</h2>
 
@@ -54,6 +54,19 @@ to <font face="Courier New">double</font>. The fitness value can be obtained via
 <p>Just change your implementation to work with <font face="Courier New">double</font>-typed
 variables instead of <font face="Courier New">int</font>-typed ones. There is no
 performance loss as our extended tests show!</p>
+
+<h3 class="subHeader">Fitness evaluator in Configuration Object</h3>
+
+<p>If you don't construct your <font face="Courier New">Configuration</font>
+object via new something like</p>
+<pre><font color="#0000FF">Configuration myConfig = new DefaultConfiguration()</font></pre>
+<p>you need to make sure you set the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/FitnessEvaluator.html">FitnessEvaluator</a></font>.
+You can easily do this by</p>
+<pre><font color="#0000FF">myConfig.setFitnessEvaluator(new DefaultFitnessEvaluator());</font></pre>
+<p>The fitness evaluator is responsible for deciding when a fitness value is
+better and when it's not. If you are interpreting the fitness value as a defect
+rate then the lower the better. If your fitness value is a performace indicator,
+it should be higher to be better.</p>
 
 <h3 class="subHeader">NaturalSelector now an abstract class</h3>
 

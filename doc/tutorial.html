@@ -1,0 +1,741 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<title>Getting Started with JGAP</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">Getting Started With JGAP</h1>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> </p>
+
+<hr>
+<a name="top">
+
+<p>To use JGAP in an application, there are five basic things that you must do: 
+
+<ol>
+  <li></a><a href="#step1">Plan your Chromosome.</a></li>
+  <li><a href="#step2">Implement a &quot;fitness function.&quot;</a></li>
+  <li><a href="#step3">Setup a Configuration object.</a></li>
+  <li><a href="#step4">Create a population of potential solutions.</a></li>
+  <li><a href="#step5">Evolve the population!</a></li>
+</ol>
+
+<p>Through the course of this tutorial, we'll build a simple example program that makes
+use of JGAP. The goal of our program will be to produce a user-specified amount of change
+in the fewest possible American coins (quarters, dimes, nickels, and pennies). </p>
+<a name="step1">
+
+<h3 class="subheader">Step 1: Plan your Chromosome</h3>
+
+<p>At the heart of the genetic algorithm is the Chromosome. The Chromosome represents a
+potential solution and is divided into multiple genes. Genes in JGAP represent distinct
+aspects of the solution as a whole, just as human genes represent distinct aspects of
+individual people, such as their sex or eye color. During the JGAP evolution process,
+chromosomes are exposed to multiple genetic operators that represent mating, mutation,
+etc. and then are chosen for the next generation during a natural selection phase based
+upon their &quot;fitness,&quot; which is a measure of how optimal that solution is
+relative to other potential solutions. The entire goal of the genetic algorithm is to
+mimic the natural process of evolution in order to produce superior solutions. </p>
+
+<p>Step 1, therefore, is to decide on the makeup of your chromosomes, which includes how
+many genes you want and what those genes will represent. In our sample program, we want to
+create a pile of change that contains the fewest possible American coins that total up to
+the amount specified by the user. Since a chromosome represents a potential solution, in
+our sample it will represent a pile of change. We'll setup our genes to represent the
+different denominations of coins so that we'll have a total of four genes per chromosome
+(one each for quarters, dimes, nickels, and pennies). </p>
+
+<p align="center"><img class="diagram" src="chromosome.png"
+alt="(Diagram of a Chromosome with four genes: quarters, dimes, nickels, and pennies.)"
+width="300" height="150"> </p>
+
+<p>We'll actually write the code to setup our Chromosome objects in </a><a href="#step3">step
+3</a>. </p>
+<a name="step2">
+
+<h3 class="subheader">Step 2: Implementing a Fitness Function</h3>
+
+<p>JGAP is designed to do almost all of the evolutionary work for you in a relatively
+generic fashion. However, it has no knowledge of the specific problem you're actually
+trying to solve, and hence has no intrinsic way of deciding if one potential solution is
+any better than another potential solution for your specific problem. That's where the
+fitness function comes in: it's a single method that you must implement that accepts a
+potential problem solution and returns an integer value that indicates how good (or
+&quot;fit&quot;) that solution is relative to other possible solutions. The higher the
+number, the better the solution. The lower the number (1 being the lowest legal fitness
+value), the poorer the solution. JGAP will use these fitness measurements to evolve the
+population of solutions toward a more optimal set of solutions. </p>
+
+<p>Let's start with a fully-working example of a fitness function, the details of which
+will be explained below. Since the goal of our small program is to produce an amount of
+change in American coins equal to a target amount in the fewest possible number of coins,
+it seems reasonable that the measure of fitness for a particular solution would be a
+combination of the relative closeness of the amount of change it represented to the target
+amount of change, and the total number of coins represented by the solution (fewer being
+better). </p>
+
+<pre class="code">
+<tt>
+<b><font color="#000080">package</font></b> <font color="#000000">examples;</font>
+
+<b><font
+color="#000080">import</font></b> <font color="#000000">org.jgap.Chromosome;</font>
+<b><font
+color="#000080">import</font></b> <font color="#000000">org.jgap.FitnessFunction;</font>
+
+<i><font
+color="#808080">/**</font></i>
+<i><font color="#808080"> * This class provides an implementation of the classic &quot;Make change&quot; problem</font></i>
+<i><font
+color="#808080"> * using a genetic algorithm. The goal of the problem is to provide a</font></i>
+<i><font
+color="#808080"> * specified amount of change (from a cash purchase) in the fewest coins</font></i>
+<i><font
+color="#808080"> * possible. This example implementation uses American currency (quarters,</font></i>
+<i><font
+color="#808080"> * dimes, nickels, and pennies).</font></i>
+<i><font color="#808080"> *</font></i>
+<i><font
+color="#808080"> * This example may be seen as somewhat significant because it demonstrates</font></i>
+<i><font
+color="#808080"> * the use of a genetic algorithm in a less-than-optimal problem space.</font></i>
+<i><font
+color="#808080"> * The genetic algorithm does best when there is a smooth slope of fitness</font></i>
+<i><font
+color="#808080"> * over the problem space towards the optimum solution. This problem exhibits</font></i>
+<i><font
+color="#808080"> * a more choppy space with more local optima. However, as can be seen from</font></i>
+<i><font
+color="#808080"> * running this example, the genetic algorithm still will get the correct</font></i>
+<i><font
+color="#808080"> * answer virtually everytime.</font></i>
+<i><font color="#808080"> */</font></i>
+<b><font
+color="#000080">public</font></b> <b><font color="#000080">class</font></b> <font
+color="#000000">MinimizingMakeChangeFitnessFunction</font> <b><font color="#000080">extends</font></b> <font
+color="#000000">FitnessFunction</font>
+<font color="#000000">{</font>
+    <b><font
+color="#000080">private</font></b> <b><font color="#000080">final</font></b> <b><font
+color="#000080">int</font></b> <font color="#000000">m_targetAmount;</font>
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Constructs this MinimizingMakeChangeFitnessFunction with the desired</font></i>
+<i><font
+color="#808080">     * amount of change to make.</font></i>
+<i><font color="#808080">     *</font></i>
+<i><font
+color="#808080">     * @param a_targetAmount The desired amount of change, in cents. This</font></i>
+<i><font
+color="#808080">     *                       value must be between 1 and 99 cents.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <font
+color="#000000">MinimizingMakeChangeFitnessFunction(</font> <b><font color="#000080">int</font></b> <font
+color="#000000">a_targetAmount</font> <font color="#000000">)</font>
+    <font
+color="#000000">{</font>
+        <b><font color="#000080">if</font></b><font
+color="#000000">(</font> <font color="#000000">a_targetAmount</font> <font color="#000000">&lt;</font> <font
+color="#0000FF">1</font> <font color="#000000">||</font> <font color="#000000">a_targetAmount</font> <font
+color="#000000">&gt;</font> <font color="#0000FF">99</font> <font color="#000000">)</font>
+        <font
+color="#000000">{</font>
+            <b><font color="#000080">throw</font></b> <b><font
+color="#000080">new</font></b> <font color="#000000">IllegalArgumentException(</font>
+                <b><font
+color="#009900">&quot;Change amount must be between 1 and 99 cents.&quot;</font></b> <font
+color="#000000">);</font>
+        <font color="#000000">}</font>
+
+        <font
+color="#000000">m_targetAmount</font> <font color="#000000">=</font> <font color="#000000">a_targetAmount;</font>
+    <font
+color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Determine the fitness of the given Chromosome instance. The higher the</font></i>
+<i><font
+color="#808080">     * return value, the more fit the instance. This method should always</font></i>
+<i><font
+color="#808080">     * return the same fitness value for two equivalent Chromosome instances.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @param a_subject: The Chromosome instance to evaluate.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @return A positive integer reflecting the fitness rating of the given</font></i>
+<i><font
+color="#808080">     *         Chromosome.</font></i>
+<i><font color="#808080">     */</font></i>
+    <b><font
+color="#000080">public</font></b> <b><font color="#000080">double</font></b> <font
+color="#000000">evaluate(</font> <font color="#000000">Chromosome</font> <font
+color="#000000">a_subject</font> <font color="#000000">)</font>
+    <font color="#000000">{</font>
+        <i><font
+color="#808080">// The fitness value measures both how close the value is to the</font></i>
+        <i><font
+color="#808080">// target amount supplied by the user and the total number of coins</font></i>
+        <i><font
+color="#808080">// represented by the solution. We do this in two steps: first,</font></i>
+        <i><font
+color="#808080">// we consider only the represented amount of change vs. the target</font></i>
+        <i><font
+color="#808080">// amount of change and calculate higher fitness values for amounts</font></i>
+        <i><font
+color="#808080">// closer to the target, and lower fitness values for amounts further</font></i>
+        <i><font
+color="#808080">// away from the target. If the amount equals the target, then we go</font></i>
+        <i><font
+color="#808080">// to step 2, which adjusts the fitness to a higher value for</font></i>
+        <i><font
+color="#808080">// solutions representing fewer total coins, and lower fitness</font></i>
+        <i><font
+color="#808080">// values for solutions representing a larger total number of coins.</font></i>
+        <i><font
+color="#808080">// ------------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">int</font></b> <font color="#000000">changeAmount</font> <font
+color="#000000">=</font> <font color="#000000">amountOfChange(</font> <font
+color="#000000">a_subject</font> <font color="#000000">);</font>
+        <b><font
+color="#000080">int</font></b> <font color="#000000">totalCoins</font> <font
+color="#000000">=</font> <font color="#000000">getTotalNumberOfCoins(</font> <font
+color="#000000">a_subject</font> <font color="#000000">);</font>
+        <b><font
+color="#000080">int</font></b> <font color="#000000">changeDifference</font> <font
+color="#000000">=</font> <font color="#000000">Math.abs(</font> <font color="#000000">m_targetAmount</font> <font
+color="#000000">-</font> <font color="#000000">changeAmount</font> <font color="#000000">);</font>
+
+        <i><font
+color="#808080">// Step 1: Determine the distance of the amount represented by the</font></i>
+        <i><font
+color="#808080">// solution from the target amount. Since we know the maximum amount</font></i>
+        <i><font
+color="#808080">// of change is 99 cents, we'll subtract from that the difference</font></i>
+        <i><font
+color="#808080">// between the solution amount and the target amount. That will give</font></i>
+        <i><font
+color="#808080">// the desired effect of returning higher values for amounts close</font></i>
+        <i><font
+color="#808080">// to the target amount and lower values for amounts further away</font></i>
+        <i><font
+color="#808080">// from the target amount.</font></i>
+        <i><font color="#808080">// ------------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">double</font></b> <font color="#000000">fitness</font> <font
+color="#000000">=</font> <font color="#000000">(</font> <font color="#0000FF">99</font> <font
+color="#000000">-</font> <font color="#000000">changeDifference</font> <font
+color="#000000">);</font>
+
+        <i><font color="#808080">// Step 2: If the solution amount equals the target amount, then</font></i>
+        <i><font
+color="#808080">// we add additional fitness points for solutions representing fewer</font></i>
+        <i><font
+color="#808080">// total coins.</font></i>
+        <i><font color="#808080">// -----------------------------------------------------------------</font></i>
+        <b><font
+color="#000080">if</font></b><font color="#000000">(</font> <font color="#000000">changeAmount</font> <font
+color="#000000">==</font> <font color="#000000">m_targetAmount</font> <font
+color="#000000">)</font>
+        <font color="#000000">{</font>
+            <font
+color="#000000">fitness</font> <font color="#000000">+=</font> <font color="#0000FF">100</font> <font
+color="#000000">-</font> <font color="#000000">(</font> <font color="#0000FF">10</font> <font
+color="#000000">*</font> <font color="#000000">totalCoins</font> <font color="#000000">);</font>
+        <font
+color="#000000">}</font>
+
+        <b><font color="#000080">return</font></b> <font
+color="#000000">fitness;</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Calculates the total amount of change (in cents) represented by</font></i>
+<i><font
+color="#808080">     * the given chromosome and returns that amount.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @param a_potentialSolution The potential solution to evaluate.</font></i>
+<i><font
+color="#808080">     * @return The total amount of change (in cents) represented by the</font></i>
+<i><font
+color="#808080">     *         given solution.</font></i>
+<i><font color="#808080">     */</font></i>
+    <b><font
+color="#000080">public</font></b> <b><font color="#000080">static</font></b> <b><font
+color="#000080">int</font></b> <font color="#000000">amountOfChange(</font> <font
+color="#000000">Chromosome</font> <font color="#000000">a_potentialSolution</font> <font
+color="#000000">)</font>
+    <font color="#000000">{</font>
+        <b><font color="#000080">int</font></b> <font
+color="#000000">numQuarters</font> <font color="#000000">=</font> <font color="#000000">getNumberOfCoinsAtGene(</font> <font
+color="#000000">a_potentialSolution,</font> <font color="#0000FF">0</font> <font
+color="#000000">);</font>
+        <b><font color="#000080">int</font></b> <font
+color="#000000">numDimes</font> <font color="#000000">=</font> <font color="#000000">getNumberOfCoinsAtGene(</font> <font
+color="#000000">a_potentialSolution,</font> <font color="#0000FF">1</font> <font
+color="#000000">);</font>
+        <b><font color="#000080">int</font></b> <font
+color="#000000">numNickels</font> <font color="#000000">=</font> <font color="#000000">getNumberOfCoinsAtGene(</font> <font
+color="#000000">a_potentialSolution,</font> <font color="#0000FF">2</font> <font
+color="#000000">);</font>
+        <b><font color="#000080">int</font></b> <font
+color="#000000">numPennies</font> <font color="#000000">=</font> <font color="#000000">getNumberOfCoinsAtGene(</font> <font
+color="#000000">a_potentialSolution,</font> <font color="#0000FF">3</font> <font
+color="#000000">);</font>
+
+        <b><font color="#000080">return</font></b> <font
+color="#000000">(</font> <font color="#000000">numQuarters</font> <font color="#000000">*</font> <font
+color="#0000FF">25</font> <font color="#000000">)</font> <font color="#000000">+</font> <font
+color="#000000">(</font> <font color="#000000">numDimes</font> <font color="#000000">*</font> <font
+color="#0000FF">10</font> <font color="#000000">)</font> <font color="#000000">+</font> <font
+color="#000000">(</font> <font color="#000000">numNickels</font> <font color="#000000">*</font> <font
+color="#0000FF">5</font> <font color="#000000">)</font> <font color="#000000">+</font>
+               <font
+color="#000000">numPennies;</font>
+    <font color="#000000">}</font>
+
+
+    <i><font
+color="#808080">/**</font></i>
+<i><font color="#808080">     * Retrieves the number of coins represented by the given potential</font></i>
+<i><font
+color="#808080">     * solution at the given gene position.</font></i>
+<i><font
+color="#808080">     *</font></i>
+<i><font color="#808080">     * @param a_potentialSolution The potential solution to evaluate.</font></i>
+<i><font
+color="#808080">     * @param a_position The gene position to evaluate.</font></i>
+<i><font
+color="#808080">     * @return the number of coins represented by the potential solution</font></i>
+<i><font
+color="#808080">     *         at the given gene position.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <b><font
+color="#000080">static</font></b> <b><font color="#000080">int</font></b> <font
+color="#000000">getNumberOfCoinsAtGene(</font> <font color="#000000">Chromosome</font> <font
+color="#000000">a_potentialSolution,</font>
+                                              <b><font
+color="#000080">int</font></b> <font color="#000000">a_position</font> <font
+color="#000000">)</font>
+    <font color="#000000">{</font>
+        <font color="#000000">Integer</font> <font
+color="#000000">numCoins</font> <font color="#000000">=</font>
+          <font
+color="#000000">(Integer)</font> <font color="#000000">a_potentialSolution.getAllele(</font> <font
+color="#000000">a_position</font> <font color="#000000">).getValue();</font>
+
+        <b><font
+color="#000080">return</font></b> <font color="#000000">numCoins.intValue();</font>
+    <font
+color="#000000">}</font>
+
+
+    <i><font color="#808080">/**</font></i>
+<i><font
+color="#808080">     * Returns the total number of coins represented by all of the genes in</font></i>
+<i><font
+color="#808080">     * the given chromosome.</font></i>
+<i><font color="#808080">     *</font></i>
+<i><font
+color="#808080">     * @param a_potentialsolution The potential solution to evaluate.</font></i>
+<i><font
+color="#808080">     * @return The total number of coins represented by the given Chromosome.</font></i>
+<i><font
+color="#808080">     */</font></i>
+    <b><font color="#000080">public</font></b> <b><font
+color="#000080">static</font></b> <b><font color="#000080">int</font></b> <font
+color="#000000">getTotalNumberOfCoins(</font> <font color="#000000">Chromosome</font> <font
+color="#000000">a_potentialsolution</font> <font color="#000000">)</font>
+    <font
+color="#000000">{</font>
+        <b><font color="#000080">int</font></b> <font
+color="#000000">totalCoins</font> <font color="#000000">=</font> <font color="#0000FF">0</font><font
+color="#000000">;</font>
+
+        <b><font color="#000080">int</font></b> <font
+color="#000000">numberOfGenes</font> <font color="#000000">=</font> <font color="#000000">a_potentialsolution.size();</font>
+        <b><font
+color="#000080">for</font></b><font color="#000000">(</font> <b><font color="#000080">int</font></b> <font
+color="#000000">i</font> <font color="#000000">=</font> <font color="#0000FF">0</font><font
+color="#000000">;</font> <font color="#000000">i</font> <font color="#000000">&lt;</font> <font
+color="#000000">numberOfGenes;</font> <font color="#000000">i++</font> <font
+color="#000000">)</font>
+        <font color="#000000">{</font>
+            <font
+color="#000000">totalCoins</font> <font color="#000000">+=</font> <font color="#000000">getNumberOfCoinsAtGene(</font> <font
+color="#000000">a_potentialsolution,</font> <font color="#000000">i</font> <font
+color="#000000">);</font>
+        <font color="#000000">}</font>
+
+        <b><font
+color="#000080">return</font></b> <font color="#000000">totalCoins;</font>
+    <font
+color="#000000">}</font>
+<font color="#000000">}</font>
+
+</tt>
+</pre>
+
+<p>Let's tackle our example fitness function bit by bit. To start, we define our own class
+and extend the org.jgap.FitnessFunction class. All fitness functions must extend the
+FitnessFunction class. We then define a constructor and an evaluate() method. The
+evaluate() method is a standard method that all fitness functions must implement. That is
+the method that will be called by the genetic engine when it needs to know the fitness
+value of a chromosome. </p>
+
+<p>Our constructor isn't very exciting: it merely accepts a target change amount that the
+user desires, verifies that the amount meets our constraint of being between 1 and 99
+cents, and then stores the amount in an instance variable for later use. </p>
+
+<p>The interesting part of the whole class is the evaluate() method, which is where the
+work is done. The evaluate method is always passed in a Chromosome, which represents a
+potential solution. A Chromosome is made up of genes, each of which represents a
+respective part of the solution. In our example, the Chromosome represents an amount of
+change, while the genes represent the specific kinds of coins: quarters for the first
+gene, dimes for the second gene, nickels for the third gene, and pennies for the fourth
+gene. The value of a gene is called an allele. In our example, the allele would be the
+number of a given type of coin (for example, 2 pennies). </p>
+
+<p>The first thing the evaluate() method does is invoke a couple of helper methods which
+conveniently return the total amount of change that is represented by the potential
+solution and the total number of coins represented by the solution. We'll take a closer
+look at how these work later. It then subtracts the amount of change represented by the
+solution from the target amount, and takes the absolute value of the difference to measure
+how close the solution amount is to the target amount. We then set about calculating our
+fitness value. </p>
+
+<p>As the comments indicate, we're going to calculate fitness in two stages. The first
+stage calculates an initial fitness value based on how far away the solution amount is
+from the target amount. Then, if the solution amount happens to equal the target amount,
+we go to stage two, which adjusts the fitness value based upon the total number of coins
+represented by the solution. In the end, we want to return high fitness values for
+solutions that match the target amount with very few coins, and return lower fitness
+values for solutions that are far away from the target amount or represent a large number
+of coins. </p>
+
+<p>Moving beyond the evaluate() method, we encounter those helper methods we mentioned
+earlier. The amountOfChange() method calculates the total amount of change (in cents)
+represented by a Chromosome that is passed to it. Internally, it defers to the
+getNumberOfCoinsAtGene() method to actually extract the number of each type of coin. It
+then calculates the total amount of change and returns it. </p>
+
+<p>The next convenience method, getNumberOfCoinsAtGene(), is responsible for determining
+the number of coins represented by a specific gene in the given Chromosome. As mentioned
+earlier, the value of each gene in the Chromosome is called an allele. This method gets
+the allele for the gene at the provided position in the Chromosome and then returns it as
+an int primitive. </p>
+
+<p>Finally, there's a getTotalNumberOfCoins() method that determines the total number of
+coins represented by a given Chromosome. It simply tallies up the number of coins
+represented by each gene--using the getNumberOfCoinsAtGene() method--and then returns the
+tally. </p>
+
+<p>And that's the end of the fitness function. If you're feeling a little bit overwhelmed,
+don't worry about it and take some comfort in the fact that it's all down hill from here!
+The fitness function is the hardest part of using JGAP and, after writing a few, you'll
+get the hang of it. </p>
+</a><a name="step3">
+
+<h3 class="subheader">Step 3: Setup a Configuration Object</h3>
+
+<p>JGAP is designed to be very flexible and pluggable. If you want, you can create your
+own genetic operators, random number generators, natural selectors, and so on. To support
+all of this, JGAP uses a Configuration object that must be setup with all of the settings
+you want prior to using the genetic engine. Fortunately, we realize that most people will
+want to use the stock components, and so we include a DefaultConfiguration class that
+comes already setup with the most common settings. You just need to provide three extra
+pieces of information: what fitness function you want to use, how you want your
+Chromosomes to be setup, and how many Chromosomes you want in your population. Let's look
+at some sample code. </p>
+
+<pre class="code">
+<tt>
+<i><font color="#808080">// Start with a DefaultConfiguration, which comes setup with the</font></i>
+<i><font
+color="#808080">// most common settings.</font></i>
+<i><font color="#808080">// -------------------------------------------------------------</font></i>
+<font
+color="#000000">Configuration</font> <font color="#000000">conf</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">DefaultConfiguration();</font>
+
+<i><font
+color="#808080">// Set the fitness function we want to use, which is our</font></i>
+<i><font
+color="#808080">// MinimizingMakeChangeFitnessFunction that we created earlier.</font></i>
+<i><font
+color="#808080">// We construct it with the target amount of change provided</font></i>
+<i><font
+color="#808080">// by the user.</font></i>
+<i><font color="#808080">// ------------------------------------------------------------</font></i>
+<font
+color="#000000">FitnessFunction</font> <font color="#000000">myFunc</font> <font
+color="#000000">=</font>
+    <b><font color="#000080">new</font></b> <font color="#000000">MinimizingMakeChangeFitnessFunction(</font> <font
+color="#000000">targetAmount</font> <font color="#000000">);</font>
+
+<font color="#000000">conf.setFitnessFunction(</font> <font
+color="#000000">myFunc</font> <font color="#000000">);</font>
+
+<i><font color="#808080">// Now we need to tell the Configuration object how we want our</font></i>
+<i><font
+color="#808080">// Chromosomes to be setup. We do that by actually creating a</font></i>
+<i><font
+color="#808080">// sample Chromosome and then setting it on the Configuration</font></i>
+<i><font
+color="#808080">// object. As mentioned earlier, we want our Chromosomes to</font></i>
+<i><font
+color="#808080">// each have four genes, one for each of the coin types. We</font></i>
+<i><font
+color="#808080">// want the values of those genes to be integers, which represent</font></i>
+<i><font
+color="#808080">// how many coins of that type we have. We therefore use the</font></i>
+<i><font
+color="#808080">// IntegerGene class to represent each of the genes. That class</font></i>
+<i><font
+color="#808080">// also lets us specify a lower and upper bound, which we set</font></i>
+<i><font
+color="#808080">// to sensible values for each coin type.</font></i>
+<i><font
+color="#808080">// --------------------------------------------------------------</font></i>
+<font
+color="#000000">Gene[]</font> <font color="#000000">sampleGenes</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">Gene[</font> <font
+color="#0000FF">4</font> <font color="#000000">];</font>
+
+<font color="#000000">sampleGenes[</font><font
+color="#0000FF">0</font><font color="#000000">]</font> <font color="#000000">=</font> <b><font
+color="#000080">new</font></b> <font color="#000000">IntegerGene(</font> <font
+color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">3</font> <font
+color="#000000">);</font>  <i><font color="#808080">// Quarters</font></i>
+<font
+color="#000000">sampleGenes[</font><font color="#0000FF">1</font><font color="#000000">]</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(</font> <font
+color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">2</font> <font
+color="#000000">);</font>  <i><font color="#808080">// Dimes</font></i>
+<font
+color="#000000">sampleGenes[</font><font color="#0000FF">2</font><font color="#000000">]</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(</font> <font
+color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">1</font> <font
+color="#000000">);</font>  <i><font color="#808080">// Nickels</font></i>
+<font
+color="#000000">sampleGenes[</font><font color="#0000FF">3</font><font color="#000000">]</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">IntegerGene(</font> <font
+color="#0000FF">0</font><font color="#000000">,</font> <font color="#0000FF">4</font> <font
+color="#000000">);</font>  <i><font color="#808080">// Pennies</font></i>
+
+<font
+color="#000000">Chromosome</font> <font color="#000000">sampleChromosome</font> <font
+color="#000000">=</font> <b><font color="#000080">new</font></b> <font color="#000000">Chromosome(</font> <font
+color="#000000">sampleGenes</font> <font color="#000000">);</font>
+
+<font color="#000000">conf.setSampleChromosome(</font> <font
+color="#000000">sampleChromosome</font> <font color="#000000">);</font>
+
+<i><font
+color="#808080">// Finally, we need to tell the Configuration object how many</font></i>
+<i><font
+color="#808080">// Chromosomes we want in our population. The more Chromosomes,</font></i>
+<i><font
+color="#808080">// the larger the number of potential solutions (which is good</font></i>
+<i><font
+color="#808080">// for finding the answer), but the longer it will take to evolve</font></i>
+<i><font
+color="#808080">// the population each round. We'll set the population size to</font></i>
+<i><font
+color="#808080">// 500 here.</font></i>
+<i><font color="#808080">// --------------------------------------------------------------</font></i>
+<font
+color="#000000">conf.setPopulationSize(</font> <font color="#0000FF">500</font> <font
+color="#000000">);</font>
+
+</tt>
+</pre>
+
+<p>Hopefully most of the above code is pretty self-explanatory, with maybe the exception
+of setting up the sample Chromosome. Let's look at that bit in a little more detail. </p>
+
+<p>As mentioned earlier, a Chromosome is made up of genes. JGAP lets you choose what Gene
+class to use to represent each gene in the Chromosome (for more information on creating
+custom Gene classes, please see the </a><a href="genes.html">Creating Custom Genes</a>
+document). That provides the most flexibility and convenience. If we wanted to, we could
+have actually written a separate Gene class for each coin type in our example, such as a
+QuarterGene, DimeGene, NickelGene, and PennyGene. In fact, we look at what a QuarterGene
+might look like in the <i>Creating Custom Genes</i> document that we just mentioned. </p>
+
+<p>As it happens, we decided that the IntegerGene (which comes with JGAP) would suffice.
+You'll notice, however, that we did take advantage of the ability to specify different
+Gene implementations for each gene in the Chromosome by creating separate IntegerGenes
+with different lower and upper bounds for each coin type. We set the upper bounds to be
+the largest number of coins of that respective type that would appear in an optimal
+solution. Limiting the solution space this way helps JGAP arrive at better solutions with
+fewer evolutions. </p>
+
+<p>So to get back to the code, we first create an array of Genes with a length of 4, since
+we want to represent 4 genes (one for each coin type). We then set each Gene in the array
+to an IntegerGene that is constructed with appropriate lower and upper bounds for that
+coin type. Finally, we construct a new Chromosome and pass it the array of Genes, and then
+set that sample Chromosome on the Configuration object. </p>
+
+<p>The final part of this step is setting the population size, which is the number of
+Chromosomes we want in the population. A larger population size means more potential
+solutions to choose from and more genetic diversity, but it also means more work to evolve
+that population. Ultimately, you'll need to settle on a value that balances your need for
+a nice selection of potential solutions against how much time you're willing to spend
+waiting for your population to evolve. </p>
+<a name="step4">
+
+<h3 class="subheader">Step 4: Create a Population</h3>
+
+<p>Recall that each potential solution is represented by a Chromosome. A population of
+Chromosomes is called a Genotype, and that is the class we need to construct to create our
+population. If you want, you can construct each Chromosome individually and then pass them
+all into a new Genotype (much like we constructed each Gene and passed them into the
+sample Chromosome in step 3), but JGAP provides a much quicker and easier way of creating
+a random population. In fact, it only takes one line of code! </p>
+
+<pre class="code">
+<tt>
+<font color="#000000">Genotype</font> <font color="#000000">population</font> <font
+color="#000000">=</font> <font color="#000000">Genotype.randomInitialGenotype(</font> <font
+color="#000000">conf</font> <font color="#000000">);</font>
+
+</tt>
+</pre>
+
+<p>The randomInitialGenotype() method takes in a Configuration object (which we setup in
+step 3) and returns a Genotype with the correct number of Chromosomes, each of which has
+its genes set to random values. In other words, it generates a random population. For most
+applications, this is all that's necessary to create your initial population of potential
+solutions. </p>
+</a><a name="step5">
+
+<h3 class="subheader">Step 5: Evolve the Population!</h3>
+
+<p>Now that we've gotten everything setup and ready to go, it's time to start evolving the
+population until it contains some potential solutions that we're satisfied with. Evolving
+the population one cycle is another one-liner: </p>
+
+<pre class="code">
+<tt>
+<font color="#000000">population.evolve();</font>
+
+</tt>
+</pre>
+
+<p>Typically, after each evolution cycle, you'll want to check if the population contains
+any satisfactory solutions. The easiest way to do this is to invoke the
+getFittestChromosome() method on the population: </p>
+
+<pre class="code">
+<tt>
+<font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar</font> <font
+color="#000000">=</font> <font color="#000000">population.getFittestChromosome();</font>
+
+</tt>
+</pre>
+
+<p>If the best solution so far is good enough for you, then you're done. If not, then you
+can evolve the population again. Alternatively, you may just choose to evolve the
+population a set number of times and then see what the best solution is that was produced
+at the end (or a combination thereof). For our example problem, we'll take this latter
+approach. </p>
+
+<pre class="code">
+<tt>
+<font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar;</font>
+
+<b><font
+color="#000080">for</font></b><font color="#000000">(</font> <b><font color="#000080">int</font></b> <font
+color="#000000">i</font> <font color="#000000">=</font> <font color="#0000FF">0</font><font
+color="#000000">;</font> <font color="#000000">i</font> <font color="#000000">&lt;</font> <font
+color="#000000">MAX_ALLOWED_EVOLUTIONS;</font> <font color="#000000">i++</font> <font
+color="#000000">)</font>
+<font color="#000000">{</font>
+    <font color="#000000">population.evolve();</font>
+<font
+color="#000000">}</font>
+
+<font color="#000000">System.out.println(</font> <b><font
+color="#009900">&quot;The best solution contained the following: &quot;</font></b> <font
+color="#000000">);</font>
+
+<font color="#000000">System.out.println(</font>
+    <font
+color="#000000">MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(</font>
+        <font
+color="#000000">bestSolutionSoFar,</font> <font color="#0000FF">0</font> <font
+color="#000000">)</font> <font color="#000000">+</font> <b><font color="#009900">&quot; quarters.&quot;</font></b> <font
+color="#000000">);</font>
+
+<font color="#000000">System.out.println(</font>
+    <font
+color="#000000">MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(</font>
+        <font
+color="#000000">bestSolutionSoFar,</font> <font color="#0000FF">1</font> <font
+color="#000000">)</font> <font color="#000000">+</font> <b><font color="#009900">&quot; dimes.&quot;</font></b> <font
+color="#000000">);</font>
+
+<font color="#000000">System.out.println(</font>
+    <font
+color="#000000">MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(</font>
+        <font
+color="#000000">bestSolutionSoFar,</font> <font color="#0000FF">2</font> <font
+color="#000000">)</font> <font color="#000000">+</font> <b><font color="#009900">&quot; nickels.&quot;</font></b> <font
+color="#000000">);</font>
+
+<font color="#000000">System.out.println(</font>
+    <font
+color="#000000">MinimizingMakeChangeFitnessFunction.getNumberOfCoinsAtGene(</font>
+        <font
+color="#000000">bestSolutionSoFar,</font> <font color="#0000FF">3</font> <font
+color="#000000">)</font> <font color="#000000">+</font> <b><font color="#009900">&quot; pennies.&quot;</font></b> <font
+color="#000000">);</font>
+
+<font color="#000000">System.out.println(</font> <b><font
+color="#009900">&quot;For a total of &quot;</font></b> <font color="#000000">+</font>
+    <font
+color="#000000">MinimizingMakeChangeFitnessFunction.amountOfChange(</font>
+        <font
+color="#000000">bestSolutionSoFar</font> <font color="#000000">)</font> <font
+color="#000000">+</font> <b><font color="#009900">&quot; cents in &quot;</font></b> <font
+color="#000000">+</font>
+    <font color="#000000">MinimizingMakeChangeFitnessFunction.getTotalNumberOfCoins(</font>
+        <font
+color="#000000">bestSolutionSoFar</font> <font color="#000000">)</font> <font
+color="#000000">+</font> <b><font color="#009900">&quot; coins.&quot;</font></b> <font
+color="#000000">);</font>
+
+</tt>
+</pre>
+
+<p>Now we've got ourselves a full-fledged genetic application! To view all of the code for
+this example, see the MinimizingMakeChange.java and
+MinimizingMakeChangeFitnessFunction.java files in the src/examples/ directory of the JGAP
+distribution. </p>
+
+<p class="copyright">Copyright © 2002, 2003, 2004 Neil Rotstan/Klaus Meffert. All rights
+reserved. </p>
+
+<hr>
+</a><a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a> <br>
+<a href="http://sourceforge.net"><img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
+border="0" alt="SourceForge Logo"></a> </p>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="supergenes-Dateien/filelist.xml">
+<link rel=Edit-Time-Data href="supergenes-Dateien/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>Supergenes and genetic algorithms in JGap</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Klaus</o:Author>
+  <o:LastAuthor>Klaus</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:Created>2005-01-11T11:45:00Z</o:Created>
+  <o:LastSaved>2005-01-11T11:48:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>825</o:Words>
+  <o:Characters>5201</o:Characters>
+  <o:Lines>43</o:Lines>
+  <o:Paragraphs>12</o:Paragraphs>
+  <o:CharactersWithSpaces>6014</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:HyphenationZone>21</w:HyphenationZone>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<link rel=Stylesheet type="text/css" media=all href=stylesheet.css>
+<style>
+<!--
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-believe-normal-left:yes;}
+h1
+	{mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:24.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+h2
+	{mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	mso-outline-level:2;
+	font-size:18.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+p
+	{font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+pre
+	{margin-top:0cm;
+	margin-bottom:0cm;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";}
+p.homelink, li.homelink, div.homelink
+	{mso-style-name:homelink;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	mso-fareast-font-family:"Times New Roman";}
+p.doctitle, li.doctitle, div.doctitle
+	{mso-style-name:doctitle;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	mso-fareast-font-family:"Times New Roman";}
+p.subheader, li.subheader, div.subheader
+	{mso-style-name:subheader;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	mso-fareast-font-family:"Times New Roman";}
+p.documenttext, li.documenttext, div.documenttext
+	{mso-style-name:documenttext;
+	mso-margin-top-alt:auto;
+	margin-right:36.0pt;
+	mso-margin-bottom-alt:auto;
+	margin-left:36.0pt;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	mso-fareast-font-family:"Times New Roman";}
+p.code, li.code, div.code
+	{mso-style-name:code;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:36.0pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.diagram, li.diagram, div.diagram
+	{mso-style-name:diagram;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.question, li.question, div.question
+	{mso-style-name:question;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	mso-fareast-font-family:"Times New Roman";}
+p.copyright, li.copyright, div.copyright
+	{mso-style-name:copyright;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	font-size:7.5pt;
+	mso-fareast-font-family:"Times New Roman";
+	font-weight:bold;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 2.0cm 70.85pt;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Normale Tabelle";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><![if mso 9]>
+<style>
+p.MsoNormal
+	{margin-left:36.0pt;}
+</style>
+<![endif]><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor=white background=doublehelix.png lang=DE link=blue vlink=blue
+style='tab-interval:35.4pt;margin-left:36.0pt;margin-right:36.0pt'>
+
+<div class=Section1>
+
+<h1 align=center style='text-align:center'><span style='color:green'>Supergenes<o:p></o:p></span></h1>
+
+<p class=MsoNormal align=center style='margin:0cm;margin-bottom:.0001pt;
+text-align:center'><span style='color:black'><a href="../../index.html"><span
+style='font-size:10.0pt;font-family:Arial;color:green'>[</span><span
+lang=EN-GB style='font-size:10.0pt;font-family:Arial;color:green;mso-ansi-language:
+EN-GB'>Documentation</span><span style='font-size:10.0pt;font-family:Arial;
+color:green'> Index]</span></a> <o:p></o:p></span></p>
+
+<div class=MsoNormal align=center style='margin:0cm;margin-bottom:.0001pt;
+text-align:center'><span style='color:black'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<h2 align=center style='text-align:center'><span lang=EN-GB style='color:green;
+mso-ansi-language:EN-GB'>The problem <o:p></o:p></span></h2>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>In some tasks, you may have several closely dependent genes that cannot
+mutate in arbitrary way. Instead, the valid set of values for each
+gene-component depends from the current value of the related genes - part of
+the same system. Such group of the related genes can make only part of the
+whole genome. Using default <em>JGap</em> mechanism means that a mutation,
+breaking the internal rules of the interdependent gene group, will lead to
+discarding the whole such chromosome. This finally slows the evolution,
+reducing the system performance.<o:p></o:p></span></p>
+
+<h2 align=center style='text-align:center'><span lang=EN-GB style='color:green;
+mso-ansi-language:EN-GB'>The solution: <em>Supergenes</em><o:p></o:p></span></h2>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>In biology, <em>Supergene</em> represents several genes, which control
+closely related aspects of the phenotype. The living cell is a complex
+machinery, and the problem of gene dependency is frequent. For example, part of
+the plant photosyntetic system is a so-called ATP synthase. This is a complex
+formation, consisting of several proteins - components. If some components
+mutate, becoming useless, the ATP synthase cannot longer be created. The most
+surprising is that <em>the other</em> proteins that have not been touched by
+mutation, are also suppressed. Probably having a damaged ATP synthase is worse
+than having no ATP synthase at all. So, the gene group, responsible for ATP
+synthase, mutates as a single unit: ATP synthase absent/ATP synthase present. <o:p></o:p></span></p>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>It is possible to suggest an example from mathematics. Imagine that we
+use <em>JGap</em> to find the values <em>a</em>, <em>b, c </em>and<em> d, </em>fitting
+the experimental data into real function<o:p></o:p></span></p>
+
+<p align=center style='text-align:center'><span style='color:black'><img
+border=0 width=196 height=60 id="_x0000_i1026"
+src="supergene_files/images/supergene_formula.gif"><o:p></o:p></span></p>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>If we only restrict x &gt; 0, we must also restrict <em>a</em> &gt;= <em>b</em>,
+but <em>c</em> and <em>d </em>are not dependent from this condition. So <em>a</em>
+and <em>b</em> can be placed in a supergene, setting validity condition <em>a
+&gt;= b</em>.<o:p></o:p></span></p>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>The old </span><span style='color:black'><a href="../tutorial.html"><span
+lang=EN-GB style='mso-ansi-language:EN-GB'>MinimizeMakeChange</span></a></span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> example can also be
+extended to make supergenes useful: lets suppose that the number of pennies and
+nickels must be <em>both</em> even or <em>both</em> odd.<o:p></o:p></span></p>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>JGap Supergene mutates only in such way, that the allele combination
+remains valid. Mutations, that make allele combination invalid, are rejected
+inside the method, responsible for creating the mutated version. For the
+efficient use, you must combine several genes and supergenes inside the same
+chromosome. Supergene components can also be a Supergenes, creating the
+tree-like structures in this way. <o:p></o:p></span></p>
+
+<h2 align=center style='text-align:center'><span lang=EN-GB style='color:green;
+mso-ansi-language:EN-GB'>Using the supergenes with JGap<o:p></o:p></span></h2>
+
+<p style='text-align:justify'><strong><span lang=EN-GB style='color:black;
+mso-ansi-language:EN-GB'>For better understanding of this chapter, we recommend
+to read about the </span></strong><span style='color:black'><a
+href="../tutorial.html"><strong><span lang=EN-GB style='mso-ansi-language:EN-GB'>MinimizeMakeChange</span></strong></a></span><strong><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> example first.</span></strong><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>In JGap, the supergene support is implemented in package
+org.jgap.supergenes. The simpliest way to create a supergene is to derive it
+from the <em>abstractSupergene </em>class, overriding<em> isValid() </em>method.
+For example, if we need a supergene, holding the two <em>IntegerGenes</em>
+(nickels and pennies) and ensuring condition <em>nickels mod 2 = pennies mod 2:</em><o:p></o:p></span></p>
+
+<pre style='text-align:justify'><span lang=EN-GB style='color:navy;mso-ansi-language:
+EN-GB'>import</span><span lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> org.jgap.impl.IntegerGene;<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:navy;mso-ansi-language:
+EN-GB'>import</span><span lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> org.jgap.supergenes.abstractSupergene;<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:navy;mso-ansi-language:
+EN-GB'>import</span><span lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> org.jgap.Gene;<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><o:p>&nbsp;</o:p></span></pre><pre style='text-align:justify'><span
+lang=EN-GB style='color:green;mso-ansi-language:EN-GB'>/** Supergene to hold quarters and nickels. Valid if the number of<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:green;mso-ansi-language:
+EN-GB'> * nickels and pennies is either both odd or both even. */</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'><o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><o:p>&nbsp;</o:p></span></pre><pre style='text-align:justify'><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>public</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> </span><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>class</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> NickelsPenniesSupergene </span><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>extends</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> abstractSupergene {<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:green;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>  </span><span style='mso-spacerun:yes'>  </span>/* It is important to provide these two constructors: */<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>    </span></span><span lang=EN-GB
+style='color:navy;mso-ansi-language:EN-GB'>public</span><span lang=EN-GB
+style='color:black;mso-ansi-language:EN-GB'> NickelsPenniesSupergene() {}<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>    </span></span><span lang=EN-GB
+style='color:navy;mso-ansi-language:EN-GB'>public</span><span lang=EN-GB
+style='color:black;mso-ansi-language:EN-GB'> NickelsPenniesSupergene( Gene[] a_genes )<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>     </span>{<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>         </span></span><span lang=EN-GB
+style='color:navy;mso-ansi-language:EN-GB'>super</span><span lang=EN-GB
+style='color:black;mso-ansi-language:EN-GB'>(a_genes);<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>     </span>}<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><o:p>&nbsp;</o:p></span></pre><pre style='text-align:justify'><span
+lang=EN-GB style='color:green;mso-ansi-language:EN-GB'><span style='mso-spacerun:yes'>    </span>/* Now just check nickels mod 2 = pennies mod 2: */</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'><o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>    </span></span><span lang=EN-GB
+style='color:navy;mso-ansi-language:EN-GB'>public</span><span lang=EN-GB
+style='color:black;mso-ansi-language:EN-GB'> </span><span lang=EN-GB
+style='color:navy;mso-ansi-language:EN-GB'>boolean</span><span lang=EN-GB
+style='color:black;mso-ansi-language:EN-GB'> isValid(Gene [] genes, Supergene s)<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>    </span></span><span style='color:
+black'>{<o:p></o:p></span></pre><pre style='text-align:justify'><span
+style='color:black'><span style='mso-spacerun:yes'>         </span>IntegerGene nickels = (IntegerGene)<span style='mso-spacerun:yes'>  </span>genes[</span><span
+style='color:maroon'>0</span><span style='color:black'>];<o:p></o:p></span></pre><pre
+style='text-align:justify'><span style='color:black'><span style='mso-spacerun:yes'>         </span>IntegerGene pennies<span style='mso-spacerun:yes'>  </span>= (IntegerGene) genes[</span><span
+style='color:maroon'>1</span><span style='color:black'>];<o:p></o:p></span></pre><pre
+style='text-align:justify'><span style='color:black'><span style='mso-spacerun:yes'>         </span></span><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>boolean</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> valid = nickels.intValue() % </span><span
+lang=EN-GB style='color:maroon;mso-ansi-language:EN-GB'>2</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> == pennies.intValue() % </span><span
+lang=EN-GB style='color:maroon;mso-ansi-language:EN-GB'>2</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>;<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>         </span></span><span lang=EN-GB
+style='color:navy;mso-ansi-language:EN-GB'>return</span><span lang=EN-GB
+style='color:black;mso-ansi-language:EN-GB'> valid;<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>    </span>}<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>}<o:p></o:p></span></pre>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>Now, the sample gene array, consisting of one supergene and two ordinary
+genes for quarters and dimes, is created in the following way:<o:p></o:p></span></p>
+
+<pre style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>        </span>Gene[] sampleGenes = </span><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>new</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> Gene[</span><span
+lang=EN-GB style='color:maroon;mso-ansi-language:EN-GB'>3</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>];<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>        </span>sampleGenes[DIMES]<span style='mso-spacerun:yes'>    </span>= getDimesGene ();<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>        </span>sampleGenes[QUARTERS] = getQuartersGene ();<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><o:p>&nbsp;</o:p></span></pre><pre style='text-align:justify'><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'><span style='mso-spacerun:yes'>        </span>sampleGenes[</span><span
+lang=EN-GB style='color:maroon;mso-ansi-language:EN-GB'>2</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>] = </span><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>new</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> NickelsPenniesSupergene(<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>            </span></span><span
+lang=EN-GB style='color:navy;mso-ansi-language:EN-GB'>new</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> Gene[] {<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>            </span>getNickelsGene (),<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>            </span>getPenniesGene (),<o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-tab-count:1'>  </span>}<o:p></o:p></span></pre>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>Compare this with the non-supergene version:<o:p></o:p></span></p>
+
+<pre style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>        </span></span><span
+style='color:black'>Gene[] sampleGenes = </span><span style='color:navy'>new</span><span
+style='color:black'> Gene[</span><span style='color:maroon'>4</span><span
+style='color:black'>];<o:p></o:p></span></pre><pre style='text-align:justify'><span
+style='color:black'><span style='mso-spacerun:yes'>        </span>sampleGenes[DIMES] = getDimesGene(); <o:p></o:p></span></pre><pre
+style='text-align:justify'><span style='color:black'><span style='mso-spacerun:yes'>        </span>sampleGenes[NICKELS] = getNickelsGene(); <o:p></o:p></span></pre><pre
+style='text-align:justify'><span style='color:black'><span style='mso-spacerun:yes'>        </span></span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>sampleGenes[QUARTERS] = getQuartersGene(); <o:p></o:p></span></pre><pre
+style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'><span style='mso-spacerun:yes'>        </span>sampleGenes[PENNIES] = getPenniesGene(); <o:p></o:p></span></pre>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>It is trivial to create a chromosome from the gene array and to get a
+solution of the task (see example class org.jgap.supergenes.SupergeneSampleApplicationTest
+included with the tests in the JGAP distribution).<o:p></o:p></span></p>
+
+<h2 align=center style='text-align:center'><span lang=EN-GB style='color:green;
+mso-ansi-language:EN-GB'>Are supergenes useful?<o:p></o:p></span></h2>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>I other words, can they increase the application performance in a real
+JGap applications? Maybe this conception is interesting just from the point of
+theoretical biology? To ansver this question, we did a </span><span
+style='color:black'><a href="supergene_files/supergene_performance.html"><span
+lang=EN-GB style='mso-ansi-language:EN-GB'>performance tests</span></a></span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>. From these tests we
+concluded the following:<o:p></o:p></span></p>
+
+<blockquote style='margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p style='text-align:justify'><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'>The supergene conception can significantly (up to 3 times in the most
+boundary cases) increase the evolution speed. It can also increase the accuracy
+of solution for the small populations. However these effects are dependent from
+the chosen population size and maximal number of iterations. While in some
+cases the use of supergenes can be definitely sensible, we would recommend to
+try both supergene and non-supergene versions for your specific task. <o:p></o:p></span></p>
+
+</blockquote>
+
+<p align=center style='text-align:center'><span style='color:black'><a
+href="../../index.html"><span style='font-size:10.0pt;font-family:Arial;
+color:green'>[</span><span lang=EN-GB style='font-size:10.0pt;font-family:Arial;
+color:green;mso-ansi-language:EN-GB'>Documentation</span><span
+style='font-size:10.0pt;font-family:Arial;color:green'> Index]</span></a> <o:p></o:p></span></p>
+
+<p class=copyright><span lang=EN-GB style='mso-ansi-language:EN-GB'>This page
+is copyright © 2004, 2005 </span><a
+href="http://sourceforge.net/users/klausikm/"><span lang=EN-GB
+style='mso-ansi-language:EN-GB'>Klaus Meffert</span></a><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> and </span><a
+href="http://sourceforge.net/users/audriusa/"><span lang=EN-GB
+style='mso-ansi-language:EN-GB'>Audrius Meskauskas</span></a><span lang=EN-GB
+style='mso-ansi-language:EN-GB'>, GNU free documentation </span><a
+href="http://www.gnu.org/licenses/fdl.html"><span lang=EN-GB style='mso-ansi-language:
+EN-GB'>license</span></a><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+
+<div class=MsoNormal align=center style='margin:0cm;margin-bottom:.0001pt;
+text-align:center'><span style='color:black'>
+
+<hr size=2 width="100%" align=center>
+
+</span></div>
+
+<p align=center style='text-align:center'><span style='color:black'><a
+href="http://sourceforge.net/projects/jgap/"><span style='text-decoration:none;
+text-underline:none'><img border=0 width=210 height=62 id="_x0000_i1028"
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5"
+alt="SourceForge Logo"></span></a><o:p></o:p></span></p>
+
+</div>
+
+</body>
+
+</html>
