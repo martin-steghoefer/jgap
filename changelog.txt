@@ -22,6 +22,8 @@
 * Added tests for Configuration exposing a previous bug
 * Added tests to validate equals() methods better
 * Added tests for StringGene.setToRandomValue
+* Added tests for Chromosome
+* Added tests for Population
 * Removed org.jgap.impl.ReproductionOperator, it's not needed!
 * Added org.jgap.impl.BulkFitnessOffsetRemover (see request
   1084383)
