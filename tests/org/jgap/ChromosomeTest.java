@@ -33,7 +33,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public ChromosomeTest() {
   }
@@ -437,6 +437,23 @@ public class ChromosomeTest
     chrom = new Chromosome(conf, genes);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
     //intentionally assert it a second time
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
+  }
+
+  public void testGetFitnessValue_1() throws Exception {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    StaticFitnessFunction ff = new StaticFitnessFunction(20);
+    conf.setFitnessFunction(ff);
+    Chromosome chrom = new Chromosome(genes);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(5);
+    chrom = new Chromosome(conf, genes);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
+    //set fitness value to a different one
+    ff.setStaticFitnessValue(44.235d);
     assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), 0.0000001d);
   }
 
