@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   public MutationOperatorTest() {
   }
@@ -176,18 +174,42 @@ public class MutationOperatorTest
     assertEquals(3 + 2 + 2, chroms.size());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testOperate_5()
       throws Exception {
     MutationOperator mutOp = new MutationOperator();
-    Chromosome[] population = new Chromosome[] {
-        new Chromosome(new BooleanGene(), 9),
-        (new Chromosome(new IntegerGene(), 4))};
+    BooleanGene gene1 = new BooleanGene();
+    Chromosome chrom1 = new Chromosome(gene1, 1);
+    chrom1.getGene(0).setAllele(new Boolean(false));
+    IntegerGene gene2 = new IntegerGene(0, 10);
+    Chromosome chrom2 = new Chromosome(gene2, 1);
+    chrom2.getGene(0).setAllele(new Integer(3));
+    Chromosome[] chroms = new Chromosome[] {
+        chrom1, chrom2};
     Configuration conf = new Configuration();
-    conf.setRandomGenerator(new StockRandomGenerator());
+    conf.setPopulationSize(5);
+    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    rn.setNextInt(0);
+    rn.setNextDouble(0.8d);
+    conf.setRandomGenerator(rn);
     Genotype.setConfiguration(conf);
-    Population pop = new Population(population);
+    Population pop = new Population(chroms);
     mutOp.operate(pop, pop.getChromosomes());
-    assertEquals(2, pop.getChromosomes().size());
+    assertEquals(2 + 2, pop.getChromosomes().size());
+    //old gene
+    assertFalse( ( (BooleanGene) pop.getChromosome(0).getGene(0)).booleanValue());
+    //mutated gene
+    assertTrue( ( (BooleanGene) pop.getChromosome(2).getGene(0)).booleanValue());
+    //old gene
+    assertEquals(3, ( (IntegerGene) pop.getChromosome(1).getGene(0)).intValue());
+    //mutated gene
+    assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
+                 ( (IntegerGene) pop.getChromosome(3).getGene(0)).intValue());
   }
 
   /**
@@ -196,16 +218,13 @@ public class MutationOperatorTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testOperate_6()
-       {
+  public void testOperate_6() {
     MutationOperator mutOp = new MutationOperator(0);
     mutOp.setMutationRateCalc(null);
     mutOp.operate(null, null);
     /**@todo ensure that nothing mutated*/
   }
-
   /**@todo test against CompositeGene*/
-
 }
 
 class TestFitnessFunction
