@@ -23,12 +23,14 @@ public class ConfigurationForTest
     extends Configuration {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  public final static double STATIC_FITNESS_VALUE = 2.3d;
 
   public ConfigurationForTest() throws InvalidConfigurationException {
     super();
     setPopulationSize(5);
-    setFitnessFunction(new StaticFitnessFunction(2.3d));
+    setFitnessFunction(new StaticFitnessFunction(STATIC_FITNESS_VALUE));
     setEventManager(new EventManager());
     setFitnessEvaluator(new DefaultFitnessEvaluator());
     addNaturalSelector(new BestChromosomesSelector(), true);
