@@ -28,6 +28,9 @@ import junit.framework.TestSuite;
 
 /**
  * Tests for StringGene class
+ *
+ * @author Klaus Meffert
+ * @since 1.1
  */
 public class StringGeneTest
     extends TestCase
@@ -167,8 +170,8 @@ public class StringGeneTest
     {
         Gene gene1 = new StringGene (2, 5);
         Gene gene2 = new StringGene (1, 5);
-        gene1.setAllele("ABC");
-        gene2.setAllele("AB");
+        gene1.setAllele ("ABC");
+        gene2.setAllele ("AB");
         assertFalse (gene1.equals (gene2));
         assertFalse (gene2.equals (gene1));
     }
@@ -198,7 +201,7 @@ public class StringGeneTest
 
     public void testSetAllele_2 ()
     {
-        Gene gene1 = new StringGene (3, 4,"ABCDEFHI");
+        Gene gene1 = new StringGene (3, 4, "ABCDEFHI");
         try
         {
             gene1.setAllele ("ABDG");
@@ -232,27 +235,80 @@ public class StringGeneTest
         gene1.setAllele ("");
     }
 
-    public void testNewGene_0 () throws Exception
+    public void testNewGene_0 ()
+        throws Exception
     {
         StringGene gene1 = new StringGene (1, 4);
         gene1.setAllele ("XYZ");
-        int minLength1 = gene1.getMinLength();
-        int maxLength1 = gene1.getMaxLength();
-        StringGene gene2 = (StringGene)gene1.newGene (new DefaultConfiguration ());
-        int minLength2 = gene2.getMinLength();
-        int maxLength2 = gene2.getMaxLength();
+        int minLength1 = gene1.getMinLength ();
+        int maxLength1 = gene1.getMaxLength ();
+        StringGene gene2 = (StringGene) gene1.newGene (new DefaultConfiguration ());
+        int minLength2 = gene2.getMinLength ();
+        int maxLength2 = gene2.getMaxLength ();
         assertEquals (minLength1, minLength2);
         assertEquals (maxLength1, maxLength2);
     }
 
-    public void testPersistentRepresentation_0() throws Exception {
-        Gene gene1 = new StringGene (2, 10,"ABCDE");
-        gene1.setAllele(new String("BABE"));
-        String pres1 = gene1.getPersistentRepresentation();
+    public void testPersistentRepresentation_0 ()
+        throws Exception
+    {
+        Gene gene1 = new StringGene (2, 10, "ABCDE");
+        gene1.setAllele (new String ("BABE"));
+        String pres1 = gene1.getPersistentRepresentation ();
         Gene gene2 = new StringGene ();
-        gene2.setValueFromPersistentRepresentation(pres1);
-        String pres2 = gene2.getPersistentRepresentation();
-        assertEquals(pres1, pres2);
+        gene2.setValueFromPersistentRepresentation (pres1);
+        String pres2 = gene2.getPersistentRepresentation ();
+        assertEquals (pres1, pres2);
+    }
+
+    public void testPersistentRepresentation_1 ()
+    {
+        Gene gene1 = new StringGene (2, 10);
+        try
+        {
+            gene1.setAllele ("");
+            fail ();
+        }
+        catch (IllegalArgumentException iex)
+        {
+            ; //this is OK
+        }
+    }
+
+    public void testPersistentRepresentation_2 ()
+        throws Exception
+    {
+        Gene gene1 = new StringGene (0, 10);
+        gene1.setAllele ("");
+        String pres1 = gene1.getPersistentRepresentation ();
+        Gene gene2 = new StringGene ();
+        gene2.setValueFromPersistentRepresentation (pres1);
+        String pres2 = gene2.getPersistentRepresentation ();
+        assertEquals (pres1, pres2);
+    }
+
+    public void testPersistentRepresentation_3 ()
+        throws Exception
+    {
+        Gene gene1 = new StringGene ();
+        gene1.setAllele ("");
+        String pres1 = gene1.getPersistentRepresentation ();
+        Gene gene2 = new StringGene ();
+        gene2.setValueFromPersistentRepresentation (pres1);
+        String pres2 = gene2.getPersistentRepresentation ();
+        assertEquals (pres1, pres2);
+    }
+
+    public void testPersistentRepresentation_4 ()
+        throws Exception
+    {
+        Gene gene1 = new StringGene ();
+        gene1.setAllele (null);
+        String pres1 = gene1.getPersistentRepresentation ();
+        Gene gene2 = new StringGene ();
+        gene2.setValueFromPersistentRepresentation (pres1);
+        String pres2 = gene2.getPersistentRepresentation ();
+        assertEquals (pres1, pres2);
     }
 
 }
