@@ -32,7 +32,7 @@ import org.jgap.*;
  */
 public class DataTreeBuilder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -71,7 +71,7 @@ public class DataTreeBuilder {
   /**
    * Shared lock object used for synchronization purposes.
    */
-  private final Object m_lock = new Object();
+  private Object m_lock;
 
   private static DataTreeBuilder instance;
 
@@ -84,6 +84,7 @@ public class DataTreeBuilder {
   public static DataTreeBuilder getInstance() {
     if (instance == null) {
       instance = new DataTreeBuilder();
+      instance.m_lock = new Object();
     }
     return instance;
   }
@@ -99,13 +100,13 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Represent a Genotype as a generic data type document, including its
+   * Represent a Genotype as a generic data document, including its
    * population of Chromosome instances.
    *
    * @param a_subject The genotype to represent
    * @throws Exception
-   *
    * @return a generic document object representing the given Genotype.
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -125,7 +126,7 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Represent a Genotype as a generic data type element, including its
+   * Represent a Genotype as a generic data element, including its
    * population of Chromosome instances.
    *
    * This may be useful in scenarios where representation as an
@@ -135,7 +136,6 @@ public class DataTreeBuilder {
    *
    * @param a_subject The genotype to represent
    * @throws Exception
-   *
    * @return an element object representing the given Genotype.
    *
    * @author Klaus Meffert
@@ -168,7 +168,6 @@ public class DataTreeBuilder {
    *
    * @param a_subject The chromosome to represent
    * @throws Exception
-   *
    * @return a document object representing the given Chromosome.
    *
    * @author Klaus Meffert
@@ -196,7 +195,7 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Represent a Chromosome as a generic data type element, including its
+   * Represent a Chromosome as a generic data element, including its
    * contained Gene instances.
    * This may be useful in scenarios where representation as an entire document
    * is undesirable, such as when the representation of this Chromosome is to
@@ -204,7 +203,6 @@ public class DataTreeBuilder {
    *
    * @param a_subject The chromosome to represent
    * @throws Exception
-   *
    * @return an element object representing the given Chromosome.
    *
    * @author Klaus Meffert
@@ -232,10 +230,9 @@ public class DataTreeBuilder {
 
   /**
    * Represent Genes as a generic data type element.
-   * @throws Exception
    *
    * @param a_geneValues The genes to represent
-   *
+   * @throws Exception
    * @return an element object representing the given genes.
    *
    * @author Klaus Meffert
@@ -257,10 +254,10 @@ public class DataTreeBuilder {
   }
 
   /**
-   * Represent a Gene as a generic data type element.
+   * Represent a Gene as a generic data element.
+   *
    * @param a_gene The Gene to represent
    * @throws Exception
-   *
    * @return an element object representing the given gene.
    *
    * @author Klaus Meffert
@@ -283,6 +280,16 @@ public class DataTreeBuilder {
     return geneElement;
   }
 
+  /**
+   * Represent an Allele as a generic data element
+   *
+   * @param gene the gene holding the allele
+   * @throws Exception
+   * @return IDataElement created data element
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   private IDataElement representAlleleAsElement(Gene gene)
       throws Exception {
     IDataElement alleleElement = new DataElement(ALLELE_TAG);
