@@ -1,3 +1,16 @@
+2.0
+----------
+* changed return type of fitness value from int to double, see request
+
+1.1
+----------
+* Added support for more than one NaturalSelector.
+* Added support for processing of NaturalSelector's before and after applying GeneticOperator's.
+* Provided new Gene implementations
+* Did minor changes across all packages.
+* Implemented feature requests 708772, 708781
+* Added unit tests.
+
 1.0
 ----------
 * A RuntimeException is now thrown if a fitness function attempts to
