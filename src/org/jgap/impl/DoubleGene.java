@@ -34,7 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -285,8 +285,8 @@ public class DoubleGene
       // If the value exceeds either the upper or lower bounds, then
       // map the value to within the legal range. To do this, we basically
       // calculate the distance between the value and the double min,
-      // determine how many bounds units that represents, and then add
-      // that number of units to the upper bound.
+      // then multiply it with a random number and then care that the lower
+      // boundary is added.
       // -----------------------------------------------------------------
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
