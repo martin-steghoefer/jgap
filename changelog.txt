@@ -1,43 +1,59 @@
 2.1
 ----------
-* Modified hashcode function in class Chromosome to be as in java.util.AbstractList
+* Modified hashcode function in class Chromosome to be as
+  in java.util.AbstractList
 * Made GaussianMutationOperator work with CompositeGene
+* Fixed an error in TournamentSelector with tournament size = 1
+* Added constraint checks in constructor of class TournamentSelector
 * Added utility class for general testing of hashcode function
 * Added tests for hashcode function in class Chromosome
 * Added tests for ThresholdSelector (see request 1083587)
+* Added tests for TournamentSelector (see request 1083509)
 * Added tests for FittesPopulationMerger (see request 1084425)
 * Added tests for PopulationHistory (see request 1075163)
 * Added tests for GaussianMutationOperator (see request 1072059)
+* Added tests for SwappingMutationOperator (see request 1093233)
 * Fixed javadocs of several classes
-* Moved FitnessValueComparator from BestChromosomesSelector and made public
+* Moved FitnessValueComparator from BestChromosomesSelector and made
+  public
 * Completed unit tests for existing classes
-* Changed input type of Chromosome.setFitnessValue from int to double
-
+* Changed input type of Chromosome.setFitnessValue from int to
+  double
 
 2.0
 ----------
-* Added new NaturalSelector: class TournamentSelector (see request 1066342)
-* Made add(Chromosome) method protected by moving from INaturalSelector to NaturalSelector
+* Added new NaturalSelector: class TournamentSelector
+  (see request 1066342)
+* Made add(Chromosome) method protected by moving from
+  INaturalSelector to NaturalSelector
 * Added new class GaussianMutationOperator (see request 708772)
-* Added DeltaFitnessEvaluator interpreting fitness values a defect rates
-* Added new package org.jgap.impl.salesman containing classes helping to solve the
-  Travelling Salesman Problem (TSP) and related problems.
-* Centralized Configuration object. Use Genotype.setConfiguration(Configuration) to
-  set it and Genotype.getConfiguration() to obtain it.
+* Added DeltaFitnessEvaluator interpreting fitness values as
+  defect rates
+* Added new package org.jgap.impl.salesman containing classes
+  helping to solve the Travelling Salesman Problem (TSP) and
+  related problems
+* Centralized Configuration object. Use
+  Genotype.setConfiguration(Configuration) to set it and
+  Genotype.getConfiguration() to obtain it
 * Introduced overall performance test to ensure performance
 * Introduced new example in packeg examples.simpleBoolean
 * Introduced new example for Travelling Salesman Problem (TSP)
   in package org.jgap.impl.salesman
-* Introduced org.jgap.supergenes.Supergene including documentation and example
-* Changed return type Chromosome[] to Population containing list of Chromosomes
+* Introduced org.jgap.supergenes.Supergene including documentation
+  and example
+* Changed return type Chromosome[] to Population containing list
+  of Chromosomes
 * Added new unit tests
 * Class Chromosome: made attribute "Gene[] m_genes" private
-* Class Chromosome: added support for application data object in method clone()
-* Renamed interface NaturalSelector to INaturalSelector, introduced abstract base
-  class NaturalSelector implementing INaturalSelector (see request 1075249)
-* Interface INaturalSelector: Introduced new method boolean returnsUniqueChromosomes()
-* Fixed Chromosome.getFitnessValue() to return the current fitness value and not
-  always the first one computed
+* Class Chromosome: added support for application data object
+  in method clone()
+* Renamed interface NaturalSelector to INaturalSelector,
+  introduced abstract base class NaturalSelector implementing
+  INaturalSelector (see request 1075249)
+* Interface INaturalSelector: Introduced new method
+  boolean returnsUniqueChromosomes()
+* Fixed Chromosome.getFitnessValue() to return the current fitness
+  value and not always the first one computed
 * Fixed design flaw in Genes' methods mapValueToWithinBounds()
 * Genes now can hold a Configuration object
 
@@ -47,199 +63,193 @@
   783997 
 * Implemented feature request 708774 (averaging crossover)
 * Implemented feature request 710497 (attach application data)
-* Added support for more than one NaturalSelector.
+* Added support for more than one NaturalSelector
 * Added support for processing of NaturalSelector's before and after
-  applying GeneticOperator's.
+  applying GeneticOperator's
 * Provided new Gene implementations
 * Did minor changes across all packages.
 * Implemented feature requests 708772, 708781
-* Added unit tests.
+* Added unit tests
 * Fixed a bug in the BestChromosomesSelector and WeightedRouletteSelector
   classes
 
 1.0
 ----------
 * A RuntimeException is now thrown if a fitness function attempts to
-  return a non-positive fitness value.
+  return a non-positive fitness value
 * Fixed a bug in the WeightedRouletteSelector that, under certain
-  circumstances, resulted in a fatal "logic error" exception.
+  circumstances, resulted in a fatal "logic error" exception
 * Updated the sample fitness function to ensure that it never
-  returns a non-positive fitness value.
+  returns a non-positive fitness value
 * Added author and since tags to the class-level javadoc of each 
-  class.
+  class
 
 1.0-RC2
 ----------
 * Added new BulkFitnessFunction class, which can be used to create
   fitness functions that evaluate an entire working pool of chromosomes
-  all at once.
+  all at once
 * Fixed hashCode() in Chromosome class so that it is no longer dependent
-  on the fitness function.
-* Java serialization of Genotypes and Chromosomes is now working properly.
-* Added a FAQ document.
-* Updated various documentation.
-* Updated the README file. 
+  on the fitness function
+* Java serialization of Genotypes and Chromosomes is now working properly
+* Added a FAQ document
+* Updated various documentation
+* Updated the README file
 
 
 1.0-RC1
 ----------
 * Added new document on using the XMLManager to marshall populations
   into XML representations that can be used for persistence, transmission,
-  etc.
+  etc
 * Renamed Allele class to Gene class and updated all of the source files
-  accordingly to fix source and documentation.
+  accordingly to fix source and documentation
 * Renamed Gene.setValue() and Gene.getValue() methods to Gene.setAllele()
-  and Gene.getAllele(), respectively.
+  and Gene.getAllele(), respectively
 * Renamed IntegerAllele to IntegerGene, BooleanAllele to BooleanGene,
-  and AlleleCreationException to GeneCreationException.
+  and AlleleCreationException to GeneCreationException
 * Removed the MakeChange.java and MakeChangeFitnessFunction.java files
   from the examples directory, as they added very little value given
   the presence of the MinimizingMakeChange.java and 
-  MinimizingMakeChangeFitnessFunction.java files.
+  MinimizingMakeChangeFitnessFunction.java files
 * Fixed default constructor in IntegerGene so that it will no longer
-  result in an ArithmeticException.
-* Fixed compareTo() method in IntegerGene.
-* Added hashCode() method to IntegerGene and BooleanGene.
-* Made various other minor fixes.
-* Removed the TestGenetics and TestXML examples.
-* Updated introductory documentation.
-* Updated various javadocs to increase clarity and accuracy.
-* Updated the README file.
-
+  result in an ArithmeticException
+* Fixed compareTo() method in IntegerGene
+* Added hashCode() method to IntegerGene and BooleanGene
+* Made various other minor fixes
+* Removed the TestGenetics and TestXML examples
+* Updated introductory documentation
+* Updated various javadocs to increase clarity and accuracy
+* Updated the README file
 
 0.32
 ----------
-* Added new document on creating custom Alleles in the docs/ subdirectory.
+* Added new document on creating custom Alleles in the docs/ subdirectory
 * Modified WeightedRouletteSelector to represent the "wheel" as an array
   just prior to selection of Chromosomes in order to increase iteration 
-  speed.
+  speed
 * Modified ReproductionOperator to simply add the Chromosomes from the 
   population directly into the pool of candidate chromosomes, rather than
   making a copy of each one and adding the copy, in order to increase speed
-  and reduce memory consumption.
+  and reduce memory consumption
 * Switched pooling from Alleles to Chromosomes. Removed AllelePool class
   and added ChromosomePool class. Also added generic Pool class, which
-  ChromosomePool uses.
+  ChromosomePool uses
 * WeightedRouletteSelector now pools its internal SlotCounter instances
-  to save memory.
+  to save memory
 * Updated various Javadocs and comments that were dated, less helpful, or 
-  simply wrong.
+  simply wrong
 * Made various minor code changes to increase efficiency or improve 
-  readability.
+  readability
 * Modified TestGenetics to only display the most fit Chromosome at the
-  end, rather than dumping the entire Genotype.
+  end, rather than dumping the entire Genotype
 * Added "debug" target to Ant build script so that debug versions of the
-  JGAP classes can be easily built.
-* Updated the copyright notices on all files.
-* Updated the README file.
-
+  JGAP classes can be easily built
+* Updated the copyright notices on all files
+* Updated the README file
 
 0.31
 ----------
 * Fixed AllelePool to discriminate between alleles intended for different
   gene positions so that position-specific configurations will be preserved.
-  Thanks to Alexandre Freire for reporting this bug.
-* AllelePool is no longer a static class.
+  Thanks to Alexandre Freire for reporting this bug
+* AllelePool is no longer a static class
 * The Configuration object now supports the AllelePool as an optional
   configurable option, and the various JGAP components now access the pool
   instance via the active Configuration. The DefaultConfiguration utility
-  class automatically sets up an AllelePool instance.
+  class automatically sets up an AllelePool instance
 * The Allele.setValueFromStringRepresentation() method has been renamed to
   setValueFromPersistentRepresentation() and may now throw an
   UnsupportedOperationException for users who do not wish to take advantage
   of XML persistence and do not want to bother providing an implementation 
-  for this method.
+  for this method
 * An Allele.getPersistentRepresentation() method has been added to the Allele
   interface and should be implemented to provide a String representation of
   the Allele that is suitable for XML persistence and could be later used to
   reconstruct the Allele. Previously, the toString() method was used for 
-  this purpose.
-* IntegerAllele and BooleanAllele have been updated to conform to the changes
-  to the Allele interface.
+  this purpose
+* IntegerAllele and BooleanAllele have been updated to conform to the
+  changes to the Allele interface
 * The XMLManager.getGenesFromElement() method now requires that the active 
-  Configuration object be passed in.
-* Made minor Javadoc fixes and code formatting changes, and removed some dead
-  code.
-* Updated the README file.
-
+  Configuration object be passed in
+* Made minor Javadoc fixes and code formatting changes, and removed
+  some dead code
+* Updated the README file
 
 0.3
 ----------
 * Changed NaturalSelector.add() method to accept an int for the fitness
   value instead of a long.
 * Fixed some bugs in WeightedRouletteSelector related to overflow of
-  ints.
+  ints
 * Reformatted the code and touched up the comments & javadocs.
-* Replaced BitSet representation of genes with Allele interface.
+* Replaced BitSet representation of genes with Allele interface
   Each gene in the Chromosome can be represented by a different
   Allele implementation. The desired implementations must be
-  specified in the active Configuration instance.
-* Added object pooling for the Allele instances.
-* Heavily modified the representation of genes in the XML format.
+  specified in the active Configuration instance
+* Added object pooling for the Allele instances
+* Heavily modified the representation of genes in the XML format
 * The various "get" methods in XMLManager now throw two new
   exceptions: UnsupportedRepresentationException is used to indicate
   that the active Allele implementation does not support the string
   representations of the alleles in the XML file being parsed; and
   AlleleCreationException is used to indicate that there was a
   problem finding or instantiating the concrete Allele class
-  indicated in the XML file for a given allele.
+  indicated in the XML file for a given allele
 * A desired EventManager instance must now be specified in the
   active configuration. The DefaultConfiguration class automatically
-  includes this in its setup.
+  includes this in its setup
 * Added specific error messages for each of the failure conditions
   in the Configuration validity check to help make identification of
-  setup problems easier.
+  setup problems easier
 * FitnessFunction is now an abstract class instead of an interface.
   While users continue to implement the evalute() method, the
   genetic engine now uses the getFitnessValue() method, which
   delegates to the evaluate() method and adds some additional logic
-  of its own.
+  of its own
 * The event system has been made more generic. The GenotypeEvent
   class has been replaced with a GeneticEvent class, and the
   EventManager.fireGenotypeEvent() method has been replaced with
   the EventManager.fireGeneticEvent() method. Event listeners
   must now provide the names of events they wish to subscribe to
-  and will only be notified when those kinds of events are fired.
+  and will only be notified when those kinds of events are fired
 * Added a docs/ subdirectory and some basic high-level documentation
   on genetic algorithms in general, using JGAP, and writing custom
-  genetic operators.
-* Updated the README file.
-
+  genetic operators
+* Updated the README file
 
 0.21
 ----------
 * Added equals and hashcode methods to Chromosome and Genotype
 * Chromosome now implements Comparable interface
 * Added XMLManager, which can convert genotypes and chromosomes
-  into XML and vice versa.
-* Added events system.
+  into XML and vice versa
+* Added events system
 * Modified stock natural selection algorithm and mutation operator
-  to help reduce population stagnation.
-* Added TestXML example class.
-* Minor updates to README file.
-
+  to help reduce population stagnation
+* Added TestXML example class
+* Minor updates to README file
 
 0.2
 -----------
 * Added this CHANGELOG file
 * Added a TODO file
-* Made appropriate classes and interfaces serializable.
+* Made appropriate classes and interfaces serializable
 * Created an algorithm configuration mechanism, via the
   org.jgap.Configuration class, that provides a central point of
-  control over the various configuration settings.
+  control over the various configuration settings
 * Increased modularity by abstracting out the genetic operators and
-  the random number generator.
+  the random number generator
 * Created an org.jgap.impl package where stock implementations of
   JGAP interfaces, such as genetic operators and natural selectors,
-  are now stored.
-* Updated Ant build script.
+  are now stored
+* Updated Ant build script
 * Fixed bug wherein BitSet.length() was occasionally being used instead
-  of Chromosome.size(), resulting in less desirable behavior.
-* Fixed memory leak in Genotype.
-* Made thread-safe.
-* Updated the brace and indentation style.
+  of Chromosome.size(), resulting in less desirable behavior
+* Fixed memory leak in Genotype
+* Made thread-safe
+* Updated the brace and indentation style
 * Updated README file
-
 
 0.1
 ------------
