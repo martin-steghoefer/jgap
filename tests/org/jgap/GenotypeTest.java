@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
@@ -23,7 +23,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -57,7 +57,8 @@ public class GenotypeTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_1() throws Exception {
+  public void testConstruct_1()
+      throws Exception {
     try {
       Population pop = null;
       new Genotype(new DefaultConfiguration(), pop);
@@ -172,7 +173,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
-    assertTrue(genotype.getConfiguration().getFitnessEvaluator() instanceof
+    assertTrue(genotype.getConfiguration().getFitnessEvaluator()instanceof
                DefaultFitnessEvaluator);
   }
 
@@ -301,13 +302,53 @@ public class GenotypeTest
     assertEquals(chrom, chrom2);
   }
 
-  public void testEvolve_0() {
-    /**@todo implement*/
-    /**@todo check for correcctness of method when NaturalSelectors missing*/
+  /**
+   * NaturalSelectors missing
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testEvolve_0()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    //remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    config.addNaturalSelector(new WeightedRouletteSelector(), false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    genotype.evolve(1);
   }
 
   public void testEvolve_1() {
     /**@todo implement, test BulkFitnessFunction*/
+  }
+
+  public void testEvolve_2() {
+    /**@todo implement, test: population size remains constant when
+     * the configuration contains a BCS as postselector*/
+  }
+
+  /**
+   * GeneticOperators missing
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testEvolve_4()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    //remove all genetic operators
+    config.getGeneticOperators().clear();
+    config.addNaturalSelector(new WeightedRouletteSelector(), true);
+    try {
+      Genotype genotype = Genotype.randomInitialGenotype(config);
+      fail();
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
+    }
   }
 
   /**
@@ -482,7 +523,8 @@ public class GenotypeTest
     }
 
     //Test mathematical average and dispersion of hashcode
-    //I am not sure of the value of this test since boundry values are pretty much arbitrary
+    //I am not sure of the value of this test since boundary values are
+    //pretty much arbitrary
 //    thc.setAverageMax(16500000);
 //    thc.setAverageMin(14000);
 //    thc.setStdDevMax(2100000000);
@@ -515,7 +557,8 @@ public class GenotypeTest
     System.gc();
   }
 
-  public void testSetActiveConfiguration_0() throws Exception {
+  public void testSetActiveConfiguration_0()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -525,7 +568,8 @@ public class GenotypeTest
     genotype.setActiveConfiguration(null);
   }
 
-  public void testSetActiveConfiguration_1() throws Exception {
+  public void testSetActiveConfiguration_1()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
@@ -535,8 +579,9 @@ public class GenotypeTest
     try {
       genotype.setActiveConfiguration(null);
       fail();
-    }catch (InvalidConfigurationException iex) {
-      ;//this is OK
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
     }
   }
 }
