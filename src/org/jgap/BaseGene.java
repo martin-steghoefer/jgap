@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public BaseGene() {
   }
@@ -31,7 +31,7 @@ public abstract class BaseGene
    * @since 1.0
    */
   public Object getAllele() {
-    return getValue();
+    return getInternalValue();
   }
 
   /**
@@ -46,14 +46,14 @@ public abstract class BaseGene
    * @since 1.0
    */
   public int hashCode() {
-    // If our internal Integer is null, then return zero. Otherwise,
+    // If our internal value is null, then return zero. Otherwise,
     // just return the hash code of the Object.
     // -------------------------------------------------------------
-    if (getValue() == null) {
+    if (getInternalValue() == null) {
       return 0;
     }
     else {
-      return getValue().hashCode();
+      return getInternalValue().hashCode();
     }
   }
 
@@ -80,11 +80,11 @@ public abstract class BaseGene
    * @since 1.0
    */
   public String toString() {
-    if (getValue() == null) {
+    if (getInternalValue() == null) {
       return "null";
     }
     else {
-      return getValue().toString();
+      return getInternalValue().toString();
     }
   }
 
@@ -100,6 +100,29 @@ public abstract class BaseGene
   }
 
   /**
+   * Compares this Gene with the given object and returns true if the other
+   * object is a Gene of the same type and has the same value (allele) as
+   * this Gene. Otherwise it returns false.
+   *
+   * @param other the object to compare to this Gene for equality.
+   * @return true if this Gene is equal to the given object, false otherwise.
+   *
+   * @author Klaus Meffert
+   * @since 1.1
+   */
+  public boolean equals(Object other) {
+    try {
+      return compareTo(other) == 0;
+    }
+    catch (ClassCastException e) {
+      // If the other object isn't an Gene of current type
+      // (like IntegerGene for IntegerGene's), then we're not equal.
+      // -------------------------------------------------
+      return false;
+    }
+  }
+
+  /**
    * Each Gene implementation holds its own m_value object keeping the allele
    * value. In your Gene implementation, just return it with this method
    * (see {@link org.jgap.impl.BooleanGene} for example)
@@ -108,5 +131,5 @@ public abstract class BaseGene
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected abstract Object getValue();
+  protected abstract Object getInternalValue();
 }
