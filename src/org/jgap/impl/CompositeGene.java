@@ -21,6 +21,9 @@ package org.jgap.impl;
 import java.util.*;
 
 import org.jgap.*;
+import java.net.URLEncoder;
+import java.net.URLDecoder;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Ordered container for multiple genes
@@ -41,18 +44,32 @@ import org.jgap.*;
  * as equal!
  *
  * @author Klaus Meffert
+ * @author Audrius Meskauskas
  * @since 1.1
  */
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
-   * Represents the delimiter that is used to separate genes in the
+   * This field separates gene class name from
+   * the gene persistent representation string.
+   * '*' does not work properly with URLEncoder, so I have changed it to '#'
+   */
+  public final static String GENE_DELIMITER = "#";
+  /**
+   * Represents the heading delimiter that is used to separate genes in the
    * persistent representation of CompositeGene instances.
    */
-  public final static String GENE_DELIMITER = "*";
+  public final static String GENE_DELIMITER_HEADING = "<";
+
+  /**
+   * Represents the closing delimiter that is used to separate genes in the
+   * persistent representation of CompositeGene instances.
+   */
+  public final static String GENE_DELIMITER_CLOSING = ">";
+
 
   private Gene m_geneTypeAllowed;
 
@@ -121,10 +138,13 @@ public class CompositeGene
                                            + " has been forbidden!");
       }
     }
+    /** Audrius Meskauskas: why? Should we remove this?
+     * @todo Check if the code below can be safely removed.
     if (a_gene instanceof CompositeGene) {
       throw new IllegalArgumentException("It is not allowed to add a"
                                          + " CompositeGene to a CompositeGene!");
     }
+    */
     //check if gene already exists
     //----------------------------
     boolean containsGene;
@@ -225,46 +245,53 @@ public class CompositeGene
    * @throws UnsupportedRepresentationException
    *
    * @author Klaus Meffert
+   * @author Audrius Meskauskas
    * @since 1.1
    */
-  public void setValueFromPersistentRepresentation(String a_representation) throws
-      UnsupportedRepresentationException {
+  public void setValueFromPersistentRepresentation(String a_representation)
+    throws UnsupportedRepresentationException {
     if (a_representation != null) {
-      StringTokenizer tokenizer =
-          new StringTokenizer(a_representation, GENE_DELIMITER);
-      int numberGenes = tokenizer.countTokens();
-      String singleGene;
-      String geneTypeClass;
       try {
-        for (int i = 0; i < numberGenes; i++) {
-          singleGene = tokenizer.nextToken();
-          StringTokenizer geneTypeTokenizer =
-              new StringTokenizer(singleGene,
-                                  Gene.PERSISTENT_FIELD_DELIMITER);
-          //read type for every gene and then newly construct it
-          //----------------------------------------------------
-          geneTypeClass = geneTypeTokenizer.nextToken();
-          Class clazz = Class.forName(geneTypeClass);
-          Gene gene = (Gene) clazz.newInstance();
-          //now work with the freshly constructed genes
-          // ------------------------------------------
-          String rep = "";
-          while (geneTypeTokenizer.hasMoreTokens()) {
-            if (rep.length() > 0) {
-              rep += Gene.PERSISTENT_FIELD_DELIMITER;
-            }
-            rep += geneTypeTokenizer.nextToken();
+          /** Remove the old content */
+          genes.clear();
+          ArrayList r = split(a_representation);
+          Iterator iter = r.iterator();
+
+          StringTokenizer st;
+          String clas;
+          String representation;
+          String g;
+          Gene gene;
+
+          while (iter.hasNext()) {
+              g = decode ((String) iter.next());
+              st = new StringTokenizer(g, GENE_DELIMITER);
+              if (st.countTokens()!=2)
+               throw new UnsupportedRepresentationException("In "+g+", "+
+                "expecting two tokens, separated by "+GENE_DELIMITER);
+              clas = st.nextToken();
+              representation = st.nextToken();
+              gene = createGene(clas, representation);
+              addGene(gene);
           }
-          gene.setValueFromPersistentRepresentation(rep);
-          addGene(gene);
-        }
       }
       catch (Exception ex) {
+        ex.printStackTrace();
         throw new UnsupportedRepresentationException(ex.getCause().
             getMessage());
       }
     }
   }
+
+  /** Creates a new instance of gene. */
+  protected Gene createGene(String a_geneClassName,
+   String a_persistentRepresentation) throws Exception
+   {
+        Class geneClass = Class.forName (a_geneClassName);
+        Gene gene = (Gene) geneClass.newInstance ();
+        gene.setValueFromPersistentRepresentation (a_persistentRepresentation);
+        return gene;
+   }
 
   /**
    * See interface Gene for description
@@ -272,28 +299,27 @@ public class CompositeGene
    * @throws UnsupportedOperationException
    *
    * @author Klaus Meffert
+   * @author Audrius Meskauskas
    * @since 1.1
    */
   public String getPersistentRepresentation() throws
       UnsupportedOperationException {
-    String result = "";
-    Gene gene;
-    for (int i = 0; i < genes.size(); i++) {
-      gene = (Gene) genes.get(i);
-      //save type with every gene to make the process reversible
-      //--------------------------------------------------------
-      result += gene.getClass().getName();
-      result += gene.PERSISTENT_FIELD_DELIMITER;
-      //get persistent representation from each gene itself
-      result += gene.getPersistentRepresentation();
-      if (i < genes.size() - 1) {
-        result += GENE_DELIMITER;
-        /**@todo if GENE_DELIMITER occurs in a gene (e.g. StringGene)
-         * undertake actions to maintain consistency
-         */
+      StringBuffer b = new StringBuffer();
+      Iterator iter = genes.iterator();
+      Gene gene;
+      while (iter.hasNext()) {
+        gene = (Gene) iter.next();
+        b.append(GENE_DELIMITER_HEADING);
+        b.append(
+         encode
+         (
+          gene.getClass().getName()+
+          GENE_DELIMITER+
+          gene.getPersistentRepresentation())
+         );
+        b.append(GENE_DELIMITER_CLOSING);
       }
-    }
-    return result;
+      return b.toString();
   }
 
   /**
@@ -500,6 +526,7 @@ public class CompositeGene
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
+   * @author Audrius Meskauskas
    * @since 1.1
    */
   public String toString() {
@@ -516,7 +543,8 @@ public class CompositeGene
           result += GENE_DELIMITER;
         }
       }
-      return result;
+      // (..) helps to see the nested composite genes
+      return " ( "+result+" ) ";
     }
   }
 
@@ -604,4 +632,67 @@ public class CompositeGene
                                  + " in the CompositeGene.");
     }
   }
+
+  /**
+   * Encode string, doubling the separators.
+   * @param The string to encode (arbitrary characters)
+   * @return The string, containing only characters, valid in URL's
+   */
+  protected static final String encode(String a_x)
+   {
+      try {
+          return URLEncoder.encode (a_x, "UTF-8");
+      }
+      catch (UnsupportedEncodingException ex) {
+          throw new Error("This should never happen!");
+      }
+   }
+
+   /** Decode string, undoubling the separators.
+    * @param the URL-encoded string with restricted character set.
+    * @return decoded string
+    */
+   protected static final String decode(String a_x)
+   {
+      try {
+          return URLDecoder.decode (a_x, "UTF-8");
+      }
+      catch (UnsupportedEncodingException ex) {
+          throw new Error("This should never happen!");
+      }
+   }
+
+   /**
+    * Splits the string x into individual gene representations
+    * @author Audrius Meskauskas
+    * @param a_x The string to split.
+    * @return The elements of the returned array are the
+    * persistent representation strings of the genes - components.
+    */
+   protected static final ArrayList split(String a_x)
+    throws UnsupportedRepresentationException
+     {
+       ArrayList a = new ArrayList();
+
+       StringTokenizer st = new StringTokenizer
+       (a_x,GENE_DELIMITER_HEADING+ GENE_DELIMITER_CLOSING, true);
+
+       while (st.hasMoreTokens())
+        {
+           if (!st.nextToken().equals(GENE_DELIMITER_HEADING))
+            throw new UnsupportedRepresentationException
+              (a_x+" no open tag");
+           String n = st.nextToken();
+           if (n.equals(GENE_DELIMITER_CLOSING)) a.add(""); /* Empty token */
+           else
+            {
+              a.add(n);
+              if (!st.nextToken().equals(GENE_DELIMITER_CLOSING))
+              throw new UnsupportedRepresentationException
+               (a_x+" no close tag");
+            }
+        }
+       return a;
+     }
+
 }
