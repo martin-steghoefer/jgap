@@ -13,14 +13,14 @@ import java.util.*;
 
 /**
  * List of chromosomes held in the Genotype (or possibly later in the
- * Configuration object
+ * Configuration object).
  *
  * @author Klaus Meffert
  * @since 2.0
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -54,8 +54,9 @@ public class Population {
   }
 
   /*
-   * Constructs an empty Population with the given size
-   * @param size the size of the empty Population
+   * Constructs an empty Population with the given initial size
+   * @param size the initial size of the empty Population. The initial size
+   * is not fix, it is just for optimized list creation.
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -65,12 +66,12 @@ public class Population {
   }
 
   /*
-   *
+   * Constructs an empty Population with initial size 100
    * @author Klaus Meffert
    * @since 2.0
    */
   public Population() {
-    m_chromosomes = new ArrayList(100);
+    this(100);
   }
 
   /**
@@ -194,9 +195,10 @@ public class Population {
     Iterator it = m_chromosomes.iterator();
     double bestFitness = -1.0d;
     FitnessEvaluator evaluator = Genotype.getConfiguration().getFitnessEvaluator();
+    double fitness;
     while (it.hasNext()) {
       Chromosome chrom = (Chromosome) it.next();
-      double fitness = chrom.getFitnessValue();
+      fitness = chrom.getFitnessValue();
       if (evaluator.isFitter(fitness, bestFitness) || m_fittestChromosome == null) {
         m_fittestChromosome = chrom;
         bestFitness = fitness;
