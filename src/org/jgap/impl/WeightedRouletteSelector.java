@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;
@@ -204,6 +204,7 @@ public class WeightedRouletteSelector
    * @return selected Chromosome from the roulette wheel
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   private Chromosome spinWheel(RandomGenerator a_generator,
@@ -214,6 +215,9 @@ public class WeightedRouletteSelector
     // ------------------------------------
     double selectedSlot =
         Math.abs(a_generator.nextDouble() * m_totalNumberOfUsedSlots);
+    if (selectedSlot > m_totalNumberOfUsedSlots) {
+      selectedSlot = m_totalNumberOfUsedSlots;
+    }
     // Loop through the wheel until we find our selected slot. Here's
     // how this works: we have three arrays, one with the fitness values
     // of the chromosomes, one with the total number of slots on the
