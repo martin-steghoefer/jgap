@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -116,6 +116,7 @@ public class Population {
 
   public void setChromosomes(List a_chromosomes) {
     m_chromosomes = a_chromosomes;
+    setChanged(true);
   }
 
   /**
