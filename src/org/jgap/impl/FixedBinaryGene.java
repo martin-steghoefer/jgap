@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private int m_length;
 
@@ -108,9 +108,9 @@ public class FixedBinaryGene
         return;
       }
     }
-    int[] bits = (int[])a_newValue;
-    for (int i=0;i<bits.length;i++) {
-     setBit(i,bits[i]);
+    int[] bits = (int[]) a_newValue;
+    for (int i = 0; i < bits.length; i++) {
+      setBit(i, bits[i]);
     }
   }
 
@@ -139,7 +139,7 @@ public class FixedBinaryGene
 
   public Object getAllele() {
     int[] bits = new int[getLength()];
-    for (int i=0;i<getLength();i++) {
+    for (int i = 0; i < getLength(); i++) {
       if (getBit(i)) {
         bits[i] = 1;
       }
@@ -156,7 +156,7 @@ public class FixedBinaryGene
 
   public boolean getBit(int m_index) {
     checkIndex(m_index);
-    return   getUnchecked(m_index);
+    return getUnchecked(m_index);
   }
 
   public void setBit(int m_index, boolean m_value) {
@@ -205,20 +205,19 @@ public class FixedBinaryGene
   }
 
   public void flip(int index) {
-          checkIndex(index);
-          int segment = index / 32;
-          int offset = index % 32;
-          int mask = 0x1 << (32 - offset - 1);
-          m_value[segment] ^= mask;
+    checkIndex(index);
+    int segment = index / 32;
+    int offset = index % 32;
+    int mask = 0x1 << (32 - offset - 1);
+    m_value[segment] ^= mask;
   }
-
 
   protected int checkSubLength(int from, int to)
       throws IndexOutOfBoundsException {
     checkIndex(from);
     checkIndex(to);
     int sublen = to - from + 1;
-    if (0 > sublen)
+    if (0 >= sublen)
       throw new IllegalArgumentException("must have 'from' <= 'to', but has "
                                          + from + " > " + to);
     return sublen;
@@ -278,7 +277,8 @@ public class FixedBinaryGene
       throws UnsupportedOperationException, UnsupportedRepresentationException {
     if (a_representation != null) {
       if (isValidRepresentation(a_representation)) {
-        a_representation = a_representation.substring(1,a_representation.length()-1);
+        a_representation = a_representation.substring(1,
+            a_representation.length() - 1);
         StringTokenizer st = new StringTokenizer(a_representation, ",");
         int index = 0;
         while (st.hasMoreTokens()) {
@@ -313,7 +313,7 @@ public class FixedBinaryGene
     if (a_representation == null) {
       return false;
     }
-    if (!a_representation.startsWith("[") || !a_representation.endsWith("]") ) {
+    if (!a_representation.startsWith("[") || !a_representation.endsWith("]")) {
       return false;
     }
     return true;
@@ -325,7 +325,7 @@ public class FixedBinaryGene
     }
     int len = getLength();
     for (int i = 0; i < len; i++) {
-      setBit(i,a_numberGenerator.nextBoolean());
+      setBit(i, a_numberGenerator.nextBoolean());
     }
   }
 
@@ -336,29 +336,24 @@ public class FixedBinaryGene
    * @since 2.0
    */
   public String toString() {
-    if (m_value == null) {
-      return "null";
-    }
-    else {
-      int len = getLength();
-      String s = "[";
-      int value;
-      for (int i = 0; i < len; i++) {
-        if (getBit(i)) {
-          value = 1;
-        }
-        else {
-          value = 0;
-        }
-        if (i == 0) {
-          s += value;
-        }
-        else {
-          s += "," + value;
-        }
+    int len = getLength();
+    String s = "[";
+    int value;
+    for (int i = 0; i < len; i++) {
+      if (getBit(i)) {
+        value = 1;
       }
-      return s + "]";
+      else {
+        value = 0;
+      }
+      if (i == 0) {
+        s += value;
+      }
+      else {
+        s += "," + value;
+      }
     }
+    return s + "]";
   }
 
   /**
@@ -390,7 +385,7 @@ public class FixedBinaryGene
       // change to 1
       // ---------------
       if (!getBit(index)) {
-        setBit(index,true);
+        setBit(index, true);
       }
     }
     else if (a_percentage < 0) {
