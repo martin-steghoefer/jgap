@@ -18,15 +18,15 @@
 
 package org.jgap.impl;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
+
 import org.jgap.*;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import junit.framework.*;
 
 /**
  * Test class for AveragingCrossoverOperator class
+ *
  * @author Klaus Meffert
  * @since 2.0
  */
@@ -34,7 +34,7 @@ public class AveragingCrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public AveragingCrossoverOperatorTest() {
   }
@@ -79,7 +79,7 @@ public class AveragingCrossoverOperatorTest
     Gene gene3 = new IntegerGene(1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
-    op.operate(conf, population, chroms);
+    op.operate(conf, new Population(population), chroms);
     assertEquals(5, chroms.size());
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
@@ -126,8 +126,8 @@ public class AveragingCrossoverOperatorTest
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     Chromosome[] population2 = (Chromosome[]) population.clone();
-    op.operate(conf, population, chroms);
-    op.operate(conf, population2, chroms);
+    op.operate(conf, new Population(population), chroms);
+    op.operate(conf, new Population(population2), chroms);
     assertTrue(isChromosomesEqual(population, population2));
   }
 

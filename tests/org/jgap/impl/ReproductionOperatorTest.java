@@ -18,13 +18,11 @@
 
 package org.jgap.impl;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.jgap.impl.DefaultConfiguration;
-import org.jgap.Configuration;
 import java.util.*;
+
 import org.jgap.*;
+
+import junit.framework.*;
 
 /**
  * Tests for ReproductionOperator class
@@ -36,7 +34,7 @@ public class ReproductionOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public ReproductionOperatorTest() {
   }
@@ -55,11 +53,11 @@ public class ReproductionOperatorTest
     ReproductionOperator repOp = new ReproductionOperator();
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[]{};
-    repOp.operate(new Configuration(), population, candChroms);
+    repOp.operate(new Configuration(), new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
     candChroms.clear();
     population = new Chromosome[]{new Chromosome(new BooleanGene(),9),(new Chromosome(new IntegerGene(),4))};
-    repOp.operate(new Configuration(), population, candChroms);
+    repOp.operate(new Configuration(), new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
   }
 

@@ -18,12 +18,12 @@
 
 package org.jgap.impl;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.jgap.*;
 import java.util.*;
-import junitx.util.PrivateAccessor;
+
+import org.jgap.*;
+
+import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Tests for WeightedRouletteSelector class
@@ -34,7 +34,8 @@ import junitx.util.PrivateAccessor;
 public class WeightedRouletteSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
+
   public WeightedRouletteSelectorTest() {
   }
 
@@ -50,7 +51,8 @@ public class WeightedRouletteSelectorTest
     new WeightedRouletteSelector();
   }
 
-  public void testAdd_0() throws Exception {
+  public void testAdd_0()
+      throws Exception {
     NaturalSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene();
@@ -71,7 +73,8 @@ public class WeightedRouletteSelectorTest
     assertEquals(chrom, it.next());
   }
 
-  public void testSelect_0() throws Exception {
+  public void testSelect_0()
+      throws Exception {
     NaturalSelector selector = new WeightedRouletteSelector();
     // --------------------
     Gene gene = new BooleanGene();
@@ -80,15 +83,16 @@ public class WeightedRouletteSelectorTest
     thirdBestChrom.setFitnessValue(10);
     selector.add(null, thirdBestChrom);
     try {
-      Chromosome[] bestChroms = selector.select(null, 1);
+      Chromosome[] bestChroms = selector.select(null, 1).toChromosomes();
       fail();
     }
     catch (NullPointerException nex) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
-  public void testSelect_1() throws Exception {
+  public void testSelect_1()
+      throws Exception {
     NaturalSelector selector = new WeightedRouletteSelector();
     // add first chromosome
     // --------------------
@@ -117,16 +121,17 @@ public class WeightedRouletteSelectorTest
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
     randgen.setNextDouble(0.9d);
     conf.setRandomGenerator(randgen);
-    Chromosome[] bestChroms = selector.select(conf, 1);
+    Chromosome[] bestChroms = selector.select(conf, 1).toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)
     // ------------------------------
-    bestChroms = selector.select(conf, 4);
+    bestChroms = selector.select(conf, 4).toChromosomes();
     assertEquals(3, bestChroms.length);
   }
 
-  public void testEmpty_0() throws Exception {
+  public void testEmpty_0()
+      throws Exception {
     NaturalSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
     conf.setPopulationSize(7);
@@ -142,4 +147,3 @@ public class WeightedRouletteSelectorTest
     assertEquals(0, chromosomes.size());
   }
 }
-

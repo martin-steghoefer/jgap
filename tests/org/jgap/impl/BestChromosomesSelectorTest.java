@@ -38,7 +38,7 @@ public class BestChromosomesSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -69,6 +69,8 @@ public class BestChromosomesSelectorTest
     assertEquals(1, chromosomes.size());
     assertEquals(chrom, chromosomes.get(0));
     selector.add(null, chrom);
+    // if BestChromosomesSelector adds non-unique chroms, then we have a count
+    // of two then after the add(..), else a count of 1
     assertEquals(1, chromosomes.size());
     assertEquals(chrom, chromosomes.get(0));
   }
@@ -89,7 +91,7 @@ public class BestChromosomesSelectorTest
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(null, bestChrom);
-    Chromosome[] bestChroms = selector.select(null, 1);
+    selector.select(null, 1);
   }
 
   public void testSelect_1() throws Exception {
@@ -117,12 +119,12 @@ public class BestChromosomesSelectorTest
     selector.add(null, secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Chromosome[] bestChroms = selector.select(null, 1);
+    Chromosome[] bestChroms = selector.select(null, 1).toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 3 chromosomes
     // ----------------------------------
-    bestChroms = selector.select(null, 3);
+    bestChroms = selector.select(null, 3).toChromosomes();
     assertEquals(3, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(secondBestChrom, bestChroms[1]);
@@ -147,13 +149,13 @@ public class BestChromosomesSelectorTest
     selector.add(null, bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Chromosome[] bestChroms = selector.select(null, 1);
+    Chromosome[] bestChroms = selector.select(null, 1).toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 30 chromosomes (select-method should take into account only
     // 2 chroms!)
     // ----------------------------------
-    bestChroms = selector.select(null, 30);
+    bestChroms = selector.select(null, 30).toChromosomes();
     assertEquals(2, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(thirdBestChrom, bestChroms[1]);

@@ -18,15 +18,15 @@
 
 package org.jgap.impl;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
+
 import org.jgap.*;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import junit.framework.*;
 
 /**
  * Test class for CrossoverOperator class
+ *
  * @author Klaus Meffert
  * @since 1.1
  */
@@ -34,7 +34,7 @@ public class CrossoverOperatorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public CrossoverOperatorTest() {
   }
@@ -78,7 +78,7 @@ public class CrossoverOperatorTest
     Gene gene3 = new IntegerGene(1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
-    op.operate(conf, population, chroms);
+    op.operate(conf, new Population(population), chroms);
     assertEquals(5, chroms.size());
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
