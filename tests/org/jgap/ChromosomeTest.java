@@ -26,7 +26,7 @@ public class ChromosomeTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public ChromosomeTest() {
   }
@@ -248,9 +248,11 @@ public class ChromosomeTest
   final int MAX_GENES_TYPES = 6;
 
   /**
-   * Test hashcode for intensity of diversity
+   * Test hashcode for intensity of diversity.
    * @throws InvalidConfigurationException
+   *
    * @author John Serri
+   * @since 2.1
    */
   public void testHashcode_0() throws InvalidConfigurationException {
   	int Count;
