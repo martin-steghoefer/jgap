@@ -1,19 +1,11 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
@@ -22,7 +14,8 @@ package org.jgap;
  * number implementation so that more rigorous or alternative implementations
  * can be provided as desired.
  * <p>
- * ATTENTION:
+ * ATTENTION: nextDouble should only return values betwen 0 (inclusive)
+ *            and 1 (exclusive!). The same holds for nextFloat.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -30,7 +23,7 @@ package org.jgap;
  */
 public interface RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Returns the next pseudorandom, uniformly distributed int value

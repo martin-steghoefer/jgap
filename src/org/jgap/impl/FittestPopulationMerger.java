@@ -1,44 +1,32 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
-import java.util.List;
-import java.util.Comparator;
-import java.util.Collections;
+import java.util.*;
 
-import org.jgap.Chromosome;
-import org.jgap.Population;
-import org.jgap.Genotype;
-import org.jgap.FitnessEvaluator;
-import org.jgap.distr.IPopulationMerger;
+import org.jgap.*;
+import org.jgap.distr.*;
 
 /**
  * A implementation of the IPopulationMerger interface that
  * merges two populations as specified based on the fitness
  * function, that is, the n fittest chromosomes are returned
  * in the new population, where n is supplied by parameter.
+*
  * @author Henrique Goulart
  * @since 2.0
  */
 public class FittestPopulationMerger implements IPopulationMerger {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
     /* The method that merges the Populations.
      * @see org.jgap.distr.IPopulationMerger#mergePopulations(org.jgap.Population, org.jgap.Population, int)

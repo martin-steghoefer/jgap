@@ -1,29 +1,19 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
+import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import org.jgap.*;
-import java.io.*;
-
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * A Gene implementation that supports a string for its allele. The valid
@@ -51,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   private int m_minLength;
 
