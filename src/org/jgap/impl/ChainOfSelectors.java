@@ -26,15 +26,15 @@ import org.jgap.*;
  * Ordered chain of NaturalSelectors. With this container you can plugin
  * NaturalSelector implementations which will be performed either before (pre-)
  * or after (post-selectors) registered genetic operations have been applied.
- * @see Genotype.evolve
- * @see Configuration.addNaturalSelector
+ * @see Genotype
+ * @see Configuration
  *
  * @author Klaus Meffert
  * @since 1.1
  */
 public class ChainOfSelectors {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Ordered list holding the NaturalSelector's.

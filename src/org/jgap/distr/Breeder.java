@@ -30,7 +30,6 @@ import org.jgap.*;
 *
  * @author Klaus Meffert
  * @since 2.0
- * @see wodka project for similar implementation
  */
 public abstract class Breeder
     implements Runnable {

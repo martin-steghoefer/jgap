@@ -41,7 +41,7 @@ public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -76,7 +76,7 @@ public abstract class FitnessFunction
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject: The Chromosome instance to evaluate.
+   * @param a_subject The Chromosome instance to evaluate.
    *
    * @return A positive double reflecting the fitness rating of the given
    *         Chromosome. Note that if a non-positive double is returned,

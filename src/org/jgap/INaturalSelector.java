@@ -32,7 +32,7 @@ package org.jgap;
  */
 public interface INaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -78,7 +78,7 @@ public interface INaturalSelector {
    * @return true: The implementation of the NaturalSelector only returns
    *   unique Chromosome's (example: BestChromosomesSelector).
    *   false: Also doublette could be returned (example: WeightedRouletteSelector)
-   * @auhtor Klaus Meffert
+   * @author Klaus Meffert
    * @since 2.0
    */
   boolean returnsUniqueChromosomes();

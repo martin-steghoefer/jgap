@@ -24,8 +24,6 @@ import org.jgap.*;
 
 /**
  * Gaussian deviation serving as basis for randomly finding a number.
- * @see http://tracer.lcc.uma.es/tws/cEA/GMut.htm
- * @see http://hyperphysics.phy-astr.gsu.edu/hbase/math/gaufcn.html
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -34,7 +32,7 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;

@@ -23,9 +23,7 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- * Cauchy probability density function
- * @see http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm
- * (cumulative distribution function)
+ * Cauchy probability density function (cumulative distribution function)
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -33,7 +31,7 @@ import org.jgap.*;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001;

@@ -39,7 +39,7 @@ public class AveragingCrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -82,7 +82,7 @@ public class AveragingCrossoverOperator
     * Averaging over line means p is same for every i,
     * averaging over space if different p is chosen for each i.
    * @see CrossoverOperator for general description.
-   * @see feature request 708774
+   * also see feature request 708774
    * @param a_population Chromosome[]
    * @param a_candidateChromosomes List
    *

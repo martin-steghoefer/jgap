@@ -25,13 +25,13 @@ package org.jgap;
  * successfully locked.
  *
  * @author Neil Rotstan
- * @authro Klaus Meffert
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class InvalidConfigurationException
     extends Exception {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Constructs a new InvalidConfigurationException instance with the
