@@ -38,7 +38,7 @@ public class Chromosome
     implements Comparable, Cloneable, Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -52,7 +52,7 @@ public class Chromosome
    * in the fitness function. JGAP completely ignores the data, aside
    * from allowing it to be set and retrieved.
    */
-  private IApplicationData m_applicationData;
+  private Object m_applicationData;
 
   /**
    * The array of Genes contained in this Chromosome.
@@ -257,8 +257,10 @@ public class Chromosome
         // ---------------------------------------
         try {
           if (getApplicationData() != null) {
-            copy.setApplicationData( (IApplicationData) getApplicationData().
-                                    clone());
+            if (getApplicationData() instanceof IApplicationData) {
+              copy.setApplicationData( ((IApplicationData) getApplicationData()).
+                                      clone());
+            }
           }
           return copy;
         } catch (CloneNotSupportedException cex) {
@@ -285,13 +287,27 @@ public class Chromosome
     try {
       Chromosome ret = new Chromosome(m_activeConfiguration, copyOfGenes);
       if (getApplicationData() != null) {
-        IApplicationData clonedAppData = (IApplicationData) getApplicationData().clone();
-        if (clonedAppData == null || !clonedAppData.equals(getApplicationData())) {
-          throw new CloneNotSupportedException("ApplicationData object attached"
-                                               +" to Chromosome clones not "
-                                               +"correctly!");
+        /**@todo support Cloneable interface, i.e. look for public clone()
+         * method via introspection
+         */
+        if (getApplicationData() instanceof IApplicationData) {
+          IApplicationData clonedAppData = (IApplicationData) ((IApplicationData)
+              getApplicationData()).clone();
+/*
+          if (clonedAppData == null || !clonedAppData.equals(getApplicationData())) {
+            throw new CloneNotSupportedException(
+                "ApplicationData object attached"
+                + " to Chromosome clones not "
+                + "correctly!");
+          }
+ */
+          ret.setApplicationData(clonedAppData);
         }
-        ret.setApplicationData( clonedAppData);
+        else {
+          // Application data object does not support cloning.
+          // Therefor just copy the reference *uuumh*
+          ret.setApplicationData(getApplicationData());
+        }
       }
       return ret;
     }
@@ -589,7 +605,10 @@ public class Chromosome
       return 1;
     }
     else {
-      return getApplicationData().compareTo(otherChromosome.getApplicationData());
+      if (getApplicationData() instanceof Comparable) {
+        return ((Comparable)getApplicationData()).compareTo(otherChromosome.
+                                              getApplicationData());
+      }
     }
 
     // Everything is equal. Return zero.
@@ -670,7 +689,7 @@ public class Chromosome
    * @param a_newData The new application-specific data to attach to this
    *                  Chromosome.
    */
-  public void setApplicationData(IApplicationData a_newData) {
+  public void setApplicationData(Object a_newData) {
     m_applicationData = a_newData;
   }
 
@@ -683,7 +702,7 @@ public class Chromosome
    * @return The application-specific data previously attached to this
    *         Chromosome, or null if there is no attached data.
    */
-  public IApplicationData getApplicationData() {
+  public Object getApplicationData() {
     return m_applicationData;
   }
 }
