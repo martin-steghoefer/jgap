@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private int m_length;
 
@@ -320,7 +320,10 @@ public class FixedBinaryGene
   }
 
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    int len = getLength();
+    if (a_numberGenerator == null) {
+      throw new IllegalArgumentException("Random Generator must not be null!");
+    }
+    int len = size();
     for (int i = 0; i < len; i++) {
       if (a_numberGenerator.nextBoolean() == true) {
         m_value[i] = 1;
