@@ -1,22 +1,16 @@
 /*
  * This file is part of JGAP.
  *
- * JGAP is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * JGAP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser Public License for more details.
- *
- * You should have received a copy of the GNU Lesser Public License
- * along with JGAP; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-
 package org.jgap.data;
+
+import org.jgap.*;
+import org.jgap.impl.*;
 
 import junit.framework.*;
 
@@ -27,14 +21,12 @@ import junit.framework.*;
  * @author Siddhartha Azad
  * @since 1.0
  */
-
-import org.jgap.*;
-import org.jgap.impl.*;
-
 public class DataTreeBuilderTest
     extends TestCase {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
+
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
   // number of genes used in test case
@@ -76,9 +68,9 @@ public class DataTreeBuilderTest
 	  // write the genotype as a document
 	  IDataCreators doc = DataTreeBuilder.getInstance().
 	      representGenotypeAsDocument(genotype);
-	  // test if it got written as expected	  
+	  // test if it got written as expected
 	  IDataElementList tree = doc.getTree();
-	  // a single top level element 
+	  // a single top level element
 	  assertTrue(tree.getLength() == 1);
 	  IDataElement element = tree.item(0);
 	  // a Genotype should be the top level element
