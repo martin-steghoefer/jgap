@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -494,13 +494,11 @@ public class CompositeGeneTest
   }
 
   /**
-   * @throws Exception
-   *
    * @author Klaus Meffert
    * @since 2.2
    */
   public void testPersistentPresentation_3()
-      throws Exception {
+       {
     CompositeGene gene1 = new CompositeGene();
     try {
       gene1.setValueFromPersistentRepresentation("1" +
@@ -514,18 +512,30 @@ public class CompositeGeneTest
   }
 
   /**
-   * @throws Exception
-   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentPresentation_4()
-      throws Exception {
+  public void testPersistentPresentation_4() {
     CompositeGene gene1 = new CompositeGene();
     try {
       gene1.setValueFromPersistentRepresentation("<1" +
                                                  CompositeGene.GENE_DELIMITER +
                                                  "2>");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testPersistentPresentation_5() {
+    CompositeGene gene1 = new CompositeGene();
+    try {
+      gene1.setValueFromPersistentRepresentation("<1>");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -543,6 +553,20 @@ public class CompositeGeneTest
     CompositeGene gene1 = new CompositeGene();
     assertFalse(gene1.removeGeneByIdentity(gene1));
     assertFalse(gene1.removeGeneByIdentity(null));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testRemoveGeneByIdentity_1() {
+    CompositeGene gene1 = new CompositeGene();
+    DoubleGene gene2 = new DoubleGene(1.0d, 4.0d);
+    gene1.addGene(gene2);
+    DoubleGene gene3 = new DoubleGene(1.0d, 5.0d);
+    assertFalse(gene1.removeGeneByIdentity(gene3));
+    assertTrue(gene1.removeGeneByIdentity(gene2));
+    assertEquals(0, gene1.size());
   }
 
   static int cleanedUp = 0;
