@@ -34,7 +34,7 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -102,14 +102,14 @@ public class GaussianRandomGenerator
    */
   public int nextInt(int ceiling) {
     return Math.min(ceiling - 1,
-                    (int) Math.round(nextGaussian() * ceiling/10));
+                    (int) Math.round(nextGaussian() * ceiling/12));
   }
 
   /**
    * @return positive long value
    */
   public long nextLong() {
-    long result = Math.min(Long.MAX_VALUE, (long) (nextGaussian() * Long.MAX_VALUE / 10));
+    long result = Math.min(Long.MAX_VALUE, (long) (nextGaussian() * Long.MAX_VALUE / 12));
     return result;
   }
 
