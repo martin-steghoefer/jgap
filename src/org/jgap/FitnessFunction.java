@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -19,7 +17,6 @@
  */
 package org.jgap;
 
-
 /**
  * Fitness functions are used to determine how optimal a particular solution
  * is relative to other solutions. This abstract class should be extended and
@@ -36,49 +33,43 @@ package org.jgap;
  * Note: Two Chromosomes with equivalent sets of genes should always be
  * assigned the same fitness value by any implementation of this interface.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
-public abstract class FitnessFunction implements java.io.Serializable
-{
-    /**
-     * Retrieves the fitness value of the given Chromosome. The fitness
-     * value will be a positive integer.
-     *
-     * @param a_subject the Chromosome for which to compute and return the
-     *                  fitness value.
-     * @return the fitness value of the given Chromosome.
-     */
-    public final int getFitnessValue( Chromosome a_subject )
-    {
-        // Delegate to the evaluate() method to actually compute the
-        // fitness value. If the returned value is less than one,
-        // then we throw a runtime exception.
-        // ---------------------------------------------------------
-        int fitnessValue = evaluate( a_subject );
-
-        if( fitnessValue < 1 )
-        {
-            throw new RuntimeException(
-                "Fitness values must be positive! Received value: " +
-                fitnessValue );
-        }
-
-        return fitnessValue;
+public abstract class FitnessFunction
+    implements java.io.Serializable {
+  /**
+   * Retrieves the fitness value of the given Chromosome. The fitness
+   * value will be a positive integer.
+   *
+   * @param a_subject the Chromosome for which to compute and return the
+   *                  fitness value.
+   * @return the fitness value of the given Chromosome.
+   */
+  public final int getFitnessValue(Chromosome a_subject) {
+    // Delegate to the evaluate() method to actually compute the
+    // fitness value. If the returned value is less than one,
+    // then we throw a runtime exception.
+    // ---------------------------------------------------------
+    int fitnessValue = evaluate(a_subject);
+    if (fitnessValue < 1) {
+      throw new RuntimeException(
+          "Fitness values must be positive! Received value: " +
+          fitnessValue);
     }
+    return fitnessValue;
+  }
 
-
-    /**
-     * Determine the fitness of the given Chromosome instance. The higher the
-     * return value, the more fit the instance. This method should always
-     * return the same fitness value for two equivalent Chromosome instances.
-     *
-     * @param a_subject: The Chromosome instance to evaluate.
-     *
-     * @return A positive integer reflecting the fitness rating of the given
-     *         Chromosome. Note that if a non-positive integer is returned,
-     *         a RuntimeException will be generated.
-     */
-    protected abstract int evaluate( Chromosome a_subject );
+  /**
+   * Determine the fitness of the given Chromosome instance. The higher the
+   * return value, the more fit the instance. This method should always
+   * return the same fitness value for two equivalent Chromosome instances.
+   *
+   * @param a_subject: The Chromosome instance to evaluate.
+   *
+   * @return A positive integer reflecting the fitness rating of the given
+   *         Chromosome. Note that if a non-positive integer is returned,
+   *         a RuntimeException will be generated.
+   */
+  protected abstract int evaluate(Chromosome a_subject);
 }
-

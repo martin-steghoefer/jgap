@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -28,15 +26,17 @@ package org.jgap;
  * @author Klaus Meffert
  * @since 1.1
  */
-public interface FitnessEvaluator
-{
-    /**
-     * Compares the first given fitness value with the second and returns true
-     * if the first one is greater than the second one. Otherwise returns false
-     * @param a_fitness_value1 first fitness value
-     * @param a_fitness_value2 second fitness value
-     * @return true: first fitness value greater than second
-     * @since 1.1
-     */
-    boolean isFitter(int a_fitness_value1, int a_fitness_value2);
+public interface FitnessEvaluator {
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**
+   * Compares the first given fitness value with the second and returns true
+   * if the first one is greater than the second one. Otherwise returns false
+   * @param a_fitness_value1 first fitness value
+   * @param a_fitness_value2 second fitness value
+   * @return true: first fitness value greater than second
+   * @since 1.1
+   */
+  boolean isFitter(int a_fitness_value1, int a_fitness_value2);
 }

@@ -1,6 +1,4 @@
 /*
- * Copyright 2001-2003 Neil Rotstan
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -32,7 +30,7 @@ import org.jgap.event.EventManager;
  * All other settings may also be changed in the normal fashion for
  * those who wish to specify other custom values.
  *
- * @author Neil Rotstan
+ * @author Neil Rotstan, Klaus Meffert
  * @since 1.0
  */
 public class DefaultConfiguration extends Configuration
