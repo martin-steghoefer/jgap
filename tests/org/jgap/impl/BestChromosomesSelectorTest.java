@@ -38,7 +38,7 @@ public class BestChromosomesSelectorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -150,10 +150,10 @@ public class BestChromosomesSelectorTest
     Chromosome[] bestChroms = selector.select(null, 1);
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
-    // receive top 2 chromosomes (select-method should take into account only
+    // receive top 30 chromosomes (select-method should take into account only
     // 2 chroms!)
     // ----------------------------------
-    bestChroms = selector.select(null, 3);
+    bestChroms = selector.select(null, 30);
     assertEquals(2, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(thirdBestChrom, bestChroms[1]);

@@ -34,7 +34,7 @@ import junitx.util.PrivateAccessor;
 public class WeightedRouletteSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
   public WeightedRouletteSelectorTest() {
   }
 
@@ -71,7 +71,7 @@ public class WeightedRouletteSelectorTest
     assertEquals(chrom, it.next());
   }
 
-  public void testSelect_00() throws Exception {
+  public void testSelect_0() throws Exception {
     NaturalSelector selector = new WeightedRouletteSelector();
     // --------------------
     Gene gene = new BooleanGene();
@@ -88,7 +88,7 @@ public class WeightedRouletteSelectorTest
     }
   }
 
-  public void testSelect_0() throws Exception {
+  public void testSelect_1() throws Exception {
     NaturalSelector selector = new WeightedRouletteSelector();
     // add first chromosome
     // --------------------
@@ -120,10 +120,10 @@ public class WeightedRouletteSelectorTest
     Chromosome[] bestChroms = selector.select(conf, 1);
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
-    // now select top two chromosomes
+    // now select top 4 chromosomes (should only select 3!)
     // ------------------------------
-    bestChroms = selector.select(conf, 2);
-    assertEquals(2, bestChroms.length);
+    bestChroms = selector.select(conf, 4);
+    assertEquals(3, bestChroms.length);
   }
 
   public void testEmpty_0() throws Exception {
