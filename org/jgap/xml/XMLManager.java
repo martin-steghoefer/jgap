@@ -74,6 +74,12 @@ public class XMLManager
     private static final String SIZE_ATTRIBUTE = "size";
 
     /**
+     * Constant representing the fully-qualified name of the concrete
+     * Allele class that was used to manage the allele in question.
+     */
+    private static final String CLASS_ATTRIBUTE = "class";
+
+    /**
      * Shared DocumentBuilder, which is used to create new DOM Document
      * instances.
      */
@@ -190,6 +196,12 @@ public class XMLManager
             // ----------------------------------------
             alleleElement = a_xmlDocument.createElement( ALLELE_TAG );
 
+            // Add the class attribute and set its value to the class
+            // name of the concrete class representing the current Allele.
+            // -----------------------------------------------------------
+            alleleElement.setAttribute( CLASS_ATTRIBUTE,
+                                        a_geneValues[i].getClass().getName() );
+
             // Create a text node to contain its string representation.
             // --------------------------------------------------------
             Text alleleRepresentation =
@@ -294,10 +306,6 @@ public class XMLManager
      * Retrieve a Chromosome instance constructed from a given XML Element
      * representation.
      *
-     * @param a_activeConfiguration The current active Configuration object
-     *                              that is to be used during construction of
-     *                              the Chromosome.
-     *
      * @param a_xmlElement The XML Element representation of the Chromosome.
      *
      * @return A new Chromosome instance setup with the data from the XML
@@ -309,10 +317,10 @@ public class XMLManager
      *         Allele implementation does not support the string representation
      *         of the alleles used in the given XML document.
      */
-    public static Allele[] getGenesFromElement( Configuration a_activeConfiguration,
-                                                Element a_xmlElement )
+    public static Allele[] getGenesFromElement( Element a_xmlElement )
             throws ImproperXMLException,
-                   UnsupportedRepresentationException
+                   UnsupportedRepresentationException,
+                   AlleleCreationException
     {
         // Do some sanity checking. Make sure the XML Element isn't null and
         // that in fact represents an allele.
@@ -338,18 +346,48 @@ public class XMLManager
                 "'allele' sub-elements not found." );
         }
 
-        // For each allele, find the child text node, which is where the
-        // string representation is located, and extract the representation.
-        // ----------------------------------------------------------------
+        // For each allele, get the class attribute so we know what class
+        // to instantiate to represent the allele instance, and then find
+        // the child text node, which is where the string representation
+        // of the allele is located, and extract the representation.
+        // --------------------------------------------------------------
         int numberOfAlleleNodes = alleles.getLength();
         for( int i = 0; i < numberOfAlleleNodes; i++ )
         {
-            // Find the text node.
-            // -------------------
-            Node thisAllele = alleles.item( i );
-            thisAllele.normalize();
+            Element thisAlleleElement = (Element) alleles.item( i );
+            thisAlleleElement.normalize();
 
-            NodeList children = thisAllele.getChildNodes();
+            // Fetch the class attribute and create an instance of that
+            // class to manage the current allele.
+            // --------------------------------------------------------
+            String alleleClassName =
+                thisAlleleElement.getAttribute( CLASS_ATTRIBUTE );
+
+            // First try to fetch an Allele instance from the pool.
+            // ----------------------------------------------------
+            Allele thisAlleleObject;
+            try
+            {
+                thisAlleleObject = AllelePool.acquireAllele(
+                    Class.forName( alleleClassName ) );
+
+                // If nothing was available in the pool, create a new instance.
+                // ------------------------------------------------------------
+                if( thisAlleleObject == null )
+                {
+                    thisAlleleObject =
+                        (Allele) Class.forName( alleleClassName ).newInstance();
+                }
+            }
+            catch( Exception e )
+            {
+                throw new AlleleCreationException( e.getMessage() );
+            }
+
+            // Find the text node and fetch the string representation of the
+            // current allele.
+            // -------------------------------------------------------------
+            NodeList children = thisAlleleElement.getChildNodes();
             int childrenSize = children.getLength();
             String alleleRepresentation = null;
 
@@ -373,29 +411,20 @@ public class XMLManager
                     "allele is missing representation." );
             }
 
-            // Create the Allele instance from the representation. First try
-            // to fetch an allele instance from the allele pool to save on
-            // memory. If none is available, then create a new one.
-            // -------------------------------------------------------------
-            Allele representedAllele = AllelePool.acquireAllele();
-            if( representedAllele == null )
-            {
-                representedAllele =
-                    a_activeConfiguration.getSampleAllele().newAllele(
-                        a_activeConfiguration );
-            }
-
-            // Set the value of the allele to reflect the string
-            // representation.
-            // -------------------------------------------------
-            representedAllele.setValueFromStringRepresentation(
+            // Now set the value of the allele to that reflect the
+            // string representation.
+            // ---------------------------------------------------
+            thisAlleleObject.setValueFromStringRepresentation(
                 alleleRepresentation );
 
-            genes.add( representedAllele );
+            // Finally, add the current allele object to the list of genes.
+            // ------------------------------------------------------------
+            genes.add( thisAlleleObject );
         }
 
         return (Allele[]) genes.toArray( new Allele[ genes.size() ] );
     }
+
 
     /**
      * Retrieve a Chromosome instance constructed from a given XML Element
@@ -423,7 +452,8 @@ public class XMLManager
                                  Element a_xmlElement )
             throws ImproperXMLException,
                    InvalidConfigurationException,
-                   UnsupportedRepresentationException
+                   UnsupportedRepresentationException,
+                   AlleleCreationException
     {
         // Do some sanity checking. Make sure the XML Element isn't null and
         // that in fact represents a chromosome.
@@ -450,8 +480,7 @@ public class XMLManager
 
         // Construct the genes from their representations.
         // -----------------------------------------------
-        Allele[] geneAlleles = getGenesFromElement( a_activeConfiguration,
-                                                    genesElement );
+        Allele[] geneAlleles = getGenesFromElement( genesElement );
 
         // Construct the new Chromosome with the genes and return it.
         // ----------------------------------------------------------
@@ -486,7 +515,8 @@ public class XMLManager
                                                    Element a_xmlElement )
             throws ImproperXMLException,
                    InvalidConfigurationException,
-                   UnsupportedRepresentationException
+                   UnsupportedRepresentationException,
+                   AlleleCreationException
     {
         // Sanity check. Make sure the XML element isn't null and that it
         // actually represents a genotype.
@@ -547,7 +577,8 @@ public class XMLManager
                                                     Document a_xmlDocument )
             throws ImproperXMLException,
                    InvalidConfigurationException,
-                   UnsupportedRepresentationException
+                   UnsupportedRepresentationException,
+                   AlleleCreationException
     {
         // Extract the root element, which should be a genotype element.
         // After verifying that the root element is not null and that it
@@ -593,7 +624,8 @@ public class XMLManager
                                                         Document a_xmlDocument )
             throws ImproperXMLException,
                    InvalidConfigurationException,
-                   UnsupportedRepresentationException
+                   UnsupportedRepresentationException,
+                   AlleleCreationException
     {
         // Extract the root element, which should be a chromosome element.
         // After verifying that the root element is not null and that it

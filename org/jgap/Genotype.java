@@ -104,13 +104,13 @@ public class Genotype implements java.io.Serializable
         // --------------------------------------------------------------
         Chromosome fittestChromosome = m_chromosomes[ 0 ];
         long fittestValue =
-            m_activeConfiguration.getFitnessFunction().evaluate(
+            m_activeConfiguration.getFitnessFunction().getFitnessValue(
                                       fittestChromosome );
 
         for ( int i = 1; i < m_chromosomes.length; i++ )
         {
             long fitnessValue =
-                m_activeConfiguration.getFitnessFunction().evaluate(
+                m_activeConfiguration.getFitnessFunction().getFitnessValue(
                                           m_chromosomes[ i ] );
 
             if ( fitnessValue > fittestValue )
@@ -133,6 +133,14 @@ public class Genotype implements java.io.Serializable
      */
     public synchronized void evolve()
     {
+        // Reset the auto-exaggeration tracking in the fitness function that
+        // is specific to each evolution cycle.
+        // -----------------------------------------------------------------
+        FitnessFunction activeFitnessFunction =
+            m_activeConfiguration.getFitnessFunction();
+
+        activeFitnessFunction.resetValuesForThisEvolutionCycle();
+
         // Execute all of the Genetic Operators.
         // -------------------------------------
         List geneticOperators = m_activeConfiguration.getGeneticOperators();
@@ -144,6 +152,46 @@ public class Genotype implements java.io.Serializable
                     m_activeConfiguration, m_chromosomes, m_workingPool );
         }
 
+        // If the auto-exaggeration feature is enabled, then we're going
+        // to remap the fitness values of the chromosomes to the full
+        // spectrum of fitness values that have been computed thus far.
+        // By spreading them out along the spectrum, we exaggerate their
+        // statistical difference and make it more likely that the
+        // natural selector will choose the more optimal solutions from
+        // among a group of otherwise very similar solutions.
+        //
+        // Here we compute the two range of values: the total range,
+        // which is the range of fitness values given out during this
+        // entire genetic run; and the currentRange, which is the range
+        // of fitness values given out just during this evolution cycle.
+        // As we add Chromosomes to the natural selector, we'll use these
+        // ranges to remap each Chromosome's fitness values.
+        // -------------------------------------------------------------
+        int totalRange = 1;
+        int currentRange = 1;
+
+        if( m_activeConfiguration.isAutoExaggerationEnabled() )
+        {
+            // For now, run through all of the Chromosomes and compute their
+            // fitness functions to preload the tracking values we need.
+            // Later, we'll make this more efficient.
+            // -------------------------------------------------------------
+            Iterator iterator = m_workingPool.iterator();
+            while ( iterator.hasNext() )
+            {
+                Chromosome currentChromosome = (Chromosome) iterator.next();
+                activeFitnessFunction.getFitnessValue( currentChromosome );
+            }
+
+            totalRange = Math.max( 1,
+                activeFitnessFunction.getMostFitValueThisGeneticRun() -
+                activeFitnessFunction.getLeastFitValueThisGeneticRun() );
+
+            currentRange = Math.max( 1,
+                activeFitnessFunction.getMostFitValueThisEvolutionCycle() -
+                activeFitnessFunction.getLeastFitValueThisEvolutionCycle() );
+        }
+
         // Add the chromosomes in the working pool to the natural selector.
         // ----------------------------------------------------------------
         Iterator iterator = m_workingPool.iterator();
@@ -151,12 +199,24 @@ public class Genotype implements java.io.Serializable
         while ( iterator.hasNext() )
         {
             Chromosome currentChromosome = (Chromosome) iterator.next();
+            int originalFitness =
+                activeFitnessFunction.getFitnessValue( currentChromosome );
+
+            // If auto-exaggeration is enabled, go ahead and remap the
+            // fitness value now.
+            // -------------------------------------------------------
+            int currentFitness = originalFitness;
+            if( m_activeConfiguration.isAutoExaggerationEnabled() )
+            {
+                currentFitness = (int)
+                    (( (long) currentFitness * (long) totalRange) /
+                     currentRange );
+            }
 
             m_activeConfiguration.getNaturalSelector().add(
                     m_activeConfiguration,
                     currentChromosome,
-                    m_activeConfiguration.getFitnessFunction().evaluate(
-                                              currentChromosome ) );
+                    currentFitness );
         }
 
         // Repopulate the population of chromosomes with those selected
@@ -207,8 +267,9 @@ public class Genotype implements java.io.Serializable
         {
             buffer.append( m_chromosomes[ i ].toString() );
             buffer.append( " [" );
-            buffer.append( m_activeConfiguration.getFitnessFunction().evaluate(
-                                                     m_chromosomes[ i ] ) );
+            buffer.append(
+                m_activeConfiguration.getFitnessFunction().getFitnessValue(
+                    m_chromosomes[ i ] ) );
             buffer.append( ']' );
             buffer.append( '\n' );
         }

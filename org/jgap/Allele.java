@@ -37,7 +37,7 @@ public interface Allele extends Comparable
      * to be undefined.
      *
      * @param a_activeConfiguration The current active configuration.
-     * @return A
+     * @return A new Allele instance of the same type as this concrete Allele.
      */
     public Allele newAllele( Configuration a_activeConfiguration );
 

@@ -23,8 +23,8 @@ package org.jgap;
 
 /**
  * Fitness functions are used to determine how optimal a particular solution
- * is relative to other solutions. This interface should be implemented by
- * all concrete fitness functions. The fitness function is given a Chromosome
+ * is relative to other solutions. This abstract class should be extended and
+ * the evaluate() method implemented. The fitness function is given a Chromosome
  * to evaluate and should return its fitness value. The higher the value, the
  * more fit the Chromosome. The actual range of fitness values isn't important
  * (other than the fact that the values must be of type int): it's the
@@ -37,8 +37,142 @@ package org.jgap;
  * should always be assigned the same fitness value by any implementation of
  * this interface.
  */
-public interface FitnessFunction extends java.io.Serializable
+public abstract class FitnessFunction implements java.io.Serializable
 {
+    /**
+     * Keeps track of the highest fitness value that has been returned during
+     * this genetic run. This can be useful to track for the
+     * "auto-exaggeration" feature.
+     */
+    private int m_mostFitValueThisGeneticRun = Integer.MIN_VALUE;
+
+    /**
+     * Keeps track of the lowest fitness value that has been returned during
+     * this genetic run. This can be useful to track for the
+     * "auto-exaggeration" feature.
+     */
+    private int m_leastFitValueThisGeneticRun = Integer.MAX_VALUE;
+
+    /**
+     * Keeps track of the highest fitness value that has been returned during
+     * this specific cycle of evolution. This can be useful to track for the
+     * "auto-exaggeration" feature.
+     */
+    private int m_mostFitValueThisEvolutionCycle;
+
+    /**
+     * Keeps track of the lowest fitness value that has been returned during
+     * this specific cycle of evolution. This can be useful to track for the
+     * "auto-exaggeration" feature.
+     */
+    private int m_leastFitValueThisEvolutionCycle;
+
+
+    /**
+     * Retrieves the fitness value of the given Chromosome.
+     *
+     * @param a_subject the Chromosome for which to compute and return the
+     *                  fitness value.
+     * @return the fitness value of the given Chromosome.
+     */
+    public final int getFitnessValue( Chromosome a_subject )
+    {
+        // Delegate to the evaluate() method to actually compute the
+        // fitness value. We use the Math.max function to guarantee
+        // that the value is always > 0.
+        // ---------------------------------------------------------
+        int fitness = Math.max( 1, evaluate( a_subject ) );
+
+        // Now update our most fit and least fit instance variables
+        // as appropriate.
+        // --------------------------------------------------------
+        if( fitness > m_mostFitValueThisEvolutionCycle )
+        {
+            m_mostFitValueThisEvolutionCycle = fitness;
+
+            if( fitness > m_mostFitValueThisGeneticRun )
+            {
+                m_mostFitValueThisGeneticRun = fitness;
+            }
+        }
+
+        if( fitness < m_leastFitValueThisEvolutionCycle )
+        {
+            m_leastFitValueThisEvolutionCycle = fitness;
+
+            if( fitness < m_leastFitValueThisGeneticRun )
+            {
+                m_leastFitValueThisGeneticRun = fitness;
+            }
+        }
+
+        return fitness;
+    }
+
+
+    /**
+     * Retrieves the highest fitness value that was computed during this
+     * genetic run.
+     *
+     * @return the highest fitness value computed so far during this genetic
+     *         run.
+     */
+    public final int getMostFitValueThisGeneticRun()
+    {
+        return m_mostFitValueThisGeneticRun;
+    }
+
+
+    /**
+     * Retrieves the lowest fitness value that was computed during this
+     * genetic run.
+     *
+     * @return the lowest fitness value computed so far during this genetic
+     *         run.
+     */
+    public final int getLeastFitValueThisGeneticRun()
+    {
+        return m_leastFitValueThisGeneticRun;
+    }
+
+
+    /**
+     * Retrieves the highest fitness value that was computed during this
+     * specific evolution cycle.
+     *
+     * @return the highest fitness value computed so far during this specific
+     *         evolution cycle.
+     */
+    public final int getMostFitValueThisEvolutionCycle()
+    {
+        return m_mostFitValueThisEvolutionCycle;
+    }
+
+
+    /**
+     * Retrieves the lowest fitness value that was computed during this
+     * specific evolution cycle.
+     *
+     * @return the lowest fitness value computed so far during this specific
+     *         evolution cycle.
+     */
+    public final int getLeastFitValueThisEvolutionCycle()
+    {
+        return m_leastFitValueThisEvolutionCycle;
+    }
+
+
+    /**
+     * Resets the most fit and least fit values that are tracked for this
+     * specific evolution cycle.
+     */
+    public final void resetValuesForThisEvolutionCycle()
+    {
+        m_mostFitValueThisEvolutionCycle = Integer.MIN_VALUE;
+        m_leastFitValueThisEvolutionCycle = Integer.MAX_VALUE;
+    }
+
+
     /**
      * Determine the fitness of the given Chromosome instance. The higher the
      * return value, the more fit the instance. This method should always
@@ -48,6 +182,6 @@ public interface FitnessFunction extends java.io.Serializable
      *
      * @return The fitness rating of the given Chromosome.
      */
-    public int evaluate( Chromosome a_subject );
+    protected abstract int evaluate( Chromosome a_subject );
 }
 

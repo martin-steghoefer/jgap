@@ -26,7 +26,7 @@ import org.jgap.Chromosome;
 /**
  * Sample fitness function for the MakeChange example.
  */
-class MakeChangeFitnessFunction implements FitnessFunction
+class MakeChangeFitnessFunction extends FitnessFunction
 {
     private final int m_targetAmount;
 
@@ -50,19 +50,18 @@ class MakeChangeFitnessFunction implements FitnessFunction
         int totalCoins = MakeChange.calculateNumberOfCoins( a_subject );
         int changeDifference = Math.abs( m_targetAmount - changeAmount );
 
+        int fitness = (119 - changeDifference) - totalCoins;
 
-        int fitness = ( 5100 - changeDifference );
-
-        // Give a large bonus to change amounts that match exactly to
-        // discourage mismatches, and make the number of coins more
-        // important.
-        // ----------------------------------------------------------
-        if( changeAmount == m_targetAmount )
+        // Bias towards the correct change amount by penalizing an additional
+        // 10 fitness points if the amount is incorrect.
+        // ------------------------------------------------------------------
+        if( changeAmount != m_targetAmount )
         {
-            fitness = 100000 - ( totalCoins * totalCoins * 10 );
-            fitness -= 100 * totalCoins;
+            fitness -= 10;
         }
 
-        return fitness;
+        // Make sure we return a fitness value >= 1.
+        // -----------------------------------------
+        return Math.max( 1, fitness );
     }
 }

@@ -61,10 +61,12 @@ public class Configuration implements java.io.Serializable
     private NaturalSelector m_populationSelector = null;
 
     /**
-     * References an Allele instance that serves as a sample of the type
-     * of Alleles that is to be used to represent genes.
+     * References a Chromosome that serves as a sample of the Allele setup
+     * that is to be used. Each gene in the Chromosome should be represented
+     * with the desired Allele type. Note that this value is mutually
+     * exclusive with the sample allele--only one may be set at a time.
      */
-    private Allele m_sampleAllele = null;
+    private Chromosome m_sampleChromosome = null;
 
     /**
      * References the random number generator implementation that is to be
@@ -97,6 +99,17 @@ public class Configuration implements java.io.Serializable
      * The number of chromosomes that will be stored in the Genotype.
      */
     private int m_populationSize = 0;
+
+    /**
+     * Determines whether or not the "auto-exaggeration" feature is enabled.
+     * This feature exaggerates the difference between very close fitness
+     * values to give them a larger statistical difference and thus enhance
+     * the chances that the fitter chromosomes will be selected. Without this
+     * feature, some kinds of problems may require a lot of tweaking of the
+     * fitness function to get just right for statistically close fitness
+     * values.
+     */
+    private boolean m_autoExaggerationEnabled = false;
 
     /**
      * Indicates whether the settings of this Configuration instance have
@@ -150,46 +163,45 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Sets a sample instance of the Allele implementation that is to be used
-     * to represent genes. This allows type information to be gathered, as
-     * well as new Allele instances (of the desired implementation) to be
-     * easily generated via the Allele's newAllele() method.
+     * Sets the sample Chromosome that is to be used as a guide for the
+     * construction of other Chromosomes. The Chromosome should be constructed
+     * with each gene represented by the Allele desired Allele type for that
+     * locus. Those types will be maintained for genes at those respective
+     * locations in all Chromosomes generated with this Configuration.
      *
-     * @param a_sampleAlleleToSet The allele instance to be used as the sample.
-     *
-     * @throws InvalidConfigurationException if the given instance is not
-     *         satisfactory or if this Configuration is locked.
+     * @param a_sampleChromosomeToSet The Chromosome to be used as the sample.
+     * @throws InvalidConfigurationException if the given Chromosome is not
+     *         satisfactory, this Configuration is locked, or the sample
+     *         Allele has already been set.
      */
-    public void setSampleAllele( Allele a_sampleAlleleToSet )
+    public void setSampleChromosome( Chromosome a_sampleChromosomeToSet )
                 throws InvalidConfigurationException
     {
         verifyChangesAllowed();
 
         // Sanity check: Make sure that the given instance isn't null.
         // -----------------------------------------------------------
-        if( a_sampleAlleleToSet == null )
+        if( a_sampleChromosomeToSet == null )
         {
             throw new InvalidConfigurationException(
-                "The sample Allele instance may not be null." );
+                "The sample Chromosome instance may not be null." );
         }
 
-        // Everything appears to be ok, so assign the instance variable.
-        // -------------------------------------------------------------
-        m_sampleAllele = a_sampleAlleleToSet;
+        // Everything appears to be ok, so assign the instance variables.
+        // --------------------------------------------------------------
+        m_sampleChromosome = a_sampleChromosomeToSet;
+        m_chromosomeSize = m_sampleChromosome.size();
     }
 
-
     /**
-     * Retrieves the sample instance of the Allele implementation that is to
-     * be used to represent genes. This allows type information to be gathered,
-     * as well as new Allele instances (of the desired implementation) to be
-     * easily generated via the Allele's newAllele() method.
+     * Retrieves the sample Chromosome that contains the desired Allele
+     * types at each respective gene location (locus).
      *
-     * @return a reference to the sample Allele instance.
+     * @return the sample Chromosome instance.
      */
-    public Allele getSampleAllele()
+    public Chromosome getSampleChromosome()
     {
-        return m_sampleAllele;
+        return m_sampleChromosome;
     }
 
 
@@ -320,31 +332,11 @@ public class Configuration implements java.io.Serializable
 
 
     /**
-     * Set the chromosome size to be used for this genetic algorithm.
-     * The chromosome size is a fixed value that represntes the
-     * number of genes represented by each Chromosome.
-     *
-     * This setting is required.
-     *
-     * @param a_sizeOfChromosomes The chromosome size to be used.
-     *
-     * @throws InvalidConfigurationException if the chromosome size
-     *         is not satisfactory or this object is locked.
-     */
-    public synchronized void setChromosomeSize( int a_sizeOfChromosomes )
-                             throws InvalidConfigurationException
-    {
-        verifyChangesAllowed();
-
-        m_chromosomeSize = a_sizeOfChromosomes;
-    }
-
-
-    /**
      * Retrieve the chromosome size being used by this genetic
-     * algorithm.
+     * algorithm. This value is set automatically when the sample Chromosome
+     * is provided.
      *
-     * @return The chromosome size used by this genetic algorithm.
+     * @return The chromosome size used in this Configuration.
      */
     public int getChromosomeSize()
     {
@@ -425,6 +417,47 @@ public class Configuration implements java.io.Serializable
 
 
     /**
+     * Enables or disables the "auto-exaggeration" feature. This feature
+     * exaggerates the difference between very close fitness values to give
+     * them a larger statistical difference and thus enhance the chances that
+     * the fitter chromosomes will be selected. Without this feature, some
+     * kinds of problems may require a lot of tweaking of the fitness function
+     * to get just right for statistically close fitness values.
+     * <p>
+     * In general, if you find that the genetic engine is having difficulty
+     * picking the optimal solution from among a few very good solutions,
+     * then enabling this feature may help. However, it does add a little bit
+     * of overhead to the natural selection process and so it is disabled by
+     * default.
+     *
+     * @param a_enabledSwitch true to enable the auto-exaggeration feature,
+     *                        or false to disabled it.
+     */
+    public void setAutoExaggerationEnabled( boolean a_enabledSwitch )
+    {
+        m_autoExaggerationEnabled = a_enabledSwitch;
+    }
+
+
+    /**
+     * Retrieves the status of the "auto-exaggeration" feature switch.
+     * This feature exaggerates the difference between very close fitness
+     * values to give them a larger statistical difference and thus enhance
+     * the chances that the fitter chromosomes will be selected. Without this
+     * feature, some kinds of problems may require a lot of tweaking of the
+     * fitness function to get just right for statistically close fitness
+     * values.
+     *
+     * @return true if the auto-exaggeration feature is enabled, false
+     *         if it is disabled.
+     */
+    public boolean isAutoExaggerationEnabled()
+    {
+        return m_autoExaggerationEnabled;
+    }
+
+
+    /**
      * Lock all of the settings in this configuration object. Once
      * this method is successfully invoked, none of the settings may
      * be changed. There is no way to unlock this object once it is locked.
@@ -495,12 +528,11 @@ public class Configuration implements java.io.Serializable
                 "configuration." );
         }
 
-        if( m_sampleAllele == null )
+        if( m_sampleChromosome == null )
         {
             throw new InvalidConfigurationException(
-                "A sample instance of the desired concrete Allele " +
-                "implementation must be specified in the active " +
-                "configuration." );
+                "A sample instance of the desired Chromosome " +
+                "setup must be specified in the active configuration." );
         }
 
         if( m_populationSelector == null )
@@ -545,21 +577,26 @@ public class Configuration implements java.io.Serializable
                 "the active configuration." );
         }
 
-        // Next, it's critical that the Allele implementation has a working
-        // equals() methods, or else the genetic engine will end up
-        // failing in mysterious and unpredictable ways. We therefore verify
-        // right here that this method is working properly.
+        // Next, it's critical that each Allele implementation in the sample
+        // Chromosome has a working equals() method, or else the genetic
+        // engine will end up failing in mysterious and unpredictable ways.
+        // We therefore verify right here that this method is working properly.
         // -------------------------------------------------------------------
-        Allele sampleCopy = m_sampleAllele.newAllele( this );
-        sampleCopy.setValue( m_sampleAllele.getValue() );
-
-        if( !( sampleCopy.equals( m_sampleAllele ) ) )
+        Allele[] sampleGenes = m_sampleChromosome.getGenes();
+        for( int i = 0; i < sampleGenes.length; i++ )
         {
-            throw new InvalidConfigurationException(
-                "The sample Allele does not appear to have a working " +
-                "equals() method. When tested, the method returned false " +
-                "when comparing the sample allele with an allele of the" +
-                "same type possessing the same value. " );
+            Allele sampleCopy = sampleGenes[i].newAllele( this );
+            sampleCopy.setValue( sampleGenes[i].getValue() );
+
+            if( !( sampleCopy.equals( sampleGenes[i] ) ) )
+            {
+                throw new InvalidConfigurationException(
+                    "The sample Allele at gene position (locus) " + i +
+                    " does not appear to have a working equals() method. " +
+                    "When tested, the method returned false when comparing " +
+                    "the sample allele with an allele of the same type " +
+                    "possessing the same value." );
+            }
         }
     }
 

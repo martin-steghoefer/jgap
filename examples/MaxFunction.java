@@ -24,7 +24,7 @@ import org.jgap.Chromosome;
 import org.jgap.FitnessFunction;
 
 
-public class MaxFunction implements FitnessFunction
+public class MaxFunction extends FitnessFunction
 {
     /**
      * This example implementation calculates the fitness value of Chromosomes

@@ -45,8 +45,14 @@ import org.jgap.impl.IntegerAllele;
  */
 public class MakeChange
 {
-    private static final int MAX_EVOLUTIONS = 100;
+    private static final int MAX_EVOLUTIONS = 50;
 
+    /**
+     * Calculates the amount of change represented by the given chromosome.
+     *
+     * @param a_chromosome The chromosome to evaluate
+     * @return the amount of change (as an integer).
+     */
     public static int calculateChangeAmount( Chromosome a_chromosome )
     {
         Allele[] genes = a_chromosome.getGenes();
@@ -59,6 +65,12 @@ public class MakeChange
     }
 
 
+    /**
+     * Calculates the number of coins represented by the given chromosome.
+     *
+     * @param a_chromosome The chromosome to evaluate.
+     * @return The number of coins represented by the given chromosome.
+     */
     public static int calculateNumberOfCoins( Chromosome a_chromosome )
     {
         Allele[] genes = a_chromosome.getGenes();
@@ -71,15 +83,33 @@ public class MakeChange
     }
 
 
+    /**
+     * Employs a genetic algorithm to try to determine the minimum number
+     * of coins necessary to produce a given amount of change. Writes the
+     * answer to System.out.
+     *
+     * @param a_changeValue The amount of change for which to determine the
+     *                      minimum number of necessary coins.
+     * @throws Exception if there is a problem.
+     */
     private static void calculateMinimumCoinsForChange( int a_changeValue )
                         throws Exception
     {
         Configuration activeConfiguration = new DefaultConfiguration();
+        activeConfiguration.setAutoExaggerationEnabled( true );
         activeConfiguration.setFitnessFunction(
             new MakeChangeFitnessFunction( a_changeValue ) );
-        activeConfiguration.setChromosomeSize( 4 );
-        activeConfiguration.setPopulationSize( 1000 );
-        activeConfiguration.setSampleAllele( new IntegerAllele( 0, 99 ));
+
+        Allele[] sampleGenes = new Allele[4];
+        sampleGenes[0] = new IntegerAllele( 0, 3 );
+        sampleGenes[1] = new IntegerAllele( 0, 2 );
+        sampleGenes[2] = new IntegerAllele( 0, 2 );
+        sampleGenes[3] = new IntegerAllele( 0, 4 );
+
+        activeConfiguration.setSampleChromosome(
+            new Chromosome( sampleGenes ) );
+
+        activeConfiguration.setPopulationSize( 500 );
 
         Genotype population =
             Genotype.randomInitialGenotype( activeConfiguration );
@@ -93,6 +123,7 @@ public class MakeChange
         System.out.println( "Best answer is " +
             calculateChangeAmount( fittestChromosome ) + " cents with " +
             calculateNumberOfCoins( fittestChromosome ) + " coins." );
+        System.out.println( fittestChromosome.toString() );
     }
 
 
@@ -138,6 +169,4 @@ public class MakeChange
             }
         }
     }
-
-
 }

@@ -22,6 +22,8 @@ package org.jgap.impl;
 import org.jgap.Allele;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 
 /**
@@ -34,9 +36,11 @@ import java.util.ArrayList;
 public class AllelePool
 {
     /**
-     * The pool of alleles managed by this class.
+     * A Map of allele pools managed by this class. Each key is the Class
+     * of the pooled alleles, and the value is an ArrayList containing the
+     * pool of those alleles.
      */
-    private static final ArrayList m_allelePool = new ArrayList();
+    private static final Map m_allelePools = new HashMap();
 
 
     /**
@@ -56,20 +60,19 @@ public class AllelePool
      * @return An Allele instance from the pool (with an undefined value), or
      *         null if no allele instances are available in the pool.
      */
-    public static synchronized Allele acquireAllele()
+    public static synchronized Allele acquireAllele( Class a_alleleType )
     {
-        int poolSize = m_allelePool.size();
-
-        if( poolSize > 0 )
+        ArrayList pool = (ArrayList) m_allelePools.get( a_alleleType );
+        if( pool == null || pool.size() == 0 )
+        {
+            return null;
+        }
+        else
         {
             // Fetch from the tail of the pool to avoid element
             // shifting within the ArrayList.
             // ------------------------------------------------
-            return (Allele) m_allelePool.remove( poolSize - 1);
-        }
-        else
-        {
-            return null;
+            return (Allele) pool.remove( pool.size() - 1);
         }
      }
 
@@ -82,11 +85,15 @@ public class AllelePool
     public static synchronized void releaseAllele( Allele a_alleleToRelease )
     {
         a_alleleToRelease.cleanup();
-        m_allelePool.add( a_alleleToRelease );
-    }
+        Class alleleType = a_alleleToRelease.getClass();
 
-    public static int getPoolSize()
-    {
-        return m_allelePool.size();
+        ArrayList pool = (ArrayList) m_allelePools.get( alleleType );
+        if( pool == null )
+        {
+            pool = new ArrayList();
+            m_allelePools.put( alleleType, pool );
+        }
+
+        pool.add( a_alleleToRelease );
     }
 }

@@ -36,10 +36,10 @@ public class TestXML
         {
             Configuration activeConfiguration = new DefaultConfiguration();
 
-            activeConfiguration.setChromosomeSize( 8 );
+            activeConfiguration.setSampleChromosome(
+                new Chromosome( new BooleanAllele(), 8 ) );
             activeConfiguration.setPopulationSize( 10 );
             activeConfiguration.setFitnessFunction( new MaxFunction() );
-            activeConfiguration.setSampleAllele( new BooleanAllele() );
 
             // Test Chromsome manipulation methods
             Chromosome chromosome =

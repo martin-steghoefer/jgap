@@ -75,7 +75,7 @@ public class IntegerAllele implements Allele
     {
         m_lowerBounds = Integer.MIN_VALUE;
         m_upperBounds = Integer.MAX_VALUE;
-        m_boundsUnitsToIntegerUnits = INTEGER_RANGE / ( m_upperBounds - m_lowerBounds );
+        m_boundsUnitsToIntegerUnits = INTEGER_RANGE / ( m_upperBounds - m_lowerBounds + 1 );
     }
 
 
@@ -93,7 +93,7 @@ public class IntegerAllele implements Allele
         m_lowerBounds = a_lowerBounds;
         m_upperBounds = a_upperBounds;
         m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds );
+                                      ( m_upperBounds - m_lowerBounds + 1 );
     }
 
 
@@ -110,7 +110,7 @@ public class IntegerAllele implements Allele
         m_lowerBounds = Integer.MIN_VALUE;
         m_upperBounds = Integer.MAX_VALUE;
         m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds );
+                                      ( m_upperBounds - m_lowerBounds + 1 );
     }
 
 
@@ -133,7 +133,7 @@ public class IntegerAllele implements Allele
         m_lowerBounds = a_lowerBounds;
         m_upperBounds = a_upperBounds;
         m_boundsUnitsToIntegerUnits = INTEGER_RANGE /
-                                      ( m_upperBounds - m_lowerBounds );
+                                      ( m_upperBounds - m_lowerBounds + 1 );
     }
 
 
@@ -387,13 +387,22 @@ public class IntegerAllele implements Allele
             if( m_value.intValue() > m_upperBounds ||
                 m_value.intValue() < m_lowerBounds )
             {
-                long differenceFromIntMax = (long) Integer.MAX_VALUE -
+       /*         long differenceFromIntMax = (long) Integer.MAX_VALUE -
                                             (long) m_value.intValue();
                 int differenceFromBoundsMax =
                     (int) ( differenceFromIntMax / m_boundsUnitsToIntegerUnits );
 
                 m_value =
                     new Integer( m_upperBounds - differenceFromBoundsMax );
+        */
+                long differenceFromIntMin = (long) Integer.MIN_VALUE +
+                                            (long) m_value.intValue();
+                int differenceFromBoundsMin =
+                    (int) ( differenceFromIntMin / m_boundsUnitsToIntegerUnits );
+
+                m_value =
+                    new Integer( m_upperBounds + differenceFromBoundsMin );
+
             }
         }
     }

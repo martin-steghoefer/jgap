@@ -45,6 +45,7 @@ public class TestGenetics
 
         int numEvolutions = Integer.parseInt( args[ 2 ] );
         Configuration gaConf = new DefaultConfiguration();
+        gaConf.setAutoExaggerationEnabled( true );
         Genotype genotype = null;
 
         try
@@ -57,10 +58,10 @@ public class TestGenetics
                 System.exit( -1 );
             }
 
-            gaConf.setChromosomeSize( chromeSize );
+            gaConf.setSampleChromosome(
+                new Chromosome( new BooleanAllele(), chromeSize ) );
             gaConf.setPopulationSize( Integer.parseInt( args[ 1 ] ) );
             gaConf.setFitnessFunction( new MaxFunction() );
-            gaConf.setSampleAllele( new BooleanAllele() );
 
             genotype = Genotype.randomInitialGenotype( gaConf );
         }
@@ -90,7 +91,7 @@ public class TestGenetics
         Chromosome fittest = genotype.getFittestChromosome();
         System.out.println( "------------------------------------" );
         System.out.println( "Fittest Chromosome has value " +
-            gaConf.getFitnessFunction().evaluate( fittest ) + ":" );
+            gaConf.getFitnessFunction().getFitnessValue( fittest ) + ":" );
     }
 }
 

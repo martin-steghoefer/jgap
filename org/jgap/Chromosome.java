@@ -48,6 +48,65 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
 
 
     /**
+     * Constructs a Chromosome of the given size separate from any specific
+     * Configuration. This constructor will use the given sample Allele to
+     * create an Allele representation for each of its genes. This can be
+     * useful for constructing sample chromosomes that use the same Allele
+     * type for all of their genes and that are to be used to setup a
+     * Configuration object.
+     *
+     * @param a_sampleAllele A sample concrete Allele instance representative
+     *                       of the Alleles that should represent all genes
+     *                       in this Chromosome instance.
+     * @param a_desiredSize The desired size (number of genes) of this
+     *                      Chromosome.
+     */
+    public Chromosome( Allele a_sampleAllele, int a_desiredSize )
+    {
+        if( a_sampleAllele == null )
+        {
+            throw new IllegalArgumentException(
+                "Sample Allele cannot be null." );
+        }
+
+        if( a_desiredSize <= 0 )
+        {
+            throw new IllegalArgumentException(
+                "Chromosome size must be greater than zero." );
+        }
+
+        m_genes = new Allele[ a_desiredSize ];
+        for( int i = 0; i < m_genes.length; i++ )
+        {
+            m_genes[i] = a_sampleAllele.newAllele( null );
+        }
+
+        m_activeConfiguration = null;
+    }
+
+
+    /**
+     * Constructs a Chromosome separate from any specific Configuration. This
+     * can be useful for constructing sample chromosomes that are to be used
+     * to setup a Configuration object.
+     *
+     * @param a_initialGenes The genes of this Chromosome.
+     */
+    public Chromosome( Allele[] a_initialGenes )
+    {
+        // Sanity check: make sure the genes aren't null.
+        // ----------------------------------------------
+        if ( a_initialGenes == null )
+        {
+            throw new IllegalArgumentException( "Genes cannot be null." );
+        }
+
+        m_genes = a_initialGenes;
+        m_activeConfiguration = null;
+    }
+
+
+    /**
      * Constructs this Chromosome instance with the given array of gene values.
      * Each gene is represented by a single allele in the array. For
      * convenience, the randomInitialChromosome method is provided
@@ -86,16 +145,6 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
                 "Configuration instance must not be null" );
         }
 
-        // Make sure the declared number of genes in the active configuration
-        // matches the actual number passed in.
-        // ------------------------------------------------------------------
-        if( a_activeConfiguration.getChromosomeSize() != a_initialGenes.length )
-        {
-            throw new InvalidConfigurationException(
-                "The declared chromosome size must match the actual number " +
-                "of genes passed into the chromosomes." );
-        }
-
         // Lock the configuration settings so that they can't be changed from
         // now on, and then populate our instance variables.
         // ------------------------------------------------------------------
@@ -114,8 +163,10 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
      */
     public synchronized Object clone()
     {
-        // First make a copy of each of the Alleles.
-        // -----------------------------------------
+        // First make a copy of each of the Alleles. We explicity use the
+        // Allele at each respective gene location (locus) to create the
+        // new Allele that is to occupy that locus in the new Chromosome.
+        // --------------------------------------------------------------
         Allele[] copyOfGenes = new Allele[ m_genes.length ];
 
         for( int i = 0; i < m_genes.length; i++ )
@@ -123,11 +174,10 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
             // Try to pull the new allele from the allele pool to save on
             // memory. If none is available, then create one.
             // ----------------------------------------------------------
-            Allele copy = AllelePool.acquireAllele();
+            Allele copy = AllelePool.acquireAllele( m_genes[i].getClass() );
             if( copy == null )
             {
-                copy = m_activeConfiguration.getSampleAllele().newAllele(
-                         m_activeConfiguration );
+                copy = m_genes[i].newAllele( m_activeConfiguration );
             }
 
             // Set the value of the copy equal to the value of the original
@@ -254,37 +304,40 @@ public class Chromosome implements Cloneable, java.io.Serializable, Comparable
         a_activeConfiguration.lockSettings();
 
         // Next we need to create all of the random alleles for the
-        // Chromosome. To do this, we fetch the sample Allele instance from
-        // the active configuration and invoke its newAllele() method to
-        // create fresh Alleles. We then call their setToRandomValue() methods
-        // to initialize them to a random value.
-        // -------------------------------------------------------------------
-        Allele sampleAllele = a_activeConfiguration.getSampleAllele();
-        int numberOfGenes = a_activeConfiguration.getChromosomeSize();
+        // Chromosome. To do this, we fetch the sample Chromosome instance from
+        // the active configuration, run through its alleles, and invoke their
+        // respective newAllele() methods to create fresh Alleles. We then call
+        // their setToRandomValue() methods to initialize them to random values.
+        // ---------------------------------------------------------------------
+        Chromosome sampleChromosome =
+            a_activeConfiguration.getSampleChromosome();
 
-        Allele[] genes = new Allele[ numberOfGenes ];
+        Allele[] sampleGenes = sampleChromosome.getGenes();
+        int numberOfGenes = sampleChromosome.size();
+
+        Allele[] newGenes = new Allele[ numberOfGenes ];
 
         for ( int i = 0; i < numberOfGenes; i++ )
         {
             // First try to fetch an allele from the allele pool. If none is
             // available, then create a new one.
             // -------------------------------------------------------------
-            genes[i] = AllelePool.acquireAllele();
-            if( genes[i] == null )
+            newGenes[i] = AllelePool.acquireAllele( sampleGenes[i].getClass() );
+            if( newGenes[i] == null )
             {
-                genes[i] = sampleAllele.newAllele( a_activeConfiguration );
+                newGenes[i] = sampleGenes[i].newAllele( a_activeConfiguration );
             }
 
             // Set the allele to a random value.
             // -------------------------------
-            genes[i].setToRandomValue(
+            newGenes[i].setToRandomValue(
                 a_activeConfiguration.getRandomGenerator() );
         }
 
-        // Finally, construct the new chromosome with the generated genes
+        // Finally, construct the new chromosome with the generated newGenes
         // and return it.
         // --------------------------------------------------------------
-        return new Chromosome( a_activeConfiguration, genes );
+        return new Chromosome( a_activeConfiguration, newGenes );
     }
 
 
