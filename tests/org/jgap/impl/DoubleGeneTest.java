@@ -19,10 +19,13 @@
  */
 package org.jgap.impl;
 
-import java.util.*;
-import junit.framework.*;
-import junitx.util.*;
-import org.jgap.*;
+import java.util.Vector;
+
+import org.jgap.Gene;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junitx.util.PrivateAccessor;
 
 /**
  * Tests for DoubleGene class
@@ -119,14 +122,14 @@ public class DoubleGeneTest
         assertTrue (gene2.equals (gene1));
     }
 
-    public void testIntValue_0 ()
+    public void testDoubleValue_0 ()
     {
         DoubleGene gene1 = new DoubleGene (1.0d, 10000.0d);
         gene1.setAllele (new Double (4711.0d));
         assertEquals (4711.0d, gene1.doubleValue (), DELTA);
     }
 
-    public void testIntValue_1 ()
+    public void testDoubleValue_1 ()
     {
         DoubleGene gene1 = new DoubleGene (1.765d, 10000.0d);
         gene1.setAllele (null);
