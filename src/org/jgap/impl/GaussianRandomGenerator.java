@@ -34,7 +34,7 @@ public class GaussianRandomGenerator
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -97,7 +97,8 @@ public class GaussianRandomGenerator
   }
 
   /**
-   * @return positive integer value between 0 and ceiling
+   * @param ceiling the upper boundary excluded
+   * @return positive integer value between 0 and (ceiling - 1)
    */
   public int nextInt(int ceiling) {
     return Math.min(ceiling - 1,
