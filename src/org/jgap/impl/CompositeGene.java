@@ -54,7 +54,7 @@ public class CompositeGene
 {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.5 $";
+    private final static String CVS_REVISION = "$Revision: 1.6 $";
 
     /**
      * Represents the delimiter that is used to separate genes in the
@@ -589,11 +589,12 @@ public class CompositeGene
     }
 
     /**
-     * Applies a mutation of a given intensity (percentage) onto the atomic
-     * element at given index (NumberGenes only have one atomic element)
-     * @param index index of atomic element, between 0 and size()-1
-     * @param a_percentage percentage of mutation (greater than -1 and smaller
-     *        than 1).
+     * Don't use this method, is makes no sense here. It is just there to
+     * satisfy the Gene interface.
+     * Instead, loop over all cotnained genes and call their applyMutation
+     * method.
+     * @param index does not matter here
+     * @param a_percentage does not matter here
      *
      * @author Klaus Meffert
      * @since 1.1
@@ -602,14 +603,14 @@ public class CompositeGene
     {
         for (int i = 0; i < size (); i++)
         {
-            /**@todo problem here: size() of CompositeGene not equal to
-             * (different) sizes of contained genes.
-             * Solution: Change MutationOperator to check for CompositeGene and
-             *           then apply changes to every single gene
-             */
+            // problem here: size() of CompositeGene not equal to (different)
+            // sizes of contained genes.
+            // Solution: Don't use CompositeGene.applyMutation, instead loop
+            //           over all contained genes and call their method
+            // -------------------------------------------------------------
             throw new RuntimeException ("applyMutation may not be called for"
-                + " a CompositeGene.");
-//            geneAt(i).applyMutation(index, a_percentage);
+                + " a CompositeGene. Call this method for each gene contained"
+                + " in the CompositeGene.");
         }
     }
 
