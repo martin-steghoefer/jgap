@@ -1,6 +1,4 @@
 /*
- * Copyright 2003 Klaus Meffert
- *
  * This file is part of JGAP.
  *
  * JGAP is free software; you can redistribute it and/or modify
@@ -17,10 +15,10 @@
  * along with JGAP; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package org.jgap.impl;
 
 import java.util.List;
-
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
 import org.jgap.Gene;
@@ -37,114 +35,123 @@ import junitx.util.PrivateAccessor;
  * @author Klaus Meffert
  */
 public class BestChromosomesSelectorTest
-    extends TestCase
-{
+    extends TestCase {
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.2 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-    public BestChromosomesSelectorTest ()
-    {
-    }
+  public BestChromosomesSelectorTest() {
+  }
 
-    public static Test suite ()
-    {
-        TestSuite suite = new TestSuite (BestChromosomesSelectorTest.class);
-        return suite;
-    }
+  public static Test suite() {
+    TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
+    return suite;
+  }
 
-    public void testConstruct_0 ()
-        throws Exception
-    {
-        NaturalSelector selector = new BestChromosomesSelector ();
-        Boolean needsSorting = (Boolean) PrivateAccessor.getField (selector,
-            "needsSorting");
-        assertEquals (Boolean.FALSE, needsSorting);
-    }
+  public void testConstruct_0() throws Exception {
+    NaturalSelector selector = new BestChromosomesSelector();
+    Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
+        "needsSorting");
+    assertEquals(Boolean.FALSE, needsSorting);
+  }
 
-    public void testAdd_0 ()
-        throws Exception
-    {
-        NaturalSelector selector = new BestChromosomesSelector ();
-        Configuration conf = new DefaultConfiguration ();
-        Gene gene = new BooleanGene ();
-        Chromosome chrom = new Chromosome (gene, 5);
-        selector.add (conf, chrom);
+  public void testAdd_0() throws Exception {
+    NaturalSelector selector = new BestChromosomesSelector();
+    Configuration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    selector.add(conf, chrom);
+    Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
+        "needsSorting");
+    assertEquals(Boolean.TRUE, needsSorting);
+    List chromosomes = (List) PrivateAccessor.getField(selector,
+        "chromosomes");
+    assertEquals(1, chromosomes.size());
+    assertEquals(chrom, chromosomes.get(0));
+    selector.add(null, chrom);
+    assertEquals(1, chromosomes.size());
+    assertEquals(chrom, chromosomes.get(0));
+  }
 
-        Boolean needsSorting = (Boolean) PrivateAccessor.getField (selector,
-            "needsSorting");
-        assertEquals (Boolean.TRUE, needsSorting);
+  public void testSelect_0() throws Exception {
+    NaturalSelector selector = new BestChromosomesSelector();
+    // add first chromosome
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    thirdBestChrom.setFitnessValue(10);
+    selector.add(null, thirdBestChrom);
+    // add second chromosome
+    // ---------------------
+    gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(12);
+    selector.add(null, bestChrom);
+    // add third chromosome
+    // ---------------------
+    gene = new IntegerGene();
+    gene.setAllele(new Integer(444));
+    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    secondBestChrom.setFitnessValue(11);
+    selector.add(null, secondBestChrom);
+    // receive top 1 (= best) chromosome
+    // ---------------------------------
+    Chromosome[] bestChroms = selector.select(null, 1);
+    assertEquals(1, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    // receive top 3 chromosomes
+    // ----------------------------------
+    bestChroms = selector.select(null, 3);
+    assertEquals(3, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    assertEquals(secondBestChrom, bestChroms[1]);
+    assertEquals(thirdBestChrom, bestChroms[2]);
+  }
 
-        List chromosomes = (List) PrivateAccessor.getField (selector,
-            "chromosomes");
-        assertEquals (1, chromosomes.size ());
-        assertEquals (chrom, chromosomes.get (0));
+  public void testSelect_1() throws Exception {
+    NaturalSelector selector = new BestChromosomesSelector();
+    // add first chromosome
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(new Boolean(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    thirdBestChrom.setFitnessValue(10);
+    selector.add(null, thirdBestChrom);
+    // add second chromosome
+    // ---------------------
+    gene = new BooleanGene();
+    gene.setAllele(new Boolean(false));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(12);
+    selector.add(null, bestChrom);
+    // receive top 1 (= best) chromosome
+    // ---------------------------------
+    Chromosome[] bestChroms = selector.select(null, 1);
+    assertEquals(1, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    // receive top 2 chromosomes (select-method should take into account only
+    // 2 chroms!)
+    // ----------------------------------
+    bestChroms = selector.select(null, 3);
+    assertEquals(2, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    assertEquals(thirdBestChrom, bestChroms[1]);
+  }
 
-        selector.add (null, chrom);
-        assertEquals (1, chromosomes.size ());
-        assertEquals (chrom, chromosomes.get (0));
-    }
-
-    public void testSelect_0 ()
-        throws Exception
-    {
-        NaturalSelector selector = new BestChromosomesSelector ();
-
-        // add first chromosome
-        // --------------------
-        Gene gene = new BooleanGene ();
-        gene.setAllele (new Boolean (true));
-        Chromosome thirdBestChrom = new Chromosome (gene, 7);
-        thirdBestChrom.setFitnessValue (10);
-        selector.add (null, thirdBestChrom);
-
-        // add second chromosome
-        // ---------------------
-        gene = new BooleanGene ();
-        gene.setAllele (new Boolean (false));
-        Chromosome bestChrom = new Chromosome (gene, 3);
-        bestChrom.setFitnessValue (12);
-        selector.add (null, bestChrom);
-
-        // add third chromosome
-        // ---------------------
-        gene = new IntegerGene ();
-        gene.setAllele (new Integer (444));
-        Chromosome secondBestChrom = new Chromosome (gene, 3);
-        secondBestChrom.setFitnessValue (11);
-        selector.add (null, secondBestChrom);
-
-        // receive top 1 (= best) chromosome
-        // ---------------------------------
-        Chromosome[] bestChroms = selector.select (null, 1);
-
-        assertEquals (1, bestChroms.length);
-        assertEquals (bestChrom, bestChroms[0]);
-
-        // receive top 3 chromosomes
-        // ----------------------------------
-        bestChroms = selector.select (null, 3);
-
-        assertEquals (3, bestChroms.length);
-        assertEquals (bestChrom, bestChroms[0]);
-        assertEquals (secondBestChrom, bestChroms[1]);
-        assertEquals (thirdBestChrom, bestChroms[2]);
-    }
-
-    public void testEmpty_0 ()
-        throws Exception
-    {
-        NaturalSelector selector = new BestChromosomesSelector ();
-        Configuration conf = new DefaultConfiguration ();
-        Gene gene = new BooleanGene ();
-        Chromosome chrom = new Chromosome (gene, 5);
-        selector.add (conf, chrom);
-        selector.empty ();
-        Boolean needsSorting = (Boolean) PrivateAccessor.getField (selector,
-            "needsSorting");
-        assertEquals (Boolean.FALSE, needsSorting);
-        List chromosomes = (List) PrivateAccessor.getField (selector,
-            "chromosomes");
-        assertEquals (0, chromosomes.size ());
-    }
+  public void testEmpty_0() throws Exception {
+    NaturalSelector selector = new BestChromosomesSelector();
+    Configuration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene();
+    Chromosome chrom = new Chromosome(gene, 5);
+    selector.add(conf, chrom);
+    selector.empty();
+    Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
+        "needsSorting");
+    assertEquals(Boolean.FALSE, needsSorting);
+    List chromosomes = (List) PrivateAccessor.getField(selector,
+        "chromosomes");
+    assertEquals(0, chromosomes.size());
+  }
 }
