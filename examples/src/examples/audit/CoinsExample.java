@@ -31,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -147,16 +147,17 @@ public class CoinsExample {
           double fitness = population.getFittestChromosome().getFitnessValue();
           if (i % 3 == 0) {
             String s = String.valueOf(i);
-            Number n = eval.getValue("Fitness " + permutation, s);
-            double d;
-            if (n != null) {
-              // calculate historical average
-              d = n.doubleValue() + fitness/(run+1);
-            }
-            else {
-              d = fitness;
-            }
-            eval.setValue(permutation,run,d, "Fitness " + permutation, s);
+//            Number n = eval.getValue("Fitness " + permutation, s);
+//            double d;
+//            if (n != null) {
+//              // calculate historical average
+//              d = n.doubleValue() + fitness/(run+1);
+//            }
+//            else {
+//              d = fitness;
+//            }
+//            eval.setValue(permutation,run,fitness, "Fitness " + permutation, s);
+            eval.setValue(permutation,run,fitness, new Integer(0), s);
           }
         }
       }

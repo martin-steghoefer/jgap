@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Evaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Each data has its own data container
@@ -152,9 +152,10 @@ public class Evaluator {
     Integer runI;
     while (it.hasNext()) {
       runI = (Integer)it.next();
-      // determine dataset of given permutation
-      DefaultKeyedValues2D a_data = (DefaultKeyedValues2D) m_permutationData.get(
-        createKey(a_permutation, runI.intValue()));
+      // Determine dataset of given permutation.
+      // ---------------------------------------
+      DefaultKeyedValues2D a_data = (DefaultKeyedValues2D) m_permutationData.
+          get(createKey(a_permutation, runI.intValue()));
 
       // determine values for current run-number and "add" them to gathered
       // data.
@@ -205,6 +206,31 @@ public class Evaluator {
    * @return DefaultKeyedValues2D
    */
   public DefaultKeyedValues2D calcAvgFitnessImpr(int a_permutation) {
+    Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
+    if (runNumbers == null) {
+      return null;
+    }
+
+    Map fitnessImpr = new Hashtable();
+
+    // Loop over all run-numbers.
+    // --------------------------
+    Iterator it = runNumbers.keySet().iterator();
+    int numRuns = runNumbers.keySet().size();
+    Integer runI;
+    while (it.hasNext()) {
+
+      runI = (Integer) it.next();
+      // Determine dataset of given permutation.
+      // ---------------------------------------
+      DefaultKeyedValues2D a_data = (DefaultKeyedValues2D) m_permutationData.
+          get(createKey(a_permutation, runI.intValue()));
+      for (int col = 0; col < a_data.getColumnCount(); col++) {
+        for (int row = 0; row < a_data.getRowCount(); row++) {
+
+        }
+      }
+    }
     return null;
   }
 }
