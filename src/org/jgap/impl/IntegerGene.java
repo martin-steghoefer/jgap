@@ -358,11 +358,6 @@ public class IntegerGene extends NumberGene
     {
         int newValue = (int) Math.round (intValue () * (1.0d + a_percentage));
         setAllele (new Integer (newValue));
-
-        // If the value isn't between the upper and lower bounds of this
-       //  Gene, map it to a value within those bounds.
-       // -------------------------------------------------------------
-       mapValueToWithinBounds ();
    }
 
 }

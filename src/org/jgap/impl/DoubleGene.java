@@ -372,10 +372,5 @@ public class DoubleGene
     {
         double newValue = doubleValue () * (1 + a_percentage);
         setAllele(new Double(newValue));
-
-        // If the value isn't between the upper and lower bounds of this
-       //  Gene, map it to a value within those bounds.
-       // -------------------------------------------------------------
-       mapValueToWithinBounds ();
     }
 }
