@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<link rel=stylesheet href="../stylesheet.css" type="text/css">
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<title>Traveling salesman problem</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">The travelling salesman problem</h1>
+<center>
+      <a class="homeLink" href="../../index.html">[Documentation Index]</a>
+    </center>
+
+<p>The travelling salesman problem is the following: given a finite number of 'cities' along with the cost of travel between each pair of them, find the cheapest way of visiting all the cities and returning to your starting point. This task has deserved a serious attention from mathematicians, and a lot of literature is available. </p>
+
+<p>The number of the possible routes increases rapidly when increasing the number of cities to visit, and the method of force become inappropriate. Genetic methods cannot find surely the best solution, but they can find the comparatively good solution in an acceptable time. <i>JGap</i> implements the solution of this task using swap mutations and greedy crossover algorithm, as it is described by (Grefenstette et al, 1985).  </p>
+
+<p>To solve this task with <em>JGap</em>, you must define the
+specific of your task by deriving class from <i><font size="2">org.jgap.impl</font>.Salesman</i>.
+</p>
+
+<p>The most critical information you need to specify is how to
+measure the travel cost between the two cities. <em>JGap</em>
+uses subclasses of its <em>Gene </em>to represent a city. For
+example, if you use the <em>IntegerGene </em>to store the
+number-city reference then you can query some local structure of
+even remote database to get the travel costs or distance between
+the cities. To specify the needed algorithm, you must override
+the method Salesman.<strong>distance</strong>:</p>
+
+<pre><font color="#000080"><strong>abstract double</strong></font> <b>distance</b>(Gene&nbsp;a_from, Gene&nbsp;a_to)</pre>
+
+<p>You also need to specify the cities we need to visit, and from
+which city the journey should begin. This is done by representing
+a &quot;sample solution&quot;. This solution must be formally
+correct, but need not be even close to the optimal one. The
+sample solution must be presented in as a <em>Chromosome</em>
+that can be easily constructed from the gene array.</p>
+
+<pre><font color="#000080"><strong>abstract</strong><em><strong> </strong></em></font>Chromosome <b>createSampleChromosome</b>(Object<em>&nbsp;an_initial_data</em>)</pre>
+
+<p>For more precise control on the solution you may also need to
+override several other methods and use the parameter <em>an_initial_data.
+</em>Read the <font size="2">org.jgap.impl.salesman</font>.Salesman
+documentation for details.</p>
+
+<p>After you create a working descendant of the <em>Salesman</em>
+by overriding the two mentioned methods, the task solution can be
+obtained just by calling </p>
+
+<pre>Chromosome <b>findOptimalPath</b>(Object&nbsp;<em>an_initial_data</em>) </pre>
+
+<p>The parameter <em>an_initial_data </em>is later passed to <b>createSampleChromosome.
+</b>This is how you can solve multiple tasks with the same class,
+creating the different sample solution from the data, stored in
+your object.</p>
+
+<p>The result is also returned in a form of <em>Chromosome</em>,
+where you can easily access the individual genes.</p>
+
+<p>You can actually do more, but other details are obvious from
+the code documentation page. If you have some comments, questions
+or suggestions for this implementation, please submit a bug or
+rfe.</p>
+
+<p>See also the <a href="TravellingSalesman.java">complete java
+source code</a> for a simple example, where the distance between
+the cities is equal to the absolute difference between they given
+numbers.</p>
+
+<p class="copyright">This page is copyright © 2004, 2005 <a href="http://sourceforge.net/users/audriusa/">Audrius Meskauskas</a>, 
+   GNU free documentation <a href="http://www.gnu.org/licenses/fdl.html">license</a></p>
+
+<h4 class="subheader">Literature</h4>
+
+<dir>
+    <li><font size="2">J. Grefenstette, R. Gopal, R. Rosmaita,
+        and D. Gucht. <i>Genetic algorithms for the traveling
+        salesman problem</i>. In Proceedings of the Second
+        International Conference on Genetic Algorithms. Lawrence
+        Eribaum Associates, Mahwah, NJ, 1985. </font></li>
+    <li><a
+        href="http://ecsl.cs.unr.edu/docs/techreports/gong/node3.html"><font
+        size="2">J. L Sushil, L. Gong</font></a><font size="2">
+        (explanatory material on the web) </font></li>
+</dir>
+    <hr>
+    <center>
+      <a class="homeLink" href="../../index.html">[Documentation Index]</a>
+    </center>
+    <br>
+
+    <center>
+      <A href="http://sourceforge.net/projects/jgap/"> <IMG src="http://sourceforge.net/s
+flogo.php?group_id=11618&amp;type=5"
+         width="210" height="62" border="0" alt="SourceForge Logo"></A>
+    </center>
+
+</body>
+</html>
