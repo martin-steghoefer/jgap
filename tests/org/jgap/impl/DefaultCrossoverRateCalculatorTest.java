@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -21,9 +20,8 @@ import junit.framework.*;
  */
 public class DefaultCrossoverRateCalculatorTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public DefaultCrossoverRateCalculatorTest() {
   }
@@ -66,5 +64,14 @@ public class DefaultCrossoverRateCalculatorTest
     IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
     int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);
+  }
+
+  /**
+   * @author Klaus meffert
+   * @since 2.2
+   */
+  public void testToBePermutated_0() {
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
+    assertTrue(calc.toBePermutated());
   }
 }

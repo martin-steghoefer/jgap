@@ -21,7 +21,10 @@ import junit.framework.*;
 public class BulkFitnessOffsetRemoverTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection! */
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  //delta for distinguishing whether a value is to be interpreted as zero
+  private static final double DELTA = 0.000001d;
 
   // A plainforward implementation for this test.
   //---------------------------------------------
@@ -74,8 +77,8 @@ public class BulkFitnessOffsetRemoverTest
     // Using the DummyFitnessFunction:
     //--------------------------------
 
-    assertNotNull(this.m_fitnessFunction);
-    double fitness = this.m_fitnessFunction.getFitnessValue(chromosome);
+    assertNotNull(m_fitnessFunction);
+    double fitness = m_fitnessFunction.getFitnessValue(chromosome);
     assertEquals( (double) (100 + 200 + 300), fitness, 0.0);
   }
 
@@ -102,15 +105,15 @@ public class BulkFitnessOffsetRemoverTest
     // Using the DummyFitnessFunction:
     //--------------------------------
 
-    assertNotNull(this.m_fitnessFunction);
-    double fitness = this.m_fitnessFunction.getFitnessValue(chromosome);
+    assertNotNull(m_fitnessFunction);
+    double fitness = m_fitnessFunction.getFitnessValue(chromosome);
     assertEquals( (double) (100 + 2000.25 + 0.75e11), fitness, 0.0);
   }
 
   public void testConstructor_0() {
-    assertNotNull(this.m_fitnessFunction);
+    assertNotNull(m_fitnessFunction);
     BulkFitnessOffsetRemover test = new BulkFitnessOffsetRemover(
-        this.m_fitnessFunction);
+        m_fitnessFunction);
   }
 
   public void testConstructor_1() {
@@ -300,6 +303,33 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testGetAbsoluteFitness_0() {
+    BulkFitnessOffsetRemover remover = new BulkFitnessOffsetRemover(
+        new StaticFitnessFunction(33.345d));
+    NumberGene[] genes = {
+        new IntegerGene(),
+        new IntegerGene(),
+        new IntegerGene()};
+    Number[] values = {
+        new Integer(100),
+        new Integer(200),
+        new Integer(300)};
+    for (int i = 0; i < genes.length; i++) {
+      genes[i].setAllele(values[i]);
+    }
+    Chromosome chrom = new Chromosome(genes);
+    double fitness = remover.getAbsoluteFitness(chrom);
+    assertEquals(33.345d, chrom.getFitnessValue(),DELTA);
+    assertEquals(33.345d, fitness, DELTA);
+    fitness = remover.getAbsoluteFitness(chrom);
+    assertEquals(33.345d, chrom.getFitnessValue(),DELTA);
+    assertEquals(33.345d, fitness, DELTA);
+  }
+
+  /**
    * <p>
    * This class is a helper to allow testing class
    * {@link BulkFitnessOffsetRemover}in a plainforward way: It only works
@@ -347,7 +377,7 @@ public class BulkFitnessOffsetRemoverTest
         else {
           throw new ClassCastException(
               "The FitnessFunction "
-              + this.getClass().getName()
+              + getClass().getName()
               + " is for testing purposes only and only handles DoubleGene "
               + "and NumberGene instances (used: "
               + genes[i].getClass().getName() + ")");
