@@ -139,8 +139,28 @@ public interface Gene
 
     /**
      * @return a string representation of the gene
+     *
      * @since 1.1 (in the interface)
      */
     String toString ();
+
+    /**
+     * @return the size of the gene, i.e the number of atomic elements.
+     *         Always 1 for numbers
+     *
+     * @since 1.1
+     */
+    public int size();
+
+    /**
+     * Applies a mutation of a given intensity (percentage) onto the atomic
+     * element at given index (NumberGenes only have one atomic element)
+     * @param index index of atomic element, between 0 and size()-1
+     * @param a_percentage percentage of mutation (greater than -1 and smaller
+     *        than 1).
+     *
+     * @since 1.1
+     */
+    public void applyMutation (int index, double a_percentage);
 
 }
