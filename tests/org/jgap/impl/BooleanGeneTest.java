@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public BooleanGeneTest() {
   }
@@ -100,6 +100,20 @@ public class BooleanGeneTest
   public void testEquals_3() {
     Gene gene1 = new BooleanGene();
     assertFalse(gene1.equals(new IntegerGene()));
+  }
+
+  public void testEquals_4() {
+    Gene gene1 = new BooleanGene();
+    Gene gene2 = new IntegerGene();
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_5() {
+    Gene gene1 = new BooleanGene();
+    Gene gene2 = new FixedBinaryGene(1);
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
   }
 
   public void testBooleanValue_0() {
