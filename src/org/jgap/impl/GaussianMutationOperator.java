@@ -1,3 +1,12 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.impl;
 
 import java.util.*;
@@ -15,7 +24,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   private double m_deviation;
 
@@ -49,7 +58,6 @@ public class GaussianMutationOperator
    */
   public void operate(final Population a_population,
                       List a_candidateChromosomes) {
-    // For each Chromosome in the population...
     RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
     /**@todo resolve this more clearly!*/
     if (rn instanceof GaussianRandomGenerator) {
