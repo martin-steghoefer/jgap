@@ -27,12 +27,18 @@ package org.jgap;
 public abstract class NaturalSelector
     implements INaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
+  final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
-   * number of chromosomes to select for next generation
+   * Add a Chromosome instance to this selector's working pool of Chromosomes.
+   *
+   * @param a_chromosomeToAdd The specimen to add to the pool.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
-  private int m_howManyToSelect;
+ protected abstract void add(Chromosome a_chromosomeToAdd);
+
 
   public NaturalSelector() {
 
