@@ -34,7 +34,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -59,7 +59,7 @@ public class DoubleGene
    * object is important to obtain referenced objects from it, like the
    * RandomGenerator.
    */
-  private Configuration m_configuration;
+  private transient Configuration m_configuration;
 
   /**
    * Constructs a new DoubleGene with default settings. No bounds will

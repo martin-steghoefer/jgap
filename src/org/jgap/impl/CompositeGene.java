@@ -46,7 +46,7 @@ import org.jgap.*;
 public class CompositeGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Represents the delimiter that is used to separate genes in the
@@ -78,7 +78,7 @@ public class CompositeGene
    * object is important to obtain referenced objects from it, like the
    * RandomGenerator.
    */
-  private Configuration m_configuration;
+  private transient Configuration m_configuration;
 
   /**
    * @author Klaus Meffert

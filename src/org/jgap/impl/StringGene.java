@@ -46,7 +46,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private int m_minLength;
 
@@ -59,7 +59,7 @@ public class StringGene
    * object is important to obtain referenced objects from it, like the
    * RandomGenerator.
    */
-  private Configuration m_configuration;
+  private transient Configuration m_configuration;
 
   /**
    * Optional helper class for checking if a given allele value to be set

@@ -40,7 +40,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_length;
 
@@ -51,7 +51,7 @@ public class FixedBinaryGene
    * object is important to obtain referenced objects from it, like the
    * RandomGenerator.
    */
-  private Configuration m_configuration;
+  private transient Configuration m_configuration;
 
   /**
    * Optional helper class for checking if a given allele value to be set
