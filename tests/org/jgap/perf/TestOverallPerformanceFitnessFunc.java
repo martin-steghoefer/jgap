@@ -21,7 +21,7 @@ public class TestOverallPerformanceFitnessFunc
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   private final int m_targetAmount;
 

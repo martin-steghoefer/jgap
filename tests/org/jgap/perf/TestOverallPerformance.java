@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class TestOverallPerformance {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   /**
    * The total number of times we'll let the population evolve.
