@@ -25,7 +25,7 @@ public class GreedyCrossoverTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public GreedyCrossoverTest() {
   }
@@ -222,6 +222,87 @@ public class GreedyCrossoverTest
       }
     }
   }
+
+  /** Test the example from the literature.
+   * This test tests the crossover main algorithm, not the whole operator.
+   * @author Audrius Meskauskas
+   */
+  public void testOperate_3() throws Exception
+  {
+      Configuration conf = new DefaultConfiguration();
+      conf.setFitnessFunction(new TestFitnessFunction());
+      Genotype.setConfiguration(conf);
+      GreedyCrossover cross = new GreedyCrossover()
+      {
+          /* Computes the distances how it was described in the
+             literature example */
+          public double distance(Object a_from, Object a_to)
+           {
+               IntegerGene from = (IntegerGene) a_from;
+               IntegerGene to   = (IntegerGene) a_to;
+
+               int a = from.intValue();
+               int b = to.intValue();
+
+               if (a>b)
+               { int t = a; a = b; b = t; };
+
+               // 4,1 is shorter than 4,5
+               if (a==1 && b==4) return 1;
+               if (a==4 && b==5) return 2;
+
+               // 1,2 is shorter that 1,3
+               if (a==1 && b==2) return 10;
+               if (a==1 && b==3) return 20;
+
+               // 2,0 is shorter than 2,3
+               if (a==0 && b==2) return 100;
+               if (a==2 && b==3) return 200;
+
+
+               throw new Error
+               ("These two should not be compared: "+a+" and "+b);
+           }
+      };
+
+      cross.setStartOffset(0);
+
+      Chromosome a =
+       chromosome ( new int [] { 1, 2, 3, 4, 5, 0 } );
+
+      Chromosome b =
+       chromosome ( new int [] { 4, 1, 3, 2, 0, 5 } );
+
+   // in the literature egsample it was 1, 2, 0, 5, 4, 3, but the random
+   // choice is involved in the last step. In this implementation
+   // the choice is not random and the last two genes are always
+   // returned as 3, 4.
+   // ------------------------------------------------
+      Chromosome must_a =
+       chromosome (new int[] { 1, 2, 0, 5, 3, 4 } );
+
+   // this is same as in the literature, the random choice is not involved.
+   // ------------------------------------------------
+      Chromosome must_b =
+       chromosome (new int[] { 4, 1, 2, 0, 5, 3 } );
+
+      cross.operate(b, a);
+
+      assertEquals(a, must_a);
+      assertEquals(b, must_b);
+  }
+
+  /** Make a chromosome from the array of integer genes. */
+  private Chromosome chromosome ( int [] genes ) throws Exception
+  {
+      IntegerGene [] ig = new IntegerGene [genes.length];
+      for (int i = 0; i < ig.length; i++) {
+          ig [i] = new IntegerGene (0,5);
+          ig [i].setAllele( new Integer (genes [i] ));
+      }
+      return new Chromosome (ig);
+  }
+
 
   /*@todo check if working with CompositeGene*/
 }
