@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -189,33 +189,6 @@ public class BestChromosomesSelector
       m_chromosomes.getChromosomes().clear();
     }
     m_needsSorting = false;
-  }
-
-  /**
-   * Comparator regarding only the fitness value. Best fitness value will
-   * be on first position of resulting sorted list
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  private class FitnessValueComparator
-      implements Comparator {
-    public int compare(Object first, Object second) {
-      Chromosome chrom1 = (Chromosome) first;
-      Chromosome chrom2 = (Chromosome) second;
-
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
-          getFitnessValue(), chrom1.getFitnessValue())) {
-        return 1;
-      }
-      else if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
-          chrom1.getFitnessValue(), chrom2.getFitnessValue())) {
-        return -1;
-      }
-      else {
-        return 0;
-      }
-    }
   }
 
   /**
