@@ -47,7 +47,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -704,8 +704,7 @@ public class Configuration {
    * @since 1.0
    */
   public synchronized void verifyStateIsValid()
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     // First, make sure all of the required fields have been set to
     // appropriate values.
     // ------------------------------------------------------------
