@@ -59,14 +59,17 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman extends Salesman {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
     /** The number of cities to visit, 7 by default. */
     public static final int CITIES = 7;
 
-    /** Create an array of the given number of
+    /**
+     * Create an array of the given number of
      * integer genes. The first gene is always 0, this is
      * a city where the salesman starts the journey
+     * @param initial_data Object
+     * @return Chromosome
      */
     public Chromosome createSampleChromosome(Object initial_data) {
         Gene [] genes = new Gene [CITIES];
@@ -94,10 +97,14 @@ public class TravellingSalesman extends Salesman {
         return sample;
     }
 
-    /** Distance is equal to the difference between city numbers,
+    /**
+     * Distance is equal to the difference between city numbers,
      * except the distance between the last and first cities that
      * is equal to 1. In this way, we ensure that the optimal
      * soultion is 0 1 2 3 .. n - easy to check.
+     * @param a_from first gene, representing a city
+     * @param a_to second gene, representing a city
+     * @return the distance between two cities represented as genes
      */
     public double distance(Gene a_from, Gene a_to) {
         IntegerGene a = (IntegerGene) a_from;
@@ -112,9 +119,11 @@ public class TravellingSalesman extends Salesman {
         return Math.abs( A - B );
     }
 
-    /** Solve a sample task with the number of cities, defined
+    /**
+     * Solve a sample task with the number of cities, defined
      * in a CITIES constant. Print the known optimal way,
      * sample chromosome and found solution.
+     * @param args not relevant here
      */
     public static void main(String[] args) {
 

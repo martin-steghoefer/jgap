@@ -13,14 +13,14 @@ import org.jgap.*;
 
 /**
  * The fitness function to solve the Travelling Salesman problem
-*
+ *
  * @author Audrius Meskauskas
  * @since 2.0
  */
 public class SalesmanFitnessFunction extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public final Salesman salesman;
 
@@ -28,9 +28,16 @@ public class SalesmanFitnessFunction extends FitnessFunction {
     salesman = a_salesman;
   }
 
-  /** Computes the distance by calling salesman
+  /**
+   * Computes the distance by calling salesman
    * {@link org.jgap.impl.salesman.distance
    * salesman.distance(Gene from, Gene to) }
+   * @param a_subject chromosome representing cities
+   * @return distance of the journey thru the cities represented in the
+   * given chromosome
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   protected double evaluate(Chromosome a_subject) {
 

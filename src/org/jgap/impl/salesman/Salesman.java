@@ -45,12 +45,15 @@ import org.jgap.impl.*;
 public abstract class Salesman {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
    /**
     * Override this method to compute the distance between "cities",
     * indicated by these two given genes. The algorithm is not dependent
     * on the used type of genes.
+    * @param a_from first gene, representing a city
+    * @param a_to second gene, representing a city
+    * @return the distance between two cities represented as genes
     */
    public abstract double distance(Gene a_from, Gene a_to);
 
@@ -126,10 +129,11 @@ public abstract class Salesman {
    }
 
    /**
-    * IThe solution process breaks after
-    * the total path length drops below this limit. The default value
-    * (-1) will never be achieved, and evolution stops after
-    * getMaxEvolution() iterations.
+    * The solution process breaks after the total path length drops below this
+    * limit. The default value (-1) will never be achieved, and evolution stops
+    * after getMaxEvolution() iterations.
+    * @return satisfying cost allowed to conditionally stop before an optimal
+    * solution has been found.
     */
    public int getAcceptableCost() {
         return m_acceptable_cost;
@@ -138,23 +142,33 @@ public abstract class Salesman {
         this.m_acceptable_cost = an_AcceptableCost;
     }
 
-    /** Get the maximal number of iterations for population to evolve. */
+    /**
+     * Get the maximal number of iterations for population to evolve.
+     * @return int
+     */
     public int getMaxEvolution() {
         return max_evolution;
     }
 
     /** Set the maximal number of iterations for population to evolve
-     * (default 512). */
+     * (default 512).
+     * @param a_max_evolution sic
+     */
     public void setMaxEvolution(int a_max_evolution) {
         this.max_evolution = a_max_evolution;
     }
 
-    /** Get an population size for this solution */
+    /**
+     * @return population size for this solution
+     */
     public int getPopulationSize() {
         return population_size;
     }
 
-    /** Set an population size for this solution (default 512) */
+    /**
+     * Set an population size for this solution (default 512)
+     * @param a_population_size sic
+     */
     public void setPopulationSize(int a_population_size) {
         this.population_size = a_population_size;
     }
@@ -177,6 +191,7 @@ public abstract class Salesman {
     * createConfiguration.
     *
     * @throws Exception
+    * @return chromosome representing the optimal path between cities
     */
     public Chromosome findOptimalPath(Object a_initial_data) throws
          Exception {
@@ -259,20 +274,24 @@ public abstract class Salesman {
 
     private int m_startOffset = 1;
 
-    /** Sets a number of genes at the start of chromosome, that are
+    /**
+     * Sets a number of genes at the start of chromosome, that are
      * excluded from the swapping. In the Salesman task, the first city
      * in the list should (where the salesman leaves from) probably should
      * not change as it is part of the list. The default value is 1.
+     * @param a_offset start offset for chromosome
      */
     public void setStartOffset (int a_offset)
     {
         m_startOffset = a_offset;
     }
 
-    /** Gets a number of genes at the start of chromosome, that are
+    /**
+     * Gets a number of genes at the start of chromosome, that are
      * excluded from the swapping. In the Salesman task, the first city
      * in the list should (where the salesman leaves from) probably should
      * not change as it is part of the list. The default value is 1.
+     * @return start offset for chromosome
      */
     public int getStartOffset ()
     {
