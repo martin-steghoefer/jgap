@@ -19,7 +19,6 @@
 package org.jgap.perf;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.impl.*;
 
@@ -41,6 +40,7 @@ public class TestOverallPerformance {
    * The total number of times we'll let the population evolve.
    */
   private static final int MAX_ALLOWED_EVOLUTIONS = 1000;
+
   /**
    * Executes the genetic algorithm to determine the minimum number of
    * coins necessary to make up the given target amount of change. The
@@ -52,7 +52,8 @@ public class TestOverallPerformance {
    *
    * @throws Exception
    */
-  public void makeChangeForAmount(int a_targetChangeAmount) throws
+  public void makeChangeForAmount(int a_targetChangeAmount)
+      throws
       Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
@@ -66,11 +67,8 @@ public class TestOverallPerformance {
     gen.setNextLong(6);
     conf.setRandomGenerator(gen);
     // Set the fitness function we want to use, which is our
-
     // MinimizingMakeChangeFitnessFunction. We construct it with
-
     // the target amount of change passed in to this method.
-
     // ---------------------------------------------------------
     FitnessFunction myFunc =
         new TestOverallPerformanceFitnessFunc(a_targetChangeAmount);
@@ -122,58 +120,59 @@ public class TestOverallPerformance {
     // Display the best solution we found.
     // -----------------------------------
     Chromosome bestSolutionSoFar = population.getFittestChromosome();
-/*
-    System.out.println("The best solution contained the following: ");
-    System.out.println("\t" +
-                       TestOverallPerformanceFitnessFunc.
-                       getNumberOfCoinsAtGene(
-        bestSolutionSoFar, 0) + " quarters.");
-    System.out.println("\t" +
-                       TestOverallPerformanceFitnessFunc.
-                       getNumberOfCoinsAtGene(
-        bestSolutionSoFar, 1) + " dimes.");
-    System.out.println("\t" +
-                       TestOverallPerformanceFitnessFunc.
-                       getNumberOfCoinsAtGene(
-        bestSolutionSoFar, 2) + " nickels.");
-    System.out.println("\t" +
-                       TestOverallPerformanceFitnessFunc.
-                       getNumberOfCoinsAtGene(
-        bestSolutionSoFar, 3) + " pennies.");
-    System.out.println("For a total of " +
-                       TestOverallPerformanceFitnessFunc.amountOfChange(
-        bestSolutionSoFar) + " cents in " +
-                       TestOverallPerformanceFitnessFunc.
-                       getTotalNumberOfCoins(
-        bestSolutionSoFar) + " coins.");
-*/
+    /*
+        System.out.println("The best solution contained the following: ");
+        System.out.println("\t" +
+                           TestOverallPerformanceFitnessFunc.
+                           getNumberOfCoinsAtGene(
+            bestSolutionSoFar, 0) + " quarters.");
+        System.out.println("\t" +
+                           TestOverallPerformanceFitnessFunc.
+                           getNumberOfCoinsAtGene(
+            bestSolutionSoFar, 1) + " dimes.");
+        System.out.println("\t" +
+                           TestOverallPerformanceFitnessFunc.
+                           getNumberOfCoinsAtGene(
+            bestSolutionSoFar, 2) + " nickels.");
+        System.out.println("\t" +
+                           TestOverallPerformanceFitnessFunc.
+                           getNumberOfCoinsAtGene(
+            bestSolutionSoFar, 3) + " pennies.");
+        System.out.println("For a total of " +
+                           TestOverallPerformanceFitnessFunc.amountOfChange(
+            bestSolutionSoFar) + " cents in " +
+                           TestOverallPerformanceFitnessFunc.
+                           getTotalNumberOfCoins(
+            bestSolutionSoFar) + " coins.");
+     */
   }
 
   /**
    * Execute the performance test
    *
+   * @author Klaus Meffert
    * @since 2.0
    */
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args)
+      throws Exception {
     final int amount = 287;
     final int numRuns = 20;
     long starttime, timeMillis;
     System.out.println("Test started.");
     // get current time
     starttime = getCurrentMilliseconds();
-    for (int i=0;i<numRuns;i++) {
+    for (int i = 0; i < numRuns; i++) {
       TestOverallPerformance runner = new TestOverallPerformance();
       runner.makeChangeForAmount(amount);
     }
     // calculate time of run
     timeMillis = getCurrentMilliseconds() - starttime;
     System.out.println("Overall time needed for executing performance test: "
-                       +timeMillis+" [millisecs]");
+                       + timeMillis + " [millisecs]");
   }
 
-  public static long getCurrentMilliseconds() {
+  private static long getCurrentMilliseconds() {
     Calendar cal = Calendar.getInstance(TimeZone.getDefault());
     return cal.getTimeInMillis();
   }
-
 }
