@@ -36,7 +36,7 @@ public class DefaultConfigurationTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public DefaultConfigurationTest() {
   }
@@ -54,11 +54,11 @@ public class DefaultConfigurationTest
     assertEquals(StockRandomGenerator.class,
                  conf.getRandomGenerator().getClass());
     assertEquals(ChromosomePool.class, conf.getChromosomePool().getClass());
-    assertEquals(3, conf.getGeneticOperators().size());
-    //test if all 3 slots are occupied by the 3 default GeneticOperator's
+    assertEquals(2, conf.getGeneticOperators().size());
+    //test if all 2 slots are occupied by the 2 default GeneticOperator's
     int code = 0;
     GeneticOperator op;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
       op = (GeneticOperator) conf.getGeneticOperators().get(i);
       if (op instanceof MutationOperator) {
         code = code ^ 1;
@@ -66,10 +66,10 @@ public class DefaultConfigurationTest
       else if (op instanceof ReproductionOperator) {
         code = code ^ 2;
       }
-      else if (op instanceof AveragingCrossoverOperator) {
+      else if (op instanceof CrossoverOperator) {
         code = code ^ 4;
       }
     }
-    assertEquals(7, code);
+    assertEquals(5, code);
   }
 }

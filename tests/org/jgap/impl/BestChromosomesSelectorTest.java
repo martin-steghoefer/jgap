@@ -34,7 +34,7 @@ import junitx.util.*;
 public class BestChromosomesSelectorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public BestChromosomesSelectorTest() {
   }
@@ -107,7 +107,7 @@ public class BestChromosomesSelectorTest
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
 
-    NaturalSelector selector = new BestChromosomesSelector();
+    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
     Gene gene = new IntegerGene();
     gene.setAllele(new Integer(444));
     Chromosome secondBestChrom = new Chromosome(gene, 3);
@@ -118,7 +118,7 @@ public class BestChromosomesSelectorTest
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
-    selector.select(1);
+    selector.select(1,null,new Population());
   }
 
   public void testSelect_1()
@@ -150,13 +150,17 @@ public class BestChromosomesSelectorTest
     selector.add(secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Chromosome[] bestChroms = selector.select(1).toChromosomes();
+    Population pop = new Population();
+    selector.select(1, null, pop);
+    Chromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     selector.setOriginalRate(1.0d);
     // receive top 3 chromosomes
-    // ----------------------------------
-    bestChroms = selector.select(3).toChromosomes();
+    // -------------------------
+    pop.getChromosomes().clear();
+    selector.select(3, null, pop);
+    bestChroms = pop.toChromosomes();
     assertEquals(3, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(secondBestChrom, bestChroms[1]);
@@ -184,14 +188,18 @@ public class BestChromosomesSelectorTest
     selector.add(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Chromosome[] bestChroms = selector.select(1).toChromosomes();
+    Population pop = new Population();
+    selector.select(1, null,pop);
+    Chromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     selector.setOriginalRate(1.0d);
     // receive top 30 chromosomes (select-method should take into account only
     // 2 chroms!)
     // ----------------------------------
-    bestChroms = selector.select(30).toChromosomes();
+    pop.getChromosomes().clear();
+    selector.select(30, null, pop);
+    bestChroms = pop.toChromosomes();
     assertEquals(2, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(thirdBestChrom, bestChroms[1]);
@@ -225,14 +233,16 @@ public class BestChromosomesSelectorTest
     // receive top 30 chromosomes (select-method should take into account only
     // 2 chroms!)
     // ----------------------------------
-    Population bestChroms = selector.select(30);
+    Population pop = new Population();
+    selector.select(30,null,pop);
+    Population bestChroms = pop;
     Population chromosomes = (Population) PrivateAccessor.getField(selector, "m_chromosomes");
     assertFalse(bestChroms.equals(chromosomes));
   }
 
   public void testEmpty_0()
       throws Exception {
-    NaturalSelector selector = new BestChromosomesSelector();
+    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -253,7 +263,7 @@ public class BestChromosomesSelectorTest
    */
   public void testEmpty_1()
       throws Exception {
-    NaturalSelector selector = new BestChromosomesSelector();
+    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -261,10 +271,11 @@ public class BestChromosomesSelectorTest
     Population pop = new Population(1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    selector.select(1);
+    Population popNew = new Population();
+    selector.select(1, null, popNew);
     selector.empty();
-    assertEquals(1, pop.size());
-    assertNotNull(pop.getChromosome(0));
+    assertEquals(1, popNew.size());
+    assertNotNull(popNew.getChromosome(0));
   }
 
   /**
@@ -273,7 +284,7 @@ public class BestChromosomesSelectorTest
    */
   public void testEmpty_2()
       throws Exception {
-    NaturalSelector selector = new BestChromosomesSelector();
+    BestChromosomesSelectorForTest selector = new BestChromosomesSelectorForTest();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
@@ -281,9 +292,18 @@ public class BestChromosomesSelectorTest
     Population pop = new Population(1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    pop = selector.select(1);
+    Population popNew = new Population();
+    selector.select(1, null, popNew);
+    pop = popNew;
     selector.empty();
     assertEquals(1, pop.size());
     assertNotNull(pop.getChromosome(0));
+  }
+
+}
+
+class BestChromosomesSelectorForTest extends BestChromosomesSelector {
+  public void add(Chromosome toAdd) {
+    super.add(toAdd);
   }
 }
