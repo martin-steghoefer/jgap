@@ -23,6 +23,8 @@ import java.util.Collections;
 
 import org.jgap.Chromosome;
 import org.jgap.Population;
+import org.jgap.Genotype;
+import org.jgap.FitnessEvaluator;
 import org.jgap.distr.IPopulationMerger;
 
 /**
@@ -63,7 +65,11 @@ public class FittestPopulationMerger implements IPopulationMerger {
      */
     private class FitnessChromosomeComparator implements Comparator {
 
-        /* Implements the compare method using the fitness function.
+        /**Reference to the current FitnessEvaluator Object,
+         * used for comparing chromosomes */
+        private FitnessEvaluator fEvaluator = Genotype.getConfiguration().getFitnessEvaluator();
+        
+        /** Implements the compare method using the fitness function.
          * The comparation is implemented in a reverse way to make the
          * merging easier (the list of chromosomes is sorted in a
          * descending fitness value order). 
@@ -75,9 +81,9 @@ public class FittestPopulationMerger implements IPopulationMerger {
             Chromosome chr1 = (Chromosome) o1;
             Chromosome chr2 = (Chromosome) o2;
             //Reverse comparison.
-            if (chr1.getFitnessValue() < chr2.getFitnessValue())
+            if (fEvaluator.isFitter(chr2.getFitnessValue(),chr1.getFitnessValue()))
                 return 1;
-            else if (chr1.getFitnessValue() > chr2.getFitnessValue())
+            else if (fEvaluator.isFitter(chr1.getFitnessValue(),chr2.getFitnessValue()))
                 return -1;
             else return 0;
         }
