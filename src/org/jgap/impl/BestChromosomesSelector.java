@@ -32,7 +32,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -114,7 +114,7 @@ public class BestChromosomesSelector
    * fitness values. The chromosomes with the best fitness value win.
    * @param a_howManyToSelect The number of Chromosomes to select.
    *
-   * @return An array of the selected Chromosomes.
+   * @return The selected Chromosomes.
    *
    * @author Klaus Meffert
    * @since 1.1
