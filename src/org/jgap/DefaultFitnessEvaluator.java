@@ -20,11 +20,7 @@ public class DefaultFitnessEvaluator
     implements FitnessEvaluator {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.5 $";
-
-    public DefaultFitnessEvaluator()
-    {
-    }
+    private final static String CVS_REVISION = "$Revision: 1.6 $";
 
     /**
      * Compares the first given fitness value with the second and returns true

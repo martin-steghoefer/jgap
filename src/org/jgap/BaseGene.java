@@ -18,10 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
-  public BaseGene() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Retrieves the value represented by this Gene. All values returned
