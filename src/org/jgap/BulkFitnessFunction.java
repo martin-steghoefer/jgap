@@ -30,7 +30,7 @@ public abstract class BulkFitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Calculates and sets the fitness values on each of the given
@@ -41,7 +41,7 @@ public abstract class BulkFitnessFunction
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
-   * @since 2.0 (prior versions used Chromosome[] as input type)
+   * @since 2.2 (prior versions used other input type)
    */
-  public abstract void evaluate(List a_chromosomes);
+  public abstract void evaluate(Population a_chromosomes);
 }
