@@ -19,6 +19,7 @@
 package org.jgap;
 
 import java.io.*;
+
 import org.jgap.impl.*;
 
 /**
@@ -38,7 +39,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -95,6 +96,9 @@ public class Chromosome
    *                       Chromosome.
    * @param a_desiredSize The desired size (number of genes) of this
    *                      Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public Chromosome(Gene a_sampleGene, int a_desiredSize) {
     // Do some sanity checking to make sure the parameters we were
@@ -124,6 +128,9 @@ public class Chromosome
    * to setup a Configuration object.
    *
    * @param a_initialGenes The genes of this Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public Chromosome(Gene[] a_initialGenes) {
     // Sanity checks: make sure the genes array isn't null and
@@ -161,6 +168,9 @@ public class Chromosome
    *         instance is null or invalid.
    * @throws IllegalArgumentException if any of the given parameters are
    *         invalid, such as a null genes array or element.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public Chromosome(Configuration a_activeConfiguration,
                     Gene[] a_initialGenes)
@@ -204,6 +214,9 @@ public class Chromosome
    * @throws InvalidConfigurationException if the Configuration object is
    *         null or cannot be locked because it is in an invalid or
    *         incomplete state.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void setActiveConfiguration(Configuration a_activeConfiguration)
       throws
@@ -235,6 +248,8 @@ public class Chromosome
    * will be constructed and its value set appropriately before returning.
    *
    * @return A copy of this Chromosome.
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public synchronized Object clone() {
@@ -345,6 +360,9 @@ public class Chromosome
    *
    * @param a_desiredLocus: The index of the gene value to be returned.
    * @return The Gene at the given index.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public synchronized Gene getGene(int a_desiredLocus) {
     return m_genes[a_desiredLocus];
@@ -356,6 +374,9 @@ public class Chromosome
    * ability to manipulate Chromosomes at a low level.
    *
    * @return an array of the Genes contained within this Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public synchronized Gene[] getGenes() {
     return m_genes;
@@ -366,6 +387,9 @@ public class Chromosome
    * A Chromosome's size is constant and will never change.
    *
    * @return The number of genes contained within this Chromosome instance.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public int size() {
     return m_genes.length;
@@ -380,7 +404,8 @@ public class Chromosome
    * @return a positive double value representing the fitness of this
    *         Chromosome, or -1 if a bulk fitness function is in use and has
    *         not yet assigned a fitness value to this Chromosome.
-   * @author Neil Rotstan, Klaus Meffert
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
   public double getFitnessValue() {
@@ -420,6 +445,9 @@ public class Chromosome
    *
    * @param a_newFitnessValue a positive integer representing the fitness
    *                          of this Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void setFitnessValue(int a_newFitnessValue) {
     if (a_newFitnessValue > 0) {
@@ -432,6 +460,9 @@ public class Chromosome
    * for some display purposes.
    *
    * @return A string representation of this Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public String toString() {
     StringBuffer representation = new StringBuffer();
@@ -462,6 +493,9 @@ public class Chromosome
    *         instance is invalid.
    * @throws IllegalArgumentException if the given Configuration instance
    *         is null.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public static Chromosome randomInitialChromosome(
       Configuration a_activeConfiguration)
@@ -527,6 +561,9 @@ public class Chromosome
    *
    * @param other The object to compare against.
    * @return true if the objects are the same, false otherwise.
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
   public boolean equals(Object other) {
     // If class is not equal, return false. Therefor catch
@@ -552,6 +589,9 @@ public class Chromosome
    * Retrieve a hash code for this Chromosome.
    *
    * @return the hash code of this Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public int hashCode() {
     // Take the hash codes of the genes and XOR them all together.
@@ -577,6 +617,9 @@ public class Chromosome
    * @return a negative number if this chromosome is "less than" the given
    *         chromosome, zero if they are equal to each other, and a positive
    *         number if this chromosome is "greater than" the given chromosome.
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
    */
   public int compareTo(Object other) {
     // First, if the other Chromosome is null, then this chromosome is
@@ -630,6 +673,9 @@ public class Chromosome
    *
    * @param a_isSelected true if this Chromosome has been selected, false
    *                     otherwise.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void setIsSelectedForNextGeneration(boolean a_isSelected) {
     m_isSelectedForNextGeneration = a_isSelected;
@@ -640,6 +686,9 @@ public class Chromosome
    * selector to continue to the next generation.
    *
    * @return true if this Chromosome has been selected, false otherwise.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public boolean isSelectedForNextGeneration() {
     return m_isSelectedForNextGeneration;
@@ -649,6 +698,9 @@ public class Chromosome
    * Invoked when this Chromosome is no longer needed and should perform
    * any necessary cleanup. Note that this method will attempt to release
    * this Chromosome instance to the active ChromosomePool, if any.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public void cleanup() {
     // First, reset our internal state.
@@ -697,6 +749,9 @@ public class Chromosome
    *
    * @param a_newData The new application-specific data to attach to this
    *                  Chromosome.
+   *
+   * @author Neil Rotstan
+   * @since 1.1
    */
   public void setApplicationData(Object a_newData) {
     m_applicationData = a_newData;
@@ -710,6 +765,9 @@ public class Chromosome
    *
    * @return The application-specific data previously attached to this
    *         Chromosome, or null if there is no attached data.
+   *
+   * @author Neil Rotstan
+   * @since 1.1
    */
   public Object getApplicationData() {
     return m_applicationData;
