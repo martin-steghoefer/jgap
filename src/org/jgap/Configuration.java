@@ -47,7 +47,7 @@ import org.jgap.impl.*;
  */
 public class Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -58,6 +58,13 @@ public class Configuration {
    * @since 1.0
    */
   private FitnessFunction m_objectiveFunction;
+
+  /**
+   * The fitness evaluator. See interface class FitnessEvaluator for details
+   * @since 2.0 (since 1.1 in class Genotype)
+   */
+  private FitnessEvaluator m_fitnessEvaluator;
+
 
   /**
    * Minimum size guaranteed for population. If zero or below then no ensurance
@@ -824,6 +831,32 @@ public class Configuration {
 
   public int getMinimumPopSizePercent() {
     return m_minPercentageSizePopulation;
+  }
+
+  /**
+   * @return the assigned FitnessEvaluator
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public FitnessEvaluator getFitnessEvaluator() {
+    return m_fitnessEvaluator;
+  }
+
+  /**
+   * Set the fitness evaluator (deciding if a given fitness value is better when
+   * it's higher or better when it's lower).
+   * @param a_fitnessEvaluator the FitnessEvaluator to be used
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setFitnessEvaluator(FitnessEvaluator a_fitnessEvaluator) {
+    if (a_fitnessEvaluator == null) {
+      throw new IllegalStateException(
+          "The fitness evaluator object must not be null!");
+    }
+    m_fitnessEvaluator = a_fitnessEvaluator;
   }
 
 }
