@@ -33,23 +33,34 @@ import org.jgap.*;
  */
 public class StringGene
     implements Gene {
+
   //Constants for ready-to-use alphabets or serving as part of concetenation
   public static final String ALPHABET_CHARACTERS_UPPER =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
   public static final String ALPHABET_CHARACTERS_LOWER =
       "abcdefghijklmnopqrstuvwxyz";
+
   public static final String ALPHABET_CHARACTERS_DIGITS = "0123456789";
+
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
+
   private int m_minLength;
+
   private int m_maxLength;
+
   private String m_alphabet;
+
   private Random rn;
+
   /**
    * References the internal String value (allele) of this Gene.
    */
   protected String m_value = null;
+
   private void init() {
     rn = new Random();
   }
@@ -490,7 +501,7 @@ public class StringGene
    * @since 1.1
    */
   public int hashCode() {
-    // If our internal Double is null, then return zero. Otherwise,
+    // If our internal String is null, then return zero. Otherwise,
     // just return the hash code of the String.
     // -------------------------------------------------------------
     if (m_value == null) {
@@ -579,8 +590,8 @@ public class StringGene
     // ---------------------------------------------------------------
     s = s.substring(0, index) + ch + s.substring(index + 1);
     setAllele(s);
-    // If the value isn't in the alphabet of this Gene
-    //  Gene, map it to a value within the alphabet closest to wanted value.
+    // If the value isn't in the alphabet of this Gene,
+    // map it to a value within the alphabet closest to wanted value.
     // -------------------------------------------------------------
 
     /**@todo implement       mapValueToWithinBounds ();*/
