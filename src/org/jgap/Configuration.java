@@ -38,7 +38,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -444,8 +444,8 @@ public class Configuration
   }
 
   /**
-   *
-
+   * Only use for read-only access! Especially don't call clear() for the
+   * returned ChainOfSelectors object!
    * @param processBeforeGeneticOperators boolean
    * @return ChainOfSelectors
    *
@@ -476,6 +476,24 @@ public class Configuration
     }
     else {
       return m_sizeNaturalSelectorsPost;
+    }
+  }
+
+  /**
+   * Removes all natural selectors (either pre or post ones)
+   * @param processBeforeGeneticOperators
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void removeNaturalSelectors(boolean processBeforeGeneticOperators) {
+    if (processBeforeGeneticOperators) {
+      getNaturalSelectors(true);
+      m_sizeNaturalSelectorsPre = 0;
+    }
+    else {
+      getNaturalSelectors(false);
+      m_sizeNaturalSelectorsPost = 0;
     }
   }
 
@@ -927,7 +945,7 @@ public class Configuration
     }
     return conHandler;
   }
-  
+
   /**
    * Pass the name and value of a property to be set.
    * @author Siddhartha Azad.
@@ -947,7 +965,7 @@ public class Configuration
   		}
   	}
   }
-  
+
   /**
    * Pass the name and values of a property to be set.
    * @author Siddhartha Azad.
@@ -956,6 +974,6 @@ public class Configuration
    * */
   public void setConfigMultiProperty(String name, ArrayList values)  throws
   	ConfigException, InvalidConfigurationException  {
-  	
+
   }
 }
