@@ -40,7 +40,7 @@ import org.jgap.NaturalSelector;
 public class ChainOfSelectors
 {
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.1 $";
+    private final static String CVS_REVISION = "$Revision: 1.2 $";
 
     /**
      * Ordered list holding the NaturalSelector's.
@@ -106,5 +106,9 @@ public class ChainOfSelectors
     public NaturalSelector get (int index)
     {
         return (NaturalSelector) selectors.get (index);
+    }
+
+    public void clear() {
+        selectors.clear();
     }
 }
