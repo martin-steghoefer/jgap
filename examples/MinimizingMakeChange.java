@@ -29,16 +29,25 @@ import org.jgap.impl.IntegerAllele;
 
 
 /**
- * This class attempts to create an amount of American change (using
- * quarters, dimes, nickels, and pennies) equal to a target amount provided
- * by the user. For a detailed discussion of this program, see the JGAP
- * Tutorial. For a more ambitious version of this program, which tries
- * to produce the target amount in the fewest possible coins, please see
- * the MinimizingMakeChange.java example.
+ * This class provides an implementation of the classic "Make change" problem
+ * using a genetic algorithm. The goal of the problem is to provide a
+ * specified amount of change (from a cash purchase) in the fewest coins
+ * possible. This example implementation uses American currency (quarters,
+ * dimes, nickels, and pennies).
+ * <p>
+ * This example may be seen as somewhat significant because it demonstrates
+ * the use of a genetic algorithm in a less-than-optimal problem space.
+ * The genetic algorithm does best when there is a smooth slope of fitness
+ * over the problem space towards the optimum solution. This problem exhibits
+ * a more choppy space with more local optima. However, as can be seen from
+ * running the example, the genetic algorith still will get the correct
+ * answer relatively often, and will always be at least very close (which
+ * raises another point: genetic algorithms are always best suited for
+ * problems where "very close" is good enough).
  */
-public class MakeChange
+public class MinimizingMakeChange
 {
-    private static final int MAX_ALLOWED_EVOLUTIONS = 500;
+    private static final int MAX_ALLOWED_EVOLUTIONS = 50;
 
     public static void makeChangeForAmount( int a_targetChangeAmount )
                        throws Exception
@@ -49,13 +58,20 @@ public class MakeChange
         Configuration conf = new DefaultConfiguration();
 
         // Set the fitness function we want to use, which is our
-        // MakeChangeFitnessFunction that we created earlier. We'll
-        // construct it with a target amount of 75 cents for now.
-        // --------------------------------------------------------
+        // MinimizingMakeChangeFitnessFunction. We construct it with
+        // the target amount of change passed in to this method.
+        // ---------------------------------------------------------
         FitnessFunction myFunc =
-            new MakeChangeFitnessFunction( a_targetChangeAmount );
+            new MinimizingMakeChangeFitnessFunction( a_targetChangeAmount );
 
         conf.setFitnessFunction( myFunc );
+
+        // Since this problem may need to distinguish between very close
+        // solutions, we'll flip on the "auto-exaggeration" feature to
+        // provide a little help.
+        // -------------------------------------------------------------
+        conf.setAutoExaggerationEnabled( true );
+
 
         // Now we need to tell the Configuration object how we want our
         // Chromosomes to be setup. We do that by actually creating a
@@ -84,38 +100,26 @@ public class MakeChange
         // the larger number of potential solutions (which is good for
         // finding the answer), but the longer it will take to evolve
         // the population (which could be seen as bad). We'll just set
-        // the population size to 100 here.
+        // the population size to 500 here.
         // ------------------------------------------------------------
-        conf.setPopulationSize( 1000 );
+        conf.setPopulationSize( 500 );
 
         // Create random initial population of Chromosomes.
         // ------------------------------------------------
         Genotype population = Genotype.randomInitialGenotype( conf );
 
-        // Evolve the population until we find the correct answer, or until
-        // we reach the maximum number of allowed evolutions.
-        // ----------------------------------------------------------------
-        Chromosome bestSolutionSoFar = null;
 
+        // Evolve the population. Since we don't know what the best answer
+        // is going to be, we just evolve the max number of times.
+        // ---------------------------------------------------------------
         for( int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++ )
         {
             population.evolve();
-
-            // Check the best solution so far and see if it totals up to
-            // our target amount of change. If so, then we're done and
-            // there's no need to continue evolving the population.
-            // ---------------------------------------------------------
-            bestSolutionSoFar = population.getFittestChromosome();
-
-            if( MakeChangeFitnessFunction.amountOfChange( bestSolutionSoFar ) ==
-                a_targetChangeAmount )
-            {
-                break;
-            }
         }
 
         // Display the best solution we found.
         // -----------------------------------
+        Chromosome bestSolutionSoFar = population.getFittestChromosome();
         System.out.println( "The best solution contained the following: " );
 
         System.out.println(
