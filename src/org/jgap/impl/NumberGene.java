@@ -18,7 +18,7 @@
 
 package org.jgap.impl;
 
-import org.jgap.Gene;
+import org.jgap.*;
 
 /**
  * Base class for all Genes based on numbers.
@@ -31,13 +31,19 @@ public abstract class NumberGene
     implements Gene {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * References the internal value (allele) of this Gene
    * E.g., for DoubleGene this is of type Double
    */
   protected Object m_value = null;
+
+  /**
+   * Optional helper class for checking if a given allele value to be set
+   * is valid. If not the allele value may not be set for the gene!
+   */
+  private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
    * Executed by the genetic engine when this Gene instance is no
@@ -181,11 +187,39 @@ public abstract class NumberGene
    * @since 1.1
    */
   public void setAllele(Object a_newValue) {
+    if (m_geneAlleleChecker != null) {
+      if (!m_geneAlleleChecker.verify(this, a_newValue)) {
+        return;
+      }
+    }
     m_value = a_newValue;
     // If the value isn't between the upper and lower bounds of this
     // Gene, map it to a value within those bounds.
     // -------------------------------------------------------------
     mapValueToWithinBounds();
+  }
+
+  /**
+   * Sets the constraint checker to be used for this gene whenever method
+   * setAllele(Object a_newValue) is called
+   * @param a_constraintChecker the constraint checker to be set
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker) {
+    m_geneAlleleChecker = a_constraintChecker;
+  }
+
+  /**
+   * @return IGeneConstraintChecker the constraint checker to be used whenever
+   * method setAllele(Object a_newValue) is called
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public IGeneConstraintChecker getConstraintChecker() {
+    return m_geneAlleleChecker;
   }
 
   /**
