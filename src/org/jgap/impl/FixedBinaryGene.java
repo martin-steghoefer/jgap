@@ -40,7 +40,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private int m_length;
 
@@ -68,7 +68,9 @@ public class FixedBinaryGene
     if (0 != m_length % 32)
       ++bufSize;
     m_value = new int[bufSize];
-    for (int i = 0; i < bufSize; m_value[i++] = 0);
+    for (int i = 0; i < bufSize; i++) {
+      m_value[i] = 0;
+    }
   }
 
   public Gene newGene() {
@@ -113,7 +115,10 @@ public class FixedBinaryGene
         return;
       }
     }
-    m_value = (int[]) a_newValue;
+    int[] bits = (int[])a_newValue;
+    for (int i=0;i<bits.length;i++) {
+     setBit(i,bits[i]);
+    }
   }
 
   /**
@@ -140,16 +145,45 @@ public class FixedBinaryGene
   }
 
   public Object getAllele() {
-    return m_value;
+    int[] bits = new int[getLength()];
+    for (int i=0;i<getLength();i++) {
+      if (getBit(i)) {
+        bits[i] = 1;
+      }
+      else {
+        bits[i] = 0;
+      }
+    }
+    return bits;
   }
 
   public int[] getIntValues() {
     return m_value;
   }
 
+  public boolean getBit(int m_index) {
+    checkIndex(m_index);
+    return   getUnchecked(m_index);
+  }
+
   public void setBit(int m_index, boolean m_value) {
     checkIndex(m_index);
     setUnchecked(m_index, m_value);
+  }
+
+  public void setBit(int m_index, int m_value) {
+    if (m_value > 0) {
+      if (m_value != 1) {
+        throw new IllegalArgumentException("Only values 0 and 1 are valid!");
+      }
+      setBit(m_index, true);
+    }
+    else {
+      if (m_value != 0) {
+        throw new IllegalArgumentException("Only values 0 and 1 are valid!");
+      }
+      setBit(m_index, false);
+    }
   }
 
   public void setBit(int m_from, int m_to, boolean m_value) {
@@ -224,7 +258,7 @@ public class FixedBinaryGene
 
   public String getPersistentRepresentation()
       throws UnsupportedOperationException {
-    return m_value.toString();
+    return toString();
   }
 
   /**
@@ -250,10 +284,7 @@ public class FixedBinaryGene
   public void setValueFromPersistentRepresentation(String a_representation)
       throws UnsupportedOperationException, UnsupportedRepresentationException {
     if (a_representation != null) {
-      if (a_representation.equals("null")) {
-        m_value = null;
-      }
-      else if (isValidRepresentation(a_representation)) {
+      if (isValidRepresentation(a_representation)) {
         /**@todo implement*/
       }
       else {
@@ -319,7 +350,12 @@ public class FixedBinaryGene
       String s = "[";
       int value;
       for (int i = 0; i < len; i++) {
-        value = m_value[i];
+        if (getBit(i)) {
+          value = 1;
+        }
+        else {
+          value = 0;
+        }
         if (i == 0) {
           s += value;
         }
@@ -379,15 +415,15 @@ public class FixedBinaryGene
     if (a_percentage > 0) {
       // change to 1
       // ---------------
-      if (m_value[index] == 0) {
-        m_value[index] = 1;
+      if (!getBit(index)) {
+        setBit(index,true);
       }
     }
     else if (a_percentage < 0) {
       // change to 0
       // ---------------
-      if (m_value[index] == 1) {
-        m_value[index] = 0;
+      if (getBit(index)) {
+        setBit(index, false);
       }
     }
   }
@@ -458,16 +494,16 @@ public class FixedBinaryGene
     }
     // Count number of 1's for this Gene
     int this1s = 0;
-    for (int i = 0; i < m_value.length; i++) {
-      if (m_value[i] == 1) {
+    for (int i = 0; i < thisLen; i++) {
+      if (getBit(i)) {
         this1s++;
       }
     }
 
     // Count number of 1's for other Gene
     int other1s = 0;
-    for (int i = 0; i < otherGene.m_value.length; i++) {
-      if (otherGene.m_value[i] == 1) {
+    for (int i = 0; i < thisLen; i++) {
+      if (otherGene.getBit(i)) {
         other1s++;
       }
     }
