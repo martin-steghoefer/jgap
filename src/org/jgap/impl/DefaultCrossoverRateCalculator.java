@@ -16,7 +16,7 @@
  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package src.org.jgap.impl;
+package org.jgap.impl;
 
 import org.jgap.*;
 
@@ -27,28 +27,28 @@ import org.jgap.*;
  * @since 2.0
  */
 public class DefaultCrossoverRateCalculator implements IUniversalRateCalculator {
-        
+
   /**
    * Calculates the dynamic crossover rate. This is chosen to be the chromosome
-   * size. As the chromosome gets larger we assume that it is less likely to 
+   * size. As the chromosome gets larger we assume that it is less likely to
    * reproduce.
    *
-   * @return calculated divisor of crossover rate 
+   * @return calculated divisor of crossover rate
    *
    * @author Chris Knowles
    * @since 2.0
    */
-  public int calculateCurrentRate() {  
+  public int calculateCurrentRate() {
     int size = Genotype.getConfiguration().getChromosomeSize();
     if (size < 1) {
       size = 1;
     }
     return size;
   }
-  
+
   /**
    * Determines whether crossover is to be carried out for a given population.
-   * @return true   The DefaultCrossoverRateCalculator always returns a finite 
+   * @return true   The DefaultCrossoverRateCalculator always returns a finite
    *                rate.
    *
    * @author Chris Knowles
