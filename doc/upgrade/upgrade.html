@@ -120,6 +120,33 @@ is as follows:</p>
 in method <font face="Courier New">applyNaturalSelectors</font>. If you call the
 method yourself, adapt the parameters as shown above or have a look at the
 implementation in <font face="Courier New">Genotype</font>.</p>
+<h4 class="subHeader">Signature of method newGene changed</h4>
+<p>The new signature of the select method in interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Gene.html">org.jgap.Gene</a></font>
+(used in all implementations, as in StringGene)
+is as follows:</p>
+<pre><font color="#008000">/**
+   * Provides an implementation-independent means for creating new Gene
+   * instances. The new instance that is created and returned should be
+   * setup with any implementation-dependent configuration that this Gene
+   * instance is setup with (aside from the actual value, of course). For
+   * example, if this Gene were setup with bounds on its value, then the
+   * Gene instance returned from this method should also be setup with
+   * those same bounds. This is important, as the JGAP core will invoke this
+   * method on each Gene in the sample Chromosome in order to create each
+   * new Gene in the same respective gene position for a new Chromosome.
+   * &lt;p&gt;
+   * It should be noted that nothing is guaranteed about the actual value
+   * of the returned Gene and it should therefore be considered to be
+   * undefined.
+   *
+   * @return A new Gene instance of the same type and with the same
+   *         setup as this concrete Gene.
+   *
+   * @since 1.0
+   */
+</font><font color="#0000FF">Gene newGene();</font></pre>
+<p>Previous signatures included an input parameter of type <font face="Courier New">org.jgap.Configuration</font>.
+The configuration is now set as described in this document (see above).</p>
 <h4 class="subHeader">Method add(Chromosome a_chromosomeToAdd) is private now</h4>
 <p>As method <font face="Courier New">add(Chromosome a_chromosomeToAdd)</font>
 is private now, you need to adapt your implementations to reflect this: Just
