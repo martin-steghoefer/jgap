@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.20 $";
+  private static final String CVS_REVISION = "$Revision: 1.21 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -172,6 +172,31 @@ public class MutationOperatorTest
   }
 
   /**
+   * Nothing to do. Test that nothing is done, then
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testOperate_4() {
+    MutationOperator mutOp = new MutationOperator(0);
+    mutOp.setMutationRateCalc(null);
+    List candChroms = new Vector();
+    BooleanGene gene1 = new BooleanGene();
+    Chromosome chrom1 = new Chromosome(gene1, 1);
+    chrom1.getGene(0).setAllele(new Boolean(false));
+    IntegerGene gene2 = new IntegerGene(0, 10);
+    Chromosome chrom2 = new Chromosome(gene2, 1);
+    chrom2.getGene(0).setAllele(new Integer(3));
+    candChroms.add(chrom1);
+    candChroms.add(chrom2);
+    mutOp.operate(null, candChroms);
+    assertEquals(2,candChroms.size());
+    assertEquals(chrom1,candChroms.get(0));
+    assertEquals(chrom2,candChroms.get(1));
+  }
+
+
+  /**
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -219,7 +244,6 @@ public class MutationOperatorTest
     MutationOperator mutOp = new MutationOperator(0);
     mutOp.setMutationRateCalc(null);
     mutOp.operate(null, null);
-    /**@todo ensure that nothing mutated*/
   }
 
   /**
