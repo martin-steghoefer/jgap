@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   private int m_minLength;
 
@@ -453,14 +453,15 @@ public class StringGene
   }
 
   /**
-   * Sets the valid alphabet of the StringGene
-   * @param a_alphabet valid aplhabet for allele
+   * Sets the valid alphabet of the StringGene. The caller needs to care that
+   * there are no doublettes in the alphabet. Otherwise there is no guarantee
+   * for correct functioning of the class!
+   * @param a_alphabet valid alphabet for allele
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void setAlphabet(String a_alphabet) {
-    /**@todo optionally check if alphabet contains doublettes*/
     m_alphabet = a_alphabet;
   }
 
