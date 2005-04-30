@@ -16,7 +16,7 @@ import examples.functionFinder.*;
 public class FunctionBuilderTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public FunctionBuilderTest() {
     Repository.init();
@@ -444,10 +444,9 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Hilfsroutine, gibt Soll- und Istwert aus. assertEquals tut dies auch, aber
-   * die Ausgabe ist bei längeren Zeichenfolgen abgeschnitten
-   * @param soll
-   * @param ist
+   * Helper to output extended debug information on failing assertion
+   * @param soll wanted value
+   * @param ist real value
    */
   protected void assertFormula(String soll, String ist) {
     try {
@@ -461,101 +460,13 @@ public class FunctionBuilderTest extends TestCase {
     }
   }
 
-  public static String getFormulaFromChromosome(Chromosome chromosome) {
-    /**@todo constructTerms allgemeiner machen (Object zurückliefern),
-     * in Methode selbst das mit CompositeGene durch Call auf Plugin ersetzen
-     */
-    Vector terms = GeneExtractorTest.constructTerms(chromosome.getGenes());
-    return getFormula(terms);
-  }
-
   /**
    * Constructs a formula string out of terms (each holding operators, if relevant)
    * @param elements vector with ordered list of terms
    * @return constructed formula
    */
-  public static String getFormula(Vector elements) {
-    if (elements == null || elements.isEmpty()) {
-      return "";
-    }
-    else {
-      String result = "";
-      Term element = null;
-      boolean addKlammer = false;
-      do {
-        element = (Term) elements.elementAt(0);
-        result += getFormula_int(elements, result);
-      }
-      while (elements.size() > 0);
-      if (result == "") {
-        return "";
-      }
-      else {
-        return "F(X)=" + result;
-      }
-    }
+  private static String getFormula(Vector elements) {
+    return Utility.getFormula(elements);
   }
 
-  /**
-   * Recursive part of getFormula
-   * @param elements vector with ordered list of terms
-   * @return constructed part of formula
-   */
-  protected static String getFormula_int(Vector elements, String previous) {
-    if (elements.size() < 1) {
-      return "";
-    }
-    Term element = (Term) elements.elementAt(0);
-    element = replaceSubstitute(element);
-    String result = "";
-    //ignore illegal operator specification
-    if (element.operator != ' ' && previous.length() > 0 && !previous.endsWith("(")) {
-      result += element.operator;
-    }
-    int type = element.termType;
-    result += element.termName;
-    elements.remove(0);
-    if (type == 2) {
-      result += "(";
-      boolean compensationPossible = true;
-      do {
-        element.depth--;
-        String tempRes = getFormula_int(elements, result);
-        if (tempRes.length() > 0) {
-          compensationPossible = false;
-        }
-        result += tempRes;
-      }
-      while (element.depth > 0);
-      if (compensationPossible) {
-        result += "X";
-      }
-      result += ")";
-    }
-    else if (type == 1) {
-      /**@todo nicht benötigt?*/
-      element.depth--;
-    }
-    else {
-      throw new RuntimeException("Ungültiger Operatortyp: " + type);
-    }
-    return result;
-  }
-
-  private static Term replaceSubstitute(Term element) {
-    if (element.termName.equals("+I")) {
-      /**@todo: optional Wertebereich angeben können*/
-      element.termName = String.valueOf(new Random().nextInt(3)+1);
-    }
-    else if (element.termName.equals("-I")) {
-      element.termName = String.valueOf(-(new Random().nextInt(10)+1));
-    }
-    else if (element.termName.equals("+D")) {
-      element.termName = String.valueOf(new Random().nextDouble()*10);
-    }
-    else if (element.termName.equals("-D")) {
-      element.termName = String.valueOf(-(new Random().nextDouble()*10));
-    }
-    return element;
-  }
 }
