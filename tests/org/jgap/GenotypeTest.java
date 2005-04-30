@@ -11,6 +11,7 @@ package org.jgap;
 
 import java.util.*;
 import org.jgap.impl.*;
+import org.jgap.event.*;
 import junit.framework.*;
 import junitx.util.*;
 
@@ -23,7 +24,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -315,18 +316,80 @@ public class GenotypeTest
     //remove all natural selectors
     config.removeNaturalSelectors(false);
     config.removeNaturalSelectors(true);
-    config.addNaturalSelector(new WeightedRouletteSelector(), false);
+    config.addNaturalSelector(new WeightedRouletteSelector(), true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
     genotype.evolve(1);
+    assertFalse(popSize == genotype.getPopulation().size());
   }
 
-  public void testEvolve_1() {
-    /**@todo implement, test BulkFitnessFunction*/
+  /**
+   * Test evolve with BulkFitnessFunction
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEvolve_1()
+      throws Exception {
+    // override setFF in order to set the BulkFitnessFunction although
+    // ConfigurationForTest set an ordinary FF beforehand
+    Configuration config = new ConfigurationForTest() {
+      public synchronized void setFitnessFunction(FitnessFunction a_functionToSet)
+          throws InvalidConfigurationException {
+        setBulkFitnessFunction(new BulkFitnessOffsetRemover(a_functionToSet));
+      }
+    };
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    // just test that the following runs without error by trusting exception
+    // handling
+    genotype.evolve();
   }
 
-  public void testEvolve_2() {
-    /**@todo implement, test: population size remains constant when
-     * the configuration contains a BCS as postselector*/
+  /**
+   * Test that population size remains constant when the configuration contains
+   * a BCS as postselector
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEvolve_2_1()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    //remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    BestChromosomesSelector bcs = new BestChromosomesSelector();
+    bcs.setOriginalRate(1);
+    bcs.setDoubletteChromosomesAllowed(true);
+    config.addNaturalSelector(bcs, false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
+    genotype.evolve();
+    assertEquals(popSize,genotype.getPopulation().size());
+  }
+
+  /**
+   * Test that multiple NaturalSelector's work without error
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEvolve_2_2()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // add another naturalselector (others already exist within
+    // ConfigurationForTest)
+    BestChromosomesSelector bcs = new BestChromosomesSelector();
+    bcs.setOriginalRate(1);
+    bcs.setDoubletteChromosomesAllowed(true);
+    config.addNaturalSelector(bcs, false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
+    genotype.evolve();
+    assertEquals(popSize,genotype.getPopulation().size());
   }
 
   /**
