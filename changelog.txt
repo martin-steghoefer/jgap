@@ -2,6 +2,10 @@
 ----------
 * Improved architecture towards Genetic Programming
 * Improved code concerning coding guidelines
+* Added support for HotBits random generator
+* Added many new test cases
+* Added GUI and logical support for JGAP configuration
+* Introduced new package org.jgap.util for utility functions
 
 2.2
 ----------
