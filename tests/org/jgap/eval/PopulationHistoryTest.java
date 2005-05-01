@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationHistoryTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -217,5 +217,23 @@ public class PopulationHistoryTest
     assertEquals(1, ph.size());
     ph.addPopulation(pop);
     assertEquals(2, ph.size());
+  }
+
+  public void testGetPopulations_0() {
+    PopulationHistory ph = new PopulationHistory(3);
+    List l = ph.getPopulations();
+    assertEquals(0, l.size());
+    Population pop = new Population();
+    ph.addPopulation(pop);
+    assertEquals(1, l.size());
+    Population pop2 = new Population();
+    ph.addPopulation(pop2);
+    assertEquals(2, l.size());
+    ph.addPopulation(pop2);
+    assertEquals(3, l.size());
+    l = ph.getPopulations();
+    assertEquals(pop2,l.get(0));
+    assertEquals(pop2,l.get(1));
+    assertEquals(pop,l.get(2));
   }
 }
