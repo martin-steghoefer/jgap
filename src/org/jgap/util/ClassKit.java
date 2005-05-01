@@ -1,0 +1,315 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
+package org.jgap.util;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
+
+public class ClassKit {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
+
+  public static void main(String[] args)
+      throws Exception {
+//    getPlugins("c:\\java\\jgap\\lib");
+    getPlugins("c:\\java\\jgap\\classes");
+    if (true)
+      return;
+    List result = new Vector();
+    result = find("org.jgap.INaturalSelector");
+    for (int i = 0; i < result.size(); i++) {
+      System.err.println(result.get(i));
+    }
+//    URL url = ClassKit.class.getResource("/info/clearthought/layout/");
+    URL url = ClassKit.class.getResource("/org/jgap/impl/");
+    findInJar(result, url, Class.forName("java.io.Serializable"));
+  }
+
+  /**
+   * Display all the classes inheriting or implementing a given
+   * class in the currently loaded packages.
+   * @param tosubclassname the name of the class to inherit from
+   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   */
+  public static List find(String tosubclassname) {
+    try {
+      List result = new Vector();
+      Class tosubclass = Class.forName(tosubclassname);
+      Package[] pcks = Package.getPackages();
+      /**@todo take care of abstract classes --> introduce parameter for that*/
+      for (int i = 0; i < pcks.length; i++) {
+        List subresult = find(pcks[i].getName(), tosubclass);
+        result.addAll(subresult);
+      }
+//        List subresult = find("org.jgap.impl", tosubclass);
+//        result.addAll(subresult);
+      return result;
+    }
+    catch (ClassNotFoundException ex) {
+      System.err.println("Class " + tosubclassname + " not found!");
+      return null;
+    }
+  }
+
+  /**
+   * Display all the classes inheriting or implementing a given
+   * class in a given package.
+   * @param pckgname the fully qualified name of the package
+   * @param tosubclass the name of the class to inherit from
+   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   */
+  public static List find(String pckname, String tosubclassname)
+      throws ClassNotFoundException {
+    Class tosubclass = Class.forName(tosubclassname);
+    return find(pckname, tosubclass);
+  }
+
+  /**
+   * Display all the classes inheriting or implementing a given
+   * class in a given package.
+   * @param pckgname the fully qualified name of the package
+   * @param tosubclass the Class object to inherit from
+   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   */
+  public static List find(String pckgname, Class tosubclass) {
+    List result = new Vector();
+    // Translate the package name into an absolute path
+    String name = new String(pckgname);
+    if (!name.startsWith("/")) {
+      name = "/" + name;
+    }
+    name = name.replace('.', '/');
+
+    // Get a File object for the package
+    URL url = ClassKit.class.getResource(name);
+//    URL url = tosubclass.getResource(name);
+    // URL url = ClassLoader.getSystemClassLoader().getResource(name);
+
+    // Happens only if the jar file is not well constructed, i.e.
+    // if the directories do not appear alone in the jar file like here:
+    //
+    //          meta-inf/
+    //          meta-inf/manifest.mf
+    //          commands/                  <== IMPORTANT
+    //          commands/Command.class
+    //          commands/DoorClose.class
+    //          commands/DoorOpen.class
+    //          ClassKit.class
+    //
+    if (url == null) {
+      return result;
+    }
+    return find(url, pckgname, tosubclass);
+  }
+
+  public static List find(URL url, String pckgname, Class tosubclass) {
+    List result = new Vector();
+
+    File directory = new File(url.getFile());
+
+    if (directory.exists()) {
+      // Get the list of the files contained in the package
+      String[] files = directory.list();
+      for (int i = 0; i < files.length; i++) {
+
+        // we are only interested in .class files
+        if (files[i].endsWith(".class")) {
+          // removes the .class extension
+          String classname = files[i].substring(0, files[i].length() - 6);
+          try {
+            // Try to create an instance of the object
+            Class c = Class.forName(pckgname + "." + classname);
+            if (pckgname.equals("org.jgap.impl") &&
+                classname.equals("BestChromosomesSelector")) {
+              System.err.println("X");
+            }
+            if (implementsInterface(c, tosubclass) ||
+                extendsClass(c, tosubclass)) {
+              result.add(pckgname + "." + classname);
+            }
+          }
+          catch (ClassNotFoundException cnfex) {
+            System.err.println(cnfex);
+          }
+//          catch (InstantiationException iex) {
+//            // We try to instanciate an interface or an object that does not
+//            // have a default constructor
+//          }
+//          catch (IllegalAccessException iaex) {
+//            // The class is not public
+//          }
+        }
+      }
+    }
+    else {
+      findInJar(result, url, tosubclass);
+    }
+    return result;
+  }
+
+  public static void findInJar(final List result, URL url, Class tosubclass) {
+    try {
+      // It does not work with the filesystem: we must
+      // be in the case of a package contained in a jar file.
+      JarURLConnection conn = (JarURLConnection) url.openConnection();
+      String starts = conn.getEntryName();
+      JarFile jfile = conn.getJarFile();
+      Enumeration e = jfile.entries();
+      while (e.hasMoreElements()) {
+        ZipEntry entry = (ZipEntry) e.nextElement();
+        String entryname = entry.getName();
+        if (entryname.startsWith(starts)
+            && (entryname.lastIndexOf('/') <= starts.length())
+            && entryname.endsWith(".class")) {
+          String classname = entryname.substring(0, entryname.length() - 6);
+          if (classname.startsWith("/"))
+            classname = classname.substring(1);
+          classname = classname.replace('/', '.');
+          try {
+            // Try to create an instance of the object
+            Class c = Class.forName(classname);
+            if (implementsInterface(c, tosubclass) ||
+                extendsClass(c, tosubclass)) {
+//              Object o = Class.forName(classname).newInstance();
+//              if (tosubclass.isInstance(o)) {
+              result.add(classname);
+            }
+          }
+          catch (ClassNotFoundException cnfex) {
+            System.err.println(cnfex);
+          }
+        }
+      }
+    }
+    catch (IOException ioex) {
+      System.err.println(ioex);
+    }
+  }
+
+  public static boolean implementsInterface(Class o, Class clazz) {
+    Class[] interfaces = o.getInterfaces();
+    for (int i = 0; i < interfaces.length; i++) {
+      Class c = interfaces[i];
+      if (c.equals(clazz)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean extendsClass(Class o, Class clazz) {
+    if (clazz.getName().equals(o.getName())) {
+      return false;
+    }
+    if (clazz.isAssignableFrom(o)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public static void getPlugins(String directory) {
+    File modulePath = new File(directory);
+//        if(modulePath == null || !modulePath.exists())modulePath.mkdirs();
+    File[] jarFiles = modulePath.listFiles(new ExtensionsFilter("jar", false));
+    URL[] urls = new URL[jarFiles.length + 1];
+    int i = 0;
+    for (; i < jarFiles.length; i++) {
+      try {
+        urls[i] = jarFiles[i].toURL();
+      }
+      catch (Exception ex) {}
+    }
+    try {
+      urls[i] = modulePath.toURL();
+    }
+    catch (Exception ex) {}
+    ClassLoader ucl = new URLClassLoader(urls);
+
+    // -------------------------------
+
+    Vector classes = new Vector();
+    long startTime = System.currentTimeMillis();
+    addClasses(classes, modulePath, ""); // methodes bellow
+    System.out.println("Found Classes in: " +
+                       (System.currentTimeMillis() - startTime) + " mills");
+
+    // -------------------------------
+    Vector implementingClasses = new Vector();
+//       startTime = System.currentTimeMillis();
+    Enumeration e = classes.elements();
+    Object c;
+    while (e.hasMoreElements()) {
+      try {
+        String name = e.nextElement().toString();
+        System.err.println("found: " + name);
+      }
+      catch (Throwable ex) {
+      }
+    }
+
+  }
+
+  public static void addClasses(java.util.Vector v, File path, String name) {
+    addClassesFile(v, path, name);
+    addClassesJar(v, path);
+  }
+
+  public static void addClassesJar(java.util.Vector v, File path) {
+    File[] files = path.listFiles(new ExtensionsFilter("jar", false));
+    for (int i = 0; i < files.length; i++) {
+      try {
+        java.util.jar.JarFile jar = new java.util.jar.JarFile(files[i]);
+        String wa;
+        java.util.Enumeration e = jar.entries();
+        while (e.hasMoreElements()) {
+          wa = e.nextElement().toString();
+          if (wa.endsWith(".class") && (wa.indexOf("$") == -1))
+            v.add(wa.substring(0, wa.length() - 6).replace('/', '.'));
+        }
+      }
+      catch (Exception ex) {}
+    }
+  }
+
+  //this method is recursive to go down  sub-dirs
+  public static void addClassesFile(java.util.Vector v, File path, String name) {
+    File[] files = path.listFiles(new ExtensionsFilter("class", true));
+    for (int i = 0; i < files.length; i++) {
+      if (files[i].isDirectory())
+        addClassesFile(v, files[i], name + files[i].getName() + ".");
+      else if (files[i].getName().indexOf("$") == -1)
+        v.add(name +
+              files[i].getName().substring(0, files[i].getName().length() - 6));
+    }
+  }
+
+  static class ExtensionsFilter
+      implements FilenameFilter {
+    private String ext;
+
+    public ExtensionsFilter(String extension, boolean dummy) {
+      this.ext = extension;
+    }
+
+    public boolean accept(File dir, String name) {
+      if (name != null && name.endsWith("." + ext)) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  }
+}
