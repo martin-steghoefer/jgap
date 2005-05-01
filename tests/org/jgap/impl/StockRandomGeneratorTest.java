@@ -23,7 +23,7 @@ public class StockRandomGeneratorTest
     extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -65,8 +65,8 @@ public class StockRandomGeneratorTest
     int res;
     for (int i=0;i<100;i++) {
       res = calc.nextInt(5);
-      assertTrue(res < 5.00d);
-      assertTrue(res >= 0.000d);
+      assertTrue(res < 5);
+      assertTrue(res >= 0);
     }
   }
 
@@ -84,7 +84,6 @@ public class StockRandomGeneratorTest
           resOli = res;
         }
       }
-      assertTrue(res >= 0.000d);
     }
   }
 
@@ -120,7 +119,6 @@ public class StockRandomGeneratorTest
           resOll = res;
         }
       }
-      assertTrue(res >= 0.000d);
     }
   }
 
@@ -159,5 +157,33 @@ public class StockRandomGeneratorTest
       assertTrue(res >= 0.000d);
     }
   }
+
+  /**
+   * Tests distribution of boolean random values. We should have more than 10%
+   * of each true and false when running a significant number of tests
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testNextBoolean_0() throws Exception {
+    StockRandomGenerator calc = new StockRandomGenerator();
+    boolean res;
+    int trueCounter = 0;
+    int falseCounter = 0;
+    int total = 100;
+    for (int i=0;i<total;i++) {
+      res = calc.nextBoolean();
+      if (res) {
+        trueCounter++;
+      }
+      else {
+        falseCounter++;
+      }
+    }
+    assertTrue(trueCounter > total*0.1);
+    assertTrue(falseCounter > total*0.1);
+  }
+
 
 }
