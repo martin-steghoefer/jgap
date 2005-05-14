@@ -1,15 +1,16 @@
 2.3
 ----------
-* Improved architecture towards Genetic Programming
-* Improved code concerning coding guidelines
-* Added support for HotBits random generator
-* Added many new test cases
+* Added support for HotBits random generator (see request 1193361)
 * Added GUI and logical support for JGAP configuration
 * Introduced new package org.jgap.util for utility functions
 * Introduced toString() in class org.jgap.Configuration
-* Added new example: knapsack problem
+  (see request 1201891)
+* Improved architecture towards Genetic Programming
+* Improved code concerning coding guidelines
+* Added new example: knapsack problem (see request 1088469)
+* Added org.jgap.InversionOperator (see request 1152956)
+* Added many new test cases
 * Enhanced javadocs
-
 
 2.2
 ----------
