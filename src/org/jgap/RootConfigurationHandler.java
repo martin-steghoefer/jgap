@@ -20,8 +20,8 @@ import java.util.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-  
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
   // Namespae
   private final static String CONFIG_NAMESPACE = "Configuration";
 
@@ -71,8 +71,8 @@ public class RootConfigurationHandler
     cProps.add(cp);
     return cProps;
   }
-  
-  
+
+
   /**
    * Get the namespace to be used in the config file for the Configurable
    * this ConfigurationHandler belongs to.
@@ -82,30 +82,32 @@ public class RootConfigurationHandler
   public String getNS() {
   	return CONFIG_NAMESPACE;
   }
-  
+
   /**
    * Method that will populate an Configurable with the properties in the
    * config file.
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
    * @author Siddhartha Azad.
    * */
-  public void readConfig() throws ConfigException,
-  	InvalidConfigurationException {
+  public void readConfig()
+      throws ConfigException, InvalidConfigurationException {
   	ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
 	String value = ConfigFileReader.instance().getValue("m_populationSize");
 	if(value != null)
 		configurable.setConfigProperty("m_populationSize", value);
-	
+
   }
-  
+
   /**
    * Set the Configurable to which this ConfigurationHandler belongs.
    * @author Siddhartha Azad.
    * @param _configurable The Configurable to which this ConfigurationHandler
-   * belongs. 
+   * belongs.
    * */
   public void setConfigurable(Configurable _configurable) {
   	configurable = _configurable;
   }
-  
+
   Configurable configurable;
 }
