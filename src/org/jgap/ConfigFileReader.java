@@ -15,20 +15,21 @@ import java.io.*;
 /**
  * This is a Singleton Helper class to read a JGAP config file and provide a
  * simple interface to the config properties.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // Name of the config file to read
-  private String fileName;
+  private String m_fileName;
 
   // Properties read from the config file
-  private Properties props;
+  private Properties m_props;
 
   // namespace of the property
-  private String ns;
+  private String m_ns;
 
   /**
    * Singleton Instance of ConfigFileReader
@@ -37,9 +38,11 @@ public class ConfigFileReader {
 
   /**
    * Method to create and access the Singleton ConfigFileReader instance.
-   * @author Siddhartha Azad.
-   * @param _fileName Name of the config file.
-   * */
+   * @return instance of the ConfigFileReader
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
   public static ConfigFileReader instance() {
     if (cfReader == null) {
       cfReader = new ConfigFileReader();
@@ -49,22 +52,27 @@ public class ConfigFileReader {
 
   /**
    * Private Constructor.@param _fileName Name of the config file.
-   * @author Siddhartha Azad.
-   * */
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
   private ConfigFileReader() {
-    props = new Properties();
+    m_props = new Properties();
   }
 
   /**
    * Retrieve the value for the property with the name as in param name.
    * @author Siddhartha Azad.
-   * @param name Name of the property of which the value is required.
+   * @param a_name Name of the property of which the value is required.
    * @return value for the property with the name as in param name, null if
    * property not found.
-   * */
-  public String getValue(String name) {
-    String tmpName = ns + "." + name;
-    String val = props.getProperty(tmpName);
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public String getValue(String a_name) {
+    String tmpName = m_ns + "." + a_name;
+    String val = m_props.getProperty(tmpName);
     return val;
   }
 
@@ -82,8 +90,8 @@ public class ConfigFileReader {
     int idx = 0;
     ArrayList values = new ArrayList();
     while (!done) {
-      tmpName = ns + "." + name + "[" + idx + "]";
-      val = props.getProperty(tmpName);
+      tmpName = m_ns + "." + name + "[" + idx + "]";
+      val = m_props.getProperty(tmpName);
       if (val == null) {
         done = true;
       }
@@ -104,36 +112,43 @@ public class ConfigFileReader {
    * Set the namespace for the properties that are being read from the
    * config file at this point.
    * @author Siddhartha Azad.
-   * @param _ns Namespace for the properties being read.
+   * @param a_ns namespace for the properties being read.
    * */
-  public void setNS(String _ns) {
-    ns = _ns;
+  public void setNS(String a_ns) {
+    m_ns = a_ns;
   }
 
   /**
    * Set the config file to load from. Everytime this method is called,
    * properties are reloaded from the config file.
    * @author Siddhartha Azad.
-   * @param _fileName Name of the config file.
-   * */
-  public void setFileName(String _fileName)
+   * @param a_fileName Name of the config file.
+   * @throws ConfigException
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public void setFileName(String a_fileName)
       throws ConfigException {
-    fileName = _fileName;
+    m_fileName = a_fileName;
     load();
   }
 
   /**
    * Load the config properties file into a Properties instance.
-   * @author Siddhartha Azad.
-   * */
+   * @throws ConfigException
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
   private void load()
       throws ConfigException {
     try {
-      props.load(new FileInputStream(fileName));
+      m_props.load(new FileInputStream(m_fileName));
     }
     catch (Exception ex) {
       String dir = new File(".").getAbsolutePath();
-      throw new ConfigException("Error reading Config file " + fileName
+      throw new ConfigException("Error reading Config file " + m_fileName
                                 + " in directory " + dir);
     }
   }
