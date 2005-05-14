@@ -10,7 +10,9 @@
 package examples.functionFinder;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import com.eteks.parser.*;
 
 /**
@@ -22,7 +24,7 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private List truthTable;
 
@@ -32,7 +34,7 @@ public class MatchAgainstTruthTable
 
   private static ExpressionParser parser;
 
-  // Constants for calculating thr fitness value
+  // Constants for calculating the fitness value
   // -------------------------------------------
   public static final float DELTA = 0.000001f;
 
@@ -46,7 +48,7 @@ public class MatchAgainstTruthTable
 
   /**
    * Consteuctor
-   * @param truthTable table of input/output pairs for feeding the formula and
+   * @param a_truthTable table of input/output pairs for feeding the formula and
    * determining the fitness value thru delta computation
    *
    * @author Klaus Meffert
@@ -173,10 +175,13 @@ public class MatchAgainstTruthTable
       inputValue = tupel.getInputValue();
       input = new double[] {
           inputValue};
+      // determine current value (evolved formula) minus reference value
       delta = (float) ex1.computeFunction(input) - tupel.getOutputValue();
       deltaAbs = (float) Math.abs(delta);
       diffAbs += deltaAbs;
     }
+    /**@todo consider length of formula (i.e. number of terms, e.g.)*/
+
     // scale fitness value and return it
     return getFitness(diffAbs);
   }
