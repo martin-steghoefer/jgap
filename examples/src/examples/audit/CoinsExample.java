@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -104,10 +104,10 @@ public class CoinsExample {
     pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
 
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
-//    RandomGeneratorForTest rn = new RandomGeneratorForTest();
-//    rn.setNextDouble(0.7d);
-//    rn.setNextInt(2);
-//    pconf.addRandomGeneratorSlot(rn);
+    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    rn.setNextDouble(0.7d);
+    rn.setNextInt(2);
+    pconf.addRandomGeneratorSlot(rn);
     pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
 
     pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(a_targetChangeAmount));
@@ -216,10 +216,16 @@ public class CoinsExample {
     FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
     ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
 
-    // Create chart: performance metrics for all permutations.
-    // -----------------------------------------------------------
-    int maxPerm = permutation-1;
-    for (int i=0;i<maxPerm;i++) {
+    // Performance metrics for each single permutation.
+    // ------------------------------------------------
+    int maxPerm = permutation - 1;
+    double avgBestFitness = 0.0d;
+    int avgBestGen = 0;
+    double avgAvgFitness = 0.0d;
+    double avgAvgDiv = 0.0d;
+    double avgAvgBestD = 0.0d;
+
+    for (int i = 0; i < maxPerm; i++) {
 
 //      myDataset = eval.calcAvgFitness(i);
       Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(i);
@@ -231,7 +237,27 @@ public class CoinsExample {
       System.err.println("Avg. Fitness " + dataAvg.avgFitnessValue);
       System.err.println("Avg. Div.    " + dataAvg.avgDiversityFitnessValue);
       System.err.println("Avg. BestD   " + dataAvg.avgBestDeltaFitnessValue);
+
+      avgBestFitness += dataAvg.bestFitnessValue;
+      avgBestGen += dataAvg.bestFitnessValueGeneration;
+      avgAvgFitness += dataAvg.avgFitnessValue;
+      avgAvgDiv += dataAvg.avgDiversityFitnessValue;
+      avgAvgBestD += dataAvg.avgBestDeltaFitnessValue;
     }
+
+    // Performance metrics for all permutations.
+    // -----------------------------------------
+    System.err.println("\nOverall Statistics for all permutations");
+    System.err.println("----------------------------------------");
+    System.err.println("Avg. Best Fitness     " + avgBestFitness / maxPerm);
+    System.err.println("Avg. Best Generation  " + avgBestGen / maxPerm);
+    System.err.println("Avg. Avg. Fitness     " + avgAvgFitness / maxPerm);
+    System.err.println("Avg. Avg. Diversity   " + avgAvgDiv / maxPerm);
+    System.err.println("Avg. Avg. BestD       " + avgAvgBestD / maxPerm);
+
+    // Create chart: performance metrics for all permutations.
+    // -----------------------------------------------------------
+
 //    dataset = new DefaultCategoryDataset();
 //    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
 //      for (int jj=0;jj<myDataset.getRowCount();jj++) {
