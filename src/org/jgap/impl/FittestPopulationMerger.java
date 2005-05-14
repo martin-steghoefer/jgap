@@ -26,12 +26,8 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
-  /*
-   * The method that merges the Populations.
-   * @see org.jgap.distr.IPopulationMerger#mergePopulations(org.jgap.Population, org.jgap.Population, int)
-   */
   public Population mergePopulations(Population a_population1,
                                      Population a_population2,
                                      int a_new_population_size) {
@@ -41,8 +37,8 @@ public class FittestPopulationMerger
     //See the private class FitnessChromosomeComparator below to understand.
     List allChromosomes = a_population1.getChromosomes();
     Collections.sort(allChromosomes, new FitnessChromosomeComparator());
-    //Then a new population is created and the fittest "a_new_population_size" chromosomes
-    //are added.
+    //Then a new population is created and the fittest "a_new_population_size"
+    //chromosomes are added.
     Chromosome[] chromosomes = (Chromosome[]) allChromosomes.toArray(new
         Chromosome[0]);
     Population mergedPopulation = new Population(a_new_population_size);
@@ -64,8 +60,8 @@ public class FittestPopulationMerger
    */
   private class FitnessChromosomeComparator
       implements Comparator {
-    /**Reference to the current FitnessEvaluator Object,
-     * used for comparing chromosomes */
+    //Reference to the current FitnessEvaluator Object, used for comparing
+    //chromosomes
     private FitnessEvaluator fEvaluator = Genotype.getConfiguration().
         getFitnessEvaluator();
 
@@ -77,8 +73,7 @@ public class FittestPopulationMerger
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     public int compare(Object o1, Object o2) {
-      //The two objects passed are always
-      //Chromosomes, so a cast must be made.
+      //The two objects passed are always Chromosomes, so a cast must be made.
       Chromosome chr1 = (Chromosome) o1;
       Chromosome chr2 = (Chromosome) o2;
       //Reverse comparison.
