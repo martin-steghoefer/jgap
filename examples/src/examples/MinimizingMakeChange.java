@@ -42,7 +42,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -123,7 +123,6 @@ public class MinimizingMakeChange {
     // Now we initialize the population randomly, anyway!
     // If you want to load previous results from file, remove the next line!
     population = Genotype.randomInitialGenotype(conf);
-
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
     // ---------------------------------------------------------------
@@ -192,37 +191,36 @@ public class MinimizingMakeChange {
    * cents).
    *
    * @param args the command-line arguments.
+   * @throws Exception
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public static void main(String[] args) {
+  public static void main(String[] args)
+      throws Exception {
     if (args.length != 1) {
       System.out.println("Syntax: MinimizingMakeChange <amount>");
     }
     else {
+      int amount = 0;
       try {
-        int amount = Integer.parseInt(args[0]);
-        if (amount < 1 ||
-            amount >= MinimizingMakeChangeFitnessFunction.MAX_BOUND) {
-          System.out.println("The <amount> argument must be between 1 and "
-                             +
-                             (MinimizingMakeChangeFitnessFunction.MAX_BOUND - 1)
-                             + ".");
-        }
-        else {
-          try {
-            makeChangeForAmount(amount);
-          }
-          catch (Exception e) {
-            e.printStackTrace();
-          }
-        }
+        amount = Integer.parseInt(args[0]);
       }
       catch (NumberFormatException e) {
         System.out.println(
             "The <amount> argument must be a valid integer value");
+        System.exit(1);
+      }
+      if (amount < 1 ||
+          amount >= MinimizingMakeChangeFitnessFunction.MAX_BOUND) {
+        System.out.println("The <amount> argument must be between 1 and "
+                           +
+                           (MinimizingMakeChangeFitnessFunction.MAX_BOUND - 1)
+                           + ".");
+      }
+      else {
+        makeChangeForAmount(amount);
       }
     }
   }
