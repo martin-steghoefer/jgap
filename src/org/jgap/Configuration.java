@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
@@ -38,7 +38,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -182,7 +182,12 @@ public class Configuration
    * The Configuration Handler for this Configurable.
    * @author Siddhartha Azad
    */
-  protected RootConfigurationHandler conHandler;
+  private RootConfigurationHandler m_conHandler;
+
+  /**
+   * Informative name for output
+   */
+  private String m_name;
 
   /**
    * @author Neil Rotstan
@@ -195,8 +200,33 @@ public class Configuration
     m_sizeNaturalSelectorsPre = 0;
     m_sizeNaturalSelectorsPost = 0;
     m_geneticOperators = new ArrayList();
-    conHandler = new RootConfigurationHandler();
-    conHandler.setConfigurable(this);
+    m_conHandler = new RootConfigurationHandler();
+    m_conHandler.setConfigurable(this);
+  }
+
+  public Configuration(String a_name) {
+    this();
+    setName(a_name);
+  }
+
+  /**
+   * @param a_name informative name of the configuration
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void setName(String a_name) {
+    m_name = a_name;
+  }
+
+  /**
+   * @return informative name of the configuration
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public String getName() {
+    return m_name;
   }
 
   /**
@@ -220,19 +250,16 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.1
    */
-  public synchronized void setFitnessFunction(
-      FitnessFunction a_functionToSet)
+  public synchronized void setFitnessFunction(FitnessFunction a_functionToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given fitness function isn't null.
-
     // -------------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
           "The FitnessFunction instance may not be null.");
     }
     // Make sure the bulk fitness function hasn't already been set.
-
     // ------------------------------------------------------------
     if (m_bulkObjectiveFunction != null) {
       throw new InvalidConfigurationException(
@@ -281,16 +308,13 @@ public class Configuration
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given bulk fitness function
-
     // isn't null.
-
     // ------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
           "The BulkFitnessFunction instance may not be null.");
     }
     // Make sure a normal fitness function hasn't already been set.
-
     // ------------------------------------------------------------
     if (m_objectiveFunction != null) {
       throw new InvalidConfigurationException(
@@ -412,7 +436,6 @@ public class Configuration
 
   /**
    *
-
    * @param processBeforeGeneticOperators boolean
    * @param index int
    * @return NaturalSelector
@@ -481,7 +504,8 @@ public class Configuration
 
   /**
    * Removes all natural selectors (either pre or post ones)
-   * @param processBeforeGeneticOperators
+   * @param processBeforeGeneticOperators true: remove all selectors processed
+   * before genetic operators, false: remove the ones processed afterwards
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -889,7 +913,7 @@ public class Configuration
   }
 
   /**
-   * Set the fitness evaluator (deciding if a given fitness value is better when
+       * Set the fitness evaluator (deciding if a given fitness value is better when
    * it's higher or better when it's lower).
    * @param a_fitnessEvaluator the FitnessEvaluator to be used
    *
@@ -917,7 +941,7 @@ public class Configuration
 
   /**
    * Determines whether to save (keep) the fittest individual
-   * @param a_preserveFittest true: always transfer fittest chromosome to next gen.
+       * @param a_preserveFittest true: always transfer fittest chromosome to next gen.
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -935,45 +959,131 @@ public class Configuration
   }
 
   /**
-   * implementation of the Configurable interface
+   * Implementation of the Configurable interface
    * @return ConfigurationHandler
+   *
    * @author Siddhartha Azad
    */
   public ConfigurationHandler getConfigurationHandler() {
-    if (conHandler == null) {
-      conHandler = new RootConfigurationHandler();
+    if (m_conHandler == null) {
+      m_conHandler = new RootConfigurationHandler();
     }
-    return conHandler;
+    return m_conHandler;
   }
 
   /**
    * Pass the name and value of a property to be set.
-   * @author Siddhartha Azad.
+   *
    * @param name The name of the property.
    * @param value The value of the property.
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
+   *
+   * @author Siddhartha Azad.
    * */
-  public void setConfigProperty(String name, String value) throws
-  	ConfigException, InvalidConfigurationException  {
-  	if(name.equals("m_populationSize")) {
-  		try {
-  			Integer popSize = new Integer(value);
-  	  		this.setPopulationSize(popSize.intValue());
-  		}
-  		catch(NumberFormatException numEx) {
-  			throw new ConfigException("Value for property "+name+" must be an "+
-  					"Integer, value is "+value);
-  		}
-  	}
+  public void setConfigProperty(String name, String value)
+      throws ConfigException, InvalidConfigurationException {
+    if (name.equals("m_populationSize")) {
+      try {
+        Integer popSize = new Integer(value);
+        this.setPopulationSize(popSize.intValue());
+      }
+      catch (NumberFormatException numEx) {
+        throw new ConfigException("Value for property " + name + " must be an " +
+                                  "Integer, value is " + value);
+      }
+    }
   }
 
   /**
    * Pass the name and values of a property to be set.
-   * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param values The different values of the property.
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
+   *
+   * @author Siddhartha Azad.
    * */
-  public void setConfigMultiProperty(String name, ArrayList values)  throws
-  	ConfigException, InvalidConfigurationException  {
+  public void setConfigMultiProperty(String name, ArrayList values)
+      throws ConfigException, InvalidConfigurationException {
+    /**@todo implement*/
+  }
 
+  /**
+   * @return String representation of the configuration containing all
+   * configurable elements
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public String toString() {
+    String result = "Configuration:";
+    // basic parameters
+    result += "\n Configuration name: " + getName();
+    result += "\n Population size: " + getPopulationSize();
+    result += "\n Minimum pop. size [%]: " + getMinimumPopSizePercent();
+    result += "\n Chromosome size: " + getChromosomeSize();
+
+    // sample chromosome
+    result += "\n Sample Chromosome:\n";
+    result += "\n    Size: " + getSampleChromosome().size();
+    result += "\n    toString: " + getSampleChromosome().toString();
+
+    // random generator
+    result += "\n  Random generator: " +
+        getRandomGenerator().getClass().getName();
+
+    // event manager
+    if (getEventManager() == null) {
+      result += "\n  Event manager: none";
+    }
+    else {
+      result += "\n  Event manager: " + getEventManager().getClass().getName();
+    }
+
+    // configuration handler
+    result += "\n Configuration handler: " + getConfigurationHandler().getName();
+
+    // fitness function
+    result += "\n Fitness function: " + getFitnessFunction().getClass().getName();
+
+    // fitness evaluator
+    result += "\n Fitness evaluator: " +
+        getFitnessEvaluator().getClass().getName();
+
+    // genetic operators
+    int gensize = getGeneticOperators().size();
+    result += "\n  Genetic Operators: ";
+    if (gensize < 1) {
+      result += "none";
+    }
+    else {
+      for (int i = 0; i < gensize; i++) {
+        if (i> 0) {
+          result += "; ";
+        }
+        result += " "+getGeneticOperators().get(i).getClass().getName();
+      }
+    }
+
+    // natural selectors (pre)
+    /**@todo implement accordingly to "selectors (post)"*/
+
+    // natural selectors (post)
+    int natsize = getNaturalSelectors(true).size();
+    result += "\n  Natural Selectors: ";
+    if (natsize < 1) {
+      result += "none";
+    }
+    else {
+      for (int i = 0; i < natsize; i++) {
+        if (i> 0) {
+          result += "; ";
+        }
+        result += " "+getNaturalSelectors(true).get(i).getClass().getName();
+      }
+    }
+
+    return result;
   }
 }
