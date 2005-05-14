@@ -4,14 +4,13 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
 import org.jgap.event.*;
 import org.jgap.impl.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -23,9 +22,8 @@ import junitx.util.*;
  */
 public class ConfigurationTest
     extends TestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -59,7 +57,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testAddGeneticOperator_2() throws
+  public void testAddGeneticOperator_2()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     conf.addGeneticOperator(new MutationOperator());
@@ -68,7 +67,8 @@ public class ConfigurationTest
     assertEquals(2, conf.getGeneticOperators().size());
   }
 
-  public void testVerifyStateIsValid_0() throws
+  public void testVerifyStateIsValid_0()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -82,7 +82,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testVerifyStateIsValid_1() throws
+  public void testVerifyStateIsValid_1()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -98,7 +99,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testVerifyStateIsValid_2() throws
+  public void testVerifyStateIsValid_2()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -115,7 +117,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testVerifyStateIsValid_3() throws
+  public void testVerifyStateIsValid_3()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -133,7 +136,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testVerifyStateIsValid_4() throws
+  public void testVerifyStateIsValid_4()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -152,7 +156,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testVerifyStateIsValid_5() throws
+  public void testVerifyStateIsValid_5()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -172,7 +177,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testVerifyStateIsValid_6() throws
+  public void testVerifyStateIsValid_6()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -188,7 +194,8 @@ public class ConfigurationTest
     conf.verifyStateIsValid();
   }
 
-  public void testVerifyStateIsValid_7() throws
+  public void testVerifyStateIsValid_7()
+      throws
       InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
@@ -209,7 +216,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testIsLocked_0() throws InvalidConfigurationException {
+  public void testIsLocked_0()
+      throws InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
@@ -226,7 +234,8 @@ public class ConfigurationTest
     assertEquals(true, conf.isLocked());
   }
 
-  public void testGetter_0() throws InvalidConfigurationException {
+  public void testGetter_0()
+      throws InvalidConfigurationException {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     FitnessFunction fitFunc = new StaticFitnessFunction(2);
@@ -260,7 +269,8 @@ public class ConfigurationTest
    * Tests a deprecated function!
    * @throws Exception
    */
-  public void testSetNaturalSelector_0() throws Exception {
+  public void testSetNaturalSelector_0()
+      throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.setNaturalSelector(selector);
@@ -282,30 +292,35 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testGetNaturalSelector_1() throws Exception {
+  public void testGetNaturalSelector_1()
+      throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector = new BestChromosomesSelector();
     conf.addNaturalSelector(selector, false);
-    assertEquals(selector,conf.getNaturalSelector());
+    assertEquals(selector, conf.getNaturalSelector());
   }
 
-  public void testGetNaturalSelector_2() throws Exception {
+  public void testGetNaturalSelector_2()
+      throws Exception {
     Configuration conf = new Configuration();
     try {
       conf.getNaturalSelector(true, 0);
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
-  public void testGetNaturalSelector_3() throws Exception {
+  public void testGetNaturalSelector_3()
+      throws Exception {
     Configuration conf = new Configuration();
     try {
       conf.getNaturalSelector(false, 0);
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
@@ -315,29 +330,32 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testGetNaturalSelector_4() throws Exception {
+  public void testGetNaturalSelector_4()
+      throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector = new BestChromosomesSelector();
     conf.addNaturalSelector(selector, false);
-    assertEquals(selector,conf.getNaturalSelector(false,0));
+    assertEquals(selector, conf.getNaturalSelector(false, 0));
   }
 
-
-  public void testAddNaturalSelector_0() throws Exception {
+  public void testAddNaturalSelector_0()
+      throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector, true);
     assertEquals(selector, conf.getNaturalSelectors(true).get(0));
   }
 
-  public void testAddNaturalSelector_1() throws Exception {
+  public void testAddNaturalSelector_1()
+      throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector = new WeightedRouletteSelector();
     conf.addNaturalSelector(selector, false);
     assertEquals(selector, conf.getNaturalSelectors(false).get(0));
   }
 
-  public void testAddNaturalSelector_2() throws Exception {
+  public void testAddNaturalSelector_2()
+      throws Exception {
     Configuration conf = new Configuration();
     NaturalSelector selector1 = new WeightedRouletteSelector();
     NaturalSelector selector2 = new WeightedRouletteSelector();
@@ -412,13 +430,14 @@ public class ConfigurationTest
 
   public void testGenerationNr_0() {
     Configuration conf = new Configuration();
-    assertEquals(0,conf.getGenerationNr());
+    assertEquals(0, conf.getGenerationNr());
     conf.incrementGenerationNr();
-    assertEquals(1,conf.getGenerationNr());
+    assertEquals(1, conf.getGenerationNr());
     conf.incrementGenerationNr();
     conf.incrementGenerationNr();
-    assertEquals(3,conf.getGenerationNr());
+    assertEquals(3, conf.getGenerationNr());
   }
+
   public void testSetBulkFitnessFunction_0() {
     Configuration conf = new Configuration();
     try {
@@ -430,7 +449,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testSetBulkFitnessFunction_1() throws Exception {
+  public void testSetBulkFitnessFunction_1()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new TestFitnessFunction());
     try {
@@ -442,7 +462,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testSetBulkFitnessFunction_2() throws Exception {
+  public void testSetBulkFitnessFunction_2()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
     try {
@@ -454,12 +475,14 @@ public class ConfigurationTest
     }
   }
 
-  public void testSetBulkFitnessFunction_3() throws Exception {
+  public void testSetBulkFitnessFunction_3()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
   }
 
-  public void testGetPopulationSize_0() throws Exception {
+  public void testGetPopulationSize_0()
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(0, conf.getPopulationSize());
     final int SIZE = 22;
@@ -467,7 +490,8 @@ public class ConfigurationTest
     assertEquals(SIZE, conf.getPopulationSize());
   }
 
-  public void testSetPopulationSize_1() throws Exception {
+  public void testSetPopulationSize_1()
+      throws Exception {
     Configuration conf = new Configuration();
     try {
       conf.setPopulationSize(0);
@@ -479,28 +503,29 @@ public class ConfigurationTest
   }
 
   public void testSetRandomGenerator_0() {
-      Configuration conf = new Configuration();
-      try {
-        conf.setRandomGenerator(null);
-        fail();
-      }
-      catch (InvalidConfigurationException invex) {
-        ; //this is OK
-      }
+    Configuration conf = new Configuration();
+    try {
+      conf.setRandomGenerator(null);
+      fail();
+    }
+    catch (InvalidConfigurationException invex) {
+      ; //this is OK
+    }
   }
 
   public void testSetEventManager_0() {
-      Configuration conf = new Configuration();
-      try {
-        conf.setEventManager(null);
-        fail();
-      }
-      catch (InvalidConfigurationException invex) {
-        ; //this is OK
-      }
+    Configuration conf = new Configuration();
+    try {
+      conf.setEventManager(null);
+      fail();
+    }
+    catch (InvalidConfigurationException invex) {
+      ; //this is OK
+    }
   }
 
-  public void testLock_0() throws Exception {
+  public void testLock_0()
+      throws Exception {
     Configuration conf = new Configuration();
     try {
       conf.lockSettings();
@@ -511,7 +536,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testLock_1() throws Exception {
+  public void testLock_1()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene gene = new BooleanGene();
@@ -534,7 +560,8 @@ public class ConfigurationTest
     }
   }
 
-  public void testSetSampleChromosome_0() throws Exception {
+  public void testSetSampleChromosome_0()
+      throws Exception {
     Configuration conf = new Configuration();
     Gene gene = new BooleanGene();
     new Chromosome(gene, 55);
@@ -547,13 +574,26 @@ public class ConfigurationTest
     }
   }
 
-  public void testGetChromosomeSize_0() throws Exception {
+  public void testGetChromosomeSize_0()
+      throws Exception {
     Configuration conf = new Configuration();
     Gene gene = new BooleanGene();
     final int SIZE = 55;
     Chromosome sample = new Chromosome(gene, SIZE);
     conf.setSampleChromosome(sample);
     assertEquals(SIZE, conf.getChromosomeSize());
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testToString_0()
+      throws Exception {
+    /**@todo implement*/
   }
 }
 
