@@ -9,6 +9,7 @@
  */
 package org.jgap;
 
+import org.jgap.audit.*;
 import org.jgap.data.*;
 import org.jgap.distr.*;
 import org.jgap.eval.*;
@@ -36,10 +37,11 @@ public class AllTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
+    suite.addTest(AllAuditTests.suite());
     suite.addTest(AllBaseTests.suite());
     suite.addTest(AllDataTests.suite());
     suite.addTest(AllDistrTests.suite());
