@@ -6,6 +6,10 @@
 * Added many new test cases
 * Added GUI and logical support for JGAP configuration
 * Introduced new package org.jgap.util for utility functions
+* Introduced toString() in class org.jgap.Configuration
+* Added new example: knapsack problem
+* Enhanced javadocs
+
 
 2.2
 ----------
