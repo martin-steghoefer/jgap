@@ -10,7 +10,11 @@
 package examples;
 
 import java.io.*;
-
+//JFreeChart-related
+//import java.awt.image.*;
+//import org.jfree.chart.*;
+//import org.jfree.chart.plot.*;
+//import org.jfree.data.category.*;
 import org.jgap.*;
 import org.jgap.data.*;
 import org.jgap.impl.*;
@@ -38,12 +42,12 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The total number of times we'll let the population evolve.
    */
-  private static final int MAX_ALLOWED_EVOLUTIONS = 50;
+  private static final int MAX_ALLOWED_EVOLUTIONS = 80;
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -67,15 +71,14 @@ public class MinimizingMakeChange {
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
-
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
     FitnessFunction myFunc =
         new MinimizingMakeChangeFitnessFunction(a_targetChangeAmount);
-    conf.setFitnessFunction(myFunc);
-
+//    conf.setFitnessFunction(myFunc);
+    conf.setBulkFitnessFunction(new BulkFitnessOffsetRemover(myFunc));
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
@@ -88,27 +91,28 @@ public class MinimizingMakeChange {
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    sampleGenes[0] = new IntegerGene(0, 3); // Quarters
-    sampleGenes[1] = new IntegerGene(0, 2); // Dimes
-    sampleGenes[2] = new IntegerGene(0, 1); // Nickels
-    sampleGenes[3] = new IntegerGene(0, 4); // Pennies
+    sampleGenes[0] = new IntegerGene(0, 3 * 10); // Quarters
+    sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
+    sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
+    sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
-
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
     // finding the answer), but the longer it will take to evolve
-    // the population (which could be seen as bad). We'll just set
-    // the population size to 500 here.
+    // the population (which could be seen as bad).
     // ------------------------------------------------------------
-    conf.setPopulationSize(500);
+    conf.setPopulationSize(50);
+    // JFreeChart: setup
+//    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+//    PlotOrientation or = PlotOrientation.VERTICAL;
+
     // Create random initial population of Chromosomes.
     // Here we try to read in a previous run via XMLManager.readFile(..)
     // for demonstration purpose!
-    // ------------------------------------------------
+    // -----------------------------------------------------------------
     Genotype population;
-
     try {
       Document doc = XMLManager.readFile(new File("testJGAP.xml"));
       population = XMLManager.getGenotypeFromDocument(conf, doc);
@@ -116,28 +120,33 @@ public class MinimizingMakeChange {
     catch (FileNotFoundException fex) {
       population = Genotype.randomInitialGenotype(conf);
     }
+    // Now we initialize the population randomly, anyway!
+    // If you want to load previous results from file, remove the next line!
+    population = Genotype.randomInitialGenotype(conf);
 
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
     // ---------------------------------------------------------------
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
+      // JFreeChart: add current best fitness to chart
+//      double fitness = population.getFittestChromosome().getFitnessValue();
+//      if (i % 3 == 0) {
+//        String s = String.valueOf(i);
+//        dataset.setValue(fitness, "Fitness", s);
+//      }
     }
-
     // Save progress to file. A new run of this example will then be able to
     // resume where it stopped before!
+    // ---------------------------------------------------------------------
 
     // represent Genotype as tree with elements Chromomes and Genes
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
     IDataCreators doc2 = builder.representGenotypeAsDocument(population);
-
     // create XML document from generated tree
     XMLDocumentBuilder docbuilder = new XMLDocumentBuilder();
     Document xmlDoc = (Document) docbuilder.buildDocument(doc2);
     XMLManager.writeFile(xmlDoc, new File("testJGAP.xml"));
-
-
-
     // Display the best solution we found.
     // -----------------------------------
     Chromosome bestSolutionSoFar = population.getFittestChromosome();
@@ -166,6 +175,15 @@ public class MinimizingMakeChange {
                        MinimizingMakeChangeFitnessFunction.
                        getTotalNumberOfCoins(
         bestSolutionSoFar) + " coins.");
+    // JFreeChart: Create chart
+//    JFreeChart chart = ChartFactory.createLineChart("JGAP: Evolution progress",
+//        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
+//        true
+//        /*tooltips*/
+//        , false /*urls*/);
+//    BufferedImage image = chart.createBufferedImage(640, 480);
+//    FileOutputStream fo = new FileOutputStream("c:\\chart.jpg");
+//    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
   }
 
   /**
@@ -181,14 +199,17 @@ public class MinimizingMakeChange {
    */
   public static void main(String[] args) {
     if (args.length != 1) {
-      System.out.println("Syntax: MakeChange <amount>");
+      System.out.println("Syntax: MinimizingMakeChange <amount>");
     }
     else {
       try {
         int amount = Integer.parseInt(args[0]);
-        if (amount < 1 || amount > 99) {
-          System.out.println(
-              "The <amount> argument must be between 1 and 99.");
+        if (amount < 1 ||
+            amount >= MinimizingMakeChangeFitnessFunction.MAX_BOUND) {
+          System.out.println("The <amount> argument must be between 1 and "
+                             +
+                             (MinimizingMakeChangeFitnessFunction.MAX_BOUND - 1)
+                             + ".");
         }
         else {
           try {
