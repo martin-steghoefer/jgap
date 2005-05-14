@@ -13,9 +13,9 @@ import java.io.*;
 
 import java.awt.image.*;
 
-import org.jfree.chart.*;
-import org.jfree.chart.plot.*;
-import org.jfree.data.category.*;
+//import org.jfree.chart.*;
+//import org.jfree.chart.plot.*;
+//import org.jfree.data.category.*;
 import org.jgap.*;
 import org.jgap.data.*;
 import org.jgap.impl.*;
@@ -35,7 +35,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -109,9 +109,6 @@ public class KnapsackMain {
     // ------------------------------------------------------------
     conf.setPopulationSize(50);
 
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    PlotOrientation or = PlotOrientation.VERTICAL;
-
     // Create random initial population of Chromosomes.
     // Here we try to read in a previous run via XMLManager.readFile(..)
     // for demonstration purpose!
@@ -132,12 +129,6 @@ public class KnapsackMain {
     // ---------------------------------------------------------------
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
-      // add current best fitness to chart
-      double fitness = population.getFittestChromosome().getFitnessValue();
-      if (i % 3 == 0) {
-        String s = String.valueOf(i);
-        dataset.setValue(fitness, "Fitness", s);
-      }
     }
 
     // Save progress to file. A new run of this example will then be able to
