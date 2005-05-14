@@ -13,9 +13,11 @@ package org.jgap.util;
  * Container for holding result information after executing an operation
  *
  * @author Klaus Meffert
- * @since 2.4
+ * @since 2.3
  */
 public class CommandResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**@todo implement*/
 }
