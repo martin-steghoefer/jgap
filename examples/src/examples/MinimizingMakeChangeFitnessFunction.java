@@ -22,11 +22,13 @@ public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private final int m_targetAmount;
 
   public static final int MAX_BOUND = 1000;
+
+  private static final double ZERO_DIFFERENCE_FITNESS = 10;
 
   public MinimizingMakeChangeFitnessFunction( int a_targetAmount )
   {
@@ -46,7 +48,7 @@ public class MinimizingMakeChangeFitnessFunction
    *
    * @param a_subject The Chromosome instance to evaluate.
    *
-   * @return A positive integer reflecting the fitness rating of the given
+   * @return A positive double reflecting the fitness rating of the given
    *         Chromosome.
    * @since 2.0 (until 1.1: return type int)
    */
@@ -57,43 +59,69 @@ public class MinimizingMakeChangeFitnessFunction
     // we consider only the represented amount of change vs. the target
     // amount of change and return higher fitness values for amounts
     // closer to the target, and lower fitness values for amounts further
-    // away from the target. If the amount equals the target, then we go
-    // to step 2, which returns a higher fitness value for solutions
-    // representing fewer total coins, and lower fitness values for
-    // solutions representing more total coins.
+    // away from the target. Then we go to step 2, which returns a higher
+  	// fitness value for solutions representing fewer total coins, and
+  	// lower fitness values for solutions representing more total coins.
     // ------------------------------------------------------------------
     int changeAmount = amountOfChange(a_subject);
     int totalCoins = getTotalNumberOfCoins(a_subject);
     int changeDifference = Math.abs(m_targetAmount - changeAmount);
 
     // Step 1: Determine distance of amount represented by solution from
-    // the target amount. Since we know  the maximum amount of change is
-    // 999 cents, we'll subtract the difference in change between the
-    // solution amount and the target amount. That will give the desired effect
-    // of returning higher values for amounts closer to the target amount and
-    // lower values for amounts further away from the target amount.
+    // the target amount. If the change difference is greater than zero we
+    // will divide one by the difference in change between the
+    // solution amount and the target amount. That will give the desired
+    // effect of returning higher values for amounts closer to the target
+    // amount and lower values for amounts further away from the target
+    // amount.
+    // In the case where the change difference is zero it means that we have
+    // the correct amount and we assign a higher fitness value
     // -----------------------------------------------------------------
-    int fitness = ( MAX_BOUND-1 - changeDifference );
+    double fitness;
 
-    // Step 2: If the solution amount equals the target amount, then
-    // we add additional fitness points for solutions representing fewer
-    // total coins.
+    if(changeDifference==0)
+    	fitness = ZERO_DIFFERENCE_FITNESS;
+    else
+    	fitness = 1.0 / changeDifference;
+
+    // Step 2: We divide the fitness value by a penalty based on the number of
+    // coins. The higher the number of coins the higher the penalty and the
+    // smaller the fitness value.
+    // And inversely the smaller number of coins in the solution the higher
+    // the resulting fitness value.
     // -----------------------------------------------------------------
-    if( changeDifference == 0 )
-    {
-        fitness += MAX_BOUND - computeCoinNumberPenalty(totalCoins);
-        }
+    fitness /= computeCoinNumberPenalty(totalCoins);
 
     // Make sure fitness value is always positive.
     // -------------------------------------------
-    return Math.max(1, fitness);
+    return Math.max(0.00001d, fitness);
   }
 
+  /**
+   * Calculates the penalty to apply to the fitness value based on the ammount
+   * of coins in the solution
+   *
+   * @param a_coins Number of coins in the solution
+   * @return A penalty for the fitness value base on the number of coins
+   *
+
+
+
+  /**
+   * Calculates the penalty to apply to the fitness value based on the ammount
+   * of coins in the solution
+   *
+   * @param a_coins Number of coins in the solution
+   * @return A penalty for the fitness value base on the number of coins
+   *
+   * @author John Serri
+   * @since 2.2
+   */
   protected double computeCoinNumberPenalty(int a_coins) {
-    /**@todo the lower the number of coins the faster the fitness value
-     * should rise (and not in a linear manner!);
-     */
-    return ( (MAX_BOUND*0.05d) * a_coins );
+    if (a_coins == 0)
+      return MAX_BOUND * MAX_BOUND;
+    else
+      return (a_coins * a_coins);
   }
 
   /**
