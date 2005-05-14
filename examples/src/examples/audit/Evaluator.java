@@ -19,8 +19,13 @@ import java.util.*;
  * @since 2.2
  */
 public class Evaluator {
+  /**@todo implement: overall score calculation (out of best/avg. fitness value
+   * etc.)
+   */
+
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Each data has its own data container
