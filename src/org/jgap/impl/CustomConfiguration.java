@@ -18,39 +18,24 @@ import org.jgap.*;
 public class CustomConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-  
-  private String conFile;
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  private String m_conFile;
 
   /**
    * Constructor.
    * @param _conFile The config file from which to load the configuration.
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
+   *
    * @author Siddhartha Azad.
+   * @since 2.3
    */
   public CustomConfiguration(String _conFile) throws ConfigException,
   	InvalidConfigurationException {
     super();
-    conFile = _conFile;
+    m_conFile = _conFile;
     ConfigFileReader.instance().setFileName(_conFile);
-    conHandler.readConfig();
+    getConfigurationHandler().readConfig();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
