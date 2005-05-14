@@ -9,15 +9,17 @@
  */
 package examples.audit;
 
-import java.io.*;
 
-import java.awt.image.*;
+//Uncomment imports and code below to use JFreeChart functionality
+//import java.io.*;
+//import java.awt.image.*;
 
-import org.jfree.chart.*;
-import org.jfree.chart.plot.*;
-import org.jfree.data.category.*;
+//import org.jfree.chart.*;
+//import org.jfree.chart.plot.*;
+//import org.jfree.data.category.*;
 import org.jgap.*;
 import org.jgap.impl.*;
+import org.jgap.audit.*;
 
 /**
  * Same logic as in MinimizingMakeChange except that we are using the new
@@ -28,7 +30,7 @@ import org.jgap.impl.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -52,8 +54,6 @@ public class CoinsExample {
   public static void makeChangeForAmount(int a_targetChangeAmount)
       throws
       Exception {
-
-    PlotOrientation or = PlotOrientation.VERTICAL;
 
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
@@ -196,25 +196,26 @@ public class CoinsExample {
 
     // construct JFreeChart Dataset.
     // -----------------------------
-    DefaultKeyedValues2D myDataset = eval.calcAvgFitness(-1);//eval.getData();
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
-      for (int jj=0;jj<myDataset.getRowCount();jj++) {
-        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
-                                            myDataset.getColumnKey(ii)),
-                         "Perm "+myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
-      }
-    }
+//    DefaultKeyedValues2D myDataset = eval.calcAvgFitness(-1);//eval.getData();
+//    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+//    for (int ii=0;ii<myDataset.getColumnCount();ii++) {
+//      for (int jj=0;jj<myDataset.getRowCount();jj++) {
+//        dataset.setValue(myDataset.getValue(myDataset.getRowKey(jj),
+//                                            myDataset.getColumnKey(ii)),
+//                         "Perm "+myDataset.getRowKey(jj), myDataset.getColumnKey(ii));
+//      }
+//    }
 
-    JFreeChart chart = ChartFactory.createLineChart(
-        "JGAP: Evolution progress",
-        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
-        true
-        /*tooltips*/
-        , false /*urls*/);
-    BufferedImage image = chart.createBufferedImage(640, 480);
-    FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
-    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
+//    PlotOrientation or = PlotOrientation.VERTICAL;
+//    JFreeChart chart = ChartFactory.createLineChart(
+//        "JGAP: Evolution progress",
+//        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
+//        true
+//        /*tooltips*/
+//        , false /*urls*/);
+//    BufferedImage image = chart.createBufferedImage(640, 480);
+//    FileOutputStream fo = new FileOutputStream("c:\\JGAP_chart_fitness_values.jpg");
+//    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
 
     // Performance metrics for each single permutation.
     // ------------------------------------------------
