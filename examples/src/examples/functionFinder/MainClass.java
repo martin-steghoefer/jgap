@@ -26,7 +26,7 @@ import org.jgap.impl.*;
  */
 public class MainClass {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -48,7 +48,7 @@ public class MainClass {
    * Example:
    * MAX_TERMS_IN_FUNCTION = 1 --> F(X) = sin(X)
    * MAX_TERMS_IN_FUNCTION = 2 --> F(X) = sin(X*cos(X))
-   *                           --> F(X) = sin(X*cos(abs(X)+3))
+   *                       = 2 --> F(X) = sin(X*cos(abs(X)+3))
    * ...
    */
   public static final int MAX_TERMS_IN_FUNCTION = 1;
