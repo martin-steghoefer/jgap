@@ -34,7 +34,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -166,7 +166,7 @@ public class CrossoverOperator
         else {
           gene1 = firstGenes[j];
         }
-        //Make a distinction to CompositeGene fot the second gene
+        //Make a distinction to CompositeGene for the second gene
         if (secondGenes[j] instanceof CompositeGene) {
           //randomly determine gene to be considered
           index2 = generator.nextInt(secondGenes[j].size());
