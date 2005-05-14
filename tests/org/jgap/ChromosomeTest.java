@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ChromosomeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -339,7 +339,7 @@ public class ChromosomeTest
    */
   public void testClone_1()
       throws InvalidConfigurationException {
-    Gene[] genes = new IntegerGene[2];
+    Gene[] genes = new Gene[2];
     genes[0] = new IntegerGene();
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
@@ -357,7 +357,7 @@ public class ChromosomeTest
     assertEquals(chrom.size(), chrom2.size());
     assertEquals(chrom.getGene(0), chrom2.getGene(0));
     assertEquals(chrom.getGene(1), chrom2.getGene(1));
-    assertEquals(chrom.getGenes(), chrom2.getGenes());
+    assertEquals(chrom.getGenes().getClass(), chrom2.getGenes().getClass());
     assertEquals(chrom.toString(), chrom2.toString());
     assertTrue(chrom.equals(chrom2));
   }
