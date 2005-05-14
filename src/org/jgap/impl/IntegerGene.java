@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -25,7 +25,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.20 $";
+  private static final String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -117,8 +117,7 @@ public class IntegerGene
    * @since 1.0
    */
   public String getPersistentRepresentation()
-      throws
-      UnsupportedOperationException {
+      throws UnsupportedOperationException {
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
@@ -147,8 +146,7 @@ public class IntegerGene
    * @since 1.0
    */
   public void setValueFromPersistentRepresentation(String a_representation)
-      throws
-      UnsupportedRepresentationException {
+      throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
           new StringTokenizer(a_representation,
@@ -237,7 +235,9 @@ public class IntegerGene
    * @since 1.0
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = new Integer((int)((m_upperBounds-m_lowerBounds)*a_numberGenerator.nextDouble()+m_lowerBounds));
+    m_value = new Integer( (int) ( (m_upperBounds - m_lowerBounds) *
+                                  a_numberGenerator.nextDouble() +
+                                  m_lowerBounds));
   }
 
   /**
@@ -254,7 +254,7 @@ public class IntegerGene
    * @since 1.0
    */
   protected int compareToNative(Object o1, Object o2) {
-    return ( (Integer) o1).compareTo((Integer)o2);
+    return ( (Integer) o1).compareTo( (Integer) o2);
   }
 
   /**
@@ -306,7 +306,7 @@ public class IntegerGene
   public void applyMutation(int index, double a_percentage) {
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
     if (m_value == null) {
-     setAllele(new Integer((int)range+m_lowerBounds));
+      setAllele(new Integer( (int) range + m_lowerBounds));
     }
     else {
       int newValue = (int) Math.round(intValue() + range);
