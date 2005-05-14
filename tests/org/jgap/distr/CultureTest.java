@@ -1,11 +1,8 @@
 package org.jgap.distr;
 
-import java.util.*;
 import org.jgap.*;
-import org.jgap.impl.*;
-import org.jgap.event.*;
-import junit.framework.*;
 
+import junit.framework.*;
 
 /**
  * Test class for Culture class
@@ -16,7 +13,7 @@ import junit.framework.*;
 public class CultureTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -25,6 +22,10 @@ public class CultureTest extends TestCase {
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
     return suite;
+  }
+
+  public void testConstruct_0() {
+    /**@todo*/
   }
 
   /**@todo implement tests*/
