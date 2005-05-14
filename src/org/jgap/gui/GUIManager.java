@@ -10,7 +10,6 @@
 package org.jgap.gui;
 
 import javax.swing.*;
-
 import org.jgap.*;
 
 /**
@@ -20,16 +19,19 @@ import org.jgap.*;
  * In the future it will do the same for objects on the Root ConfigFrame that
  * are in turn Configurable.
  *
- * @author Siddhartha Azad.
+ * @author Siddhartha Azad
+ * @since 2.3
  */
 public class GUIManager {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
-   * Return a singleton GUIManager instance.
-   * */
+   * @return a singleton GUIManager instance
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
   public static GUIManager instance() {
     if (gm == null)
       gm = new GUIManager();
@@ -38,6 +40,9 @@ public class GUIManager {
 
   /**
    * Constructor for the frame
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    */
   private GUIManager() {
     frame = null;
@@ -45,14 +50,18 @@ public class GUIManager {
 
   /**
    * Create and show a new frame for a Configurable.
-   * */
-  private void showFrame(Configurable _con) {
+   * @param a_con configurable to use
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  private void showFrame(Configurable a_con) {
     try {
       // create the frame
       frame = new ConfigFrame("JGAP Configurator:" +
-                              _con.getConfigurationHandler().getName());
-      con = _con;
-      frame.createAndShowGUI(_con.getConfigurationHandler());
+                              a_con.getConfigurationHandler().getName());
+      con = a_con;
+      frame.createAndShowGUI(a_con.getConfigurationHandler());
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -61,19 +70,20 @@ public class GUIManager {
 
   /**
    * Main method for the GUI
+   * @param args not used
+   * @throws Exception
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    */
-  public static void main(String args[]) {
-    try {
-      SwingUtilities.invokeLater(new Runnable() {
-        public void run() {
-          Configuration con = new Configuration();
-          GUIManager.instance().showFrame(con);
-        }
-      });
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
+  public static void main(String args[])
+      throws Exception {
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        Configuration con = new Configuration();
+        GUIManager.instance().showFrame(con);
+      }
+    });
   }
 
   // The root frame
