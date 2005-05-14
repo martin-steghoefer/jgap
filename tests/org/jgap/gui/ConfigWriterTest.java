@@ -27,7 +27,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -38,6 +38,9 @@ public class ConfigWriterTest
    * Get mock config data, use the ConfigWriter to write a property file
    * retrieve the written file, load it and check if the contents got
    * written correctly.
+   *
+   * @throws Exception
+   *
    * @author Siddhartha Azad.
    * */
   public void testConfigData_0()
@@ -96,18 +99,15 @@ public class ConfigWriterTest
   /**
    * Test the reading of a config file and loading of the m_populatioSize
    * variable of the Configuration Configurable.
+   *
+   * @throws Exception
+   *
    * @author Siddhartha Azad.
-   * */
+   */
   public void testConfigReader_0()
       throws Exception {
-    Configuration config;
-    try {
-      config = new CustomConfiguration("jgapTest.con");
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-      return;
-    }
+    Configuration config = null;
+    config = new CustomConfiguration("jgapTest.con");
     // Some setup so that the Configuration doesn't throw an Exception. We do
     // not set the population size of the Configuration since this is supposed
     // to be read directly from the config file.
@@ -117,7 +117,6 @@ public class ConfigWriterTest
     sampleGenes[1] = new IntegerGene(1, 50);
     sampleGenes[2] = new IntegerGene(100, 150);
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
-    Genotype population;
     FitnessFunction fitFunc = new MockFitnessFunction();
     try {
       config.setFitnessFunction(fitFunc);
@@ -132,14 +131,12 @@ public class ConfigWriterTest
       config.setEventManager(new EventManager());
       config.addGeneticOperator(new CrossoverOperator());
       config.addGeneticOperator(new MutationOperator(15));
-      population = Genotype.randomInitialGenotype(config);
+      Genotype.randomInitialGenotype(config);
     }
     catch (InvalidConfigurationException icEx) {
-      icEx.printStackTrace();
       fail();
     }
     catch (Exception ex) {
-      ex.printStackTrace();
       fail();
     }
     assertEquals(config.getPopulationSize(), 35);
