@@ -23,7 +23,7 @@ public class PermutingConfiguration
     extends Configuration {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private List m_randomGeneratorSlots;
 
@@ -213,6 +213,9 @@ public class PermutingConfiguration
         m_fitnessFunctionIndex = 0;
       }
     }
+
+    /**@todo BulkFitnessOffsetRemover vs. FitnessFunction*/
+
 //    System.err.println(m_fitnessFunctionIndex+" / "+index++);
     FitnessFunction ff = (FitnessFunction) m_fitnessFunctionSlots.get(
         m_fitnessFunctionIndex);
