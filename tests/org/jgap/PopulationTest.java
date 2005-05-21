@@ -25,7 +25,7 @@ import junit.framework.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -256,7 +256,7 @@ public class PopulationTest extends TestCase {
 
   public void testContains_0() {
     Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g,10);
+    Chromosome c = new Chromosome(g, 10);
     c.setFitnessValue(45);
 
     Population p1 = new Population();
@@ -266,5 +266,98 @@ public class PopulationTest extends TestCase {
     assertTrue(p1.contains(c));
     assertFalse(p1.contains(null));
     assertFalse(p1.contains(new Chromosome(g,5)));
+  }
+
+  /**
+   * Single chromosome
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testGetGenome_0() {
+    Population pop = new Population();
+    Gene g1 = new DoubleGene();
+    Gene g2 = new StringGene();
+    Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
+    pop.addChromosome(c1);
+    List genes = pop.getGenome(true);
+    assertEquals(2, genes.size());
+    assertEquals(g1, genes.get(0));
+    assertEquals(g2, genes.get(1));
+    genes = pop.getGenome(!true);
+    assertEquals(2, genes.size());
+    assertEquals(g1, genes.get(0));
+    assertEquals(g2, genes.get(1));
+  }
+
+  /**
+   * Two chromosomes
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testGetGenome_1() {
+    Population pop = new Population();
+    Gene g1 = new DoubleGene();
+    Gene g2 = new StringGene();
+    Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
+    pop.addChromosome(c1);
+    Gene g3 = new BooleanGene();
+    Gene g4 = new IntegerGene(0,10);
+    Gene g5 = new FixedBinaryGene(4);
+    Chromosome c2 = new Chromosome(new Gene[] {g3, g4, g5});
+    pop.addChromosome(c2);
+
+    List genes = pop.getGenome(true);
+    assertEquals(5, genes.size());
+    assertEquals(g1, genes.get(0));
+    assertEquals(g2, genes.get(1));
+    assertEquals(g3, genes.get(2));
+    assertEquals(g4, genes.get(3));
+    assertEquals(g5, genes.get(4));
+
+    genes = pop.getGenome(!true);
+    assertEquals(5, genes.size());
+    assertEquals(g1, genes.get(0));
+    assertEquals(g2, genes.get(1));
+    assertEquals(g3, genes.get(2));
+    assertEquals(g4, genes.get(3));
+    assertEquals(g5, genes.get(4));
+  }
+
+  /**
+   * Test with CompositeGene
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testGetGenome_2() {
+    Population pop = new Population();
+    Gene g1 = new DoubleGene();
+    Gene g2 = new StringGene();
+    Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
+    pop.addChromosome(c1);
+    Gene g3 = new BooleanGene();
+    CompositeGene g4 = new CompositeGene();
+    Gene g5 = new FixedBinaryGene(4);
+    g4.addGene(g5);
+    Gene g6 = new DoubleGene(1.0d, 4.0d);
+    g4.addGene(g6);
+    Chromosome c2 = new Chromosome(new Gene[] {g3, g4});
+    pop.addChromosome(c2);
+
+    // resolve CompositeGene with the following call
+    List genes = pop.getGenome(true);
+    assertEquals(5, genes.size());
+    assertEquals(g1, genes.get(0));
+    assertEquals(g2, genes.get(1));
+    assertEquals(g3, genes.get(2));
+    assertEquals(g5, genes.get(3));
+    assertEquals(g6, genes.get(4));
+
+    // don't resolve CompositeGene with the following call
+    genes = pop.getGenome(!true);
+    assertEquals(4, genes.size());
+    assertEquals(g1, genes.get(0));
+    assertEquals(g2, genes.get(1));
+    assertEquals(g3, genes.get(2));
+    assertEquals(g4, genes.get(3));
   }
 }
