@@ -9,7 +9,9 @@
  */
 package org.jgap;
 
+import java.io.*;
 import java.util.*;
+import org.jgap.impl.*;
 
 /**
  * List of chromosomes held in the Genotype (or possibly later in the
@@ -18,9 +20,9 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 2.0
  */
-public class Population {
+public class Population implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -210,7 +212,8 @@ public class Population {
 
   /**
    *
-   * @param a_changed boolean
+   * @param a_changed true: mark population as changed; false: mark as not
+   * changed (meaning: changes already acknowledged)
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -229,5 +232,61 @@ public class Population {
    */
   public boolean contains(Chromosome a_chromosome) {
     return m_chromosomes.contains(a_chromosome);
+  }
+
+  /**
+   * Returns the genotype of the population, i.e. the list of genes in the
+   * population.
+   * @param a_resolveCompositeGenes true: split encountered CompositeGenes
+   * into their single (atomic) genes
+   * @return genotype of the population
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public List getGenome(boolean a_resolveCompositeGenes) {
+    List result = new Vector();
+    List chroms = getChromosomes();
+    int len = chroms.size();
+    for (int i = 0; i < len; i++) {
+      Chromosome chrom = (Chromosome)chroms.get(i);
+      Gene[] genes = chrom.getGenes();
+      int len2 = genes.length;
+      for (int j = 0; j < len2; j++) {
+        Gene gene = genes[j];
+        if (a_resolveCompositeGenes && gene instanceof CompositeGene) {
+          addCompositeGene(result, (CompositeGene)gene);
+        }
+        else {
+          addAtomicGene(result, gene);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Adds all the genes of a CompositeGene to a result list.
+   * Method calls itself recursively
+   *
+   * @param a_result the list to add to
+   * @param a_gene the gene to start with
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  private void addCompositeGene(final List a_result, Gene a_gene) {
+    if (a_gene instanceof CompositeGene) {
+      int len = ((CompositeGene)a_gene).size();
+      for (int i=0;i<len;i++) {
+        addCompositeGene(a_result, ((CompositeGene)a_gene).geneAt(i));
+      }
+    }
+    else {
+      addAtomicGene(a_result, a_gene);
+    }
+  }
+
+  private void addAtomicGene(final List a_result, Gene a_gene) {
+    a_result.add(a_gene);
   }
 }
