@@ -32,7 +32,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -646,9 +646,11 @@ public class XMLManager {
       throw new IOException(tex.getMessage());
     }
     DOMSource source = new DOMSource(doc);
-    StreamResult result = new StreamResult(new FileOutputStream(file));
+    FileOutputStream fos = new FileOutputStream(file);
+    StreamResult result = new StreamResult(fos);
     try {
       transformer.transform(source, result);
+      fos.close();
     }
     catch (TransformerException tex) {
       throw new IOException(tex.getMessage());
