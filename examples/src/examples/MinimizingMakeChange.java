@@ -42,7 +42,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -64,8 +64,7 @@ public class MinimizingMakeChange {
    * @since 1.0
    */
   public static void makeChangeForAmount(int a_targetChangeAmount)
-      throws
-      Exception {
+      throws Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
     // -------------------------------------------------------------
