@@ -24,15 +24,15 @@ public abstract class DocumentBuilderBase {
    * DocumentBuilderBase */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
-   *
+   * Builds a document from the given input (input data + existing document).
    * @param a_dataholder IDataCreators the input structure holding the data to
-   *   be represented as a generic document
+   * be represented as a generic document
    * @param a_document Object the document to put the elements in
    * @throws Exception
-   * @return Object the document built up by adding elements
+   * @return Object the document a_document built up by adding elements
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -52,7 +52,7 @@ public abstract class DocumentBuilderBase {
 
   /**
    * Recursive traversing over data tree containing elements to be transformed
-   * into tags
+   * into tags.
    * @param a_elem IDataElement
    * @param a_document Document
    * @param a_Element Element
@@ -85,11 +85,11 @@ public abstract class DocumentBuilderBase {
   }
 
   /**
-   *
-   * @param document Object
-   * @param element Object
-   * @param tagName String
-   * @return Object
+   * Generically creates an element (Template Method).
+   * @param document could be used as factory to create the element with
+   * @param element null or existing element as template
+   * @param tagName name of tag to create for the element
+   * @return created element
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -108,15 +108,53 @@ public abstract class DocumentBuilderBase {
     return element;
   }
 
+  /**
+   * Append a child to a given document
+   * @param document to append element on (e.g. org.w3c.dom.Document)
+   * @param element to append to document (e.g. org.w3c.com.Element)
+   * @return document with appended element (e.g. org.w3c.dom.Document)
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   protected abstract Object documentAppendChild(Object document,
                                                 Object element);
 
+  /**
+   * Append a child to a given element
+   * @param rootElement to append childElement on (e.g. org.w3c.com.Element)
+   * @param childElement to append to rootElement (e.g. org.w3c.com.Element)
+   * @return rootElement with appended childElement (e.g. org.w3c.com.Element)
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   protected abstract Object elementAppendChild(Object rootElement,
                                                Object childElement);
 
+  /**
+   * Creates an element with help for a given document
+   * @param document could be used as factory to create the element with
+   * @param element null or existing element as template
+   * @param tagName name of tag to create for the element
+   * @return created element
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   protected abstract Object createElement(Object document, Object element,
                                           String tagName);
 
+  /**
+   * Sets an attribute for a given Element
+   * @param element the Element to set an attribute for
+   * (e.g. org.w3c.com.Element)
+   * @param key the key of the attribute
+   * @param value the value of the attribute
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   protected abstract void setAttribute(Object element, String key,
                                        String value);
 }
