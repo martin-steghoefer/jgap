@@ -21,6 +21,8 @@ commandresult
 * Added many new test cases
 * Enhanced javadocs
 * Enhanced source code formatting
+* XMLManager: FileOutputStream now closed in method
+  writeFile(Document doc, File file)
 
 2.2
 ----------
