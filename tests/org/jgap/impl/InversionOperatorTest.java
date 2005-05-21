@@ -24,10 +24,8 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends TestCase {
 
-/**@todo implement all of the following as it is copied from CrossoverOperator*/
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
@@ -35,31 +33,7 @@ public class InversionOperatorTest
   }
 
   public void testConstruct_0() {
-    new CrossoverOperator(null);
-    new CrossoverOperator(new DefaultMutationRateCalculator());
-    new CrossoverOperator(2);
-    new CrossoverOperator(1);
-    new CrossoverOperator(50);
-  }
-
-  public void testConstruct_1() {
-    try {
-      new CrossoverOperator(0);
-      fail();
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
-  }
-
-  public void testConstruct_2() {
-    try {
-      new CrossoverOperator(-3);
-      fail();
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
+    new InversionOperator();
   }
 
   /**
@@ -70,6 +44,7 @@ public class InversionOperatorTest
    */
   public void testOperate_0()
       throws Exception {
+    /**@todo adapt all of the following as it is copied from CrossoverOperator*/
     DefaultConfiguration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
@@ -81,7 +56,7 @@ public class InversionOperatorTest
     Chromosome chrom = new Chromosome(sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    CrossoverOperator op = new CrossoverOperator();
+    InversionOperator op = new InversionOperator();
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
     Gene[] genes1 = new Gene[] {
@@ -113,7 +88,7 @@ public class InversionOperatorTest
   }
 
   /**
-   * Tests if crossing over produces same results for two operate-runs
+   * Tests if operator produces same results for two operate-runs
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -122,7 +97,7 @@ public class InversionOperatorTest
   public void testOperate_1()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    GeneticOperator op = new CrossoverOperator();
+    GeneticOperator op = new InversionOperator();
     Genotype.setConfiguration(conf);
     conf.addGeneticOperator(op);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
@@ -171,6 +146,7 @@ public class InversionOperatorTest
    */
   public void testOperate_2()
       throws Exception {
+    /**@todo adapt all of the following as it is copied from CrossoverOperator*/
     DefaultConfiguration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
@@ -182,7 +158,7 @@ public class InversionOperatorTest
     Chromosome chrom = new Chromosome(sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    CrossoverOperator op = new CrossoverOperator();
+    InversionOperator op = new InversionOperator();
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
     CompositeGene compGene = new CompositeGene ();
