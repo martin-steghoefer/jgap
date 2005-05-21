@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ConfigurationTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -595,6 +595,25 @@ public class ConfigurationTest
       throws Exception {
     /**@todo implement*/
   }
+
+  public void testGetName_0() {
+    Configuration conf = new Configuration("tEstName");
+    assertEquals("tEstName",conf.getName());
+  }
+
+  public void testGetName_1() {
+    Configuration conf = new Configuration("tEstName");
+    conf.setName("HallI");
+    assertEquals("HallI",conf.getName());
+    conf.setName("HallA");
+    assertEquals("HallA",conf.getName());
+  }
+
+  public void testGetName_2() {
+    Configuration conf = new Configuration();
+    assertEquals(null,conf.getName());
+  }
+
 }
 
 class TestFitnessFunction
