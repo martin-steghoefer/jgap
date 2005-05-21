@@ -38,7 +38,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -1067,11 +1067,8 @@ public class Configuration
     }
 
     // natural selectors (pre)
-    /**@todo implement accordingly to "selectors (post)"*/
-
-    // natural selectors (post)
     int natsize = getNaturalSelectors(true).size();
-    result += "\n  Natural Selectors: ";
+    result += "\n  Natural Selectors(pre): ";
     if (natsize < 1) {
       result += "none";
     }
@@ -1081,6 +1078,21 @@ public class Configuration
           result += "; ";
         }
         result += " "+getNaturalSelectors(true).get(i).getClass().getName();
+      }
+    }
+
+    // natural selectors (post)
+    natsize = getNaturalSelectors(false).size();
+    result += "\n  Natural Selectors(post): ";
+    if (natsize < 1) {
+      result += "none";
+    }
+    else {
+      for (int i = 0; i < natsize; i++) {
+        if (i> 0) {
+          result += "; ";
+        }
+        result += " "+getNaturalSelectors(false).get(i).getClass().getName();
       }
     }
 
