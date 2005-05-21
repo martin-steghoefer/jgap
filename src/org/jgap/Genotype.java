@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   /**
    * The current active Configuration instance.
@@ -174,6 +174,12 @@ public class Genotype
     return result;
   }
 
+  /**
+   * @return the current population of chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 2.1 (?)
+   */
   public Population getPopulation() {
     return m_population;
   }
@@ -230,6 +236,7 @@ public class Genotype
     // Apply NaturalSelectors after GeneticOperators have been applied.
     // ----------------------------------------------------------------
     applyNaturalSelectors(false);
+
 
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
@@ -484,16 +491,29 @@ public class Genotype
 
   }
 
+  /**
+   * @return the configuration to use with the Genetic Algorithm
+   *
+   * @author Klaus Meffert
+   * @since 2.0 (?)
+   */
   public static Configuration getConfiguration() {
     return m_activeConfiguration;
   }
 
+  /**
+   * Sets the configuration to use with the Genetic Algorithm
+   * @param a_configuration configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 2.0 (?)
+   */
   public static void setConfiguration(Configuration a_configuration) {
     m_activeConfiguration = a_configuration;
   }
 
   /***
-   * Hashcode fucntion for the genotype, tries to create a unique invalue for
+   * Hashcode function for the genotype, tries to create a unique hashcode for
    * the chromosomes within the population. The logic for the hashcode is
    *
    * Step  Result
@@ -503,7 +523,7 @@ public class Genotype
    *    3  31*y(2)   + hashcode_2 = y(3)
    *    n  31*y(n-1) + hashcode_n-1 = y(n)
    *
-   * Each hash_code is like a digit and the binary equivalent is computed and
+   * Each hashcode is like a digit and the binary equivalent is computed and
    * reported.
    * @return the computed hashcode
    *
@@ -514,7 +534,9 @@ public class Genotype
     int i, size = getPopulation().size();
     Chromosome s;
     int twopower = 1;
-    int localHashCode = 0;
+    // For empty genotype we want a special value different from other hashcode
+    // implementations.
+    int localHashCode = -573;
     for (i = 0; i < size; i++, twopower = 2 * twopower) {
       s = getPopulation().getChromosome(i);
       localHashCode = 31 * localHashCode + s.hashCode();
