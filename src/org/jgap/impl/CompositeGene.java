@@ -17,9 +17,9 @@ import org.jgap.*;
 /**
  * Ordered container for multiple genes
  * Has the same interface as a single gene and could be used accordingly.
- * Use the addGene(Gene) method to add single genes (not CompositeGenes!) after
- * construction, an empty CompositeGene without genes makes no sense.
- * Beware that there are two equalities defined for a CompsoiteGene in respect
+ * Use the addGene(Gene) method to add single genes (possibly CompositeGenes)
+ * after construction, an empty CompositeGene without genes makes no sense.
+ * Beware that there are two equalities defined for a CompositeGene in respect
  * to its contained genes:
  * a) Two genes are (only) equal if they are identical
  * b) Two genes are (seen as) equal if their equals method returns true
@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * This field separates gene class name from
@@ -598,10 +598,9 @@ public class CompositeGene
       // Solution: Don't use CompositeGene.applyMutation, instead loop
       //           over all contained genes and call their method
       // -------------------------------------------------------------
-      throw new RuntimeException("applyMutation may not be called for"
-                                 +
-                                 " a CompositeGene. Call this method for each gene contained"
-                                 + " in the CompositeGene.");
+      throw new RuntimeException("applyMutation may not be called for "
+                                 + "a CompositeGene. Call this method for each"
+                                 + " gene contained in the CompositeGene.");
     }
   }
 
