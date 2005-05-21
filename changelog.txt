@@ -1,3 +1,5 @@
+command
+commandresult
 2.3
 ----------
 * Added support for HotBits random generator
@@ -9,6 +11,8 @@
 * Added name attribute in class org.jgap.Configuration
   (see request 1201896)
 * Introduced culture memory (see request 1066581)
+* Introduced org.jgap.audit.PermutingConfiguration
+  (see request 814758)
 * Improved architecture towards Genetic Programming
 * Improved code concerning coding guidelines
 * Added new example: knapsack problem (see request 1088469)
@@ -16,6 +20,7 @@
 * Introduced energy for genes (see request 1102206)
 * Added many new test cases
 * Enhanced javadocs
+* Enhanced source code formatting
 
 2.2
 ----------
