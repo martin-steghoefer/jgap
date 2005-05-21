@@ -23,7 +23,7 @@ import junitx.util.*;
 public class DoubleGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -390,6 +390,10 @@ public class DoubleGeneTest
                  gene1.compareTo(gene2));
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_0() {
     DoubleGene gene = new DoubleGene(0, 100);
     gene.setAllele(new Double(50));
@@ -397,6 +401,10 @@ public class DoubleGeneTest
     assertEquals(50.0d, gene.doubleValue(), DELTA);
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_1()
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
@@ -408,6 +416,10 @@ public class DoubleGeneTest
     assertEquals(50 + (100 - 0) * 0.5d, gene.doubleValue(), DELTA);
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_2()
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
@@ -419,6 +431,10 @@ public class DoubleGeneTest
     assertEquals(50 + (100 - 44) * 0.3d, gene.doubleValue(), DELTA);
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_3()
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
@@ -430,6 +446,10 @@ public class DoubleGeneTest
     assertEquals(33 + 0.5d * (100 - 33), gene.doubleValue(), DELTA);
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_4()
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
@@ -441,6 +461,12 @@ public class DoubleGeneTest
     assertEquals(2 + 0.4d * (100 - 2), gene.doubleValue(), DELTA);
   }
 
+  /**
+   * Exceed bounds for applyMutation to force randomized setting of allele
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_5()
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
@@ -448,17 +474,25 @@ public class DoubleGeneTest
     Genotype.setConfiguration(config);
     DoubleGene gene = new DoubleGene(0, 100);
     gene.setAllele(new Double(60));
-    gene.applyMutation(0, -1.0d);
+    gene.applyMutation(1, -1.0d);
     assertEquals(0 + 0.8d * (100 - 0), gene.doubleValue(), DELTA);
   }
 
+  /**
+   *
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_6() {
     DoubleGene gene = new DoubleGene(0, 100);
     gene.setAllele(new Double(60));
-    gene.applyMutation(0, -0.4d);
+    gene.applyMutation(77, -0.4d);
     assertEquals(60 + (100 * ( -0.4d)), gene.doubleValue(), DELTA);
   }
 
+  /**
+   *
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_7() {
     DoubleGene gene = new DoubleGene(0, 100);
     try {
