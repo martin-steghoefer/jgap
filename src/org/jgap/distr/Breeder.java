@@ -26,17 +26,17 @@ public abstract class Breeder
     implements Runnable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The parent Breeder to report to
    */
-  private Breeder master;
+  private Breeder master;/**@todo use*/
 
   /**
    * The child Breeder's doing work for us and reporting to this Breeder.
    */
-  private Breeder[] workers;
+  private Breeder[] workers;/**@todo use*/
 
   /**
    * The Genotype this Breeder is responsible for
@@ -46,7 +46,7 @@ public abstract class Breeder
   /**
    * Helper class for merging together two Populations into one.
    */
-  private IPopulationMerger m_populationMerger;
+  private IPopulationMerger m_populationMerger;/**@todo use*/
 
   private transient boolean running;
 
@@ -138,6 +138,7 @@ public abstract class Breeder
     if (running) {
       running = false;
       if (genotype != null) {
+        /**@todo implement*/
 //:        genAlgo.stop();
 /*
         if (genAlgo.getRacer() != null) {
@@ -197,9 +198,3 @@ class MeanBuffer {
   }
 }
 
-/**@todo move to new class?*/
-interface ExceptionHandler {
-
-        void handleThrowable(Throwable throwable);
-
-}
