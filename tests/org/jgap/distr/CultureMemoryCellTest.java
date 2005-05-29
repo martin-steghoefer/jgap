@@ -21,7 +21,7 @@ import junit.framework.*;
 public class CultureMemoryCellTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -35,30 +35,30 @@ public class CultureMemoryCellTest
   public void testToString_0() {
     CultureMemoryCell cell = new CultureMemoryCell("aName", 77);
     assertEquals(
-        "[Name:aName;Value:null;Version:0;Read accessed:1;History Size:77;History:[]",
+        "[Name:aName;Value:null;Version:0;Read accessed:0;History Size:77;History:[]",
         cell.toString());
     cell.setDouble(45.9d);
     String result = cell.toString();
     assertEquals(
-        "[Name:aName;Value:45.9;Version:1;Read accessed:2;History Size:77;"
-        + "History:[[Name:aName;Value:null;Version:0;Read accessed:1;"
+        "[Name:aName;Value:45.9;Version:1;Read accessed:0;History Size:77;"
+        + "History:[[Name:aName;Value:null;Version:0;Read accessed:0;"
         + "History Size:77;History:[]]]", result);
   }
 
   public void testToString_1() {
     CultureMemoryCell cell = new CultureMemoryCell("aName", 77);
     assertEquals(
-        "[Name:aName;Value:null;Version:0;Read accessed:1;History Size:77;History:[]",
+        "[Name:aName;Value:null;Version:0;Read accessed:0;History Size:77;History:[]",
         cell.toString());
     cell.setDouble(17.3d);
     cell.setDouble(-45.9d);
     String result = cell.toString();
     System.err.println(result);
     assertEquals(
-        "[Name:aName;Value:-45.9;Version:2;Read accessed:2;History Size:77;"
-        + "History:[[Name:aName;Value:null;Version:0;Read accessed:1;"
+        "[Name:aName;Value:-45.9;Version:2;Read accessed:0;History Size:77;"
+        + "History:[[Name:aName;Value:null;Version:0;Read accessed:0;"
         + "History Size:77;History:[]];[Name:aName;Value:17.3;Version:1;"
-        +"Read accessed:1;History Size:77;History:[]]]", result);
+        +"Read accessed:0;History Size:77;History:[]]]", result);
   }
   /**@todo implement tests*/
 }
