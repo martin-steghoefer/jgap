@@ -4,14 +4,14 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
+import java.io.*;
 import java.util.*;
 import org.jgap.impl.*;
-import org.jgap.event.*;
 import junit.framework.*;
 import junitx.util.*;
 
@@ -24,7 +24,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -335,7 +335,8 @@ public class GenotypeTest
     // override setFF in order to set the BulkFitnessFunction although
     // ConfigurationForTest set an ordinary FF beforehand
     Configuration config = new ConfigurationForTest() {
-      public synchronized void setFitnessFunction(FitnessFunction a_functionToSet)
+      public synchronized void setFitnessFunction(FitnessFunction
+                                                  a_functionToSet)
           throws InvalidConfigurationException {
         setBulkFitnessFunction(new BulkFitnessOffsetRemover(a_functionToSet));
       }
@@ -367,7 +368,7 @@ public class GenotypeTest
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
     genotype.evolve();
-    assertEquals(popSize,genotype.getPopulation().size());
+    assertEquals(popSize, genotype.getPopulation().size());
   }
 
   /**
@@ -389,7 +390,7 @@ public class GenotypeTest
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
     genotype.evolve();
-    assertEquals(popSize,genotype.getPopulation().size());
+    assertEquals(popSize, genotype.getPopulation().size());
   }
 
   /**
@@ -570,7 +571,8 @@ public class GenotypeTest
       conf.setSampleChromosome(chrom);
       conf.setPopulationSize(5);
       geno = new Genotype(conf, pop);
-      //We only want to add unique object, since equal object will return the same hashcode
+      // We only want to add unique object, since equal object will return the
+      // same hashcode
       if (UniqueChromosome.contains(geno) == false) {
         UniqueChromosome.add(geno);
       }
@@ -646,5 +648,44 @@ public class GenotypeTest
     catch (InvalidConfigurationException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * Ensures Genotype is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new ConfigurationForTest();
+    Serializable genotype = new Genotype(conf, chroms);
+  }
+
+  /**
+   * Ensures that Genotype and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testdoSerialize_0()
+      throws Exception {
+    // construct genotype to be serialized
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new ConfigurationForTest();
+    Genotype genotype = new Genotype(conf, chroms);
+
+    // serialize genotype to a file
+    File f = new File("genotype.ser");
+    OutputStream os = new FileOutputStream(f);
+    ObjectOutputStream oos = new ObjectOutputStream(os);
+    oos.writeObject(genotype);
   }
 }
