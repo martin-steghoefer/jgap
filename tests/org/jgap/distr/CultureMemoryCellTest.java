@@ -9,6 +9,7 @@
  */
 package org.jgap.distr;
 
+import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
 
@@ -21,7 +22,7 @@ import junit.framework.*;
 public class CultureMemoryCellTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private final static double DELTA = 0.00000001d;
 
@@ -47,7 +48,7 @@ public class CultureMemoryCellTest
     String result = cell.toString();
     assertEquals(
         "[Name:aName;Value:45.9;Version:1;Read accessed:0;History Size:77;"
-        + "History:[[Name:aName;Value:null;Version:0;Read accessed:0;"
+        + "History:[[Name:aName;Value:45.9;Version:0;Read accessed:0;"
         + "History Size:77;History:[]]]", result);
   }
 
@@ -63,11 +64,10 @@ public class CultureMemoryCellTest
     cell.setDouble(17.3d);
     cell.setDouble( -45.9d);
     String result = cell.toString();
-    System.err.println(result);
     assertEquals(
         "[Name:aName;Value:-45.9;Version:2;Read accessed:0;History Size:77;"
-        + "History:[[Name:aName;Value:null;Version:0;Read accessed:0;"
-        + "History Size:77;History:[]];[Name:aName;Value:17.3;Version:1;"
+        + "History:[[Name:aName;Value:17.3;Version:0;Read accessed:0;"
+        + "History Size:77;History:[]];[Name:aName;Value:-45.9;Version:1;"
         + "Read accessed:0;History Size:77;History:[]]]", result);
   }
 
@@ -94,5 +94,47 @@ public class CultureMemoryCellTest
     assertEquals(17.3d, cell.getCurrentValueAsDouble(), DELTA);
     cell.setDouble(1.8d);
     assertEquals(1.8d, ( (Double) cell.getCurrentValue()).doubleValue(), DELTA);
+  }
+
+  /*
+   * Tests main functionality of CultureMemoryCell
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testSetValue_0() {
+    CultureMemoryCell cell = new CultureMemoryCell("aname", 3);
+    assertEquals(0,cell.getVersion());
+    cell.setValue(new Integer(15));
+    assertEquals(1,cell.getVersion());
+    assertEquals(15, ((Integer)cell.getCurrentValue()).intValue());
+    assertEquals(1,cell.getReadAccessed());
+    cell.setValue(new Integer(29));
+    assertEquals(2,cell.getVersion());
+    assertEquals(29, ((Integer)cell.getCurrentValue()).intValue());
+    assertEquals(2,cell.getReadAccessed());
+    List history = cell.getHistory();
+    assertEquals(2,history.size());
+    CultureMemoryCell c1 = (CultureMemoryCell)history.get(0);
+    assertEquals(15,((Integer)c1.getCurrentValue()).intValue());
+    c1 = (CultureMemoryCell)history.get(1);
+    assertEquals(29,((Integer)c1.getCurrentValue()).intValue());
+    cell.setValue(new Integer(42));
+    history = cell.getHistory();
+    assertEquals(3,history.size());
+    c1 = (CultureMemoryCell)history.get(0);
+    assertEquals(15,((Integer)c1.getCurrentValue()).intValue());
+    c1 = (CultureMemoryCell)history.get(1);
+    assertEquals(29,((Integer)c1.getCurrentValue()).intValue());
+    c1 = (CultureMemoryCell)history.get(2);
+    assertEquals(42,((Integer)c1.getCurrentValue()).intValue());
+    cell.setValue(new Integer(33));
+    assertEquals(3,history.size());
+    c1 = (CultureMemoryCell)history.get(0);
+    assertEquals(29,((Integer)c1.getCurrentValue()).intValue());
+    c1 = (CultureMemoryCell)history.get(1);
+    assertEquals(42,((Integer)c1.getCurrentValue()).intValue());
+    c1 = (CultureMemoryCell)history.get(2);
+    assertEquals(33,((Integer)c1.getCurrentValue()).intValue());
   }
 }
