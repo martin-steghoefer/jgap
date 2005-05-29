@@ -30,7 +30,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.12 $";
+  final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -68,6 +68,7 @@ public interface Gene
    *
    * @since 1.0
    */
+
   void setAllele(Object a_newValue);
 
   /**
@@ -95,6 +96,7 @@ public interface Gene
    *
    * @since 1.0
    */
+
   String getPersistentRepresentation()
       throws UnsupportedOperationException;
 
@@ -117,10 +119,9 @@ public interface Gene
    *
    * @since 1.0
    */
+
   void setValueFromPersistentRepresentation(String a_representation)
-      throws
-      UnsupportedOperationException,
-      UnsupportedRepresentationException;
+      throws UnsupportedOperationException, UnsupportedRepresentationException;
 
   /**
    * Sets the value of this Gene to a random legal value for the
@@ -157,7 +158,8 @@ public interface Gene
    *
    * @since 1.1
    */
-  public int size();
+
+  int size();
 
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
@@ -168,5 +170,5 @@ public interface Gene
    *
    * @since 1.1
    */
-  public void applyMutation(int index, double a_percentage);
+  void applyMutation(int index, double a_percentage);
 }
