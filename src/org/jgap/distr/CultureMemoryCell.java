@@ -22,7 +22,7 @@ import java.util.*;
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -96,9 +96,9 @@ public class CultureMemoryCell {
    * @since 2.3
    */
   public CultureMemoryCell(String a_name, int a_historySize) {
-    m_history = new Vector(a_historySize);
+    setHistorySize(a_historySize);
+    m_history = new Vector(getHistorySize());
     setName(a_name);
-    m_historySize = a_historySize;
   }
 
   /**
@@ -287,8 +287,11 @@ public class CultureMemoryCell {
    * @since 2.3
    */
   public void setHistorySize(int a_size) {
-    if (a_size > getHistory().size()) {
+    if (getHistory() != null && a_size > getHistory().size()) {
       trimHistory(a_size);
+    }
+    else if (a_size < 0) {
+      a_size = 0;
     }
     m_historySize = a_size;
   }
