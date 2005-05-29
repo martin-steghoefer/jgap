@@ -11,6 +11,7 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 import org.jgap.event.*;
 
@@ -28,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   /**
    * The current active Configuration instance.
@@ -341,10 +342,41 @@ public class Genotype
    * @throws InvalidConfigurationException if the given Configuration
    *         instance not in a valid state.
    *
-   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public static Genotype randomInitialGenotype(Configuration a_activeConfiguration)
+      throws InvalidConfigurationException {
+    return randomInitialGenotype(a_activeConfiguration, Chromosome.class);
+  }
+
+  /**
+   * Convenience method that returns a newly constructed Genotype
+   * instance configured according to the given Configuration instance.
+   * The population of Chromosomes will created according to the setup of
+   * the sample Chromosome in the Configuration object, but the gene values
+   * (alleles) will be set to random legal values.
+   * <p>
+   * Note that the given Configuration instance must be in a valid state
+   * at the time this method is invoked, or an InvalidConfigurationException
+   * will be thrown.
+   *
+   * @param a_activeConfiguration The current active Configuration object.
+   * @param a_chromosome class of Chromosome offspring (or null to use
+   * Chromosome class itself) to use for calling randomInitialChromosome
+   * @return A newly constructed Genotype instance.
+   *
+   * @throws IllegalArgumentException if the given Configuration object is
+   *         null.
+   * @throws InvalidConfigurationException if the given Configuration
+   *         instance not in a valid state.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public static Genotype randomInitialGenotype(Configuration a_activeConfiguration,
+                                               Class a_chromosome)
       throws InvalidConfigurationException {
     if (a_activeConfiguration == null) {
       throw new IllegalArgumentException(
@@ -361,11 +393,34 @@ public class Genotype
     // ------------------------------------------------------------------
     int populationSize = a_activeConfiguration.getPopulationSize();
     Population pop = new Population(populationSize);
-    for (int i = 0; i < populationSize; i++) {
-      /**@todo maybe we should call the (then static) method from the
-       * sample chromosome to be flexible with this initialization
-       */
+    if (a_chromosome == null || a_chromosome.getName().equals(Chromosome.class.getName())) {
+      // do default randomized initialization
+      for (int i = 0; i < populationSize; i++) {
       pop.addChromosome(Chromosome.randomInitialChromosome());
+      }
+    }
+    else {
+      // use user-provided randomized initialization
+      for (int i = 0; i < populationSize; i++) {
+        try {
+          Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome",
+              new Class[] {});
+          m.invoke(new Object[] {}
+                   , new Object[] {});
+        }
+        catch (NoSuchMethodException nom) {
+          throw new InvalidConfigurationException("NoSuchMethodException: " +
+                                                  nom.getMessage());
+        }
+        catch (IllegalAccessException iex) {
+          throw new InvalidConfigurationException("IllegalAccessException: " +
+                                                  iex.getMessage());
+        }
+        catch (InvocationTargetException ite) {
+          throw new InvalidConfigurationException("InvocationTargetException: " +
+                                                  ite.getMessage());
+        }
+      }
     }
     return new Genotype(a_activeConfiguration, pop);
   }
