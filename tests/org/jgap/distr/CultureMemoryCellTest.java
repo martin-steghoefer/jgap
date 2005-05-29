@@ -21,7 +21,7 @@ import junit.framework.*;
 public class CultureMemoryCellTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -32,6 +32,10 @@ public class CultureMemoryCellTest
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testToString_0() {
     CultureMemoryCell cell = new CultureMemoryCell("aName", 77);
     assertEquals(
@@ -45,6 +49,10 @@ public class CultureMemoryCellTest
         + "History Size:77;History:[]]]", result);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testToString_1() {
     CultureMemoryCell cell = new CultureMemoryCell("aName", 77);
     assertEquals(

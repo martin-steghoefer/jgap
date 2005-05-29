@@ -22,7 +22,7 @@ import java.util.*;
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -296,6 +296,13 @@ public class CultureMemoryCell {
     m_historySize = a_size;
   }
 
+  /**
+   * Trims the history to the given size
+   * @param a_size new size of history
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   protected void trimHistory(int a_size) {
     // trim length of history
     while (m_history.size() > a_size) {
@@ -327,6 +334,14 @@ public class CultureMemoryCell {
     return result.toString();
   }
 
+  /**
+   * Recursive part of toString()
+   * @param result gathered result so far
+   * @param a_historySize history size just for information purpose
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   protected void toStringRecursive(final StringBuffer result, int a_historySize) {
     List history = getHistory();
     result.append("[Name:" + getName() + ";");
