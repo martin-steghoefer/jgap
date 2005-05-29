@@ -17,12 +17,13 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static void main(String[] args)
       throws Exception {
+    File f = new File(".");
 //    getPlugins("c:\\java\\jgap\\lib");
-    getPlugins("c:\\java\\jgap\\classes");
+    getPlugins(f.getCanonicalPath()+"\\lib");
     if (true)
       return;
     List result = new Vector();
@@ -219,6 +220,7 @@ public class ClassKit {
     }
   }
 
+  /**@todo add input param: type (or list of types) to look for*/
   public static void getPlugins(String directory) {
     File modulePath = new File(directory);
 //        if(modulePath == null || !modulePath.exists())modulePath.mkdirs();
@@ -241,18 +243,18 @@ public class ClassKit {
 
     Vector classes = new Vector();
     long startTime = System.currentTimeMillis();
-    addClasses(classes, modulePath, ""); // methodes bellow
+    addClasses(classes, modulePath, "");
     System.out.println("Found Classes in: " +
                        (System.currentTimeMillis() - startTime) + " mills");
 
     // -------------------------------
     Vector implementingClasses = new Vector();
-//       startTime = System.currentTimeMillis();
     Enumeration e = classes.elements();
     Object c;
     while (e.hasMoreElements()) {
       try {
         String name = e.nextElement().toString();
+        /**@todo check if class assignable from given type*/
         System.err.println("found: " + name);
       }
       catch (Throwable ex) {
@@ -283,7 +285,7 @@ public class ClassKit {
     }
   }
 
-  //this method is recursive to go down  sub-dirs
+  //this method is recursive to go down sub-dirs
   public static void addClassesFile(java.util.Vector v, File path, String name) {
     File[] files = path.listFiles(new ExtensionsFilter("class", true));
     for (int i = 0; i < files.length; i++) {
