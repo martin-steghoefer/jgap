@@ -25,7 +25,7 @@ import junit.framework.*;
 public class PopulationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -324,7 +324,7 @@ public class PopulationTest extends TestCase {
   }
 
   /**
-   * Test with CompositeGene
+   * CompositeGene
    * @author Klaus Meffert
    * @since 2.3
    */
@@ -359,5 +359,15 @@ public class PopulationTest extends TestCase {
     assertEquals(g2, genes.get(1));
     assertEquals(g3, genes.get(2));
     assertEquals(g4, genes.get(3));
+  }
+
+  /**
+   * Ensures that the Population class is Serializable
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testIsSerializable_0() {
+    java.io.Serializable pop = new Population();
   }
 }
