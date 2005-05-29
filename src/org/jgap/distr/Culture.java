@@ -18,7 +18,7 @@ package org.jgap.distr;
  */
 public class Culture {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The storage to use. I decided to use double values as they are as
@@ -44,6 +44,8 @@ public class Culture {
    * Sets a memory cell with a given value
    * @param a_index index of the memory cell
    * @param a_value value to set in the memory
+   * @param a_historySize size of history to use, or less than 1 for turning
+   * history off
    * @param a_name informative name of the memory cell
    *
    * @author Klaus Meffert
