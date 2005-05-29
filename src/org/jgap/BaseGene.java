@@ -18,16 +18,15 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
 
   /**
-   * Retrieves the value represented by this Gene. All values returned
-   * by this class will be Boolean instances.
+   * Retrieves the value represented by this Gene.
    *
-   * @return the Boolean value of this Gene.
+   * @return the value of this Gene.
    * @since 1.0
    */
   public Object getAllele() {
