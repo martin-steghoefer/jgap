@@ -22,7 +22,7 @@ import java.util.*;
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -218,7 +218,7 @@ public class CultureMemoryCell {
    * @since 2.3
    */
   protected void keepHistory(Object a_value, int a_version, String a_name) {
-    trimHistory(m_historySize);
+    trimHistory(m_historySize-1);
     // simply add a new instance of CultureMemoryCell for keeping history track
     CultureMemoryCell cell = getNewInstance(a_value, a_version, a_name);
     cell.m_internalHistorySize = m_historySize;
