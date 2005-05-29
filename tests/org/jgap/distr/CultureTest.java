@@ -21,7 +21,7 @@ import junit.framework.*;
 public class CultureTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static double DELTA = 0.00000001d;
 
@@ -34,6 +34,10 @@ public class CultureTest
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testConstruct_0() {
     try {
       new Culture(0);
@@ -44,6 +48,10 @@ public class CultureTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testConstruct_1() {
     try {
       new Culture( -3);
@@ -54,11 +62,19 @@ public class CultureTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testConstruct_2() {
     Culture c = new Culture(7);
     assertEquals(7, c.size());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testGet_0() {
     try {
       Culture c = new Culture(35);
@@ -70,6 +86,10 @@ public class CultureTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testGet_1() {
     try {
       Culture c = new Culture(35);
@@ -81,6 +101,10 @@ public class CultureTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testGet_2() {
     Culture c = new Culture(9);
     c.set(3, 5.7d, 0, "");
@@ -90,6 +114,10 @@ public class CultureTest
     assertEquals("", cell.getName());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testGet_3() {
     Culture c = new Culture(9);
     c.set(3, -5.7d, -1, null);
@@ -99,6 +127,10 @@ public class CultureTest
     assertEquals(null, cell.getName());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testGet_4() {
     Culture c = new Culture(11);
     c.set(0, 0.0d, 17, "aName");
@@ -108,13 +140,43 @@ public class CultureTest
     assertEquals("aName", cell.getName());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testGet_5() {
     Culture c = new Culture(11);
     CultureMemoryCell cell = c.get(7);
     assertEquals(null, cell);
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testToString_0() {
+    Culture c = new Culture(11);
+    String s = "[";
+    for (int i = 0; i < c.size(); i++) {
+      if (i > 0) {
+        s += ";";
+      }
+      if (c.get(i) == null) {
+        s += "null";
+      }
+      else {
+        s += c.get(i).toString();
+      }
+    }
+    s += "]";
+    assertEquals(s, c.toString());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testToString_1() {
     Culture c = new Culture(11);
     c.set(1, 0.0d, 17, "aName");
     c.set(3, 23.5d, 5, "ANAME");
