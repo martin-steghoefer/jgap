@@ -21,7 +21,7 @@ import junit.framework.*;
 public class CultureTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private final static double DELTA = 0.00000001d;
 
@@ -108,7 +108,30 @@ public class CultureTest
     assertEquals("aName", cell.getName());
   }
 
+  public void testGet_5() {
+    Culture c = new Culture(11);
+    CultureMemoryCell cell = c.get(7);
+    assertEquals(null, cell);
+  }
+
   public void testToString_0() {
-    /**@todo implement*/
+    Culture c = new Culture(11);
+    c.set(1, 0.0d, 17, "aName");
+    c.set(3, 23.5d, 5, "ANAME");
+    c.set(4, 19.6d, 0, "aName");
+    String s = "[";
+    for (int i = 0; i < c.size(); i++) {
+      if (i > 0) {
+        s += ";";
+      }
+      if (c.get(i) == null) {
+        s += "null";
+      }
+      else {
+        s += c.get(i).toString();
+      }
+    }
+    s += "]";
+    assertEquals(s, c.toString());
   }
 }

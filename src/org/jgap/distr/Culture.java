@@ -18,7 +18,7 @@ package org.jgap.distr;
  */
 public class Culture {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The storage to use. I decided to use double values as they are as
@@ -50,7 +50,7 @@ public class Culture {
    * @since 2.3
    */
   public void set(int a_index, double a_value, int a_historySize, String a_name) {
-    if (a_index < 0 || a_index>= size()) {
+    if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }
     CultureMemoryCell cell = new CultureMemoryCell(a_name, a_historySize);
@@ -67,7 +67,7 @@ public class Culture {
    * @since 2.3
    */
   public CultureMemoryCell get(int a_index) {
-    if (a_index < 0 || a_index>= size()) {
+    if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }
     return m_memory[a_index];
@@ -92,9 +92,19 @@ public class Culture {
   public String toString() {
     StringBuffer result = new StringBuffer("[");
     int len = m_memory.length;
-    result.append(m_memory[0].toString());
+    if (m_memory[0] == null) {
+      result.append(m_memory[0]);
+    }
+    else {
+      result.append(m_memory[0].toString());
+    }
     for (int i = 1; i < len; i++) {
-      result.append("; "+m_memory[i].toString());
+      if (m_memory[i] == null) {
+        result.append(";" + m_memory[i]);
+      }
+      else {
+        result.append(";" + m_memory[i].toString());
+      }
     }
     result.append("]");
     return result.toString();
