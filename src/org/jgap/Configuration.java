@@ -37,8 +37,47 @@ import org.jgap.impl.*;
  */
 public class Configuration
     implements Configurable {
+
+  /**
+   * Constants for toString()
+   */
+  public static final String S_CONFIGURATION = "Configuration";
+
+  public static final String S_CONFIGURATION_NAME = "Configuration name";
+
+  public static final String S_POPULATION_SIZE = "Population size";
+
+  public static final String S_MINPOPSIZE = "Minimum pop. size [%]";
+
+  public static final String S_CHROMOSOME_SIZE = "Chromosome size";
+
+  public static final String S_SAMPLE_CHROM = "Sample Chromosome";
+
+  public static final String S_SIZE = "Size";
+
+  public static final String S_TOSTRING = "toString";
+
+  public static final String S_RANDOM_GENERATOR = "Random generator";
+
+  public static final String S_EVENT_MANAGER = "Event manager";
+
+  public static final String S_NONE = "none";
+
+  public static final String S_CONFIGURATION_HANDLER = "Configuration handler";
+
+  public static final String S_FITNESS_FUNCTION = "Fitness function";
+
+  public static final String S_FITNESS_EVALUATOR = "Fitness evaluator";
+
+  public static final String S_GENETIC_OPERATORS = "Genetic operators";
+  public static final String S_NATURAL_SELECTORS = "Natural Selectors";
+  public static final String S_PRE = "pre";
+  public static final String S_POST = "post";
+
+//  public static final String S_ = "";
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -1017,45 +1056,46 @@ public class Configuration
    * @since 2.3
    */
   public String toString() {
-    String result = "Configuration:";
+    String result = S_CONFIGURATION+":";
     // basic parameters
-    result += "\n Configuration name: " + getName();
-    result += "\n Population size: " + getPopulationSize();
-    result += "\n Minimum pop. size [%]: " + getMinimumPopSizePercent();
-    result += "\n Chromosome size: " + getChromosomeSize();
+    result += "\n "+S_CONFIGURATION_NAME+": "+ getName();
+    result += "\n "+S_POPULATION_SIZE+": "+ getPopulationSize();
+    result += "\n "+S_MINPOPSIZE+": " + getMinimumPopSizePercent();
+    result += "\n "+S_CHROMOSOME_SIZE+": " + getChromosomeSize();
 
     // sample chromosome
-    result += "\n Sample Chromosome:\n";
-    result += "\n    Size: " + getSampleChromosome().size();
-    result += "\n    toString: " + getSampleChromosome().toString();
+    result += "\n "+S_SAMPLE_CHROM+":\n";
+    result += "\n    "+S_SIZE+": " + getSampleChromosome().size();
+    result += "\n    "+S_TOSTRING+": " + getSampleChromosome().toString();
 
     // random generator
-    result += "\n  Random generator: " +
+    result += "\n  "+S_RANDOM_GENERATOR+": " +
         getRandomGenerator().getClass().getName();
 
+    result += "\n  "+S_EVENT_MANAGER+": ";
     // event manager
     if (getEventManager() == null) {
-      result += "\n  Event manager: none";
+      result += S_NONE;
     }
     else {
-      result += "\n  Event manager: " + getEventManager().getClass().getName();
+      result += getEventManager().getClass().getName();
     }
 
     // configuration handler
-    result += "\n Configuration handler: " + getConfigurationHandler().getName();
+    result += "\n "+S_CONFIGURATION_HANDLER+": " + getConfigurationHandler().getName();
 
     // fitness function
-    result += "\n Fitness function: " + getFitnessFunction().getClass().getName();
+    result += "\n "+S_FITNESS_FUNCTION+": " + getFitnessFunction().getClass().getName();
 
     // fitness evaluator
-    result += "\n Fitness evaluator: " +
+    result += "\n "+S_FITNESS_EVALUATOR+": " +
         getFitnessEvaluator().getClass().getName();
 
     // genetic operators
     int gensize = getGeneticOperators().size();
-    result += "\n  Genetic Operators: ";
+    result += "\n  "+S_GENETIC_OPERATORS+": ";
     if (gensize < 1) {
-      result += "none";
+      result += S_NONE;
     }
     else {
       for (int i = 0; i < gensize; i++) {
@@ -1066,11 +1106,11 @@ public class Configuration
       }
     }
 
-    // natural selectors (pre)
+    // natural selectors (post)
     int natsize = getNaturalSelectors(true).size();
-    result += "\n  Natural Selectors(pre): ";
+    result += "\n  "+S_NATURAL_SELECTORS+"("+S_PRE+"): ";
     if (natsize < 1) {
-      result += "none";
+      result += S_NONE;
     }
     else {
       for (int i = 0; i < natsize; i++) {
@@ -1083,7 +1123,7 @@ public class Configuration
 
     // natural selectors (post)
     natsize = getNaturalSelectors(false).size();
-    result += "\n  Natural Selectors(post): ";
+    result += "\n  "+S_NATURAL_SELECTORS+"("+S_POST+"): ";
     if (natsize < 1) {
       result += "none";
     }
