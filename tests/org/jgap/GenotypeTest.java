@@ -24,7 +24,7 @@ import junitx.util.*;
 public class GenotypeTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -687,5 +687,8 @@ public class GenotypeTest
     OutputStream os = new FileOutputStream(f);
     ObjectOutputStream oos = new ObjectOutputStream(os);
     oos.writeObject(genotype);
+    InputStream oi = new FileInputStream(f);
+    ObjectInputStream ois = new ObjectInputStream(oi);
+    assertEquals(genotype,(Genotype)ois.readObject());
   }
 }
