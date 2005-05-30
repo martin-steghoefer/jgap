@@ -27,7 +27,7 @@ import java.util.jar.*;
  */
 public class PluginDiscoverer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static final boolean DEBUG = false;
 
@@ -85,11 +85,19 @@ public class PluginDiscoverer {
       // don't handle inner/internal classes
       return null;
     }
-
     try {
       Class testClassObj = Class.forName(testClass, false,
                                          this.getClass().getClassLoader());
       if (interfaceClass.isAssignableFrom(testClassObj)) {
+        if (testClassObj.isInterface()) {
+          // no interfaces wanted as result
+          return null;
+        }
+        if ( (testClassObj.getModifiers() & java.lang.reflect.Modifier.ABSTRACT) >
+            0) {
+          // no abstract classes wanted as result
+          return null;
+        }
         return testClass;
       }
     }
@@ -118,6 +126,23 @@ public class PluginDiscoverer {
 
   /**
    * Finds all classes implementing the given interface
+   * @param a_fullInterfaceName name of the interface (inclusive package name)
+   * to find implementing classes (not abstract) for
+   * @return list of class names that implement the given interface
+   *
+   * @throws ClassNotFoundException
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public List findImplementingClasses(String a_fullInterfaceName)
+      throws ClassNotFoundException {
+    Class interfaceToLookFor = Class.forName(a_fullInterfaceName);
+    return findImplementingClasses(interfaceToLookFor);
+  }
+
+  /**
+   * Finds all classes implementing the given interface
    * @param intrface the interface to check against
    * @return list of class names that implement the given interface
    *
@@ -127,27 +152,43 @@ public class PluginDiscoverer {
   public List findImplementingClasses(Class intrface) {
     List result = new Vector();
     // Check the jar files
+    String s = null;
+    try {
+      // determine current directory
+      File f = new File(".");
+      s = f.getCanonicalPath();
+    }
+    catch (IOException iex) {
+      throw new RuntimeException("Unable to determine current directory");
+    }
     for (Iterator i = classpathJars.iterator(); i.hasNext(); ) {
       String filename = (String) i.next();
-      try {
-        JarFile jar = new JarFile(filename);
-        for (Enumeration item = jar.entries(); item.hasMoreElements(); ) {
-          JarEntry entry = (JarEntry) item.nextElement();
-          String name = entry.getName();
-          if (name.toLowerCase().endsWith(".class")) {
-            String classname = checkIfClassMatches(intrface, name);
-            if (classname != null)
-              result.add(classname);
+      // only search for jars in current dir or subdir (otherwise we would scan
+      // the whole bunch of system and external library jars, too, and that
+      // would be really inperformant)
+      if (filename.startsWith(s)) {
+        System.err.println(filename);
+        try {
+          JarFile jar = new JarFile(filename);
+          for (Enumeration item = jar.entries(); item.hasMoreElements(); ) {
+            JarEntry entry = (JarEntry) item.nextElement();
+            String name = entry.getName();
+            if (name.toLowerCase().endsWith(".class")) {
+              String classname = checkIfClassMatches(intrface, name);
+              if (classname != null)
+                result.add(classname);
+            }
           }
         }
-      }
-      catch (IOException e) {
-        System.out.println("Unable to open jar " + filename);
+        catch (IOException e) {
+          System.out.println("Unable to open jar " + filename);
+        }
       }
     }
     // Iterate over the classpath folders
     for (Iterator i = classpathFolders.iterator(); i.hasNext(); ) {
       String folder = (String) i.next();
+      System.err.println(folder);
       findImplementingClasses0(intrface, result, folder, "");
     }
     return result;
@@ -194,7 +235,6 @@ public class PluginDiscoverer {
       return (name != null && name.toLowerCase().endsWith(".class"));
     }
   }
-
   /**
    * Filter that only matches subdirectories
    */
@@ -205,7 +245,6 @@ public class PluginDiscoverer {
               new File(dir.getPath() + File.separator + name).isDirectory());
     }
   }
-
   /**
    * For testing purpose
    * @param argv not used
@@ -217,8 +256,8 @@ public class PluginDiscoverer {
   public static void main(String[] argv)
       throws Exception {
     PluginDiscoverer discoverer = new PluginDiscoverer();
-    Class interfaceToLookFor = Class.forName("org.jgap.INaturalSelector");
-    List plugins = discoverer.findImplementingClasses(interfaceToLookFor);
+    List plugins = discoverer.findImplementingClasses(
+        "org.jgap.INaturalSelector");
     System.out.println();
     int size = plugins.size();
     System.out.println("" + size + " plugin" +
@@ -227,7 +266,6 @@ public class PluginDiscoverer {
     for (int i = 0; i < size; i++) {
       System.out.println(plugins.get(i));
     }
-
     System.exit(0);
   }
 }
