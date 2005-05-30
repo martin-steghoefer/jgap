@@ -1,5 +1,3 @@
-command
-commandresult
 2.3
 ----------
 * Added support for HotBits random generator
@@ -11,12 +9,16 @@ commandresult
 * Added name attribute in class org.jgap.Configuration
   (see request 1201896)
 * Introduced culture memory (see request 1066581)
+* Introduced culture memory cell with history
+  (see request 1211177)
 * Introduced org.jgap.audit.PermutingConfiguration
   (see request 814758)
 * Improved architecture towards Genetic Programming
 * Improved code concerning coding guidelines
 * Added new example: knapsack problem (see request 1088469)
 * Added org.jgap.InversionOperator (see request 1152956)
+* Changed return value for BaseGene's hashcode with
+  null internal value
 * Introduced energy for genes (see request 1102206)
 * Added many new test cases
 * Enhanced javadocs
