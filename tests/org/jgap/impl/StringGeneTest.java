@@ -10,9 +10,10 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for StringGene class
@@ -21,19 +22,18 @@ import junitx.util.*;
  * @since 1.1
  */
 public class StringGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     StringGene gene = new StringGene(1, 100);
     //following should be possible without exception
@@ -43,6 +43,9 @@ public class StringGeneTest
     assertEquals(100, gene.getMaxLength());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_1() {
     try {
       new StringGene(2, 1);
@@ -53,6 +56,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_2() {
     try {
       new StringGene( -1, 3);
@@ -63,6 +69,10 @@ public class StringGeneTest
     }
   }
 
+
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_3() {
     try {
       Gene gene = new StringGene(1, 3);
@@ -73,6 +83,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_4() {
     try {
       Gene gene = new StringGene(1, 3);
@@ -83,28 +96,43 @@ public class StringGeneTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSetAlphabet_1()
       throws Exception {
     StringGene gene = new StringGene(3, 5);
     final String ALPHABET = "1234";
     gene.setAlphabet(ALPHABET);
-    String alphabet = (String) PrivateAccessor.getField(gene, "m_alphabet");
+    String alphabet = (String) privateAccessor.getField(gene, "m_alphabet");
     assertEquals(ALPHABET, alphabet);
     assertEquals(alphabet, gene.getAlphabet());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testToString_0() {
     Gene gene = new StringGene(3, 7);
     gene.setAllele("ABC");
     assertEquals("ABC", gene.toString());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetAllele_0() {
     Gene gene = new StringGene(3, 5);
     gene.setAllele("BCD");
     assertEquals("BCD", gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_0() {
     Gene gene1 = new StringGene(1, 100);
     Gene gene2 = new StringGene(1, 100);
@@ -112,21 +140,33 @@ public class StringGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_1() {
     Gene gene1 = new StringGene(3, 100);
     assertFalse(gene1.equals(null));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_2() {
     Gene gene1 = new StringGene(11, 77);
     assertTrue(gene1.equals(new StringGene()));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_3() {
     Gene gene1 = new StringGene(11, 17);
     assertFalse(gene1.equals(new Vector()));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_4() {
     Gene gene1 = new StringGene(12, 100);
     Gene gene2 = new StringGene(12, 99);
@@ -134,6 +174,9 @@ public class StringGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_5() {
     Gene gene1 = new StringGene(2, 5);
     Gene gene2 = new StringGene(1, 5);
@@ -143,6 +186,9 @@ public class StringGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_6() {
     Gene gene1 = new StringGene(2, 5);
     Gene gene2 = new DoubleGene(1, 5);
@@ -150,6 +196,9 @@ public class StringGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_7() {
     Gene gene1 = new StringGene(2, 5);
     Gene gene2 = new BooleanGene();
@@ -159,12 +208,17 @@ public class StringGeneTest
 
   /**
    * Set Allele to null, no exception should occur
+   *
+   * @author Klaus Meffert
    */
   public void testSetAllele_0() {
     Gene gene1 = new StringGene(0, 10000);
     gene1.setAllele(null);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetAllele_1() {
     Gene gene1 = new StringGene(3, 4);
     try {
@@ -176,6 +230,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetAllele_2() {
     Gene gene1 = new StringGene(3, 4, "ABCDEFHI");
     try {
@@ -187,6 +244,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetAllele_3() {
     Gene gene1 = new StringGene(3, 4, "EGAL");
     try {
@@ -199,6 +259,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetAllele_4() {
     Gene gene1 = new StringGene(0, 4, "");
     //following should be possible
@@ -241,6 +304,12 @@ public class StringGeneTest
     assertEquals("B", gene1.stringValue());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testNewGene_0()
       throws Exception {
     StringGene gene1 = new StringGene(1, 4);
@@ -254,6 +323,12 @@ public class StringGeneTest
     assertEquals(maxLength1, maxLength2);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_0()
       throws Exception {
     Gene gene1 = new StringGene(2, 10, "ABCDE");
@@ -265,6 +340,9 @@ public class StringGeneTest
     assertEquals(pres1, pres2);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_1() {
     Gene gene1 = new StringGene(2, 10);
     try {
@@ -276,6 +354,12 @@ public class StringGeneTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_2()
       throws Exception {
     Gene gene1 = new StringGene(0, 10);
@@ -287,6 +371,12 @@ public class StringGeneTest
     assertEquals(pres1, pres2);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_3()
       throws Exception {
     Gene gene1 = new StringGene();
@@ -298,6 +388,12 @@ public class StringGeneTest
     assertEquals(pres1, pres2);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_4()
       throws Exception {
     Gene gene1 = new StringGene();
@@ -309,6 +405,12 @@ public class StringGeneTest
     assertEquals(pres1, pres2);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_5()
       throws Exception {
     StringGene gene1 = new StringGene(2, 10,
@@ -323,6 +425,12 @@ public class StringGeneTest
     assertEquals(gene1.getAlphabet(), gene2.getAlphabet());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_6()
       throws Exception {
     Gene gene1 = new StringGene(2, 10, "ABCDE");
@@ -331,6 +439,12 @@ public class StringGeneTest
     assertEquals("BABE", gene1.getAllele());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_7()
       throws Exception {
     StringGene gene1 = new StringGene(2, 10, "ABCDE");
@@ -364,6 +478,9 @@ public class StringGeneTest
     assertEquals("null:2:10:ABCDE", gene1.getPersistentRepresentation());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_0() {
     Gene gene1 = new StringGene(5, 5);
     gene1.setAllele("12345");
@@ -371,6 +488,9 @@ public class StringGeneTest
     gene1.applyMutation(4, -0.99d);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_1() {
     Gene gene1 = new StringGene(1, 1);
     gene1.setAllele("1");
@@ -379,6 +499,8 @@ public class StringGeneTest
 
   /**
    * Invalid index specified
+   *
+   * @author Klaus Meffert
    */
   public void testApplyMutation_2() {
     Gene gene1 = new StringGene(1, 1);
@@ -394,12 +516,17 @@ public class StringGeneTest
 
   /**
    * No allele set
+   *
+   * @author Klaus Meffert
    */
   public void testApplyMutation_3() {
     Gene gene1 = new StringGene(1, 1);
     gene1.applyMutation(0, 0.99d);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_4() {
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
@@ -412,6 +539,8 @@ public class StringGeneTest
 
   /**
    * Mutation 0.0 should not change anything
+   *
+   * @author Klaus Meffert
    */
   public void testApplyMutation_5() {
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
@@ -420,6 +549,12 @@ public class StringGeneTest
     assertEquals(gene1.getAllele(), "ijklmn");
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSetMinMaxLength_0()
       throws Exception {
     StringGene gene = new StringGene();
@@ -429,6 +564,9 @@ public class StringGeneTest
     assertEquals(3, gene.getMaxLength());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_0() {
     StringGene gene = new StringGene(1, 6, StringGene.ALPHABET_CHARACTERS_UPPER);
 
@@ -440,6 +578,9 @@ public class StringGeneTest
     assertEquals("A", gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_1() {
     Gene gene = new StringGene(1, 6, StringGene.ALPHABET_CHARACTERS_UPPER);
     gene.setAllele("XYZA"); // should not matter here
@@ -453,6 +594,12 @@ public class StringGeneTest
     assertEquals("AAAA", gene.getAllele());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_3()
       throws Exception {
     StringGene gene = new StringGene(1, 7, "DEF");
@@ -464,6 +611,12 @@ public class StringGeneTest
     assertEquals("FFF", gene.getAllele());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_4()
       throws Exception {
     StringGene gene = new StringGene(1, 7, "DEF");
@@ -484,6 +637,9 @@ public class StringGeneTest
     assertEquals("FEDF", gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_5() {
     StringGene gene = new StringGene(1, 8, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene.setToRandomValue(new StockRandomGenerator());
@@ -496,6 +652,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_6() {
     Gene gene = new StringGene(1, 6, "");
     try {
@@ -507,6 +666,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_7() {
     Gene gene = new StringGene(1, 6, null);
     try {
@@ -534,6 +696,9 @@ public class StringGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetConstraintChecker_0() {
     StringGene gene = new StringGene(1, 6, "ABC");
     assertNull(gene.getConstraintChecker());
@@ -546,6 +711,9 @@ public class StringGeneTest
     assertNotNull(gene.getConstraintChecker());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testIsValidAlphabet_0() {
     StringGene gene = new StringGene(1, 6, "");
     try {

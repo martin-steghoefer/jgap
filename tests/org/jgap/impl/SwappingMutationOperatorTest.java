@@ -20,13 +20,9 @@ import junit.framework.*;
  * @since 2.1
  */
 public class SwappingMutationOperatorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -219,24 +215,18 @@ public class SwappingMutationOperatorTest
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
     Genotype.setConfiguration(conf);
-
     int n_iterations = 20;
-
     RandomGenerator generator = new StockRandomGenerator();
     SwappingMutationOperator mutOp = new SwappingMutationOperator();
     mutOp.setStartOffset(0);
-
     for (int n_genes = 0; n_genes < 20; n_genes++) {
-
       Gene[] genes = new IntegerGene[n_genes];
       for (int i = 0; i < genes.length; i++) {
         genes[i] = new IntegerGene( -1000, 1000);
         genes[i].setToRandomValue(generator);
       }
-
       final long checksum = checksum(genes);
       Gene[] prev = new Gene[genes.length];
-
       for (int i = 0; i < n_iterations; i++) {
         for (int gene = 0; gene < genes.length; gene++) {
           System.arraycopy(genes, 0, prev, 0, genes.length);

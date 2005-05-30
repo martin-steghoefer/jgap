@@ -12,7 +12,6 @@ package org.jgap;
 import org.jgap.event.*;
 import org.jgap.impl.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for Configuration class
@@ -21,13 +20,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class ConfigurationTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -445,7 +440,7 @@ public class ConfigurationTest
     conf.addNaturalSelector(selector, false);
     conf.getNaturalSelectors(false).clear();
     conf.addNaturalSelector(selector, false);
-    Integer i = (Integer) PrivateAccessor.getField(conf,
+    Integer i = (Integer) privateAccessor.getField(conf,
         "m_sizeNaturalSelectorsPost");
     assertEquals(1, i.intValue());
   }
@@ -461,7 +456,7 @@ public class ConfigurationTest
     conf.addNaturalSelector(selector, true);
     conf.getNaturalSelectors(true).clear();
     conf.addNaturalSelector(selector, true);
-    Integer i = (Integer) PrivateAccessor.getField(conf,
+    Integer i = (Integer) privateAccessor.getField(conf,
         "m_sizeNaturalSelectorsPre");
     assertEquals(1, i.intValue());
   }

@@ -22,13 +22,9 @@ import junit.framework.*;
  * @since 2.0
  */
 public class PopulationTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);

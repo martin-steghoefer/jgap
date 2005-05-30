@@ -13,7 +13,6 @@ import java.io.*;
 import java.util.*;
 import org.jgap.impl.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for Genotype class
@@ -22,17 +21,13 @@ import junitx.util.*;
  * @since 1.1
  */
 public class GenotypeTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
     return suite;
-  }
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
   }
 
   /**
@@ -278,7 +273,7 @@ public class GenotypeTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
-    PrivateAccessor.setField(genotype, "m_population", new Population(1));
+    privateAccessor.setField(genotype, "m_population", new Population(1));
     assertEquals(null, genotype.getFittestChromosome());
   }
 

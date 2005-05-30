@@ -9,10 +9,8 @@
  */
 package org.jgap;
 
-import java.io.*;
-import java.util.*;
-import org.jgap.impl.*;
 import junit.framework.*;
+import junitx.util.*;
 
 /**
  * Abstract test case for all JGAP test cases providing a common infrastructure
@@ -23,10 +21,12 @@ import junit.framework.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
+
+  public static PrivateAccessor privateAccessor;
 
   public JGAPTestCase(String name) {
     super(name);
@@ -36,11 +36,17 @@ public abstract class JGAPTestCase
     super();
   }
 
-
   public void setUp() {
     Genotype.setConfiguration(null);
   }
 
+  /**
+   *
+   * @param list1 first list of chromosomes
+   * @param list2 second list of chromosomes
+   * @return true lists of chromosomes are equal
+   * @author Klaus Meffert
+   */
   public static boolean isChromosomesEqual(Chromosome[] list1,
                                            Chromosome[] list2) {
     if (list1 == null) {
@@ -65,4 +71,5 @@ public abstract class JGAPTestCase
       }
     }
   }
+
 }

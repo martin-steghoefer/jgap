@@ -18,13 +18,10 @@ import junit.framework.*;
  * @since 1.1
  */
 public class FitnessFunctionTest
-    extends TestCase {
+    extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
-
-  public FitnessFunctionTest() {
-  }
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FitnessFunctionTest.class);

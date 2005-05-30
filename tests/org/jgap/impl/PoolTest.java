@@ -11,6 +11,8 @@ package org.jgap.impl;
 
 import java.util.*;
 
+import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -20,20 +22,25 @@ import junit.framework.*;
  * @author Klaus Meffert
  */
 public class PoolTest
-    extends TestCase {
-
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PoolTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     new Pool();
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testClear_0() {
     Pool pool = new Pool();
     assertEquals(0, pool.size());
@@ -47,6 +54,9 @@ public class PoolTest
     assertEquals(0, pool.size());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testAcquirePooledObject_0() {
     Pool pool = new Pool();
     assertEquals(null, pool.acquirePooledObject());
@@ -58,12 +68,18 @@ public class PoolTest
     assertEquals(0, pool.size());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testReleaseAllObjects_0() {
     Pool pool = new Pool();
     pool.releaseAllObjects(null);
     assertEquals(0, pool.size());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testReleaseAllObjects_1() {
     Pool pool = new Pool();
     Collection coll = new Vector();
@@ -76,6 +92,9 @@ public class PoolTest
     assertEquals(5, pool.size());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSize_0() {
     Pool pool = new Pool();
     assertEquals(0, pool.size());

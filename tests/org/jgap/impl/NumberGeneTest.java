@@ -12,7 +12,6 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for (abstract) NumberGene class
@@ -21,13 +20,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class NumberGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -252,14 +247,14 @@ public class NumberGeneTest
       throws Exception {
     Gene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setAllele(new Integer(4711));
-    Integer lower1 = (Integer) PrivateAccessor.getField(gene1,
+    Integer lower1 = (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds");
-    Integer upper1 = (Integer) PrivateAccessor.getField(gene1,
+    Integer upper1 = (Integer) privateAccessor.getField(gene1,
         "m_upperBounds");
     Gene gene2 = gene1.newGene();
-    Integer lower2 = (Integer) PrivateAccessor.getField(gene2,
+    Integer lower2 = (Integer) privateAccessor.getField(gene2,
         "m_lowerBounds");
-    Integer upper2 = (Integer) PrivateAccessor.getField(gene2,
+    Integer upper2 = (Integer) privateAccessor.getField(gene2,
         "m_upperBounds");
     assertEquals(lower1, lower2);
     assertEquals(upper1, upper2);
@@ -324,7 +319,7 @@ public class NumberGeneTest
   }
 
   public void testSetConstraintChecker_0() {
-    NumberGene gene1 = new NumberGeneImpl(1,3);
+    NumberGene gene1 = new NumberGeneImpl(1, 3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue)
           throws RuntimeException {
@@ -334,6 +329,7 @@ public class NumberGeneTest
     );
     assertNotNull(gene1.getConstraintChecker());
   }
+
   /**
    * Test implementation of NumberGene, based on IntegerGene
    *

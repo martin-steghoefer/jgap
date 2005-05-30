@@ -12,7 +12,6 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for WeightedRouletteSelector class
@@ -21,13 +20,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class WeightedRouletteSelectorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -41,6 +36,13 @@ public class WeightedRouletteSelectorTest
     new WeightedRouletteSelector();
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testAdd_0()
       throws Exception {
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
@@ -51,9 +53,8 @@ public class WeightedRouletteSelectorTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
     Genotype.setConfiguration(conf);
-
     selector.add(chrom);
-    Map chromosomes = (Map) PrivateAccessor.getField(selector,
+    Map chromosomes = (Map) privateAccessor.getField(selector,
         "m_wheel");
     assertEquals(1, chromosomes.size());
     Iterator it = chromosomes.keySet().iterator();
@@ -64,6 +65,13 @@ public class WeightedRouletteSelectorTest
     assertEquals(chrom, it.next());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testSelect_0()
       throws Exception {
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
@@ -82,6 +90,13 @@ public class WeightedRouletteSelectorTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testSelect_1()
       throws Exception {
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
@@ -128,6 +143,8 @@ public class WeightedRouletteSelectorTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -179,6 +196,7 @@ public class WeightedRouletteSelectorTest
 
   /**
    * Ensure the scaling of fitness value works without error (division by zero)
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -207,7 +225,7 @@ public class WeightedRouletteSelectorTest
     gene = new IntegerGene();
     gene.setAllele(new Integer(444));
     Chromosome secondBestChrom = new Chromosome(gene, 2);
-    secondBestChrom.setFitnessValue(-1.0d);
+    secondBestChrom.setFitnessValue( -1.0d);
     toAddFrom.addChromosome(secondBestChrom);
     // receive top 3 chromosomes, no error should occur
     // ------------------------------------------------
@@ -221,6 +239,13 @@ public class WeightedRouletteSelectorTest
     selector.select(3, toAddFrom, popNew);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testEmpty_0()
       throws Exception {
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
@@ -228,19 +253,20 @@ public class WeightedRouletteSelectorTest
     conf.setPopulationSize(7);
     conf.setFitnessFunction(new TestFitnessFunction());
     Genotype.setConfiguration(conf);
-
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
     conf.setSampleChromosome(chrom);
     selector.add(chrom);
     selector.empty();
-    Map chromosomes = (Map) PrivateAccessor.getField(selector, "m_wheel");
+    Map chromosomes = (Map) privateAccessor.getField(selector, "m_wheel");
     assertEquals(0, chromosomes.size());
   }
 
   /**
    * Test if clear()-method does not affect original Population
    * @throws Exception
+   *
+   * @author Klaus Meffert
    */
   public void testEmpty_1()
       throws Exception {
@@ -262,6 +288,8 @@ public class WeightedRouletteSelectorTest
   /**
    * Test if clear()-method does not affect return value
    * @throws Exception
+   *
+   * @author Klaus Meffert
    */
   public void testEmpty_2()
       throws Exception {

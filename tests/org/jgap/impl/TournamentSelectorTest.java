@@ -14,7 +14,6 @@ import java.util.*;
 import org.jgap.*;
 
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for TournamentSelector class
@@ -23,13 +22,9 @@ import junitx.util.*;
  * @since 2.0
  */
 public class TournamentSelectorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -132,7 +127,7 @@ public class TournamentSelectorTest
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
-    List chromosomes = ( (Vector) PrivateAccessor.getField(selector,
+    List chromosomes = ( (Vector) privateAccessor.getField(selector,
         "m_chromosomes"));
     assertEquals(1, chromosomes.size());
     assertEquals(chrom, chromosomes.get(0));
@@ -152,7 +147,7 @@ public class TournamentSelectorTest
     Chromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
     selector.empty();
-    List chromosomes = ( (Vector) PrivateAccessor.getField(selector,
+    List chromosomes = ( (Vector) privateAccessor.getField(selector,
         "m_chromosomes"));
     assertEquals(0, chromosomes.size());
   }
@@ -406,7 +401,7 @@ public class TournamentSelectorTest
     Population pop = new Population();
     selector.select(30, null, pop);
     Population bestChroms = pop;
-    List chromosomes = (Vector) PrivateAccessor.getField(selector,
+    List chromosomes = (Vector) privateAccessor.getField(selector,
         "m_chromosomes");
     assertFalse(bestChroms.equals(chromosomes));
   }
@@ -426,7 +421,7 @@ public class TournamentSelectorTest
     conf.setRandomGenerator(rn);
     Genotype.setConfiguration(conf);
     TournamentSelector selector = new TournamentSelector(4, 0.00001d);
-    PrivateAccessor.setField(selector, "m_probability", new Double(0.0d));
+    privateAccessor.setField(selector, "m_probability", new Double(0.0d));
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();

@@ -18,10 +18,10 @@ import junit.framework.*;
  * @since 2.2
  */
 public final class DeltaFitnessEvaluatorTest
-    extends TestCase {
+    extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DeltaFitnessEvaluatorTest.class);

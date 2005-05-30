@@ -12,7 +12,6 @@ package org.jgap;
 import java.util.*;
 import org.jgap.impl.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for Chromosome class
@@ -21,13 +20,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class ChromosomeTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -36,6 +31,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding first parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_0() {
     try {
@@ -49,6 +46,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_1() {
     try {
@@ -64,6 +63,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding first and second parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_2() {
     try {
@@ -77,6 +78,8 @@ public class ChromosomeTest
 
   /**
    * Legal construction
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_3() {
     new Chromosome(new IntegerGene(), 1);
@@ -84,6 +87,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding the only parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_4() {
     try {
@@ -97,6 +102,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding an element of the only parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_51() {
     try {
@@ -112,6 +119,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding an element of the only parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_52() {
     try {
@@ -126,6 +135,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding first parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_6() {
     try {
@@ -139,6 +150,8 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding first parameter
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_8() {
     try {
@@ -156,6 +169,8 @@ public class ChromosomeTest
   /**
    * Illegal constructions regarding configuration
    * @throws Exception
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_10()
       throws Exception {
@@ -171,6 +186,8 @@ public class ChromosomeTest
   /**
    * Illegal constructions regarding configuration
    * @throws Exception
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_11()
       throws Exception {
@@ -186,6 +203,8 @@ public class ChromosomeTest
   /**
    * Illegal constructions regarding configuration
    * @throws Exception
+   *
+   * @author Klaus Meffert
    */
   public void testConstruct_12()
       throws Exception {
@@ -200,11 +219,17 @@ public class ChromosomeTest
     new Chromosome(genes);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testConstruct_14()
       throws Exception {
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 7);
-    Gene[] genes = (Gene[]) PrivateAccessor.getField(chrom, "m_genes");
+    Gene[] genes = (Gene[]) privateAccessor.getField(chrom, "m_genes");
     assertEquals(7, genes.length);
     Gene sample;
     for (int i = 0; i < genes.length; i++) {
@@ -216,6 +241,8 @@ public class ChromosomeTest
   /**
    * Test clone without setting a configuration
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
    */
   public void testClone_0()
       throws InvalidConfigurationException {
@@ -336,6 +363,8 @@ public class ChromosomeTest
   /**
    * Test clone with setting a configuration
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
    */
   public void testClone_1()
       throws InvalidConfigurationException {
@@ -351,7 +380,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     Chromosome chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom.hashCode(), chrom2.hashCode());
-    assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), 0.0000001d);
+    assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), DELTA);
     assertEquals(chrom.isSelectedForNextGeneration(),
                  chrom2.isSelectedForNextGeneration());
     assertEquals(chrom.size(), chrom2.size());
@@ -365,6 +394,8 @@ public class ChromosomeTest
   /**
    * Test clone with set application data implementing interface Cloneable
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
    */
   public void testClone_2()
       throws InvalidConfigurationException {
@@ -386,6 +417,8 @@ public class ChromosomeTest
   /**
    * Test clone with set application data, where cloning supported
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
    */
   public void testClone_3()
       throws InvalidConfigurationException {
@@ -406,6 +439,12 @@ public class ChromosomeTest
     assertTrue(chrom.equals(chrom2));
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testEquals_0() {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
@@ -416,6 +455,12 @@ public class ChromosomeTest
     assertTrue(chrom.equals(chrom2));
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testEquals_1() {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
@@ -434,6 +479,12 @@ public class ChromosomeTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testEquals_2() {
     Gene[] genes = new IntegerGene[2];
     Gene gen0 = new IntegerGene();
@@ -461,6 +512,12 @@ public class ChromosomeTest
     assertFalse(chrom.equals(chrom2));
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testEquals_3() {
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene();
@@ -472,6 +529,12 @@ public class ChromosomeTest
     assertFalse(chrom.equals(genes));
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testGetFitnessValue_0()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -485,13 +548,17 @@ public class ChromosomeTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
     chrom = new Chromosome(genes);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
-                 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), DELTA);
     //intentionally assert it a second time
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
-                 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), DELTA);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testGetFitnessValue_1()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -505,15 +572,20 @@ public class ChromosomeTest
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
     chrom = new Chromosome(genes);
-    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(),
-                 0.0000001d);
+    assertEquals(ff.getStaticFitnessValue(), chrom.getFitnessValue(), DELTA);
     // set fitness value to a different one (should not affect first set value
     // as no computation is performed once the fitness is known in the
     // chromosome.
     ff.setStaticFitnessValue(44.235d);
-    assertEquals(20, chrom.getFitnessValue(), 0.0000001d);
+    assertEquals(20, chrom.getFitnessValue(), DELTA);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSize_0()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -523,6 +595,12 @@ public class ChromosomeTest
     assertEquals(2, chrom.size());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSize_1()
       throws Exception {
     Gene[] genes = new IntegerGene[1];
@@ -531,6 +609,12 @@ public class ChromosomeTest
     assertEquals(1, chrom.size());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSize_2()
       throws Exception {
     Gene[] genes = new IntegerGene[0];
@@ -538,6 +622,12 @@ public class ChromosomeTest
     assertEquals(0, chrom.size());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_0()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -554,6 +644,12 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_0_2()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -572,6 +668,12 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_0_3()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -592,6 +694,12 @@ public class ChromosomeTest
     assertFalse(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_0_4()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -612,6 +720,12 @@ public class ChromosomeTest
     assertFalse(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_1()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -636,6 +750,12 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) > 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_2()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -655,6 +775,12 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) > 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_3()
       throws Exception {
     Gene[] genes = new IntegerGene[1];
@@ -663,6 +789,12 @@ public class ChromosomeTest
     assertTrue(chrom.compareTo(null) > 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_4()
       throws Exception {
     Gene[] genes = new IntegerGene[2];
@@ -687,6 +819,12 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_5()
       throws Exception {
     Gene[] genes = new Gene[2];
@@ -703,6 +841,12 @@ public class ChromosomeTest
     assertTrue(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCompareTo_6()
       throws Exception {
     Gene[] genes1 = new Gene[2];
@@ -725,6 +869,12 @@ public class ChromosomeTest
     assertFalse(chrom2.compareTo(chrom) == 0);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testRandomInitialChromosome_0()
       throws Exception {
     try {
@@ -777,6 +927,12 @@ public class ChromosomeTest
     assertFalse( ( (BooleanGene) chrom.getGene(0)).booleanValue());
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testCleanUp_0()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
@@ -821,6 +977,12 @@ public class ChromosomeTest
     chrom.cleanup();
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testSetCompareApplicationData_0()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
