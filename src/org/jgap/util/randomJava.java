@@ -1,6 +1,5 @@
 package org.jgap.util;
 
-import randomX.*;
 import java.util.Random;
 
 /**
@@ -15,7 +14,6 @@ import java.util.Random;
     <a href="http://www.fourmilab.ch/">John Walker</a>,
     <a href="mailto:kelvin@fourmilab.ch">kelvin@fourmilab.ch</a>.
 */
-
 public class randomJava extends randomX {
 
     private Random r;
