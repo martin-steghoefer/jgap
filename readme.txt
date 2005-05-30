@@ -1,4 +1,4 @@
-Thank you for trying JGAP 2.3! We are very interested in any feedback
+Thank you for trying JGAP! We are very interested in any feedback
 you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
 feedback on the user's mailing list at jgap-users@lists.sourceforge.net
@@ -11,11 +11,17 @@ users. Thanks for your support!
 
 About This Release:
 
-This represents the second big production release of JGAP, the Java Genetic
-Algorithms Package. 
+This represents a release introducing major enhancements to the second big
+production release of JGAP, the Java Genetic Algorithms Package. 
 
 For a general list of changes, fixes, and enhancements that have been
-included in version 2.2, please see the changelog.txt file.
+included in this version, please see the changelog.txt file.
+
+ATTENTION: TO BE ABLE TO COMPILE THE PROVIDED SOURCES (only applicable if
+           you downloaded the source distribution of JGAP) YOU NEED TO
+           DOWNLOAD THE EXTERNAL JARS AS WELL AND PUT THE EXTRACTED JARS
+           INTO YOUR CLASS PATH (in case they are not already contained
+           with the distribution you downloaded)
 
 The Directory "doc" included with this release contains the documentation
 you could find at the JGAP homepage http://jgap.sourceforge.net
