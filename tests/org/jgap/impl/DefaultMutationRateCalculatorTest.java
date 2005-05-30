@@ -20,20 +20,21 @@ import junit.framework.*;
  * @since 1.1
  */
 public class DefaultMutationRateCalculatorTest
-    extends TestCase {
+    extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultMutationRateCalculatorTest.class);
     return suite;
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testCalculateCurrentRate_0() throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
@@ -54,6 +55,7 @@ public class DefaultMutationRateCalculatorTest
    * nevertheless should be 1, because Random needs positive integers as input
    * (see MutationOperator.operate for calling Random class)
    * @throws Exception
+   * @author Klaus Meffert
    */
   public void testCalculateCurrentRate_1() throws Exception {
     Configuration conf = new DefaultConfiguration();

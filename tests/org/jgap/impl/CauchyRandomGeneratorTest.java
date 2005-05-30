@@ -19,12 +19,9 @@ import junit.framework.*;
  * @since 1.1
  */
 public class CauchyRandomGeneratorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001d;
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);
@@ -33,6 +30,7 @@ public class CauchyRandomGeneratorTest
 
   /**
    * Check if construction and calculation in general possible
+   * @author Klaus Meffert
    */
   public void testGeneral() {
     RandomGenerator calc = new CauchyRandomGenerator();
@@ -44,6 +42,10 @@ public class CauchyRandomGeneratorTest
     calc.nextLong();
   }
 
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testNextCauchy_0()
       throws Exception {
     final double stdDev = 0.04d;

@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -20,13 +20,9 @@ import junit.framework.*;
  * @since 2.1
  */
 public class GreedyCrossoverTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -105,11 +101,9 @@ public class GreedyCrossoverTest
     Chromosome chrom = new Chromosome(sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-
     GreedyCrossover op = new GreedyCrossover();
     op.ASSERTIONS = true;
     op.setStartOffset(1);
-
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
     Gene cgene2 = new IntegerGene(1, 10);
@@ -156,7 +150,6 @@ public class GreedyCrossoverTest
     conf.setFitnessFunction(new TestFitnessFunction());
     GreedyCrossover op = new GreedyCrossover();
     op.ASSERTIONS = true;
-
     Gene sampleGene = new IntegerGene(1, 10);
     Chromosome chrom = new Chromosome(sampleGene, 3);
     conf.setSampleChromosome(chrom);
@@ -170,10 +163,8 @@ public class GreedyCrossoverTest
     Gene[] genes1 = new Gene[] {
         cgene1, cgene2};
     Chromosome chrom1 = new Chromosome(genes1);
-
     Gene[] genes2 = new Gene[] {
         cgene1, cgene2, cgene1};
-
     Chromosome chrom2 = new Chromosome(genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
@@ -209,7 +200,6 @@ public class GreedyCrossoverTest
     GreedyCrossover op = new GreedyCrossover();
     op.ASSERTIONS = true;
     op.setStartOffset(0);
-
     Gene sampleGene = new IntegerGene(1, 10);
     Chromosome chrom = new Chromosome(sampleGene, 3);
     conf.setSampleChromosome(chrom);
@@ -223,7 +213,6 @@ public class GreedyCrossoverTest
     Gene[] genes1 = new Gene[] {
         compGene, cgene1, cgene1};
     Chromosome chrom1 = new Chromosome(genes1);
-
     Gene[] genes2 = new Gene[] {
         compGene, cgene1, cgene1};
     Chromosome chrom2 = new Chromosome(genes2);
@@ -267,17 +256,14 @@ public class GreedyCrossoverTest
       public double distance(Object a_from, Object a_to) {
         IntegerGene from = (IntegerGene) a_from;
         IntegerGene to = (IntegerGene) a_to;
-
         int a = from.intValue();
         int b = to.intValue();
-
         if (a > b) {
           int t = a;
           a = b;
           b = t;
         }
         ;
-
         // 4,1 is shorter than 4,5
         if (a == 1 && b == 4) {
           return 1;
@@ -285,7 +271,6 @@ public class GreedyCrossoverTest
         if (a == 4 && b == 5) {
           return 2;
         }
-
         // 1,2 is shorter that 1,3
         if (a == 1 && b == 2) {
           return 10;
@@ -293,7 +278,6 @@ public class GreedyCrossoverTest
         if (a == 1 && b == 3) {
           return 20;
         }
-
         // 2,0 is shorter than 2,3
         if (a == 0 && b == 2) {
           return 100;
@@ -301,34 +285,26 @@ public class GreedyCrossoverTest
         if (a == 2 && b == 3) {
           return 200;
         }
-
         throw new Error
             ("These two should not be compared: " + a + " and " + b);
       }
     };
-
     cross.ASSERTIONS = true;
     cross.setStartOffset(0);
-
     Chromosome a =
         chromosome(new int[] {1, 2, 3, 4, 5, 0});
-
     Chromosome b =
         chromosome(new int[] {4, 1, 3, 2, 0, 5});
-
     // in the literature example it was 1, 2, 0, 5, 4, 3, but the random
     // choice is involved in the last step. In this implementation
     // the choice is not random and the last two genes are always
     // returned as 3, 4.
     // -----------------------------------------------------------------
     Chromosome must_a = chromosome(new int[] {1, 2, 0, 5, 3, 4});
-
     // this is same as in the literature, the random choice is not involved.
     // ---------------------------------------------------------------------
     Chromosome must_b = chromosome(new int[] {4, 1, 2, 0, 5, 3});
-
     cross.operate(b, a);
-
     assertEquals(a, must_a);
     assertEquals(b, must_b);
   }
@@ -421,6 +397,5 @@ public class GreedyCrossoverTest
     assertEquals(1, op.getStartOffset());
     op.setStartOffset(0);
     assertEquals(0, op.getStartOffset());
-
   }
 }

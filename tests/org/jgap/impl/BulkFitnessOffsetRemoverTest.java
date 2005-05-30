@@ -19,12 +19,9 @@ import junit.framework.*;
  * @since 2.2
  */
 public class BulkFitnessOffsetRemoverTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection! */
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001d;
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   // A plainforward implementation for this test.
   //---------------------------------------------
@@ -35,16 +32,6 @@ public class BulkFitnessOffsetRemoverTest
   //-----------------------------
   private final transient BulkFitnessFunction m_bulkFitnessFunction =
       new BulkFitnessOffsetRemover(m_fitnessFunction);
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see junit.framework.TestCase#setUp()
-   */
-  protected void setUp()
-      throws Exception {
-    super.setUp();
-  }
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BulkFitnessOffsetRemoverTest.class);

@@ -21,16 +21,19 @@ import junit.framework.*;
  * @since 1.1
  */
 public class DefaultConfigurationTest
-    extends TestCase {
+    extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     Configuration conf = new DefaultConfiguration();
     assertEquals(EventManager.class, conf.getEventManager().getClass());

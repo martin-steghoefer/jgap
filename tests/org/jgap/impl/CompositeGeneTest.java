@@ -20,12 +20,9 @@ import junit.framework.*;
  * @since 1.1
  */
 public class CompositeGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.000001d;
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -413,7 +410,6 @@ public class CompositeGeneTest
     CompositeGene composite1 = new CompositeGene();
     Gene strgene = new DoubleGene(2.05d, 7.53d);
     strgene.setAllele(new Double(7.52d));
-
     composite1.addGene(strgene, false);
     composite1.addGene(new DoubleGene(128.35d, 155.90d), false);
     strgene = new IntegerGene(3, 8);
@@ -421,25 +417,19 @@ public class CompositeGeneTest
     composite1.addGene(strgene, false);
     strgene = new BooleanGene();
     strgene.setAllele(new Boolean(true));
-
     composite1.addGene(strgene, false);
     composite1.addGene(new StringGene(), false);
     composite1.addGene(new StringGene(2, 5), false);
-
     String string = "<!-- many:various:chars &%$§/()=<>C:CA/ -->";
     strgene = new StringGene(6, 50, "CA! many:various:chars<>:&%$§/()-=");
     strgene.setAllele(string);
-
     // remember where, we will check the value later
     int stringPosition = composite1.size();
     composite1.addGene(strgene, false);
-
     CompositeGene compositeInside = new CompositeGene();
-
     Gene istrgene = new DoubleGene(2.05d, 17.53d);
     istrgene.setAllele(new Double(3.33));
     compositeInside.addGene(istrgene, false);
-
     compositeInside.addGene(new DoubleGene(128.35d, 155.90d), false);
     istrgene = new IntegerGene(3, 8);
     istrgene.setAllele(new Integer(5));
@@ -450,31 +440,23 @@ public class CompositeGeneTest
     compositeInside.addGene(new StringGene(), false);
     compositeInside.addGene(new StringGene(2, 5), false);
     istrgene = new StringGene(6, 11, "&xyzab<:>");
-
     String string2 = "<:yzab:>";
     istrgene.setAllele(string2);
     int position2 = compositeInside.size();
     compositeInside.addGene(istrgene, false);
-
     int whereCompositeGene = composite1.size();
     composite1.addGene(compositeInside);
-
     String pres1 = composite1.getPersistentRepresentation();
     CompositeGene gene2 = new CompositeGene();
-
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
-
     assertEquals(pres1, pres2);
-
     // check the string
     StringGene s = (StringGene) gene2.geneAt(stringPosition);
     assertTrue(string.equals(s.getAllele()));
-
     // check also in the composite gene
     CompositeGene cg = (CompositeGene) gene2.geneAt(whereCompositeGene);
     s = (StringGene) cg.geneAt(position2);
-
     assertTrue(string2.equals(s.getAllele()));
   }
 
@@ -494,8 +476,7 @@ public class CompositeGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentPresentation_3()
-       {
+  public void testPersistentPresentation_3() {
     CompositeGene gene1 = new CompositeGene();
     try {
       gene1.setValueFromPersistentRepresentation("1" +

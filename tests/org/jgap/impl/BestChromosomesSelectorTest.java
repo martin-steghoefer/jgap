@@ -12,7 +12,6 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for BestChromosomesSelector class
@@ -21,16 +20,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class BestChromosomesSelectorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.0000001;
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -46,12 +38,12 @@ public class BestChromosomesSelectorTest
   public void testConstruct_0()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector();
-    Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
+    Boolean needsSorting = (Boolean) privateAccessor.getField(selector,
         "m_needsSorting");
     assertEquals(Boolean.FALSE, needsSorting);
     assertTrue(selector.returnsUniqueChromosomes());
     assertFalse(selector.getDoubletteChromosomesAllowed());
-    Object m_fitnessValueComparator = PrivateAccessor.getField(selector,
+    Object m_fitnessValueComparator = privateAccessor.getField(selector,
         "m_fitnessValueComparator");
     assertTrue(m_fitnessValueComparator != null);
   }
@@ -90,10 +82,10 @@ public class BestChromosomesSelectorTest
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
-    Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
+    Boolean needsSorting = (Boolean) privateAccessor.getField(selector,
         "m_needsSorting");
     assertEquals(Boolean.TRUE, needsSorting);
-    List chromosomes = ( (Population) PrivateAccessor.getField(selector,
+    List chromosomes = ( (Population) privateAccessor.getField(selector,
         "m_chromosomes")).getChromosomes();
     assertEquals(1, chromosomes.size());
     assertEquals(chrom, chromosomes.get(0));
@@ -268,7 +260,7 @@ public class BestChromosomesSelectorTest
     Population pop = new Population();
     selector.select(30, null, pop);
     Population bestChroms = pop;
-    Population chromosomes = (Population) PrivateAccessor.getField(selector,
+    Population chromosomes = (Population) privateAccessor.getField(selector,
         "m_chromosomes");
     assertFalse(bestChroms.equals(chromosomes));
   }
@@ -343,10 +335,10 @@ public class BestChromosomesSelectorTest
     Chromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
     selector.empty();
-    Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
+    Boolean needsSorting = (Boolean) privateAccessor.getField(selector,
         "m_needsSorting");
     assertEquals(Boolean.FALSE, needsSorting);
-    List chromosomes = ( (Population) PrivateAccessor.getField(selector,
+    List chromosomes = ( (Population) privateAccessor.getField(selector,
         "m_chromosomes")).getChromosomes();
     assertEquals(0, chromosomes.size());
   }

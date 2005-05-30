@@ -19,13 +19,9 @@ import junit.framework.*;
  * @since 1.1
  */
 public class BooleanGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -229,6 +225,9 @@ public class BooleanGeneTest
     assertEquals(0, gene1.compareTo(gene2));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_0() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -236,6 +235,9 @@ public class BooleanGeneTest
     assertEquals(true, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_1() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -243,6 +245,9 @@ public class BooleanGeneTest
     assertEquals(true, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_2() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -250,6 +255,9 @@ public class BooleanGeneTest
     assertEquals(false, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_3() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -257,6 +265,9 @@ public class BooleanGeneTest
     assertEquals(false, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_4() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -264,6 +275,9 @@ public class BooleanGeneTest
     assertEquals(false, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_5() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -271,6 +285,9 @@ public class BooleanGeneTest
     assertEquals(true, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_6() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
@@ -278,6 +295,9 @@ public class BooleanGeneTest
     assertEquals(true, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_7() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
@@ -285,6 +305,9 @@ public class BooleanGeneTest
     assertEquals(false, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_8() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
@@ -292,6 +315,9 @@ public class BooleanGeneTest
     assertEquals(false, gene.booleanValue());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testApplyMutation_9() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
@@ -405,6 +431,9 @@ public class BooleanGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetPersistentRepresentation_0() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
@@ -412,6 +441,9 @@ public class BooleanGeneTest
     assertEquals("true", s);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetPersistentRepresentation_1() {
     BooleanGene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
@@ -419,6 +451,9 @@ public class BooleanGeneTest
     assertEquals("false", s);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetPersistentRepresentation_2() {
     BooleanGene gene = new BooleanGene();
     String s = gene.getPersistentRepresentation();

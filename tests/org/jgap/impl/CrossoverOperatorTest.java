@@ -22,16 +22,19 @@ import junit.framework.*;
  * @since 1.1
  */
 public class CrossoverOperatorTest
-    extends TestCase {
+    extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     new CrossoverOperator(null);
     new CrossoverOperator(new DefaultMutationRateCalculator());
@@ -40,6 +43,9 @@ public class CrossoverOperatorTest
     new CrossoverOperator(50);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_1() {
     try {
       new CrossoverOperator(0);
@@ -50,6 +56,9 @@ public class CrossoverOperatorTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_2() {
     try {
       new CrossoverOperator(-3);
@@ -214,30 +223,4 @@ public class CrossoverOperatorTest
     assertEquals(8, ( (Integer) ((Vector)result.getAllele()).get(0)).intValue());
   }
 
-  public static boolean isChromosomesEqual(Chromosome[] list1,
-                                           Chromosome[] list2) {
-    if (list1 == null) {
-      return (list2 == null);
-    }
-    else if (list2 == null) {
-      return false;
-    }
-    else {
-      if (list1.length != list2.length) {
-        return false;
-      }
-      else {
-        for (int i = 0; i < list1.length; i++) {
-          Chromosome c1 = (Chromosome) list1[i];
-          Chromosome c2 = (Chromosome) list2[i];
-          if (!c1.equals(c2)) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
-  }
-
-  /*@todo check if working with CompositeGene*/
 }

@@ -20,37 +20,45 @@ import junit.framework.*;
  * @since 1.1
  */
 public class MutationOperatorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     MutationOperator mutOp = new MutationOperator(234);
     assertEquals(234, mutOp.m_mutationRate);
     assertNull(mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_1() {
     MutationOperator mutOp = new MutationOperator();
     assertEquals(0, mutOp.m_mutationRate);
     assertNotNull(mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_2() {
     MutationOperator mutOp = new MutationOperator(null);
     assertEquals(0, mutOp.m_mutationRate);
     assertNull(mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_3() {
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     MutationOperator mutOp = new MutationOperator(calc);
@@ -58,6 +66,11 @@ public class MutationOperatorTest
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testOperate_0()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
@@ -90,6 +103,11 @@ public class MutationOperatorTest
     assertEquals(candChroms.size(), population.length);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
   public void testOperate_1()
       throws Exception {
     MutationOperator mutOp = new MutationOperator();
@@ -103,6 +121,9 @@ public class MutationOperatorTest
     mutOp.operate(new Population(population), candChroms);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testOperate_2() {
     MutationOperator mutOp = new MutationOperator();
     List candChroms = new Vector();

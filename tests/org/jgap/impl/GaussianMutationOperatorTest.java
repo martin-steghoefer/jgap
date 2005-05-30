@@ -22,13 +22,9 @@ import junit.framework.*;
  * @since 2.0
  */
 public class GaussianMutationOperatorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianMutationOperatorTest.class);
@@ -246,37 +242,5 @@ public class GaussianMutationOperatorTest
     assertEquals(3+2+2, chroms.size());
   }
 
-  /**
-   * @param list1 Chromosome[]
-   * @param list2 Chromosome[]
-   * @return boolean
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public static boolean isChromosomesEqual(Chromosome[] list1,
-                                           Chromosome[] list2) {
-    if (list1 == null) {
-      return (list2 == null);
-    }
-    else if (list2 == null) {
-      return false;
-    }
-    else {
-      if (list1.length != list2.length) {
-        return false;
-      }
-      else {
-        for (int i = 0; i < list1.length; i++) {
-          Chromosome c1 = (Chromosome) list1[i];
-          Chromosome c2 = (Chromosome) list2[i];
-          if (!c1.equals(c2)) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
-  }
 
 }

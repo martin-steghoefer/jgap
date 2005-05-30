@@ -10,20 +10,18 @@
 package org.jgap.impl;
 
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
  * Tests for ChromosomePool class
  *
- * @since 2.0
  * @author Klaus Meffert
+ * @since 2.0
  */
 public class ChromosomePoolTest
-    extends TestCase {
-
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomePoolTest.class);
@@ -32,26 +30,45 @@ public class ChromosomePoolTest
 
   /**
    * Test if construction possible without failure
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public void testConstruct_0() {
     new ChromosomePool();
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testAquireChromosome_0() {
     assertEquals(null, new ChromosomePool().acquireChromosome());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void testReleaseChromosome_0() {
     try {
       new ChromosomePool().releaseChromosome(null);
       fail();
     }
     catch (NullPointerException nex) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
-  public void testReleaseChromosome_1() throws Exception {
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public void testReleaseChromosome_1()
+      throws Exception {
     ChromosomePool pool = new ChromosomePool();
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());

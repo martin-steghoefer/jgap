@@ -12,7 +12,6 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
-import junitx.util.*;
 
 /**
  * Tests for DoubleGene class
@@ -21,9 +20,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class DoubleGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -37,52 +36,79 @@ public class DoubleGeneTest
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     Gene gene = new DoubleGene(1.1d, 100.0d);
     //following should be possible without exception
     gene.setAllele(new Double(101.1d));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_1() {
     Gene gene = new DoubleGene();
     gene.setAllele(new Double(Double.MAX_VALUE));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_2() {
     Gene gene = new DoubleGene();
     gene.setAllele(new Double( - (Double.MAX_VALUE / 2)));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testToString_0() {
     Gene gene = new DoubleGene(1.2d, 99.7d);
     gene.setAllele(new Double(47.3d));
     assertEquals("47.3", gene.toString());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testToString_1() {
     Gene gene = new DoubleGene( -100.0d, 100.0d);
     gene.setAllele(new Double( -88.75286d));
     assertEquals("-88.75286", gene.toString());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetAllele_0() {
     Gene gene = new DoubleGene(1.9d, 100.4d);
     gene.setAllele(new Double(33.0d));
     assertEquals(new Double(33.0d), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetAllele_1() {
     Gene gene = new DoubleGene(1.8d, 100.1d);
     gene.setAllele(new Double(1.9d));
     assertEquals(new Double(1.9d), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetAllele_2() {
     Gene gene = new DoubleGene(1.0d, 100.0d);
     gene.setAllele(new Double(100.0d));
     assertEquals(new Double(100.0d), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_0() {
     Gene gene1 = new DoubleGene(1.1d, 100.2d);
     Gene gene2 = new DoubleGene(1.1d, 100.2d);
@@ -90,21 +116,33 @@ public class DoubleGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_1() {
     Gene gene1 = new DoubleGene(1.9d, 100.4d);
     assertFalse(gene1.equals(null));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_2() {
     Gene gene1 = new DoubleGene(11.2d, 100.7d);
     assertFalse(gene1.equals(new BooleanGene()));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_3() {
     Gene gene1 = new DoubleGene(1.0d, 100.7d);
     assertFalse(gene1.equals(new Vector()));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_4() {
     Gene gene1 = new DoubleGene(1.2d, 100.3d);
     Gene gene2 = new DoubleGene(1.2d, 99.5d);
@@ -112,6 +150,9 @@ public class DoubleGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_5() {
     Gene gene1 = new FixedBinaryGene(5);
     Gene gene2 = new DoubleGene(1, 99);
@@ -119,6 +160,9 @@ public class DoubleGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_6() {
     Gene gene1 = new DoubleGene(1, 99);
     Gene gene2 = new BooleanGene();
@@ -126,6 +170,9 @@ public class DoubleGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testEquals_7() {
     Gene gene1 = new DoubleGene(1, 99);
     Gene gene2 = new IntegerGene();
@@ -133,12 +180,18 @@ public class DoubleGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testDoubleValue_0() {
     DoubleGene gene1 = new DoubleGene(1.0d, 10000.0d);
     gene1.setAllele(new Double(4711.0d));
     assertEquals(4711.0d, gene1.doubleValue(), DELTA);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testDoubleValue_1() {
     DoubleGene gene1 = new DoubleGene(1.765d, 10000.0d);
     gene1.setAllele(null);
@@ -153,12 +206,16 @@ public class DoubleGeneTest
 
   /**
    * Set Allele to null, no exception should occur
+   * @author Klaus Meffert
    */
   public void testSetAllele_0() {
     Gene gene1 = new DoubleGene(1.0d, 10000.0d);
     gene1.setAllele(null);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetAllele_1() {
     Gene gene1 = new DoubleGene(1.0d, 10000.0d);
     try {
@@ -170,6 +227,9 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetAllele_2() {
     Gene gene1 = new DoubleGene(1.0d, 10000.0d);
     try {
@@ -181,23 +241,33 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testNewGene_0()
       throws Exception {
     Gene gene1 = new DoubleGene(1.0d, 10000.0d);
     gene1.setAllele(new Double(4711.0d));
-    Double lower1 = (Double) PrivateAccessor.getField(gene1,
+    Double lower1 = (Double) privateAccessor.getField(gene1,
         "m_lowerBounds");
-    Double upper1 = (Double) PrivateAccessor.getField(gene1,
+    Double upper1 = (Double) privateAccessor.getField(gene1,
         "m_upperBounds");
     Gene gene2 = gene1.newGene();
-    Double lower2 = (Double) PrivateAccessor.getField(gene2,
+    Double lower2 = (Double) privateAccessor.getField(gene2,
         "m_lowerBounds");
-    Double upper2 = (Double) PrivateAccessor.getField(gene2,
+    Double upper2 = (Double) privateAccessor.getField(gene2,
         "m_upperBounds");
     assertEquals(lower1, lower2);
     assertEquals(upper1, upper2);
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_0()
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
@@ -209,12 +279,22 @@ public class DoubleGeneTest
     assertEquals(pres1, pres2);
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_1()
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
     gene1.setValueFromPersistentRepresentation(null);
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_2()
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
@@ -227,6 +307,11 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_3()
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
@@ -245,6 +330,11 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_4()
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
@@ -263,6 +353,11 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testPersistentRepresentation_5()
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
@@ -281,6 +376,9 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testCleanup_0() {
     //cleanup should do nothing!
     Gene gene = new DoubleGene(1.3d, 6.5d);
@@ -289,6 +387,9 @@ public class DoubleGeneTest
     assertEquals(copy, gene);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_0() {
     Gene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
@@ -297,6 +398,11 @@ public class DoubleGeneTest
     assertEquals(new Double(0.789d * (6.5d - 1.3d) + 1.3d), gene.getAllele());
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_1()
       throws Exception {
     Gene gene = new DoubleGene( -1.3d, 6.5d);
@@ -310,6 +416,11 @@ public class DoubleGeneTest
     assertEquals(new Double(0.014d * (6.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
+  /**
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_2()
       throws Exception {
     Gene gene = new DoubleGene( -1.3d, -0.5d);
@@ -323,6 +434,9 @@ public class DoubleGeneTest
     assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_3() {
     DoubleGene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
@@ -334,6 +448,9 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testSetToRandomValue_4() {
     DoubleGene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
@@ -345,6 +462,9 @@ public class DoubleGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testCompareToNative_0() {
     Gene gene1 = new DoubleGene(1.3d, 6.5d);
     gene1.setAllele(new Double(5.8d));
@@ -354,6 +474,9 @@ public class DoubleGeneTest
                  gene1.compareTo(gene2));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testCompareToNative_1() {
     Gene gene1 = new DoubleGene(1.3d, 6.5d);
     gene1.setAllele(new Double(5.8d));
@@ -363,6 +486,9 @@ public class DoubleGeneTest
                  gene1.compareTo(gene2));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testCompareToNative_2() {
     Gene gene1 = new DoubleGene(1.3d, 6.5d);
     gene1.setAllele(new Double(5.9d));
@@ -372,6 +498,9 @@ public class DoubleGeneTest
                  gene1.compareTo(gene2));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testCompareToNative_3() {
     Gene gene1 = new DoubleGene(1.3d, 6.5d);
     gene1.setAllele(new Double(5.9d));
@@ -381,6 +510,9 @@ public class DoubleGeneTest
                  gene1.compareTo(gene2));
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testCompareToNative_4() {
     Gene gene1 = new DoubleGene( -1.3d, 6.5d);
     gene1.setAllele(new Double(0.0d));
