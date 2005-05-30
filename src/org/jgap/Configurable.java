@@ -13,42 +13,48 @@ import java.util.*;
 
 /**
  * This interface must be implemented for any class to be Configurable.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public interface Configurable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Return a ConfigurationHandler specific to the concrete class implementing
    * this interface.
-   * @return A Concrete ConfigurationHandler.
+   * @return a concrete ConfigurationHandler
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   ConfigurationHandler getConfigurationHandler();
-  
+
   /**
    * Pass the name and value of a property to be set.
    * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param value The value of the property.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
-  void setConfigProperty(String name, String value) throws ConfigException,
-  	InvalidConfigurationException  ;
-  
+
+  void setConfigProperty(String name, String value)
+      throws ConfigException,
+      InvalidConfigurationException;
+
   /**
    * Pass the name and values of a property to be set.
    * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param values The different values of the property.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
-  void setConfigMultiProperty(String name, ArrayList values) throws 
-  	ConfigException, InvalidConfigurationException;
-  
+  void setConfigMultiProperty(String name, ArrayList values)
+      throws
+      ConfigException, InvalidConfigurationException;
 }
-
-
-
-
-
-
