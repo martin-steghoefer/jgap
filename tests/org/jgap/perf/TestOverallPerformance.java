@@ -10,13 +10,12 @@
 package org.jgap.perf;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
  * This class provides an implementation of an overall performance test.
- *  To obtain this, the provided example has been modified slightly, regarding
+ * To obtain this, the provided example has been modified slightly, regarding
  * the random number generator. We use a static number generator here which does
  * not deserve the name "random generator". With that we have a determined
  * calculation path that results in reproducable results.
@@ -28,9 +27,8 @@ import org.jgap.impl.*;
  * @since 2.0
  */
 public class TestOverallPerformance {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -120,6 +118,8 @@ public class TestOverallPerformance {
 
   /**
    * Execute the performance test
+   * @param args ignored
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -142,6 +142,9 @@ public class TestOverallPerformance {
                        + timeMillis + " [millisecs]");
   }
 
+  /**
+   * @return current time in milliseconds
+   */
   private static long getCurrentMilliseconds() {
     Calendar cal = Calendar.getInstance(TimeZone.getDefault());
     return cal.getTimeInMillis();
