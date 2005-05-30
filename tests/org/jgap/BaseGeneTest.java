@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -52,7 +52,7 @@ public class BaseGeneTest
    */
   public void testHashCode_0() {
     BaseGeneImpl gene = new BaseGeneImpl();
-    assertEquals( -2, gene.hashCode());
+    assertEquals( -79, gene.hashCode());
   }
 
   class BaseGeneImpl
