@@ -1,7 +1,5 @@
 package org.jgap.util;
 
-import randomX.*;
-
 /**
     Implementation of a <b>randomX</b>-compliant class using
     L'Ecuyer's two-sequence generator with a Bays-Durham shuffle, as
@@ -25,7 +23,6 @@ import randomX.*;
     <a href="http://www.fourmilab.ch/">John Walker</a>,
     <a href="mailto:kelvin@fourmilab.ch">kelvin@fourmilab.ch</a>.
 */
-
 public class randomLEcuyer extends randomX {
 
     /* L'Ecuyer's recommended multiplier and modulus for the two

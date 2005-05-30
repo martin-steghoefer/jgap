@@ -1,7 +1,5 @@
 package org.jgap.util;
 
-import randomX.*;
-
 /**
     Implementation of a <b>randomX</b>-compliant class using the
     "Minimal Standard" multiplicative congruential generator of Park
@@ -29,7 +27,6 @@ import randomX.*;
     <a href="http://www.fourmilab.ch/">John Walker</a>,
     <a href="mailto:kelvin@fourmilab.ch">kelvin@fourmilab.ch</a>.
 */
-
 public class randomMCG extends randomX {
     long state;
 
