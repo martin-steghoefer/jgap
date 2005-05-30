@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
@@ -37,7 +37,6 @@ import org.jgap.impl.*;
  */
 public class Configuration
     implements Configurable {
-
   /**
    * Constants for toString()
    */
@@ -70,14 +69,17 @@ public class Configuration
   public static final String S_FITNESS_EVALUATOR = "Fitness evaluator";
 
   public static final String S_GENETIC_OPERATORS = "Genetic operators";
+
   public static final String S_NATURAL_SELECTORS = "Natural Selectors";
+
   public static final String S_PRE = "pre";
+
   public static final String S_POST = "post";
 
 //  public static final String S_ = "";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -952,7 +954,7 @@ public class Configuration
   }
 
   /**
-       * Set the fitness evaluator (deciding if a given fitness value is better when
+   * Set the fitness evaluator (deciding if a given fitness value is better when
    * it's higher or better when it's lower).
    * @param a_fitnessEvaluator the FitnessEvaluator to be used
    *
@@ -980,7 +982,7 @@ public class Configuration
 
   /**
    * Determines whether to save (keep) the fittest individual
-       * @param a_preserveFittest true: always transfer fittest chromosome to next gen.
+   * @param a_preserveFittest true: always transfer fittest chromosome to next gen.
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -1056,23 +1058,20 @@ public class Configuration
    * @since 2.3
    */
   public String toString() {
-    String result = S_CONFIGURATION+":";
+    String result = S_CONFIGURATION + ":";
     // basic parameters
-    result += "\n "+S_CONFIGURATION_NAME+": "+ getName();
-    result += "\n "+S_POPULATION_SIZE+": "+ getPopulationSize();
-    result += "\n "+S_MINPOPSIZE+": " + getMinimumPopSizePercent();
-    result += "\n "+S_CHROMOSOME_SIZE+": " + getChromosomeSize();
-
+    result += "\n " + S_CONFIGURATION_NAME + ": " + getName();
+    result += "\n " + S_POPULATION_SIZE + ": " + getPopulationSize();
+    result += "\n " + S_MINPOPSIZE + ": " + getMinimumPopSizePercent();
+    result += "\n " + S_CHROMOSOME_SIZE + ": " + getChromosomeSize();
     // sample chromosome
-    result += "\n "+S_SAMPLE_CHROM+":\n";
-    result += "\n    "+S_SIZE+": " + getSampleChromosome().size();
-    result += "\n    "+S_TOSTRING+": " + getSampleChromosome().toString();
-
+    result += "\n " + S_SAMPLE_CHROM + ":\n";
+    result += "\n    " + S_SIZE + ": " + getSampleChromosome().size();
+    result += "\n    " + S_TOSTRING + ": " + getSampleChromosome().toString();
     // random generator
-    result += "\n  "+S_RANDOM_GENERATOR+": " +
+    result += "\n  " + S_RANDOM_GENERATOR + ": " +
         getRandomGenerator().getClass().getName();
-
-    result += "\n  "+S_EVENT_MANAGER+": ";
+    result += "\n  " + S_EVENT_MANAGER + ": ";
     // event manager
     if (getEventManager() == null) {
       result += S_NONE;
@@ -1080,62 +1079,57 @@ public class Configuration
     else {
       result += getEventManager().getClass().getName();
     }
-
     // configuration handler
-    result += "\n "+S_CONFIGURATION_HANDLER+": " + getConfigurationHandler().getName();
-
+    result += "\n " + S_CONFIGURATION_HANDLER + ": " +
+        getConfigurationHandler().getName();
     // fitness function
-    result += "\n "+S_FITNESS_FUNCTION+": " + getFitnessFunction().getClass().getName();
-
+    result += "\n " + S_FITNESS_FUNCTION + ": " +
+        getFitnessFunction().getClass().getName();
     // fitness evaluator
-    result += "\n "+S_FITNESS_EVALUATOR+": " +
+    result += "\n " + S_FITNESS_EVALUATOR + ": " +
         getFitnessEvaluator().getClass().getName();
-
     // genetic operators
     int gensize = getGeneticOperators().size();
-    result += "\n  "+S_GENETIC_OPERATORS+": ";
+    result += "\n  " + S_GENETIC_OPERATORS + ": ";
     if (gensize < 1) {
       result += S_NONE;
     }
     else {
       for (int i = 0; i < gensize; i++) {
-        if (i> 0) {
+        if (i > 0) {
           result += "; ";
         }
-        result += " "+getGeneticOperators().get(i).getClass().getName();
+        result += " " + getGeneticOperators().get(i).getClass().getName();
       }
     }
-
-    // natural selectors (post)
+    // natural selectors (pre)
     int natsize = getNaturalSelectors(true).size();
-    result += "\n  "+S_NATURAL_SELECTORS+"("+S_PRE+"): ";
+    result += "\n  " + S_NATURAL_SELECTORS + "(" + S_PRE + "): ";
     if (natsize < 1) {
       result += S_NONE;
     }
     else {
       for (int i = 0; i < natsize; i++) {
-        if (i> 0) {
+        if (i > 0) {
           result += "; ";
         }
-        result += " "+getNaturalSelectors(true).get(i).getClass().getName();
+        result += " " + getNaturalSelectors(true).get(i).getClass().getName();
       }
     }
-
     // natural selectors (post)
     natsize = getNaturalSelectors(false).size();
-    result += "\n  "+S_NATURAL_SELECTORS+"("+S_POST+"): ";
+    result += "\n  " + S_NATURAL_SELECTORS + "(" + S_POST + "): ";
     if (natsize < 1) {
       result += "none";
     }
     else {
       for (int i = 0; i < natsize; i++) {
-        if (i> 0) {
+        if (i > 0) {
           result += "; ";
         }
-        result += " "+getNaturalSelectors(false).get(i).getClass().getName();
+        result += " " + getNaturalSelectors(false).get(i).getClass().getName();
       }
     }
-
     return result;
   }
 }
