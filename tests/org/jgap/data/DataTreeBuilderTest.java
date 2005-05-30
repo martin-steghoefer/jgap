@@ -21,9 +21,9 @@ import junit.framework.*;
  * @since 1.0
  */
 public class DataTreeBuilderTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
@@ -42,7 +42,6 @@ public class DataTreeBuilderTest
    */
   public void testRepresentGenotypeAsDocument_0() {
     try {
-
       //Create a Genotype with a population of NUM_CHROMS Chromosomes, each
       //Chromosome with NUM_GENES Genes.
       Chromosome[] chroms = new Chromosome[NUM_CHROMS];

@@ -20,20 +20,22 @@ import junit.framework.*;
  * @since 2.0
  */
 public class TravellingSalesmanTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private m_testTravellingSalesman m_testTravellingSalesman;
 
-  protected void setUp()
-      throws Exception {
+  public static Test suite() {
+    TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
+    return suite;
+  }
+  public void setUp() {
     super.setUp();
     m_testTravellingSalesman = new m_testTravellingSalesman();
   }
 
-  protected void tearDown()
-      throws Exception {
+  public void tearDown() throws Exception {
     m_testTravellingSalesman = null;
     super.tearDown();
   }
@@ -170,8 +172,4 @@ public class TravellingSalesmanTest
     }
   }
 
-  public static Test suite() {
-    TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
-    return suite;
-  }
 }
