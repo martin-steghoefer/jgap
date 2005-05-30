@@ -21,7 +21,7 @@ import org.jgap.*;
 public class CustomConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Constructor.
@@ -34,8 +34,7 @@ public class CustomConfiguration
    * @since 2.3
    */
   public CustomConfiguration(String a_configFileName)
-      throws ConfigException,
-      InvalidConfigurationException {
+      throws ConfigException, InvalidConfigurationException {
     super();
     ConfigFileReader.instance().setFileName(a_configFileName);
     getConfigurationHandler().readConfig();
