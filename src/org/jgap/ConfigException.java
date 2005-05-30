@@ -11,12 +11,14 @@ package org.jgap;
 
 /**
  * Exception throw when there is an error with configuring JGAP via the GUI.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public class ConfigException
     extends Exception {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Constructs a new ConfigException instance with the
@@ -24,6 +26,9 @@ public class ConfigException
    *
    * @param a_message An error message describing the reason this exception
    *                  is being thrown.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    */
   public ConfigException(String a_message) {
     super(a_message);

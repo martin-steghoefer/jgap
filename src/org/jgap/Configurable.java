@@ -19,7 +19,7 @@ import java.util.*;
  * */
 public interface Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Return a ConfigurationHandler specific to the concrete class implementing
@@ -33,7 +33,6 @@ public interface Configurable {
 
   /**
    * Pass the name and value of a property to be set.
-   * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param value The value of the property.
    *
@@ -42,12 +41,10 @@ public interface Configurable {
    * */
 
   void setConfigProperty(String name, String value)
-      throws ConfigException,
-      InvalidConfigurationException;
+      throws ConfigException, InvalidConfigurationException;
 
   /**
    * Pass the name and values of a property to be set.
-   * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param values The different values of the property.
    *
@@ -55,6 +52,5 @@ public interface Configurable {
    * @since 2.3
    * */
   void setConfigMultiProperty(String name, ArrayList values)
-      throws
-      ConfigException, InvalidConfigurationException;
+      throws ConfigException, InvalidConfigurationException;
 }

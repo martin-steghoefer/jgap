@@ -21,7 +21,8 @@ import java.util.*;
  * */
 public class RootConfigurationHandler
     implements ConfigurationHandler {
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   // Namespae
   private final static String CONFIG_NAMESPACE = "Configuration";

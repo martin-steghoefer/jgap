@@ -16,16 +16,31 @@ import javax.swing.*;
 /**
  * This class is a Singleton that generates a properties file from
  * classes implementing IConfigInfo.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  /**
+   * Singleton instance of ConfigWriter
+   */
+  private static ConfigWriter cWriter;
+
+  // The configuration stored as Properties
+  private Properties config;
+
+  // namespace for the properties being written
+  private String m_ns;/**@todo is this var obsolete?*/
 
   /**
    * Method to create and access the Singleton ConfigWriter instance.
    * @return A ConfigWriter Singleton instance.
-   * @author Siddhartha Azad.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public static ConfigWriter instance() {
     if (cWriter == null)
@@ -35,7 +50,9 @@ public class ConfigWriter {
 
   /**
    * Constructor for the ConfigWriter Singleton
-   * @author Siddhartha Azad.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    */
   private ConfigWriter() {
     config = new Properties();
@@ -43,13 +60,15 @@ public class ConfigWriter {
 
   /**
    * Persist the configuration information as selected by the user.
-   * @author Siddhartha Azad.
    * @param cInfo Configuration Information to persist.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public void write(IConfigInfo cInfo) {
     try {
       ConfigData cd = cInfo.getConfigData();
-      String nsPrefix = cd.getNS()+".";
+      String nsPrefix = cd.getNS() + ".";
       String name;
       ArrayList values;
       // construct name-value pairs from the information in the lists
@@ -66,12 +85,11 @@ public class ConfigWriter {
       }
       String value = "", tmpName = "";
       for (int i = 0; i < cd.getNumTexts(); i++) {
-      	name = cd.getTextNameAt(i);
-      	value = cd.getTextValueAt(i);
-      	tmpName = nsPrefix + name;
-      	config.setProperty(tmpName, value);
+        name = cd.getTextNameAt(i);
+        value = cd.getTextValueAt(i);
+        tmpName = nsPrefix + name;
+        config.setProperty(tmpName, value);
       }
-      
     }
     catch (Exception ex) {
       JOptionPane.showMessageDialog(null,
@@ -102,20 +120,12 @@ public class ConfigWriter {
 
   /**
    * Set the namespace to be used in the config file for writing properties.
-   * @author Siddhartha Azad.
-   * @param _ns The namepsace of the Configurable.
+   * @param a_ns The namepsace of the Configurable.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
-  public void setNS(String _ns) {
-  	ns = _ns;
+  public void setNS(String a_ns) {
+    m_ns = a_ns;
   }
-  
-  /**
-   * Singleton Instance of ConfigWriter
-   */
-  private static ConfigWriter cWriter;
-
-  // The configuration stored as Properties
-  private Properties config;
-  // namespace for the properties being written
-  private String ns;
 }

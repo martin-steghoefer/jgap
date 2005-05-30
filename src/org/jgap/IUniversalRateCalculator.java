@@ -16,20 +16,24 @@ package org.jgap;
  * @since 2.0
  */
 public interface IUniversalRateCalculator {
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Calculates the required dynamic rate.
    * @return the currently applying mutation rate.
    *
+   * @author Chris Knowles
    * @since 2.0
    */
   int calculateCurrentRate();
 
-   /**
+  /**
    * Calculates whether a mutation should be carried out.
    * @return flag indicating whether mutation should be performed
    *
+   * @author Chris Knowles
    * @since 2.0
    */
-   boolean toBePermutated();
+  boolean toBePermutated();
 }

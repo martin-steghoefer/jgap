@@ -12,94 +12,122 @@ package org.jgap;
 import java.util.*;
 
 /**
- * Represents a propety to be shown on the Configuration Screen.
- * @author Siddhartha Azad.
+ * Represents a property to be shown on the Configuration Screen.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  */
 public class ConfigProperty {
-	/**
-	 * Default Constructor for a ConfigProperty.
-	 * @author Siddhartha Azad.
-	 */
-	ConfigProperty() {
-		// defaults
-		name = "";
-		type = "String";
-		widget = "JTextField";
-		values = new ArrayList();
-	}
-	
-	/**
-	 * Getter for the name of this property.
-	 * @return name associated with this property.
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Setter for the name of this property.
-	 * @param _name The name associated with this property.
-	 * This name will be used as the key in the properties file for persisting
-	 * configuration information.
-	 */
-	public void setName(String _name) {
-		name = _name;
-	}
-	
-	/**
-	 * Getter for the type of the values of this property.
-	 * @return type of the value for this property.
-	 */
-	public String getType() {
-		return type;
-	}
-	
-	/**
-	 * Setter for the type of the values of this property.
-	 * @param _type Example "int" or "Class" or "String".
-	 */
-	public void setType(String _type) {
-		type = _type;
-	}
-	
-	/**
-	 * Getter for the name of the widget to be used to render this property.
-	 * @return name of the widget associated with this property.
-	 */
-	public String getWidget() {
-		return widget;
-	}
-	
-	/**
-	 * Setter for the name of the widget to be used to render this property.
-	 * @param _widget Either "JList" or "JTextField" for now.
-	 * @return name associated with this property.
-	 */
-	public void setWidget(String _widget) {
-		widget = _widget;
-	}
-	
-	/**
-	 * Add a value into the values ArrayList. These values are added in case the
-	 * display component is a ListBox or ComboBox or something that can have
-	 * multiple values.
-	 * @author Siddhartha Azad.
-	 */
-	public void addValue(String value) {
-		values.add(value);
-	}
-	
-	/**
-	 * Get the iterator on the values associated with this property.
-	 * @return Iterator on the values ArrayList for this property.
-	 * @author Siddhartha Azad.
-	 */
-	public Iterator getValuesIter() {
-		return values.iterator();
-	}
-	
-	private String name;
-	private String type;
-	private String widget;
-	ArrayList values;
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  private String name;
+
+  private String type;
+
+  private String widget;
+
+  private ArrayList values;
+
+  /**
+   * Default Constructor for a ConfigProperty.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  ConfigProperty() {
+    // defaults
+    name = "";
+    type = "String";
+    widget = "JTextField";
+    values = new ArrayList();
+  }
+
+  /**
+   * @return name associated with this property.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Setter for the name of this property.
+   * @param a_name The name associated with this property.
+   * This name will be used as the key in the properties file for persisting
+   * configuration information.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public void setName(String a_name) {
+    name = a_name;
+  }
+
+  /**
+   * @return type of the value for this property.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * @param a_type Example "int" or "Class" or "String".
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public void setType(String a_type) {
+    type = a_type;
+  }
+
+  /**
+   * @return name of the widget associated with this property.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public String getWidget() {
+    return widget;
+  }
+
+  /**
+   * Sets the widget
+   * @param a_widget Either "JList" or "JTextField" for now.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public void setWidget(String a_widget) {
+    widget = a_widget;
+  }
+
+  /**
+   * Add a value into the values ArrayList. These values are added in case the
+   * display component is a ListBox or ComboBox or something that can have
+   * multiple values.
+   * @param a_value the value to add
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public void addValue(String a_value) {
+    values.add(a_value);
+  }
+
+  /**
+   * Get the iterator on the values associated with this property.
+   * @return Iterator on the values ArrayList for this property.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public Iterator getValuesIter() {
+    return values.iterator();
+  }
 }

@@ -11,17 +11,22 @@ package org.jgap;
 
 /**
  * Interface a ConfigWriter uses to get the information from a ConfigFrame.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public interface IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   ConfigData getConfigData();
 
   /**
    * Get the config file to write to.
    * @return The config file name to write to.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    */
   String getFileName();
-  
 }

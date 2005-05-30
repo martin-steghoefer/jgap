@@ -14,12 +14,13 @@ import java.util.*;
 /**
  * The interface for the GUI to retrieve the information about what a Configurable
  * looks like and how it must be rendered.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public interface ConfigurationHandler {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -32,29 +33,37 @@ public interface ConfigurationHandler {
    * Return the information to generate the GUI for configuring this class.
    * @return A list of ConfigProperty objects.
    * */
+
   ArrayList getConfigProperties();
-  
+
   /**
    * Method that will populate an Configurable with the properties in the
    * config file.
-   * @author Siddhartha Azad.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
-  void readConfig()  throws ConfigException,
-	InvalidConfigurationException ;
-  
+
+  void readConfig()
+      throws ConfigException, InvalidConfigurationException;
+
   /**
    * Get the namespace to be used in the config file for the Configurable
    * this ConfigurationHandler belongs to.
-   * @author Siddhartha Azad.
-   * @return The namepsace of the Configurable
+   * @return namepsace of the Configurable
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   String getNS();
-  
+
   /**
    * Set the Configurable to which this ConfigurationHandler belongs.
-   * @author Siddhartha Azad.
-   * @param _configurable The Configurable to which this ConfigurationHandler
-   * belongs. 
-   * */
-  void setConfigurable(Configurable _configurable);
+   * @param a_configurable The Configurable to which this ConfigurationHandler
+   * belongs.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  void setConfigurable(Configurable a_configurable);
 }

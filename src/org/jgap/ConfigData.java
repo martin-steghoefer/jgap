@@ -14,11 +14,13 @@ import java.util.*;
 /**
  * Class to encapsulate information given by the GUI to a ConfigWriter to
  * persist.
- * @author Siddhartha Azad.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public class ConfigData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public ConfigData() {
     listData = new ArrayList();
@@ -46,9 +48,12 @@ public class ConfigData {
   /**
    * Get the name of the list at the specified index.
    * @param index Index of the list
-   * @returns
-   * @throws IndexOutOfBoundsException when index < 0 ||
+   * @return name of the list at the specified index
+   * @throws IndexOutOfBoundsException when index < 0 or
    * index >= listData.size()
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public String getListNameAt(int index) {
     ListData ld = (ListData) listData.get(index);
@@ -58,9 +63,12 @@ public class ConfigData {
   /**
    * Get the contents of the list at the specified index.
    * @param index Index of the list
-   * @returns
-   * @throws IndexOutOfBoundsException when index < 0 ||
+   * @return contents of the list at the specified index.
+   * @throws IndexOutOfBoundsException when index < 0 or
    * index >= listData.size()
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public ArrayList getListValuesAt(int index) {
     ListData ld = (ListData) listData.get(index);
@@ -70,9 +78,12 @@ public class ConfigData {
   /**
    * Get the name of the text at the specified index.
    * @param index Index of the text
-   * @returns
-   * @throws IndexOutOfBoundsException when index < 0 ||
+   * @return name of the text at the specified index.
+   * @throws IndexOutOfBoundsException when index < 0 or
    * index >= textData.size()
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public String getTextNameAt(int index) {
     TextData td = (TextData) textData.get(index);
@@ -81,58 +92,68 @@ public class ConfigData {
 
   /**
    * Get the value of the text at the specified index.
-   * @param index Index of the text
-   * @returns
+   * @param index index of the text
+   * @return value of the text at the specified index
    * @throws IndexOutOfBoundsException when index < 0 ||
    * index >= textData.size()
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public String getTextValueAt(int index) {
     TextData ld = (TextData) textData.get(index);
     return ld.getValue();
   }
-  
+
   /**
    * Set the namespace of the Configurable for which this ConfigData is being
    * used.
-   * @author Siddhartha Azad.
    * @param _ns The namespace of the Configurable to be used while writing the
    * config file.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public void setNS(String _ns) {
-  	ns = _ns;
+    ns = _ns;
   }
-  
+
   /**
    * Get the namespace of the Configurable for which this ConfigData is being
    * used.
-   * @author Siddhartha Azad.
    * @return The namespace of the Configurable to be used while writing the
    * config file.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public String getNS() {
-  	return ns;
+    return ns;
   }
 
   ArrayList listData;
 
   ArrayList textData;
-  
   // The namespace for the properties file
+
   String ns;
   /**
    * Data associated with the lists on the GUI.
-   * @author Siddhartha Azad.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
+
   class ListData {
     /**
      * Constructor.
-     * @param _name Name of the object being configured, to be used as the
+     * @param a_name Name of the object being configured, to be used as the
      * key in the config properties file.
-     * @param _data Data associated with the List (Data selected by the user)
+     * @param a_data Data associated with the List (Data selected by the user)
      */
-    ListData(String _name, ArrayList _data) {
-      data = _data;
-      name = _name;
+    ListData(String a_name, ArrayList a_data) {
+      data = a_data;
+      name = a_name;
     }
 
     public Iterator getDataIter() {
@@ -159,18 +180,20 @@ public class ConfigData {
   }
   /**
    * Data associated with the TextFields, on the GUI.
-   * @author Siddhartha Azad.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   class TextData {
     /**
      * Constructor.
      * @param _name Name of the object being configured. Will be used as the
      * key in the config properties file.
-     * @param _value The value in the JTextField (value in the properties file)
+     * @param a_value The value in the JTextField (value in the properties file)
      * */
-    public TextData(String _name, String _value) {
-      name = _name;
-      value = _value;
+    public TextData(String a_name, String a_value) {
+      name = a_name;
+      value = a_value;
     }
 
     public void setName(String _name) {
