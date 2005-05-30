@@ -1,3 +1,11 @@
+2.4
+----------
+* Introduced new abstract base class org.jgap.JGAPTestCase.
+  All test cases are now derived from this new class hosting
+  commong logic
+* Added many new test cases
+* Added javadocs
+
 2.3
 ----------
 * Added support for HotBits random generator
@@ -15,7 +23,8 @@
   (see request 814758)
 * Improved architecture towards Genetic Programming
 * Improved code concerning coding guidelines
-* Added new example: knapsack problem (see request 1088469)
+* Added new example: knapsack problem
+  (see request 1088469)
 * Added org.jgap.InversionOperator (see request 1152956)
 * Changed return value for BaseGene's hashcode with
   null internal value
