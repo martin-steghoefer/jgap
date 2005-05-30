@@ -23,7 +23,7 @@ public class UnsupportedRepresentationException
     extends Exception {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Constructs a new UnsupportedRepresentationException instance with the
@@ -31,6 +31,9 @@ public class UnsupportedRepresentationException
    *
    * @param a_message An error message describing the reason this exception
    *                  is being thrown.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public UnsupportedRepresentationException(String a_message) {
     super(a_message);
