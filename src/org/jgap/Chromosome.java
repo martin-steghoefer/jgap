@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -198,7 +198,6 @@ public class Chromosome
    * @since 1.0
    */
   public synchronized Object clone() {
-
     // Before doing anything, make sure that a Configuration object
     // has been set on this Chromosome. If not, then throw an
     // IllegalStateException.
@@ -244,6 +243,9 @@ public class Chromosome
     // locus in the new Chromosome.
     // -------------------------------------------------------------------
     Gene[] copyOfGenes = new Gene[m_genes.length];
+//    if (m_genes.length == 0 || copyOfGenes.length == 0) {
+//      throw new IllegalArgumentException("Genes length = 0!");
+//    }
     for (int i = 0; i < copyOfGenes.length; i++) {
       copyOfGenes[i] = m_genes[i].newGene();
       copyOfGenes[i].setAllele(m_genes[i].getAllele());
@@ -703,6 +705,11 @@ public class Chromosome
   }
 
   public void setGenes(Gene[] a_genes) {
+//    for (int i=0;i<a_genes.length;i++) {
+//      if (a_genes[i]==null) {
+//        throw new RuntimeException("Gene may not be null!");
+//      }
+//    }
     m_genes = a_genes;
   }
 
