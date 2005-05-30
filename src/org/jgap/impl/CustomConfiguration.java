@@ -21,10 +21,10 @@ import org.jgap.*;
 public class CustomConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
-   * Constructor.
+   * Constructor, reading in the configuration from the given file
    * @param a_configFileName The config file from which to load the
    * configuration.
    * @throws ConfigException
