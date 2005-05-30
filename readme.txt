@@ -1,4 +1,4 @@
-Thank you for trying JGAP 2.2! We are very interested in any feedback
+Thank you for trying JGAP 2.3! We are very interested in any feedback
 you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
 feedback on the user's mailing list at jgap-users@lists.sourceforge.net
