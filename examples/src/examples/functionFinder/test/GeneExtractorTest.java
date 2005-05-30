@@ -6,7 +6,6 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 
-import junit.framework.*;
 import examples.functionFinder.*;
 
 /**
@@ -15,10 +14,10 @@ import examples.functionFinder.*;
  * @author Klaus Meffert
  * @since 2.2
  */
-public class GeneExtractorTest extends TestCase {
+public class GeneExtractorTest extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private static int numberOfFunctions;
   private static int numberOfConstants;
@@ -28,6 +27,9 @@ public class GeneExtractorTest extends TestCase {
     super(name);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public static void init() {
     Repository.init();
     numberOfFunctions = Repository.getFunctions().size();
@@ -36,11 +38,13 @@ public class GeneExtractorTest extends TestCase {
   }
 
   public void setUp() {
+    super.setUp();
     init();
   }
 
   /**
    * Use a function
+   * @author Klaus Meffert
    */
   public void testGene_0() {
     Gene[] genes = new Gene[ 2 ];
@@ -55,6 +59,7 @@ public class GeneExtractorTest extends TestCase {
 
   /**
    * Use a constant
+   * @author Klaus Meffert
    */
   public void testGene_1() {
     Gene[] genes = new Gene[ 2 ];
@@ -67,6 +72,7 @@ public class GeneExtractorTest extends TestCase {
 
   /**
    * Use a constant (forcing modulo for functions)
+   * @author Klaus Meffert
    */
   public void testGene_2() {
     Gene[] genes = new Gene[ 2 ];
@@ -80,6 +86,7 @@ public class GeneExtractorTest extends TestCase {
 
   /**
    * Use a function (forcing modulo for operator)
+   * @author Klaus Meffert
    */
   public void testGene_3() {
     Gene[] genes = new Gene[ 2 ];
@@ -94,6 +101,7 @@ public class GeneExtractorTest extends TestCase {
 
   /**
    * Use a function
+   * @author Klaus Meffert
    */
   public void testGene_4() {
     CompositeGene comp = new CompositeGene();
@@ -107,6 +115,10 @@ public class GeneExtractorTest extends TestCase {
     ;//this is OK
     }
   }
+
+  /**
+   * @author Klaus Meffert
+   */
   public void testGene_5() {
     CompositeGene comp = new CompositeGene();
     Gene[] genes = new Gene[ 1 ];
@@ -122,7 +134,14 @@ public class GeneExtractorTest extends TestCase {
         elem.operator);
   }
 
-  public static Vector constructTerms(Gene[] genes) {
+  /**
+   * Helper method
+   * @param genes Gene[]
+   * @return Vector
+   *
+   * @author Klaus Meffert
+   */
+  private Vector constructTerms(Gene[] genes) {
     Vector result = new Vector();
     Term term;
     Gene[] geneTupel;
@@ -209,10 +228,16 @@ public class GeneExtractorTest extends TestCase {
     return result;
   }
 
-  public static Term constructTerm(Gene[] genes) {
+  /**
+   *
+   * @param genes Gene[]
+   * @return Term
+   * @author Klaus Meffert
+   */
+  private Term constructTerm(Gene[] genes) {
     Gene fkt = genes[ 0 ];
     Gene op = genes[ 1 ];
-    Integer allele = (Integer) genes[ 0 ].getAllele();
+    Integer allele = (Integer) fkt.getAllele();
     int fktNr = allele.intValue();
     fktNr = fktNr % (numberOfFunctions + numberOfConstants);
     String fktName;
@@ -238,9 +263,10 @@ public class GeneExtractorTest extends TestCase {
 
   /**
    * Gene that always returns the same (Integer) allele value
-   * @version 1.0
+   *
+   * @author Klaus Meffert
    */
-  private class TestGene
+  private class TestGene extends BaseGene
       implements Gene, Comparable, Serializable {
     private int value;
 
@@ -252,8 +278,8 @@ public class GeneExtractorTest extends TestCase {
       return new Integer(value);
     }
 
-    public void cleanup() {
-
+    public Object getInternalValue() {
+      return getAllele();
     }
 
     public void setToRandomValue(RandomGenerator a_numberGenerator) {
@@ -272,10 +298,6 @@ public class GeneExtractorTest extends TestCase {
 
     public void setAllele(Object a_newValue) {
 
-    }
-
-    public Gene newGene(Configuration a_activeConfiguration) {
-      return null;
     }
 
     public int compareTo(Object o) {
