@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -33,33 +33,92 @@ public class BaseGeneTest
 
   /**
    * Following should be possible without exception
+   * @author Klaus Meffert
+   * @since 2.3
    */
   public void testConstruct_0() {
     Gene gene = new BaseGeneImpl();
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testToString_0() {
     Gene gene = new BaseGeneImpl();
     assertEquals("null", gene.toString());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   public void testToString_1() {
     Gene gene = new BaseGeneImpl();
     gene.setAllele(new Integer(98));
     assertEquals("98", gene.toString());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testGetAllele_0() {
     Gene gene = new BaseGeneImpl();
     gene.setAllele(new Double(75));
     assertEquals(new Double(75), gene.getAllele());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSize_0() {
+    Gene gene = new BaseGeneImpl();
+    assertEquals(1, gene.size());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_0() {
+    BaseGeneImpl gene = new BaseGeneImpl();
+    gene.m_compareTo_result = 0;
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(null));
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(gene));
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(new Integer(2)));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEquals_1() {
+    BaseGeneImpl gene = new BaseGeneImpl();
+    gene.m_compareTo_result = -1;
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(null));
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(gene));
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(new Integer(2)));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEquals_2() {
+    BaseGeneImpl gene = new BaseGeneImpl();
+    gene.m_compareTo_result = 1;
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(null));
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(gene));
+    assertEquals(gene.m_compareTo_result == 0, gene.equals(new Integer(2)));
   }
 
   /**
    * Following should be possible without exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   public void testCleanup_0() {
     Gene gene = new BaseGeneImpl();
@@ -76,12 +135,31 @@ public class BaseGeneTest
     assertEquals( -79, gene.hashCode());
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testHashCode_1() {
+    BaseGeneImpl gene = new BaseGeneImpl();
+    gene.setAllele(new Double(1.5d));
+    assertEquals( new Double(1.5d).hashCode(), gene.hashCode());
+  }
+
+  /**@todo test set/get energy*/
+
+  /**
+   * Test implementation of Gene interface extending BaseGene class
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   class BaseGeneImpl
       extends BaseGene {
     private Object m_allele;
+    public int m_compareTo_result;
 
     public int compareTo(Object o) {
-      return 0;
+      return m_compareTo_result;
     }
 
     public Gene newGene() {
