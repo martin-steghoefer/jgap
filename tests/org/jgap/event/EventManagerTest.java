@@ -12,7 +12,8 @@ package org.jgap.event;
 import java.util.*;
 
 import junit.framework.*;
-import junitx.util.*;
+
+import org.jgap.*;
 
 /**
  * Tests for EventManager class
@@ -21,9 +22,9 @@ import junitx.util.*;
  * @since 1.1
  */
 public class EventManagerTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(EventManagerTest.class);
@@ -40,7 +41,7 @@ public class EventManagerTest
       throws Exception {
     EventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
-    Map listeners = (Map) PrivateAccessor.getField(man, "m_listeners");
+    Map listeners = (Map) privateAccessor.getField(man, "m_listeners");
     assertTrue(listeners.isEmpty());
     man.addEventListener("testeventname", listener);
     List listenersList = (List) listeners.get("testeventname");
@@ -57,7 +58,7 @@ public class EventManagerTest
       throws Exception {
     EventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
-    Map listeners = (Map) PrivateAccessor.getField(man, "m_listeners");
+    Map listeners = (Map) privateAccessor.getField(man, "m_listeners");
     man.addEventListener("testeventname", listener);
     man.addEventListener("testeventname", listener);
     List listenersList = (List) listeners.get("testeventname");
@@ -74,7 +75,7 @@ public class EventManagerTest
       throws Exception {
     EventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
-    Map listeners = (Map) PrivateAccessor.getField(man, "m_listeners");
+    Map listeners = (Map) privateAccessor.getField(man, "m_listeners");
     man.addEventListener("testeventname", listener);
     List listenersList = (List) listeners.get("testeventname");
     man.removeEventListener("notfound", listener);
@@ -117,6 +118,10 @@ public class EventManagerTest
     assertEquals(genEvent,listener.event);
   }
 
+  /**
+   *
+   * @author Klaus Meffert
+   */
   private class EventListener
       implements GeneticEventListener {
     public boolean fired;

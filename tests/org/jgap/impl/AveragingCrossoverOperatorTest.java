@@ -20,13 +20,9 @@ import junit.framework.*;
  * @since 2.0
  */
 public class AveragingCrossoverOperatorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AveragingCrossoverOperatorTest.class);
@@ -189,36 +185,6 @@ public class AveragingCrossoverOperatorTest
     target = (Chromosome) chroms.get(3);
     CompositeGene result = (CompositeGene) target.getGene(0);
     assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0)).intValue());
-  }
-
-  public static boolean isChromosomesEqual(Chromosome[] list1,
-                                           Chromosome[] list2) {
-    if (list1 == null) {
-      if (list2 == null) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-    else if (list2 == null) {
-      return false;
-    }
-    else {
-      if (list1.length != list2.length) {
-        return false;
-      }
-      else {
-        for (int i = 0; i < list1.length; i++) {
-          Chromosome c1 = (Chromosome) list1[i];
-          Chromosome c2 = (Chromosome) list2[i];
-          if (!c1.equals(c2)) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
   }
 
   /**

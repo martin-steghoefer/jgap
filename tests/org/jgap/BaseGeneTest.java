@@ -18,13 +18,9 @@ import junit.framework.*;
  * @since 2.3
  */
 public class BaseGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -142,7 +138,7 @@ public class BaseGeneTest
   public void testHashCode_1() {
     BaseGeneImpl gene = new BaseGeneImpl();
     gene.setAllele(new Double(1.5d));
-    assertEquals( new Double(1.5d).hashCode(), gene.hashCode());
+    assertEquals(new Double(1.5d).hashCode(), gene.hashCode());
   }
 
   /**@todo test set/get energy*/
@@ -156,6 +152,7 @@ public class BaseGeneTest
   class BaseGeneImpl
       extends BaseGene {
     private Object m_allele;
+
     public int m_compareTo_result;
 
     public int compareTo(Object o) {

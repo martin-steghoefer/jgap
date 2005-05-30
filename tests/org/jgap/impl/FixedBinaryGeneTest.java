@@ -20,19 +20,18 @@ import junit.framework.*;
  * @since 2.0
  */
 public class FixedBinaryGeneTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     // following should be possible without exception
     new FixedBinaryGene(1);
@@ -41,6 +40,9 @@ public class FixedBinaryGeneTest
     new FixedBinaryGene(100000);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_1() {
     try {
       new FixedBinaryGene(0);
@@ -51,6 +53,9 @@ public class FixedBinaryGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_2() {
     try {
       new FixedBinaryGene( -5);
@@ -322,7 +327,6 @@ public class FixedBinaryGeneTest
     }
     catch (Exception e) {
       /*Some Exception should be thrown*/
-
     }
   }
 
@@ -336,7 +340,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
@@ -350,7 +354,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
@@ -413,10 +417,8 @@ public class FixedBinaryGeneTest
   public void testCompareTo_0() {
     FixedBinaryGene gene1 = new FixedBinaryGene(4);
     FixedBinaryGene gene2 = new FixedBinaryGene(4);
-
     gene1.setAllele(new int[] {1, 0, 1, 0});
     gene2.setAllele(new int[] {1, 1, 0, 1});
-
     assertEquals(1, gene1.compareTo(null));
     assertEquals( -1, gene1.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene1));
@@ -428,7 +430,6 @@ public class FixedBinaryGeneTest
   public void testCompareTo_1() {
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     FixedBinaryGene gene2 = new FixedBinaryGene(3);
-
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
   }
@@ -437,18 +438,14 @@ public class FixedBinaryGeneTest
    * @author vamsi
    */
   public void testCompareTo_2() {
-
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     FixedBinaryGene gene2 = new FixedBinaryGene(3);
     gene1.setAllele(new int[] {1, 1, 1});
     gene2.setAllele(new int[] {1, 1, 1});
-
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
-
     gene1.setAllele(new int[] {0, 0, 0});
     gene2.setAllele(new int[] {0, 0, 0});
-
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
   }
@@ -464,9 +461,10 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      ;//this is OK (should compare only FixedBinaryGene's)
+      ; //this is OK (should compare only FixedBinaryGene's)
     }
   }
+
   /**
    * @author vamsi
    */
@@ -477,7 +475,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      ;//this is OK (should compare only FixedBinaryGene's)
+      ; //this is OK (should compare only FixedBinaryGene's)
     }
   }
 
@@ -525,7 +523,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception E) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
@@ -569,7 +567,6 @@ public class FixedBinaryGeneTest
    * @since 2.0
    */
   public void testSetValueFromPersistentRepresentation_0() {
-
     FixedBinaryGene gene = new FixedBinaryGene(4);
     try {
       gene.setValueFromPersistentRepresentation(null);
@@ -592,7 +589,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
@@ -862,7 +859,6 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene1 = new FixedBinaryGene(7);
     gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
     try {
-
       gene1.flip(7);
       fail();
     }
@@ -919,12 +915,14 @@ public class FixedBinaryGeneTest
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testNewGene_0() {
     FixedBinaryGene gene1 = new FixedBinaryGene(7);
     FixedBinaryGene gene2 = (FixedBinaryGene) gene1.newGene();
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
-
   }
 
   /**

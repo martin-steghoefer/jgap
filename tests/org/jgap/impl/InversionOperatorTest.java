@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -22,16 +20,18 @@ import junit.framework.*;
  * @since 2.3
  */
 public class InversionOperatorTest
-    extends TestCase {
-
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
     new InversionOperator();
   }
@@ -161,7 +161,7 @@ public class InversionOperatorTest
     InversionOperator op = new InversionOperator();
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
-    CompositeGene compGene = new CompositeGene ();
+    CompositeGene compGene = new CompositeGene();
     compGene.addGene(cgene1);
     Gene[] genes1 = new Gene[] {
         compGene};
@@ -188,33 +188,8 @@ public class InversionOperatorTest
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
-    CompositeGene result = (CompositeGene)target.getGene(0);
-    assertEquals(8, ( (Integer) ((Vector)result.getAllele()).get(0)).intValue());
-  }
-
-  public static boolean isChromosomesEqual(Chromosome[] list1,
-                                           Chromosome[] list2) {
-    if (list1 == null) {
-      return (list2 == null);
-    }
-    else if (list2 == null) {
-      return false;
-    }
-    else {
-      if (list1.length != list2.length) {
-        return false;
-      }
-      else {
-        for (int i = 0; i < list1.length; i++) {
-          Chromosome c1 = (Chromosome) list1[i];
-          Chromosome c2 = (Chromosome) list2[i];
-          if (!c1.equals(c2)) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
+    CompositeGene result = (CompositeGene) target.getGene(0);
+    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0)).intValue());
   }
 
 }

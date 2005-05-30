@@ -13,27 +13,29 @@ import org.jgap.*;
 
 /**
  * Sample Fitness function Mocking fitness functions.
+ *
+ * @author Siddhartha Azad
+ * @since 2.3
  */
 public class MockFitnessFunction
     extends FitnessFunction {
-	
-	  /** String containing the CVS revision. Read out via reflection!*/
-	  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-	  /**
-	   * This is really a placeholder fitness function required only so that
-	   * we can tests certain parts of the system without having to specify
-	   * a real fitness function.
-	   * In the real world this would not be a good fitness function for any
-	   * application, since it simply returns a constant value.
-	   * @author Siddhartha Azad.
-	   * @param a_subject The Chromosome instance to evaluate.
-	   * @return A positive integer reflecting the fitness rating of the given
-	   * Chromosome.
-	   */
-	  public double evaluate(Chromosome chromosome) {
-	  	  return 100;
-	  }
-
-	
+  /**
+   * This is really a placeholder fitness function required only so that
+   * we can tests certain parts of the system without having to specify
+   * a real fitness function.
+   * In the real world this would not be a good fitness function for any
+   * application, since it simply returns a constant value.
+   * @param a_subject The Chromosome instance to evaluate.
+   * @return A positive integer reflecting the fitness rating of the given
+   * Chromosome.
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public double evaluate(Chromosome chromosome) {
+    return 100;
+  }
 }

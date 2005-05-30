@@ -25,9 +25,9 @@ import junit.framework.*;
  * @since 2.3
  */
 public class ConfigWriterTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -41,7 +41,8 @@ public class ConfigWriterTest
    *
    * @throws Exception
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public void testConfigData_0()
       throws Exception {
@@ -102,7 +103,8 @@ public class ConfigWriterTest
    *
    * @throws Exception
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
+   * @since 2.3
    */
   public void testConfigReader_0()
       throws Exception {

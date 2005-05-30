@@ -18,13 +18,14 @@ import junit.framework.*;
 
 /**
  * Tests for PopulationHistory class
+ *
  * @author Klaus Meffert
  * @since 1.1
  */
 public class PopulationHistoryTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -219,6 +220,9 @@ public class PopulationHistoryTest
     assertEquals(2, ph.size());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetPopulations_0() {
     PopulationHistory ph = new PopulationHistory(3);
     List l = ph.getPopulations();

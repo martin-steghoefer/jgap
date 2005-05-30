@@ -11,6 +11,9 @@ package org.jgap.event;
 
 import junit.framework.*;
 
+
+import org.jgap.*;
+
 /**
  * Tests for GeneticEvent class
  *
@@ -18,37 +21,46 @@ import junit.framework.*;
  * @since 1.1
  */
 public class GeneticEventTest
-    extends TestCase {
-
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GeneticEventTest.class);
     return suite;
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_0() {
-    try
-    {
+    try {
       new GeneticEvent("testEventName", null);
       fail();
     }
-    catch (IllegalArgumentException illex)
-    {
+    catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testConstruct_1() {
     new GeneticEvent(null, this);
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGetEventName_0() {
     GeneticEvent event = new GeneticEvent("testEventName", this);
     assertEquals("testEventName", event.getEventName());
   }
 
+  /**
+   * @author Klaus Meffert
+   */
   public void testGENOTYPE_EVOLVED_EVENT_0() {
     assertTrue(GeneticEvent.GENOTYPE_EVOLVED_EVENT != null);
     assertTrue(GeneticEvent.GENOTYPE_EVOLVED_EVENT.length() > 0);

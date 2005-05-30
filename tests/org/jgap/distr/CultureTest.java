@@ -10,6 +10,7 @@
 package org.jgap.distr;
 
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -19,15 +20,9 @@ import junit.framework.*;
  * @since 2.3
  */
 public class CultureTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
-
-  private final static double DELTA = 0.00000001d;
-
-  public void setUp() {
-    Genotype.setConfiguration(null);
-  }
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
