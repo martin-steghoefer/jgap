@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -49,7 +49,7 @@ public abstract class BaseGene
     // just return the hash code of the Object.
     // -------------------------------------------------------------
     if (getInternalValue() == null) {
-      return 0;
+      return -79;
     }
     else {
       return getInternalValue().hashCode();
