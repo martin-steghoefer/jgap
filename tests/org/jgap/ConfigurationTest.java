@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ConfigurationTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -716,7 +716,7 @@ public class ConfigurationTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 2.3
+   * @since 2.4
    */
   public void testToString_0()
       throws Exception {
@@ -810,6 +810,7 @@ public class ConfigurationTest
    * @return String
    *
    * @author Klaus Meffert
+   * @since 2.4
    */
   private String trimString(String s1) {
     String result = s1;
