@@ -15,20 +15,21 @@ import java.util.*;
  * The ConfigurationHandler for the Configuration class itself. This is the
  * entry point for a Configuration.
  * In other words this is for configuring a Configuration.
+ *
  * @author Siddhartha Azad.
+ * @since 2.3
  * */
 public class RootConfigurationHandler
     implements ConfigurationHandler {
-
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   // Namespae
   private final static String CONFIG_NAMESPACE = "Configuration";
 
   /**
-   * Return the name of this Configuration Object to be used in the properties
-   * file.
-   * @return Name of this Configuration Object (name of what you are configuring)
+   * @return Name of this Configuration Object (name of what you are
+   * configuring) to be used in the properties file
+   * @since 2.3
    * */
   public String getName() {
     return "Configuration";
@@ -37,6 +38,7 @@ public class RootConfigurationHandler
   /**
    * Return the information to generate the GUI for configuring this class.
    * @return A list of ConfigProperty objects.
+   * @since 2.3
    * */
   public ArrayList getConfigProperties() {
     /**@todo This list could be cached after the first call.*/
@@ -62,7 +64,6 @@ public class RootConfigurationHandler
     cp.addValue("org.jgap.impl.GaussianMutationOperator");
     cp.addValue("org.jgap.impl.MutationOperator");
     cProps.add(cp);
-
     // The population size
     cp = new ConfigProperty();
     cp.setName("m_populationSize");
@@ -72,15 +73,16 @@ public class RootConfigurationHandler
     return cProps;
   }
 
-
   /**
    * Get the namespace to be used in the config file for the Configurable
    * this ConfigurationHandler belongs to.
-   * @author Siddhartha Azad.
    * @return The namepsace of the Configurable
+   *
+   * @author Siddhartha Azad.
+   * @since 2.3
    * */
   public String getNS() {
-  	return CONFIG_NAMESPACE;
+    return CONFIG_NAMESPACE;
   }
 
   /**
@@ -88,25 +90,28 @@ public class RootConfigurationHandler
    * config file.
    * @throws ConfigException
    * @throws InvalidConfigurationException
+   *
    * @author Siddhartha Azad.
+   * @since 2.3
    * */
   public void readConfig()
       throws ConfigException, InvalidConfigurationException {
-  	ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
-	String value = ConfigFileReader.instance().getValue("m_populationSize");
-	if(value != null)
-		configurable.setConfigProperty("m_populationSize", value);
-
+    ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
+    String value = ConfigFileReader.instance().getValue("m_populationSize");
+    if (value != null)
+      configurable.setConfigProperty("m_populationSize", value);
   }
 
   /**
    * Set the Configurable to which this ConfigurationHandler belongs.
-   * @author Siddhartha Azad.
    * @param _configurable The Configurable to which this ConfigurationHandler
    * belongs.
+   *
+   * @author Siddhartha Azad.
+   * @since 2.3
    * */
   public void setConfigurable(Configurable _configurable) {
-  	configurable = _configurable;
+    configurable = _configurable;
   }
 
   Configurable configurable;
