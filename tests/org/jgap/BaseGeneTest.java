@@ -9,19 +9,18 @@
  */
 package org.jgap;
 
-import org.jgap.*;
 import junit.framework.*;
 
 /**
  * Test class for BaseGene class
  *
  * @author Klaus Meffert
- * @since 1.1
+ * @since 2.3
  */
 public class BaseGeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public void setUp() {
     Genotype.setConfiguration(null);
@@ -32,18 +31,40 @@ public class BaseGeneTest
     return suite;
   }
 
+  /**
+   * Following should be possible without exception
+   */
   public void testConstruct_0() {
-    //construction should be possible without exception
     Gene gene = new BaseGeneImpl();
   }
 
   public void testToString_0() {
+    Gene gene = new BaseGeneImpl();
+    assertEquals("null", gene.toString());
+  }
+
+  public void testToString_1() {
+    Gene gene = new BaseGeneImpl();
+    gene.setAllele(new Integer(98));
+    assertEquals("98", gene.toString());
   }
 
   public void testGetAllele_0() {
+    Gene gene = new BaseGeneImpl();
+    gene.setAllele(new Double(75));
+    assertEquals(new Double(75), gene.getAllele());
   }
 
   public void testEquals_0() {
+  }
+
+  /**
+   * Following should be possible without exception
+   */
+  public void testCleanup_0() {
+    Gene gene = new BaseGeneImpl();
+    gene.setAllele(new Double(75));
+    gene.cleanup();
   }
 
   /**
@@ -57,6 +78,8 @@ public class BaseGeneTest
 
   class BaseGeneImpl
       extends BaseGene {
+    private Object m_allele;
+
     public int compareTo(Object o) {
       return 0;
     }
@@ -66,10 +89,7 @@ public class BaseGeneTest
     }
 
     public void setAllele(Object a_newValue) {
-    }
-
-    public Object getAllele() {
-      return null;
+      m_allele = a_newValue;
     }
 
     public String getPersistentRepresentation()
@@ -83,15 +103,13 @@ public class BaseGeneTest
     }
 
     public void setToRandomValue(RandomGenerator a_numberGenerator) {
-
     }
 
-    public   void applyMutation(int index, double a_percentage) {
-
+    public void applyMutation(int index, double a_percentage) {
     }
 
     protected Object getInternalValue() {
-      return null;
+      return m_allele;
     }
   }
 }
