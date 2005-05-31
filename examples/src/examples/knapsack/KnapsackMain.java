@@ -10,7 +10,6 @@
 package examples.knapsack;
 
 import java.io.*;
-
 import org.jgap.*;
 import org.jgap.data.*;
 import org.jgap.impl.*;
@@ -30,7 +29,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -45,7 +44,7 @@ public class KnapsackMain {
   /** Names of arbitrary items, only for outputting something imaginable*/
   public static String[] itemNames = {
       "Torch", "Banana", "Miniradio", "TV", "Gameboy", "Small thingie",
-      "Medium thingie","Big thingie","Huge thingie","Gigantic thingie"};
+      "Medium thingie", "Big thingie", "Huge thingie", "Gigantic thingie"};
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -61,21 +60,18 @@ public class KnapsackMain {
    * @since 2.3
    */
   public static void findItemsForVolume(double a_knapsackVolume)
-      throws
-      Exception {
+      throws Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
-
     // Set the fitness function we want to use. We construct it with
     // the target volume passed in to this method.
     // ---------------------------------------------------------
     FitnessFunction myFunc =
         new KnapsackFitnessFunction(a_knapsackVolume);
     conf.setFitnessFunction(myFunc);
-
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
@@ -88,14 +84,13 @@ public class KnapsackMain {
     // to senseful values (i.e. maximum possible) for each item type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[itemVolumes.length];
-    for (int i=0;i<itemVolumes.length;i++) {
+    for (int i = 0; i < itemVolumes.length; i++) {
       sampleGenes[i] = new IntegerGene(0,
                                        (int) Math.ceil(a_knapsackVolume /
           itemVolumes[i]));
     }
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
-
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -103,7 +98,6 @@ public class KnapsackMain {
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
     conf.setPopulationSize(50);
-
     // Create random initial population of Chromosomes.
     // Here we try to read in a previous run via XMLManager.readFile(..)
     // for demonstration purpose!
@@ -116,29 +110,26 @@ public class KnapsackMain {
     catch (FileNotFoundException fex) {
       population = Genotype.randomInitialGenotype(conf);
     }
-
     population = Genotype.randomInitialGenotype(conf);
-
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
     // ---------------------------------------------------------------
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
     }
-
     // Save progress to file. A new run of this example will then be able to
     // resume where it stopped before!
     // ---------------------------------------------------------------------
 
     // represent Genotype as tree with elements Chromomes and Genes
+    // ------------------------------------------------------------
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
     IDataCreators doc2 = builder.representGenotypeAsDocument(population);
-
     // create XML document from generated tree
+    // ---------------------------------------
     XMLDocumentBuilder docbuilder = new XMLDocumentBuilder();
     Document xmlDoc = (Document) docbuilder.buildDocument(doc2);
     XMLManager.writeFile(xmlDoc, new File("knapsackJGAP.xml"));
-
     // Display the best solution we found.
     // -----------------------------------
     Chromosome bestSolutionSoFar = population.getFittestChromosome();
@@ -171,7 +162,8 @@ public class KnapsackMain {
    */
   public static void main(String[] args) {
     if (args.length != 1) {
-      System.out.println("Syntax: "+KnapsackMain.class.getName()+" <volume>");
+      System.out.println("Syntax: " + KnapsackMain.class.getName() +
+                         " <volume>");
     }
     else {
       try {
