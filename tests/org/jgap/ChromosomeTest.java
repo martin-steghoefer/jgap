@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -147,6 +147,51 @@ public class ChromosomeTest
       ; //this is OK
     }
   }
+
+  /**
+   * Illegal constructions regarding first parameter
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_71() {
+    try {
+      new Chromosome(0);
+      fail();
+    }
+    catch (IllegalArgumentException illex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Illegal constructions regarding first parameter
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_72() {
+    try {
+      new Chromosome(-5);
+      fail();
+    }
+    catch (IllegalArgumentException illex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_73() {
+    Chromosome chrom = new Chromosome(5);
+    assertEquals(5,chrom.getGenes().length);
+    for (int i=0;i<5;i++) {
+      assertEquals(null, chrom.getGene(i));
+    }
+  }
+
 
   /**
    * Illegal constructions regarding first parameter
