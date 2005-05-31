@@ -18,7 +18,7 @@ package org.jgap.data;
  */
 public interface IDataCreators {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   void setTree(IDataElementList tree);
 
@@ -30,6 +30,14 @@ public interface IDataCreators {
    */
   IDataElementList getTree();
 
+  /**
+   * Constructs a new instance of the entity implementing IDataCreators
+   * @throws Exception
+   * @return new instance of the entity itself
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   IDataCreators newDocument()
       throws Exception;
 
