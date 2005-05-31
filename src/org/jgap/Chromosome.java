@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -112,11 +112,10 @@ public class Chromosome
    * chromosomes that use the same Gene type for all of their genes and that
    * are to be used to setup a Configuration object.
    *
-   * @param a_sampleGene A sample concrete Gene instance that will be used
-   *                       as a template for all of the genes in this
-   *                       Chromosome.
+   * @param a_sampleGene a concrete sampleGene instance that will be used
+   * as a template for all of the genes in this Chromosome
    * @param a_desiredSize The desired size (number of genes) of this
-   *                      Chromosome.
+   * Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -147,7 +146,7 @@ public class Chromosome
    * can be useful for constructing sample chromosomes that are to be used
    * to setup a Configuration object.
    *
-   * @param a_initialGenes The genes of this Chromosome.
+   * @param a_initialGenes the initial genes of this Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -173,13 +172,15 @@ public class Chromosome
 
   /**
    *
-   * @param a_size
+   * @param a_size number of genes the chromosome contains of
    *
    * @author Klaus Meffert
    * @since 2.2
    */
   public Chromosome(int a_size) {
-    /**@todo add test case*/
+    if (a_size <= 0) {
+      throw new IllegalArgumentException("Size must be greater than zero");
+    }
     m_genes = new Gene[a_size];
   }
 
@@ -191,7 +192,7 @@ public class Chromosome
    * returning it. If that is not possible, then a new Chromosome instance
    * will be constructed and its value set appropriately before returning.
    *
-   * @return A copy of this Chromosome.
+   * @return copy of this Chromosome
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
