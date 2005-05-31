@@ -13,17 +13,26 @@ package org.jgap.distr;
  * Represents an IMaster instance. Distributes work to IWorker instances.
  *
  * @author Klaus Meffert
- * @since 2.4
+ * @since 2.3
  */
 public class Master {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   //information needed by workers
   private MasterInfo m_masterinfo;
 
   public Master() {
+  }
 
+  /**
+   *
+   * @return MasterInfo
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public MasterInfo getMasterInfo() {
+    return m_masterinfo;
   }
 }
