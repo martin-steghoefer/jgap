@@ -17,7 +17,7 @@ package org.jgap.distr;
  */
 public class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   //information needed by workers
   private MasterInfo m_masterinfo;
@@ -34,5 +34,9 @@ public class Master {
    */
   public MasterInfo getMasterInfo() {
     return m_masterinfo;
+  }
+
+  public void sendToWorker(IWorker a_worker, WorkerCommand a_command) {
+    /**@todo implement*/
   }
 }
