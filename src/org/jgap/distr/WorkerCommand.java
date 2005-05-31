@@ -9,20 +9,36 @@
  */
 package org.jgap.distr;
 
+import java.util.*;
+
 import org.jgap.util.*;
 
 /**
  * Command sent by an IMaster instance to an IWorker instance.
  *
  * @author Klaus Meffert
- * @since 2.4
+ * @since 2.3
  */
 public class WorkerCommand
     implements ICommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public WorkerCommand() {
+  /**
+   * Informative name
+   */
+  private String m_name;
+
+  /**
+   * Time the command was created (i.e. the constructor was called) in
+   * milliseconds. For statistical and purposes and for allowing to set a
+   * timeout
+   */
+  private long m_timeCreated;
+
+  public WorkerCommand(String a_name) {
+    m_name = a_name;
+    m_timeCreated = getCurrentMilliseconds();
 
   }
 
@@ -32,4 +48,10 @@ public class WorkerCommand
     /**@todo implement*/
     return null;
   }
+
+  private static long getCurrentMilliseconds() {
+  Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+  return cal.getTimeInMillis();
+}
+
 }
