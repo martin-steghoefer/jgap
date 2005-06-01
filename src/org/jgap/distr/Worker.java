@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.distr;
 
@@ -18,6 +18,10 @@ package org.jgap.distr;
  */
 public abstract class Worker
     implements IWorker {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
+
   /**@todo remove abstract, implement all methods*/
 
   /**
@@ -26,9 +30,6 @@ public abstract class Worker
    * and allow multiple requests from the master at once))
    */
   private MasterListener m_masterListener;
-
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // reference to master for calling him back
   private MasterInfo m_master;
@@ -41,5 +42,4 @@ public abstract class Worker
     m_master = a_master;
     m_masterListener = a_masterListener;
   }
-
 }
