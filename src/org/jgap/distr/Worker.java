@@ -20,8 +20,15 @@ public abstract class Worker
     implements IWorker {
   /**@todo remove abstract, implement all methods*/
 
+  /**
+   * Listener to requests from the (one and only) master of this worker
+   * (=KKMultiServerThread resp. KKMultiServer (to make it more sophisticated
+   * and allow multiple requests from the master at once))
+   */
+  private MasterListener m_masterListener;
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // reference to master for calling him back
   private MasterInfo m_master;

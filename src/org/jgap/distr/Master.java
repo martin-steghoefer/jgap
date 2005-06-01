@@ -9,6 +9,8 @@
  */
 package org.jgap.distr;
 
+import java.io.*;
+
 /**
  * Represents an IMaster instance. Distributes work to IWorker instances.
  *
@@ -17,12 +19,23 @@ package org.jgap.distr;
  */
 public class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   //information needed by workers
   private MasterInfo m_masterinfo;
 
-  public Master() {
+  /**
+   * Dispatcher of a request
+   */
+  private RequestDispatcher m_dispatcher;
+
+  /**
+   * Listener to requests and answers from workers (= KKMultiServer)
+   */
+  private WorkerListener m_workerListener;
+
+  public Master(RequestDispatcher a_dispatcher) {
+    m_dispatcher = a_dispatcher;
   }
 
   /**
@@ -36,7 +49,8 @@ public class Master {
     return m_masterinfo;
   }
 
-  public void sendToWorker(IWorker a_worker, WorkerCommand a_command) {
+  public void sendToWorker(IWorker a_worker, WorkerCommand a_command) throws IOException{
     /**@todo implement*/
+    m_dispatcher.dispatch(a_worker, a_command);
   }
 }
