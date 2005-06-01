@@ -4,13 +4,12 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.distr;
 
 import java.util.*;
-
 import org.jgap.util.*;
 
 /**
@@ -22,7 +21,7 @@ import org.jgap.util.*;
 public class WorkerCommand
     implements ICommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Informative name
@@ -39,7 +38,6 @@ public class WorkerCommand
   public WorkerCommand(String a_name) {
     m_name = a_name;
     m_timeCreated = getCurrentMilliseconds();
-
   }
 
   /**@inheritedDoc*/
@@ -50,8 +48,15 @@ public class WorkerCommand
   }
 
   private static long getCurrentMilliseconds() {
-  Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-  return cal.getTimeInMillis();
-}
+    Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+    return cal.getTimeInMillis();
+  }
 
+  public String getName() {
+    return m_name;
+  }
+
+  public long getAgeMillis() {
+    return getCurrentMilliseconds() - m_timeCreated;
+  }
 }
