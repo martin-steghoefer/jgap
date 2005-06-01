@@ -10,14 +10,14 @@
 package org.jgap.distr;
 
 /**
- * Represents a listener for master requests
+ * Represents a listener for requests from workers to the master
  *
  * @author Klaus Meffert
  * @since 2.4
  */
-public class WorkerListener {
+public abstract class WorkerListener {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**@todo implement*/
 }

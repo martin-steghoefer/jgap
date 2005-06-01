@@ -28,7 +28,7 @@ public abstract class Worker
   private MasterListener m_masterListener;
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // reference to master for calling him back
   private MasterInfo m_master;
@@ -37,8 +37,9 @@ public abstract class Worker
    * Construct worker and tell him who his master is
    * @param a_master
    */
-  public Worker(MasterInfo a_master) {
+  public Worker(MasterInfo a_master, MasterListener a_masterListener) {
     m_master = a_master;
+    m_masterListener = a_masterListener;
   }
 
 }

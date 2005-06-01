@@ -19,7 +19,7 @@ import java.io.*;
  */
 public class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   //information needed by workers
   private MasterInfo m_masterinfo;
@@ -34,8 +34,9 @@ public class Master {
    */
   private WorkerListener m_workerListener;
 
-  public Master(RequestDispatcher a_dispatcher) {
+  public Master(RequestDispatcher a_dispatcher, WorkerListener a_workerListener) {
     m_dispatcher = a_dispatcher;
+    m_workerListener = a_workerListener;
   }
 
   /**
@@ -49,7 +50,8 @@ public class Master {
     return m_masterinfo;
   }
 
-  public void sendToWorker(IWorker a_worker, WorkerCommand a_command) throws IOException{
+  public void sendToWorker(IWorker a_worker, WorkerCommand a_command)
+      throws IOException {
     /**@todo implement*/
     m_dispatcher.dispatch(a_worker, a_command);
   }
