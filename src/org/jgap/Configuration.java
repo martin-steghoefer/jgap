@@ -76,10 +76,8 @@ public class Configuration
 
   public static final String S_POST = "post";
 
-//  public static final String S_ = "";
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -1015,12 +1013,13 @@ public class Configuration
   /**
    * Pass the name and value of a property to be set.
    *
-   * @param name The name of the property.
-   * @param value The value of the property.
+   * @param name The name of the property
+   * @param value The value of the property
    * @throws ConfigException
    * @throws InvalidConfigurationException
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public void setConfigProperty(String name, String value)
       throws ConfigException, InvalidConfigurationException {
@@ -1030,20 +1029,21 @@ public class Configuration
         this.setPopulationSize(popSize.intValue());
       }
       catch (NumberFormatException numEx) {
-        throw new ConfigException("Value for property " + name + " must be an " +
-                                  "Integer, value is " + value);
+        throw new ConfigException("Value for property " + name + " must be " +
+                                  "an Integer, value is " + value);
       }
     }
   }
 
   /**
-   * Pass the name and values of a property to be set.
-   * @param name The name of the property.
-   * @param values The different values of the property.
+   * Pass the name and values of a property to be set
+   * @param name The name of the property
+   * @param values The different values of the property
    * @throws ConfigException
    * @throws InvalidConfigurationException
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public void setConfigMultiProperty(String name, ArrayList values)
       throws ConfigException, InvalidConfigurationException {
