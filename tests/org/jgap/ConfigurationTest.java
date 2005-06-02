@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -879,18 +879,6 @@ public class ConfigurationTest
   public void testGetName_2() {
     Configuration conf = new Configuration();
     assertEquals(null, conf.getName());
-  }
-}
-class TestFitnessFunction
-    extends FitnessFunction {
-  /**
-   * @param a_subject Chromosome
-   * @return double
-   * @since 2.0 (until 1.1: return type int)
-   */
-  protected double evaluate(Chromosome a_subject) {
-    //result does not matter here
-    return 1.0000000d;
   }
 }
 class TestBulkFitnessFunction

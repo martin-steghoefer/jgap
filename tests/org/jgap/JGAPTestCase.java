@@ -21,7 +21,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -69,6 +69,19 @@ public abstract class JGAPTestCase
         }
         return true;
       }
+    }
+  }
+
+  public class TestFitnessFunction
+      extends FitnessFunction {
+    /**
+     * @param a_subject Chromosome
+     * @return double
+     * @since 2.0 (until 1.1: return type int)
+     */
+    protected double evaluate(Chromosome a_subject) {
+      //result does not matter here
+      return 1.0000000d;
     }
   }
 
