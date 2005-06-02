@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -29,65 +28,64 @@ import org.jgap.*;
  * from {@link org.jgap.impl.MutationOperator MutationOperator})</font>
  * @since 2.0
  */
-public class SwappingMutationOperator extends MutationOperator {
-
+public class SwappingMutationOperator
+    extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-    /** {@inheritDoc} */
-    public SwappingMutationOperator() {
+  private int m_startOffset = 1;
+
+  /** {@inheritDoc} */
+  public SwappingMutationOperator() {
+  }
+
+  /** {@inheritDoc} */
+  public SwappingMutationOperator(IUniversalRateCalculator
+                                  a_mutationRateCalculator) {
+    super(a_mutationRateCalculator);
+  }
+
+  /** {@inheritDoc} */
+  public SwappingMutationOperator(int a_desiredMutationRate) {
+    super(a_desiredMutationRate);
+  }
+
+  /** {@inheritDoc} */
+  public void operate(final Population a_population,
+                      List a_candidateChromosomes) {
+    // this was a private variable, now it is local reference.
+    final IUniversalRateCalculator m_mutationRateCalc = getMutationRateCalc();
+    // If the mutation rate is set to zero and dynamic mutation rate is
+    // disabled, then we don't perform any mutation.
+    // ----------------------------------------------------------------
+    if (m_mutationRate == 0 && m_mutationRateCalc == null) {
+      return;
     }
-
-    /** {@inheritDoc} */
-    public SwappingMutationOperator
-    (IUniversalRateCalculator a_mutationRateCalculator) {
-        super(a_mutationRateCalculator);
+    // Determine the mutation rate. If dynamic rate is enabled, then
+    // calculate it based upon the number of genes in the chromosome.
+    // Otherwise, go with the mutation rate set upon construction.
+    // --------------------------------------------------------------
+    int currentRate;
+    if (m_mutationRateCalc != null) {
+      currentRate = m_mutationRateCalc.calculateCurrentRate();
     }
-
-    /** {@inheritDoc} */
-    public SwappingMutationOperator(int a_desiredMutationRate) {
-        super(a_desiredMutationRate);
+    else {
+      currentRate = m_mutationRate;
     }
-
-    /** {@inheritDoc} */
-    public void operate(final Population a_population,
-                        List a_candidateChromosomes) {
-
-      // this was a private variable, now it is local reference.
-      final IUniversalRateCalculator m_mutationRateCalc = getMutationRateCalc();
-
-      // If the mutation rate is set to zero and dynamic mutation rate is
-      // disabled, then we don't perform any mutation.
-      // ----------------------------------------------------------------
-      if (m_mutationRate == 0 && m_mutationRateCalc == null) {
-        return;
+    RandomGenerator generator = Genotype.getConfiguration().
+        getRandomGenerator();
+    // It would be inefficient to create copies of each Chromosome just
+    // to decide whether to mutate them. Instead, we only make a copy
+    // once we've positively decided to perform a mutation.
+    // ----------------------------------------------------------------
+    for (int i = 0; i < a_population.size(); i++) {
+      Chromosome x = (Chromosome) a_population.getChromosome(i);
+      // This returns null if not mutated:
+      Chromosome xm = operate(x, currentRate, generator);
+      if (xm != null) {
+        a_candidateChromosomes.add(xm);
       }
-      // Determine the mutation rate. If dynamic rate is enabled, then
-      // calculate it based upon the number of genes in the chromosome.
-      // Otherwise, go with the mutation rate set upon construction.
-      // --------------------------------------------------------------
-      int currentRate;
-      if (m_mutationRateCalc != null) {
-        currentRate = m_mutationRateCalc.calculateCurrentRate();
-      }
-      else {
-        currentRate = m_mutationRate;
-      }
-      RandomGenerator generator = Genotype.getConfiguration().
-       getRandomGenerator();
-
-      // It would be inefficient to create copies of each Chromosome just
-      // to decide whether to mutate them. Instead, we only make a copy
-      // once we've positively decided to perform a mutation.
-      // ----------------------------------------------------------------
-      for (int i = 0; i < a_population.size(); i++) {
-        Chromosome x = (Chromosome) a_population.getChromosome(i);
-        // This returns null if not mutated:
-        Chromosome xm = operate(x, currentRate, generator);
-        if (xm != null) {
-          a_candidateChromosomes.add(x);
-        }
-      }
+    }
   }
 
   /**
@@ -97,27 +95,28 @@ public class SwappingMutationOperator extends MutationOperator {
    * @return mutated chromosome of null if no mutation has occured.
    */
   protected Chromosome operate(Chromosome a_x, int a_rate,
-   RandomGenerator generator)
-  {
-      Chromosome chromosome = null;
-      // ----------------------------------------
-      for (int j = m_startOffset; j < a_x.size(); j++) {
-        // Ensure probability of 1/currentRate for applying mutation
-        // ---------------------------------------------------------
-        if (generator.nextInt(a_rate) == 0) {
-          if (chromosome == null)
-            chromosome = (Chromosome) a_x.clone();
-          Gene[] genes = chromosome.getGenes();
-          Gene[] mutated = operate(generator, j, genes);
-          // setGenes is not required for this operator, but it may
-          // be needed for the derived operators.
-          chromosome.setGenes(mutated);
-        }
+                               RandomGenerator generator) {
+    Chromosome chromosome = null;
+    // ----------------------------------------
+    for (int j = m_startOffset; j < a_x.size(); j++) {
+      // Ensure probability of 1/currentRate for applying mutation
+      // ---------------------------------------------------------
+      if (generator.nextInt(a_rate) == 0) {
+        if (chromosome == null)
+          chromosome = (Chromosome) a_x.clone();
+        Gene[] genes = chromosome.getGenes();
+        Gene[] mutated = operate(generator, j, genes);
+        // setGenes is not required for this operator, but it may
+        // be needed for the derived operators.
+        // ------------------------------------------------------
+        chromosome.setGenes(mutated);
       }
-      return chromosome;
+    }
+    return chromosome;
   }
 
-  /** Operate on the given array of genes. This method is only called
+  /**
+   * Operate on the given array of genes. This method is only called
    * when it is already clear that the mutation must occur under the given
    * mutation rate.
    * @param a_generator A random number generator that may be needed to
@@ -126,38 +125,37 @@ public class SwappingMutationOperator extends MutationOperator {
    * @param a_genes The array of all genes in the chromosome.
    * @return The mutated gene array.
    */
-  protected Gene [] operate (RandomGenerator a_generator,
-    int a_target_gene, Gene[] a_genes) {
-        // swap this gene with the other one now:
-        //  mutateGene(genes[j], generator);
-        // ------------------------------------
-        int other = m_startOffset +
-          a_generator.nextInt( a_genes.length-m_startOffset );
-        Gene t = a_genes [a_target_gene];
-        a_genes [a_target_gene] = a_genes [other];
-        a_genes [other] = t;
-        return a_genes;
-    }
+  protected Gene[] operate(RandomGenerator a_generator,
+                           int a_target_gene, Gene[] a_genes) {
+    // swap this gene with the other one now:
+    //  mutateGene(genes[j], generator);
+    // ------------------------------------
+    int other = m_startOffset +
+        a_generator.nextInt(a_genes.length - m_startOffset);
+    Gene t = a_genes[a_target_gene];
+    a_genes[a_target_gene] = a_genes[other];
+    a_genes[other] = t;
+    return a_genes;
+  }
 
-    private int m_startOffset = 1;
+  /**
+   * Sets a number of genes at the start of chromosome, that are
+   * excluded from the swapping. In the Salesman task, the first city
+   * in the list should (where the salesman leaves from) probably should
+   * not change as it is part of the list. The default value is 1.
+   */
+  public void setStartOffset(int a_offset) {
+    m_startOffset = a_offset;
+  }
 
-    /** Sets a number of genes at the start of chromosome, that are
-     * excluded from the swapping. In the Salesman task, the first city
-     * in the list should (where the salesman leaves from) probably should
-     * not change as it is part of the list. The default value is 1.
-     */
-    public void setStartOffset (int a_offset)
-    {
-        m_startOffset = a_offset;
-    }
-
-    /** Gets a number of genes at the start of chromosome, that are
-     * excluded from the swapping. In the Salesman task, the first city
-     * in the list should (where the salesman leaves from) probably should
-     * not change as it is part of the list. The default value is 1.
-     */
-    public int getStartOffset ()
-    {
-        return m_startOffset;
-    }
+  /**
+   * Gets a number of genes at the start of chromosome, that are
+   * excluded from the swapping. In the Salesman task, the first city
+   * in the list should (where the salesman leaves from) probably should
+   * not change as it is part of the list. The default value is 1.
+   * @return the start offset
+   */
+  public int getStartOffset() {
+    return m_startOffset;
+  }
 }
