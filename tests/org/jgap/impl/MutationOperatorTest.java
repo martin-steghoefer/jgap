@@ -10,7 +10,9 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -22,7 +24,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -313,18 +315,5 @@ public class MutationOperatorTest
                  ( (
                   IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
                   geneAt(0)).intValue());
-  }
-}
-
-class TestFitnessFunction
-    extends FitnessFunction {
-  /**
-   * @param a_subject Chromosome
-   * @return double
-   * @since 2.0 (until 1.1: return type int)
-   */
-  protected double evaluate(Chromosome a_subject) {
-    //result does not matter here
-    return 1.000000d;
   }
 }
