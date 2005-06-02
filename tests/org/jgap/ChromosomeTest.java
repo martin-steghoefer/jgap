@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests for Chromosome class
+ * Tests the Chromosome class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1037,34 +1037,36 @@ public class ChromosomeTest
     chrom.setCompareApplicationData(true);
     assertTrue(chrom.isCompareApplicationData());
   }
+  class MyAppObject
+      extends TestFitnessFunction
+      implements Cloneable {
+    public int compareTo(Object o) {
+      return 0;
+    }
+
+    public Object clone()
+        throws CloneNotSupportedException {
+      return null;
+    }
+  }
+
+
+  class MyAppObject2
+      extends TestFitnessFunction
+      implements IApplicationData {
+    public boolean equals(Object o2) {
+      return compareTo(o2) == 0;
+    }
+
+    public int compareTo(Object o) {
+      return 0;
+    }
+
+    public Object clone()
+        throws CloneNotSupportedException {
+      return new MyAppObject2();
+    }
+  }
 }
 
-class MyAppObject
-    extends TestFitnessFunction
-    implements Cloneable {
-  public int compareTo(Object o) {
-    return 0;
-  }
 
-  public Object clone()
-      throws CloneNotSupportedException {
-    return null;
-  }
-}
-
-class MyAppObject2
-    extends TestFitnessFunction
-    implements IApplicationData {
-  public boolean equals(Object o2) {
-    return compareTo(o2) == 0;
-  }
-
-  public int compareTo(Object o) {
-    return 0;
-  }
-
-  public Object clone()
-      throws CloneNotSupportedException {
-    return new MyAppObject2();
-  }
-}
