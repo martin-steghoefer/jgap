@@ -25,7 +25,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -113,7 +113,6 @@ public class SwappingMutationOperatorTest
     assertFalse(candChroms.get(0) == c1);
     assertEquals(c2,candChroms.get(1));
     assertFalse(candChroms.get(1) == c2);
-    /**@todo assert result is correct*/
   }
 
   /**
