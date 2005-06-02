@@ -10,11 +10,14 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+import org.jgap.JGAPTestCase.*;
+
 import junit.framework.*;
 
 /**
- * Tests for SwappingMutationOperator class
+ * Tests the SwappingMutationOperator class
  *
  * @author Klaus Meffert
  * @since 2.1
@@ -22,7 +25,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -106,6 +109,11 @@ public class SwappingMutationOperatorTest
         c1, c2};
     mutOp.operate(new Population(population), candChroms);
     assertEquals(candChroms.size(), population.length);
+    assertEquals(c1,candChroms.get(0));
+    assertFalse(candChroms.get(0) == c1);
+    assertEquals(c2,candChroms.get(1));
+    assertFalse(candChroms.get(1) == c2);
+    /**@todo assert result is correct*/
   }
 
   /**
@@ -125,6 +133,7 @@ public class SwappingMutationOperatorTest
     conf.setRandomGenerator(new StockRandomGenerator());
     Genotype.setConfiguration(conf);
     mutOp.operate(new Population(population), candChroms);
+    /**@todo assert result is correct*/
   }
 
   /**
