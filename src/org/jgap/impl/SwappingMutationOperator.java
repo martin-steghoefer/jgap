@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_startOffset = 1;
 
@@ -50,7 +50,11 @@ public class SwappingMutationOperator
     super(a_desiredMutationRate);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * @author Audrius Meskauskas
+   * @author Klaus Meffert
+   * @since 2.0
+   */
   public void operate(final Population a_population,
                       List a_candidateChromosomes) {
     // this was a private variable, now it is local reference.
@@ -78,7 +82,8 @@ public class SwappingMutationOperator
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
     // ----------------------------------------------------------------
-    for (int i = 0; i < a_population.size(); i++) {
+    int size = a_population.size();
+    for (int i = 0; i < size; i++) {
       Chromosome x = (Chromosome) a_population.getChromosome(i);
       // This returns null if not mutated:
       Chromosome xm = operate(x, currentRate, generator);
@@ -93,14 +98,17 @@ public class SwappingMutationOperator
    * @param a_x chromosome to operate
    * @param a_rate mutation rate
    * @return mutated chromosome of null if no mutation has occured.
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   protected Chromosome operate(Chromosome a_x, int a_rate,
                                RandomGenerator generator) {
     Chromosome chromosome = null;
     // ----------------------------------------
     for (int j = m_startOffset; j < a_x.size(); j++) {
-      // Ensure probability of 1/currentRate for applying mutation
-      // ---------------------------------------------------------
+      // Ensure probability of 1/currentRate for applying mutation.
+      // ----------------------------------------------------------
       if (generator.nextInt(a_rate) == 0) {
         if (chromosome == null)
           chromosome = (Chromosome) a_x.clone();
@@ -119,11 +127,14 @@ public class SwappingMutationOperator
    * Operate on the given array of genes. This method is only called
    * when it is already clear that the mutation must occur under the given
    * mutation rate.
-   * @param a_generator A random number generator that may be needed to
+   * @param a_generator a random number generator that may be needed to
    * perform a mutation.
-   * @param a_target_gene An index of gene in the chromosome that will mutate.
-   * @param a_genes The array of all genes in the chromosome.
-   * @return The mutated gene array.
+   * @param a_target_gene an index of gene in the chromosome that will mutate.
+   * @param a_genes the array of all genes in the chromosome.
+   * @return the mutated gene array.
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   protected Gene[] operate(RandomGenerator a_generator,
                            int a_target_gene, Gene[] a_genes) {
@@ -143,6 +154,9 @@ public class SwappingMutationOperator
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public void setStartOffset(int a_offset) {
     m_startOffset = a_offset;
@@ -154,6 +168,9 @@ public class SwappingMutationOperator
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
    * @return the start offset
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public int getStartOffset() {
     return m_startOffset;
