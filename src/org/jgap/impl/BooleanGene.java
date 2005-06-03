@@ -30,7 +30,7 @@ public class BooleanGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -135,12 +135,22 @@ public class BooleanGene
    *
    * @return A string representation of this Gene's current state.
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method.
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
    */
   public String getPersistentRepresentation()
       throws
       UnsupportedOperationException {
-    return toString();
+    String s;
+    if (getInternalValue() == null) {
+      s = "null";
+    }
+    else {
+      s = getInternalValue().toString();
+    }
+    return s;
   }
 
   /**
@@ -152,13 +162,12 @@ public class BooleanGene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
+   * prior call to the getPersistentRepresentation() method.
    *
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method.
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -211,11 +220,9 @@ public class BooleanGene
    * overall mutation rate when this Gene implementation is in use.
    *
    * @param a_numberGenerator The random number generator that should be
-   *                          used to create any random values. It's important
-   *                          to use this generator to maintain the user's
-   *                          flexibility to configure the genetic engine
-   *                          to use the random number generator of their
-   *                          choice.
+   * used to create any random values. It's important to use this generator to
+   * maintain the user's flexibility to configure the genetic engine to use the
+   * random number generator of their choice.
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
     if (a_numberGenerator.nextBoolean() == true) {
@@ -233,10 +240,10 @@ public class BooleanGene
    *
    * @param  other the BooleanGene to be compared.
    * @return  a negative integer, zero, or a positive integer as this object
-   *		is less than, equal to, or greater than the specified object.
+   * is less than, equal to, or greater than the specified object.
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this BooleanGene.
+   * from being compared to this BooleanGene.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -292,7 +299,7 @@ public class BooleanGene
    * element at given index
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1).
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -337,4 +344,24 @@ public class BooleanGene
        return super.hashCode();
      }
    }
+
+   /**
+    * @return string representation of this Gene's value that may be useful for
+    * display purposes.
+    *
+    * @author Klaus Meffert
+    * @since 2.4
+    */
+   public String toString() {
+     String s = "BooleanGene"
+         +"=";
+     if (getInternalValue() == null) {
+       s += "null";
+     }
+     else {
+       s+= getInternalValue().toString();
+     }
+     return s;
+   }
+
 }
