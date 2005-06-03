@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -73,13 +73,13 @@ public class BooleanGeneTest
   public void testToString_0() {
     Gene gene = new BooleanGene();
     gene.setAllele(new Boolean(true));
-    assertEquals("true", gene.toString());
+    assertEquals("BooleanGene=true", gene.toString());
   }
 
   public void testToString_1() {
     Gene gene = new BooleanGene();
     gene.setAllele(new Boolean(false));
-    assertEquals("false", gene.toString());
+    assertEquals("BooleanGene=false", gene.toString());
   }
 
   public void testGetAllele_0() {
