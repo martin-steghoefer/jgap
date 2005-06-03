@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -103,6 +103,14 @@ public class Chromosome
    * @since 2.2
    */
   private boolean m_compareAppData;
+
+  /**
+   * Constants for toString()
+   */
+  public final static String S_FITNESS_VALUE = "Fitness value";
+  public final static String S_ALLELES = "Alleles";
+  public final static String S_APPLICATION_DATA = "Application data";
+
 
   /**
    * Constructs a Chromosome of the given size separate from any specific
@@ -283,7 +291,7 @@ public class Chromosome
       return ret;
     }
     catch (CloneNotSupportedException cex) {
-      // rethrow as RuntimeException to be backward compatible and have
+      // rethrow as IllegalStateException to be backward compatible and have
       // a more convenient handling
       throw new IllegalStateException(cex.getMessage());
     }
@@ -380,10 +388,8 @@ public class Chromosome
   }
 
   /**
-   * Returns a string representation of this Chromosome, useful
-   * for some display purposes.
-   *
-   * @return A string representation of this Chromosome.
+   * @return a string representation of this Chromosome, useful
+   * for display purposes.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -391,17 +397,32 @@ public class Chromosome
    */
   public String toString() {
     StringBuffer representation = new StringBuffer();
-    representation.append("[ ");
+    representation.append(S_FITNESS_VALUE+":"+getFitnessValue());
+    representation.append(", "+S_ALLELES+":");
+    representation.append("[");
     // Append the representations of each of the gene Alleles.
     // -------------------------------------------------------
     for (int i = 0; i < m_genes.length - 1; i++) {
-      representation.append(m_genes[i].toString());
-      representation.append(", ");
+      if (i > 0) {
+        representation.append(", ");
+      }
+      if (m_genes[i] == null) {
+        representation.append("null");
+      }
+      else {
+        representation.append(m_genes[i].toString());
+      }
     }
-    representation.append(m_genes[m_genes.length - 1].toString());
-    representation.append(" ]");
+    representation.append("]");
+    String appData;
+    if (getApplicationData() != null) {
+      appData = getApplicationData().toString();
+    }
+    else {
+      appData = "null";
+    }
+    representation.append(", " + S_APPLICATION_DATA + ":" + appData);
     return representation.toString();
-    /**@todo what about the IApplicationData object?*/
   }
 
   /**
