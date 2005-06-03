@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -404,7 +404,7 @@ public class Chromosome
     representation.append("[");
     // Append the representations of each of the gene Alleles.
     // -------------------------------------------------------
-    for (int i = 0; i < m_genes.length - 1; i++) {
+    for (int i = 0; i < m_genes.length; i++) {
       if (i > 0) {
         representation.append(", ");
       }
