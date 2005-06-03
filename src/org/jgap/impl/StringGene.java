@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   private int m_minLength;
 
@@ -66,7 +66,7 @@ public class StringGene
    * @since 1.1
    */
   public StringGene() {
-    this(0,0);
+    this(0, 0);
   }
 
   /**
@@ -78,7 +78,7 @@ public class StringGene
    * @since 1.1
    */
   public StringGene(int a_minLength, int a_maxLength) {
-    this(a_minLength, a_maxLength,  null);
+    this(a_minLength, a_maxLength, null);
   }
 
   /**
@@ -184,27 +184,24 @@ public class StringGene
       if (tokenizer.countTokens() != 4) {
         throw new UnsupportedRepresentationException(
             "The format of the given persistent representation '" +
-            a_representation+"'"+
+            a_representation + "'" +
             "is not recognized: it does not contain four tokens.");
       }
-
       String valueRepresentation;
       String alphabetRepresentation;
       String minLengthRepresentation;
       String maxLengthRepresentation;
-
       try {
         valueRepresentation =
-          URLDecoder.decode (tokenizer.nextToken (), "UTF-8");
+            URLDecoder.decode(tokenizer.nextToken(), "UTF-8");
         minLengthRepresentation = tokenizer.nextToken();
         maxLengthRepresentation = tokenizer.nextToken();
         alphabetRepresentation =
-          URLDecoder.decode (tokenizer.nextToken (), "UTF-8");
-       }
-         catch (UnsupportedEncodingException ex) {
-          throw new Error ("UTF-8 encoding should be always supported");
-       }
-
+            URLDecoder.decode(tokenizer.nextToken(), "UTF-8");
+      }
+      catch (UnsupportedEncodingException ex) {
+        throw new Error("UTF-8 encoding should be always supported");
+      }
       // Now parse and set the minimum length.
       // -------------------------------------
       try {
@@ -287,17 +284,29 @@ public class StringGene
   public String getPersistentRepresentation()
       throws UnsupportedOperationException {
     try {
-        // The persistent representation includes the value, minimum length,
-        // maximum length and valid alphabet. Each is separated by a colon.
-        // ----------------------------------------------------------------
-        return URLEncoder.encode("" + toString(), "UTF-8") +
-            PERSISTENT_FIELD_DELIMITER + m_minLength +
-            PERSISTENT_FIELD_DELIMITER + m_maxLength +
-            PERSISTENT_FIELD_DELIMITER +
-            URLEncoder.encode("" + m_alphabet, "UTF-8");
+      // The persistent representation includes the value, minimum length,
+      // maximum length and valid alphabet. Each is separated by a colon.
+      // ----------------------------------------------------------------
+      String s;
+      if (m_value == null) {
+        s = "null";
+      }
+      else {
+        if (m_value.equals("")) {
+          s = "\"\"";
+        }
+        else {
+          s = m_value.toString();
+        }
+      }
+      return URLEncoder.encode("" + s, "UTF-8") +
+          PERSISTENT_FIELD_DELIMITER + m_minLength +
+          PERSISTENT_FIELD_DELIMITER + m_maxLength +
+          PERSISTENT_FIELD_DELIMITER +
+          URLEncoder.encode("" + m_alphabet, "UTF-8");
     }
     catch (UnsupportedEncodingException ex) {
-        throw new Error ("UTF-8 encoding should be supported");
+      throw new Error("UTF-8 encoding should be supported");
     }
   }
 
@@ -585,7 +594,7 @@ public class StringGene
     // Set mutated character by concatenating the String with it.
     // ----------------------------------------------------------
     if (s == null) {
-      s = ""+newValue;
+      s = "" + newValue;
     }
     else {
       s = s.substring(0, index) + newValue + s.substring(index + 1);
@@ -596,5 +605,4 @@ public class StringGene
   protected Object getInternalValue() {
     return m_value;
   }
-
 }
