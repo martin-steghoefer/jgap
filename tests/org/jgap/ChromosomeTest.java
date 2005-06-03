@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -82,7 +82,8 @@ public class ChromosomeTest
    * @author Klaus Meffert
    */
   public void testConstruct_3() {
-    new Chromosome(new IntegerGene(), 1);
+    Chromosome chrom = new Chromosome(new IntegerGene(), 1);
+    assertEquals(1, chrom.size());
   }
 
   /**
@@ -186,8 +187,8 @@ public class ChromosomeTest
    */
   public void testConstruct_73() {
     Chromosome chrom = new Chromosome(5);
-    assertEquals(5,chrom.getGenes().length);
-    for (int i=0;i<5;i++) {
+    assertEquals(5, chrom.getGenes().length);
+    for (int i = 0; i < 5; i++) {
       assertEquals(null, chrom.getGene(i));
     }
   }
@@ -212,7 +213,6 @@ public class ChromosomeTest
   }
 
   /**
-   * Illegal constructions regarding configuration
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -224,29 +224,34 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-    // fitness function missing in config.,
-    new Chromosome(genes);
+    Chromosome chrom = new Chromosome(genes);
+    assertEquals(2, chrom.size());
+    assertEquals(genes[0], chrom.getGene(0));
+    assertEquals(genes[1], chrom.getGene(1));
   }
 
   /**
-   * Illegal constructions regarding configuration
    * @throws Exception
    *
    * @author Klaus Meffert
    */
   public void testConstruct_11()
       throws Exception {
-    Gene[] genes = new IntegerGene[2];
-    genes[0] = new IntegerGene();
-    genes[1] = new IntegerGene();
+    Gene[] genes = new BooleanGene[3];
+    genes[0] = new BooleanGene();
+    genes[1] = new BooleanGene();
+    genes[2] = new BooleanGene();
+    genes[2].setAllele(new Boolean(true));
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
     Genotype.setConfiguration(conf);
-    new Chromosome(genes);
+    Chromosome chrom = new Chromosome(genes);
+    assertEquals(3, chrom.size());
+    assertEquals(genes[0], chrom.getGene(0));
+    assertEquals(genes[1], chrom.getGene(1));
   }
 
   /**
-   * Illegal constructions regarding configuration
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1023,7 +1028,6 @@ public class ChromosomeTest
   }
 
   /**
-   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1037,6 +1041,50 @@ public class ChromosomeTest
     chrom.setCompareApplicationData(true);
     assertTrue(chrom.isCompareApplicationData());
   }
+
+  /**
+   * No genes.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testToString_0() throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(3);
+    assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
+                 + ", "+Chromosome.S_FITNESS_VALUE + ":" + chrom.getFitnessValue()
+                 + ", " + Chromosome.S_ALLELES + ":[null, null, null]"
+                 + ", " + Chromosome.S_APPLICATION_DATA + ":null",
+                 chrom.toString());
+  }
+
+  /**
+   * Two genes.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testToString_1() throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    Genotype.setConfiguration(conf);
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene(0,77);
+    genes[0].setAllele(new Integer(47));
+    genes[1] = new IntegerGene(2, 333);
+    genes[1].setAllele(new Integer(55));
+    Chromosome chrom = new Chromosome(2);
+    chrom.setGenes(genes);
+    assertEquals(Chromosome.S_SIZE+":"+chrom.size()
+      +", "+Chromosome.S_FITNESS_VALUE + ":" + chrom.getFitnessValue()
+                 + ", " + Chromosome.S_ALLELES + ":[IntegerGene(0,77)=47,"
+                 +" IntegerGene(2,333)=55]"
+                 + ", " + Chromosome.S_APPLICATION_DATA + ":null",
+                 chrom.toString());
+  }
+
   class MyAppObject
       extends TestFitnessFunction
       implements Cloneable {

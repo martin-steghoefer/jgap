@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for IntegerGene class
+ * Tests the IntegerGene class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -38,14 +38,13 @@ public class IntegerGeneTest
   public void testToString_0() {
     Gene gene = new IntegerGene(1, 100);
     gene.setAllele(new Integer(47));
-    assertEquals("47", gene.toString());
+    assertEquals("IntegerGene(1,100)=47", gene.toString());
   }
 
   public void testToString_1() {
-    Gene gene = new IntegerGene(1, 100);
-    gene.setAllele(new Integer(102));
-    int toString = Integer.parseInt(gene.toString());
-    assertTrue(toString >= 1 && toString <= 100);
+    Gene gene = new IntegerGene(-2, 100);
+    gene.setAllele(new Integer(99));
+    assertEquals("IntegerGene(-2,100)=99", gene.toString());
   }
 
   public void testGetAllele_0() {
