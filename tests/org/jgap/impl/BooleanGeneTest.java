@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -33,6 +33,41 @@ public class BooleanGeneTest
     //following should be possible without exception
     gene.setAllele(new Boolean(true));
     gene.setAllele(new Boolean(false));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_1() {
+    BooleanGene gene = new BooleanGene(true);
+    assertEquals(true, gene.booleanValue());
+    gene = new BooleanGene(false);
+    assertEquals(false, gene.booleanValue());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_2() {
+    BooleanGene gene = new BooleanGene(new Boolean(true));
+    assertEquals(true, gene.booleanValue());
+    gene = new BooleanGene(new Boolean(false));
+    assertEquals(false, gene.booleanValue());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_3() {
+    try {
+      BooleanGene gene = new BooleanGene(null);
+      fail();
+    }catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
   }
 
   public void testToString_0() {
