@@ -25,7 +25,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -121,7 +121,14 @@ public class IntegerGene
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
-    return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
+    String s;
+    if (getInternalValue() == null) {
+      s = "null";
+    }
+    else {
+      s = getInternalValue().toString();
+    }
+    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
         PERSISTENT_FIELD_DELIMITER + m_upperBounds;
   }
 
@@ -134,13 +141,12 @@ public class IntegerGene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
+   * prior call to the getPersistentRepresentation() method.
    *
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method.
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation.
    *
    * @author Neil Rostan
    * @since 1.0
@@ -330,4 +336,24 @@ public class IntegerGene
       return super.hashCode();
     }
   }
+
+  /**
+   * @return string representation of this Gene's value that may be useful for
+   * display purposes.
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public String toString() {
+    String s = "IntegerGene("+m_lowerBounds+","+m_upperBounds+")"
+        +"=";
+    if (getInternalValue() == null) {
+      s += "null";
+    }
+    else {
+      s+= getInternalValue().toString();
+    }
+    return s;
+  }
+
 }
