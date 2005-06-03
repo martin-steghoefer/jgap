@@ -4,6 +4,8 @@
   All test cases are now derived from this new class hosting
   commong logic
 * Fixed a performance issue in SwappingMutationOperator
+* Fixed bug in Chromosome.toString()
+* Extended Chromosome.toString()
 * Added constraint check in constructor Chromosome(int a_size)
 * Added many new test cases
 * Added javadocs
