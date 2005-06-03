@@ -30,7 +30,7 @@ public class BooleanGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -50,6 +50,44 @@ public class BooleanGene
    * References the internal boolean value of this Gene.
    */
   protected Boolean m_value = null;
+
+  /**
+   * Constructor
+   *
+   * @author Klaus Meffert
+   * @since 2.4 (previously: implicitely existent)
+   */
+  public BooleanGene() {
+
+  }
+
+  /**
+   * @param a_value allele value to setup the gene with
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public BooleanGene(boolean a_value) {
+    m_value = new Boolean(a_value);
+  }
+
+  /**
+   * @param a_value allele value to setup the gene with
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public BooleanGene(Boolean a_value) {
+    if (a_value == null) {
+      throw new IllegalArgumentException("Allele value may not be null. Use"
+                                         +" no argument constructor if you"
+                                         +" need to set allele to null"
+                                         +" initially.");
+    }
+    else {
+      m_value = a_value;
+    }
+  }
 
   /**
    * Provides an implementation-independent means for creating new Gene
