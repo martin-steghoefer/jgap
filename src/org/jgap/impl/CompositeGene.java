@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * This field separates gene class name from
@@ -502,10 +502,10 @@ public class CompositeGene
    */
   public String toString() {
     if (genes.isEmpty()) {
-      return "null";
+      return "CompositeGene=null";
     }
     else {
-      String result = "";
+      String result = "CompositeGene=(";
       Gene gene;
       for (int i = 0; i < genes.size(); i++) {
         gene = (Gene) genes.get(i);
@@ -514,8 +514,7 @@ public class CompositeGene
           result += GENE_DELIMITER;
         }
       }
-      // (..) helps to see the nested composite genes
-      return "(" + result + ")";
+      return result + ")";
     }
   }
 
