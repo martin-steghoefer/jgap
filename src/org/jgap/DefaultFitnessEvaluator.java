@@ -11,7 +11,7 @@ package org.jgap;
 
 /**
  * A default implementation of a fitness evaluator. This implementation is
- * straight forward
+ * straight forward: a higher fitness value is seen as fitter
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -20,7 +20,7 @@ public class DefaultFitnessEvaluator
     implements FitnessEvaluator {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    private final static String CVS_REVISION = "$Revision: 1.6 $";
+    private final static String CVS_REVISION = "$Revision: 1.7 $";
 
     /**
      * Compares the first given fitness value with the second and returns true
@@ -29,7 +29,7 @@ public class DefaultFitnessEvaluator
      * @param a_fitness_value2 second fitness value
      * @return true: first fitness value greater than second
      *
-     * @since 1.1
+     * @author Klaus Meffert
      * @since 2.0 (until 1.1: input types int)
      */
     public boolean isFitter(double a_fitness_value1, double a_fitness_value2) {
