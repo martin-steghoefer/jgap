@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -173,7 +173,7 @@ public class ChromosomeTest
    */
   public void testConstruct_72() {
     try {
-      new Chromosome(-5);
+      new Chromosome( -5);
       fail();
     }
     catch (IllegalArgumentException illex) {
@@ -192,7 +192,6 @@ public class ChromosomeTest
       assertEquals(null, chrom.getGene(i));
     }
   }
-
 
   /**
    * Illegal constructions regarding first parameter
@@ -270,7 +269,6 @@ public class ChromosomeTest
   }
 
   /**
-   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -286,6 +284,30 @@ public class ChromosomeTest
       sample = (Gene) genes[i];
       assertEquals(gene, sample);
     }
+  }
+
+  /**
+   * Test the default constructor (initializes nothing, therefor check for
+   * NullPointerException)
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testConstruct_15()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new RandomFitnessFunction());
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome();
+    assertEquals(0, chrom.size());
+    Chromosome chrom2 = (Chromosome) chrom.clone();
+    assertEquals(chrom, chrom2);
+    conf.getChromosomePool().releaseChromosome(chrom);
+    chrom2 = (Chromosome) chrom.clone();
+    chrom.cleanup();
+    conf.setChromosomePool(null);
+    chrom.cleanup();
   }
 
   /**
@@ -337,7 +359,6 @@ public class ChromosomeTest
     thc.setVerbose(true);
     List uniqueChromosome = new ArrayList();
     List equalChromosome = new ArrayList();
-
     // Build Random Chromosomes
     for (count = 0; count < MAX_CHROMOSOME_TO_TEST; count++) {
       numGenes = (int) (Math.random() * MAX_GENES_TO_TEST);
@@ -372,7 +393,6 @@ public class ChromosomeTest
         uniqueChromosome.add(chrom);
       }
     }
-
     //Test to see if enough hashcodes are unique
     thc.setFractionUnique(.95);
     if (!thc.testHashCodeUniqueness(uniqueChromosome)) {
@@ -381,7 +401,6 @@ public class ChromosomeTest
           thc.getActualFractionUnique());
       fail();
     }
-
     //Test mathematical average and dispersion of hashcode
     //I am not sure of the value of this test since boundry values are
     // pretty much arbitrary
@@ -392,7 +411,6 @@ public class ChromosomeTest
     if (!thc.testDispersion(uniqueChromosome)) {
       fail();
     }
-
     // Build identical Chromosomes
     for (count = 0; count < 3; count++) {
       genes = new Gene[1];
@@ -404,7 +422,6 @@ public class ChromosomeTest
     if (!thc.testHashCodeEquality(equalChromosome)) {
       fail();
     }
-
     // A lot of temporary objects where created in this test so do a quick
     // garbage collect.
     System.gc();
@@ -1049,12 +1066,14 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testToString_0() throws Exception {
+  public void testToString_0()
+      throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(3);
     assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
-                 + ", "+Chromosome.S_FITNESS_VALUE + ":" + chrom.getFitnessValue()
+                 + ", " + Chromosome.S_FITNESS_VALUE + ":" +
+                 chrom.getFitnessValue()
                  + ", " + Chromosome.S_ALLELES + ":[null, null, null]"
                  + ", " + Chromosome.S_APPLICATION_DATA + ":null",
                  chrom.toString());
@@ -1067,20 +1086,22 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testToString_1() throws Exception {
+  public void testToString_1()
+      throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
     Gene[] genes = new IntegerGene[2];
-    genes[0] = new IntegerGene(0,77);
+    genes[0] = new IntegerGene(0, 77);
     genes[0].setAllele(new Integer(47));
     genes[1] = new IntegerGene(2, 333);
     genes[1].setAllele(new Integer(55));
     Chromosome chrom = new Chromosome(2);
     chrom.setGenes(genes);
-    assertEquals(Chromosome.S_SIZE+":"+chrom.size()
-      +", "+Chromosome.S_FITNESS_VALUE + ":" + chrom.getFitnessValue()
+    assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
+                 + ", " + Chromosome.S_FITNESS_VALUE + ":" +
+                 chrom.getFitnessValue()
                  + ", " + Chromosome.S_ALLELES + ":[IntegerGene(0,77)=47,"
-                 +" IntegerGene(2,333)=55]"
+                 + " IntegerGene(2,333)=55]"
                  + ", " + Chromosome.S_APPLICATION_DATA + ":null",
                  chrom.toString());
   }
@@ -1097,8 +1118,6 @@ public class ChromosomeTest
       return null;
     }
   }
-
-
   class MyAppObject2
       extends TestFitnessFunction
       implements IApplicationData {
@@ -1116,5 +1135,3 @@ public class ChromosomeTest
     }
   }
 }
-
-
