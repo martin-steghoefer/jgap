@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -108,8 +108,11 @@ public class Chromosome
    * Constants for toString()
    */
   public final static String S_FITNESS_VALUE = "Fitness value";
+
   public final static String S_ALLELES = "Alleles";
+
   public final static String S_APPLICATION_DATA = "Application data";
+
   public final static String S_SIZE = "Size";
 
   /**
@@ -311,8 +314,8 @@ public class Chromosome
    * first gene is at index zero and the last gene is at the index equal to
    * the size of this Chromosome - 1.
    *
-   * @param a_desiredLocus The index of the gene value to be returned.
-   * @return The Gene at the given index.
+   * @param a_desiredLocus The index of the gene value to be returned
+   * @return The Gene at the given index
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -326,7 +329,7 @@ public class Chromosome
    * exists primarily for the benefit of GeneticOperators that require the
    * ability to manipulate Chromosomes at a low level.
    *
-   * @return an array of the Genes contained within this Chromosome.
+   * @return an array of the Genes contained within this Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -363,15 +366,15 @@ public class Chromosome
    * returned.
    *
    * @return a positive double value representing the fitness of this
-   *         Chromosome, or -1 if a bulk fitness function is in use and has
-   *         not yet assigned a fitness value to this Chromosome.
+   * Chromosome, or -1 if a bulk fitness function is in use and has not yet
+   * assigned a fitness value to this Chromosome
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
   public double getFitnessValue() {
-    if (m_fitnessValue >=0.000d) {
+    if (m_fitnessValue >= 0.000d) {
       return m_fitnessValue;
     }
     if (Genotype.getConfiguration() != null) {
@@ -393,7 +396,7 @@ public class Chromosome
    * else (except test cases).
    *
    * @param a_newFitnessValue a positive integer representing the fitness
-   *                          of this Chromosome.
+   * of this Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -414,9 +417,9 @@ public class Chromosome
    */
   public String toString() {
     StringBuffer representation = new StringBuffer();
-    representation.append(S_SIZE+":"+size());
-    representation.append(", "+S_FITNESS_VALUE+":"+getFitnessValue());
-    representation.append(", "+S_ALLELES+":");
+    representation.append(S_SIZE + ":" + size());
+    representation.append(", " + S_FITNESS_VALUE + ":" + getFitnessValue());
+    representation.append(", " + S_ALLELES + ":");
     representation.append("[");
     // Append the representations of each of the gene Alleles.
     // -------------------------------------------------------
@@ -453,9 +456,9 @@ public class Chromosome
    *
    * @return randomly initialized Chromosome
    * @throws InvalidConfigurationException if the given Configuration
-   *         instance is invalid.
+   * instance is invalid
    * @throws IllegalArgumentException if the given Configuration instance
-   *         is null.
+   * is null
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -521,8 +524,9 @@ public class Chromosome
    * true if and the argument is an instance of the Chromosome class
    * and has a set of genes equal to this one.
    *
-   * @param other The object to compare against.
-   * @return true if the objects are the same, false otherwise.
+   * @param other The object to compare against
+   * @return true if the objects are the same, false otherwise
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
@@ -551,7 +555,7 @@ public class Chromosome
    * Retrieve a hash code for this Chromosome. Does not considers the order
    * of the Genes for all cases (especially when gene is empty).
    *
-   * @return the hash code of this Chromosome.
+   * @return the hash code of this Chromosome
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -577,8 +581,9 @@ public class Chromosome
    *
    * @param other The Chromosome against which to compare this chromosome.
    * @return a negative number if this chromosome is "less than" the given
-   *         chromosome, zero if they are equal to each other, and a positive
-   *         number if this chromosome is "greater than" the given chromosome.
+   * chromosome, zero if they are equal to each other, and a positive number if
+   * this chromosome is "greater than" the given chromosome
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
@@ -646,7 +651,7 @@ public class Chromosome
    * to continue to the next generation or manually (e.g. via an add-method).
    *
    * @param a_isSelected true if this Chromosome has been selected, false
-   *                     otherwise.
+   * otherwise
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -659,7 +664,7 @@ public class Chromosome
    * Retrieves whether this Chromosome has been selected by the natural
    * selector to continue to the next generation.
    *
-   * @return true if this Chromosome has been selected, false otherwise.
+   * @return true if this Chromosome has been selected, false otherwise
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -719,7 +724,7 @@ public class Chromosome
    * in the fitness function. JGAP ignores this data.
    *
    * @param a_newData The new application-specific data to attach to this
-   *                  Chromosome.
+   * Chromosome
    *
    * @author Neil Rotstan
    * @since 1.1
@@ -732,10 +737,10 @@ public class Chromosome
    * Retrieves the application-specific data that is attached to this
    * Chromosome. Attaching application-specific data may be useful for
    * some applications when it comes time to evaluate this Chromosome
-   * in the fitness function. JGAP ignores this data.
+   * in the fitness function. JGAP ignores this data functionally
    *
    * @return The application-specific data previously attached to this
-   *         Chromosome, or null if there is no attached data.
+   * Chromosome, or null if there is no data attached
    *
    * @author Neil Rotstan
    * @since 1.1
