@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for ChromosomePool class
+ * Tests the ChromosomePool class
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class ChromosomePoolTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomePoolTest.class);
@@ -30,12 +30,15 @@ public class ChromosomePoolTest
 
   /**
    * Test if construction possible without failure
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testConstruct_0() {
-    new ChromosomePool();
+  public void testConstruct_0() throws Exception {
+    ChromosomePool pool = new ChromosomePool();
+    Pool p = (Pool)privateAccessor.getField(pool, "m_chromosomePool");
+    assertNotNull(p);
   }
 
   /**
