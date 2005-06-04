@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -420,8 +420,9 @@ public class GreedyCrossoverTest
     try {
       op.operate(pop, chroms);
       fail();
-    }catch (Error e) {
-      ;//this is OK
+    }
+    catch (Error e) {
+      ; //this is OK
     }
   }
 
