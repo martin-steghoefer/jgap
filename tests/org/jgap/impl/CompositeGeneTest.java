@@ -10,11 +10,13 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
- * Tests for CompositeGene class
+ * Tests the CompositeGene class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +24,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -155,11 +157,11 @@ public class CompositeGeneTest
     Gene newGene1 = new DoubleGene();
     newGene1.setAllele(new Double(47.123d));
     gene.addGene(newGene1, false);
-    assertEquals("(" + newGene1.toString() + ")", gene.toString());
+    assertEquals("CompositeGene=(" + newGene1.toString() + ")", gene.toString());
     Gene newGene2 = new IntegerGene();
     newGene2.setAllele(new Integer(23456));
     gene.addGene(newGene2, false);
-    assertEquals("(" + newGene1.toString() + gene.GENE_DELIMITER +
+    assertEquals("CompositeGene=(" + newGene1.toString() + gene.GENE_DELIMITER +
                  newGene2.toString() + ")", gene.toString());
   }
 
@@ -169,7 +171,7 @@ public class CompositeGeneTest
    */
   public void testToString_1() {
     CompositeGene gene = new CompositeGene();
-    assertEquals("null", gene.toString());
+    assertEquals("CompositeGene=null", gene.toString());
   }
 
   public void testGetAllele_0() {
