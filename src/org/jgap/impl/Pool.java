@@ -32,7 +32,7 @@ import java.util.*;
 public class Pool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The List of Objects currently in the pool.
@@ -41,6 +41,9 @@ public class Pool {
 
   /**
    * Constructor.
+   *
+   * @author Neil Rotstan
+   * @since 1.0
    */
   public Pool() {
     m_pooledObjects = new ArrayList();
@@ -52,8 +55,8 @@ public class Pool {
    * objects, so it's up to the caller to reset the state of the
    * returned Object if that's desirable.
    *
-   * @return An Object instance from the pool or null if no
-   *         Object instances are available in the pool.
+   * @return an Object instance from the pool or null if no Object instances
+   * are available in the pool.
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -76,8 +79,7 @@ public class Pool {
    * Releases an Object to the pool. It's not required that the Object
    * originated from the pool--any Object can be released to it.
    *
-   * @param a_objectToPool The Object instance to be released into
-   *                       the pool.
+   * @param a_objectToPool the Object instance to be released into the pool
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -91,8 +93,7 @@ public class Pool {
    * the objects in the Collection originated from the pool--any objects
    * can be released to it.
    *
-   * @param a_objectsToPool The Collection of objects to release into
-   *                        the pool.
+   * @param a_objectsToPool the Collection of objects to release into the pool
    *
    * @author Neil Rotstan
    * @since 1.0
