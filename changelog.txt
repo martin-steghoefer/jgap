@@ -6,6 +6,8 @@
 * Fixed a performance issue in SwappingMutationOperator
 * Fixed bug in Chromosome.toString()
 * Extended Chromosome.toString()
+* Added default constructor in Chromosome as well as tests for
+  that (see request 1214408)
 * Added constructor in BooleanGene allowing to preset the
   allele value
 * Added constraint check in constructor Chromosome(int a_size)
