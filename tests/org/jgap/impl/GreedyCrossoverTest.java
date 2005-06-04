@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Test class for GreedyCrossover class
+ * Teste the GreedyCrossover class
  *
  * @author Klaus Meffert
  * @since 2.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -335,6 +335,66 @@ public class GreedyCrossoverTest
     conf.setPopulationSize(6);
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
+    Gene cgene1_2 = new IntegerGene(1, 150);
+    cgene1.setAllele(new Integer(99));
+    Gene[] genes1 = new Gene[] {
+        cgene1, cgene1_2};
+    Chromosome chrom1 = new Chromosome(genes1);
+    Gene cgene2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(9));
+    Gene cgene2_2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(1));
+    Gene[] genes2 = new Gene[] {
+        cgene2, cgene2_2};
+    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome[] population = new Chromosome[] {
+        chrom1, chrom2};
+    List chroms = new Vector();
+    Gene gene1 = new IntegerGene(1, 10);
+    gene1.setAllele(new Integer(5));
+    chroms.add(gene1);
+    Gene gene2 = new IntegerGene(1, 10);
+    gene2.setAllele(new Integer(7));
+    chroms.add(gene2);
+    Gene gene3 = new IntegerGene(1, 10);
+    gene3.setAllele(new Integer(4));
+    chroms.add(gene3);
+    assertEquals(3, chroms.size());
+    Population pop = new Population(population);
+    op.operate(pop, chroms);
+    assertEquals(2, pop.size());
+    assertEquals(3 + 2, chroms.size());
+    op.operate(pop, chroms);
+    assertEquals(2, pop.size());
+    assertEquals(3 + 2 + 2, chroms.size());
+  }
+
+  /**
+   * Tests if error thrown because of wrong length of gene
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testOperate_6()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    GreedyCrossover op = new GreedyCrossover();
+    op.ASSERTIONS = true;
+    conf.addGeneticOperator(op);
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    rand.setNextDouble(0.45d);
+    rand.setNextInt(0);
+    op.setStartOffset(0);
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(1, 10);
+    Chromosome chrom = new Chromosome(sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    Gene cgene1 = new IntegerGene(1, 10);
+    cgene1.setAllele(new Integer(6));
     Gene[] genes1 = new Gene[] {
         cgene1};
     Chromosome chrom1 = new Chromosome(genes1);
@@ -357,12 +417,12 @@ public class GreedyCrossoverTest
     chroms.add(gene3);
     assertEquals(3, chroms.size());
     Population pop = new Population(population);
-    op.operate(pop, chroms);
-    assertEquals(2, pop.size());
-    assertEquals(3 + 2, chroms.size());
-    op.operate(pop, chroms);
-    assertEquals(2, pop.size());
-    assertEquals(3 + 2 + 2, chroms.size());
+    try {
+      op.operate(pop, chroms);
+      fail();
+    }catch (Error e) {
+      ;//this is OK
+    }
   }
 
   /**
