@@ -20,9 +20,10 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 2.0
  */
-public class Population implements Serializable {
+public class Population
+    implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -30,35 +31,36 @@ public class Population implements Serializable {
   private List m_chromosomes;
 
   /**
-   * The fittest Chromosome of the population
+   * The fittest Chromosome of the population.
    */
   private Chromosome m_fittestChromosome;
 
   /**
-   * Indicated whether at least one of the chromosomes has been changed (deleted,
-   * added, modified)
+   * Indicates whether at least one of the chromosomes has been changed
+   * (deleted, added, modified).
    */
   private boolean m_changed;
 
   /*
-   * Constructs the Population from a list of Chromosomes
-   * @param chromosomes the Chromosome's to be used for building the Population
+   * Constructs the Population from a list of Chromosomes.
+   * @param a_chromosomes the Chromosome's to be used for building the
+   * Population
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(Chromosome[] chromosomes) {
-    this(chromosomes.length);
-    for (int i = 0; i < chromosomes.length; i++) {
-      m_chromosomes.add(chromosomes[i]);
+  public Population(Chromosome[] a_chromosomes) {
+    this(a_chromosomes.length);
+    for (int i = 0; i < a_chromosomes.length; i++) {
+      m_chromosomes.add(a_chromosomes[i]);
     }
     setChanged(true);
   }
 
   /*
-   * Constructs an empty Population with the given initial size
-   * @param size the initial size of the empty Population. The initial size
-   * is not fix, it is just for optimized list creation.
+   * Constructs an empty Population with the given initial size.
+   * @param a_size the initial size of the empty Population. The initial size
+   * is not fix, it is just for optimized list creation
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -68,7 +70,8 @@ public class Population implements Serializable {
   }
 
   /*
-   * Constructs an empty Population with initial size 100
+   * Constructs an empty Population with initial size 100.
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -77,8 +80,7 @@ public class Population implements Serializable {
   }
 
   /**
-   * Adds a Chromosome to this Population. Does nothing
-   * when given null.
+   * Adds a Chromosome to this Population. Does nothing when given null.
    *
    * @param toAdd the Chromosome to add
    *
@@ -114,7 +116,7 @@ public class Population implements Serializable {
   }
 
   /**
-   * Sets in the given Chromosome on the given index in the list of chromosomes
+   * Sets in the given Chromosome on the given index in the list of chromosomes.
    * @param index the index to set the Chromosome in
    * @param a_chromosome the Chromosome to be set in
    *
@@ -137,15 +139,15 @@ public class Population implements Serializable {
   }
 
   /**
-   * Returns a Chromosome at given index in the Population
-   * @param index the index of the Chromosome to be returned
+   * Returns a Chromosome at given index in the Population.
+   * @param a_index the index of the Chromosome to be returned
    * @return Chromosome at given index in the Population
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Chromosome getChromosome(int index) {
-    return (Chromosome) m_chromosomes.get(index);
+  public Chromosome getChromosome(int a_index) {
+    return (Chromosome) m_chromosomes.get(a_index);
   }
 
   /**
@@ -196,7 +198,8 @@ public class Population implements Serializable {
     }
     Iterator it = m_chromosomes.iterator();
     double bestFitness = -1.0d;
-    FitnessEvaluator evaluator = Genotype.getConfiguration().getFitnessEvaluator();
+    FitnessEvaluator evaluator = Genotype.getConfiguration().
+        getFitnessEvaluator();
     double fitness;
     while (it.hasNext()) {
       Chromosome chrom = (Chromosome) it.next();
@@ -249,13 +252,13 @@ public class Population implements Serializable {
     List chroms = getChromosomes();
     int len = chroms.size();
     for (int i = 0; i < len; i++) {
-      Chromosome chrom = (Chromosome)chroms.get(i);
+      Chromosome chrom = (Chromosome) chroms.get(i);
       Gene[] genes = chrom.getGenes();
       int len2 = genes.length;
       for (int j = 0; j < len2; j++) {
         Gene gene = genes[j];
         if (a_resolveCompositeGenes && gene instanceof CompositeGene) {
-          addCompositeGene(result, (CompositeGene)gene);
+          addCompositeGene(result, (CompositeGene) gene);
         }
         else {
           addAtomicGene(result, gene);
@@ -267,18 +270,19 @@ public class Population implements Serializable {
 
   /**
    * Adds all the genes of a CompositeGene to a result list.
-   * Method calls itself recursively
+   * Method calls itself recursively.
    *
    * @param a_result the list to add to
    * @param a_gene the gene to start with
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
   private void addCompositeGene(final List a_result, Gene a_gene) {
     if (a_gene instanceof CompositeGene) {
-      int len = ((CompositeGene)a_gene).size();
-      for (int i=0;i<len;i++) {
-        addCompositeGene(a_result, ((CompositeGene)a_gene).geneAt(i));
+      int len = ( (CompositeGene) a_gene).size();
+      for (int i = 0; i < len; i++) {
+        addCompositeGene(a_result, ( (CompositeGene) a_gene).geneAt(i));
       }
     }
     else {
