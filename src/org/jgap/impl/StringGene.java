@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   private int m_minLength;
 
@@ -62,6 +62,8 @@ public class StringGene
   private String m_value;
 
   /**
+   * Default constructor, sets minimum and maximum length to arbitrary.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -70,7 +72,8 @@ public class StringGene
   }
 
   /**
-   *
+   * Constructor, allows to specify minimum and maximum lengths of the string
+   * held by this gene
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
    *
@@ -108,14 +111,12 @@ public class StringGene
 
   /**
    * Sets the value (allele) of this Gene to a random String according to the
-   * valid alphabet and boundaries of length
+   * valid alphabet and boundaries of length.
    *
-   * @param a_numberGenerator The random number generator that should be
-   *                          used to create any random values. It's important
-   *                          to use this generator to maintain the user's
-   *                          flexibility to configure the genetic engine
-   *                          to use the random number generator of their
-   *                          choice.
+   * @param a_numberGenerator The random number generator that should be used
+   * to create any random values. It's important to use this generator to
+   * maintain the user's flexibility to configure the genetic engine to use the
+   * random number generator of their choice
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -160,14 +161,13 @@ public class StringGene
    * be available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
+   * @param a_representation the string representation retrieved from a prior
+   * call to the getPersistentRepresentation() method
    *
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -238,8 +238,8 @@ public class StringGene
           tempValue = valueRepresentation;
         }
       }
-      //check if minLength and maxLength are violated
-      //---------------------------------------------
+      //check if minLength and maxLength are violated.
+      //----------------------------------------------
       if (tempValue != null) {
         if (m_minLength > tempValue.length()) {
           throw new UnsupportedRepresentationException(
@@ -252,15 +252,15 @@ public class StringGene
               + " is longer than the allowed maximum length.");
         }
       }
-      //check if all characters are within the alphabet
-      //-----------------------------------------------
+      //check if all characters are within the alphabet.
+      //------------------------------------------------
       if (!isValidAlphabet(tempValue, alphabetRepresentation)) {
         throw new UnsupportedRepresentationException("The value given"
             + " contains invalid characters.");
       }
       m_value = tempValue;
-      // Now set the alphabet that should be valid
-      // -----------------------------------------
+      // Now set the alphabet that should be valid.
+      // ------------------------------------------
       m_alphabet = alphabetRepresentation;
     }
   }
@@ -274,9 +274,9 @@ public class StringGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return A string representation of this Gene's current state.
+   * @return A string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -286,7 +286,7 @@ public class StringGene
     try {
       // The persistent representation includes the value, minimum length,
       // maximum length and valid alphabet. Each is separated by a colon.
-      // ----------------------------------------------------------------
+      // -----------------------------------------------------------------
       String s;
       if (m_value == null) {
         s = "null";
@@ -316,7 +316,7 @@ public class StringGene
    * longer than the minimum or maximum length or any character is not within
    * the valid alphabet an exception is throwsn
    *
-   * @param a_newValue the new value of this Gene instance.
+   * @param a_newValue the new value of this Gene instance
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -385,8 +385,8 @@ public class StringGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
-   *         setup as this concrete Gene.
+   * @return A new Gene instance of the same type and with the same setup as
+   * this concrete Gene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -400,19 +400,18 @@ public class StringGene
    * be a StringGene) for order, which is determined by the String
    * value of this Gene compared to the one provided for comparison.
    *
-   * @param  other the StringGene to be compared to this StringGene.
+   * @param a_other the StringGene to be compared to this StringGene
    * @return a negative int, zero, or a positive int as this object
-   *	       is less than, equal to, or greater than the object provided for
-   *         comparison.
+   * is less than, equal to, or greater than the object provided for comparison
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this StringGene.
+   * from being compared to this StringGene.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public int compareTo(Object other) {
-    StringGene otherStringGene = (StringGene) other;
+  public int compareTo(Object a_other) {
+    StringGene otherStringGene = (StringGene) a_other;
     // First, if the other gene (or its value) is null, then this is
     // the greater allele. Otherwise, just use the String's compareTo
     // method to perform the comparison.
@@ -478,30 +477,32 @@ public class StringGene
    * Retrieves a string representation of this StringGene's value that
    * may be useful for display purposes.
    *
-   * @return a string representation of this StringGene's value.
+   * @return a string representation of this StringGene's value
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public String toString() {
+    String s ="StringGene=";
     if (m_value == null) {
-      return "null";
+      s+= "null";
     }
     else {
       if (m_value.equals("")) {
-        return "\"\"";
+        s+= "\"\"";
       }
       else {
-        return m_value.toString();
+        s+= m_value.toString();
       }
     }
+    return s;
   }
 
   /**
    * Retrieves the String value of this Gene, which may be more convenient in
    * some cases than the more general getAllele() method.
    *
-   * @return the String value of this Gene.
+   * @return the String value of this Gene
    *
    * @since 1.1
    */
@@ -546,7 +547,7 @@ public class StringGene
    * element at given index (NumberGenes only have one atomic element)
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1).
    *
    * @author Klaus Meffert
    * @since 1.1
