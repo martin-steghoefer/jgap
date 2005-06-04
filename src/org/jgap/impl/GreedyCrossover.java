@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   public boolean ASSERTIONS = true;
@@ -147,7 +147,7 @@ public class GreedyCrossover
 
   }
 
-  Gene[] operate(Gene[] g1, Gene[] g2) {
+  protected Gene[] operate(Gene[] g1, Gene[] g2) {
     int n = g1.length;
 
     LinkedList out = new LinkedList();
@@ -221,7 +221,8 @@ public class GreedyCrossover
     }
 
     if (ASSERTIONS && not_picked.size() != 1)
-      throw new Error("Unknown Error!");
+      throw new Error("Given Gene not correctly created (must have length > 1"
+                      +")");
 
     out.add(not_picked.last());
 
@@ -248,7 +249,7 @@ public class GreedyCrossover
 
   }
 
-  Gene findNext(Gene[] g, Gene x) {
+  protected Gene findNext(Gene[] g, Gene x) {
     for (int i = m_startOffset; i < g.length - 1; i++) {
       if (g[i].equals(x))
         return g[i + 1];
