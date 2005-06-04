@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -76,7 +76,7 @@ public class FixedBinaryGeneTest
       //assert that we have
       assertFalse(gene.getBit(i));
     }
-    assertEquals("[0,0,0,0,0]", gene.toString());
+    assertEquals("FixedBinaryGene[0,0,0,0,0]", gene.toString());
   }
 
   /**
@@ -86,7 +86,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene = new FixedBinaryGene(6);
     assertEquals(1, gene.size());
     assertEquals(1, (gene.getValue()).length);
-    assertEquals("[0,0,0,0,0,0]", gene.toString());
+    assertEquals("FixedBinaryGene[0,0,0,0,0,0]", gene.toString());
   }
 
   /**
@@ -116,7 +116,7 @@ public class FixedBinaryGeneTest
   public void testToString_0() {
     Gene gene = new FixedBinaryGene(1);
     gene.setAllele(new int[] {1});
-    assertEquals("[1]", gene.toString());
+    assertEquals("FixedBinaryGene[1]", gene.toString());
   }
 
   /**
@@ -125,7 +125,7 @@ public class FixedBinaryGeneTest
   public void testToString_1() {
     Gene gene = new FixedBinaryGene(3);
     gene.setAllele(new int[] {1, 0, 1});
-    assertEquals("[1,0,1]", gene.toString());
+    assertEquals("FixedBinaryGene[1,0,1]", gene.toString());
   }
 
   /**
@@ -134,7 +134,7 @@ public class FixedBinaryGeneTest
    */
   public void testToString_2() {
     Gene gene = new FixedBinaryGene(3);
-    assertEquals("[0,0,0]", gene.toString());
+    assertEquals("FixedBinaryGene[0,0,0]", gene.toString());
   }
 
   /**
@@ -498,7 +498,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene = new FixedBinaryGene(4);
     gene.setAllele(new int[] {0, 0, 1, 1});
     gene.applyMutation(0, 0.0d);
-    assertEquals("[0,0,1,1]", gene.toString());
+    assertEquals("FixedBinaryGene[0,0,1,1]", gene.toString());
   }
 
   /**
@@ -508,7 +508,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene = new FixedBinaryGene(4);
     gene.setAllele(new int[] {0, 0, 1, 0});
     gene.applyMutation(1, 0.000001d);
-    assertEquals("[0,1,1,0]", gene.toString());
+    assertEquals("FixedBinaryGene[0,1,1,0]", gene.toString());
   }
 
   /**
@@ -534,7 +534,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene = new FixedBinaryGene(4);
     gene.setAllele(new int[] {1, 1, 0, 1});
     gene.applyMutation(0, -1.0d);
-    assertEquals("[0,1,0,1]", gene.toString());
+    assertEquals("FixedBinaryGene[0,1,0,1]", gene.toString());
   }
 
   /**
@@ -546,7 +546,7 @@ public class FixedBinaryGeneTest
     gene.applyMutation(0, -2.0d);
     gene.applyMutation(3, 2.0d);
     gene.applyMutation(1, -4.0d);
-    assertEquals("[0,0,0,1]", gene.toString());
+    assertEquals("FixedBinaryGene[0,0,0,1]", gene.toString());
   }
 
   /**
@@ -559,7 +559,7 @@ public class FixedBinaryGeneTest
     gene.applyMutation(1, 2.0d);
     gene.applyMutation(2, 2.0d);
     gene.applyMutation(3, 2.0d);
-    assertEquals("[1,1,1,1]", gene.toString());
+    assertEquals("FixedBinaryGene[1,1,1,1]", gene.toString());
   }
 
   /**
@@ -678,7 +678,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene = new FixedBinaryGene(3);
     gene.setAllele(new int[] {1, 0, 1});
     String s = gene.getPersistentRepresentation();
-    assertEquals("[1,0,1]", s);
+    assertEquals("FixedBinaryGene[1,0,1]", s);
   }
 
   /**
@@ -712,7 +712,7 @@ public class FixedBinaryGeneTest
       throws Exception {
     FixedBinaryGene gene = new FixedBinaryGene(3);
     String s = gene.getPersistentRepresentation();
-    assertEquals("[0,0,0]", s);
+    assertEquals("FixedBinaryGene[0,0,0]", s);
   }
 
   /**
