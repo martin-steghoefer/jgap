@@ -25,7 +25,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -121,9 +121,15 @@ public class DoubleGene
       UnsupportedOperationException {
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
-
     // --------------------------------------------------------------
-    return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
+    String s;
+    if (getInternalValue() == null) {
+      s = "null";
+    }
+    else {
+      s = getInternalValue().toString();
+    }
+    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
         PERSISTENT_FIELD_DELIMITER + m_upperBounds;
   }
 
@@ -369,4 +375,24 @@ public class DoubleGene
       return super.hashCode();
     }
   }
+
+  /**
+   * @return string representation of this Gene's value that may be useful for
+   * display purposes.
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public String toString() {
+    String s = "DoubleGene("+m_lowerBounds+","+m_upperBounds+")"
+        +"=";
+    if (getInternalValue() == null) {
+      s += "null";
+    }
+    else {
+      s+= getInternalValue().toString();
+    }
+    return s;
+  }
+
 }
