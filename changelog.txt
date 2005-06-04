@@ -12,6 +12,7 @@
   that (see request 1214408)
 * Added constructor in BooleanGene allowing to preset the
   allele value
+* Added getGeneTypeAllowed in CompositeGene
 * Added constraint check in constructor Chromosome(int a_size)
 * Added many new test cases
 * Added javadocs
