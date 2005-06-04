@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -111,7 +111,6 @@ public class Chromosome
   public final static String S_ALLELES = "Alleles";
   public final static String S_APPLICATION_DATA = "Application data";
   public final static String S_SIZE = "Size";
-
 
   /**
    * Constructs a Chromosome of the given size separate from any specific
@@ -180,7 +179,7 @@ public class Chromosome
   }
 
   /**
-   *
+   * Constructor for specifying the number of genes
    * @param a_size number of genes the chromosome contains of
    *
    * @author Klaus Meffert
@@ -191,6 +190,15 @@ public class Chromosome
       throw new IllegalArgumentException("Size must be greater than zero");
     }
     m_genes = new Gene[a_size];
+  }
+
+  /**
+   * Default constructor
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Chromosome() {
   }
 
   /**
@@ -225,7 +233,7 @@ public class Chromosome
       Chromosome copy = pool.acquireChromosome();
       if (copy != null) {
         Gene[] genes = copy.getGenes();
-        for (int i = 0; i < genes.length; i++) {
+        for (int i = 0; i < size(); i++) {
           genes[i].setAllele(m_genes[i].getAllele());
         }
         // Also clone the IApplicationData object.
@@ -252,7 +260,7 @@ public class Chromosome
     // location (locus) to create the new Gene that is to occupy that same
     // locus in the new Chromosome.
     // -------------------------------------------------------------------
-    Gene[] copyOfGenes = new Gene[m_genes.length];
+    Gene[] copyOfGenes = new Gene[size()];
 //    if (m_genes.length == 0 || copyOfGenes.length == 0) {
 //      throw new IllegalArgumentException("Genes length = 0!");
 //    }
@@ -329,15 +337,23 @@ public class Chromosome
 
   /**
    * Returns the size of this Chromosome (the number of genes it contains).
-   * A Chromosome's size is constant and will never change.
+   * A Chromosome's size is constant and will not change, until setGenes(...)
+   * is used.
    *
-   * @return The number of genes contained within this Chromosome instance.
+   * @return number of genes contained within this Chromosome instance
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public int size() {
-    return m_genes.length;
+    if (m_genes == null) {
+      // only possible when using default constructor
+      return 0;
+    }
+    else {
+      return m_genes.length;
+    }
   }
 
   /**
@@ -579,14 +595,14 @@ public class Chromosome
     // If the other Chromosome doesn't have the same number of genes,
     // then whichever has more is the "greater" Chromosome.
     // --------------------------------------------------------------
-    if (otherGenes.length != m_genes.length) {
-      return m_genes.length - otherGenes.length;
+    if (otherChromosome.size() != size()) {
+      return size() - otherChromosome.size();
     }
     // Next, compare the gene values (alleles) for differences. If
     // one of the genes is not equal, then we return the result of its
     // comparison.
     // ---------------------------------------------------------------
-    for (int i = 0; i < m_genes.length; i++) {
+    for (int i = 0; i < size(); i++) {
       int comparison = m_genes[i].compareTo(otherGenes[i]);
       if (comparison != 0) {
         return comparison;
@@ -690,7 +706,7 @@ public class Chromosome
       // basically entails requesting each of our genes to clean
       // themselves up as well.
       // -------------------------------------------------------------
-      for (int i = 0; i < m_genes.length; i++) {
+      for (int i = 0; i < size(); i++) {
         m_genes[i].cleanup();
       }
     }
@@ -728,6 +744,12 @@ public class Chromosome
     return m_applicationData;
   }
 
+  /**
+   * Sets the genes for the chromosome
+   * @param a_genes the genes to set for the chromosome
+   *
+   * @author Klaus Meffert
+   */
   public void setGenes(Gene[] a_genes) {
 //    for (int i=0;i<a_genes.length;i++) {
 //      if (a_genes[i]==null) {
