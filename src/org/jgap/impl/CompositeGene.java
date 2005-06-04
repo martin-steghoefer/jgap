@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * This field separates gene class name from
@@ -107,6 +107,16 @@ public class CompositeGene
 
   public void addGene(Gene a_gene) {
     addGene(a_gene, false);
+  }
+
+  /**
+   * @return the gene type allowed, or null if any type allowed
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Gene getGeneTypeAllowed() {
+    return m_geneTypeAllowed;
   }
 
   /**
