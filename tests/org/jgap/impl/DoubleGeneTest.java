@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for DoubleGene class
+ * Tests the DoubleGene class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.20 $";
+  private static final String CVS_REVISION = "$Revision: 1.21 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -67,7 +67,7 @@ public class DoubleGeneTest
   public void testToString_0() {
     Gene gene = new DoubleGene(1.2d, 99.7d);
     gene.setAllele(new Double(47.3d));
-    assertEquals("47.3", gene.toString());
+    assertEquals("DoubleGene(1.2,99.7)=47.3", gene.toString());
   }
 
   /**
@@ -76,7 +76,7 @@ public class DoubleGeneTest
   public void testToString_1() {
     Gene gene = new DoubleGene( -100.0d, 100.0d);
     gene.setAllele(new Double( -88.75286d));
-    assertEquals("-88.75286", gene.toString());
+    assertEquals("DoubleGene(-100.0,100.0)=-88.75286", gene.toString());
   }
 
   /**
