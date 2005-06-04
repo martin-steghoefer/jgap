@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * This field separates gene class name from
@@ -93,7 +93,7 @@ public class CompositeGene
    * CompositeGene.
    *
    * @param a_geneTypeAllowed the class of Genes to be allowed to be added to
-   * the CompositeGene.
+   * the CompositeGene
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -113,15 +113,15 @@ public class CompositeGene
    * Adds a gene to the CompositeGene's container. See comments in class
    * header for additional details about equality (concerning "strict" param.)
    * @param a_gene the gene to be added
-   * @param strict false: add the given gene except the gene itself already is
-   *        contained within the CompositeGene's container.
-   *        true: add the gene if there is no other gene being equal to the
-   *        given gene in request to the Gene's equals method
+   * @param a_strict false: add the given gene except the gene itself already is
+   * contained within the CompositeGene's container. true: add the gene if
+   * there is no other gene being equal to the given gene in request to the
+   * Gene's equals method
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void addGene(Gene a_gene, boolean strict) {
+  public void addGene(Gene a_gene, boolean a_strict) {
     if (m_geneTypeAllowed != null) {
       if (!a_gene.getClass().getName().equals(m_geneTypeAllowed.getClass().
                                               getName())) {
@@ -133,7 +133,7 @@ public class CompositeGene
     //check if gene already exists
     //----------------------------
     boolean containsGene;
-    if (!strict) {
+    if (!a_strict) {
       containsGene = containsGeneByIdentity(a_gene);
     }
     else {
@@ -224,8 +224,8 @@ public class CompositeGene
 
   /**
    * See interface Gene for description
-   * @param a_representation the string representation retrieved from a
-   *        prior call to the getPersistentRepresentation() method.
+   * @param a_representation the string representation retrieved from a prior
+   * call to the getPersistentRepresentation() method
    *
    * @throws UnsupportedRepresentationException
    *
@@ -268,10 +268,14 @@ public class CompositeGene
 
   /**
    * Creates a new instance of gene.
-   * @param a_geneClassName String
-   * @param a_persistentRepresentation String
+   * @param a_geneClassName name of the gene class
+   * @param a_persistentRepresentation persistent representation of the gene to
+   * create (could be obtained via getPersistentRepresentation)
+   *
+   * @return newly created gene
    * @throws Exception
-   * @return Gene
+   *
+   * @author Klaus Meffert
    */
   protected Gene createGene(String a_geneClassName,
                             String a_persistentRepresentation)
@@ -284,7 +288,7 @@ public class CompositeGene
 
   /**
    * See interface Gene for description
-   * @return A string representation of this Gene's current state.
+   * @return A string representation of this Gene's current state
    * @throws UnsupportedOperationException
    *
    * @author Klaus Meffert
@@ -292,8 +296,7 @@ public class CompositeGene
    * @since 1.1
    */
   public String getPersistentRepresentation()
-      throws
-      UnsupportedOperationException {
+      throws UnsupportedOperationException {
     StringBuffer b = new StringBuffer();
     Iterator iter = genes.iterator();
     Gene gene;
@@ -318,7 +321,7 @@ public class CompositeGene
    * represents the allele of the corresponding gene in the CompositeGene's
    * container
    *
-   * @return the Boolean value of this Gene.
+   * @return the Boolean value of this Gene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -339,7 +342,7 @@ public class CompositeGene
    * must conform with the type of the gene in the CompositeGene's container
    * at the corresponding position.
    *
-   * @param a_newValue the new value of this Gene instance.
+   * @param a_newValue the new value of this Gene instance
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -401,8 +404,8 @@ public class CompositeGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
-   *         setup as this concrete Gene.
+   * @return A new Gene instance of the same type and with the same setup as
+   * this concrete Gene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -423,12 +426,12 @@ public class CompositeGene
    * false value is considered to be less than a true value. A null value
    * is considered to be less than any non-null value.
    *
-   * @param  other the CompositeGene to be compared.
-   * @return  a negative integer, zero, or a positive integer as this object
-   *		is less than, equal to, or greater than the specified object.
+   * @param other the CompositeGene to be compared
+   * @return a negative integer, zero, or a positive integer as this object
+   * is less than, equal to, or greater than the specified object
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this CompositeGene.
+   * from being compared to this CompositeGene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -453,8 +456,8 @@ public class CompositeGene
       return isEmpty() ? 0 : 1;
     }
     else {
-      //compare each gene against each other
-      // -----------------------------------
+      //compare each gene against each other.
+      // ------------------------------------
       int numberGenes = Math.min(size(), otherCompositeGene.size());
       Gene gene1;
       Gene gene2;
@@ -477,7 +480,7 @@ public class CompositeGene
         }
       }
       //if everything is equal until now the CompositeGene with more
-      //contained genes wins
+      //contained genes wins.
       // -----------------------------------------------------------
       if (size() == otherCompositeGene.size()) {
         return 0;
@@ -584,7 +587,7 @@ public class CompositeGene
    * satisfy the Gene interface.
    * Instead, loop over all cotnained genes and call their applyMutation
    * method.
-   * @param index does not matter here
+   * @param index ignored here
    * @param a_percentage does not matter here
    *
    * @author Klaus Meffert
@@ -605,8 +608,8 @@ public class CompositeGene
 
   /**
    * Encode string, doubling the separators.
-   * @param a_string The string to encode (arbitrary characters)
-   * @return The string, containing only characters, valid in URL's
+   * @param a_string the string to encode (arbitrary characters)
+   * @return the encoded string, containing only characters, valid in URL's
    *
    * @author Audrius Meskauskas
    * @since 2.0
@@ -621,8 +624,8 @@ public class CompositeGene
   }
 
   /** Decode string, undoubling the separators.
-   * @param a_encoded the URL-encoded string with restricted character set.
-   * @return decoded string
+   * @param a_encoded the URL-encoded string with restricted character set
+   * @return decoded the decoded string
    *
    * @author Audrius Meskauskas
    * @since 2.0
@@ -638,9 +641,9 @@ public class CompositeGene
 
   /**
    * Splits the string a_x into individual gene representations
-   * @param a_string The string to split.
-   * @return The elements of the returned array are the
-   * persistent representation strings of the genes - components.
+   * @param a_string the string to split
+   * @return the elements of the returned array are the persistent
+   * representation strings of the genes - components
    * @throws UnsupportedRepresentationException
    *
    * @author Audrius Meskauskas
@@ -674,7 +677,7 @@ public class CompositeGene
   /**
    * Retrieves the hash code value for this Gene.
    *
-   * @return this Gene's hash code.
+   * @return this Gene's hash code
    *
    * @author Klaus Meffert
    * @since ":"
