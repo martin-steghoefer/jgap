@@ -7,6 +7,7 @@
 * Fixed bug in Chromosome.toString()
 * Extended Chromosome.toString()
 * Extended toString() of all Gene implementations
+* GreedyCrossover: enhanced error message and fixed test case
 * Added default constructor in Chromosome as well as tests for
   that (see request 1214408)
 * Added constructor in BooleanGene allowing to preset the
