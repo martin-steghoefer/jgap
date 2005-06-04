@@ -59,7 +59,7 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
@@ -77,21 +77,18 @@ public class TravellingSalesman
       genes[i] = new IntegerGene(0, CITIES - 1);
       genes[i].setAllele(new Integer(i));
     }
-
     Chromosome sample = new Chromosome(genes);
-
     System.out.println("Optimal way " + sample);
     System.out.println("Score " +
-                       (Integer.MAX_VALUE / 2 - m_conf.getFitnessFunction()
+                       (Integer.MAX_VALUE / 2 -
+                        Genotype.getConfiguration().getFitnessFunction()
                         .getFitnessValue(sample)));
-
     shuffle(genes);
-
     System.out.println("Sample chromosome " + sample);
     System.out.println("Score " +
-                       (Integer.MAX_VALUE / 2 - m_conf.getFitnessFunction()
+                       (Integer.MAX_VALUE / 2 -
+                        Genotype.getConfiguration().getFitnessFunction()
                         .getFitnessValue(sample)));
-
     return sample;
   }
 
@@ -107,17 +104,14 @@ public class TravellingSalesman
   public double distance(Gene a_from, Gene a_to) {
     IntegerGene a = (IntegerGene) a_from;
     IntegerGene b = (IntegerGene) a_to;
-
     int A = a.intValue();
     int B = b.intValue();
-
     if (A == 0 && B == CITIES - 1) {
       return 1;
     }
     if (B == 0 && A == CITIES - 1) {
       return 1;
     }
-
     return Math.abs(A - B);
   }
 
@@ -139,6 +133,5 @@ public class TravellingSalesman
     catch (Exception ex) {
       ex.printStackTrace();
     }
-
   }
 }
