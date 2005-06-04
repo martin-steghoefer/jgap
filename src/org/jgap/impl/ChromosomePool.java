@@ -22,7 +22,7 @@ import org.jgap.*;
  */
 public class ChromosomePool {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The internal pool in which the Chromosomes are stored.
@@ -68,9 +68,10 @@ public class ChromosomePool {
   public synchronized void releaseChromosome(Chromosome a_chromosome) {
     // First cleanup the chromosome's genes before returning it back
     // to the pool.
-    // ---------------------------------------------------------------
+    // -------------------------------------------------------------
     Gene[] genes = a_chromosome.getGenes();
-    for (int i = 0; i < genes.length; i++) {
+    int size = a_chromosome.size();
+    for (int i = 0; i < size; i++) {
       genes[i].cleanup();
     }
     // Now add it to the pool.
