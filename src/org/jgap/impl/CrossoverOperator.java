@@ -34,7 +34,7 @@ public class CrossoverOperator
     implements GeneticOperator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
    /**
    * The current crossover rate used by this crossover operator.
@@ -66,7 +66,7 @@ public class CrossoverOperator
    * crossover rate calculator, which results in dynamic crossover being turned
    * on.
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
-   *        computation
+   * computation
    *
    * @author Chris Knowles
    * @since 2.0
@@ -79,7 +79,7 @@ public class CrossoverOperator
    * Constructs a new instance of this CrossoverOperator with the given
    * crossover rate.
    *
-   * @param a_desiredCrossoverRate The desired rate of crossover.
+   * @param a_desiredCrossoverRate the desired rate of crossover
    *
    * @author Chris Knowles
    * @since 2.0
@@ -105,16 +105,15 @@ public class CrossoverOperator
    * should never modify the original population, but should first make copies
    * of the Chromosomes selected for modification and operate upon the copies.
    *
-   * @param a_population The population of chromosomes from the current
-   *                     evolution prior to exposure to any genetic operators.
-   *                     Chromosomes in this array should never be modified.
-   * @param a_candidateChromosomes The pool of chromosomes that are candidates
-   *                               for the next evolved population. Only these
-   *                               chromosomes will go to the natural
-   *                               phase, so it's important to add any
-   *                               modified copies of Chromosomes to this
-   *                               list if it's desired for them to be
-   *                               considered for natural selection.
+   * @param a_population the population of chromosomes from the current
+   * evolution prior to exposure to any genetic operators. Chromosomes in this
+   * array should never be modified
+   * @param a_candidateChromosomes the pool of chromosomes that are candidates
+   * for the next evolved population. Only these chromosomes will go to the
+   * natural phase, so it's important to add any modified copies of Chromosomes
+   * to this list if it's desired for them to be considered for natural
+   * selection
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 2.0 (earlier versions referenced the Configuration object)
@@ -122,7 +121,8 @@ public class CrossoverOperator
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
 
-    // Work out the number of crossovers that should be performed
+    // Work out the number of crossovers that should be performed.
+    // -----------------------------------------------------------
     int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = 0;
@@ -189,8 +189,8 @@ public class CrossoverOperator
   }
 
   /**
-   * Sets the crossover rate calculator
-   * @param a_crossoverRateCalculator The new calculator
+   * Sets the crossover rate calculator.
+   * @param a_crossoverRateCalculator the new calculator
    *
    * @author Chris Knowles
    * @since 2.0
