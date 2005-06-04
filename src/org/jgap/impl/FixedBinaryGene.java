@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   private int m_length;
 
@@ -335,14 +335,14 @@ public class FixedBinaryGene
   }
 
   /**
-   * @return String
+   * @return String representation
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public String toString() {
     int len = getLength();
-    String s = "[";
+    String s = "FixedBinaryGene[";
     int value;
     for (int i = 0; i < len; i++) {
       if (getBit(i)) {
