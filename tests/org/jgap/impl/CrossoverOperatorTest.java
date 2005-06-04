@@ -16,7 +16,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Test class for CrossoverOperator class
+ * Tests the CrossoverOperator class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -25,7 +25,7 @@ public class CrossoverOperatorTest
     extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
