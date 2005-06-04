@@ -25,7 +25,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -63,9 +63,9 @@ public class DoubleGene
    * bounds for values (alleles) of this Gene instance.
    *
    * @param a_lowerBounds The lowest value that this Gene may possess,
-   *                      inclusive.
+   * inclusive
    * @param a_upperBounds The highest value that this Gene may possess,
-   *                      inclusive.
+   * inclusive
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -91,7 +91,7 @@ public class DoubleGene
    * undefined.
    *
    * @return A new Gene instance of the same type and with the same
-   *         setup as this concrete Gene.
+   * setup as this concrete Gene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -111,14 +111,13 @@ public class DoubleGene
    *
    * @return A string representation of this Gene's current state.
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public String getPersistentRepresentation()
-      throws
-      UnsupportedOperationException {
+      throws UnsupportedOperationException {
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
@@ -142,20 +141,18 @@ public class DoubleGene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
+   * prior call to the getPersistentRepresentation() method
    *
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void setValueFromPersistentRepresentation(String a_representation)
-      throws
-      UnsupportedRepresentationException {
+      throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
           new StringTokenizer(a_representation,
@@ -219,7 +216,7 @@ public class DoubleGene
    * Retrieves the double value of this Gene, which may be more convenient in
    * some cases than the more general getAllele() method.
    *
-   * @return the double value of this Gene.
+   * @return the double value of this Gene
    * @since 1.1
    */
   public double doubleValue() {
@@ -230,22 +227,19 @@ public class DoubleGene
    * Sets the value (allele) of this Gene to a random Double value between
    * the lower and upper bounds (if any) of this Gene.
    *
-   * @param a_numberGenerator The random number generator that should be
-   *                          used to create any random values. It's important
-   *                          to use this generator to maintain the user's
-   *                          flexibility to configure the genetic engine
-   *                          to use the random number generator of their
-   *                          choice.
+   * @param a_numberGenerator The random number generator that should be used
+   * to create any random values. It's important to use this generator to
+   * maintain the user's flexibility to configure the genetic engine to use the
+   * random number generator of their choice
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = new Double((m_upperBounds-m_lowerBounds)*a_numberGenerator.nextDouble()+m_lowerBounds);
-    // If the value isn't between the upper and lower bounds of this
-    // DoubleGene, map it to a value within those bounds.
-    // -------------------------------------------------------------
-//    mapValueToWithinBounds();
+    // maps the randomly determined value to the current bounds.
+    // ---------------------------------------------------------
+    m_value = new Double( (m_upperBounds - m_lowerBounds) *
+                         a_numberGenerator.nextDouble() + m_lowerBounds);
   }
 
   /**
@@ -255,8 +249,8 @@ public class DoubleGene
    * @param o1 first object to be compared, always is not null
    * @param o2 second object to be compared, always is not null
    * @return a negative integer, zero, or a positive integer as this object
-   *	       is less than, equal to, or greater than the object provided for
-   *         comparison.
+   * is less than, equal to, or greater than the object provided for comparison
+   *
    * @since 1.1
    */
   protected int compareToNative(Object o1, Object o2) {
@@ -284,7 +278,7 @@ public class DoubleGene
       // calculate the distance between the value and the double min,
       // then multiply it with a random number and then care that the lower
       // boundary is added.
-      // -----------------------------------------------------------------
+      // ------------------------------------------------------------------
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
         RandomGenerator rn;
@@ -304,7 +298,7 @@ public class DoubleGene
    * See interface Gene for description
    * @param index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1)
    *
    * @author Klaus Meffert
    * @since 1.1

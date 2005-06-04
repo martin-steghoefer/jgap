@@ -30,7 +30,7 @@ public class BooleanGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -58,7 +58,6 @@ public class BooleanGene
    * @since 2.4 (previously: implicitely existent)
    */
   public BooleanGene() {
-
   }
 
   /**
@@ -80,9 +79,9 @@ public class BooleanGene
   public BooleanGene(Boolean a_value) {
     if (a_value == null) {
       throw new IllegalArgumentException("Allele value may not be null. Use"
-                                         +" no argument constructor if you"
-                                         +" need to set allele to null"
-                                         +" initially.");
+                                         + " no argument constructor if you"
+                                         + " need to set allele to null"
+                                         + " initially.");
     }
     else {
       m_value = a_value;
@@ -104,8 +103,8 @@ public class BooleanGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
-   *         setup as this concrete Gene.
+   * @return a new Gene instance of the same type and with the same setup as
+   * this concrete Gene.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -141,8 +140,7 @@ public class BooleanGene
    * @author Klaus Meffert
    */
   public String getPersistentRepresentation()
-      throws
-      UnsupportedOperationException {
+      throws UnsupportedOperationException {
     String s;
     if (getInternalValue() == null) {
       s = "null";
@@ -174,8 +172,7 @@ public class BooleanGene
    * @since 1.0
    */
   public void setValueFromPersistentRepresentation(String a_representation)
-      throws
-      UnsupportedRepresentationException {
+      throws UnsupportedRepresentationException {
     if (a_representation != null) {
       if (a_representation.equals("null")) {
         m_value = null;
@@ -297,7 +294,7 @@ public class BooleanGene
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
    * element at given index
-   * @param index index of atomic element, between 0 and size()-1
+   * @param index not used here
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    * than 1).
    *
@@ -324,44 +321,43 @@ public class BooleanGene
     }
   }
 
-   protected Object getInternalValue() {
-     return m_value;
-   }
+  protected Object getInternalValue() {
+    return m_value;
+  }
 
-   /**
-    * Modified hashCode() function to return different hashcodes for differently
-    * ordered genes in a chromosome
-    * @return -2 if no allele set, otherwise value return by BaseGene.hashCode()
-    *
-    * @author Klaus Meffert
-    * @since 2.2
-    */
-   public int hashCode() {
-     if (getInternalValue() == null) {
-       return -2;
-     }
-     else {
-       return super.hashCode();
-     }
-   }
+  /**
+   * Modified hashCode() function to return different hashcodes for differently
+   * ordered genes in a chromosome
+   * @return -2 if no allele set, otherwise value return by BaseGene.hashCode()
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public int hashCode() {
+    if (getInternalValue() == null) {
+      return -2;
+    }
+    else {
+      return super.hashCode();
+    }
+  }
 
-   /**
-    * @return string representation of this Gene's value that may be useful for
-    * display purposes.
-    *
-    * @author Klaus Meffert
-    * @since 2.4
-    */
-   public String toString() {
-     String s = "BooleanGene"
-         +"=";
-     if (getInternalValue() == null) {
-       s += "null";
-     }
-     else {
-       s+= getInternalValue().toString();
-     }
-     return s;
-   }
-
+  /**
+   * @return string representation of this Gene's value that may be useful for
+   * display purposes.
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public String toString() {
+    String s = "BooleanGene"
+        + "=";
+    if (getInternalValue() == null) {
+      s += "null";
+    }
+    else {
+      s += getInternalValue().toString();
+    }
+    return s;
+  }
 }
