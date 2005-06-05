@@ -11,17 +11,20 @@ package org.jgap.distr;
 
 /**
  * Worker implementation. A worker receives commands from an IMaster instance
- * and returns results to the master.
+ * and returns results to the master. A worker can receive commands even when
+ * it is working but it can only work on one task at a time
  *
  * @author Klaus Meffert
  * @since 2.4
  */
-public abstract class Worker
+public class Worker
     implements IWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  /**@todo remove abstract, implement all methods*/
+  /**
+   * Display name, only textual information.
+   */
   private String m_displayName;
 
   /**
@@ -31,7 +34,9 @@ public abstract class Worker
    */
   private MasterListener m_masterListener;
 
-  // reference to master for calling him back
+  /**
+   * Reference to master for calling him back.
+   */
   private MasterInfo m_master;
 
   /**
@@ -64,9 +69,72 @@ public abstract class Worker
    * Lets a server send a command to process to the worker
    * @param a_command the command to process
    * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   public Object sendCommand(WorkerCommand a_command) {
-    /**@todo implement*/
+    /**@todo this should be moved to a thread*/
+    /**@todo implement:
+     * currently working? if yes, add to queue (if queue not full)
+     * if no: start work*/
+    return null;
+  }
+
+  /**
+   * @return current status of the entity
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Object getStatus() {
+    /**@todo implement:
+     * idle
+     * starting
+     * receiving task
+     * working
+     * sending result
+     * stopping
+     * stopped*/
+    return null;
+  }
+
+  /**
+   * Forces the worker to pause its work (can be resumed)
+   * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Object pause() {
+    /**@todo implement:
+     * able to pause resp. in work?*/
+    return null;
+  }
+
+  /**
+   * Forces the worker to stop its work (cannot be resumed)
+   * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Object stop() {
+    /**@todo implement:
+     * able to stop resp. in work?*/
+    return null;
+  }
+
+  /**
+   * Forces the worker to resume a paused work
+   * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Object resume() {
+    /**@todo implement:
+     * able to resum resp. paused?*/
     return null;
   }
 }
