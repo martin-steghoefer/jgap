@@ -15,7 +15,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests for Population class
+ * Tests the Population class
  *
  * @author Klaus Meffert
  * @author Chris Knowles
@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -337,7 +337,8 @@ public class PopulationTest
   }
 
   /**
-   * Ensures that the Population class is Serializable
+   * Ensures that the Population class is implementing the Serializable
+   * interface
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -365,5 +366,65 @@ public class PopulationTest
     OutputStream os = new FileOutputStream(f);
     ObjectOutputStream oos = new ObjectOutputStream(os);
     oos.writeObject(pop);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testRemoveChromosome_0() {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Population pop = new Population(chroms);
+    assertEquals(chroms[0], pop.removeChromosome(0));
+    assertEquals(0, pop.size());
+    try {
+      pop.removeChromosome(0);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * With illegal index
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testRemoveChromosome_1() {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Population pop = new Population(chroms);
+    try {
+      pop.removeChromosome(1);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * With illegal index
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testRemoveChromosome_2() {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Population pop = new Population(chroms);
+    try {
+      pop.removeChromosome( -1);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
   }
 }
