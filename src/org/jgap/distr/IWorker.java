@@ -18,7 +18,7 @@ package org.jgap.distr;
 public interface IWorker {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * @return display name of the worker
@@ -49,7 +49,7 @@ public interface IWorker {
   Object resume();
 
   /**
-   * Sends a command to process to the worker
+   * Lets a server send a command to process to the worker
    * @param a_command the command to process
    * @return status message
    */
