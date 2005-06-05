@@ -11,30 +11,28 @@ package org.jgap.supergenes;
 
 import org.jgap.*;
 
-
 /**
  * The abstract supergeneValidator, hiding the getPersisten()
  * and setFromPersistent() methods that are not always required.
+ *
  * @author Audrius Meskauskas
  */
-
-public abstract class Validator implements supergeneValidator {
-
+public abstract class Validator
+    implements supergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-    /** {@inheritDoc} */
-    public abstract boolean isValid(Gene[] genes, Supergene for_supergene);
+  /** {@inheritDoc} */
+  public abstract boolean isValid(Gene[] genes, Supergene for_supergene);
 
-    /** {@inheritDoc}
-     * The default implementation returns an empty string. */
-    public String getPersistent() {
-        return "";
-    }
+  /** {@inheritDoc}
+   * The default implementation returns an empty string. */
+  public String getPersistent() {
+    return "";
+  }
 
-    /** {@inheritDoc}
-     * The default implementation does nothing. */
-    public void setFromPersistent(String a_from) {
-    }
-
+  /** {@inheritDoc}
+   * The default implementation does nothing. */
+  public void setFromPersistent(String a_from) {
+  }
 }
