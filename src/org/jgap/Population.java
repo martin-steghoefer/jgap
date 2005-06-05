@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -82,14 +82,14 @@ public class Population
   /**
    * Adds a Chromosome to this Population. Does nothing when given null.
    *
-   * @param toAdd the Chromosome to add
+   * @param a_toAdd the Chromosome to add
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void addChromosome(Chromosome toAdd) {
-    if (toAdd != null) {
-      m_chromosomes.add(toAdd);
+  public void addChromosome(Chromosome a_toAdd) {
+    if (a_toAdd != null) {
+      m_chromosomes.add(a_toAdd);
       setChanged(true);
     }
   }
@@ -110,6 +110,13 @@ public class Population
     }
   }
 
+  /**
+   * Replaces all chromosomes in the population with the give list of
+   * chromosomes
+   * @param a_chromosomes the chromosomes to make the population up from
+   *
+   * @author Klaus Meffert
+   */
   public void setChromosomes(List a_chromosomes) {
     m_chromosomes = a_chromosomes;
     setChanged(true);
@@ -117,14 +124,14 @@ public class Population
 
   /**
    * Sets in the given Chromosome on the given index in the list of chromosomes.
-   * @param index the index to set the Chromosome in
+   * @param a_index the index to set the Chromosome in
    * @param a_chromosome the Chromosome to be set in
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setChromosome(int index, Chromosome a_chromosome) {
-    m_chromosomes.set(index, a_chromosome);
+  public void setChromosome(int a_index, Chromosome a_chromosome) {
+    m_chromosomes.set(a_index, a_chromosome);
     setChanged(true);
   }
 
@@ -185,8 +192,8 @@ public class Population
   }
 
   /**
-   * Determines the fittest Chromosome in the population (the one with the highest
-   * fitness value) and memorizes it
+   * Determines the fittest Chromosome in the population (the one with the
+   * highest fitness value) and memorizes it
    * @return the fittest Chromosome of the population
    *
    * @author Klaus Meffert
@@ -235,6 +242,24 @@ public class Population
    */
   public boolean contains(Chromosome a_chromosome) {
     return m_chromosomes.contains(a_chromosome);
+  }
+
+  /**
+   * Removes a chromosome in the list at the given index. Method has package
+   * visibility to signal that this is a method not to be used outside the
+   * JGAP kernal for normal circumstances.
+   *
+   * @param a_index index of chromosome to be removed in list
+   * @return removed Chromosome
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  Chromosome removeChromosome(int a_index) {
+    if (a_index < 0 || a_index >= size()) {
+      throw new IllegalArgumentException("Index must be within bounds!");
+    }
+    return (Chromosome)m_chromosomes.remove(a_index);
   }
 
   /**
@@ -290,6 +315,14 @@ public class Population
     }
   }
 
+  /**
+   * Helper method for addCompositeGene
+   * @param a_result List
+   * @param a_gene Gene
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
   private void addAtomicGene(final List a_result, Gene a_gene) {
     a_result.add(a_gene);
   }
