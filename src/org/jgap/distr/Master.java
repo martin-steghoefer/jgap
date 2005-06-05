@@ -13,15 +13,18 @@ import java.io.*;
 
 /**
  * Represents an IMaster instance. Distributes work to IWorker instances.
+ * Allows to receive new tasks and send them to the workers when applicable.
  *
  * @author Klaus Meffert
  * @since 2.3
  */
 public class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
-  //information needed by workers
+  /**
+   * Information needed by workers
+   */
   private MasterInfo m_masterinfo;
 
   /**
@@ -37,20 +40,33 @@ public class Master {
   public Master(RequestDispatcher a_dispatcher, WorkerListener a_workerListener) {
     m_dispatcher = a_dispatcher;
     m_workerListener = a_workerListener;
+    m_masterinfo = new MasterInfo();
+    m_masterinfo.IPAddress = ""; /**todo determine*/
+    m_masterinfo.name = "computername"; /**todo determine*/
   }
 
+  /**
+   * Starts the master listener
+   * @throws IOException
+   */
   public void start()
       throws IOException {
     m_workerListener.listen();
   }
 
+  /**
+   * Stops the master from being working.
+   */
   public void stop() {
     m_workerListener.stop();
+    /**@todo notify all workers to stop working???
+     * No, better would be: next time master is available it can receive
+     * old results from workers. So, the workers need to store them for
+     * some time, until the master is able to receive the worker results.*/
   }
 
   /**
-   *
-   * @return MasterInfo
+   * @return information about this master
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -59,6 +75,12 @@ public class Master {
     return m_masterinfo;
   }
 
+  /**
+   * Sends a command to a worker
+   * @param a_worker the worker to send the command to
+   * @param a_command the command to send
+   * @throws IOException
+   */
   public void sendToWorker(IWorker a_worker, WorkerCommand a_command)
       throws IOException {
     /**@todo implement*/
