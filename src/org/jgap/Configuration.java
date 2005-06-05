@@ -37,6 +37,9 @@ import org.jgap.impl.*;
  */
 public class Configuration
     implements Configurable {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
+
   /**
    * Constants for toString()
    */
@@ -75,9 +78,6 @@ public class Configuration
   public static final String S_PRE = "pre";
 
   public static final String S_POST = "post";
-
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -219,14 +219,30 @@ public class Configuration
 
   /**
    * The Configuration Handler for this Configurable.
+   *
    * @author Siddhartha Azad
+   * @since 2.3
    */
   private RootConfigurationHandler m_conHandler;
 
   /**
    * Informative name for output
+   *
+   * @author Klaus Meffert
+   * @since 2.3
    */
   private String m_name;
+
+  /**
+   * True: population size will be kept constant at specified size in
+   * configuration. False: population size will grow dependently on used
+   * NaturalSelector's and GeneticOperator's.
+   * Default is TRUE
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  private boolean m_keepPopulationSizeConstant;
 
   /**
    * @author Neil Rotstan
@@ -241,6 +257,7 @@ public class Configuration
     m_geneticOperators = new ArrayList();
     m_conHandler = new RootConfigurationHandler();
     m_conHandler.setConfigurable(this);
+    m_keepPopulationSizeConstant = true;
   }
 
   public Configuration(String a_name) {
@@ -280,11 +297,11 @@ public class Configuration
    * fitness function. Although one or the other must be set, the two are
    * mutually exclusive.
    *
-   * @param a_functionToSet The fitness function to be used.
+   * @param a_functionToSet fitness function to be used
    *
-   * @throws InvalidConfigurationException if the fitness function
-   *         is null, a bulk fitness function has already been set,
-   *         or if this Configuration object is locked.
+   * @throws InvalidConfigurationException if the fitness function is null, a
+   * bulk fitness function has already been set, or if this Configuration
+   * object is locked.
    *
    * @author Neil Rotstan
    * @since 1.1
@@ -312,7 +329,7 @@ public class Configuration
    * Retrieves the fitness function previously setup in this Configuration
    * object.
    *
-   * @return The fitness function.
+   * @return the fitness function
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -333,11 +350,11 @@ public class Configuration
    * normal fitness function. Although one or the other is required, the
    * two are mutually exclusive.
    *
-   * @param a_functionToSet The bulk fitness function to be used.
+   * @param a_functionToSet bulk fitness function to be used
    *
-   * @throws InvalidConfigurationException if the bulk fitness function
-   *         is null, the normal fitness function has already been set,
-   *         or if this Configuration object is locked.
+   * @throws InvalidConfigurationException if the bulk fitness function is
+   * null, the normal fitness function has already been set, or if this
+   * Configuration object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -367,7 +384,7 @@ public class Configuration
    * Retrieves the bulk fitness function previously setup in this
    * Configuration object.
    *
-   * @return The bulk fitness function.
+   * @return The bulk fitness function
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -384,9 +401,9 @@ public class Configuration
    * it will be constructed with the same Gene setup as that provided in
    * this sample Chromosome.
    *
-   * @param a_sampleChromosomeToSet The Chromosome to be used as the sample.
-   * @throws InvalidConfigurationException if the given Chromosome is null
-   *         or this Configuration object is locked.
+   * @param a_sampleChromosomeToSet Chromosome to be used as the sample
+   * @throws InvalidConfigurationException if the given Chromosome is null or
+   * this Configuration object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -410,7 +427,7 @@ public class Configuration
    * Retrieves the sample Chromosome that contains the desired Gene setup
    * for each respective gene position (locus).
    *
-   * @return the sample Chromosome instance.
+   * @return sample Chromosome instance
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -424,7 +441,7 @@ public class Configuration
    * algorithm. This value is set automatically when the sample Chromosome
    * is provided.
    *
-   * @return The chromosome size used in this Configuration.
+   * @return chromosome size used in this Configuration
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -440,17 +457,16 @@ public class Configuration
    * round of evolution (usually guided by the fitness values
    * provided by the fitness function). This setting is required.
    *
-   * @param a_selectorToSet The natural selector to be used.
+   * @param a_selectorToSet the natural selector to be used.
    *
-   * @throws InvalidConfigurationException if the natural selector
-   *         is null or this Configuration object is locked.
+   * @throws InvalidConfigurationException if the natural selector is null or
+   * this Configuration object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
    * @deprecated use addNaturalSelector(false) instead
    */
-  public synchronized void setNaturalSelector(
-      NaturalSelector a_selectorToSet)
+  public synchronized void setNaturalSelector(NaturalSelector a_selectorToSet)
       throws InvalidConfigurationException {
     addNaturalSelector(a_selectorToSet, false);
   }
@@ -458,13 +474,13 @@ public class Configuration
   /**
    * Retrieves the natural selector setup in this Configuration instance.
    *
-   * @return The natural selector.
+   * @return the natural selector
    *
    * @author Neil Rotstan
    * @since 1.0
    * @deprecated use getNaturalSelectors(true) or getNaturalSelectors(false)
-   *             to obtain the relevant chain of NaturalSelector's and then
-   *             call the chain's get(index) method
+   * to obtain the relevant chain of NaturalSelector's and then call the
+   * chain's get(index) method
    */
   public NaturalSelector getNaturalSelector() {
     if (m_sizeNaturalSelectorsPost < 1) {
@@ -475,32 +491,32 @@ public class Configuration
 
   /**
    *
-   * @param processBeforeGeneticOperators boolean
-   * @param index int
+   * @param a_processBeforeGeneticOperators boolean
+   * @param a_index int
    * @return NaturalSelector
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public NaturalSelector getNaturalSelector(boolean
-                                            processBeforeGeneticOperators,
-                                            int index) {
-    if (processBeforeGeneticOperators) {
-      if (m_sizeNaturalSelectorsPre <= index) {
+                                            a_processBeforeGeneticOperators,
+                                            int a_index) {
+    if (a_processBeforeGeneticOperators) {
+      if (m_sizeNaturalSelectorsPre <= a_index) {
         throw new IllegalArgumentException(
             "Index of NaturalSelector out of bounds");
       }
       else {
-        return m_preSelectors.get(index);
+        return m_preSelectors.get(a_index);
       }
     }
     else {
-      if (m_sizeNaturalSelectorsPost <= index) {
+      if (m_sizeNaturalSelectorsPost <= a_index) {
         throw new IllegalArgumentException(
             "Index of NaturalSelector out of bounds");
       }
       else {
-        return m_postSelectors.get(index);
+        return m_postSelectors.get(a_index);
       }
     }
   }
@@ -508,15 +524,15 @@ public class Configuration
   /**
    * Only use for read-only access! Especially don't call clear() for the
    * returned ChainOfSelectors object!
-   * @param processBeforeGeneticOperators boolean
+   * @param a_processBeforeGeneticOperators boolean
    * @return ChainOfSelectors
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public ChainOfSelectors getNaturalSelectors(boolean
-                                              processBeforeGeneticOperators) {
-    if (processBeforeGeneticOperators) {
+                                              a_processBeforeGeneticOperators) {
+    if (a_processBeforeGeneticOperators) {
       return m_preSelectors;
     }
     else {
@@ -526,14 +542,14 @@ public class Configuration
 
   /**
    *
-   * @param processBeforeGeneticOperators boolean
+   * @param a_processBeforeGeneticOperators boolean
    * @return int
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public int getNaturalSelectorsSize(boolean processBeforeGeneticOperators) {
-    if (processBeforeGeneticOperators) {
+  public int getNaturalSelectorsSize(boolean a_processBeforeGeneticOperators) {
+    if (a_processBeforeGeneticOperators) {
       return m_sizeNaturalSelectorsPre;
     }
     else {
@@ -543,14 +559,15 @@ public class Configuration
 
   /**
    * Removes all natural selectors (either pre or post ones)
-   * @param processBeforeGeneticOperators true: remove all selectors processed
-   * before genetic operators, false: remove the ones processed afterwards
+   * @param a_processBeforeGeneticOperators true: remove all selectors
+   * processed before genetic operators, false: remove the ones processed
+   * afterwards
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void removeNaturalSelectors(boolean processBeforeGeneticOperators) {
-    if (processBeforeGeneticOperators) {
+  public void removeNaturalSelectors(boolean a_processBeforeGeneticOperators) {
+    if (a_processBeforeGeneticOperators) {
       getNaturalSelectors(true);
       m_sizeNaturalSelectorsPre = 0;
     }
@@ -566,16 +583,15 @@ public class Configuration
    * which are used throughout the process of genetic evolution and
    * selection. This setting is required.
    *
-   * @param a_generatorToSet The random generator to be used.
+   * @param a_generatorToSet random generator to be used
    *
-   * @throws InvalidConfigurationException if the random generator
-   *         is null or this object is locked.
+   * @throws InvalidConfigurationException if the random generator is null or
+   * this object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void setRandomGenerator(
-      RandomGenerator a_generatorToSet)
+  public synchronized void setRandomGenerator(RandomGenerator a_generatorToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given random generator isn't null.
@@ -590,7 +606,7 @@ public class Configuration
   /**
    * Retrieves the random generator setup in this Configuration instance.
    *
-   * @return The random generator.
+   * @return the random generator
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -609,8 +625,8 @@ public class Configuration
    *
    * @param a_operatorToAdd The genetic operator to add.
    *
-   * @throws InvalidConfigurationException if the genetic operator
-   *         is null of if this Configuration object is locked.
+   * @throws InvalidConfigurationException if the genetic operator is null or
+   * if this Configuration object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -634,7 +650,7 @@ public class Configuration
    * retrieved with this method will no longer reflect the actual
    * list in use.
    *
-   * @return The list of genetic operators.
+   * @return The list of genetic operators
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -649,10 +665,10 @@ public class Configuration
    * number of Chromosomes contained within the Genotype (population).
    * This setting is required.
    *
-   * @param a_sizeOfPopulation The population size to be used.
+   * @param a_sizeOfPopulation population size to be used
    *
-   * @throws InvalidConfigurationException if the population size
-   *         is not positive or this object is locked.
+   * @throws InvalidConfigurationException if the population size is not
+   * positive or this object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -673,7 +689,7 @@ public class Configuration
   /**
    * Retrieves the population size setup in this Configuration instance.
    *
-   * @return The population size.
+   * @return population size
    */
   public int getPopulationSize() {
     return m_populationSize;
@@ -685,10 +701,10 @@ public class Configuration
    * and event notifications.
    *
    * @param a_eventManagerToSet the EventManager instance to use in this
-   *                            configuration.
+   * configuration
    *
    * @throws InvalidConfigurationException if the event manager is null
-   *         or this Configuration object is locked.
+   * or this Configuration object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -711,7 +727,7 @@ public class Configuration
    * The EventManager is responsible for the management of event subscribers
    * and event notifications.
    *
-   * @return the actively configured EventManager instance.
+   * @return the actively configured EventManager instance
    */
   public EventManager getEventManager() {
     return m_eventManager;
@@ -725,8 +741,8 @@ public class Configuration
    * is optional. If none exists, then a new Chromosome will be constructed
    * each time one is needed.
    *
-   * @param a_chromosomePoolToSet The ChromosomePool instance to use.
-   * @throws InvalidConfigurationException if this object is locked.
+   * @param a_chromosomePoolToSet the ChromosomePool instance to use
+   * @throws InvalidConfigurationException if this object is locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -746,7 +762,7 @@ public class Configuration
    * Chromosomes should be constructed each time one is needed.
    *
    * @return The ChromosomePool instance associated this configuration, or
-   *         null if none has been provided.
+   * null if none has been provided
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -772,7 +788,7 @@ public class Configuration
    * does nothing and simply returns.
    *
    * @throws InvalidConfigurationException if this Configuration object is
-   *         in an invalid state at the time of invocation.
+   * in an invalid state at the time of invocation
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -793,7 +809,7 @@ public class Configuration
    * Retrieves the lock status of this object.
    *
    * @return true if this object has been locked by a previous successful
-   *         call to the lockSettings() method, false otherwise.
+   * call to the lockSettings() method, false otherwise
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -809,8 +825,8 @@ public class Configuration
    * exception will be thrown detailing the reason the state is not valid.
    *
    * @throws InvalidConfigurationException if the state of this Configuration
-   *         is not valid. The error message in the exception will detail
-   *         the reason for invalidity.
+   * is not valid. The error message in the exception will detail the reason
+   * for invalidity
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -893,7 +909,7 @@ public class Configuration
    * to making any state alterations.
    *
    * @throws InvalidConfigurationException if this Configuration object is
-   *         locked.
+   * locked
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -912,18 +928,18 @@ public class Configuration
    * NaturalSelector's. It's possible to execute the NaturalSelector before
    * or after (registered) genetic operations have been applied.
    * @param a_selector the selector to be added to the chain
-   * @param processBeforeGeneticOperators true: execute NaturalSelector before
-   *        any genetic operator will be applied, false: .. after..
+   * @param a_processBeforeGeneticOperators true: execute NaturalSelector
+   * before any genetic operator will be applied, false: .. after..
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void addNaturalSelector(NaturalSelector a_selector,
-                                 boolean processBeforeGeneticOperators)
+                                 boolean a_processBeforeGeneticOperators)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
-    if (processBeforeGeneticOperators) {
+    if (a_processBeforeGeneticOperators) {
       m_preSelectors.addNaturalSelector(a_selector);
       m_sizeNaturalSelectorsPre = m_preSelectors.size();
     }
@@ -952,8 +968,8 @@ public class Configuration
   }
 
   /**
-   * Set the fitness evaluator (deciding if a given fitness value is better when
-   * it's higher or better when it's lower).
+   * Set the fitness evaluator (deciding if a given fitness value is better
+   * when it's higher or better when it's lower).
    * @param a_fitnessEvaluator the FitnessEvaluator to be used
    *
    * @author Klaus Meffert
@@ -969,7 +985,7 @@ public class Configuration
 
   /**
    * @return true: fittest chromosome should always be transferred to next
-   * generation.
+   * generation
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -980,7 +996,8 @@ public class Configuration
 
   /**
    * Determines whether to save (keep) the fittest individual
-   * @param a_preserveFittest true: always transfer fittest chromosome to next gen.
+   * @param a_preserveFittest true: always transfer fittest chromosome to next
+   * generation
    *
    * @author Klaus Meffert
    * @since 2.1
@@ -1131,5 +1148,14 @@ public class Configuration
       }
     }
     return result;
+  }
+
+  public boolean isKeepPopulationSizeConstant() {
+    return m_keepPopulationSizeConstant;
+  }
+
+  public void setKeepPopulationSizeConstant(boolean
+                                            a_keepPopulationSizeConstant) {
+    m_keepPopulationSizeConstant = a_keepPopulationSizeConstant;
   }
 }
