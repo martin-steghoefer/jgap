@@ -11,11 +11,13 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.impl.*;
+
 import junit.framework.*;
 
 /**
- * Tests for Genotype class
+ * Tests the Genotype class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -23,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -299,7 +301,8 @@ public class GenotypeTest
   }
 
   /**
-   * NaturalSelectors missing
+   * Assert population size shrinks when using special configuration and by
+   * overwriting default setting for keeping population size constant
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -308,14 +311,16 @@ public class GenotypeTest
   public void testEvolve_0()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    //remove all natural selectors
+    // Remove all natural selectors
     config.removeNaturalSelectors(false);
     config.removeNaturalSelectors(true);
+    config.setKeepPopulationSizeConstant(false);
+    // Add new NaturalSelector
     config.addNaturalSelector(new WeightedRouletteSelector(), true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
     genotype.evolve(1);
-    assertFalse(popSize == genotype.getPopulation().size());
+    assertTrue(popSize > genotype.getPopulation().size());
   }
 
   /**
@@ -323,7 +328,7 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 2.4
+   * @since 2.3
    */
   public void testEvolve_1()
       throws Exception {
@@ -337,7 +342,7 @@ public class GenotypeTest
       }
     };
     Genotype genotype = Genotype.randomInitialGenotype(config);
-    // just test that the following runs without error by trusting exception
+    // Just test that the following runs without error by trusting exception
     // handling
     genotype.evolve();
   }
@@ -348,12 +353,13 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 2.4
+   * @since 2.3
    */
   public void testEvolve_2_1()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    //remove all natural selectors
+    config.setKeepPopulationSizeConstant(false);
+    // Remove all natural selectors
     config.removeNaturalSelectors(false);
     config.removeNaturalSelectors(true);
     BestChromosomesSelector bcs = new BestChromosomesSelector();
@@ -371,12 +377,12 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 2.4
+   * @since 2.3
    */
   public void testEvolve_2_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // add another naturalselector (others already exist within
+    // Add another naturalselector (others already exist within
     // ConfigurationForTest)
     BestChromosomesSelector bcs = new BestChromosomesSelector();
     bcs.setOriginalRate(1);
@@ -389,6 +395,47 @@ public class GenotypeTest
   }
 
   /**
+   * Test that population size remains constant with default settings
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEvolve_3_1()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    config.setKeepPopulationSizeConstant(true);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
+    genotype.evolve();
+    assertEquals(popSize, genotype.getPopulation().size());
+  }
+
+  /**
+   * Test that population size grows with default settings overwritten
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEvolve_3_2()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    // Overwrite default setting
+    config.setKeepPopulationSizeConstant(!true);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
+    genotype.evolve();
+    assertTrue(popSize < genotype.getPopulation().size());
+  }
+
+  /**
    * GeneticOperators missing
    * @throws Exception
    *
@@ -398,7 +445,7 @@ public class GenotypeTest
   public void testEvolve_4()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    //remove all genetic operators
+    // Remove all genetic operators
     config.getGeneticOperators().clear();
     config.addNaturalSelector(new WeightedRouletteSelector(), true);
     try {
