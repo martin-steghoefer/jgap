@@ -28,6 +28,17 @@
 * Renamed test class abstractSupergenesPerformanceTest to
   SupergenesPerformanceTest
 * Renamed test class p_force to Force
+* Renamed test class p_totalSupergeneTest to
+  TotalSupergeneTest
+* Renamed test class p_SupergeneTest to SupergeneTest
+* Renamed test class p_withoutSupergeneChangeFitnessFunction
+  to p_withoutSupergeneChangeFitnessFunction
+* Renamed test class p_withoutSupergeneTest to
+  WithoutSupergeneTest
+* Renamed test class p_SupergeneChangeFitnessFunction to
+  SupergeneChangeFitnessFunction
+* Renamed test class p_abstractChangFitnessFunction to
+  AbstractChangFitnessFunction
 * Added javadocs
 * Fixed some spelling errors in javadocs
 
