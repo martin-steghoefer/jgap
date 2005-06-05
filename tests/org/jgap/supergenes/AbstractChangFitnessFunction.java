@@ -7,28 +7,27 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-
 package org.jgap.supergenes;
 
 import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Sample fitness function for the MakeChange example,
- * including supergenes.
+ * Sample fitness function for the MakeChange example, including supergenes.
+ *
  * @author Neil Rotstan
  * @author Klaus Meffert
  * @author Audrius Meskauskas (subsequent adaptation)
  * @since 2.0
  */
-abstract class p_abstractChangFitnessFunction extends FitnessFunction {
-
+abstract class AbstractChangFitnessFunction
+    extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   private final int m_targetAmount;
 
-  public p_abstractChangFitnessFunction(int a_targetAmount) {
+  public AbstractChangFitnessFunction(int a_targetAmount) {
     if (a_targetAmount < 1 || a_targetAmount > 99) {
       throw new IllegalArgumentException(
           "Change amount must be between 1 and 99 cents.");
@@ -41,10 +40,10 @@ abstract class p_abstractChangFitnessFunction extends FitnessFunction {
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject: The Chromosome instance to evaluate.
+   * @param a_subject The Chromosome instance to evaluate
    *
-   * @return A positive integer reflecting the fitness rating of the given
-   *         Chromosome.
+   * @return positive integer reflecting the fitness rating of the given
+   * Chromosome
    * @since 2.0 (until 1.1: return type int)
    */
   public double evaluate(Chromosome a_subject) {
@@ -90,22 +89,21 @@ abstract class p_abstractChangFitnessFunction extends FitnessFunction {
    * Calculates the total amount of change (in cents) represented by
    * the given potential solution and returns that amount.
    *
-   * @param a_potentialSolution The pontential solution to evaluate.
-   * @return The total amount of change (in cents) represented by the
-   *         given solution.
+   * @param a_potentialSolution the potential solution to evaluate
+   * @return the total amount of change (in cents) represented by the
+   * given solution
    */
   public int amountOfChange(Chromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution,
-     p_SupergeneTest.QUARTERS);
+                                             SupergeneTest.QUARTERS);
     int numDimes = getNumberOfCoinsAtGene(a_potentialSolution,
-     p_SupergeneTest.DIMES);
+                                          SupergeneTest.DIMES);
     int numNickels = getNumberOfCoinsAtGene(a_potentialSolution,
-     p_SupergeneTest.NICKELS);
+                                            SupergeneTest.NICKELS);
     int numPennies = getNumberOfCoinsAtGene(a_potentialSolution,
-     p_SupergeneTest.PENNIES);
-
-    return p_abstractSupergeneTest.amountOfChange
-     (numQuarters, numDimes, numNickels, numPennies);
+                                            SupergeneTest.PENNIES);
+    return AbstractSupergeneTest.amountOfChange
+        (numQuarters, numDimes, numNickels, numPennies);
   }
 
   /**
@@ -113,33 +111,31 @@ abstract class p_abstractChangFitnessFunction extends FitnessFunction {
    * solution at the given gene position.
    *
    * @param a_potentialSolution The potential solution to evaluate.
-   * @param a_position The gene position to evaluate.
    * @return the number of coins represented by the potential solution
    *         at the given gene position.
    */
   public int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
-   int a_code) {
-     Gene g = getResponsibleGene(a_potentialSolution, a_code);
-     return ((IntegerGene) g).intValue();
+                                    int a_code) {
+    Gene g = getResponsibleGene(a_potentialSolution, a_code);
+    return ( (IntegerGene) g).intValue();
   }
 
   /**
    * Returns the total number of coins represented by all of the genes in
    * the given potential solution.
    *
-   * @param a_potentialsolution The potential solution to evaluate.
-   * @return The total number of coins represented by the given Chromosome.
+   * @param a_potentialsolution the potential solution to evaluate
+   * @return the total number of coins represented by the given Chromosome
    */
   public int getTotalNumberOfCoins(Chromosome a_c) {
-      return
-       getNumberOfCoinsAtGene(a_c, p_SupergeneTest.QUARTERS)+
-       getNumberOfCoinsAtGene(a_c, p_SupergeneTest.DIMES)+
-       getNumberOfCoinsAtGene(a_c, p_SupergeneTest.NICKELS)+
-       getNumberOfCoinsAtGene(a_c, p_SupergeneTest.PENNIES);
+    return
+        getNumberOfCoinsAtGene(a_c, SupergeneTest.QUARTERS) +
+        getNumberOfCoinsAtGene(a_c, SupergeneTest.DIMES) +
+        getNumberOfCoinsAtGene(a_c, SupergeneTest.NICKELS) +
+        getNumberOfCoinsAtGene(a_c, SupergeneTest.PENNIES);
   }
 
   /** Get the gene, responsible for the number of coins, corresponding
    * this code */
   public abstract Gene getResponsibleGene(Chromosome a_chromosome, int a_code);
-
 }
