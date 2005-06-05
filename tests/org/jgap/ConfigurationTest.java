@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests for Configuration class
+ * Tests the Configuration class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -880,6 +880,22 @@ public class ConfigurationTest
     Configuration conf = new Configuration();
     assertEquals(null, conf.getName());
   }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testKeepPopSizeConstant_0() {
+    Configuration conf = new Configuration();
+    assertEquals(true, conf.isKeepPopulationSizeConstant());
+    conf.setKeepPopulationSizeConstant(false);
+    assertEquals(false, conf.isKeepPopulationSizeConstant());
+    conf.setKeepPopulationSizeConstant(true);
+    assertEquals(true, conf.isKeepPopulationSizeConstant());
+    conf.setKeepPopulationSizeConstant(false);
+    assertEquals(false, conf.isKeepPopulationSizeConstant());
+  }
+
 }
 class TestBulkFitnessFunction
     extends BulkFitnessFunction {
