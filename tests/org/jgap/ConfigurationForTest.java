@@ -21,13 +21,20 @@ import org.jgap.impl.*;
  */
 public class ConfigurationForTest
     extends Configuration {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public final static double STATIC_FITNESS_VALUE = 2.3d;
 
-  public ConfigurationForTest() throws InvalidConfigurationException {
+  /**
+   * Default constructor
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public ConfigurationForTest()
+      throws InvalidConfigurationException {
     super();
     setPopulationSize(5);
     setFitnessFunction(new StaticFitnessFunction(STATIC_FITNESS_VALUE));
@@ -42,5 +49,4 @@ public class ConfigurationForTest
     Chromosome chrom = new Chromosome(genes);
     setSampleChromosome(chrom);
   }
-
 }
