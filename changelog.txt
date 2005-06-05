@@ -3,6 +3,10 @@
 * Introduced new abstract base class org.jgap.JGAPTestCase.
   All test cases are now derived from this new class hosting
   commong logic
+* Introduced new parameter in Configuration
+  "keepPopulationSizeConstant" (along with getter and setter).
+  This parameter is queries in Genotype.evolve() to ensure a
+  fixed population size. Default for parameter ist TRUE!
 * Fixed a performance issue in SwappingMutationOperator
 * Fixed bug in Chromosome.toString()
 * Extended Chromosome.toString()
@@ -19,6 +23,7 @@
 * Added constraint check in constructor Chromosome(int a_size)
 * Added many new test cases
 * Added javadocs
+* Fixed some spelling errors in javadocs
 
 2.3
 ----------
