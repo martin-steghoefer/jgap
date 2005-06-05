@@ -18,7 +18,7 @@ package org.jgap.distr;
 public interface IWorker {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * @return display name of the worker
@@ -43,7 +43,7 @@ public interface IWorker {
   Object stop();
 
   /**
-   * Force thr worker to resume a paused work
+   * Forces the worker to resume a paused work
    * @return status message
    */
   Object resume();
