@@ -9,11 +9,9 @@
  */
 package org.jgap.supergenes;
 
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -30,626 +28,595 @@ import org.jgap.*;
  */
 public abstract class abstractSupergene
     implements Supergene, supergeneValidator, Serializable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
-    /**
-     * This field separates gene class name from
-     * the gene persistent representation string.
-     */
-    public final static String GENE_DELIMITER = "#";
-    /**
-     * Represents the heading delimiter that is used to separate genes in the
-     * persistent representation of CompositeGene instances.
-     */
-    public final static String GENE_DELIMITER_HEADING = "<";
+  /**
+   * This field separates gene class name from
+   * the gene persistent representation string.
+   */
+  public final static String GENE_DELIMITER = "#";
 
-    /**
-     * Represents the closing delimiter that is used to separate genes in the
-     * persistent representation of CompositeGene instances.
-     */
-    public final static String GENE_DELIMITER_CLOSING = ">";
+  /**
+   * Represents the heading delimiter that is used to separate genes in the
+   * persistent representation of CompositeGene instances.
+   */
+  public final static String GENE_DELIMITER_HEADING = "<";
 
+  /**
+   * Represents the closing delimiter that is used to separate genes in the
+   * persistent representation of CompositeGene instances.
+   */
+  public final static String GENE_DELIMITER_CLOSING = ">";
 
-    /** Holds the genes of this supergene. */
-    private Gene[] m_genes;
+  /** Holds the genes of this supergene. */
+  private Gene[] m_genes;
 
-    /**
-     * Get the array of genes - components of this supergene.
-     * The supergene components may be supergenes itself.
-     */
-    public Gene[] getGenes()
-     {
-         return m_genes;
-     }
+  /**
+   * @return the array of genes - components of this supergene. The supergene
+   * components may be supergenes itself
+   */
+  public Gene[] getGenes() {
+    return m_genes;
+  }
 
-     /**
-      * Returns the Gene at the given index (locus) within the Chromosome. The
-      * first gene is at index zero and the last gene is at the index equal to
-      * the size of this Chromosome - 1.
-      *
-      * This seems to be one of the bottlenecks, so it is declared final.
-      * I cannot imagine the reason for overriding this trivial single line
-      * method.
-      *
-      * @param a_desiredLocus: The index of the gene value to be returned.
-      * @return The Gene at the given index.
-      */
-     public final Gene getGene(int a_index)
-      {
-          return m_genes[a_index];
-      };
+  /**
+   * Returns the Gene at the given index (locus) within the Chromosome. The
+   * first gene is at index zero and the last gene is at the index equal to
+   * the size of this Chromosome - 1.
+   *
+   * This seems to be one of the bottlenecks, so it is declared final.
+   * I cannot imagine the reason for overriding this trivial single line
+   * method.
+   *
+   * @param a_desiredLocus the index of the gene value to be returned.
+   * @return The Gene at the given index
+   */
+  public final Gene getGene(int a_index) {
+    return m_genes[a_index];
+  };
 
+  /** Constructs abstract supergene with the given gene list.
+   * @param a_genes array of genes for this Supergene
+   */
+  public abstractSupergene(Gene[] a_genes) {
+    m_genes = a_genes;
+  }
 
-    /** Constructs abstract supergene with the given gene list.
-     * @param a_genes array of genes for this Supergene
-     */
-    public abstractSupergene(Gene [] a_genes) {
-        m_genes = a_genes;
+  /**
+   * <b>Always provide the parameterless
+   * constructor</b> for the derived class. This is required to
+   * create a new instance of supergene and should be used inside
+   * <code>newGene</code> only. The parameterless
+   * constructor need not (and cannot) assign the private
+   * <code>genes</code> array.
+   */
+  public abstractSupergene() {
+  }
+
+  /**
+   * Test the allele combination of this supergene for validity.
+   * This method calls isValid for the current gene list.
+   * @return true only if the supergene allele combination is valid
+   * or the setValidator (<i>null</i>) has been previously called
+   */
+  public boolean isValid() {
+    if (m_validator == null) {
+      return true;
     }
-
-    /**
-     * <b>Always provide the parameterless
-     * constructor</b> for the derived class. This is required to
-     * create a new instance of supergene and should be used inside
-     * <code>newGene</code> only. The parameterless
-     * constructor need not (and cannot) assign the private
-     * <code>genes</code> array.
-     */
-    public abstractSupergene() {
+    else {
+      return m_validator.isValid(m_genes, this);
     }
+  }
 
+  /**
+   * Test the given gene list for validity. The genes must exactly the same
+   * as inside this supergene.
+   * At <i>least about 5 % of the randomly
+   * generated Supergene suparallele values should be valid.</i> If the valid
+   * combinations represents too small part of all possible combinations,
+   * it can take too long to find the suitable mutation that does not brake
+   * a supergene. If you face this problem, try to split the supergene into
+   * several sub-supergenes.
+   *
+   * This method is only called if you have not set any alternative
+   * validator (including <i>null</i>.
+   *
+   * </p>
+   * @param a_case ignored here
+   * @param a_forSupergene ignored here
+   *
+   * @return true only if the supergene allele combination is valid
+   * @throws Error by default. If you do not set external validator,
+   * you should always override this method
+   */
+  public boolean isValid(Gene[] a_case, Supergene a_forSupergene) {
+    throw new Error("For " + getClass().getName() + ", override " +
+                    " isValid (Gene[], Supergene) or set an"
+                    +" external validator.");
+  }
 
-    /**
-     * Test the allele combination of this supergene for validity.
-     * This method calls isValid for the current gene list.
-     * @return true only if the supergene allele combination is valid
-     * or the setValidator (<i>null</i>) has been previously called.
-     */
-    public boolean isValid() {
-      if (m_validator == null) {
-        return true;
+  /** Creates a new instance of this Supergene class with the same number of
+   * genes, calling newGene() for each subgene. The class, derived from this
+   * abstract supergene will be instantiated
+   * (not the instance of abstractSupergene itself). If the external
+   * validator is set, the same validator will be set for the new gene.
+   * @throws Error if the instance of <i>this</i> cannot be instantiated
+   * (for example, if it is not public or  the parameterless constructor is
+   * not provided).
+   * */
+  public Gene newGene() {
+    Gene[] g = new Gene[m_genes.length];
+    for (int i = 0; i < m_genes.length; i++) {
+      g[i] = m_genes[i].newGene();
+    }
+    try {
+      abstractSupergene age =
+          (abstractSupergene) getClass().newInstance();
+      if (m_validator != this)
+        age.setValidator(m_validator);
+      age.m_genes = g;
+      return age;
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      throw new Error("This should not happen. Is the parameterless " +
+                      "constructor provided fo " + getClass().getName() + "?");
+    }
+  }
+
+  /** Maximal number of retries for applyMutation and setToRandomValue.
+   * If the valid supergen cannot be created after this number of iterations,
+   * the error message is printed and the unchanged instance is returned. */
+  public static int MAX_RETRIES = 1000;
+
+  /**
+   * Applies a mutation of a given intensity (percentage) onto the gene
+   * at the given index. Retries while isValid() returns true for the
+   * supergene. The method is delegated to the first element [0] of the
+   * gene, indexed by <code>index</code>.
+   * @see org.jgap.supergenes.abstractSupergene.isValid()
+   */
+  /**
+   * Applies a mutation of a given intensity (percentage) onto the gene
+   * at the given index. Retries while isValid() returns true for the
+   * supergene. The method is delegated to the first element [0] of the
+   * gene, indexed by <code>index</code>.
+   * @see org.jgap.supergenes.abstractSupergene.isValid()
+   */
+  public void applyMutation(int index, double a_percentage) {
+    // Return immediately the current value is found in
+    // the list of immutable alleles for this position.
+    // ---------------------------------------------------
+    if (index < m_immutable.length) {
+      if (m_immutable[index] != null) {
+        synchronized (m_immutable) {
+          if (m_immutable[index].contains(this))
+            return;
+        }
       }
-      else {
-        return m_validator.isValid(m_genes, this);
+    }
+    if (!isValid()) {
+      throw new Error("Should be valid on entry");
+    }
+    Object backup = m_genes[index].getAllele();
+    for (int i = 0; i < MAX_RETRIES; i++) {
+      m_genes[index].applyMutation(0, a_percentage);
+      if (isValid())return;
+    }
+    // restore the gene as it was
+    m_genes[index].setAllele(backup);
+    markImmutable(index);
+  }
+
+  /** Maximal number of notes about immutable genes per
+   * single gene position */
+  public static int MAX_IMMUTABLE_GENES = 100000;
+
+  /** @todo: Implement protection against overgrowing of this
+   * data block.
+   */
+  private void markImmutable(int a_index) {
+    synchronized (m_immutable) {
+      if (m_immutable.length <= a_index) {
+        // Extend the array (double length).
+        // ---------------------------------
+        Set[] r = new Set[2 * m_immutable.length];
+        System.arraycopy(m_immutable, 0, r, 0, m_immutable.length);
+        m_immutable = r;
+      }
+      if (m_immutable[a_index] == null) {
+        m_immutable[a_index] = new TreeSet();
+      }
+      if (m_immutable[a_index].size() < MAX_IMMUTABLE_GENES) {
+        m_immutable[a_index].add(this);
       }
     }
+    ;
+  }
 
-    /**
-     * Test the given gene list for validity. The genes must exactly the same
-     * as inside this supergene.
-     * At <i>least about 5 % of the randomly
-     * generated Supergene suparallele values should be valid.</i> If the valid
-     * combinations represents too small part of all possible combinations,
-     * it can take too long to find the suitable mutation that does not brake
-     * a supergene. If you face this problem, try to split the supergene into
-     * several sub-supergenes.
-     *
-     * This method is only called if you have not set any alternative
-     * validator (including <i>null</i>.
-     *
-     * </p>
-     * @return true only if the supergene allele combination is valid.
-     * @throws Error by default. If you do not set external validator,
-     * you should always override this method.
-     */
-    public boolean isValid(Gene [] a_case, Supergene a_forSupergene)
-    {
-        throw new Error ("For "+getClass().getName()+", override "+
-        " isValid (Gene[], Supergene) or set an external validator.");
+  /** Set of supergene allele values that cannot mutate. */
+  private static Set[] m_immutable = new Set[1];
+
+  /**
+   * Discards all internal caches, ensuring correct repetetive tests
+   * of performance. Differently from cleanup(), discards also static
+   * references, that are assumed to be useful for the multiple instances
+   * of the Supergene.
+   * Clears the set of the alleles that are known to be immutable.
+   */
+  public static void reset() {
+    m_immutable = new Set[1];
+  }
+
+  /**
+   * Sets the value of this Gene to a random legal value for the
+   * implementation. It calls setToRandomValue for all subgenes and
+   * then validates. With a large number of subgenes and low percent of
+   * valid combinations this may take too long to complete. We think,
+   * at lease several % of the all possible combintations must be valid.
+   *
+   * @throws an error if unable to get a valid random instance in
+   * the number of loops, defined by MAX_RETRIES.
+   */
+  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+    /** set all to random value first */
+    for (int i = 0; i < m_genes.length; i++) {
+      m_genes[i].setToRandomValue(a_numberGenerator);
     }
-
-
-    /** Creates a new instance of this Supergene class with the same number of
-     * genes, calling newGene() for each subgene. The class, derived from this
-     * abstract supergene will be instantiated
-     * (not the instance of abstractSupergene itself). If the external
-     * validator is set, the same validator will be set for the new gene.
-     * @throws Error if the instance of <i>this</i> cannot be instantiated
-     * (for example, if it is not public or  the parameterless constructor is
-     * not provided).
-     * */
-    public Gene newGene() {
-        Gene [] g = new Gene[m_genes.length];
-        for (int i = 0; i < m_genes.length; i++) {
-            g[i] = m_genes[i].newGene();
+    if (isValid())return;
+    for (int i = 0; i < MAX_RETRIES; i++) {
+      for (int j = 0; j < m_genes.length; j++) {
+        // Mutate only one gene at time.
+        // -----------------------------
+        m_genes[j].setToRandomValue(a_numberGenerator);
+        if (isValid()) {
+          return;
         }
-
-        try {
-            abstractSupergene age =
-                (abstractSupergene) getClass ().newInstance ();
-
-            if (m_validator!=this)
-             age.setValidator(m_validator);
-
-            age.m_genes = g;
-            return age;
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Error("This should not happen. Is the parameterless "+
-            "constructor provided fo "+getClass().getName()+"?");
-        }
+      }
     }
+  }
 
-    /** Maximal number of retries for applyMutation and setToRandomValue.
-     * If the valid supergen cannot be created after this number of iterations,
-     * the error message is printed and the unchanged instance is returned. */
-    public static int MAX_RETRIES = 1000;
-
-    /**
-     * Applies a mutation of a given intensity (percentage) onto the gene
-     * at the given index. Retries while isValid() returns true for the
-     * supergene. The method is delegated to the first element [0] of the
-     * gene, indexed by <code>index</code>.
-     * @see org.jgap.supergenes.abstractSupergene.isValid()
-     */
-    /**
-     * Applies a mutation of a given intensity (percentage) onto the gene
-     * at the given index. Retries while isValid() returns true for the
-     * supergene. The method is delegated to the first element [0] of the
-     * gene, indexed by <code>index</code>.
-     * @see org.jgap.supergenes.abstractSupergene.isValid()
-     */
-    public void applyMutation(int index, double a_percentage) {
-
-        // Return immediately the current value is found in
-        // the list of immutable alleles for this position.
-        // ---------------------------------------------------
-        if ( index<m_immutable.length ) {
-          if (m_immutable[index] != null) {
-            synchronized (m_immutable) {
-              if (m_immutable[index].contains(this))
-                return;
-            }
-          }
-        }
-
-        if (!isValid()) {
-          throw new Error("Should be valid on entry");
-        }
-
-        Object backup = m_genes [index].getAllele();
-
-        for (int i = 0; i < MAX_RETRIES; i++) {
-            m_genes [index] .applyMutation (0, a_percentage);
-            if (isValid ())  return;
-        }
-
-        // restore the gene as it was
-        m_genes [index]. setAllele(backup);
-        markImmutable(index);
-
+  /**
+   * Sets the allele.
+   * @param that must be an array of objects, size matching the
+   * number of genes
+   */
+  public void setAllele(Object a_superAllele) {
+    Object[] a = (Object[]) a_superAllele;
+    if (a.length != m_genes.length) {
+      throw new
+          ClassCastException("Record length, " + a.length + " != " +
+                             m_genes.length);
     }
-
-    /** Maximal number of notes about immutable genes per
-     * single gene position */
-    public static int MAX_IMMUTABLE_GENES = 100000;
-
-    /** @todo: Implement protection against overgrowing of this
-     * data block.
-     */
-    private void markImmutable(int a_index)
-     {
-         synchronized (m_immutable)
-         {
-             if (m_immutable.length<=a_index)
-              {
-                  /** Extend the array (double length). */
-                  Set [] r = new Set [2*m_immutable.length];
-                  System.arraycopy(m_immutable, 0, r, 0, m_immutable.length);
-                  m_immutable = r;
-              }
-
-              if (m_immutable [a_index] == null) {
-                m_immutable[a_index] = new TreeSet();
-              }
-
-              if (m_immutable [a_index] .size()<MAX_IMMUTABLE_GENES) {
-                m_immutable[a_index].add(this);
-              }
-         };
-     }
-
-    /** Set of supergene allele values that cannot mutate. */
-    private static Set [] m_immutable = new Set[1];
-
-    /**
-     * Discards all internal caches, ensuring correct repetetive tests
-     * of performance. Differently from cleanup(), discards also static
-     * references, that are assumed to be useful for the multiple instances
-     * of the Supergene.
-     * Clears the set of the alleles that are known to be immutable.
-     */
-    public static void reset()
-     {
-         m_immutable = new Set[1];
-     }
-
-    /**
-     * Sets the value of this Gene to a random legal value for the
-     * implementation. It calls setToRandomValue for all subgenes and
-     * then validates. With a large number of subgenes and low percent of
-     * valid combinations this may take too long to complete. We think,
-     * at lease several % of the all possible combintations must be valid.
-     *
-     * @throws an error if unable to get a valid random instance in
-     * the number of loops, defined by MAX_RETRIES.
-     */
-    public void setToRandomValue(RandomGenerator a_numberGenerator) {
-        /** set all to random value first */
-        for (int i = 0; i < m_genes.length; i++) {
-            m_genes[i].setToRandomValue(a_numberGenerator);
-        }
-        if (isValid()) return;
-
-        for (int i = 0; i < MAX_RETRIES; i++) {
-            for (int j = 0; j < m_genes.length; j++) {
-                /* mutate only one gene at time. */
-                m_genes[j].setToRandomValue(a_numberGenerator);
-                if (isValid()) return;
-            }
-        }
+    for (int i = 0; i < m_genes.length; i++) {
+      m_genes[i].setAllele(a[i]);
     }
+  }
 
-    /**
-     * Sets the allele.
-     * @param that must be an array of objects, size matching the
-     * number of genes.
-     */
-    public void setAllele(Object a_superAllele) {
-        Object[] a = (Object[]) a_superAllele;
-        if (a.length!=m_genes.length) throw new
-         ClassCastException("Record length, "+a.length+" != "+m_genes.length);
-        for (int i = 0; i < m_genes.length; i++) {
-            m_genes[i].setAllele(a[i]);
-        }
-     }
-
-    /**
-     * Retrieves the allele value represented by this Supergene.
-     * @return array of objects, each matching the subgene in this Supergene
-     */
-    public Object getAllele() {
-        Object [] o = new Object [m_genes.length];
-        for (int i = 0; i < m_genes.length; i++) {
-            o[i] = m_genes[i].getAllele();
-        }
-        return o;
+  /**
+   * Retrieves the allele value represented by this Supergene.
+   * @return array of objects, each matching the subgene in this Supergene
+   */
+  public Object getAllele() {
+    Object[] o = new Object[m_genes.length];
+    for (int i = 0; i < m_genes.length; i++) {
+      o[i] = m_genes[i].getAllele();
     }
+    return o;
+  }
 
-    /**
-     * Retrieves a string representation of the value of this Supergene
-     * instance, using calls to the Supergene components. Supports other
-     * (nested) supergenes in this supergene.
-     */
-    public String getPersistentRepresentation()
-     throws  UnsupportedOperationException {
-        StringBuffer b = new StringBuffer();
-
-        // Write validator:
-        String validator = null;
-        String v_representation = "";
-        supergeneValidator v = getValidator();
-
-        if (v==null) validator = "null";
-         else
-        if (v==this) validator = "this";
-         else
-          {
-              validator = v.getClass().getName();
-              v_representation = v.getPersistent();
-          }
-
-
-        b.append(GENE_DELIMITER_HEADING);
-        b.append(
-         encode
-         (
-          validator+
-          GENE_DELIMITER+
-          v_representation)
-         );
-        b.append(GENE_DELIMITER_CLOSING);
-
-        // Write genes:
-        Gene gene;
-        for (int i = 0; i < m_genes.length; i++) {
-          gene = m_genes[i];
-          b.append(GENE_DELIMITER_HEADING);
-          b.append(
-           encode
-           (
-            gene.getClass().getName()+
-            GENE_DELIMITER+
-            gene.getPersistentRepresentation())
-           );
-          b.append(GENE_DELIMITER_CLOSING);
-        }
-        return b.toString();
+  /**
+   * @return a string representation of the value of this Supergene
+   * instance, using calls to the Supergene components. Supports other
+   * (nested) supergenes in this supergene
+   */
+  public String getPersistentRepresentation()
+      throws UnsupportedOperationException {
+    StringBuffer b = new StringBuffer();
+    // Write validator:
+    String validator = null;
+    String v_representation = "";
+    supergeneValidator v = getValidator();
+    if (v == null) {
+      validator = "null";
     }
+    else
+    if (v == this) {
+      validator = "this";
+    }
+    else {
+      validator = v.getClass().getName();
+      v_representation = v.getPersistent();
+    }
+    b.append(GENE_DELIMITER_HEADING);
+    b.append(
+        encode
+        (
+        validator +
+        GENE_DELIMITER +
+        v_representation)
+        );
+    b.append(GENE_DELIMITER_CLOSING);
+    // Write genes:
+    Gene gene;
+    for (int i = 0; i < m_genes.length; i++) {
+      gene = m_genes[i];
+      b.append(GENE_DELIMITER_HEADING);
+      b.append(
+          encode
+          (
+          gene.getClass().getName() +
+          GENE_DELIMITER +
+          gene.getPersistentRepresentation())
+          );
+      b.append(GENE_DELIMITER_CLOSING);
+    }
+    return b.toString();
+  }
 
-    /**
-     * Sets the value and internal state of this Gene from the string
-     * representation returned by a previous invocation of the
-     * getPersistentRepresentation() method.
-     *
-     * If the validator is not THIS and not null, a new validator is
-     * created using Class.forName(..).newInstance.
-     *
-     * @param a_representation the string representation retrieved from a
-     *        prior call to the getPersistentRepresentation() method.
-     *
-     *
-     * @throws UnsupportedRepresentationException
-     *
-     * @author Audrius Meskauskas
-     * @since 2.0
-     */
-    public void setValueFromPersistentRepresentation(String a_representation)
+  /**
+   * Sets the value and internal state of this Gene from the string
+   * representation returned by a previous invocation of the
+   * getPersistentRepresentation() method.
+   *
+   * If the validator is not THIS and not null, a new validator is
+   * created using Class.forName(..).newInstance.
+   *
+   * @param a_representation the string representation retrieved from a
+   * prior call to the getPersistentRepresentation() method
+   *
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
+   */
+  public void setValueFromPersistentRepresentation(String a_representation)
       throws UnsupportedRepresentationException {
-      if (a_representation != null) {
-        try {
-            /** Remove the old content */
-            ArrayList r = split(a_representation);
-            Iterator iter = r.iterator();
-
-            m_genes = new Gene [r.size()-1];
-             // the first member in array is a validator representation
-
-            StringTokenizer st;
-            String clas;
-            String representation;
-            String g;
-            Gene gene;
-
-           String validator = (String) iter.next();
-           setValidator( createValidator(decode(validator)) );
-
-           for (int i = 0; i < m_genes.length; i++)
-            {
-                g = decode ((String) iter.next());
-                st = new StringTokenizer(g, GENE_DELIMITER);
-                if (st.countTokens()!=2)
-                 throw new UnsupportedRepresentationException("In "+g+", "+
-                  "expecting two tokens, separated by "+GENE_DELIMITER);
-                clas = st.nextToken();
-                representation = st.nextToken();
-                gene = createGene(clas, representation);
-                m_genes [i] = gene;
-            }
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-          throw new UnsupportedRepresentationException(ex.getCause().
-              getMessage());
+    if (a_representation != null) {
+      try {
+        /// Remove the old content.
+        // ------------------------
+        ArrayList r = split(a_representation);
+        Iterator iter = r.iterator();
+        m_genes = new Gene[r.size() - 1];
+        // The first member in array is a validator representation.
+        // --------------------------------------------------------
+        StringTokenizer st;
+        String clas;
+        String representation;
+        String g;
+        Gene gene;
+        String validator = (String) iter.next();
+        setValidator(createValidator(decode(validator)));
+        for (int i = 0; i < m_genes.length; i++) {
+          g = decode( (String) iter.next());
+          st = new StringTokenizer(g, GENE_DELIMITER);
+          if (st.countTokens() != 2)
+            throw new UnsupportedRepresentationException("In " + g + ", " +
+                "expecting two tokens, separated by " + GENE_DELIMITER);
+          clas = st.nextToken();
+          representation = st.nextToken();
+          gene = createGene(clas, representation);
+          m_genes[i] = gene;
         }
       }
+      catch (Exception ex) {
+        ex.printStackTrace();
+        throw new UnsupportedRepresentationException(ex.getCause().
+            getMessage());
+      }
     }
+  }
 
-    /** Create validator from the string representation. */
-    protected supergeneValidator createValidator(String a_rep)
-    {
-        try {
-              StringTokenizer vo = new StringTokenizer
-               (a_rep, GENE_DELIMITER, true);
-              if (vo.countTokens()!=2) throw new Error
-               ("In "+a_rep+", expecting two tokens, separated by "+
-                GENE_DELIMITER);
-
-              String clas = vo.nextToken();
-
-              supergeneValidator sv;
-
-              if (clas.equals("this")) sv = this;
-              else
-              if (clas.equals("null")) sv = null;
-              else sv = (supergeneValidator)
-               Class.forName(clas).newInstance();
-
-              if (sv!=null) sv.setFromPersistent(decode(vo.nextToken()));
-              return sv;
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Error
-             ("Unable to crate validator from '"+a_rep+"' for "+
-             getClass().getName());
-        }
+  /** Create validator from the string representation. */
+  protected supergeneValidator createValidator(String a_rep) {
+    try {
+      StringTokenizer vo = new StringTokenizer
+          (a_rep, GENE_DELIMITER, true);
+      if (vo.countTokens() != 2)throw new Error
+          ("In " + a_rep + ", expecting two tokens, separated by " +
+           GENE_DELIMITER);
+      String clas = vo.nextToken();
+      supergeneValidator sv;
+      if (clas.equals("this")) sv = this;
+      else
+      if (clas.equals("null")) sv = null;
+      else sv = (supergeneValidator)
+          Class.forName(clas).newInstance();
+      if (sv != null) sv.setFromPersistent(decode(vo.nextToken()));
+      return sv;
     }
-
-    /** Creates a new instance of gene. */
-    protected Gene createGene(String a_geneClassName,
-     String a_persistentRepresentation) throws Exception
-     {
-          Class geneClass = Class.forName (a_geneClassName);
-          Gene gene = (Gene) geneClass.newInstance ();
-          gene.setValueFromPersistentRepresentation (a_persistentRepresentation);
-          return gene;
-     }
-
-
-    /** Calls cleanup() for each subgene. */
-    public void cleanup() {
-        for (int i = 0; i < m_genes.length; i++) {
-            m_genes[i].cleanup();
-        }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      throw new Error
+          ("Unable to crate validator from '" + a_rep + "' for " +
+           getClass().getName());
     }
+  }
 
-    /**
-     * @return a string representation of the supergene, providing
-     * class name and calling toString() for all subgenes.
-     */
-    public String toString() {
-        StringBuffer b = new StringBuffer();
-        b.append("Supergene "+getClass().getName()+ " {");
-        for (int i = 0; i < m_genes.length; i++) {
-            b.append(" ");
-            b.append(m_genes[i].toString());
-        }
+  /** Creates a new instance of gene. */
+  protected Gene createGene(String a_geneClassName,
+                            String a_persistentRepresentation)
+      throws Exception {
+    Class geneClass = Class.forName(a_geneClassName);
+    Gene gene = (Gene) geneClass.newInstance();
+    gene.setValueFromPersistentRepresentation(a_persistentRepresentation);
+    return gene;
+  }
 
-        if (m_validator==null) b.append(" non validating ");
-        else
-         if (m_validator!=this) b.append(m_validator.toString());
-        b.append("}");
-        return b.toString();
+  /** Calls cleanup() for each subgene. */
+  public void cleanup() {
+    for (int i = 0; i < m_genes.length; i++) {
+      m_genes[i].cleanup();
     }
+  }
 
-    /** Returns the number of the genes-components of this supergene. */
-    public int size() {
-        return m_genes.length;
+  /**
+   * @return a string representation of the supergene, providing
+   * class name and calling toString() for all subgenes.
+   */
+  public String toString() {
+    StringBuffer b = new StringBuffer();
+    b.append("Supergene " + getClass().getName() + " {");
+    for (int i = 0; i < m_genes.length; i++) {
+      b.append(" ");
+      b.append(m_genes[i].toString());
     }
-
-    /** Calls compareTo() for all subgenes. The passed parameter must be
-     * an instance of abstractSupergene. */
-    public int compareTo(Object o) {
-        abstractSupergene q = (abstractSupergene) o;
-
-        int c = m_genes.length-q.m_genes.length;
-        if (c!=0) return c;
-
-        for (int i = 0; i < m_genes.length; i++) {
-            c = m_genes[i].compareTo(q.m_genes[i]);
-            if (c!=0) return c;
-        }
-        if (getClass().equals(o.getClass())) return 0;
-
-        return getClass().getName().compareTo(o.getClass().getName());
+    if (m_validator == null) {
+      b.append(" non validating ");
     }
+    else if (m_validator != this) {
+      b.append(m_validator.toString());
+    }
+    b.append("}");
+    return b.toString();
+  }
 
-    /**
-     * Calls equals() for each pair of genes. If the supplied object is
-     * an instance of the different class, returns false. Also, the
-     * genes are assumed to be different if they have different validator
-     * classes (or only one of the validators is set to null).
-     */
-    public boolean equals(Object a_gene) {
-        if (a_gene==null || ! (a_gene.getClass().equals(getClass())))
-         return false;
+  /** Returns the number of the genes-components of this supergene. */
+  public int size() {
+    return m_genes.length;
+  }
 
-        abstractSupergene age = (abstractSupergene) a_gene;
+  /** Calls compareTo() for all subgenes. The passed parameter must be
+   * an instance of abstractSupergene. */
+  public int compareTo(Object o) {
+    abstractSupergene q = (abstractSupergene) o;
+    int c = m_genes.length - q.m_genes.length;
+    if (c != 0)return c;
+    for (int i = 0; i < m_genes.length; i++) {
+      c = m_genes[i].compareTo(q.m_genes[i]);
+      if (c != 0) {
+        return c;
+      }
+    }
+    if (getClass().equals(o.getClass())) {
+      return 0;
+    }
+    return getClass().getName().compareTo(o.getClass().getName());
+  }
 
-        if (m_validator!=age.m_validator)
-        if (m_validator!=null && age.m_immutable!=null)
-         if (! m_validator.getClass().equals(age.m_validator.getClass()) )
+  /**
+   * Calls equals() for each pair of genes. If the supplied object is
+   * an instance of the different class, returns false. Also, the
+   * genes are assumed to be different if they have different validator
+   * classes (or only one of the validators is set to null).
+   */
+  public boolean equals(Object a_gene) {
+    if (a_gene == null || ! (a_gene.getClass().equals(getClass()))) {
+      return false;
+    }
+    abstractSupergene age = (abstractSupergene) a_gene;
+    if (m_validator != age.m_validator)
+      if (m_validator != null && age.m_immutable != null)
+        if (!m_validator.getClass().equals(age.m_validator.getClass()))
           return false;
+    return Arrays.equals(m_genes, age.m_genes);
+  }
 
-        return Arrays.equals(m_genes, age.m_genes);
+  /** Returns sum of hashCode() of the genes-components. */
+  public int hashCode() {
+    int s = 0;
+    for (int i = m_genes.length - 1; i >= 0; i--) {
+      s += m_genes[i].hashCode();
     }
+    return s;
+  }
 
-    /** Returns sum of hashCode() of the genes-components. */
-    public int hashCode() {
-        int s = 0;
-        for (int i = m_genes.length-1; i>=0; i--) {
-            s+=m_genes[i].hashCode();
-        }
-        return s;
+  /* Encode string, doubling the separators. */
+  protected static final String encode(String a_x) {
+    try {
+      return URLEncoder.encode(a_x, "UTF-8");
     }
+    catch (UnsupportedEncodingException ex) {
+      throw new Error("This should never happen!");
+    }
+  }
 
-    /* Encode string, doubling the separators. */
-    protected static final String encode(String a_x)
-     {
-        try {
-            return URLEncoder.encode (a_x, "UTF-8");
-        }
-        catch (UnsupportedEncodingException ex) {
-            throw new Error("This should never happen!");
-        }
-     }
+  /** Decode string, undoubling the separators. */
+  protected static final String decode(String a_x) {
+    try {
+      return URLDecoder.decode(a_x, "UTF-8");
+    }
+    catch (UnsupportedEncodingException ex) {
+      throw new Error("This should never happen!");
+    }
+  }
 
-     /** Decode string, undoubling the separators. */
-     protected static final String decode(String a_x)
-     {
-        try {
-            return URLDecoder.decode (a_x, "UTF-8");
-        }
-        catch (UnsupportedEncodingException ex) {
-            throw new Error("This should never happen!");
-        }
-     }
-
-     /**
-      * Splits the string a_x into individual gene representations
-      * @author Audrius Meskauskas
-      * @param a_x The string to split.
-      * @return The elements of the returned array are the
-      * persistent representation strings of the genes - components.
-      */
-     protected static final ArrayList split(String a_x)
-      throws UnsupportedRepresentationException
-       {
-         ArrayList a = new ArrayList();
-
-         StringTokenizer st = new StringTokenizer
-         (a_x,GENE_DELIMITER_HEADING+ GENE_DELIMITER_CLOSING, true);
-
-         while (st.hasMoreTokens())
-          {
-             if (!st.nextToken().equals(GENE_DELIMITER_HEADING))
-              throw new UnsupportedRepresentationException
-                (a_x+" no open tag");
-             String n = st.nextToken();
-             if (n.equals(GENE_DELIMITER_CLOSING)) a.add(""); /* Empty token */
-             else
-              {
-                a.add(n);
-                if (!st.nextToken().equals(GENE_DELIMITER_CLOSING))
-                throw new UnsupportedRepresentationException
-                 (a_x+" no close tag");
-              }
-          }
-         return a;
-       }
-
-    /** Append a new gene to the gene array. */
-    public void addGene(Gene g)
-     {
-         if (m_genes == null)
-                 m_genes = new Gene [] { g };
-          else
-              {
-                 Gene [] genes = new Gene [m_genes.length+1];
-                 System.arraycopy(m_genes, 0, genes, 0, m_genes.length);
-                 genes [m_genes.length] = g;
-                 m_genes = genes;
-              }
-
-     }
-
-     /**
-      * Sets an object, responsible for deciding if the Supergene allele
-      * combination is valid. If it is set to null, no validation is performed
-      * (all combinations are assumed to be valid). If no validator is
-      * set, the method <code>isValid (Gene [] ) </code>is called.
-      */
-      public void setValidator(supergeneValidator a_validator)
-      {
-          m_validator = a_validator;
+  /**
+   * Splits the string a_x into individual gene representations
+   * @param a_string the string to split
+   * @return the elements of the returned array are the
+   * persistent representation strings of the genes - components
+   *
+   * @author Audrius Meskauskas
+   */
+  protected static final ArrayList split(String a_string)
+      throws UnsupportedRepresentationException {
+    ArrayList a = new ArrayList();
+    StringTokenizer st = new StringTokenizer
+        (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
+    while (st.hasMoreTokens()) {
+      if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
+        throw new UnsupportedRepresentationException
+            (a_string + " no open tag");
       }
+      String n = st.nextToken();
+      if (n.equals(GENE_DELIMITER_CLOSING)) a.add(""); // Empty token
+      else {
+        a.add(n);
+        if (!st.nextToken().equals(GENE_DELIMITER_CLOSING)) {
+          throw new UnsupportedRepresentationException
+              (a_string + " no close tag");
+        }
+      }
+    }
+    return a;
+  }
 
-      /**
-       * Gets an object, responsible for deciding if the Supergene allele
-       * combination is valid. If no external validator was set and the
-       * class uses its own internal validation method, it returns <i>this</i>
-       */
-       public supergeneValidator getValidator()
-       {
-           return m_validator;
-       }
+  /** Append a new gene to the gene array. */
+  public void addGene(Gene a_gene) {
+    if (m_genes == null)
+      m_genes = new Gene[] {
+          a_gene};
+    else {
+      Gene[] genes = new Gene[m_genes.length + 1];
+      System.arraycopy(m_genes, 0, genes, 0, m_genes.length);
+      genes[m_genes.length] = a_gene;
+      m_genes = genes;
+    }
+  }
 
-       /** A validator (initially set to <i>this</i> */
-       protected supergeneValidator m_validator = this;
+  /**
+   * Sets an object, responsible for deciding if the Supergene allele
+   * combination is valid. If it is set to null, no validation is performed
+   * (all combinations are assumed to be valid). If no validator is
+   * set, the method <code>isValid (Gene [] ) </code>is called.
+   */
+  public void setValidator(supergeneValidator a_validator) {
+    m_validator = a_validator;
+  }
 
-       /** {@inheritDoc}
-        * The default implementation returns an empty string. */
-       public String getPersistent() {
-           return "";
-       }
+  /**
+   * Gets an object, responsible for deciding if the Supergene allele
+   * combination is valid. If no external validator was set and the
+   * class uses its own internal validation method, it returns <i>this</i>
+   */
+  public supergeneValidator getValidator() {
+    return m_validator;
+  }
 
-       /** {@inheritDoc}
-        * The default implementation does nothing. */
-       public void setFromPersistent(String a_from) {
-       }
+  /** A validator (initially set to <i>this</i> */
+  protected supergeneValidator m_validator = this;
 
+  /** {@inheritDoc}
+   * The default implementation returns an empty string. */
+  public String getPersistent() {
+    return "";
+  }
+
+  /** {@inheritDoc}
+   * The default implementation does nothing. */
+  public void setFromPersistent(String a_from) {
+  }
 }
