@@ -15,7 +15,7 @@ import org.jgap.*;
 /**
  * Implementation of a NaturalSelector that takes the top n chromosomes into
  * the next generation. n can be specified. Which chromosomes are the best is
- * decided by evaluating their fitness value
+ * decided by evaluating their fitness value.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -71,7 +71,7 @@ public class BestChromosomesSelector
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
-   * @param a_chromosomeToAdd The specimen to add to the pool.
+   * @param a_chromosomeToAdd the specimen to add to the pool.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -97,9 +97,9 @@ public class BestChromosomesSelector
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
    *
-   * @param a_from_pop the population the Chromosomes will be selected from.
-   * @param a_to_pop the population the Chromosomes will be added to.
-   * @param a_howManyToSelect The number of Chromosomes to select.
+   * @param a_from_pop the population the Chromosomes will be selected from
+   * @param a_to_pop the population the Chromosomes will be added to
+   * @param a_howManyToSelect the number of Chromosomes to select
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -118,15 +118,13 @@ public class BestChromosomesSelector
     else {
       canBeSelected = a_howManyToSelect;
     }
-
     int neededSize = a_howManyToSelect;
     if (m_originalRate < 1.0d) {
-      canBeSelected = (int)Math.round((double)canBeSelected * m_originalRate);
+      canBeSelected = (int) Math.round( (double) canBeSelected * m_originalRate);
       if (canBeSelected < 1) {
         canBeSelected = 1;
       }
     }
-
     // Sort the collection of chromosomes previously added for evaluation.
     // Only do this if necessary.
     // -------------------------------------------------------------------
@@ -142,7 +140,6 @@ public class BestChromosomesSelector
       selectedChromosome.setIsSelectedForNextGeneration(true);
       a_to_pop.addChromosome(selectedChromosome);
     }
-
     if (getDoubletteChromosomesAllowed()) {
       int toAdd;
       do {
@@ -183,8 +180,7 @@ public class BestChromosomesSelector
    * Determines whether doublette chromosomes may be added to the selector or
    * will be ignored.
    * @param a_doublettesAllowed true: doublette chromosomes allowed to be
-   *       added to the selector. FALSE: doublettes will be ignored and not
-   *       added
+   * added to the selector. FALSE: doublettes will be ignored and not added
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -217,7 +213,7 @@ public class BestChromosomesSelector
    *
    * @param a_originalRate the rate of how many of the original chromosomes
    * will be selected according to BestChromosomeSelector's strategy. The rest
-   * (non-original) of the chromosomes is addest as duplicates
+   * (non-original) of the chromosomes is added as duplicates
    *
    * @author Klaus Meffert
    * @since 2.0
