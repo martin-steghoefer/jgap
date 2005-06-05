@@ -19,9 +19,15 @@
   that (see request 1214408)
 * Added constructor in BooleanGene allowing to preset the
   allele value
-* Added getGeneTypeAllowed in CompositeGene
+* Added method removeChromosome in Population
+* Added method getGeneTypeAllowed in CompositeGene
 * Added constraint check in constructor Chromosome(int a_size)
 * Added many new test cases
+* Renamed test class p_abstractSupergeneTest to
+  AbstractSupergeneTest
+* Renamed test class abstractSupergenesPerformanceTest to
+  SupergenesPerformanceTest
+* Renamed test class p_force to Force
 * Added javadocs
 * Fixed some spelling errors in javadocs
 
