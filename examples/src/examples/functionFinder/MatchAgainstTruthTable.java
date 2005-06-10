@@ -24,15 +24,15 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  private List truthTable;
+  private List m_truthTable;
 
-  private int currentFitness;
+  private int m_currentFitness;
 
-  private static Syntax syntax;
+  private static Syntax m_syntax;
 
-  private static ExpressionParser parser;
+  private static ExpressionParser m_parser;
 
   // Constants for calculating the fitness value
   // -------------------------------------------
@@ -55,14 +55,14 @@ public class MatchAgainstTruthTable
    * @since 2.2
    */
   public MatchAgainstTruthTable(List a_truthTable) {
-    this.truthTable = a_truthTable;
-    syntax = new JavaSyntax();
-    parser = new ExpressionParser(syntax, null);
+    m_truthTable = a_truthTable;
+    m_syntax = new JavaSyntax();
+    m_parser = new ExpressionParser(m_syntax, null);
     Repository.init();
   }
 
   public int getCurrentFitness() {
-    return currentFitness;
+    return m_currentFitness;
   }
 
   /**
@@ -80,8 +80,8 @@ public class MatchAgainstTruthTable
       //Calculcate result of formula
       formula = Utility.getFormulaFromChromosome(a_chromosome);
       //Calculate fitness
-      int fitness = calcFitness(formula, truthTable);
-      currentFitness = fitness;
+      int fitness = calcFitness(formula, m_truthTable);
+      m_currentFitness = fitness;
       return fitness;
     }
     catch (Exception ex) {
@@ -157,7 +157,7 @@ public class MatchAgainstTruthTable
     // Compile expression with parser
     CompiledFunction ex1;
     try {
-      ex1 = parser.compileFunction(a_formula);
+      ex1 = m_parser.compileFunction(a_formula);
     }
     catch (CompilationException ex) {
       System.err.println("Error in formula: " + a_formula);
