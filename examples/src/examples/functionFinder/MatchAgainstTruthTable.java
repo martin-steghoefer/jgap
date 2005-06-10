@@ -24,7 +24,7 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private List truthTable;
 
@@ -47,9 +47,9 @@ public class MatchAgainstTruthTable
   public static final int LEAST_FITNESS_VALUE = 0;
 
   /**
-   * Consteuctor
-   * @param a_truthTable table of input/output pairs for feeding the formula and
-   * determining the fitness value thru delta computation
+   * Constructor
+   * @param a_truthTable table of input/output pairs for feeding the formula
+   * and determining the fitness value thru delta computation
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -67,18 +67,18 @@ public class MatchAgainstTruthTable
 
   /**
    * Implementation of the evaluate method from class FitnessFunction.
-   * Calculates the fitness of a given Chromosom in a determined way.
-   * @param chromosome the Chromosom to be evaluated
-   * @return positive integer value representing the fitness of the Chromosom
+   * Calculates the fitness of a given Chromosome in a determined way.
+   * @param a_chromosome the Chromosome to be evaluated
+   * @return positive integer value representing the fitness of the Chromosome
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public double evaluate(Chromosome chromosome) {
+  public double evaluate(Chromosome a_chromosome) {
     String formula = null;
     try {
       //Calculcate result of formula
-      formula = Utility.getFormulaFromChromosome(chromosome);
+      formula = Utility.getFormulaFromChromosome(a_chromosome);
       //Calculate fitness
       int fitness = calcFitness(formula, truthTable);
       currentFitness = fitness;
@@ -138,17 +138,17 @@ public class MatchAgainstTruthTable
   /**
    * Fitness value calculation for a given formula. Based on given table of
    * input/output-pairs.
-   * @param formula input formula
-   * @param truthTable table of input/output-pairs for formula
+   * @param a_formula input formula
+   * @param a_truthTable table of input/output-pairs for formula
    * @return fitness value of formula
    * @throws CompilationException e.g. in case of division by zero
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static int calcFitness(String formula, List truthTable)
+  public static int calcFitness(String a_formula, List a_truthTable)
       throws CompilationException {
-    if (formula == null || formula.length() < 6) {
+    if (a_formula == null || a_formula.length() < 6) {
       // Minimal length of 6 because the minmimum prefix "F(x)=" has a length
       // of 5
       return 0;
@@ -157,10 +157,10 @@ public class MatchAgainstTruthTable
     // Compile expression with parser
     CompiledFunction ex1;
     try {
-      ex1 = parser.compileFunction(formula);
+      ex1 = parser.compileFunction(a_formula);
     }
     catch (CompilationException ex) {
-      System.err.println("FORMELFEHLER: " + formula);
+      System.err.println("Error in formula: " + a_formula);
       throw ex;
     }
     // Determine delta values of all function values and add up their squares
@@ -170,8 +170,8 @@ public class MatchAgainstTruthTable
     float diffAbs = 0.0f;
     float delta;
     float deltaAbs;
-    for (int i = 0; i < truthTable.size(); i++) {
-      tupel = (Tupel) truthTable.get(i);
+    for (int i = 0; i < a_truthTable.size(); i++) {
+      tupel = (Tupel) a_truthTable.get(i);
       inputValue = tupel.getInputValue();
       input = new double[] {
           inputValue};
@@ -180,33 +180,11 @@ public class MatchAgainstTruthTable
       deltaAbs = (float) Math.abs(delta);
       diffAbs += deltaAbs;
     }
-    /**@todo consider length of formula (i.e. number of terms, e.g.)*/
+    /**@todo consider length of formula (i.e. number of terms, e.g.) for
+     * fitness calculation*/
 
     // scale fitness value and return it
     return getFitness(diffAbs);
   }
 
-  /**
-   *
-   * @param i int
-   * @return String
-   *
-   * @author Klaus Meffert
-   * @since 2.2
-   */
-  public static String toBinaryString(int i) {
-    return Integer.toBinaryString(i);
-  }
-
-  /**
-   *
-   * @param i Integer
-   * @return String
-   *
-   * @author Klaus Meffert
-   * @since 2.2
-   */
-  public static String toBinaryString(Integer i) {
-    return Integer.toBinaryString(i.intValue());
-  }
 }
