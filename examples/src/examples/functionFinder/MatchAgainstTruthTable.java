@@ -24,7 +24,7 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private List m_truthTable;
 
@@ -112,22 +112,22 @@ public class MatchAgainstTruthTable
 
   /**
    * Helper function: scaled calculation of fitness value
-   * @param input unscaled fitness value
-   * @return scales fitness value
+   * @param a_input unscaled fitness value
+   * @return scaled fitness value
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static int getFitness(float input) {
+  protected int getFitness(float a_input) {
     int result;
-    input = Math.abs(input);
-    if (input >= MAX_FITNESS / RELATION_FITNESS) {
+    a_input = Math.abs(a_input);
+    if (a_input >= MAX_FITNESS / RELATION_FITNESS) {
       // Input too bad --> ignore
       result = 0;
     }
     else {
       // Normal case
-      result = (int) Math.floor(MAX_FITNESS - input * RELATION_FITNESS);
+      result = (int) Math.floor(MAX_FITNESS - a_input * RELATION_FITNESS);
     }
     if (result < 0) {
       result = 0;
@@ -136,8 +136,8 @@ public class MatchAgainstTruthTable
   }
 
   /**
-   * Fitness value calculation for a given formula. Based on given table of
-   * input/output-pairs.
+   * Helper: Fitness value calculation for a given formula. Based on given
+   * table of input/output-pairs.
    * @param a_formula input formula
    * @param a_truthTable table of input/output-pairs for formula
    * @return fitness value of formula
@@ -146,7 +146,7 @@ public class MatchAgainstTruthTable
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static int calcFitness(String a_formula, List a_truthTable)
+  protected int calcFitness(String a_formula, List a_truthTable)
       throws CompilationException {
     if (a_formula == null || a_formula.length() < 6) {
       // Minimal length of 6 because the minmimum prefix "F(x)=" has a length
