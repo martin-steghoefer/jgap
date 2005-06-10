@@ -33,17 +33,19 @@ public abstract class FitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private static double NO_FITNESS_VALUE = -1.0000000d;
+
+  private double m_lastComputedFitnessValue;
 
   /**
    * Retrieves the fitness value of the given Chromosome. The fitness
    * value will be a positive double.
    *
    * @param a_subject the Chromosome for which to compute and return the
-   *                  fitness value.
-   * @return the fitness value of the given Chromosome.
+   * fitness value
+   * @return the fitness value of the given Chromosome
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -60,19 +62,30 @@ public abstract class FitnessFunction
           "Fitness values must be positive! Received value: " +
           fitnessValue);
     }
+    m_lastComputedFitnessValue = fitnessValue;
     return fitnessValue;
   }
 
+  /**
+   * @return the last fitness value computed via method getFitnessValue(
+   * Chromosome), or 0.0 if the former method has not been called yet.
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public double getLastComputedFitnessValue() {
+    return m_lastComputedFitnessValue;
+  }
   /**
    * Determine the fitness of the given Chromosome instance. The higher the
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject The Chromosome instance to evaluate.
+   * @param a_subject the Chromosome instance to evaluate
    *
-   * @return A positive double reflecting the fitness rating of the given
-   *         Chromosome. Note that if a non-positive double is returned,
-   *         a RuntimeException should be generated.
+   * @return positive double reflecting the fitness rating of the given
+   * Chromosome. Note that if a non-positive double is returned, a
+   * RuntimeException should be generated
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
