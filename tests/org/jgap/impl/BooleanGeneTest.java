@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Test class for BooleanGene class
+ * Tests the BooleanGene class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -511,5 +511,29 @@ public class BooleanGeneTest
   public void testHashCode_0() {
     BooleanGene gene = new BooleanGene();
     assertEquals( -2, gene.hashCode());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_0() {
+    BaseGene gene = new BooleanGene();
+    assertEquals(0.0, gene.getEnergy(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_1() {
+    BaseGene gene = new BooleanGene();
+    gene.setEnergy(2.3);
+    assertEquals(2.3, gene.getEnergy(), DELTA);
+    gene.setEnergy(-55.8);
+    assertEquals(-55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy(0.5);
+    gene.setEnergy(0.8);
+    assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 }

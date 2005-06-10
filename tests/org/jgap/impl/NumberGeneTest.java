@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for (abstract) NumberGene class
+ * Tests the (abstract) NumberGene class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -328,6 +328,30 @@ public class NumberGeneTest
     }
     );
     assertNotNull(gene1.getConstraintChecker());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_0() {
+    BaseGene gene = new NumberGeneImpl(0, 1);
+    assertEquals(0.0, gene.getEnergy(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_1() {
+    BaseGene gene = new NumberGeneImpl(2, 4);
+    gene.setEnergy(2.3);
+    assertEquals(2.3, gene.getEnergy(), DELTA);
+    gene.setEnergy( -55.8);
+    assertEquals( -55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy(0.5);
+    gene.setEnergy(0.8);
+    assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 
   /**

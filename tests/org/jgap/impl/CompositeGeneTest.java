@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -645,5 +643,29 @@ public class CompositeGeneTest
     gene1.addGene(d);
     gene1.setToRandomValue(new RandomGeneratorForTest(0.23d));
     assertEquals( (1.8d - 0.5d) * 0.23d + 0.5d, d.doubleValue(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_0() {
+    BaseGene gene = new CompositeGene();
+    assertEquals(0.0, gene.getEnergy(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_1() {
+    BaseGene gene = new CompositeGene();
+    gene.setEnergy(2.3);
+    assertEquals(2.3, gene.getEnergy(), DELTA);
+    gene.setEnergy( -55.8);
+    assertEquals( -55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy(0.5);
+    gene.setEnergy(0.8);
+    assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 }

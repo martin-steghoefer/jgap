@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -659,5 +659,29 @@ public class DoubleGeneTest
   public void testHashCode_0() {
     DoubleGene gene = new DoubleGene(0, 100);
     assertEquals(-3, gene.hashCode());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_0() {
+    BaseGene gene = new DoubleGene();
+    assertEquals(0.0, gene.getEnergy(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetEnergy_1() {
+    BaseGene gene = new DoubleGene();
+    gene.setEnergy(2.3);
+    assertEquals(2.3, gene.getEnergy(), DELTA);
+    gene.setEnergy(-55.8);
+    assertEquals(-55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy(0.5);
+    gene.setEnergy(0.8);
+    assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 }
