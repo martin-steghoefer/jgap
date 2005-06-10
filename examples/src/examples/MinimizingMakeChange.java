@@ -42,7 +42,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -54,9 +54,8 @@ public class MinimizingMakeChange {
    * coins necessary to make up the given target amount of change. The
    * solution will then be written to System.out.
    *
-   * @param a_targetChangeAmount The target amount of change for which this
-   *                             method is attempting to produce the minimum
-   *                             number of coins.
+   * @param a_targetChangeAmount the target amount of change for which this
+   * method is attempting to produce the minimum number of coins
    * @throws Exception
    *
    * @author Neil Rotstan
@@ -189,7 +188,7 @@ public class MinimizingMakeChange {
    * amount of change to create (in other words, 75 would be equal to 75
    * cents).
    *
-   * @param args the command-line arguments.
+   * @param args amount of change in cents to create
    * @throws Exception
    *
    * @author Neil Rotstan

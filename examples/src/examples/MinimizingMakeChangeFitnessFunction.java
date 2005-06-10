@@ -22,7 +22,7 @@ public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private final int m_targetAmount;
 
@@ -46,10 +46,10 @@ public class MinimizingMakeChangeFitnessFunction
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject The Chromosome instance to evaluate.
+   * @param a_subject the Chromosome instance to evaluate
    *
-   * @return A positive double reflecting the fitness rating of the given
-   *         Chromosome.
+   * @return positive double reflecting the fitness rating of the given
+   * Chromosome
    * @since 2.0 (until 1.1: return type int)
    */
   public double evaluate(Chromosome a_subject) {
@@ -101,18 +101,8 @@ public class MinimizingMakeChangeFitnessFunction
    * Calculates the penalty to apply to the fitness value based on the ammount
    * of coins in the solution
    *
-   * @param a_coins Number of coins in the solution
-   * @return A penalty for the fitness value base on the number of coins
-   *
-
-
-
-  /**
-   * Calculates the penalty to apply to the fitness value based on the ammount
-   * of coins in the solution
-   *
-   * @param a_coins Number of coins in the solution
-   * @return A penalty for the fitness value base on the number of coins
+   * @param a_coins number of coins in the solution
+   * @return penalty for the fitness value base on the number of coins
    *
    * @author John Serri
    * @since 2.2
@@ -128,9 +118,9 @@ public class MinimizingMakeChangeFitnessFunction
    * Calculates the total amount of change (in cents) represented by
    * the given potential solution and returns that amount.
    *
-   * @param a_potentialSolution The pontential solution to evaluate.
+   * @param a_potentialSolution the potential solution to evaluate
    * @return The total amount of change (in cents) represented by the
-   *         given solution.
+   * given solution
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -148,10 +138,10 @@ public class MinimizingMakeChangeFitnessFunction
    * Retrieves the number of coins represented by the given potential
    * solution at the given gene position.
    *
-   * @param a_potentialSolution The potential solution to evaluate.
-   * @param a_position The gene position to evaluate.
-   * @return the number of coins represented by the potential solution
-   *         at the given gene position.
+   * @param a_potentialSolution the potential solution to evaluate
+   * @param a_position The gene position to evaluate
+   * @return the number of coins represented by the potential solution at the
+   * given gene position
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -167,8 +157,8 @@ public class MinimizingMakeChangeFitnessFunction
    * Returns the total number of coins represented by all of the genes in
    * the given potential solution.
    *
-   * @param a_potentialsolution The potential solution to evaluate.
-   * @return The total number of coins represented by the given Chromosome.
+   * @param a_potentialsolution the potential solution to evaluate
+   * @return total number of coins represented by the given Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
