@@ -15,6 +15,7 @@
 * InversionOperator: fixed test cases
 * TSP example: eliminated design flaw with configuration
   object
+* Added method getLastComputedFitnessValue in FitnessFunction
 * Added default constructor in Chromosome as well as tests for
   that (see request 1214408)
 * Added constructor in BooleanGene allowing to preset the
@@ -39,6 +40,7 @@
   SupergeneChangeFitnessFunction
 * Renamed test class p_abstractChangFitnessFunction to
   AbstractChangFitnessFunction
+* Improved architecture of example FormulaFinder
 * Added javadocs
 * Fixed some spelling errors in javadocs
 
