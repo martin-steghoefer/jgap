@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -296,7 +296,8 @@ public class Chromosome
         }
         else {
           // Application data object does not support cloning.
-          // Therefor just copy the reference *uuumh*
+          // Therefor just copy the reference *uuumh*.
+          // -------------------------------------------------
           ret.setApplicationData(getApplicationData());
         }
       }
@@ -304,7 +305,8 @@ public class Chromosome
     }
     catch (CloneNotSupportedException cex) {
       // rethrow as IllegalStateException to be backward compatible and have
-      // a more convenient handling
+      // a more convenient handling.
+      // -------------------------------------------------------------------
       throw new IllegalStateException(cex.getMessage());
     }
   }
@@ -314,8 +316,8 @@ public class Chromosome
    * first gene is at index zero and the last gene is at the index equal to
    * the size of this Chromosome - 1.
    *
-   * @param a_desiredLocus The index of the gene value to be returned
-   * @return The Gene at the given index
+   * @param a_desiredLocus index of the gene value to be returned
+   * @return Gene at the given index
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -377,6 +379,19 @@ public class Chromosome
     if (m_fitnessValue >= 0.000d) {
       return m_fitnessValue;
     }
+    else {
+      return calcFitnessValue();
+    }
+  }
+
+  /**
+   * @return fitness value of this chromosome determined via the registered
+   * fitness function
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  protected double calcFitnessValue() {
     if (Genotype.getConfiguration() != null) {
       FitnessFunction normalFitnessFunction =
           Genotype.getConfiguration().getFitnessFunction();
@@ -787,4 +802,5 @@ public class Chromosome
   public boolean isCompareApplicationData() {
     return m_compareAppData;
   }
+
 }
