@@ -20,7 +20,7 @@ import org.jgap.*;
  * <p>
  * This MutationOperator supports both fixed and dynamic mutation rates.
  * A fixed rate is one specified at construction time by the user. A dynamic
- * rate is one determined by this class if no fixed rate is provided, and is
+ * rate is determined by this class if no fixed rate is provided, and is
  * calculated based on the size of the Chromosomes in the population such
  * that, on average, one gene will be mutated for every ten Chromosomes
  * processed by this operator.
@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -67,7 +67,7 @@ public class MutationOperator
    * mutation rate calculator, which results in dynamic mutation being turned
    * on.
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
-   *        computation
+   * computation
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -80,11 +80,10 @@ public class MutationOperator
    * Constructs a new instance of this MutationOperator with the given
    * mutation rate.
    *
-   * @param a_desiredMutationRate The desired rate of mutation, expressed
-   *                              as the denominator of the 1 / X fraction.
-   *                              For example, 1000 would result in 1/1000
-   *                              genes being mutated on average. A mutation
-   *                              rate of zero disables mutation entirely.
+   * @param a_desiredMutationRate desired rate of mutation, expressed as
+   * the denominator of the 1 / X fraction. For example, 1000 would result
+   * in 1/1000 genes being mutated on average. A mutation rate of zero disables
+   * mutation entirely.
    *
    * @author Neil Rotstan
    * @since 1.1
@@ -107,16 +106,14 @@ public class MutationOperator
    * should never modify the original population, but should first make copies
    * of the Chromosomes selected for modification and operate upon the copies.
    *
-   * @param a_population The population of chromosomes from the current
-   *                     evolution prior to exposure to any genetic operators.
-   *                     Chromosomes in this array should never be modified.
-   * @param a_candidateChromosomes The pool of chromosomes that are candidates
-   *                               for the next evolved population. Only these
-   *                               chromosomes will go to the natural
-   *                               phase, so it's important to add any
-   *                               modified copies of Chromosomes to this
-   *                               list if it's desired for them to be
-   *                               considered for natural selection.
+   * @param a_population population of chromosomes from the current evolution
+   * prior to exposure to any genetic operators. Chromosomes in this array
+   * should never be modified.
+   * @param a_candidateChromosomes pool of chromosomes that are candidates
+   * for the next evolved population. Only these chromosomes will go to the
+   * natural phase, so it's important to add any modified copies of Chromosomes
+   * to this list if it's desired for them to be considered for natural
+   * selection.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -185,7 +182,7 @@ public class MutationOperator
           }
           // Process all atomic elements in the gene. For a StringGene this
           // would be the length of the string, for an IntegerGene, it is
-          // always one element
+          // always one element.
           // --------------------------------------------------------------
           if (genes[j] instanceof CompositeGene) {
             CompositeGene compositeGene = (CompositeGene) genes[j];
@@ -233,15 +230,15 @@ public class MutationOperator
   }
 
   /**
-   * Sets the MutationRateCalculator to be used for determining the strengt of
+   * Sets the MutationRateCalculator to be used for determining the strength of
    * mutation
-   * @param m_mutationRateCalc MutationRateCalculator
+   * @param a_mutationRateCalc MutationRateCalculator
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setMutationRateCalc(IUniversalRateCalculator m_mutationRateCalc) {
-    this.m_mutationRateCalc = m_mutationRateCalc;
+  public void setMutationRateCalc(IUniversalRateCalculator a_mutationRateCalc) {
+    m_mutationRateCalc = a_mutationRateCalc;
     if (m_mutationRateCalc != null) {
       m_mutationRate = 0;
     }
