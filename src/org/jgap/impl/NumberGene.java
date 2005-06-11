@@ -21,7 +21,7 @@ public abstract class NumberGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -40,28 +40,29 @@ public abstract class NumberGene
    * be a NumberGene) for order, which is determined by the number
    * value of this Gene compared to the one provided for comparison.
    *
-   * @param  other the NumberGene to be compared to this NumberGene.
+   * @param a_other the NumberGene to be compared to this NumberGene
    * @return a negative integer, zero, or a positive integer as this object
-   * is less than, equal to, or greater than the object provided for comparison.
+   * is less than, equal to, or greater than the object provided for comparison
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this NumberGene.
+   * from being compared to this NumberGene
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public int compareTo(Object other) {
-    NumberGene otherGene = (NumberGene) other;
+  public int compareTo(Object a_other) {
+    NumberGene otherGene = (NumberGene) a_other;
     // First, if the other gene (or its value) is null, then this is
     // the greater allele. Otherwise, just use the overridden compareToNative
     // method to perform the comparison.
-    // ---------------------------------------------------------------
+    // ----------------------------------------------------------------------
     if (otherGene == null) {
       return 1;
     }
     else if (otherGene.m_value == null) {
-      // check if type corresponds (because we could have a type not inherited
-      // from NumberGene)
+      // Check if type corresponds (because we could have a type not inherited
+      // from NumberGene).
+      // ---------------------------------------------------------------------
       if (!otherGene.getClass().equals(this.getClass())) {
         throw new ClassCastException(
             "Comparison not possible: different types!");
@@ -89,15 +90,15 @@ public abstract class NumberGene
    * Compares to objects by first casting them into their expected type
    * (e.g. Integer for IntegerGene) and then calling the compareTo-method
    * of the casted type.
-   * @param o1 first object to be compared, always is not null
-   * @param o2 second object to be compared, always is not null
+   * @param a_o1 first object to be compared, always is not null
+   * @param a_o2 second object to be compared, always is not null
    * @return a negative integer, zero, or a positive integer as this object
-   * is less than, equal to, or greater than the object provided for comparison.
+   * is less than, equal to, or greater than the object provided for comparison
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  protected abstract int compareToNative(Object o1, Object o2);
+  protected abstract int compareToNative(Object a_o1, Object a_o2);
 
   /**
    * Sets the value (allele) of this Gene to the new given value. This class
@@ -105,7 +106,7 @@ public abstract class NumberGene
    * If the value is above or below the upper or lower bounds, it will be
    * mappped to within the allowable range.
    *
-   * @param a_newValue the new value of this Gene instance.
+   * @param a_newValue the new value of this Gene instance
    *
    * @author Klaus Meffert
    * @since 1.1
