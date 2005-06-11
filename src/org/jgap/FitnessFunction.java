@@ -31,13 +31,12 @@ package org.jgap;
  */
 public abstract class FitnessFunction
     implements java.io.Serializable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
-  private static double NO_FITNESS_VALUE = -1.0000000d;
+  public static double NO_FITNESS_VALUE = -1.0000000d;
 
-  private double m_lastComputedFitnessValue;
+  private double m_lastComputedFitnessValue = NO_FITNESS_VALUE;
 
   /**
    * Retrieves the fitness value of the given Chromosome. The fitness
@@ -68,7 +67,8 @@ public abstract class FitnessFunction
 
   /**
    * @return the last fitness value computed via method getFitnessValue(
-   * Chromosome), or 0.0 if the former method has not been called yet.
+   * Chromosome), or NO_FITNES_VALUE if the former method has not been called
+   * yet.
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -76,6 +76,7 @@ public abstract class FitnessFunction
   public double getLastComputedFitnessValue() {
     return m_lastComputedFitnessValue;
   }
+
   /**
    * Determine the fitness of the given Chromosome instance. The higher the
    * return value, the more fit the instance. This method should always
@@ -99,6 +100,7 @@ public abstract class FitnessFunction
    *
    * @author Klaus Meffert
    * @since 2.0
+   * @deprecated use NO_FITNESS_VALUE instead
    */
   public double getNoFitnessValue() {
     return NO_FITNESS_VALUE;
