@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -259,6 +259,36 @@ public class PopulationTest
       chromosomes.add(c);
     }
     Chromosome fittest = (Chromosome) chromosomes.get(99);
+    p.setChromosomes(chromosomes);
+    assertEquals(fittest, p.determineFittestChromosome());
+  }
+
+  /**
+   * Ordered list of fitness values of chroms in population. Use fitness
+   * evaluator different from standard one
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testDetermineFittestChromosome_3()
+      throws Exception {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    Genotype.getConfiguration().setFitnessEvaluator(
+        new DeltaFitnessEvaluator());
+    List chromosomes = new ArrayList();
+    Gene g = null;
+    Chromosome c = null;
+    Population p = new Population();
+    int nTot = 100;
+    for (int i = 0; i < nTot; i++) {
+      g = new DoubleGene();
+      c = new Chromosome(g, 10);
+      c.setFitnessValue(i);
+      p.addChromosome(c);
+      chromosomes.add(c);
+    }
+    Chromosome fittest = (Chromosome) chromosomes.get(0);
     p.setChromosomes(chromosomes);
     assertEquals(fittest, p.determineFittestChromosome());
   }
