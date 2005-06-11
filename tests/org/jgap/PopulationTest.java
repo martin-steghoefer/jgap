@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -189,7 +189,61 @@ public class PopulationTest
     }
   }
 
+  /**
+   * Empty population
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testDetermineFittestChromosome_0()
+      throws Exception {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    Population p = new Population();
+    assertEquals(null, p.determineFittestChromosome());
+  }
+
+  /**
+   * Unordered list of fitness values of chroms in population
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testDetermineFittestChromosome_1()
+      throws Exception {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    List chromosomes = new ArrayList();
+    Gene g = null;
+    Chromosome c = null;
+    Population p = new Population();
+    g = new DoubleGene();
+    c = new Chromosome(g, 10);
+    c.setFitnessValue(5);
+    p.addChromosome(c);
+    chromosomes.add(c);
+    c = new Chromosome(g, 3);
+    c.setFitnessValue(19);
+    p.addChromosome(c);
+    chromosomes.add(c);
+    c = new Chromosome(g, 1);
+    c.setFitnessValue(11);
+    p.addChromosome(c);
+    chromosomes.add(c);
+    c = new Chromosome(g, 8);
+    c.setFitnessValue(18);
+    p.addChromosome(c);
+    chromosomes.add(c);
+    Chromosome fittest = (Chromosome) chromosomes.get(1);
+    p.setChromosomes(chromosomes);
+    assertEquals(fittest, p.determineFittestChromosome());
+  }
+
+  /**
+   * Ordered list of fitness values of chroms in population
+   * @throws Exception
+   */
+  public void testDetermineFittestChromosome_2()
       throws Exception {
     Genotype.setConfiguration(new DefaultConfiguration());
     List chromosomes = new ArrayList();
@@ -206,7 +260,7 @@ public class PopulationTest
     }
     Chromosome fittest = (Chromosome) chromosomes.get(99);
     p.setChromosomes(chromosomes);
-    assertEquals(p.determineFittestChromosome(), fittest);
+    assertEquals(fittest, p.determineFittestChromosome());
   }
 
   public void testSize_0() {
@@ -354,7 +408,7 @@ public class PopulationTest
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testdoSerialize_0()
+  public void testDoSerialize_0()
       throws Exception {
     // construct genotype to be serialized
     Chromosome[] chroms = new Chromosome[1];
