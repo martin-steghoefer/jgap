@@ -32,11 +32,10 @@ import org.jgap.*;
  */
 public class CrossoverOperator
     implements GeneticOperator {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
-   /**
+  /**
    * The current crossover rate used by this crossover operator.
    */
   protected int m_crossoverRate;
@@ -47,7 +46,7 @@ public class CrossoverOperator
    */
   private IUniversalRateCalculator m_crossoverRateCalc;
 
-   /**
+  /**
    * Constructs a new instance of this CrossoverOperator without a specified
    * crossover rate, this results in dynamic crossover rate being turned off.
    * This means that the crossover rate will be fixed at populationsize\2.
@@ -56,9 +55,9 @@ public class CrossoverOperator
    * @since 2.0
    */
   public CrossoverOperator() {
-      //set the default crossoverRate to be populationsize/2
-      m_crossoverRate = 2;
-      setCrossoverRateCalc(null);
+    //set the default crossoverRate to be populationsize/2
+    m_crossoverRate = 2;
+    setCrossoverRateCalc(null);
   }
 
   /**
@@ -120,19 +119,17 @@ public class CrossoverOperator
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-
     // Work out the number of crossovers that should be performed.
     // -----------------------------------------------------------
     int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = 0;
-    if (m_crossoverRateCalc == null){
-        numCrossovers = size / m_crossoverRate;
+    if (m_crossoverRateCalc == null) {
+      numCrossovers = size / m_crossoverRate;
     }
-    else{
-        numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
+    else {
+      numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
-
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
@@ -140,14 +137,13 @@ public class CrossoverOperator
     // the two chromosomes.
     // --------------------------------------------------------------
     int index1, index2;
-
     for (int i = 0; i < numCrossovers; i++) {
       index1 = generator.nextInt(size);
       index2 = generator.nextInt(size);
       Chromosome chrom1 = a_population.getChromosome(index1);
       Chromosome chrom2 = a_population.getChromosome(index2);
-      Chromosome firstMate = (Chromosome)chrom1.clone();
-      Chromosome secondMate = (Chromosome)chrom2.clone();
+      Chromosome firstMate = (Chromosome) chrom1.clone();
+      Chromosome secondMate = (Chromosome) chrom2.clone();
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = generator.nextInt(firstGenes.length);
@@ -161,7 +157,7 @@ public class CrossoverOperator
         if (firstGenes[j] instanceof CompositeGene) {
           //randomly determine gene to be considered
           index1 = generator.nextInt(firstGenes[j].size());
-          gene1 = ((CompositeGene)firstGenes[j]).geneAt(index1);
+          gene1 = ( (CompositeGene) firstGenes[j]).geneAt(index1);
         }
         else {
           gene1 = firstGenes[j];
@@ -170,7 +166,7 @@ public class CrossoverOperator
         if (secondGenes[j] instanceof CompositeGene) {
           //randomly determine gene to be considered
           index2 = generator.nextInt(secondGenes[j].size());
-          gene2 = ((CompositeGene)secondGenes[j]).geneAt(index2);
+          gene2 = ( (CompositeGene) secondGenes[j]).geneAt(index2);
         }
         else {
           gene2 = secondGenes[j];
@@ -195,7 +191,8 @@ public class CrossoverOperator
    * @author Chris Knowles
    * @since 2.0
    */
-  private void setCrossoverRateCalc(IUniversalRateCalculator a_crossoverRateCalculator){
-      this.m_crossoverRateCalc = a_crossoverRateCalculator;
+  private void setCrossoverRateCalc(IUniversalRateCalculator
+                                    a_crossoverRateCalculator) {
+    this.m_crossoverRateCalc = a_crossoverRateCalculator;
   }
 }
