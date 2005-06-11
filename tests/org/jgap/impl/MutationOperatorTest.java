@@ -10,13 +10,11 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
- * Tests for MutationOperator class
+ * Tests the MutationOperator class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -201,6 +199,7 @@ public class MutationOperatorTest
    * @since 2.4
    */
   public void testOperate_4() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     MutationOperator mutOp = new MutationOperator(0);
     mutOp.setMutationRateCalc(null);
     List candChroms = new Vector();
@@ -213,11 +212,10 @@ public class MutationOperatorTest
     candChroms.add(chrom1);
     candChroms.add(chrom2);
     mutOp.operate(null, candChroms);
-    assertEquals(2,candChroms.size());
-    assertEquals(chrom1,candChroms.get(0));
-    assertEquals(chrom2,candChroms.get(1));
+    assertEquals(2, candChroms.size());
+    assertEquals(chrom1, candChroms.get(0));
+    assertEquals(chrom2, candChroms.get(1));
   }
-
 
   /**
    * @throws Exception
@@ -264,6 +262,7 @@ public class MutationOperatorTest
    * @since 2.2
    */
   public void testOperate_6() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     MutationOperator mutOp = new MutationOperator(0);
     mutOp.setMutationRateCalc(null);
     mutOp.operate(null, null);
@@ -313,7 +312,7 @@ public class MutationOperatorTest
     //mutated gene
     assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
                  ( (
-                  IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
+        IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
                   geneAt(0)).intValue());
   }
 }
