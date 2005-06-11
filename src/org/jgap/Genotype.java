@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   /**
    * The current active Configuration instance.
@@ -216,8 +216,8 @@ public class Genotype
     if (getConfiguration().isPreserveFittestIndividual()) {
       fittest = getPopulation().determineFittestChromosome();
     }
-    // Apply NaturalSelectors before GeneticOperators will be applied.
-    // ---------------------------------------------------------------
+    // Apply certain NaturalSelectors before GeneticOperators will be applied.
+    // -----------------------------------------------------------------------
     applyNaturalSelectors(true);
     // Execute all of the Genetic Operators.
     // -------------------------------------
@@ -227,8 +227,8 @@ public class Genotype
       ( (GeneticOperator) operatorIterator.next()).operate(getPopulation(),
           getPopulation().getChromosomes());
     }
-    // Apply NaturalSelectors after GeneticOperators have been applied.
-    // ----------------------------------------------------------------
+    // Apply certain NaturalSelectors after GeneticOperators have been applied.
+    // ------------------------------------------------------------------------
     applyNaturalSelectors(false);
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
