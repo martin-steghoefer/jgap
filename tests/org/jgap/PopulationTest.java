@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -510,5 +510,21 @@ public class PopulationTest
     catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testRemoveChromosome_3() throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Population pop = new Population(chroms);
+    Chromosome c = pop.removeChromosome(0);
+    assertEquals(chroms[0],c);
+    assertTrue(((Boolean)privateAccessor.getField(pop,"m_changed")).booleanValue());
   }
 }
