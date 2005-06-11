@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -456,6 +456,9 @@ public class ChromosomeTest
     assertEquals(chrom.getGenes().getClass(), chrom2.getGenes().getClass());
     assertEquals(chrom.toString(), chrom2.toString());
     assertTrue(chrom.equals(chrom2));
+    assertFalse(chrom.getGenes() == chrom2.getGenes());
+    assertFalse(chrom.getGene(0) == chrom2.getGene(0));
+    assertFalse(chrom.getGene(1) == chrom2.getGene(1));
   }
 
   /**
