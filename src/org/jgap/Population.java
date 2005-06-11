@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -211,7 +211,8 @@ public class Population
     while (it.hasNext()) {
       Chromosome chrom = (Chromosome) it.next();
       fitness = chrom.getFitnessValue();
-      if (evaluator.isFitter(fitness, bestFitness) || m_fittestChromosome == null) {
+      if (evaluator.isFitter(fitness, bestFitness)
+          || m_fittestChromosome == null) {
         m_fittestChromosome = chrom;
         bestFitness = fitness;
       }
@@ -221,7 +222,8 @@ public class Population
   }
 
   /**
-   *
+   * Mark the population as changed. Look for usage of variable m_changed
+   * for details.
    * @param a_changed true: mark population as changed; false: mark as not
    * changed (meaning: changes already acknowledged)
    *
@@ -247,7 +249,7 @@ public class Population
   /**
    * Removes a chromosome in the list at the given index. Method has package
    * visibility to signal that this is a method not to be used outside the
-   * JGAP kernal for normal circumstances.
+   * JGAP kernel under normal circumstances.
    *
    * @param a_index index of chromosome to be removed in list
    * @return removed Chromosome
