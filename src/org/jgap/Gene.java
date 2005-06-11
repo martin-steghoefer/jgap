@@ -30,7 +30,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.13 $";
+  final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -53,8 +53,8 @@ public interface Gene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
-   *         setup as this concrete Gene.
+   * @return a new Gene instance of the same type and with the same setup as
+   * this concrete Gene
    *
    * @since 1.0
    */
@@ -64,11 +64,10 @@ public interface Gene
    * Sets the value of this Gene to the new given value. The actual
    * type of the value is implementation-dependent.
    *
-   * @param a_newValue the new value of this Gene instance.
+   * @param a_newValue the new value of this Gene instance
    *
    * @since 1.0
    */
-
   void setAllele(Object a_newValue);
 
   /**
@@ -90,13 +89,12 @@ public interface Gene
    * features will not be available. An UnsupportedOperationException should
    * be thrown if no implementation is provided.
    *
-   * @return A string representation of this Gene's current state.
+   * @return string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    *
    * @since 1.0
    */
-
   String getPersistentRepresentation()
       throws UnsupportedOperationException;
 
@@ -109,17 +107,15 @@ public interface Gene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
+   * prior call to the getPersistentRepresentation() method
    *
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation
    *
    * @since 1.0
    */
-
   void setValueFromPersistentRepresentation(String a_representation)
       throws UnsupportedOperationException, UnsupportedRepresentationException;
 
@@ -128,12 +124,10 @@ public interface Gene
    * implementation. This method exists for the benefit of mutation and other
    * operations that simply desire to randomize the value of a gene.
    *
-   * @param a_numberGenerator The random number generator that should be
-   *                          used to create any random values. It's important
-   *                          to use this generator to maintain the user's
-   *                          flexibility to configure the genetic engine
-   *                          to use the random number generator of their
-   *                          choice.
+   * @param a_numberGenerator The random number generator that should be used
+   * to create any random values. It's important to use this generator to
+   * maintain the user's flexibility to configure the genetic engine to use the
+   * random number generator of their choice
    *
    * @since 1.0
    */
@@ -154,11 +148,10 @@ public interface Gene
 
   /**
    * @return the size of the gene, i.e the number of atomic elements.
-   *         Always 1 for numbers
+   * Always 1 for numbers
    *
    * @since 1.1
    */
-
   int size();
 
   /**
@@ -166,7 +159,7 @@ public interface Gene
    * element at given index (NumberGenes only have one atomic element)
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   * than 1).
+   * than 1)
    *
    * @since 1.1
    */
