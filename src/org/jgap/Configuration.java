@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.util.*;
+
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
@@ -38,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * Constants for toString()
@@ -1030,24 +1031,24 @@ public class Configuration
   /**
    * Pass the name and value of a property to be set.
    *
-   * @param name The name of the property
-   * @param value The value of the property
+   * @param a_name the name of the property
+   * @param a_value the value of the property
    * @throws ConfigException
    * @throws InvalidConfigurationException
    *
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public void setConfigProperty(String name, String value)
+  public void setConfigProperty(String a_name, String a_value)
       throws ConfigException, InvalidConfigurationException {
-    if (name.equals("m_populationSize")) {
+    if (a_name.equals("m_populationSize")) {
       try {
-        Integer popSize = new Integer(value);
+        Integer popSize = new Integer(a_value);
         this.setPopulationSize(popSize.intValue());
       }
       catch (NumberFormatException numEx) {
-        throw new ConfigException("Value for property " + name + " must be " +
-                                  "an Integer, value is " + value);
+        throw new ConfigException("Value for property " + a_name + " must be " +
+                                  "an Integer, value is " + a_value);
       }
     }
   }
