@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -261,6 +261,7 @@ public class Population
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Index must be within bounds!");
     }
+    setChanged(true);
     return (Chromosome) m_chromosomes.remove(a_index);
   }
 
