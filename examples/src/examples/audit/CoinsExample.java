@@ -9,7 +9,6 @@
  */
 package examples.audit;
 
-
 //Uncomment imports and code below to use JFreeChart functionality
 //import java.io.*;
 //import java.awt.image.*;
@@ -30,7 +29,7 @@ import org.jgap.audit.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -42,9 +41,8 @@ public class CoinsExample {
    * coins necessary to make up the given target amount of change. The
    * solution will then be written to System.out.
    *
-   * @param a_targetChangeAmount The target amount of change for which this
-   *                             method is attempting to produce the minimum
-   *                             number of coins.
+   * @param a_targetChangeAmount the target amount of change for which this
+   * method is attempting to produce the minimum number of coins
    * @throws Exception
    *
    * @author Neil Rotstan
@@ -52,15 +50,12 @@ public class CoinsExample {
    * @since 1.0
    */
   public static void makeChangeForAmount(int a_targetChangeAmount)
-      throws
-      Exception {
-
+      throws Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
-
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
@@ -68,7 +63,6 @@ public class CoinsExample {
     FitnessFunction myFunc =
         new CoinsExampleFitnessFunction(a_targetChangeAmount);
     conf.setFitnessFunction(myFunc);
-
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
@@ -87,7 +81,6 @@ public class CoinsExample {
     sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
-
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -95,25 +88,20 @@ public class CoinsExample {
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
     conf.setPopulationSize(50);
-
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     pconf.addGeneticOperatorSlot(new CrossoverOperator());
     pconf.addGeneticOperatorSlot(new MutationOperator());
-
     pconf.addNaturalSelectorSlot(new BestChromosomesSelector());
     pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
-
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
     rn.setNextDouble(0.7d);
     rn.setNextInt(2);
     pconf.addRandomGeneratorSlot(rn);
     pconf.addRandomGeneratorSlot(new GaussianRandomGenerator());
-
-    pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(a_targetChangeAmount));
-
+    pconf.addFitnessFunctionSlot(new CoinsExampleFitnessFunction(
+        a_targetChangeAmount));
     Evaluator eval = new Evaluator(pconf);
-
     /**@todo class Evaluator:
      * input:
      *   + PermutingConfiguration
@@ -126,14 +114,11 @@ public class CoinsExample {
      *   + best fitness value accomplished
      *   + average number of performance improvements for all generations
      */
-
-    int permutation=0;
+    int permutation = 0;
     while (eval.hasNext()) {
-
       // Create random initial population of Chromosomes.
       // ------------------------------------------------
       Genotype population = Genotype.randomInitialGenotype(eval.next());
-
       for (int run = 0; run < 10; run++) {
         // Evolve the population. Since we don't know what the best answer
         // is going to be, we just evolve the max number of times.
@@ -153,13 +138,12 @@ public class CoinsExample {
 //            else {
 //              d = fitness;
 //            }
-            eval.setValue(permutation, run, fitness, ""+permutation, s);
+            eval.setValue(permutation, run, fitness, "" + permutation, s);
             eval.storeGenotype(permutation, run, population);
 //            eval.setValue(permutation,run,fitness, new Integer(0), s);
           }
         }
       }
-
       // Display the best solution we found.
       // -----------------------------------
       Chromosome bestSolutionSoFar = population.getFittestChromosome();
@@ -190,7 +174,6 @@ public class CoinsExample {
           bestSolutionSoFar) + " coins.");
       permutation++;
     }
-
     // Create chart: fitness values average over all permutations.
     // -----------------------------------------------------------
 
@@ -225,27 +208,24 @@ public class CoinsExample {
     double avgAvgFitness = 0.0d;
     double avgAvgDiv = 0.0d;
     double avgAvgBestD = 0.0d;
-
     for (int i = 0; i < maxPerm; i++) {
-
 //      myDataset = eval.calcAvgFitness(i);
       Evaluator.GenotypeDataAvg dataAvg = eval.calcPerformance(i);
       System.err.println("-----------------------------");
-      System.err.println("Perm " +i);
+      System.err.println("Perm " + i);
       System.err.println("Best Fitness " + dataAvg.bestFitnessValue);
       System.err.println(" Generation  " + dataAvg.bestFitnessValueGeneration);
-      System.err.println(" BestFit/Gen " + dataAvg.bestFitnessValue/dataAvg.bestFitnessValueGeneration);
+      System.err.println(" BestFit/Gen " +
+                         dataAvg.bestFitnessValue / dataAvg.bestFitnessValueGeneration);
       System.err.println("Avg. Fitness " + dataAvg.avgFitnessValue);
       System.err.println("Avg. Div.    " + dataAvg.avgDiversityFitnessValue);
       System.err.println("Avg. BestD   " + dataAvg.avgBestDeltaFitnessValue);
-
       avgBestFitness += dataAvg.bestFitnessValue;
       avgBestGen += dataAvg.bestFitnessValueGeneration;
       avgAvgFitness += dataAvg.avgFitnessValue;
       avgAvgDiv += dataAvg.avgDiversityFitnessValue;
       avgAvgBestD += dataAvg.avgBestDeltaFitnessValue;
     }
-
     // Performance metrics for all permutations.
     // -----------------------------------------
     System.err.println("\nOverall Statistics for all permutations");
@@ -255,7 +235,6 @@ public class CoinsExample {
     System.err.println("Avg. Avg. Fitness     " + avgAvgFitness / maxPerm);
     System.err.println("Avg. Avg. Diversity   " + avgAvgDiv / maxPerm);
     System.err.println("Avg. Avg. BestD       " + avgAvgBestD / maxPerm);
-
     // Create chart: performance metrics for all permutations.
     // -----------------------------------------------------------
 
