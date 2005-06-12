@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -71,7 +71,7 @@ public class BestChromosomesSelector
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
-   * @param a_chromosomeToAdd the specimen to add to the pool.
+   * @param a_chromosomeToAdd the specimen to add to the pool
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -87,8 +87,8 @@ public class BestChromosomesSelector
     // New chromosome, insert it into the sorted collection of chromosomes
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
     m_chromosomes.addChromosome(a_chromosomeToAdd);
-    // Indicate that the list of chromosomes to add needs sorting
-    // ----------------------------------------------------------
+    // Indicate that the list of chromosomes to add needs sorting.
+    // -----------------------------------------------------------
     m_needsSorting = true;
   }
 
@@ -107,20 +107,23 @@ public class BestChromosomesSelector
   public synchronized void select(int a_howManyToSelect, Population a_from_pop,
                                   Population a_to_pop) {
     if (a_from_pop != null) {
-      for (int i = 0; i < a_from_pop.size(); i++) {
+      int popSize = a_from_pop.size();
+      for (int i = 0; i < popSize; i++) {
         add(a_from_pop.getChromosome(i));
       }
     }
     int canBeSelected;
-    if (a_howManyToSelect > m_chromosomes.size()) {
-      canBeSelected = m_chromosomes.size();
+    int chromsSize = m_chromosomes.size();
+    if (a_howManyToSelect > chromsSize) {
+      canBeSelected = chromsSize;
     }
     else {
       canBeSelected = a_howManyToSelect;
     }
     int neededSize = a_howManyToSelect;
     if (m_originalRate < 1.0d) {
-      canBeSelected = (int) Math.round( (double) canBeSelected * m_originalRate);
+      canBeSelected = (int) Math.round(
+          (double) canBeSelected * m_originalRate);
       if (canBeSelected < 1) {
         canBeSelected = 1;
       }
@@ -129,7 +132,8 @@ public class BestChromosomesSelector
     // Only do this if necessary.
     // -------------------------------------------------------------------
     if (m_needsSorting) {
-      Collections.sort(m_chromosomes.getChromosomes(), m_fitnessValueComparator);
+      Collections.sort(m_chromosomes.getChromosomes(),
+                       m_fitnessValueComparator);
       m_needsSorting = false;
     }
     // To select a chromosome, we just go thru the sorted list.
@@ -153,8 +157,9 @@ public class BestChromosomesSelector
         }
         // Add existing Chromosome's by cloning them to fill up the return
         // result to contain the desired number of Chromosome's
+        // ---------------------------------------------------------------
         for (int i = 0; i < loopCount; i++) {
-          selectedChromosome = m_chromosomes.getChromosome(i);
+          selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
           selectedChromosome.setIsSelectedForNextGeneration(true);
           a_to_pop.addChromosome(selectedChromosome);
         }
