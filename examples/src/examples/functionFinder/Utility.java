@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  */
 public class Utility {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static int numberOfFunctions;
 
@@ -194,9 +194,11 @@ public class Utility {
     }
     else if (element.termName.equals("+D")) {
       element.termName = String.valueOf(new Random().nextDouble() * 10);
+      /**@todo recalculate fitnessValue of all Chromosomes using "+D"*/
     }
     else if (element.termName.equals("-D")) {
       element.termName = String.valueOf( - (new Random().nextDouble() * 10));
+      /**@todo recalculate fitnessValue of all Chromosomes using "-D"*/
     }
     return element;
   }
