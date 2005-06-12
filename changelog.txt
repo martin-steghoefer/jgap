@@ -1,5 +1,7 @@
 2.4
 ----------
+* Introduced new package org.jgap.impl.fitness for classes
+  related to fitness functions
 * Introduced new abstract base class org.jgap.JGAPTestCase.
   All test cases are now derived from this new class hosting
   commong logic
@@ -7,14 +9,17 @@
   "keepPopulationSizeConstant" (along with getter and setter).
   This parameter is queries in Genotype.evolve() to ensure a
   fixed population size. Default for parameter ist TRUE!
+* WeightedRouletteSelector now cares of FitnessEvaluator!
 * Fixed a performance issue in SwappingMutationOperator
 * Fixed bug in Chromosome.toString()
 * Extended Chromosome.toString()
 * Extended toString() of all Gene implementations
 * GreedyCrossover: enhanced error message and fixed test case
 * InversionOperator: fixed test cases
+* Fitness Function: Made constant NO_FITNESS_VALUE public
 * TSP example: eliminated design flaw with configuration
   object
+* Added new Gene implementation (MapGene)
 * Added method getLastComputedFitnessValue in FitnessFunction
 * Added default constructor in Chromosome as well as tests for
   that (see request 1214408)
