@@ -14,7 +14,8 @@ import java.util.*;
 /**
  * Represents a memory cell used within {@link org.jgap.distr.Culture}, a
  * special form of memory.
- * CultureMemoryCell also stored metadata along with the value-to-store, like
+ * <P>
+ * CultureMemoryCell also stores metadata along with the value-to-store, like
  * date/time of setting a value, change history
  *
  * @author Klaus Meffert
@@ -22,7 +23,7 @@ import java.util.*;
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Informative name of the memory cell (optional)
