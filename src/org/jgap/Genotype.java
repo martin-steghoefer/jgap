@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   /**
    * The current active Configuration instance.
@@ -292,8 +292,8 @@ public class Genotype
    * equivalent to invoking the standard evolve() method the given number
    * of times in a row.
    *
-   * @param a_numberOfEvolutions The number of times to evolve this Genotype
-   *                             before returning.
+   * @param a_numberOfEvolutions the number of times to evolve this Genotype
+   * before returning
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -337,7 +337,7 @@ public class Genotype
    * will be thrown.
    *
    * @param a_activeConfiguration the current active Configuration object
-   * @return Aanewly constructed Genotype instance
+   * @return a newly constructed Genotype instance
    *
    * @throws IllegalArgumentException if the given Configuration object is
    * null
