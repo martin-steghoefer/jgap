@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -382,7 +382,7 @@ public class GenotypeTest
   public void testEvolve_2_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Add another naturalselector (others already exist within
+    // Add another NaturalSelector (others already exist within
     // ConfigurationForTest)
     BestChromosomesSelector bcs = new BestChromosomesSelector();
     bcs.setOriginalRate(1);
@@ -622,7 +622,7 @@ public class GenotypeTest
 
     //Test to see if enough hashcodes are unique
     thc.setFractionUnique(.95);
-    if (thc.testHashCodeUniqueness(UniqueChromosome) == false) {
+    if (!thc.testHashCodeUniqueness(UniqueChromosome)) {
       System.out.println(
           "testHashCodeUniqueness failed\n Actual Percent unique = " +
           thc.getActualFractionUnique());
@@ -655,7 +655,7 @@ public class GenotypeTest
       EqualChromosome.add(geno);
     }
     //If an object is equal it must have the same hashcode
-    if (thc.testHashCodeEquality(EqualChromosome) == false) {
+    if (!thc.testHashCodeEquality(EqualChromosome)) {
       fail();
     }
 
