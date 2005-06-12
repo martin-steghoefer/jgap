@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -74,7 +74,7 @@ public class WeightedRouletteSelector
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *
-   * @param a_chromosomeToAdd The specimen to add to the pool.
+   * @param a_chromosomeToAdd the specimen to add to the pool
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -125,9 +125,9 @@ public class WeightedRouletteSelector
    * be selected than those with lower fitness values, but it should not be
    * guaranteed.
    *
-   * @param a_howManyToSelect The number of Chromosomes to select.
-   * @param a_from_pop the population the Chromosomes will be selected from.
-   * @param a_to_pop the population the Chromosomes will be added to.
+   * @param a_howManyToSelect the number of Chromosomes to select
+   * @param a_from_pop the population the Chromosomes will be selected from
+   * @param a_to_pop the population the Chromosomes will be added to
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -136,12 +136,14 @@ public class WeightedRouletteSelector
   public synchronized void select(int a_howManyToSelect, Population a_from_pop,
                                   Population a_to_pop) {
     if (a_from_pop != null) {
-      for (int i = 0; i < a_from_pop.size(); i++) {
+      int size = a_from_pop.size();
+      for (int i = 0; i < size; i++) {
         add(a_from_pop.getChromosome(i));
       }
     }
 
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = Genotype.getConfiguration().
+        getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
     // that contains the fitness values for each chromosome, one that
@@ -173,7 +175,8 @@ public class WeightedRouletteSelector
       // ------------------------------------------------------
       m_totalNumberOfUsedSlots += counterValues[i];
     }
-    if (a_howManyToSelect > numberOfEntries && !getDoubletteChromosomesAllowed()) {
+    if (a_howManyToSelect > numberOfEntries
+        && !getDoubletteChromosomesAllowed()) {
       a_howManyToSelect = numberOfEntries;
     }
     // To select each chromosome, we just "spin" the wheel and grab
@@ -193,14 +196,14 @@ public class WeightedRouletteSelector
    * "landed upon." Each time a chromosome is selected, one instance of it
    * is removed from the wheel so that it cannot be selected again.
    *
-   * @param a_generator The random number generator to be used during the
-   *                    spinning process.
-   * @param a_fitnessValues An array of fitness values of the respective
-   *                        Chromosomes.
-   * @param a_counterValues An array of total counter values of the
-   *                        respective Chromosomes.
-   * @param a_chromosomes The respective Chromosome instances from which
-   *                      selection is to occur.
+   * @param a_generator the random number generator to be used during the
+   * spinning process
+   * @param a_fitnessValues an array of fitness values of the respective
+   * Chromosomes
+   * @param a_counterValues an array of total counter values of the
+   * respective Chromosomes
+   * @param a_chromosomes the respective Chromosome instances from which
+   * selection is to occur
    * @return selected Chromosome from the roulette wheel
    *
    * @author Neil Rotstan
@@ -235,19 +238,28 @@ public class WeightedRouletteSelector
     // we've found the chromosome sitting in that slot and we return it.
     // --------------------------------------------------------------------
     double currentSlot = 0.0;
+    FitnessEvaluator evaluator = Genotype.getConfiguration().
+        getFitnessEvaluator();
     for (int i = 0; i < a_counterValues.length; i++) {
       // Increment our ongoing total and see if we've landed on the
       // selected slot.
       // ----------------------------------------------------------
       currentSlot += a_counterValues[i];
-      if (currentSlot > selectedSlot - DELTA) {
+      boolean found;
+      if (evaluator.isFitter(2,1)) {
+        found = currentSlot > selectedSlot - DELTA;
+      }
+      else {
+        found = currentSlot <= selectedSlot - DELTA;
+      }
+      if (found) {
         // Remove one instance of the chromosome from the wheel by
         // decrementing the slot counter by the fitness value.
-        // --------------------------------------------------------
+        // -------------------------------------------------------
         a_counterValues[i] -= a_fitnessValues[i];
         m_totalNumberOfUsedSlots -= a_fitnessValues[i];
-        // Now return our selected Chromosome
-        // ----------------------------------
+        // Now return our selected Chromosome.
+        // -----------------------------------
         return a_chromosomes[i];
       }
     }
@@ -308,7 +320,8 @@ public class WeightedRouletteSelector
     // Now divide the total fitness by the largest fitness value to
     // compute the scaling factor.
     // ------------------------------------------------------------
-    if (largestFitnessValue > 0.000000d && totalFitness.floatValue() > 0.0000001d) {
+    if (largestFitnessValue > 0.000000d
+        && totalFitness.floatValue() > 0.0000001d) {
       double scalingFactor =
           totalFitness.divide(new BigDecimal(largestFitnessValue),
                               BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -337,8 +350,7 @@ public class WeightedRouletteSelector
    * Determines whether doublette chromosomes may be added to the selector or
    * will be ignored.
    * @param a_doublettesAllowed true: doublette chromosomes allowed to be
-   *       added to the selector. FALSE: doublettes will be ignored and not
-   *       added
+   * added to the selector. FALSE: doublettes will be ignored and not added
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -390,8 +402,8 @@ class SlotCounter {
    * Resets the internal state of this SlotCounter instance so that it can
    * be used to count slots for a new Chromosome.
    *
-   * @param a_initialFitness The fitness value of the Chromosome for which
-   *                         this instance is acting as a counter.
+   * @param a_initialFitness the fitness value of the Chromosome for which
+   * this instance is acting as a counter
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -405,7 +417,7 @@ class SlotCounter {
    * Retrieves the fitness value of the chromosome for which this instance
    * is acting as a counter.
    *
-   * @return The fitness value that was passed in at reset time.
+   * @return the fitness value that was passed in at reset time
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -430,7 +442,7 @@ class SlotCounter {
    * on the roulette wheel that are currently occupied by the Chromosome
    * associated with this SlotCounter instance.
    *
-   * @return the current value of this counter.
+   * @return the current value of this counter
    */
   public int getCounterValue() {
     return m_count;
@@ -439,8 +451,8 @@ class SlotCounter {
   /**
    * Scales this SlotCounter's fitness value by the given scaling factor.
    *
-   * @param a_scalingFactor The factor by which the fitness value is to be
-   *                        scaled.
+   * @param a_scalingFactor the factor by which the fitness value is to be
+   * scaled
    *
    * @author Neil Rotstan
    * @since 1.0
