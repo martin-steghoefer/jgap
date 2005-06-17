@@ -12,6 +12,8 @@
 * WeightedRouletteSelector now cares of FitnessEvaluator!
 * Fixed a performance issue in SwappingMutationOperator
 * Fixed bug in Chromosome.toString()
+* Fixed bug in BestChromosomesSelector.operate() (index out
+  of bounds in certain circumstances)
 * Extended Chromosome.toString()
 * Extended toString() of all Gene implementations
 * GreedyCrossover: enhanced error message and fixed test case
