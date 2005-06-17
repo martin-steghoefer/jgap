@@ -21,7 +21,7 @@ import com.eteks.parser.*;
 public class Repository
     extends Term {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static List constants;
 
@@ -64,12 +64,12 @@ public class Repository
     constants.add("2");
 //    constants.add("-2");
 
-    // Variables (X to times to extend probability)
+    // Variables (X two times to extend probability)
     constants.add("X");
     constants.add("X");
     constants.add("+I"); // this is any positive integer
-//    constants.add("-I");// this is any negative integer
     constants.add("+D"); // this is any positive double
+//    constants.add("-I");// this is any negative integer
 //    constants.add("-D");// this is any negative double
   }
 
@@ -91,7 +91,6 @@ public class Repository
    */
   public static void defineFunctions() {
 //    functions.add("");//dummy-Funktion, doing nothing (Z80: NOP)
-    Math.abs(2);
     functions.add("Math.log");
     functions.add("Math.exp");
     functions.add("Math.sqrt");
@@ -123,7 +122,7 @@ public class Repository
    * Makes sure to only apply functions being valid for the given input values.
    * @param truthTable Wertetabelle
    */
-  public static void apply(List truthTable) {
+  public static void apply(Map truthTable) {
     MatchAgainstTruthTable.Tupel tupel;
     int j = 0;
     String formula;
@@ -135,10 +134,12 @@ public class Repository
         continue;
       }
       formula = "F(X)=" + s + "(X)";
-      for (int i = 0; i < truthTable.size(); i++) {
-        tupel = (MatchAgainstTruthTable.Tupel) truthTable.get(i);
+      Set keySet = truthTable.keySet();
+      Iterator keys = keySet.iterator();
+      while (keys.hasNext()) {
+        double inputValue = ((Double)keys.next()).doubleValue();
         try {
-          evaluate(formula, tupel.getInputValue());
+          evaluate(formula, inputValue);
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -158,10 +159,11 @@ public class Repository
    * @param inputValue EIngabewert
    * @throws CompilationException
    * @return respond of formula to input value
+   * @author Klaus Meffert
+   * @since 2.2
    */
-  public static double evaluate(String formula, float inputValue)
+  public static double evaluate(String formula, double inputValue)
       throws CompilationException {
-
     CompiledFunction ex1 = parser.compileFunction(formula);
     return ex1.computeFunction(new double[] {inputValue});
   }
