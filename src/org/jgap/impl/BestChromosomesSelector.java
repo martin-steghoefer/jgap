@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -156,7 +156,7 @@ public class BestChromosomesSelector
           loopCount = toAdd;
         }
         // Add existing Chromosome's by cloning them to fill up the return
-        // result to contain the desired number of Chromosome's
+        // result to contain the desired number of Chromosome's.
         // ---------------------------------------------------------------
         for (int i = 0; i < loopCount; i++) {
           selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);

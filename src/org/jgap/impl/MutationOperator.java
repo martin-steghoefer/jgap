@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -108,12 +108,12 @@ public class MutationOperator
    *
    * @param a_population population of chromosomes from the current evolution
    * prior to exposure to any genetic operators. Chromosomes in this array
-   * should never be modified.
+   * should never be modified
    * @param a_candidateChromosomes pool of chromosomes that are candidates
    * for the next evolved population. Only these chromosomes will go to the
    * natural phase, so it's important to add any modified copies of Chromosomes
    * to this list if it's desired for them to be considered for natural
-   * selection.
+   * selection
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -132,9 +132,7 @@ public class MutationOperator
     // Otherwise, go with the mutation rate set upon construction.
     // --------------------------------------------------------------
     boolean mutate = false;
-
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
-
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
@@ -147,18 +145,16 @@ public class MutationOperator
       // For each Chromosome in the population...
       // ----------------------------------------
       for (int j = 0; j < genes.length; j++) {
-
         if (m_mutationRateCalc != null) {
           // If it's a dynamic mutation rate then let the calculator decide
           // whether the current gene should be mutated
           mutate = m_mutationRateCalc.toBePermutated();
         }
         else {
-          // Else non-dynamic so just mutate based on the the current rate.
+          // Non-dynamic, so just mutate based on the the current rate.
           // In fact we use a rate of 1/m_mutationRate
           mutate = (generator.nextInt(m_mutationRate) == 0);
         }
-
         if (mutate) {
           // Now that we want to actually modify the Chromosome,
           // let's make a copy of it (if we haven't already) and
@@ -178,7 +174,6 @@ public class MutationOperator
             // ...then mutate all its genes...
             // -------------------------------
             genes = copyOfChromosome.getGenes();
-
           }
           // Process all atomic elements in the gene. For a StringGene this
           // would be the length of the string, for an IntegerGene, it is
@@ -208,10 +203,9 @@ public class MutationOperator
    */
   private void mutateGene(Gene a_gene, RandomGenerator a_generator) {
     for (int k = 0; k < a_gene.size(); k++) {
-      // Retrieve value between 0 and 1 (not included) from
-      // generator. Then map this value to range -1 and 1
-      // (-1 included, 1 not)
-      // --------------------------------------------------
+      // Retrieve value between 0 and 1 (not included) from generator.
+      // Then map this value to range -1 and 1 (-1 included, 1 not).
+      // -------------------------------------------------------------
       double percentage = -1 + a_generator.nextDouble() * 2;
       // Mutate atomic element by calculated percentage
       // ----------------------------------------------
