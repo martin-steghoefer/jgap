@@ -24,11 +24,11 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private List m_truthTable;
 
-  private int m_currentFitness;
+  private double m_currentFitness;
 
   private static Syntax m_syntax;
 
@@ -61,7 +61,7 @@ public class MatchAgainstTruthTable
     Repository.init();
   }
 
-  public int getCurrentFitness() {
+  public double getCurrentFitness() {
     return m_currentFitness;
   }
 
@@ -69,7 +69,7 @@ public class MatchAgainstTruthTable
    * Implementation of the evaluate method from class FitnessFunction.
    * Calculates the fitness of a given Chromosome in a determined way.
    * @param a_chromosome the Chromosome to be evaluated
-   * @return positive integer value representing the fitness of the Chromosome
+   * @return positive double value representing the fitness of the Chromosome
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -80,7 +80,7 @@ public class MatchAgainstTruthTable
       //Calculcate result of formula
       formula = Utility.getFormulaFromChromosome(a_chromosome);
       //Calculate fitness
-      int fitness = calcFitness(formula, m_truthTable);
+      double fitness = calcFitness(formula, m_truthTable);
       m_currentFitness = fitness;
       return fitness;
     }
@@ -91,7 +91,7 @@ public class MatchAgainstTruthTable
     }
   }
 
-  static class Tupel {
+  class Tupel {
     private float inputValue;
 
     private float outputValue;
@@ -118,7 +118,7 @@ public class MatchAgainstTruthTable
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected int getFitness(float a_input) {
+  protected double getFitness(float a_input) {
     int result;
     a_input = Math.abs(a_input);
     if (a_input >= MAX_FITNESS / RELATION_FITNESS) {
@@ -146,7 +146,7 @@ public class MatchAgainstTruthTable
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected int calcFitness(String a_formula, List a_truthTable)
+  protected double calcFitness(String a_formula, List a_truthTable)
       throws CompilationException {
     if (a_formula == null || a_formula.length() < 6) {
       // Minimal length of 6 because the minmimum prefix "F(x)=" has a length
