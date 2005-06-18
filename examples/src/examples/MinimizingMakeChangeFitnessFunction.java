@@ -20,21 +20,25 @@ import org.jgap.*;
  */
 public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private final int m_targetAmount;
 
   public static final int MAX_BOUND = 1000;
 
-  private static final double ZERO_DIFFERENCE_FITNESS = 10;
+  private static final double ZERO_DIFFERENCE_FITNESS = Math.sqrt(MAX_BOUND);
 
-  public MinimizingMakeChangeFitnessFunction(int a_targetAmount) {
-    if (a_targetAmount < 1 || a_targetAmount >= MAX_BOUND) {
-      throw new IllegalArgumentException(
-          "Change amount must be between 1 and " + MAX_BOUND + " cents.");
-    }
-    m_targetAmount = a_targetAmount;
+  public MinimizingMakeChangeFitnessFunction( int a_targetAmount )
+  {
+      if( a_targetAmount < 1 || a_targetAmount >= MAX_BOUND )
+      {
+          throw new IllegalArgumentException(
+              "Change amount must be between 1 and "+MAX_BOUND+" cents." );
+      }
+
+      m_targetAmount = a_targetAmount;
   }
 
   /**
@@ -47,6 +51,7 @@ public class MinimizingMakeChangeFitnessFunction
    * @return positive double reflecting the fitness rating of the given
    * Chromosome
    * @since 2.0 (until 1.1: return type int)
+   * @author Neil Rotstan, Klaus Meffert, John Serri
    */
   public double evaluate(Chromosome a_subject) {
     // The fitness value measures both how close the value is to the
@@ -62,6 +67,9 @@ public class MinimizingMakeChangeFitnessFunction
     int changeAmount = amountOfChange(a_subject);
     int totalCoins = getTotalNumberOfCoins(a_subject);
     int changeDifference = Math.abs(m_targetAmount - changeAmount);
+
+    double fitness = 0.0d;
+
     // Step 1: Determine distance of amount represented by solution from
     // the target amount. If the change difference is greater than zero we
     // will divide one by the difference in change between the
@@ -70,43 +78,76 @@ public class MinimizingMakeChangeFitnessFunction
     // amount and lower values for amounts further away from the target
     // amount.
     // In the case where the change difference is zero it means that we have
-    // the correct amount and we assign a higher fitness value.
-    // ---------------------------------------------------------------------
-    double fitness;
-    if (changeDifference == 0) {
-      fitness = ZERO_DIFFERENCE_FITNESS;
+    // the correct amount and we assign a higher fitness value
+    // -----------------------------------------------------------------
+
+    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2,1)) {
+      fitness += changeDifferenceBonus(MAX_BOUND, changeDifference);
     }
     else {
-      fitness = 1.0 / changeDifference;
+      fitness -= changeDifferenceBonus(MAX_BOUND, changeDifference);
     }
+
     // Step 2: We divide the fitness value by a penalty based on the number of
     // coins. The higher the number of coins the higher the penalty and the
     // smaller the fitness value.
     // And inversely the smaller number of coins in the solution the higher
     // the resulting fitness value.
     // -----------------------------------------------------------------------
-    fitness /= computeCoinNumberPenalty(totalCoins);
+    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2,1)) {
+      fitness -= computeCoinNumberPenalty(MAX_BOUND, totalCoins);
+    }
+    else {
+      fitness += computeCoinNumberPenalty(MAX_BOUND, totalCoins);
+    }
+
     // Make sure fitness value is always positive.
     // -------------------------------------------
-    return Math.max(0.00001d, fitness);
+    return Math.max(1.0d, fitness);
+  }
+
+
+  /**
+   * Bonus calculation of fitness value.
+   * @param a_maxFitness maximum fitness value appliable
+   * @param a_changeDifference change difference in coins for the coins problem
+   * @return bonus for given change difference
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  protected double changeDifferenceBonus(double a_maxFitness,
+                                         int a_changeDifference) {
+    if (a_changeDifference == 0) {
+      return a_maxFitness;
+    }
+    else {
+      // we arbitrarily work with half of the maximum fitness as basis for non-
+      // optimal solutions (concerning change difference)
+      return a_maxFitness / 2 - a_changeDifference * a_changeDifference;
+    }
   }
 
   /**
    * Calculates the penalty to apply to the fitness value based on the ammount
    * of coins in the solution
    *
+   * @param a_maxFitness maximum fitness value allowed
    * @param a_coins number of coins in the solution
    * @return penalty for the fitness value base on the number of coins
    *
    * @author John Serri
    * @since 2.2
    */
-  protected double computeCoinNumberPenalty(int a_coins) {
-    if (a_coins == 0) {
-      return MAX_BOUND * MAX_BOUND;
+  protected double computeCoinNumberPenalty(double a_maxFitness, int a_coins) {
+    if (a_coins == 1) {
+      // we know the solution cannot have less than one coin
+      return 0;
     }
     else {
-      return (a_coins * a_coins);
+      // The more coins the more penalty, but not more than the maximum fitness
+      // value possible. Let's avoid linear behavior and use
+      // exponential penalty calculation instead
+      return (Math.min(a_maxFitness, a_coins * a_coins));
     }
   }
 
@@ -115,7 +156,7 @@ public class MinimizingMakeChangeFitnessFunction
    * the given potential solution and returns that amount.
    *
    * @param a_potentialSolution the potential solution to evaluate
-   * @return the total amount of change (in cents) represented by the
+   * @return The total amount of change (in cents) represented by the
    * given solution
    *
    * @author Neil Rotstan
