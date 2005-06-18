@@ -3,17 +3,17 @@ package examples.functionFinder.test;
 import junit.framework.*;
 
 /**
- * Runs all tests for function builder example
+ * Runs all tests for formula finder example
  *
  * @author Klaus Meffert
  * @since 2.2
  */
-public class TestAll extends TestSuite {
+public class AllFormulaFinderTests extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
   private static final String CVS_REVISION = "$Revision: 1.1 $";
 
-  public TestAll(String name) {
+  public AllFormulaFinderTests(String name) {
     super(name);
   }
 
