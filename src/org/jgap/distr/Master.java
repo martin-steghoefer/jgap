@@ -10,6 +10,7 @@
 package org.jgap.distr;
 
 import java.io.*;
+import org.jgap.util.*;
 
 /**
  * Represents an IMaster instance. Distributes work to IWorker instances.
@@ -18,9 +19,9 @@ import java.io.*;
  * @author Klaus Meffert
  * @since 2.3
  */
-public class Master {
+public abstract class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Information needed by workers
@@ -37,22 +38,35 @@ public class Master {
    */
   private WorkerListener m_workerListener;
 
-  public Master(RequestDispatcher a_dispatcher, WorkerListener a_workerListener) {
+  /**
+   * Constructor.
+   * @param a_dispatcher the dispatcher to use for requests to workers
+   * @param a_workerListener the listener to use for listening to worker
+   * messages
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Master(RequestDispatcher a_dispatcher, WorkerListener a_workerListener)
+      throws Exception {
     m_dispatcher = a_dispatcher;
     m_workerListener = a_workerListener;
     m_masterinfo = new MasterInfo();
-    m_masterinfo.IPAddress = ""; /**todo determine*/
-    m_masterinfo.name = "computername"; /**todo determine*/
+    m_masterinfo.IPAddress = NetworkKit.getLocalIPAddress();
+    m_masterinfo.name = NetworkKit.getLocalHostName();
   }
 
   /**
-   * Starts the master listener
+   * Starts the master listener. Implement in specific implementations of
+   * Master.
    * @throws IOException
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
-  public void start()
-      throws IOException {
-    m_workerListener.listen();
-  }
+  public abstract void start()
+      throws IOException;
 
   /**
    * Stops the master from being working.
@@ -76,7 +90,7 @@ public class Master {
   }
 
   /**
-   * Sends a command to a worker
+   * Sends a command to a worker.
    * @param a_worker the worker to send the command to
    * @param a_command the command to send
    * @throws IOException
@@ -86,4 +100,37 @@ public class Master {
     /**@todo implement*/
     m_dispatcher.dispatch(a_worker, a_command);
   }
+
+  /**
+   *
+   * @return the RequestDispatcher used
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public RequestDispatcher getDispatcher() {
+    return m_dispatcher;
+  }
+
+  /**
+   *
+   * @return MasterInfo of this master
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public MasterInfo getMasterinfo() {
+    return m_masterinfo;
+  }
+
+  /**
+   * @return the WorkerListener used
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public WorkerListener getWorkerListener() {
+    return m_workerListener;
+  }
+
 }
