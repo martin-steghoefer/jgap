@@ -5,6 +5,7 @@
 * Introduced new abstract base class org.jgap.JGAPTestCase.
   All test cases are now derived from this new class hosting
   commong logic
+* Introduced new utility class org.jgap.util.NetworkKit
 * Introduced test suite for examples
 * Introduced new parameter in Configuration
   "keepPopulationSizeConstant" (along with getter and setter).
