@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for WeightedRouletteSelector class
+ * Tests the WeightedRouletteSelector class
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -263,16 +263,16 @@ public class WeightedRouletteSelectorTest
     // ---------------------
     gene = new DoubleGene();
     gene.setAllele(new Double(2.3d));
-    Chromosome bestChrom = new Chromosome(gene, 3);
-    bestChrom.setFitnessValue(2);
-    toAddFrom.addChromosome(bestChrom);
+    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    secondBestChrom.setFitnessValue(2);
+    toAddFrom.addChromosome(secondBestChrom);
     // add third chromosome
     // --------------------
     gene = new IntegerGene();
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 2);
-    secondBestChrom.setFitnessValue(3);
-    toAddFrom.addChromosome(secondBestChrom);
+    Chromosome bestChrom = new Chromosome(gene, 2);
+    bestChrom.setFitnessValue(3);
+    toAddFrom.addChromosome(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
     DefaultConfiguration conf = new DefaultConfiguration();
@@ -285,7 +285,7 @@ public class WeightedRouletteSelectorTest
     selector.select(1, toAddFrom, popNew);
     Chromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
-    assertEquals(thirdBestChrom, bestChroms[0]);
+    assertEquals(bestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)
     // ----------------------------------------------------
     popNew.getChromosomes().clear();
