@@ -24,7 +24,7 @@ import com.eteks.parser.*;
 public class MatchAgainstTruthTable
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private List m_truthTable;
 
@@ -111,14 +111,14 @@ public class MatchAgainstTruthTable
   }
 
   /**
-   * Helper function: scaled calculation of fitness value
+   * Helper method: Scaled calculation of fitness value
    * @param a_input unscaled fitness value
    * @return scaled fitness value
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected double getFitness(float a_input) {
+   protected double scaleFitness(float a_input) {
     int result;
     a_input = Math.abs(a_input);
     if (a_input >= MAX_FITNESS / RELATION_FITNESS) {
@@ -184,7 +184,7 @@ public class MatchAgainstTruthTable
      * fitness calculation*/
 
     // scale fitness value and return it
-    return getFitness(diffAbs);
+    return scaleFitness(diffAbs);
   }
 
 }
