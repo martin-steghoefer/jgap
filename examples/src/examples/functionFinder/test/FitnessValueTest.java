@@ -1,31 +1,34 @@
 package examples.functionFinder.test;
 
-import junit.framework.*;
-
 import examples.functionFinder.*;
+import org.jgap.*;
 
 /**
- * Tests for FitnessValue class
+ * Tests the FitnessValue class
  *
  * @author Klaus Meffert
  * @since 2.2
  */
-public class FitnessValueTest extends TestCase {
+public class FitnessValueTest extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
+
+  private MatchAgainstTruthTable matcher;
 
   public FitnessValueTest() {
     super();
+    matcher = new MatchAgainstTruthTable(null);
   }
 
-  public int getFitness(float input) {
-    int fitness = MatchAgainstTruthTable.getFitness(input);
+  public double getFitness(float input) throws Throwable {
+    double fitness = ((Double)privateAccessor.invoke(matcher, "scaleFitness", new Class[] {float.class}
+                                            , new Object[] {new Float(input)})).doubleValue();
     assertTrue(fitness >= 0);
     return fitness;
   }
 
-  public void testFitness0_1() {
+  public void testFitness0_1() throws Throwable{
     //fitness for diff 0 must be maximum
     assertEquals(MatchAgainstTruthTable.MAX_FITNESS, getFitness(0),MatchAgainstTruthTable.DELTA);
     //fitness for diff 0 must be greater than for diff 1.1
@@ -34,43 +37,43 @@ public class FitnessValueTest extends TestCase {
     assertTrue(getFitness(0) > getFitness(1.0001f));
   }
 
-  public void testFitness0_2() {
+  public void testFitness0_2() throws Throwable{
     //fitness for diff 0 must be greater than for diff 1.0
-    int diff1 = getFitness(0);
-    int diff2 = getFitness(1.0f);
+    double diff1 = getFitness(0);
+    double diff2 = getFitness(1.0f);
     assertTrue( diff1 > diff2);
   }
 
-  public void testFitness0_05() {
+  public void testFitness0_05() throws Throwable{
     //fitness for diff 0 must be greater than for diff 0.5
     assertTrue(getFitness(0) > getFitness(0.5f));
   }
 
-  public void testFitness01_02() {
+  public void testFitness01_02() throws Throwable{
     //fitness for diff 0.01 must be greater/equal than for diff 0.2
-    int diff1 = getFitness(0.01f);
-    int diff2 = getFitness(0.2f);
+    double diff1 = getFitness(0.01f);
+    double diff2 = getFitness(0.2f);
     assertTrue(diff1 >= diff2);
   }
 
-  public void testFitness001_01() {
+  public void testFitness001_01() throws Throwable{
     //fitness for diff 0.01 must be greater/equal than for diff 0.1
     assertTrue(getFitness(0.01f) >= getFitness(0.1f));
   }
 
-  public void testFitness0_01() {
+  public void testFitness0_01() throws Throwable{
     //fitness for diff 0 must be greater than for diff 0.1
     assertTrue(getFitness(0) > getFitness(0.1f));
   }
 
-  public void testFitness0_DELTA() {
+  public void testFitness0_DELTA() throws Throwable{
     //fitness for diff 0 must be greater than for diff 1.0
-    int diff1 =getFitness(0);
-    int diff2 =getFitness(MatchAgainstTruthTable.DELTA);
+    double diff1 =getFitness(0);
+    double diff2 =getFitness(MatchAgainstTruthTable.DELTA);
     assertTrue( diff1 >= diff2);
   }
 
-  public void testFitness01_05() {
+  public void testFitness01_05() throws Throwable{
     //fitness for diff 0.1 must be greater/equal than for diff 0.5
     assertTrue(getFitness(0.1f) >= getFitness(0.5f));
   }
@@ -78,63 +81,63 @@ public class FitnessValueTest extends TestCase {
   /**
    * fitness for diff 2 must be greater than 90% of MAX
    */
-  public void testFitness2() {
-    int diff1 = getFitness(2);
+  public void testFitness2() throws Throwable{
+    double diff1 = getFitness(2);
     assertTrue(diff1 > MatchAgainstTruthTable.MAX_FITNESS*0.9);
   }
 
   /**
    * fitness for diff 10 must be less than MAX
    */
-  public void testFitness10() {
-    int diff1 = getFitness(10);
+  public void testFitness10() throws Throwable{
+    double diff1 = getFitness(10);
     assertTrue(diff1 < MatchAgainstTruthTable.MAX_FITNESS);
   }
 
-  public void testFitness10_100() {
+  public void testFitness10_100() throws Throwable{
     //fitness for diff 10 must be greater than fitness for diff 100
-    int diff1 = getFitness(10);
-    int diff2 = getFitness(100);
+    double diff1 = getFitness(10);
+    double diff2 = getFitness(100);
     assertTrue(diff1 > diff2);
   }
 
-  public void testFitness20_21() {
+  public void testFitness20_21() throws Throwable{
     //fitness for diff 20 must be greater/equal than fitness for diff 21
-    int diff1 = getFitness(20);
-    int diff2 = getFitness(21);
+    double diff1 = getFitness(20);
+    double diff2 = getFitness(21);
     assertTrue(diff1 >= diff2);
   }
 
-  public void testFitness2048() {
+  public void testFitness2048() throws Throwable{
     assertTrue(getFitness(20)>5);
   }
 
-  public void testFitness20000_20001() {
+  public void testFitness20000_20001() throws Throwable{
     //fitness for diff 20000 must be greater/equal than fitness for diff 20001
-    int diff1 = getFitness(20000);
-    int diff2 = getFitness(20001);
+    double diff1 = getFitness(20000);
+    double diff2 = getFitness(20001);
     assertTrue(diff1 >= diff2);
   }
 
-  public void testFitnessWORST() {
+  public void testFitnessWORST() throws Throwable{
     //fitness for worst input must be 0
-    int diff = getFitness(MatchAgainstTruthTable.MAX_FITNESS);
+    double diff = getFitness(MatchAgainstTruthTable.MAX_FITNESS);
     assertTrue(diff == 0);
     diff = getFitness(MatchAgainstTruthTable.MAX_FITNESS + 100);
     assertTrue(diff == 0);
   }
 
-  public void testFitnessNegative() {
+  public void testFitnessNegative() throws Throwable{
     //fitness for negative input must be equal to positive input
-    int diff1 = getFitness(-200);
-    int diff2 = getFitness(200);
+    double diff1 = getFitness(-200);
+    double diff2 = getFitness(200);
     assertTrue(diff1 == diff2);
   }
 
-  public void testStetigkeit() {
-    int oldFitness = -1;
-    int newFitness;
-    int diff1 = getFitness(81.92f);
+  public void testStetigkeit() throws Throwable{
+    double oldFitness = -1;
+    double newFitness;
+    double diff1 = getFitness(81.92f);
     for (float i=0.01f;i<20000;i=i*2) {
 //      System.err.print("i: "+i);
       newFitness = getFitness(i);
