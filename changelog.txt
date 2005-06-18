@@ -48,6 +48,7 @@
 * Renamed test class p_abstractChangFitnessFunction to
   AbstractChangFitnessFunction
 * Improved architecture of example FormulaFinder
+* Renamed TestAll (FormulaFinder) to AllFormulaFinderTests
 * Added javadocs
 * Fixed some spelling errors in javadocs
 
