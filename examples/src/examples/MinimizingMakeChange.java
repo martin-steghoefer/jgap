@@ -42,12 +42,12 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The total number of times we'll let the population evolve.
    */
-  private static final int MAX_ALLOWED_EVOLUTIONS = 80;
+  private static final int MAX_ALLOWED_EVOLUTIONS = 200;
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -69,6 +69,7 @@ public class MinimizingMakeChange {
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
+    conf.setKeepPopulationSizeConstant(false);
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
@@ -101,7 +102,7 @@ public class MinimizingMakeChange {
     // finding the answer), but the longer it will take to evolve
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
-    conf.setPopulationSize(50);
+    conf.setPopulationSize(80);
     // JFreeChart: setup
 //    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 //    PlotOrientation or = PlotOrientation.VERTICAL;
