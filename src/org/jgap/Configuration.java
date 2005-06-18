@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   /**
    * Constants for toString()
@@ -1055,8 +1055,8 @@ public class Configuration
 
   /**
    * Pass the name and values of a property to be set
-   * @param name The name of the property
-   * @param values The different values of the property
+   * @param name the name of the property
+   * @param values the different values of the property
    * @throws ConfigException
    * @throws InvalidConfigurationException
    *
@@ -1151,10 +1151,31 @@ public class Configuration
     return result;
   }
 
+  /**
+   * See setKeepPopulationSizeConstant for description.
+   * @return true: population size will always be
+   * the same size (as given with Configuration.setPopulationSize(int).
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public boolean isKeepPopulationSizeConstant() {
     return m_keepPopulationSizeConstant;
   }
 
+  /**
+   * Allows to keep the population size constant after one evolution, even if
+   * there is no appropriate instance of NaturalSelector (such as
+   * WeightedRouletteSelector) registered with the Configuration.<p>
+   * Be aware that keeping the population size constant often means that a
+   * higher population size is necessary (e.g. for the MinimizingMakeChange
+   * example)!
+   * @param a_keepPopulationSizeConstant true: population size will always be
+   * the same size (as given with Configuration.setPopulationSize(int).
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void setKeepPopulationSizeConstant(boolean
                                             a_keepPopulationSizeConstant) {
     m_keepPopulationSizeConstant = a_keepPopulationSizeConstant;
