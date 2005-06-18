@@ -12,18 +12,30 @@ package org.jgap.distr;
 import java.io.*;
 
 /**
- * Represents a listener for requests from workers to the master
+ * Represents a listener for requests from workers to the master.
  *
  * @author Klaus Meffert
  * @since 2.4
  */
 public abstract class WorkerListener {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  /**@todo implement*/
+  /**
+   * Listens to a request.
+   * @throws IOException
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public abstract void listen()
+      throws IOException;
 
-  public abstract void listen() throws IOException;
-
+  /**
+   * Stops the listener.
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public abstract void stop();
 }

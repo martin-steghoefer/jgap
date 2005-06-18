@@ -16,35 +16,49 @@ package org.jgap.distr;
  * @since 2.4
  */
 public interface IWorker {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * @return display name of the worker
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   String getDisplayName();
 
   /**
    * @return current status of the entity
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   Object getStatus();
 
   /**
    * Forces the worker to pause its work (can be resumed)
    * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   Object pause();
 
   /**
    * Forces the worker to stop its work (cannot be resumed)
    * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   Object stop();
 
   /**
    * Forces the worker to resume a paused work
    * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   Object resume();
 
@@ -52,6 +66,9 @@ public interface IWorker {
    * Lets a server send a command to process to the worker
    * @param a_command the command to process
    * @return status message
+   *
+   * @author Klaus Meffert
+   * @since 2.4
    */
   Object sendCommand(WorkerCommand a_command);
 }
