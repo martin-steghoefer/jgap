@@ -1,7 +1,10 @@
 <html>
 
 <head>
+<meta http-equiv="Content-Language" content="en-us">
 <link rel="stylesheet" href="stylesheet.css" type="text/css">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
 <title>Brief summary of coding style and practice used in JGAP</title>
 </head>
 
@@ -17,73 +20,11 @@
 <p>The following is a short list of guidelines to follow when contributing code or patches
 to the JGAP project. Before we commit any code to the CVS respository, we need to make it
 follow these guidelines (for protection of our own sanity), so it's a lot easier on us if
-your code simply adheres to the guidelines when you submit it :-) Thanks! 
+your code simply adheres to the guidelines when you submit it :-) Thanks!<h2>Formatting
+of Code</h2>
 
 <ol>
-  <li>Indent 4 spaces. No tabs, please. </li>
-  <li>Lines of code should not exceed 79 characters in length. </li>
-  <li>Braces go on the next line, no extra indentation. For example: <br>
-    <pre>
-          public void foo()
-          {
-              doSomeWork();
-          }
-        </pre>
-  </li>
-  <li>Add the lines <br>
-    <pre>
-        /** String containing the CVS revision. Read out via reflection!*/
-        private static final String CVS_REVISION = &quot;$Revision: 1.2 $&quot;;</pre>
-    After each class declaratin line at top of the class file. For interfaces omit the "private" statement.
-  </li>
-  <li>Class names always start with a capital letter and contain no underscores!
-  </li>
-  <li>Class and instance variables, other than constants, should start with &quot;m_&quot;.
-    For example, <br>
-    <pre>
-          private int m_myField;
-          </pre>
-  </li>
-  <li>Method arguments should begin with &quot;a_&quot;. For example, <br>
-    <pre>  
-          public void foo( int a_someValue );
-          </pre>
-  </li>
-  <li>Constants should be in all capitals. For example, <br>
-    <pre>
-          private static final int MY_CONSTANT_VALUE = 1;      
-          </pre>
-  </li>
-  <li>All classes, methods, and fields require javadocs, including private methods and fields.
-  </li>
-  <li>All in-line comments should be &quot;underlined.&quot; For example: <br>
-    <pre>
-          // This is an in-line comment.
-          // Notice that it is underlined.
-          // -----------------------------
-          doSomeWork();
-          </pre>
-  </li>
-  <li>In general, favor descriptive method and variable names over in-line comments. For
-    example, instead of: <br>
-    <pre>
-          // Calculate area of circle
-          // ------------------------
-          x = 2 * PI * r * r;
-          </pre>
-    <p>Do: </p>
-    <pre>
-          // Calculate area of circle
-          // ------------------------
-          areaOfCircle = getAreaOfCircle( circleRadius );
-          </pre>
-  </li>
-  <li>Favor clean, readable, maintainable code over optimized code. Let a profiler determine
-    where the bottlenecks exist and then optimize as little as possible to achieve desired
-    performance. When you do optimize, please leave a very detailed comment explaining that
-    the code has been optimized and what it is doing. </li>
-  <li>All new code files must have a copyright statement at the top that reads: <pre>
-         /*
+  <li>All new code files must have a copyright statement at the top that reads: <pre>         /*
           * This file is part of JGAP.
           *
           * JGAP offers a dual license model containing the LGPL as well as the MPL.
@@ -91,23 +32,136 @@ your code simply adheres to the guidelines when you submit it :-) Thanks!
           * For licencing information please see the file license.txt included with JGAP
           * or have a look at the top of class org.jgap.Chromosome which representatively
           * includes the JGAP license policy applicable for any file delivered with JGAP.
-          */
-         </pre>
-    <p>You should substitute your own name in the copyright statement and update the year as
-    appropriate. </p>
+          */        </pre>
   </li>
+  <li>Add the lines
+    <pre>        /** String containing the CVS revision. Read out via reflection!*/
+        private static final String CVS_REVISION = &quot;$Revision: 1.3 $&quot;;</pre>
+    after each class declaration line at top of the class file. For interfaces omit the "private" statement.
+  </li>
+  <li>Indent 4 spaces. No tabs, please. </li>
+  <li>Lines of code should not exceed 79 characters in length. Please take this
+    very seriously! </li>
+  <li>Braces go on the next line, no extra indentation. For example:
+    <pre>          public void foo()
+          {
+              doSomeWork();
+          }</pre>
+  </li>
+  <li>Class names always start with a capital letter and contain no underscores.
+    THIS IS VERY IMPORTANT!
+  </li>
+  <li>Class and instance variables, other than constants, should start with &quot;m_&quot;.
+    For example,
+    <pre>          private int m_myField;</pre>
+  </li>
+  <li>Method arguments should begin with &quot;a_&quot;. For example,
+    <pre>          public void foo( int a_someValue );</pre>
+  </li>
+  <li>Constants should be in all capitals. For example,
+    <pre>          private static final int MY_CONSTANT_VALUE = 1;         </pre>
+  </li>
+  <li>All classes, methods, and fields require javadocs, including private methods and
+    fields.
+  </li>
+  <li>Do not format javadocs by adding unnecessary spaces or indentation (javadoc
+    output will do this!)
+  </li>
+  <li>Do not start a javadoc for parameters with a capital letter. Do not end
+    such text with a period.
+  </li>
+  <li>All in-line comments should be &quot;underlined.&quot; For example:
+    <pre>          // This is an in-line comment.
+          // Notice that it is underlined.
+          // -----------------------------
+          doSomeWork();</pre>
+  </li>
+</ol>
+
+    <h2>
+          Programming
+          </h2>
+
+<ol>
+  <li>Favor clean, readable, maintainable code over optimized code. Let a profiler determine
+    where the bottlenecks exist and then optimize as little as possible to achieve desired
+    performance. When you do optimize, please leave a very detailed comment explaining that
+    the code has been optimized and what it is doing. </li>
   <li>Currently, we are <em>not</em> using Java 1.4 assertions in the JGAP code. We may begin
     doing so in the future, but for now please leave them out. </li>
-  <li>If you end up creating a new package, please also create a package.html file that
+  <li>If you end up creating a new package, please also create a <font face="Courier New"> package.html</font> file that
     explains the purpose of that package. Javadoc will use this file to generate a package
     description. </li>
+  <li>In general, favor descriptive method and variable names over in-line
+    comments. For example, instead of:
+    <pre>          // Calculate area of circle
+          // ------------------------
+          x = 2 * PI * r * r;        </pre>
+    <p>Do: </p>
+    <pre>          areaOfCircle = getAreaOfCircle( circleRadius );</pre>
+  </li>
+  <li>When adding a new class or new method, you could add the <a href="http://sourceforge.net/tracker/?group_id=11618&amp;atid=361618" target="_blank"> RFE</a> number in the
+    javadoc comment. </li>
+</ol>
+<h2>Test cases</h2>
+<ol>
+  <li>For each new class introduced there should be one new (JUnit) test class
+    created extending <font face="Courier New">junit.framework.TestCase</font>
+    (see the JGAP unit tests for examples)</li>
+  <li>Each test case class is added to a test suite class containing a reference
+    to all unit tests in the package the test suite class is lying. See <font face="Courier New">org.jgap.impl.AllImplTests</font>
+    for example.&nbsp;</li>
+  <li>Test clase and test suite classes are lying in a different directory
+    branch than the source code classes. Please see the JGAP CVS: <font face="Courier New">src</font>
+    is the toplevel directory for source code and <font face="Courier New">test</font>
+    is the toplevel directory for test code. Please notice, that the <font face="Courier New">src</font>
+    and <font face="Courier New">test</font> directory both have the same
+    package hierarchy!</li>
+  <li>
+    <pre>For test cases, the class heading javadoc should write (e.g. for class StringGene):
+
+<font face="Courier New">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;/*
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * Tests the StringGene class
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  * ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  * @author ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  */</font></pre>
+  </li>
+  <li>Don't add any outputs to the console (<font face="Courier New">System.out</font>
+    or <font face="Courier New">System.err</font>) in your test cases. In nearly
+    any case this could be avoided completely by using explanatory messages with
+    exceptions or the JUnit <font face="Courier New">fail(...)</font> method.</li>
+  <li>It might be useful looking at the existing unit tests to get some hints
+    about how to do exception handling etc. Also see <a href="http://javarunner.blogspot.com/2005/01/test-driven-development-useful.html" target="_blank">Test-Driven
+    Development: Useful Techniques, Resources</a>.</li>
+  <li>The blog entry <a href="http://javarunner.blogspot.com/2005/06/intentionally-failing-junit-tests.html" target="_blank">Intentionally
+    failing JUnit tests</a> could be a useful resource.</li>
+  <li>If you don't feel sure when to write your tests (before, during or after
+    coding), the blo entry <a href="http://javarunner.blogspot.com/2005/02/when-tdd-is-not-optimal.html" target="_blank">When
+    TDD is not optimal</a> might be useful.</li>
+</ol>
+<h2>CVS</h2>
+
+<ol>
   <li>For developers, it's ok to commit in-progress code to CVS that doesn't work, but please
     try to avoid committing code that doesn't compile or that completely breaks everything. If
     you're going to be doing a lot of work that will likely break everything, we can consider
     creating a branch for you to work on until your code is at least semi-stable. </li>
+  <li>When checking in something to the CVS, you should do this per class as you
+    could then add a useful comment. It is not forbidden adding the <a href="http://sourceforge.net/tracker/?group_id=11618&amp;atid=361618" target="_blank"> RFE</a> number
+    (the request number from the <a href="http://sourceforge.net/tracker/?group_id=11618&amp;atid=361618" target="_blank"> JGAP sourceforge RFE
+    page</a>) in the comment! </li>
+</ol>
+
+<h2>In general</h2>
+
+<ol>
   <li>Finally, you may find JGAP code that doesn't adhere to one of the rules. That doesn't
     mean it's ok to disregard them in your code! ;-) </li>
+  <li>If you think an important functionality is missing or there is a design
+    flaw in JGAP, feel free to post this as a <a href="http://sourceforge.net/tracker/?group_id=11618&amp;atid=361618" target="_blank">RFE</a>. </li>
 </ol>
+
+<p>&nbsp;</p>
 
 <p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
 reserved. </p>
