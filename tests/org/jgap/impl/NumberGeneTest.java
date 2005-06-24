@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -172,6 +172,19 @@ public class NumberGeneTest
     Gene gene2 = new NumberGeneImpl(1, 99);
     assertEquals(gene1, gene2);
     assertEquals(gene2, gene1);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEquals_5() {
+    Gene gene1 = new NumberGeneImpl(1, 100);
+    gene1.setAllele(new Integer(2));
+    Gene gene2 = new NumberGeneImpl(1, 99);
+    gene1.setAllele(new Integer(3));
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
   }
 
   /**
