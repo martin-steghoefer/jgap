@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -25,7 +25,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -62,10 +62,10 @@ public class IntegerGene
    * Constructs a new IntegerGene with the specified lower and upper
    * bounds for values (alleles) of this Gene instance.
    *
-   * @param a_lowerBounds The lowest value that this Gene may possess,
-   *                      inclusive.
-   * @param a_upperBounds The highest value that this Gene may possess,
-   *                      inclusive.
+   * @param a_lowerBounds the lowest value that this Gene may possess,
+   * inclusive
+   * @param a_upperBounds the highest value that this Gene may possess,
+   * inclusive
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -90,8 +90,8 @@ public class IntegerGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
-   *         setup as this concrete Gene.
+   * @return a new Gene instance of the same type and with the same setup as
+   * this concrete Gene
    *
    * @author Neil Rostan
    * @since 1.0
@@ -109,9 +109,9 @@ public class IntegerGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return A string representation of this Gene's current state.
+   * @return string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * is provided for this method
    *
    * @author Neil Rostan
    * @since 1.0
@@ -141,12 +141,12 @@ public class IntegerGene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   * prior call to the getPersistentRepresentation() method.
+   * prior call to the getPersistentRepresentation() method
    *
    * @throws UnsupportedOperationException to indicate that no implementation
-   * is provided for this method.
+   * is provided for this method
    * @throws UnsupportedRepresentationException if this Gene implementation
-   * does not support the given string representation.
+   * does not support the given string representation
    *
    * @author Neil Rostan
    * @since 1.0
@@ -230,12 +230,10 @@ public class IntegerGene
    * Sets the value (allele) of this Gene to a random Integer value between
    * the lower and upper bounds (if any) of this Gene.
    *
-   * @param a_numberGenerator The random number generator that should be
-   *                          used to create any random values. It's important
-   *                          to use this generator to maintain the user's
-   *                          flexibility to configure the genetic engine
-   *                          to use the random number generator of their
-   *                          choice.
+   * @param a_numberGenerator the random number generator that should be
+   * used to create any random values. It's important to use this generator to
+   * maintain the user's flexibility to configure the genetic engine to use the
+   * random number generator of their choice
    *
    * @author Neil Rostan
    * @since 1.0
@@ -252,9 +250,8 @@ public class IntegerGene
    * of the casted type.
    * @param o1 first object to be compared, always is not null
    * @param o2 second object to be compared, always is not null
-   * @return a negative integer, zero, or a positive integer as this object
-   *	       is less than, equal to, or greater than the object provided for
-   *         comparison.
+   * @return a negative integer, zero, or a positive integer as this object is
+   * less than, equal to, or greater than the object provided for comparison
    *
    * @author Neil Rostan
    * @since 1.0
@@ -304,7 +301,7 @@ public class IntegerGene
    * See interface Gene for description
    * @param index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1).
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -345,15 +342,14 @@ public class IntegerGene
    * @since 2.4
    */
   public String toString() {
-    String s = "IntegerGene("+m_lowerBounds+","+m_upperBounds+")"
-        +"=";
+    String s = "IntegerGene(" + m_lowerBounds + "," + m_upperBounds + ")"
+        + "=";
     if (getInternalValue() == null) {
       s += "null";
     }
     else {
-      s+= getInternalValue().toString();
+      s += getInternalValue().toString();
     }
     return s;
   }
-
 }
