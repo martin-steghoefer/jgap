@@ -26,10 +26,10 @@ import org.jgap.*;
  * @author Audrius Meskauskas
  * @since 2.0
  */
-public abstract class abstractSupergene
+public abstract class abstractSupergene extends BaseGene
     implements Supergene, supergeneValidator, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * This field separates gene class name from
@@ -618,5 +618,9 @@ public abstract class abstractSupergene
   /** {@inheritDoc}
    * The default implementation does nothing. */
   public void setFromPersistent(String a_from) {
+  }
+
+  public Object getInternalValue() {
+    return getAllele();
   }
 }
