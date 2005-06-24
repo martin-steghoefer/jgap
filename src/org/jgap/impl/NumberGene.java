@@ -21,11 +21,11 @@ public abstract class NumberGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
-   * References the internal value (allele) of this Gene
-   * E.g., for DoubleGene this is of type Double
+   * References the internal value (allele) of this Gene.
+   * E.g., for DoubleGene this is of type Double.
    */
   protected Object m_value = null;
 
@@ -37,8 +37,8 @@ public abstract class NumberGene
 
   /**
    * Compares this NumberGene with the specified object (which must also
-   * be a NumberGene) for order, which is determined by the number
-   * value of this Gene compared to the one provided for comparison.
+   * be a NumberGene) for order, which is determined by the number value of
+   * this Gene compared to the one provided for comparison.
    *
    * @param a_other the NumberGene to be compared to this NumberGene
    * @return a negative integer, zero, or a positive integer as this object
@@ -77,6 +77,9 @@ public abstract class NumberGene
         if (!otherGene.getClass().equals(this.getClass())) {
           throw new ClassCastException(
               "Comparison not possible: different types!");
+        }
+        if (m_value == null) {
+          return -1;
         }
         return compareToNative(m_value, otherGene.m_value);
       }
@@ -126,7 +129,7 @@ public abstract class NumberGene
 
   /**
    * Sets the constraint checker to be used for this gene whenever method
-   * setAllele(Object a_newValue) is called
+   * setAllele(Object a_newValue) is called.
    * @param a_constraintChecker the constraint checker to be set
    *
    * @author Klaus Meffert
