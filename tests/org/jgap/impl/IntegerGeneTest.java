@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -101,6 +101,12 @@ public class IntegerGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * Uses subclass of IntegerGene
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_6() {
     Gene gene1 = new IntegerGene(1, 100);
     Gene gene2 = new IntegerGene2(1, 100);
@@ -108,6 +114,12 @@ public class IntegerGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * Uses subclass of IntegerGene
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_7() {
     Gene gene1 = new IntegerGene(1, 100);
     gene1.setAllele(new Integer(7));
@@ -117,6 +129,12 @@ public class IntegerGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * Compare with application data set and option for comparation activated
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_8() {
     BaseGene gene1 = new IntegerGene(1, 100);
     gene1.setAllele(new Integer(7));
@@ -130,6 +148,12 @@ public class IntegerGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
+  /**
+   * Compare with application data set and option for comparation activated
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_9() {
     BaseGene gene1 = new IntegerGene(1, 100);
     gene1.setAllele(new Integer(7));
@@ -143,6 +167,12 @@ public class IntegerGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
+  /**
+   * Compare with application data set and option for comparation activated
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_9_2() {
     BaseGene gene1 = new IntegerGene(1, 100);
     gene1.setAllele(new Integer(8));
@@ -156,6 +186,12 @@ public class IntegerGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
+  /**
+   * Compare with application data set but option for comparation deactivated
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
   public void testEquals_9_3() {
     BaseGene gene1 = new IntegerGene(1, 100);
     gene1.setAllele(new Integer(8));
