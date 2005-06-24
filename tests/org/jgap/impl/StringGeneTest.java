@@ -24,7 +24,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -226,7 +226,26 @@ public class StringGeneTest
   }
 
   /**
-   * Set Allele to null, no exception should occur
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEquals_8() {
+    Gene gene1 = new StringGene(2, 6);
+    gene1.setAllele("hallo");
+    Gene gene2 = new StringGene(2,6);
+    gene2.setAllele("hello");
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+    gene1.setAllele("hello1");
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+    gene2.setAllele("HELLO1");
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  /**
+   * Set Allele to null, no exception should occur.
    *
    * @author Klaus Meffert
    */
@@ -236,6 +255,8 @@ public class StringGeneTest
   }
 
   /**
+   * Allele too short.
+   *
    * @author Klaus Meffert
    */
   public void testSetAllele_1() {
@@ -250,6 +271,8 @@ public class StringGeneTest
   }
 
   /**
+   * Allele consists of illegal characters.
+   *
    * @author Klaus Meffert
    */
   public void testSetAllele_2() {
@@ -269,7 +292,8 @@ public class StringGeneTest
   public void testSetAllele_3() {
     Gene gene1 = new StringGene(3, 4, "EGAL");
     try {
-      //length of allele to short
+      // Length of allele to short.
+      // --------------------------
       gene1.setAllele("");
       fail();
     }

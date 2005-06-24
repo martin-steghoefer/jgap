@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Test class for FixedBinaryGene class
+ * Tests the FixedBinaryGene class
  *
  * @author Klaus Meffert
  * @author vamsi
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -247,6 +247,19 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEquals_8() {
+    Gene gene1 = new FixedBinaryGene(2);
+    gene1.setAllele(new int[] {0, 1});
+    Gene gene2 = new FixedBinaryGene(2);
+    gene2.setAllele(new int[] {0, 0});
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  /**
    * @author vamsi
    */
   public void testIntValues_0() {
@@ -279,6 +292,8 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * Allele is null.
+   *
    * @author vamsi
    */
   public void testSetAllele_0() {
@@ -293,6 +308,8 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * Allele is of wrong type.
+   *
    * @author vamsi
    */
   public void testSetAllele_1() {
@@ -307,7 +324,8 @@ public class FixedBinaryGeneTest
   }
 
   /**
-   * Set Allele to int values, no exception should occur
+   * Set Allele to int values, no exception should occur.
+   *
    * @author vamsi
    */
   public void testSetAllele_2() {
@@ -332,6 +350,8 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * Allele contains illegal characters.
+   *
    * @author vamsi
    */
   public void testSetAllele_4() {
@@ -346,6 +366,8 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * Allele is of wrong length.
+   *
    * @author vamsi
    */
   public void testSetAllele_5() {
