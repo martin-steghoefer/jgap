@@ -30,7 +30,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.14 $";
+  final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -164,4 +164,26 @@ public interface Gene
    * @since 1.1
    */
   void applyMutation(int index, double a_percentage);
+
+  /**
+   * Retrieves the application-specific data that is attached to this Gene.
+   * Attaching application-specific data may be useful for
+   * some applications when it comes time to distinguish a Gene from another.
+   * JGAP ignores this data functionally.
+   *
+   * @return the application-specific data previously attached to this Gene,
+   * or null if there is no data attached
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  Object getApplicationData();
+
+  /*
+   * @return should we also consider the application data when comparing?
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  boolean isCompareApplicationData();
 }
