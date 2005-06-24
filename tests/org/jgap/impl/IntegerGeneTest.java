@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -115,6 +115,58 @@ public class IntegerGeneTest
     gene2.setAllele(new Integer(7));
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_8() {
+    BaseGene gene1 = new IntegerGene(1, 100);
+    gene1.setAllele(new Integer(7));
+    gene1.setApplicationData(new Integer(7));
+    gene1.setCompareApplicationData(true);
+    Gene gene2 = new IntegerGene(1, 100);
+    gene2.setApplicationData(new Integer(7));
+    gene2.setAllele(new Integer(7));
+    gene2.setCompareApplicationData(true);
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+  }
+
+  public void testEquals_9() {
+    BaseGene gene1 = new IntegerGene(1, 100);
+    gene1.setAllele(new Integer(7));
+    gene1.setApplicationData(new Integer(7));
+    gene1.setCompareApplicationData(true);
+    Gene gene2 = new IntegerGene(1, 100);
+    gene2.setCompareApplicationData(true);
+    gene2.setApplicationData(new Integer(7));
+    gene2.setAllele(new Integer(7));
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+  }
+
+  public void testEquals_9_2() {
+    BaseGene gene1 = new IntegerGene(1, 100);
+    gene1.setAllele(new Integer(8));
+    gene1.setApplicationData(new Integer(5));
+    gene1.setCompareApplicationData(true);
+    Gene gene2 = new IntegerGene(1, 100);
+    gene2.setCompareApplicationData(true);
+    gene2.setApplicationData(new Integer(7));
+    gene2.setAllele(new Integer(8));
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+  }
+
+  public void testEquals_9_3() {
+    BaseGene gene1 = new IntegerGene(1, 100);
+    gene1.setAllele(new Integer(8));
+    gene1.setApplicationData(new Integer(5));
+    gene1.setCompareApplicationData(false);
+    Gene gene2 = new IntegerGene(1, 100);
+    gene2.setCompareApplicationData(false);
+    gene2.setApplicationData(new Integer(7));
+    gene2.setAllele(new Integer(8));
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
   }
 
   public void testIntValue_0() {
