@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -148,6 +148,8 @@ public class BaseGeneTest
   public void testSetEnergy_0() {
     BaseGeneImpl gene = new BaseGeneImpl();
     assertEquals(0.0, gene.getEnergy(), DELTA);
+    gene.setEnergy(2.3);
+    assertEquals(2.3, gene.getEnergy(), DELTA);
   }
 
   /**
@@ -163,6 +165,35 @@ public class BaseGeneTest
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
+  }
+
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testSetApplicationData_0() {
+    BaseGeneImpl gene = new BaseGeneImpl();
+    assertEquals(null, gene.getApplicationData());
+    Integer i =new Integer(23);
+    gene.setApplicationData(i);
+    assertSame(i, gene.getApplicationData());
+    String s = "Hallo";
+    gene.setApplicationData(s);
+    assertSame(s, gene.getApplicationData());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testIsCompareApplicationData_0() {
+    BaseGeneImpl gene = new BaseGeneImpl();
+    assertEquals(false, gene.isCompareApplicationData());
+    gene.setCompareApplicationData(false);
+    assertEquals(false, gene.isCompareApplicationData());
+    gene.setCompareApplicationData(true);
+    assertEquals(true, gene.isCompareApplicationData());
   }
 
   /**
