@@ -18,10 +18,19 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
+
+  /**
+   * Application-specific data that is attached to the Gene.
+   * This data may assist the application in labelling this Gene.
+   * in JGAP completely ignores the data, aside from allowing it to be set and
+   * retrieved.
+   */
+  private Object m_applicationData;
+
 
   /**
    * Retrieves the value represented by this Gene.
@@ -151,5 +160,37 @@ public abstract class BaseGene
    */
   public void setEnergy(double a_energy) {
     m_energy = a_energy;
+  }
+
+  /**
+   * This sets the application-specific data that is attached to this Gene.
+   * Attaching application-specific data may be useful for
+   * some applications when it comes time to distinguish a Gene from another.
+   * JGAP ignores this data functionally.
+   *
+   * @param a_newData the new application-specific data to attach to this
+   * Gene
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void setApplicationData(Object a_newData) {
+    m_applicationData = a_newData;
+  }
+
+  /**
+   * Retrieves the application-specific data that is attached to this Gene.
+   * Attaching application-specific data may be useful for
+   * some applications when it comes time to distinguish a Gene from another.
+   * JGAP ignores this data functionally.
+   *
+   * @return the application-specific data previously attached to this Gene,
+   * or null if there is no data attached
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Object getApplicationData() {
+    return m_applicationData;
   }
 }
