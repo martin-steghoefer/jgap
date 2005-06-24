@@ -13,6 +13,7 @@
   fixed population size. Default for parameter ist TRUE!
 * Introduced application data to BaseGene,
   see request 1226280
+* Extended Gene interface according to request 1226280
 * WeightedRouletteSelector now cares of FitnessEvaluator!
 * Fixed a performance issue in SwappingMutationOperator
 * Fixed bug in Chromosome.toString()
