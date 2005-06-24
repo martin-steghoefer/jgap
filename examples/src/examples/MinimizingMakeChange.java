@@ -42,7 +42,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -78,6 +78,11 @@ public class MinimizingMakeChange {
         new MinimizingMakeChangeFitnessFunction(a_targetChangeAmount);
 //    conf.setFitnessFunction(myFunc);
     conf.setBulkFitnessFunction(new BulkFitnessOffsetRemover(myFunc));
+    // Optionally, this example is working with DeltaFitnessEvaluator.
+    // See MinimizingMakeChangeFitnessFunction for details!
+    // ---------------------------------------------------------------
+//    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
+
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
