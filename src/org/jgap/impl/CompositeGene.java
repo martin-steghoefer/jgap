@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * This field separates gene class name from
@@ -213,10 +213,10 @@ public class CompositeGene
 
   /**
    * See interface Gene for description
-   * @param a_numberGenerator The random number generator that should be
-   *        used to create any random values. It's important to use this
-   * generator to maintain the user's flexibility to configure the genetic
-   * engine to use the random number generator of their choice.
+   * @param a_numberGenerator the random number generator that should be used
+   * to create any random values. It's important to use this generator to
+   * maintain the user's flexibility to configure the genetic engine to use the
+   * random number generator of their choice
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -298,7 +298,7 @@ public class CompositeGene
 
   /**
    * See interface Gene for description
-   * @return A string representation of this Gene's current state
+   * @return string representation of this Gene's current state
    * @throws UnsupportedOperationException
    *
    * @author Klaus Meffert
@@ -331,7 +331,7 @@ public class CompositeGene
    * represents the allele of the corresponding gene in the CompositeGene's
    * container
    *
-   * @return the Boolean value of this Gene
+   * @return the value of this Gene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -504,7 +504,7 @@ public class CompositeGene
   /**
    * Retrieves a string representation of this CompositeGene's value that
    * may be useful for display purposes.
-   * @return a string representation of this CompositeGene's value. Every
+   * @return string representation of this CompositeGene's value. Every
    * contained gene's string representation is delimited by the given
    * delimiter
    *
@@ -594,26 +594,23 @@ public class CompositeGene
 
   /**
    * Don't use this method, is makes no sense here. It is just there to
-   * satisfy the Gene interface.
-   * Instead, loop over all cotnained genes and call their applyMutation
-   * method.
-   * @param index ignored here
+   * satisfy the Gene interface. Instead, loop over all contained genes and
+   * call their applyMutation method.
+   * @param a_index does not matter here
    * @param a_percentage does not matter here
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void applyMutation(int index, double a_percentage) {
-    for (int i = 0; i < size(); i++) {
-      // problem here: size() of CompositeGene not equal to (different)
-      // sizes of contained genes.
-      // Solution: Don't use CompositeGene.applyMutation, instead loop
-      //           over all contained genes and call their method
-      // -------------------------------------------------------------
-      throw new RuntimeException("applyMutation may not be called for "
-                                 + "a CompositeGene. Call this method for each"
-                                 + " gene contained in the CompositeGene.");
-    }
+  public void applyMutation(int a_index, double a_percentage) {
+    // problem here: size() of CompositeGene not equal to (different)
+    // sizes of contained genes.
+    // Solution: Don't use CompositeGene.applyMutation, instead loop
+    //           over all contained genes and call their method
+    // -------------------------------------------------------------
+    throw new RuntimeException("applyMutation may not be called for "
+                               + "a CompositeGene. Call this method for each"
+                               + " gene contained in the CompositeGene.");
   }
 
   /**

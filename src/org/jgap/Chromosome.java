@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -125,8 +125,7 @@ public class Chromosome
    *
    * @param a_sampleGene a concrete sampleGene instance that will be used
    * as a template for all of the genes in this Chromosome
-   * @param a_desiredSize The desired size (number of genes) of this
-   * Chromosome
+   * @param a_desiredSize the desired size (number of genes) of this Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -539,8 +538,8 @@ public class Chromosome
    * true if and the argument is an instance of the Chromosome class
    * and has a set of genes equal to this one.
    *
-   * @param other The object to compare against
-   * @return true if the objects are the same, false otherwise
+   * @param other the object to compare against
+   * @return true: if the objects are the same, false otherwise
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -594,7 +593,7 @@ public class Chromosome
    * number of genes or if any of its gene values (alleles) are less than
    * their corresponding gene values in the other chromosome.
    *
-   * @param other The Chromosome against which to compare this chromosome.
+   * @param other the Chromosome against which to compare this chromosome
    * @return a negative number if this chromosome is "less than" the given
    * chromosome, zero if they are equal to each other, and a positive number if
    * this chromosome is "greater than" the given chromosome
@@ -629,8 +628,8 @@ public class Chromosome
       }
     }
     if (m_compareAppData) {
-      // Compare application data
-      // ------------------------
+      // Compare application data.
+      // -------------------------
       if (getApplicationData() == null) {
         if (otherChromosome.getApplicationData() != null) {
           return -1;
@@ -738,7 +737,7 @@ public class Chromosome
    * some applications when it comes time to evaluate this Chromosome
    * in the fitness function. JGAP ignores this data.
    *
-   * @param a_newData The new application-specific data to attach to this
+   * @param a_newData the new application-specific data to attach to this
    * Chromosome
    *
    * @author Neil Rotstan
@@ -752,9 +751,9 @@ public class Chromosome
    * Retrieves the application-specific data that is attached to this
    * Chromosome. Attaching application-specific data may be useful for
    * some applications when it comes time to evaluate this Chromosome
-   * in the fitness function. JGAP ignores this data functionally
+   * in the fitness function. JGAP ignores this data functionally.
    *
-   * @return The application-specific data previously attached to this
+   * @return the application-specific data previously attached to this
    * Chromosome, or null if there is no data attached
    *
    * @author Neil Rotstan
@@ -784,7 +783,7 @@ public class Chromosome
    * "false" as "true" means a Chromosome is losing its identity when
    * application data is set differently!
    *
-   * @param a_doCompare true consider application data in method compareTo
+   * @param a_doCompare true: consider application data in method compareTo
    *
    * @author Klaus Meffert
    * @since 2.2
