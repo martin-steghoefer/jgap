@@ -35,6 +35,7 @@
 * Added method getGeneTypeAllowed in CompositeGene
 * Added constraint check in constructor Chromosome(int a_size)
 * Added many new test cases
+* Extended abstractSuperGene from BaseGene
 * Renamed test class p_abstractSupergeneTest to
   AbstractSupergeneTest
 * Renamed test class abstractSupergenesPerformanceTest to
