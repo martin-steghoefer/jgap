@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * This field separates gene class name from
@@ -69,7 +69,7 @@ public class CompositeGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  private List genes;
+  private List m_genes;
 
   /**
    * Optional helper class for checking if a given allele value to be set
@@ -99,7 +99,7 @@ public class CompositeGene
    * @since 2.0
    */
   public CompositeGene(Gene a_geneTypeAllowed) {
-    genes = new Vector();
+    m_genes = new Vector();
     if (a_geneTypeAllowed != null) {
       m_geneTypeAllowed = a_geneTypeAllowed;
     }
@@ -147,13 +147,13 @@ public class CompositeGene
       containsGene = containsGeneByIdentity(a_gene);
     }
     else {
-      containsGene = genes.contains(a_gene);
+      containsGene = m_genes.contains(a_gene);
     }
     if (containsGene) {
       throw new IllegalArgumentException("The gene is already contained"
                                          + " in the CompositeGene!");
     }
-    genes.add(a_gene);
+    m_genes.add(a_gene);
   }
 
   /**
@@ -174,7 +174,7 @@ public class CompositeGene
     else {
       for (int i = 0; i < size; i++) {
         if (geneAt(i) == gene) {
-          genes.remove(i);
+          m_genes.remove(i);
           return true;
         }
       }
@@ -193,7 +193,7 @@ public class CompositeGene
    * @since 1.1
    */
   public boolean removeGene(Gene gene) {
-    return genes.remove(gene);
+    return m_genes.remove(gene);
   }
 
   /**
@@ -205,8 +205,9 @@ public class CompositeGene
    */
   public void cleanup() {
     Gene gene;
-    for (int i = 0; i < genes.size(); i++) {
-      gene = (Gene) genes.get(i);
+    int size = m_genes.size();
+    for (int i = 0; i < size; i++) {
+      gene = (Gene) m_genes.get(i);
       gene.cleanup();
     }
   }
@@ -226,8 +227,9 @@ public class CompositeGene
       throw new IllegalArgumentException("Random generatoe must not be null!");
     }
     Gene gene;
-    for (int i = 0; i < genes.size(); i++) {
-      gene = (Gene) genes.get(i);
+    int size = m_genes.size();
+    for (int i = 0; i < size; i++) {
+      gene = (Gene) m_genes.get(i);
       gene.setToRandomValue(a_numberGenerator);
     }
   }
@@ -247,8 +249,9 @@ public class CompositeGene
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       try {
-        /** Remove the old content */
-        genes.clear();
+        // Remove the old content.
+        // -----------------------
+        m_genes.clear();
         ArrayList r = split(a_representation);
         Iterator iter = r.iterator();
 
@@ -308,7 +311,7 @@ public class CompositeGene
   public String getPersistentRepresentation()
       throws UnsupportedOperationException {
     StringBuffer b = new StringBuffer();
-    Iterator iter = genes.iterator();
+    Iterator iter = m_genes.iterator();
     Gene gene;
     while (iter.hasNext()) {
       gene = (Gene) iter.next();
@@ -339,8 +342,9 @@ public class CompositeGene
   public Object getAllele() {
     List alleles = new Vector();
     Gene gene;
-    for (int i = 0; i < genes.size(); i++) {
-      gene = (Gene) genes.get(i);
+    int size = m_genes.size();
+    for (int i = 0; i < size; i++) {
+      gene = (Gene) m_genes.get(i);
       alleles.add(gene.getAllele());
     }
     return alleles;
@@ -371,7 +375,7 @@ public class CompositeGene
     List alleles = (List) a_newValue;
     Gene gene;
     for (int i = 0; i < alleles.size(); i++) {
-      gene = (Gene) genes.get(i);
+      gene = (Gene) m_genes.get(i);
       gene.setAllele(alleles.get(i));
     }
   }
@@ -423,9 +427,9 @@ public class CompositeGene
   public Gene newGene() {
     CompositeGene compositeGene = new CompositeGene();
     Gene gene;
-    int geneSize = genes.size();
+    int geneSize = m_genes.size();
     for (int i = 0; i < geneSize; i++) {
-      gene = (Gene) genes.get(i);
+      gene = (Gene) m_genes.get(i);
       compositeGene.addGene(gene.newGene(), false);
     }
     return compositeGene;
@@ -466,8 +470,8 @@ public class CompositeGene
       return isEmpty() ? 0 : 1;
     }
     else {
-      //compare each gene against each other.
-      // ------------------------------------
+      // Compare each gene against each other.
+      // -------------------------------------
       int numberGenes = Math.min(size(), otherCompositeGene.size());
       Gene gene1;
       Gene gene2;
@@ -489,9 +493,9 @@ public class CompositeGene
           }
         }
       }
-      //if everything is equal until now the CompositeGene with more
-      //contained genes wins.
-      // -----------------------------------------------------------
+      // If everything is equal until now the CompositeGene with more
+      // contained genes wins.
+      // ------------------------------------------------------------
       if (size() == otherCompositeGene.size()) {
         return 0;
       }
@@ -514,16 +518,16 @@ public class CompositeGene
    * @since 1.1
    */
   public String toString() {
-    if (genes.isEmpty()) {
+    if (m_genes.isEmpty()) {
       return "CompositeGene=null";
     }
     else {
       String result = "CompositeGene=(";
       Gene gene;
-      for (int i = 0; i < genes.size(); i++) {
-        gene = (Gene) genes.get(i);
+      for (int i = 0; i < m_genes.size(); i++) {
+        gene = (Gene) m_genes.get(i);
         result += gene;
-        if (i < genes.size() - 1) {
+        if (i < m_genes.size() - 1) {
           result += GENE_DELIMITER;
         }
       }
@@ -538,7 +542,7 @@ public class CompositeGene
    * @since 1.1
    */
   public boolean isEmpty() {
-    return genes.isEmpty() ? true : false;
+    return m_genes.isEmpty() ? true : false;
   }
 
   /**
@@ -550,7 +554,7 @@ public class CompositeGene
    * @since 1.1
    */
   public Gene geneAt(int index) {
-    return (Gene) genes.get(index);
+    return (Gene) m_genes.get(index);
   }
 
   /**
@@ -560,7 +564,7 @@ public class CompositeGene
    * @since 1.1
    */
   public int size() {
-    return genes.size();
+    return m_genes.size();
   }
 
   /**
@@ -702,5 +706,4 @@ public class CompositeGene
   protected Object getInternalValue() {
     return null;
   }
-
 }
