@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -361,6 +361,54 @@ public class IntegerGeneTest
     catch (ClassCastException cex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_1() {
+    Gene gene1 = new IntegerGene(13, 65);
+    gene1.setAllele(new Integer(58));
+    Gene gene2 = new IntegerGene(53, 67);
+    gene2.setAllele(new Integer(59));
+    assertEquals( -1, gene1.compareTo(gene2));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_2() {
+    Gene gene1 = new IntegerGene(13, 65);
+    gene1.setAllele(new Integer(58));
+    Gene gene2 = new IntegerGene(53, 67);
+    gene2.setAllele(new Integer(58));
+    assertEquals(0, gene1.compareTo(gene2));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_3() {
+    Gene gene1 = new IntegerGene(13, 65);
+    gene1.setAllele(new Integer(59));
+    Gene gene2 = new IntegerGene(53, 67);
+    gene2.setAllele(new Integer(58));
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals( -1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testCompareTo_4() {
+    Gene gene1 = new IntegerGene(13, 65);
+    Gene gene2 = new IntegerGene(53, 67);
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
   }
 
   /**
