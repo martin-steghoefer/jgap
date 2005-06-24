@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -713,6 +713,74 @@ public class CompositeGeneTest
     gene1.addGene(newGene2, false);
     CompositeGene gene2 = new CompositeGene();
     gene2.addGene(newGene2, false);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(-1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_1() {
+    CompositeGene gene1 = new CompositeGene();
+    Gene newGene1 = new IntegerGene(3, 5);
+    gene1.addGene(newGene1, false);
+    CompositeGene gene2 = new CompositeGene();
+    gene2.addGene(newGene1, false);
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_2() {
+    CompositeGene gene1 = new CompositeGene();
+    Gene newGene1 = new IntegerGene(3, 5);
+    gene1.addGene(newGene1, false);
+    CompositeGene gene2 = new CompositeGene();
+    Gene newGene2 = new IntegerGene(3, 5);
+    gene2.addGene(newGene2, false);
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_3() {
+    CompositeGene gene1 = new CompositeGene();
+    Gene newGene1 = new IntegerGene(3, 5);
+    gene1.addGene(newGene1, false);
+    CompositeGene gene2 = new CompositeGene();
+    Gene newGene2 = new IntegerGene(3, 5);
+    newGene2.setAllele(new Integer(2));
+    gene2.addGene(newGene2, false);
+    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_4() {
+    CompositeGene gene1 = new CompositeGene();
+    Gene newGene1 = new IntegerGene(3, 5);
+    newGene1.setAllele(new Integer(1));
+    Gene newGene2 = new IntegerGene(3, 5);
+    newGene2.setAllele(new Integer(2));
+    gene1.addGene(newGene1, false);
+    gene1.addGene(newGene2, false);
+    CompositeGene gene2 = new CompositeGene();
+    Gene newGene3 = new IntegerGene(3, 5);
+    newGene3.setAllele(new Integer(1));
+    Gene newGene4 = new IntegerGene(3, 5);
+    newGene3.setAllele(new Integer(-2));
+    gene2.addGene(newGene3, false);
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals(-1, gene2.compareTo(gene1));
   }
