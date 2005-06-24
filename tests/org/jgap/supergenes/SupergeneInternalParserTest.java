@@ -21,7 +21,7 @@ public class SupergeneInternalParserTest extends TestCase
 {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   class test extends abstractSupergene
   {
@@ -61,7 +61,7 @@ public class SupergeneInternalParserTest extends TestCase
         return b.toString().equals(expectedResponse);
     }
 
-    /** Used in test only */
+    //Used in test only
     private void splitRecursive(String a_t, StringBuffer a_buffer,
     String a_ident, boolean a_print)
      throws UnsupportedRepresentationException
