@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -29,6 +29,7 @@ public class BaseGeneTest
 
   /**
    * Following should be possible without exception
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
@@ -111,7 +112,7 @@ public class BaseGeneTest
   }
 
   /**
-   * Following should be possible without exception
+   * Simple cleanup should be possible without exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -197,7 +198,7 @@ public class BaseGeneTest
   }
 
   /**
-   * Test implementation of Gene interface extending BaseGene class
+   * Test implementation of Gene interface extending abstract BaseGene class
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -208,7 +209,7 @@ public class BaseGeneTest
 
     public int m_compareTo_result;
 
-    public int compareTo(Object o) {
+    public int compareTo(Object a_o) {
       return m_compareTo_result;
     }
 
@@ -233,7 +234,7 @@ public class BaseGeneTest
     public void setToRandomValue(RandomGenerator a_numberGenerator) {
     }
 
-    public void applyMutation(int index, double a_percentage) {
+    public void applyMutation(int a_index, double a_percentage) {
     }
 
     protected Object getInternalValue() {
