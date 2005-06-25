@@ -21,11 +21,12 @@ public abstract class NumberGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * References the internal value (allele) of this Gene.
    * E.g., for DoubleGene this is of type Double.
+   * This value is protected because extending classes will like to use it, too.
    */
   protected Object m_value = null;
 
@@ -63,25 +64,48 @@ public abstract class NumberGene
       // Check if type corresponds (because we could have a type not inherited
       // from NumberGene).
       // ---------------------------------------------------------------------
-      if (!otherGene.getClass().equals(this.getClass())) {
+      if (!otherGene.getClass().equals(getClass())) {
         throw new ClassCastException(
             "Comparison not possible: different types!");
       }
       // If our value is also null, then we're the same. Otherwise,
       // this is the greater gene.
       // ----------------------------------------------------------
-      return m_value == null ? 0 : 1;
+      if (m_value == null) {
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherGene.getApplicationData());
+        }
+        else {
+          return 0;
+        }
+      }
+      else {
+        return 1;
+      }
     }
     else {
       try {
-        if (!otherGene.getClass().equals(this.getClass())) {
+        if (!otherGene.getClass().equals(getClass())) {
           throw new ClassCastException(
               "Comparison not possible: different types!");
         }
         if (m_value == null) {
           return -1;
         }
-        return compareToNative(m_value, otherGene.m_value);
+        int res = compareToNative(m_value, otherGene.m_value);
+        if (res == 0) {
+          if (isCompareApplicationData()) {
+            return compareApplicationData(getApplicationData(),
+                                          otherGene.getApplicationData());
+          }
+          else {
+            return 0;
+          }
+        }
+        else {
+          return res;
+        }
       }
       catch (ClassCastException e) {
         throw e;
