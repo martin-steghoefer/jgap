@@ -15,7 +15,7 @@ import org.jgap.xml.*;
 import org.w3c.dom.*;
 
 /**
- * Tests the XML capabilities of JGAP. Uses the simple boolean example for that
+ * Tests the XML capabilities of JGAP. Uses the simple boolean example for that.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -24,7 +24,7 @@ import org.w3c.dom.*;
 public class TestXML {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public static void main(String[] args) {
     try {
@@ -36,7 +36,8 @@ public class TestXML {
       activeConfiguration.setFitnessFunction(new MaxFunction());
       Genotype.setConfiguration(activeConfiguration);
 
-      // Test Chromsome manipulation methods
+      // Test Chromsome manipulation methods.
+      // ------------------------------------
       Chromosome chromosome =
           Chromosome.randomInitialChromosome();
 
@@ -52,7 +53,8 @@ public class TestXML {
         System.exit( -1);
       }
 
-      // Test Genotype manipulation methods
+      // Test Genotype manipulation methods.
+      // -----------------------------------
       Genotype genotype =
           Genotype.randomInitialGenotype(activeConfiguration);
 
