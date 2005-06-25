@@ -6,6 +6,9 @@
   All test cases are now derived from this new class hosting
   commong logic
 * Introduced new utility class org.jgap.util.NetworkKit
+* Added new example: examples.chromInit.ChromosomeInit
+  Shows how to initialize Chromosomes with different number
+  of Gene's.
 * Introduced test suite for examples
 * Introduced new parameter in Configuration
   "keepPopulationSizeConstant" (along with getter and setter).
