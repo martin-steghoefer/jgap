@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MaxFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * This example implementation calculates the fitness value of Chromosomes
@@ -40,6 +40,10 @@ public class MaxFunction
    * value.
    * @param a_subject the Chromosome to be evaluated
    * @return defect rate of our problem
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public double evaluate(Chromosome a_subject) {
     int total = 0;

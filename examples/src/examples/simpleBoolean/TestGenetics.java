@@ -22,12 +22,13 @@ import org.jgap.impl.*;
 public class TestGenetics {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public static void main(String[] args) {
     int numEvolutions = 500;
     Configuration gaConf = new DefaultConfiguration();
-    gaConf.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    gaConf.setPreservFittestIndividual(true);
+    gaConf.setKeepPopulationSizeConstant(false);
     Genotype genotype = null;
 
     try {
@@ -56,12 +57,13 @@ public class TestGenetics {
     for (int i = 0; i < numEvolutions; i++) {
       genotype.evolve();
 
-      // print progress
+      // Print progress.
+      // ---------------
       if (percentEvolution > 0 && i % percentEvolution == 0) {
         progress++;
         Chromosome fittest = genotype.getFittestChromosome();
-        System.out.println("Fittest Chromosome has value " +
-                           fittest.getFitnessValue());
+        double fitness = fittest.getFitnessValue();
+        System.out.println("Fittest Chromosome has value " + fitness);
       }
     }
 
