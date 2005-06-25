@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -147,38 +147,16 @@ public abstract class BaseGene
     try {
       int result =compareTo(a_other);
       if (result == 0) {
-        if (m_compareAppData) {
+        if (isCompareApplicationData()) {
           Gene otherGene = (Gene)a_other;
-          // Compare application data.
-          // -------------------------
-          if (getApplicationData() == null) {
-            if (otherGene.getApplicationData() != null) {
-              return false;
-            }
-            else {
-              return true;
-            }
-          }
-          else if (otherGene.getApplicationData() == null) {
-            return false;
-          }
-          else {
-            if (getApplicationData() instanceof Comparable) {
-              try {
-                return ( (Comparable) getApplicationData()).compareTo(
-                    otherGene.getApplicationData()) == 0;
-              }
-              catch (ClassCastException cex) {
-                return true;
-              }
-            }
-            else {
-              return getApplicationData().getClass().getName().compareTo(
-                  otherGene.getApplicationData().getClass().getName()) == 0;
-            }
-          }
+          int resultAppData = compareApplicationData(getApplicationData(),
+              otherGene.getApplicationData());
+          return resultAppData == 0;
+
         }
-        else return true;
+        else {
+          return true;
+        }
       }
       else return false;
     }
@@ -278,4 +256,34 @@ public abstract class BaseGene
     return m_compareAppData;
   }
 
+  protected int compareApplicationData(Object a_appdata1, Object a_appdata2) {
+    // Compare application data.
+    // -------------------------
+    if (a_appdata1 == null) {
+      if (a_appdata2 != null) {
+        return -1;
+      }
+      else {
+        return 0;
+      }
+    }
+    else if (a_appdata2 == null) {
+      return 1;
+    }
+    else {
+      if (a_appdata1 instanceof Comparable) {
+        try {
+          return ( (Comparable) a_appdata1).compareTo(
+              a_appdata2);
+        }
+        catch (ClassCastException cex) {
+          return 0;
+        }
+      }
+      else {
+        return a_appdata1.getClass().getName().compareTo(
+            a_appdata2.getClass().getName());
+      }
+    }
+  }
 }
