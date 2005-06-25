@@ -28,7 +28,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   /**
    * The current active Configuration instance.
@@ -399,13 +399,15 @@ public class Genotype
     Population pop = new Population(populationSize);
     if (a_chromosome == null ||
         a_chromosome.getName().equals(Chromosome.class.getName())) {
-      // do default randomized initialization
+      // Do default randomized initialization.
+      // -------------------------------------
       for (int i = 0; i < populationSize; i++) {
         pop.addChromosome(Chromosome.randomInitialChromosome());
       }
     }
     else {
-      // use user-provided randomized initialization
+      // Use user-provided randomized initialization.
+      // --------------------------------------------
       for (int i = 0; i < populationSize; i++) {
         try {
           Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome",
