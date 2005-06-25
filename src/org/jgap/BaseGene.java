@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -28,14 +28,29 @@ public abstract class BaseGene
    * This data may assist the application in labelling this Gene.
    * in JGAP completely ignores the data, aside from allowing it to be set and
    * retrieved.
+   *
+   * @since 2.4
    */
   private Object m_applicationData;
 
+  /**
+   * Method compareTo(): Should we also consider the application data when
+   * comparing? Default is "false" as "true" means a Gene's losing its
+   * identity when application data is set differently!
+   *
+   * @since 2.4
+   */
+  private boolean m_compareAppData;
 
   /**
-   * Retrieves the value represented by this Gene.
+   * Constants for toString()
+   */
+  public final static String S_APPLICATION_DATA = "Application data";
+
+  /**
+   * Retrieves the allele value represented by this Gene.
    *
-   * @return the value of this Gene.
+   * @return the allele value of this Gene
    * @since 1.0
    */
   public Object getAllele() {
@@ -47,7 +62,7 @@ public abstract class BaseGene
    * Override if another hashCode() implementation is necessary or more
    * appropriate than this default implementation.
    *
-   * @return this Gene's hash code.
+   * @return this Gene's hash code
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -55,8 +70,8 @@ public abstract class BaseGene
    */
   public int hashCode() {
     // If our internal value is null, then return zero. Otherwise,
-    // just return the hash code of the Object.
-    // -------------------------------------------------------------
+    // just return the hash code of the allele Object.
+    // -----------------------------------------------------------
     if (getInternalValue() == null) {
       return -79;
     }
@@ -75,7 +90,7 @@ public abstract class BaseGene
    */
   public void cleanup() {
     // No specific cleanup is necessary by default.
-    // ---------------------------------------------------------
+    // --------------------------------------------
   }
 
   /**
@@ -88,12 +103,22 @@ public abstract class BaseGene
    * @since 1.0
    */
   public String toString() {
+    String representation;
     if (getInternalValue() == null) {
-      return "null";
+      representation = "null";
     }
     else {
-      return getInternalValue().toString();
+      representation = getInternalValue().toString();
     }
+    String appData;
+    if (getApplicationData() != null) {
+      appData = getApplicationData().toString();
+    }
+    else {
+      appData = "null";
+    }
+    representation += ", " + S_APPLICATION_DATA + ":" + appData;
+    return representation;
   }
 
   /**
@@ -112,20 +137,55 @@ public abstract class BaseGene
    * object is a Gene of the same type and has the same value (allele) as
    * this Gene. Otherwise it returns false.
    *
-   * @param other the object to compare to this Gene for equality.
+   * @param a_other the object to compare to this Gene for equality.
    * @return true if this Gene is equal to the given object, false otherwise.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public boolean equals(Object other) {
+  public boolean equals(Object a_other) {
     try {
-      return compareTo(other) == 0;
+      int result =compareTo(a_other);
+      if (result == 0) {
+        if (m_compareAppData) {
+          Gene otherGene = (Gene)a_other;
+          // Compare application data.
+          // -------------------------
+          if (getApplicationData() == null) {
+            if (otherGene.getApplicationData() != null) {
+              return false;
+            }
+            else {
+              return true;
+            }
+          }
+          else if (otherGene.getApplicationData() == null) {
+            return false;
+          }
+          else {
+            if (getApplicationData() instanceof Comparable) {
+              try {
+                return ( (Comparable) getApplicationData()).compareTo(
+                    otherGene.getApplicationData()) == 0;
+              }
+              catch (ClassCastException cex) {
+                return true;
+              }
+            }
+            else {
+              return getApplicationData().getClass().getName().compareTo(
+                  otherGene.getApplicationData().getClass().getName()) == 0;
+            }
+          }
+        }
+        else return true;
+      }
+      else return false;
     }
     catch (ClassCastException e) {
       // If the other object isn't an Gene of current type
       // (like IntegerGene for IntegerGene's), then we're not equal.
-      // -------------------------------------------------
+      // -----------------------------------------------------------
       return false;
     }
   }
@@ -193,4 +253,29 @@ public abstract class BaseGene
   public Object getApplicationData() {
     return m_applicationData;
   }
+
+  /**
+   * Should we also consider the application data when comparing? Default is
+   * "false" as "true" means a Gene is losing its identity when
+   * application data is set differently!
+   *
+   * @param a_doCompare true: consider application data in method compareTo
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void setCompareApplicationData(boolean a_doCompare) {
+    m_compareAppData = a_doCompare;
+  }
+
+  /*
+   * @return should we also consider the application data when comparing?
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public boolean isCompareApplicationData() {
+    return m_compareAppData;
+  }
+
 }
