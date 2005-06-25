@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   private int m_minLength;
 
@@ -73,7 +73,7 @@ public class StringGene
 
   /**
    * Constructor, allows to specify minimum and maximum lengths of the string
-   * held by this gene
+   * held by this gene.
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
    *
@@ -85,10 +85,11 @@ public class StringGene
   }
 
   /**
-   *
-   * @param a_minLength minimum valid length of allele
-   * @param a_maxLength maximum valid length of allele
-   * @param a_alphabet valid aplhabet for allele
+   * Constructor, allows to specify minimum and maximum lengths of the string
+   * held by this gene, as well as the valid alphabet.
+   * @param a_minLength minimum valid length of an allele
+   * @param a_maxLength maximum valid length of an allele
+   * @param a_alphabet valid alphabet for an allele
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -113,7 +114,7 @@ public class StringGene
    * Sets the value (allele) of this Gene to a random String according to the
    * valid alphabet and boundaries of length.
    *
-   * @param a_numberGenerator The random number generator that should be used
+   * @param a_numberGenerator the random number generator that should be used
    * to create any random values. It's important to use this generator to
    * maintain the user's flexibility to configure the genetic engine to use the
    * random number generator of their choice
@@ -141,9 +142,9 @@ public class StringGene
       i = -i;
     }
     length = m_minLength + i;
-    //for each character: randomize character value (which can be represented
-    //by an integer value)
-    //-----------------------------------------------------------------------
+    // For each character: randomize character value (which can be represented
+    // by an integer value).
+    //------------------------------------------------------------------------
     m_value = "";
     final int alphabetLength = m_alphabet.length();
     for (int j = 0; j < length; j++) {
@@ -274,7 +275,7 @@ public class StringGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return A string representation of this Gene's current state
+   * @return string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
    * is provided for this method
    *
@@ -314,7 +315,7 @@ public class StringGene
    * Sets the value (allele) of this Gene to the new given value. This class
    * expects the value to be a String instance. If the value is shorter or
    * longer than the minimum or maximum length or any character is not within
-   * the valid alphabet an exception is throwsn
+   * the valid alphabet an exception is thrown.
    *
    * @param a_newValue the new value of this Gene instance
    *
@@ -329,8 +330,8 @@ public class StringGene
         throw new IllegalArgumentException(
             "The given value is too short or too long!");
       }
-      //check for validity of alphabet
-      //------------------------------
+      //check for validity of alphabet.
+      //-------------------------------
       if (!isValidAlphabet(temp, m_alphabet)) {
         throw new IllegalArgumentException("The given value contains"
                                            + " at least one invalid character.");
@@ -385,7 +386,7 @@ public class StringGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same setup as
+   * @return a new Gene instance of the same type and with the same setup as
    * this concrete Gene
    *
    * @author Klaus Meffert
@@ -405,7 +406,7 @@ public class StringGene
    * is less than, equal to, or greater than the object provided for comparison
    *
    * @throws ClassCastException if the specified object's type prevents it
-   * from being compared to this StringGene.
+   * from being compared to this StringGene
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -423,11 +424,34 @@ public class StringGene
       // If our value is also null, then we're the same. Otherwise,
       // this is the greater gene.
       // ----------------------------------------------------------
-      return m_value == null ? 0 : 1;
+      if (m_value == null) {
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherStringGene.getApplicationData());
+        }
+        else {
+          return 0;
+        }
+      }
+      else {
+        return 1;
+      }
     }
     else {
       try {
-        return m_value.compareTo(otherStringGene.m_value);
+        int res = m_value.compareTo(otherStringGene.m_value);
+        if (res == 0) {
+          if (isCompareApplicationData()) {
+            return compareApplicationData(getApplicationData(),
+                                          otherStringGene.getApplicationData());
+          }
+          else {
+            return 0;
+          }
+        }
+        else {
+          return res;
+        }
       }
       catch (ClassCastException e) {
         e.printStackTrace();
@@ -511,7 +535,7 @@ public class StringGene
   }
 
   /**
-   * Checks whether a string value is valid concerning a given alphabet
+   * Checks whether a string value is valid concerning a given alphabet.
    * @param a_value the value to check
    * @param a_alphabet the valid alphabet to check against
    * @return true: given string value is valid
@@ -529,8 +553,8 @@ public class StringGene
     if (a_alphabet.length() < 1) {
       return false;
     }
-    //loop over all characters of a_value
-    //-----------------------------------
+    // Loop over all characters of a_value.
+    // ------------------------------------
     int length = a_value.length();
     char c;
     for (int i = 0; i < length; i++) {
@@ -544,7 +568,7 @@ public class StringGene
 
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
-   * element at given index (NumberGenes only have one atomic element)
+   * element at given index (NumberGenes only have one atomic element).
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    * than 1).
