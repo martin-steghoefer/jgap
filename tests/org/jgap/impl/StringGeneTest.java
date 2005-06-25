@@ -24,7 +24,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -242,6 +242,56 @@ public class StringGeneTest
     gene2.setAllele("HELLO1");
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
+  }
+
+  /**
+   * Using application data
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testEquals_9() {
+    Gene gene1 = new StringGene(2, 6);
+    gene1.setAllele("hallo");
+    gene1.setApplicationData(new Double(2.3d));
+    Gene gene2 = new StringGene(2,6);
+    gene2.setAllele("hallo");
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+    gene1.setCompareApplicationData(true);
+    assertFalse(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+    gene2.setCompareApplicationData(true);
+    assertFalse(gene1.equals(gene2));
+    assertFalse(gene2.equals(gene1));
+    gene2.setApplicationData(new Double(2.3d));
+    assertTrue(gene1.equals(gene2));
+    assertTrue(gene2.equals(gene1));
+  }
+
+  /**
+   * Using application data
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_0() {
+    Gene gene1 = new StringGene(2, 6);
+    gene1.setAllele("hallo");
+    gene1.setApplicationData(new Double(2.3d));
+    Gene gene2 = new StringGene(2,6);
+    gene2.setAllele("hallo");
+    assertEquals(0,gene1.compareTo(gene2));
+    assertEquals(0,gene2.compareTo(gene1));
+    gene1.setCompareApplicationData(true);
+    assertEquals(1,gene1.compareTo(gene2));
+    assertEquals(0,gene2.compareTo(gene1));
+    gene2.setCompareApplicationData(true);
+    assertEquals(1,gene1.compareTo(gene2));
+    assertEquals(-1,gene2.compareTo(gene1));
+    gene2.setApplicationData(new Double(2.3d));
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
   }
 
   /**
