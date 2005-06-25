@@ -20,17 +20,19 @@ import org.jgap.impl.*;
  * @since 2.0
  */
 public class TestGenetics {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
+  /**
+   * Starts the example
+   * @param args ignored here
+   */
   public static void main(String[] args) {
     int numEvolutions = 500;
     Configuration gaConf = new DefaultConfiguration();
     gaConf.setPreservFittestIndividual(true);
     gaConf.setKeepPopulationSizeConstant(false);
     Genotype genotype = null;
-
     try {
       int chromeSize = 16;
       if (chromeSize > 32) {
@@ -38,25 +40,21 @@ public class TestGenetics {
                            "Chromosomes greater than 32 bits in length.");
         System.exit( -1);
       }
-
-      gaConf.setSampleChromosome(
-          new Chromosome(new BooleanGene(), chromeSize));
+      Chromosome sampleChromosome = new Chromosome(new BooleanGene(),
+          chromeSize);
+      gaConf.setSampleChromosome(sampleChromosome);
       gaConf.setPopulationSize(20);
       gaConf.setFitnessFunction(new MaxFunction());
-
       genotype = Genotype.randomInitialGenotype(gaConf);
     }
     catch (InvalidConfigurationException e) {
       e.printStackTrace();
       System.exit( -2);
     }
-
     int progress = 0;
     int percentEvolution = numEvolutions / 100;
-
     for (int i = 0; i < numEvolutions; i++) {
       genotype.evolve();
-
       // Print progress.
       // ---------------
       if (percentEvolution > 0 && i % percentEvolution == 0) {
@@ -66,7 +64,6 @@ public class TestGenetics {
         System.out.println("Fittest Chromosome has value " + fitness);
       }
     }
-
     Chromosome fittest = genotype.getFittestChromosome();
     System.out.println("Fittest Chromosome has value " +
                        fittest.getFitnessValue());
