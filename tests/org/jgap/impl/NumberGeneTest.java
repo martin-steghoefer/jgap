@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -289,6 +289,7 @@ public class NumberGeneTest
     assertEquals(1, gene1.compareTo(gene2));
     gene2.setAllele(new Integer(4711));
     assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
   }
 
   /**
@@ -332,6 +333,29 @@ public class NumberGeneTest
     }
   }
 
+  /**
+   * Using application data
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_3()
+      {
+    Gene gene1 = new NumberGeneImpl(1, 10000);
+    gene1.setAllele(new Integer(4711));
+    gene1.setApplicationData(new Integer(2));
+    gene1.setCompareApplicationData(true);
+    Gene gene2 = gene1.newGene();
+    gene2.setAllele(new Integer(4711));
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+    gene2.setCompareApplicationData(true);
+    assertEquals(-1, gene2.compareTo(gene1));
+    gene2.setApplicationData(new Integer(3));
+    assertEquals(1, gene2.compareTo(gene1));
+    assertEquals(-1, gene1.compareTo(gene2));
+  }
+
   public void testSetConstraintChecker_0() {
     NumberGene gene1 = new NumberGeneImpl(1, 3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
@@ -369,7 +393,7 @@ public class NumberGeneTest
   }
 
   /**
-   * Test implementation of NumberGene, based on IntegerGene
+   * Test implementation of NumberGene, based on IntegerGene.
    *
    * @author Klaus Meffert
    * @since 1.1
