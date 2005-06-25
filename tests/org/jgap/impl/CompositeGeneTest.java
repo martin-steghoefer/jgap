@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -300,7 +300,7 @@ public class CompositeGeneTest
   public void testEquals_8() {
     Gene newGene1 = new IntegerGene(3, 5);
     newGene1.setAllele(new Integer(3));
-    Gene newGene2 = new IntegerGene(3, 5);
+    Gene newGene2 = new IntegerGene(3, 15);
     newGene2.setAllele(new Integer(9));
     CompositeGene gene1 = new CompositeGene();
     gene1.addGene(newGene1, false);
@@ -800,6 +800,40 @@ public class CompositeGeneTest
     gene2.addGene(newGene3, false);
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals(-1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * Using application data
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_5() {
+    CompositeGene gene1 = new CompositeGene();
+    gene1.setCompareApplicationData(true);
+    Gene newGene1 = new IntegerGene(3, 5);
+    gene1.addGene(newGene1, false);
+    CompositeGene gene2 = new CompositeGene();
+    gene2.setCompareApplicationData(true);
+    Gene newGene2 = new IntegerGene(3, 5);
+    gene2.addGene(newGene2, false);
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+    gene1.setApplicationData(new Integer(2));
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(-1, gene2.compareTo(gene1));
+    gene2.setApplicationData(new Integer(3));
+    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene1));
+    newGene1.setApplicationData(new Integer(5));
+    newGene2.setApplicationData(new Integer(4));
+    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene1));
+    newGene1.setCompareApplicationData(true);
+    newGene2.setCompareApplicationData(true);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(-1, gene2.compareTo(gene1));
+
   }
 
 }
