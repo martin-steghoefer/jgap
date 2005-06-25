@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   /**
    * This field separates gene class name from
@@ -440,7 +440,7 @@ public class CompositeGene
    * false value is considered to be less than a true value. A null value
    * is considered to be less than any non-null value.
    *
-   * @param other the CompositeGene to be compared
+   * @param a_other the CompositeGene to be compared
    * @return a negative integer, zero, or a positive integer as this object
    * is less than, equal to, or greater than the specified object
    *
@@ -450,19 +450,19 @@ public class CompositeGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public int compareTo(Object other) {
+  public int compareTo(Object a_other) {
     // First, if the other gene (or its value) is null, then this is
     // the greater allele. Otherwise, just use the contained genes' compareTo
     // method to perform the comparison.
     // ---------------------------------------------------------------
-    if (other == null) {
+    if (a_other == null) {
       return 1;
     }
 
-    if (! (other instanceof CompositeGene)) {
-      return this.getClass().getName().compareTo(other.getClass().getName());
+    if (! (a_other instanceof CompositeGene)) {
+      return this.getClass().getName().compareTo(a_other.getClass().getName());
     }
-    CompositeGene otherCompositeGene = (CompositeGene) other;
+    CompositeGene otherCompositeGene = (CompositeGene) a_other;
     if (otherCompositeGene.isEmpty()) {
       // If our value is also null, then we're the same. Otherwise,
       // this is the greater gene.
@@ -497,7 +497,13 @@ public class CompositeGene
       // contained genes wins.
       // ------------------------------------------------------------
       if (size() == otherCompositeGene.size()) {
-        return 0;
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherCompositeGene.getApplicationData());
+        }
+        else {
+          return 0;
+        }
       }
       else {
         return size() > otherCompositeGene.size() ? 1 : -1;
