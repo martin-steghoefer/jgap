@@ -32,6 +32,7 @@
 * Fitness Function: Made constant NO_FITNESS_VALUE public
 * TSP example: eliminated design flaw with configuration
   object
+* Added ColtRandomGenerator, see request 1231159
 * Added new Gene implementation (MapGene)
 * Added method getLastComputedFitnessValue in FitnessFunction
 * Added default constructor in Chromosome as well as tests for
