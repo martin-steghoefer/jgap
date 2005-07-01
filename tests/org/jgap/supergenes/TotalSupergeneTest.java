@@ -13,15 +13,15 @@ import org.jgap.supergenes.*;
 import java.io.*;
 
 /**
- * Total test of the supported Supergene classes. Due slow run it is not
- * included into AllTests
+ * Total test of the supported Supergene classes. Due to slow run it is not
+ * included into AllTests.
  *
  * @author Audrius Meskauskas
  * @since 2.0
  */
 class TotalSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Test supported Supegene features, including performance tests.
