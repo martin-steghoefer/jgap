@@ -25,7 +25,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -171,12 +171,11 @@ public class DoubleGene
       // First parse and set the representation of the value.
       // ----------------------------------------------------
       if (valueRepresentation.equals("null")) {
-        m_value = null;
+        setAllele(null);
       }
       else {
         try {
-          m_value =
-              new Double(Double.parseDouble(valueRepresentation));
+          setAllele(new Double(Double.parseDouble(valueRepresentation)));
         }
         catch (NumberFormatException e) {
           throw new UnsupportedRepresentationException(
@@ -220,7 +219,7 @@ public class DoubleGene
    * @since 1.1
    */
   public double doubleValue() {
-    return ( (Double) m_value).doubleValue();
+    return ( (Double) getAllele()).doubleValue();
   }
 
   /**
@@ -238,8 +237,8 @@ public class DoubleGene
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
     // maps the randomly determined value to the current bounds.
     // ---------------------------------------------------------
-    m_value = new Double( (m_upperBounds - m_lowerBounds) *
-                         a_numberGenerator.nextDouble() + m_lowerBounds);
+    setAllele(new Double( (m_upperBounds - m_lowerBounds) *
+                         a_numberGenerator.nextDouble() + m_lowerBounds));
   }
 
   /**
@@ -271,8 +270,8 @@ public class DoubleGene
    * @since 1.1
    */
   protected void mapValueToWithinBounds() {
-    if (m_value != null) {
-      Double d_value = ( (Double) m_value);
+    if (getAllele() != null) {
+      Double d_value = ( (Double) getAllele());
       // If the value exceeds either the upper or lower bounds, then
       // map the value to within the legal range. To do this, we basically
       // calculate the distance between the value and the double min,
@@ -288,8 +287,8 @@ public class DoubleGene
         else {
           rn = new StockRandomGenerator();
         }
-        m_value = new Double(rn.nextDouble()
-            *(m_upperBounds - m_lowerBounds) + m_lowerBounds);
+        setAllele(new Double(rn.nextDouble()
+            *(m_upperBounds - m_lowerBounds) + m_lowerBounds));
       }
     }
   }
@@ -307,23 +306,6 @@ public class DoubleGene
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
     double newValue = doubleValue() + range;
     setAllele(new Double(newValue));
-  }
-
-  /**
-   * See NumberGene.setAllele(Object)
-   * @param a_newValue sic
-   *
-   * @author Klaus Meffert
-   * @since 1.1
-   */
-  public void setAllele(Object a_newValue) {
-    if (m_geneAlleleChecker != null) {
-      if (!m_geneAlleleChecker.verify(this, a_newValue)) {
-        return;
-      }
-    }
-    m_value = a_newValue;
-    mapValueToWithinBounds();
   }
 
   /**
@@ -347,10 +329,6 @@ public class DoubleGene
    */
   public IGeneConstraintChecker getConstraintChecker() {
     return m_geneAlleleChecker;
-  }
-
-  protected Object getInternalValue() {
-    return m_value;
   }
 
   /**
