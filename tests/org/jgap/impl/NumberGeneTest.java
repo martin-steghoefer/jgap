@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -454,8 +454,8 @@ public class NumberGeneTest
     }
 
     protected void mapValueToWithinBounds() {
-      if (m_value != null) {
-        Integer i_value = ( (Integer) m_value);
+      if (getAllele() != null) {
+        Integer i_value = ( (Integer) getAllele());
         // If the value exceeds either the upper or lower bounds, then
         // map the value to within the legal range. To do this, we basically
         // calculate the distance between the value and the integer min,
@@ -469,8 +469,7 @@ public class NumberGeneTest
           int differenceFromBoundsMin =
               (int) (differenceFromIntMin /
                      m_boundsUnitsToIntegerUnits);
-          m_value =
-              new Integer(m_upperBounds + differenceFromBoundsMin);
+          setAllele(new Integer(m_upperBounds + differenceFromBoundsMin));
         }
       }
     }
