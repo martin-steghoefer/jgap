@@ -43,6 +43,7 @@ public class ColtRandomGenerator
    * generated and returned. All n possible int values are produced with
    * (approximately) equal probability.
    *
+   * @param ceiling upper ceiling to consider for return value
    * @return a pseudorandom integer value between 0 and the given
    * ceiling - 1, inclusive
    */
