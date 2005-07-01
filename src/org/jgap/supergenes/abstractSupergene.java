@@ -29,7 +29,7 @@ import org.jgap.*;
 public abstract class abstractSupergene extends BaseGene
     implements Supergene, supergeneValidator, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * This field separates gene class name from
@@ -620,7 +620,13 @@ public abstract class abstractSupergene extends BaseGene
   public void setFromPersistent(String a_from) {
   }
 
+  /**
+   * @return not needed for abstract supergene
+   */
   public Object getInternalValue() {
-    return getAllele();
+    if (true) {
+      throw new RuntimeException("getInternalValue() called unexpectedly!");
+    }
+    return null;
   }
 }
