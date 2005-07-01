@@ -21,14 +21,13 @@ public abstract class NumberGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
-   * References the internal value (allele) of this Gene.
-   * E.g., for DoubleGene this is of type Double.
-   * This value is protected because extending classes will like to use it, too.
+   * References the internal value (allele) of this Gene
+   * E.g., for DoubleGene this is of type Double
    */
-  protected Object m_value = null;
+  private Object m_value;
 
   /**
    * Optional helper class for checking if a given allele value to be set
