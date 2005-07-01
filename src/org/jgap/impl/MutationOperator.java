@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -94,27 +94,6 @@ public class MutationOperator
   }
 
   /**
-   * The operate method will be invoked on each of the genetic operators
-   * referenced by the current Configuration object during the evolution
-   * phase. Operators are given an opportunity to run in the order that
-   * they are added to the Configuration. Implementations of this method
-   * may reference the population of Chromosomes as it was at the beginning
-   * of the evolutionary phase and/or they may instead reference the
-   * candidate Chromosomes, which are the results of prior genetic operators.
-   * In either case, only Chromosomes added to the list of candidate
-   * chromosomes will be considered for natural selection. Implementations
-   * should never modify the original population, but should first make copies
-   * of the Chromosomes selected for modification and operate upon the copies.
-   *
-   * @param a_population population of chromosomes from the current evolution
-   * prior to exposure to any genetic operators. Chromosomes in this array
-   * should never be modified
-   * @param a_candidateChromosomes pool of chromosomes that are candidates
-   * for the next evolved population. Only these chromosomes will go to the
-   * natural phase, so it's important to add any modified copies of Chromosomes
-   * to this list if it's desired for them to be considered for natural
-   * selection
-   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0

@@ -23,7 +23,7 @@ import org.jgap.*;
 public class InversionOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Constructs a new instance of this operator
@@ -35,15 +35,6 @@ public class InversionOperator
   }
 
   /**
-   * @param a_population the population of chromosomes from the current
-   * evolution prior to exposure to any genetic operators. Chromosomes in this
-   * array should never be modified.
-   * @param a_candidateChromosomes the pool of chromosomes that are candidates
-   * for the next evolved population. Only these chromosomes will go to the
-   * natural phase, so it's important to add any modified copies of Chromosomes
-   * to this list if it's desired for them to be considered for natural
-   * selection
-   *
    * @author Klaus Meffert
    * @since 2.3
    */
