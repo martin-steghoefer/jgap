@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * Constants for toString()
@@ -893,11 +893,14 @@ public class Configuration
       sampleCopy.setAllele(sampleGenes[i].getAllele());
       if (! (sampleCopy.equals(sampleGenes[i]))) {
         throw new InvalidConfigurationException(
-            "The sample Gene at gene position (locus) " + i +
-            " does not appear to have a working equals() method. " +
-            "When tested, the method returned false when comparing " +
-            "the sample gene with a gene of the same type and " +
-            "possessing the same value (allele).");
+            "The sample Gene at gene position (locus) "
+            + i
+            + " does not appear to have a working equals() method. It could also"
+            +" be that you forgot to implement method newGene() in your"
+            +" Gene implementation."
+            + "When tested, the method returned false when comparing "
+            + "the sample gene with a gene of the same type and "
+            + "possessing the same value (allele).");
       }
     }
   }
@@ -996,7 +999,7 @@ public class Configuration
   }
 
   /**
-   * Determines whether to save (keep) the fittest individual
+   * Determines whether to save (keep) the fittest individual.
    * @param a_preserveFittest true: always transfer fittest chromosome to next
    * generation
    *
@@ -1016,7 +1019,7 @@ public class Configuration
   }
 
   /**
-   * Implementation of the Configurable interface
+   * Implementation of the Configurable interface.
    * @return ConfigurationHandler
    *
    * @author Siddhartha Azad
@@ -1054,7 +1057,7 @@ public class Configuration
   }
 
   /**
-   * Pass the name and values of a property to be set
+   * Pass the name and values of a property to be set.
    * @param name the name of the property
    * @param values the different values of the property
    * @throws ConfigException
@@ -1077,36 +1080,44 @@ public class Configuration
    */
   public String toString() {
     String result = S_CONFIGURATION + ":";
-    // basic parameters
+    // Basic parameters.
+    // -----------------
     result += "\n " + S_CONFIGURATION_NAME + ": " + getName();
     result += "\n " + S_POPULATION_SIZE + ": " + getPopulationSize();
     result += "\n " + S_MINPOPSIZE + ": " + getMinimumPopSizePercent();
     result += "\n " + S_CHROMOSOME_SIZE + ": " + getChromosomeSize();
-    // sample chromosome
+    // Sample chromosome.
+    // ------------------
     result += "\n " + S_SAMPLE_CHROM + ":\n";
     result += "\n    " + S_SIZE + ": " + getSampleChromosome().size();
     result += "\n    " + S_TOSTRING + ": " + getSampleChromosome().toString();
-    // random generator
+    // Random generator.
+    // -----------------
     result += "\n  " + S_RANDOM_GENERATOR + ": " +
         getRandomGenerator().getClass().getName();
     result += "\n  " + S_EVENT_MANAGER + ": ";
-    // event manager
+    // Event manager.
+    // --------------
     if (getEventManager() == null) {
       result += S_NONE;
     }
     else {
       result += getEventManager().getClass().getName();
     }
-    // configuration handler
+    // Configuration handler.
+    // ----------------------
     result += "\n " + S_CONFIGURATION_HANDLER + ": " +
         getConfigurationHandler().getName();
-    // fitness function
+    // Fitness function.
+    // -----------------
     result += "\n " + S_FITNESS_FUNCTION + ": " +
         getFitnessFunction().getClass().getName();
-    // fitness evaluator
+    // Fitness evaluator.
+    // ------------------
     result += "\n " + S_FITNESS_EVALUATOR + ": " +
         getFitnessEvaluator().getClass().getName();
-    // genetic operators
+    // Genetic operators.
+    // ------------------
     int gensize = getGeneticOperators().size();
     result += "\n  " + S_GENETIC_OPERATORS + ": ";
     if (gensize < 1) {
@@ -1120,7 +1131,8 @@ public class Configuration
         result += " " + getGeneticOperators().get(i).getClass().getName();
       }
     }
-    // natural selectors (pre)
+    // Natural selectors (pre).
+    // ------------------------
     int natsize = getNaturalSelectors(true).size();
     result += "\n  " + S_NATURAL_SELECTORS + "(" + S_PRE + "): ";
     if (natsize < 1) {
@@ -1134,7 +1146,8 @@ public class Configuration
         result += " " + getNaturalSelectors(true).get(i).getClass().getName();
       }
     }
-    // natural selectors (post)
+    // Natural selectors (post).
+    // -------------------------
     natsize = getNaturalSelectors(false).size();
     result += "\n  " + S_NATURAL_SELECTORS + "(" + S_POST + "): ";
     if (natsize < 1) {
