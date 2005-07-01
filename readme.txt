@@ -38,9 +38,15 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP 2.2 was compiled and tested with Java 1.4 on Windows 2000.
+JGAP was compiled and tested with Java 1.4 on Windows 2000.
 Prior versions of JGAP have been testes with Linux, MacOS and Windows XP
 as well.
+
+This release contains code that is based on external libraries. You could
+find it in the src-3rdparty library. Due to licensing issues the needed
+external libraries (such as Colt) are not included with JGAP you need to
+download them separately. The links to the download sites could be found
+in the header comments of the corresponding JGAP source files.
 
 Please direct any questions, comments, problems, or inquiries to the
 JGAP users mailing list at:
