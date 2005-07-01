@@ -1,5 +1,7 @@
 2.4
 ----------
+* Made m_value (holding the allele) in Gene implementations
+  private. Use getAllele and setAllele(Object) instead!
 * Introduced new package org.jgap.impl.fitness for classes
   related to fitness functions
 * Introduced new abstract base class org.jgap.JGAPTestCase.
@@ -39,6 +41,8 @@
 * Added method removeChromosome in Population
 * Added method getGeneTypeAllowed in CompositeGene
 * Added constraint check in constructor Chromosome(int a_size)
+* Removed methods in DoubleGene already contained in its
+  superclass, NumberGene
 * Added many new test cases
 * Extended abstractSuperGene from BaseGene
 * Renamed test class p_abstractSupergeneTest to
