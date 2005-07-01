@@ -21,7 +21,7 @@ import org.jgap.util.*;
  */
 public abstract class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Information needed by workers
@@ -60,13 +60,13 @@ public abstract class Master {
   /**
    * Starts the master listener. Implement in specific implementations of
    * Master.
-   * @throws IOException
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
    */
   public abstract void start()
-      throws IOException;
+      throws Exception;
 
   /**
    * Stops the master from being working.
