@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -25,7 +25,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -97,7 +97,11 @@ public class IntegerGene
    * @since 1.0
    */
   public Gene newGene() {
-    return new IntegerGene(m_lowerBounds, m_upperBounds);
+    IntegerGene result = new IntegerGene(m_lowerBounds, m_upperBounds);
+    /**@todo move the following to BaseGene.newGene() and rename newGene()
+     * here to newGeneInternal()*/
+    result.setConstraintChecker(getConstraintChecker());
+    return result;
   }
 
   /**
@@ -172,12 +176,11 @@ public class IntegerGene
 
       // ----------------------------------------------------
       if (valueRepresentation.equals("null")) {
-        m_value = null;
+        setAllele(null);
       }
       else {
         try {
-          m_value =
-              new Integer(Integer.parseInt(valueRepresentation));
+          setAllele(new Integer(Integer.parseInt(valueRepresentation)));
         }
         catch (NumberFormatException e) {
           throw new UnsupportedRepresentationException(
@@ -217,13 +220,13 @@ public class IntegerGene
    * Retrieves the int value of this Gene, which may be more convenient in
    * some cases than the more general getAllele() method.
    *
-   * @return the int value of this Gene.
+   * @return the int value of this Gene
    *
    * @author Neil Rostan
    * @since 1.0
    */
   public int intValue() {
-    return ( (Integer) m_value).intValue();
+    return ( (Integer) getAllele()).intValue();
   }
 
   /**
@@ -239,9 +242,9 @@ public class IntegerGene
    * @since 1.0
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = new Integer( (int) ( (m_upperBounds - m_lowerBounds) *
+    setAllele(new Integer( (int) ( (m_upperBounds - m_lowerBounds) *
                                   a_numberGenerator.nextDouble() +
-                                  m_lowerBounds));
+                                  m_lowerBounds)));
   }
 
   /**
@@ -250,8 +253,8 @@ public class IntegerGene
    * of the casted type.
    * @param o1 first object to be compared, always is not null
    * @param o2 second object to be compared, always is not null
-   * @return a negative integer, zero, or a positive integer as this object is
-   * less than, equal to, or greater than the object provided for comparison
+   * @return a negative integer, zero, or a positive integer as this object
+   * is less than, equal to, or greater than the object provided for comparison
    *
    * @author Neil Rostan
    * @since 1.0
@@ -274,8 +277,8 @@ public class IntegerGene
    * @since 1.0
    */
   protected void mapValueToWithinBounds() {
-    if (m_value != null) {
-      Integer i_value = ( (Integer) m_value);
+    if (getAllele() != null) {
+      Integer i_value = ( (Integer) getAllele());
       // If the value exceeds either the upper or lower bounds, then
       // map the value to within the legal range. To do this, we basically
       // calculate the distance between the value and the integer min,
@@ -291,24 +294,24 @@ public class IntegerGene
         else {
           rn = new StockRandomGenerator();
         }
-        m_value = new Integer(rn.nextInt(
-            m_upperBounds - m_lowerBounds) + m_lowerBounds);
+        setAllele(new Integer(rn.nextInt(m_upperBounds - m_lowerBounds) +
+                              m_lowerBounds));
       }
     }
   }
 
   /**
-   * See interface Gene for description
+   * See interface Gene for description.
    * @param index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   * than 1).
+   * than 1)
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void applyMutation(int index, double a_percentage) {
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
-    if (m_value == null) {
+    if (getAllele() == null) {
       setAllele(new Integer( (int) range + m_lowerBounds));
     }
     else {
@@ -319,7 +322,7 @@ public class IntegerGene
 
   /**
    * Modified hashCode() function to return different hashcodes for differently
-   * ordered genes in a chromosome
+   * ordered genes in a chromosome.
    * @return -1 if no allele set, otherwise value return by BaseGene.hashCode()
    *
    * @author Klaus Meffert
@@ -342,14 +345,15 @@ public class IntegerGene
    * @since 2.4
    */
   public String toString() {
-    String s = "IntegerGene(" + m_lowerBounds + "," + m_upperBounds + ")"
-        + "=";
+    String s = "IntegerGene("+m_lowerBounds+","+m_upperBounds+")"
+        +"=";
     if (getInternalValue() == null) {
       s += "null";
     }
     else {
-      s += getInternalValue().toString();
+      s+= getInternalValue().toString();
     }
     return s;
   }
+
 }
