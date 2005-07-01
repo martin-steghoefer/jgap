@@ -36,8 +36,33 @@ of Code</h2>
   </li>
   <li>Add the lines
     <pre>        /** String containing the CVS revision. Read out via reflection!*/
-        private static final String CVS_REVISION = &quot;$Revision: 1.3 $&quot;;</pre>
+        private static final String CVS_REVISION = &quot;$Revision: 1.4 $&quot;;</pre>
     after each class declaration line at top of the class file. For interfaces omit the "private" statement.
+  </li>
+  <li>Do not format javadocs by adding unnecessary spaces or indentation (javadoc
+    output will do this!)
+  </li>
+  <li>Do not start a javadoc for parameters with a capital letter. Do not end
+    such text with a period.
+  </li>
+  <li>In methods: Order of javadoc elements should be:
+    <ul>
+      <li>description of method</li>
+      <li>add a blank line</li>
+      <li>parameters</li>
+      <li>return value (if appliacable)</li>
+      <li>throws (if applicable)</li>
+      <li>add a blank line</li>
+      <li>author</li>
+      <li>since (here you should enter the next JGAP version to be released,
+        i.e. &quot;2.4&quot; (without quotation marks)).</li>
+    </ul>
+  </li>
+  <li>All in-line comments should be &quot;underlined.&quot; For example:
+    <pre>          // This is an in-line comment.
+          // Notice that it is underlined.
+          // -----------------------------
+          doSomeWork();</pre>
   </li>
   <li>Indent 4 spaces. No tabs, please. </li>
   <li>Lines of code should not exceed 79 characters in length. Please take this
@@ -63,18 +88,6 @@ of Code</h2>
   </li>
   <li>All classes, methods, and fields require javadocs, including private methods and
     fields.
-  </li>
-  <li>Do not format javadocs by adding unnecessary spaces or indentation (javadoc
-    output will do this!)
-  </li>
-  <li>Do not start a javadoc for parameters with a capital letter. Do not end
-    such text with a period.
-  </li>
-  <li>All in-line comments should be &quot;underlined.&quot; For example:
-    <pre>          // This is an in-line comment.
-          // Notice that it is underlined.
-          // -----------------------------
-          doSomeWork();</pre>
   </li>
 </ol>
 
@@ -146,10 +159,14 @@ of Code</h2>
     try to avoid committing code that doesn't compile or that completely breaks everything. If
     you're going to be doing a lot of work that will likely break everything, we can consider
     creating a branch for you to work on until your code is at least semi-stable. </li>
+  <li>It is better to check in quite often than to wait too long with committing
+    your work. </li>
   <li>When checking in something to the CVS, you should do this per class as you
     could then add a useful comment. It is not forbidden adding the <a href="http://sourceforge.net/tracker/?group_id=11618&amp;atid=361618" target="_blank"> RFE</a> number
     (the request number from the <a href="http://sourceforge.net/tracker/?group_id=11618&amp;atid=361618" target="_blank"> JGAP sourceforge RFE
     page</a>) in the comment! </li>
+  <li>If using WinDiff: It's much more comfortable using an external viewer
+    (such as WinMerge) than using the internal textual representation. </li>
 </ol>
 
 <h2>In general</h2>
@@ -167,9 +184,17 @@ of Code</h2>
 reserved. </p>
 
 <hr>
-<a class="homeLink" href="../index.html"><div align="center"><center>
+<a class="homeLink" href="../index.html">
 
-<pre>[JGAP Home]</a>
+<p align="center">[JGAP Home]</a>
+    
+
+
+    
+<br>
+&nbsp; <br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     
 
 
@@ -178,7 +203,10 @@ reserved. </p>
 src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
 border="0" alt="SourceForge Logo"></a>
     
-  </pre>
-</center></div>
+<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;
+    
+  </p>
 </body>
 </html>
