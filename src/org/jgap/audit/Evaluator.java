@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Each data has its own data container
@@ -265,7 +265,7 @@ public class Evaluator {
   /**
    * Stores information contained in the given genotype.
    * @param a_permutation int
-   * @param a_run int
+   * @param a_run index of the run proceeded for the given genotype
    * @param a_genotype the genotype holding the population of chromosomes
    *
    * @author Klaus Meffert
