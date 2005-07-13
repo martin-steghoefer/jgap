@@ -10,8 +10,9 @@
 package org.jgap;
 
 import java.io.*;
-import java.util.*;
 import java.lang.reflect.*;
+import java.util.*;
+
 import org.jgap.event.*;
 
 /**
@@ -28,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   /**
    * The current active Configuration instance.
@@ -198,6 +199,21 @@ public class Genotype
   }
 
   /**
+   * Retrieves the top n Chromsomes in the population (the ones with the best
+   * fitness values).
+   *
+   * @param a_numberOfChromosomes the number of chromosomes desired
+   * @return the List of Chromosomes with the highest fitness values, or null
+   * if there are no chromosomes in this Genotype
+   *
+   * @author Charles Kevin Hill
+   * @since 2.4
+   */
+  public synchronized List getFittestChromosomes(int a_numberOfChromosomes) {
+    return getPopulation().determineFittestChromosomes(a_numberOfChromosomes);
+  }
+
+  /**
    * Evolve the population of Chromosomes within this Genotype. This will
    * execute all of the genetic operators added to the present active
    * configuration and then invoke the natural selector to choose which
@@ -224,8 +240,9 @@ public class Genotype
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
-      ( (GeneticOperator) operatorIterator.next()).operate(getPopulation(),
-          getPopulation().getChromosomes());
+      GeneticOperator operator = (GeneticOperator) operatorIterator.next();
+      applyGeneticOperator(operator, getPopulation(),
+                           getPopulation().getChromosomes());
     }
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
@@ -603,5 +620,23 @@ public class Genotype
 
   protected void setPopulation(Population a_pop) {
     m_population = a_pop;
+  }
+
+  /**
+   * Overwritable method that calls a GeneticOperator to operate on a given
+   * population and asks him to store the result in the list of chromosomes.
+   * Override this method if you want to ensure that a_chromosomes is not
+   * part of a_population resp. if you want to use a different list.
+   * @param a_operator the GeneticOperator to call
+   * @param a_population the Population to use
+   * @param a_chromosomes the List of Chromosome objects to return
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  protected void applyGeneticOperator(GeneticOperator a_operator,
+                                      Population a_population,
+                                      List a_chromosomes) {
+    a_operator.operate(a_population, a_chromosomes);
   }
 }
