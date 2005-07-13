@@ -25,16 +25,20 @@ import org.jgap.Chromosome;
 public class ChromosomeFitnessComparator
     implements Comparator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /* (non-Javadoc)
    * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
    */
-  public int compare(Object o, Object t) {
-    if (o == null)return -1;
-    if (t == null)return 1;
-    Chromosome chromosomeOne = (Chromosome) o;
-    Chromosome chromosomeTwo = (Chromosome) t;
+  public int compare(Object a_chromosome1, Object a_chromosome2) {
+    if (a_chromosome1 == null) {
+      return -1;
+    }
+    if (a_chromosome2 == null) {
+      return 1;
+    }
+    Chromosome chromosomeOne = (Chromosome) a_chromosome1;
+    Chromosome chromosomeTwo = (Chromosome) a_chromosome2;
     return (int) (chromosomeTwo.getFitnessValue() -
                   chromosomeOne.getFitnessValue());
   }
