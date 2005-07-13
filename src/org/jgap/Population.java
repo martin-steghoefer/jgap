@@ -12,6 +12,7 @@ package org.jgap;
 import java.io.*;
 import java.util.*;
 import org.jgap.impl.*;
+import org.jgap.util.*;
 
 /**
  * List of chromosomes held in the Genotype (or possibly later in the
@@ -23,7 +24,7 @@ import org.jgap.impl.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.24 $";
+  private static final String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -263,6 +264,31 @@ public class Population
     }
     setChanged(true);
     return (Chromosome) m_chromosomes.remove(a_index);
+  }
+
+  /**
+   * Sorts the Chromosome list and returns the fittest n Chromosomes in
+   * the population.
+   * @param a_numberOfChromosomes number of top performer chromosomes to be
+   * returned
+   * @return list of the fittest Chromosomes of the population
+   *
+   * @author Charles Kevin Hill
+   * @since 2.4
+   */
+  public List determineFittestChromosomes(int a_numberOfChromosomes) {
+    a_numberOfChromosomes = Math.min(a_numberOfChromosomes,
+                                     getChromosomes().size());
+    if (a_numberOfChromosomes <= 0) {
+      return null;
+    }
+    if (!m_changed) {
+      return getChromosomes().subList(0, a_numberOfChromosomes - 1);
+    }
+    // Sort the list of chromosomes using the fitness comparator
+    Collections.sort(getChromosomes(), new ChromosomeFitnessComparator());
+    setChanged(false);
+    return getChromosomes().subList(0, a_numberOfChromosomes);
   }
 
   /**
