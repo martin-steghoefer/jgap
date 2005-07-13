@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -193,7 +193,7 @@ public class Population
 
   /**
    * Determines the fittest Chromosome in the population (the one with the
-   * highest fitness value) and memorizes it
+   * highest fitness value) and memorizes it.
    * @return the fittest Chromosome of the population
    *
    * @author Klaus Meffert
