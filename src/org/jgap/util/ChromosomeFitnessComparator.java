@@ -1,0 +1,41 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
+package org.jgap.util;
+
+import java.util.Comparator;
+import org.jgap.Chromosome;
+
+/**
+ * Simple comparator to allow the sorting of Chromosome lists.
+ * Usage example:
+ * 		Collections.sort(
+ * 			population.getPopulation().getChromosomes(),
+ * 			new ChromosomeFitnessComparator() );
+ *
+ * @author Charles Kevin Hill
+ * @since 2.4
+ */
+public class ChromosomeFitnessComparator
+    implements Comparator {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
+
+  /* (non-Javadoc)
+   * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+   */
+  public int compare(Object o, Object t) {
+    if (o == null)return -1;
+    if (t == null)return 1;
+    Chromosome chromosomeOne = (Chromosome) o;
+    Chromosome chromosomeTwo = (Chromosome) t;
+    return (int) (chromosomeTwo.getFitnessValue() -
+                  chromosomeOne.getFitnessValue());
+  }
+}
