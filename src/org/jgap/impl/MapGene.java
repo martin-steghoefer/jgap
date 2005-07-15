@@ -14,6 +14,8 @@ import java.util.*;
 import org.jgap.*;
 
 /**
+ * ATTENTION: This class is preliminary and subject of future adaptations! Use
+ * with care or wait for a more mature version we are working on.
  * Creates a gene instance in which individual alleles have both a label (key)
  * and a value with a distinct meaning. For example, IntegerGene only allows
  * for values having a continuous range, and does not have a function where it
@@ -31,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Container for valid alleles
@@ -300,7 +302,7 @@ public class MapGene
    * is less than, equal to, or greater than the object provided for comparison
    *
    * @throws ClassCastException if the specified object's type prevents it from
-   * being compared to this NumberGene
+   * being compared to this Gene
    *
    * @author Klaus Meffert
    * @author Johnathan Kool
