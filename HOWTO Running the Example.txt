@@ -17,7 +17,7 @@ Also see the JGAP homepage at
 http://jgap.sourceforge.net
 for details about the example.
 
-Especially read the Getting Started section on the page!
+Especially read the documentation on the page!
 
 Klaus Meffert, 2005-01-01
 klausikm@users.sourceforge.net
