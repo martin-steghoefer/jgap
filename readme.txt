@@ -7,7 +7,35 @@ project administrator at klausikm@users.sourceforge.net. The more feedback
 we get, the more we can improve JGAP to better meet the needs of our 
 users. Thanks for your support!
 
-------------------------------------------------------------------------
+--------------------------------------------------------------------------
+
+Installation:
+
+Please note that the latest public release of JGAP can always be found
+by following the "Download" link on the JGAP home page. The home page 
+is located at http://jgap.sourceforge.net
+
+0. Obtain the third party libraries used with JGAP. You get them in
+the download section. These files need to be bundles separatedly due
+to license issues.
+
+1. If you haven't already, untar or unzip the JGAP archive into your
+directory of choice.
+
+2. Simply add the jgap.jar to your classpath. If you wish to use the
+examples, then also add the jgap-examples.jar to your classpath.
+
+3. Finally, if you wish to view or modify the source code, it can
+be found in the src/ directory of the archive. For convenience, an Ant
+build script is included. For more information on Ant, please see the
+Ant home page at http://ant.apache.org
+
+4. Javadocs can be found in the javadocs/ directory. Other documentation,
+including basic documents to help you get started, can be found in the
+docs/ directory. A simple example can be found in the src/examples
+directory.
+
+--------------------------------------------------------------------------
 
 About This Release:
 
@@ -66,33 +94,3 @@ Mailing list archives are also available for each of the lists.
 
 Thanks again for trying out JGAP!
 --Klaus Meffert for the JGAP team
-
-------------------------------------------------------------------------
-Installation:
-
-Please note that the latest public release of JGAP can always be found
-by following the "Download" link on the JGAP home page. The home page 
-is located at http://jgap.sourceforge.net
-
-1. If you haven't already, untar or unzip the JGAP archive into your
-directory of choice.
-
-2. Simply add the jgap.jar to your classpath. If you wish to use the
-examples, then also add the jgap-examples.jar to your classpath.
-
-3. Finally, if you wish to view or modify the source code, it can
-be found in the src/ directory of the archive. For convenience, an Ant
-build script is included. For more information on Ant, please see the
-Ant home page at http://ant.apache.org
-
-4. Javadocs can be found in the javadocs/ directory. Other documentation,
-including basic documents to help you get started, can be found in the
-docs/ directory. A simple example can be found in the src/examples
-directory.
-
-If you have any questions, or run into any problems, please feel free
-to send a message to the JGAP users mailing list at:
-
-     jgap-users@lists.sourceforge.net
-
-or to the developers mailing list at jgap-devl@lists.sourceforge.net.
