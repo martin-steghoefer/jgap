@@ -24,7 +24,7 @@ import org.jgap.*;
  * a) Two genes are (only) equal if they are identical
  * b) Two genes are (seen as) equal if their equals method returns true
  *
- * This influences several methods such as addGene. Notice that it is "better"
+ * This influences several methods such as addGene. Notice that it is safer
  * to use addGene(a_gene, false) than addGene(a_gene, true) because the second
  * variant only allows to add genes not seen as equal to already added genes in
  * respect to their equals function. But: the equals function returns true for
@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * This field separates gene class name from
