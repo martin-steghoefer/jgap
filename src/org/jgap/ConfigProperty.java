@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class ConfigProperty {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private String name;
 
@@ -35,7 +35,7 @@ public class ConfigProperty {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  ConfigProperty() {
+  public ConfigProperty() {
     // defaults
     name = "";
     type = "String";

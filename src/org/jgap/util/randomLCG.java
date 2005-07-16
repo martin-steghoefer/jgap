@@ -1,5 +1,8 @@
 package org.jgap.util;
 
+
+import randomX.*;
+
 /**
     Implementation of a <b>randomX</b>-compliant class using the
     simple (and not very good) <tt>rand()</tt> linear congruential

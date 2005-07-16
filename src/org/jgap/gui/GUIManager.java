@@ -9,8 +9,10 @@
  */
 package org.jgap.gui;
 
-import javax.swing.*;
 import org.jgap.*;
+
+import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  * Singleton GUIManager for the JGAP Configurator.
@@ -24,7 +26,7 @@ import org.jgap.*;
  */
 public class GUIManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * @return a singleton GUIManager instance
@@ -46,22 +48,32 @@ public class GUIManager {
    */
   private GUIManager() {
     frame = null;
+    childFrames = new ArrayList();
+    childCons = new ArrayList();
   }
 
   /**
    * Create and show a new frame for a Configurable.
    * @param a_con configurable to use
-   *
    * @author Siddhartha Azad
    * @since 2.3
    */
-  private void showFrame(Configurable a_con) {
-    try {
+  public void showFrame(ConfigFrame parent, Configurable _con) {
+  	try {
       // create the frame
-      frame = new ConfigFrame("JGAP Configurator:" +
-                              a_con.getConfigurationHandler().getName());
-      con = a_con;
-      frame.createAndShowGUI(a_con.getConfigurationHandler());
+  	  if(_con.getConfigurationHandler().getName().equals("Configuration")) {
+  	  	frame = new ConfigFrame(null, "JGAP Configurator:" +
+  	  			_con.getConfigurationHandler().getName(), true);
+  	  	con = _con;
+  	  	frame.createAndShowGUI(_con.getConfigurationHandler());
+  	  }
+  	  else {
+  	  	ConfigFrame tmpFrame = new ConfigFrame(parent, "JGAP Configurator:" +
+  	  			_con.getConfigurationHandler().getName(), false);
+  	  	childCons.add(_con);
+  	  	childFrames.add(tmpFrame);
+  	  	tmpFrame.createAndShowGUI(_con.getConfigurationHandler());
+  	  }
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -76,19 +88,27 @@ public class GUIManager {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public static void main(String args[])
-      throws Exception {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        Configuration con = new Configuration();
-        GUIManager.instance().showFrame(con);
-      }
-    });
+  public static void main(String args[]) {
+    try {
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          Configuration con = new Configuration();
+          // parent is null for the root frame
+          GUIManager.instance().showFrame(null, con);
+        }
+      });
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   // The root frame
   private ConfigFrame frame;
-
+  // the children frames
+  private ArrayList childFrames;
+  // children configurables, one to one mapping with childFrames
+  private ArrayList childCons;
   // The entity to configure
   protected Configurable con;
 

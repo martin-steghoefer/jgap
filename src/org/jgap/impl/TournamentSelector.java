@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -47,6 +47,16 @@ public class TournamentSelector
    */
   private FitnessValueComparator m_fitnessValueComparator;
 
+  /**
+   * Default Constructor, needed to create Configurable via Class class.
+   * @author Siddhartha Azad.
+   */
+  public TournamentSelector() {
+    super();
+    m_chromosomes = new Vector();
+    m_fitnessValueComparator = new FitnessValueComparator();
+  }
+  
   /**
    * Constructor
    * @param a_tournament_size the size of each tournament to play
@@ -70,6 +80,22 @@ public class TournamentSelector
     m_fitnessValueComparator = new FitnessValueComparator();
   }
 
+  public void setTournamentSize(int a_tournament_size, double a_probability) {
+  	if (a_tournament_size < 1) {
+        throw new IllegalArgumentException("Tournament size must be at least 1!");
+  	}
+  	if (a_probability <= 0.0d || a_probability > 1.0d) {
+        throw new IllegalArgumentException("Probability must be greater 0.0 and"
+                                           +" less or equal than 1.0!");
+      }
+  	m_tournament_size = a_tournament_size;
+  	m_probability = a_probability;
+  }
+  
+  public void setProbability() {
+  	
+  }
+  
   /**
    * Select a given number of Chromosomes from the pool that will move on
    * to the next generation population. This selection will be guided by the
@@ -175,4 +201,32 @@ public class TournamentSelector
       }
     }
   }
+  
+  
+  public ConfigurationHandler getConfigurationHandler() {
+  	return new TournamentSelectorConHandler();
+  }
+  
+  /**
+   * Pass the name and value of a property to be set.
+   * @author Siddhartha Azad.
+   * @param name The name of the property.
+   * @param value The value of the property.
+   * */
+  public void setConfigProperty(String name, String value) throws ConfigException,
+  	InvalidConfigurationException   {
+  	/**@todo write this */
+  }
+  
+  /**
+   * Pass the name and values of a property to be set.
+   * @author Siddhartha Azad.
+   * @param name The name of the property.
+   * @param values The different values of the property.
+   * */
+  public void setConfigMultiProperty(String name, ArrayList values) throws 
+  	ConfigException, InvalidConfigurationException {
+  	/**@todo write this */
+  }
+  
 }

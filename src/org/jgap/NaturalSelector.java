@@ -19,9 +19,9 @@ import java.util.*;
  * @since 2.0
  */
 public abstract class NaturalSelector
-    implements INaturalSelector {
+    implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.

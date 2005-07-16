@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -150,6 +150,44 @@ public class ThresholdSelector
     m_needsSorting = true;
   }
 
+//methods derived from the Configurable interface
+  
+  /**
+   * Return a ConfigurationHandler for this class.
+   * @author Siddhartha Azad.
+   * @since 2.3
+   * */
+  public ConfigurationHandler getConfigurationHandler() {
+  	// @todo write this
+  	return null;
+  }
+  
+  /**
+   * Pass the name and value of a property to be set.
+   * @author Siddhartha Azad.
+   * @param name The name of the property.
+   * @param value The value of the property.
+   * @since 2.3
+   * */
+  public void setConfigProperty(String name, String value) throws ConfigException,
+  	InvalidConfigurationException   {
+  	/**@todo write this */
+  }
+  
+ 
+  
+  /**
+   * Pass the name and values of a property to be set.
+   * @author Siddhartha Azad.
+   * @param name The name of the property.
+   * @param values The different values of the property.
+   * @since 2.3
+   * */
+  public void setConfigMultiProperty(String name, ArrayList values) throws 
+  	ConfigException, InvalidConfigurationException {
+  	/**@todo write this */
+  }
+  
   /**
    * Comparator regarding only the fitness value. Best fitness value will
    * be on first position of resulting sorted list

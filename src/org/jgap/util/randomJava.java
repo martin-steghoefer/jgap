@@ -1,5 +1,8 @@
 package org.jgap.util;
 
+
+import org.jgap.*;
+
 import java.util.Random;
 
 /**
