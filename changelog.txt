@@ -1,3 +1,7 @@
+2.5
+----------
+
+
 2.4
 ----------
 * Made m_value (holding the allele) in Gene implementations
