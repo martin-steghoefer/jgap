@@ -36,6 +36,17 @@ free to post them to the jgap-users mailing list!
     <p class="answer">Yes, double typed fitness values have been introduced with release 1.1.
     Before that thet type was int.</p>
   </li>
+  <li><p class="question">How can I select the top n performers of a population? </p>
+    <p class="answer">During evolution, to select the best performing
+    chromosomes for the next generation, use the <font face="Courier New">org.jgap.impl.BestChromosomesSelector</font>.
+    See <font face="Courier New">org.jgap.impl.DefaultConfiguration</font> for
+    an example.</p>
+    <p class="answer">To select the top n performers after evolution, you could
+    use <font face="Courier New">Genotype.getPopulation.toChromosomes()</font>.
+    After that, sort the returned array of Chromosomes via <font face="Courier New">Arrays.sort(chromosomesArrayFromPopulation,
+    yourComparator)</font>. <font face="Courier New">yourComparator</font> sorts
+    the array of chromosomes by the fitness value of each Chromosome.</p>
+  </li>
   <li><p class="question">Does JGAP support multiple threads? </p>
     <p class="answer">JGAP does not currently offer any support for multi-threaded or
     distributed evaluation, but this is something we're considering for a future (after
@@ -62,7 +73,7 @@ free to post them to the jgap-users mailing list!
     package? </p>
     <p class="answer">Yes, as a matter of a fact there is a whole open-source project
     dedicated to integration of JGAP with JOONE! You can find out more about the JOONEJGAP
-    project on their <a href="http://joonegap.sourceforge.net/">home page</a>. </p>
+    project on their <a href="http://joonegap.sourceforge.net/">homepage</a>. </p>
     <p class="answer">Additionally (among others), there is a dissertation about Genetic
     Algorithms playing together with Neural Nets to play Backgammon!</p>
   </li>

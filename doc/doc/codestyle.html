@@ -36,8 +36,13 @@ of Code</h2>
   </li>
   <li>Add the lines
     <pre>        /** String containing the CVS revision. Read out via reflection!*/
-        private static final String CVS_REVISION = &quot;$Revision: 1.4 $&quot;;</pre>
+        private static final String CVS_REVISION = &quot;$Revision: 1.5 $&quot;;</pre>
     after each class declaration line at top of the class file. For interfaces omit the "private" statement.
+  </li>
+  <li>
+    <pre>When importing classes with the <font face="Courier New">import</font> statement, use the generic form and don't import single classes:
+          import java.util.*;    // correct
+          import java.util.List; // WRONG</pre>
   </li>
   <li>Do not format javadocs by adding unnecessary spaces or indentation (javadoc
     output will do this!)
@@ -67,24 +72,29 @@ of Code</h2>
   <li>Indent 4 spaces. No tabs, please. </li>
   <li>Lines of code should not exceed 79 characters in length. Please take this
     very seriously! </li>
-  <li>Braces go on the next line, no extra indentation. For example:
-    <pre>          public void foo()
-          {
+  <li>Curly braces go on the same line, no extra indentation. For example:
+    <pre>          public void foo() {
               doSomeWork();
+          }</pre>
+  </li>
+  <li>Always but the statements after an if or else-statement in curly braces,
+    like:<pre>          if (condition) { // this curly brace is required
+              statement1;
+	      statement2;
           }</pre>
   </li>
   <li>Class names always start with a capital letter and contain no underscores.
     THIS IS VERY IMPORTANT!
   </li>
-  <li>Class and instance variables, other than constants, should start with &quot;m_&quot;.
-    For example,
+  <li>Class and instance variables, other than constants, should start with <font face="Courier New">m_</font>.
+    For example:
     <pre>          private int m_myField;</pre>
   </li>
-  <li>Method arguments should begin with &quot;a_&quot;. For example,
-    <pre>          public void foo( int a_someValue );</pre>
+  <li>Method arguments should always begin with &quot;a_&quot;. For example,
+    <pre>          public void foo(int a_someValue);</pre>
   </li>
   <li>Constants should be in all capitals. For example,
-    <pre>          private static final int MY_CONSTANT_VALUE = 1;         </pre>
+    <pre>          public static final int MY_CONSTANT_VALUE = 1;         </pre>
   </li>
   <li>All classes, methods, and fields require javadocs, including private methods and
     fields.
