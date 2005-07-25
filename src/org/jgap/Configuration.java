@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * Constants for toString()
@@ -1027,6 +1027,7 @@ public class Configuration
   public ConfigurationHandler getConfigurationHandler() {
     if (m_conHandler == null) {
       m_conHandler = new RootConfigurationHandler();
+      m_conHandler.setConfigurable(this);
     }
     return m_conHandler;
   }

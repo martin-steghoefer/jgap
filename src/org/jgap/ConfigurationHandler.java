@@ -20,7 +20,7 @@ import java.util.*;
  * */
 public interface ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -37,7 +37,7 @@ public interface ConfigurationHandler {
   ArrayList getConfigProperties();
 
   /**
-   * Method that will populate an Configurable with the properties in the
+   * Method that will populate a Configurable with the properties in the
    * config file.
    *
    * @author Siddhartha Azad

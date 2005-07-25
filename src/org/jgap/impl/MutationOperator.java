@@ -30,9 +30,9 @@ import org.jgap.*;
  * @since 1.0
  */
 public class MutationOperator
-    implements GeneticOperator {
+    implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -215,5 +215,47 @@ public class MutationOperator
     if (m_mutationRateCalc != null) {
       m_mutationRate = 0;
     }
+  }
+  
+  /**
+   * Get the ConfigurationHandler for this class.
+   * 
+   * @author Siddhartha Azad
+   * @since 2.4
+   * */
+  public ConfigurationHandler getConfigurationHandler() {
+  	MutationOperatorConHandler conHandler = new MutationOperatorConHandler();
+  	conHandler.setConfigurable(this);
+  	return conHandler;
+  }
+  
+  /**
+   * Pass the name and value of a property to be set.
+   * @param name The name of the property.
+   * @param value The value of the property.
+   * 
+   * @author Siddhartha Azad.
+   * @since 2.4
+   * */
+  public void setConfigProperty(String name, String value) throws ConfigException,
+  	InvalidConfigurationException   {
+  	if(name.equals("m_mutationRate")) {
+  		m_mutationRate = Integer.parseInt(value);
+  	}
+  	else
+  		System.out.println("MutationOperator:Unknown property "+name);
+  }
+  
+  /**
+   * Pass the name and values of a property to be set.
+   * @param name The name of the property.
+   * @param values The different values of the property.
+   * 
+   * @author Siddhartha Azad.
+   * @since 2.4
+   * */
+  public void setConfigMultiProperty(String name, ArrayList values) throws 
+  	ConfigException, InvalidConfigurationException {
+  	// no multi-properties defined for a MutationOperator yet
   }
 }

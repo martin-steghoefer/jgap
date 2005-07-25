@@ -27,7 +27,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
 	// data members of class ConfigFrame
 	private ConfigurationHandler conHandler;
@@ -69,6 +69,9 @@ public class ConfigFrame
 	
 	// the parent frame of this frame
 	private ConfigFrame parent;
+	
+	// default name for the config file 
+	private static final String defaultConfigFile = "jgap.con";
 	
 	/**
 	 * Constructor
@@ -160,7 +163,7 @@ public class ConfigFrame
 			String fName = fileName.getText();
 			// use a default file name
 			if(fName.equals(""))
-				fName = "jgap.con";
+				fName = ConfigFrame.defaultConfigFile;
 			return fName;
 		}
 		else
@@ -179,27 +182,14 @@ public class ConfigFrame
 	 */
 	private void setup() {
 		int numLists = 0, numTexts = 0;
-		if(conHandler == null)
-			JOptionPane.showMessageDialog( null ,
-					"conHandler is null",
-					"JGAP Info",
-					JOptionPane.INFORMATION_MESSAGE);
-		else
-			JOptionPane.showMessageDialog( null ,
-					"conHandler is not null",
-					"JGAP Info",
-					JOptionPane.INFORMATION_MESSAGE);
 		ArrayList props = conHandler.getConfigProperties();
-		if(props == null)
+		if(props == null) {
 			JOptionPane.showMessageDialog( null ,
 					"setup():No Configurable Properties in this Configuration",
 					"props size is "+props.size(),
 					JOptionPane.INFORMATION_MESSAGE);
-		else
-			JOptionPane.showMessageDialog( null ,
-				"No Configurable Properties in this Configuration",
-				"props size is "+props.size(),
-				JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
 		for(Iterator iter = props.iterator(); iter.hasNext();) {
 			try {
 				ConfigProperty prop = (ConfigProperty)iter.next();

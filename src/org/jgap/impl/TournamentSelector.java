@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -203,30 +203,45 @@ public class TournamentSelector
   }
   
   
+  /**
+   * Get the ConfigurationHandler for this class.
+   * 
+   * @author Siddhartha Azad
+   * @since 2.0
+   * */
   public ConfigurationHandler getConfigurationHandler() {
-  	return new TournamentSelectorConHandler();
+  	TournamentSelectorConHandler conHandler = new TournamentSelectorConHandler();
+  	conHandler.setConfigurable(this);
+  	return conHandler;
   }
   
   /**
    * Pass the name and value of a property to be set.
-   * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param value The value of the property.
+   * 
+   * @author Siddhartha Azad.
+   * @since 2.0
    * */
   public void setConfigProperty(String name, String value) throws ConfigException,
   	InvalidConfigurationException   {
-  	/**@todo write this */
+  	if(name.equals("m_probability"))
+  		m_probability = Double.parseDouble(name);
+  	else
+  		System.out.println("TournamentSelector:Unknown property "+name);
   }
   
   /**
    * Pass the name and values of a property to be set.
-   * @author Siddhartha Azad.
    * @param name The name of the property.
    * @param values The different values of the property.
+   * 
+   * @author Siddhartha Azad.
+   * @since 2.0
    * */
   public void setConfigMultiProperty(String name, ArrayList values) throws 
   	ConfigException, InvalidConfigurationException {
-  	/**@todo write this */
+  	// currently no multi-properties defined for TournamentSelectors
   }
   
 }

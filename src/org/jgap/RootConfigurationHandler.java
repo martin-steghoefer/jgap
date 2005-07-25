@@ -22,10 +22,16 @@ import java.util.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
-  // Namespae
+  // Namespace
   private final static String CONFIG_NAMESPACE = "Configuration";
+  
+  // constatns to indicate various properties
+  
+  private final static String GENETIC_OPS = "GeneticOperators";
+  
+  private final static String NATURAL_SELS = "NaturalSelectors";
 
   /**
    * @return Name of this Configuration Object (name of what you are
@@ -49,7 +55,7 @@ public class RootConfigurationHandler
     // NaturalSelectors available. This information will be renders as a JList.
     ConfigProperty cp;
     cp = new ConfigProperty();
-    cp.setName("NaturalSelectors");
+    cp.setName(NATURAL_SELS);
     cp.setType("Class");
     cp.setWidget("JList");
     cp.addValue("org.jgap.impl.BestChromosomesSelector");
@@ -59,7 +65,7 @@ public class RootConfigurationHandler
     /**@todo we could scan all classes in the classpath for implementing
      * the GeneticOperator interface*/
     cp = new ConfigProperty();
-    cp.setName("GeneticOperators");
+    cp.setName(GENETIC_OPS);
     cp.setType("Class");
     cp.setWidget("JList");
     cp.addValue("org.jgap.impl.GaussianMutationOperator");
@@ -97,10 +103,30 @@ public class RootConfigurationHandler
    * */
   public void readConfig()
       throws ConfigException, InvalidConfigurationException {
+  	// set the namespace to get the properties from
     ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
     String value = ConfigFileReader.instance().getValue("m_populationSize");
     if (value != null)
       configurable.setConfigProperty("m_populationSize", value);
+    
+    //  go through all genetic operators and configure them
+    try {
+    	ConfigurationHelper.configureClass(GENETIC_OPS);
+    }
+    catch(ConfigException conEx) {
+    	conEx.printStackTrace();
+    	System.err.println("Error while configuring " + GENETIC_OPS);
+    }
+    
+    //  go through all natural selectors and configure them
+    try {
+    	ConfigurationHelper.configureClass(NATURAL_SELS);
+    }
+    catch(ConfigException conEx) {
+    	conEx.printStackTrace();
+    	System.err.println("Error while configuring " + NATURAL_SELS);
+    }
+    // go through all natural selectors and configure them
   }
 
   /**
@@ -114,6 +140,6 @@ public class RootConfigurationHandler
   public void setConfigurable(Configurable _configurable) {
     configurable = _configurable;
   }
-
+  
   Configurable configurable;
 }

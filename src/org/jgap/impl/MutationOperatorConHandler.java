@@ -11,13 +11,13 @@ package org.jgap.impl;
 import org.jgap.*;
 import java.util.ArrayList;
 
-public class TournamentSelectorConHandler
+public class MutationOperatorConHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
   
   // Must be the fully qualified class name
-  private final static String CONFIG_NAMESPACE = "org.jgap.impl.TournamentSelector";
+  private final static String CONFIG_NAMESPACE = "org.jgap.impl.MutationOperator";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -33,17 +33,14 @@ public class TournamentSelectorConHandler
    * @return A list of ConfigProperty objects.
    * */
   public ArrayList getConfigProperties() {
-    /**@todo This list could be cached after the first call.*/
-    /**@todo we could scan all classes in the classpath for implementing
-     * the INaturalSelector interface*/
   	ArrayList cProps = new ArrayList();
     // NaturalSelectors available. This information will be renders as a JList.
     ConfigProperty cp;
 
     // The population size
     cp = new ConfigProperty();
-    cp.setName("m_probability");
-    cp.setType("double");
+    cp.setName("m_mutationRate");
+    cp.setType("int");
     cp.setWidget("JTextField");
     cProps.add(cp);
     return cProps;
@@ -68,9 +65,9 @@ public class TournamentSelectorConHandler
   public void readConfig() throws ConfigException,
   	InvalidConfigurationException {
   	ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
-	String value = ConfigFileReader.instance().getValue("m_probability");
+	String value = ConfigFileReader.instance().getValue("m_mutationRate");
 	if(value != null)
-		configurable.setConfigProperty("m_probability", value);
+		configurable.setConfigProperty("m_mutationRate", value);
 	
   }
   
