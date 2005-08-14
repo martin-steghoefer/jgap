@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -209,7 +209,7 @@ public class TournamentSelector
    * @author Siddhartha Azad
    * @since 2.0
    * */
-  public ConfigurationHandler getConfigurationHandler() {
+  public ConfigurationHandler getConfigurationHandler() throws ConfigException {
   	TournamentSelectorConHandler conHandler = new TournamentSelectorConHandler();
   	conHandler.setConfigurable(this);
   	return conHandler;
@@ -228,7 +228,7 @@ public class TournamentSelector
   	if(name.equals("m_probability"))
   		m_probability = Double.parseDouble(name);
   	else
-  		System.out.println("TournamentSelector:Unknown property "+name);
+  		System.err.println("TournamentSelector:Unknown property "+name);
   }
   
   /**

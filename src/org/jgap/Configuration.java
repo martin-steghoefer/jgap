@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * Constants for toString()
@@ -1024,7 +1024,7 @@ public class Configuration
    *
    * @author Siddhartha Azad
    */
-  public ConfigurationHandler getConfigurationHandler() {
+  public ConfigurationHandler getConfigurationHandler() throws ConfigException {
     if (m_conHandler == null) {
       m_conHandler = new RootConfigurationHandler();
       m_conHandler.setConfigurable(this);
@@ -1107,8 +1107,13 @@ public class Configuration
     }
     // Configuration handler.
     // ----------------------
-    result += "\n " + S_CONFIGURATION_HANDLER + ": " +
-        getConfigurationHandler().getName();
+    try {
+    	result += "\n " + S_CONFIGURATION_HANDLER + ": " +
+        	getConfigurationHandler().getName();
+    }
+    catch(ConfigException conEx) {
+    	conEx.printStackTrace();
+    }
     // Fitness function.
     // -----------------
     result += "\n " + S_FITNESS_FUNCTION + ": " +

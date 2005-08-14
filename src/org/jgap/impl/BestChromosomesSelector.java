@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -242,42 +242,5 @@ public class BestChromosomesSelector
     return m_originalRate;
   }
   
-  //methods derived from the Configurable interface
-  
-  /**
-   * Return a ConfigurationHandler for this class.
-   * @author Siddhartha Azad.
-   * @since 2.3
-   * */
-  public ConfigurationHandler getConfigurationHandler() {
-  	// @todo write this
-  	return null;
-  }
-  
-  
-  /**
-   * Pass the name and value of a property to be set.
-   * @author Siddhartha Azad.
-   * @param name The name of the property.
-   * @param value The value of the property.
-   * @since 2.3
-   * */
-  public void setConfigProperty(String name, String value) throws ConfigException,
-  	InvalidConfigurationException   {
-  	/**@todo write this */
-  }
-  
  
-  
-  /**
-   * Pass the name and values of a property to be set.
-   * @author Siddhartha Azad.
-   * @param name The name of the property.
-   * @param values The different values of the property.
-   * @since 2.3
-   * */
-  public void setConfigMultiProperty(String name, ArrayList values) throws 
-  	ConfigException, InvalidConfigurationException {
-  	/**@todo write this */
-  }
 }

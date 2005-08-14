@@ -26,7 +26,7 @@ import java.util.ArrayList;
  */
 public class GUIManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * @return a singleton GUIManager instance
@@ -58,7 +58,7 @@ public class GUIManager {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public void showFrame(ConfigFrame parent, Configurable _con) {
+  public void showFrame(ConfigFrame parent, Configurable _con) throws Exception {
   	try {
       // create the frame
   	  if(_con.getConfigurationHandler().getName().equals("Configuration")) {
@@ -76,7 +76,11 @@ public class GUIManager {
   	  }
     }
     catch (Exception ex) {
-      ex.printStackTrace();
+    	JOptionPane.showMessageDialog( null ,
+				"Could not show configuration frame. This attribute may not be configurable.",
+				"Configuration Error",
+				JOptionPane.INFORMATION_MESSAGE);
+      
     }
   }
 
@@ -94,7 +98,12 @@ public class GUIManager {
         public void run() {
           Configuration con = new Configuration();
           // parent is null for the root frame
-          GUIManager.instance().showFrame(null, con);
+          try{
+          	GUIManager.instance().showFrame(null, con);
+          }
+          catch(Exception ex) {
+          	
+          }
         }
       });
     }

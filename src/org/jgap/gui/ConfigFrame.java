@@ -27,7 +27,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
 	// data members of class ConfigFrame
 	private ConfigurationHandler conHandler;
@@ -682,12 +682,15 @@ public class ConfigFrame
 						try {
 						      SwingUtilities.invokeLater(new Runnable() {
 						        public void run() {
-						          Configuration con = new Configuration();
 						          GUIManager.instance().showFrame(frame, conObj);
 						        }
 						      });
 						    }
 						    catch (Exception ex) {
+						    	JOptionPane.showMessageDialog( null ,
+										ex.getMessage(),
+										"Configuration Error:Could not create new frame",
+										JOptionPane.INFORMATION_MESSAGE);
 						      ex.printStackTrace();
 						    }
 					}

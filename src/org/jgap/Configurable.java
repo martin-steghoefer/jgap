@@ -19,7 +19,7 @@ import java.util.*;
  * */
 public interface Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Return a ConfigurationHandler specific to the concrete class implementing
@@ -29,7 +29,7 @@ public interface Configurable {
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  ConfigurationHandler getConfigurationHandler();
+  ConfigurationHandler getConfigurationHandler() throws ConfigException;
 
   /**
    * Pass the name and value of a property to be set.

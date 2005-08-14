@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -223,7 +223,7 @@ public class MutationOperator
    * @author Siddhartha Azad
    * @since 2.4
    * */
-  public ConfigurationHandler getConfigurationHandler() {
+  public ConfigurationHandler getConfigurationHandler() throws ConfigException {
   	MutationOperatorConHandler conHandler = new MutationOperatorConHandler();
   	conHandler.setConfigurable(this);
   	return conHandler;
