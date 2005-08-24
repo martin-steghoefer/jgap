@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.util.*;
+import org.jgap.data.config.*;
 
 import org.jgap.event.*;
 import org.jgap.impl.*;
@@ -39,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * Constants for toString()

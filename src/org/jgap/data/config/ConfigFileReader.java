@@ -7,7 +7,7 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package org.jgap;
+package org.jgap.data.config;
 
 import java.util.*;
 import java.io.*;
@@ -20,7 +20,7 @@ import java.io.*;
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   // Name of the config file to read
   private String m_fileName;

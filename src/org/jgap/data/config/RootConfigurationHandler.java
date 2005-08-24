@@ -7,9 +7,10 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package org.jgap;
+package org.jgap.data.config;
 
 import java.util.*;
+import org.jgap.*;
 
 /**
  * The ConfigurationHandler for the Configuration class itself. This is the
@@ -22,7 +23,7 @@ import java.util.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "Configuration";

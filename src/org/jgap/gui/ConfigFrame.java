@@ -15,6 +15,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.jgap.*;
+import org.jgap.data.config.*;
 import info.clearthought.layout.*;
 
 /**
@@ -27,7 +28,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
 	// data members of class ConfigFrame
 	private ConfigurationHandler conHandler;

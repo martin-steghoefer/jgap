@@ -9,12 +9,13 @@
  */
 package org.jgap.impl;
 import org.jgap.*;
+import org.jgap.data.config.*;
 import java.util.ArrayList;
 
 public class MutationOperatorConHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
   
   // Must be the fully qualified class name
   private final static String CONFIG_NAMESPACE = "org.jgap.impl.MutationOperator";

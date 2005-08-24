@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import java.util.*;
 import org.jgap.*;
+import org.jgap.data.config.*;
 
 /**
  * Implementation of a NaturalSelector that plays tournaments to determine
@@ -25,7 +26,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.

@@ -10,6 +10,7 @@
 package org.jgap.impl;
 
 import org.jgap.*;
+import org.jgap.data.config.*;
 
 /**
  * Default implementation of a mutation rate calculcator
@@ -21,7 +22,7 @@ public class DefaultMutationRateCalculator
     implements IUniversalRateCalculator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Calculates the mutation rate

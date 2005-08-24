@@ -7,9 +7,10 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package org.jgap.impl;
+package org.jgap.data.config;
 
 import org.jgap.*;
+
 
 /**
  * The CustomConfiguration is the configuration instance that can read a JGAP
@@ -21,7 +22,7 @@ import org.jgap.*;
 public class CustomConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   /**
    * Constructor, reading in the configuration from the given file

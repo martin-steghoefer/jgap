@@ -10,6 +10,7 @@
 package org.jgap.gui;
 
 import java.io.*;
+import org.jgap.data.config.*;
 import java.util.*;
 
 import org.jgap.*;
@@ -27,7 +28,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);

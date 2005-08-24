@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import java.util.*;
 import org.jgap.*;
+import org.jgap.data.config.*;
 
 /**
  * The mutation operator runs through the genes in each of the Chromosomes
@@ -32,7 +33,7 @@ import org.jgap.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as

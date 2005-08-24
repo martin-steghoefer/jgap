@@ -10,6 +10,7 @@
 package examples.config;
 
 import org.jgap.*;
+import org.jgap.data.config.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
@@ -26,7 +27,7 @@ import org.jgap.impl.*;
  * */
 public class MaximizingFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Constructor

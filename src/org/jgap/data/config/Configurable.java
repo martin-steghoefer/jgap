@@ -7,9 +7,10 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package org.jgap;
+package org.jgap.data.config;
 
 import java.util.*;
+import org.jgap.*;
 
 /**
  * This interface must be implemented for any class to be Configurable.
@@ -19,7 +20,7 @@ import java.util.*;
  * */
 public interface Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.1 $";
 
   /**
    * Return a ConfigurationHandler specific to the concrete class implementing

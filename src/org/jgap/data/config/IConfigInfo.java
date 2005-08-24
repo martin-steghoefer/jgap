@@ -7,30 +7,26 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package org.jgap;
+package org.jgap.data.config;
 
 /**
- * Exception throw when there is an error with configuring JGAP via the GUI.
+ * Interface a ConfigWriter uses to get the information from a ConfigFrame.
  *
  * @author Siddhartha Azad
  * @since 2.3
  * */
-public class ConfigException
-    extends Exception {
+public interface IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.1 $";
+
+  ConfigData getConfigData();
 
   /**
-   * Constructs a new ConfigException instance with the
-   * given error message.
-   *
-   * @param a_message An error message describing the reason this exception
-   *                  is being thrown.
+   * Get the config file to write to.
+   * @return The config file name to write to.
    *
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public ConfigException(String a_message) {
-    super(a_message);
-  }
+  String getFileName();
 }

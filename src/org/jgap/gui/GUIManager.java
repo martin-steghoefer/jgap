@@ -10,6 +10,7 @@
 package org.jgap.gui;
 
 import org.jgap.*;
+import org.jgap.data.config.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  */
 public class GUIManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * @return a singleton GUIManager instance

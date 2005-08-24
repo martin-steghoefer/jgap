@@ -10,6 +10,7 @@
 package org.jgap.gui;
 
 import org.jgap.*;
+import org.jgap.data.config.*;
 import java.util.*;
 
 /**
@@ -20,7 +21,7 @@ import java.util.*;
  * */
 public class MockIConfigInfo
     implements IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * @author Siddhartha Azad

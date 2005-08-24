@@ -10,6 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
+import org.jgap.data.config.*;
 
 import org.jgap.*;
 import org.jgap.distr.*;
@@ -26,7 +27,7 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public Population mergePopulations(Population a_population1,
                                      Population a_population2,
