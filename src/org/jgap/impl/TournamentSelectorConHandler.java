@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class TournamentSelectorConHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
   
   // Must be the fully qualified class name
   private final static String CONFIG_NAMESPACE = "org.jgap.impl.TournamentSelector";
@@ -44,7 +44,6 @@ public class TournamentSelectorConHandler
     // The population size
     cp = new ConfigProperty();
     cp.setName("m_probability");
-    cp.setType("double");
     cp.setWidget("JTextField");
     cProps.add(cp);
     return cProps;

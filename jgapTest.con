@@ -1,5 +1,5 @@
 #---JGAP Configuration File---
 #Sun Mar 27 03:32:12 GMT-05:00 2005
 org.jgap.impl.MutationOperator.m_mutationRate=3
-Configuration.m_populationSize=35
-Configuration.GeneticOperators[0]=org.jgap.impl.MutationOperator
+org.jgap.Configuration.m_populationSize=35
+org.jgap.Configuration.GeneticOperators[0]=org.jgap.impl.MutationOperator

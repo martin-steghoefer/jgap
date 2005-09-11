@@ -28,7 +28,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
 	// data members of class ConfigFrame
 	private ConfigurationHandler conHandler;
@@ -108,6 +108,23 @@ public class ConfigFrame
 		this.setVisible(true);
 		this.setBounds(100, 100, 300, 300);
 		this.setSize(500, 300);
+		try {
+			MetaConfig mt = MetaConfig.instance();
+		}
+		catch(MetaConfigException mcEx) {
+			JOptionPane.showMessageDialog( null ,
+					"Exception while parsing JGAP Meta Config file "+
+					mcEx.getMessage(),
+					"Meta Config Exception",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		catch(Exception ex) {
+			JOptionPane.showMessageDialog( null ,
+					"Exception while parsing JGAP Meta Config file "+
+					ex.getMessage(),
+					"Meta Config Exception",
+					JOptionPane.ERROR_MESSAGE);
+		}		
 		this.setup();
 		this.show();
 		if(isRoot)
@@ -148,7 +165,10 @@ public class ConfigFrame
 			}
 		}
 		catch(ClassCastException cex) {
-			cex.printStackTrace();
+			JOptionPane.showMessageDialog( null ,
+					cex.getMessage(),
+					"ConfigFrame.getConfigData():Configuration Error",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 		return cd;
 	}
@@ -183,11 +203,22 @@ public class ConfigFrame
 	 */
 	private void setup() {
 		int numLists = 0, numTexts = 0;
-		ArrayList props = conHandler.getConfigProperties();
+		ArrayList props = null;
+		try {
+			/** @todo find a better way to get the classname than getNS() */
+			props = MetaConfig.instance().getConfigProperty(conHandler.getNS());
+		}
+		catch(Exception ex) {
+			JOptionPane.showMessageDialog( null ,
+					ex.getMessage(),
+					"Configuration Error: Could not get properties for class "
+					+conHandler.getNS(),
+					JOptionPane.INFORMATION_MESSAGE);	
+		}
 		if(props == null) {
 			JOptionPane.showMessageDialog( null ,
 					"setup():No Configurable Properties in this Configuration",
-					"props size is "+props.size(),
+					"Configuration Message",
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
@@ -204,12 +235,17 @@ public class ConfigFrame
 				}
 				else {
 					// Only JLists and JTextFields allowed at this point
-					System.err.println("ConfigFrame::setup():Invalid Widget name "
-							+ prop.getWidget());
+					JOptionPane.showMessageDialog( null ,
+							"Unknown Widget "+prop.getWidget(),
+							"Configuration Error",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 			catch(ClassCastException cex) {
-				cex.printStackTrace();
+				JOptionPane.showMessageDialog( null ,
+						cex.getMessage(),
+						"ConfigError.setup():Configuration Error: Invalid cast",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		// If no known widgets are present, a GUI cannot be rendered
@@ -406,7 +442,6 @@ public class ConfigFrame
 					"Exception"+ex.toString(),
 					"This is the title",
 					JOptionPane.INFORMATION_MESSAGE);
-			ex.printStackTrace();
 		}
 	}
 
@@ -703,9 +738,8 @@ public class ConfigFrame
 						}
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
 						JOptionPane.showMessageDialog( null ,
-								"An exception",
+								ex.getMessage(),
 								"Configuration Error",
 								JOptionPane.INFORMATION_MESSAGE);
 					}

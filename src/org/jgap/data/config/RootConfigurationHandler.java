@@ -23,10 +23,10 @@ import org.jgap.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // Namespace
-  private final static String CONFIG_NAMESPACE = "Configuration";
+  private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
   
   // constatns to indicate various properties
   
@@ -49,36 +49,7 @@ public class RootConfigurationHandler
    * @since 2.3
    * */
   public ArrayList getConfigProperties() {
-    /**@todo This list could be cached after the first call.*/
-    /**@todo we could scan all classes in the classpath for implementing
-     * the INaturalSelector interface*/
-    ArrayList cProps = new ArrayList();
-    // NaturalSelectors available. This information will be renders as a JList.
-    ConfigProperty cp;
-    cp = new ConfigProperty();
-    cp.setName(NATURAL_SELS);
-    cp.setType("Class");
-    cp.setWidget("JList");
-    cp.addValue("org.jgap.impl.BestChromosomesSelector");
-    cp.addValue("org.jgap.impl.TournamentSelector");
-    cProps.add(cp);
-    // GeneticOperators available. This information will be renders as a JList.
-    /**@todo we could scan all classes in the classpath for implementing
-     * the GeneticOperator interface*/
-    cp = new ConfigProperty();
-    cp.setName(GENETIC_OPS);
-    cp.setType("Class");
-    cp.setWidget("JList");
-    cp.addValue("org.jgap.impl.GaussianMutationOperator");
-    cp.addValue("org.jgap.impl.MutationOperator");
-    cProps.add(cp);
-    // The population size
-    cp = new ConfigProperty();
-    cp.setName("m_populationSize");
-    cp.setType("int");
-    cp.setWidget("JTextField");
-    cProps.add(cp);
-    return cProps;
+   return null;
   }
 
   /**

@@ -1,0 +1,11 @@
+# root class
+class=org.jgap.Configuration
+property=m_preSelectors, JList
+values=org.jgap.impl.BestChromosomesSelector, org.jgap.impl.TournamentSelector
+property=m_postSelectors, JList
+values=org.jgap.impl.BestChromosomesSelector, org.jgap.impl.TournamentSelector
+property=m_geneticOperators, JList
+values=org.jgap.impl.GaussianMutationOperator, org.jgap.impl.MutationOperator
+property=m_populationSize, JTextField
+class=org.jgap.impl.TournamentSelector
+property=m_probability, JTextField

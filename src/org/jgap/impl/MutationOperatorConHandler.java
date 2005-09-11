@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class MutationOperatorConHandler
     implements ConfigurationHandler {
 
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
   
   // Must be the fully qualified class name
   private final static String CONFIG_NAMESPACE = "org.jgap.impl.MutationOperator";
@@ -41,7 +41,6 @@ public class MutationOperatorConHandler
     // The population size
     cp = new ConfigProperty();
     cp.setName("m_mutationRate");
-    cp.setType("int");
     cp.setWidget("JTextField");
     cProps.add(cp);
     return cProps;
