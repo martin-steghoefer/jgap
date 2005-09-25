@@ -44,7 +44,14 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
+
+  private int max_evolution = 128;
+
+  private int population_size = 512;
+
+  private int m_acceptable_cost = -1;
+
 
   /**
    * Override this method to compute the distance between "cities",
@@ -173,12 +180,6 @@ public abstract class Salesman {
   public void setPopulationSize(int a_population_size) {
     this.population_size = a_population_size;
   }
-
-  private int max_evolution = 128;
-
-  private int population_size = 512;
-
-  private int m_acceptable_cost = -1;
 
   /**
    * Executes the genetic algorithm to determine the
