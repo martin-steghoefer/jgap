@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   private int m_minLength;
 
@@ -145,13 +145,16 @@ public class StringGene
     // For each character: randomize character value (which can be represented
     // by an integer value).
     //------------------------------------------------------------------------
-    m_value = "";
+    String newAllele = "";
     final int alphabetLength = m_alphabet.length();
     for (int j = 0; j < length; j++) {
       index = a_numberGenerator.nextInt(alphabetLength);
       value = m_alphabet.charAt(index);
-      m_value += value;
+      newAllele += value;
     }
+    // Call setAllele to ensure extended verification.
+    // -----------------------------------------------
+    setAllele(newAllele);
   }
 
   /**
