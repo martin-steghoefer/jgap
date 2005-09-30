@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Container for valid alleles
@@ -133,7 +133,8 @@ public class MapGene
 
   /**
    * Sets the allele value to be a random value using a defined random number
-   * generator.
+   * generator. If no valid alleles are defined, any allele is allowed. Then,
+   * a new Integer with random value is set as random value.
    *
    * @param a_numberGenerator RandomGenerator
    *
@@ -141,8 +142,13 @@ public class MapGene
    * @since 2.4
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = geneMap.get(geneMap.keySet().toArray()[a_numberGenerator.nextInt(
-        geneMap.size())]);
+    if (geneMap.isEmpty()) {
+      m_value = new Integer(a_numberGenerator.nextInt());
+    }
+    else {
+      m_value = geneMap.get(geneMap.keySet().toArray()[a_numberGenerator.
+                            nextInt(geneMap.size())]);
+    }
   }
 
   /**
