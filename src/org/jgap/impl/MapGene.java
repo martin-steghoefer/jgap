@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Container for valid alleles
@@ -283,7 +283,7 @@ public class MapGene
    * @since 2.4
    */
   public void setAllele(Object a_newValue) {
-    if (geneMap.keySet().contains(a_newValue)) {
+    if (geneMap.keySet().isEmpty() || geneMap.keySet().contains(a_newValue)) {
       m_value = geneMap.get(a_newValue);
     }
     else {
