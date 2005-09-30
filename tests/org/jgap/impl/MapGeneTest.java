@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -205,35 +205,17 @@ public class MapGeneTest
    */
   public void testSetAllele_0() {
     MapGene gene1 = new MapGene();
-    try {
-      gene1.setAllele(null);
-      fail();
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
+    gene1.setAllele(null);
   }
 
   public void testSetAllele_1() {
     MapGene gene1 = new MapGene();
-    try {
-      gene1.setAllele("22");
-      fail();
-    }
-    catch (IllegalArgumentException classex) {
-      ; //this is OK
-    }
+    gene1.setAllele("22");
   }
 
   public void testSetAllele_2() {
     Gene gene = new MapGene();
-    try {
-      gene.setAllele(new Integer(101));
-      fail();
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
+    gene.setAllele(new Integer(101));
   }
 
   public void testNewGene_0()
@@ -493,11 +475,9 @@ public class MapGeneTest
   }
 
   public void testSetToRandomValue_0() {
-    Gene gene = new IntegerGene(1, 6);
-    gene.setAllele(new Integer(5));
-
-    gene.setToRandomValue(new RandomGeneratorForTest(0.2d));
-    assertEquals(new Integer( (int) (0.2d * (6 - 1) + 1)), gene.getAllele());
+    Gene gene = new MapGene();
+    gene.setToRandomValue(new RandomGeneratorForTest(3));
+    assertEquals(new Integer(3), gene.getAllele());
   }
 
   public void testSetToRandomValue_1()
