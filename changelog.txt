@@ -1,6 +1,10 @@
 2.5
 ----------
-
+* Fixed bugs in MapGene
+* Added new package org.jgap.data.config containing
+  configuration-related classes
+* Added several units tests
+* Extended JGAP documentation
 
 2.4
 ----------
@@ -20,6 +24,7 @@
   "keepPopulationSizeConstant" (along with getter and setter).
   This parameter is queries in Genotype.evolve() to ensure a
   fixed population size. Default for parameter ist TRUE!
+* Improved Genotype.evolve()
 * Introduced application data to BaseGene,
   see request 1226280
 * Extended Gene interface according to request 1226280
