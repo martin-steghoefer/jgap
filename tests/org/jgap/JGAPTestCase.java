@@ -9,6 +9,7 @@
  */
 package org.jgap;
 
+import java.util.*;
 import junit.framework.*;
 import junitx.util.*;
 
@@ -21,7 +22,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -70,6 +71,11 @@ public abstract class JGAPTestCase
         return true;
       }
     }
+  }
+
+
+  public static void assertEqualsMap(Map a_map1, Map a_map2) {
+    /**@todo implement*/
   }
 
   public class TestFitnessFunction
