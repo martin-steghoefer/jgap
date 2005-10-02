@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -271,6 +271,7 @@ public class MapGeneTest
     Gene gene2 = new MapGene();
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
+    /**@todo compare two maps independent of the order of their elements*/
     assertEquals(pres1, pres2);
   }
 
@@ -296,20 +297,16 @@ public class MapGeneTest
    */
   public void testPersistentRepresentation_2()
       throws Exception {
-    Gene gene1 = new IntegerGene(2, 753);
+    MapGene gene1 = new MapGene();
     gene1.setAllele(new Integer(45));
-    gene1.setValueFromPersistentRepresentation("2" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "3" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "4");
-    assertEquals(2, ( (Integer) gene1.getAllele()).intValue());
-    assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
-        "m_lowerBounds")).intValue());
-    assertEquals(4, ( (Integer) privateAccessor.getField(gene1,
-        "m_upperBounds")).intValue());
+    gene1.setValueFromPersistentRepresentation("6"
+                                               +
+                                               MapGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               + "(0,1.0d),(2,3.0d),(4,5.0d)");
+    assertEquals(6, ( (Integer) gene1.getAllele()).intValue());
+    assertEquals(3, ( (Map) privateAccessor.getField(gene1,
+        "m_geneMap")).size());
   }
 
   /**
