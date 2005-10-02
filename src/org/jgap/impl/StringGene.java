@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   private int m_minLength;
 
@@ -397,7 +397,9 @@ public class StringGene
    * @since 1.1
    */
   public Gene newGene() {
-    return new StringGene(m_minLength, m_maxLength, m_alphabet);
+    StringGene result = new StringGene(m_minLength, m_maxLength, m_alphabet);
+    result.setConstraintChecker(getConstraintChecker());
+    return result;
   }
 
   /**

@@ -33,7 +33,7 @@ public class FixedBinaryGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   private int m_length;
 
@@ -68,7 +68,9 @@ public class FixedBinaryGene
   }
 
   public Gene newGene() {
-    return new FixedBinaryGene(m_length);
+    FixedBinaryGene result = new FixedBinaryGene(m_length);
+    result.setConstraintChecker(getConstraintChecker());
+    return result;
   }
 
   public FixedBinaryGene(final FixedBinaryGene toCopy) {

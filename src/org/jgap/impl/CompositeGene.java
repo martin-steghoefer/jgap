@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   /**
    * This field separates gene class name from
@@ -426,6 +426,7 @@ public class CompositeGene
    */
   public Gene newGene() {
     CompositeGene compositeGene = new CompositeGene();
+    compositeGene.setConstraintChecker(getConstraintChecker());
     Gene gene;
     int geneSize = m_genes.size();
     for (int i = 0; i < geneSize; i++) {

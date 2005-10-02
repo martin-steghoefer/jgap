@@ -25,7 +25,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -97,7 +97,9 @@ public class DoubleGene
    * @since 1.1
    */
   public Gene newGene() {
-    return new DoubleGene(m_lowerBounds, m_upperBounds);
+    DoubleGene result = new DoubleGene(m_lowerBounds, m_upperBounds);
+    result.setConstraintChecker(getConstraintChecker());
+    return result;
   }
 
   /**
