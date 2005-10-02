@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   private int m_minLength;
 
@@ -63,6 +63,7 @@ public class StringGene
 
   /**
    * Default constructor, sets minimum and maximum length to arbitrary.
+   * You need to set the valid alphabet later!
    *
    * @author Klaus Meffert
    * @since 1.1
