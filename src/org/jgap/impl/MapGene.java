@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Container for valid alleles
@@ -44,6 +44,13 @@ public class MapGene
    * Represents the constant range of values supported by integers.
    */
   private Object m_value;
+
+  /**
+   * Represents the delimiter that is used to mark the allele map.
+   */
+  final static String ALLELEMAP_BEGIN_DELIMITER = "[";
+  final static String ALLELEMAP_END_DELIMITER = "]";
+
 
   /**
    * Default constructor
@@ -204,16 +211,15 @@ public class MapGene
   public void setValueFromPersistentRepresentation(String a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
-      StringTokenizer tokenizer =
-          new StringTokenizer(a_representation,
-                              PERSISTENT_FIELD_DELIMITER);
+      StringTokenizer tokenizer = new StringTokenizer(a_representation,
+          PERSISTENT_FIELD_DELIMITER);
       // Make sure the representation contains the correct number of
       // fields. If not, throw an exception.
       // -----------------------------------------------------------
-      if (tokenizer.countTokens() < 3) {
+      if (tokenizer.countTokens() != 2) {
         throw new UnsupportedRepresentationException(
             "The format of the given persistent representation " +
-            "is not recognized: it must contain at least three tokens.");
+            "is not recognized: it must contain two tokens.");
       }
       String valueRepresentation = tokenizer.nextToken();
       // First parse and set the representation of the value.
@@ -223,8 +229,7 @@ public class MapGene
       }
       else {
         try {
-          m_value =
-              new Integer(Integer.parseInt(valueRepresentation));
+          m_value = new Integer(Integer.parseInt(valueRepresentation));
         }
         catch (NumberFormatException e) {
           throw new UnsupportedRepresentationException(
@@ -233,21 +238,32 @@ public class MapGene
               "an integer value.");
         }
       }
-      // Parse the potential categories.
-      // -------------------------------
-      Integer key, value;
+      // Parse gene map.
+      // ---------------
+      String s = tokenizer.nextToken();
+      tokenizer = new StringTokenizer(s,",");
+      boolean lastWasOpening = false;
+      String key = null;
       while (tokenizer.hasMoreTokens()) {
-        try {
-          key = new Integer(Integer.parseInt(tokenizer.nextToken(
-              PERSISTENT_FIELD_DELIMITER + "=")));
-          value = new Integer(Integer.parseInt(tokenizer.nextToken()));
-          m_geneMap.put(key, value);
+        String element = tokenizer.nextToken(",");
+        if (lastWasOpening) {
+          if (element.endsWith(")")) {
+            element = element.substring(0,element.length()-1);
+            addAllele(key, element);
+            lastWasOpening = false;
+          }
+          else {
+            throw new IllegalStateException("Closing bracket missing");
+          }
         }
-        catch (NumberFormatException e) {
-          throw new UnsupportedRepresentationException(
-              "The format of the given persistent representation " +
-              "is not recognized: a member of the list of eligible values does " +
-              "not appear to be an integer value.");
+        else {
+          if (element.startsWith("(")) {
+            key = element.substring(1);
+            lastWasOpening = true;
+          }
+          else {
+            throw new IllegalStateException("Opening bracket missing");
+          }
         }
       }
     }
@@ -271,16 +287,22 @@ public class MapGene
    */
   public String getPersistentRepresentation()
       throws UnsupportedOperationException {
-    // The persistent representation includes the value, lower bound,
-    // and upper bound. Each is separated by a colon.
-    // --------------------------------------------------------------
-    Iterator it = m_geneMap.entrySet().iterator();
+    // The persistent representation includes the value and the allele
+    // assignment.
+    // ---------------------------------------------------------------
+    Iterator it = m_geneMap.keySet().iterator();
     StringBuffer strbf = new StringBuffer();
+    boolean first = true;
     while (it.hasNext()) {
-      strbf.append(PERSISTENT_FIELD_DELIMITER);
-      strbf.append(it.next().toString());
+      if (!first) {
+        strbf.append(",");
+      }
+      Object key = it.next();
+      Object value = m_geneMap.get(key);
+      strbf.append("("+key.toString()+","+value.toString()+")");
+      first = false;
     }
-    return m_value.toString() + strbf.toString();
+    return m_value.toString() + MapGene.PERSISTENT_FIELD_DELIMITER+strbf.toString();
   }
 
   /**
