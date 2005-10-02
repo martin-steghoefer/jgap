@@ -1,6 +1,8 @@
 2.5
 ----------
-* Fixed bugs in MapGene
+* Fixed bugs in MapGene.
+* Fixed bug in newGene() methods (constraint checker not
+  considered)
 * Renamed private field geneMap to m_geneMap
 * Added new package org.jgap.data.config containing
   configuration-related classes
