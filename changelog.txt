@@ -3,6 +3,8 @@
 * Fixed bugs in MapGene
 * Added new package org.jgap.data.config containing
   configuration-related classes
+* Enhanced Genotype constructor to provide global
+  configuration earlier
 * Added several units tests
 * Extended JGAP documentation
 
