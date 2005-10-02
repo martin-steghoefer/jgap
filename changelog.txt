@@ -6,6 +6,7 @@
   configuration-related classes
 * Enhanced Genotype constructor to provide global
   configuration earlier
+* Enhanced error message in Configuration.verifyStateIsValid
 * Added several units tests
 * Extended JGAP documentation
 
