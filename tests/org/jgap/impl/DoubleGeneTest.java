@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0001d;
@@ -261,19 +261,22 @@ public class DoubleGeneTest
    */
   public void testNewGene_0()
       throws Exception {
-    Gene gene1 = new DoubleGene(1.0d, 10000.0d);
+    DoubleGene gene1 = new DoubleGene(1.0d, 10000.0d);
+    IGeneConstraintChecker checker = new GeneConstraintChecker();
+    gene1.setConstraintChecker(checker);
     gene1.setAllele(new Double(4711.0d));
     Double lower1 = (Double) privateAccessor.getField(gene1,
         "m_lowerBounds");
     Double upper1 = (Double) privateAccessor.getField(gene1,
         "m_upperBounds");
-    Gene gene2 = gene1.newGene();
+    DoubleGene gene2 = (DoubleGene)gene1.newGene();
     Double lower2 = (Double) privateAccessor.getField(gene2,
         "m_lowerBounds");
     Double upper2 = (Double) privateAccessor.getField(gene2,
         "m_upperBounds");
     assertEquals(lower1, lower2);
     assertEquals(upper1, upper2);
+    assertEquals(checker, gene2.getConstraintChecker());
   }
 
   /**
@@ -696,5 +699,12 @@ public class DoubleGeneTest
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
+  }
+
+  class GeneConstraintChecker implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue)
+        throws RuntimeException {
+      return true;
+    }
   }
 }

@@ -24,7 +24,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -406,6 +406,8 @@ public class StringGeneTest
   public void testNewGene_0()
       throws Exception {
     StringGene gene1 = new StringGene(1, 4);
+    IGeneConstraintChecker checker = new GeneConstraintChecker();
+    gene1.setConstraintChecker(checker);
     gene1.setAllele("XYZ");
     int minLength1 = gene1.getMinLength();
     int maxLength1 = gene1.getMaxLength();
@@ -414,6 +416,7 @@ public class StringGeneTest
     int maxLength2 = gene2.getMaxLength();
     assertEquals(minLength1, minLength2);
     assertEquals(maxLength1, maxLength2);
+    assertEquals(checker, gene2.getConstraintChecker());
   }
 
   /**
@@ -840,5 +843,12 @@ public class StringGeneTest
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
+  }
+
+  class GeneConstraintChecker implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue)
+        throws RuntimeException {
+      return true;
+    }
   }
 }
