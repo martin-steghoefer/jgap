@@ -30,14 +30,14 @@ public abstract class BulkFitnessFunction
     implements java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Calculates and sets the fitness values on each of the given
    * Chromosomes via their setFitnessValue() method.
    *
-   * @param a_chromosomes List of Chromosomes for which the fitness values
-   * must be computed and set.
+   * @param a_chromosomes list of Chromosomes for which the fitness values
+   * must be computed and set
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
