@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -943,9 +943,12 @@ public class FixedBinaryGeneTest
    */
   public void testNewGene_0() {
     FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    IGeneConstraintChecker checker = new GeneConstraintChecker();
+    gene1.setConstraintChecker(checker);
     FixedBinaryGene gene2 = (FixedBinaryGene) gene1.newGene();
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
+    assertEquals(checker, gene2.getConstraintChecker());
   }
 
   /**
@@ -984,5 +987,12 @@ public class FixedBinaryGeneTest
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
+  }
+
+  class GeneConstraintChecker implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue)
+        throws RuntimeException {
+      return true;
+    }
   }
 }

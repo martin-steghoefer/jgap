@@ -24,7 +24,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -261,19 +261,22 @@ public class IntegerGeneTest
 
   public void testNewGene_0()
       throws Exception {
-    Gene gene1 = new IntegerGene(1, 10000);
+    IntegerGene gene1 = new IntegerGene(1, 10000);
+    IGeneConstraintChecker checker = new GeneConstraintChecker();
+    gene1.setConstraintChecker(checker);
     gene1.setAllele(new Integer(4711));
     Integer lower1 = (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds");
     Integer upper1 = (Integer) privateAccessor.getField(gene1,
         "m_upperBounds");
-    Gene gene2 = gene1.newGene();
+    IntegerGene gene2 = (IntegerGene)gene1.newGene();
     Integer lower2 = (Integer) privateAccessor.getField(gene2,
         "m_lowerBounds");
     Integer upper2 = (Integer) privateAccessor.getField(gene2,
         "m_upperBounds");
     assertEquals(lower1, lower2);
     assertEquals(upper1, upper2);
+    assertEquals(checker, gene2.getConstraintChecker());
   }
 
   public void testCleanup() {
@@ -752,6 +755,13 @@ public class IntegerGeneTest
 
     public IntegerGene2(int a_lowerBounds, int a_upperBounds) {
       super(a_lowerBounds, a_upperBounds);
+    }
+  }
+
+  class GeneConstraintChecker implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue)
+        throws RuntimeException {
+      return true;
     }
   }
 }

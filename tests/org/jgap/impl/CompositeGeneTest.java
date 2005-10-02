@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -396,6 +396,8 @@ public class CompositeGeneTest
   public void testNewGene_0()
       throws Exception {
     CompositeGene gene1 = new CompositeGene();
+    IGeneConstraintChecker checker = new GeneConstraintChecker();
+    gene1.setConstraintChecker(checker);
     gene1.addGene(new DoubleGene(2.05d, 7.53d), false);
     gene1.addGene(new DoubleGene(128.35d, 155.90d), false);
     gene1.addGene(new IntegerGene(3, 8), false);
@@ -405,6 +407,7 @@ public class CompositeGeneTest
     gene1.addGene(new StringGene(6, 11, "ABC"), false);
     CompositeGene gene2 = (CompositeGene) gene1.newGene();
     assertTrue(gene1.equals(gene2));
+    assertEquals(checker, gene2.getConstraintChecker());
     //Remove all genes from gene2 that are contained in gene1.
     //Because they should be equal, gene2 should then be empty.
     //---------------------------------------------------------
@@ -836,4 +839,10 @@ public class CompositeGeneTest
 
   }
 
+  class GeneConstraintChecker implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue)
+        throws RuntimeException {
+      return true;
+    }
+  }
 }
