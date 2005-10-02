@@ -29,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.54 $";
+  private final static String CVS_REVISION = "$Revision: 1.55 $";
 
   /**
    * The current active Configuration instance.
@@ -107,12 +107,12 @@ public class Genotype
             "may be null.");
       }
     }
+    m_population = a_population;
+    m_activeConfiguration = a_activeConfiguration;
     // Lock the settings of the Configuration object so that the cannot
     // be altered.
     // ----------------------------------------------------------------
     a_activeConfiguration.lockSettings();
-    m_population = a_population;
-    m_activeConfiguration = a_activeConfiguration;
   }
 
   /**
@@ -214,7 +214,7 @@ public class Genotype
   }
 
   /**
-   * Evolve the population of Chromosomes within this Genotype. This will
+   * Evolves the population of Chromosomes within this Genotype. This will
    * execute all of the genetic operators added to the present active
    * configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population. Note
