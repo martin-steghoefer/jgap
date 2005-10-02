@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Container for valid alleles
@@ -306,7 +306,7 @@ public class MapGene
     }
     else {
       throw new IllegalArgumentException("Allele value being set ("
-                                         +m_value
+                                         +a_newValue
                                          +") is not an element of the set of"
                                          +" permitted values.");
     }
