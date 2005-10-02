@@ -33,12 +33,12 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Container for valid alleles
    */
-  private Map geneMap;
+  private Map m_geneMap;
 
   /**
    * Represents the constant range of values supported by integers.
@@ -50,7 +50,7 @@ public class MapGene
    * @since 2.4
    */
   public MapGene() {
-    geneMap = new HashMap();
+    m_geneMap = new HashMap();
   }
 
   /**
@@ -66,7 +66,11 @@ public class MapGene
   }
 
   public Gene newGene() {
-    return new MapGene();
+    MapGene result = new MapGene(m_geneMap);
+    // get m_value from original
+    Object value = getAllele();
+    result.setAllele(value);
+    return result;
   }
 
   /**
@@ -77,7 +81,7 @@ public class MapGene
    * @since 2.4
    */
   public void addAllele(Object a_key, Object a_value) {
-    geneMap.put(a_key, a_value);
+    m_geneMap.put(a_key, a_value);
   }
 
   /**
@@ -89,7 +93,7 @@ public class MapGene
    * @since 2.4
    */
   public void addAllele(Object a_value) {
-    geneMap.put(a_value, a_value);
+    m_geneMap.put(a_value, a_value);
   }
 
   /**
@@ -101,7 +105,7 @@ public class MapGene
    * @since 2.4
    */
   public void addAllele(int a_value) {
-    geneMap.put(new Integer(a_value), new Integer(a_value));
+    m_geneMap.put(new Integer(a_value), new Integer(a_value));
   }
 
   /**
@@ -116,7 +120,7 @@ public class MapGene
       throw new IllegalArgumentException("List of alleles may not be null!");
     }
     else {
-      geneMap.putAll(a_alleles);
+      m_geneMap.putAll(a_alleles);
     }
   }
 
@@ -128,7 +132,7 @@ public class MapGene
    * @since 2.4
    */
   public void removeAlleles(Object key) {
-    geneMap.remove(key);
+    m_geneMap.remove(key);
   }
 
   /**
@@ -142,12 +146,12 @@ public class MapGene
    * @since 2.4
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    if (geneMap.isEmpty()) {
+    if (m_geneMap.isEmpty()) {
       m_value = new Integer(a_numberGenerator.nextInt());
     }
     else {
-      m_value = geneMap.get(geneMap.keySet().toArray()[a_numberGenerator.
-                            nextInt(geneMap.size())]);
+      m_value = m_geneMap.get(m_geneMap.keySet().toArray()[a_numberGenerator.
+                            nextInt(m_geneMap.size())]);
     }
   }
 
@@ -237,7 +241,7 @@ public class MapGene
           key = new Integer(Integer.parseInt(tokenizer.nextToken(
               PERSISTENT_FIELD_DELIMITER + "=")));
           value = new Integer(Integer.parseInt(tokenizer.nextToken()));
-          geneMap.put(key, value);
+          m_geneMap.put(key, value);
         }
         catch (NumberFormatException e) {
           throw new UnsupportedRepresentationException(
@@ -270,7 +274,7 @@ public class MapGene
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
-    Iterator it = geneMap.entrySet().iterator();
+    Iterator it = m_geneMap.entrySet().iterator();
     StringBuffer strbf = new StringBuffer();
     while (it.hasNext()) {
       strbf.append(PERSISTENT_FIELD_DELIMITER);
@@ -289,12 +293,22 @@ public class MapGene
    * @since 2.4
    */
   public void setAllele(Object a_newValue) {
-    if (geneMap.keySet().isEmpty() || geneMap.keySet().contains(a_newValue)) {
-      m_value = geneMap.get(a_newValue);
+    // ignore null value as it should have no effect here (otherwise problematic
+    // in conjunction with newGene)
+    if (a_newValue == null) {
+      return;
+    }
+    if (m_geneMap.keySet().isEmpty()) {
+      m_value = a_newValue;
+    }
+    else if (m_geneMap.keySet().contains(a_newValue)) {
+      m_value = m_geneMap.get(a_newValue);
     }
     else {
-      throw new IllegalArgumentException("Allele value being set is not an " +
-                                         "element of the set of permitted values.");
+      throw new IllegalArgumentException("Allele value being set ("
+                                         +m_value
+                                         +") is not an element of the set of"
+                                         +" permitted values.");
     }
   }
 
@@ -324,47 +338,85 @@ public class MapGene
       return 1;
     }
     else if (otherGene.m_value == null) {
-      // If our value is also null, then we're the same. Otherwise,
-      // this is the greater gene.
-      // ----------------------------------------------------------
-      return m_value == null ? 0 : 1;
+      // If our value is not null, then we're the greater gene.
+      // ------------------------------------------------------
+      if (m_value != null) {
+        return 1;
+      }
     }
-    else {
-      try {
-        Method method = m_value.getClass().getMethod("compareTo",
-            new Class[] {otherGene.m_value.getClass()});
-        Integer i = (Integer) method.invoke(m_value,
-                                            new Object[] {otherGene.m_value});
-        return i.intValue();
+    try {
+      int size1 = m_geneMap.size();
+      int size2 = otherGene.m_geneMap.size();
+      if (size1 != size2) {
+        if (size1 < size2) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
       }
-      catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("CompareTo method of the Gene value" +
-                                           " object cannot be invoked.");
+      else {
+        //compare geneMap keys and values
+        Iterator it1 = m_geneMap.keySet().iterator();
+        Iterator it2 = otherGene.m_geneMap.keySet().iterator();
+        while (it1.hasNext()) {
+          Object key1 = it1.next();
+          if (!otherGene.m_geneMap.keySet().contains(key1)) {
+            // arbitrarily returning -1
+            return -1;
+          }
+          Object value1 = m_geneMap.get(key1);
+          Object value2 = otherGene.m_geneMap.get(key1);
+          if (value1 == null && value2 != null) {
+            return -1;
+          }
+          else if (!value1.equals(value2)) {
+            // arbitrarily returning -1
+            return -1;
+          }
+        }
       }
-      catch (IllegalArgumentException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The value object of the Gene does" +
-                                           " not have a compareTo method.  It" +
-                                           " cannot be compared.");
+      if (m_value == null) {
+        if (otherGene.m_value != null) {
+          return 1;
+        }
+        else {
+          return 0;
+        }
       }
-      catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The compareTo method of the Gene" +
-                                           " value object cannot be accessed ");
-      }
-      catch (SecurityException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The compareTo method of the Gene" +
-                                           " value object cannot be accessed." +
-                                           "  Insufficient permission levels.");
-      }
-      catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The value object of the Gene does" +
-                                           " not have a compareTo method.  It" +
-                                           " cannot be compared.");
-      }
+      Method method = m_value.getClass().getMethod("compareTo",
+          new Class[] {otherGene.m_value.getClass()});
+      Integer i = (Integer) method.invoke(m_value,
+                                          new Object[] {otherGene.m_value});
+      return i.intValue();
+    }
+    catch (InvocationTargetException ex) {
+      ex.printStackTrace();
+      throw new IllegalArgumentException("CompareTo method of the Gene value" +
+                                         " object cannot be invoked.");
+    }
+    catch (IllegalArgumentException ex) {
+      ex.printStackTrace();
+      throw new IllegalArgumentException("The value object of the Gene does" +
+                                         " not have a compareTo method.  It" +
+                                         " cannot be compared.");
+    }
+    catch (IllegalAccessException ex) {
+      ex.printStackTrace();
+      throw new IllegalArgumentException("The compareTo method of the Gene" +
+                                         " value object cannot be accessed ");
+    }
+    catch (SecurityException ex) {
+      ex.printStackTrace();
+      throw new IllegalArgumentException("The compareTo method of the Gene" +
+                                         " value object cannot be accessed." +
+                                         "  Insufficient permission levels.");
+    }
+    catch (NoSuchMethodException ex) {
+      ex.printStackTrace();
+      throw new IllegalArgumentException("The value object of the Gene does" +
+                                         " not have a compareTo method.  It" +
+                                         " cannot be compared.");
     }
   }
 
@@ -404,11 +456,11 @@ public class MapGene
    */
   public String toString() {
     String result = "[";
-    if (geneMap.size() < 1) {
+    if (m_geneMap.size() < 1) {
       result += "null";
     }
     else {
-      Set keys = geneMap.keySet();
+      Set keys = m_geneMap.keySet();
       Iterator keyIterator = keys.iterator();
       boolean firstTime = true;
       while (keyIterator.hasNext()) {
@@ -427,7 +479,7 @@ public class MapGene
           keyString = key.toString();
         }
         result += "(" + keyString + ",";
-        Object value = geneMap.get(key);
+        Object value = m_geneMap.get(key);
         String valueString;
         if (value == null) {
           valueString = "null";
