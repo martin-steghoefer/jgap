@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class ConfigurationForTest
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public final static double STATIC_FITNESS_VALUE = 2.3d;
 
@@ -43,9 +43,13 @@ public class ConfigurationForTest
     addNaturalSelector(new BestChromosomesSelector(), true);
     addGeneticOperator(new MutationOperator());
     setRandomGenerator(new StockRandomGenerator());
-    Gene[] genes = new Gene[1];
+    Gene[] genes = new Gene[3];
     Gene gene = new BooleanGene();
     genes[0] = gene;
+    gene = new StringGene(1,10,StringGene.ALPHABET_CHARACTERS_LOWER);
+    genes[1] = gene;
+    gene = new IntegerGene(100,300);
+    genes[2] = gene;
     Chromosome chrom = new Chromosome(genes);
     setSampleChromosome(chrom);
   }
