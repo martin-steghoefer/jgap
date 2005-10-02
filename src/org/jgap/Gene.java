@@ -30,7 +30,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.17 $";
+  final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -68,7 +68,6 @@ public interface Gene
    *
    * @since 1.0
    */
-
   void setAllele(Object a_newValue);
 
   /**
@@ -96,7 +95,6 @@ public interface Gene
    *
    * @since 1.0
    */
-
   String getPersistentRepresentation()
       throws UnsupportedOperationException;
 
@@ -155,7 +153,6 @@ public interface Gene
    *
    * @since 1.1
    */
-
   int size();
 
   /**
@@ -207,7 +204,6 @@ public interface Gene
    * @author Klaus Meffert
    * @since 2.4
    */
-
   void setCompareApplicationData(boolean a_doCompare);
 
   /*
