@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -318,9 +318,10 @@ public class GenotypeTest
     // Add new NaturalSelector
     config.addNaturalSelector(new WeightedRouletteSelector(), true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
-    int popSize = config.getPopulationSize();
+    int popSize = config.getPopulationSize() *
+        config.getSampleChromosome().getGenes().length;
     genotype.evolve(1);
-    assertTrue(popSize > genotype.getPopulation().size());
+    assertTrue(popSize >= genotype.getPopulation().size());
   }
 
   /**
