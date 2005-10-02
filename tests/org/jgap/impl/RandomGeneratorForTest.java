@@ -23,7 +23,7 @@ public class RandomGeneratorForTest
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   private long m_nextLong;
   private double m_nextDouble;
@@ -58,6 +58,7 @@ public class RandomGeneratorForTest
   public RandomGeneratorForTest(boolean nextBoolean) {
     this();
     setNextBoolean(nextBoolean);
+    setNextInt(1);
   }
 
   public int nextInt() {
