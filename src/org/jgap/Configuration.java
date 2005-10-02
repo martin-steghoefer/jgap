@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * Constants for toString()
@@ -896,9 +896,10 @@ public class Configuration
         throw new InvalidConfigurationException(
             "The sample Gene at gene position (locus) "
             + i
-            + " does not appear to have a working equals() method. It could also"
-            +" be that you forgot to implement method newGene() in your"
-            +" Gene implementation."
+            + " does not appear to have a working equals() or compareTo()"
+            + " method.\n"
+            + "It could also be that you forgot to implement method"
+            + " newGene() in your Gene implementation.\n"
             + "When tested, the method returned false when comparing "
             + "the sample gene with a gene of the same type and "
             + "possessing the same value (allele).");
