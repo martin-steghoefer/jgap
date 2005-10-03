@@ -10,6 +10,7 @@
 package examples;
 
 import java.io.*;
+import java.util.*;
 //JFreeChart-related
 //import java.awt.image.*;
 //import org.jfree.chart.*;
@@ -42,7 +43,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -99,6 +100,11 @@ public class MinimizingMakeChange {
     sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
     sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
     sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
+//    Map alleles = new Hashtable();
+//    for (int i=0;i<40;i++) {
+//      alleles.put(new Integer(i), new Integer(i));
+//    }
+//    sampleGenes[3] = new MapGene(alleles);
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
@@ -120,6 +126,10 @@ public class MinimizingMakeChange {
     try {
       Document doc = XMLManager.readFile(new File("testJGAP.xml"));
       population = XMLManager.getGenotypeFromDocument(conf, doc);
+    }
+    catch (UnsupportedRepresentationException uex) {
+      // code might have changed between two consecutive runs
+      population = Genotype.randomInitialGenotype(conf);
     }
     catch (FileNotFoundException fex) {
       population = Genotype.randomInitialGenotype(conf);
