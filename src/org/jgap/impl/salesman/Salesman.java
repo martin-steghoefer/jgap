@@ -44,7 +44,7 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private int max_evolution = 128;
 
@@ -81,13 +81,12 @@ public abstract class Salesman {
    */
   public abstract Chromosome createSampleChromosome(Object initial_data);
 
-  /** Return the fitness function. The function, returned by this method,
-   * calls {@link org.jgap.impl.salesman.Salesman#distance
-   * distance(Object from, Object to) }
+  /**
+   * Return the fitness function to use.
    *
    * @param initial_data the same object as was passed to findOptimalPath.
    * It can be used to specify the task more precisely if the class is
-   * used for solving multiple tasks.
+   * used for solving multiple tasks
    * @return an applicable fitness function
    *
    * @author Audrius Meskauskas
@@ -96,7 +95,8 @@ public abstract class Salesman {
     return new SalesmanFitnessFunction(this);
   }
 
-  /** Create a configuration. The configuration should not contain
+  /**
+   * Create a configuration. The configuration should not contain
    * operators for odrinary crossover and mutations, as they make
    * chromosoms invalid in this task. The special operators
    * SwappingMutationOperator and GreedyCrossober should be used instead.
@@ -109,8 +109,8 @@ public abstract class Salesman {
    */
   public Configuration createConfiguration(Object initial_data) {
     try {
-      // This is copied from DefaultConfiguration
-      // ----------------------------------------
+      // This is copied from DefaultConfiguration.
+      // -----------------------------------------
       Configuration config = new Configuration();
       BestChromosomesSelector bestChromsSelector =
           new BestChromosomesSelector(1.0d);
