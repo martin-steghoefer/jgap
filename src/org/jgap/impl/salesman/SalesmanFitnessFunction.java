@@ -12,15 +12,17 @@ package org.jgap.impl.salesman;
 import org.jgap.*;
 
 /**
- * The fitness function to solve the Travelling Salesman problem
+ * The fitness function to solve the Travelling Salesman problem. The function
+ * returned by this method calls {@link org.jgap.impl.salesman.Salesman#distance
+ * distance(Object from, Object to) }
  *
  * @author Audrius Meskauskas
  * @since 2.0
  */
-public class SalesmanFitnessFunction extends FitnessFunction {
-
+public class SalesmanFitnessFunction
+    extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public final Salesman salesman;
 
@@ -40,7 +42,6 @@ public class SalesmanFitnessFunction extends FitnessFunction {
    * @since 2.0
    */
   protected double evaluate(Chromosome a_subject) {
-
     double s = 0;
     Gene[] genes = a_subject.getGenes();
     for (int i = 0; i < genes.length - 1; i++) {
@@ -48,7 +49,6 @@ public class SalesmanFitnessFunction extends FitnessFunction {
     }
     // add cost of coming back:
     s += salesman.distance(genes[genes.length - 1], genes[0]);
-
     return Integer.MAX_VALUE / 2 - s;
   }
 }
