@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Container for valid alleles
@@ -145,11 +145,13 @@ public class MapGene
   /**
    * Sets the allele value to be a random value using a defined random number
    * generator. If no valid alleles are defined, any allele is allowed. Then,
-   * a new Integer with random value is set as random value.
+   * a new Integer with random value is set as random value. Override this
+   * method if you want a different behaviour, such as a Double instead of the
+   * Integer type.
    *
-   * @param a_numberGenerator RandomGenerator
+   * @param a_numberGenerator the random generator to use
    *
-   * @author Johnathan Kool
+   * @author Klaus Meffert
    * @since 2.4
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
