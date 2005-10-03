@@ -61,7 +61,6 @@ color="#000080">import</font></b> <font color="#000000">java.util.List;</font>
 
 <br>
 <br>
-<br>
 
 
 <i><font
@@ -124,31 +123,29 @@ color="#808080">     * population.</font></i>
 <i><font color="#808080">     *</font></i>
 <br>
 <i><font
-color="#808080">     * @param a_population The population of chromosomes from the current</font></i>
+color="#808080">     * <u> @param a_population </u>the population of chromosomes from the current</font></i>
 <br>
 <i><font
 color="#808080">     *                     evolution prior to exposure to any genetic operators.</font></i>
 <br>
 <i><font
-color="#808080">     *                     Chromosomes in this array should never be modified.</font></i>
+color="#808080">     *                     Chromosomes in this array should never be
+modified</font></i>
 <br>
 <i><font
-color="#808080">     * @param a_candidateChromosomes The pool of chromosomes that are candidates</font></i>
+color="#808080">     * <u> @param a_candidateChromosomes </u>the pool of chromosomes that are candidates</font></i>
 <br>
 <i><font
-color="#808080">     *                               for the next evolved population. Any</font></i>
+color="#808080">     *                               for the next evolved population. Any
+chromosomes that are modified by this</font></i>
 <br>
 <i><font
-color="#808080">     *                               chromosomes that are modified by this</font></i>
+color="#808080">     *                               genetic operator that should be considered
+for natural selection should be</font></i>
 <br>
 <i><font
-color="#808080">     *                               genetic operator that should be considered</font></i>
-<br>
-<i><font
-color="#808080">     *                               for natural selection should be added to</font></i>
-<br>
-<i><font
-color="#808080">     *                               the candidate chromosomes.</font></i>
+color="#808080">     * </font></i><i><font
+color="#808080">added to the candidate chromosomes</font></i>
 <br>
 <i><font
 color="#808080">     */</font></i>
@@ -185,12 +182,15 @@ color="#808080">// next phase of evolution.</font></i>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <i><font color="#808080">// -----------------------------------------------------------------</font></i>
 <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><font color="#000080">int</font></b>
+len = a_population.length;
+<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b><font
 color="#000080">for</font></b> <font color="#000000">(</font> <b><font color="#000080">int</font></b> <font
 color="#000000">i</font> <font color="#000000">=</font> <font color="#0000FF">0</font><font
-color="#000000">;</font> <font color="#000000">i</font> <font color="#000000">&lt;</font> <font
-color="#000000">a_population.length;</font> <font color="#000000">i++</font> <font
+color="#000000">;</font> <font color="#000000">i</font> <font color="#000000">&lt;</font> 
+len; <font color="#000000">i++</font> <font
 color="#000000">)</font>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -233,8 +233,7 @@ chromosomes. </p>
 <p>Now that we've written our operator, we need to tell JGAP to use it. This just requires
 a single additional call to the Configuration object during your normal setup phase: </p>
 
-<pre class="code"><tt>
-              <font color="#000000">Configuration</font> <font
+<pre class="code"><tt>              <font color="#000000">Configuration</font> <font
 color="#000000">conf</font> <font color="#000000">=</font> <b><font color="#000080">new</font></b> <font
 color="#000000">DefaultConfiguration();</font>
               <font color="#000000">conf.addGeneticOperator(</font> <b><font
