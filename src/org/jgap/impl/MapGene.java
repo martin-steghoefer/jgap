@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Container for valid alleles
@@ -208,6 +208,7 @@ public class MapGene
    * does not support the given string representation.
    *
    * @author Neil Rostan
+   * @author Klaus Meffert
    * @since 2.4
    */
   public void setValueFromPersistentRepresentation(String a_representation)
@@ -285,6 +286,7 @@ public class MapGene
    * is provided for this method.
    *
    * @author Neil Rostan
+   * @author Klaus Meffert
    * @since 2.4
    */
   public String getPersistentRepresentation()
@@ -301,10 +303,11 @@ public class MapGene
       }
       Object key = it.next();
       Object value = m_geneMap.get(key);
-      strbf.append("("+key.toString()+","+value.toString()+")");
+      strbf.append("(" + key.toString() + "," + value.toString() + ")");
       first = false;
     }
-    return m_value.toString() + MapGene.PERSISTENT_FIELD_DELIMITER+strbf.toString();
+    return m_value.toString() + MapGene.PERSISTENT_FIELD_DELIMITER +
+        strbf.toString();
   }
 
   /**
