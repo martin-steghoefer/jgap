@@ -1,14 +1,20 @@
 2.5
 ----------
+* BaseGene: moved IGeneConstraintChecker functionality from
+  CompositeGene/NumberGene and centralized it herewith
 * Fixed bugs in MapGene.
-* Fixed bug in newGene() methods (constraint checker not
-  considered)
-* Renamed private field geneMap to m_geneMap
+* MapGene; Fixed bug in newGene() methods (constraint checker
+  considered)not 
+* MapGene: Renamed private field geneMap to m_geneMap
 * Added new package org.jgap.data.config containing
   configuration-related classes
 * Enhanced Genotype constructor to provide global
   configuration earlier
 * Enhanced error message in Configuration.verifyStateIsValid
+* Made field m_isSelectedForNextGeneration in Chromosome
+  private
+* MinimizeChange-example: added support for changed persistent
+  representation thru evolved code
 * Added several units tests
 * Extended JGAP documentation
 
