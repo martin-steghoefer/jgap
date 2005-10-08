@@ -27,6 +27,8 @@
   private
 * MinimizeChange-example: added support for changed persistent
   representation thru evolved code
+* Introduced new suite AllUtilTests
+* Introduced new class PluginDiscovererTest
 * Added several units tests
 * Extended JGAP documentation
 
