@@ -59,17 +59,20 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
 
   /**
-   * Create an array of the given number of
-   * integer genes. The first gene is always 0, this is
-   * a city where the salesman starts the journey
+   * Create an array of the given number of integer genes. The first gene is
+   * always 0, this is a city where the salesman starts the journey.
+   *
    * @param initial_data Object
    * @return Chromosome
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public Chromosome createSampleChromosome(Object initial_data) {
     Gene[] genes = new Gene[CITIES];
@@ -93,13 +96,16 @@ public class TravellingSalesman
   }
 
   /**
-   * Distance is equal to the difference between city numbers,
-   * except the distance between the last and first cities that
-   * is equal to 1. In this way, we ensure that the optimal
-   * soultion is 0 1 2 3 .. n - easy to check.
+   * Distance is equal to the difference between city numbers, except the
+   * distance between the last and first cities that is equal to 1. In this
+   * way, we ensure that the optimal solution is 0 1 2 3 .. n - easy to check.
+   *
    * @param a_from first gene, representing a city
    * @param a_to second gene, representing a city
    * @return the distance between two cities represented as genes
+
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public double distance(Gene a_from, Gene a_to) {
     IntegerGene a = (IntegerGene) a_from;
@@ -116,10 +122,14 @@ public class TravellingSalesman
   }
 
   /**
-   * Solve a sample task with the number of cities, defined
-   * in a CITIES constant. Print the known optimal way,
-   * sample chromosome and found solution.
+   * Solve a sample task with the number of cities, defined in a CITIES
+   * constant. Print the known optimal way, sample chromosome and found
+   * solution.
+   *
    * @param args not relevant here
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public static void main(String[] args) {
     try {
