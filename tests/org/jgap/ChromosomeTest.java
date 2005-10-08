@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -45,6 +45,25 @@ public class ChromosomeTest
   }
 
   /**
+   * Illegal constructions regarding first parameter
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testConstruct_0_2() {
+    try {
+      new Chromosome(null, 1, new MyConstraintChecker());
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+    catch (InvalidConfigurationException cex) {
+      fail();
+    }
+  }
+
+  /**
    * Illegal constructions regarding second parameter
    *
    * @author Klaus Meffert
@@ -52,7 +71,37 @@ public class ChromosomeTest
   public void testConstruct_1() {
     try {
       new Chromosome(new IntegerGene(), 0);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Illegal constructions regarding second parameter
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testConstruct_1_2() {
+    try {
       new Chromosome(new IntegerGene(), -1);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Illegal constructions regarding second parameter
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testConstruct_1_3() {
+    try {
       new Chromosome(new IntegerGene(), -500);
       fail();
     }
@@ -77,13 +126,42 @@ public class ChromosomeTest
   }
 
   /**
+   * Illegal constructions regarding first and second parameter
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testConstruct_2_2() {
+    try {
+      new Chromosome(null, 0, null);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+    catch (InvalidConfigurationException cex) {
+      fail();
+    }
+  }
+
+  /**
    * Legal construction
+   *
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
-  public void testConstruct_3() {
+  public void testConstruct_3()
+      throws Exception {
     Chromosome chrom = new Chromosome(new IntegerGene(), 1);
     assertEquals(1, chrom.size());
+    chrom = new Chromosome(new IntegerGene(), 1, null);
+    assertEquals(1, chrom.size());
+    assertNull(chrom.getConstraintChecker());
+    IGeneConstraintChecker cc = new MyConstraintChecker();
+    chrom = new Chromosome(new IntegerGene(), 1, cc);
+    assertEquals(1, chrom.size());
+    assertEquals(cc, chrom.getConstraintChecker());
   }
 
   /**
@@ -106,7 +184,7 @@ public class ChromosomeTest
    *
    * @author Klaus Meffert
    */
-  public void testConstruct_51() {
+  public void testConstruct_5_1() {
     try {
       Gene[] genes = new IntegerGene[2];
       genes[0] = new IntegerGene();
@@ -123,7 +201,7 @@ public class ChromosomeTest
    *
    * @author Klaus Meffert
    */
-  public void testConstruct_52() {
+  public void testConstruct_5_2() {
     try {
       Gene[] genes = new IntegerGene[1];
       genes[0] = null;
@@ -131,6 +209,30 @@ public class ChromosomeTest
     }
     catch (IllegalArgumentException iex) {
       ; //this is OK
+    }
+  }
+
+  /**
+   * Illegal constructions regarding a gene type forbidden by the constraint
+   * checker used.
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testConstruct_5_3() {
+    try {
+      Gene[] genes = new Gene[2];
+      genes[0] = new IntegerGene();
+      genes[1] = new DoubleGene();
+      IGeneConstraintChecker cc = new MyConstraintChecker(DoubleGene.class);
+      new Chromosome(genes, cc);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      fail();
+    }
+    catch (InvalidConfigurationException cex) {
+      ;//this is OK
     }
   }
 
@@ -155,7 +257,7 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_71() {
+  public void testConstruct_7_1() {
     try {
       new Chromosome(0);
       fail();
@@ -171,7 +273,7 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_72() {
+  public void testConstruct_7_2() {
     try {
       new Chromosome( -5);
       fail();
@@ -185,7 +287,7 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_73() {
+  public void testConstruct_7_3() {
     Chromosome chrom = new Chromosome(5);
     assertEquals(5, chrom.getGenes().length);
     for (int i = 0; i < 5; i++) {
@@ -1109,6 +1211,54 @@ public class ChromosomeTest
                  chrom.toString());
   }
 
+  /**
+   * Test setter/getter of constraint checker
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testSetConstraintChecker_0() throws Exception {
+    Chromosome c = new Chromosome(2);
+    assertNull(c.getConstraintChecker());
+    IGeneConstraintChecker cc = new MyConstraintChecker();
+    c.setConstraintChecker(cc);
+    assertEquals(cc, c.getConstraintChecker());
+    c.setConstraintChecker(null);
+    assertNull(c.getConstraintChecker());
+  }
+
+  /**
+   * Test setter/getter of constraint checker
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testSetConstraintChecker_1() throws Exception {
+    Gene gene = new IntegerGene();
+    Chromosome c = new Chromosome(gene, 2);
+    assertNull(c.getConstraintChecker());
+    IGeneConstraintChecker cc = new MyConstraintChecker(IntegerGene.class);
+    try {
+      c.setConstraintChecker(cc);
+      fail();
+    } catch (InvalidConfigurationException cex) {
+      ;//this is OK
+    }
+    assertEquals(cc, c.getConstraintChecker());
+    Gene[] genes = new Gene[]{gene};
+    try {
+      c.setGenes(genes);
+      fail();
+    } catch (InvalidConfigurationException cex) {
+      ;//this is OK
+    }
+    c.setConstraintChecker(null);
+    assertNull(c.getConstraintChecker());
+    c.setGenes(genes);
+  }
+
   class MyAppObject
       extends TestFitnessFunction
       implements Cloneable {
@@ -1135,6 +1285,23 @@ public class ChromosomeTest
     public Object clone()
         throws CloneNotSupportedException {
       return new MyAppObject2();
+    }
+  }
+
+  class MyConstraintChecker implements IGeneConstraintChecker {
+    private Class m_forbidden;
+    public MyConstraintChecker () {
+      this(null);
+    }
+    public MyConstraintChecker (Class a_forbiddenClass) {
+      m_forbidden = a_forbiddenClass;
+    }
+
+    public boolean verify(Gene a_gene, Object a_value) {
+      if (m_forbidden == null) {
+        return true;
+      }
+      return !(a_gene.getClass().equals(m_forbidden));
     }
   }
 }
