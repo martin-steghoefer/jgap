@@ -16,6 +16,13 @@
 * Enhanced Genotype constructor to provide global
   configuration earlier
 * Enhanced error message in Configuration.verifyStateIsValid
+* Salesman: renamed private variables to conform with naming
+  conventions
+* SalesmanFitnessFunction: renamed private variables to
+  conform with naming conventions and made public field
+  salesman (now m_salesman) private
+* TravellingSalesman renamed private variables to conform with
+  naming conventions
 * Made field m_isSelectedForNextGeneration in Chromosome
   private
 * MinimizeChange-example: added support for changed persistent
