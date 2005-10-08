@@ -2,6 +2,10 @@
 ----------
 * BaseGene: moved IGeneConstraintChecker functionality from
   CompositeGene/NumberGene and centralized it herewith
+* Chromosome: Added support for a constraint checker
+  (see request 1212244)
+* Chromosome: Added new constructors
+* Chromsome: Enhanced logic in constructor(Gene, int)
 * Fixed bugs in MapGene.
 * MapGene; Fixed bug in newGene() methods (constraint checker
   considered)not 
