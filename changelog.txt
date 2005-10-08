@@ -6,6 +6,7 @@
   (see request 1212244)
 * Chromosome: Added new constructors
 * Chromsome: Enhanced logic in constructor(Gene, int)
+* FixedBinaryGene: fixed hashCode()
 * Fixed bugs in MapGene.
 * MapGene; Fixed bug in newGene() methods (constraint checker
   considered)not 
