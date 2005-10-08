@@ -25,7 +25,7 @@ public class DoubleGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -38,12 +38,6 @@ public class DoubleGene
    * provided by the user, this should be set to Double.MIN_VALUE
    */
   protected double m_lowerBounds;
-
-  /**
-   * Optional helper class for checking if a given allele value to be set
-   * is valid. If not the allele value may not be set for the gene!
-   */
-  private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
    * Constructs a new DoubleGene with default settings. No bounds will
@@ -308,29 +302,6 @@ public class DoubleGene
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
     double newValue = doubleValue() + range;
     setAllele(new Double(newValue));
-  }
-
-  /**
-   * Sets the constraint checker to be used for this gene whenever method
-   * setAllele(Object a_newValue) is called
-   * @param a_constraintChecker the constraint checker to be set
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker) {
-    m_geneAlleleChecker = a_constraintChecker;
-  }
-
-  /**
-   * @return IGeneConstraintChecker the constraint checker to be used whenever
-   * method setAllele(Object a_newValue) is called
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public IGeneConstraintChecker getConstraintChecker() {
-    return m_geneAlleleChecker;
   }
 
   /**
