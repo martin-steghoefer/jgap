@@ -22,18 +22,19 @@ import org.jgap.*;
 public class SalesmanFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public final Salesman salesman;
+  private final Salesman m_salesman;
 
   public SalesmanFitnessFunction(Salesman a_salesman) {
-    salesman = a_salesman;
+    m_salesman = a_salesman;
   }
 
   /**
    * Computes the distance by calling salesman
    * {@link org.jgap.impl.salesman.distance
    * salesman.distance(Gene from, Gene to) }
+   *
    * @param a_subject chromosome representing cities
    * @return distance of the journey thru the cities represented in the
    * given chromosome
@@ -45,10 +46,10 @@ public class SalesmanFitnessFunction
     double s = 0;
     Gene[] genes = a_subject.getGenes();
     for (int i = 0; i < genes.length - 1; i++) {
-      s += salesman.distance(genes[i], genes[i + 1]);
+      s += m_salesman.distance(genes[i], genes[i + 1]);
     }
     // add cost of coming back:
-    s += salesman.distance(genes[genes.length - 1], genes[0]);
+    s += m_salesman.distance(genes[genes.length - 1], genes[0]);
     return Integer.MAX_VALUE / 2 - s;
   }
 }
