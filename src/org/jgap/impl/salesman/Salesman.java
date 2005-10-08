@@ -44,22 +44,25 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
-  private int max_evolution = 128;
+  private int m_maxEvolution = 128;
 
-  private int population_size = 512;
+  private int m_populationSize = 512;
 
-  private int m_acceptable_cost = -1;
-
+  private int m_acceptableCost = -1;
 
   /**
    * Override this method to compute the distance between "cities",
    * indicated by these two given genes. The algorithm is not dependent
    * on the used type of genes.
+   *
    * @param a_from first gene, representing a city
    * @param a_to second gene, representing a city
    * @return the distance between two cities represented as genes
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public abstract double distance(Gene a_from, Gene a_to);
 
@@ -78,6 +81,7 @@ public abstract class Salesman {
    * @return a sample chromosome
    *
    * @author Audrius Meskauskas
+   * @since 2.0
    */
   public abstract Chromosome createSampleChromosome(Object initial_data);
 
@@ -90,6 +94,7 @@ public abstract class Salesman {
    * @return an applicable fitness function
    *
    * @author Audrius Meskauskas
+   * @since 2.0
    */
   public FitnessFunction createFitnessFunction(Object initial_data) {
     return new SalesmanFitnessFunction(this);
@@ -100,12 +105,14 @@ public abstract class Salesman {
    * operators for odrinary crossover and mutations, as they make
    * chromosoms invalid in this task. The special operators
    * SwappingMutationOperator and GreedyCrossober should be used instead.
+   *
    * @param initial_data the same object as was passed to findOptimalPath.
    * It can be used to specify the task more precisely if the class is
    * used for solving multiple tasks
    * @return created configuration
    *
    * @author Audrius Meskauskas
+   * @since 2.0
    */
   public Configuration createConfiguration(Object initial_data) {
     try {
@@ -122,7 +129,7 @@ public abstract class Salesman {
       config.setFitnessEvaluator(new DefaultFitnessEvaluator());
       config.setChromosomePool(new ChromosomePool());
       // These are different:
-      // -----------------------------------------
+      // --------------------
       config.addGeneticOperator(new GreedyCrossover());
       config.addGeneticOperator(new SwappingMutationOperator(20));
       return config;
@@ -139,46 +146,60 @@ public abstract class Salesman {
    * The solution process breaks after the total path length drops below this
    * limit. The default value (-1) will never be achieved, and evolution stops
    * after getMaxEvolution() iterations.
+   *
    * @return satisfying cost allowed to conditionally stop before an optimal
    * solution has been found.
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public int getAcceptableCost() {
-    return m_acceptable_cost;
+    return m_acceptableCost;
   }
 
-  public void setAcceptableCost(int an_AcceptableCost) {
-    this.m_acceptable_cost = an_AcceptableCost;
+  public void setAcceptableCost(int an_acceptableCost) {
+    m_acceptableCost = an_acceptableCost;
   }
 
   /**
-   * Get the maximal number of iterations for population to evolve.
-   * @return int
+   * @return maximal number of iterations for population to evolve.
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
   public int getMaxEvolution() {
-    return max_evolution;
+    return m_maxEvolution;
   }
 
   /** Set the maximal number of iterations for population to evolve
    * (default 512).
-   * @param a_max_evolution sic
+   * @param a_maxEvolution sic
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
    */
-  public void setMaxEvolution(int a_max_evolution) {
-    this.max_evolution = a_max_evolution;
+  public void setMaxEvolution(int a_maxEvolution) {
+    m_maxEvolution = a_maxEvolution;
   }
 
   /**
    * @return population size for this solution
+   *
+   * @since 2.0
    */
   public int getPopulationSize() {
-    return population_size;
+    return m_populationSize;
   }
 
   /**
    * Set an population size for this solution (default 512)
-   * @param a_population_size sic
+   *
+   * @param a_populationSize sic
+   *
+   * @since 2.0
    */
-  public void setPopulationSize(int a_population_size) {
-    this.population_size = a_population_size;
+  public void setPopulationSize(int a_populationSize) {
+    m_populationSize = a_populationSize;
   }
 
   /**
@@ -194,6 +215,7 @@ public abstract class Salesman {
    * @return chromosome representing the optimal path between cities
    *
    * @author Audrius Meskauskas
+   * @since 2.0
    */
   public Chromosome findOptimalPath(Object a_initial_data)
       throws Exception {
@@ -214,7 +236,7 @@ public abstract class Salesman {
     // the population (which could be seen as bad). We'll just set
     // the population size to 500 here.
     // ------------------------------------------------------------
-    Genotype.getConfiguration().setPopulationSize(population_size);
+    Genotype.getConfiguration().setPopulationSize(getPopulationSize());
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
 
@@ -240,7 +262,7 @@ public abstract class Salesman {
     // is going to be, we just evolve the max number of times.
     // ---------------------------------------------------------------
     Evolution:
-        for (int i = 0; i < max_evolution; i++) {
+        for (int i = 0; i < getMaxEvolution(); i++) {
       population.evolve();
       best = population.getFittestChromosome();
       if (best.getFitnessValue() >= getAcceptableCost()) {
@@ -248,7 +270,7 @@ public abstract class Salesman {
       }
     }
     // Return the best solution we found.
-    // -----------------------------------
+    // ----------------------------------
     return best;
   }
 
@@ -275,7 +297,10 @@ public abstract class Salesman {
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
    * @param a_offset start offset for chromosome
+   *
+   * @since 2.0
    */
   public void setStartOffset(int a_offset) {
     m_startOffset = a_offset;
@@ -286,7 +311,10 @@ public abstract class Salesman {
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
    * @return start offset for chromosome
+   *
+   * @since 2.0
    */
   public int getStartOffset() {
     return m_startOffset;
