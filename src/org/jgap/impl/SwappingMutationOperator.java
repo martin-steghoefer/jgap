@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private int m_startOffset = 1;
 
@@ -97,27 +97,33 @@ public class SwappingMutationOperator
    * Operate on the given chromosome with the given mutation rate.
    * @param a_x chromosome to operate
    * @param a_rate mutation rate
+   * @param a_generator random generator to use (must not be null)
    * @return mutated chromosome of null if no mutation has occured.
    *
    * @author Audrius Meskauskas
    * @since 2.0
    */
   protected Chromosome operate(Chromosome a_x, int a_rate,
-                               RandomGenerator generator) {
+                               RandomGenerator a_generator) {
     Chromosome chromosome = null;
     // ----------------------------------------
     for (int j = m_startOffset; j < a_x.size(); j++) {
       // Ensure probability of 1/currentRate for applying mutation.
       // ----------------------------------------------------------
-      if (generator.nextInt(a_rate) == 0) {
+      if (a_generator.nextInt(a_rate) == 0) {
         if (chromosome == null)
           chromosome = (Chromosome) a_x.clone();
         Gene[] genes = chromosome.getGenes();
-        Gene[] mutated = operate(generator, j, genes);
+        Gene[] mutated = operate(a_generator, j, genes);
         // setGenes is not required for this operator, but it may
         // be needed for the derived operators.
         // ------------------------------------------------------
-        chromosome.setGenes(mutated);
+        try {
+          chromosome.setGenes(mutated);
+        }
+        catch (InvalidConfigurationException cex) {
+          throw new Error("Gene type not allowed by constraint checker", cex);
+        }
       }
     }
     return chromosome;
@@ -154,6 +160,8 @@ public class SwappingMutationOperator
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
+   * @param a_offset the offset to set
    *
    * @author Audrius Meskauskas
    * @since 2.0

@@ -23,7 +23,7 @@ import org.jgap.*;
 public class InversionOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Constructs a new instance of this operator
@@ -67,7 +67,12 @@ public class InversionOperator
     for (int j = 0; j < locus; j++) {
       invertedGenes[index++] = firstGenes[j];
     }
-    firstMate.setGenes(invertedGenes);
+    try {
+      firstMate.setGenes(invertedGenes);
+    }
+    catch (InvalidConfigurationException cex) {
+      throw new Error("Gene type not allowed by constraint checker", cex);
+    }
     // Add the modified chromosome to the candidate pool so that it'll be
     // considered for natural selection during the next phase of evolution.
     // --------------------------------------------------------------------
