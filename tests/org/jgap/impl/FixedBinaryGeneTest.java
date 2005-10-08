@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -962,7 +962,45 @@ public class FixedBinaryGeneTest
     gene.hashCode();
     gene.setBit(0, 5, true);
     gene.hashCode();
-    /**@todo implement checks*/
+    /**@todo implement checks for uniqueness*/
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testHashCode_1() {
+    Gene gene1 = new FixedBinaryGene(2);
+    Gene gene2 = new FixedBinaryGene(2);
+    int[] v1 = (int[])gene1.getAllele();
+    int[] v2 = (int[])gene1.getAllele();
+    int h1 = v1.hashCode();
+    int h2 = v2.hashCode();
+    assertEquals(gene1.hashCode(), gene2.hashCode());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testHashCode_2() {
+    Gene gene1 = new FixedBinaryGene(3);
+    gene1.setAllele(new int[]{0,1,0});
+    Gene gene2 = new FixedBinaryGene(3);
+    gene2.setAllele(new int[]{0,1,0});
+    assertEquals(gene1.hashCode(), gene2.hashCode());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testHashCode_3() {
+    Gene gene1 = new FixedBinaryGene(2);
+    gene1.setAllele(new int[]{1,1});
+    Gene gene2 = new FixedBinaryGene(2);
+    gene1.setAllele(new int[]{1,0});
+    assertFalse(gene1.hashCode() == gene2.hashCode());
   }
 
   /**
