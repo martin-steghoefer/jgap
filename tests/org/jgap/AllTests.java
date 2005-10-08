@@ -16,28 +16,28 @@ import org.jgap.eval.*;
 import org.jgap.event.*;
 import org.jgap.ext.*;
 import org.jgap.gp.*;
+import org.jgap.gui.*;
 import org.jgap.impl.*;
 import org.jgap.supergenes.*;
+import org.jgap.util.*;
 import org.jgap.xml.*;
-import org.jgap.gui.*;
 
 import junit.framework.*;
 
 /**
- * Test suite for all test cases.
- * Start this class to execute all Tests.
- * Required are junit.jar and junit-addons_1.4.jar
- * In here, only test suites will be coped with (see method suite()).
- * Don't add any test cases to this class.
+ * Test suite for all test cases.<p>
+ * Start this class to execute all Tests.<p>
+ * Required are junit.jar and junit-addons_1.4.jar<p>
+ * In here, only test suites will be coped with (see method suite()).<p>
+ * Don't add any test cases to this class!
  *
  * @author Klaus Meffert
  * @since 1.1
  */
 public class AllTests
     extends TestSuite {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
@@ -49,10 +49,11 @@ public class AllTests
     suite.addTest(AllEventTests.suite());
     suite.addTest(AllExtTests.suite());
     suite.addTest(AllGPTests.suite());
-    suite.addTest(AllImplTests.suite());
-    suite.addTest(AllXMLTests.suite());
-    suite.addTest(AllSupergenesTests.suite());
     suite.addTest(AllGUITests.suite());
+    suite.addTest(AllImplTests.suite());
+    suite.addTest(AllSupergenesTests.suite());
+    suite.addTest(AllUtilTests.suite());
+    suite.addTest(AllXMLTests.suite());
     return suite;
   }
 }
