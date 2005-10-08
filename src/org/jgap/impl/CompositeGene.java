@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * This field separates gene class name from
@@ -666,7 +666,7 @@ public class CompositeGene
    * @return this Gene's hash code
    *
    * @author Klaus Meffert
-   * @since ":"
+   * @since 2.2
    */
   public int hashCode() {
     int hashCode = 1;
