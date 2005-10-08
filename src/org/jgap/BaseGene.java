@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -286,4 +286,38 @@ public abstract class BaseGene
       }
     }
   }
+
+  /**
+   * Optional helper class for checking if a given allele value to be set
+   * for a given gene is valid. If not, the allele value may not be set for the
+   * gene or the gene type (e.g. IntegerGene) is not allowed in general!
+   *
+   * @author Klaus Meffert
+   * @since 2.5 (moved from CompositeGene, where it was since 2.0)
+   */
+  private IGeneConstraintChecker m_geneAlleleChecker;
+
+  /**
+   * Sets the constraint checker to be used for this gene whenever method
+   * setAllele(Object) is called.
+   * @param a_constraintChecker the constraint checker to be set
+   *
+   * @author Klaus Meffert
+   * @since 2.5 (moved from CompositeGene, where it was since 2.0)
+   */
+  public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker) {
+    m_geneAlleleChecker = a_constraintChecker;
+  }
+
+  /**
+   * @return IGeneConstraintChecker the constraint checker to be used whenever
+   * method setAllele(Object) is called.
+   *
+   * @author Klaus Meffert
+   * @since 2.5 (moved from CompositeGene, where it was since 2.0)
+   */
+  public IGeneConstraintChecker getConstraintChecker() {
+    return m_geneAlleleChecker;
+  }
+
 }
