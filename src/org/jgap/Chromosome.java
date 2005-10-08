@@ -62,9 +62,20 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   public static final double DELTA = 0.000000001d;
+
+  /**
+   * Constants for toString()
+   */
+  public final static String S_FITNESS_VALUE = "Fitness value";
+
+  public final static String S_ALLELES = "Alleles";
+
+  public final static String S_APPLICATION_DATA = "Application data";
+
+  public final static String S_SIZE = "Size";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -83,7 +94,7 @@ public class Chromosome
    * Keeps track of whether or not this Chromosome has been selected by
    * the natural selector to move on to the next generation.
    */
-  protected boolean m_isSelectedForNextGeneration = false;
+  private boolean m_isSelectedForNextGeneration;
 
   /**
    * Stores the fitness value of this Chromosome as determined by the
@@ -105,15 +116,38 @@ public class Chromosome
   private boolean m_compareAppData;
 
   /**
-   * Constants for toString()
+   * Optional helper class for checking if a given allele value to be set
+   * for a given gene is valid. If not, the allele value may not be set for the
+   * gene or the gene type (e.g. IntegerGene) is not allowed in general!
+   *
+   * @author Klaus Meffert
+   * @since 2.5
    */
-  public final static String S_FITNESS_VALUE = "Fitness value";
+  private IGeneConstraintChecker m_geneAlleleChecker;
 
-  public final static String S_ALLELES = "Alleles";
+  /**
+   * Default constructor
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public Chromosome() {
+  }
 
-  public final static String S_APPLICATION_DATA = "Application data";
-
-  public final static String S_SIZE = "Size";
+  /**
+   * Constructor for specifying the number of genes
+   * @param a_size number of genes the chromosome contains of
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public Chromosome(int a_desiredSize) {
+    if (a_desiredSize <= 0) {
+      throw new IllegalArgumentException(
+          "Chromosome size must be greater than zero");
+    }
+    m_genes = new Gene[a_desiredSize];
+  }
 
   /**
    * Constructs a Chromosome of the given size separate from any specific
@@ -128,24 +162,33 @@ public class Chromosome
    * @param a_desiredSize the desired size (number of genes) of this Chromosome
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public Chromosome(Gene a_sampleGene, int a_desiredSize) {
-    // Do some sanity checking to make sure the parameters we were
+    this(a_desiredSize);
+    initFromGene(a_sampleGene);
+  }
+
+  public Chromosome(Gene a_sampleGene, int a_desiredSize,
+                    IGeneConstraintChecker a_constraintChecker)
+      throws InvalidConfigurationException {
+   this(a_desiredSize);
+   initFromGene(a_sampleGene);
+   setConstraintChecker(a_constraintChecker);
+  }
+
+  protected void initFromGene(Gene a_sampleGene) {
+    // Do sanity checking to make sure the parameters we were
     // given are valid.
-    // -----------------------------------------------------------
+    // ------------------------------------------------------
     if (a_sampleGene == null) {
       throw new IllegalArgumentException(
           "Sample Gene cannot be null.");
     }
-    if (a_desiredSize <= 0) {
-      throw new IllegalArgumentException(
-          "Chromosome size must be positive.");
-    }
-    // Create the array of Genes and populate it with new Gene
-    // instances created from the sample gene.
-    // -------------------------------------------------------
-    m_genes = new Gene[a_desiredSize];
+    // Populate the array of genes it with new Gene instances
+    // created from the sample gene.
+    // ------------------------------------------------------
     for (int i = 0; i < m_genes.length; i++) {
       m_genes[i] = a_sampleGene.newGene();
     }
@@ -162,6 +205,39 @@ public class Chromosome
    * @since 1.0
    */
   public Chromosome(Gene[] a_initialGenes) {
+    initWithGenes(a_initialGenes);
+  }
+
+  /**
+   * Constructs a Chromosome separate from any specific Configuration. This
+   * can be useful for constructing sample chromosomes that are to be used
+   * to setup a Configuration object. Additionally, a constraint checker can be
+   * specified. It is used right here to verify the validity of the gene types
+   * supplied.
+   *
+   * @param a_initialGenes the initial genes of this Chromosome
+   * @param a_constraintChecker constraint checker to use
+   * @throws InvalidConfigurationException in case the constraint checker
+   * reports a configuration error
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public Chromosome(Gene[] a_initialGenes,
+                    IGeneConstraintChecker a_constraintChecker)
+      throws InvalidConfigurationException {
+    initWithGenes(a_initialGenes);
+    setConstraintChecker(a_constraintChecker);
+  }
+
+  /**
+   * Helper: called by constructors only
+   * @param a_initialGenes the initial genes of this Chromosome
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  protected void initWithGenes(Gene[] a_initialGenes) {
     // Sanity checks: make sure the genes array isn't null and
     // that none of the genes contained within it are null.
     // -------------------------------------------------------
@@ -178,29 +254,6 @@ public class Chromosome
       }
     }
     m_genes = a_initialGenes;
-  }
-
-  /**
-   * Constructor for specifying the number of genes
-   * @param a_size number of genes the chromosome contains of
-   *
-   * @author Klaus Meffert
-   * @since 2.2
-   */
-  public Chromosome(int a_size) {
-    if (a_size <= 0) {
-      throw new IllegalArgumentException("Size must be greater than zero");
-    }
-    m_genes = new Gene[a_size];
-  }
-
-  /**
-   * Default constructor
-   *
-   * @author Klaus Meffert
-   * @since 2.4
-   */
-  public Chromosome() {
   }
 
   /**
@@ -764,18 +817,22 @@ public class Chromosome
   }
 
   /**
-   * Sets the genes for the chromosome
+   * Sets the genes for the chromosome.
    * @param a_genes the genes to set for the chromosome
+   *
+   * @throws InvalidConfigurationException in case constraint checker is
+   * provided
    *
    * @author Klaus Meffert
    */
-  public void setGenes(Gene[] a_genes) {
+  public void setGenes(Gene[] a_genes) throws InvalidConfigurationException{
 //    for (int i=0;i<a_genes.length;i++) {
 //      if (a_genes[i]==null) {
 //        throw new RuntimeException("Gene may not be null!");
 //      }
 //    }
     m_genes = a_genes;
+    verify();
   }
 
   /**
@@ -802,4 +859,58 @@ public class Chromosome
     return m_compareAppData;
   }
 
+  /**
+   * Sets the constraint checker to be used for this gene whenever method
+   * setAllele(Object) is called.
+   *
+   * @param a_constraintChecker the constraint checker to be set
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker)
+      throws InvalidConfigurationException {
+    m_geneAlleleChecker = a_constraintChecker;
+    verify();
+  }
+
+  /**
+   * @return IGeneConstraintChecker the constraint checker to be used whenever
+   * method setAllele(Object) is called.
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public IGeneConstraintChecker getConstraintChecker() {
+    return m_geneAlleleChecker;
+  }
+
+  /**
+   * Verifies the state of the chromosome. Especially takes care of the
+   * constraint checker set (if any).
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  protected void verify()
+      throws InvalidConfigurationException {
+    if (getConstraintChecker() != null) {
+      int len = getGenes().length;
+      for (int i = 0; i < len; i++) {
+        Gene gene = getGene(i);
+        if (!getConstraintChecker().verify(gene, null)) {
+          throw new InvalidConfigurationException("The gene type "
+                                                  + gene.getClass().getName()
+                                                  +
+                                                  " is not allowed to be used in"
+                                                  +
+                                                  " the chromosome due to the"
+                                                  + " constraint checker used.");
+        }
+      }
+    }
+  }
 }
