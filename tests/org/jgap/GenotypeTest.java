@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgap.impl.*;
+import org.jgap.util.*;
 
 import junit.framework.*;
 
@@ -25,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
