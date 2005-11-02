@@ -30,7 +30,8 @@
 * Introduced new suite AllUtilTests
 * Introduced new class PluginDiscovererTest
 * Added several units tests
-* Extended JGAP documentation
+* Extended JGAP documentation and added package information
+  files (package.html)
 
 2.4
 ----------
