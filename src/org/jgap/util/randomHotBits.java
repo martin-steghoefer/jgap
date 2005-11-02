@@ -3,9 +3,6 @@ package org.jgap.util;
 import java.net.*;
 import java.io.*;
 
-import randomX.*;
-
-
 /**
     Implementation of a <b>randomX</b>-compliant class which obtains
     genuine random data from <a href="http://www.fourmilab.ch/">John
