@@ -24,7 +24,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -714,6 +714,27 @@ public class IntegerGeneTest
         gene.intValue() > 6) {
       fail();
     }
+  }
+
+  /**
+   * Exposing bug #1357474
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testSetToRandomValue_5()
+      throws Exception {
+     Gene gene = new IntegerGene( 1, 3);
+     gene.setAllele(new Integer(4));
+
+     Configuration conf = new DefaultConfiguration();
+     Genotype.setConfiguration(conf);
+
+     gene.setToRandomValue(new RandomGeneratorForTest(0.95d));
+     assertEquals(new Integer(3), gene.getAllele());
+     gene.setToRandomValue(new RandomGeneratorForTest(0.05d));
+     assertEquals(new Integer(1), gene.getAllele());
   }
 
   /**

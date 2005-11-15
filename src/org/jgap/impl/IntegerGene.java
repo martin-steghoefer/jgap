@@ -25,7 +25,7 @@ public class IntegerGene
     extends NumberGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.24 $";
+  private static final String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -239,12 +239,14 @@ public class IntegerGene
    * random number generator of their choice
    *
    * @author Neil Rostan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    setAllele(new Integer( (int) ( (m_upperBounds - m_lowerBounds) *
-                                  a_numberGenerator.nextDouble() +
-                                  m_lowerBounds)));
+    double randomValue = (m_upperBounds - m_lowerBounds) *
+        a_numberGenerator.nextDouble() +
+        m_lowerBounds;
+    setAllele(new Integer( (int) Math.round(randomValue)));
   }
 
   /**
