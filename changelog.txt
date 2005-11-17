@@ -4,6 +4,7 @@
   CompositeGene/NumberGene and centralized it herewith
 * Chromosome: Added support for a constraint checker
   (see request 1212244)
+* IntegerGene: Fixed bug with setToRandomValue
 * Chromosome: Added new constructors
 * Chromsome: Enhanced logic in constructor(Gene, int)
 * FixedBinaryGene: fixed hashCode()
