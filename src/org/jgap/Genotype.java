@@ -29,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   /**
    * The current active Configuration instance.
@@ -203,7 +203,7 @@ public class Genotype
    * fitness values).
    *
    * @param a_numberOfChromosomes the number of chromosomes desired
-   * @return the List of Chromosomes with the highest fitness values, or null
+   * @return the list of Chromosomes with the highest fitness values, or null
    * if there are no chromosomes in this Genotype
    *
    * @author Charles Kevin Hill
@@ -227,26 +227,39 @@ public class Genotype
    */
   public synchronized void evolve() {
     verifyConfigurationAvailable();
-    //determine the fittest chromosome in the population
-    Chromosome fittest = null;
-    if (getConfiguration().isPreserveFittestIndividual()) {
-      fittest = getPopulation().determineFittestChromosome();
+    // Adjust population size to configured size (if wanted).
+    // ------------------------------------------------------
+    if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
+      keepPopSizeConstant(getPopulation(),
+                          m_activeConfiguration.getPopulationSize());
     }
+
     // Apply certain NaturalSelectors before GeneticOperators will be applied.
     // -----------------------------------------------------------------------
     applyNaturalSelectors(true);
+
     // Execute all of the Genetic Operators.
     // -------------------------------------
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
+
     while (operatorIterator.hasNext()) {
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
       applyGeneticOperator(operator, getPopulation(),
                            getPopulation().getChromosomes());
     }
+    // Reset fitness value of genetically operated Chromosomes.
+    // --------------------------------------------------------
+    int originalPopSize = getPopulation().size();
+    int size = getPopulation().size();
+    for (int i = originalPopSize; i < size; i++) {
+      Chromosome chrom = getPopulation().getChromosome(i);
+      chrom.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+    }
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     applyNaturalSelectors(false);
+
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction =
@@ -254,14 +267,16 @@ public class Genotype
     if (bulkFunction != null) {
       bulkFunction.evaluate(getPopulation());
     }
-    int sizeWanted = m_activeConfiguration.getPopulationSize();
-    int popSize;
-    // Fill up population randomly if size dropped below 10% of original size.
-    // -----------------------------------------------------------------------
+    // Fill up population randomly if size dropped below specified percentage
+    // of original size.
+    // ----------------------------------------------------------------------
     if (m_activeConfiguration.getMinimumPopSizePercent() > 0) {
+      int sizeWanted = m_activeConfiguration.getPopulationSize();
+      int popSize;
+
       int minSize = (int) (sizeWanted *
-                           m_activeConfiguration.getMinimumPopSizePercent() /
-                           100);
+                           m_activeConfiguration.getMinimumPopSizePercent()
+                           / 100);
       popSize = getPopulation().size();
       if (popSize < minSize) {
         Chromosome newChrom;
@@ -276,25 +291,20 @@ public class Genotype
         }
       }
     }
+
     if (getConfiguration().isPreserveFittestIndividual()) {
+      // Determine the fittest chromosome in the population.
+      // ---------------------------------------------------
+      Chromosome fittest = null;
+      fittest = getPopulation().determineFittestChromosome();
+
       if (!getPopulation().contains(fittest)) {
         // Re-add fittest chromosome to current population.
         // ------------------------------------------------
         getPopulation().addChromosome(fittest);
       }
     }
-    // Adjust population size to configured size (if wanted).
-    // ------------------------------------------------------
-    if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
-      popSize = getPopulation().size();
-      if (popSize > sizeWanted) {
-        // See request  1213752.
-        // ---------------------
-        while (popSize > sizeWanted) {
-          getPopulation().removeChromosome(--popSize);
-        }
-      }
-    }
+
     // Increase number of generation.
     // ------------------------------
     m_activeConfiguration.incrementGenerationNr();
@@ -318,6 +328,11 @@ public class Genotype
   public void evolve(int a_numberOfEvolutions) {
     for (int i = 0; i < a_numberOfEvolutions; i++) {
       evolve();
+    }
+
+    if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
+      keepPopSizeConstant(getPopulation(),
+                          m_activeConfiguration.getPopulationSize());
     }
   }
 
@@ -426,15 +441,23 @@ public class Genotype
       // Use user-provided randomized initialization.
       // --------------------------------------------
       for (int i = 0; i < populationSize; i++) {
+        Object chrom = null;
         try {
-          Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome",
+          // TODO fix, because method Chromosome.randomInitialChromosome is static!
+          chrom = a_chromosome.newInstance();
+          Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome2",
               new Class[] {});
-          m.invoke(new Object[] {}
+          chrom = m.invoke(chrom
                    , new Object[] {});
         }
+        catch (InstantiationException oex) {
+          throw new InvalidConfigurationException("InstantiationException: " +
+                                                  oex.getMessage());
+        }
         catch (NoSuchMethodException nom) {
-          throw new InvalidConfigurationException("NoSuchMethodException: " +
-                                                  nom.getMessage());
+          chrom = Chromosome.randomInitialChromosome();
+//          throw new InvalidConfigurationException("NoSuchMethodException: " +
+//                                                  nom.getMessage());
         }
         catch (IllegalAccessException iex) {
           throw new InvalidConfigurationException("IllegalAccessException: " +
@@ -444,6 +467,7 @@ public class Genotype
           throw new InvalidConfigurationException("InvocationTargetException: " +
                                                   ite.getMessage());
         }
+        pop.addChromosome((Chromosome)chrom);
       }
     }
     return new Genotype(a_activeConfiguration, pop);
@@ -627,6 +651,7 @@ public class Genotype
    * population and asks him to store the result in the list of chromosomes.
    * Override this method if you want to ensure that a_chromosomes is not
    * part of a_population resp. if you want to use a different list.
+   *
    * @param a_operator the GeneticOperator to call
    * @param a_population the Population to use
    * @param a_chromosomes the List of Chromosome objects to return
@@ -638,5 +663,25 @@ public class Genotype
                                       Population a_population,
                                       List a_chromosomes) {
     a_operator.operate(a_population, a_chromosomes);
+  }
+
+  /**
+   * Cares that the population size does not exceed the given maximum size
+   * @param a_pop the Population to keep constant in size
+   * @param a_maxSize the maximum size allowed for the Population
+   *
+   * @auhtor Klaus Meffert
+   * @since 2.5
+   */
+  protected void keepPopSizeConstant(Population a_pop, int a_maxSize) {
+
+    int popSize = a_pop.size();
+    if (popSize > a_maxSize) {
+      // See request  1213752.
+      // ---------------------
+      while (popSize > a_maxSize) {
+        a_pop.removeChromosome(--popSize);
+      }
+    }
   }
 }
