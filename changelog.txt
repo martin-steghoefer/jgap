@@ -1,6 +1,7 @@
 2.5
 ----------
 * Fixed bug (concerning fitness value calculation)
+* Genotype: optimized method evolve()
 * BaseGene: moved IGeneConstraintChecker functionality from
   CompositeGene/NumberGene and centralized it herewith
 * Chromosome: Added support for a constraint checker
