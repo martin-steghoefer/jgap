@@ -29,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   /**
    * The current active Configuration instance.
@@ -455,9 +455,8 @@ public class Genotype
                                                   oex.getMessage());
         }
         catch (NoSuchMethodException nom) {
-          chrom = Chromosome.randomInitialChromosome();
-//          throw new InvalidConfigurationException("NoSuchMethodException: " +
-//                                                  nom.getMessage());
+          throw new InvalidConfigurationException("NoSuchMethodException: " +
+                                                  nom.getMessage());
         }
         catch (IllegalAccessException iex) {
           throw new InvalidConfigurationException("IllegalAccessException: " +
