@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private int m_startOffset = 1;
 
@@ -132,12 +132,12 @@ public class SwappingMutationOperator
   /**
    * Operate on the given array of genes. This method is only called
    * when it is already clear that the mutation must occur under the given
-   * mutation rate.
+   * mutation rate
    * @param a_generator a random number generator that may be needed to
-   * perform a mutation.
-   * @param a_target_gene an index of gene in the chromosome that will mutate.
-   * @param a_genes the array of all genes in the chromosome.
-   * @return the mutated gene array.
+   * perform a mutation
+   * @param a_target_gene an index of gene in the chromosome that will mutate
+   * @param a_genes the array of all genes in the chromosome
+   * @return the mutated gene array
    *
    * @author Audrius Meskauskas
    * @since 2.0
@@ -146,7 +146,7 @@ public class SwappingMutationOperator
                            int a_target_gene, Gene[] a_genes) {
     // swap this gene with the other one now:
     //  mutateGene(genes[j], generator);
-    // ------------------------------------
+    // -------------------------------------
     int other = m_startOffset +
         a_generator.nextInt(a_genes.length - m_startOffset);
     Gene t = a_genes[a_target_gene];
@@ -175,6 +175,7 @@ public class SwappingMutationOperator
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
    * @return the start offset
    *
    * @author Audrius Meskauskas

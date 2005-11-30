@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -110,7 +110,7 @@ public class MutationOperator
     // Determine the mutation rate. If dynamic rate is enabled, then
     // calculate it using the IUniversalRateCalculator instance.
     // Otherwise, go with the mutation rate set upon construction.
-    // --------------------------------------------------------------
+    // -------------------------------------------------------------
     boolean mutate = false;
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     // It would be inefficient to create copies of each Chromosome just
@@ -127,12 +127,14 @@ public class MutationOperator
       for (int j = 0; j < genes.length; j++) {
         if (m_mutationRateCalc != null) {
           // If it's a dynamic mutation rate then let the calculator decide
-          // whether the current gene should be mutated
+          // whether the current gene should be mutated.
+          // --------------------------------------------------------------
           mutate = m_mutationRateCalc.toBePermutated();
         }
         else {
           // Non-dynamic, so just mutate based on the the current rate.
-          // In fact we use a rate of 1/m_mutationRate
+          // In fact we use a rate of 1/m_mutationRate.
+          // ----------------------------------------------------------
           mutate = (generator.nextInt(m_mutationRate) == 0);
         }
         if (mutate) {
@@ -187,8 +189,8 @@ public class MutationOperator
       // Then map this value to range -1 and 1 (-1 included, 1 not).
       // -------------------------------------------------------------
       double percentage = -1 + a_generator.nextDouble() * 2;
-      // Mutate atomic element by calculated percentage
-      // ----------------------------------------------
+      // Mutate atomic element by calculated percentage.
+      // -----------------------------------------------
       a_gene.applyMutation(k, percentage);
     }
   }
@@ -205,7 +207,7 @@ public class MutationOperator
 
   /**
    * Sets the MutationRateCalculator to be used for determining the strength of
-   * mutation
+   * mutation.
    * @param a_mutationRateCalc MutationRateCalculator
    *
    * @author Klaus Meffert
@@ -217,46 +219,48 @@ public class MutationOperator
       m_mutationRate = 0;
     }
   }
-  
+
   /**
    * Get the ConfigurationHandler for this class.
-   * 
+   *
    * @author Siddhartha Azad
    * @since 2.4
    * */
-  public ConfigurationHandler getConfigurationHandler() throws ConfigException {
-  	MutationOperatorConHandler conHandler = new MutationOperatorConHandler();
-  	conHandler.setConfigurable(this);
-  	return conHandler;
+  public ConfigurationHandler getConfigurationHandler()
+      throws ConfigException {
+    MutationOperatorConHandler conHandler = new MutationOperatorConHandler();
+    conHandler.setConfigurable(this);
+    return conHandler;
   }
-  
+
   /**
    * Pass the name and value of a property to be set.
    * @param name The name of the property.
    * @param value The value of the property.
-   * 
+   *
    * @author Siddhartha Azad.
    * @since 2.4
    * */
-  public void setConfigProperty(String name, String value) throws ConfigException,
-  	InvalidConfigurationException   {
-  	if(name.equals("m_mutationRate")) {
-  		m_mutationRate = Integer.parseInt(value);
-  	}
-  	else
-  		System.out.println("MutationOperator:Unknown property "+name);
+  public void setConfigProperty(String name, String value)
+      throws ConfigException, InvalidConfigurationException {
+    if (name.equals("m_mutationRate")) {
+      m_mutationRate = Integer.parseInt(value);
+    }
+    else {
+      System.out.println("MutationOperator:Unknown property " + name);
+    }
   }
-  
+
   /**
    * Pass the name and values of a property to be set.
    * @param name The name of the property.
    * @param values The different values of the property.
-   * 
+   *
    * @author Siddhartha Azad.
    * @since 2.4
    * */
-  public void setConfigMultiProperty(String name, ArrayList values) throws 
-  	ConfigException, InvalidConfigurationException {
-  	// no multi-properties defined for a MutationOperator yet
+  public void setConfigMultiProperty(String name, ArrayList values)
+      throws ConfigException, InvalidConfigurationException {
+    // no multi-properties defined for a MutationOperator yet
   }
 }
