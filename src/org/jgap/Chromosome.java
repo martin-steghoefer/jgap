@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -300,6 +300,9 @@ public class Chromosome
                                       clone());
             }
           }
+          // Reset fitness value
+          // -------------------
+          copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
           return copy;
         }
         catch (CloneNotSupportedException cex) {
@@ -353,6 +356,9 @@ public class Chromosome
           ret.setApplicationData(getApplicationData());
         }
       }
+      // Reset fitness value
+      // -------------------
+      ret.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
       return ret;
     }
     catch (CloneNotSupportedException cex) {
@@ -556,6 +562,7 @@ public class Chromosome
         for (int i = 0; i < genes.length; i++) {
           genes[i].setToRandomValue(generator);
         }
+        randomChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
         return randomChromosome;
       }
     }
@@ -565,6 +572,7 @@ public class Chromosome
     // ------------------------------------------------------------------
     Chromosome sampleChromosome =
         Genotype.getConfiguration().getSampleChromosome();
+    sampleChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
