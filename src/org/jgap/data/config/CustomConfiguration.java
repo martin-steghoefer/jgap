@@ -11,7 +11,6 @@ package org.jgap.data.config;
 
 import org.jgap.*;
 
-
 /**
  * The CustomConfiguration is the configuration instance that can read a JGAP
  * configuration file and load itself.
@@ -22,24 +21,23 @@ import org.jgap.*;
 public class CustomConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Constructor, reading in the configuration from the given file
    * @param a_configFileName The config file from which to load the
    * configuration.
+   *
    * @throws ConfigException
    * @throws InvalidConfigurationException
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
    * @since 2.3
    */
   public CustomConfiguration(String a_configFileName)
       throws ConfigException, InvalidConfigurationException {
     super();
     ConfigFileReader.instance().setFileName(a_configFileName);
-    
-    	getConfigurationHandler().readConfig();
-    	
+    getConfigurationHandler().readConfig();
   }
 }

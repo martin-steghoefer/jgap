@@ -20,7 +20,7 @@ import java.io.*;
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // Name of the config file to read
   private String m_fileName;
@@ -111,9 +111,11 @@ public class ConfigFileReader {
   /**
    * Set the namespace for the properties that are being read from the
    * config file at this point.
-   * @author Siddhartha Azad.
-   * @param a_ns namespace for the properties being read.
-   * */
+   *
+   * @param a_ns namespace for the properties being read
+   *
+   * @author Siddhartha Azad
+   */
   public void setNS(String a_ns) {
     m_ns = a_ns;
   }
@@ -121,7 +123,7 @@ public class ConfigFileReader {
   /**
    * Set the config file to load from. Everytime this method is called,
    * properties are reloaded from the config file.
-   * @author Siddhartha Azad.
+   *
    * @param a_fileName Name of the config file.
    * @throws ConfigException
    *
