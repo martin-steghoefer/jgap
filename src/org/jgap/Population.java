@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.25 $";
+  private static final String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -107,6 +107,14 @@ public class Population
   public void addChromosomes(Population a_population) {
     if (a_population != null) {
       m_chromosomes.addAll(a_population.getChromosomes());
+      // The following would do the same:
+//      if (a_population.getChromosomes() != null) {
+//        int size = a_population.getChromosomes().size();
+//        for (int i = 0; i < size; i++) {
+//          Chromosome chrom = a_population.getChromosome(i);
+//          m_chromosomes.add(chrom);
+//        }
+//      }
       setChanged(true);
     }
   }
