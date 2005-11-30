@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
- * or have a look at the top of class org.jgap.Chromosome which representatively
- * includes the JGAP license policy applicable for any file delivered with JGAP.
+     * or have a look at the top of class org.jgap.Chromosome which representatively
+     * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -57,10 +57,12 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   public boolean ASSERTIONS = true;
+
+  private int m_startOffset = 1;
 
   /** Compute the distance between "cities", indicated by these two
    * given genes. The default method expects the genes to be a
@@ -74,6 +76,7 @@ public class GreedyCrossover
   public double distance(Object a_from, Object a_to) {
     IntegerGene from = (IntegerGene) a_from;
     IntegerGene to = (IntegerGene) a_to;
+
     return Math.abs(to.intValue() - from.intValue());
   }
 
@@ -82,19 +85,25 @@ public class GreedyCrossover
     int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = size / 2;
+
     RandomGenerator generator
         = Genotype.getConfiguration().getRandomGenerator();
+
     // For each crossover, grab two random chromosomes and do what
     // Grefenstette et al say.
     // --------------------------------------------------------------
     for (int i = 0; i < numCrossovers; i++) {
+
       Chromosome firstMate = (Chromosome)
           a_population.getChromosome(generator.
                                      nextInt(size)).clone();
+
       Chromosome secondMate = (Chromosome)
           a_population.getChromosome(generator.
                                      nextInt(size)).clone();
+
       operate(firstMate, secondMate);
+
       // Add the modified chromosomes to the candidate pool so that
       // they'll be considered for natural selection during the next
       // phase of evolution.
@@ -118,14 +127,15 @@ public class GreedyCrossover
       throws Error {
     Gene[] g1 = a_firstMate.getGenes();
     Gene[] g2 = a_secondMate.getGenes();
+
     Gene[] c1, c2;
     try {
-      try {
-        c1 = operate(g1, g2);
-        c2 = operate(g2, g1);
-        a_firstMate.setGenes(c1);
-        a_secondMate.setGenes(c2);
-      }
+    try {
+      c1 = operate(g1, g2);
+      c2 = operate(g2, g1);
+      a_firstMate.setGenes(c1);
+      a_secondMate.setGenes(c2);
+    }
       catch (InvalidConfigurationException cex) {
         throw new Error(cex);
       }
@@ -138,12 +148,15 @@ public class GreedyCrossover
                       "from crossover. Error message: "
                       + err.getMessage());
     }
+
   }
 
   protected Gene[] operate(Gene[] g1, Gene[] g2) {
     int n = g1.length;
+
     LinkedList out = new LinkedList();
     TreeSet not_picked = new TreeSet();
+
     out.add(g1[m_startOffset]);
     for (int j = m_startOffset + 1; j < n; j++) { // g[m_startOffset] picked
       if (ASSERTIONS && not_picked.contains(g1[j])) {
@@ -154,10 +167,12 @@ public class GreedyCrossover
       }
       not_picked.add(g1[j]);
     }
+
     if (ASSERTIONS) {
       if (g1.length != g2.length) {
         throw new Error("Chromosome sizes must be equal");
       }
+
       for (int j = m_startOffset; j < n; j++) {
         if (!not_picked.contains(g2[j])) {
           if (!g1[m_startOffset].equals(g2[j])) {
@@ -168,12 +183,16 @@ public class GreedyCrossover
         }
       }
     }
+
     while (not_picked.size() > 1) {
       Gene last = (Gene) out.getLast();
       Gene n1 = findNext(g1, last);
       Gene n2 = findNext(g2, last);
+
       Gene picked, other;
+
       boolean pick1;
+
       if (n1 == null) {
         pick1 = false;
       }
@@ -183,6 +202,7 @@ public class GreedyCrossover
       else {
         pick1 = distance(last, n1) < distance(last, n2);
       }
+
       if (pick1) {
         picked = n1;
         other = n2;
@@ -191,6 +211,7 @@ public class GreedyCrossover
         picked = n2;
         other = n1;
       }
+
       if (out.contains(picked))
         picked = other;
       if (picked == null || out /* still */.contains(picked)) {
@@ -198,18 +219,24 @@ public class GreedyCrossover
         picked = (Gene) not_picked.first();
       }
       ;
+
       out.add(picked);
       not_picked.remove(picked);
     }
+
     if (ASSERTIONS && not_picked.size() != 1)
       throw new Error("Given Gene not correctly created (must have length > 1"
-                      + ")");
+                      +")");
+
     out.add(not_picked.last());
+
     Gene[] g = new Gene[n];
     Iterator gi = out.iterator();
+
     for (int i = 0; i < m_startOffset; i++) {
       g[i] = g1[i];
     }
+
     if (ASSERTIONS) {
       if (out.size() != g.length - m_startOffset)
         throw new Error("Unexpected internal error. " +
@@ -217,10 +244,13 @@ public class GreedyCrossover
                         " and " + (g.length - m_startOffset) + ", g.length " +
                         g.length + ", start offset " + m_startOffset);
     }
+
     for (int i = m_startOffset; i < g.length; i++) {
       g[i] = (Gene) gi.next();
     }
+
     return g;
+
   }
 
   protected Gene findNext(Gene[] g, Gene x) {
@@ -230,8 +260,6 @@ public class GreedyCrossover
     }
     return null;
   }
-
-  private int m_startOffset = 1;
 
   /**
    * Sets a number of genes at the start of chromosome, that are
