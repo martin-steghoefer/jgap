@@ -1,13 +1,28 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap;
 
-import java.io.*;
 import org.jgap.impl.*;
 
-public class ChromosomeForTest extends Chromosome {
+/**
+ * Derived Chromosome class for testing purposes only.
+ *
+ * @author Klaus Meffert
+ * @since 2.5
+ */
+public class ChromosomeForTest
+    extends Chromosome {
   public boolean isCloned;
 
+  // Default constructor needed for construction via newInstance()
   public ChromosomeForTest() {
-
   }
 
   public ChromosomeForTest(Gene[] a_initialGenes) {
@@ -86,8 +101,10 @@ public class ChromosomeForTest extends Chromosome {
     // ---------------------------------------------------------
     return new ChromosomeForTest(newGenes);
   }
+
   public synchronized Object clone() {
-    ChromosomeForTest chrom = new  ChromosomeForTest(((Chromosome)super.clone()).getGenes());
+    ChromosomeForTest chrom = new ChromosomeForTest(
+        ( (Chromosome)super.clone()).getGenes());
     chrom.isCloned = true;
     return chrom;
   }
