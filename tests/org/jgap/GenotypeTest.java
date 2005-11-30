@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -461,7 +461,7 @@ public class GenotypeTest
 
   /**
    * Test that for new chromosomes (e.g. mutated ones) their fitness value
-   * will be recomputed. Reveals bug 1368072
+   * will be recomputed. Reveals bug 1368072.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -470,21 +470,19 @@ public class GenotypeTest
   public void testEvolve_5_1()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
         getNaturalSelector(true, 0);
     sel.setDoubletteChromosomesAllowed(true);
     config.getGeneticOperators().clear();
-    config.addGeneticOperator(new SwappingMutationOperator());
-    assertEquals(0, doTestEvolve_5(config));
+    config.addGeneticOperator(new SwappingMutationOperator(1));
+    assertTrue(doTestEvolve_5(config) > 0);
   }
 
   /**
    * Test that for new chromosomes (e.g. mutated ones) their fitness value
-   * will only be recomputed if necessary. Special case in which bug 1368072
-   * does not apply.
+   * will be recomputed. Reveals bug 1368072.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -504,9 +502,30 @@ public class GenotypeTest
     assertTrue(doTestEvolve_5(config) > 0);
   }
 
+  /**
+   * Test that for new chromosomes (e.g. mutated ones) their fitness value
+   * will only be recomputed if necessary. Special case in which bug 1368072
+   * does not apply.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
+  public void testEvolve_5_3()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    config.setPreservFittestIndividual(true);
+    config.setKeepPopulationSizeConstant(true);
+    BestChromosomesSelector sel = (BestChromosomesSelector) config.
+        getNaturalSelector(true, 0);
+    sel.setDoubletteChromosomesAllowed(true);
+    config.getGeneticOperators().clear();
+    config.addGeneticOperator(new MutationOperator(0));
+    assertTrue(doTestEvolve_5(config) == 0);
+  }
+
   private int doTestEvolve_5(Configuration config)
       throws Exception {
-//    config.addGeneticOperator(new MutationOperator(1));
     Genotype genotype = Genotype.randomInitialGenotype(config,
         ChromosomeForTest.class);
 
@@ -514,7 +533,7 @@ public class GenotypeTest
 
     // Reset counter. Because of static state holder we only need to do this
     // for one chromosome referencing the same global state holder as well as
-    // all other chromosomes (of class ChromosomeForTest) do
+    // all other chromosomes (of class ChromosomeForTest) do.
     ChromosomeForTest chrom = (ChromosomeForTest) genotype.getPopulation().
         getChromosome(0);
     chrom.resetComputedTimes();
@@ -529,8 +548,7 @@ public class GenotypeTest
 
     // Check if global state holder indicates that getFitnessValue() has been
     // called at least once for a cloned (e.g. mutated) chromosome and that for
-    // this call the to date fitness value is initial (i.e. not set)
-    int computedTimes = 0;
+    // this call the to date fitness value is initial (i.e. not set).
     chrom = (ChromosomeForTest) genotype.getPopulation().
         getChromosome(0);
     return chrom.getComputedTimes();
