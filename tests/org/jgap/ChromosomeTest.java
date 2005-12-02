@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -459,7 +459,7 @@ public class ChromosomeTest
     Gene[] genes;
     Chromosome chrom;
     TestHashcode thc = new TestHashcode();
-    thc.setVerbose(true);
+    thc.setVerbose(!true);
     List uniqueChromosome = new ArrayList();
     List equalChromosome = new ArrayList();
     // Build Random Chromosomes
