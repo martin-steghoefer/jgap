@@ -28,16 +28,14 @@ import org.jgap.Gene;
  * combinations represents too small part of all possible combinations,
  * it can take too long to find the suitable mutation that does not brake
  * a supergene. If you face this problem, try to split the supergene into
- * several sub-supergenes.
- * </p>
+ * several sub-supergenes.</p>
  *
  * @author Audrius Meskauskas
  */
-
 public interface Supergene extends Gene {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "$Revision: 1.7 $";
+    final static String CVS_REVISION = "$Revision: 1.8 $";
 
     /**
      * Test the allele combination of this supergene for validity.
@@ -45,8 +43,8 @@ public interface Supergene extends Gene {
      * the decission is delegated to this validator. The derived
      * classes may have internal default validator for the case
      * when no external validator is set.
-     * @see Note in the interface header. *
-     * @return true only if the supergene allele combination is valid.
+     * @see note in the interface header
+     * @return true only if the supergene allele combination is valid
      */
     boolean isValid();
 
@@ -61,10 +59,10 @@ public interface Supergene extends Gene {
      * first gene is at index zero and the last gene is at the index equal to
      * the size of this Supergene - 1.
      *
-     * @param a_desiredLocus: The index of the gene value to be returned.
-     * @return The Gene at the given index.
+     * @param a_index the index of the gene value to be returned
+     * @return the Gene at the given index
      */
-    Gene getGene(int index);
+    Gene getGene(int a_index);
 
     /**
      * Sets an object, responsible for deciding if the Supergene allele
@@ -83,6 +81,5 @@ public interface Supergene extends Gene {
       * such classes just return <i>this</i>.
       */
       supergeneValidator getValidator();
-
 
 }

@@ -29,7 +29,7 @@ import org.jgap.*;
 public abstract class abstractSupergene extends BaseGene
     implements Supergene, supergeneValidator, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * This field separates gene class name from
@@ -69,8 +69,8 @@ public abstract class abstractSupergene extends BaseGene
    * I cannot imagine the reason for overriding this trivial single line
    * method.
    *
-   * @param a_desiredLocus the index of the gene value to be returned.
-   * @return The Gene at the given index
+   * @param a_index the index of the gene value to be returned
+   * @return the Gene at the given index
    */
   public final Gene getGene(int a_index) {
     return m_genes[a_index];
@@ -177,13 +177,6 @@ public abstract class abstractSupergene extends BaseGene
    * gene, indexed by <code>index</code>.
    * @see org.jgap.supergenes.abstractSupergene.isValid()
    */
-  /**
-   * Applies a mutation of a given intensity (percentage) onto the gene
-   * at the given index. Retries while isValid() returns true for the
-   * supergene. The method is delegated to the first element [0] of the
-   * gene, indexed by <code>index</code>.
-   * @see org.jgap.supergenes.abstractSupergene.isValid()
-   */
   public void applyMutation(int index, double a_percentage) {
     // Return immediately the current value is found in
     // the list of immutable alleles for this position.
@@ -279,7 +272,7 @@ public abstract class abstractSupergene extends BaseGene
 
   /**
    * Sets the allele.
-   * @param that must be an array of objects, size matching the
+   * @param a_superAllele must be an array of objects, size matching the
    * number of genes
    */
   public void setAllele(Object a_superAllele) {

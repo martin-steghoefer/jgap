@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 abstract class AbstractChangFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final int m_targetAmount;
 
@@ -127,12 +127,12 @@ abstract class AbstractChangFitnessFunction
    * @param a_potentialsolution the potential solution to evaluate
    * @return the total number of coins represented by the given Chromosome
    */
-  public int getTotalNumberOfCoins(Chromosome a_c) {
+  public int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
     return
-        getNumberOfCoinsAtGene(a_c, SupergeneTest.QUARTERS) +
-        getNumberOfCoinsAtGene(a_c, SupergeneTest.DIMES) +
-        getNumberOfCoinsAtGene(a_c, SupergeneTest.NICKELS) +
-        getNumberOfCoinsAtGene(a_c, SupergeneTest.PENNIES);
+        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.QUARTERS) +
+        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.DIMES) +
+        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.NICKELS) +
+        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.PENNIES);
   }
 
   /** Get the gene, responsible for the number of coins, corresponding
