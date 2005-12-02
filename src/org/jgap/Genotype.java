@@ -29,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   /**
    * The current active Configuration instance.
@@ -444,6 +444,7 @@ public class Genotype
         Object chrom = null;
         try {
           // TODO fix, because method Chromosome.randomInitialChromosome is static!
+          // Currently, only a quick fix for bug 1371577
           chrom = a_chromosome.newInstance();
           Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome2",
               new Class[] {});
