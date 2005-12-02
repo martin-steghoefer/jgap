@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -292,7 +292,6 @@ public abstract class BaseGene
    * for a given gene is valid. If not, the allele value may not be set for the
    * gene or the gene type (e.g. IntegerGene) is not allowed in general!
    *
-   * @author Klaus Meffert
    * @since 2.5 (moved from CompositeGene, where it was since 2.0)
    */
   private IGeneConstraintChecker m_geneAlleleChecker;

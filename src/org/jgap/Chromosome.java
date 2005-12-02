@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -120,7 +120,6 @@ public class Chromosome
    * for a given gene is valid. If not, the allele value may not be set for the
    * gene or the gene type (e.g. IntegerGene) is not allowed in general!
    *
-   * @author Klaus Meffert
    * @since 2.5
    */
   private IGeneConstraintChecker m_geneAlleleChecker;
