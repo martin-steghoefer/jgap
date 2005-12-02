@@ -13,13 +13,13 @@ import junit.framework.*;
 
 /**
  * Test suite for all tests of package org.jgap.gui
- * @author Siddhartha Azad.
+ * @author Siddhartha Azad
  */
 public class AllGUITests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
