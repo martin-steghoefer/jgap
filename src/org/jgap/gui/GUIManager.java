@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class GUIManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * @return a singleton GUIManager instance
@@ -59,21 +59,21 @@ public class GUIManager {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public void showFrame(ConfigFrame parent, Configurable _con) throws Exception {
+  public void showFrame(ConfigFrame parent, Configurable a_con) throws Exception {
   	try {
       // create the frame
-  	  if(_con.getConfigurationHandler().getName().equals("Configuration")) {
+  	  if(a_con.getConfigurationHandler().getName().equals("Configuration")) {
   	  	frame = new ConfigFrame(null, "JGAP Configurator:" +
-  	  			_con.getConfigurationHandler().getName(), true);
-  	  	con = _con;
-  	  	frame.createAndShowGUI(_con.getConfigurationHandler());
+  	  			a_con.getConfigurationHandler().getName(), true);
+  	  	con = a_con;
+  	  	frame.createAndShowGUI(a_con.getConfigurationHandler());
   	  }
   	  else {
   	  	ConfigFrame tmpFrame = new ConfigFrame(parent, "JGAP Configurator:" +
-  	  			_con.getConfigurationHandler().getName(), false);
-  	  	childCons.add(_con);
+  	  			a_con.getConfigurationHandler().getName(), false);
+  	  	childCons.add(a_con);
   	  	childFrames.add(tmpFrame);
-  	  	tmpFrame.createAndShowGUI(_con.getConfigurationHandler());
+  	  	tmpFrame.createAndShowGUI(a_con.getConfigurationHandler());
   	  }
     }
     catch (Exception ex) {
@@ -81,7 +81,7 @@ public class GUIManager {
 				"Could not show configuration frame. This attribute may not be configurable.",
 				"Configuration Error",
 				JOptionPane.INFORMATION_MESSAGE);
-      
+
     }
   }
 
@@ -103,7 +103,7 @@ public class GUIManager {
           	GUIManager.instance().showFrame(null, con);
           }
           catch(Exception ex) {
-          	
+
           }
         }
       });

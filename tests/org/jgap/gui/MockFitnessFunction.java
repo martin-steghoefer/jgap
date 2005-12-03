@@ -20,7 +20,7 @@ import org.jgap.*;
 public class MockFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * This is really a placeholder fitness function required only so that
@@ -35,7 +35,7 @@ public class MockFitnessFunction
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public double evaluate(Chromosome chromosome) {
+  public double evaluate(Chromosome a_subject) {
     return 100;
   }
 }

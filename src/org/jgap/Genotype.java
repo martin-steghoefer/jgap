@@ -29,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   /**
    * The current active Configuration instance.
@@ -670,7 +670,7 @@ public class Genotype
    * @param a_pop the Population to keep constant in size
    * @param a_maxSize the maximum size allowed for the Population
    *
-   * @auhtor Klaus Meffert
+   * @author Klaus Meffert
    * @since 2.5
    */
   protected void keepPopSizeConstant(Population a_pop, int a_maxSize) {

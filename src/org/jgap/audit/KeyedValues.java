@@ -21,7 +21,7 @@ import java.util.*;
 public class KeyedValues
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /** Data storage */
   private List m_data;
@@ -54,9 +54,9 @@ public class KeyedValues
    * @author Klaus Meffert
    * @since 2.3
    */
-  public Number getValue(final int a_item) {
+  public Number getValue(final int a_index) {
     Number result;
-    final KeyedValue kval = (KeyedValue) m_data.get(a_item);
+    final KeyedValue kval = (KeyedValue) m_data.get(a_index);
     if (kval != null) {
       result = kval.getValue();
     }
