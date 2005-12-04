@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DataTreeBuilder {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -172,7 +172,7 @@ public class DataTreeBuilder {
     // -------------------------------------------------------------
     IDataCreators chromosomeDocument;
     synchronized (m_lock) {
-      //hier die Datenstruktur für den Tree aufbauen
+      // Build data structure for tree
       chromosomeDocument = new DataElementsDocument();
       chromosomeDocument.setTree(createTree());
     }
