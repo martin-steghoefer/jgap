@@ -17,7 +17,7 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static void main(String[] args)
       throws Exception {
@@ -40,7 +40,7 @@ public class ClassKit {
    * Display all the classes inheriting or implementing a given
    * class in the currently loaded packages.
    * @param tosubclassname the name of the class to inherit from
-   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
   public static List find(String tosubclassname) {
     try {
@@ -65,14 +65,14 @@ public class ClassKit {
   /**
    * Display all the classes inheriting or implementing a given
    * class in a given package.
-   * @param pckgname the fully qualified name of the package
-   * @param tosubclass the name of the class to inherit from
-   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   * @param a_pckname the fully qualified name of the package
+   * @param a_tosubclassname the name of the class to inherit from
+   * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
-  public static List find(String pckname, String tosubclassname)
+  public static List find(String a_pckname, String a_tosubclassname)
       throws ClassNotFoundException {
-    Class tosubclass = Class.forName(tosubclassname);
-    return find(pckname, tosubclass);
+    Class tosubclass = Class.forName(a_tosubclassname);
+    return find(a_pckname, tosubclass);
   }
 
   /**
@@ -80,7 +80,7 @@ public class ClassKit {
    * class in a given package.
    * @param pckgname the fully qualified name of the package
    * @param tosubclass the Class object to inherit from
-   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
   public static List find(String pckgname, Class tosubclass) {
     List result = new Vector();

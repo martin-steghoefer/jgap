@@ -42,7 +42,7 @@ import org.jgap.*;
  * other city. If both cities have already appeared, we randomly select a
  * non-selected city.
  *
- * @see J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
+ * See J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
  *  <i>Genetic algorithms for the traveling salesman problem</i>.
  * In Proceedings of the Second International Conference on Genetic Algorithms.
  *  Lawrence Eribaum Associates, Mahwah, NJ, 1985.
@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   public boolean ASSERTIONS = true;

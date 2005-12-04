@@ -16,7 +16,6 @@ import org.jgap.*;
  * Test Supergene sample application, verifying the "make change"
  * supergene and non-supergene versions. Both must return a zero error.
  * Performance is not verified.
- * @return true if the Supergene tests succeded.
  *
  * @author Meskauskas Audrius
  * @since 2.0
@@ -24,7 +23,7 @@ import org.jgap.*;
 public class SupergeneSampleApplicationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public void testSupergeneTotal() {
     int E_s = Integer.MAX_VALUE;

@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 abstract class AbstractChangFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final int m_targetAmount;
 
@@ -110,9 +110,10 @@ abstract class AbstractChangFitnessFunction
    * Retrieves the number of coins represented by the given potential
    * solution at the given gene position.
    *
-   * @param a_potentialSolution The potential solution to evaluate.
+   * @param a_potentialSolution the potential solution to evaluate
+   * @param a_code index of gene
    * @return the number of coins represented by the potential solution
-   *         at the given gene position.
+   * at the given gene position
    */
   public int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
                                     int a_code) {
@@ -135,7 +136,13 @@ abstract class AbstractChangFitnessFunction
         getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.PENNIES);
   }
 
-  /** Get the gene, responsible for the number of coins, corresponding
-   * this code */
+  /**
+   * Get the gene, responsible for the number of coins, corresponding
+   * this code.
+   *
+   * @param a_chromosome Chromosome to evaluate
+   * @param a_code index of Gene
+   * @return responsible gene
+   */
   public abstract Gene getResponsibleGene(Chromosome a_chromosome, int a_code);
 }

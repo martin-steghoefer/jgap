@@ -16,7 +16,7 @@ import org.jgap.*;
  * Swaps the genes instead of mutating them. This kind of operator is
  * required by Traveling Salesman Problem.
  *
- * @see J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
+ * See J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
  *  <i>Genetic algorithms for the traveling salesman problem</i>.
  * In Proceedings of the Second International Conference on Genetic Algorithms.
  *  Lawrence Eribaum Associates, Mahwah, NJ, 1985.
@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private int m_startOffset = 1;
 

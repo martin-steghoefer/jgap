@@ -11,7 +11,6 @@ package org.jgap.impl;
 
 import java.lang.reflect.*;
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -25,13 +24,13 @@ import org.jgap.*;
  * <p>Organization: RSMAS, University of Miami</p>
  *
  * @author Johnathan Kool
- * @version 0.1
+ * @since 2.4
  */
 public class SetGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private HashSet geneSet = new HashSet();
 
@@ -49,34 +48,28 @@ public class SetGene
   /**
    * Adds a potential allele value to the collection.
    *
-   * @param i_value Integer:  The Integer value to be added
+   * @param a_value the Integer value to be added
    */
-  public void addAllele(Object allele) {
-
-    geneSet.add(allele);
-
+  public void addAllele(Object a_value) {
+    geneSet.add(a_value);
   }
 
   /**
    * Add a set of potential allele values to the collection
    *
-   * @param alleles Map:  The set of alleles to be added
+   * @param a_alleles the set of alleles to be added
    */
-  public void addAlleles(Collection alleles) {
-
-    geneSet.addAll(alleles);
-
+  public void addAlleles(Collection a_alleles) {
+    geneSet.addAll(a_alleles);
   }
 
   /**
    * Removes a potential allele or set of alleles from the collection.
    *
-   * @param key Object:  The unique value(s) of the object(s) to be removed
+   * @param a_key the unique value(s) of the object(s) to be removed
    */
-  public void removeAlleles(Object allele) {
-
-    geneSet.remove(allele);
-
+  public void removeAlleles(Object a_key) {
+    geneSet.remove(a_key);
   }
 
   /**
@@ -88,9 +81,7 @@ public class SetGene
    * @param a_numberGenerator RandomGenerator
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-
     m_value = ( (List) geneSet).get(a_numberGenerator.nextInt(geneSet.size()));
-
   }
 
   /**
@@ -102,11 +93,14 @@ public class SetGene
    * another.  It may be possible to weight the likelihood of mutation
    * to different forms, but that will not be implemented here.
    *
+   * @param a_index ignored here
+   * @param a_percentage ignored here
+   *
    * @author Klaus Meffert
    * @author Johnathan Kool
-   * @since 1.1
+   * @since 2.4
    */
-  public void applyMutation(int index, double a_percentage) {
+  public void applyMutation(int a_index, double a_percentage) {
     RandomGenerator rn;
     if (Genotype.getConfiguration() != null) {
       rn = Genotype.getConfiguration().getRandomGenerator();
@@ -152,7 +146,6 @@ public class SetGene
             "is not recognized: it must contain at least three tokens.");
       }
       String valueRepresentation = tokenizer.nextToken();
-
       // First parse and set the representation of the value.
 
       // ----------------------------------------------------
@@ -172,7 +165,6 @@ public class SetGene
         }
       }
       //Parse the potential categories.
-
       Integer allele;
       while (tokenizer.hasMoreTokens()) {
         try {
@@ -186,9 +178,7 @@ public class SetGene
               "not appear to be an integer value.");
         }
       }
-
     }
-
   }
 
   /**
@@ -216,14 +206,10 @@ public class SetGene
     Iterator it = geneSet.iterator();
     StringBuffer strbf = new StringBuffer();
     while (it.hasNext()) {
-
       strbf.append(PERSISTENT_FIELD_DELIMITER);
       strbf.append(it.next().toString());
-
     }
-
     return m_value.toString() + strbf.toString();
-
   }
 
   /**
@@ -235,19 +221,13 @@ public class SetGene
    * @author Johnathan Kool
    */
   public void setAllele(Object a_newValue) {
-
     if (geneSet.contains(a_newValue)) {
-
       m_value = a_newValue;
-
     }
-
     else {
-
       throw new IllegalArgumentException("Allele value being set is not an " +
-          "element of the set of permitted values.");
+                                         "element of the set of permitted values.");
     }
-
   }
 
   /**
@@ -264,12 +244,10 @@ public class SetGene
    *
    * @author Klaus Meffert
    * @author Johnathan Kool
-   * @since 1.1
+   * @since 2.4
    */
   public int compareTo(Object other) {
-
     SetGene otherGene = (SetGene) other;
-
     // First, if the other gene (or its value) is null, then this is
     // the greater allele. Otherwise, just use the overridden compareToNative
     // method to perform the comparison.
@@ -319,7 +297,6 @@ public class SetGene
                                            " not have a compareTo method.  It" +
                                            " cannot be compared.");
       }
-
     }
   }
 
