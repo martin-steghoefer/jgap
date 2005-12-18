@@ -29,7 +29,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   /**
    * The current active Configuration instance.
@@ -558,7 +558,7 @@ public class Genotype
         a_processBeforeGeneticOperators);
     if (selectorSize > 0) {
       int m_population_size = m_activeConfiguration.getPopulationSize();
-      int m_single_selection_size = m_population_size / selectorSize;
+      int m_single_selection_size;
       Population m_new_population;
       m_new_population = new Population(m_population_size);
       NaturalSelector selector;
@@ -574,7 +574,7 @@ public class Genotype
           m_single_selection_size = m_population_size - getPopulation().size();
         }
         else {
-          m_single_selection_size = m_population_size;
+          m_single_selection_size = m_population_size / selectorSize;
         }
         // Do selection of Chromosomes.
         // ----------------------------
