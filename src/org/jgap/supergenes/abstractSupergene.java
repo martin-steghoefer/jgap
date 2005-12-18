@@ -29,7 +29,7 @@ import org.jgap.*;
 public abstract class abstractSupergene extends BaseGene
     implements Supergene, supergeneValidator, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * This field separates gene class name from
@@ -136,11 +136,14 @@ public abstract class abstractSupergene extends BaseGene
                     +" external validator.");
   }
 
-  /** Creates a new instance of this Supergene class with the same number of
+  /**
+   * Creates a new instance of this Supergene class with the same number of
    * genes, calling newGene() for each subgene. The class, derived from this
    * abstract supergene will be instantiated
    * (not the instance of abstractSupergene itself). If the external
    * validator is set, the same validator will be set for the new gene.
+   *
+   * @return the new Gene
    * @throws Error if the instance of <i>this</i> cannot be instantiated
    * (for example, if it is not public or  the parameterless constructor is
    * not provided).
@@ -177,14 +180,14 @@ public abstract class abstractSupergene extends BaseGene
    * gene, indexed by <code>index</code>.
    * @see org.jgap.supergenes.abstractSupergene.isValid()
    */
-  public void applyMutation(int index, double a_percentage) {
+  public void applyMutation(int a_index, double a_percentage) {
     // Return immediately the current value is found in
     // the list of immutable alleles for this position.
     // ---------------------------------------------------
-    if (index < m_immutable.length) {
-      if (m_immutable[index] != null) {
+    if (a_index < m_immutable.length) {
+      if (m_immutable[a_index] != null) {
         synchronized (m_immutable) {
-          if (m_immutable[index].contains(this))
+          if (m_immutable[a_index].contains(this))
             return;
         }
       }
@@ -192,14 +195,14 @@ public abstract class abstractSupergene extends BaseGene
     if (!isValid()) {
       throw new Error("Should be valid on entry");
     }
-    Object backup = m_genes[index].getAllele();
+    Object backup = m_genes[a_index].getAllele();
     for (int i = 0; i < MAX_RETRIES; i++) {
-      m_genes[index].applyMutation(0, a_percentage);
+      m_genes[a_index].applyMutation(0, a_percentage);
       if (isValid())return;
     }
     // restore the gene as it was
-    m_genes[index].setAllele(backup);
-    markImmutable(index);
+    m_genes[a_index].setAllele(backup);
+    markImmutable(a_index);
   }
 
   /** Maximal number of notes about immutable genes per

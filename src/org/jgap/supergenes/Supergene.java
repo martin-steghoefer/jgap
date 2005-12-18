@@ -35,15 +35,15 @@ import org.jgap.Gene;
 public interface Supergene extends Gene {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "$Revision: 1.8 $";
+    final static String CVS_REVISION = "$Revision: 1.9 $";
 
     /**
      * Test the allele combination of this supergene for validity.
      * If a validator was previously set be calling setValidator(),
      * the decission is delegated to this validator. The derived
      * classes may have internal default validator for the case
-     * when no external validator is set.
-     * @see note in the interface header
+     * when no external validator is set. See note in the interface header.
+     *
      * @return true only if the supergene allele combination is valid
      */
     boolean isValid();
