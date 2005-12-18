@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * Constants for toString()
@@ -411,8 +411,7 @@ public class Configuration
    * @since 1.0
    */
   public void setSampleChromosome(Chromosome a_sampleChromosomeToSet)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given chromosome isn't null.
 
@@ -1023,7 +1022,7 @@ public class Configuration
   /**
    * Implementation of the Configurable interface.
    * @return ConfigurationHandler
-   *
+   * @throws ConfigException
    * @author Siddhartha Azad
    */
   public ConfigurationHandler getConfigurationHandler() throws ConfigException {
