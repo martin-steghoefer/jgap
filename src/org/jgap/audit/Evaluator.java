@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Each data has its own data container
@@ -231,7 +231,7 @@ public class Evaluator {
     // Loop over all run-numbers.
     // --------------------------
     Iterator it = runNumbers.keySet().iterator();
-    int numRuns = runNumbers.keySet().size();
+//    int numRuns = runNumbers.keySet().size();
     Integer runI;
     while (it.hasNext()) {
       runI = (Integer) it.next();
