@@ -10,7 +10,6 @@
 package org.jgap.data;
 
 import java.util.*;
-import org.jgap.data.*;
 
 /**
  * Element owning of a tag name and holding attributes.
@@ -24,7 +23,7 @@ import org.jgap.data.*;
 public class DataElement
     implements IDataElement {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private IDataElementList elements;
 
