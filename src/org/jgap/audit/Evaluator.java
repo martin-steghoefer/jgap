@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Each data has its own data container
@@ -227,7 +227,7 @@ public class Evaluator {
     if (runNumbers == null) {
       return null;
     }
-    Map fitnessImpr = new Hashtable();
+//    Map fitnessImpr = new Hashtable();
     // Loop over all run-numbers.
     // --------------------------
     Iterator it = runNumbers.keySet().iterator();

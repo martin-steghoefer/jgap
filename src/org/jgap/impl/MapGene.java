@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Container for valid alleles
@@ -385,7 +385,7 @@ public class MapGene
       else {
         //compare geneMap keys and values
         Iterator it1 = m_geneMap.keySet().iterator();
-        Iterator it2 = otherGene.m_geneMap.keySet().iterator();
+//        Iterator it2 = otherGene.m_geneMap.keySet().iterator();
         while (it1.hasNext()) {
           Object key1 = it1.next();
           if (!otherGene.m_geneMap.keySet().contains(key1)) {

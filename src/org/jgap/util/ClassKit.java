@@ -17,7 +17,7 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static void main(String[] args)
       throws Exception {
@@ -250,7 +250,6 @@ public class ClassKit {
     // -------------------------------
     Vector implementingClasses = new Vector();
     Enumeration e = classes.elements();
-    Object c;
     while (e.hasMoreElements()) {
       try {
         String name = e.nextElement().toString();
