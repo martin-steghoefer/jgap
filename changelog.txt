@@ -1,6 +1,7 @@
 2.6
 -----------------------------------------------------------
 * Extended javadoc
+* Removed some unneeded local variables
 
 2.5
 ----------
