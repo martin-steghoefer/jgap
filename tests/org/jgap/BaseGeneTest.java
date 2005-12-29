@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -82,9 +82,9 @@ public class BaseGeneTest
   public void testEquals_0() {
     BaseGeneImpl gene = new BaseGeneImpl();
     gene.m_compareTo_result = 0;
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(null));
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(gene));
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(new Integer(2)));
+    assertTrue(gene.equals(null));
+    assertTrue(gene.equals(gene));
+    assertTrue(gene.equals(new Integer(2)));
   }
 
   /**
@@ -94,9 +94,9 @@ public class BaseGeneTest
   public void testEquals_1() {
     BaseGeneImpl gene = new BaseGeneImpl();
     gene.m_compareTo_result = -1;
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(null));
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(gene));
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(new Integer(2)));
+    assertFalse(gene.equals(null));
+    assertFalse(gene.equals(gene));
+    assertFalse(gene.equals(new Integer(2)));
   }
 
   /**
@@ -106,9 +106,9 @@ public class BaseGeneTest
   public void testEquals_2() {
     BaseGeneImpl gene = new BaseGeneImpl();
     gene.m_compareTo_result = 1;
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(null));
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(gene));
-    assertEquals(gene.m_compareTo_result == 0, gene.equals(new Integer(2)));
+    assertFalse(gene.equals(null));
+    assertFalse(gene.equals(gene));
+    assertFalse(gene.equals(new Integer(2)));
   }
 
   /**

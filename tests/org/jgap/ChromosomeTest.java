@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -343,7 +343,7 @@ public class ChromosomeTest
     genes[0] = new BooleanGene();
     genes[1] = new BooleanGene();
     genes[2] = new BooleanGene();
-    genes[2].setAllele(new Boolean(true));
+    genes[2].setAllele(Boolean.valueOf(true));
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
     Genotype.setConfiguration(conf);
@@ -407,7 +407,7 @@ public class ChromosomeTest
     Chromosome chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom, chrom2);
     conf.getChromosomePool().releaseChromosome(chrom);
-    chrom2 = (Chromosome) chrom.clone();
+    assertEquals(Chromosome.class, chrom.clone().getClass());
     chrom.cleanup();
     conf.setChromosomePool(null);
     chrom.cleanup();
@@ -434,11 +434,11 @@ public class ChromosomeTest
     }
   }
 
-  final int MAX_CHROMOSOME_TO_TEST = 1000;
+  final static int MAX_CHROMOSOME_TO_TEST = 1000;
 
-  final int MAX_GENES_TO_TEST = 25;
+  final static int MAX_GENES_TO_TEST = 25;
 
-  final int MAX_GENES_TYPES = 6;
+  final static int MAX_GENES_TYPES = 6;
 
   /**
    * Test hashcode for intensity of diversity.<p>
@@ -584,7 +584,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
-    chrom2 = (Chromosome) chrom.clone();
+    assertEquals(Chromosome.class, chrom.clone().getClass());
   }
 
   /**
@@ -1037,8 +1037,8 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes2);
     assertTrue(chrom.compareTo(chrom2) == 0);
     assertTrue(chrom2.compareTo(chrom) == 0);
-    genes2[1].setAllele(new Boolean(false));
-    genes1[1].setAllele(new Boolean(true));
+    genes2[1].setAllele(Boolean.valueOf(false));
+    genes1[1].setAllele(Boolean.valueOf(true));
     assertFalse(chrom2.compareTo(chrom) == 0);
   }
 
