@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -242,6 +242,46 @@ public class ConfigurationTest
     catch (IllegalArgumentException illex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * Configuration with sample chromosome that has no genes
+   * @throws InvalidConfigurationException
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testVerifyStateIsValid_8()
+      throws InvalidConfigurationException {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Chromosome sample = new Chromosome();
+    conf.setSampleChromosome(sample);
+    conf.setPopulationSize(5);
+    try {
+      conf.verifyStateIsValid();
+      fail();
+    }
+    catch (InvalidConfigurationException illex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Configuration with sample chromosome that has a gene with allele value null
+   * @throws InvalidConfigurationException
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testVerifyStateIsValid_9()
+      throws InvalidConfigurationException {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    BooleanGene gene = new BooleanGene();
+    gene.setAllele(null);
+    Chromosome sample = new Chromosome(gene, 55);
+    conf.setSampleChromosome(sample);
+    conf.setPopulationSize(5);
+    conf.verifyStateIsValid();
   }
 
   /**
