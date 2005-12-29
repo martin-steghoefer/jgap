@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -426,8 +426,7 @@ public class NumberGeneTest
           PERSISTENT_FIELD_DELIMITER + m_upperBounds;
     }
 
-    public void setValueFromPersistentRepresentation(String
-        a_representation)
+    public void setValueFromPersistentRepresentation(String a_representation)
         throws UnsupportedRepresentationException {
       // not implemented here!
       // ---------------------
