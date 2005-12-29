@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -525,9 +525,6 @@ public class ChromosomeTest
     if (!thc.testHashCodeEquality(equalChromosome)) {
       fail();
     }
-    // A lot of temporary objects where created in this test so do a quick
-    // garbage collect.
-    System.gc();
   }
 
   /**
