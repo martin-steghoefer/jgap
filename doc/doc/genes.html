@@ -15,6 +15,10 @@
 <hr>
 <a name="top">
 
+<p><b>Preface: Please note that this documentation could be correlated to a
+former JGAP version. Therefor we recommend having a look at the examples
+provided with JGAP and then read this document in order to get an idea.</b> </p>
+
 <p>Genes represent the discrete components of a problem solution (chromosome) that can
 vary independently of each other throughout the evolution process. Just as genes control
 various independent features within our own genetic makeup, such as sex or eye color, so
@@ -68,13 +72,7 @@ be a demonstrative example, we'll implement it here from scratch. First the code
 <b><font color="#000080">package</font></b> <font color="#000000">hypothetical.examples;</font>
 
 <b><font
-color="#000080">import</font></b> <font color="#000000">org.jgap.Gene;</font>
-<b><font
-color="#000080">import</font></b> <font color="#000000">org.jgap.Configuration;</font>
-<b><font
-color="#000080">import</font></b> <font color="#000000">org.jgap.UnsupportedRepresentationException;</font>
-<b><font
-color="#000080">import</font></b> <font color="#000000">org.jgap.RandomGenerator;</font>
+color="#000080">import</font></b> <font color="#000000">org.jgap.*;</font>
 
 <b><font
 color="#000080">import</font></b> <font color="#000000">java.util.StringTokenizer;</font>
@@ -92,7 +90,7 @@ color="#808080"> * maximum.</font></i>
 <i><font color="#808080"> */</font></i>
 <b><font
 color="#000080">public</font></b> <b><font color="#000080">class</font></b> <font
-color="#000000">QuarterGene</font> <b><font color="#000080">implements</font></b> <font
+color="#000000">QuarterGene</font> extends BaseGene <font color="#000080"><b>implements</b></font> <font
 color="#000000">Gene, java.io.Serializable</font>
 <font color="#000000">{</font>
     <b><font
@@ -583,11 +581,22 @@ color="#000000">{</font>
         <b><font color="#000080">return</font></b> <font
 color="#000000">m_numberOfQuarters;</font>
     <font color="#000000">}</font>
-<font
-color="#000000">}</font>
+</font></tt></pre>
 
-</tt>
-</pre>
+<pre class="code"><tt>    <b><font color="#000080">public</font></b> <font
+color="#000080">Object getInternalValue()</font><font color="#000000"> {</font><font
+color="#000080">
+        <b>return</b> <font
+color="#000000">m_numberOfQuarter</font></font><font color="#000000">s</font><font
+color="#000080"><font
+color="#000000">;</font>
+    <font color="#000000">}</font>
+<font
+color="#000000"></font></font><font
+color="#000080"><font
+color="#000000">}</font>
+</font></tt><font
+color="#000080"></pre>
 
 <p>Hopefully most of the methods and code in the example above are pretty self-explanatory
 once the javadocs and comments are consulted. We start off with a couple of constructors,
@@ -612,7 +621,10 @@ QuarterGene to a legal random value--in this case, an Integer between zero and t
 bound. </p>
 
 <p>The next two methods deal with XML marshalling and are optional. (For more information
-on XML marshalling, please see the </a><a href="marshalling.html">Marshalling Populations
+on XML marshalling, please see the
+</font>
+ </a> <font
+color="#000080"><a href="marshalling.html">Marshalling Populations
 to XML</a> document.) We've implemented them here to provide an example. The
 getPersistentRepresentation() method returns a String that represents not only the current
 value of our QuarterGene, but also the upper bound, so that this QuarterGene can be later

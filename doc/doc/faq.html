@@ -64,12 +64,12 @@ free to post them to the jgap-users mailing list!
   </li>
   <li><p class="question">Why aren't the chromosomes in my population ever candidates for
     natural selection? </p>
-    <p class="answer">This can occur if you're setting up your own genetic operators and
-    haven't included a reproduction operator. It's the sole job of the reproduction operator
-    to guarantee that the chromosomes in the current population become candidates for the next
-    generation. </p>
-  </li>
-  <li><p class="question">Has anyone used JGAP in combination with the JOONE neural networks
+    <p class="answer">This should not happen if you properly use a
+    NaturalSelector resp. if this selector is implemented correctly. The
+    reproduction operator is deprecated in newer JGAp versions due to
+    performance reasons and due to the fact that the current architecture
+    delivers such funtionality itself. </p>
+    <p class="question">Has anyone used JGAP in combination with the JOONE neural networks
     package? </p>
     <p class="answer">Yes, as a matter of a fact there is a whole open-source project
     dedicated to integration of JGAP with JOONE! You can find out more about the JOONEJGAP
