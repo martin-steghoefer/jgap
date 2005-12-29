@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -660,11 +660,11 @@ public class GenotypeTest
     genotype.hashCode();
   }
 
-  final int MAX_CHROMOSOME_TO_TEST = 1000;
+  private final static int MAX_CHROMOSOME_TO_TEST = 1000;
 
-  final int MAX_GENES_TO_TEST = 25;
+  private final static int MAX_GENES_TO_TEST = 25;
 
-  final int MAX_GENES_TYPES = 6;
+  private final static int MAX_GENES_TYPES = 6;
 
   public void testHashcode_1()
       throws Exception {
