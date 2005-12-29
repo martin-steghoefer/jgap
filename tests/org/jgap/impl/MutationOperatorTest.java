@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.24 $";
+  private static final String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -205,7 +205,7 @@ public class MutationOperatorTest
     List candChroms = new Vector();
     BooleanGene gene1 = new BooleanGene();
     Chromosome chrom1 = new Chromosome(gene1, 1);
-    chrom1.getGene(0).setAllele(new Boolean(false));
+    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
     IntegerGene gene2 = new IntegerGene(0, 10);
     Chromosome chrom2 = new Chromosome(gene2, 1);
     chrom2.getGene(0).setAllele(new Integer(3));
@@ -228,7 +228,7 @@ public class MutationOperatorTest
     MutationOperator mutOp = new MutationOperator();
     BooleanGene gene1 = new BooleanGene();
     Chromosome chrom1 = new Chromosome(gene1, 1);
-    chrom1.getGene(0).setAllele(new Boolean(false));
+    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
     IntegerGene gene2 = new IntegerGene(0, 10);
     Chromosome chrom2 = new Chromosome(gene2, 1);
     chrom2.getGene(0).setAllele(new Integer(3));
@@ -281,7 +281,8 @@ public class MutationOperatorTest
     CompositeGene comp1 = new CompositeGene();
     comp1.addGene(gene1);
     Chromosome chrom1 = new Chromosome(comp1, 1);
-    ( (CompositeGene) chrom1.getGene(0)).geneAt(0).setAllele(new Boolean(false));
+    ( (CompositeGene) chrom1.getGene(0)).geneAt(0).setAllele(
+        Boolean.valueOf(false));
     IntegerGene gene2 = new IntegerGene(0, 10);
     CompositeGene comp2 = new CompositeGene();
     comp2.addGene(gene2);

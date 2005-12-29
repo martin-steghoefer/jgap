@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -119,7 +119,7 @@ public class BestChromosomesSelectorTest
     secondBestChrom.setFitnessValue(11);
     selector.add(secondBestChrom);
     gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
@@ -143,14 +143,14 @@ public class BestChromosomesSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
     gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
@@ -196,14 +196,14 @@ public class BestChromosomesSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
     gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
@@ -242,14 +242,14 @@ public class BestChromosomesSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
     gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
@@ -284,14 +284,14 @@ public class BestChromosomesSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
     gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
