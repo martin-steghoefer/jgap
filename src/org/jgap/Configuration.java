@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   /**
    * Constants for toString()
@@ -336,7 +336,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public FitnessFunction getFitnessFunction() {
+  public synchronized FitnessFunction getFitnessFunction() {
     return m_objectiveFunction;
   }
 
@@ -391,7 +391,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public BulkFitnessFunction getBulkFitnessFunction() {
+  public synchronized BulkFitnessFunction getBulkFitnessFunction() {
     return m_bulkObjectiveFunction;
   }
 
@@ -483,7 +483,7 @@ public class Configuration
    * to obtain the relevant chain of NaturalSelector's and then call the
    * chain's get(index) method
    */
-  public NaturalSelector getNaturalSelector() {
+  public synchronized NaturalSelector getNaturalSelector() {
     if (m_sizeNaturalSelectorsPost < 1) {
       return null;
     }
@@ -499,7 +499,7 @@ public class Configuration
    * @author Klaus Meffert
    * @since 1.1
    */
-  public NaturalSelector getNaturalSelector(boolean
+  public synchronized NaturalSelector getNaturalSelector(boolean
                                             a_processBeforeGeneticOperators,
                                             int a_index) {
     if (a_processBeforeGeneticOperators) {
@@ -612,7 +612,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public RandomGenerator getRandomGenerator() {
+  public synchronized RandomGenerator getRandomGenerator() {
     return m_randomGenerator;
   }
 
@@ -675,8 +675,7 @@ public class Configuration
    * @since 1.0
    */
   public synchronized void setPopulationSize(int a_sizeOfPopulation)
-      throws
-      InvalidConfigurationException {
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure the population size is positive.
     // --------------------------------------------------------
@@ -692,7 +691,7 @@ public class Configuration
    *
    * @return population size
    */
-  public int getPopulationSize() {
+  public synchronized int getPopulationSize() {
     return m_populationSize;
   }
 

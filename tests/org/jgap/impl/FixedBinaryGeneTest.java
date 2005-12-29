@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -345,7 +345,7 @@ public class FixedBinaryGeneTest
       fail();
     }
     catch (Exception e) {
-      /*Some Exception should be thrown*/
+      ; //this is OK
     }
   }
 

@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -31,8 +31,8 @@ public class BooleanGeneTest
   public void testConstruct_0() {
     Gene gene = new BooleanGene();
     //following should be possible without exception
-    gene.setAllele(new Boolean(true));
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(true));
+    gene.setAllele(Boolean.valueOf(false));
   }
 
   /**
@@ -51,9 +51,9 @@ public class BooleanGeneTest
    * @since 2.4
    */
   public void testConstruct_2() {
-    BooleanGene gene = new BooleanGene(new Boolean(true));
+    BooleanGene gene = new BooleanGene(Boolean.valueOf(true));
     assertEquals(true, gene.booleanValue());
-    gene = new BooleanGene(new Boolean(false));
+    gene = new BooleanGene(Boolean.valueOf(false));
     assertEquals(false, gene.booleanValue());
   }
 
@@ -63,22 +63,23 @@ public class BooleanGeneTest
    */
   public void testConstruct_3() {
     try {
-      BooleanGene gene = new BooleanGene(null);
+      new BooleanGene(null);
       fail();
-    }catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
   public void testToString_0() {
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     assertEquals("BooleanGene=true", gene.toString());
   }
 
   public void testToString_1() {
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     assertEquals("BooleanGene=false", gene.toString());
   }
 
@@ -93,14 +94,14 @@ public class BooleanGeneTest
 
   public void testGetAllele_0() {
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
-    assertEquals(new Boolean(true), gene.getAllele());
+    gene.setAllele(Boolean.valueOf(true));
+    assertEquals(Boolean.valueOf(true), gene.getAllele());
   }
 
   public void testGetAllele_1() {
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
-    assertEquals(new Boolean(false), gene.getAllele());
+    gene.setAllele(Boolean.valueOf(false));
+    assertEquals(Boolean.valueOf(false), gene.getAllele());
   }
 
   public void testGetAllele_2() {
@@ -127,9 +128,9 @@ public class BooleanGeneTest
 
   public void testEquals_2() {
     Gene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(true));
+    gene1.setAllele(Boolean.valueOf(true));
     Gene gene2 = new BooleanGene();
-    gene2.setAllele(new Boolean(false));
+    gene2.setAllele(Boolean.valueOf(false));
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
@@ -155,13 +156,13 @@ public class BooleanGeneTest
 
   public void testBooleanValue_0() {
     BooleanGene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(true));
+    gene1.setAllele(Boolean.valueOf(true));
     assertEquals(true, gene1.booleanValue());
   }
 
   public void testBooleanValue_1() {
     BooleanGene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(false));
+    gene1.setAllele(Boolean.valueOf(false));
     assertEquals(false, gene1.booleanValue());
   }
 
@@ -201,7 +202,7 @@ public class BooleanGeneTest
    */
   public void testSetAllele_2() {
     Gene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(true));
+    gene1.setAllele(Boolean.valueOf(true));
   }
 
   /**
@@ -209,7 +210,7 @@ public class BooleanGeneTest
    */
   public void testSetAllele_3() {
     Gene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(false));
+    gene1.setAllele(Boolean.valueOf(false));
   }
 
   public void testCompareTo_0() {
@@ -226,22 +227,22 @@ public class BooleanGeneTest
 
   public void testCompareTo_2() {
     Gene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(true));
+    gene1.setAllele(Boolean.valueOf(true));
     Gene gene2 = new BooleanGene();
-    gene2.setAllele(new Boolean(true));
+    gene2.setAllele(Boolean.valueOf(true));
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
-    gene1.setAllele(new Boolean(false));
-    gene2.setAllele(new Boolean(false));
+    gene1.setAllele(Boolean.valueOf(false));
+    gene2.setAllele(Boolean.valueOf(false));
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
   }
 
   public void testCompareTo_3() {
     Gene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(true));
+    gene1.setAllele(Boolean.valueOf(true));
     Gene gene2 = new BooleanGene();
-    gene2.setAllele(new Boolean(false));
+    gene2.setAllele(Boolean.valueOf(false));
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals( -1, gene2.compareTo(gene1));
   }
@@ -252,7 +253,7 @@ public class BooleanGeneTest
    */
   public void testCompareTo_4() {
     Gene gene1 = new BooleanGene();
-    gene1.setAllele(new Boolean(true));
+    gene1.setAllele(Boolean.valueOf(true));
     Gene gene2 = new BooleanGene();
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals( -1, gene2.compareTo(gene1));
@@ -274,7 +275,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_0() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, 0.0d);
     assertEquals(true, gene.booleanValue());
   }
@@ -284,7 +285,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_1() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(1, 0.000001d); //index 1 should be ignored
     assertEquals(true, gene.booleanValue());
   }
@@ -294,7 +295,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_2() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(333, -0.000001d); //index 333 should be ignored
     assertEquals(false, gene.booleanValue());
   }
@@ -304,7 +305,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_3() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, -1.0d);
     assertEquals(false, gene.booleanValue());
   }
@@ -314,7 +315,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_4() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, -2.0d);
     assertEquals(false, gene.booleanValue());
   }
@@ -324,7 +325,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_5() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, 2.0d);
     assertEquals(true, gene.booleanValue());
   }
@@ -334,7 +335,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_6() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(0, 2.0d);
     assertEquals(true, gene.booleanValue());
   }
@@ -344,7 +345,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_7() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(0, -1.0d);
     assertEquals(false, gene.booleanValue());
   }
@@ -354,7 +355,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_8() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(22, -0.5d); //22 should be ignored
     assertEquals(false, gene.booleanValue());
   }
@@ -364,7 +365,7 @@ public class BooleanGeneTest
    */
   public void testApplyMutation_9() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(22, 0.5d); //22 should be ignored
     assertEquals(true, gene.booleanValue());
   }
@@ -480,7 +481,7 @@ public class BooleanGeneTest
    */
   public void testGetPersistentRepresentation_0() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     String s = gene.getPersistentRepresentation();
     assertEquals("true", s);
   }
@@ -490,7 +491,7 @@ public class BooleanGeneTest
    */
   public void testGetPersistentRepresentation_1() {
     BooleanGene gene = new BooleanGene();
-    gene.setAllele(new Boolean(false));
+    gene.setAllele(Boolean.valueOf(false));
     String s = gene.getPersistentRepresentation();
     assertEquals("false", s);
   }
