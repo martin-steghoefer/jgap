@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -428,7 +428,7 @@ public class PopulationTest
    * @since 2.3
    */
   public void testIsSerializable_0() {
-    Serializable pop = new Population();
+    assertTrue(Serializable.class.isInstance(new Population()));
   }
 
   /**
