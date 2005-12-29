@@ -29,7 +29,7 @@ import org.jgap.*;
 public abstract class abstractSupergene extends BaseGene
     implements Supergene, supergeneValidator, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * This field separates gene class name from
@@ -48,6 +48,15 @@ public abstract class abstractSupergene extends BaseGene
    * persistent representation of CompositeGene instances.
    */
   public final static String GENE_DELIMITER_CLOSING = ">";
+
+  /** Maximal number of retries for applyMutation and setToRandomValue.
+   * If the valid supergen cannot be created after this number of iterations,
+   * the error message is printed and the unchanged instance is returned. */
+  public final static int MAX_RETRIES = 1000;
+
+  /** Maximal number of notes about immutable genes per
+   * single gene position */
+  public final static int MAX_IMMUTABLE_GENES = 100000;
 
   /** Holds the genes of this supergene. */
   private Gene[] m_genes;
@@ -168,11 +177,6 @@ public abstract class abstractSupergene extends BaseGene
     }
   }
 
-  /** Maximal number of retries for applyMutation and setToRandomValue.
-   * If the valid supergen cannot be created after this number of iterations,
-   * the error message is printed and the unchanged instance is returned. */
-  public static int MAX_RETRIES = 1000;
-
   /**
    * Applies a mutation of a given intensity (percentage) onto the gene
    * at the given index. Retries while isValid() returns true for the
@@ -204,10 +208,6 @@ public abstract class abstractSupergene extends BaseGene
     m_genes[a_index].setAllele(backup);
     markImmutable(a_index);
   }
-
-  /** Maximal number of notes about immutable genes per
-   * single gene position */
-  public static int MAX_IMMUTABLE_GENES = 100000;
 
   /** @todo: Implement protection against overgrowing of this
    * data block.
