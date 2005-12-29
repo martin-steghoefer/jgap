@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -807,7 +807,7 @@ public class GenotypeTest
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
     Configuration conf = new ConfigurationForTest();
-    Serializable genotype = new Genotype(conf, chroms);
+    assertTrue(Serializable.class.isInstance(new Genotype(conf, chroms)));
   }
 
   /**

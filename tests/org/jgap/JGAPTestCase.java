@@ -22,12 +22,12 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
 
-  public static PrivateAccessor privateAccessor;
+  public final static PrivateAccessor privateAccessor = null;
 
   public JGAPTestCase(String name) {
     super(name);
