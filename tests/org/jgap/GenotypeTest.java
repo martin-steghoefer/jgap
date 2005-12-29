@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -760,10 +760,6 @@ public class GenotypeTest
     if (!thc.testHashCodeEquality(EqualChromosome)) {
       fail();
     }
-
-    // A lot of temporary objects where created in this test so do a quick
-    // garbage collect.
-    System.gc();
   }
 
   public void testSetActiveConfiguration_0()
