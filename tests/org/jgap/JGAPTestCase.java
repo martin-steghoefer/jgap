@@ -22,7 +22,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -88,6 +88,22 @@ public abstract class JGAPTestCase
     protected double evaluate(Chromosome a_subject) {
       //result does not matter here
       return 1.0000000d;
+    }
+  }
+
+  public static void assertInList(final Map a_list, Object a_object) {
+    if (a_list.containsKey(a_object)) {
+      a_list.remove(a_object);
+    }
+    else {
+      // Because only source code is browsed (also non-compilable code!),
+      // there is no disctinction between class java.lang.X and class X
+      if (a_list.containsKey("java.lang." + a_object)) {
+        a_list.remove("java.lang." + a_object);
+      }
+      else {
+        fail("Object " + a_object + " not in list!");
+      }
     }
   }
 
