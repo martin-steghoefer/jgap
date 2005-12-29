@@ -17,7 +17,7 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static void main(String[] args)
       throws Exception {
@@ -248,7 +248,7 @@ public class ClassKit {
                        (System.currentTimeMillis() - startTime) + " mills");
 
     // -------------------------------
-    Vector implementingClasses = new Vector();
+//    Vector implementingClasses = new Vector();
     Enumeration e = classes.elements();
     while (e.hasMoreElements()) {
       try {

@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Each data has its own data container
@@ -124,7 +124,7 @@ public class Evaluator {
   }
 
   protected Object createKey(int a_permutation, int a_run) {
-    return new String(a_permutation + "_" + a_run);
+    return a_permutation + "_" + a_run;
   }
 
   /**

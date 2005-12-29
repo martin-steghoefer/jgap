@@ -27,7 +27,7 @@ import java.util.jar.*;
  */
 public class PluginDiscoverer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static final boolean DEBUG = false;
 
@@ -211,7 +211,7 @@ public class PluginDiscoverer {
     if (!f.isDirectory()) {
       return;
     }
-    File[] matches = f.listFiles(new classFilter());
+    File[] matches = f.listFiles(new ClassFilter());
     for (int i = 0; i < matches.length; i++) {
       String classname = path + File.separator + matches[i].getName();
       classname = checkIfClassMatches(intrface, classname);
@@ -219,7 +219,7 @@ public class PluginDiscoverer {
         result.add(classname);
       }
     }
-    matches = f.listFiles(new directoryFilter());
+    matches = f.listFiles(new DirectoryFilter());
     for (int i = 0; i < matches.length; i++) {
       String folder = path + File.separator + matches[i].getName();
       findImplementingClasses0(intrface, result, base, folder);
@@ -229,7 +229,7 @@ public class PluginDiscoverer {
   /**
    * Filter that only matches class files
    */
-  public class classFilter
+  public class ClassFilter
       implements FilenameFilter {
     public boolean accept(File dir, String name) {
       return (name != null && name.toLowerCase().endsWith(".class"));
@@ -238,7 +238,7 @@ public class PluginDiscoverer {
   /**
    * Filter that only matches subdirectories
    */
-  public class directoryFilter
+  public class DirectoryFilter
       implements FilenameFilter {
     public boolean accept(File dir, String name) {
       return (dir != null &&

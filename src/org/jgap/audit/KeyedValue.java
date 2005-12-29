@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class KeyedValue
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private Comparable m_key;
 
@@ -56,7 +56,7 @@ public class KeyedValue
    * @author Klaus Meffert
    * @since 2.3
    */
-  public Number getValue() {
+  public synchronized Number getValue() {
     return m_value;
   }
 

@@ -110,6 +110,6 @@ public class ChromosomeForTest
   }
 
   public static class TestResultHolder {
-    public static int computedTimes;
+    static int computedTimes;
   }
 }

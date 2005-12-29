@@ -24,7 +24,7 @@ public abstract class DocumentBuilderBase {
    * DocumentBuilderBase */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Builds a document from the given input (input data + existing document).
@@ -97,7 +97,7 @@ public abstract class DocumentBuilderBase {
   private Object createElementGeneric(Object document, Object element,
                                       String tagName) {
     if (element == null) {
-      element = createElement(document, element, tagName);
+      element = createElement(document, null, tagName);
       documentAppendChild(document, element);
     }
     else {

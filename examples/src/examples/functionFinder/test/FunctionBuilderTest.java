@@ -16,7 +16,7 @@ import examples.functionFinder.*;
 public class FunctionBuilderTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public FunctionBuilderTest() {
     Repository.init();
@@ -46,9 +46,8 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   public void testEmpty_3() {
-    Vector elements = new Vector();
     try {
-      Term element = new Term(1, "", 1);
+      new Term(1, "", 1);
       fail();
     }
     catch (AssertionFailedError aex) {
