@@ -32,9 +32,9 @@ package org.jgap;
 public abstract class FitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
-  public static double NO_FITNESS_VALUE = -1.0000000d;
+  public final static double NO_FITNESS_VALUE = -1.0000000d;
 
   private double m_lastComputedFitnessValue = NO_FITNESS_VALUE;
 
