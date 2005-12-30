@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Determines if object should output debug information.
@@ -272,15 +272,19 @@ public class TestHashcode {
       System.out.println("Average + StdDev =" + (average + stdDev));
     }
 
-    if ( (m_AverageMin < average) && (average < m_AverageMax))
+    if ( (m_AverageMin < average) && (average < m_AverageMax)) {
       result = true;
-    else
+    }
+    else {
       result = false;
+    }
 
-    if ( (m_StdDevMin < stdDev) && (stdDev < m_StdDevMax))
+    if ( (m_StdDevMin < stdDev) && (stdDev < m_StdDevMax)) {
       result &= true;
-    else
-      result &= false;
+    }
+    else {
+      result = false;
+    }
     return result;
   }
 
