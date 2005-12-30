@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
@@ -236,13 +236,20 @@ public class CompositeGeneTest
     assertFalse(gene1.equals(new Vector()));
   }
 
-  public void testEquals_4() {
-    CompositeGene gene1 = new CompositeGene();
-    gene1.addGene(null, false);
-    CompositeGene gene2 = new CompositeGene();
-    gene2.addGene(null, false);
-    assertTrue(gene1.equals(gene2));
-    assertTrue(gene2.equals(gene1));
+  /**
+   * Tests that no NullPointerException arises
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_4_2() {
+    CompositeGene gene1 = new CompositeGene(new BooleanGene());
+    try {
+      gene1.addGene(null, false);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ;// this is expected
+    }
   }
 
   public void testEquals_5() {
