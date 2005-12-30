@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class CoinsEnergy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -181,7 +181,7 @@ public class CoinsEnergy {
    * @since 2.4
    */
   public static class EnergyGeneConstraintChecker implements IGeneConstraintChecker {
-    public static double[] coinWeights = {1.0d, 2.0d, 8.0d, 3.0d};
+    public final static double[] coinWeights = {1.0d, 2.0d, 8.0d, 3.0d};
 
     /**
      * Check if a given allele value is valid for the given gene instance.

@@ -23,7 +23,7 @@ public class PermutingConfiguration
     extends Configuration {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private List m_randomGeneratorSlots;
 
@@ -109,7 +109,7 @@ public class PermutingConfiguration
     m_naturalSelectorSlots.add(a_naturalSelector);
   }
 
-  public void addGeneticOperator(GeneticOperator a_geneticOperator) {
+  public synchronized void addGeneticOperator(GeneticOperator a_geneticOperator) {
     throw new UnsupportedOperationException("Use addGeneticOperatorSlot instead!");
 
   }

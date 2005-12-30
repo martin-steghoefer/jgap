@@ -29,7 +29,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -37,12 +37,12 @@ public class KnapsackMain {
   private static final int MAX_ALLOWED_EVOLUTIONS = 140;
 
   /** Volumes of arbitrary items in ccm*/
-  public static double[] itemVolumes = {
+  public final static double[] itemVolumes = {
       50.2d, 14.8d, 27.5d, 6800.0d, 25.0d, 4.75d, 95.36d, 1500.7d, 18365.9d,
       83571.1d};
 
   /** Names of arbitrary items, only for outputting something imaginable*/
-  public static String[] itemNames = {
+  public final static String[] itemNames = {
       "Torch", "Banana", "Miniradio", "TV", "Gameboy", "Small thingie",
       "Medium thingie", "Big thingie", "Huge thingie", "Gigantic thingie"};
 
