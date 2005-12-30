@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -77,7 +77,7 @@ public class WeightedRouletteSelectorTest
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
@@ -104,7 +104,7 @@ public class WeightedRouletteSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 4);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
@@ -156,7 +156,7 @@ public class WeightedRouletteSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 4);
     thirdBestChrom.setFitnessValue(10);
     toAddFrom.addChromosome(thirdBestChrom);
@@ -210,7 +210,7 @@ public class WeightedRouletteSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 4);
     thirdBestChrom.setFitnessValue(0);
     toAddFrom.addChromosome(thirdBestChrom);
@@ -255,7 +255,7 @@ public class WeightedRouletteSelectorTest
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
-    gene.setAllele(new Boolean(true));
+    gene.setAllele(Boolean.valueOf(true));
     Chromosome thirdBestChrom = new Chromosome(gene, 4);
     thirdBestChrom.setFitnessValue(1);
     toAddFrom.addChromosome(thirdBestChrom);
