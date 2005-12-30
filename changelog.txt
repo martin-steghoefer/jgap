@@ -1,7 +1,12 @@
 2.6
 -----------------------------------------------------------
+* Made IGeneConstraintChecker Serializable
 * Extended javadoc
 * Removed some unneeded local variables
+* Fixed many code smells
+* Renamed class instantiableSupergene in 
+  class SupergenePersistentRepresentationTest
+  to InstantiableSupergene
 
 2.5
 ----------
