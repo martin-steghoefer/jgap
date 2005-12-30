@@ -21,7 +21,7 @@ import junit.framework.*;
 public class ChromosomePoolTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomePoolTest.class);
@@ -58,7 +58,7 @@ public class ChromosomePoolTest
       new ChromosomePool().releaseChromosome(null);
       fail();
     }
-    catch (NullPointerException nex) {
+    catch (IllegalArgumentException nex) {
       ; //this is OK
     }
   }
