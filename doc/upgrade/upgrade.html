@@ -32,9 +32,16 @@ read this document. It will guide you thru the process of upgrading to version
 
 <p><b>Hint: If you try to upgrade from a version lower than 2.0 to a version
 higher than 2.0, first upgrade to 2.0, then test your application. After that,
-upgrade to 2.4 and test again!</b></p>
+upgrade to 2.4 (or a later version) and test again!</b></p>
 
 <h2 class="docTitle">Upgrade Instructions</h2>
+
+<h3 class="subHeader">Reproduction Operator</h3>
+<p>The ReproductionOperator class is no longer needed. Reproduction takes place
+via implementations of NaturalSelector's. Main reason: Performance increase.<br>
+As this information has been added quite a time after releasing version 2.0, it
+could be that it applies not for version 2.0. But it applies&nbsp; for the
+latest JGAP versions for sure!</p>
 
 <h3 class="subHeader">Central Configuration Object</h3>
 <p>With version 2.0, the holder of the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html">org.jgap.Configuration</a></font> object has been made a
