@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * This field separates gene class name from
@@ -123,6 +123,9 @@ public class CompositeGene
    * @since 1.1
    */
   public void addGene(Gene a_gene, boolean a_strict) {
+    if ( a_gene == null) {
+      throw new IllegalArgumentException("Gene instance must not be null!");
+    }
     if (m_geneTypeAllowed != null) {
       if (!a_gene.getClass().getName().equals(m_geneTypeAllowed.getClass().
                                               getName())) {
