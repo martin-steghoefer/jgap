@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -225,12 +225,12 @@ public class XMLManagerTest
   }
 
   /**
-   * Do the same as above test to verify that overriding existin file works
+   * Do the same as above test to verify that overriding existing file works
    * @throws Exception
    */
   public void testWriteFile_1()
       throws Exception {
-    Document doc = XMLManager.representGenotypeAsDocument(genotype);
+    XMLManager.representGenotypeAsDocument(genotype);
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(genotype),
                          new File(FILENAME_WRITE));
   }
