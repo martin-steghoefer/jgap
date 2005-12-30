@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DataTreeBuilder {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -73,7 +73,7 @@ public class DataTreeBuilder {
    * @author Klaus Meffert
    * @since 2.0
    */
-  public static DataTreeBuilder getInstance() {
+  public static synchronized DataTreeBuilder getInstance() {
     if (instance == null) {
       instance = new DataTreeBuilder();
       instance.m_lock = new Object();
