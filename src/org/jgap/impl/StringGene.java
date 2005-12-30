@@ -42,7 +42,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   private int m_minLength;
 
@@ -295,7 +295,7 @@ public class StringGene
           s = "\"\"";
         }
         else {
-          s = m_value.toString();
+          s = m_value;
         }
       }
       return URLEncoder.encode("" + s, "UTF-8") +
