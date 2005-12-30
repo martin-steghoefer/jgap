@@ -33,7 +33,7 @@ public class MapGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Container for valid alleles
@@ -397,7 +397,7 @@ public class MapGene
           if (value1 == null && value2 != null) {
             return -1;
           }
-          else if (!value1.equals(value2)) {
+          else if (value1 == null || !value1.equals(value2)) {
             // arbitrarily returning -1
             return -1;
           }
