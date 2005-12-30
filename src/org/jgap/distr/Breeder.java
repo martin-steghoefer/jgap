@@ -26,7 +26,7 @@ public abstract class Breeder
     implements Runnable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The parent Breeder to report to
@@ -41,7 +41,7 @@ public abstract class Breeder
   /**
    * The Genotype this Breeder is responsible for
    */
-  private Genotype genotype;
+  private Genotype genotype;/**@todo construct somewhere*/
 
   /**
    * Helper class for merging together two Populations into one.
