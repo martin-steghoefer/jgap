@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.util.*;
+import java.io.*;
 import org.jgap.impl.*;
 import junit.framework.*;
 import org.jgap.util.*;
@@ -23,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1302,4 +1303,43 @@ public class ChromosomeTest
       return !(a_gene.getClass().equals(m_forbidden));
     }
   }
+
+  /**
+   * Ensures Chromosome is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    Chromosome chrom = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    assertTrue(Serializable.class.isInstance(chrom));
+  }
+
+  /**
+   * Ensures that Chromosome and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    // construct chromosome to be serialized
+    Chromosome chrom = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    IGeneConstraintChecker checker = new MyConstraintChecker();
+    chrom.setConstraintChecker(checker);
+    // serialize chromosome to a file
+    File f = File.createTempFile("chromosome","ser");
+    OutputStream os = new FileOutputStream(f);
+    ObjectOutputStream oos = new ObjectOutputStream(os);
+    oos.writeObject(chrom);
+    InputStream oi = new FileInputStream(f);
+    ObjectInputStream ois = new ObjectInputStream(oi);
+    assertEquals(chrom, ois.readObject());
+  }
+
 }
