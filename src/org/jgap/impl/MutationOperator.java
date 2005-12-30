@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -101,6 +101,12 @@ public class MutationOperator
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
+    // Population or candidate chromosomes list empty:
+    // nothing to do.
+    // -----------------------------------------------
+    if (a_population == null || a_candidateChromosomes == null) {
+      return;
+    }
     // If the mutation rate is set to zero and dynamic mutation rate is
     // disabled, then we don't perform any mutation.
     // ----------------------------------------------------------------
