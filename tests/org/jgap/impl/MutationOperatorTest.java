@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.25 $";
+  private static final String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -122,6 +122,8 @@ public class MutationOperatorTest
   }
 
   /**
+   * NullpointerException because of null Configuration
+   *
    * @author Klaus Meffert
    */
   public void testOperate_2() {
@@ -265,6 +267,17 @@ public class MutationOperatorTest
     Genotype.setConfiguration(new DefaultConfiguration());
     MutationOperator mutOp = new MutationOperator(0);
     mutOp.setMutationRateCalc(null);
+    mutOp.operate(null, null);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testOperate_6_2() {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    MutationOperator mutOp = new MutationOperator(0);
+    mutOp.setMutationRateCalc(new DefaultMutationRateCalculator());
     mutOp.operate(null, null);
   }
 
