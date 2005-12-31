@@ -1,6 +1,5 @@
 package examples.functionFinder.test;
 
-import java.io.*;
 import java.util.*;
 
 import org.jgap.*;
@@ -17,7 +16,7 @@ import examples.functionFinder.*;
 public class GeneExtractorTest extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   private static int numberOfFunctions;
   private static int numberOfConstants;
