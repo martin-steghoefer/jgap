@@ -21,7 +21,7 @@ import org.jgap.util.*;
  */
 public abstract class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Information needed by workers
@@ -110,17 +110,6 @@ public abstract class Master {
    */
   public RequestDispatcher getDispatcher() {
     return m_dispatcher;
-  }
-
-  /**
-   *
-   * @return MasterInfo of this master
-   *
-   * @author Klaus Meffert
-   * @since 2.4
-   */
-  public MasterInfo getMasterinfo() {
-    return m_masterinfo;
   }
 
   /**

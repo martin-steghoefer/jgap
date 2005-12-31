@@ -22,7 +22,7 @@ import javax.swing.*;
  * */
 public class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Singleton instance of ConfigWriter
@@ -99,8 +99,11 @@ public class ConfigWriter {
     }
     try {
       FileOutputStream out = new FileOutputStream(cInfo.getFileName());
-      config.store(out, "---JGAP Configuration File---");
-      out.close();
+      try {
+        config.store(out, "---JGAP Configuration File---");
+      }finally {
+        out.close();
+      }
     }
     catch (FileNotFoundException fileEx) {
       JOptionPane.showMessageDialog(null,

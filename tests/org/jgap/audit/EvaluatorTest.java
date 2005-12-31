@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static double DELTA = 0.00000001d;
 
@@ -274,7 +274,7 @@ public class EvaluatorTest
     assertEquals( (Math.abs(9.0d - 4) / 2 + Math.abs(8.0d - 9) / 2) / 2
                  + (Math.abs(11.0d - 14) / 2 + Math.abs(28.0d - 11) / 2) / 2,
                  avg.avgDiversityFitnessValue, DELTA);
-    assertEquals( (Math.abs(28 - 9)) / 1, avg.avgBestDeltaFitnessValue,
+    assertEquals( (Math.abs(28 - 9)) / (double) 1, avg.avgBestDeltaFitnessValue,
                  DELTA);
     assertEquals( (double) 3 / 2 + (double) 3 / 2, avg.sizeAvg, DELTA);
   }
