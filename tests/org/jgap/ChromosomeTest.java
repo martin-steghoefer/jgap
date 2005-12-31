@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -451,7 +451,7 @@ public class ChromosomeTest
    * @author John Serri
    * @since 2.1
    */
-  public void testHashcode_0()
+  public void testHashCode_0()
       throws InvalidConfigurationException {
     int count;
     int numGenes;

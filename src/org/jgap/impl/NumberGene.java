@@ -18,10 +18,9 @@ import org.jgap.*;
  * @since 1.1 (most code moved and adapted from IntegerGene)
  */
 public abstract class NumberGene
-    extends BaseGene
-    implements Gene {
+    extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * References the internal value (allele) of this Gene

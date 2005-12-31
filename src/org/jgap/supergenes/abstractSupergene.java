@@ -27,9 +27,9 @@ import org.jgap.*;
  * @since 2.0
  */
 public abstract class abstractSupergene extends BaseGene
-    implements Supergene, supergeneValidator, Serializable {
+    implements Supergene, supergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * This field separates gene class name from

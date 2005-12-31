@@ -27,10 +27,9 @@ import org.jgap.*;
  * @since 2.4
  */
 public class SetGene
-    extends BaseGene
-    implements Gene {
+    extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private HashSet geneSet = new HashSet();
 

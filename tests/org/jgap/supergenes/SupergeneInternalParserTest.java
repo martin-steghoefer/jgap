@@ -21,9 +21,9 @@ public class SupergeneInternalParserTest extends TestCase
 {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
-  class test extends abstractSupergene
+  class TestClass extends abstractSupergene
   {
 
     public boolean testInternalParser() {
@@ -99,11 +99,11 @@ public class SupergeneInternalParserTest extends TestCase
     return suite;
   }
 
-  test m_test;
+  TestClass m_test;
 
   protected void setUp() throws Exception {
       super.setUp();
-      m_test = new test();
+      m_test = new TestClass();
   }
 
   protected void tearDown() throws Exception {

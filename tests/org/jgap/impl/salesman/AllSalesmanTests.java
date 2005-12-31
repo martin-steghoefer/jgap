@@ -18,10 +18,10 @@ import junit.framework.*;
  * @since 2.0
  */
 public class AllSalesmanTests
-    extends TestCase {
+    extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();

@@ -28,8 +28,7 @@ import org.jgap.*;
  * @since 1.1
  */
 public class StringGene
-    extends BaseGene
-    implements Gene {
+    extends BaseGene {
   //Constants for ready-to-use alphabets or serving as part of concetenation
   public static final String ALPHABET_CHARACTERS_UPPER =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -42,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   private int m_minLength;
 

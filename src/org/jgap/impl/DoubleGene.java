@@ -22,10 +22,9 @@ import org.jgap.*;
  * @since 1.1
  */
 public class DoubleGene
-    extends NumberGene
-    implements Gene {
+    extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly

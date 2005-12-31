@@ -30,10 +30,9 @@ import org.jgap.*;
  * @since 2.4
  */
 public class MapGene
-    extends BaseGene
-    implements Gene {
+    extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Container for valid alleles
