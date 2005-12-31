@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -264,6 +264,7 @@ public class Chromosome
    * will be constructed and its value set appropriately before returning.
    *
    * @return copy of this Chromosome
+   * @throws IllegalStateException instead of CloneNotSupportedException
    *
    * @author Neil Rotstan
    * @author Klaus Meffert

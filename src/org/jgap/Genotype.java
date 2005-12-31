@@ -21,6 +21,9 @@ import org.jgap.event.*;
  * may be constructed normally via constructor, or the static
  * randomInitialGenotype() method can be used to generate a Genotype with a
  * randomized Chromosome population.
+ * <p>
+ * Please note that among all created Genotype instances there may only be one
+ * configuration (singleton!), used by all Genotype instances
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -29,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
+  private final static String CVS_REVISION = "$Revision: 1.61 $";
 
   /**
    * The current active Configuration instance.
@@ -78,7 +81,7 @@ public class Genotype
    * will be thrown.
    *
    * @param a_activeConfiguration the current active Configuration object
-   * @param a_population The Chromosome population to be managed by this
+   * @param a_population the Chromosome population to be managed by this
    * Genotype instance
    * @throws InvalidConfigurationException
    *
