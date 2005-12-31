@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1104,7 +1104,7 @@ public class ChromosomeTest
    *
    * @author Klaus Meffert
    */
-  public void testCleanUp_0()
+  public void testCleanup_0()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
@@ -1118,7 +1118,7 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCleanUp_1()
+  public void testCleanup_1()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
@@ -1139,7 +1139,7 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCleanUp_2()
+  public void testCleanup_2()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     conf.setChromosomePool(new ChromosomePool());
