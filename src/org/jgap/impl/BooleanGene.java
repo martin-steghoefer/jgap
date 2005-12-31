@@ -30,21 +30,21 @@ public class BooleanGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
    * are used to save memory so that a new Boolean object doesn't have to
    * be constructed each time.
    */
-  protected static final Boolean TRUE_BOOLEAN = new Boolean(true);
+  protected static final Boolean TRUE_BOOLEAN = Boolean.valueOf(true);
 
   /**
    * Shared constant representing the "false" boolean value. Shared constants
    * are used to save memory so that a new Boolean object doesn't have to
    * be constructed each time.
    */
-  protected static final Boolean FALSE_BOOLEAN = new Boolean(false);
+  protected static final Boolean FALSE_BOOLEAN = Boolean.valueOf(false);
 
   /**
    * References the internal boolean value of this Gene.
@@ -303,20 +303,20 @@ public class BooleanGene
    */
   public void applyMutation(int index, double a_percentage) {
     if (m_value == null) {
-      m_value = new Boolean(false);
+      m_value = Boolean.valueOf(false);
     }
     else if (a_percentage > 0) {
       // change to TRUE
       // ---------------
       if (!m_value.booleanValue()) {
-        m_value = new Boolean(true);
+        m_value = Boolean.valueOf(true);
       }
     }
     else if (a_percentage < 0) {
       // change to FALSE
       // ---------------
       if (m_value.booleanValue()) {
-        m_value = new Boolean(false);
+        m_value = Boolean.valueOf(false);
       }
     }
   }

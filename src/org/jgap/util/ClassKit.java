@@ -17,7 +17,7 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static void main(String[] args)
       throws Exception {
@@ -85,7 +85,7 @@ public class ClassKit {
   public static List find(String pckgname, Class tosubclass) {
     List result = new Vector();
     // Translate the package name into an absolute path
-    String name = new String(pckgname);
+    String name = pckgname;
     if (!name.startsWith("/")) {
       name = "/" + name;
     }

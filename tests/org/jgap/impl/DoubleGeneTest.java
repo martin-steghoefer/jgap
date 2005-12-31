@@ -22,13 +22,10 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.24 $";
-
-  //delta for distinguishing whether a value is to be interpreted as zero
-  private static final double DELTA = 0.0001d;
+  private static final String CVS_REVISION = "$Revision: 1.25 $";
 
   public void setUp() {
-    Genotype.setConfiguration(null);
+    super.setUp();
   }
 
   public static Test suite() {

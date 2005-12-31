@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -451,7 +451,7 @@ public class GenotypeTest
     config.getGeneticOperators().clear();
     config.addNaturalSelector(new WeightedRouletteSelector(), true);
     try {
-      Genotype genotype = Genotype.randomInitialGenotype(config);
+      Genotype.randomInitialGenotype(config);
       fail();
     }
     catch (InvalidConfigurationException iex) {
@@ -631,7 +631,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(99999);
     Genotype genotype = new Genotype(conf, chroms);
-    assertEquals(false, genotype.equals(null));
+    assertFalse(genotype.equals(null));
     Genotype genotype2 = new Genotype(conf, chroms);
     assertTrue(genotype.equals(genotype2));
     assertEquals(genotype.toString(), genotype2.toString());

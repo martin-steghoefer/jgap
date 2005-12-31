@@ -23,10 +23,10 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
 
-    public static class instantiableSupergene extends abstractSupergene
+    public static class InstantiableSupergene extends abstractSupergene
      {
          public boolean isValid(Gene [] a) { return true; };
      }
@@ -34,7 +34,7 @@ public class SupergenePersistentRepresentationTest extends TestCase {
     public static boolean testRepresentation()
      {
         try {
-            instantiableSupergene gene = new instantiableSupergene ();
+            InstantiableSupergene gene = new InstantiableSupergene ();
 
             Gene i1 = new IntegerGene (1, 12);
             Gene i2 = new DoubleGene  (3, 4);
@@ -45,7 +45,7 @@ public class SupergenePersistentRepresentationTest extends TestCase {
             gene.addGene (i1);
             gene.addGene (i2);
 
-            instantiableSupergene nested = new instantiableSupergene();
+            InstantiableSupergene nested = new InstantiableSupergene();
 
             Gene n1 = new IntegerGene (1, 12);
             Gene n2 = new DoubleGene  (3, 4);
@@ -58,7 +58,7 @@ public class SupergenePersistentRepresentationTest extends TestCase {
 
             gene.addGene(nested);
 
-            instantiableSupergene nested2 = new instantiableSupergene();
+            InstantiableSupergene nested2 = new InstantiableSupergene();
             nested2.setValidator(new Validator()
              {
                  public boolean isValid(Gene [] g, Supergene s)
@@ -78,7 +78,7 @@ public class SupergenePersistentRepresentationTest extends TestCase {
 
             gene.addGene(nested2);
 
-            instantiableSupergene nested3 = new instantiableSupergene();
+            InstantiableSupergene nested3 = new InstantiableSupergene();
             nested3.setValidator(null);
 
             Gene nnn1 = new IntegerGene (1, 1000);
@@ -97,7 +97,7 @@ public class SupergenePersistentRepresentationTest extends TestCase {
 
 //            System.out.println ("Old representation: " + representation);
 
-            instantiableSupergene restored = new instantiableSupergene ();
+            InstantiableSupergene restored = new InstantiableSupergene ();
             restored.setValueFromPersistentRepresentation (representation);
 
 //            System.out.println ("New representation: " +

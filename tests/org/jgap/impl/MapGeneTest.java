@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -49,7 +49,7 @@ public class MapGeneTest
   public void testConstruct_2()
       throws Exception {
     try {
-      Gene gene = new MapGene(null);
+      new MapGene(null);
       fail();
     } catch (IllegalArgumentException iex) {
       ;//this is OK
