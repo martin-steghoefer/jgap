@@ -16,7 +16,7 @@ import examples.functionFinder.*;
 public class FunctionBuilderTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public FunctionBuilderTest() {
     Repository.init();
@@ -37,7 +37,7 @@ public class FunctionBuilderTest extends TestCase {
     Term element = new Term(0, "X", 1);
     elements.add(element);
     try {
-      String formula = getFormula(elements);
+      getFormula(elements);
       fail();
     }
     catch (RuntimeException rte) {

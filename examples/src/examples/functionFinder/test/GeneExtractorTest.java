@@ -17,7 +17,7 @@ import examples.functionFinder.*;
 public class GeneExtractorTest extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   private static int numberOfFunctions;
   private static int numberOfConstants;
@@ -267,8 +267,7 @@ public class GeneExtractorTest extends JGAPTestCase {
    *
    * @author Klaus Meffert
    */
-  private class TestGene extends BaseGene
-      implements Gene, Comparable, Serializable {
+  private class TestGene extends BaseGene {
     private int value;
 
     public TestGene(int value) {

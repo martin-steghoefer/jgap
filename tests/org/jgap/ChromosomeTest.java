@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -427,7 +427,7 @@ public class ChromosomeTest
     genes[1] = new IntegerGene();
     Chromosome chrom = new Chromosome(genes);
     try {
-      Chromosome chrom2 = (Chromosome) chrom.clone();
+      chrom.clone();
       fail();
     }
     catch (IllegalStateException illex) {

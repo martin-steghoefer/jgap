@@ -12,7 +12,7 @@ import org.jgap.*;
 public class FitnessValueTest extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private MatchAgainstTruthTable matcher;
 
@@ -131,13 +131,12 @@ public class FitnessValueTest extends JGAPTestCase {
     //fitness for negative input must be equal to positive input
     double diff1 = getFitness(-200);
     double diff2 = getFitness(200);
-    assertTrue(diff1 == diff2);
+    assertEquals(diff1, diff2, DELTA);
   }
 
   public void testStetigkeit() throws Throwable{
     double oldFitness = -1;
     double newFitness;
-    double diff1 = getFitness(81.92f);
     for (float i=0.01f;i<20000;i=i*2) {
 //      System.err.print("i: "+i);
       newFitness = getFitness(i);
