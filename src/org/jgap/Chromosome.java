@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -671,19 +671,20 @@ public class Chromosome
     if (other == null) {
       return 1;
     }
+    int size = size();
     Chromosome otherChromosome = (Chromosome) other;
     Gene[] otherGenes = otherChromosome.m_genes;
     // If the other Chromosome doesn't have the same number of genes,
     // then whichever has more is the "greater" Chromosome.
     // --------------------------------------------------------------
-    if (otherChromosome.size() != size()) {
+    if (otherChromosome.size() != size) {
       return size() - otherChromosome.size();
     }
     // Next, compare the gene values (alleles) for differences. If
     // one of the genes is not equal, then we return the result of its
     // comparison.
     // ---------------------------------------------------------------
-    for (int i = 0; i < size(); i++) {
+    for (int i = 0; i < size; i++) {
       int comparison = m_genes[i].compareTo(otherGenes[i]);
       if (comparison != 0) {
         return comparison;
