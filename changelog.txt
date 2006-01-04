@@ -5,6 +5,7 @@
   --> interface org.jgap.IJAGPFactory as well as impl.
        org.jgap.impl.JGAPFactory.
   Could be replaced via System.setproperty(...)
+* Added equals and  compareTo to CrossoverOperator
 * Added interface org.jgap.ICompsiteGene for
   genes that may contain other genes
 * Added interface org.jgap.IChromosomePool for
