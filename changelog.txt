@@ -1,5 +1,7 @@
 2.6
 -----------------------------------------------------------
+* Added interface org.jgap.ICompsiteGene for
+  genes that may contain other genes
 * Made IGeneConstraintChecker Serializable
 * Extended javadoc
 * Removed some unneeded local variables
