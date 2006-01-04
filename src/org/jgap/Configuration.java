@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * Constants for toString()
@@ -134,13 +134,13 @@ public class Configuration
   private RandomGenerator m_randomGenerator;
 
   /**
-   * References the EventManager that is to be used for the notification
+   * References the event manager that is to be used for the notification
    * of genetic events and the management of event subscribers.
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  private EventManager m_eventManager;
+  private IEventManager m_eventManager;
 
   /**
    * References the chromosome pool, if any, that is to be used to pool
@@ -696,8 +696,8 @@ public class Configuration
   }
 
   /**
-   * Sets the EventManager that is to be associated with this configuration.
-   * The EventManager is responsible for the management of event subscribers
+   * Sets the event manager that is to be associated with this configuration.
+   * The event manager is responsible for the management of event subscribers
    * and event notifications.
    *
    * @param a_eventManagerToSet the EventManager instance to use in this
@@ -709,27 +709,26 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setEventManager(EventManager a_eventManagerToSet)
-      throws
-      InvalidConfigurationException {
+  public void setEventManager(IEventManager a_eventManagerToSet)
+      throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given event manager isn't null.
     // ----------------------------------------------------------------
     if (a_eventManagerToSet == null) {
       throw new InvalidConfigurationException(
-          "The EventManager instance may not be null.");
+          "The event manager instance may not be null.");
     }
     m_eventManager = a_eventManagerToSet;
   }
 
   /**
-   * Retrieves the EventManager associated with this configuration.
-   * The EventManager is responsible for the management of event subscribers
+   * Retrieves the event manager associated with this configuration.
+   * The event manager is responsible for the management of event subscribers
    * and event notifications.
    *
-   * @return the actively configured EventManager instance
+   * @return the actively configured event manager instance
    */
-  public EventManager getEventManager() {
+  public IEventManager getEventManager() {
     return m_eventManager;
   }
 

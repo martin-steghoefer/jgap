@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -323,7 +323,7 @@ public class ConfigurationTest
     conf.addNaturalSelector(natSel, false);
     RandomGenerator randGen = new StockRandomGenerator();
     conf.setRandomGenerator(randGen);
-    EventManager evMan = new EventManager();
+    IEventManager evMan = new EventManager();
     conf.setEventManager(evMan);
     GeneticOperator mutOp = new MutationOperator();
     conf.addGeneticOperator(mutOp);

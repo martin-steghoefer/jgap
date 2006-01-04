@@ -24,7 +24,7 @@ import org.jgap.*;
 public class EventManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(EventManagerTest.class);
@@ -39,7 +39,7 @@ public class EventManagerTest
    */
   public void testAddEventListener_0()
       throws Exception {
-    EventManager man = new EventManager();
+    IEventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
     Map listeners = (Map) privateAccessor.getField(man, "m_listeners");
     assertTrue(listeners.isEmpty());
@@ -56,7 +56,7 @@ public class EventManagerTest
    */
   public void testAddEventListener_1()
       throws Exception {
-    EventManager man = new EventManager();
+    IEventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
     Map listeners = (Map) privateAccessor.getField(man, "m_listeners");
     man.addEventListener("testeventname", listener);
@@ -73,7 +73,7 @@ public class EventManagerTest
    */
   public void testRemoveEventListener_0()
       throws Exception {
-    EventManager man = new EventManager();
+    IEventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
     Map listeners = (Map) privateAccessor.getField(man, "m_listeners");
     man.addEventListener("testeventname", listener);
@@ -94,7 +94,7 @@ public class EventManagerTest
    */
   public void testFireGeneticeEvent_0()
       throws Exception {
-    EventManager man = new EventManager();
+    IEventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
     man.addEventListener("testeventname", listener);
     GeneticEvent genEvent = new GeneticEvent("wrong_name",this);
@@ -109,7 +109,7 @@ public class EventManagerTest
    */
   public void testFireGeneticeEvent_1()
       throws Exception {
-    EventManager man = new EventManager();
+    IEventManager man = new EventManager();
     EventListener listener = new EventListener();
     man.addEventListener("testeventname", listener);
     GeneticEvent genEvent = new GeneticEvent("testeventname",this);
