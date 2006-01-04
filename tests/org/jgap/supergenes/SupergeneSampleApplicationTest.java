@@ -23,7 +23,7 @@ import org.jgap.*;
 public class SupergeneSampleApplicationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public void testSupergeneTotal() {
     int E_s = Integer.MAX_VALUE;
@@ -34,7 +34,7 @@ public class SupergeneSampleApplicationTest
       Force.REPORT_ENABLED = false;
       AbstractSupergeneTest.MAX_ALLOWED_EVOLUTIONS = 512;
       AbstractSupergeneTest.POPULATION_SIZE = 256;
-      abstractSupergene.reset();
+      AbstractSupergene.reset();
       E_s = new SupergeneTest().test();
       if (E_s == 0) {
         break Test;

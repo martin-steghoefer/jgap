@@ -22,7 +22,7 @@ import java.io.*;
  */
 public class SupergenesPerformanceTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Starts the performance test
@@ -50,7 +50,7 @@ public class SupergenesPerformanceTest {
           long t_s = 0;
           long t_w = 0;
           for (i = 0; i < 10; i++) {
-            abstractSupergene.reset();
+            AbstractSupergene.reset();
             long s_started;
             // Test with Supergene.
             // --------------------
