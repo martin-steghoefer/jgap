@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1315,7 +1315,7 @@ public class ChromosomeTest
       throws Exception {
     Chromosome chrom = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
-    assertTrue(Serializable.class.isInstance(chrom));
+    assertTrue(isSerializable(chrom));
   }
 
   /**
@@ -1332,14 +1332,8 @@ public class ChromosomeTest
                                new IntegerGene(1, 5)});
     IGeneConstraintChecker checker = new MyConstraintChecker();
     chrom.setConstraintChecker(checker);
-    // serialize chromosome to a file
-    File f = File.createTempFile("chromosome","ser");
-    OutputStream os = new FileOutputStream(f);
-    ObjectOutputStream oos = new ObjectOutputStream(os);
-    oos.writeObject(chrom);
-    InputStream oi = new FileInputStream(f);
-    ObjectInputStream ois = new ObjectInputStream(oi);
-    assertEquals(chrom, ois.readObject());
+    Object o = doSerialize(chrom);
+    assertEquals(o, chrom);
   }
 
 }
