@@ -17,10 +17,10 @@ import org.jgap.*;
  * @author Chris Knowles
  * @since 2.0
  */
-public class DefaultCrossoverRateCalculator implements IUniversalRateCalculator {
-
+public class DefaultCrossoverRateCalculator
+    implements IUniversalRateCalculator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Calculates the dynamic crossover rate. This is chosen to be the chromosome
@@ -42,14 +42,13 @@ public class DefaultCrossoverRateCalculator implements IUniversalRateCalculator 
 
   /**
    * Determines whether crossover is to be carried out for a given population.
-   * @return true   The DefaultCrossoverRateCalculator always returns a finite
-   *                rate.
+   * @return true the DefaultCrossoverRateCalculator always returns a finite
+   * rate
    *
    * @author Chris Knowles
    * @since 2.0
    */
-  public boolean toBePermutated()
-  {
-      return true;
+  public boolean toBePermutated() {
+    return true;
   }
 }
