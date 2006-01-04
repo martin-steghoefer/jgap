@@ -61,7 +61,7 @@ public class ChromosomeForTest
     // If we can, we'll randomize its gene values (alleles) and then
     // return it.
     // ------------------------------------------------------------
-    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       Chromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {

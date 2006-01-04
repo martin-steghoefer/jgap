@@ -62,7 +62,7 @@ import org.jgap.impl.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -283,7 +283,7 @@ public class Chromosome
     // Now, first see if we can pull a Chromosome from the pool and just
     // set its gene values (alleles) appropriately.
     // ------------------------------------------------------------
-    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       Chromosome copy = pool.acquireChromosome();
       if (copy != null) {
@@ -553,7 +553,7 @@ public class Chromosome
     // If we can, we'll randomize its gene values (alleles) and then
     // return it.
     // ------------------------------------------------------------
-    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       Chromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {
@@ -776,7 +776,7 @@ public class Chromosome
     // Now fetch the active ChromosomePool from the Configuration object
     // and, if the pool exists, release this Chromosome to it.
     // -----------------------------------------------------------------
-    ChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       // Note that the pool will take care of any gene cleanup for us,
       // so we don't need to worry about it here.

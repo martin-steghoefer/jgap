@@ -20,9 +20,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 1.0
  */
-public class ChromosomePool {
+public class ChromosomePool
+    implements IChromosomePool {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The internal pool in which the Chromosomes are stored.
@@ -44,8 +45,8 @@ public class ChromosomePool {
    * It should be noted that nothing is guaranteed about the value of the
    * Chromosome's genes and they should be treated as undefined.
    *
-   * @return A Chromosome instance from the pool or null if no
-   *         Chromosome instances are available in the pool.
+   * @return a Chromosome instance from the pool or null if no Chromosome
+   * instances are available in the pool
    *
    * @author Neil Rostan
    * @since 1.0
@@ -60,7 +61,7 @@ public class ChromosomePool {
    * method will invoke the cleanup() method on each of the Chromosome's
    * genes prior to adding it back to the pool.
    *
-   * @param a_chromosome The Chromosome instance to be released into the pool.
+   * @param a_chromosome the Chromosome instance to be released into the pool
    *
    * @author Neil Rostan
    * @since 1.0

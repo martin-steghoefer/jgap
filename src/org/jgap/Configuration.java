@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * Constants for toString()
@@ -150,7 +150,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  private ChromosomePool m_chromosomePool;
+  private IChromosomePool m_chromosomePool;
 
   /**
    * Stores all of the GeneticOperator implementations that are to be used
@@ -747,7 +747,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setChromosomePool(ChromosomePool a_chromosomePoolToSet)
+  public void setChromosomePool(IChromosomePool a_chromosomePoolToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     m_chromosomePool = a_chromosomePoolToSet;
@@ -767,7 +767,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public ChromosomePool getChromosomePool() {
+  public IChromosomePool getChromosomePool() {
     return m_chromosomePool;
   }
 
