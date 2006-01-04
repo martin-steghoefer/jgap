@@ -34,7 +34,7 @@ import org.jgap.*;
 public interface Supergene
     extends Gene, ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Test the allele combination of this supergene for validity.
@@ -70,7 +70,7 @@ public interface Supergene
    * classes may have internal default validator for the case
    * when no external validator is set.
    */
-  void setValidator(supergeneValidator a_validator);
+  void setValidator(SupergeneValidator a_validator);
 
   /**
    * Gets an object, responsible for deciding if the Supergene allele
@@ -79,5 +79,5 @@ public interface Supergene
    * able to return a validator, using the same method (typicallly,
    * such classes just return <i>this</i>.
    */
-  supergeneValidator getValidator();
+  SupergeneValidator getValidator();
 }
