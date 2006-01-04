@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -45,7 +45,7 @@ import org.jgap.*;
  * See J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
  *  <i>Genetic algorithms for the traveling salesman problem</i>.
  * In Proceedings of the Second International Conference on Genetic Algorithms.
- *  Lawrence Eribaum Associates, Mahwah, NJ, 1985.
+ * Lawrence Eribaum Associates, Mahwah, NJ, 1985.
  * and also {@link http://ecsl.cs.unr.edu/docs/techreports/gong/node3.html
  * Sushil J. Louis & Gong Li  }
  *
@@ -57,10 +57,10 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
-  public boolean ASSERTIONS = true;
+  boolean ASSERTIONS = true;
 
   private int m_startOffset = 1;
 
@@ -71,7 +71,7 @@ public class GreedyCrossover
    *
    * @param a_from Object
    * @param a_to Object
-   * @return double
+   * @return distance between the two given cities
    */
   public double distance(Object a_from, Object a_to) {
     IntegerGene from = (IntegerGene) a_from;
