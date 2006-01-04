@@ -36,7 +36,7 @@ of Code</h2>
   </li>
   <li>Add the lines
     <pre>        /** String containing the CVS revision. Read out via reflection!*/
-        private static final String CVS_REVISION = &quot;$Revision: 1.6 $&quot;;</pre>
+        private static final String CVS_REVISION = &quot;$Revision: 1.7 $&quot;;</pre>
     after each class declaration line at top of the class file. For interfaces omit the "private" statement.
   </li>
   <li>
@@ -54,17 +54,17 @@ of Code</h2>
     <ul>
       <li>description of method</li>
       <li>add a blank line</li>
-      <li>parameters</li>
-      <li>return value (if appliacable)</li>
-      <li>throws (if applicable)</li>
+      <li>parameters (if existent)</li>
+      <li>return value (if not void)</li>
+      <li>throws (if existent)</li>
       <li>add a blank line</li>
       <li>author</li>
       <li>since (here you should enter the next JGAP version to be released,
         i.e. &quot;2.4&quot; (without quotation marks)).</li>
     </ul>
   </li>
-  <li>Also add javadocs to non-private methods as well as to static methods
-    (also to main).
+  <li>All classes, methods, and fields require javadocs, including private methods and
+    fields and the main method.
   </li>
   <li>All in-line comments should be &quot;underlined.&quot; For example:
     <pre>          // This is an in-line comment.
@@ -97,10 +97,9 @@ of Code</h2>
     <pre>          public void foo(int a_someValue);</pre>
   </li>
   <li>Constants should be in all capitals. For example,
-    <pre>          public static final int MY_CONSTANT_VALUE = 1;         </pre>
+    <pre>          public static final int MY_CONSTANT_VALUE = 1;</pre>
   </li>
-  <li>All classes, methods, and fields require javadocs, including private methods and
-    fields.
+  <li>In interfaces, don't use the key workd <i>public</i> for declared methods.
   </li>
 </ol>
 
