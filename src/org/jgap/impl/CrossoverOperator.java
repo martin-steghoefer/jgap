@@ -31,9 +31,13 @@ import org.jgap.*;
  * @since 1.0
  */
 public class CrossoverOperator
-    implements GeneticOperator {
+    implements GeneticOperator, java.io.Serializable, Comparable {
+  /**@todo add base class, also use for other GeneticOperator's.
+   * Move compareTo there etc.
+   */
+
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -49,7 +53,7 @@ public class CrossoverOperator
   /**
    * Constructs a new instance of this CrossoverOperator without a specified
    * crossover rate, this results in dynamic crossover rate being turned off.
-   * This means that the crossover rate will be fixed at populationsize\2.
+   * This means that the crossover rate will be fixed at populationsize/2.
    *
    * @author Chris Knowles
    * @since 2.0
@@ -64,6 +68,7 @@ public class CrossoverOperator
    * Constructs a new instance of this CrossoverOperator with a specified
    * crossover rate calculator, which results in dynamic crossover being turned
    * on.
+   *
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
    * computation
    *
@@ -168,6 +173,7 @@ public class CrossoverOperator
 
   /**
    * Sets the crossover rate calculator.
+   *
    * @param a_crossoverRateCalculator the new calculator
    *
    * @author Chris Knowles
@@ -175,6 +181,73 @@ public class CrossoverOperator
    */
   private void setCrossoverRateCalc(IUniversalRateCalculator
                                     a_crossoverRateCalculator) {
-    this.m_crossoverRateCalc = a_crossoverRateCalculator;
+    m_crossoverRateCalc = a_crossoverRateCalculator;
   }
+
+  /**
+   * Compares this CrossoverOperator against the specified object. The result is
+   * true if and the argument is an instance of this class and is equal wrt the
+   * data.
+   *
+   * @param other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public boolean equals(Object other) {
+    try {
+      return compareTo(other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  /**
+   * Compares the given CrossoverOperator to this CrossoverOperator.
+   *
+   * @param other the instance against which to compare this instance
+   * @return a negative number if this instance is "less than" the given
+   * instance, zero if they are equal to each other, and a positive number if
+   * this  is "greater than" the given instance
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(Object other) {
+    if (other == null) {
+      return 1;
+    }
+    CrossoverOperator op = (CrossoverOperator)other;
+    if (m_crossoverRateCalc == null) {
+      if (op.m_crossoverRateCalc != null) {
+        return -1;
+      }
+    }
+    else {
+      if (op.m_crossoverRateCalc == null) {
+        return 1;
+      }
+      else {
+        // here, we could compare the rate calculators
+//        if (!m_crossoverRateCalc.equals(op.m_crossoverRateCalc)) {
+//          return -1; //arbitrary
+//        }
+      }
+    }
+    if (m_crossoverRate != op.m_crossoverRate) {
+      if (m_crossoverRate > op.m_crossoverRate) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    }
+
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
+  }
+
 }
