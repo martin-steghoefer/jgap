@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.26 $";
+  private static final String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -319,8 +319,8 @@ public class Population
       int len2 = genes.length;
       for (int j = 0; j < len2; j++) {
         Gene gene = genes[j];
-        if (a_resolveCompositeGenes && gene instanceof CompositeGene) {
-          addCompositeGene(result, (CompositeGene) gene);
+        if (a_resolveCompositeGenes && gene instanceof ICompositeGene) {
+          addCompositeGene(result, (ICompositeGene) gene);
         }
         else {
           addAtomicGene(result, gene);
@@ -341,10 +341,10 @@ public class Population
    * @since 2.3
    */
   private void addCompositeGene(final List a_result, Gene a_gene) {
-    if (a_gene instanceof CompositeGene) {
-      int len = ( (CompositeGene) a_gene).size();
+    if (a_gene instanceof ICompositeGene) {
+      int len = a_gene.size();
       for (int i = 0; i < len; i++) {
-        addCompositeGene(a_result, ( (CompositeGene) a_gene).geneAt(i));
+        addCompositeGene(a_result, ( (ICompositeGene) a_gene).geneAt(i));
       }
     }
     else {

@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -167,8 +167,8 @@ public class MutationOperator
           // would be the length of the string, for an IntegerGene, it is
           // always one element.
           // --------------------------------------------------------------
-          if (genes[j] instanceof CompositeGene) {
-            CompositeGene compositeGene = (CompositeGene) genes[j];
+          if (genes[j] instanceof ICompositeGene) {
+            ICompositeGene compositeGene = (ICompositeGene) genes[j];
             for (int k = 0; k < compositeGene.size(); k++) {
               mutateGene(compositeGene.geneAt(k), generator);
             }
