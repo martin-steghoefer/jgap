@@ -22,10 +22,10 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 1.0
  */
-public class EventManager {
-
+public class EventManager
+    implements IEventManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * References a Map of subscribed event listeners. Each key is an event
@@ -38,16 +38,15 @@ public class EventManager {
    * by the given name is fired.
    *
    * @param a_eventName the name of the event to which the given listener
-   *                    should be subscribed. Standard events are
-   *                    represented by constants in the GeneticEvent class.
+   * should be subscribed. Standard events are represented by constants in the
+   * GeneticEvent class
    * @param a_eventListenerToAdd the genetic listener to subscribe to
-   *                             notifications of the given event.
+   * notifications of the given event
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void addEventListener(
-      String a_eventName,
+  public synchronized void addEventListener( String a_eventName,
       GeneticEventListener a_eventListenerToAdd) {
     List eventListeners = (List) m_listeners.get(a_eventName);
     if (eventListeners == null) {
@@ -62,16 +61,15 @@ public class EventManager {
    * The listener will no longer be notified when the given event occurs.
    *
    * @param a_eventName the name of the event to which the given listener
-   *                    should be removed. Standard events are
-   *                    represented by constants in the GeneticEvent class.
+   * should be removed. Standard events are represented by constants in the
+   * GeneticEvent class
    * @param a_eventListenerToRemove the genetic listener to unsubscribe from
-   *                                notifications of the given event.
+   * notifications of the given event
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void removeEventListener(
-      String a_eventName,
+  public synchronized void removeEventListener(String a_eventName,
       GeneticEventListener a_eventListenerToRemove) {
     List eventListeners = (List) m_listeners.get(a_eventName);
     if (eventListeners != null) {
@@ -84,7 +82,7 @@ public class EventManager {
    * (as determined by the name of the event) will be notified of it
    * having been fired.
    *
-   * @param a_eventToFire The representation of the GeneticEvent to fire.
+   * @param a_eventToFire the representation of the GeneticEvent to fire
    *
    * @author Neil Rotstan
    * @since 1.0
