@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.27 $";
+  private static final String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -293,7 +293,7 @@ public class IntegerGene
           rn = Genotype.getConfiguration().getRandomGenerator();
         }
         else {
-          rn = new StockRandomGenerator();
+          rn = new StockRandomGenerator();/**@todo replace with RandomGen-Factory*/
         }
         setAllele(new Integer(rn.nextInt(m_upperBounds - m_lowerBounds) +
                               m_lowerBounds));
