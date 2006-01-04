@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -28,9 +27,8 @@ import org.jgap.*;
  */
 public class AveragingCrossoverOperator
     implements GeneticOperator {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -65,7 +63,7 @@ public class AveragingCrossoverOperator
    * @since 2.0
    */
   public AveragingCrossoverOperator() {
-    this((RandomGenerator)null);
+    this( (RandomGenerator)null);
   }
 
   /**
@@ -87,35 +85,37 @@ public class AveragingCrossoverOperator
    * crossover rate calculator, which results in dynamic crossover being turned
    * on.
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
-   *        computation
+   * computation
    *
    * @author Klaus Meffert (copied from CrossoverOperator)
    * @since 2.0
    */
-  public AveragingCrossoverOperator(IUniversalRateCalculator a_crossoverRateCalculator) {
+  public AveragingCrossoverOperator(IUniversalRateCalculator
+                                    a_crossoverRateCalculator) {
     this();
     setCrossoverRateCalc(a_crossoverRateCalculator);
   }
 
   /**
    * Sets the crossover rate calculator
-   * @param a_crossoverRateCalculator The new calculator
+   * @param a_crossoverRateCalculator the new calculator
    *
    * @author Klaus Meffert  (copied from CrossoverOperator)
    * @since 2.0
    */
-  private void setCrossoverRateCalc(IUniversalRateCalculator a_crossoverRateCalculator){
-      m_crossoverRateCalc = a_crossoverRateCalculator;
+  private void setCrossoverRateCalc(IUniversalRateCalculator
+                                    a_crossoverRateCalculator) {
+    m_crossoverRateCalc = a_crossoverRateCalculator;
   }
 
   /**
    * Crossover that acts as a perturbed mean of two individuals.
-    * x_i = p*x1_i + (1-p)*x2_i
-    * p - uniform random value over [0,1].
-    * Averaging over line means p is same for every i,
-    * averaging over space if different p is chosen for each i.
-   * @see CrossoverOperator for general description.
-   * also see feature request 708774
+   * x_i = p*x1_i + (1-p)*x2_i
+   * p - uniform random value over [0,1].
+   * Averaging over line means p is same for every i,
+   * averaging over space if different p is chosen for each i.
+   * See CrossoverOperator for general description, also see feature request
+   * 708774
    * @param a_population Chromosome[]
    * @param a_candidateChromosomes List
    *
@@ -128,13 +128,12 @@ public class AveragingCrossoverOperator
     int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = 0;
-    if (m_crossoverRateCalc == null){
-        numCrossovers = size / m_crossoverRate;
+    if (m_crossoverRateCalc == null) {
+      numCrossovers = size / m_crossoverRate;
     }
-    else{
-        numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
+    else {
+      numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
-
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     if (m_crossoverGenerator == null) {
       m_crossoverGenerator = generator;
@@ -163,7 +162,7 @@ public class AveragingCrossoverOperator
         if (firstGenes[j] instanceof CompositeGene) {
           //randomly determine gene to be considered
           index1 = generator.nextInt(firstGenes[j].size());
-          gene1 = ((CompositeGene)firstGenes[j]).geneAt(index1);
+          gene1 = ( (CompositeGene) firstGenes[j]).geneAt(index1);
         }
         else {
           gene1 = firstGenes[j];
@@ -172,7 +171,7 @@ public class AveragingCrossoverOperator
         if (secondGenes[j] instanceof CompositeGene) {
           //randomly determine gene to be considered
           index2 = generator.nextInt(secondGenes[j].size());
-          gene2 = ((CompositeGene)secondGenes[j]).geneAt(index2);
+          gene2 = ( (CompositeGene) secondGenes[j]).geneAt(index2);
         }
         else {
           gene2 = secondGenes[j];
@@ -188,7 +187,6 @@ public class AveragingCrossoverOperator
       a_candidateChromosomes.add(firstMate);
       a_candidateChromosomes.add(secondMate);
     }
-
   }
 
   /**
@@ -203,7 +201,7 @@ public class AveragingCrossoverOperator
    * @since 2.0
    */
   protected int getLocus(RandomGenerator generator, int index, int max) {
-    Integer locus = (Integer)loci.get(new Integer(index));
+    Integer locus = (Integer) loci.get(new Integer(index));
     if (locus == null) {
       locus = new Integer(generator.nextInt(max));
       loci.put(new Integer(index), locus);
