@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * This field separates gene class name from
@@ -528,15 +528,14 @@ public class CompositeGene
   }
 
   /**
-   * Returns the gene at the given index
-   * @param index sic
+   * @param a_index index to return the gene at
    * @return the gene at the given index
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public Gene geneAt(int index) {
-    return (Gene) m_genes.get(index);
+  public Gene geneAt(int a_index) {
+    return (Gene) m_genes.get(a_index);
   }
 
   /**
