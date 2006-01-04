@@ -27,9 +27,9 @@ import org.jgap.*;
  * @since 2.0
  */
 public abstract class AbstractSupergene extends BaseGene
-    implements Supergene, supergeneValidator {
+    implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * This field separates gene class name from
@@ -313,7 +313,7 @@ public abstract class AbstractSupergene extends BaseGene
     // Write validator:
     String validator = null;
     String v_representation = "";
-    supergeneValidator v = getValidator();
+    SupergeneValidator v = getValidator();
     if (v == null) {
       validator = "null";
     }
@@ -406,7 +406,7 @@ public abstract class AbstractSupergene extends BaseGene
   }
 
   /** Create validator from the string representation. */
-  protected supergeneValidator createValidator(String a_rep) {
+  protected SupergeneValidator createValidator(String a_rep) {
     try {
       StringTokenizer vo = new StringTokenizer
           (a_rep, GENE_DELIMITER, true);
@@ -414,11 +414,11 @@ public abstract class AbstractSupergene extends BaseGene
           ("In " + a_rep + ", expecting two tokens, separated by " +
            GENE_DELIMITER);
       String clas = vo.nextToken();
-      supergeneValidator sv;
+      SupergeneValidator sv;
       if (clas.equals("this")) sv = this;
       else
       if (clas.equals("null")) sv = null;
-      else sv = (supergeneValidator)
+      else sv = (SupergeneValidator)
           Class.forName(clas).newInstance();
       if (sv != null) sv.setFromPersistent(decode(vo.nextToken()));
       return sv;
@@ -589,7 +589,7 @@ public abstract class AbstractSupergene extends BaseGene
    * (all combinations are assumed to be valid). If no validator is
    * set, the method <code>isValid (Gene [] ) </code>is called.
    */
-  public void setValidator(supergeneValidator a_validator) {
+  public void setValidator(SupergeneValidator a_validator) {
     m_validator = a_validator;
   }
 
@@ -598,12 +598,12 @@ public abstract class AbstractSupergene extends BaseGene
    * combination is valid. If no external validator was set and the
    * class uses its own internal validation method, it returns <i>this</i>
    */
-  public supergeneValidator getValidator() {
+  public SupergeneValidator getValidator() {
     return m_validator;
   }
 
   /** A validator (initially set to <i>this</i> */
-  protected supergeneValidator m_validator = this;
+  protected SupergeneValidator m_validator = this;
 
   /** {@inheritDoc}
    * The default implementation returns an empty string. */

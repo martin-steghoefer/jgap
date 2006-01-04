@@ -42,9 +42,9 @@ import org.jgap.impl.*;
  *  </li>
  * </ul>
  */
-public abstract class Salesman {
+public abstract class Salesman implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private int m_maxEvolution = 128;
 
