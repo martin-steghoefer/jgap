@@ -9,15 +9,17 @@
  */
 package org.jgap;
 
+import java.io.*;
+
 /**
  * Interface for a calculator that determines a dynamic rate.
  *
  * @author Chris Knowles
  * @since 2.0
  */
-public interface IUniversalRateCalculator {
+public interface IUniversalRateCalculator extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Calculates the required dynamic rate.
