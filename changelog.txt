@@ -13,7 +13,8 @@
   class EventManager
 * Renamed method getGene in Supergene to geneAt
   (--> same name as in class CompositeGene)
-* Made IGeneConstraintChecker Serializable
+* Made IGeneConstraintChecker serializable
+* Made IUniversalRateCalculator serializable
 * Extended javadoc
 * Removed some unneeded local variables
 * Fixed many code smells
