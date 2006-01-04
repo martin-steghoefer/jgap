@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -100,7 +100,7 @@ public class AveragingCrossoverOperator
    * Sets the crossover rate calculator
    * @param a_crossoverRateCalculator the new calculator
    *
-   * @author Klaus Meffert  (copied from CrossoverOperator)
+   * @author Klaus Meffert
    * @since 2.0
    */
   private void setCrossoverRateCalc(IUniversalRateCalculator
