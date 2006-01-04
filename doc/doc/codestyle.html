@@ -36,7 +36,7 @@ of Code</h2>
   </li>
   <li>Add the lines
     <pre>        /** String containing the CVS revision. Read out via reflection!*/
-        private static final String CVS_REVISION = &quot;$Revision: 1.5 $&quot;;</pre>
+        private static final String CVS_REVISION = &quot;$Revision: 1.6 $&quot;;</pre>
     after each class declaration line at top of the class file. For interfaces omit the "private" statement.
   </li>
   <li>
@@ -62,6 +62,9 @@ of Code</h2>
       <li>since (here you should enter the next JGAP version to be released,
         i.e. &quot;2.4&quot; (without quotation marks)).</li>
     </ul>
+  </li>
+  <li>Also add javadocs to non-private methods as well as to static methods
+    (also to main).
   </li>
   <li>All in-line comments should be &quot;underlined.&quot; For example:
     <pre>          // This is an in-line comment.

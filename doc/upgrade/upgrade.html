@@ -213,10 +213,10 @@ value changed..</p>
 name should begin with a capital letter!</p>
 
 <h4 class="subHeader">Since 2.6: Configuration must be set before calling
-Gene.setAllele</h4>
-<p>As setAllele in Gene classes may call mapToValueWithinBounds, which in turn
+Gene.setAllele or applyMutation</h4>
+<p>As setAllele and applyMutation (and possibly other methods) in Gene classes may call mapToValueWithinBounds, which in turn
 accesses the configuration via Genotype.getConfiguration, the configuration must
-be set before the call to setAllele. However, this should be good
+be set before the call to setAllele, applyMutation and possibly other methods. However, this should be good
 practice!&nbsp;</p>
 
 <h2 class="docTitle">Final remarks</h2>
