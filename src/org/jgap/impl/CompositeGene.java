@@ -37,9 +37,10 @@ import org.jgap.*;
  * @since 1.1
  */
 public class CompositeGene
-    extends BaseGene {
+    extends BaseGene
+    implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * This field separates gene class name from
@@ -95,6 +96,10 @@ public class CompositeGene
     }
   }
 
+  /**
+   * Adds a gene to the CompositeGene
+   * @param a_gene the gene to add
+   */
   public void addGene(Gene a_gene) {
     addGene(a_gene, false);
   }
