@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.26 $";
+  private static final String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -346,15 +346,14 @@ public class IntegerGene
    * @since 2.4
    */
   public String toString() {
-    String s = "IntegerGene("+m_lowerBounds+","+m_upperBounds+")"
-        +"=";
+    String s = "IntegerGene(" + m_lowerBounds + "," + m_upperBounds + ")"
+        + "=";
     if (getInternalValue() == null) {
       s += "null";
     }
     else {
-      s+= getInternalValue().toString();
+      s += getInternalValue().toString();
     }
     return s;
   }
-
 }
