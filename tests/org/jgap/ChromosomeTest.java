@@ -10,7 +10,7 @@
 package org.jgap;
 
 import java.util.*;
-import java.io.*;
+
 import org.jgap.impl.*;
 import junit.framework.*;
 import org.jgap.util.*;
@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1334,6 +1334,6 @@ public class ChromosomeTest
     chrom.setConstraintChecker(checker);
     Object o = doSerialize(chrom);
     assertEquals(o, chrom);
-  }
+ }
 
 }
