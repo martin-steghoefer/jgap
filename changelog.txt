@@ -2,6 +2,10 @@
 -----------------------------------------------------------
 * Added interface org.jgap.ICompsiteGene for
   genes that may contain other genes
+* Added interface org.jgap.IChromosomePool for
+  class ChromosomePool
+* Added interface org.jgap.event.IEventManager for
+  class EventManager
 * Renamed method getGene in Supergene to geneAt
   (--> same name as in class CompositeGene)
 * Made IGeneConstraintChecker Serializable
