@@ -9,33 +9,32 @@
  */
 package org.jgap.supergenes;
 
-import org.jgap.Gene;
+import org.jgap.*;
 
 /**
  * <p>Supergene represents several genes, which usually control closely
  * related aspects of the phenotype. The Supergene mutates
  * only in such way, that the allele combination remains valid.
  * Mutations, that make allele combination invalid, are rejected
- * inside {@link org.jgap.Gene#applyMutation } method. Supergene components can also be
- * a Supergenes, creating the tree-like structures in this way.
+ * inside {@link org.jgap.Gene#applyMutation } method. Supergene components can
+ * also be a Supergene, creating the tree-like structures in this way.
  *</p><p>
  * In biology, the invalid combinations
- * represents completely broken metabolic chains, unbalanced
+ * represent completely broken metabolic chains, unbalanced
  * signaling pathways (activator without supressor) and so on.
  *</p><p>
- * At <i>least about 5 % of the randomly
- * generated Supergene suparallele values should be valid.</i> If the valid
- * combinations represents too small part of all possible combinations,
- * it can take too long to find the suitable mutation that does not brake
- * a supergene. If you face this problem, try to split the supergene into
- * several sub-supergenes.</p>
+ * At <i>least about 5 % of the randomly generated Supergene suparallele values
+ * should be valid.</i> If the valid combinations represents too small part of
+ * all possible combinations, it can take too long to find the suitable mutation
+ * that does not brake a supergene. If you face this problem, try to split the
+ * supergene into several sub-supergenes.</p>
  *
  * @author Audrius Meskauskas
  */
-public interface Supergene extends Gene {
+public interface Supergene extends Gene, ICompositeGene {
 
     /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "$Revision: 1.9 $";
+    final static String CVS_REVISION = "$Revision: 1.10 $";
 
     /**
      * Test the allele combination of this supergene for validity.
@@ -62,7 +61,7 @@ public interface Supergene extends Gene {
      * @param a_index the index of the gene value to be returned
      * @return the Gene at the given index
      */
-    Gene getGene(int a_index);
+    Gene geneAt(int a_index);
 
     /**
      * Sets an object, responsible for deciding if the Supergene allele
