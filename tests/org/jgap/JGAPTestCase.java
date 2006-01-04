@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.util.*;
+import java.io.*;
 import junit.framework.*;
 import junitx.util.*;
 
@@ -22,7 +23,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -73,7 +74,6 @@ public abstract class JGAPTestCase
     }
   }
 
-
   public static void assertEqualsMap(Map a_map1, Map a_map2) {
     /**@todo implement*/
   }
@@ -90,7 +90,6 @@ public abstract class JGAPTestCase
       return 1.0000000d;
     }
   }
-
   public static void assertInList(final Map a_list, Object a_object) {
     if (a_list.containsKey(a_object)) {
       a_list.remove(a_object);
@@ -107,4 +106,38 @@ public abstract class JGAPTestCase
     }
   }
 
+  /**
+   * @param a_obj object to verify
+   * @return true: object implements serializable
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public boolean isSerializable(Object a_obj) {
+    return Serializable.class.isInstance(a_obj);
+  }
+
+  /**
+   *
+   * @param o object to serialize, then deserialize
+   * @return deserialized object that has previously been serialized
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public Object doSerialize(Object o) throws Exception {
+    // serialize object to a file
+    File f = File.createTempFile("object","ser");
+    OutputStream os = new FileOutputStream(f);
+    ObjectOutputStream oos = new ObjectOutputStream(os);
+    oos.writeObject(o);
+    oos.flush();
+    oos.close();
+    InputStream oi = new FileInputStream(f);
+    ObjectInputStream ois = new ObjectInputStream(oi);
+    Object result = ois.readObject();
+    ois.close();
+    return result;
+  }
 }
