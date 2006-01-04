@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,14 +22,16 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
     return suite;
   }
 
-  public void testConstruct_0() {
+  public void testConstruct_0()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene = new IntegerGene(1, 100);
     //following should be possible without exception
     gene.setAllele(new Integer(101));
@@ -191,10 +191,14 @@ public class IntegerGeneTest
   }
 
   /*
+   * @throws Exception
+
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_10() {
+  public void testEquals_10()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(1, 100);
     gene1.setAllele(new Integer(8));
     Gene gene2 = new IntegerGene(1, 99);
@@ -269,7 +273,7 @@ public class IntegerGeneTest
         "m_lowerBounds");
     Integer upper1 = (Integer) privateAccessor.getField(gene1,
         "m_upperBounds");
-    IntegerGene gene2 = (IntegerGene)gene1.newGene();
+    IntegerGene gene2 = (IntegerGene) gene1.newGene();
     Integer lower2 = (Integer) privateAccessor.getField(gene2,
         "m_lowerBounds");
     Integer upper2 = (Integer) privateAccessor.getField(gene2,
@@ -323,14 +327,16 @@ public class IntegerGeneTest
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("2" +
-                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER +
                                                "3" +
-                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER +
                                                "4");
-    assertEquals(2,((Integer)gene1.getAllele()).intValue());
-    assertEquals(3,((Integer) privateAccessor.getField(gene1,
+    assertEquals(2, ( (Integer) gene1.getAllele()).intValue());
+    assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds")).intValue());
-    assertEquals(4,((Integer) privateAccessor.getField(gene1,
+    assertEquals(4, ( (Integer) privateAccessor.getField(gene1,
         "m_upperBounds")).intValue());
   }
 
@@ -345,14 +351,16 @@ public class IntegerGeneTest
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("null" +
-                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER +
                                                "3" +
-                                               IntegerGene.PERSISTENT_FIELD_DELIMITER +
+                                               IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER +
                                                "4");
     assertNull(gene1.getAllele());
-    assertEquals(3,((Integer) privateAccessor.getField(gene1,
+    assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds")).intValue());
-    assertEquals(4,((Integer) privateAccessor.getField(gene1,
+    assertEquals(4, ( (Integer) privateAccessor.getField(gene1,
         "m_upperBounds")).intValue());
   }
 
@@ -360,8 +368,7 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentRepresentation_4()
-       {
+  public void testPersistentRepresentation_4() {
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     try {
@@ -373,8 +380,9 @@ public class IntegerGeneTest
                                                  PERSISTENT_FIELD_DELIMITER +
                                                  "4");
       fail();
-    } catch (UnsupportedRepresentationException uex) {
-      ;//this is OK
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
     }
   }
 
@@ -382,8 +390,7 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentRepresentation_5()
-      {
+  public void testPersistentRepresentation_5() {
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     try {
@@ -395,8 +402,9 @@ public class IntegerGeneTest
                                                  PERSISTENT_FIELD_DELIMITER +
                                                  "a");
       fail();
-    } catch (UnsupportedRepresentationException uex) {
-      ;//this is OK
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
     }
   }
 
@@ -440,10 +448,14 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareToNative_3() {
+  public void testCompareToNative_3()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(53, 67);
@@ -453,10 +465,14 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareToNative_4() {
+  public void testCompareToNative_4()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene(53, 67);
@@ -466,10 +482,14 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testCompareTo_0() {
+  public void testCompareTo_0()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene2(53, 67);
@@ -645,9 +665,8 @@ public class IntegerGeneTest
   public void testSetToRandomValue_0() {
     Gene gene = new IntegerGene(1, 6);
     gene.setAllele(new Integer(5));
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.2d));
-    assertEquals(new Integer((int)(0.2d * (6 - 1) + 1)), gene.getAllele());
+    assertEquals(new Integer( (int) (0.2d * (6 - 1) + 1)), gene.getAllele());
   }
 
   /**
@@ -660,12 +679,10 @@ public class IntegerGeneTest
       throws Exception {
     Gene gene = new IntegerGene( -1, 7);
     gene.setAllele(new Integer(4));
-
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.3d));
-    assertEquals(new Integer((int)(0.3d * (7 + 1) - 1)), gene.getAllele());
+    assertEquals(new Integer( (int) (0.3d * (7 + 1) - 1)), gene.getAllele());
   }
 
   /**
@@ -676,25 +693,23 @@ public class IntegerGeneTest
    */
   public void testSetToRandomValue_2()
       throws Exception {
-     Gene gene = new IntegerGene( -2, -1);
-     gene.setAllele(new Integer(4));
-
-     Configuration conf = new DefaultConfiguration();
-     Genotype.setConfiguration(conf);
-
-     gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
-     assertEquals(new Integer((int)(0.8d * ( -1 + 2) - 2)), gene.getAllele());
+    Genotype.setConfiguration(new ConfigurationForTest());
+    Gene gene = new IntegerGene( -2, -1);
+    gene.setAllele(new Integer(4));
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
+    assertEquals(new Integer( (int) (0.8d * ( -1 + 2) - 2)), gene.getAllele());
   }
 
   /**
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testSetToRandomValue_3(){
+  public void testSetToRandomValue_3() {
     IntegerGene gene = new IntegerGene(0, 8);
     gene.setAllele(new Integer(5));
     gene.setToRandomValue(new RandomGeneratorForTest(4));
-
     if (gene.intValue() < 0 ||
         gene.intValue() > 8) {
       fail();
@@ -705,11 +720,10 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testSetToRandomValue_4(){
+  public void testSetToRandomValue_4() {
     IntegerGene gene = new IntegerGene(1, 6);
     gene.setAllele(new Integer(2));
     gene.setToRandomValue(new RandomGeneratorForTest(3));
-
     if (gene.intValue() < 1 ||
         gene.intValue() > 6) {
       fail();
@@ -725,16 +739,15 @@ public class IntegerGeneTest
    */
   public void testSetToRandomValue_5()
       throws Exception {
-     Gene gene = new IntegerGene( 1, 3);
-     gene.setAllele(new Integer(4));
-
-     Configuration conf = new DefaultConfiguration();
-     Genotype.setConfiguration(conf);
-
-     gene.setToRandomValue(new RandomGeneratorForTest(0.95d));
-     assertEquals(new Integer(3), gene.getAllele());
-     gene.setToRandomValue(new RandomGeneratorForTest(0.05d));
-     assertEquals(new Integer(1), gene.getAllele());
+    Genotype.setConfiguration(new ConfigurationForTest());
+    Gene gene = new IntegerGene(1, 3);
+    gene.setAllele(new Integer(4));
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    gene.setToRandomValue(new RandomGeneratorForTest(0.95d));
+    assertEquals(new Integer(3), gene.getAllele());
+    gene.setToRandomValue(new RandomGeneratorForTest(0.05d));
+    assertEquals(new Integer(1), gene.getAllele());
   }
 
   /**
@@ -778,8 +791,8 @@ public class IntegerGeneTest
       super(a_lowerBounds, a_upperBounds);
     }
   }
-
-  class GeneConstraintChecker implements IGeneConstraintChecker {
+  class GeneConstraintChecker
+      implements IGeneConstraintChecker {
     public boolean verify(Gene a_gene, Object a_alleleValue)
         throws RuntimeException {
       return true;

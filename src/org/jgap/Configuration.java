@@ -11,7 +11,6 @@ package org.jgap;
 
 import java.util.*;
 import org.jgap.data.config.*;
-
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
@@ -40,7 +39,14 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
+
+  /**
+   * Constant for clazz name of JGAP Factory to use. Use as:
+   * System.setProperty(PROPERTY_JGAPFACTORY_CLASS,"myJGAPFactory");
+   * If none such property set, class JGAPFactory will be used.
+   */
+  public static final String PROPERTY_JGAPFACTORY_CLASS = "JGAPFACTORYCLASS";
 
   /**
    * Constants for toString()
@@ -247,6 +253,14 @@ public class Configuration
   private boolean m_keepPopulationSizeConstant;
 
   /**
+   * Holds the central configurable factory for creating default objects.
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  private IJGAPFactory m_factory;
+
+  /**
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
@@ -260,6 +274,23 @@ public class Configuration
     m_conHandler = new RootConfigurationHandler();
     m_conHandler.setConfigurable(this);
     m_keepPopulationSizeConstant = true;
+    // Create factory for being able to configure the used default objects,
+    // like random generators or fitness evaluators.
+    // --------------------------------------------------------------------
+    String clazz = System.getProperty(PROPERTY_JGAPFACTORY_CLASS);
+    if (clazz != null && clazz.length() > 0) {
+      try {
+        m_factory = (IJGAPFactory) Class.forName(clazz).newInstance();
+      }
+      catch (Exception ex) {
+        throw new RuntimeException("Class " + clazz +
+                                   " could not be instantiated"
+                                   + " as type IJGAPFactory");
+      }
+    }
+    else {
+      m_factory = new JGAPFactory();
+    }
   }
 
   public Configuration(String a_name) {
@@ -500,8 +531,8 @@ public class Configuration
    * @since 1.1
    */
   public synchronized NaturalSelector getNaturalSelector(boolean
-                                            a_processBeforeGeneticOperators,
-                                            int a_index) {
+      a_processBeforeGeneticOperators,
+      int a_index) {
     if (a_processBeforeGeneticOperators) {
       if (m_sizeNaturalSelectorsPre <= a_index) {
         throw new IllegalArgumentException(
@@ -1023,7 +1054,8 @@ public class Configuration
    * @throws ConfigException
    * @author Siddhartha Azad
    */
-  public ConfigurationHandler getConfigurationHandler() throws ConfigException {
+  public ConfigurationHandler getConfigurationHandler()
+      throws ConfigException {
     if (m_conHandler == null) {
       m_conHandler = new RootConfigurationHandler();
       m_conHandler.setConfigurable(this);
@@ -1107,11 +1139,11 @@ public class Configuration
     // Configuration handler.
     // ----------------------
     try {
-    	result += "\n " + S_CONFIGURATION_HANDLER + ": " +
-        	getConfigurationHandler().getName();
+      result += "\n " + S_CONFIGURATION_HANDLER + ": " +
+          getConfigurationHandler().getName();
     }
-    catch(ConfigException conEx) {
-    	conEx.printStackTrace();
+    catch (ConfigException conEx) {
+      conEx.printStackTrace();
     }
     // Fitness function.
     // -----------------
@@ -1188,14 +1220,17 @@ public class Configuration
    * Be aware that keeping the population size constant often means that a
    * higher population size is necessary (e.g. for the MinimizingMakeChange
    * example)!
-   * @param a_keepPopulationSizeConstant true: population size will always be
+   * @param a_keepPopSizeConstant true: population size will always be
    * the same size (as given with Configuration.setPopulationSize(int).
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void setKeepPopulationSizeConstant(boolean
-                                            a_keepPopulationSizeConstant) {
-    m_keepPopulationSizeConstant = a_keepPopulationSizeConstant;
+  public void setKeepPopulationSizeConstant(boolean a_keepPopSizeConstant) {
+    m_keepPopulationSizeConstant = a_keepPopSizeConstant;
+  }
+
+  public IJGAPFactory getJGAPFactory() {
+    return m_factory;
   }
 }

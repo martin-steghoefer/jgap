@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -280,7 +280,8 @@ public class DoubleGene
           rn = Genotype.getConfiguration().getRandomGenerator();
         }
         else {
-          rn = new StockRandomGenerator();/**@todo replace with RandomGen-Factory*/
+          rn = Genotype.getConfiguration().getJGAPFactory().
+              createRandomGenerator();
         }
         setAllele(new Double(rn.nextDouble()
             *(m_upperBounds - m_lowerBounds) + m_lowerBounds));

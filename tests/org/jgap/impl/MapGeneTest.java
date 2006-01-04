@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -425,7 +425,8 @@ public class MapGeneTest
         getAllele()), gene1.compareTo(gene2));
   }
 
-  public void testCompareToNative_3() {
+  public void testCompareToNative_3() throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(53, 67);
@@ -434,7 +435,8 @@ public class MapGeneTest
         getAllele()), gene1.compareTo(gene2));
   }
 
-  public void testCompareToNative_4() {
+  public void testCompareToNative_4() throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene(53, 67);
@@ -532,11 +534,11 @@ public class MapGeneTest
 
   public void testSetToRandomValue_2()
       throws Exception {
-    Gene gene = new IntegerGene( -2, -1);
-    gene.setAllele(new Integer(4));
-
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
+
+    Gene gene = new IntegerGene( -2, -1);
+    gene.setAllele(new Integer(4));
 
     gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
     assertEquals(new Integer( (int) (0.8d * ( -1 + 2) - 2)), gene.getAllele());

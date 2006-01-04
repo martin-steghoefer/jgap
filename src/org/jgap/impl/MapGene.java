@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Container for valid alleles
@@ -185,7 +185,7 @@ public class MapGene
       rn = Genotype.getConfiguration().getRandomGenerator();
     }
     else {
-      rn = new StockRandomGenerator();
+      rn = Genotype.getConfiguration().getJGAPFactory().createRandomGenerator();
     }
     setToRandomValue(rn);
   }

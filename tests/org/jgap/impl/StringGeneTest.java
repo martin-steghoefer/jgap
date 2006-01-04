@@ -24,7 +24,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -575,9 +575,11 @@ public class StringGeneTest
   }
 
   /**
+   * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_0() {
+  public void testApplyMutation_0() throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(5, 5);
     gene1.setAllele("12345");
     gene1.applyMutation(0, 0.99d);
@@ -585,9 +587,11 @@ public class StringGeneTest
   }
 
   /**
+   * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_1() {
+  public void testApplyMutation_1() throws Exception{
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(1, 1);
     gene1.setAllele("1");
     gene1.applyMutation(0, 0.99d);
@@ -596,9 +600,11 @@ public class StringGeneTest
   /**
    * Invalid index specified
    *
+   * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_2() {
+  public void testApplyMutation_2() throws Exception{
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(1, 1);
     gene1.setAllele("1");
     try {
@@ -613,17 +619,21 @@ public class StringGeneTest
   /**
    * No allele set
    *
+   * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_3() {
+  public void testApplyMutation_3() throws Exception{
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(1, 1);
     gene1.applyMutation(0, 0.99d);
   }
 
   /**
+   * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_4() {
+  public void testApplyMutation_4() throws Exception{
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
     gene1.applyMutation(0, 0.3d);
@@ -636,9 +646,11 @@ public class StringGeneTest
   /**
    * Mutation 0.0 should not change anything
    *
+   * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_5() {
+  public void testApplyMutation_5() throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
     gene1.applyMutation(0, 0.0d);
