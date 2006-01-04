@@ -12,32 +12,29 @@ package org.jgap.supergenes;
 import org.jgap.*;
 import org.jgap.impl.*;
 
-/** Supergene to hold pennies and nickels. Valid if the number of
+/**
+ * Supergene to hold pennies and nickels. Valid if the number of
  * nickels and pennies is either both odd or both even.
  *
  * @author Audrius Meskauskas
  * @since 2.0
  */
-public class NickelsPenniesSupergene extends abstractSupergene {
-
+public class NickelsPenniesSupergene
+    extends AbstractSupergene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
-    public NickelsPenniesSupergene() {
-    }
+  public NickelsPenniesSupergene() {
+  }
 
-    public NickelsPenniesSupergene( Gene[] a_genes )
-     {
-         super(a_genes);
-     }
+  public NickelsPenniesSupergene(Gene[] a_genes) {
+    super(a_genes);
+  }
 
-    public boolean isValid(Gene [] genes, Supergene s)
-    {
-         IntegerGene nickels = (IntegerGene)  genes[0];
-         IntegerGene pennies  = (IntegerGene) genes[1];
-         boolean valid = nickels.intValue() % 2 == pennies.intValue() % 2;
-         return valid;
-
-    }
-
+  public boolean isValid(Gene[] genes, Supergene s) {
+    IntegerGene nickels = (IntegerGene) genes[0];
+    IntegerGene pennies = (IntegerGene) genes[1];
+    boolean valid = nickels.intValue() % 2 == pennies.intValue() % 2;
+    return valid;
+  }
 }
