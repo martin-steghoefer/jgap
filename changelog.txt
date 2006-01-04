@@ -2,6 +2,8 @@
 -----------------------------------------------------------
 * Added interface org.jgap.ICompsiteGene for
   genes that may contain other genes
+* Renamed method getGene in Supergene to geneAt
+  (--> same name as in class CompositeGene)
 * Made IGeneConstraintChecker Serializable
 * Extended javadoc
 * Removed some unneeded local variables
