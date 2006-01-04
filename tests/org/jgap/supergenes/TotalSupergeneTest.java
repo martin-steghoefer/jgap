@@ -21,7 +21,7 @@ import java.io.*;
  */
 class TotalSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Test supported Supegene features, including performance tests.
@@ -44,7 +44,7 @@ class TotalSupergeneTest {
       int N = 12;
       for (int i = 1; i <= N; i++) {
         System.out.println("Iteration " + i + " of " + N);
-        abstractSupergene.reset();
+        AbstractSupergene.reset();
         long s_started;
         // Test with Supergene
         System.out.print("            evaluating Supergene... ");
@@ -98,5 +98,6 @@ class TotalSupergeneTest {
     catch (IOException ex) {
       ;
     }
+    System.exit(0);
   }
 }
