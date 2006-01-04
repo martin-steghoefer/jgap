@@ -22,7 +22,7 @@ import junit.framework.*;
 public class AveragingCrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AveragingCrossoverOperatorTest.class);
@@ -210,4 +210,34 @@ public class AveragingCrossoverOperatorTest
     Genotype.setConfiguration(conf);
     new AveragingCrossoverOperator( (IUniversalRateCalculator)null);
   }
+
+  /**
+   * Ensures Object is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    AveragingCrossoverOperator op = new AveragingCrossoverOperator();
+    assertTrue(isSerializable(op));
+  }
+
+  /**
+   * Ensures that Object and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    // construct object to be serialized
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
+    AveragingCrossoverOperator op = new AveragingCrossoverOperator(calc);
+    Object o = doSerialize(op);
+    assertEquals(o, op);
+  }
+
 }

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.26 $";
+  private static final String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -328,5 +328,34 @@ public class MutationOperatorTest
                  ( (
         IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
                   geneAt(0)).intValue());
+  }
+
+  /**
+   * Ensures Object is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    MutationOperator op = new MutationOperator();
+    assertTrue(isSerializable(op));
+  }
+
+  /**
+   * Ensures that Object and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    // construct object to be serialized
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
+    MutationOperator op = new MutationOperator(calc);
+    Object o = doSerialize(op);
+    assertEquals(o, op);
   }
 }

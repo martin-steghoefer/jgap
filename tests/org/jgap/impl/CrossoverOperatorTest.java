@@ -10,9 +10,8 @@
 package org.jgap.impl;
 
 import java.util.*;
-
+import java.io.*;
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -23,9 +22,8 @@ import junit.framework.*;
  */
 public class CrossoverOperatorTest
     extends JGAPTestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -61,7 +59,7 @@ public class CrossoverOperatorTest
    */
   public void testConstruct_2() {
     try {
-      new CrossoverOperator(-3);
+      new CrossoverOperator( -3);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -192,7 +190,7 @@ public class CrossoverOperatorTest
     CrossoverOperator op = new CrossoverOperator();
     Gene cgene1 = new IntegerGene(1, 10);
     cgene1.setAllele(new Integer(6));
-    CompositeGene compGene = new CompositeGene ();
+    CompositeGene compGene = new CompositeGene();
     compGene.addGene(cgene1);
     Gene[] genes1 = new Gene[] {
         compGene};
@@ -219,8 +217,35 @@ public class CrossoverOperatorTest
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
-    CompositeGene result = (CompositeGene)target.getGene(0);
-    assertEquals(8, ( (Integer) ((Vector)result.getAllele()).get(0)).intValue());
+    CompositeGene result = (CompositeGene) target.getGene(0);
+    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0)).intValue());
   }
 
+  /**
+   * Ensures Object is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator();
+    assertTrue(isSerializable(op));
+  }
+
+  /**
+   * Ensures that Object and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    // construct object to be serialized
+    CrossoverOperator op = new CrossoverOperator(new DefaultCrossoverRateCalculator());
+    CrossoverOperator o = (CrossoverOperator)doSerialize(op);
+    assertEquals(o, op);
+  }
 }
