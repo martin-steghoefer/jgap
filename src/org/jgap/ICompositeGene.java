@@ -1,0 +1,31 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
+package org.jgap;
+
+/**
+ * Interface for Genes being composed by other genes.
+ *
+ * @author Klaus Meffert
+ * @since 2.6
+ */
+public interface ICompositeGene {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  static final String CVS_REVISION = "$Revision: 1.1 $";
+
+  /**
+   * Adds a gene to the composed Gene
+   * @param a_gene the gene to add
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  void addGene(Gene a_gene);
+}
