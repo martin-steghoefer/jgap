@@ -29,7 +29,7 @@ import org.jgap.*;
 public abstract class abstractSupergene extends BaseGene
     implements Supergene, supergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * This field separates gene class name from
@@ -81,7 +81,7 @@ public abstract class abstractSupergene extends BaseGene
    * @param a_index the index of the gene value to be returned
    * @return the Gene at the given index
    */
-  public final Gene getGene(int a_index) {
+  public final Gene geneAt(int a_index) {
     return m_genes[a_index];
   };
 
