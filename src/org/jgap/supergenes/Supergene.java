@@ -31,54 +31,53 @@ import org.jgap.*;
  *
  * @author Audrius Meskauskas
  */
-public interface Supergene extends Gene, ICompositeGene {
+public interface Supergene
+    extends Gene, ICompositeGene {
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.11 $";
 
-    /** String containing the CVS revision. Read out via reflection!*/
-    final static String CVS_REVISION = "$Revision: 1.10 $";
+  /**
+   * Test the allele combination of this supergene for validity.
+   * If a validator was previously set be calling setValidator(),
+   * the decission is delegated to this validator. The derived
+   * classes may have internal default validator for the case
+   * when no external validator is set. See note in the interface header.
+   *
+   * @return true only if the supergene allele combination is valid
+   */
+  boolean isValid();
 
-    /**
-     * Test the allele combination of this supergene for validity.
-     * If a validator was previously set be calling setValidator(),
-     * the decission is delegated to this validator. The derived
-     * classes may have internal default validator for the case
-     * when no external validator is set. See note in the interface header.
-     *
-     * @return true only if the supergene allele combination is valid
-     */
-    boolean isValid();
+  /**
+   * Get the array of genes - components of this supergene.
+   * The supergene components may be supergenes itself.
+   */
+  Gene[] getGenes();
 
-    /**
-     * Get the array of genes - components of this supergene.
-     * The supergene components may be supergenes itself.
-     */
-    Gene [] getGenes();
+  /**
+   * Returns the Gene at the given index (locus) within the Supergene. The
+   * first gene is at index zero and the last gene is at the index equal to
+   * the size of this Supergene - 1.
+   *
+   * @param a_index the index of the gene value to be returned
+   * @return the Gene at the given index
+   */
+  Gene geneAt(int a_index);
 
-    /**
-     * Returns the Gene at the given index (locus) within the Supergene. The
-     * first gene is at index zero and the last gene is at the index equal to
-     * the size of this Supergene - 1.
-     *
-     * @param a_index the index of the gene value to be returned
-     * @return the Gene at the given index
-     */
-    Gene geneAt(int a_index);
+  /**
+   * Sets an object, responsible for deciding if the Supergene allele
+   * combination is valid. If it is set to null, no validation is performed
+   * (all combinations are assumed to be valid). The derived
+   * classes may have internal default validator for the case
+   * when no external validator is set.
+   */
+  void setValidator(supergeneValidator a_validator);
 
-    /**
-     * Sets an object, responsible for deciding if the Supergene allele
-     * combination is valid. If it is set to null, no validation is performed
-     * (all combinations are assumed to be valid). The derived
-     * classes may have internal default validator for the case
-     * when no external validator is set.
-     */
-     void setValidator(supergeneValidator a_validator);
-
-     /**
-      * Gets an object, responsible for deciding if the Supergene allele
-      * combination is valid. If no external validator was set and the
-      * class uses its own internal validation method, it still must be
-      * able to return a validator, using the same method (typicallly,
-      * such classes just return <i>this</i>.
-      */
-      supergeneValidator getValidator();
-
+  /**
+   * Gets an object, responsible for deciding if the Supergene allele
+   * combination is valid. If no external validator was set and the
+   * class uses its own internal validation method, it still must be
+   * able to return a validator, using the same method (typicallly,
+   * such classes just return <i>this</i>.
+   */
+  supergeneValidator getValidator();
 }
