@@ -21,7 +21,7 @@ import java.util.*;
 public class KeyedValues2D
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /** The row keys */
   private List m_rowKeys;
@@ -197,8 +197,8 @@ public class KeyedValues2D
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setValue(Number a_value, Comparable a_rowKey,
-                       Comparable a_columnKey) {
+  public void setValue(final Number a_value, final Comparable a_rowKey,
+                       final Comparable a_columnKey) {
     final KeyedValues row;
     int rowIndex = getRowIndex(a_rowKey);
     if (rowIndex >= 0) {

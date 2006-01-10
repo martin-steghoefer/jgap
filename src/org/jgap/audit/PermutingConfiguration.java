@@ -21,9 +21,8 @@ import java.util.*;
  */
 public class PermutingConfiguration
     extends Configuration {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private List m_randomGeneratorSlots;
 
@@ -89,7 +88,7 @@ public class PermutingConfiguration
     if (a_conf.getSampleChromosome() != null) {
       setSampleChromosome(a_conf.getSampleChromosome());
     }
-    if(a_conf.getRandomGenerator() != null) {
+    if (a_conf.getRandomGenerator() != null) {
       setRandomGenerator(a_conf.getRandomGenerator());
     }
     if (a_conf.getChromosomePool() != null) {
@@ -101,18 +100,20 @@ public class PermutingConfiguration
     m_randomGeneratorSlots.add(a_randomGenerator);
   }
 
-  public void addNaturalSelector(NaturalSelector a_naturalSelector, boolean egal) {
-    throw new UnsupportedOperationException("Use addNaturalSelectorSlot instead!");
+  public void addNaturalSelector(NaturalSelector a_naturalSel, boolean a_egal) {
+    throw new UnsupportedOperationException(
+        "Use addNaturalSelectorSlot instead!");
   }
 
   public void addNaturalSelectorSlot(NaturalSelector a_naturalSelector) {
     m_naturalSelectorSlots.add(a_naturalSelector);
   }
 
-  public synchronized void addGeneticOperator(GeneticOperator a_geneticOperator) {
-    throw new UnsupportedOperationException("Use addGeneticOperatorSlot instead!");
-
+  public synchronized void addGeneticOperator(GeneticOperator a_geneticOp) {
+    throw new UnsupportedOperationException(
+        "Use addGeneticOperatorSlot instead!");
   }
+
   public void addGeneticOperatorSlot(GeneticOperator a_geneticOperator) {
     m_geneticOperatorSlots.add(a_geneticOperator);
   }
@@ -130,30 +131,29 @@ public class PermutingConfiguration
       setFitnessFunction(getFitnessFunction());
     }
     m_configuration.setMinimumPopSizePercent(getMinimumPopSizePercent());
-
     if (getPopulationSize() > 0) {
       m_configuration.setPopulationSize(getPopulationSize());
     }
     if (getSampleChromosome() != null) {
       m_configuration.setSampleChromosome(getSampleChromosome());
     }
-    if(getRandomGenerator() != null) {
+    if (getRandomGenerator() != null) {
       m_configuration.setRandomGenerator(getRandomGenerator());
     }
     if (getChromosomePool() != null) {
       m_configuration.setChromosomePool(getChromosomePool());
     }
-
     List list;
     Iterator it;
     /**@todo make permutation below computed dynamically and not statically*/
-    /**@todo introduce new parameters: populationSize, setPreservFittestIndividual,
-     * MAX_ALLOWED_EVOLUTIONS
+    /**@todo introduce new parameters: populationSize,
+     * setPreservFittestIndividual, MAX_ALLOWED_EVOLUTIONS
      */
 
     // Permute GeneticOperator's.
     // --------------------------
-    if (m_geneticOperatorIndex >= Math.pow(2, m_geneticOperatorSlots.size())-1) {
+    if (m_geneticOperatorIndex >=
+        Math.pow(2, m_geneticOperatorSlots.size()) - 1) {
 //      m_componentIndex++;
 //    }
 //    if (bitSet(m_componentIndex, 0)) {
@@ -170,10 +170,10 @@ public class PermutingConfiguration
       op = (GeneticOperator) it.next();
       m_configuration.addGeneticOperator(op);
     }
-
     // Permute NaturalSelector's.
     // --------------------------
-    if (m_naturalSelectorIndex >= Math.pow(2, m_naturalSelectorSlots.size())-1) {
+    if (m_naturalSelectorIndex >=
+        Math.pow(2, m_naturalSelectorSlots.size()) - 1) {
 //      m_componentIndex++;
 //    }
 //    if (bitSet(m_componentIndex, 1)) {
@@ -188,9 +188,8 @@ public class PermutingConfiguration
     while (it.hasNext()) {
       ns = (NaturalSelector) it.next();
       m_configuration.addNaturalSelector(ns, true);
-          /**@todo allow for "false"*/
+      /**@todo allow for "false"*/
     }
-
     // Permute RandomGenerator's.
     // --------------------------
     if (true || bitSet(m_componentIndex, 2)) {
@@ -204,7 +203,6 @@ public class PermutingConfiguration
     RandomGenerator rg = (RandomGenerator) m_randomGeneratorSlots.get(
         m_randomGeneratorIndex);
     m_configuration.setRandomGenerator(rg);
-
     // Permute FitnessFunction's.
     // --------------------------
     if (true || bitSet(m_componentIndex, 3)) {
@@ -213,16 +211,13 @@ public class PermutingConfiguration
         m_fitnessFunctionIndex = 0;
       }
     }
-
     /**@todo BulkFitnessOffsetRemover vs. FitnessFunction*/
 
 //    System.err.println(m_fitnessFunctionIndex+" / "+index++);
     FitnessFunction ff = (FitnessFunction) m_fitnessFunctionSlots.get(
         m_fitnessFunctionIndex);
     m_configuration.setFitnessFunction(ff);
-
     m_componentIndex++;
-
     return m_configuration;
   }
 
@@ -247,7 +242,6 @@ public class PermutingConfiguration
         newList.add(list.get(i));
       }
     }
-
     return newList;
   }
 
@@ -257,9 +251,9 @@ public class PermutingConfiguration
 
   public boolean hasNext() {
     double r = (m_randomGeneratorSlots.size())
-        *(m_fitnessFunctionSlots.size())
-        *(Math.pow(2,m_naturalSelectorSlots.size())-1)
-        *(Math.pow(2,m_geneticOperatorSlots.size())-1);
+        * (m_fitnessFunctionSlots.size())
+        * (Math.pow(2, m_naturalSelectorSlots.size()) - 1)
+        * (Math.pow(2, m_geneticOperatorSlots.size()) - 1);
     return m_componentIndex < r;
   }
 }
