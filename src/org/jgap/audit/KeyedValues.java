@@ -21,7 +21,7 @@ import java.util.*;
 public class KeyedValues
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   /** Data storage */
   private List m_data;
@@ -172,24 +172,24 @@ public class KeyedValues
   /**
    * Tests if this object is equal to another
    *
-   * @param o the other object
+   * @param a_obj the other object
    *
    * @return true: this object is equal to the other one
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public boolean equals(final Object o) {
-    if (o == null) {
+  public boolean equals(final Object a_obj) {
+    if (a_obj == null) {
       return false;
     }
-    if (o == this) {
+    if (a_obj == this) {
       return true;
     }
-    if (! (o instanceof KeyedValues)) {
+    if (! (a_obj instanceof KeyedValues)) {
       return false;
     }
-    final KeyedValues kvs = (KeyedValues) o;
+    final KeyedValues kvs = (KeyedValues) a_obj;
     final int count = size();
     if (count != kvs.size()) {
       return false;

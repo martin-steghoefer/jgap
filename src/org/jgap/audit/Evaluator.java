@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Each data has its own data container
@@ -53,7 +53,7 @@ public class Evaluator {
    */
   private List m_genotypeDataAvg;
 
-  public Evaluator(PermutingConfiguration a_conf) {
+  public Evaluator(final PermutingConfiguration a_conf) {
     if (a_conf == null) {
       throw new IllegalArgumentException("Configuration must not be null!");
     }
