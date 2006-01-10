@@ -16,6 +16,8 @@
   (--> same name as in class CompositeGene)
 * Made IGeneConstraintChecker serializable
 * Made IUniversalRateCalculator serializable
+* Took care of many coding conventions (Checkstyle,
+  Findbugs)
 * Extended javadoc
 * Removed some unneeded local variables
 * Fixed many code smells
