@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -295,8 +295,8 @@ public class Chromosome
         try {
           if (getApplicationData() != null) {
             if (getApplicationData() instanceof IApplicationData) {
-              copy.setApplicationData( ( (IApplicationData) getApplicationData()).
-                                      clone());
+              copy.setApplicationData( 
+                 ( (IApplicationData) getApplicationData()).clone());
             }
           }
           // Reset fitness value
@@ -339,11 +339,11 @@ public class Chromosome
               IApplicationData)
               getApplicationData()).clone();
           /*
-           if (clonedAppData == null || !clonedAppData.equals(getApplicationData())) {
-                      throw new CloneNotSupportedException(
-                          "ApplicationData object attached"
-                          + " to Chromosome clones not "
-                          + "correctly!");
+           if (clonedAppData == null 
+               || !clonedAppData.equals(getApplicationData())) {
+                throw new CloneNotSupportedException(
+                    "ApplicationData object attached"
+                    + " to Chromosome clones not correctly!");
                     }
            */
           ret.setApplicationData(clonedAppData);
@@ -575,7 +575,8 @@ public class Chromosome
     sampleChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = 
+       Genotype.getConfiguration().getRandomGenerator();
     for (int i = 0; i < newGenes.length; i++) {
       // We use the newGene() method on each of the genes in the
       // sample Chromosome to generate our new Gene instances for
@@ -912,12 +913,10 @@ public class Chromosome
         Gene gene = getGene(i);
         if (!getConstraintChecker().verify(gene, null)) {
           throw new InvalidConfigurationException("The gene type "
-                                                  + gene.getClass().getName()
-                                                  +
-                                                  " is not allowed to be used in"
-                                                  +
-                                                  " the chromosome due to the"
-                                                  + " constraint checker used.");
+                                      + gene.getClass().getName()
+                                      + " is not allowed to be used in"
+                                      + " the chromosome due to the"
+                                      + " constraint checker used.");
         }
       }
     }

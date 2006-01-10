@@ -32,7 +32,7 @@ package org.jgap;
 public abstract class FitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -58,8 +58,8 @@ public abstract class FitnessFunction
     double fitnessValue = evaluate(a_subject);
     if (fitnessValue < 0.00000000d) {
       throw new RuntimeException(
-          "Fitness values must be positive! Received value: " +
-          fitnessValue);
+          "Fitness values must be positive! Received value: "
+          + fitnessValue);
     }
     m_lastComputedFitnessValue = fitnessValue;
     return fitnessValue;

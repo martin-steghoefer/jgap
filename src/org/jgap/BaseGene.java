@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -145,7 +145,7 @@ public abstract class BaseGene
    */
   public boolean equals(Object a_other) {
     try {
-      int result =compareTo(a_other);
+      int result = compareTo(a_other);
       if (result == 0) {
         if (isCompareApplicationData()) {
           Gene otherGene = (Gene)a_other;
@@ -158,7 +158,9 @@ public abstract class BaseGene
           return true;
         }
       }
-      else return false;
+      else {
+        return false;
+      }
     }
     catch (ClassCastException e) {
       // If the other object isn't an Gene of current type
