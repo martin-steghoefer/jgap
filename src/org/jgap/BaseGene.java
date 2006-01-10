@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -143,7 +143,7 @@ public abstract class BaseGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public boolean equals(Object a_other) {
+  public boolean equals(final Object a_other) {
     try {
       int result = compareTo(a_other);
       if (result == 0) {
@@ -198,7 +198,7 @@ public abstract class BaseGene
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setEnergy(double a_energy) {
+  public void setEnergy(final double a_energy) {
     m_energy = a_energy;
   }
 
@@ -214,7 +214,7 @@ public abstract class BaseGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void setApplicationData(Object a_newData) {
+  public void setApplicationData(final Object a_newData) {
     m_applicationData = a_newData;
   }
 
@@ -244,7 +244,7 @@ public abstract class BaseGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void setCompareApplicationData(boolean a_doCompare) {
+  public void setCompareApplicationData(final boolean a_doCompare) {
     m_compareAppData = a_doCompare;
   }
 
@@ -258,7 +258,8 @@ public abstract class BaseGene
     return m_compareAppData;
   }
 
-  protected int compareApplicationData(Object a_appdata1, Object a_appdata2) {
+  protected int compareApplicationData(final Object a_appdata1,
+                                       final Object a_appdata2) {
     // Compare application data.
     // -------------------------
     if (a_appdata1 == null) {
@@ -275,8 +276,7 @@ public abstract class BaseGene
     else {
       if (a_appdata1 instanceof Comparable) {
         try {
-          return ( (Comparable) a_appdata1).compareTo(
-              a_appdata2);
+          return ( (Comparable)a_appdata1).compareTo(a_appdata2);
         }
         catch (ClassCastException cex) {
           return 0;
@@ -306,7 +306,8 @@ public abstract class BaseGene
    * @author Klaus Meffert
    * @since 2.5 (moved from CompositeGene, where it was since 2.0)
    */
-  public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker) {
+  public void setConstraintChecker(
+         final IGeneConstraintChecker a_constraintChecker) {
     m_geneAlleleChecker = a_constraintChecker;
   }
 

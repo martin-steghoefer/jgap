@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -283,8 +283,8 @@ public class Configuration
         m_factory = (IJGAPFactory) Class.forName(clazz).newInstance();
       }
       catch (Exception ex) {
-        throw new RuntimeException("Class " + clazz +
-                                   " could not be instantiated"
+        throw new RuntimeException("Class " + clazz
+                                   + " could not be instantiated"
                                    + " as type IJGAPFactory");
       }
     }
@@ -293,7 +293,7 @@ public class Configuration
     }
   }
 
-  public Configuration(String a_name) {
+  public Configuration(final String a_name) {
     this();
     setName(a_name);
   }
@@ -304,7 +304,7 @@ public class Configuration
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setName(String a_name) {
+  public void setName(final String a_name) {
     m_name = a_name;
   }
 

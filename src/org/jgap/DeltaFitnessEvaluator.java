@@ -19,7 +19,7 @@ package org.jgap;
 public class DeltaFitnessEvaluator
     implements FitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -30,7 +30,8 @@ public class DeltaFitnessEvaluator
    *
    * @since 2.0 (until 1.1: input types int)
    */
-  public boolean isFitter(double a_fitness_value1, double a_fitness_value2) {
+  public boolean isFitter(final double a_fitness_value1, 
+                          final double a_fitness_value2) {
     return a_fitness_value1 < a_fitness_value2;
   }
 }
