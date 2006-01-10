@@ -23,7 +23,7 @@ package org.jgap;
  */
 public interface RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Returns the next pseudorandom, uniformly distributed int value
@@ -32,7 +32,7 @@ public interface RandomGenerator {
    * returned. All 2^32  possible int values are produced with
    * (approximately) equal probability.
    *
-   * @return a pseudorandom integer value.
+   * @return a pseudorandom integer value
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -46,15 +46,15 @@ public interface RandomGenerator {
    * is that one int value in the specified range is pseudorandomly
    * generated and returned. All n possible int values are produced with
    * (approximately) equal probability.
-   * @param ceiling the upper boundary excluded
+   * @param a_ceiling the upper boundary excluded
    *
    * @return a pseudorandom integer value between 0 and the given
-   *         ceiling - 1, inclusive.
+   * ceiling - 1, inclusive
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  public int nextInt(int ceiling);
+  public int nextInt(int a_ceiling);
 
   /**
    * Returns the next pseudorandom, uniformly distributed long value from
@@ -63,7 +63,7 @@ public interface RandomGenerator {
    * returned. All 2^64 possible long values are produced with
    * (approximately) equal probability.
    *
-   * @return a psuedorandom long value.
+   * @return a psuedorandom long value
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -74,7 +74,7 @@ public interface RandomGenerator {
    * Returns the next pseudorandom, uniformly distributed double value
    * between 0.0 and 1.0 from this random number generator's sequence.
    *
-   * @return a psuedorandom double value GREATER/EQUAL 0 AND LESS THAN 1.
+   * @return a psuedorandom double value GREATER/EQUAL 0 AND LESS THAN 1
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -85,7 +85,7 @@ public interface RandomGenerator {
    * Returns the next pseudorandom, uniformly distributed float value
    * between 0.0 and 1.0 from this random number generator's sequence.
    *
-   * @return a psuedorandom float value.
+   * @return a psuedorandom float value
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -99,7 +99,7 @@ public interface RandomGenerator {
    * and returned. The values true and false are produced with
    * (approximately) equal probability.
    *
-   * @return a pseudorandom boolean value.
+   * @return a pseudorandom boolean value
    *
    * @author Neil Rotstan
    * @since 1.0
