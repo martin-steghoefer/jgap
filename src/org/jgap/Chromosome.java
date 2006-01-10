@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -139,7 +139,7 @@ public class Chromosome
    * @author Klaus Meffert
    * @since 2.2
    */
-  public Chromosome(int a_desiredSize) {
+  public Chromosome(final int a_desiredSize) {
     if (a_desiredSize <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -163,7 +163,7 @@ public class Chromosome
    * @author Klaus Meffert
    * @since 1.0
    */
-  public Chromosome(Gene a_sampleGene, int a_desiredSize) {
+  public Chromosome(final Gene a_sampleGene, final int a_desiredSize) {
     this(a_desiredSize);
     initFromGene(a_sampleGene);
   }
@@ -295,7 +295,7 @@ public class Chromosome
         try {
           if (getApplicationData() != null) {
             if (getApplicationData() instanceof IApplicationData) {
-              copy.setApplicationData( 
+              copy.setApplicationData(
                  ( (IApplicationData) getApplicationData()).clone());
             }
           }
@@ -339,7 +339,7 @@ public class Chromosome
               IApplicationData)
               getApplicationData()).clone();
           /*
-           if (clonedAppData == null 
+           if (clonedAppData == null
                || !clonedAppData.equals(getApplicationData())) {
                 throw new CloneNotSupportedException(
                     "ApplicationData object attached"
@@ -575,7 +575,7 @@ public class Chromosome
     sampleChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
-    RandomGenerator generator = 
+    RandomGenerator generator =
        Genotype.getConfiguration().getRandomGenerator();
     for (int i = 0; i < newGenes.length; i++) {
       // We use the newGene() method on each of the genes in the
