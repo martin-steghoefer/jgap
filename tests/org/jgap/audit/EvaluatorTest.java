@@ -20,14 +20,12 @@ import junit.framework.*;
  * @since 2.2
  */
 public class EvaluatorTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
-  private final static double DELTA = 0.00000001d;
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public void setUp() {
-    Genotype.setConfiguration(null);
+    super.setUp();
   }
 
   public static Test suite() {
@@ -98,8 +96,8 @@ public class EvaluatorTest
     assertEquals( (7.3 + 4.8 + 11.4) / 3, avg.avgFitnessValue, DELTA);
     assertEquals( (Math.abs(4.8 - 7.3) / 2 + Math.abs(11.4 - 4.8) / 2) / 1,
                  avg.avgDiversityFitnessValue, DELTA);
-    assertEquals(0.0d, avg.avgBestDeltaFitnessValue, DELTA); //because only one run
-  }
+   assertEquals(0.0d, avg.avgBestDeltaFitnessValue, DELTA); //because only 1 run
+ }
 
   public void testCalcPerformance_1()
       throws Exception {
@@ -142,8 +140,8 @@ public class EvaluatorTest
     assertEquals(pop.determineFittestChromosome().getFitnessValue(),
                  avg.bestFitnessValue, DELTA);
     assertEquals(0, avg.bestFitnessValueGeneration);
-    assertEquals( ( (7.3 + 4.8 + 11.4) / 3) / 2 +
-                 ( (7.0d + 17.0d + 19) / 3) / 2, avg.avgFitnessValue, DELTA);
+    assertEquals( ( (7.3 + 4.8 + 11.4) / 3) / 2
+                 + ( (7.0d + 17.0d + 19) / 3) / 2, avg.avgFitnessValue, DELTA);
     assertEquals( (Math.abs(4.8 - 7.3) / 2 + Math.abs(11.4 - 4.8) / 2) / 2
                  + (Math.abs(17.0 - 7) / 2 + Math.abs(19.0 - 17) / 2) / 2,
                  avg.avgDiversityFitnessValue, DELTA);
@@ -256,8 +254,8 @@ public class EvaluatorTest
                           pop10.determineFittestChromosome().getFitnessValue()),
                  avg.bestFitnessValue, DELTA);
     assertEquals(0, avg.bestFitnessValueGeneration);
-    assertEquals( ( (7.3 + 4.8 + 11.4) / 3) / 2 +
-                 ( (7.0d + 17.0d + 19) / 3) / 2, avg.avgFitnessValue, DELTA);
+    assertEquals( ( (7.3 + 4.8 + 11.4) / 3) / 2
+                 + ( (7.0d + 17.0d + 19) / 3) / 2, avg.avgFitnessValue, DELTA);
     assertEquals( (Math.abs(4.8 - 7.3) / 2 + Math.abs(11.4 - 4.8) / 2) / 2
                  + (Math.abs(17.0 - 7) / 2 + Math.abs(19.0 - 17) / 2) / 2,
                  avg.avgDiversityFitnessValue, DELTA);
@@ -269,8 +267,8 @@ public class EvaluatorTest
                           pop11.determineFittestChromosome().getFitnessValue()),
                  avg.bestFitnessValue, DELTA);
     assertEquals(0, avg.bestFitnessValueGeneration);
-    assertEquals( ( (4 + 9 + 8.0d) / 3) / 2 +
-                 ( (14 + 11.0d + 28) / 3) / 2, avg.avgFitnessValue, DELTA);
+    assertEquals( ( (4 + 9 + 8.0d) / 3) / 2
+                 + ( (14 + 11.0d + 28) / 3) / 2, avg.avgFitnessValue, DELTA);
     assertEquals( (Math.abs(9.0d - 4) / 2 + Math.abs(8.0d - 9) / 2) / 2
                  + (Math.abs(11.0d - 14) / 2 + Math.abs(28.0d - 11) / 2) / 2,
                  avg.avgDiversityFitnessValue, DELTA);

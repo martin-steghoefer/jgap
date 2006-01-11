@@ -73,5 +73,6 @@ class WithoutSupergeneTest
   public static void main(String[] args) {
     WithoutSupergeneTest test = new WithoutSupergeneTest();
     test.test();
-  };
+    System.exit(0);
+  }
 }

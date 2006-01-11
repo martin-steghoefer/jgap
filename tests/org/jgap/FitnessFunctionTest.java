@@ -21,7 +21,7 @@ public class FitnessFunctionTest
     extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FitnessFunctionTest.class);
@@ -30,7 +30,7 @@ public class FitnessFunctionTest
 
   public void testGetFitnessValue_0() {
     FitnessFunctionImpl fitfunc = new FitnessFunctionImpl(7);
-    assertEquals(7.0d, fitfunc.getFitnessValue(null),0.00000001d);
+    assertEquals(7.0d, fitfunc.getFitnessValue(null), 0.00000001d);
   }
 
   public void testGetFitnessValue_1() {
@@ -40,7 +40,7 @@ public class FitnessFunctionTest
       fail();
     }
     catch (RuntimeException cause) {
-      // This is expected since non-positive fitness values are illegal.
+      ; // This is expected since non-positive fitness values are illegal.
     }
   }
 
@@ -50,7 +50,7 @@ public class FitnessFunctionTest
       fitfunc.getFitnessValue(null);
     }
     catch (RuntimeException cause) {
-      // This is expected since non-positive fitness values are illegal.
+      ; // This is expected since non-positive fitness values are illegal.
     }
   }
 
@@ -66,13 +66,13 @@ public class FitnessFunctionTest
     /**
      * @since 2.0 (until 1.1: type int)
      */
-    private double evaluationValue;
-    public FitnessFunctionImpl(double evaluationValue) {
-      this.evaluationValue = evaluationValue;
+    private double m_evaluationValue;
+    public FitnessFunctionImpl(double a_evaluationValue) {
+      m_evaluationValue = a_evaluationValue;
     }
 
     protected double evaluate(Chromosome a_subject) {
-      return evaluationValue;
+      return m_evaluationValue;
     }
   }
 }

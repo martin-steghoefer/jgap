@@ -9,8 +9,6 @@
  */
 package org.jgap;
 
-import org.jgap.impl.*;
-
 /**
  * Derived Chromosome class for testing purposes only.
  *
@@ -19,13 +17,13 @@ import org.jgap.impl.*;
  */
 public class ChromosomeForTest
     extends Chromosome {
-  public boolean isCloned;
+  private boolean m_isCloned;
 
   // Default constructor needed for construction via newInstance()
   public ChromosomeForTest() {
   }
 
-  public ChromosomeForTest(Gene[] a_initialGenes) {
+  public ChromosomeForTest(final Gene[] a_initialGenes) {
     super(a_initialGenes);
   }
 
@@ -38,11 +36,15 @@ public class ChromosomeForTest
   }
 
   public double getFitnessValue() {
-    if (isCloned && m_fitnessValue < 0) {
+    if (m_isCloned && m_fitnessValue < 0) {
       // Record test result!
       TestResultHolder.computedTimes++;
     }
     return super.getFitnessValue();
+  }
+
+  public void resetIsCloned() {
+    m_isCloned = false;
   }
 
   public Chromosome randomInitialChromosome2()
@@ -105,7 +107,7 @@ public class ChromosomeForTest
   public synchronized Object clone() {
     ChromosomeForTest chrom = new ChromosomeForTest(
         ( (Chromosome)super.clone()).getGenes());
-    chrom.isCloned = true;
+    chrom.m_isCloned = true;
     return chrom;
   }
 

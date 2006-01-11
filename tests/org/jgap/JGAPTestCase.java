@@ -23,15 +23,15 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
 
   public final static PrivateAccessor privateAccessor = null;
 
-  public JGAPTestCase(String name) {
-    super(name);
+  public JGAPTestCase(String a_name) {
+    super(a_name);
   }
 
   public JGAPTestCase() {
@@ -44,27 +44,28 @@ public abstract class JGAPTestCase
 
   /**
    *
-   * @param list1 first list of chromosomes
-   * @param list2 second list of chromosomes
+   * @param a_list1 first list of chromosomes
+   * @param a_list2 second list of chromosomes
    * @return true lists of chromosomes are equal
+   *
    * @author Klaus Meffert
    */
-  public static boolean isChromosomesEqual(Chromosome[] list1,
-                                           Chromosome[] list2) {
-    if (list1 == null) {
-      return (list2 == null);
+  public static boolean isChromosomesEqual(Chromosome[] a_list1,
+                                           Chromosome[] a_list2) {
+    if (a_list1 == null) {
+      return (a_list2 == null);
     }
-    else if (list2 == null) {
+    else if (a_list2 == null) {
       return false;
     }
     else {
-      if (list1.length != list2.length) {
+      if (a_list1.length != a_list2.length) {
         return false;
       }
       else {
-        for (int i = 0; i < list1.length; i++) {
-          Chromosome c1 = (Chromosome) list1[i];
-          Chromosome c2 = (Chromosome) list2[i];
+        for (int i = 0; i < a_list1.length; i++) {
+          Chromosome c1 = (Chromosome) a_list1[i];
+          Chromosome c2 = (Chromosome) a_list2[i];
           if (!c1.equals(c2)) {
             return false;
           }
@@ -119,19 +120,20 @@ public abstract class JGAPTestCase
 
   /**
    *
-   * @param o object to serialize, then deserialize
+   * @param a_obj object to serialize, then deserialize
    * @return deserialized object that has previously been serialized
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public Object doSerialize(Object o) throws Exception {
+  public Object doSerialize(Object a_obj)
+      throws Exception {
     // serialize object to a file
-    File f = File.createTempFile("object","ser");
+    File f = File.createTempFile("object", "ser");
     OutputStream os = new FileOutputStream(f);
     ObjectOutputStream oos = new ObjectOutputStream(os);
-    oos.writeObject(o);
+    oos.writeObject(a_obj);
     oos.flush();
     oos.close();
     InputStream oi = new FileInputStream(f);

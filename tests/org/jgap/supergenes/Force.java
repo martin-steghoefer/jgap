@@ -14,9 +14,15 @@ package org.jgap.supergenes;
  * verify if the solution exists in general.
  * @author Audrius Meskauskas
  */
-class Force {
+public final class Force {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
+  public static boolean REPORT_ENABLED = true;
+
+  private Force() {
+
+  }
 
   /**
    * Check the existence of soulution.
@@ -27,21 +33,27 @@ class Force {
    * @author Audrius Meskauskas
    */
   public static boolean solve(int a_sum) {
-    for (int q = 0; q < 4; q++)
-      for (int d = 0; d < 10; d++)
-        for (int n = 0; n < 20; n++)
+    for (int q = 0; q < 4; q++) {
+      for (int d = 0; d < 10; d++) {
+        for (int n = 0; n < 20; n++) {
           for (int p = 0; p < 99; p++) {
-            if (AbstractSupergeneTest.amountOfChange(q, d, n, p) == a_sum)
+            if (AbstractSupergeneTest.amountOfChange(q, d, n, p) == a_sum) {
               if (p % 2 == n % 2) {
-                if (REPORT_ENABLED)
-                  System.out.println("Force " + a_sum + ": " + q +
-                                     " quarters " + d + " dimes " +
-                                     n + " nickels " + p + " pennies");
+                if (REPORT_ENABLED) {
+                  System.out.println("Force " + a_sum + ": " + q
+                                     + " quarters " + d + " dimes "
+                                     + n + " nickels " + p + " pennies");
+                }
                 return true;
               }
+            }
           }
-    if (REPORT_ENABLED)
+        }
+      }
+    }
+    if (REPORT_ENABLED) {
       System.out.println("Force " + a_sum + ": no solution");
+    }
     return false;
   }
 
@@ -55,5 +67,4 @@ class Force {
     }
   }
 
-  public static boolean REPORT_ENABLED = true;
 }

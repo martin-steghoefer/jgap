@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 abstract class AbstractChangFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final int m_targetAmount;
 
@@ -40,7 +40,7 @@ abstract class AbstractChangFitnessFunction
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject The Chromosome instance to evaluate
+   * @param a_subject the Chromosome instance to evaluate
    *
    * @return positive integer reflecting the fitness rating of the given
    * Chromosome
@@ -102,8 +102,8 @@ abstract class AbstractChangFitnessFunction
                                             SupergeneTest.NICKELS);
     int numPennies = getNumberOfCoinsAtGene(a_potentialSolution,
                                             SupergeneTest.PENNIES);
-    return AbstractSupergeneTest.amountOfChange
-        (numQuarters, numDimes, numNickels, numPennies);
+    return AbstractSupergeneTest.amountOfChange(numQuarters, numDimes,
+                                                numNickels, numPennies);
   }
 
   /**
@@ -130,10 +130,10 @@ abstract class AbstractChangFitnessFunction
    */
   public int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
     return
-        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.QUARTERS) +
-        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.DIMES) +
-        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.NICKELS) +
-        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.PENNIES);
+        getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.QUARTERS)
+        + getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.DIMES)
+        + getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.NICKELS)
+        + getNumberOfCoinsAtGene(a_potentialsolution, SupergeneTest.PENNIES);
   }
 
   /**

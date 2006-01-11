@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -43,7 +43,8 @@ public class BaseGeneTest
    */
   public void testToString_0() {
     Gene gene = new BaseGeneImpl();
-    assertEquals("null, "+BaseGene.S_APPLICATION_DATA+":null", gene.toString());
+    assertEquals("null, " + BaseGene.S_APPLICATION_DATA + ":null",
+                 gene.toString());
   }
 
   /**
@@ -53,7 +54,8 @@ public class BaseGeneTest
   public void testToString_1() {
     Gene gene = new BaseGeneImpl();
     gene.setAllele(new Integer(98));
-    assertEquals("98, "+BaseGene.S_APPLICATION_DATA+":null", gene.toString());
+    assertEquals("98, " + BaseGene.S_APPLICATION_DATA + ":null",
+                 gene.toString());
   }
 
   /**
@@ -168,7 +170,6 @@ public class BaseGeneTest
     assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 
-
   /**
    * @author Klaus Meffert
    * @since 2.4
@@ -176,7 +177,7 @@ public class BaseGeneTest
   public void testSetApplicationData_0() {
     BaseGeneImpl gene = new BaseGeneImpl();
     assertEquals(null, gene.getApplicationData());
-    Integer i =new Integer(23);
+    Integer i = new Integer(23);
     gene.setApplicationData(i);
     assertSame(i, gene.getApplicationData());
     String s = "Hallo";
@@ -207,7 +208,7 @@ public class BaseGeneTest
       extends BaseGene {
     private Object m_allele;
 
-    public int m_compareTo_result;
+    private int m_compareTo_result;
 
     public int compareTo(Object a_o) {
       return m_compareTo_result;
@@ -221,14 +222,11 @@ public class BaseGeneTest
       m_allele = a_newValue;
     }
 
-    public String getPersistentRepresentation()
-        throws UnsupportedOperationException {
+    public String getPersistentRepresentation() {
       return null;
     }
 
-    public void setValueFromPersistentRepresentation(String a_representation)
-        throws UnsupportedOperationException,
-        UnsupportedRepresentationException {
+    public void setValueFromPersistentRepresentation(String a_representation) {
     }
 
     public void setToRandomValue(RandomGenerator a_numberGenerator) {

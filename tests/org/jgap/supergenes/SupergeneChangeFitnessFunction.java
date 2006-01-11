@@ -11,7 +11,8 @@ package org.jgap.supergenes;
 
 import org.jgap.*;
 
-/** Fitness function for a version where Supergene is used
+/**
+ * Fitness function for a version where Supergene is used
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -21,7 +22,7 @@ import org.jgap.*;
 class SupergeneChangeFitnessFunction
     extends AbstractChangFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public SupergeneChangeFitnessFunction(int a_targetAmount) {
     super(a_targetAmount);
@@ -35,14 +36,12 @@ class SupergeneChangeFitnessFunction
       case SupergeneTest.DIMES:
       case SupergeneTest.QUARTERS:
         return a_chromosome.getGene(a_code);
-      case SupergeneTest.NICKELS: {
+      case SupergeneTest.NICKELS:
         Supergene s = (Supergene) a_chromosome.getGene(2);
         return s.geneAt(0);
-      }
-      case SupergeneTest.PENNIES: {
-        Supergene s = (Supergene) a_chromosome.getGene(2);
+      case SupergeneTest.PENNIES:
+        s = (Supergene) a_chromosome.getGene(2);
         return s.geneAt(1);
-      }
       default:
         throw new Error("Invalid coind code " + a_code);
     }

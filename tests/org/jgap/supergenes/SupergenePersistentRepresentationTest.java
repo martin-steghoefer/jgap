@@ -22,11 +22,11 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static class InstantiableSupergene
       extends AbstractSupergene {
-    public boolean isValid(Gene[] a) {
+    public boolean isValid(Gene[] a_gene) {
       return true;
     };
   }
@@ -49,7 +49,7 @@ public class SupergenePersistentRepresentationTest
       gene.addGene(nested);
       InstantiableSupergene nested2 = new InstantiableSupergene();
       nested2.setValidator(new Validator() {
-        public boolean isValid(Gene[] g, Supergene s) {
+        public boolean isValid(Gene[] a_gene, Supergene a_supergene) {
           return true;
         }
       });

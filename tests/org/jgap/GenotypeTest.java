@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -172,8 +172,8 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
-    assertTrue(genotype.getConfiguration().getFitnessEvaluator()instanceof
-               DefaultFitnessEvaluator);
+    assertTrue(genotype.getConfiguration().getFitnessEvaluator()
+               instanceof DefaultFitnessEvaluator);
   }
 
   /**
@@ -319,8 +319,8 @@ public class GenotypeTest
     // Add new NaturalSelector
     config.addNaturalSelector(new WeightedRouletteSelector(), true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
-    int popSize = config.getPopulationSize() *
-        config.getSampleChromosome().getGenes().length;
+    int popSize = config.getPopulationSize()
+        * config.getSampleChromosome().getGenes().length;
     genotype.evolve(1);
     assertTrue(popSize >= genotype.getPopulation().size());
   }
@@ -540,7 +540,7 @@ public class GenotypeTest
     // Mark any chromosome as original (that is not cloned)
     for (int i=0;i<genotype.getPopulation().size();i++) {
       chrom = (ChromosomeForTest)genotype.getPopulation().getChromosome(i);
-      chrom.isCloned = false;
+      chrom.resetIsCloned();
     }
 
     // Now do the test evolution --> new fitness values must be recomputed!

@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class NickelsPenniesSupergene
     extends AbstractSupergene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public NickelsPenniesSupergene() {
   }
@@ -31,9 +31,9 @@ public class NickelsPenniesSupergene
     super(a_genes);
   }
 
-  public boolean isValid(Gene[] genes, Supergene s) {
-    IntegerGene nickels = (IntegerGene) genes[0];
-    IntegerGene pennies = (IntegerGene) genes[1];
+  public boolean isValid(Gene[] a_genes, Supergene a_supergene) {
+    IntegerGene nickels = (IntegerGene) a_genes[0];
+    IntegerGene pennies = (IntegerGene) a_genes[1];
     boolean valid = nickels.intValue() % 2 == pennies.intValue() % 2;
     return valid;
   }

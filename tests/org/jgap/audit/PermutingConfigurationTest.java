@@ -1,11 +1,9 @@
 package org.jgap.audit;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
-
 import junit.framework.*;
 
 /**
@@ -15,12 +13,12 @@ import junit.framework.*;
  * @since 2.2
  */
 public class PermutingConfigurationTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setUp() {
-    Genotype.setConfiguration(null);
+    super.setUp();
   }
 
   public static Test suite() {
@@ -45,9 +43,11 @@ public class PermutingConfigurationTest
     Configuration conf1 = new DefaultConfiguration();
     conf1.setFitnessFunction(new StaticFitnessFunction(0.5d));
     PermutingConfiguration conf = new PermutingConfiguration(conf1);
-    assertEquals(StaticFitnessFunction.class, conf.getFitnessFunction().getClass());
+    assertEquals(StaticFitnessFunction.class,
+                 conf.getFitnessFunction().getClass());
     assertEquals(EventManager.class, conf.getEventManager().getClass());
-    assertEquals(DefaultFitnessEvaluator.class, conf.getFitnessEvaluator().getClass());
+    assertEquals(DefaultFitnessEvaluator.class,
+                 conf.getFitnessEvaluator().getClass());
     assertEquals(0, conf.getNaturalSelectorsSize(true));
     assertEquals(StockRandomGenerator.class,
                  conf.getRandomGenerator().getClass());
@@ -61,37 +61,34 @@ public class PermutingConfigurationTest
    * unique.
    * @throws Exception
    */
-  public void testPermute_0() throws Exception {
+  public void testPermute_0()
+      throws Exception {
     Map cache = new Hashtable();
     Configuration conf1 = new DefaultConfiguration();
     PermutingConfiguration conf = new PermutingConfiguration(conf1);
     // 2 possible combinations (because only 1 RandomGenerator a time possible)
     conf.addRandomGeneratorSlot(new StockRandomGenerator());
     conf.addRandomGeneratorSlot(new GaussianRandomGenerator());
-
     // 3 possible combinations (multiple NaturalSelector's possible)
     conf.addNaturalSelectorSlot(new BestChromosomesSelector());
     conf.addNaturalSelectorSlot(new WeightedRouletteSelector());
-
     // 3 possible combinations (multiple GeneticOperator's possible)
     conf.addGeneticOperatorSlot(new MutationOperator());
     conf.addGeneticOperatorSlot(new CrossoverOperator());
-
     // 1 possible combinations
     conf.addFitnessFunctionSlot(new StaticFitnessFunction(0.5d));
-
     assertTrue(conf.hasNext());
     Configuration c;
-    for (int i=0;i<18;i++) { // 18 = 2 * 3 * 3 * 1
+    for (int i = 0; i < 18; i++) { // 18 = 2 * 3 * 3 * 1
       c = conf.next();
       assertNotNull(c);
       // add to cache and check that object is unique among cached ones
       int hash = c.getRandomGenerator().hashCode()
           + c.getFitnessFunction().hashCode();
-      for (int j=0;j<c.getNaturalSelectorsSize(true);j++) {
+      for (int j = 0; j < c.getNaturalSelectorsSize(true); j++) {
         hash += c.getNaturalSelector(true, j).hashCode();
       }
-      for (int j=0;j<c.getGeneticOperators().size();j++) {
+      for (int j = 0; j < c.getGeneticOperators().size(); j++) {
         hash += c.getGeneticOperators().get(j).hashCode();
       }
       Integer hashI = new Integer(hash);

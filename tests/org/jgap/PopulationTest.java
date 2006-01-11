@@ -24,7 +24,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -346,7 +346,7 @@ public class PopulationTest
     assertEquals(2, genes.size());
     assertEquals(g1, genes.get(0));
     assertEquals(g2, genes.get(1));
-    genes = pop.getGenome(!true);
+    genes = pop.getGenome(false);
     assertEquals(2, genes.size());
     assertEquals(g1, genes.get(0));
     assertEquals(g2, genes.get(1));
@@ -375,7 +375,7 @@ public class PopulationTest
     assertEquals(g3, genes.get(2));
     assertEquals(g4, genes.get(3));
     assertEquals(g5, genes.get(4));
-    genes = pop.getGenome(!true);
+    genes = pop.getGenome(false);
     assertEquals(5, genes.size());
     assertEquals(g1, genes.get(0));
     assertEquals(g2, genes.get(1));
@@ -412,7 +412,7 @@ public class PopulationTest
     assertEquals(g5, genes.get(3));
     assertEquals(g6, genes.get(4));
     // don't resolve CompositeGene with the following call
-    genes = pop.getGenome(!true);
+    genes = pop.getGenome(false);
     assertEquals(4, genes.size());
     assertEquals(g1, genes.get(0));
     assertEquals(g2, genes.get(1));
@@ -524,7 +524,8 @@ public class PopulationTest
                                new IntegerGene(1, 5)});
     Population pop = new Population(chroms);
     Chromosome c = pop.removeChromosome(0);
-    assertEquals(chroms[0],c);
-    assertTrue(((Boolean)privateAccessor.getField(pop,"m_changed")).booleanValue());
+    assertEquals(chroms[0], c);
+    assertTrue( ( (Boolean) privateAccessor.getField(pop, "m_changed")).
+               booleanValue());
   }
 }

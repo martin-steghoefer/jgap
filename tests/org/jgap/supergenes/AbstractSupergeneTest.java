@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  * */
 abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Gene index for the dimes gene
@@ -53,6 +53,8 @@ abstract class AbstractSupergeneTest {
    */
   public static int POPULATION_SIZE = 2000;
 
+  public static boolean REPORT_ENABLED = true;
+
   /**
    * @return Created Dimes gene instance.
    */
@@ -82,10 +84,10 @@ abstract class AbstractSupergeneTest {
   }
 
   /** Compute the money value from the coin information. */
-  public static int amountOfChange
-      (int numQuarters, int numDimes, int numNickels, int numPennies) {
-    return
-        (numQuarters * 25) + (numDimes * 10) + (numNickels * 5) + numPennies;
+  public static int amountOfChange(int a_numQuarters, int a_numDimes,
+                                   int a_numNickels, int a_numPennies) {
+    return (a_numQuarters * 25) + (a_numDimes * 10) + (a_numNickels * 5)
+        + a_numPennies;
   };
 
   /**
@@ -103,8 +105,6 @@ abstract class AbstractSupergeneTest {
   public abstract int makeChangeForAmount(int a_targetChangeAmount)
       throws Exception;
 
-  public static boolean REPORT_ENABLED = true;
-
   /**
    * Write report on eveluation to the given stream.
    * @param a_fitnessFunction p_SupergeneChangeFitnessFunction
@@ -117,30 +117,20 @@ abstract class AbstractSupergeneTest {
     if (!REPORT_ENABLED) {
       return bestSolutionSoFar;
     }
-    System.out.println("\nThe best solution has a fitness value of " +
-                       bestSolutionSoFar.getFitnessValue());
+    System.out.println("\nThe best solution has a fitness value of "
+                       + bestSolutionSoFar.getFitnessValue());
     System.out.println("It contained the following: ");
-    System.out.println("\t" +
-                       a_fitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + a_fitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, QUARTERS) + " quarters.");
-    System.out.println("\t" +
-                       a_fitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + a_fitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, DIMES) + " dimes.");
-    System.out.println("\t" +
-                       a_fitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + a_fitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, NICKELS) + " nickels.");
-    System.out.println("\t" +
-                       a_fitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + a_fitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, PENNIES) + " pennies.");
-    System.out.println("For a total of " +
-                       a_fitnessFunction.amountOfChange(
-        bestSolutionSoFar) + " cents in " +
-                       a_fitnessFunction.
-                       getTotalNumberOfCoins(
+    System.out.println("For a total of " + a_fitnessFunction.amountOfChange(
+        bestSolutionSoFar) + " cents in "
+                       + a_fitnessFunction.getTotalNumberOfCoins(
         bestSolutionSoFar) + " coins.");
     return bestSolutionSoFar;
   }
@@ -156,46 +146,48 @@ abstract class AbstractSupergeneTest {
    * as 1000 on the error score.
    */
   public int test() {
-    int S = 0;
+    int s = 0;
     int e;
     Test:
         for (int amount = 20; amount < 100; amount++) {
       try {
-        if (REPORT_ENABLED)
+        if (REPORT_ENABLED) {
           System.out.println("EXCANGING " + amount + " ");
-          // Do not solve cases without solutions
-        if (EXISTING_SOLUTIONS_ONLY)
+        }
+        // Do not solve cases without solutions
+        if (EXISTING_SOLUTIONS_ONLY) {
           if (!Force.solve(amount)) {
             continue Test;
           }
+        }
         e = makeChangeForAmount(amount);
         if (REPORT_ENABLED) {
           System.out.println(" err " + e);
           System.out.println("---------------");
         }
-        S = S + e;
+        s = s + e;
       }
       catch (Exception ex) {
         ex.printStackTrace();
-        S += 1000;
+        s += 1000;
       }
     }
     if (REPORT_ENABLED) {
-      System.out.println("Sum of errors " + S);
+      System.out.println("Sum of errors " + s);
     }
-    return S;
+    return s;
   }
 
   /**
    * Find and print the solution, return the solution error.
    * @return absolute difference between the required and computed change
    */
-  protected int solve(int a_targetChangeAmount, Configuration conf,
-                      SupergeneChangeFitnessFunction fitnessFunction,
-                      Gene[] sampleGenes)
+  protected int solve(int a_targetChangeAmount, Configuration a_conf,
+                      SupergeneChangeFitnessFunction a_fitnessFunction,
+                      Gene[] a_sampleGenes)
       throws InvalidConfigurationException {
-    Chromosome sampleChromosome = new Chromosome(sampleGenes);
-    conf.setSampleChromosome(sampleChromosome);
+    Chromosome sampleChromosome = new Chromosome(a_sampleGenes);
+    a_conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -203,18 +195,18 @@ abstract class AbstractSupergeneTest {
     // the population (which could be seen as bad). We'll just set
     // the population size to 500 here.
     // ------------------------------------------------------------
-    conf.setPopulationSize(POPULATION_SIZE);
+    a_conf.setPopulationSize(POPULATION_SIZE);
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
     Genotype population;
-    population = Genotype.randomInitialGenotype(conf);
+    population = Genotype.randomInitialGenotype(a_conf);
     int s;
     Evolution:
-        // Evolve the population, break if the the change solution is found
-        // ---------------------------------------------------------------
+        // Evolve the population, break if the the change solution is found.
+        // ----------------------------------------------------------------
         for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
-      s = Math.abs(fitnessFunction.amountOfChange(population.
+      s = Math.abs(a_fitnessFunction.amountOfChange(population.
                                                   getFittestChromosome())
                    - a_targetChangeAmount);
       if (s == 0)break Evolution;
@@ -222,8 +214,8 @@ abstract class AbstractSupergeneTest {
     }
     // Display the best solution we found.
     // -----------------------------------
-    Chromosome bestSolutionSoFar = report(fitnessFunction, population);
-    s = Math.abs(fitnessFunction.amountOfChange(bestSolutionSoFar)
+    Chromosome bestSolutionSoFar = report(a_fitnessFunction, population);
+    s = Math.abs(a_fitnessFunction.amountOfChange(bestSolutionSoFar)
                  - a_targetChangeAmount);
     return s;
   }

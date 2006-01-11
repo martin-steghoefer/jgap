@@ -20,9 +20,12 @@ import java.io.*;
  * @author Audrius Meskauskas
  * @since 2.0
  */
-public class SupergenesPerformanceTest {
+public final class SupergenesPerformanceTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
+  private SupergenesPerformanceTest() {
+  }
 
   /**
    * Starts the performance test
@@ -35,9 +38,9 @@ public class SupergenesPerformanceTest {
       WithoutSupergeneTest wt = new WithoutSupergeneTest();
       FileOutputStream fo = new FileOutputStream("Test_result.prn");
       PrintStream out = new PrintStream(fo);
-      String s = "Popsize\t MaxIter\t t,supergene" +
-          "\t t,control" +
-          "\t Err,supergene \t Err,control";
+      String s = "Popsize\t MaxIter\t t,supergene"
+          + "\t t,control"
+          + "\t Err,supergene \t Err,control";
       out.println(s);
       System.out.println(s);
       int maxiter, popsize, i;
@@ -56,22 +59,19 @@ public class SupergenesPerformanceTest {
             // --------------------
             s_started = System.currentTimeMillis();
             int E_s = st.test();
-            long d_supergene = System.currentTimeMillis() -
-                s_started;
+            long d_supergene = System.currentTimeMillis() - s_started;
             // Test without Supergene.
             // -----------------------
             s_started = System.currentTimeMillis();
             int E_w = wt.test();
-            long d_without = System.currentTimeMillis() -
-                s_started;
+            long d_without = System.currentTimeMillis() - s_started;
             t_s += d_supergene;
             t_w += d_without;
             e_s += E_s;
             e_w += E_w;
           }
-          String r = (popsize + "\t " + maxiter + "\t " + t_s +
-                      "\t " + t_w +
-                      "\t " + e_s + "\t " + e_w);
+          String r = (popsize + "\t " + maxiter + "\t " + t_s
+                      + "\t " + t_w + "\t " + e_s + "\t " + e_w);
           out.println(r);
           System.out.println(r);
         }

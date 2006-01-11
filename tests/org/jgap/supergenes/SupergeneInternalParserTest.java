@@ -9,40 +9,41 @@
  */
 package org.jgap.supergenes;
 
+import java.util.*;
+
 import org.jgap.*;
-import org.jgap.supergenes.*;
-import java.util.Iterator;
+
 import junit.framework.*;
 
 /** Tests the Supergene internal parser. */
 public class SupergeneInternalParserTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   class TestClass
       extends AbstractSupergene {
     public boolean testInternalParser() {
       /* Undocumented test statements. */
       String expectedResponse =
-          "----'0'" +
-          "----'1'" +
-          "----'2'" +
-          "----''" +
-          "--------'i1'" +
-          "--------'ib'" +
-          "--------'ic'" +
-          "--------'k1'" +
-          "--------'k2'" +
-          "------------'hn1'" +
-          "----------------''" +
-          "----------------'a'" +
-          "------------'hn2'" +
-          "------------'hn3'";
-      String s = "<0><1><2><><" + encode("<i1><ib><ic>") +
-          "><" + encode("<k1><k2><" +
-                        encode("<hn1><" + encode("<><a>") +
-                               "><hn2><hn3>") + ">") + ">";
+          "----'0'"
+          + "----'1'"
+          + "----'2'"
+          + "----''"
+          + "--------'i1'"
+          + "--------'ib'"
+          + "--------'ic'"
+          + "--------'k1'"
+          + "--------'k2'"
+          + "------------'hn1'"
+          + "----------------''"
+          + "----------------'a'"
+          + "------------'hn2'"
+          + "------------'hn3'";
+      String s = "<0><1><2><><" + encode("<i1><ib><ic>")
+          + "><" + encode("<k1><k2><"
+                          + encode("<hn1><" + encode("<><a>")
+                                   + "><hn2><hn3>") + ">") + ">";
       StringBuffer b = new StringBuffer();
       try {
         splitRecursive(s, b, "", false);
