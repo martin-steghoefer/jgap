@@ -26,7 +26,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -574,12 +574,49 @@ public class GenotypeTest
     assertTrue(genotype.toString() != null);
     assertTrue(genotype.toString().length() > 0);
     assertEquals(Chromosome.S_SIZE+":1, "
-                 +Chromosome.S_FITNESS_VALUE+":5.0, "
-                 +Chromosome.S_ALLELES+":[IntegerGene(1,55)=null], "
-                 +Chromosome.S_APPLICATION_DATA+":null"
-                 +" [5.0]\n",genotype.toString());
+                 + Chromosome.S_FITNESS_VALUE + ":"
+                 + FitnessFunction.NO_FITNESS_VALUE
+                 + ", "
+                 + Chromosome.S_ALLELES + ":[IntegerGene(1,55)=null], "
+                 + Chromosome.S_APPLICATION_DATA + ":null"
+                 + " ["
+                 + FitnessFunction.NO_FITNESS_VALUE
+                 + "]\n", genotype.toString());
   }
 
+  /**
+   * Same as testToString_0 except that fitness value is computed
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testToString_1()
+      throws Exception {
+    final double fitnessvalue = 5.0d;
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(fitnessvalue));
+    Chromosome[] chroms = new Chromosome[1];
+    Chromosome chrom = new Chromosome(new Gene[] {
+                                      new IntegerGene(1, 55)});
+    chroms[0] = chrom;
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(7);
+    Genotype genotype = new Genotype(conf, chroms);
+    assertTrue(genotype.toString() != null);
+    assertTrue(genotype.toString().length() > 0);
+    // compute fitness of Genotype thus of all contained chromosomes
+    genotype.getFittestChromosome();
+    assertEquals(Chromosome.S_SIZE+":1, "
+                 + Chromosome.S_FITNESS_VALUE + ":"
+                 + fitnessvalue
+                 + ", "
+                 + Chromosome.S_ALLELES + ":[IntegerGene(1,55)=null], "
+                 + Chromosome.S_APPLICATION_DATA + ":null"
+                 + " ["
+                 + fitnessvalue
+                 +"]\n", genotype.toString());
+  }
   /**
    * @throws Exception
    *

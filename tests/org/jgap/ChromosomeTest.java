@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1177,7 +1177,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(3);
     assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
                  + ", " + Chromosome.S_FITNESS_VALUE + ":" +
-                 chrom.getFitnessValue()
+                 FitnessFunction.NO_FITNESS_VALUE
                  + ", " + Chromosome.S_ALLELES + ":[null, null, null]"
                  + ", " + Chromosome.S_APPLICATION_DATA + ":null",
                  chrom.toString());
@@ -1200,10 +1200,11 @@ public class ChromosomeTest
     genes[1] = new IntegerGene(2, 333);
     genes[1].setAllele(new Integer(55));
     Chromosome chrom = new Chromosome(2);
+    chrom.setFitnessValue(47.11d);
     chrom.setGenes(genes);
     assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
                  + ", " + Chromosome.S_FITNESS_VALUE + ":" +
-                 chrom.getFitnessValue()
+                 47.11d
                  + ", " + Chromosome.S_ALLELES + ":[IntegerGene(0,77)=47,"
                  + " IntegerGene(2,333)=55]"
                  + ", " + Chromosome.S_APPLICATION_DATA + ":null",
