@@ -24,7 +24,7 @@ public class DefaultConfigurationTest
     extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -37,7 +37,8 @@ public class DefaultConfigurationTest
   public void testConstruct_0() {
     Configuration conf = new DefaultConfiguration();
     assertEquals(EventManager.class, conf.getEventManager().getClass());
-    assertEquals(DefaultFitnessEvaluator.class, conf.getFitnessEvaluator().getClass());
+    assertEquals(DefaultFitnessEvaluator.class,
+                 conf.getFitnessEvaluator().getClass());
     assertEquals(BestChromosomesSelector.class,
                  conf.getNaturalSelectors(true).get(0).getClass());
     assertEquals(StockRandomGenerator.class,

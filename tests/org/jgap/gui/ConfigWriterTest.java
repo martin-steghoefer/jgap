@@ -28,7 +28,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -48,7 +48,7 @@ public class ConfigWriterTest
   public void testConfigData_0()
       throws Exception {
     IConfigInfo ici = new MockIConfigInfo();
-    ConfigWriter.instance().write(ici);
+    ConfigWriter.getInstance().write(ici);
     // read the file and check the values
     int totalProps = 0;
     Properties props = new Properties();

@@ -23,7 +23,7 @@ import junit.framework.*;
 public class DataTreeBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
@@ -47,7 +47,8 @@ public class DataTreeBuilderTest
       Chromosome[] chroms = new Chromosome[NUM_CHROMS];
       for (int i = 0; i < NUM_CHROMS; i++) {
         chroms[i] = new Chromosome(new Gene[] {
-                                   new IntegerGene(1, 5), new IntegerGene(1, 10)});
+                                   new IntegerGene(1, 5),
+                                   new IntegerGene(1, 10)});
         chroms[i].getGene(0).setAllele(new Integer(i + 1));
         chroms[i].getGene(1).setAllele(new Integer(i + 1));
       }

@@ -22,32 +22,32 @@ public class StaticFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * @since 2.0 (until 1.1: type int)
    */
-  private double staticFitnessValue;
+  private double m_staticFitnessValue;
 
   /**
-   * @param staticFitnessValue double
+   * @param a_staticFitnessValue double
    *
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: input type int)
    */
-  public StaticFitnessFunction(double staticFitnessValue) {
-    this.staticFitnessValue = staticFitnessValue;
+  public StaticFitnessFunction(double a_staticFitnessValue) {
+    m_staticFitnessValue = a_staticFitnessValue;
   }
 
   /**
-   * @param chrom Chromosome
+   * @param a_chrom ignored: the Chromosome to evaluate
    * @return double
    *
    * @author Klaus  Meffert
    * @since 2.0 (until 1.1: return type int)
    */
-  public double evaluate(Chromosome chrom) {
-    double result = staticFitnessValue;
+  public double evaluate(Chromosome a_chrom) {
+    double result = m_staticFitnessValue;
     return result;
   }
 
@@ -58,16 +58,17 @@ public class StaticFitnessFunction
    * @since 2.0 (until 1.1: return type int)
    */
   public double getStaticFitnessValue() {
-    return staticFitnessValue;
+    return m_staticFitnessValue;
   }
 
   /**
-   * @param staticFitnessValue double
+   * @param a_staticFitnessValue the value to return as fitness value when
+   * calling evaluate()
    *
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: type int)
    */
-  public void setStaticFitnessValue(double staticFitnessValue) {
-    this.staticFitnessValue = staticFitnessValue;
+  public void setStaticFitnessValue(double a_staticFitnessValue) {
+    m_staticFitnessValue = a_staticFitnessValue;
   }
 }

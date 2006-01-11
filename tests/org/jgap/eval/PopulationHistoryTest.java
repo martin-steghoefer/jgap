@@ -25,7 +25,7 @@ import junit.framework.*;
 public class PopulationHistoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -236,8 +236,8 @@ public class PopulationHistoryTest
     ph.addPopulation(pop2);
     assertEquals(3, l.size());
     l = ph.getPopulations();
-    assertEquals(pop2,l.get(0));
-    assertEquals(pop2,l.get(1));
-    assertEquals(pop,l.get(2));
+    assertEquals(pop2, l.get(0));
+    assertEquals(pop2, l.get(1));
+    assertEquals(pop, l.get(2));
   }
 }

@@ -27,7 +27,7 @@ import java.util.jar.*;
  */
 public class PluginDiscoverer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static final boolean DEBUG = false;
 
@@ -70,7 +70,8 @@ public class PluginDiscoverer {
    * @author Klaus Meffert
    * @since 2.3
    */
-  private String checkIfClassMatches(Class a_interfaceClass, String a_testClass) {
+  private String checkIfClassMatches(final Class a_interfaceClass,
+                                     String a_testClass) {
     // remove trailing dots
     if (a_testClass.toLowerCase().endsWith(".class")) {
       a_testClass = a_testClass.substring(0, a_testClass.length() - 6);
@@ -93,8 +94,8 @@ public class PluginDiscoverer {
           // no interfaces wanted as result
           return null;
         }
-        if ( (testClassObj.getModifiers() & java.lang.reflect.Modifier.ABSTRACT) >
-            0) {
+        if ( (testClassObj.getModifiers() & java.lang.reflect.Modifier.ABSTRACT)
+            > 0) {
           // no abstract classes wanted as result
           return null;
         }
@@ -171,7 +172,8 @@ public class PluginDiscoverer {
         System.err.println(filename);
         try {
           JarFile jar = new JarFile(filename);
-          for (Enumeration item = jar.entries(); item.hasMoreElements(); ) {
+          Enumeration item = jar.entries();
+          while (item.hasMoreElements()) {
             JarEntry entry = (JarEntry) item.nextElement();
             String name = entry.getName();
             if (name.toLowerCase().endsWith(".class")) {

@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
@@ -24,9 +22,8 @@ import junitx.util.*;
  */
 public class ThresholdSelectorTest
     extends JGAPTestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -60,7 +57,7 @@ public class ThresholdSelectorTest
     ThresholdSelector selector = new ThresholdSelector(0.5d);
     Double m_bestChroms_Percentage = (Double) PrivateAccessor.getField(selector,
         "m_bestChroms_Percentage");
-    assertEquals(0.5d,m_bestChroms_Percentage.doubleValue(), DELTA);
+    assertEquals(0.5d, m_bestChroms_Percentage.doubleValue(), DELTA);
     assertFalse(selector.returnsUniqueChromosomes());
     Object m_fitnessValueComparator = PrivateAccessor.getField(selector,
         "m_fitnessValueComparator");
@@ -77,7 +74,6 @@ public class ThresholdSelectorTest
     ThresholdSelector selector = new ThresholdSelector(0.5d);
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
@@ -103,7 +99,6 @@ public class ThresholdSelectorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     ThresholdSelector selector = new ThresholdSelector(0.3d);
     Gene gene = new IntegerGene();
     gene.setAllele(new Integer(444));
@@ -115,7 +110,7 @@ public class ThresholdSelectorTest
     Chromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
-    selector.select(1,null,new Population());
+    selector.select(1, null, new Population());
   }
 
   /**
@@ -127,7 +122,6 @@ public class ThresholdSelectorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     ThresholdSelector selector = new ThresholdSelector(1.0d);
     // add first chromosome
     // --------------------
@@ -197,7 +191,7 @@ public class ThresholdSelectorTest
     // receive top 1 (= best) chromosome
     // ---------------------------------
     Population pop = new Population();
-    selector.select(1, null,pop);
+    selector.select(1, null, pop);
     Chromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
@@ -245,7 +239,7 @@ public class ThresholdSelectorTest
     // receive top 1 (= best) chromosome
     // ---------------------------------
     Population pop = new Population();
-    selector.select(1, null,pop);
+    selector.select(1, null, pop);
     Chromosome[] bestChroms = pop.toChromosomes();
     assertFalse(bestChroms[0].equals(bestChrom));
   }
@@ -279,9 +273,10 @@ public class ThresholdSelectorTest
     // receive top 30 chromosomes.
     // ---------------------------
     Population pop = new Population();
-    selector.select(30,null,pop);
+    selector.select(30, null, pop);
     Population bestChroms = pop;
-    List chromosomes = (Vector) PrivateAccessor.getField(selector, "m_chromosomes");
+    List chromosomes = (Vector) PrivateAccessor.getField(selector,
+        "m_chromosomes");
     assertFalse(bestChroms.equals(chromosomes));
   }
 

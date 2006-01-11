@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CultureTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
@@ -77,7 +77,7 @@ public class CultureTest
       fail();
     }
     catch (IllegalArgumentException iex) {
-      //this is OK
+      ; //this is OK
     }
   }
 
@@ -92,7 +92,7 @@ public class CultureTest
       fail();
     }
     catch (IllegalArgumentException iex) {
-      //this is OK
+      ; //this is OK
     }
   }
 

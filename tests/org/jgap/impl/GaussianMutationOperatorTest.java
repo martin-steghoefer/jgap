@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianMutationOperatorTest.class);
@@ -183,7 +181,7 @@ public class GaussianMutationOperatorTest
     assertEquals(Math.round( (10 - 1) * (0.45d * 0.15d) + 9),
                  ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
-    compGene = (CompositeGene)target.getGene(0);
+    compGene = (CompositeGene) target.getGene(0);
     Gene gene = compGene.geneAt(0);
     assertEquals(Math.round( (10 - 1) * (0.45d * 0.15d) + 6),
                  ( (Integer) gene.getAllele()).intValue());
@@ -236,11 +234,9 @@ public class GaussianMutationOperatorTest
     Population pop = new Population(population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2, chroms.size());
+    assertEquals(3 + 2, chroms.size());
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
-    assertEquals(3+2+2, chroms.size());
+    assertEquals(3 + 2 + 2, chroms.size());
   }
-
-
 }

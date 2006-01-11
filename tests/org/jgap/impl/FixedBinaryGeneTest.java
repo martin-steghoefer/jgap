@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -388,8 +388,7 @@ public class FixedBinaryGeneTest
   public void testSetAllele_6() {
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -406,8 +405,7 @@ public class FixedBinaryGeneTest
   public void testSetAllele_7() {
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return true;
       }
     });
@@ -425,8 +423,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     assertNull(gene1.getConstraintChecker());
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -545,7 +542,7 @@ public class FixedBinaryGeneTest
       gene.applyMutation(333, -0.000001d);
       fail();
     }
-    catch (Exception E) {
+    catch (Exception e) {
       ; //this is OK
     }
   }
@@ -972,8 +969,8 @@ public class FixedBinaryGeneTest
   public void testHashCode_1() {
     Gene gene1 = new FixedBinaryGene(2);
     Gene gene2 = new FixedBinaryGene(2);
-    int[] v1 = (int[])gene1.getAllele();
-    int[] v2 = (int[])gene1.getAllele();
+    int[] v1 = (int[]) gene1.getAllele();
+    int[] v2 = (int[]) gene1.getAllele();
     int h1 = v1.hashCode();
     int h2 = v2.hashCode();
     assertEquals(gene1.hashCode(), gene2.hashCode());
@@ -985,9 +982,9 @@ public class FixedBinaryGeneTest
    */
   public void testHashCode_2() {
     Gene gene1 = new FixedBinaryGene(3);
-    gene1.setAllele(new int[]{0,1,0});
+    gene1.setAllele(new int[] {0, 1, 0});
     Gene gene2 = new FixedBinaryGene(3);
-    gene2.setAllele(new int[]{0,1,0});
+    gene2.setAllele(new int[] {0, 1, 0});
     assertEquals(gene1.hashCode(), gene2.hashCode());
   }
 
@@ -997,9 +994,9 @@ public class FixedBinaryGeneTest
    */
   public void testHashCode_3() {
     Gene gene1 = new FixedBinaryGene(2);
-    gene1.setAllele(new int[]{1,1});
+    gene1.setAllele(new int[] {1, 1});
     Gene gene2 = new FixedBinaryGene(2);
-    gene1.setAllele(new int[]{1,0});
+    gene1.setAllele(new int[] {1, 0});
     assertFalse(gene1.hashCode() == gene2.hashCode());
   }
 
@@ -1020,16 +1017,16 @@ public class FixedBinaryGeneTest
     BaseGene gene = new FixedBinaryGene(3);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
-    gene.setEnergy(-55.8);
-    assertEquals(-55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy( -55.8);
+    assertEquals( -55.8, gene.getEnergy(), DELTA);
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 
-  class GeneConstraintChecker implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue)
-        throws RuntimeException {
+  class GeneConstraintChecker
+      implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue) {
       return true;
     }
   }

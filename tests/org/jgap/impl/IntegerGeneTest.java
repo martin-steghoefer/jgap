@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -326,13 +326,13 @@ public class IntegerGeneTest
       throws Exception {
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
-    gene1.setValueFromPersistentRepresentation("2" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "3" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "4");
+    gene1.setValueFromPersistentRepresentation("2"
+                                               + IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               + "3"
+                                               + IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               + "4");
     assertEquals(2, ( (Integer) gene1.getAllele()).intValue());
     assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds")).intValue());
@@ -350,13 +350,13 @@ public class IntegerGeneTest
       throws Exception {
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
-    gene1.setValueFromPersistentRepresentation("null" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "3" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "4");
+    gene1.setValueFromPersistentRepresentation("null"
+                                               + IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               +  "3"
+                                               + IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               + "4");
     assertNull(gene1.getAllele());
     assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds")).intValue());
@@ -372,13 +372,13 @@ public class IntegerGeneTest
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     try {
-      gene1.setValueFromPersistentRepresentation("null" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "3.5" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "4");
+      gene1.setValueFromPersistentRepresentation("null"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "3.5"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "4");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -394,13 +394,13 @@ public class IntegerGeneTest
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     try {
-      gene1.setValueFromPersistentRepresentation("null" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "3" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "a");
+      gene1.setValueFromPersistentRepresentation("null"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "3"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "a");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -710,8 +710,8 @@ public class IntegerGeneTest
     IntegerGene gene = new IntegerGene(0, 8);
     gene.setAllele(new Integer(5));
     gene.setToRandomValue(new RandomGeneratorForTest(4));
-    if (gene.intValue() < 0 ||
-        gene.intValue() > 8) {
+    if (gene.intValue() < 0
+        || gene.intValue() > 8) {
       fail();
     }
   }
@@ -724,8 +724,8 @@ public class IntegerGeneTest
     IntegerGene gene = new IntegerGene(1, 6);
     gene.setAllele(new Integer(2));
     gene.setToRandomValue(new RandomGeneratorForTest(3));
-    if (gene.intValue() < 1 ||
-        gene.intValue() > 6) {
+    if (gene.intValue() < 1
+        || gene.intValue() > 6) {
       fail();
     }
   }
@@ -793,8 +793,7 @@ public class IntegerGeneTest
   }
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue)
-        throws RuntimeException {
+    public boolean verify(Gene a_gene, Object a_alleleValue) {
       return true;
     }
   }

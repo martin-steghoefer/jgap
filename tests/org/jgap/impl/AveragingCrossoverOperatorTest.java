@@ -22,7 +22,7 @@ import junit.framework.*;
 public class AveragingCrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AveragingCrossoverOperatorTest.class);
@@ -184,7 +184,8 @@ public class AveragingCrossoverOperatorTest
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
     CompositeGene result = (CompositeGene) target.getGene(0);
-    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0)).intValue());
+    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0))
+                 .intValue());
   }
 
   /**

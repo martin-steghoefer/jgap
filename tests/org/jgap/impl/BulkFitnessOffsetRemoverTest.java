@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BulkFitnessOffsetRemoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection! */
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   // A plainforward implementation for this test.
   //---------------------------------------------
@@ -122,29 +122,29 @@ public class BulkFitnessOffsetRemoverTest
     assertNotNull(m_bulkFitnessFunction);
     // setting up two Chromosomes and assign values:
     //--------------------------------------------------
-    Gene G100A = new IntegerGene();
-    G100A.setAllele(new Integer(100));
-    Gene G100B = new IntegerGene();
-    G100B.setAllele(new Integer(100));
+    Gene g100A = new IntegerGene();
+    g100A.setAllele(new Integer(100));
+    Gene g100B = new IntegerGene();
+    g100B.setAllele(new Integer(100));
 
-    Chromosome C100A = new Chromosome(new Gene[] {G100A});
-    Chromosome C100B = new Chromosome(new Gene[] {G100B});
+    Chromosome c100A = new Chromosome(new Gene[] {g100A});
+    Chromosome c100B = new Chromosome(new Gene[] {g100B});
 
     // Running the evaluate method.
     // It will remove the common offset 100 and add 1.
     //-------------------------------------------------
     Population chromosomeList = new Population();
-    chromosomeList.addChromosome(C100A);
-    chromosomeList.addChromosome(C100B);
+    chromosomeList.addChromosome(c100A);
+    chromosomeList.addChromosome(c100B);
     m_bulkFitnessFunction.evaluate(chromosomeList);
     // The offset should have been removed:
     //-------------------------------------
-    assertEquals(1.0, C100A.getFitnessValue(), 0d);
-    assertEquals(1.0, C100B.getFitnessValue(), 0d);
+    assertEquals(1.0, c100A.getFitnessValue(), 0d);
+    assertEquals(1.0, c100B.getFitnessValue(), 0d);
   }
 
   /**
-   * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)}with a
+   * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)} with a
    * list of two Chromosomes with one IntegerGene with the allele 100. The
    * IntegerGene is the same instance in both Chromosomes.
    *
@@ -305,10 +305,10 @@ public class BulkFitnessOffsetRemoverTest
     }
     Chromosome chrom = new Chromosome(genes);
     double fitness = remover.getAbsoluteFitness(chrom);
-    assertEquals(33.345d, chrom.getFitnessValue(),DELTA);
+    assertEquals(33.345d, chrom.getFitnessValue(), DELTA);
     assertEquals(33.345d, fitness, DELTA);
     fitness = remover.getAbsoluteFitness(chrom);
-    assertEquals(33.345d, chrom.getFitnessValue(),DELTA);
+    assertEquals(33.345d, chrom.getFitnessValue(), DELTA);
     assertEquals(33.345d, fitness, DELTA);
   }
 

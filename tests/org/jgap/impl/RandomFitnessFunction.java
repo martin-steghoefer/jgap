@@ -14,7 +14,7 @@ import java.util.Random;
 
 /**
  * Fitness function returning random values
- * Description: Only for testing purpose
+ * Only for testing purposes
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -23,22 +23,22 @@ public class RandomFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  private Random rand;
+  private Random m_rand;
 
   public RandomFitnessFunction() {
-    rand = new Random();
+    m_rand = new Random();
   }
 
   /**
-   * @param chrom Chromosome
+   * @param a_chrom ignored: the Chromosome to evaluate
    * @return double
    * @since 2.0 (until 1.1: return type int)
    */
-  public double evaluate(Chromosome chrom) {
+  public double evaluate(Chromosome a_chrom) {
     double result;
-    result = rand.nextDouble();
+    result = m_rand.nextDouble();
     return result;
   }
 }

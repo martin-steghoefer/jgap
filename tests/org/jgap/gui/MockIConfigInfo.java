@@ -21,20 +21,23 @@ import java.util.*;
  * */
 public class MockIConfigInfo
     implements IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  // The ConfigData instance that will be populated and returned
+  private ConfigData m_conData;
 
   /**
    * @author Siddhartha Azad
    * @since 2.3
    */
   public MockIConfigInfo() {
-    conData = new ConfigData();
+    m_conData = new ConfigData();
     // populate the ConfigData instance
-    conData.setNS("Configurable");
+    m_conData.setNS("Configurable");
     // add the TextField properties
-    conData.addTextData("text1", "text1_value");
-    conData.addTextData("text2", "text2_value");
-    conData.addTextData("text3", "text3_value");
+    m_conData.addTextData("text1", "text1_value");
+    m_conData.addTextData("text2", "text2_value");
+    m_conData.addTextData("text3", "text3_value");
     // add the List properties
     ArrayList listData;
     String listName = "";
@@ -44,12 +47,12 @@ public class MockIConfigInfo
       listData.add(listName + "_value_1");
       listData.add(listName + "_value_2");
       listData.add(listName + "_value_3");
-      conData.addListData(listName, listData);
+      m_conData.addListData(listName, listData);
     }
   }
 
   public ConfigData getConfigData() {
-    return conData;
+    return m_conData;
   }
 
   /**
@@ -61,6 +64,4 @@ public class MockIConfigInfo
     return "jgapTmp.con";
   }
 
-  // The ConfigData instance that will be populated and returned
-  private ConfigData conData;
 }

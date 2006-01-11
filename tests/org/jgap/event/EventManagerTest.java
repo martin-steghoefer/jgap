@@ -10,9 +10,7 @@
 package org.jgap.event;
 
 import java.util.*;
-
 import junit.framework.*;
-
 import org.jgap.*;
 
 /**
@@ -24,7 +22,7 @@ import org.jgap.*;
 public class EventManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(EventManagerTest.class);
@@ -97,7 +95,7 @@ public class EventManagerTest
     IEventManager man = new EventManager();
     GeneticEventListener listener = new EventListener();
     man.addEventListener("testeventname", listener);
-    GeneticEvent genEvent = new GeneticEvent("wrong_name",this);
+    GeneticEvent genEvent = new GeneticEvent("wrong_name", this);
     man.fireGeneticEvent(genEvent);
   }
 
@@ -112,10 +110,10 @@ public class EventManagerTest
     IEventManager man = new EventManager();
     EventListener listener = new EventListener();
     man.addEventListener("testeventname", listener);
-    GeneticEvent genEvent = new GeneticEvent("testeventname",this);
+    GeneticEvent genEvent = new GeneticEvent("testeventname", this);
     man.fireGeneticEvent(genEvent);
-    assertTrue(listener.fired);
-    assertEquals(genEvent,listener.event);
+    assertTrue(listener.m_fired);
+    assertEquals(genEvent, listener.m_event);
   }
 
   /**
@@ -124,11 +122,13 @@ public class EventManagerTest
    */
   private class EventListener
       implements GeneticEventListener {
-    public boolean fired;
-    public GeneticEvent event;
+    private boolean m_fired;
+
+    private GeneticEvent m_event;
+
     public void geneticEventFired(GeneticEvent a_firedEvent) {
-      fired = true;
-      event = a_firedEvent;
+      m_fired = true;
+      m_event = a_firedEvent;
     }
   }
 }

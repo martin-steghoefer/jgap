@@ -21,7 +21,7 @@ public class TestOverallPerformanceFitnessFunc
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final int m_targetAmount;
 
@@ -38,10 +38,9 @@ public class TestOverallPerformanceFitnessFunc
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject The Chromosome instance to evaluate.
-   *
-   * @return A positive integer reflecting the fitness rating of the given
-   *         Chromosome.
+   * @param a_subject the Chromosome instance to evaluate
+   * @return a positive integer reflecting the fitness rating of the given
+   * Chromosome
    */
   public double evaluate(Chromosome a_subject) {
     // The fitness value measures both how close the value is to the
@@ -85,9 +84,9 @@ public class TestOverallPerformanceFitnessFunc
    * Here we use "fantasy" coins just to have more genes and bloat the time
    * consumed for test performance test
    *
-   * @param a_potentialSolution The pontential solution to evaluate.
-   * @return The total amount of change (in cents) represented by the
-   *         given solution.
+   * @param a_potentialSolution the pontential solution to evaluate
+   * @return the total amount of change (in cents) represented by the
+   * given solution
    */
   public static int amountOfChange(Chromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution, 0);
@@ -100,8 +99,8 @@ public class TestOverallPerformanceFitnessFunc
     int D = getNumberOfCoinsAtGene(a_potentialSolution, 7);
     int E = getNumberOfCoinsAtGene(a_potentialSolution, 8);
     int F = getNumberOfCoinsAtGene(a_potentialSolution, 9);
-    return (numQuarters * 25) + (numDimes * 10) + (numNickels * 5) +
-        numPennies + (A * 29) + (B * 31) + (C * 37) + (D * 41) + (E * 43)
+    return (numQuarters * 25) + (numDimes * 10) + (numNickels * 5)
+        + numPennies + (A * 29) + (B * 31) + (C * 37) + (D * 41) + (E * 43)
         + (F * 47);
   }
 
@@ -109,10 +108,10 @@ public class TestOverallPerformanceFitnessFunc
    * Retrieves the number of coins represented by the given potential
    * solution at the given gene position.
    *
-   * @param a_potentialSolution The potential solution to evaluate.
-   * @param a_position The gene position to evaluate.
+   * @param a_potentialSolution the potential solution to evaluate
+   * @param a_position the gene position to evaluate
    * @return the number of coins represented by the potential solution
-   *         at the given gene position.
+   * at the given gene position
    */
   public static int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
                                            int a_position) {
@@ -125,8 +124,8 @@ public class TestOverallPerformanceFitnessFunc
    * Returns the total number of coins represented by all of the genes in
    * the given potential solution.
    *
-   * @param a_potentialsolution The potential solution to evaluate.
-   * @return The total number of coins represented by the given Chromosome.
+   * @param a_potentialsolution the potential solution to evaluate
+   * @return the total number of coins represented by the given Chromosome
    */
   public static int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
     int totalCoins = 0;

@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -69,7 +67,6 @@ public class StringGeneTest
     }
   }
 
-
   /**
    * @author Klaus Meffert
    */
@@ -105,10 +102,10 @@ public class StringGeneTest
   public void testSetAlphabet_1()
       throws Exception {
     StringGene gene = new StringGene(3, 5);
-    final String ALPHABET = "1234";
-    gene.setAlphabet(ALPHABET);
+    final String alphabet_const = "1234";
+    gene.setAlphabet(alphabet_const);
     String alphabet = (String) privateAccessor.getField(gene, "m_alphabet");
-    assertEquals(ALPHABET, alphabet);
+    assertEquals(alphabet, alphabet_const);
     assertEquals(alphabet, gene.getAlphabet());
   }
 
@@ -232,7 +229,7 @@ public class StringGeneTest
   public void testEquals_8() {
     Gene gene1 = new StringGene(2, 6);
     gene1.setAllele("hallo");
-    Gene gene2 = new StringGene(2,6);
+    Gene gene2 = new StringGene(2, 6);
     gene2.setAllele("hello");
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
@@ -254,7 +251,7 @@ public class StringGeneTest
     Gene gene1 = new StringGene(2, 6);
     gene1.setAllele("hallo");
     gene1.setApplicationData(new Double(2.3d));
-    Gene gene2 = new StringGene(2,6);
+    Gene gene2 = new StringGene(2, 6);
     gene2.setAllele("hallo");
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
@@ -279,16 +276,16 @@ public class StringGeneTest
     Gene gene1 = new StringGene(2, 6);
     gene1.setAllele("hallo");
     gene1.setApplicationData(new Double(2.3d));
-    Gene gene2 = new StringGene(2,6);
+    Gene gene2 = new StringGene(2, 6);
     gene2.setAllele("hallo");
-    assertEquals(0,gene1.compareTo(gene2));
-    assertEquals(0,gene2.compareTo(gene1));
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
     gene1.setCompareApplicationData(true);
-    assertEquals(1,gene1.compareTo(gene2));
-    assertEquals(0,gene2.compareTo(gene1));
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
     gene2.setCompareApplicationData(true);
-    assertEquals(1,gene1.compareTo(gene2));
-    assertEquals(-1,gene2.compareTo(gene1));
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals( -1, gene2.compareTo(gene1));
     gene2.setApplicationData(new Double(2.3d));
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
@@ -370,8 +367,7 @@ public class StringGeneTest
     //following should be possible
     gene1.setAllele("A");
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -388,8 +384,7 @@ public class StringGeneTest
     //following should be possible
     gene1.setAllele("A");
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return true;
       }
     });
@@ -545,7 +540,6 @@ public class StringGeneTest
       throws Exception {
     StringGene gene1 = new StringGene(2, 10, "ABCDE");
     gene1.setAllele(null);
-
     assertEquals("null:2:10:ABCDE", gene1.getPersistentRepresentation());
   }
 
@@ -578,7 +572,8 @@ public class StringGeneTest
    * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_0() throws Exception {
+  public void testApplyMutation_0()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(5, 5);
     gene1.setAllele("12345");
@@ -590,7 +585,8 @@ public class StringGeneTest
    * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_1() throws Exception{
+  public void testApplyMutation_1()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(1, 1);
     gene1.setAllele("1");
@@ -603,7 +599,8 @@ public class StringGeneTest
    * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_2() throws Exception{
+  public void testApplyMutation_2()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(1, 1);
     gene1.setAllele("1");
@@ -622,7 +619,8 @@ public class StringGeneTest
    * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_3() throws Exception{
+  public void testApplyMutation_3()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(1, 1);
     gene1.applyMutation(0, 0.99d);
@@ -632,7 +630,8 @@ public class StringGeneTest
    * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_4() throws Exception{
+  public void testApplyMutation_4()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
@@ -649,7 +648,8 @@ public class StringGeneTest
    * @throws Exception
    * @author Klaus Meffert
    */
-  public void testApplyMutation_5() throws Exception {
+  public void testApplyMutation_5()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new StringGene(6, 6, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
@@ -677,7 +677,6 @@ public class StringGeneTest
    */
   public void testSetToRandomValue_0() {
     StringGene gene = new StringGene(1, 6, StringGene.ALPHABET_CHARACTERS_UPPER);
-
     gene.setToRandomValue(new RandomGeneratorForTest(2));
     assertEquals("CCC", gene.getAllele());
     gene.setToRandomValue(new RandomGeneratorForTest(1));
@@ -711,10 +710,8 @@ public class StringGeneTest
   public void testSetToRandomValue_3()
       throws Exception {
     StringGene gene = new StringGene(1, 7, "DEF");
-
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     gene.setToRandomValue(new RandomGeneratorForTest(2));
     assertEquals("FFF", gene.getAllele());
   }
@@ -729,10 +726,8 @@ public class StringGeneTest
       throws Exception {
     StringGene gene = new StringGene(1, 7, "DEF");
     gene.setAllele("EEFD");
-
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
     // set random generator to produce
     // 1) length of new allele (-1)
@@ -751,10 +746,9 @@ public class StringGeneTest
   public void testSetToRandomValue_5() {
     StringGene gene = new StringGene(1, 8, StringGene.ALPHABET_CHARACTERS_LOWER);
     gene.setToRandomValue(new StockRandomGenerator());
-
     for (int i = 0; i < gene.size(); i++) {
-      if ( ( (String) gene.getAllele()).charAt(i) < 'a' ||
-          ( (String) gene.getAllele()).charAt(i) > 'z') {
+      if ( ( (String) gene.getAllele()).charAt(i) < 'a'
+          || ( (String) gene.getAllele()).charAt(i) > 'z') {
         fail();
       }
     }
@@ -811,8 +805,7 @@ public class StringGeneTest
     StringGene gene = new StringGene(1, 6, "ABC");
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -850,16 +843,16 @@ public class StringGeneTest
     BaseGene gene = new IntegerGene();
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
-    gene.setEnergy(-55.8);
-    assertEquals(-55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy( -55.8);
+    assertEquals( -55.8, gene.getEnergy(), DELTA);
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 
-  class GeneConstraintChecker implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue)
-        throws RuntimeException {
+  class GeneConstraintChecker
+      implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue) {
       return true;
     }
   }

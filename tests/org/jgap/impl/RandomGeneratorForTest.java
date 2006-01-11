@@ -23,7 +23,7 @@ public class RandomGeneratorForTest
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   private long m_nextLong;
   private double m_nextDouble;
@@ -32,32 +32,33 @@ public class RandomGeneratorForTest
   private int[] m_nextIntSequence;
   private double m_nextGaussian;
   private int m_intIndex;
+
   public RandomGeneratorForTest() {
   }
 
-  public RandomGeneratorForTest(int nextInt) {
+  public RandomGeneratorForTest(int a_nextInt) {
     this();
-    setNextInt(nextInt);
+    setNextInt(a_nextInt);
   }
 
-  public RandomGeneratorForTest(double nextDouble) {
+  public RandomGeneratorForTest(double a_nextDouble) {
     this();
-    setNextDouble(nextDouble);
+    setNextDouble(a_nextDouble);
   }
 
-  public RandomGeneratorForTest(float nextFloat) {
+  public RandomGeneratorForTest(float a_nextFloat) {
     this();
-    setNextFloat(nextFloat);
+    setNextFloat(a_nextFloat);
   }
 
-  public RandomGeneratorForTest(long nextLong) {
+  public RandomGeneratorForTest(long a_nextLong) {
     this();
-    setNextLong(nextLong);
+    setNextLong(a_nextLong);
   }
 
-  public RandomGeneratorForTest(boolean nextBoolean) {
+  public RandomGeneratorForTest(boolean a_nextBoolean) {
     this();
-    setNextBoolean(nextBoolean);
+    setNextBoolean(a_nextBoolean);
     setNextInt(1);
   }
 
@@ -69,8 +70,8 @@ public class RandomGeneratorForTest
     return result;
   }
 
-  public int nextInt(int ceiling) {
-    return nextInt() % ceiling;
+  public int nextInt(int a_ceiling) {
+    return nextInt() % a_ceiling;
   }
 
   public long nextLong() {

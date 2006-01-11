@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.27 $";
+  private static final String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -247,7 +247,8 @@ public class MutationOperatorTest
     mutOp.operate(pop, pop.getChromosomes());
     assertEquals(2 + 2, pop.getChromosomes().size());
     //old gene
-    assertFalse( ( (BooleanGene) pop.getChromosome(0).getGene(0)).booleanValue());
+    assertFalse( ( (BooleanGene) pop.getChromosome(0).getGene(0))
+                 .booleanValue());
     //mutated gene
     assertTrue( ( (BooleanGene) pop.getChromosome(2).getGene(0)).booleanValue());
     //old gene

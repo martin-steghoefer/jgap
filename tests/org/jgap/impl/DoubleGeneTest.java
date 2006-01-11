@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.26 $";
+  private static final String CVS_REVISION = "$Revision: 1.27 $";
 
   public void setUp() {
     super.setUp();
@@ -335,13 +335,13 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
     try {
-      gene1.setValueFromPersistentRepresentation("2.3" +
-                                                 DoubleGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "4.6" +
-                                                 DoubleGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "6,5");
+      gene1.setValueFromPersistentRepresentation("2.3"
+                                                 + DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "4.6"
+                                                 + DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "6,5");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -358,13 +358,13 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
     try {
-      gene1.setValueFromPersistentRepresentation("2.3" +
-                                                 DoubleGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "b" +
-                                                 DoubleGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "a");
+      gene1.setValueFromPersistentRepresentation("2.3"
+                                                 + DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "b"
+                                                 + DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "a");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -381,13 +381,13 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene1 = new DoubleGene(2.05d, 7.53d);
     try {
-      gene1.setValueFromPersistentRepresentation("a" +
-                                                 DoubleGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "b" +
-                                                 DoubleGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "a");
+      gene1.setValueFromPersistentRepresentation("a"
+                                                 + DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "b"
+                                                 + DoubleGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "a");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -462,8 +462,8 @@ public class DoubleGeneTest
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
 
-    if (gene.doubleValue() < 1.3d ||
-        gene.doubleValue() > 6.5d) {
+    if (gene.doubleValue() < 1.3d
+        || gene.doubleValue() > 6.5d) {
       fail();
     }
   }
@@ -476,8 +476,8 @@ public class DoubleGeneTest
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
 
-    if (gene.doubleValue() < 1.3d ||
-        gene.doubleValue() > 6.5d) {
+    if (gene.doubleValue() < 1.3d
+        || gene.doubleValue() > 6.5d) {
       fail();
     }
   }
@@ -664,8 +664,7 @@ public class DoubleGeneTest
     DoubleGene gene = new DoubleGene(0, 100);
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -706,8 +705,7 @@ public class DoubleGeneTest
   }
 
   class GeneConstraintChecker implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue)
-        throws RuntimeException {
+    public boolean verify(Gene a_gene, Object a_alleleValue) {
       return true;
     }
   }

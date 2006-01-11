@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * This field separates gene class name from
@@ -443,7 +443,12 @@ public class CompositeGene
       // If our value is also null, then we're the same. Otherwise,
       // this is the greater gene.
       // ----------------------------------------------------------
-      return isEmpty() ? 0 : 1;
+      if (isEmpty()) {
+        return 0;
+      }
+      else {
+        return 1;
+      }
     }
     else {
       // Compare each gene against each other.
@@ -482,7 +487,12 @@ public class CompositeGene
         }
       }
       else {
-        return size() > otherCompositeGene.size() ? 1 : -1;
+        if (size() > otherCompositeGene.size()) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
       }
     }
   }

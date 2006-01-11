@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -43,9 +43,9 @@ public class BestChromosomesSelectorTest
     assertEquals(Boolean.FALSE, needsSorting);
     assertTrue(selector.returnsUniqueChromosomes());
     assertFalse(selector.getDoubletteChromosomesAllowed());
-    Object m_fitnessValueComparator = privateAccessor.getField(selector,
+    Object fitnessValueComparator = privateAccessor.getField(selector,
         "m_fitnessValueComparator");
-    assertTrue(m_fitnessValueComparator != null);
+    assertTrue(fitnessValueComparator != null);
   }
 
   /**

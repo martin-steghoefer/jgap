@@ -10,10 +10,8 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.JGAPTestCase.*;
-
 import junit.framework.*;
 
 /**
@@ -25,7 +23,7 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
@@ -86,12 +84,12 @@ public class InversionOperatorTest
     chroms.add(gene3);
     final int size = chroms.size();
     op.operate(new Population(population), chroms);
-    assertEquals(size+1, chroms.size());
+    assertEquals(size + 1, chroms.size());
     Chromosome target = (Chromosome) chroms.get(size);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     op.operate(new Population(population), chroms);
-    assertEquals(size+2, chroms.size());
-    target = (Chromosome) chroms.get(size+1);
+    assertEquals(size + 2, chroms.size());
+    target = (Chromosome) chroms.get(size + 1);
     assertEquals(99, ( (Integer) target.getGene(0).getAllele()).intValue());
     assertEquals(8, ( (Integer) target.getGene(1).getAllele()).intValue());
   }
@@ -194,15 +192,14 @@ public class InversionOperatorTest
     chroms.add(gene3);
     int size = chroms.size();
     op.operate(new Population(population), chroms);
-    assertEquals(size+1, chroms.size());
+    assertEquals(size + 1, chroms.size());
     Chromosome target = (Chromosome) chroms.get(size);
-    CompositeGene cog = (CompositeGene )target.getGene(0);
-    assertEquals(6, ((Integer)( (Vector) cog.getAllele()).get(0)).intValue());
+    CompositeGene cog = (CompositeGene) target.getGene(0);
+    assertEquals(6, ( (Integer) ( (Vector) cog.getAllele()).get(0)).intValue());
     op.operate(new Population(population), chroms);
-    assertEquals(size+2, chroms.size());
-    target = (Chromosome) chroms.get(size+1);
+    assertEquals(size + 2, chroms.size());
+    target = (Chromosome) chroms.get(size + 1);
     IntegerGene result = (IntegerGene) target.getGene(0);
     assertEquals(8, ( (Integer) result.getAllele()).intValue());
   }
-
 }

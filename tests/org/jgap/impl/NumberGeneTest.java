@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -46,7 +46,8 @@ public class NumberGeneTest
   public void testToString_0() {
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(47));
-    assertEquals("47, "+BaseGene.S_APPLICATION_DATA+":null", gene.toString());
+    assertEquals("47, " + BaseGene.S_APPLICATION_DATA + ":null",
+                 gene.toString());
   }
 
   /**
@@ -57,7 +58,7 @@ public class NumberGeneTest
     Gene gene = new NumberGeneImpl(1, 100);
     gene.setAllele(new Integer(102));
     int indexComma = gene.toString().indexOf(',');
-    int toString = Integer.parseInt(gene.toString().substring(0,indexComma));
+    int toString = Integer.parseInt(gene.toString().substring(0, indexComma));
     assertTrue(toString >= 1 && toString <= 100);
   }
 
@@ -220,8 +221,7 @@ public class NumberGeneTest
   public void testSetAllele_2() {
     NumberGene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     }
@@ -236,8 +236,7 @@ public class NumberGeneTest
   public void testSetAllele_3() {
     NumberGene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return true;
       }
     }
@@ -339,8 +338,7 @@ public class NumberGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testCompareTo_3()
-      {
+  public void testCompareTo_3() {
     Gene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setAllele(new Integer(4711));
     gene1.setApplicationData(new Integer(2));
@@ -350,17 +348,16 @@ public class NumberGeneTest
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
     gene2.setCompareApplicationData(true);
-    assertEquals(-1, gene2.compareTo(gene1));
+    assertEquals( -1, gene2.compareTo(gene1));
     gene2.setApplicationData(new Integer(3));
     assertEquals(1, gene2.compareTo(gene1));
-    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals( -1, gene1.compareTo(gene2));
   }
 
   public void testSetConstraintChecker_0() {
     NumberGene gene1 = new NumberGeneImpl(1, 3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     }
@@ -400,14 +397,14 @@ public class NumberGeneTest
    */
   private class NumberGeneImpl
       extends NumberGene {
-    protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
-        (long) Integer.MIN_VALUE;
+    protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE
+        - (long) Integer.MIN_VALUE;
 
-    protected int m_upperBounds;
+    private int m_upperBounds;
 
-    protected int m_lowerBounds;
+    private int m_lowerBounds;
 
-    protected long m_boundsUnitsToIntegerUnits;
+    private long m_boundsUnitsToIntegerUnits;
 
     public NumberGeneImpl(int a_lowerBounds, int a_upperBounds) {
       m_lowerBounds = a_lowerBounds;
@@ -419,15 +416,12 @@ public class NumberGeneTest
       return new NumberGeneImpl(m_lowerBounds, m_upperBounds);
     }
 
-    public String getPersistentRepresentation()
-        throws
-        UnsupportedOperationException {
-      return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
-          PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+    public String getPersistentRepresentation() {
+      return toString() + PERSISTENT_FIELD_DELIMITER + m_lowerBounds
+          + PERSISTENT_FIELD_DELIMITER + m_upperBounds;
     }
 
-    public void setValueFromPersistentRepresentation(String a_representation)
-        throws UnsupportedRepresentationException {
+    public void setValueFromPersistentRepresentation(String a_representation) {
       // not implemented here!
       // ---------------------
     }
@@ -437,7 +431,7 @@ public class NumberGeneTest
       // ---------------------
     }
 
-    public void applyMutation(int index, double a_percentage) {
+    public void applyMutation(int a_index, double a_percentage) {
       // not implemented here!
       // ---------------------
     }
@@ -461,25 +455,24 @@ public class NumberGeneTest
         // determine how many bounds units that represents, and then add
         // that number of units to the upper bound.
         // -----------------------------------------------------------------
-        if (i_value.intValue() > m_upperBounds ||
-            i_value.intValue() < m_lowerBounds) {
-          long differenceFromIntMin = (long) Integer.MIN_VALUE +
-              (long) i_value.intValue();
-          int differenceFromBoundsMin =
-              (int) (differenceFromIntMin /
-                     m_boundsUnitsToIntegerUnits);
+        if (i_value.intValue() > m_upperBounds
+            || i_value.intValue() < m_lowerBounds) {
+          long differenceFromIntMin = (long) Integer.MIN_VALUE
+              + (long) i_value.intValue();
+          int differenceFromBoundsMin = (int) (differenceFromIntMin
+                                               / m_boundsUnitsToIntegerUnits);
           setAllele(new Integer(m_upperBounds + differenceFromBoundsMin));
         }
       }
     }
 
-    protected int compareToNative(Object o1, Object o2) {
-      return ( (Integer) o1).compareTo(o2);
+    protected int compareToNative(Object a_o1, Object a_o2) {
+      return ( (Integer) a_o1).compareTo(a_o2);
     }
 
-    public boolean equals(Object other) {
+    public boolean equals(Object a_other) {
       try {
-        return compareTo(other) == 0;
+        return compareTo(a_other) == 0;
       }
       catch (ClassCastException e) {
         return false;

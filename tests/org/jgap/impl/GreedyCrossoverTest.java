@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -285,8 +285,7 @@ public class GreedyCrossoverTest
         if (a == 2 && b == 3) {
           return 200;
         }
-        throw new Error
-            ("These two should not be compared: " + a + " and " + b);
+        throw new Error("These two should not be compared: " + a + " and " + b);
       }
     };
     cross.ASSERTIONS = true;
@@ -428,19 +427,19 @@ public class GreedyCrossoverTest
 
   /**
    * Make a chromosome from the array of integer genes.
-   * @param genes input genes
+   * @param a_genes input genes
    * @return chromosome containing input genes
    * @throws Exception
    *
    * @author Audrius Meskauskas
    * @since 2.1
    */
-  private Chromosome chromosome(int[] genes)
+  private Chromosome chromosome(int[] a_genes)
       throws Exception {
-    IntegerGene[] ig = new IntegerGene[genes.length];
+    IntegerGene[] ig = new IntegerGene[a_genes.length];
     for (int i = 0; i < ig.length; i++) {
       ig[i] = new IntegerGene(0, 5);
-      ig[i].setAllele(new Integer(genes[i]));
+      ig[i].setAllele(new Integer(a_genes[i]));
     }
     return new Chromosome(ig);
   }

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -51,8 +51,9 @@ public class MapGeneTest
     try {
       new MapGene(null);
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
@@ -144,7 +145,7 @@ public class MapGeneTest
 
   public void testEquals_2() {
     Map alleles = new HashMap();
-    alleles.put(new Integer(1),new Integer(1));
+    alleles.put(new Integer(1), new Integer(1));
     Gene gene1 = new MapGene(alleles);
     assertFalse(gene1.equals(new BooleanGene()));
   }
@@ -156,7 +157,7 @@ public class MapGeneTest
 
   public void testEquals_4() {
     Map alleles = new HashMap();
-    alleles.put(new Integer(1),new Integer(1));
+    alleles.put(new Integer(1), new Integer(1));
     Gene gene1 = new MapGene(alleles);
     Gene gene2 = new MapGene(alleles);
     assertTrue(gene1.equals(gene2));
@@ -165,10 +166,10 @@ public class MapGeneTest
 
   public void testEquals_4_2() {
     Map alleles1 = new HashMap();
-    alleles1.put(new Integer(1),new Integer(1));
+    alleles1.put(new Integer(1), new Integer(1));
     Gene gene1 = new MapGene(alleles1);
     Map alleles2 = new HashMap();
-    alleles1.put(new Integer(2),new Integer(3));
+    alleles1.put(new Integer(2), new Integer(3));
     Gene gene2 = new MapGene(alleles2);
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
@@ -208,10 +209,10 @@ public class MapGeneTest
       throws Exception {
     MapGene gene1 = new MapGene();
     gene1.setAllele(new Integer(4711));
-    Object value1 = privateAccessor.getField(gene1,"m_value");
-    MapGene gene2 = (MapGene)gene1.newGene();
-    Object value2 = privateAccessor.getField(gene2,"m_value");
-    Map geneMap = (Map)privateAccessor.getField(gene2,"m_geneMap");
+    Object value1 = privateAccessor.getField(gene1, "m_value");
+    MapGene gene2 = (MapGene) gene1.newGene();
+    Object value2 = privateAccessor.getField(gene2, "m_value");
+    Map geneMap = (Map) privateAccessor.getField(gene2, "m_geneMap");
     assertEquals(value1, value2);
     assertEquals(0, geneMap.size());
     assertEquals(gene1, gene2);
@@ -224,7 +225,7 @@ public class MapGeneTest
   public void testNewGene_1()
       throws Exception {
     MapGene gene1 = new MapGene();
-    MapGene gene2 = (MapGene)gene1.newGene();
+    MapGene gene2 = (MapGene) gene1.newGene();
     assertEquals(gene1, gene2);
   }
 
@@ -235,12 +236,11 @@ public class MapGeneTest
   public void testNewGene_2()
       throws Exception {
     Map alleles = new Hashtable();
-    for (int i=0;i<40;i++) {
+    for (int i = 0; i < 40; i++) {
       alleles.put(new Integer(i), new Integer(i));
     }
     MapGene gene1 = new MapGene(alleles);
-
-    MapGene gene2 = (MapGene)gene1.newGene();
+    MapGene gene2 = (MapGene) gene1.newGene();
     assertTrue(gene1.equals(gene2));
   }
 
@@ -319,13 +319,13 @@ public class MapGeneTest
       throws Exception {
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
-    gene1.setValueFromPersistentRepresentation("null" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "3" +
-                                               IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER +
-                                               "4");
+    gene1.setValueFromPersistentRepresentation("null"
+                                               + IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               + "3"
+                                               + IntegerGene.
+                                               PERSISTENT_FIELD_DELIMITER
+                                               + "4");
     assertNull(gene1.getAllele());
     assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
         "m_lowerBounds")).intValue());
@@ -341,13 +341,13 @@ public class MapGeneTest
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     try {
-      gene1.setValueFromPersistentRepresentation("null" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "3.5" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "4");
+      gene1.setValueFromPersistentRepresentation("null"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "3.5"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "4");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -363,13 +363,13 @@ public class MapGeneTest
     Gene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     try {
-      gene1.setValueFromPersistentRepresentation("null" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "3" +
-                                                 IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER +
-                                                 "a");
+      gene1.setValueFromPersistentRepresentation("null"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "3"
+                                                 + IntegerGene.
+                                                 PERSISTENT_FIELD_DELIMITER
+                                                 + "a");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -387,10 +387,10 @@ public class MapGeneTest
       throws Exception {
     Map alleles = new HashMap();
     for (int i = -49; i < -3; i++) {
-      alleles.put(new Integer(i), new Integer(i+1));
+      alleles.put(new Integer(i), new Integer(i + 1));
     }
     Gene gene1 = new MapGene(alleles);
-    gene1.setAllele(new Integer(-23));
+    gene1.setAllele(new Integer( -23));
     String pres1 = gene1.getPersistentRepresentation();
     Gene gene2 = new MapGene();
     gene2.setValueFromPersistentRepresentation(pres1);
@@ -425,7 +425,8 @@ public class MapGeneTest
         getAllele()), gene1.compareTo(gene2));
   }
 
-  public void testCompareToNative_3() throws Exception {
+  public void testCompareToNative_3()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(59));
@@ -435,7 +436,8 @@ public class MapGeneTest
         getAllele()), gene1.compareTo(gene2));
   }
 
-  public void testCompareToNative_4() throws Exception {
+  public void testCompareToNative_4()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new IntegerGene(13, 65);
     gene1.setAllele(new Integer(0));
@@ -524,10 +526,8 @@ public class MapGeneTest
       throws Exception {
     Gene gene = new IntegerGene( -1, 7);
     gene.setAllele(new Integer(4));
-
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.3d));
     assertEquals(new Integer( (int) (0.3d * (7 + 1) - 1)), gene.getAllele());
   }
@@ -536,10 +536,8 @@ public class MapGeneTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     Gene gene = new IntegerGene( -2, -1);
     gene.setAllele(new Integer(4));
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
     assertEquals(new Integer( (int) (0.8d * ( -1 + 2) - 2)), gene.getAllele());
   }
@@ -548,9 +546,8 @@ public class MapGeneTest
     IntegerGene gene = new IntegerGene(0, 8);
     gene.setAllele(new Integer(5));
     gene.setToRandomValue(new RandomGeneratorForTest(4));
-
-    if (gene.intValue() < 0 ||
-        gene.intValue() > 8) {
+    if (gene.intValue() < 0
+        || gene.intValue() > 8) {
       fail();
     }
   }
@@ -559,9 +556,8 @@ public class MapGeneTest
     IntegerGene gene = new IntegerGene(1, 6);
     gene.setAllele(new Integer(2));
     gene.setToRandomValue(new RandomGeneratorForTest(3));
-
-    if (gene.intValue() < 1 ||
-        gene.intValue() > 6) {
+    if (gene.intValue() < 1
+        || gene.intValue() > 6) {
       fail();
     }
   }

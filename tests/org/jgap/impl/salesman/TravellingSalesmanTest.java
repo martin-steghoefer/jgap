@@ -22,9 +22,9 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  private m_testTravellingSalesman m_testTravellingSalesman;
+  private TravellingSalesmanForTest m_testTravellingSalesman;
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
@@ -32,7 +32,7 @@ public class TravellingSalesmanTest
   }
   public void setUp() {
     super.setUp();
-    m_testTravellingSalesman = new m_testTravellingSalesman();
+    m_testTravellingSalesman = new TravellingSalesmanForTest();
   }
 
   public void tearDown() throws Exception {
@@ -56,8 +56,7 @@ public class TravellingSalesmanTest
    * 'cities' along with the
    * cost of travel between each pair of them, find the cheapest way of visiting
    * all the cities and returning to your starting point.
-   * </font>
-   * </p>
+   * </p></font>
    *
    * @see
    *  <ul>
@@ -89,19 +88,20 @@ public class TravellingSalesmanTest
    * @author Audrius Meskauskas
    * @version 1.0
    */
-  public class m_testTravellingSalesman
+  public class TravellingSalesmanForTest
       extends Salesman {
     /** The number of cities to visit, 7 by default. */
     public static final int CITIES = 7;
 
-    /** Create an array of the given number of
+    /**
+     * Create an array of the given number of
      * integer genes. The first gene is always 0, this is
      * a city where the salesman starts the journey
      *
-     * @param initial_data Object
+     * @param a_initial_data Object
      * @return Chromosome
      */
-    public Chromosome createSampleChromosome(Object initial_data) {
+    public Chromosome createSampleChromosome(Object a_initial_data) {
       Gene[] genes = new Gene[CITIES];
       for (int i = 0; i < genes.length; i++) {
         genes[i] = new IntegerGene(0, CITIES - 1);
@@ -155,7 +155,7 @@ public class TravellingSalesmanTest
       try {
         int oks = 0;
         for (int i = 0; i < 7; i++) {
-          m_testTravellingSalesman t = new m_testTravellingSalesman();
+          TravellingSalesmanForTest t = new TravellingSalesmanForTest();
           Chromosome optimal = t.findOptimalPath(null);
           if (Integer.MAX_VALUE / 2 - optimal.getFitnessValue() <= 7) {
             oks++;

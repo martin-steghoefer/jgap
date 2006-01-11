@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Determines if object should output debug information.
@@ -177,7 +177,7 @@ public class TestHashcode {
     for (index = 0; index < numObjects; index++) {
       int hashcode = a_ObjectList.get(index).hashCode();
       key = new Integer(hashcode);
-      if (hashCodes.containsKey(key) == true) {
+      if (hashCodes.containsKey(key)) {
         newvalue = ( (Integer) hashCodes.get(key)).intValue() + 1;
         hashCodes.put(key, new Integer(newvalue));
       }

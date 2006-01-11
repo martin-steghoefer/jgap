@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CultureMemoryCellTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureMemoryCellTest.class);
@@ -35,9 +35,9 @@ public class CultureMemoryCellTest
    */
   public void testToString_0() {
     CultureMemoryCell cell = new CultureMemoryCell("aName", 77);
-    assertEquals(
-        "[Name:aName;Value:null;Version:0;Read accessed:0;History Size:77;History:[]",
-        cell.toString());
+    assertEquals("[Name:aName;Value:null;Version:0;Read accessed:0;"
+                 + "History Size:77;History:[]",
+                 cell.toString());
     cell.setDouble(45.9d);
     String result = cell.toString();
     assertEquals(
@@ -52,9 +52,9 @@ public class CultureMemoryCellTest
    */
   public void testToString_1() {
     CultureMemoryCell cell = new CultureMemoryCell("aName", 77);
-    assertEquals(
-        "[Name:aName;Value:null;Version:0;Read accessed:0;History Size:77;History:[]",
-        cell.toString());
+    assertEquals("[Name:aName;Value:null;Version:0;Read accessed:0;"
+                 + "History Size:77;History:[]",
+                 cell.toString());
     cell.setDouble(17.3d);
     cell.setDouble( -45.9d);
     String result = cell.toString();
@@ -73,9 +73,9 @@ public class CultureMemoryCellTest
    */
   public void testToString_2() {
     CultureMemoryCell cell = new CultureMemoryCell();
-    assertEquals(
-        "[Name:null;Value:null;Version:0;Read accessed:0;History Size:3;History:[]",
-        cell.toString());
+    assertEquals("[Name:null;Value:null;Version:0;Read accessed:0;"
+                 + "History Size:3;History:[]",
+                 cell.toString());
   }
 
   /**

@@ -23,7 +23,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -218,7 +218,8 @@ public class CrossoverOperatorTest
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
     CompositeGene result = (CompositeGene) target.getGene(0);
-    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0)).intValue());
+    assertEquals(8, ( (Integer) ( (Vector) result.getAllele())
+                 .get(0)).intValue());
   }
 
   /**
@@ -244,8 +245,9 @@ public class CrossoverOperatorTest
   public void testDoSerialize_0()
       throws Exception {
     // construct object to be serialized
-    CrossoverOperator op = new CrossoverOperator(new DefaultCrossoverRateCalculator());
-    CrossoverOperator o = (CrossoverOperator)doSerialize(op);
+    CrossoverOperator op = new CrossoverOperator(
+        new DefaultCrossoverRateCalculator());
+    CrossoverOperator o = (CrossoverOperator) doSerialize(op);
     assertEquals(o, op);
   }
 }
