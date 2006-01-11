@@ -23,7 +23,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   private double m_deviation;
 
@@ -46,7 +46,7 @@ public class GaussianMutationOperator
    *
    * @since 2.0
    */
-  public GaussianMutationOperator(double a_deviation) {
+  public GaussianMutationOperator(final double a_deviation) {
     m_deviation = a_deviation;
   }
 
@@ -59,7 +59,7 @@ public class GaussianMutationOperator
    * @since 2.0
    */
   public void operate(final Population a_population,
-                      List a_candidateChromosomes) {
+                      final List a_candidateChromosomes) {
     int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
                         a_population.size());
 
@@ -117,7 +117,7 @@ public class GaussianMutationOperator
    * @author Klaus Meffert
    * @since 2.0
    */
-  private void mutateGene(Gene a_gene, double a_percentage) {
+  private void mutateGene(final Gene a_gene, final double a_percentage) {
     for (int k = 0; k < a_gene.size(); k++) {
       // Mutate atomic element by given percentage.
       // ------------------------------------------
@@ -125,7 +125,7 @@ public class GaussianMutationOperator
     }
   }
 
-  private void setRandomGenerator(RandomGenerator a_rg) {
+  private void setRandomGenerator(final RandomGenerator a_rg) {
     m_rg = a_rg;
   }
 }

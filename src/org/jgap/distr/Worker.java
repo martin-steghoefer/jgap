@@ -20,7 +20,7 @@ package org.jgap.distr;
 public class Worker
     implements IWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Display name, only textual information.
@@ -48,8 +48,8 @@ public class Worker
    * @author Klaus Meffert
    * @since 2.4
    */
-  public Worker(String a_displayName, MasterInfo a_master,
-                MasterListener a_masterListener) {
+  public Worker(final String a_displayName, final MasterInfo a_master,
+                final MasterListener a_masterListener) {
     m_displayName = a_displayName;
     m_master = a_master;
     m_masterListener = a_masterListener;
@@ -73,7 +73,7 @@ public class Worker
    * @author Klaus Meffert
    * @since 2.4
    */
-  public Object sendCommand(WorkerCommand a_command) {
+  public Object sendCommand(final WorkerCommand a_command) {
     /**@todo this should be moved to a thread*/
     /**@todo implement:
      * currently working? if yes, add to queue (if queue not full)

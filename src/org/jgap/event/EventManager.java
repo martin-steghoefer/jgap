@@ -25,7 +25,7 @@ import java.util.*;
 public class EventManager
     implements IEventManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * References a Map of subscribed event listeners. Each key is an event
@@ -46,8 +46,8 @@ public class EventManager
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void addEventListener( String a_eventName,
-      GeneticEventListener a_eventListenerToAdd) {
+  public synchronized void addEventListener(final String a_eventName,
+      final GeneticEventListener a_eventListenerToAdd) {
     List eventListeners = (List) m_listeners.get(a_eventName);
     if (eventListeners == null) {
       eventListeners = new LinkedList();
@@ -69,8 +69,8 @@ public class EventManager
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void removeEventListener(String a_eventName,
-      GeneticEventListener a_eventListenerToRemove) {
+  public synchronized void removeEventListener(final String a_eventName,
+      final GeneticEventListener a_eventListenerToRemove) {
     List eventListeners = (List) m_listeners.get(a_eventName);
     if (eventListeners != null) {
       eventListeners.remove(a_eventListenerToRemove);
@@ -87,7 +87,7 @@ public class EventManager
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void fireGeneticEvent(GeneticEvent a_eventToFire) {
+  public synchronized void fireGeneticEvent(final GeneticEvent a_eventToFire) {
     List eventListeners =
         (List) m_listeners.get(a_eventToFire.getEventName());
     if (eventListeners != null) {

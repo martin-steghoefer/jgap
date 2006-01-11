@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   private int m_minLength;
 
@@ -74,7 +74,7 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public StringGene(int a_minLength, int a_maxLength) {
+  public StringGene(final int a_minLength, final int a_maxLength) {
     this(a_minLength, a_maxLength, null);
   }
 
@@ -88,7 +88,8 @@ public class StringGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public StringGene(int a_minLength, int a_maxLength, String a_alphabet) {
+  public StringGene(final int a_minLength, final int a_maxLength,
+                    final String a_alphabet) {
     if (a_minLength < 0) {
       throw new IllegalArgumentException(
           "minimum length must be greater than"
@@ -116,7 +117,7 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     if (m_alphabet == null || m_alphabet.length() < 1) {
       throw new IllegalStateException("The valid alphabet is empty!");
     }
@@ -170,7 +171,7 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setValueFromPersistentRepresentation(String a_representation)
+  public void setValueFromPersistentRepresentation(final String a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
@@ -319,7 +320,7 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setAllele(Object a_newValue) {
+  public void setAllele(final Object a_newValue) {
     if (a_newValue != null) {
       String temp = (String) a_newValue;
       if (temp.length() < m_minLength ||

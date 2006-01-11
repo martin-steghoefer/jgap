@@ -10,8 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-import org.jgap.data.config.*;
-
 import org.jgap.*;
 import org.jgap.distr.*;
 
@@ -27,11 +25,11 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
-  public Population mergePopulations(Population a_population1,
-                                     Population a_population2,
-                                     int a_new_population_size) {
+  public Population mergePopulations(final Population a_population1,
+                                     final Population a_population2,
+                                     final int a_new_population_size) {
     //All the chromosomes are placed in the first population for sorting.
     a_population1.addChromosomes(a_population2);
     //A sorting is made according to the chromosomes fitness values
@@ -63,7 +61,7 @@ public class FittestPopulationMerger
       implements Comparator {
     //Reference to the current FitnessEvaluator Object, used for comparing
     //chromosomes
-    private FitnessEvaluator fEvaluator = Genotype.getConfiguration().
+    private FitnessEvaluator m_fEvaluator = Genotype.getConfiguration().
         getFitnessEvaluator();
 
     /**
@@ -73,15 +71,17 @@ public class FittestPopulationMerger
      * descending fitness value order).
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
-    public int compare(Object o1, Object o2) {
+    public int compare(final Object a_o1, final Object a_o2) {
       //The two objects passed are always Chromosomes, so a cast must be made.
-      Chromosome chr1 = (Chromosome) o1;
-      Chromosome chr2 = (Chromosome) o2;
+      Chromosome chr1 = (Chromosome) a_o1;
+      Chromosome chr2 = (Chromosome) a_o2;
       //Reverse comparison.
-      if (fEvaluator.isFitter(chr2.getFitnessValue(), chr1.getFitnessValue())) {
+      if (m_fEvaluator.isFitter(chr2.getFitnessValue(),
+                                chr1.getFitnessValue())) {
         return 1;
       }
-      else if (fEvaluator.isFitter(chr1.getFitnessValue(), chr2.getFitnessValue())) {
+      else if (m_fEvaluator.isFitter(chr1.getFitnessValue(),
+                                     chr2.getFitnessValue())) {
         return -1;
       }
       else {

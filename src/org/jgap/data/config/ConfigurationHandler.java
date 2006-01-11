@@ -13,20 +13,20 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- * The interface for the GUI to retrieve the information about what a Configurable
- * looks like and how it must be rendered.
+ * The interface for the GUI to retrieve the information about what a#
+ * Configurable looks like and how it must be rendered.
  *
  * @author Siddhartha Azad
  * @since 2.3
  * */
 public interface ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
    * file.
-   * @return Name of this Configuration Object (name of what you are configuring)
+   * @return name of this config. Object (name of what you are configuring)
    * */
   String getName();
 

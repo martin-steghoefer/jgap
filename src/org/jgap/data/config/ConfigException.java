@@ -20,19 +20,19 @@ package org.jgap.data.config;
 public class ConfigException
     extends Exception {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Constructs a new ConfigException instance with the
    * given error message.
    *
-   * @param a_message An error message describing the reason this exception
-   *                  is being thrown.
+   * @param a_message an error message describing the reason this exception
+   * is being thrown.
    *
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public ConfigException(String a_message) {
+  public ConfigException(final String a_message) {
     super(a_message);
   }
 }

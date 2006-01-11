@@ -25,16 +25,16 @@ import org.jgap.*;
  */
 public class ChainOfSelectors {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
    * Intentionally used as a decorator and not via inheritance!
    */
-  private List selectors;
+  private List m_selectors;
 
   public ChainOfSelectors() {
-    selectors = new Vector();
+    m_selectors = new Vector();
   }
 
   /**
@@ -52,20 +52,20 @@ public class ChainOfSelectors {
           "This Configuration object is locked. Settings may not be " +
           "altered.");
     }
-    selectors.add(a_selector);
+    m_selectors.add(a_selector);
   }
 
   /**
    *
-   * @param c Collection
+   * @param a_c Collection to add all elements from
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void addAll(Collection c)
+  public void addAll(Collection a_c)
       throws InvalidConfigurationException {
-    Iterator it = c.iterator();
+    Iterator it = a_c.iterator();
     while (it.hasNext()) {
       NaturalSelector selector = (NaturalSelector) it.next();
       addNaturalSelector(selector);
@@ -79,7 +79,7 @@ public class ChainOfSelectors {
    * @since 1.1 (previously part of class Configuration)
    */
   public int size() {
-    return selectors.size();
+    return m_selectors.size();
   }
 
   /**
@@ -93,7 +93,7 @@ public class ChainOfSelectors {
   }
 
   public int hashCode() {
-    return selectors.hashCode();
+    return m_selectors.hashCode();
   }
 
   /**
@@ -105,7 +105,7 @@ public class ChainOfSelectors {
    * @since 1.1
    */
   public boolean equals(Object o) {
-    return selectors.equals(o);
+    return m_selectors.equals(o);
   }
 
   /**
@@ -117,7 +117,7 @@ public class ChainOfSelectors {
    * @since 1.1
    */
   public NaturalSelector get(int index) {
-    return (NaturalSelector) selectors.get(index);
+    return (NaturalSelector) m_selectors.get(index);
   }
 
   /**
@@ -127,7 +127,7 @@ public class ChainOfSelectors {
    *
    */
   public void clear() {
-    selectors.clear();
+    m_selectors.clear();
   }
 
   /**
@@ -137,6 +137,6 @@ public class ChainOfSelectors {
    * @since 1.1
    */
   public Iterator iterator() {
-    return selectors.iterator();
+    return m_selectors.iterator();
   }
 }

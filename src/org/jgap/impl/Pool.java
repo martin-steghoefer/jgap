@@ -32,7 +32,7 @@ import java.util.*;
 public class Pool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The List of Objects currently in the pool.
@@ -56,7 +56,7 @@ public class Pool {
    * returned Object if that's desirable.
    *
    * @return an Object instance from the pool or null if no Object instances
-   * are available in the pool.
+   * are available in the pool
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -84,7 +84,7 @@ public class Pool {
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void releaseObject(Object a_objectToPool) {
+  public synchronized void releaseObject(final Object a_objectToPool) {
     m_pooledObjects.add(a_objectToPool);
   }
 
@@ -98,7 +98,7 @@ public class Pool {
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void releaseAllObjects(Collection a_objectsToPool) {
+  public synchronized void releaseAllObjects(final Collection a_objectsToPool) {
     if (a_objectsToPool != null) {
       m_pooledObjects.addAll(a_objectsToPool);
     }
@@ -107,7 +107,7 @@ public class Pool {
   /**
    * Retrieves the number of objects currently available in this pool.
    *
-   * @return the number of objects in this pool.
+   * @return the number of objects in this pool
    *
    * @author Neil Rotstan
    * @since 1.0

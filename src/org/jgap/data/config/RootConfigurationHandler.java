@@ -23,7 +23,7 @@ import org.jgap.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -50,7 +50,7 @@ public class RootConfigurationHandler
    * @since 2.3
    * */
   public ArrayList getConfigProperties() {
-   return null;
+    return null;
   }
 
   /**
@@ -77,28 +77,26 @@ public class RootConfigurationHandler
    * */
   public void readConfig()
       throws ConfigException, InvalidConfigurationException {
-  	// set the namespace to get the properties from
+    // set the namespace to get the properties from
     ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
     String value = ConfigFileReader.instance().getValue("m_populationSize");
     if (value != null)
       configurable.setConfigProperty("m_populationSize", value);
-
-    // go through all genetic operators and configure them
+      // go through all genetic operators and configure them
     try {
-    	ConfigurationHelper.configureClass(GENETIC_OPS);
+      ConfigurationHelper.configureClass(GENETIC_OPS);
     }
-    catch(ConfigException conEx) {
-    	conEx.printStackTrace();
-    	System.err.println("Error while configuring " + GENETIC_OPS);
+    catch (ConfigException conEx) {
+      conEx.printStackTrace();
+      System.err.println("Error while configuring " + GENETIC_OPS);
     }
-
     // go through all natural selectors and configure them
     try {
-    	ConfigurationHelper.configureClass(NATURAL_SELS);
+      ConfigurationHelper.configureClass(NATURAL_SELS);
     }
-    catch(ConfigException conEx) {
-    	conEx.printStackTrace();
-    	System.err.println("Error while configuring " + NATURAL_SELS);
+    catch (ConfigException conEx) {
+      conEx.printStackTrace();
+      System.err.println("Error while configuring " + NATURAL_SELS);
     }
     // go through all natural selectors and configure them
   }

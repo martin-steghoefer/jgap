@@ -20,32 +20,33 @@ import javax.swing.*;
  * @author Siddhartha Azad
  * @since 2.3
  * */
-public class ConfigWriter {
+public final class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Singleton instance of ConfigWriter
    */
-  private static ConfigWriter cWriter;
+  private static ConfigWriter m_cWriter;
 
   // The configuration stored as Properties
-  private Properties config;
+  private Properties m_config;
 
   // namespace for the properties being written
-  private String m_ns;/**@todo is this var obsolete?*/
+  private String m_ns; /**@todo is this var obsolete?*/
 
   /**
    * Method to create and access the Singleton ConfigWriter instance.
-   * @return A ConfigWriter Singleton instance.
+   * @return a ConfigWriter Singleton instance.
    *
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public static ConfigWriter instance() {
-    if (cWriter == null)
-      cWriter = new ConfigWriter();
-    return cWriter;
+  public static ConfigWriter getInstance() {
+    if (m_cWriter == null) {
+      m_cWriter = new ConfigWriter();
+    }
+    return m_cWriter;
   }
 
   /**
@@ -55,19 +56,19 @@ public class ConfigWriter {
    * @since 2.3
    */
   private ConfigWriter() {
-    config = new Properties();
+    m_config = new Properties();
   }
 
   /**
    * Persist the configuration information as selected by the user.
-   * @param cInfo Configuration Information to persist.
+   * @param cInfo configuration Information to persist
    *
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public void write(IConfigInfo cInfo) {
+  public void write(final IConfigInfo a_cInfo) {
     try {
-      ConfigData cd = cInfo.getConfigData();
+      ConfigData cd = a_cInfo.getConfigData();
       String nsPrefix = cd.getNS() + ".";
       String name;
       ArrayList values;
@@ -80,7 +81,7 @@ public class ConfigWriter {
           // append an index for same key elements
           String tmpName = name + "[" + idx + "]";
           tmpName = nsPrefix + tmpName;
-          config.setProperty(tmpName, (String) iter.next());
+          m_config.setProperty(tmpName, (String) iter.next());
         }
       }
       String value = "", tmpName = "";
@@ -88,7 +89,7 @@ public class ConfigWriter {
         name = cd.getTextNameAt(i);
         value = cd.getTextValueAt(i);
         tmpName = nsPrefix + name;
-        config.setProperty(tmpName, value);
+        m_config.setProperty(tmpName, value);
       }
     }
     catch (Exception ex) {
@@ -98,10 +99,11 @@ public class ConfigWriter {
                                     JOptionPane.INFORMATION_MESSAGE);
     }
     try {
-      FileOutputStream out = new FileOutputStream(cInfo.getFileName());
+      FileOutputStream out = new FileOutputStream(a_cInfo.getFileName());
       try {
-        config.store(out, "---JGAP Configuration File---");
-      }finally {
+        m_config.store(out, "---JGAP Configuration File---");
+      }
+      finally {
         out.close();
       }
     }
@@ -123,12 +125,12 @@ public class ConfigWriter {
 
   /**
    * Set the namespace to be used in the config file for writing properties.
-   * @param a_ns The namepsace of the Configurable.
+   * @param a_ns the namepsace of the Configurable
    *
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public void setNS(String a_ns) {
+  public void setNS(final String a_ns) {
     m_ns = a_ns;
   }
 }

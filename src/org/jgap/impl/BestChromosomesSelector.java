@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -61,7 +61,7 @@ public class BestChromosomesSelector
     this(1.0d);
   }
 
-  public BestChromosomesSelector(double a_originalRate) {
+  public BestChromosomesSelector(final double a_originalRate) {
     super();
     m_chromosomes = new Population();
     m_needsSorting = false;
@@ -76,12 +76,12 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  protected synchronized void add(Chromosome a_chromosomeToAdd) {
+  protected synchronized void add(final Chromosome a_chromosomeToAdd) {
     // If opted-in: Check if chromosome already added
     // This speeds up the process by orders of magnitude but could lower the
     // quality of evolved results because of fewer Chromosome's used!!!
-    if (!m_doublettesAllowed &&
-        m_chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
+    if (!m_doublettesAllowed
+        && m_chromosomes.getChromosomes().contains(a_chromosomeToAdd)) {
       return;
     }
     // New chromosome, insert it into the sorted collection of chromosomes
@@ -104,8 +104,9 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  public synchronized void select(int a_howManyToSelect, Population a_from_pop,
-                                  Population a_to_pop) {
+  public synchronized void select(final int a_howManyToSelect,
+                                  final Population a_from_pop,
+                                  final Population a_to_pop) {
     if (a_from_pop != null) {
       int popSize = a_from_pop.size();
       for (int i = 0; i < popSize; i++) {
@@ -190,7 +191,8 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setDoubletteChromosomesAllowed(boolean a_doublettesAllowed) {
+  public void setDoubletteChromosomesAllowed(
+      final boolean a_doublettesAllowed) {
     m_doublettesAllowed = a_doublettesAllowed;
   }
 
@@ -223,7 +225,7 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setOriginalRate(double a_originalRate) {
+  public void setOriginalRate(final double a_originalRate) {
     if (a_originalRate < 0.0d || a_originalRate > 1.0d) {
       throw new IllegalArgumentException("Original rate must be greater than"
                                          + " zero and not greater than one!");
@@ -241,6 +243,5 @@ public class BestChromosomesSelector
   public double getOriginalRate() {
     return m_originalRate;
   }
-  
- 
+
 }

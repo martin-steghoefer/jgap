@@ -20,34 +20,47 @@ import java.util.*;
  * */
 public class ConfigData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  // name of the object being configured
+  private String m_name;
+
+  // value in the text field for this object
+  private String m_value;
+
+  private ArrayList m_listData;
+
+  private ArrayList m_textData;
+
+  // The namespace for the properties file
+  private String m_ns;
 
   public ConfigData() {
-    listData = new ArrayList();
-    textData = new ArrayList();
+    m_listData = new ArrayList();
+    m_textData = new ArrayList();
   }
 
-  public void addListData(String name, ArrayList values) {
-    ListData ld = new ListData(name, values);
-    listData.add(ld);
+  public void addListData(final String a_name, final ArrayList a_values) {
+    ListData ld = new ListData(a_name, a_values);
+    m_listData.add(ld);
   }
 
-  public void addTextData(String name, String value) {
-    TextData td = new TextData(name, value);
-    textData.add(td);
+  public void addTextData(final String a_name, final String a_value) {
+    TextData td = new TextData(a_name, a_value);
+    m_textData.add(td);
   }
 
   public int getNumLists() {
-    return listData.size();
+    return m_listData.size();
   }
 
   public int getNumTexts() {
-    return textData.size();
+    return m_textData.size();
   }
 
   /**
    * Get the name of the list at the specified index.
-   * @param index Index of the list
+   * @param a_index index of the list
    * @return name of the list at the specified index
    * @throws IndexOutOfBoundsException when index < 0 or
    * index >= listData.size()
@@ -55,14 +68,14 @@ public class ConfigData {
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public String getListNameAt(int index) {
-    ListData ld = (ListData) listData.get(index);
+  public String getListNameAt(final int a_index) {
+    ListData ld = (ListData) m_listData.get(a_index);
     return ld.getName();
   }
 
   /**
    * Get the contents of the list at the specified index.
-   * @param index Index of the list
+   * @param a_index index of the list
    * @return contents of the list at the specified index.
    * @throws IndexOutOfBoundsException when index < 0 or
    * index >= listData.size()
@@ -70,14 +83,14 @@ public class ConfigData {
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public ArrayList getListValuesAt(int index) {
-    ListData ld = (ListData) listData.get(index);
+  public ArrayList getListValuesAt(final int a_index) {
+    ListData ld = (ListData) m_listData.get(a_index);
     return ld.getListData();
   }
 
   /**
    * Get the name of the text at the specified index.
-   * @param index Index of the text
+   * @param a_index index of the text
    * @return name of the text at the specified index.
    * @throws IndexOutOfBoundsException when index < 0 or
    * index >= textData.size()
@@ -85,14 +98,14 @@ public class ConfigData {
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public String getTextNameAt(int index) {
-    TextData td = (TextData) textData.get(index);
+  public String getTextNameAt(final int a_index) {
+    TextData td = (TextData) m_textData.get(a_index);
     return td.getName();
   }
 
   /**
    * Get the value of the text at the specified index.
-   * @param index index of the text
+   * @param a_index index of the text
    * @return value of the text at the specified index
    * @throws IndexOutOfBoundsException when index < 0 ||
    * index >= textData.size()
@@ -100,22 +113,22 @@ public class ConfigData {
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public String getTextValueAt(int index) {
-    TextData ld = (TextData) textData.get(index);
+  public String getTextValueAt(final int a_index) {
+    TextData ld = (TextData) m_textData.get(a_index);
     return ld.getValue();
   }
 
   /**
    * Set the namespace of the Configurable for which this ConfigData is being
    * used.
-   * @param _ns The namespace of the Configurable to be used while writing the
-   * config file.
+   * @param a_ns namespace of the Configurable to be used while writing the
+   * config file
    *
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public void setNS(String _ns) {
-    ns = _ns;
+  public void setNS(final String a_ns) {
+    m_ns = a_ns;
   }
 
   /**
@@ -128,15 +141,9 @@ public class ConfigData {
    * @since 2.3
    * */
   public String getNS() {
-    return ns;
+    return m_ns;
   }
 
-  ArrayList listData;
-
-  ArrayList textData;
-  // The namespace for the properties file
-
-  String ns;
   /**
    * Data associated with the lists on the GUI.
    *
@@ -145,38 +152,39 @@ public class ConfigData {
    * */
 
   class ListData {
+
+    // name of the object being configured
+    private String m_name;
+
+    // values selected for this object, to be written in the config file
+    private ArrayList m_data;
     /**
      * Constructor.
      * @param a_name Name of the object being configured, to be used as the
      * key in the config properties file.
      * @param a_data Data associated with the List (Data selected by the user)
      */
-    ListData(String a_name, ArrayList a_data) {
-      data = a_data;
-      name = a_name;
+    ListData(final String a_name, final ArrayList a_data) {
+      m_data = a_data;
+      m_name = a_name;
     }
 
     public Iterator getDataIter() {
-      return data.iterator();
+      return m_data.iterator();
     }
 
     public ArrayList getListData() {
-      return data;
+      return m_data;
     }
 
-    public void setName(String _name) {
-      name = _name;
+    public void setName(final String a_name) {
+      m_name = a_name;
     }
 
     public String getName() {
-      return name;
+      return m_name;
     }
 
-    // name of the object being configured
-    private String name;
-
-    // values selected for this object, to be written in the config file
-    private ArrayList data;
   }
   /**
    * Data associated with the TextFields, on the GUI.
@@ -187,35 +195,30 @@ public class ConfigData {
   class TextData {
     /**
      * Constructor.
-     * @param _name Name of the object being configured. Will be used as the
-     * key in the config properties file.
-     * @param a_value The value in the JTextField (value in the properties file)
+     * @param a_name name of the object being configured. Will be used as the
+     * key in the config properties file
+     * @param a_value the value in the JTextField (value in the properties file)
      * */
-    public TextData(String a_name, String a_value) {
-      name = a_name;
-      value = a_value;
+    public TextData(final String a_name, final String a_value) {
+      m_name = a_name;
+      m_value = a_value;
     }
 
-    public void setName(String _name) {
-      name = _name;
+    public void setName(final String a_name) {
+      m_name = a_name;
     }
 
     public String getName() {
-      return name;
+      return m_name;
     }
 
-    public void setValue(String _value) {
-      value = _value;
+    public void setValue(final String a_value) {
+      m_value = a_value;
     }
 
     public String getValue() {
-      return value;
+      return m_value;
     }
 
-    // name of the object being configured
-    private String name;
-
-    // value in the text field for this object
-    private String value;
   }
 }

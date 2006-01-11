@@ -22,13 +22,13 @@ import org.jgap.*;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private double m_scale;
 
   private double m_location;
 
-  private Random rn;
+  private Random m_rn;
 
   /**
    * @author Klaus Meffert
@@ -45,10 +45,10 @@ public class CauchyRandomGenerator
    * @author Klaus Meffert
    * @since 1.1
    */
-  public CauchyRandomGenerator(double a_location, double a_scale) {
+  public CauchyRandomGenerator(final double a_location, final double a_scale) {
     m_location = a_location;
     m_scale = a_scale;
-    rn = new Random();
+    m_rn = new Random();
   }
 
   public int nextInt() {
@@ -56,9 +56,9 @@ public class CauchyRandomGenerator
                     (int) Math.round(nextCauchy() * Integer.MAX_VALUE));
   }
 
-  public int nextInt(int ceiling) {
-    return Math.min(ceiling - 1,
-                    (int) Math.round(nextCauchy() * ceiling));
+  public int nextInt(final int a_ceiling) {
+    return Math.min(a_ceiling - 1,
+                    (int) Math.round(nextCauchy() * a_ceiling));
   }
 
   public long nextLong() {
@@ -87,7 +87,7 @@ public class CauchyRandomGenerator
    * @since 1.1
    */
   public double nextCauchy() {
-    return 0.5 + Math.atan( (rn.nextDouble() - m_location) / m_scale) / Math.PI;
+    return 0.5 + Math.atan( (m_rn.nextDouble() - m_location) / m_scale) / Math.PI;
   }
 
   /**

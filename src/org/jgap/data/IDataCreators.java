@@ -18,9 +18,9 @@ package org.jgap.data;
  */
 public interface IDataCreators {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  void setTree(IDataElementList tree);
+  void setTree(IDataElementList a_tree);
 
   /**
    * @return the tree (of elements) held by the implementing class
@@ -43,12 +43,12 @@ public interface IDataCreators {
 
   /**
    * Appends a child element to the tree
-   * @param newChild the child to be added to the tree
+   * @param a_newChild the child to be added to the tree
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  void appendChild(IDataElement newChild)
+  void appendChild(IDataElement a_newChild)
       throws Exception;
 }

@@ -18,11 +18,11 @@ package org.jgap.distr;
  */
 public class MasterInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // The computer's address over it is reachable in the network
-  public String IPAddress;
+  public String m_IPAddress;
 
   // Only for display purposes
-  public String name;
+  public String m_name;
 }

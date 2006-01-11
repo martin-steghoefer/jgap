@@ -8,17 +8,20 @@
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
+
 import org.jgap.*;
 import org.jgap.data.config.*;
 import java.util.ArrayList;
 
 public class MutationOperatorConHandler
     implements ConfigurationHandler {
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-  
   // Must be the fully qualified class name
-  private final static String CONFIG_NAMESPACE = "org.jgap.impl.MutationOperator";
+  private final static String CONFIG_NAMESPACE =
+      "org.jgap.impl.MutationOperator";
+
+  private Configurable m_configurable;
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -34,10 +37,9 @@ public class MutationOperatorConHandler
    * @return A list of ConfigProperty objects.
    * */
   public ArrayList getConfigProperties() {
-  	ArrayList cProps = new ArrayList();
+    ArrayList cProps = new ArrayList();
     // NaturalSelectors available. This information will be renders as a JList.
     ConfigProperty cp;
-
     // The population size
     cp = new ConfigProperty();
     cp.setName("m_mutationRate");
@@ -45,8 +47,7 @@ public class MutationOperatorConHandler
     cProps.add(cp);
     return cProps;
   }
-  
-  
+
   /**
    * Get the namespace to be used in the config file for the Configurable
    * this ConfigurationHandler belongs to.
@@ -54,32 +55,32 @@ public class MutationOperatorConHandler
    * @return The namepsace of the Configurable
    * */
   public String getNS() {
-  	return CONFIG_NAMESPACE;
+    return CONFIG_NAMESPACE;
   }
-  
+
   /**
    * Method that will populate an Configurable with the properties in the
    * config file.
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
    * */
-  public void readConfig() throws ConfigException,
-  	InvalidConfigurationException {
-  	ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
-	String value = ConfigFileReader.instance().getValue("m_mutationRate");
-	if(value != null)
-		configurable.setConfigProperty("m_mutationRate", value);
-	
+  public void readConfig()
+      throws ConfigException, InvalidConfigurationException {
+    ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
+    String value = ConfigFileReader.instance().getValue("m_mutationRate");
+    if (value != null) {
+      m_configurable.setConfigProperty("m_mutationRate", value);
+    }
   }
-  
+
   /**
-   * Set the Configurable to which this ConfigurationHandler belongs.
-   * @author Siddhartha Azad.
-   * @param _configurable The Configurable to which this ConfigurationHandler
-   * belongs. 
+   * Set the Configurable towhich this ConfigurationHandler belongs.
+   * @param a_configurable the Configurable to which this ConfigurationHandler
+   * belongs to
+   *
+   * @author Siddhartha Azad
    * */
-  public void setConfigurable(Configurable _configurable) {
-  	configurable = _configurable;
+  public void setConfigurable(Configurable a_configurable) {
+    m_configurable = a_configurable;
   }
-  
-  Configurable configurable;
+
 }

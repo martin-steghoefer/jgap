@@ -24,19 +24,19 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Double.MAX_VALUE.
    */
-  protected double m_upperBounds;
+  private double m_upperBounds;
 
   /**
    * The lower bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Double.MIN_VALUE
    */
-  protected double m_lowerBounds;
+  private double m_lowerBounds;
 
   /**
    * Constructs a new DoubleGene with default settings. No bounds will
@@ -48,22 +48,22 @@ public class DoubleGene
    * @since 1.1
    */
   public DoubleGene() {
-    this(- ( Double.MAX_VALUE / 2),Double.MAX_VALUE);
+    this( - (Double.MAX_VALUE / 2), Double.MAX_VALUE);
   }
 
   /**
    * Constructs a new DoubleGene with the specified lower and upper
    * bounds for values (alleles) of this Gene instance.
    *
-   * @param a_lowerBounds The lowest value that this Gene may possess,
+   * @param a_lowerBounds the lowest value that this Gene may possess,
    * inclusive
-   * @param a_upperBounds The highest value that this Gene may possess,
+   * @param a_upperBounds the highest value that this Gene may possess,
    * inclusive
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public DoubleGene(double a_lowerBounds, double a_upperBounds) {
+  public DoubleGene(final double a_lowerBounds, final double a_upperBounds) {
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
   }
@@ -83,7 +83,7 @@ public class DoubleGene
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
+   * @return a new Gene instance of the same type and with the same
    * setup as this concrete Gene
    *
    * @author Klaus Meffert
@@ -104,15 +104,12 @@ public class DoubleGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return A string representation of this Gene's current state.
-   * @throws UnsupportedOperationException to indicate that no implementation
-   * is provided for this method
+   * @return a string representation of this Gene's current state.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public String getPersistentRepresentation()
-      throws UnsupportedOperationException {
+  public String getPersistentRepresentation() {
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
@@ -123,8 +120,8 @@ public class DoubleGene
     else {
       s = getInternalValue().toString();
     }
-    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
-        PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds
+        + PERSISTENT_FIELD_DELIMITER + m_upperBounds;
   }
 
   /**

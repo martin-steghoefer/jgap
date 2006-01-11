@@ -23,39 +23,39 @@ import java.util.*;
 public class DataElement
     implements IDataElement {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private IDataElementList elements;
+  private IDataElementList m_elements;
 
-  private Map attributes;
+  private Map m_attributes;
 
-  private String tagName;
+  private String m_tagName;
 
-  public DataElement(String a_tagName) {
-    elements = new DataElementList();
-    attributes = new HashMap();
-    tagName = a_tagName;
+  public DataElement(final String a_tagName) {
+    m_elements = new DataElementList();
+    m_attributes = new HashMap();
+    m_tagName = a_tagName;
   }
 
-  public void setAttribute(String name, String value)
+  public void setAttribute(final String a_name, final String a_value)
       throws Exception {
-    attributes.put(name, value);
+    m_attributes.put(a_name, a_value);
   }
 
-  public void appendChild(IDataElement newChild)
+  public void appendChild(final IDataElement a_newChild)
       throws Exception {
-    elements.add(newChild);
+    m_elements.add(a_newChild);
   }
 
   public String getTagName() {
-    return tagName;
+    return m_tagName;
   }
 
-  public IDataElementList getElementsByTagName(String name) {
+  public IDataElementList getElementsByTagName(final String a_name) {
     IDataElementList ret = new DataElementList();
-    for (int i = 0; i < elements.getLength(); i++) {
-      if (elements.item(i).getTagName().equals(name)) {
-        ret.add(elements.item(i));
+    for (int i = 0; i < m_elements.getLength(); i++) {
+      if (m_elements.item(i).getTagName().equals(a_name)) {
+        ret.add(m_elements.item(i));
       }
     }
     return ret;
@@ -71,14 +71,14 @@ public class DataElement
   }
 
   public IDataElementList getChildNodes() {
-    return elements;
+    return m_elements;
   }
 
-  public String getAttribute(String name) {
-    return (String) attributes.get(name);
+  public String getAttribute(final String a_name) {
+    return (String) m_attributes.get(a_name);
   }
 
   public Map getAttributes() {
-    return attributes;
+    return m_attributes;
   }
 }

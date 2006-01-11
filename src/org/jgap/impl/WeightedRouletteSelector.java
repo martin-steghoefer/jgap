@@ -31,7 +31,7 @@ import org.jgap.data.config.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -81,7 +81,7 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  protected synchronized void add(Chromosome a_chromosomeToAdd) {
+  protected synchronized void add(final Chromosome a_chromosomeToAdd) {
     // The "roulette wheel" is represented by a Map. Each key is a
     // Chromosome and each value is an instance of the SlotCounter inner
     // class. The counter keeps track of the total number of slots that
@@ -134,7 +134,8 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized void select(int a_howManyToSelect, Population a_from_pop,
+  public synchronized void select(int a_howManyToSelect,
+                                  final Population a_from_pop,
                                   Population a_to_pop) {
     if (a_from_pop != null) {
       int size = a_from_pop.size();
@@ -168,8 +169,8 @@ public class WeightedRouletteSelector
       SlotCounter currentCounter =
           (SlotCounter) chromosomeEntry.getValue();
       fitnessValues[i] = currentCounter.getFitnessValue();
-      counterValues[i] = currentCounter.getFitnessValue() *
-          currentCounter.getCounterValue();
+      counterValues[i] = currentCounter.getFitnessValue()
+          * currentCounter.getCounterValue();
       chromosomes[i] = currentChromosome;
       // We're also keeping track of the total number of slots,
       // which is the sum of all the counter values.
@@ -211,10 +212,10 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  private Chromosome spinWheel(RandomGenerator a_generator,
-                               double[] a_fitnessValues,
-                               double[] a_counterValues,
-                               Chromosome[] a_chromosomes) {
+  private Chromosome spinWheel(final RandomGenerator a_generator,
+                               final double[] a_fitnessValues,
+                               final double[] a_counterValues,
+                               final Chromosome[] a_chromosomes) {
     // Randomly choose a slot on the wheel.
     // ------------------------------------
     double selectedSlot =
@@ -275,14 +276,15 @@ public class WeightedRouletteSelector
     for (int i = 0; i < a_counterValues.length; i++) {
       totalSlotsLeft += a_counterValues[i];
     }
-    throw new RuntimeException("Logic Error. This code should never " +
-                               "be reached. Please report this as a bug to the " +
-                               "JGAP team: selected slot " + selectedSlot + " " +
-                               "exceeded " + totalSlotsLeft +
-                               " number of slots left. " +
-                               "We thought there were " +
-                               m_totalNumberOfUsedSlots +
-                               " slots left.");
+    throw new RuntimeException("Logic Error. This code should never "
+                               + "be reached. Please report this as a bug to"
+                               + " the JGAP team: selected slot "
+                               + selectedSlot + " "
+                               + "exceeded " + totalSlotsLeft
+                               + " number of slots left. "
+                               + "We thought there were "
+                               + m_totalNumberOfUsedSlots
+                               + " slots left.");
   }
 
   /**
@@ -356,7 +358,7 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setDoubletteChromosomesAllowed(boolean a_doublettesAllowed) {
+  public void setDoubletteChromosomesAllowed(final boolean a_doublettesAllowed) {
     m_doublettesAllowed = a_doublettesAllowed;
   }
 
@@ -370,8 +372,8 @@ public class WeightedRouletteSelector
     return m_doublettesAllowed;
   }
   // methods derived from the Configurable interface
-  
-  
+
+
 }
 
 /**
@@ -412,7 +414,7 @@ class SlotCounter {
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void reset(double a_initialFitness) {
+  public void reset(final double a_initialFitness) {
     m_fitnessValue = a_initialFitness;
     m_count = 1;
   }
@@ -461,7 +463,7 @@ class SlotCounter {
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void scaleFitnessValue(double a_scalingFactor) {
+  public void scaleFitnessValue(final double a_scalingFactor) {
     m_fitnessValue /= a_scalingFactor;
   }
 }

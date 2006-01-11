@@ -24,13 +24,13 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.29 $";
+  private static final String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * Represents the constant range of values supported by integers.
    */
-  protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE -
-      (long) Integer.MIN_VALUE;
+  protected final static long INTEGER_RANGE = (long) Integer.MAX_VALUE
+      - (long) Integer.MIN_VALUE;
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -69,7 +69,7 @@ public class IntegerGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IntegerGene(int a_lowerBounds, int a_upperBounds) {
+  public IntegerGene(final int a_lowerBounds, final int a_upperBounds) {
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
   }
@@ -113,14 +113,11 @@ public class IntegerGene
    * implementation is provided.
    *
    * @return string representation of this Gene's current state
-   * @throws UnsupportedOperationException to indicate that no implementation
-   * is provided for this method
    *
    * @author Neil Rostan
    * @since 1.0
    */
-  public String getPersistentRepresentation()
-      throws UnsupportedOperationException {
+  public String getPersistentRepresentation() {
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
@@ -131,8 +128,8 @@ public class IntegerGene
     else {
       s = getInternalValue().toString();
     }
-    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds +
-        PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds
+        + PERSISTENT_FIELD_DELIMITER + m_upperBounds;
   }
 
   /**
@@ -154,7 +151,7 @@ public class IntegerGene
    * @author Neil Rostan
    * @since 1.0
    */
-  public void setValueFromPersistentRepresentation(String a_representation)
+  public void setValueFromPersistentRepresentation(final String a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
@@ -172,7 +169,6 @@ public class IntegerGene
       String lowerBoundRepresentation = tokenizer.nextToken();
       String upperBoundRepresentation = tokenizer.nextToken();
       // First parse and set the representation of the value.
-
       // ----------------------------------------------------
       if (valueRepresentation.equals("null")) {
         setAllele(null);
@@ -241,7 +237,7 @@ public class IntegerGene
    * @author Klaus Meffert
    * @since 1.0
    */
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     double randomValue = (m_upperBounds - m_lowerBounds) *
         a_numberGenerator.nextDouble() +
         m_lowerBounds;
@@ -252,16 +248,16 @@ public class IntegerGene
    * Compares to objects by first casting them into their expected type
    * (e.g. Integer for IntegerGene) and then calling the compareTo-method
    * of the casted type.
-   * @param o1 first object to be compared, always is not null
-   * @param o2 second object to be compared, always is not null
+   * @param a_o1 first object to be compared, always is not null
+   * @param a_o2 second object to be compared, always is not null
    * @return a negative integer, zero, or a positive integer as this object
    * is less than, equal to, or greater than the object provided for comparison
    *
    * @author Neil Rostan
    * @since 1.0
    */
-  protected int compareToNative(Object o1, Object o2) {
-    return ( (Integer) o1).compareTo( (Integer) o2);
+  protected int compareToNative(final Object a_o1, final Object a_o2) {
+    return ( (Integer) a_o1).compareTo( (Integer) a_o2);
   }
 
   /**
@@ -304,14 +300,14 @@ public class IntegerGene
 
   /**
    * See interface Gene for description.
-   * @param index ignored (because there is only 1 atomic element)
+   * @param a_index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    * than 1)
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void applyMutation(int index, double a_percentage) {
+  public void applyMutation(final int a_index, final double a_percentage) {
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
     if (getAllele() == null) {
       setAllele(new Integer( (int) range + m_lowerBounds));

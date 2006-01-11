@@ -12,8 +12,8 @@ package org.jgap.data;
 import java.util.*;
 
 /**
- * Implements the IDataElementList interface and represents a list of IDataElement
- * elements.
+ * Implements the IDataElementList interface and represents a list of
+ * IDataElement elements.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -21,23 +21,23 @@ import java.util.*;
 public class DataElementList
     implements IDataElementList {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private List list;
+  private List m_list;
 
   public DataElementList() {
-    list = new Vector();
+    m_list = new Vector();
   }
 
-  public IDataElement item(int index) {
-    return (IDataElement) list.get(index);
+  public IDataElement item(final int a_index) {
+    return (IDataElement) m_list.get(a_index);
   }
 
   public int getLength() {
-    return list.size();
+    return m_list.size();
   }
 
-  public void add(IDataElement element) {
-    list.add(element);
+  public void add(final IDataElement a_element) {
+    m_list.add(a_element);
   }
 }

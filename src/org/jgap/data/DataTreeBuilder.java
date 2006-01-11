@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DataTreeBuilder {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -65,7 +65,7 @@ public class DataTreeBuilder {
    */
   private Object m_lock;
 
-  private static DataTreeBuilder instance;
+  private static DataTreeBuilder m_instance;
 
   /**
    * @return the singleton instance of this class
@@ -74,11 +74,11 @@ public class DataTreeBuilder {
    * @since 2.0
    */
   public static synchronized DataTreeBuilder getInstance() {
-    if (instance == null) {
-      instance = new DataTreeBuilder();
-      instance.m_lock = new Object();
+    if (m_instance == null) {
+      m_instance = new DataTreeBuilder();
+      m_instance.m_lock = new Object();
     }
-    return instance;
+    return m_instance;
   }
 
   /**
@@ -87,22 +87,18 @@ public class DataTreeBuilder {
   private DataTreeBuilder() {
   }
 
-  public static void main(String[] args)
-      throws Exception {
-  }
-
   /**
    * Represent a Genotype as a generic data document, including its
    * population of Chromosome instances.
    *
-   * @param a_subject The genotype to represent
+   * @param a_subject the genotype to represent
    * @throws Exception
-   * @return a generic document object representing the given Genotype.
+   * @return a generic document object representing the given Genotype
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataCreators representGenotypeAsDocument(Genotype a_subject)
+  public IDataCreators representGenotypeAsDocument(final Genotype a_subject)
       throws Exception {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
@@ -126,14 +122,14 @@ public class DataTreeBuilder {
    * of this Genotype is to be combined with other elements in a
    * single document.
    *
-   * @param a_subject The genotype to represent
+   * @param a_subject the genotype to represent
    * @throws Exception
-   * @return an element object representing the given Genotype.
+   * @return an element object representing the given Genotype
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataElement representGenotypeAsElement(Genotype a_subject)
+  public IDataElement representGenotypeAsElement(final Genotype a_subject)
       throws Exception {
     Population population = a_subject.getPopulation();
     // Start by creating the genotype element and its size attribute,
@@ -158,14 +154,14 @@ public class DataTreeBuilder {
    * Represent a Chromosome as a generic data type document, including its
    * contained Gene instances.
    *
-   * @param a_subject The chromosome to represent
+   * @param a_subject the chromosome to represent
    * @throws Exception
-   * @return a document object representing the given Chromosome.
+   * @return a document object representing the given Chromosome
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataCreators representChromosomeAsDocument(Chromosome a_subject)
+  public IDataCreators representChromosomeAsDocument(final Chromosome a_subject)
       throws Exception {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
@@ -193,14 +189,14 @@ public class DataTreeBuilder {
    * is undesirable, such as when the representation of this Chromosome is to
    * be combined with other elements in a single document.
    *
-   * @param a_subject The chromosome to represent
+   * @param a_subject the chromosome to represent
    * @throws Exception
-   * @return an element object representing the given Chromosome.
+   * @return an element object representing the given Chromosome
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataElement representChromosomeAsElement(Chromosome a_subject)
+  public IDataElement representChromosomeAsElement(final Chromosome a_subject)
       throws Exception {
     // Start by creating an element for the chromosome and its size
     // attribute, which represents the number of genes in the chromosome.
@@ -223,14 +219,14 @@ public class DataTreeBuilder {
   /**
    * Represent Genes as a generic data type element.
    *
-   * @param a_geneValues The genes to represent
+   * @param a_geneValues the genes to represent
    * @throws Exception
-   * @return an element object representing the given genes.
+   * @return an element object representing the given genes
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataElement representGenesAsElement(Gene[] a_geneValues)
+  public IDataElement representGenesAsElement(final Gene[] a_geneValues)
       throws Exception {
     // Create the parent genes element.
     // --------------------------------
@@ -248,14 +244,14 @@ public class DataTreeBuilder {
   /**
    * Represent a Gene as a generic data element.
    *
-   * @param a_gene The Gene to represent
+   * @param a_gene the Gene to represent
    * @throws Exception
-   * @return an element object representing the given gene.
+   * @return an element object representing the given gene
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataElement representGeneAsElement(Gene a_gene)
+  public IDataElement representGeneAsElement(final Gene a_gene)
       throws Exception {
     // Create the allele element for this gene.
     // ----------------------------------------
@@ -282,10 +278,10 @@ public class DataTreeBuilder {
    * @author Klaus Meffert
    * @since 2.0
    */
-  private IDataElement representAlleleAsElement(Gene gene)
+  private IDataElement representAlleleAsElement(final Gene a_gene)
       throws Exception {
     IDataElement alleleElement = new DataElement(ALLELE_TAG);
-    alleleElement.setAttribute("value", gene.getPersistentRepresentation());
+    alleleElement.setAttribute("value", a_gene.getPersistentRepresentation());
     return alleleElement;
   }
 }

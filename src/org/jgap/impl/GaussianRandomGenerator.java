@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -21,14 +20,13 @@ import org.jgap.*;
  */
 public class GaussianRandomGenerator
     implements RandomGenerator {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
 
-  private Random rn;
+  private Random m_rn;
 
   /**
    * Standard deviation of the gaussian deviation
@@ -43,7 +41,7 @@ public class GaussianRandomGenerator
    * Constructor speicifying the (obliagtory) standard deviation
    * @param a_standardDeviation the standard deviation to use
    */
-  public GaussianRandomGenerator(double a_standardDeviation) {
+  public GaussianRandomGenerator(final double a_standardDeviation) {
     super();
     init();
     setGaussianStdDeviation(a_standardDeviation);
@@ -53,10 +51,10 @@ public class GaussianRandomGenerator
    * Initializations on construction
    */
   private void init() {
-    rn = new Random();
+    m_rn = new Random();
   }
 
-  public void setGaussianStdDeviation(double a_standardDeviation) {
+  public void setGaussianStdDeviation(final double a_standardDeviation) {
     if (a_standardDeviation <= DELTA) {
       throw new IllegalArgumentException(
           "Standard deviation must be greater 0!");
@@ -73,23 +71,25 @@ public class GaussianRandomGenerator
    */
   public int nextInt() {
     return Math.abs(Math.min(Integer.MAX_VALUE - 1,
-                    (int) Math.round(nextGaussian() * Integer.MAX_VALUE)));
+                             (int) Math.round(nextGaussian() *
+                                              Integer.MAX_VALUE)));
   }
 
   /**
-   * @param ceiling the upper boundary excluded
+   * @param a_ceiling the upper boundary excluded
    * @return positive integer value between 0 and (ceiling - 1)
    */
-  public int nextInt(int ceiling) {
-    return Math.min(ceiling - 1,
-                    (int) Math.round(nextGaussian() * ceiling/(5.8d*2)));
+  public int nextInt(final int a_ceiling) {
+    return Math.min(a_ceiling - 1,
+                    (int) Math.round(nextGaussian() * a_ceiling / (5.8d * 2)));
   }
 
   /**
    * @return positive long value
    */
   public long nextLong() {
-    long result = Math.min(Long.MAX_VALUE, (long) (nextGaussian() * Long.MAX_VALUE / (5.8d*2)));
+    long result = Math.min(Long.MAX_VALUE,
+                         (long) (nextGaussian() * Long.MAX_VALUE / (5.8d * 2)));
     return result;
   }
 
@@ -111,7 +111,7 @@ public class GaussianRandomGenerator
    */
   private double nextGaussian() {
     //scale to [0..1[
-    double r = (rn.nextGaussian() + 5.8d ) / (5.8d*2.0d);
+    double r = (m_rn.nextGaussian() + 5.8d) / (5.8d * 2.0d);
     return r;
   }
 }

@@ -19,19 +19,19 @@ import java.util.*;
  */
 public class ConfigProperty {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // name of the property
-  private String name;
+  private String m_name;
 
   // widget to use to get the value of this property
-  private String widget;
+  private String m_widget;
 
   // label with which to display this property
-  private String label;
-  
+  private String m_label;
+
   // allowable values for this property (if applicable)
-  private ArrayList values;
+  private ArrayList m_values;
 
   /**
    * Default Constructor for a ConfigProperty.
@@ -41,12 +41,11 @@ public class ConfigProperty {
    */
   public ConfigProperty() {
     // defaults
-    name = "";
-    label = "";
-    widget = "JTextField";
-    values = new ArrayList();
+    m_name = "";
+    m_label = "";
+    m_widget = "JTextField";
+    m_values = new ArrayList();
   }
-
 
   /**
    * @return name associated with this property.
@@ -55,7 +54,7 @@ public class ConfigProperty {
    * @since 2.3
    */
   public String getName() {
-    return name;
+    return m_name;
   }
 
   /**
@@ -67,14 +66,15 @@ public class ConfigProperty {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public void setName(String a_name) {
-    name = a_name;
+  public void setName(final String a_name) {
+    m_name = a_name;
     // by default display label is same as the name
-    if(label.equals(""))
-    	label = a_name;
+    if (m_label.equals("")) {
+      m_label = a_name;
+    }
   }
 
-  
+
   /**
    * @return name of the widget associated with this property.
    *
@@ -82,7 +82,7 @@ public class ConfigProperty {
    * @since 2.3
    */
   public String getWidget() {
-    return widget;
+    return m_widget;
   }
 
   /**
@@ -92,8 +92,8 @@ public class ConfigProperty {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public void setWidget(String a_widget) {
-    widget = a_widget;
+  public void setWidget(final String a_widget) {
+    m_widget = a_widget;
   }
 
   /**
@@ -103,21 +103,21 @@ public class ConfigProperty {
    * @since 2.4
    */
   public String getLabel() {
-    return label;
+    return m_label;
   }
 
   /**
    * Sets the label
-   * @param a_label The label of this property, by default the same as the
-   * name of the property.
+   * @param a_label the label of this property, by default the same as the
+   * name of the property
    *
    * @author Siddhartha Azad
    * @since 2.4
    */
-  public void setLabel(String a_label) {
-    label = a_label;
+  public void setLabel(final String a_label) {
+    m_label = a_label;
   }
-  
+
   /**
    * Add a value into the values ArrayList. These values are added in case the
    * display component is a ListBox or ComboBox or something that can have
@@ -127,8 +127,8 @@ public class ConfigProperty {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public void addValue(String a_value) {
-    values.add(a_value);
+  public void addValue(final String a_value) {
+    m_values.add(a_value);
   }
 
   /**
@@ -139,6 +139,6 @@ public class ConfigProperty {
    * @since 2.3
    */
   public Iterator getValuesIter() {
-    return values.iterator();
+    return m_values.iterator();
   }
 }

@@ -21,7 +21,7 @@ import org.jgap.util.*;
  */
 public abstract class Master {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Information needed by workers
@@ -48,13 +48,14 @@ public abstract class Master {
    * @author Klaus Meffert
    * @since 2.4
    */
-  public Master(RequestDispatcher a_dispatcher, WorkerListener a_workerListener)
+  public Master(final RequestDispatcher a_dispatcher,
+                final WorkerListener a_workerListener)
       throws Exception {
     m_dispatcher = a_dispatcher;
     m_workerListener = a_workerListener;
     m_masterinfo = new MasterInfo();
-    m_masterinfo.IPAddress = NetworkKit.getLocalIPAddress();
-    m_masterinfo.name = NetworkKit.getLocalHostName();
+    m_masterinfo.m_IPAddress = NetworkKit.getLocalIPAddress();
+    m_masterinfo.m_name = NetworkKit.getLocalHostName();
   }
 
   /**
@@ -95,7 +96,8 @@ public abstract class Master {
    * @param a_command the command to send
    * @throws IOException
    */
-  public void sendToWorker(IWorker a_worker, WorkerCommand a_command)
+  public void sendToWorker(final IWorker a_worker,
+                           final WorkerCommand a_command)
       throws IOException {
     /**@todo implement*/
     m_dispatcher.dispatch(a_worker, a_command);

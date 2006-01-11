@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -73,7 +73,8 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.1
    */
-  public MutationOperator(IUniversalRateCalculator a_mutationRateCalculator) {
+  public MutationOperator(final IUniversalRateCalculator
+                          a_mutationRateCalculator) {
     setMutationRateCalc(a_mutationRateCalculator);
   }
 
@@ -89,7 +90,7 @@ public class MutationOperator
    * @author Neil Rotstan
    * @since 1.1
    */
-  public MutationOperator(int a_desiredMutationRate) {
+  public MutationOperator(final int a_desiredMutationRate) {
     m_mutationRate = a_desiredMutationRate;
     setMutationRateCalc(null);
   }
@@ -155,7 +156,8 @@ public class MutationOperator
           if (copyOfChromosome == null) {
             // ...take a copy of it...
             // -----------------------
-            copyOfChromosome = (Chromosome) a_population.getChromosome(i).clone();
+            copyOfChromosome
+                = (Chromosome) a_population.getChromosome(i).clone();
             // ...add it to the candidate pool...
             // ----------------------------------
             a_candidateChromosomes.add(copyOfChromosome);
@@ -189,7 +191,7 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.1
    */
-  private void mutateGene(Gene a_gene, RandomGenerator a_generator) {
+  private void mutateGene(final Gene a_gene, final RandomGenerator a_generator) {
     for (int k = 0; k < a_gene.size(); k++) {
       // Retrieve value between 0 and 1 (not included) from generator.
       // Then map this value to range -1 and 1 (-1 included, 1 not).
@@ -219,7 +221,8 @@ public class MutationOperator
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setMutationRateCalc(IUniversalRateCalculator a_mutationRateCalc) {
+  public void setMutationRateCalc(final IUniversalRateCalculator
+                                  a_mutationRateCalc) {
     m_mutationRateCalc = a_mutationRateCalc;
     if (m_mutationRateCalc != null) {
       m_mutationRate = 0;
@@ -241,31 +244,32 @@ public class MutationOperator
 
   /**
    * Pass the name and value of a property to be set.
-   * @param name The name of the property.
-   * @param value The value of the property.
+   * @param a_name the name of the property
+   * @param a_value the value of the property
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
    * @since 2.4
    * */
-  public void setConfigProperty(String name, String value)
+  public void setConfigProperty(final String a_name, final String a_value)
       throws ConfigException, InvalidConfigurationException {
-    if (name.equals("m_mutationRate")) {
-      m_mutationRate = Integer.parseInt(value);
+    if (a_name.equals("m_mutationRate")) {
+      m_mutationRate = Integer.parseInt(a_value);
     }
     else {
-      System.out.println("MutationOperator:Unknown property " + name);
+      System.out.println("MutationOperator:Unknown property " + a_name);
     }
   }
 
   /**
    * Pass the name and values of a property to be set.
-   * @param name The name of the property.
-   * @param values The different values of the property.
+   * @param a_name the name of the property
+   * @param a_values the different values of the property
    *
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
    * @since 2.4
    * */
-  public void setConfigMultiProperty(String name, ArrayList values)
+  public void setConfigMultiProperty(final String a_name,
+                                     final ArrayList a_values)
       throws ConfigException, InvalidConfigurationException {
     // no multi-properties defined for a MutationOperator yet
   }

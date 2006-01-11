@@ -20,7 +20,7 @@ import org.jgap.*;
 public abstract class NumberGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -43,7 +43,7 @@ public abstract class NumberGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public int compareTo(Object a_other) {
+  public int compareTo(final Object a_other) {
     NumberGene otherGene = (NumberGene) a_other;
     // First, if the other gene (or its value) is null, then this is
     // the greater allele. Otherwise, just use the overridden compareToNative
@@ -130,7 +130,7 @@ public abstract class NumberGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setAllele(Object a_newValue) {
+  public void setAllele(final Object a_newValue) {
     if (getConstraintChecker() != null) {
       if (!getConstraintChecker().verify(this, a_newValue)) {
         return;

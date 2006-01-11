@@ -21,7 +21,7 @@ import org.jgap.util.*;
 public class WorkerCommand
     implements ICommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Informative name
@@ -35,13 +35,13 @@ public class WorkerCommand
    */
   private long m_timeCreated;
 
-  public WorkerCommand(String a_name) {
+  public WorkerCommand(final String a_name) {
     m_name = a_name;
     m_timeCreated = getCurrentMilliseconds();
   }
 
   /**@inheritedDoc*/
-  public CommandResult execute(Object a_parameters)
+  public CommandResult execute(final Object a_parameters)
       throws Exception {
     /**@todo implement*/
     return null;

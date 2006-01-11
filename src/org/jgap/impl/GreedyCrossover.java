@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -73,7 +73,7 @@ public class GreedyCrossover
    * @param a_to Object
    * @return distance between the two given cities
    */
-  public double distance(Object a_from, Object a_to) {
+  public double distance(final Object a_from, final Object a_to) {
     IntegerGene from = (IntegerGene) a_from;
     IntegerGene to = (IntegerGene) a_to;
 
@@ -123,7 +123,8 @@ public class GreedyCrossover
    * @author Audrius Meskauskas
    * @since 2.1
    */
-  public void operate(Chromosome a_firstMate, Chromosome a_secondMate)
+  public void operate(final Chromosome a_firstMate,
+                      final Chromosome a_secondMate)
       throws Error {
     Gene[] g1 = a_firstMate.getGenes();
     Gene[] g2 = a_secondMate.getGenes();
@@ -144,41 +145,41 @@ public class GreedyCrossover
       throw new Error("Error occured while operating on:"
                       + a_firstMate + " and "
                       + a_secondMate
-                      + ". First " + m_startOffset + " genes were excluded " +
-                      "from crossover. Error message: "
+                      + ". First " + m_startOffset + " genes were excluded "
+                      + "from crossover. Error message: "
                       + err.getMessage());
     }
 
   }
 
-  protected Gene[] operate(Gene[] g1, Gene[] g2) {
-    int n = g1.length;
+  protected Gene[] operate(final Gene[] a_g1, final Gene[] a_g2) {
+    int n = a_g1.length;
 
     LinkedList out = new LinkedList();
     TreeSet not_picked = new TreeSet();
 
-    out.add(g1[m_startOffset]);
+    out.add(a_g1[m_startOffset]);
     for (int j = m_startOffset + 1; j < n; j++) { // g[m_startOffset] picked
-      if (ASSERTIONS && not_picked.contains(g1[j])) {
+      if (ASSERTIONS && not_picked.contains(a_g1[j])) {
         throw new Error("All genes must be different for " +
-                        getClass().getName() + ". The gene " + g1[j] + "[" + j +
-                        "] occurs more " +
-                        "than once in one of the chromosomes. ");
+                        getClass().getName() + ". The gene " + a_g1[j] + "[" + j
+                        + "] occurs more "
+                        + "than once in one of the chromosomes. ");
       }
-      not_picked.add(g1[j]);
+      not_picked.add(a_g1[j]);
     }
 
     if (ASSERTIONS) {
-      if (g1.length != g2.length) {
+      if (a_g1.length != a_g2.length) {
         throw new Error("Chromosome sizes must be equal");
       }
 
       for (int j = m_startOffset; j < n; j++) {
-        if (!not_picked.contains(g2[j])) {
-          if (!g1[m_startOffset].equals(g2[j])) {
+        if (!not_picked.contains(a_g2[j])) {
+          if (!a_g1[m_startOffset].equals(a_g2[j])) {
             throw new Error("Chromosome gene sets must be identical."
-                            + " First Chrom: " + new Chromosome(g1)
-                            + ". Second Chrom: " + new Chromosome(g2));
+                            + " First Chrom: " + new Chromosome(a_g1)
+                            + ". Second Chrom: " + new Chromosome(a_g2));
           }
         }
       }
@@ -186,8 +187,8 @@ public class GreedyCrossover
 
     while (not_picked.size() > 1) {
       Gene last = (Gene) out.getLast();
-      Gene n1 = findNext(g1, last);
-      Gene n2 = findNext(g2, last);
+      Gene n1 = findNext(a_g1, last);
+      Gene n2 = findNext(a_g2, last);
 
       Gene picked, other;
 
@@ -218,15 +219,15 @@ public class GreedyCrossover
         // select a non-selected // it is not random
         picked = (Gene) not_picked.first();
       }
-      ;
 
       out.add(picked);
       not_picked.remove(picked);
     }
 
-    if (ASSERTIONS && not_picked.size() != 1)
+    if (ASSERTIONS && not_picked.size() != 1) {
       throw new Error("Given Gene not correctly created (must have length > 1"
-                      +")");
+                      + ")");
+    }
 
     out.add(not_picked.last());
 
@@ -234,15 +235,15 @@ public class GreedyCrossover
     Iterator gi = out.iterator();
 
     for (int i = 0; i < m_startOffset; i++) {
-      g[i] = g1[i];
+      g[i] = a_g1[i];
     }
 
     if (ASSERTIONS) {
       if (out.size() != g.length - m_startOffset)
-        throw new Error("Unexpected internal error. " +
-                        "These two must be equal: " + out.size() +
-                        " and " + (g.length - m_startOffset) + ", g.length " +
-                        g.length + ", start offset " + m_startOffset);
+        throw new Error("Unexpected internal error. "
+                        + "These two must be equal: " + out.size()
+                        + " and " + (g.length - m_startOffset) + ", g.length "
+                        + g.length + ", start offset " + m_startOffset);
     }
 
     for (int i = m_startOffset; i < g.length; i++) {
@@ -253,10 +254,11 @@ public class GreedyCrossover
 
   }
 
-  protected Gene findNext(Gene[] g, Gene x) {
-    for (int i = m_startOffset; i < g.length - 1; i++) {
-      if (g[i].equals(x))
-        return g[i + 1];
+  protected Gene findNext(final Gene[] a_g, final Gene a_x) {
+    for (int i = m_startOffset; i < a_g.length - 1; i++) {
+      if (a_g[i].equals(a_x)) {
+        return a_g[i + 1];
+      }
     }
     return null;
   }

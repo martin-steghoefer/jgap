@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -65,7 +65,7 @@ public class BooleanGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public BooleanGene(boolean a_value) {
+  public BooleanGene(final boolean a_value) {
     m_value = new Boolean(a_value);
   }
 
@@ -75,7 +75,7 @@ public class BooleanGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public BooleanGene(Boolean a_value) {
+  public BooleanGene(final Boolean a_value) {
     if (a_value == null) {
       throw new IllegalArgumentException("Allele value may not be null. Use"
                                          + " no argument constructor if you"
@@ -103,7 +103,7 @@ public class BooleanGene
    * undefined.
    *
    * @return a new Gene instance of the same type and with the same setup as
-   * this concrete Gene.
+   * this concrete Gene
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -116,9 +116,9 @@ public class BooleanGene
    * Sets the value of this Gene to the new given value. This class
    * expects the value to be a Boolean instance.
    *
-   * @param a_newValue the new value of this Gene instance.
+   * @param a_newValue the new value of this Gene instance
    */
-  public void setAllele(Object a_newValue) {
+  public void setAllele(final Object a_newValue) {
     m_value = (Boolean) a_newValue;
   }
 
@@ -131,9 +131,9 @@ public class BooleanGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return A string representation of this Gene's current state.
+   * @return a string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
-   * is provided for this method.
+   * is provided for this method
    *
    * @author Neil Rotstan
    * @author Klaus Meffert

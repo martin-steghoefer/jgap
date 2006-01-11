@@ -18,13 +18,13 @@ package org.jgap.distr;
  */
 public class Culture {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The storage to use. I decided to use double values as they are as
    * performant as integers (or even faster) and are usable generically.
    */
-  private CultureMemoryCell m_memory[];
+  private CultureMemoryCell[] m_memory;
 
   /**
    * Constructor
@@ -33,7 +33,7 @@ public class Culture {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public Culture(int a_size) {
+  public Culture(final int a_size) {
     if (a_size < 1) {
       throw new IllegalArgumentException("Size must be greater than zero!");
     }
@@ -51,7 +51,8 @@ public class Culture {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void set(int a_index, double a_value, int a_historySize, String a_name) {
+  public void set(final int a_index, final double a_value,
+                  final int a_historySize, final String a_name) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }
@@ -68,7 +69,7 @@ public class Culture {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public CultureMemoryCell get(int a_index) {
+  public CultureMemoryCell get(final int a_index) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }

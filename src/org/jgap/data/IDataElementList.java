@@ -17,11 +17,11 @@ package org.jgap.data;
  */
 public interface IDataElementList {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  IDataElement item(int index);
+  IDataElement item(int a_index);
 
   int getLength();
 
-  void add(IDataElement element);
+  void add(IDataElement a_element);
 }

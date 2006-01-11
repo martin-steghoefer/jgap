@@ -18,43 +18,42 @@ import org.jgap.*;
  * <p>
  * A breeder is part of a fractal structure (fractal because each Breeder can
  * be parent and/or child of other Breeder's).
-*
+ *
  * @author Klaus Meffert
  * @since 2.0
  */
 public abstract class Breeder
     implements Runnable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The parent Breeder to report to
    */
-  private Breeder master;/**@todo use*/
+  private Breeder m_master; /**@todo use*/
 
   /**
    * The child Breeder's doing work for us and reporting to this Breeder.
    */
-  private Breeder[] workers;/**@todo use*/
+  private Breeder[] m_workers; /**@todo use*/
 
   /**
    * The Genotype this Breeder is responsible for
    */
-  private Genotype genotype;/**@todo construct somewhere*/
+  private Genotype m_genotype; /**@todo construct somewhere*/
 
   /**
    * Helper class for merging together two Populations into one.
    */
-  private IPopulationMerger m_populationMerger;/**@todo use*/
+  private IPopulationMerger m_populationMerger; /**@todo use*/
 
-  private transient boolean running;
+  private transient boolean m_running;
 
-  private transient boolean stopped = true;
+  private transient boolean m_stopped = true;
 
-  private transient MeanBuffer meanBuffer = new MeanBuffer(40);
+  private transient MeanBuffer m_meanBuffer = new MeanBuffer(40);
 
-  public Breeder(IPopulationMerger a_populationMerger) {
+  public Breeder(final IPopulationMerger a_populationMerger) {
     super();
     m_populationMerger = a_populationMerger;
   }
@@ -67,10 +66,10 @@ public abstract class Breeder
    */
   public void run() {
     try {
-      stopped = false;
-      while (running) {
+      m_stopped = false;
+      while (m_running) {
         evalOneGeneration();
-        int sleepTime = meanBuffer.mean() / 100;
+        int sleepTime = m_meanBuffer.mean() / 100;
         if (sleepTime <= 0) {
           pause(1);
         }
@@ -78,11 +77,11 @@ public abstract class Breeder
           pause(sleepTime);
         }
       }
-      stopped = true;
+      m_stopped = true;
     }
     catch (Throwable t) {
-      stopped = true;
-      running = false;
+      m_stopped = true;
+      m_running = false;
 //      if (exHandler != null) {
 //        exHandler.handleThrowable(t);
 //      }
@@ -100,9 +99,9 @@ public abstract class Breeder
   private void evalOneGeneration()
       throws Exception {
     long begin = System.currentTimeMillis();
-    genotype.evolve(1);
+    m_genotype.evolve(1);
     informParent();
-    meanBuffer.add( (int) (System.currentTimeMillis() - begin));
+    m_meanBuffer.add( (int) (System.currentTimeMillis() - begin));
   }
 
   protected void informParent() {
@@ -112,14 +111,14 @@ public abstract class Breeder
   /**
    * Pauses the Breeder. This is important if a user providing a system for
    * running the GA does not want to make available 100% of his CPU resources.
-   * @param milliSec int
+   * @param a_milliSec number of milliseconds to wait
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  private synchronized void pause(int milliSec) {
+  private synchronized void pause(final int a_milliSec) {
     try {
-      wait(milliSec);
+      wait(a_milliSec);
     }
     catch (InterruptedException e) {
       ;
@@ -127,74 +126,75 @@ public abstract class Breeder
   }
 
   public void start() {
-    if (!running) {
-      running = true;
+    if (!m_running) {
+      m_running = true;
       Thread thread = new Thread(this);
       thread.start();
     }
   }
 
   public void stop() {
-    if (running) {
-      running = false;
-      if (genotype != null) {
+    if (m_running) {
+      m_running = false;
+      if (m_genotype != null) {
         /**@todo implement*/
 //:        genAlgo.stop();
-/*
-        if (genAlgo.getRacer() != null) {
-          genAlgo.getRacer().reset();
-        }
- */
+        /*
+                if (genAlgo.getRacer() != null) {
+                  genAlgo.getRacer().reset();
+                }
+         */
       }
     }
   }
 
   public boolean isRunning() {
-    return running;
+    return m_running;
   }
 
   public boolean canBeStarted() {
-    return !running;
+    return !m_running;
   }
 
   public boolean canBeStopped() {
-    return running;
+    return m_running;
   }
 }
-
 /**
  * A buffer that calculate the mean of a certain amount
  * of values. Uses a fifo inside.
  */
-
 class MeanBuffer {
+  private int[] m_buf = null;
 
-  private int[] buf = null;
-  private int size;
-  private int index = 0;
+  private int m_size;
 
-  public MeanBuffer(int size) {
-    this.size = size;
-    buf = new int[size];
-    for (int i=0; i<size; i++){
-      buf[i] = 0;
+  private int m_index;
+
+  public MeanBuffer(final int a_size) {
+    m_size = a_size;
+    m_buf = new int[m_size];
+    for (int i = 0; i < m_size; i++) {
+      m_buf[i] = 0;
     }
   }
-  public void add(int val){
-    buf[index] = val;
-    index = (index + 1) % size;
+
+  public void add(final int a_val) {
+    m_buf[m_index] = a_val;
+    m_index = (m_index + 1) % m_size;
   }
-  public int mean(){
+
+  public int mean() {
     int sum = 0;
-    for (int i=0; i<size; i++){
-      sum += buf[i];
+    for (int i = 0; i < m_size; i++) {
+      sum += m_buf[i];
     }
-    return sum / size;
+    return sum / m_size;
   }
-  public void reset(){
-    for (int i=0; i<size; i++){
-      buf[i] = 0;
+
+  public void reset() {
+    for (int i = 0; i < m_size; i++) {
+      m_buf[i] = 0;
     }
   }
 }
-

@@ -20,7 +20,7 @@ import java.io.*;
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // Name of the config file to read
   private String m_fileName;
@@ -34,7 +34,7 @@ public class ConfigFileReader {
   /**
    * Singleton Instance of ConfigFileReader
    */
-  private static ConfigFileReader cfReader;
+  private static ConfigFileReader m_cfReader;
 
   /**
    * Method to create and access the Singleton ConfigFileReader instance.
@@ -44,14 +44,14 @@ public class ConfigFileReader {
    * @since 2.3
    */
   public static ConfigFileReader instance() {
-    if (cfReader == null) {
-      cfReader = new ConfigFileReader();
+    if (m_cfReader == null) {
+      m_cfReader = new ConfigFileReader();
     }
-    return cfReader;
+    return m_cfReader;
   }
 
   /**
-   * Private Constructor.@param _fileName Name of the config file.
+   * Private Constructor.
    *
    * @author Siddhartha Azad
    * @since 2.3
@@ -62,15 +62,14 @@ public class ConfigFileReader {
 
   /**
    * Retrieve the value for the property with the name as in param name.
-   * @author Siddhartha Azad.
-   * @param a_name Name of the property of which the value is required.
+   * @param a_name name of the property of which the value is required
    * @return value for the property with the name as in param name, null if
-   * property not found.
+   * property not found
    *
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public String getValue(String a_name) {
+  public String getValue(final String a_name) {
     String tmpName = m_ns + "." + a_name;
     String val = m_props.getProperty(tmpName);
     return val;
@@ -78,19 +77,21 @@ public class ConfigFileReader {
 
   /**
    * Retrieve the values for the property with the name as in param name.
-   * @author Siddhartha Azad.
-   * @param name Name of the property of which the value is required.
+   *
+   * @param name the name of the property of which the value is required
    * @return ArrayList of Strings with values for the property with the name as
-   * in param name, null if property not found.
+   * in param name, null if property not found
+   *
+   * @author Siddhartha Azad
    * */
-  public ArrayList getValues(String name) {
+  public ArrayList getValues(final String a_name) {
     String val = "";
     boolean done = false;
     String tmpName = "";
     int idx = 0;
     ArrayList values = new ArrayList();
     while (!done) {
-      tmpName = m_ns + "." + name + "[" + idx + "]";
+      tmpName = m_ns + "." + a_name + "[" + idx + "]";
       val = m_props.getProperty(tmpName);
       if (val == null) {
         done = true;
@@ -116,7 +117,7 @@ public class ConfigFileReader {
    *
    * @author Siddhartha Azad
    */
-  public void setNS(String a_ns) {
+  public void setNS(final String a_ns) {
     m_ns = a_ns;
   }
 
@@ -130,7 +131,7 @@ public class ConfigFileReader {
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public void setFileName(String a_fileName)
+  public void setFileName(final String a_fileName)
       throws ConfigException {
     m_fileName = a_fileName;
     load();

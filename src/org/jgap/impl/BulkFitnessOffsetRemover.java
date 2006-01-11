@@ -110,21 +110,26 @@ import org.jgap.*;
  * </table>
  * </p>
  * <p>
- * If any {@link org.jgap.NaturalSelector} performs selection based upon the fitness values, it
- * will have to put those values in relation to each other. As a fact, the probability
- * to select the Chromosome that contained the black box parameters that caused an answer time
- * of 4000 ms is "equal" to the probability to select the Chromosome that caused a black box
- * answer time to be 2000 ms!
+ * If any {@link org.jgap.NaturalSelector} performs selection based upon the
+ * fitness values, it will have to put those values in relation to each other.
+ * As a fact, the probability to select the Chromosome that contained the black
+ * box parameters that caused an answer time of 4000 ms is "equal" to the
+ * probability to select the Chromosome that caused a black box answer time to
+ * be 2000 ms!
  * </p>
  * <p>
- * Of course one could work around that problem by replacing the <tt>Integer.MAX_VALUE</tt>
- * transformation by a fixed maximum value the black box would need for the service.
- * But what, if you have no guaranteed maximum answer time for the service of the black box ?
- * Even if you have got one, it will be chosen sufficently high above the average answer
- * time thus letting your fitness function return values with a high offset in the fitness.
+ * Of course one could work around that problem by replacing the
+ * <tt>Integer.MAX_VALUE</tt> transformation by a fixed maximum value the black
+ * box would need for the service.
+ * But what, if you have no guaranteed maximum answer time for the service of
+ * the black box ?
+ * Even if you have got one, it will be chosen sufficently high above the
+ * average answer time thus letting your fitness function return values with a
+ * high offset in the fitness.
  * </p>
  * <p>
- * <h4>This is, what happens, if you use this instance for fitness evaluation:</h4>
+ * <h4>This is, what happens, if you use this instance for fitness
+ * evaluation:</h4>
  * <table border="1">
  * <tr align="left" valign="top">
  * <th>
@@ -186,16 +191,21 @@ import org.jgap.*;
  *     <font color="#999999">.... // As shown above.</font>
  *   }
  *
- *   public void startOptimization(org.jgap.Configuration gaConf)throws InvalidConfigurationException{
- *     <font color="#999999">// The given Configuration may be preconfigured with
+ *   public void startOptimization(org.jgap.Configuration gaConf)t
+*       hrows InvalidConfigurationException{
+ *     <font color="#999999">
+ *     // The given Configuration may be preconfigured with
  *     // NaturalSelector & GeneticOperator instances,.
- *     // But should not contain a FitnessFunction or BulkFitnessFunction!</font>
+ *     // But should not contain a FitnessFunction or BulkFitnessFunction!
+ * </font>
  *     <b>gaConf.setBulkFitnessFunction(new BulkFitnessOffsetRemover(this));</b>
  *     <font color="#999999">// Why does it work? We implement FitnessFunction!
  *     // Still to do here:
- *     // - Create a sample chromosome according to your blackbox & set it to the configuration.
+ *     // - Create a sample chromosome according to your blackbox & set it to
+*      //   the configuration.
  *     // - Create a random inital Genotype.
- *     // - loop over a desired amount of generations invoking aGenotype.evolve()..</font>
+ *     // - loop over a desired amount of generations invoking
+*      //   aGenotype.evolve()..</font>
  *   }
  * }
  * </font>
@@ -208,15 +218,14 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /*
-   * Replace this member by the Configuration as
    * Replace this member by the Configuration as
    * soon as Configuration allows bulk fitness function and
    * fitness function to be stored both in it.
    */
-  private FitnessFunction ff;
+  private FitnessFunction m_ff;
 
   /*
    * This constructor is planned but not possible yet,
@@ -247,25 +256,25 @@ public class BulkFitnessOffsetRemover
    * evaluated Chromosomes (which still have the offset from the evaluation).
    * </p>
    */
-  private double previousOffset;
+  private double m_previousOffset;
 
-  public BulkFitnessOffsetRemover(FitnessFunction a_ff) {
+  public BulkFitnessOffsetRemover(final FitnessFunction a_ff) {
     if (a_ff == null) {
       throw new IllegalArgumentException("Fitness function must not be null!");
     }
-    ff = a_ff;
+    m_ff = a_ff;
   }
 
   /* (non-Javadoc)
    * @see org.jgap.BulkFitnessFunction#evaluate(org.jgap.Chromosome[])
    */
-  public void evaluate(Population a_chromosomes) {
+  public void evaluate(final Population a_chromosomes) {
     double offset = Double.MAX_VALUE;
     double curFitness;
     Iterator itChromosomes = a_chromosomes.iterator();
-    Chromosome a_Chromosome;
+    Chromosome Chromosome;
     while (itChromosomes.hasNext()) {
-      a_Chromosome = (Chromosome) itChromosomes.next();
+      Chromosome = (Chromosome) itChromosomes.next();
       /*
        * This is a workaround:
        * We have to check, wethter a Chromosome has
@@ -280,12 +289,12 @@ public class BulkFitnessOffsetRemover
        * If a redesign of that method is made, this has to be changed
        * here too.. .
        */
-      curFitness = a_Chromosome.getFitnessValue();
+      curFitness = Chromosome.getFitnessValue();
       if (curFitness < 0) {
         // OK, get it from our fitness function.
-        curFitness = ff.getFitnessValue(a_Chromosome);
+        curFitness = m_ff.getFitnessValue(Chromosome);
         // And store it to avoid evaluation of the same Chromosome again:
-        a_Chromosome.setFitnessValue(curFitness);
+        Chromosome.setFitnessValue(curFitness);
       }
       else {
         /*
@@ -295,8 +304,8 @@ public class BulkFitnessOffsetRemover
          * Else these Chromosomes would be the unfittest and
          * additionally disallow cutting a huge offset from the others.
          */
-        curFitness += previousOffset;
-        a_Chromosome.setFitnessValue(curFitness);
+        curFitness += m_previousOffset;
+        Chromosome.setFitnessValue(curFitness);
       }
       // search for the offset that is to be cut:
       offset = (offset < curFitness) ? offset : curFitness;
@@ -317,13 +326,13 @@ public class BulkFitnessOffsetRemover
      * that every Chromosome may survive...
      */
     offset--;
-    previousOffset = offset;
+    m_previousOffset = offset;
     // offset cannot be <0... thx to fitness value policy of jgap.
     // finally remove the offset from every fitness value:
     itChromosomes = a_chromosomes.iterator();
     while (itChromosomes.hasNext()) {
-      a_Chromosome = (Chromosome) itChromosomes.next();
-      a_Chromosome.setFitnessValue(a_Chromosome.getFitnessValue() - offset);
+      Chromosome = (Chromosome) itChromosomes.next();
+      Chromosome.setFitnessValue(Chromosome.getFitnessValue() - offset);
     }
   }
 
@@ -365,7 +374,8 @@ public class BulkFitnessOffsetRemover
    * </p>
    * <p>
    * Each bulk fitness evaluation a Chromosome experiences,
-   * it's fitness value <i>F</i> get's an addition of the old offset <i>O<sub>(n-1)</sub></i>
+   * it's fitness value <i>F</i> get's an addition of the old offset
+   * <i>O<sub>(n-1)</sub></i>
    * and a substraction by the new offset <i>O<sub>n</i></sub>. <br>
    * <i><sub>n</sub></i> is the generation index.
    *
@@ -376,18 +386,23 @@ public class BulkFitnessOffsetRemover
    *
    * =>
    *
-   * 1) F<sub>n</sub> = <b>F<sub>(n-1)</sub></b> + O<sub>(n-1)</sub> - O<sub>n</sub>
+   * 1) F<sub>n</sub> = <b>F<sub>(n-1)</sub></b>
+   * + O<sub>(n-1)</sub> - O<sub>n</sub>
    *
-   * 2) <b>F<sub>(n-1)</sub></b> = F<sub>(n-2)</sub> + O<sub>(n-2)</sub> - O<sub>(n-1)</sub>
+   * 2) <b>F<sub>(n-1)</sub></b> = F<sub>(n-2)</sub>
+   * + O<sub>(n-2)</sub> - O<sub>(n-1)</sub>
    *
    * 2 in 1)
-   *    F<sub>n</sub> = (F<sub>(n-2)</sub> + O<sub>(n-2)</sub> - O<sub>(n-1)</sub>) + O<sub>(n-1)</sub> - O<sub>n</sub>
+   *    F<sub>n</sub> = (F<sub>(n-2)</sub> + O<sub>(n-2)</sub>
+   * - O<sub>(n-1)</sub>) + O<sub>(n-1)</sub> - O<sub>n</sub>
    *    F<sub>n</sub> = F<sub>(n-2)</sub> + O<sub>(n-2)</sub> - O<sub>n</sub>
    *
-   * We made a step over 2 generations: With the current offset and the fitness & offset of the
+   * We made a step over 2 generations: With the current offset and the
+   * fitness & offset of the
    * "preprevious" generation we can calculate the current fitness.
-   * We can assume that this generation stepping works for farer steps <sub>m</sub>
-   * (just continue step 2) until you have a generation step value high enough ;-))
+   * We can assume that this generation stepping works for farer steps
+   * <sub>m</sub> (just continue step 2) until you have a generation step value
+   * high enough ;-))
    *
    * => F<sub>n</sub> = F<sub>(n-m)</sub> + O<sub>(n-m)</sub> - O<sub>n</sub>
    *
@@ -406,20 +421,23 @@ public class BulkFitnessOffsetRemover
    * </p>
    * <p>
    * This shows, that it is possible to compute the original fitness value of a
-   * Chromosome from it's current fitness value and the {@link #previousOffset previous offset}
+   * Chromosome from it's current fitness value and the
+   * {@link #previousOffset previous offset}
    * regardless of the amounts of generations between original evaluation and
    * the current generation.
    * </p>
-   * @param individuum Any Chromosome that is normally being evaluated by this <tt>BulkFitnessFunction</tt>.
-   * @return The original fitness value as returned by the registered {@link #ff fitnessFunction} instance.
+   * @param a_individuum any Chromosome that is normally being evaluated by
+   * this <tt>BulkFitnessFunction</tt>
+   * @return the original fitness value as returned by the registered
+   * {@link #ff fitnessFunction} instance.
    */
-  public double getAbsoluteFitness(Chromosome individuum) {
-    double fitness = individuum.getFitnessValue();
+  public double getAbsoluteFitness(final Chromosome a_individuum) {
+    double fitness = a_individuum.getFitnessValue();
     if (fitness < 0.0) {
       // OK, get it from our fitness function.
-      fitness = ff.getFitnessValue(individuum);
+      fitness = m_ff.getFitnessValue(a_individuum);
       // And store it to avoid evaluation of the same Chromosome again:
-      individuum.setFitnessValue(fitness);
+      a_individuum.setFitnessValue(fitness);
     }
     else {
       /*
@@ -429,7 +447,7 @@ public class BulkFitnessOffsetRemover
        * Else these Chromosomes would be the unfittest and
        * additionally disallow cutting a huge offset from the others.
        */
-      fitness += previousOffset;
+      fitness += m_previousOffset;
     }
     return fitness;
   }

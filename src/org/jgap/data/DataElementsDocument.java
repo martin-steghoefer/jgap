@@ -19,12 +19,12 @@ package org.jgap.data;
 public class DataElementsDocument
     implements IDataCreators {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private IDataElementList tree;
+  private IDataElementList m_tree;
 
-  public void setTree(IDataElementList a_tree) {
-    tree = a_tree;
+  public void setTree(final IDataElementList a_tree) {
+    m_tree = a_tree;
   }
 
   /**
@@ -34,12 +34,12 @@ public class DataElementsDocument
    * @since 2.0
    */
   public IDataElementList getTree() {
-    return tree;
+    return m_tree;
   }
 
   public DataElementsDocument()
       throws Exception {
-    tree = new DataElementList();
+    m_tree = new DataElementList();
   }
 
   public IDataCreators newDocument()
@@ -49,14 +49,14 @@ public class DataElementsDocument
 
   /**
    * Appends a child element to the tree
-   * @param newChild the child to be added to the tree
+   * @param a_newChild the child to be added to the tree
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void appendChild(IDataElement newChild)
+  public void appendChild(final IDataElement a_newChild)
       throws Exception {
-    tree.add(newChild);
+    m_tree.add(a_newChild);
   }
 }

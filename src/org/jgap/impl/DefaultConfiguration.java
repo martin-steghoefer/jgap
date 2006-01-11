@@ -28,7 +28,7 @@ import org.jgap.data.config.*;
 public class DefaultConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Constructs a new DefaultConfiguration instance with a number of
@@ -58,9 +58,9 @@ public class DefaultConfiguration
     }
     catch (InvalidConfigurationException e) {
       throw new RuntimeException(
-          "Fatal error: DefaultConfiguration class could not use its " +
-          "own stock configuration values. This should never happen. " +
-          "Please report this as a bug to the JGAP team.");
+          "Fatal error: DefaultConfiguration class could not use its "
+          + "own stock configuration values. This should never happen. "
+          + "Please report this as a bug to the JGAP team.");
     }
   }
 }

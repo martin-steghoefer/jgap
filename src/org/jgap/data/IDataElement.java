@@ -20,21 +20,21 @@ import java.util.*;
  */
 public interface IDataElement {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  void setAttribute(String name, String value)
+  void setAttribute(String a_name, String a_value)
       throws Exception;
 
-  void appendChild(IDataElement newChild)
+  void appendChild(IDataElement a_newChild)
       throws Exception;
 
   String getTagName();
 
-  IDataElementList getElementsByTagName(String name);
+  IDataElementList getElementsByTagName(String a_name);
 
   IDataElementList getChildNodes();
 
-  String getAttribute(String name);
+  String getAttribute(String a_name);
 
   Map getAttributes();
 }

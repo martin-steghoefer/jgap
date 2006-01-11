@@ -4,8 +4,8 @@
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
  * For licencing information please see the file license.txt included with JGAP
-     * or have a look at the top of class org.jgap.Chromosome which representatively
-     * includes the JGAP license policy applicable for any file delivered with JGAP.
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.distr;
 
@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -82,7 +82,7 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public CultureMemoryCell(String a_name) {
+  public CultureMemoryCell(final String a_name) {
     this(a_name, 3);
   }
 
@@ -96,7 +96,7 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public CultureMemoryCell(String a_name, int a_historySize) {
+  public CultureMemoryCell(final String a_name, final int a_historySize) {
     setHistorySize(a_historySize);
     m_history = new Vector(getHistorySize());
     setName(a_name);
@@ -109,7 +109,7 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setName(String a_name) {
+  public void setName(final String a_name) {
     m_name = a_name;
   }
 
@@ -130,7 +130,7 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setValue(Object a_value) {
+  public void setValue(final Object a_value) {
     if (m_historySize > 0) {
       keepHistory(a_value, getVersion(), getName());
     }
@@ -143,14 +143,14 @@ public class CultureMemoryCell {
   }
 
   /**
-   * Convenience method to store a primitive double easily
+   * Convenience method to store a primitive double easily.
    *
    * @param a_value double value to store
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setDouble(double a_value) {
+  public void setDouble(final double a_value) {
     setValue(new Double(a_value));
   }
 
@@ -218,8 +218,9 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  protected void keepHistory(Object a_value, int a_version, String a_name) {
-    trimHistory(m_historySize-1);
+  protected void keepHistory(final Object a_value, final int a_version,
+                             final String a_name) {
+    trimHistory(m_historySize - 1);
     // simply add a new instance of CultureMemoryCell for keeping history track
     CultureMemoryCell cell = getNewInstance(a_value, a_version, a_name);
     cell.m_internalHistorySize = m_historySize;
@@ -238,8 +239,9 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  protected CultureMemoryCell getNewInstance(Object a_value, int a_version,
-                                             String a_name) {
+  protected CultureMemoryCell getNewInstance(final Object a_value,
+                                             final int a_version,
+                                             final String a_name) {
     // DON'T USE SETTERS IN HERE BECAUSE OF ENDLESS LOOPS!
     CultureMemoryCell cell = new CultureMemoryCell(a_name, 0);
     cell.m_value = a_value;
@@ -286,14 +288,17 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void setHistorySize(int a_size) {
+  public void setHistorySize(final int a_size) {
     if (getHistory() != null && a_size > getHistory().size()) {
       trimHistory(a_size);
+      m_historySize = a_size;
     }
     else if (a_size < 0) {
-      a_size = 0;
+      m_historySize = 0;
     }
-    m_historySize = a_size;
+    else {
+      m_historySize = a_size;
+    }
   }
 
   /**
@@ -303,7 +308,7 @@ public class CultureMemoryCell {
    * @author Klaus Meffert
    * @since 2.3
    */
-  protected void trimHistory(int a_size) {
+  protected void trimHistory(final int a_size) {
     // trim length of history
     while (m_history.size() > a_size) {
       // remove one entry (always the first one = oldest one)
@@ -312,7 +317,7 @@ public class CultureMemoryCell {
   }
 
   /**
-   * @return size of the history ,og
+   * @return size of the history
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -336,29 +341,30 @@ public class CultureMemoryCell {
 
   /**
    * Recursive part of toString()
-   * @param result gathered result so far
+   * @param a_result gathered result so far and modified here
    * @param a_historySize history size just for information purpose
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  protected void toStringRecursive(final StringBuffer result, int a_historySize) {
+  protected void toStringRecursive(StringBuffer a_result,
+                                   final int a_historySize) {
     List history = getHistory();
-    result.append("[Name:" + getName() + ";");
-    result.append("Value:" + m_value + ";");//not getCurrentValue()!
-    result.append("Version:" + getVersion() + ";");
-    result.append("Read accessed:" + getReadAccessed() + ";");
-    result.append("History Size:" + a_historySize + ";");
-    result.append("History:[");
+    a_result.append("[Name:" + getName() + ";");
+    a_result.append("Value:" + m_value + ";"); //not getCurrentValue()!
+    a_result.append("Version:" + getVersion() + ";");
+    a_result.append("Read accessed:" + getReadAccessed() + ";");
+    a_result.append("History Size:" + a_historySize + ";");
+    a_result.append("History:[");
     for (int i = 0; i < history.size(); i++) {
       if (i > 0) {
-        result.append(";");
+        a_result.append(";");
       }
       CultureMemoryCell cell = (CultureMemoryCell) history.get(i);
       // do recursive call
-      cell.toStringRecursive(result, cell.m_internalHistorySize);
-      result.append("]");
+      cell.toStringRecursive(a_result, cell.m_internalHistorySize);
+      a_result.append("]");
     }
-    result.append("]");
+    a_result.append("]");
   }
 }

@@ -37,12 +37,12 @@ public class CrossoverOperator
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The current crossover rate used by this crossover operator.
    */
-  protected int m_crossoverRate;
+  private int m_crossoverRate;
 
   /**
    * Calculator for dynamically determining the crossover rate. If set to
@@ -75,7 +75,8 @@ public class CrossoverOperator
    * @author Chris Knowles
    * @since 2.0
    */
-  public CrossoverOperator(IUniversalRateCalculator a_crossoverRateCalculator) {
+  public CrossoverOperator(final IUniversalRateCalculator
+                           a_crossoverRateCalculator) {
     setCrossoverRateCalc(a_crossoverRateCalculator);
   }
 
@@ -88,7 +89,7 @@ public class CrossoverOperator
    * @author Chris Knowles
    * @since 2.0
    */
-  public CrossoverOperator(int a_desiredCrossoverRate) {
+  public CrossoverOperator(final int a_desiredCrossoverRate) {
     if (a_desiredCrossoverRate < 1) {
       throw new IllegalArgumentException("Crossover rate must be greater zero");
     }
@@ -179,7 +180,7 @@ public class CrossoverOperator
    * @author Chris Knowles
    * @since 2.0
    */
-  private void setCrossoverRateCalc(IUniversalRateCalculator
+  private void setCrossoverRateCalc(final IUniversalRateCalculator
                                     a_crossoverRateCalculator) {
     m_crossoverRateCalc = a_crossoverRateCalculator;
   }
@@ -189,15 +190,15 @@ public class CrossoverOperator
    * true if and the argument is an instance of this class and is equal wrt the
    * data.
    *
-   * @param other the object to compare against
+   * @param a_other the object to compare against
    * @return true: if the objects are the same, false otherwise
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public boolean equals(Object other) {
+  public boolean equals(final Object a_other) {
     try {
-      return compareTo(other) == 0;
+      return compareTo(a_other) == 0;
     }
     catch (ClassCastException cex) {
       return false;
@@ -207,19 +208,19 @@ public class CrossoverOperator
   /**
    * Compares the given CrossoverOperator to this CrossoverOperator.
    *
-   * @param other the instance against which to compare this instance
+   * @param a_other the instance against which to compare this instance
    * @return a negative number if this instance is "less than" the given
    * instance, zero if they are equal to each other, and a positive number if
-   * this  is "greater than" the given instance
+   * this is "greater than" the given instance
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public int compareTo(Object other) {
-    if (other == null) {
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
       return 1;
     }
-    CrossoverOperator op = (CrossoverOperator)other;
+    CrossoverOperator op = (CrossoverOperator)a_other;
     if (m_crossoverRateCalc == null) {
       if (op.m_crossoverRateCalc != null) {
         return -1;

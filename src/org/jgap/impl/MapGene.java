@@ -19,11 +19,11 @@ import org.jgap.*;
  * Creates a gene instance in which individual alleles have both a label (key)
  * and a value with a distinct meaning. For example, IntegerGene only allows
  * for values having a continuous range, and does not have a function where it
- * is possible to specify setValue...</p>
- * This implementation does not support specifying a range of valid
+ * is possible to specify setValue...
+ * <p>This implementation does not support specifying a range of valid
  * integer values. Instead it is planned to provide a constraint checker plugin
  * later on. With this, the current implementation will stay unchanged and can
- * be as performant as possible without losing flexibility.
+ * be as performant as possible without losing flexibility.</p>
  *
  * @author Johnathan Kool, Organisation: RSMAS, University of Miami
  * @author Klaus Meffert (adaptations)
@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Container for valid alleles
@@ -50,7 +50,6 @@ public class MapGene
   final static String ALLELEMAP_BEGIN_DELIMITER = "[";
   final static String ALLELEMAP_END_DELIMITER = "]";
 
-
   /**
    * Default constructor
    * @since 2.4
@@ -66,7 +65,7 @@ public class MapGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public MapGene(Map a_alleles) {
+  public MapGene(final Map a_alleles) {
     this();
     addAlleles(a_alleles);
   }
@@ -86,7 +85,7 @@ public class MapGene
    * @param a_value the Integer value to be added
    * @since 2.4
    */
-  public void addAllele(Object a_key, Object a_value) {
+  public void addAllele(final Object a_key, final Object a_value) {
     m_geneMap.put(a_key, a_value);
   }
 
@@ -98,7 +97,7 @@ public class MapGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void addAllele(Object a_value) {
+  public void addAllele(final Object a_value) {
     m_geneMap.put(a_value, a_value);
   }
 
@@ -110,7 +109,7 @@ public class MapGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void addAllele(int a_value) {
+  public void addAllele(final int a_value) {
     m_geneMap.put(new Integer(a_value), new Integer(a_value));
   }
 
@@ -121,7 +120,7 @@ public class MapGene
    *
    * @since 2.4
    */
-  public void addAlleles(Map a_alleles) {
+  public void addAlleles(final Map a_alleles) {
     if (a_alleles == null) {
       throw new IllegalArgumentException("List of alleles may not be null!");
     }
@@ -133,12 +132,12 @@ public class MapGene
   /**
    * Removes a potential allele or set of alleles from the collection.
    *
-   * @param key the unique value(s) of the object(s) to be removed
+   * @param a_key the unique value(s) of the object(s) to be removed
    *
    * @since 2.4
    */
-  public void removeAlleles(Object key) {
-    m_geneMap.remove(key);
+  public void removeAlleles(final Object a_key) {
+    m_geneMap.remove(a_key);
   }
 
   /**
@@ -153,7 +152,7 @@ public class MapGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     if (m_geneMap.isEmpty()) {
       m_value = new Integer(a_numberGenerator.nextInt());
     }
@@ -179,7 +178,7 @@ public class MapGene
    * @author Johnathan Kool
    * @since 2.4
    */
-  public void applyMutation(int a_index, double a_percentage) {
+  public void applyMutation(final int a_index, final double a_percentage) {
     RandomGenerator rn;
     if (Genotype.getConfiguration() != null) {
       rn = Genotype.getConfiguration().getRandomGenerator();
@@ -210,7 +209,7 @@ public class MapGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void setValueFromPersistentRepresentation(String a_representation)
+  public void setValueFromPersistentRepresentation(final String a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer = new StringTokenizer(a_representation,

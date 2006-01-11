@@ -32,11 +32,13 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   private int m_length;
 
   private int[] m_value;
+
+  private static final int WORD_LEN_BITS = 32;
 
   /**
    *
@@ -45,13 +47,13 @@ public class FixedBinaryGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public FixedBinaryGene(int a_length) {
+  public FixedBinaryGene(final int a_length) {
     if (a_length < 1) {
       throw new IllegalArgumentException("Length must be greater than zero!");
     }
     m_length = a_length;
-    int bufSize = m_length / 32;
-    if (0 != m_length % 32) {
+    int bufSize = m_length / WORD_LEN_BITS;
+    if (0 != m_length % WORD_LEN_BITS) {
       ++bufSize;
     }
     m_value = new int[bufSize];
@@ -66,13 +68,14 @@ public class FixedBinaryGene
     return result;
   }
 
-  public FixedBinaryGene(final FixedBinaryGene toCopy) {
-    m_length = toCopy.getLength();
-    int bufSize = m_length / 32;
-    if (0 != m_length % 32)
+  public FixedBinaryGene(final FixedBinaryGene a_toCopy) {
+    m_length = a_toCopy.getLength();
+    int bufSize = m_length / WORD_LEN_BITS;
+    if (0 != m_length % WORD_LEN_BITS) {
       ++bufSize;
+    }
     m_value = new int[bufSize];
-    System.arraycopy(toCopy.getValue(), 0, m_value, 0, m_value.length);
+    System.arraycopy(a_toCopy.getValue(), 0, m_value, 0, m_value.length);
   }
 
   protected int[] getValue() {
@@ -89,7 +92,7 @@ public class FixedBinaryGene
     return copy;
   }
 
-  public void setAllele(Object a_newValue) {
+  public void setAllele(final Object a_newValue) {
     if (a_newValue == null) {
       throw new IllegalArgumentException("Allele must not be null!");
     }
@@ -127,106 +130,109 @@ public class FixedBinaryGene
     return m_value;
   }
 
-  public boolean getBit(int m_index) {
-    checkIndex(m_index);
-    return getUnchecked(m_index);
+  public boolean getBit(final int a_index) {
+    checkIndex(a_index);
+    return getUnchecked(a_index);
   }
 
-  public void setBit(int m_index, boolean m_value) {
-    checkIndex(m_index);
-    setUnchecked(m_index, m_value);
+  public void setBit(final int a_index, final boolean a_value) {
+    checkIndex(a_index);
+    setUnchecked(a_index, a_value);
   }
 
-  public void setBit(int m_index, int m_value) {
-    if (m_value > 0) {
-      if (m_value != 1) {
+  public void setBit(final int a_index, final int a_value) {
+    if (a_value > 0) {
+      if (a_value != 1) {
         throw new IllegalArgumentException("Only values 0 and 1 are valid!");
       }
-      setBit(m_index, true);
+      setBit(a_index, true);
     }
     else {
-      if (m_value != 0) {
+      if (a_value != 0) {
         throw new IllegalArgumentException("Only values 0 and 1 are valid!");
       }
-      setBit(m_index, false);
+      setBit(a_index, false);
     }
   }
 
-  public void setBit(int m_from, int m_to, boolean m_value) {
-    checkSubLength(m_from, m_to);
-    for (int i = m_from; i < m_to; setUnchecked(i++, m_value));
+  public void setBit(final int a_from, final int a_to, final boolean a_value) {
+    checkSubLength(a_from, a_to);
+    for (int i = a_from; i < a_to; i++) {
+      setUnchecked(i, a_value);
+    }
   }
 
-  public void setBit(int from, int to, FixedBinaryGene values) {
-    if (values.getLength() == 0) {
+  public void setBit(final int a_from, final int a_to,
+                     final FixedBinaryGene a_values) {
+    if (a_values.getLength() == 0) {
       throw new IllegalArgumentException("Length of values must be > 0");
     }
-    checkSubLength(from, to);
+    checkSubLength(a_from, a_to);
     int iV = 0;
-    for (int i = from; i <= to; i++, iV++) {
-      if (iV >= values.getLength()) {
+    for (int i = a_from; i <= a_to; i++, iV++) {
+      if (iV >= a_values.getLength()) {
         iV = 0;
       }
-      setUnchecked(i, values.getUnchecked(iV));
+      setUnchecked(i, a_values.getUnchecked(iV));
     }
   }
 
-  public FixedBinaryGene substring(int m_from, int m_to) {
-    int len = checkSubLength(m_from, m_to);
+  public FixedBinaryGene substring(final int a_from, final int a_to) {
+    int len = checkSubLength(a_from, a_to);
     FixedBinaryGene substring = new FixedBinaryGene(len);
-    for (int i = m_from; i <= m_to; i++)
-      substring.setUnchecked(i - m_from, getUnchecked(i));
+    for (int i = a_from; i <= a_to; i++) {
+      substring.setUnchecked(i - a_from, getUnchecked(i));
+    }
     return substring;
   }
 
-  public void flip(int index) {
-    checkIndex(index);
-    int segment = index / 32;
-    int offset = index % 32;
-    int mask = 0x1 << (32 - offset - 1);
+  public void flip(final int a_index) {
+    checkIndex(a_index);
+    int segment = a_index / WORD_LEN_BITS;
+    int offset = a_index % WORD_LEN_BITS;
+    int mask = 0x1 << (WORD_LEN_BITS - offset - 1);
     m_value[segment] ^= mask;
   }
 
-  protected int checkSubLength(int from, int to)
-      throws IndexOutOfBoundsException {
-    checkIndex(from);
-    checkIndex(to);
-    int sublen = to - from + 1;
+  protected int checkSubLength(final int a_from, final int a_to) {
+    checkIndex(a_from);
+    checkIndex(a_to);
+    int sublen = a_to - a_from + 1;
     if (0 >= sublen) {
       throw new IllegalArgumentException("must have 'from' <= 'to', but has "
-                                         + from + " > " + to);
+                                         + a_from + " > " + a_to);
     }
     return sublen;
   }
 
-  protected void checkIndex(int index)
-      throws IndexOutOfBoundsException {
-    if (index < 0 || index >= getLength()) {
-      throw new IndexOutOfBoundsException("index is " + index
+  protected void checkIndex(final int a_index) {
+    if (a_index < 0 || a_index >= getLength()) {
+      throw new IndexOutOfBoundsException("index is " + a_index
                                           + ", but must be in [0, "
                                           + (getLength() - 1) + "]");
     }
   }
 
-  protected boolean getUnchecked(int index) {
-    int segment = index / 32;
-    int offset = index % 32;
-    int mask = 0x1 << (32 - offset - 1);
+  protected boolean getUnchecked(final int a_index) {
+    int segment = a_index / WORD_LEN_BITS;
+    int offset = a_index % WORD_LEN_BITS;
+    int mask = 0x1 << (WORD_LEN_BITS - offset - 1);
     return 0 != (m_value[segment] & mask);
   }
 
-  public void setUnchecked(int index, boolean value) {
-    int segment = index / 32;
-    int offset = index % 32;
-    int mask = 0x1 << (32 - offset - 1);
-    if (value)
+  public void setUnchecked(final int a_index, final boolean a_value) {
+    int segment = a_index / WORD_LEN_BITS;
+    int offset = a_index % WORD_LEN_BITS;
+    int mask = 0x1 << (WORD_LEN_BITS - offset - 1);
+    if (a_value) {
       m_value[segment] |= mask;
-    else
+    }
+    else {
       m_value[segment] &= ~mask;
+    }
   }
 
-  public String getPersistentRepresentation()
-      throws UnsupportedOperationException {
+  public String getPersistentRepresentation() {
     return toString();
   }
 
@@ -239,19 +245,16 @@ public class FixedBinaryGene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
+   * prior call to the getPersistentRepresentation() method
    *
-   * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public void setValueFromPersistentRepresentation(String a_representation)
-      throws UnsupportedOperationException, UnsupportedRepresentationException {
+      throws UnsupportedRepresentationException {
     if (a_representation != null) {
       if (isValidRepresentation(a_representation)) {
         a_representation = a_representation.substring(1,
@@ -286,7 +289,7 @@ public class FixedBinaryGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  private boolean isValidRepresentation(String a_representation) {
+  private boolean isValidRepresentation(final String a_representation) {
     if (a_representation == null) {
       return false;
     }
@@ -296,7 +299,7 @@ public class FixedBinaryGene
     return true;
   }
 
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     if (a_numberGenerator == null) {
       throw new IllegalArgumentException("Random Generator must not be null!");
     }
@@ -334,7 +337,7 @@ public class FixedBinaryGene
   }
 
   /**
-   * @return the size of the gene, i.e the number of atomic elements.
+   * @return the size of the gene, i.e the number of atomic elements
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -348,28 +351,28 @@ public class FixedBinaryGene
    * element at given index
    * @param index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
-   *        than 1).
+   * than 1)
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void applyMutation(int index, double a_percentage) {
-    if (index < 0 || index >= getLength()) {
+  public void applyMutation(final int a_index, final double a_percentage) {
+    if (a_index < 0 || a_index >= getLength()) {
       throw new IllegalArgumentException(
           "Index must be between 0 and getLength() - 1");
     }
     if (a_percentage > 0) {
       // change to 1
       // ---------------
-      if (!getBit(index)) {
-        setBit(index, true);
+      if (!getBit(a_index)) {
+        setBit(a_index, true);
       }
     }
     else if (a_percentage < 0) {
       // change to 0
       // ---------------
-      if (getBit(index)) {
-        setBit(index, false);
+      if (getBit(a_index)) {
+        setBit(a_index, false);
       }
     }
   }
@@ -382,18 +385,18 @@ public class FixedBinaryGene
    * than the other one. If there is the same number of 1's the Gene with the
    * highest value (binary to int) is greater.
    *
-   * @param  other the FixedBinaryGene to be compared.
-   * @return  a negative integer, zero, or a positive integer as this object
-   *		is less than, equal to, or greater than the specified object.
+   * @param a_other the FixedBinaryGene to be compared
+   * @return a negative integer, zero, or a positive integer as this object
+   * is less than, equal to, or greater than the specified object.
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this Gene.
+   * from being compared to this Gene
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public int compareTo(Object other) {
-    FixedBinaryGene otherGene = (FixedBinaryGene) other;
+  public int compareTo(final Object a_other) {
+    FixedBinaryGene otherGene = (FixedBinaryGene) a_other;
     // First, if the other gene is null, then this is the greater gene.
     // ----------------------------------------------------------------
     if (otherGene == null) {

@@ -21,9 +21,9 @@ import org.jgap.*;
  */
 public class PopulationHistory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private List populations;
+  private List m_populations;
 
   private int m_maxSize;
 
@@ -34,8 +34,8 @@ public class PopulationHistory {
    * @author Klaus Meffert
    * @since 2.0
    */
-  public PopulationHistory(int a_maxSize) {
-    populations = new Vector();
+  public PopulationHistory(final int a_maxSize) {
+    m_populations = new Vector();
     if (a_maxSize < 0) {
       throw new IllegalArgumentException("Maximum size must be greater"
                                          + " or equal to zero!");
@@ -43,24 +43,28 @@ public class PopulationHistory {
     m_maxSize = a_maxSize;
   }
 
-  public Population getPopulation(int count) {
-    return count >= populations.size() ? null :
-        (Population) populations.get(count);
+  public Population getPopulation(final int a_count) {
+    if (a_count >= m_populations.size()) {
+      return null;
+    }
+    else {
+      return (Population) m_populations.get(a_count);
+    }
   }
 
   /**
    * Adds a population to the history. If the maximum size of this container
    * is exceeded after that then the oldest population added is removed
-   * @param pop the population to be added
+   * @param a_population the population to be added
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void addPopulation(Population pop) {
-    populations.add(0, pop);
-    int popSize = populations.size();
+  public void addPopulation(final Population a_population) {
+    m_populations.add(0, a_population);
+    int popSize = m_populations.size();
     if (m_maxSize != 0 && popSize > m_maxSize) {
-      populations.remove(popSize - 1);
+      m_populations.remove(popSize - 1);
     }
   }
 
@@ -69,30 +73,30 @@ public class PopulationHistory {
    * @since 2.0
    */
   public void removeAllPopulations() {
-    populations.removeAll(populations);
+    m_populations.removeAll(m_populations);
   }
 
   public int size() {
-    return populations.size();
+    return m_populations.size();
   }
 
   public List getPopulations() {
-    return populations;
+    return m_populations;
   }
 
   /**
    * Sets the list of populations to the list provided.
-   * @param populations list of populations to be set
+   * @param a_populations list of populations to be set
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setPopulations(List populations) {
-    this.populations = populations;
-    int popSize = populations.size();
+  public void setPopulations(final List a_populations) {
+    m_populations = a_populations;
+    int popSize = m_populations.size();
     if (m_maxSize != 0 && popSize > m_maxSize) {
       for (int i = m_maxSize; i < popSize; i++) {
-        populations.remove(m_maxSize);
+        m_populations.remove(m_maxSize);
       }
     }
   }

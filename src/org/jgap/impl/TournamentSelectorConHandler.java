@@ -8,17 +8,20 @@
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
+
 import org.jgap.*;
 import org.jgap.data.config.*;
 import java.util.ArrayList;
 
 public class TournamentSelectorConHandler
     implements ConfigurationHandler {
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-  
   // Must be the fully qualified class name
-  private final static String CONFIG_NAMESPACE = "org.jgap.impl.TournamentSelector";
+  private final static String CONFIG_NAMESPACE =
+      "org.jgap.impl.TournamentSelector";
+
+  private Configurable m_configurable;
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -37,10 +40,9 @@ public class TournamentSelectorConHandler
     /**@todo This list could be cached after the first call.*/
     /**@todo we could scan all classes in the classpath for implementing
      * the INaturalSelector interface*/
-  	ArrayList cProps = new ArrayList();
+    ArrayList cProps = new ArrayList();
     // NaturalSelectors available. This information will be renders as a JList.
     ConfigProperty cp;
-
     // The population size
     cp = new ConfigProperty();
     cp.setName("m_probability");
@@ -48,41 +50,40 @@ public class TournamentSelectorConHandler
     cProps.add(cp);
     return cProps;
   }
-  
-  
+
   /**
    * Get the namespace to be used in the config file for the Configurable
    * this ConfigurationHandler belongs to.
-   * @author Siddhartha Azad.
-   * @return The namepsace of the Configurable
+   * @return the namespace of the Configurable
+   * @author Siddhartha Azad
    * */
   public String getNS() {
-  	return CONFIG_NAMESPACE;
+    return CONFIG_NAMESPACE;
   }
-  
+
   /**
    * Method that will populate an Configurable with the properties in the
    * config file.
-   * @author Siddhartha Azad.
+   * @author Siddhartha Azad
    * */
-  public void readConfig() throws ConfigException,
-  	InvalidConfigurationException {
-  	ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
-	String value = ConfigFileReader.instance().getValue("m_probability");
-	if(value != null)
-		configurable.setConfigProperty("m_probability", value);
-	
+  public void readConfig()
+      throws ConfigException, InvalidConfigurationException {
+    ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
+    String value = ConfigFileReader.instance().getValue("m_probability");
+    if (value != null) {
+      m_configurable.setConfigProperty("m_probability", value);
+    }
   }
-  
+
   /**
    * Set the Configurable to which this ConfigurationHandler belongs.
-   * @author Siddhartha Azad.
-   * @param _configurable The Configurable to which this ConfigurationHandler
-   * belongs. 
+   * @param a_configurable the Configurable to which this ConfigurationHandler
+   * belongs to
+   *
+   * @author Siddhartha Azad
    * */
-  public void setConfigurable(Configurable _configurable) {
-  	configurable = _configurable;
+  public void setConfigurable(Configurable a_configurable) {
+    m_configurable = a_configurable;
   }
-  
-  Configurable configurable;
+
 }

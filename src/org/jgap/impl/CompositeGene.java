@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   /**
    * This field separates gene class name from
@@ -89,7 +89,7 @@ public class CompositeGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public CompositeGene(Gene a_geneTypeAllowed) {
+  public CompositeGene(final Gene a_geneTypeAllowed) {
     m_genes = new Vector();
     if (a_geneTypeAllowed != null) {
       m_geneTypeAllowed = a_geneTypeAllowed;
@@ -100,7 +100,7 @@ public class CompositeGene
    * Adds a gene to the CompositeGene
    * @param a_gene the gene to add
    */
-  public void addGene(Gene a_gene) {
+  public void addGene(final Gene a_gene) {
     addGene(a_gene, false);
   }
 
@@ -126,20 +126,20 @@ public class CompositeGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void addGene(Gene a_gene, boolean a_strict) {
+  public void addGene(final Gene a_gene, final boolean a_strict) {
     if ( a_gene == null) {
       throw new IllegalArgumentException("Gene instance must not be null!");
     }
     if (m_geneTypeAllowed != null) {
       if (!a_gene.getClass().getName().equals(m_geneTypeAllowed.getClass().
                                               getName())) {
-        throw new IllegalArgumentException("Adding a " +
-                                           a_gene.getClass().getName()
+        throw new IllegalArgumentException("Adding a "
+                                           + a_gene.getClass().getName()
                                            + " has been forbidden!");
       }
     }
-    //check if gene already exists
-    //----------------------------
+    // Check if gene already exists.
+    // -----------------------------
     boolean containsGene;
     if (!a_strict) {
       containsGene = containsGeneByIdentity(a_gene);
@@ -158,20 +158,20 @@ public class CompositeGene
    * Removes the given gene from the collection of genes. The gene is only
    * removed if an object of the same identity is contained. The equals
    * method will not be used here intentionally
-   * @param gene the gene to be removed
+   * @param a_gene the gene to be removed
    * @return true: given gene found and removed
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public boolean removeGeneByIdentity(Gene gene) {
+  public boolean removeGeneByIdentity(final Gene a_gene) {
     int size = size();
     if (size < 1) {
       return false;
     }
     else {
       for (int i = 0; i < size; i++) {
-        if (geneAt(i) == gene) {
+        if (geneAt(i) == a_gene) {
           m_genes.remove(i);
           return true;
         }
@@ -184,14 +184,14 @@ public class CompositeGene
    * Removes the given gene from the collection of genes. The gene is
    * removed if another gene exists that is equal to the given gene in respect
    * to the equals method of the gene
-   * @param gene the gene to be removed
+   * @param a_gene the gene to be removed
    * @return true: given gene found and removed
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public boolean removeGene(Gene gene) {
-    return m_genes.remove(gene);
+  public boolean removeGene(final Gene a_gene) {
+    return m_genes.remove(a_gene);
   }
 
   /**
@@ -220,7 +220,7 @@ public class CompositeGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     if (a_numberGenerator == null) {
       throw new IllegalArgumentException("Random generatoe must not be null!");
     }

@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -38,12 +38,12 @@ public class AveragingCrossoverOperator
   /**
    * The current crossover rate used by this crossover operator.
    */
-  protected int m_crossoverRate;
+  private int m_crossoverRate;
 
   /**
    * Cache for alreadycrandomized loci for crossing over
    */
-  private Map loci;
+  private Map m_loci;
 
   /**
    * Calculator for dynamically determining the crossover rate. If set to
@@ -52,7 +52,7 @@ public class AveragingCrossoverOperator
   private IUniversalRateCalculator m_crossoverRateCalc;
 
   private void init() {
-    loci = new Hashtable();
+    m_loci = new Hashtable();
   }
 
   /**
@@ -69,14 +69,15 @@ public class AveragingCrossoverOperator
   /**
    * Using a different random generator for randomizing the loci for
    * crossing over than for selecting the genes to be crossed over
-   * @param generatorForAveraging RandomGenerator
+   * @param a_generatorForAveraging RandomGenerator to use
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public AveragingCrossoverOperator(RandomGenerator generatorForAveraging) {
+  public AveragingCrossoverOperator(final RandomGenerator
+                                    a_generatorForAveraging) {
     init();
-    m_crossoverGenerator = generatorForAveraging;
+    m_crossoverGenerator = a_generatorForAveraging;
     m_crossoverRate = 2;
   }
 
@@ -90,7 +91,7 @@ public class AveragingCrossoverOperator
    * @author Klaus Meffert (copied from CrossoverOperator)
    * @since 2.0
    */
-  public AveragingCrossoverOperator(IUniversalRateCalculator
+  public AveragingCrossoverOperator(final IUniversalRateCalculator
                                     a_crossoverRateCalculator) {
     this();
     setCrossoverRateCalc(a_crossoverRateCalculator);
@@ -103,7 +104,7 @@ public class AveragingCrossoverOperator
    * @author Klaus Meffert
    * @since 2.0
    */
-  private void setCrossoverRateCalc(IUniversalRateCalculator
+  private void setCrossoverRateCalc(final IUniversalRateCalculator
                                     a_crossoverRateCalculator) {
     m_crossoverRateCalc = a_crossoverRateCalculator;
   }
@@ -134,7 +135,8 @@ public class AveragingCrossoverOperator
     else {
       numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator
+        = Genotype.getConfiguration().getRandomGenerator();
     if (m_crossoverGenerator == null) {
       m_crossoverGenerator = generator;
     }
@@ -192,19 +194,20 @@ public class AveragingCrossoverOperator
   /**
    * Returns the crossover location for a given index.
    * For each index the crossover locatio  is the same, therefor it is cached!
-   * @param generator to generate random values the first time
-   * @param index the index of the crossover operation
-   * @param max upper boundary for random generator
+   * @param a_generator to generate random values the first time
+   * @param a_index the index of the crossover operation
+   * @param a_max upper boundary for random generator
    * @return crossover location for a given index
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  protected int getLocus(RandomGenerator generator, int index, int max) {
-    Integer locus = (Integer) loci.get(new Integer(index));
+  protected int getLocus(final RandomGenerator a_generator, final int a_index,
+                         final int a_max) {
+    Integer locus = (Integer) m_loci.get(new Integer(a_index));
     if (locus == null) {
-      locus = new Integer(generator.nextInt(max));
-      loci.put(new Integer(index), locus);
+      locus = new Integer(a_generator.nextInt(a_max));
+      m_loci.put(new Integer(a_index), locus);
     }
     return locus.intValue();
   }
