@@ -16,11 +16,15 @@
   (--> same name as in class CompositeGene)
 * Made IGeneConstraintChecker serializable
 * Made IUniversalRateCalculator serializable
-* Took care of many coding conventions (Checkstyle,
-  Findbugs)
-* Extended javadoc
+* Made field m_crossoverRate in class CrossoverOperator
+  private (was protected)
+* Made fields m_upperBounds and m_lowerBounds in class
+  CrossoverOperator private (they were protected)
+* Extensively took care of coding conventions
+  (Checkstyle, Findbugs)
+* Extensively fixed code smells
+* Extended and fixed javadoc
 * Removed some unneeded local variables
-* Fixed many code smells
 * Renamed class instantiableSupergene in 
   class SupergenePersistentRepresentationTest
   to InstantiableSupergene
