@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  * */
 abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Gene index for the dimes gene
@@ -180,43 +180,10 @@ abstract class AbstractSupergeneTest {
         S += 1000;
       }
     }
-    if (REPORT_ENABLED)
+    if (REPORT_ENABLED) {
       System.out.println("Sum of errors " + S);
+    }
     return S;
-  }
-
-  /**
-   * Main method (however non-static!). A single command-line argument is
-   * expected, which is the amount of change to create (in other words, 75
-   * would be equal to 75 cents).
-   *
-   * @param args the command-line arguments.
-   */
-  public void _main(String[] args) {
-    if (args.length != 1) {
-      System.out.println("Syntax: MakeChange <amount>");
-    }
-    else {
-      try {
-        int amount = Integer.parseInt(args[0]);
-        if (amount < 1 || amount > 99) {
-          System.out.println(
-              "The <amount> argument must be between 1 and 99.");
-        }
-        else {
-          try {
-            makeChangeForAmount(amount);
-          }
-          catch (Exception e) {
-            e.printStackTrace();
-          }
-        }
-      }
-      catch (NumberFormatException e) {
-        System.out.println(
-            "The <amount> argument must be a valid integer value");
-      }
-    }
   }
 
   /**
