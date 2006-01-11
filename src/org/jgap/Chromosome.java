@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -422,7 +422,9 @@ public class Chromosome
    * Retrieves the fitness value of this Chromosome, as determined by the
    * active fitness function. If a bulk fitness function is in use and
    * has not yet assigned a fitness value to this Chromosome, then -1 is
-   * returned.
+   * returned.<p>
+   * Attention: should not be called from toString() as the fitness value would
+   * be computed if it was initial!
    *
    * @return a positive double value representing the fitness of this
    * Chromosome, or -1 if a bulk fitness function is in use and has not yet
@@ -491,7 +493,10 @@ public class Chromosome
   public String toString() {
     StringBuffer representation = new StringBuffer();
     representation.append(S_SIZE + ":" + size());
-    representation.append(", " + S_FITNESS_VALUE + ":" + getFitnessValue());
+    // Don't use getFitnessValue() here as it would then be initialized anyway!
+    // Also see bug
+    // ------------------------------------------------------------------------
+    representation.append(", " + S_FITNESS_VALUE + ":" + m_fitnessValue);
     representation.append(", " + S_ALLELES + ":");
     representation.append("[");
     // Append the representations of each of the gene Alleles.
