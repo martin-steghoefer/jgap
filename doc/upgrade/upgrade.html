@@ -219,6 +219,12 @@ accesses the configuration via Genotype.getConfiguration, the configuration must
 be set before the call to setAllele, applyMutation and possibly other methods. However, this should be good
 practice!&nbsp;</p>
 
+<h4 class="subHeader">Since 2.6: Several fields private instead of protected</h4>
+<p>These fields are <a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/CrossoverOperator.html"> CrossoverOperator</a>.m_crossoverRate,
+<a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/DoubleGene.html">DoubleGene</a>.m_upperBounds and
+<a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/DoubleGene.html">DoubleGene</a>.m_lowerBounds.
+Use setters resp. constructors instead!</p>
+
 <h2 class="docTitle">Final remarks</h2>
 
 <p>It should be quite straight forward upgrading from version 1.1 to 2.0. With
