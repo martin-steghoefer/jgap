@@ -22,11 +22,36 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
+
+  private static int cleanedUp = 0;
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGeneTest.class);
     return suite;
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testCompareTo_4()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
+    CompositeGene gene1 = new CompositeGene();
+    Gene newGene1 = new IntegerGene(3, 5);
+    newGene1.setAllele(new Integer(4));
+    Gene newGene2 = new IntegerGene(3, 5);
+    newGene2.setAllele(new Integer(2));
+    gene1.addGene(newGene1, false);
+    gene1.addGene(newGene2, false);
+    CompositeGene gene2 = new CompositeGene();
+    Gene newGene3 = new IntegerGene(3, 5);
+    newGene3.setAllele(new Integer(1));
+    newGene3.setAllele(new Integer(3));
+    gene2.addGene(newGene3, false);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals( -1, gene2.compareTo(gene1));
   }
 
   /**
@@ -167,8 +192,8 @@ public class CompositeGeneTest
     Gene newGene2 = new IntegerGene();
     newGene2.setAllele(new Integer(23456));
     gene.addGene(newGene2, false);
-    assertEquals("CompositeGene=(" + newGene1.toString() + gene.GENE_DELIMITER +
-                 newGene2.toString() + ")", gene.toString());
+    assertEquals("CompositeGene=(" + newGene1.toString() + gene.GENE_DELIMITER
+                 + newGene2.toString() + ")", gene.toString());
   }
 
   /**
@@ -368,8 +393,7 @@ public class CompositeGeneTest
     gene2.setAllele(new Double(1.0d));
     gene.addGene(gene2);
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -389,8 +413,7 @@ public class CompositeGeneTest
     gene2.setAllele(new Double(1.0d));
     gene.addGene(gene2);
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return true;
       }
     });
@@ -542,13 +565,12 @@ public class CompositeGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentPresentation_3()
-       {
+  public void testPersistentPresentation_3() {
     CompositeGene gene1 = new CompositeGene();
     try {
-      gene1.setValueFromPersistentRepresentation("1" +
-                                                 CompositeGene.GENE_DELIMITER +
-                                                 "2");
+      gene1.setValueFromPersistentRepresentation("1"
+                                                 + CompositeGene.GENE_DELIMITER
+                                                 + "2");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -563,9 +585,9 @@ public class CompositeGeneTest
   public void testPersistentPresentation_4() {
     CompositeGene gene1 = new CompositeGene();
     try {
-      gene1.setValueFromPersistentRepresentation("<1" +
-                                                 CompositeGene.GENE_DELIMITER +
-                                                 "2>");
+      gene1.setValueFromPersistentRepresentation("<1"
+                                                 + CompositeGene.GENE_DELIMITER
+                                                 + "2>");
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
@@ -614,8 +636,6 @@ public class CompositeGeneTest
     assertEquals(0, gene1.size());
   }
 
-  static int cleanedUp = 0;
-
   /**
    * @author Klaus Meffert
    * @since 2.2
@@ -657,8 +677,7 @@ public class CompositeGeneTest
     CompositeGene gene = new CompositeGene();
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue)
-          throws RuntimeException {
+      public boolean verify(Gene a_gene, Object a_alleleValue) {
         return false;
       }
     });
@@ -806,28 +825,29 @@ public class CompositeGeneTest
     assertEquals(1, gene2.compareTo(gene1));
   }
 
-  /**
-   * @author Klaus Meffert
-   * @since 2.4
-   */
-  public void testCompareTo_4() throws Exception{
-    Genotype.setConfiguration(new ConfigurationForTest());
-    CompositeGene gene1 = new CompositeGene();
-    Gene newGene1 = new IntegerGene(3, 5);
-    newGene1.setAllele(new Integer(1));
-    Gene newGene2 = new IntegerGene(3, 5);
-    newGene2.setAllele(new Integer(2));
-    gene1.addGene(newGene1, false);
-    gene1.addGene(newGene2, false);
-    CompositeGene gene2 = new CompositeGene();
-    Gene newGene3 = new IntegerGene(3, 5);
-    newGene3.setAllele(new Integer(1));
-    newGene3.setAllele(new Integer(-2));
-    gene2.addGene(newGene3, false);
-    assertEquals(1, gene1.compareTo(gene2));
-    assertEquals(-1, gene2.compareTo(gene1));
-  }
-
+//  /**
+//   * @author Klaus Meffert
+//   * @since 2.4
+//   */
+//  public void testCompareTo_4()
+//      throws Exception {
+//    Genotype.setConfiguration(new ConfigurationForTest());
+//    CompositeGene gene1 = new CompositeGene();
+//    Gene newGene1 = new IntegerGene(3, 5);
+//    newGene1.setAllele(new Integer(1));
+//    Gene newGene2 = new IntegerGene(3, 5);
+//    newGene2.setAllele(new Integer(2));
+//    gene1.addGene(newGene1, false);
+//    gene1.addGene(newGene2, false);
+//    CompositeGene gene2 = new CompositeGene();
+//    Gene newGene3 = new IntegerGene(3, 5);
+//    newGene3.setAllele(new Integer(1));
+//    newGene3.setAllele(new Integer( -2));
+//    gene2.addGene(newGene3, false);
+//    assertEquals(1, gene1.compareTo(gene2));
+//    assertEquals( -1, gene2.compareTo(gene1));
+//  }
+//
   /**
    * Using application data
    *
@@ -863,8 +883,7 @@ public class CompositeGeneTest
   }
 
   class GeneConstraintChecker implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue)
-        throws RuntimeException {
+    public boolean verify(Gene a_gene, Object a_alleleValue) {
       return true;
     }
   }
