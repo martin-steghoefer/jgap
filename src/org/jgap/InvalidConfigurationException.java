@@ -23,7 +23,7 @@ package org.jgap;
 public class InvalidConfigurationException
     extends Exception {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Constructs a new InvalidConfigurationException instance with the
@@ -35,7 +35,7 @@ public class InvalidConfigurationException
    * @author Neil Rotstan
    * @since 1.0
    */
-  public InvalidConfigurationException(String a_message) {
+  public InvalidConfigurationException(final String a_message) {
     super(a_message);
   }
 }

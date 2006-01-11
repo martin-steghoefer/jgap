@@ -23,41 +23,44 @@ import javax.xml.parsers.*;
 public class XMLDocumentBuilder
     extends DocumentBuilderBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
-  protected void setAttribute(Object xmlElement, String key, String value) {
-    ( (Element) xmlElement).setAttribute(key, value);
+  protected void setAttribute(final Object a_xmlElement, final String a_key,
+                              final String a_value) {
+    ( (Element) a_xmlElement).setAttribute(a_key, a_value);
   }
 
-  protected Object documentAppendChild(Object xmlDocument, Object element) {
-    return ( (Document) xmlDocument).appendChild( (Element) element);
+  protected Object documentAppendChild(final Object a_xmlDocument,
+                                       final Object a_element) {
+    return ( (Document) a_xmlDocument).appendChild( (Element) a_element);
   }
 
-  protected Object elementAppendChild(Object xmlElement, Object element) {
-    return ( (Element) xmlElement).appendChild( (Element) element);
+  protected Object elementAppendChild(final Object a_xmlElement,
+                                      final Object a_element) {
+    return ( (Element) a_xmlElement).appendChild( (Element) a_element);
   }
 
-  protected Object createElement(Object doc, Object xmlElement, String tagName) {
-    return ( (Document) doc).createElement(tagName);
+  protected Object createElement(final Object a_doc, final Object a_xmlElement,
+                                 final String a_tagName) {
+    return ( (Document) a_doc).createElement(a_tagName);
   }
 
   /**
    * Convenience method to build an XML document from a generic input structure
    * (of type IDataCreators)
    * @param a_document IDataCreators the input structure holding the data to
-   *   be represented as XML document
+   * be represented as XML document
    * @throws Exception
    * @return Object the XML document
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Object buildDocument(IDataCreators a_document)
+  public Object buildDocument(final IDataCreators a_document)
       throws Exception {
     DocumentBuilder m_documentCreator = DocumentBuilderFactory.newInstance().
         newDocumentBuilder();
     Document xmlDoc = m_documentCreator.newDocument();
-
     return super.buildDocument(a_document, xmlDoc);
   }
 }

@@ -17,10 +17,17 @@ import java.net.*;
  * @author Klaus Meffert
  * @since 2.4
  */
-public class NetworkKit {
+public final class NetworkKit {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  /**
+   * Private constructor because it's  utility class
+   */
+  private NetworkKit() {
+
+  }
 
   /**
    * @return IP address string in textual presentation

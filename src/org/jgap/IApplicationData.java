@@ -22,7 +22,7 @@ package org.jgap;
 public interface IApplicationData extends Comparable, Cloneable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  public Object clone() throws CloneNotSupportedException;
+  Object clone() throws CloneNotSupportedException;
 }

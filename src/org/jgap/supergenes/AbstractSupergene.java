@@ -29,7 +29,7 @@ import org.jgap.*;
 public abstract class AbstractSupergene extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * This field separates gene class name from
@@ -61,6 +61,9 @@ public abstract class AbstractSupergene extends BaseGene
   /** Holds the genes of this supergene. */
   private Gene[] m_genes;
 
+  /** Set of supergene allele values that cannot mutate. */
+  private static Set[] m_immutable = new Set[1];
+
   /**
    * @return the array of genes - components of this supergene. The supergene
    * components may be supergenes itself
@@ -81,14 +84,14 @@ public abstract class AbstractSupergene extends BaseGene
    * @param a_index the index of the gene value to be returned
    * @return the Gene at the given index
    */
-  public final Gene geneAt(int a_index) {
+  public final Gene geneAt(final int a_index) {
     return m_genes[a_index];
   };
 
   /** Constructs abstract supergene with the given gene list.
    * @param a_genes array of genes for this Supergene
    */
-  public AbstractSupergene(Gene[] a_genes) {
+  public AbstractSupergene(final Gene[] a_genes) {
     m_genes = a_genes;
   }
 
@@ -129,9 +132,8 @@ public abstract class AbstractSupergene extends BaseGene
    * several sub-supergenes.
    *
    * This method is only called if you have not set any alternative
-   * validator (including <i>null</i>.
+   * validator (including <i>null</i>).
    *
-   * </p>
    * @param a_case ignored here
    * @param a_forSupergene ignored here
    *
@@ -139,10 +141,10 @@ public abstract class AbstractSupergene extends BaseGene
    * @throws Error by default. If you do not set external validator,
    * you should always override this method
    */
-  public boolean isValid(Gene[] a_case, Supergene a_forSupergene) {
-    throw new Error("For " + getClass().getName() + ", override " +
-                    " isValid (Gene[], Supergene) or set an"
-                    +" external validator.");
+  public boolean isValid(final Gene[] a_case, final Supergene a_forSupergene) {
+    throw new Error("For " + getClass().getName() + ", override "
+                    + " isValid (Gene[], Supergene) or set an"
+                    + " external validator.");
   }
 
   /**
@@ -165,15 +167,16 @@ public abstract class AbstractSupergene extends BaseGene
     try {
       AbstractSupergene age =
           (AbstractSupergene) getClass().newInstance();
-      if (m_validator != this)
+      if (m_validator != this) {
         age.setValidator(m_validator);
+      }
       age.m_genes = g;
       return age;
     }
     catch (Exception ex) {
       ex.printStackTrace();
-      throw new Error("This should not happen. Is the parameterless " +
-                      "constructor provided fo " + getClass().getName() + "?");
+      throw new Error("This should not happen. Is the parameterless "
+                      + "constructor provided fo " + getClass().getName() + "?");
     }
   }
 
@@ -184,15 +187,16 @@ public abstract class AbstractSupergene extends BaseGene
    * gene, indexed by <code>index</code>.
    * @see org.jgap.supergenes.abstractSupergene.isValid()
    */
-  public void applyMutation(int a_index, double a_percentage) {
+  public void applyMutation(final int a_index, final double a_percentage) {
     // Return immediately the current value is found in
     // the list of immutable alleles for this position.
     // ---------------------------------------------------
     if (a_index < m_immutable.length) {
       if (m_immutable[a_index] != null) {
         synchronized (m_immutable) {
-          if (m_immutable[a_index].contains(this))
+          if (m_immutable[a_index].contains(this)) {
             return;
+          }
         }
       }
     }
@@ -202,7 +206,9 @@ public abstract class AbstractSupergene extends BaseGene
     Object backup = m_genes[a_index].getAllele();
     for (int i = 0; i < MAX_RETRIES; i++) {
       m_genes[a_index].applyMutation(0, a_percentage);
-      if (isValid())return;
+      if (isValid()) {
+        return;
+      }
     }
     // restore the gene as it was
     m_genes[a_index].setAllele(backup);
@@ -212,7 +218,7 @@ public abstract class AbstractSupergene extends BaseGene
   /** @todo: Implement protection against overgrowing of this
    * data block.
    */
-  private void markImmutable(int a_index) {
+  private void markImmutable(final int a_index) {
     synchronized (m_immutable) {
       if (m_immutable.length <= a_index) {
         // Extend the array (double length).
@@ -230,9 +236,6 @@ public abstract class AbstractSupergene extends BaseGene
     }
     ;
   }
-
-  /** Set of supergene allele values that cannot mutate. */
-  private static Set[] m_immutable = new Set[1];
 
   /**
    * Discards all internal caches, ensuring correct repetetive tests
@@ -326,26 +329,15 @@ public abstract class AbstractSupergene extends BaseGene
       v_representation = v.getPersistent();
     }
     b.append(GENE_DELIMITER_HEADING);
-    b.append(
-        encode
-        (
-        validator +
-        GENE_DELIMITER +
-        v_representation)
-        );
+    b.append(encode(validator + GENE_DELIMITER + v_representation));
     b.append(GENE_DELIMITER_CLOSING);
     // Write genes:
     Gene gene;
     for (int i = 0; i < m_genes.length; i++) {
       gene = m_genes[i];
       b.append(GENE_DELIMITER_HEADING);
-      b.append(
-          encode
-          (
-          gene.getClass().getName() +
-          GENE_DELIMITER +
-          gene.getPersistentRepresentation())
-          );
+      b.append(encode(gene.getClass().getName() + GENE_DELIMITER +
+                      gene.getPersistentRepresentation()));
       b.append(GENE_DELIMITER_CLOSING);
     }
     return b.toString();

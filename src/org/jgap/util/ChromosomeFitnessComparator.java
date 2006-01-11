@@ -15,9 +15,9 @@ import org.jgap.Chromosome;
 /**
  * Simple comparator to allow the sorting of Chromosome lists.
  * Usage example:
- * 		Collections.sort(
- * 			population.getPopulation().getChromosomes(),
- * 			new ChromosomeFitnessComparator() );
+ *   Collections.sort(
+ *     population.getPopulation().getChromosomes(),
+ *     new ChromosomeFitnessComparator() );
  *
  * @author Charles Kevin Hill
  * @since 2.4
@@ -25,12 +25,12 @@ import org.jgap.Chromosome;
 public class ChromosomeFitnessComparator
     implements Comparator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /* (non-Javadoc)
    * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
    */
-  public int compare(Object a_chromosome1, Object a_chromosome2) {
+  public int compare(final Object a_chromosome1, final Object a_chromosome2) {
     if (a_chromosome1 == null) {
       return -1;
     }
@@ -39,7 +39,7 @@ public class ChromosomeFitnessComparator
     }
     Chromosome chromosomeOne = (Chromosome) a_chromosome1;
     Chromosome chromosomeTwo = (Chromosome) a_chromosome2;
-    return (int) (chromosomeTwo.getFitnessValue() -
-                  chromosomeOne.getFitnessValue());
+    return (int) (chromosomeTwo.getFitnessValue()
+                  - chromosomeOne.getFitnessValue());
   }
 }

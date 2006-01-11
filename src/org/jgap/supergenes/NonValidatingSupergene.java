@@ -18,26 +18,25 @@ import org.jgap.Gene;
  * @author Audrius Meskauskas
  * @version 1.0
  */
-public class NonValidatingSupergene extends AbstractSupergene {
-
+public class NonValidatingSupergene
+    extends AbstractSupergene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-    public NonValidatingSupergene() {}
-    public NonValidatingSupergene (Gene [] a_genes)
-     {
-         super (a_genes);
-     }
+  public NonValidatingSupergene() {
+  }
 
-    /** Always true */
-    public final boolean isValid(Gene[] a, Supergene a_for) {
-        return true;
-    }
+  public NonValidatingSupergene(final Gene[] a_genes) {
+    super(a_genes);
+  }
 
-    /** Always true */
-    public final boolean isValid() {
-        return true;
-    }
-
-
+  /**
+   * Always returns true
+   * @param a_gene ignored
+   * @param a_for Supergene ignored
+   * @return always true
+   */
+  public final boolean isValid(final Gene[] a_gene, final Supergene a_for) {
+    return true;
+  }
 }

@@ -23,7 +23,7 @@ import org.jgap.data.config.*;
 public abstract class NaturalSelector
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -37,18 +37,20 @@ public abstract class NaturalSelector
 
   // Default implementation for the Configurable Interface
   /**
-   * Default implementation of this method. To be called only for derived class objects.
+   * Default implementation of this method. To be called only for derived
+   * class objects.
    * @return a concrete ConfigurationHandler
    *
    * @author Siddhartha Azad
    * @since 2.4
    * */
   public ConfigurationHandler getConfigurationHandler() throws ConfigException {
-  	throw new ConfigException("No ConfigurationHandler present for this class");
+    throw new ConfigException("No ConfigurationHandler present for this class");
   }
 
   /**
-   * Default implementation of this method. To be called only for derived class objects.
+   * Default implementation of this method. To be called only for derived
+   * class objects.
    * @param name The name of the property.
    * @param value The value of the property.
    *
@@ -57,11 +59,12 @@ public abstract class NaturalSelector
    * */
   public void setConfigProperty(String name, String value)
       throws ConfigException, InvalidConfigurationException {
-  	throw new ConfigException("No properties present to be configured.");
+    throw new ConfigException("No properties present to be configured.");
   }
 
   /**
-   * Default implementation of this method. To be called only for derived class objects.
+   * Default implementation of this method. To be called only for derived
+   * class objects.
    * @param name The name of the property.
    * @param values The different values of the property.
    *
@@ -70,11 +73,9 @@ public abstract class NaturalSelector
    * */
   public void setConfigMultiProperty(String name, ArrayList values)
       throws ConfigException, InvalidConfigurationException {
-  	throw new ConfigException("No properties present to be configured.");
+    throw new ConfigException("No properties present to be configured.");
   }
-  
-  
-  
+
   /**
    * Comparator regarding only the fitness value. Best fitness value will
    * be on first position of resulting sorted list

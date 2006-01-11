@@ -27,7 +27,7 @@ import org.jgap.*;
 public abstract class TruthTableFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Map m_truthTable;
 
@@ -59,12 +59,12 @@ public abstract class TruthTableFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public TruthTableFitnessFunction(Map a_truthTable) {
+  public TruthTableFitnessFunction(final Map a_truthTable) {
     this();
     setTruthTable(a_truthTable);
   }
 
-  public void setTruthTable(Map a_truthTable) {
+  public void setTruthTable(final Map a_truthTable) {
     m_truthTable = a_truthTable;
   }
 
@@ -93,7 +93,7 @@ public abstract class TruthTableFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public double calcFitness(Map a_actualInputOutput) {
+  public double calcFitness(final Map a_actualInputOutput) {
     // Determine delta values of all function values and add up their squares
     double outputValueGiven, outputValueWanted;
     Double inputValueWanted;

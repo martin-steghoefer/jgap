@@ -24,7 +24,7 @@ package org.jgap;
 public interface INaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
+  final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Select a given number of Chromosomes from the pool that will move on
@@ -36,7 +36,8 @@ public interface INaturalSelector {
    * guaranteed.
    *
    * @param a_howManyToSelect The number of Chromosomes to select.
-   * @param a_from_population the population the Chromosomes will be selected from.
+   * @param a_from_population the population the Chromosomes will be
+   * selected from.
    * @param a_to_population the population the Chromosomes will be added to.
    *
    * @author Neil Rotstan

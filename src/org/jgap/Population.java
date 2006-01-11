@@ -11,7 +11,6 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-import org.jgap.impl.*;
 import org.jgap.util.*;
 
 /**
@@ -24,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.27 $";
+  private static final String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -50,7 +49,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(Chromosome[] a_chromosomes) {
+  public Population(final Chromosome[] a_chromosomes) {
     this(a_chromosomes.length);
     for (int i = 0; i < a_chromosomes.length; i++) {
       m_chromosomes.add(a_chromosomes[i]);
@@ -66,7 +65,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(int a_size) {
+  public Population(final int a_size) {
     m_chromosomes = new ArrayList(a_size);
   }
 
@@ -88,7 +87,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void addChromosome(Chromosome a_toAdd) {
+  public void addChromosome(final Chromosome a_toAdd) {
     if (a_toAdd != null) {
       m_chromosomes.add(a_toAdd);
       setChanged(true);
@@ -104,7 +103,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void addChromosomes(Population a_population) {
+  public void addChromosomes(final Population a_population) {
     if (a_population != null) {
       m_chromosomes.addAll(a_population.getChromosomes());
       // The following would do the same:
@@ -126,7 +125,7 @@ public class Population
    *
    * @author Klaus Meffert
    */
-  public void setChromosomes(List a_chromosomes) {
+  public void setChromosomes(final List a_chromosomes) {
     m_chromosomes = a_chromosomes;
     setChanged(true);
   }
@@ -139,7 +138,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setChromosome(int a_index, Chromosome a_chromosome) {
+  public void setChromosome(final int a_index, final Chromosome a_chromosome) {
     m_chromosomes.set(a_index, a_chromosome);
     setChanged(true);
   }
@@ -162,7 +161,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Chromosome getChromosome(int a_index) {
+  public Chromosome getChromosome(final int a_index) {
     return (Chromosome) m_chromosomes.get(a_index);
   }
 
@@ -239,7 +238,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected void setChanged(boolean a_changed) {
+  protected void setChanged(final boolean a_changed) {
     m_changed = a_changed;
   }
 
@@ -251,7 +250,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.1
    */
-  public boolean contains(Chromosome a_chromosome) {
+  public boolean contains(final Chromosome a_chromosome) {
     return m_chromosomes.contains(a_chromosome);
   }
 
@@ -266,7 +265,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.4
    */
-  Chromosome removeChromosome(int a_index) {
+  Chromosome removeChromosome(final int a_index) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Index must be within bounds!");
     }
@@ -284,10 +283,10 @@ public class Population
    * @author Charles Kevin Hill
    * @since 2.4
    */
-  public List determineFittestChromosomes(int a_numberOfChromosomes) {
-    a_numberOfChromosomes = Math.min(a_numberOfChromosomes,
+  public List determineFittestChromosomes(final int a_numberOfChromosomes) {
+    int numberOfChromosomes = Math.min(a_numberOfChromosomes,
                                      getChromosomes().size());
-    if (a_numberOfChromosomes <= 0) {
+    if (numberOfChromosomes <= 0) {
       return null;
     }
     if (!m_changed) {
@@ -309,7 +308,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.3
    */
-  public List getGenome(boolean a_resolveCompositeGenes) {
+  public List getGenome(final boolean a_resolveCompositeGenes) {
     List result = new Vector();
     List chroms = getChromosomes();
     int len = chroms.size();
@@ -340,7 +339,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.3
    */
-  private void addCompositeGene(final List a_result, Gene a_gene) {
+  private void addCompositeGene(final List a_result, final Gene a_gene) {
     if (a_gene instanceof ICompositeGene) {
       int len = a_gene.size();
       for (int i = 0; i < len; i++) {
@@ -360,7 +359,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.3
    */
-  private void addAtomicGene(final List a_result, Gene a_gene) {
+  private void addAtomicGene(final List a_result, final Gene a_gene) {
     a_result.add(a_gene);
   }
 }

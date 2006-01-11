@@ -44,7 +44,7 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private int m_maxEvolution = 128;
 
@@ -75,7 +75,7 @@ public abstract class Salesman implements java.io.Serializable {
    * start offset with setStartOffset( ).  Other genes will be shuffled to
    * create the initial random population.
    *
-   * @param initial_data the same object as was passed to findOptimalPath.
+   * @param a_initial_data the same object as was passed to findOptimalPath.
    * It can be used to specify the task more precisely if the class is
    * used for solving multiple tasks
    * @return a sample chromosome
@@ -83,12 +83,12 @@ public abstract class Salesman implements java.io.Serializable {
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public abstract Chromosome createSampleChromosome(Object initial_data);
+  public abstract Chromosome createSampleChromosome(Object a_initial_data);
 
   /**
    * Return the fitness function to use.
    *
-   * @param initial_data the same object as was passed to findOptimalPath.
+   * @param a_initial_data the same object as was passed to findOptimalPath.
    * It can be used to specify the task more precisely if the class is
    * used for solving multiple tasks
    * @return an applicable fitness function
@@ -96,7 +96,7 @@ public abstract class Salesman implements java.io.Serializable {
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public FitnessFunction createFitnessFunction(Object initial_data) {
+  public FitnessFunction createFitnessFunction(final Object a_initial_data) {
     return new SalesmanFitnessFunction(this);
   }
 
@@ -106,7 +106,7 @@ public abstract class Salesman implements java.io.Serializable {
    * chromosoms invalid in this task. The special operators
    * SwappingMutationOperator and GreedyCrossober should be used instead.
    *
-   * @param initial_data the same object as was passed to findOptimalPath.
+   * @param a_initial_data the same object as was passed to findOptimalPath.
    * It can be used to specify the task more precisely if the class is
    * used for solving multiple tasks
    * @return created configuration
@@ -114,7 +114,7 @@ public abstract class Salesman implements java.io.Serializable {
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public Configuration createConfiguration(Object initial_data) {
+  public Configuration createConfiguration(final Object a_initial_data) {
     try {
       // This is copied from DefaultConfiguration.
       // -----------------------------------------
@@ -136,9 +136,9 @@ public abstract class Salesman implements java.io.Serializable {
     }
     catch (InvalidConfigurationException e) {
       throw new RuntimeException(
-          "Fatal error: DefaultConfiguration class could not use its " +
-          "own stock configuration values. This should never happen. " +
-          "Please report this as a bug to the JGAP team.");
+          "Fatal error: DefaultConfiguration class could not use its "
+          + "own stock configuration values. This should never happen. "
+          + "Please report this as a bug to the JGAP team.");
     }
   }
 
@@ -157,8 +157,8 @@ public abstract class Salesman implements java.io.Serializable {
     return m_acceptableCost;
   }
 
-  public void setAcceptableCost(int an_acceptableCost) {
-    m_acceptableCost = an_acceptableCost;
+  public void setAcceptableCost(final int a_acceptableCost) {
+    m_acceptableCost = a_acceptableCost;
   }
 
   /**
@@ -178,7 +178,7 @@ public abstract class Salesman implements java.io.Serializable {
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public void setMaxEvolution(int a_maxEvolution) {
+  public void setMaxEvolution(final int a_maxEvolution) {
     m_maxEvolution = a_maxEvolution;
   }
 
@@ -198,7 +198,7 @@ public abstract class Salesman implements java.io.Serializable {
    *
    * @since 2.0
    */
-  public void setPopulationSize(int a_populationSize) {
+  public void setPopulationSize(final int a_populationSize) {
     m_populationSize = a_populationSize;
   }
 
@@ -217,7 +217,7 @@ public abstract class Salesman implements java.io.Serializable {
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public Chromosome findOptimalPath(Object a_initial_data)
+  public Chromosome findOptimalPath(final Object a_initial_data)
       throws Exception {
     Genotype.setConfiguration(createConfiguration(a_initial_data));
     FitnessFunction myFunc = createFitnessFunction(a_initial_data);
@@ -243,14 +243,14 @@ public abstract class Salesman implements java.io.Serializable {
     // As we cannot allow the normal mutations if this task,
     // we need multiple calls to createSampleChromosome.
     // -----------------------------------------------------
-    Chromosome chromosomes[] =
+    Chromosome[] chromosomes =
         new Chromosome[Genotype.getConfiguration().getPopulationSize()];
-    Gene[] s_genes = sampleChromosome.getGenes();
+    Gene[] samplegenes = sampleChromosome.getGenes();
     for (int i = 0; i < chromosomes.length; i++) {
-      Gene[] genes = new Gene[s_genes.length];
+      Gene[] genes = new Gene[samplegenes.length];
       for (int k = 0; k < genes.length; k++) {
-        genes[k] = s_genes[k].newGene();
-        genes[k].setAllele(s_genes[k].getAllele());
+        genes[k] = samplegenes[k].newGene();
+        genes[k].setAllele(samplegenes[k].getAllele());
       }
       shuffle(genes);
       chromosomes[i] = new Chromosome(genes);
@@ -274,14 +274,13 @@ public abstract class Salesman implements java.io.Serializable {
     return best;
   }
 
-  protected void shuffle(Gene[] a_genes) {
+  protected void shuffle(final Gene[] a_genes) {
     Gene t;
     // shuffle:
     for (int r = 0; r < 10 * a_genes.length; r++) {
       for (int i = m_startOffset; i < a_genes.length; i++) {
-        int p =
-            m_startOffset +
-            Genotype.getConfiguration().getRandomGenerator().
+        int p = m_startOffset
+            + Genotype.getConfiguration().getRandomGenerator().
             nextInt(a_genes.length - m_startOffset);
         t = a_genes[i];
         a_genes[i] = a_genes[p];
@@ -302,7 +301,7 @@ public abstract class Salesman implements java.io.Serializable {
    *
    * @since 2.0
    */
-  public void setStartOffset(int a_offset) {
+  public void setStartOffset(final int a_offset) {
     m_startOffset = a_offset;
   }
 

@@ -32,7 +32,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -90,8 +90,8 @@ public class XMLManager {
     }
     catch (ParserConfigurationException parserError) {
       throw new RuntimeException(
-          "XMLManager: Unable to setup DocumentBuilder: " +
-          parserError.getMessage());
+          "XMLManager: Unable to setup DocumentBuilder: "
+          + parserError.getMessage());
     }
   }
 
@@ -106,14 +106,15 @@ public class XMLManager {
    * Marshall a Chromosome instance to an XML Document representation,
    * including its contained Gene instances.
    *
-   * @param a_subject The chromosome to represent as an XML document.
-   * @return a Document object representing the given Chromosome.
+   * @param a_subject the chromosome to represent as an XML document
+   * @return a Document object representing the given Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Document representChromosomeAsDocument(Chromosome a_subject) {
+  public static Document representChromosomeAsDocument(final Chromosome
+      a_subject) {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
     // -------------------------------------------------------------
@@ -131,14 +132,14 @@ public class XMLManager {
    * Marshall a Genotype to an XML Document representation, including its
    * population of Chromosome instances.
    *
-   * @param a_subject The genotype to represent as an XML document.
-   * @return a Document object representing the given Genotype.
+   * @param a_subject the genotype to represent as an XML document
+   * @return a Document object representing the given Genotype
    *
    * @author Neil Rotstan
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Document representGenotypeAsDocument(Genotype a_subject) {
+  public static Document representGenotypeAsDocument(final Genotype a_subject) {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
     // -------------------------------------------------------------
@@ -155,19 +156,19 @@ public class XMLManager {
   /**
    * Marshall an array of Genes to an XML Element representation.
    *
-   * @param a_geneValues The genes to represent as an XML element.
-   * @param a_xmlDocument A Document instance that will be used to create
-   *                      the Element instance. Note that the element will
-   *                      NOT be added to the document by this method.
-   * @return an Element object representing the given genes.
+   * @param a_geneValues the genes to represent as an XML element
+   * @param a_xmlDocument a Document instance that will be used to create
+   * the Element instance. Note that the element will NOT be added to the
+   * document by this method
+   * @return an Element object representing the given genes
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Element representGenesAsElement(Gene[] a_geneValues,
-                                                Document a_xmlDocument) {
+  public static Element representGenesAsElement(final Gene[] a_geneValues,
+                                                final Document a_xmlDocument) {
     // Create the parent genes element.
     // --------------------------------
     Element genesElement = a_xmlDocument.createElement(GENES_TAG);
@@ -206,11 +207,11 @@ public class XMLManager {
    * @author Klaus Meffert
    * @since 2.0
    */
-  private static Element representAlleleAsElement(Gene gene,
-                                                  Document a_xmlDocument) {
+  private static Element representAlleleAsElement(final Gene a_gene,
+                                                  final Document a_xmlDocument) {
     Element alleleElement = a_xmlDocument.createElement(ALLELE_TAG);
-    alleleElement.setAttribute("class", gene.getClass().getName());
-    alleleElement.setAttribute("value", gene.getPersistentRepresentation());
+    alleleElement.setAttribute("class", a_gene.getClass().getName());
+    alleleElement.setAttribute("value", a_gene.getPersistentRepresentation());
     return alleleElement;
   }
 
@@ -221,18 +222,18 @@ public class XMLManager {
    * such as when the representation of this Chromosome is to be combined
    * with other elements in a single Document.
    *
-   * @param a_subject The chromosome to represent as an XML element.
-   * @param a_xmlDocument A Document instance that will be used to create
-   *                      the Element instance. Note that the element will
-   *                      NOT be added to the document by this method.
-   * @return an Element object representing the given Chromosome.
+   * @param a_subject the chromosome to represent as an XML element
+   * @param a_xmlDocument a Document instance that will be used to create
+   * the Element instance. Note that the element will NOT be added to the
+   * document by this method
+   * @return an Element object representing the given Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Element representChromosomeAsElement(Chromosome a_subject,
-      Document a_xmlDocument) {
+  public static Element representChromosomeAsElement(final Chromosome a_subject,
+      final Document a_xmlDocument) {
     // Start by creating an element for the chromosome and its size
     // attribute, which represents the number of genes in the chromosome.
     // ------------------------------------------------------------------
@@ -260,18 +261,18 @@ public class XMLManager {
    * of this Genotype is to be combined with other elements in a
    * single Document.
    *
-   * @param a_subject The genotype to represent as an XML element.
-   * @param a_xmlDocument A Document instance that will be used to create
-   *                      the Element instance. Note that the element will
-   *                      NOT be added to the document by this method.
-   * @return an Element object representing the given Genotype.
+   * @param a_subject the genotype to represent as an XML element
+   * @param a_xmlDocument a Document instance that will be used to create
+   * the Element instance. Note that the element will NOT be added to the
+   * document by this method
+   * @return an Element object representing the given Genotype
    *
    * @author Neil Rotstan
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Element representGenotypeAsElement(Genotype a_subject,
-      Document a_xmlDocument) {
+  public static Element representGenotypeAsElement(final Genotype a_subject,
+      final Document a_xmlDocument) {
     Population population = a_subject.getPopulation();
     // Start by creating the genotype element and its size attribute,
     // which represents the number of chromosomes present in the
@@ -284,8 +285,9 @@ public class XMLManager {
     // genotype.
     // ------------------------------------------------------------
     for (int i = 0; i < population.size(); i++) {
-      Element chromosomeElement =
-          representChromosomeAsElement(population.getChromosome(i), a_xmlDocument);
+      Element chromosomeElement
+          = representChromosomeAsElement(population.getChromosome(i),
+                                       a_xmlDocument);
       genotypeTag.appendChild(chromosomeElement);
     }
     return genotypeTag;
@@ -296,18 +298,17 @@ public class XMLManager {
    * representation.
    *
    * @param a_activeConfiguration current Configuration object
-   * @param a_xmlElement The XML Element representation of the Chromosome.
-   *
-   * @return A new Chromosome instance setup with the data from the XML
-   *         Element representation.
+   * @param a_xmlElement the XML Element representation of the Chromosome
+   * @return a new Chromosome instance setup with the data from the XML Element
+   * representation
    *
    * @throws ImproperXMLException if the given Element is improperly
-   *         structured or missing data.
+   * structured or missing data
    * @throws UnsupportedRepresentationException if the actively configured
-   *         Gene implementation does not support the string representation
-   *         of the alleles used in the given XML document.
-   * @throws GeneCreationException if there is a problem creating or
-   *                                 populating an Gene instance.
+   * Gene implementation does not support the string representation of the
+   * alleles used in the given XML document
+   * @throws GeneCreationException if there is a problem creating or populating
+   * an Gene instance
    *
    * @author Neil Rotstan
    * @since 1.0

@@ -20,10 +20,10 @@ import org.jgap.*;
 public abstract class Validator
     implements SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /** {@inheritDoc} */
-  public abstract boolean isValid(Gene[] genes, Supergene for_supergene);
+  public abstract boolean isValid(Gene[] a_genes, Supergene a_for_supergene);
 
   /** {@inheritDoc}
    * The default implementation returns an empty string. */
@@ -33,6 +33,6 @@ public abstract class Validator
 
   /** {@inheritDoc}
    * The default implementation does nothing. */
-  public void setFromPersistent(String a_from) {
+  public void setFromPersistent(final String a_from) {
   }
 }

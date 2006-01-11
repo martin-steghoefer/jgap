@@ -22,11 +22,11 @@ import org.jgap.*;
 public class SalesmanFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final Salesman m_salesman;
 
-  public SalesmanFitnessFunction(Salesman a_salesman) {
+  public SalesmanFitnessFunction(final Salesman a_salesman) {
     m_salesman = a_salesman;
   }
 
@@ -42,7 +42,7 @@ public class SalesmanFitnessFunction
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  protected double evaluate(Chromosome a_subject) {
+  protected double evaluate(final Chromosome a_subject) {
     double s = 0;
     Gene[] genes = a_subject.getGenes();
     for (int i = 0; i < genes.length - 1; i++) {

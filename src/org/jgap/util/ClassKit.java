@@ -17,15 +17,16 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static void main(String[] args)
       throws Exception {
     File f = new File(".");
 //    getPlugins("c:\\java\\jgap\\lib");
-    getPlugins(f.getCanonicalPath()+"\\lib");
-    if (true)
+    getPlugins(f.getCanonicalPath() + "\\lib");
+    if (true) {
       return;
+    }
     List result = new Vector();
     result = find("org.jgap.INaturalSelector");
     for (int i = 0; i < result.size(); i++) {
@@ -39,13 +40,13 @@ public class ClassKit {
   /**
    * Display all the classes inheriting or implementing a given
    * class in the currently loaded packages.
-   * @param tosubclassname the name of the class to inherit from
+   * @param a_tosubclassname the name of the class to inherit from
    * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
-  public static List find(String tosubclassname) {
+  public static List find(String a_tosubclassname) {
     try {
       List result = new Vector();
-      Class tosubclass = Class.forName(tosubclassname);
+      Class tosubclass = Class.forName(a_tosubclassname);
       Package[] pcks = Package.getPackages();
       /**@todo take care of abstract classes --> introduce parameter for that*/
       for (int i = 0; i < pcks.length; i++) {
@@ -57,7 +58,7 @@ public class ClassKit {
       return result;
     }
     catch (ClassNotFoundException ex) {
-      System.err.println("Class " + tosubclassname + " not found!");
+      System.err.println("Class " + a_tosubclassname + " not found!");
       return null;
     }
   }
@@ -69,7 +70,7 @@ public class ClassKit {
    * @param a_tosubclassname the name of the class to inherit from
    * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
-  public static List find(String a_pckname, String a_tosubclassname)
+  public static List find(final String a_pckname, final String a_tosubclassname)
       throws ClassNotFoundException {
     Class tosubclass = Class.forName(a_tosubclassname);
     return find(a_pckname, tosubclass);
@@ -78,19 +79,18 @@ public class ClassKit {
   /**
    * Display all the classes inheriting or implementing a given
    * class in a given package.
-   * @param pckgname the fully qualified name of the package
-   * @param tosubclass the Class object to inherit from
+   * @param a_pckgname the fully qualified name of the package
+   * @param a_tosubclass the Class object to inherit from
    * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
-  public static List find(String pckgname, Class tosubclass) {
+  public static List find(final String a_pckgname, final Class a_tosubclass) {
     List result = new Vector();
     // Translate the package name into an absolute path
-    String name = pckgname;
+    String name = a_pckgname;
     if (!name.startsWith("/")) {
       name = "/" + name;
     }
     name = name.replace('.', '/');
-
     // Get a File object for the package
     URL url = ClassKit.class.getResource(name);
 //    URL url = tosubclass.getResource(name);
@@ -110,33 +110,30 @@ public class ClassKit {
     if (url == null) {
       return result;
     }
-    return find(url, pckgname, tosubclass);
+    return find(url, a_pckgname, a_tosubclass);
   }
 
-  public static List find(URL url, String pckgname, Class tosubclass) {
+  public static List find(URL a_url, String a_pckgname, Class a_tosubclass) {
     List result = new Vector();
-
-    File directory = new File(url.getFile());
-
+    File directory = new File(a_url.getFile());
     if (directory.exists()) {
       // Get the list of the files contained in the package
       String[] files = directory.list();
       for (int i = 0; i < files.length; i++) {
-
         // we are only interested in .class files
         if (files[i].endsWith(".class")) {
           // removes the .class extension
           String classname = files[i].substring(0, files[i].length() - 6);
           try {
             // Try to create an instance of the object
-            Class c = Class.forName(pckgname + "." + classname);
-            if (pckgname.equals("org.jgap.impl") &&
-                classname.equals("BestChromosomesSelector")) {
+            Class c = Class.forName(a_pckgname + "." + classname);
+            if (a_pckgname.equals("org.jgap.impl")
+                && classname.equals("BestChromosomesSelector")) {
               System.err.println("X");
             }
-            if (implementsInterface(c, tosubclass) ||
-                extendsClass(c, tosubclass)) {
-              result.add(pckgname + "." + classname);
+            if (implementsInterface(c, a_tosubclass) ||
+                extendsClass(c, a_tosubclass)) {
+              result.add(a_pckgname + "." + classname);
             }
           }
           catch (ClassNotFoundException cnfex) {
@@ -153,16 +150,17 @@ public class ClassKit {
       }
     }
     else {
-      findInJar(result, url, tosubclass);
+      findInJar(result, a_url, a_tosubclass);
     }
     return result;
   }
 
-  public static void findInJar(final List result, URL url, Class tosubclass) {
+  public static void findInJar(final List a_result, URL a_url,
+                               Class a_tosubclass) {
     try {
       // It does not work with the filesystem: we must
       // be in the case of a package contained in a jar file.
-      JarURLConnection conn = (JarURLConnection) url.openConnection();
+      JarURLConnection conn = (JarURLConnection) a_url.openConnection();
       String starts = conn.getEntryName();
       JarFile jfile = conn.getJarFile();
       Enumeration e = jfile.entries();
@@ -179,11 +177,11 @@ public class ClassKit {
           try {
             // Try to create an instance of the object
             Class c = Class.forName(classname);
-            if (implementsInterface(c, tosubclass) ||
-                extendsClass(c, tosubclass)) {
+            if (implementsInterface(c, a_tosubclass)
+                || extendsClass(c, a_tosubclass)) {
 //              Object o = Class.forName(classname).newInstance();
 //              if (tosubclass.isInstance(o)) {
-              result.add(classname);
+              a_result.add(classname);
             }
           }
           catch (ClassNotFoundException cnfex) {
@@ -197,22 +195,23 @@ public class ClassKit {
     }
   }
 
-  public static boolean implementsInterface(Class o, Class clazz) {
-    Class[] interfaces = o.getInterfaces();
+  public static boolean implementsInterface(final Class a_o,
+                                            final Class a_clazz) {
+    Class[] interfaces = a_o.getInterfaces();
     for (int i = 0; i < interfaces.length; i++) {
       Class c = interfaces[i];
-      if (c.equals(clazz)) {
+      if (c.equals(a_clazz)) {
         return true;
       }
     }
     return false;
   }
 
-  public static boolean extendsClass(Class o, Class clazz) {
-    if (clazz.getName().equals(o.getName())) {
+  public static boolean extendsClass(final Class a_o, final Class a_clazz) {
+    if (a_clazz.getName().equals(a_o.getName())) {
       return false;
     }
-    if (clazz.isAssignableFrom(o)) {
+    if (a_clazz.isAssignableFrom(a_o)) {
       return true;
     }
     else {
@@ -221,8 +220,8 @@ public class ClassKit {
   }
 
   /**@todo add input param: type (or list of types) to look for*/
-  public static void getPlugins(String directory) {
-    File modulePath = new File(directory);
+  public static void getPlugins(final String a_directory) {
+    File modulePath = new File(a_directory);
 //        if(modulePath == null || !modulePath.exists())modulePath.mkdirs();
     File[] jarFiles = modulePath.listFiles(new ExtensionsFilter("jar", false));
     URL[] urls = new URL[jarFiles.length + 1];
@@ -238,15 +237,12 @@ public class ClassKit {
     }
     catch (Exception ex) {}
     ClassLoader ucl = new URLClassLoader(urls);
-
     // -------------------------------
-
     Vector classes = new Vector();
     long startTime = System.currentTimeMillis();
     addClasses(classes, modulePath, "");
     System.out.println("Found Classes in: " +
                        (System.currentTimeMillis() - startTime) + " mills");
-
     // -------------------------------
 //    Vector implementingClasses = new Vector();
     Enumeration e = classes.elements();
@@ -259,16 +255,16 @@ public class ClassKit {
       catch (Throwable ex) {
       }
     }
-
   }
 
-  public static void addClasses(java.util.Vector v, File path, String name) {
-    addClassesFile(v, path, name);
-    addClassesJar(v, path);
+  public static void addClasses(final Vector a_v, final File a_path,
+                                final String a_name) {
+    addClassesFile(a_v, a_path, a_name);
+    addClassesJar(a_v, a_path);
   }
 
-  public static void addClassesJar(java.util.Vector v, File path) {
-    File[] files = path.listFiles(new ExtensionsFilter("jar", false));
+  public static void addClassesJar(final Vector a_v, final File a_path) {
+    File[] files = a_path.listFiles(new ExtensionsFilter("jar", false));
     for (int i = 0; i < files.length; i++) {
       try {
         java.util.jar.JarFile jar = new java.util.jar.JarFile(files[i]);
@@ -277,35 +273,36 @@ public class ClassKit {
         while (e.hasMoreElements()) {
           wa = e.nextElement().toString();
           if (wa.endsWith(".class") && (wa.indexOf("$") == -1))
-            v.add(wa.substring(0, wa.length() - 6).replace('/', '.'));
+            a_v.add(wa.substring(0, wa.length() - 6).replace('/', '.'));
         }
       }
-      catch (Exception ex) {}
+      catch (Exception ex) {
+      }
     }
   }
 
   //this method is recursive to go down sub-dirs
-  public static void addClassesFile(java.util.Vector v, File path, String name) {
-    File[] files = path.listFiles(new ExtensionsFilter("class", true));
+  public static void addClassesFile(Vector a_v, File a_path, String a_name) {
+    File[] files = a_path.listFiles(new ExtensionsFilter("class", true));
     for (int i = 0; i < files.length; i++) {
       if (files[i].isDirectory())
-        addClassesFile(v, files[i], name + files[i].getName() + ".");
+        addClassesFile(a_v, files[i], a_name + files[i].getName() + ".");
       else if (files[i].getName().indexOf("$") == -1)
-        v.add(name +
-              files[i].getName().substring(0, files[i].getName().length() - 6));
+        a_v.add(a_name +
+                files[i].getName().substring(0, files[i].getName().length() - 6));
     }
   }
 
   static class ExtensionsFilter
       implements FilenameFilter {
-    private String ext;
+    private String m_ext;
 
-    public ExtensionsFilter(String extension, boolean dummy) {
-      this.ext = extension;
+    public ExtensionsFilter(String a_extension, boolean a_dummy) {
+      m_ext = a_extension;
     }
 
-    public boolean accept(File dir, String name) {
-      if (name != null && name.endsWith("." + ext)) {
+    public boolean accept(File a_dir, String a_name) {
+      if (a_name != null && a_name.endsWith("." + m_ext)) {
         return true;
       }
       else {

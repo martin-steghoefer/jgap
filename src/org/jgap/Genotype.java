@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.61 $";
+  private final static String CVS_REVISION = "$Revision: 1.62 $";
 
   /**
    * The current active Configuration instance.
@@ -56,9 +56,6 @@ public class Genotype
    * @param a_activeConfiguration the current active Configuration object
    * @param a_initialChromosomes the Chromosome population to be managed by
    * this Genotype instance
-   * @throws IllegalArgumentException if either the given Configuration object
-   * or the array of Chromosomes is null, or if any of the Genes in the array
-   * of Chromosomes is null
    * @throws InvalidConfigurationException if the given Configuration object is
    * in an invalid state
    *
@@ -446,8 +443,8 @@ public class Genotype
       for (int i = 0; i < populationSize; i++) {
         Object chrom = null;
         try {
-          // TODO fix, because method Chromosome.randomInitialChromosome is static!
-          // Currently, only a quick fix for bug 1371577
+          // TODO fix, because method Chromosome.randomInitialChromosome is
+          // static! Currently, only a quick fix for bug 1371577
           chrom = a_chromosome.newInstance();
           Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome2",
               new Class[] {});
@@ -455,20 +452,20 @@ public class Genotype
                    , new Object[] {});
         }
         catch (InstantiationException oex) {
-          throw new InvalidConfigurationException("InstantiationException: " +
-                                                  oex.getMessage());
+          throw new InvalidConfigurationException("InstantiationException: "
+                                                  + oex.getMessage());
         }
         catch (NoSuchMethodException nom) {
-          throw new InvalidConfigurationException("NoSuchMethodException: " +
-                                                  nom.getMessage());
+          throw new InvalidConfigurationException("NoSuchMethodException: "
+                                                  + nom.getMessage());
         }
         catch (IllegalAccessException iex) {
-          throw new InvalidConfigurationException("IllegalAccessException: " +
-                                                  iex.getMessage());
+          throw new InvalidConfigurationException("IllegalAccessException: "
+                                                  + iex.getMessage());
         }
         catch (InvocationTargetException ite) {
-          throw new InvalidConfigurationException("InvocationTargetException: " +
-                                                  ite.getMessage());
+          throw new InvalidConfigurationException("InvocationTargetException: "
+                                                  + ite.getMessage());
         }
         pop.addChromosome((Chromosome)chrom);
       }
@@ -553,7 +550,8 @@ public class Genotype
    * @author Klaus Meffert
    * @since 2.0
    */
-  protected void applyNaturalSelectors(boolean a_processBeforeGeneticOperators) {
+  protected void applyNaturalSelectors(
+      boolean a_processBeforeGeneticOperators) {
     // Process all natural selectors applicable before executing the
     // genetic operators (reproduction, crossing over, mutation...).
     // -------------------------------------------------------------
