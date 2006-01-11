@@ -26,10 +26,11 @@ import org.jgap.*;
  * @author Audrius Meskauskas
  * @since 2.0
  */
-public abstract class AbstractSupergene extends BaseGene
+public abstract class AbstractSupergene
+    extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * This field separates gene class name from
@@ -52,7 +53,7 @@ public abstract class AbstractSupergene extends BaseGene
   /** Maximal number of retries for applyMutation and setToRandomValue.
    * If the valid supergen cannot be created after this number of iterations,
    * the error message is printed and the unchanged instance is returned. */
-  public final static int MAX_RETRIES = 1000;
+  public final static int MAX_RETRIES = 1;
 
   /** Maximal number of notes about immutable genes per
    * single gene position */
@@ -200,9 +201,9 @@ public abstract class AbstractSupergene extends BaseGene
         }
       }
     }
-    if (!isValid()) {
-      throw new Error("Should be valid on entry");
-    }
+//    if (!isValid()) {
+//      throw new Error("Should be valid on entry");
+//    }
     Object backup = m_genes[a_index].getAllele();
     for (int i = 0; i < MAX_RETRIES; i++) {
       m_genes[a_index].applyMutation(0, a_percentage);
@@ -254,16 +255,15 @@ public abstract class AbstractSupergene extends BaseGene
    * then validates. With a large number of subgenes and low percent of
    * valid combinations this may take too long to complete. We think,
    * at lease several % of the all possible combintations must be valid.
-   *
-   * @throws an error if unable to get a valid random instance in
-   * the number of loops, defined by MAX_RETRIES.
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    /** set all to random value first */
+    // set all to random value first
     for (int i = 0; i < m_genes.length; i++) {
       m_genes[i].setToRandomValue(a_numberGenerator);
     }
-    if (isValid())return;
+    if (isValid()) {
+      return;
+    }
     for (int i = 0; i < MAX_RETRIES; i++) {
       for (int j = 0; j < m_genes.length; j++) {
         // Mutate only one gene at time.
@@ -284,9 +284,9 @@ public abstract class AbstractSupergene extends BaseGene
   public void setAllele(Object a_superAllele) {
     Object[] a = (Object[]) a_superAllele;
     if (a.length != m_genes.length) {
-      throw new
-          ClassCastException("Record length, " + a.length + " != " +
-                             m_genes.length);
+      throw new ClassCastException("Record length, " + a.length
+                                   + " not equal to "
+                                   + m_genes.length);
     }
     for (int i = 0; i < m_genes.length; i++) {
       m_genes[i].setAllele(a[i]);
