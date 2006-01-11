@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class CoinsEnergy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -90,7 +90,6 @@ public class CoinsEnergy {
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
     conf.setPopulationSize(80);
-
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
     Genotype population = Genotype.randomInitialGenotype(conf);
@@ -106,34 +105,24 @@ public class CoinsEnergy {
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
     }
-
     // Display the best solution we found.
     // -----------------------------------
     Chromosome bestSolutionSoFar = population.getFittestChromosome();
-    System.out.println("The best solution has a fitness value of " +
-                       bestSolutionSoFar.getFitnessValue());
+    System.out.println("The best solution has a fitness value of "
+                       + bestSolutionSoFar.getFitnessValue());
     System.out.println("It contained the following: ");
-    System.out.println("\t" +
-                       CoinsEnergyFitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + CoinsEnergyFitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, 0) + " quarters.");
-    System.out.println("\t" +
-                       CoinsEnergyFitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + CoinsEnergyFitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, 1) + " dimes.");
-    System.out.println("\t" +
-                       CoinsEnergyFitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + CoinsEnergyFitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, 2) + " nickels.");
-    System.out.println("\t" +
-                       CoinsEnergyFitnessFunction.
-                       getNumberOfCoinsAtGene(
+    System.out.println("\t" + CoinsEnergyFitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, 3) + " pennies.");
-    System.out.println("For a total of " +
-                       CoinsEnergyFitnessFunction.amountOfChange(
-        bestSolutionSoFar) + " cents in " +
-                       CoinsEnergyFitnessFunction.
-                       getTotalNumberOfCoins(
+    System.out.println("For a total of "
+                       + CoinsEnergyFitnessFunction.amountOfChange(
+        bestSolutionSoFar) + " cents in "
+                       + CoinsEnergyFitnessFunction.getTotalNumberOfCoins(
         bestSolutionSoFar) + " coins.");
   }
 
@@ -169,7 +158,7 @@ public class CoinsEnergy {
     }
     catch (NumberFormatException e) {
       System.out.println(
-          "The " + (index+1) + ". argument must be a valid integer value");
+          "The " + (index + 1) + ". argument must be a valid integer value");
       System.exit(1);
       return -1; // does not matter
     }
@@ -180,8 +169,10 @@ public class CoinsEnergy {
    * @author Klaus Meffert
    * @since 2.4
    */
-  public static class EnergyGeneConstraintChecker implements IGeneConstraintChecker {
-    public final static double[] coinWeights = {1.0d, 2.0d, 8.0d, 3.0d};
+  public static class EnergyGeneConstraintChecker
+      implements IGeneConstraintChecker {
+    public final static double[] coinWeights = {
+        1.0d, 2.0d, 8.0d, 3.0d};
 
     /**
      * Check if a given allele value is valid for the given gene instance.
@@ -196,7 +187,7 @@ public class CoinsEnergy {
      */
     public boolean verify(Gene a_gene, Object a_alleleValue)
         throws RuntimeException {
-      double computedWeight = 0.0d;/**todo compute*/
+      double computedWeight = 0.0d; /**todo compute*/
       // We need to figure out what type of coin (penny, nickel, dime, quarter)
       // the current Gene represents. This is not trivial as it depends on the
       // index of the Gene within the Chromosome. The Chromosome is not
