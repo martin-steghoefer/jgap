@@ -28,7 +28,7 @@ import org.jgap.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private List m_parameters;
 
@@ -86,8 +86,10 @@ public class JGAPFactory
   }
 
   /**
-   * Retrieves a clone handler capable of clone the given class
-   * @param a_classToClone the class to clone an object of
+   * Retrieves a clone handler capable of clone the given class.
+   *
+   * @param a_obj the object to clone (maybe null)
+   * @param a_classToClone the class to clone an object of (maybe null)
    * @return the clone handler found capable of clone the given
    * class, or null if none registered
    *
@@ -143,19 +145,20 @@ public class JGAPFactory
 
   /**
    * Retrieves an initializer capable of initializing the Object of the given
-   * class
-   * @param a_objToInit the object class to init
-   * @return  the initializer found capable of initializing an object of the
-   * given class, or null if none registered
+   * class.
+   *
+   * @param a_obj the object to init (maybe null)
+   * @param a_class the object class to init (maybe null)
+   * @return new instance (should be!) of initialized object
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public IInitializer getInitializerFor(Object a_obj, Class a_objToInit) {
+  public IInitializer getInitializerFor(Object a_obj, Class a_class) {
     Iterator it = m_initer.iterator();
     while (it.hasNext()) {
       IInitializer initer = (IInitializer) it.next();
-      if (initer.isHandlerFor(a_obj, a_objToInit)) {
+      if (initer.isHandlerFor(a_obj, a_class)) {
         return initer;
       }
     }
@@ -165,7 +168,7 @@ public class JGAPFactory
     if (m_defaultIniter == null) {
       m_defaultIniter = new DefaultInitializer();
     }
-    if (m_defaultIniter.isHandlerFor(a_obj, a_objToInit)) {
+    if (m_defaultIniter.isHandlerFor(a_obj, a_class)) {
       return m_defaultIniter;
     }
     return null;

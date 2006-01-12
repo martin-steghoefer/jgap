@@ -37,7 +37,7 @@ public class CrossoverOperator
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -186,7 +186,7 @@ public class CrossoverOperator
   }
 
   /**
-   * Compares this CrossoverOperator against the specified object. The result is
+   * Compares this GeneticOperator against the specified object. The result is
    * true if and the argument is an instance of this class and is equal wrt the
    * data.
    *
@@ -206,7 +206,7 @@ public class CrossoverOperator
   }
 
   /**
-   * Compares the given CrossoverOperator to this CrossoverOperator.
+   * Compares the given GeneticOperator to this GeneticOperator.
    *
    * @param a_other the instance against which to compare this instance
    * @return a negative number if this instance is "less than" the given
@@ -220,7 +220,7 @@ public class CrossoverOperator
     if (a_other == null) {
       return 1;
     }
-    CrossoverOperator op = (CrossoverOperator)a_other;
+    CrossoverOperator op = (CrossoverOperator) a_other;
     if (m_crossoverRateCalc == null) {
       if (op.m_crossoverRateCalc != null) {
         return -1;
@@ -245,10 +245,8 @@ public class CrossoverOperator
         return -1;
       }
     }
-
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
   }
-
 }

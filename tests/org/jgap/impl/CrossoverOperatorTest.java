@@ -10,7 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-import java.io.*;
+
 import org.jgap.*;
 import junit.framework.*;
 
@@ -23,7 +23,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -223,7 +223,7 @@ public class CrossoverOperatorTest
   }
 
   /**
-   * Ensures Object is implementing Serializable
+   * Ensures the operator is implementing Serializable
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -236,7 +236,7 @@ public class CrossoverOperatorTest
   }
 
   /**
-   * Ensures that Object and all objects contained implement Serializable
+   * Ensures that the operator and all objects contained implement Serializable
    * @throws Exception
    *
    * @author Klaus Meffert
