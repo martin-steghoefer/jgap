@@ -17,7 +17,7 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static void main(String[] args)
       throws Exception {
@@ -132,8 +132,8 @@ public class ClassKit {
                 && classname.equals("BestChromosomesSelector")) {
               System.err.println("X");
             }
-            if (implementsInterface(c, a_tosubclass) ||
-                extendsClass(c, a_tosubclass)) {
+            if (implementsInterface(c, a_tosubclass)
+                || extendsClass(c, a_tosubclass)) {
               result.add(a_pckgname + "." + classname);
             }
           }
@@ -156,7 +156,7 @@ public class ClassKit {
     return result;
   }
 
-  public static void findInJar(final List a_result, URL a_url,
+  public static void findInJar(final List a_result, final URL a_url,
                                Class a_tosubclass) {
     try {
       // It does not work with the filesystem: we must
@@ -238,7 +238,9 @@ public class ClassKit {
     try {
       urls[i] = modulePath.toURL();
     }
-    catch (Exception ex) {}
+    catch (Exception ex) {
+      ; //do nothing?
+    }
     ClassLoader ucl = new URLClassLoader(urls);
     // -------------------------------
     Vector classes = new Vector();
@@ -288,15 +290,16 @@ public class ClassKit {
   }
 
   //this method is recursive to go down sub-dirs
-  public static void addClassesFile(Vector a_v, File a_path, String a_name) {
+  public static void addClassesFile(Vector a_v, final File a_path,
+                                    final String a_name) {
     File[] files = a_path.listFiles(new ExtensionsFilter("class", true));
     for (int i = 0; i < files.length; i++) {
       if (files[i].isDirectory()) {
         addClassesFile(a_v, files[i], a_name + files[i].getName() + ".");
       }
       else if (files[i].getName().indexOf("$") == -1) {
-        a_v.add(a_name +
-                files[i].getName().
+        a_v.add(a_name
+                + files[i].getName().
                 substring(0, files[i].getName().length() - 6));
       }
     }
