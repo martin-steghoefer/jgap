@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -292,23 +292,11 @@ public class Chromosome
         }
         // Also clone the IApplicationData object.
         // ---------------------------------------
-        try {
-          if (getApplicationData() != null) {
-            if (getApplicationData() instanceof IApplicationData) {
-              copy.setApplicationData(
-                 ( (IApplicationData) getApplicationData()).clone());
-            }
-          }
-          // Reset fitness value
-          // -------------------
-          copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
-          return copy;
-        }
-        catch (CloneNotSupportedException cex) {
-          // rethrow as IllegalStateException to be backward compatible and have
-          // a more convenient handling
-          throw new IllegalStateException(cex.getMessage());
-        }
+        copy.setApplicationData(cloneObject(getApplicationData()));
+        // Reset fitness value
+        // -------------------
+        copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+        return copy;
       }
     }
     // If we get this far, then we couldn't fetch a Chromosome from the
@@ -328,43 +316,38 @@ public class Chromosome
     // Now construct a new Chromosome with the copies of the genes and
     // return it. Also clone the IApplicationData object.
     // ---------------------------------------------------------------
-    try {
-      Chromosome ret = new Chromosome(copyOfGenes);
-      if (getApplicationData() != null) {
-        /**@todo support Cloneable interface, i.e. look for public clone()
-         * method via introspection
-         */
-        if (getApplicationData() instanceof IApplicationData) {
-          IApplicationData clonedAppData = (IApplicationData) ( (
-              IApplicationData)
-              getApplicationData()).clone();
-          /*
-           if (clonedAppData == null
-               || !clonedAppData.equals(getApplicationData())) {
-                throw new CloneNotSupportedException(
-                    "ApplicationData object attached"
-                    + " to Chromosome clones not correctly!");
-                    }
-           */
-          ret.setApplicationData(clonedAppData);
-        }
-        else {
-          // Application data object does not support cloning.
-          // Therefor just copy the reference *uuumh*.
-          // -------------------------------------------------
-          ret.setApplicationData(getApplicationData());
-        }
-      }
-      // Reset fitness value
-      // -------------------
-      ret.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
-      return ret;
+    Chromosome ret = new Chromosome(copyOfGenes);
+    ret.setApplicationData(cloneObject(getApplicationData()));
+    // Reset fitness value.
+    // --------------------
+    ret.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+    return ret;
+  }
+
+  /**
+   * Clones an object by using clone handlers. If no deep cloning possible, then
+   * return the reference.
+   * @param a_object the object to clone
+   * @return the cloned object, or the object itself if no coning supported
+   *
+   * @authro Klaus Meffert
+   * @since 2.6
+   */
+  protected Object cloneObject(Object a_object) {
+    if (a_object == null) {
+      return null;
     }
-    catch (CloneNotSupportedException cex) {
-      // rethrow as IllegalStateException to be backward compatible and have
-      // a more convenient handling.
-      // -------------------------------------------------------------------
-      throw new IllegalStateException(cex.getMessage());
+    // Try to clone via a registered clone handler.
+    // --------------------------------------------
+    ICloneHandler cloner = Genotype.getConfiguration().getJGAPFactory().
+        getCloneHandlerFor(a_object.getClass());
+    if (cloner != null) {
+      return cloner.doClone(a_object, this);
+    }
+    else {
+      // No cloning supported, so just return the reference.
+      // ---------------------------------------------------
+      return a_object;
     }
   }
 
