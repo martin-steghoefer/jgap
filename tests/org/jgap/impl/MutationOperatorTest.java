@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.28 $";
+  private static final String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -332,7 +332,57 @@ public class MutationOperatorTest
   }
 
   /**
-   * Ensures Object is implementing Serializable
+   * Considers IGeneticOperatorConstraint. Here, the mutation of a BooleanGene
+   * is forbidden by that constraint.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testOperate_8()
+      throws Exception {
+    MutationOperator mutOp = new MutationOperator();
+    BooleanGene gene1 = new BooleanGene();
+    Chromosome chrom1 = new Chromosome(gene1, 1);
+    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
+
+    IntegerGene gene2 = new IntegerGene(0, 10);
+    Chromosome chrom2 = new Chromosome(gene2, 1);
+    chrom2.getGene(0).setAllele(new Integer(3));
+    Chromosome[] chroms = new Chromosome[] {
+        chrom1, chrom2};
+    Configuration conf = new Configuration();
+    conf.setPopulationSize(5);
+    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+
+    rn.setNextInt(0);
+    rn.setNextInt(0);
+    rn.setNextDouble(0.8d);
+    conf.setRandomGenerator(rn);
+    Genotype.setConfiguration(conf);
+
+    IGeneticOperatorConstraint constraint = new
+        GeneticOperatorConstraintForTest();
+    Genotype.getConfiguration().getJGAPFactory().setGeneticOperatorConstraint(
+        constraint);
+
+    Population pop = new Population(chroms);
+    mutOp.operate(pop, pop.getChromosomes());
+    // +1 (not +2) because only IntegerGene should have been mutated.
+    assertEquals(2 + 1, pop.getChromosomes().size());
+    //old gene
+    assertFalse( ( (BooleanGene) pop.getChromosome(0).getGene(0)).booleanValue());
+    //old gene
+    assertEquals(3,( (IntegerGene)  pop.getChromosome(1).
+                                  getGene(0)).intValue());
+    //mutated gene
+    assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
+                 ( (IntegerGene) pop.getChromosome(2).getGene(0)).intValue());
+  }
+
+  /**
+   * Ensures operator is implementing Serializable
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -345,7 +395,7 @@ public class MutationOperatorTest
   }
 
   /**
-   * Ensures that Object and all objects contained implement Serializable
+   * Ensures that operator and all objects contained implement Serializable
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -358,5 +408,20 @@ public class MutationOperatorTest
     MutationOperator op = new MutationOperator(calc);
     Object o = doSerialize(op);
     assertEquals(o, op);
+  }
+
+  public class GeneticOperatorConstraintForTest
+      implements IGeneticOperatorConstraint {
+    public boolean isValid(Population a_pop, List a_chromosomes,
+                           GeneticOperator a_caller) {
+      Chromosome chrom = (Chromosome)a_chromosomes.get(0);
+      Gene gene = chrom.getGene(0);
+      if (gene.getClass() == BooleanGene.class) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   }
 }

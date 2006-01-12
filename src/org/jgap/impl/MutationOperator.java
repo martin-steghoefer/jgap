@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -102,16 +102,16 @@ public class MutationOperator
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-    // Population or candidate chromosomes list empty:
-    // nothing to do.
-    // -----------------------------------------------
     if (a_population == null || a_candidateChromosomes == null) {
+      // Population or candidate chromosomes list empty:
+      // nothing to do.
+      // -----------------------------------------------
       return;
     }
-    // If the mutation rate is set to zero and dynamic mutation rate is
-    // disabled, then we don't perform any mutation.
-    // ----------------------------------------------------------------
     if (m_mutationRate == 0 && m_mutationRateCalc == null) {
+      // If the mutation rate is set to zero and dynamic mutation rate is
+      // disabled, then we don't perform any mutation.
+      // ----------------------------------------------------------------
       return;
     }
     // Determine the mutation rate. If dynamic rate is enabled, then
@@ -126,8 +126,11 @@ public class MutationOperator
     // ----------------------------------------------------------------
     int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
                         a_population.size());
+    IGeneticOperatorConstraint constraint = Genotype.getConfiguration().
+        getJGAPFactory().getGeneticOperatorConstraint();
     for (int i = 0; i < size; i++) {
-      Gene[] genes = a_population.getChromosome(i).getGenes();
+      Chromosome chrom = a_population.getChromosome(i);
+      Gene[] genes = chrom.getGenes();
       Chromosome copyOfChromosome = null;
       // For each Chromosome in the population...
       // ----------------------------------------
@@ -145,6 +148,13 @@ public class MutationOperator
           mutate = (generator.nextInt(m_mutationRate) == 0);
         }
         if (mutate) {
+          if (constraint != null) {
+            List v = new Vector();
+            v.add(chrom);
+            if (!constraint.isValid(a_population, v, this)) {
+              continue;
+            }
+          }
           // Now that we want to actually modify the Chromosome,
           // let's make a copy of it (if we haven't already) and
           // add it to the candidate chromosomes so that it will
@@ -157,7 +167,7 @@ public class MutationOperator
             // ...take a copy of it...
             // -----------------------
             copyOfChromosome
-                = (Chromosome) a_population.getChromosome(i).clone();
+                = (Chromosome) chrom.clone();
             // ...add it to the candidate pool...
             // ----------------------------------
             a_candidateChromosomes.add(copyOfChromosome);
@@ -320,10 +330,6 @@ public class MutationOperator
         return 1;
       }
       else {
-        // here, we could compare the rate calculators
-//        if (!m_crossoverRateCalc.equals(op.m_crossoverRateCalc)) {
-//          return -1; //arbitrary
-//        }
       }
     }
     if (m_mutationRate != op.m_mutationRate) {

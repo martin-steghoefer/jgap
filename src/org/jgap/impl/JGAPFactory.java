@@ -28,7 +28,7 @@ import org.jgap.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private List m_parameters;
 
@@ -40,6 +40,8 @@ public class JGAPFactory
 
   private IInitializer m_defaultIniter;
 
+  private IGeneticOperatorConstraint m_geneticOpConstraint;
+
   public JGAPFactory() {
     m_cloneHandlers = new Vector();
     m_initer = new Vector();
@@ -47,7 +49,7 @@ public class JGAPFactory
 
   /**
    * Allows setting (generic because unknown) parameters for creating objects
-   * @param a_parameters Collection
+   * @param a_parameters Collection of generic parameters
    */
   public void setParameters(Collection a_parameters) {
     m_parameters = new Vector(a_parameters);
@@ -115,7 +117,6 @@ public class JGAPFactory
     return null;
   }
 
-
   /**
    * Registers an initializer that could be retrieved by getInitializerFor(Class)
    * @param a_chromIniter the IChromosomeInitializer to register
@@ -172,5 +173,14 @@ public class JGAPFactory
       return m_defaultIniter;
     }
     return null;
+  }
+
+  public void setGeneticOperatorConstraint(IGeneticOperatorConstraint
+                                           a_constraint) {
+    m_geneticOpConstraint = a_constraint;
+  }
+
+  public IGeneticOperatorConstraint getGeneticOperatorConstraint() {
+    return m_geneticOpConstraint;
   }
 }

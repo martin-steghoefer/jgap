@@ -19,7 +19,7 @@ import java.util.*;
  */
 public interface IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   void setParameters(Collection a_parameters);
 
@@ -72,4 +72,9 @@ public interface IJGAPFactory {
    * @since 2.6
    */
   int registerInitializer(IInitializer a_chromIniter);
+
+  void setGeneticOperatorConstraint(IGeneticOperatorConstraint
+                                    a_constraint);
+
+  IGeneticOperatorConstraint getGeneticOperatorConstraint();
 }
