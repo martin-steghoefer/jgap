@@ -12,8 +12,9 @@ package org.jgap;
 import java.util.*;
 
 import org.jgap.impl.*;
-import junit.framework.*;
 import org.jgap.util.*;
+
+import junit.framework.*;
 
 /**
  * Tests the Chromosome class
@@ -24,7 +25,7 @@ import org.jgap.util.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -435,11 +436,101 @@ public class ChromosomeTest
     }
   }
 
-  final static int MAX_CHROMOSOME_TO_TEST = 1000;
+  /**
+   * Test clone with setting a configuration
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   */
+  public void testClone_1()
+      throws InvalidConfigurationException {
+    Gene[] genes = new Gene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom3 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom3);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    Chromosome chrom2 = (Chromosome) chrom.clone();
+    assertEquals(chrom.hashCode(), chrom2.hashCode());
+    assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), DELTA);
+    assertEquals(chrom.isSelectedForNextGeneration(),
+                 chrom2.isSelectedForNextGeneration());
+    assertEquals(chrom.size(), chrom2.size());
+    assertEquals(chrom.getGene(0), chrom2.getGene(0));
+    assertEquals(chrom.getGene(1), chrom2.getGene(1));
+    assertEquals(chrom.getGenes().getClass(), chrom2.getGenes().getClass());
+    assertEquals(chrom.toString(), chrom2.toString());
+    assertTrue(chrom.equals(chrom2));
+    assertNotSame(chrom.getGenes(), chrom2.getGenes());
+    assertNotSame(chrom.getGene(0), chrom2.getGene(0));
+    assertNotSame(chrom.getGene(1), chrom2.getGene(1));
+  }
 
-  final static int MAX_GENES_TO_TEST = 25;
+  /**
+   * Test clone with set application data implementing interface Cloneable,
+   * but restricting access because MyAppData is a package protected class (and
+   * the Chromosome class resides in differwent package) and also not
+   * implementing IApplicationData
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   */
+  public void testClone_2()
+      throws InvalidConfigurationException {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Genotype.setConfiguration(conf);
+    Chromosome chrom2 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Chromosome chrom = new Chromosome(genes);
+    Object appObj = new MyAppObject();
+    chrom.setApplicationData(appObj);
+    Chromosome cloned = (Chromosome)chrom.clone();
+    assertTrue(appObj == cloned.getApplicationData());
+  }
 
-  final static int MAX_GENES_TYPES = 6;
+  /**
+   * Test clone with set application data, where cloning supported. Access is
+   * not granted via Cloneable (because of inner class) but via explicit and
+   * specially considered interface IApplicationData (see MyAppObject2)!
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   */
+  public void testClone_3()
+      throws InvalidConfigurationException {
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Genotype.setConfiguration(conf);
+    Chromosome chrom2 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom2);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    Object appObj = new MyAppObject2();
+    chrom.setApplicationData(appObj);
+    chrom2 = (Chromosome) chrom.clone();
+    assertTrue(chrom.equals(chrom2));
+    assertEquals(appObj, chrom2.getApplicationData());
+    assertFalse(appObj == chrom2.getApplicationData());
+  }
+
+  private final static int MAX_CHROMOSOME_TO_TEST = 1000;
+
+  private final static int MAX_GENES_TO_TEST = 25;
+
+  private final static int MAX_GENES_TYPES = 6;
 
   /**
    * Test hashcode for intensity of diversity.<p>
@@ -526,88 +617,6 @@ public class ChromosomeTest
     if (!thc.testHashCodeEquality(equalChromosome)) {
       fail();
     }
-  }
-
-  /**
-   * Test clone with setting a configuration
-   * @throws InvalidConfigurationException
-   *
-   * @author Klaus Meffert
-   */
-  public void testClone_1()
-      throws InvalidConfigurationException {
-    Gene[] genes = new Gene[2];
-    genes[0] = new IntegerGene();
-    genes[1] = new IntegerGene();
-    Configuration conf = new DefaultConfiguration();
-    conf.setFitnessFunction(new StaticFitnessFunction(20));
-    Chromosome chrom3 = new Chromosome(genes);
-    conf.setSampleChromosome(chrom3);
-    conf.setPopulationSize(5);
-    Genotype.setConfiguration(conf);
-    Chromosome chrom = new Chromosome(genes);
-    Chromosome chrom2 = (Chromosome) chrom.clone();
-    assertEquals(chrom.hashCode(), chrom2.hashCode());
-    assertEquals(chrom.getFitnessValue(), chrom2.getFitnessValue(), DELTA);
-    assertEquals(chrom.isSelectedForNextGeneration(),
-                 chrom2.isSelectedForNextGeneration());
-    assertEquals(chrom.size(), chrom2.size());
-    assertEquals(chrom.getGene(0), chrom2.getGene(0));
-    assertEquals(chrom.getGene(1), chrom2.getGene(1));
-    assertEquals(chrom.getGenes().getClass(), chrom2.getGenes().getClass());
-    assertEquals(chrom.toString(), chrom2.toString());
-    assertTrue(chrom.equals(chrom2));
-    assertNotSame(chrom.getGenes(), chrom2.getGenes());
-    assertNotSame(chrom.getGene(0), chrom2.getGene(0));
-    assertNotSame(chrom.getGene(1), chrom2.getGene(1));
-  }
-
-  /**
-   * Test clone with set application data implementing interface Cloneable
-   * @throws InvalidConfigurationException
-   *
-   * @author Klaus Meffert
-   */
-  public void testClone_2()
-      throws InvalidConfigurationException {
-    Gene[] genes = new IntegerGene[2];
-    genes[0] = new IntegerGene();
-    genes[1] = new IntegerGene();
-    Configuration conf = new DefaultConfiguration();
-    conf.setFitnessFunction(new StaticFitnessFunction(20));
-    Genotype.setConfiguration(conf);
-    Chromosome chrom2 = new Chromosome(genes);
-    conf.setSampleChromosome(chrom2);
-    conf.setPopulationSize(5);
-    Chromosome chrom = new Chromosome(genes);
-    Object appObj = new MyAppObject();
-    chrom.setApplicationData(appObj);
-    assertEquals(Chromosome.class, chrom.clone().getClass());
-  }
-
-  /**
-   * Test clone with set application data, where cloning supported
-   * @throws InvalidConfigurationException
-   *
-   * @author Klaus Meffert
-   */
-  public void testClone_3()
-      throws InvalidConfigurationException {
-    Gene[] genes = new IntegerGene[2];
-    genes[0] = new IntegerGene();
-    genes[1] = new IntegerGene();
-    Configuration conf = new DefaultConfiguration();
-    conf.setFitnessFunction(new StaticFitnessFunction(20));
-    Genotype.setConfiguration(conf);
-    Chromosome chrom2 = new Chromosome(genes);
-    conf.setSampleChromosome(chrom2);
-    conf.setPopulationSize(5);
-    Genotype.setConfiguration(conf);
-    Chromosome chrom = new Chromosome(genes);
-    Object appObj = new MyAppObject2();
-    chrom.setApplicationData(appObj);
-    chrom2 = (Chromosome) chrom.clone();
-    assertTrue(chrom.equals(chrom2));
   }
 
   /**
