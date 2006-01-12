@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -210,5 +210,70 @@ public class AveragingCrossoverOperator
       m_loci.put(new Integer(a_index), locus);
     }
     return locus.intValue();
+  }
+
+  /**
+   * Compares this GeneticOperator against the specified object. The result is
+   * true if and the argument is an instance of this class and is equal wrt the
+   * data.
+   *
+   * @param a_other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public boolean equals(final Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  /**
+   * Compares the given GeneticOperator to this GeneticOperator.
+   *
+   * @param a_other the instance against which to compare this instance
+   * @return a negative number if this instance is "less than" the given
+   * instance, zero if they are equal to each other, and a positive number if
+   * this is "greater than" the given instance
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    AveragingCrossoverOperator op = (AveragingCrossoverOperator) a_other;
+    if (m_crossoverRateCalc == null) {
+      if (op.m_crossoverRateCalc != null) {
+        return -1;
+      }
+    }
+    else {
+      if (op.m_crossoverRateCalc == null) {
+        return 1;
+      }
+      else {
+        // here, we could compare the rate calculators
+//        if (!m_crossoverRateCalc.equals(op.m_crossoverRateCalc)) {
+//          return -1; //arbitrary
+//        }
+      }
+    }
+    if (m_crossoverRate != op.m_crossoverRate) {
+      if (m_crossoverRate > op.m_crossoverRate) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    }
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
   }
 }
