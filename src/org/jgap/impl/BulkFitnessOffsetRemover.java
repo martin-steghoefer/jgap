@@ -19,20 +19,21 @@ import org.jgap.*;
  * instances will start from a minimum of 1 afterwards.
  * </p>
  * <p>
- * The removal of an offset in the fitness values of a population strengthens the
- * "survival of the fittest" effect of a selector that performs selection
+ * The removal of an offset in the fitness values of a population strengthens
+ * the "survival of the fittest" effect of a selector that performs selection
  * upon fitness values. A high offset in the fitness values of a population
- * lowers the relative difference between the fitness values of the Chromosomes in
- * a population.
+ * lowers the relative difference between the fitness values of the Chromosomes
+ * in a population.
  * </p>
  * <h3>Example of applicability</h3>
  * <p>
  * You are optimizing a black box with <i>n</i> parameters that are mapped
- * to {@link org.jgap.Chromosome} instances each having <i>n</i> {@link org.jgap.Gene}
- * instances.<br>
+ * to {@link org.jgap.Chromosome} instances each having <i>n</i>
+ * {@link org.jgap.Gene} instances.<br>
  * You want to minimize the answer time of the black box and provide
  * a {@link org.jgap.FitnessFunction#evaluate(org.jgap.Chromosome)}
- * that takes the genes out of the chromosome, put's it's {@link org.jgap.Gene#getAllele()}
+ * that takes the genes out of the chromosome, put's it's
+ * {@link org.jgap.Gene#getAllele()}
  * values to the parameters and measures the answer time of the black box
  * (by invoking it's service to optimize). <br>
  * The longer the time takes, the worse it's fitness is, so you have to
@@ -49,8 +50,10 @@ import org.jgap.*;
  *     <font color="#999999">// get the Gene[] & put the parameters into the box.
  *     ...
  *     </font>
- *     long duration = System.currentTimeMillis();  <font color="#999999">// You certainly will use an advanced StopWatch...</font>
- *     this.bbox.service();  <font color="#999999">// The black boxes service to optimize.</font>
+ *     long duration = System.currentTimeMillis();
+ * <font color="#999999">// You certainly will use an advanced StopWatch...</font>
+ *     this.bbox.service();
+ * <font color="#999999">// The black boxes service to optimize.</font>
  *     duration = System.currentTimeMillis()-duration;
  *     <font color="#999999">// transform the time into fitness value:</font>
  *     fitness = double.MAX_VALUE - (double)duration;
@@ -61,7 +64,8 @@ import org.jgap.*;
  * </pre>
  * </p>
  * <p>
- * <h4>We might get the following results (each row stands for a Chromosome, the table is a population):</h4>
+ * <h4>We might get the following results (each row stands for a Chromosome,
+ * the table is a population):</h4>
  * <table border="1">
  * <tr align="left" valign="top">
  * <th>
@@ -218,7 +222,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /*
    * Replace this member by the Configuration as
@@ -376,7 +380,7 @@ public class BulkFitnessOffsetRemover
    * Each bulk fitness evaluation a Chromosome experiences,
    * it's fitness value <i>F</i> get's an addition of the old offset
    * <i>O<sub>(n-1)</sub></i>
-   * and a substraction by the new offset <i>O<sub>n</i></sub>. <br>
+   * and a substraction by the new offset <i>O<sub>n</sub></i>.<br>
    * <i><sub>n</sub></i> is the generation index.
    *
    * <pre>

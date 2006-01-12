@@ -23,7 +23,7 @@ import org.jgap.*;
 public class ChromosomePool
     implements IChromosomePool {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The internal pool in which the Chromosomes are stored.
@@ -66,7 +66,7 @@ public class ChromosomePool
    * @author Neil Rostan
    * @since 1.0
    */
-  public synchronized void releaseChromosome(Chromosome a_chromosome) {
+  public synchronized void releaseChromosome(final Chromosome a_chromosome) {
     if (a_chromosome == null) {
       throw new IllegalArgumentException(
           "Chromosome instance must not be null!");

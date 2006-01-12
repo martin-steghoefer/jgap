@@ -21,7 +21,7 @@ import org.jgap.*;
 public class GaussianRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -71,8 +71,8 @@ public class GaussianRandomGenerator
    */
   public int nextInt() {
     return Math.abs(Math.min(Integer.MAX_VALUE - 1,
-                             (int) Math.round(nextGaussian() *
-                                              Integer.MAX_VALUE)));
+                             (int) Math.round(nextGaussian()
+                                              * Integer.MAX_VALUE)));
   }
 
   /**

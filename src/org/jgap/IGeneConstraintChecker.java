@@ -19,19 +19,17 @@ package org.jgap;
  */
 public interface IGeneConstraintChecker extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Check if a given allele value is valid for the given gene instance.
+   *
    * @param a_gene the gene the given allele is to be validated for
    * @param a_alleleValue the allele value to be validated
    * @return true: allele may be set for gene; false: validity check failed
-   * @throws RuntimeException if the checker cannot decide whether the given
-   * allele is valid or not
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  boolean verify(Gene a_gene, Object a_alleleValue)
-      throws RuntimeException;
+  boolean verify(Gene a_gene, Object a_alleleValue);
 }

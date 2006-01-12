@@ -37,7 +37,7 @@ public class CrossoverOperator
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -234,7 +234,7 @@ public class CrossoverOperator
    * @author Klaus Meffert
    * @since 2.6
    */
-  public int compareTo(Object a_other) {
+  public int compareTo(final Object a_other) {
     if (a_other == null) {
       return 1;
     }
@@ -248,12 +248,12 @@ public class CrossoverOperator
       if (op.m_crossoverRateCalc == null) {
         return 1;
       }
-      else {
+//      else {
         // here, we could compare the rate calculators
 //        if (!m_crossoverRateCalc.equals(op.m_crossoverRateCalc)) {
 //          return -1; //arbitrary
 //        }
-      }
+//      }
     }
     if (m_crossoverRate != op.m_crossoverRate) {
       if (m_crossoverRate > op.m_crossoverRate) {

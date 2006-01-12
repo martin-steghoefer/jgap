@@ -27,7 +27,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   // data members of class ConfigFrame
   private ConfigurationHandler m_conHandler;
@@ -150,11 +150,11 @@ public class ConfigFrame
     ArrayList values;
     try {
       Iterator lIter = m_listGroups.iterator();
-      while(lIter.hasNext()) {
+      while (lIter.hasNext()) {
         ListGroup lg = (ListGroup) lIter.next();
         values = new ArrayList();
         Enumeration e = lg.getOutListModel().elements();
-        while(e.hasMoreElements()) {
+        while (e.hasMoreElements()) {
           String val = (String) e.nextElement();
           values.add(val);
         }
@@ -163,13 +163,13 @@ public class ConfigFrame
       // add textFields
       TextGroup tg;
       Iterator tIter = m_textGroups.iterator();
-      while(tIter.hasNext()) {
+      while (tIter.hasNext()) {
         tg = (TextGroup) tIter.next();
         cd.addTextData(tg.getProp().getName(), tg.getTextField().getText());
       }
     }
     catch (ClassCastException cex) {
-      JOptionPane.showMessageDialog(null,cex.getMessage(),
+      JOptionPane.showMessageDialog(null, cex.getMessage(),
                                     "ConfigFrame.getConfigData():Configuration"
                                     + " Error",
                                     JOptionPane.INFORMATION_MESSAGE);

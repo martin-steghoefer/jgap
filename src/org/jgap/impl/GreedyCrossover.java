@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -124,8 +124,7 @@ public class GreedyCrossover
    * @since 2.1
    */
   public void operate(final Chromosome a_firstMate,
-                      final Chromosome a_secondMate)
-      throws Error {
+                      final Chromosome a_secondMate) {
     Gene[] g1 = a_firstMate.getGenes();
     Gene[] g2 = a_secondMate.getGenes();
 
@@ -161,8 +160,9 @@ public class GreedyCrossover
     out.add(a_g1[m_startOffset]);
     for (int j = m_startOffset + 1; j < n; j++) { // g[m_startOffset] picked
       if (ASSERTIONS && not_picked.contains(a_g1[j])) {
-        throw new Error("All genes must be different for " +
-                        getClass().getName() + ". The gene " + a_g1[j] + "[" + j
+        throw new Error("All genes must be different for "
+                        + getClass().getName()
+                        + ". The gene " + a_g1[j] + "[" + j
                         + "] occurs more "
                         + "than once in one of the chromosomes. ");
       }
@@ -213,8 +213,9 @@ public class GreedyCrossover
         other = n1;
       }
 
-      if (out.contains(picked))
+      if (out.contains(picked)) {
         picked = other;
+      }
       if (picked == null || out /* still */.contains(picked)) {
         // select a non-selected // it is not random
         picked = (Gene) not_picked.first();
@@ -239,11 +240,12 @@ public class GreedyCrossover
     }
 
     if (ASSERTIONS) {
-      if (out.size() != g.length - m_startOffset)
+      if (out.size() != g.length - m_startOffset) {
         throw new Error("Unexpected internal error. "
                         + "These two must be equal: " + out.size()
                         + " and " + (g.length - m_startOffset) + ", g.length "
                         + g.length + ", start offset " + m_startOffset);
+      }
     }
 
     for (int i = m_startOffset; i < g.length; i++) {
@@ -316,7 +318,7 @@ public class GreedyCrossover
    * @author Klaus Meffert
    * @since 2.6
    */
-  public int compareTo(Object a_other) {
+  public int compareTo(final Object a_other) {
     if (a_other == null) {
       return 1;
     }

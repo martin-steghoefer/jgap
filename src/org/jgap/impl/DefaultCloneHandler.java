@@ -34,7 +34,7 @@ public class DefaultCloneHandler
    * @author Klaus Meffert
    * @since 2.6
    */
-  public boolean isHandlerFor(Object a_obj, Class a_clazz) {
+  public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
     if (IApplicationData.class.isAssignableFrom(a_clazz)) {
       return true;
     }
@@ -68,7 +68,8 @@ public class DefaultCloneHandler
    * @author Klaus Meffert
    * @since 2.6
    */
-  public Object perform(Object a_objToClone, Class a_class, Object a_params) {
+  public Object perform(final Object a_objToClone, final Class a_class,
+                        final Object a_params) {
     if (IApplicationData.class.isAssignableFrom(a_objToClone.getClass())) {
       try {
         return ( (IApplicationData) a_objToClone).clone();
