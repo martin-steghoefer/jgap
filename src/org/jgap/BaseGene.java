@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -97,7 +97,7 @@ public abstract class BaseGene
    * Retrieves a string representation of this Gene's value that
    * may be useful for display purposes.
    *
-   * @return a string representation of this Gene's value.
+   * @return a string representation of this Gene's value
    *
    * @author Klaus Meffert
    * @since 1.0
@@ -122,8 +122,8 @@ public abstract class BaseGene
   }
 
   /**
-   * @return the size of the gene, i.e the number of atomic elements.
-   * Always 1 for non-composed Gene types. Override for composed Gene types.
+   * @return the size of the gene, i.e the number of atomic elements. Always 1
+   * for non-composed Gene types. Override for composed Gene types
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -137,8 +137,8 @@ public abstract class BaseGene
    * object is a Gene of the same type and has the same value (allele) as
    * this Gene. Otherwise it returns false.
    *
-   * @param a_other the object to compare to this Gene for equality.
-   * @return true if this Gene is equal to the given object, false otherwise.
+   * @param a_other the object to compare to this Gene for equality
+   * @return true if this Gene is equal to the given object, false otherwise
    *
    * @author Klaus Meffert
    * @since 1.1
