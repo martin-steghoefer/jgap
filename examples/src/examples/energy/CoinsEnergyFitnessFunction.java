@@ -21,14 +21,14 @@ import org.jgap.*;
 public class CoinsEnergyFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final int m_targetAmount;
 
   private final double m_maxWeight;
 
-  public static final int MAX_BOUND = 1000;
-  public static final double MAX_WEIGHT = 100;
+  public static final int MAX_BOUND = 10000;
+  public static final double MAX_WEIGHT = 500;
 
   private static final double ZERO_DIFFERENCE_FITNESS = Math.sqrt(MAX_BOUND);
 
@@ -74,7 +74,7 @@ public class CoinsEnergyFitnessFunction
     int totalCoins = getTotalNumberOfCoins(a_subject);
     int changeDifference = Math.abs(m_targetAmount - changeAmount);
 
-    double fitness = 0.0d;
+    double fitness;
 
     // Step 1: Determine total sum of energies (interpreted as weights here)
     // of coins. If higher than the given maximum value, the solution is not
@@ -90,14 +90,21 @@ public class CoinsEnergyFitnessFunction
       }
     }
 
+    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+      fitness = MAX_BOUND;
+    }
+    else {
+      fitness = 0.0d;
+    }
+
     // Step 2: Determine distance of amount represented by solution from
     // the target amount.
     // -----------------------------------------------------------------
     if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
-      fitness += changeDifferenceBonus(MAX_BOUND, changeDifference);
+      fitness -= changeDifferenceBonus(MAX_BOUND/3, changeDifference);
     }
     else {
-      fitness -= changeDifferenceBonus(MAX_BOUND, changeDifference);
+      fitness += changeDifferenceBonus(MAX_BOUND/3, changeDifference);
     }
 
     // Step 3: We divide the fitness value by a penalty based on the number of
@@ -107,21 +114,20 @@ public class CoinsEnergyFitnessFunction
     // the resulting fitness value.
     // -----------------------------------------------------------------------
     if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
-      fitness -= computeCoinNumberPenalty(MAX_BOUND, totalCoins);
+      fitness -= computeCoinNumberPenalty(MAX_BOUND/3, totalCoins);
     }
     else {
-      fitness += computeCoinNumberPenalty(MAX_BOUND, totalCoins);
+      fitness += computeCoinNumberPenalty(MAX_BOUND/3, totalCoins);
     }
 
     // Step 4: Penalize higher weight (= engery) values.
     // -------------------------------------------------
     if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
-      fitness -= computeWeightPenalty(MAX_BOUND, totalWeight);
+      fitness -= computeWeightPenalty(MAX_BOUND/3, totalWeight);
     }
     else {
-      fitness += computeWeightPenalty(MAX_BOUND, totalWeight);
+      fitness += computeWeightPenalty(MAX_BOUND/3, totalWeight);
     }
-
 
     // Make sure fitness value is always positive.
     // -------------------------------------------
@@ -144,7 +150,7 @@ public class CoinsEnergyFitnessFunction
     else {
       // we arbitrarily work with half of the maximum fitness as basis for
       // non-optimal solutions (concerning change difference)
-      return a_maxFitness / 2 - a_changeDifference * a_changeDifference;
+      return Math.min(a_maxFitness, Math.pow(a_changeDifference, 2.2d));
     }
   }
 
@@ -165,10 +171,13 @@ public class CoinsEnergyFitnessFunction
       return 0;
     }
     else {
+      if (a_coins < 1) {
+        return a_maxFitness;
+      }
       // The more coins the more penalty, but not more than the maximum
       // fitness value possible. Let's avoid linear behavior and use
       // exponential penalty calculation instead
-      return (Math.min(a_maxFitness, a_coins * a_coins));
+      return (Math.min(a_maxFitness, Math.pow(a_coins, 1.3d)));
     }
   }
 
@@ -177,7 +186,7 @@ public class CoinsEnergyFitnessFunction
    * the given potential solution and returns that amount.
    *
    * @param a_potentialSolution the potential solution to evaluate
-   * @return The total amount of change (in cents) represented by the
+   * @return the total amount of change (in cents) represented by the
    * given solution
    *
    * @author Neil Rotstan
@@ -243,7 +252,8 @@ public class CoinsEnergyFitnessFunction
     double totalWeight = 0.0d;
     int numberOfGenes = a_potentialSolution.size();
     for (int i = 0; i < numberOfGenes; i++) {
-      totalWeight += a_potentialSolution.getGene(i).getEnergy();
+      int coinsNumber = getNumberOfCoinsAtGene(a_potentialSolution,i);
+      totalWeight += a_potentialSolution.getGene(i).getEnergy() * coinsNumber;
     }
     return totalWeight;
   }

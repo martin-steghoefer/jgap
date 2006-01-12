@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class CoinsEnergy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -77,10 +77,18 @@ public class CoinsEnergy {
     Gene[] sampleGenes = new Gene[4];
     IntegerGene gene = new IntegerGene(0, 3 * 10);
     gene.setConstraintChecker(new EnergyGeneConstraintChecker());
+    // Initialize energys of Gene's. Each Gene represents a coin with a
+    // specific value, and each coin with different value has a specific
+    // weight. Not necessarily a higher weight for higher coin values!
+    // (as in real life!).
     sampleGenes[0] = gene; // Quarters
+    sampleGenes[0].setEnergy(20.0d);
     sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
+    sampleGenes[1].setEnergy(10.0d);
     sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
+    sampleGenes[2].setEnergy(11.0d);
     sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
+    sampleGenes[3].setEnergy(7.0d);
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
@@ -93,11 +101,6 @@ public class CoinsEnergy {
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
     Genotype population = Genotype.randomInitialGenotype(conf);
-    // Initialize energys of Gene's. Each Gene represents a coin with a
-    // specific value, and each coin with different value has a specific
-    // weight. Not necessarily a higher weight for higher coin values!
-    // (as in real life!).
-    /**@todo */
 
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
@@ -110,7 +113,7 @@ public class CoinsEnergy {
     Chromosome bestSolutionSoFar = population.getFittestChromosome();
     System.out.println("The best solution has a fitness value of "
                        + bestSolutionSoFar.getFitnessValue());
-    System.out.println("It contained the following: ");
+    System.out.println("It contains the following: ");
     System.out.println("\t" + CoinsEnergyFitnessFunction.getNumberOfCoinsAtGene(
         bestSolutionSoFar, 0) + " quarters.");
     System.out.println("\t" + CoinsEnergyFitnessFunction.getNumberOfCoinsAtGene(
@@ -121,9 +124,14 @@ public class CoinsEnergy {
         bestSolutionSoFar, 3) + " pennies.");
     System.out.println("For a total of "
                        + CoinsEnergyFitnessFunction.amountOfChange(
-        bestSolutionSoFar) + " cents in "
+        bestSolutionSoFar)
+                       + " cents in "
                        + CoinsEnergyFitnessFunction.getTotalNumberOfCoins(
-        bestSolutionSoFar) + " coins.");
+        bestSolutionSoFar)
+                       + " coins with a total weight of "
+                       + CoinsEnergyFitnessFunction.getTotalWeight(
+        bestSolutionSoFar)
+                       + ")");
   }
 
   /**
@@ -141,7 +149,7 @@ public class CoinsEnergy {
   public static void main(String[] args)
       throws Exception {
     if (args.length != 2) {
-      System.out.println("Syntax: MinimizingMakeChange <amount> <max weight>");
+      System.out.println("Syntax: CoinsEnergy <amount> <max weight>");
     }
     else {
       int amount = getValue(args, 0);
@@ -185,15 +193,16 @@ public class CoinsEnergy {
      * @author Klaus Meffert
      * @since 2.4
      */
-    public boolean verify(Gene a_gene, Object a_alleleValue)
+    public boolean verify(Gene a_gene, final Object a_alleleValue)
         throws RuntimeException {
-      double computedWeight = 0.0d; /**todo compute*/
-      // We need to figure out what type of coin (penny, nickel, dime, quarter)
+      double computedWeight = 0.0d;
+      // We need to figure out what type of coin (penny, nickle, dime, quarter)
       // the current Gene represents. This is not trivial as it depends on the
       // index of the Gene within the Chromosome. The Chromosome is not
       // accessible by the Gene!
       // ----------------------------------------------------------------------
-      a_gene.setEnergy(computedWeight);
+       /**todo compute*/
+//      a_gene.setEnergy(computedWeight);
       // No verification here, always conform.
       // -------------------------------------
       return true;
