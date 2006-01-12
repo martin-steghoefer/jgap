@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -322,4 +322,30 @@ public abstract class BaseGene
     return m_geneAlleleChecker;
   }
 
+  /**
+   * Provides implementation-independent means for creating new Gene
+   * instances. The new instance that is created and returned should be
+   * setup with any implementation-dependent configuration that this Gene
+   * instance is setup with (aside from the actual value, of course). For
+   * example, if this Gene were setup with bounds on its value, then the
+   * Gene instance returned from this method should also be setup with
+   * those same bounds. This is important, as the JGAP core will invoke this
+   * method on each Gene in the sample Chromosome in order to create each
+   * new Gene in the same respective gene position for a new Chromosome.
+   *
+   * @return a new Gene instance of the same type and with the same setup as
+   * this concrete Gene
+   *
+   * @author Neil Rostan
+   * @author Klaus Meffert
+   * @since 2.6 (since 1.0 in IntegerGene)
+   */
+  public Gene newGene() {
+    Gene result = newGeneInternal();
+    result.setConstraintChecker(getConstraintChecker());
+    result.setEnergy(getEnergy());
+    return result;
+  }
+
+  protected abstract Gene newGeneInternal();
 }
