@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private int m_startOffset = 1;
 
@@ -111,8 +111,9 @@ public class SwappingMutationOperator
       // Ensure probability of 1/currentRate for applying mutation.
       // ----------------------------------------------------------
       if (a_generator.nextInt(a_rate) == 0) {
-        if (chromosome == null)
+        if (chromosome == null) {
           chromosome = (Chromosome) a_x.clone();
+        }
         Gene[] genes = chromosome.getGenes();
         Gene[] mutated = operate(a_generator, j, genes);
         // setGenes is not required for this operator, but it may
