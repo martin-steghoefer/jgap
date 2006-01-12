@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -412,7 +412,7 @@ public class NumberGeneTest
       calculateBoundsUnitsToIntegerUnitsRatio();
     }
 
-    public Gene newGene() {
+    protected Gene newGeneInternal() {
       return new NumberGeneImpl(m_lowerBounds, m_upperBounds);
     }
 
