@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -41,7 +41,7 @@ public class MutationOperator
    * mean that, on average, 1 / 1000 genes would be mutated. A value of zero
    * disabled mutation entirely.
    */
-  protected int m_mutationRate;
+  private int m_mutationRate;
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -346,5 +346,9 @@ public class MutationOperator
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
+  }
+
+  public int getMutationRate() {
+    return m_mutationRate;
   }
 }
