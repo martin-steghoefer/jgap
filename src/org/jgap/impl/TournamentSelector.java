@@ -26,7 +26,7 @@ import org.jgap.data.config.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -57,7 +57,7 @@ public class TournamentSelector
     m_chromosomes = new Vector();
     m_fitnessValueComparator = new FitnessValueComparator();
   }
-  
+
   /**
    * Constructor
    * @param a_tournament_size the size of each tournament to play
@@ -66,14 +66,15 @@ public class TournamentSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public TournamentSelector(int a_tournament_size, double a_probability) {
+  public TournamentSelector(final int a_tournament_size,
+                            final double a_probability) {
     super();
     if (a_tournament_size < 1) {
       throw new IllegalArgumentException("Tournament size must be at least 1!");
     }
     if (a_probability <= 0.0d || a_probability > 1.0d) {
       throw new IllegalArgumentException("Probability must be greater 0.0 and"
-                                         +" less or equal than 1.0!");
+                                         + " less or equal than 1.0!");
     }
     m_tournament_size = a_tournament_size;
     m_probability = a_probability;
@@ -81,45 +82,45 @@ public class TournamentSelector
     m_fitnessValueComparator = new FitnessValueComparator();
   }
 
-  public void setTournamentSize(int a_tournament_size, double a_probability) {
-  	if (a_tournament_size < 1) {
-        throw new IllegalArgumentException("Tournament size must be at least 1!");
-  	}
-  	if (a_probability <= 0.0d || a_probability > 1.0d) {
-        throw new IllegalArgumentException("Probability must be greater 0.0 and"
-                                           +" less or equal than 1.0!");
-      }
-  	m_tournament_size = a_tournament_size;
-  	m_probability = a_probability;
+  public void setTournamentSize(final int a_tournament_size,
+                                final double a_probability) {
+    if (a_tournament_size < 1) {
+      throw new IllegalArgumentException("Tournament size must be at least 1!");
+    }
+    if (a_probability <= 0.0d || a_probability > 1.0d) {
+      throw new IllegalArgumentException("Probability must be greater 0.0 and"
+                                         + " less or equal than 1.0!");
+    }
+    m_tournament_size = a_tournament_size;
+    m_probability = a_probability;
   }
-  
+
   public void setProbability() {
-  	
   }
-  
+
   /**
    * Select a given number of Chromosomes from the pool that will move on
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
    *
    * @param a_howManyToSelect int
-   * @param a_from_pop the population the Chromosomes will be selected from.
-   * @param a_to_pop the population the Chromosomes will be added to.
+   * @param a_from_pop the population the Chromosomes will be selected from
+   * @param a_to_pop the population the Chromosomes will be added to
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void select(int a_howManyToSelect, Population  a_from_pop, Population a_to_pop) {
+  public void select(final int a_howManyToSelect, final Population a_from_pop,
+                     Population a_to_pop) {
     if (a_from_pop != null) {
       for (int i = 0; i < a_from_pop.size(); i++) {
         add(a_from_pop.getChromosome(i));
       }
     }
-
     List tournament = new Vector();
     RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
     int size = m_chromosomes.size();
-    if (size ==0) {
+    if (size == 0) {
       return;
     }
     int k;
@@ -172,7 +173,7 @@ public class TournamentSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  protected void add(Chromosome a_chromosomeToAdd) {
+  protected void add(final Chromosome a_chromosomeToAdd) {
     m_chromosomes.add(a_chromosomeToAdd);
   }
 
@@ -185,10 +186,9 @@ public class TournamentSelector
    */
   private class FitnessValueComparator
       implements Comparator {
-    public int compare(Object first, Object second) {
-      Chromosome chrom1 = (Chromosome) first;
-      Chromosome chrom2 = (Chromosome) second;
-
+    public int compare(Object a_first, Object a_second) {
+      Chromosome chrom1 = (Chromosome) a_first;
+      Chromosome chrom2 = (Chromosome) a_second;
       if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {
         return 1;
@@ -202,47 +202,47 @@ public class TournamentSelector
       }
     }
   }
-  
-  
   /**
    * Get the ConfigurationHandler for this class.
-   * 
+   *
    * @author Siddhartha Azad
    * @since 2.0
    * */
-  public ConfigurationHandler getConfigurationHandler() throws ConfigException {
-  	TournamentSelectorConHandler conHandler = new TournamentSelectorConHandler();
-  	conHandler.setConfigurable(this);
-  	return conHandler;
+  public ConfigurationHandler getConfigurationHandler()
+      throws ConfigException {
+    TournamentSelectorConHandler conHandler = new TournamentSelectorConHandler();
+    conHandler.setConfigurable(this);
+    return conHandler;
   }
-  
+
   /**
    * Pass the name and value of a property to be set.
    * @param name The name of the property.
    * @param value The value of the property.
-   * 
+   *
    * @author Siddhartha Azad.
    * @since 2.0
    * */
-  public void setConfigProperty(String name, String value) throws ConfigException,
-  	InvalidConfigurationException   {
-  	if(name.equals("m_probability"))
-  		m_probability = Double.parseDouble(name);
-  	else
-  		System.err.println("TournamentSelector:Unknown property "+name);
+  public void setConfigProperty(String a_name, String a_value)
+      throws ConfigException, InvalidConfigurationException {
+    if (a_name.equals("m_probability")) {
+      m_probability = Double.parseDouble(a_name);
+    }
+    else {
+      System.err.println("TournamentSelector:Unknown property " + a_name);
+    }
   }
-  
+
   /**
    * Pass the name and values of a property to be set.
    * @param name The name of the property.
    * @param values The different values of the property.
-   * 
+   *
    * @author Siddhartha Azad.
    * @since 2.0
    * */
-  public void setConfigMultiProperty(String name, ArrayList values) throws 
-  	ConfigException, InvalidConfigurationException {
-  	// currently no multi-properties defined for TournamentSelectors
+  public void setConfigMultiProperty(String name, ArrayList values)
+      throws ConfigException, InvalidConfigurationException {
+    // currently no multi-properties defined for TournamentSelectors
   }
-  
 }

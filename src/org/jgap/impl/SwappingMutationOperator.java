@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private int m_startOffset = 1;
 
@@ -40,13 +40,13 @@ public class SwappingMutationOperator
   }
 
   /** {@inheritDoc} */
-  public SwappingMutationOperator(IUniversalRateCalculator
+  public SwappingMutationOperator(final IUniversalRateCalculator
                                   a_mutationRateCalculator) {
     super(a_mutationRateCalculator);
   }
 
   /** {@inheritDoc} */
-  public SwappingMutationOperator(int a_desiredMutationRate) {
+  public SwappingMutationOperator(final int a_desiredMutationRate) {
     super(a_desiredMutationRate);
   }
 
@@ -62,7 +62,7 @@ public class SwappingMutationOperator
     // If the mutation rate is set to zero and dynamic mutation rate is
     // disabled, then we don't perform any mutation.
     // ----------------------------------------------------------------
-    if (m_mutationRate == 0 && m_mutationRateCalc == null) {
+    if (getMutationRate() == 0 && m_mutationRateCalc == null) {
       return;
     }
     // Determine the mutation rate. If dynamic rate is enabled, then
@@ -74,7 +74,7 @@ public class SwappingMutationOperator
       currentRate = m_mutationRateCalc.calculateCurrentRate();
     }
     else {
-      currentRate = m_mutationRate;
+      currentRate = getMutationRate();
     }
     RandomGenerator generator = Genotype.getConfiguration().
         getRandomGenerator();
@@ -103,8 +103,8 @@ public class SwappingMutationOperator
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  protected Chromosome operate(Chromosome a_x, int a_rate,
-                               RandomGenerator a_generator) {
+  protected Chromosome operate(final Chromosome a_x, final int a_rate,
+                               final RandomGenerator a_generator) {
     Chromosome chromosome = null;
     // ----------------------------------------
     for (int j = m_startOffset; j < a_x.size(); j++) {
@@ -143,13 +143,13 @@ public class SwappingMutationOperator
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  protected Gene[] operate(RandomGenerator a_generator,
-                           int a_target_gene, Gene[] a_genes) {
+  protected Gene[] operate(final RandomGenerator a_generator,
+                           final int a_target_gene, final Gene[] a_genes) {
     // swap this gene with the other one now:
     //  mutateGene(genes[j], generator);
     // -------------------------------------
-    int other = m_startOffset +
-        a_generator.nextInt(a_genes.length - m_startOffset);
+    int other = m_startOffset
+        + a_generator.nextInt(a_genes.length - m_startOffset);
     Gene t = a_genes[a_target_gene];
     a_genes[a_target_gene] = a_genes[other];
     a_genes[other] = t;
@@ -167,7 +167,7 @@ public class SwappingMutationOperator
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public void setStartOffset(int a_offset) {
+  public void setStartOffset(final int a_offset) {
     m_startOffset = a_offset;
   }
 

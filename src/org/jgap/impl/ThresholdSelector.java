@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -57,7 +57,7 @@ public class ThresholdSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public ThresholdSelector(double a_bestChromosomes_Percentage) {
+  public ThresholdSelector(final double a_bestChromosomes_Percentage) {
     super();
     if (a_bestChromosomes_Percentage < 0.0000000d ||
         a_bestChromosomes_Percentage > 1.0000000d) {
@@ -75,14 +75,15 @@ public class ThresholdSelector
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
 
-   * @param a_howManyToSelect The number of Chromosomes to select.
-   * @param a_from_pop the population the Chromosomes will be selected from.
-   * @param a_to_pop the population the Chromosomes will be added to.
+   * @param a_howManyToSelect the number of Chromosomes to select
+   * @param a_from_pop the population the Chromosomes will be selected from
+   * @param a_to_pop the population the Chromosomes will be added to
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void select(int a_howManyToSelect, Population  a_from_pop, Population a_to_pop) {
+  public void select(final int a_howManyToSelect, final Population a_from_pop,
+                     Population a_to_pop) {
     if (a_from_pop != null) {
       for (int i = 0; i < a_from_pop.size(); i++) {
         add(a_from_pop.getChromosome(i));
@@ -106,8 +107,8 @@ public class ThresholdSelector
     }
 
     // Select the best chromosomes for granted
-    int bestToBeSelected = (int) Math.round(canBeSelected *
-                                            m_bestChroms_Percentage);
+    int bestToBeSelected = (int) Math.round(canBeSelected
+                                            * m_bestChroms_Percentage);
     for (int i = 0; i < bestToBeSelected; i++) {
       a_to_pop.addChromosome((Chromosome)m_chromosomes.get(i));
     }
@@ -145,13 +146,13 @@ public class ThresholdSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  protected void add(Chromosome a_chromosomeToAdd) {
+  protected void add(final Chromosome a_chromosomeToAdd) {
     m_chromosomes.add(a_chromosomeToAdd);
     m_needsSorting = true;
   }
 
 
-  
+
   /**
    * Comparator regarding only the fitness value. Best fitness value will
    * be on first position of resulting sorted list
@@ -161,9 +162,9 @@ public class ThresholdSelector
    */
   private class FitnessValueComparator
       implements Comparator {
-    public int compare(Object first, Object second) {
-      Chromosome chrom1 = (Chromosome) first;
-      Chromosome chrom2 = (Chromosome) second;
+    public int compare(Object a_first, Object a_second) {
+      Chromosome chrom1 = (Chromosome) a_first;
+      Chromosome chrom2 = (Chromosome) a_second;
 
       if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {

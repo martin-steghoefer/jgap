@@ -15,7 +15,7 @@ import org.jgap.*;
 /**
  * Central factory for creating default objects to use, e.g. random generators.
  * Could be made configurable. An instance of JGAPFactory can be acces via<p>
- * <code><Configuration>.getJGAPFactory();</code><p>
+ * <code>Genotype.getConfiguration().getJGAPFactory();</code><p>
  * To use your own factory class instead, use:<p>
  * <code>
  * System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS, "myFactory");<p>
@@ -28,7 +28,7 @@ import org.jgap.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private List m_parameters;
 
@@ -51,7 +51,7 @@ public class JGAPFactory
    * Allows setting (generic because unknown) parameters for creating objects
    * @param a_parameters Collection of generic parameters
    */
-  public void setParameters(Collection a_parameters) {
+  public void setParameters(final Collection a_parameters) {
     m_parameters = new Vector(a_parameters);
   }
 
@@ -69,7 +69,7 @@ public class JGAPFactory
    * @author Klaus Meffert
    * @since 2.6
    */
-  public int registerCloneHandler(ICloneHandler a_cloneHandler) {
+  public int registerCloneHandler(final ICloneHandler a_cloneHandler) {
     m_cloneHandlers.add(a_cloneHandler);
     return m_cloneHandlers.size() - 1;
   }
@@ -83,7 +83,7 @@ public class JGAPFactory
    * @author Klaus Meffert
    * @since 2.6
    */
-  public ICloneHandler removeCloneHandler(int a_index) {
+  public ICloneHandler removeCloneHandler(final int a_index) {
     return (ICloneHandler) m_cloneHandlers.remove(a_index);
   }
 
@@ -98,7 +98,8 @@ public class JGAPFactory
    * @author Klaus Meffert
    * @since 2.6
    */
-  public ICloneHandler getCloneHandlerFor(Object a_obj, Class a_classToClone) {
+  public ICloneHandler getCloneHandlerFor(final Object a_obj,
+                                          final Class a_classToClone) {
     Iterator it = m_cloneHandlers.iterator();
     while (it.hasNext()) {
       ICloneHandler handler = (ICloneHandler) it.next();
@@ -126,7 +127,7 @@ public class JGAPFactory
    * @author Klaus Meffert
    * @since 2.6
    */
-  public int registerInitializer(IInitializer a_chromIniter) {
+  public int registerInitializer(final IInitializer a_chromIniter) {
     m_initer.add(a_chromIniter);
     return m_initer.size() - 1;
   }
@@ -140,7 +141,7 @@ public class JGAPFactory
    * @author Klaus Meffert
    * @since 2.6
    */
-  public IInitializer removeInitializer(int a_index) {
+  public IInitializer removeInitializer(final int a_index) {
     return (IInitializer) m_initer.remove(a_index);
   }
 
@@ -155,7 +156,8 @@ public class JGAPFactory
    * @author Klaus Meffert
    * @since 2.6
    */
-  public IInitializer getInitializerFor(Object a_obj, Class a_class) {
+  public IInitializer getInitializerFor(final Object a_obj,
+                                        final Class a_class) {
     Iterator it = m_initer.iterator();
     while (it.hasNext()) {
       IInitializer initer = (IInitializer) it.next();
@@ -175,7 +177,7 @@ public class JGAPFactory
     return null;
   }
 
-  public void setGeneticOperatorConstraint(IGeneticOperatorConstraint
+  public void setGeneticOperatorConstraint(final IGeneticOperatorConstraint
                                            a_constraint) {
     m_geneticOpConstraint = a_constraint;
   }

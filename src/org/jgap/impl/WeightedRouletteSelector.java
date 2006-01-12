@@ -31,7 +31,7 @@ import org.jgap.data.config.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -134,7 +134,7 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized void select(int a_howManyToSelect,
+  public synchronized void select(final int a_howManyToSelect,
                                   final Population a_from_pop,
                                   Population a_to_pop) {
     if (a_from_pop != null) {
@@ -248,7 +248,7 @@ public class WeightedRouletteSelector
       // ----------------------------------------------------------
       currentSlot += a_counterValues[i];
       boolean found;
-      if (evaluator.isFitter(2,1)) {
+      if (evaluator.isFitter(2, 1)) {
         found = currentSlot > selectedSlot - DELTA;
       }
       else {

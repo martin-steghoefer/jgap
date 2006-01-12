@@ -29,9 +29,9 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  private HashSet geneSet = new HashSet();
+  private HashSet m_geneSet = new HashSet();
 
   private Object m_value;
 
@@ -50,7 +50,7 @@ public class SetGene
    * @param a_value the Integer value to be added
    */
   public void addAllele(Object a_value) {
-    geneSet.add(a_value);
+    m_geneSet.add(a_value);
   }
 
   /**
@@ -59,7 +59,7 @@ public class SetGene
    * @param a_alleles the set of alleles to be added
    */
   public void addAlleles(Collection a_alleles) {
-    geneSet.addAll(a_alleles);
+    m_geneSet.addAll(a_alleles);
   }
 
   /**
@@ -68,7 +68,7 @@ public class SetGene
    * @param a_key the unique value(s) of the object(s) to be removed
    */
   public void removeAlleles(Object a_key) {
-    geneSet.remove(a_key);
+    m_geneSet.remove(a_key);
   }
 
   /**
@@ -80,7 +80,8 @@ public class SetGene
    * @param a_numberGenerator RandomGenerator
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    m_value = ( (List) geneSet).get(a_numberGenerator.nextInt(geneSet.size()));
+    m_value = ( (List) m_geneSet).get(a_numberGenerator.nextInt(
+        m_geneSet.size()));
   }
 
   /**
@@ -168,13 +169,13 @@ public class SetGene
       while (tokenizer.hasMoreTokens()) {
         try {
           allele = new Integer(Integer.parseInt(tokenizer.nextToken()));
-          geneSet.add(allele);
+          m_geneSet.add(allele);
         }
         catch (NumberFormatException e) {
           throw new UnsupportedRepresentationException(
-              "The format of the given persistent representation " +
-              "is not recognized: a member of the list of eligible values does " +
-              "not appear to be an integer value.");
+              "The format of the given persistent representation "
+              + "is not recognized: a member of the list of eligible values "
+              + "does not appear to be an integer value.");
         }
       }
     }
@@ -202,7 +203,7 @@ public class SetGene
     // The persistent representation includes the value, lower bound,
     // and upper bound. Each is separated by a colon.
     // --------------------------------------------------------------
-    Iterator it = geneSet.iterator();
+    Iterator it = m_geneSet.iterator();
     StringBuffer strbf = new StringBuffer();
     while (it.hasNext()) {
       strbf.append(PERSISTENT_FIELD_DELIMITER);
@@ -220,7 +221,7 @@ public class SetGene
    * @author Johnathan Kool
    */
   public void setAllele(Object a_newValue) {
-    if (geneSet.contains(a_newValue)) {
+    if (m_geneSet.contains(a_newValue)) {
       m_value = a_newValue;
     }
     else {
@@ -234,12 +235,12 @@ public class SetGene
    * be a NumberGene) for order, which is determined by the number
    * value of this Gene compared to the one provided for comparison.
    *
-   * @param  other the NumberGene to be compared to this NumberGene.
+   * @param other the NumberGene to be compared to this NumberGene
    * @return a negative integer, zero, or a positive integer as this object
-   * is less than, equal to, or greater than the object provided for comparison.
+   * is less than, equal to, or greater than the object provided for comparison
    *
    * @throws ClassCastException if the specified object's type prevents it
-   *         from being compared to this NumberGene.
+   * from being compared to this NumberGene
    *
    * @author Klaus Meffert
    * @author Johnathan Kool

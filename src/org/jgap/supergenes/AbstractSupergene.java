@@ -30,7 +30,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * This field separates gene class name from
@@ -256,7 +256,7 @@ public abstract class AbstractSupergene
    * valid combinations this may take too long to complete. We think,
    * at lease several % of the all possible combintations must be valid.
    */
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     // set all to random value first
     for (int i = 0; i < m_genes.length; i++) {
       m_genes[i].setToRandomValue(a_numberGenerator);
@@ -281,7 +281,7 @@ public abstract class AbstractSupergene
    * @param a_superAllele must be an array of objects, size matching the
    * number of genes
    */
-  public void setAllele(Object a_superAllele) {
+  public void setAllele(final Object a_superAllele) {
     Object[] a = (Object[]) a_superAllele;
     if (a.length != m_genes.length) {
       throw new ClassCastException("Record length, " + a.length
@@ -310,8 +310,7 @@ public abstract class AbstractSupergene
    * instance, using calls to the Supergene components. Supports other
    * (nested) supergenes in this supergene
    */
-  public String getPersistentRepresentation()
-      throws UnsupportedOperationException {
+  public String getPersistentRepresentation() {
     StringBuffer b = new StringBuffer();
     // Write validator:
     String validator = null;
@@ -336,8 +335,8 @@ public abstract class AbstractSupergene
     for (int i = 0; i < m_genes.length; i++) {
       gene = m_genes[i];
       b.append(GENE_DELIMITER_HEADING);
-      b.append(encode(gene.getClass().getName() + GENE_DELIMITER +
-                      gene.getPersistentRepresentation()));
+      b.append(encode(gene.getClass().getName() + GENE_DELIMITER
+                      + gene.getPersistentRepresentation()));
       b.append(GENE_DELIMITER_CLOSING);
     }
     return b.toString();
