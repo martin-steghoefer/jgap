@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -89,18 +89,7 @@ public class BooleanGene
 
   /**
    * Provides an implementation-independent means for creating new Gene
-   * instances. The new instance that is created and returned should be
-   * setup with any implementation-dependent configuration that this Gene
-   * instance is setup with (aside from the actual value, of course). For
-   * example, if this Gene were setup with bounds on its value, then the
-   * Gene instance returned from this method should also be setup with
-   * those same bounds. This is important, as the JGAP core will invoke this
-   * method on each Gene in the sample Chromosome in order to create each
-   * new Gene in the same respective gene position for a new Chromosome.
-   * <p>
-   * It should be noted that nothing is guaranteed about the actual value
-   * of the returned Gene and it should therefore be considered to be
-   * undefined.
+   * instances.
    *
    * @return a new Gene instance of the same type and with the same setup as
    * this concrete Gene
@@ -108,7 +97,7 @@ public class BooleanGene
    * @author Neil Rotstan
    * @author Klaus Meffert
    */
-  public Gene newGene() {
+  protected Gene newGeneInternal() {
     return new BooleanGene();
   }
 

@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.30 $";
+  private static final String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -75,31 +75,17 @@ public class IntegerGene
   }
 
   /**
-   * Provides an implementation-independent means for creating new Gene
-   * instances. The new instance that is created and returned should be
-   * setup with any implementation-dependent configuration that this Gene
-   * instance is setup with (aside from the actual value, of course). For
-   * example, if this Gene were setup with bounds on its value, then the
-   * Gene instance returned from this method should also be setup with
-   * those same bounds. This is important, as the JGAP core will invoke this
-   * method on each Gene in the sample Chromosome in order to create each
-   * new Gene in the same respective gene position for a new Chromosome.
-   * <p>
-   * It should be noted that nothing is guaranteed about the actual value
-   * of the returned Gene and it should therefore be considered to be
-   * undefined.
+   * Provides implementation-independent means for creating new Gene
+   * instances.
    *
    * @return a new Gene instance of the same type and with the same setup as
    * this concrete Gene
    *
-   * @author Neil Rostan
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 2.6 (was newGene since 1.0, moved to BaseGene)
    */
-  public Gene newGene() {
+  protected Gene newGeneInternal() {
     IntegerGene result = new IntegerGene(m_lowerBounds, m_upperBounds);
-    /**@todo move the following to BaseGene.newGene() and rename newGene()
-     * here to newGeneInternal()*/
-    result.setConstraintChecker(getConstraintChecker());
     return result;
   }
 

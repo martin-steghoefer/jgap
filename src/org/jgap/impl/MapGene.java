@@ -32,7 +32,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Container for valid alleles
@@ -70,7 +70,7 @@ public class MapGene
     addAlleles(a_alleles);
   }
 
-  public Gene newGene() {
+  protected Gene newGeneInternal() {
     MapGene result = new MapGene(m_geneMap);
     // get m_value from original
     Object value = getAllele();

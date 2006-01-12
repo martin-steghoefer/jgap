@@ -29,7 +29,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private HashSet geneSet = new HashSet();
 
@@ -40,7 +40,7 @@ public class SetGene
    */
   public SetGene() {}
 
-  public Gene newGene() {
+  protected Gene newGeneInternal() {
     return new SetGene();
   }
 
