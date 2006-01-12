@@ -17,7 +17,7 @@ import java.util.zip.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static void main(String[] args)
       throws Exception {
@@ -43,7 +43,7 @@ public class ClassKit {
    * @param a_tosubclassname the name of the class to inherit from
    * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
-  public static List find(String a_tosubclassname) {
+  public static List find(final String a_tosubclassname) {
     try {
       List result = new Vector();
       Class tosubclass = Class.forName(a_tosubclassname);
@@ -113,7 +113,8 @@ public class ClassKit {
     return find(url, a_pckgname, a_tosubclass);
   }
 
-  public static List find(URL a_url, String a_pckgname, Class a_tosubclass) {
+  public static List find(final URL a_url, final String a_pckgname,
+                          final Class a_tosubclass) {
     List result = new Vector();
     File directory = new File(a_url.getFile());
     if (directory.exists()) {
@@ -171,8 +172,9 @@ public class ClassKit {
             && (entryname.lastIndexOf('/') <= starts.length())
             && entryname.endsWith(".class")) {
           String classname = entryname.substring(0, entryname.length() - 6);
-          if (classname.startsWith("/"))
+          if (classname.startsWith("/")) {
             classname = classname.substring(1);
+          }
           classname = classname.replace('/', '.');
           try {
             // Try to create an instance of the object
@@ -230,7 +232,8 @@ public class ClassKit {
       try {
         urls[i] = jarFiles[i].toURL();
       }
-      catch (Exception ex) {}
+      catch (Exception ex) {
+      }
     }
     try {
       urls[i] = modulePath.toURL();
@@ -241,8 +244,8 @@ public class ClassKit {
     Vector classes = new Vector();
     long startTime = System.currentTimeMillis();
     addClasses(classes, modulePath, "");
-    System.out.println("Found Classes in: " +
-                       (System.currentTimeMillis() - startTime) + " mills");
+    System.out.println("Found Classes in: "
+                       + (System.currentTimeMillis() - startTime) + " mills");
     // -------------------------------
 //    Vector implementingClasses = new Vector();
     Enumeration e = classes.elements();
@@ -253,6 +256,7 @@ public class ClassKit {
         System.err.println("found: " + name);
       }
       catch (Throwable ex) {
+        ; // do nothing?
       }
     }
   }
@@ -272,11 +276,13 @@ public class ClassKit {
         java.util.Enumeration e = jar.entries();
         while (e.hasMoreElements()) {
           wa = e.nextElement().toString();
-          if (wa.endsWith(".class") && (wa.indexOf("$") == -1))
+          if (wa.endsWith(".class") && (wa.indexOf("$") == -1)) {
             a_v.add(wa.substring(0, wa.length() - 6).replace('/', '.'));
+          }
         }
       }
       catch (Exception ex) {
+        ; // do nothing?
       }
     }
   }
@@ -285,11 +291,14 @@ public class ClassKit {
   public static void addClassesFile(Vector a_v, File a_path, String a_name) {
     File[] files = a_path.listFiles(new ExtensionsFilter("class", true));
     for (int i = 0; i < files.length; i++) {
-      if (files[i].isDirectory())
+      if (files[i].isDirectory()) {
         addClassesFile(a_v, files[i], a_name + files[i].getName() + ".");
-      else if (files[i].getName().indexOf("$") == -1)
+      }
+      else if (files[i].getName().indexOf("$") == -1) {
         a_v.add(a_name +
-                files[i].getName().substring(0, files[i].getName().length() - 6));
+                files[i].getName().
+                substring(0, files[i].getName().length() - 6));
+      }
     }
   }
 
@@ -297,17 +306,12 @@ public class ClassKit {
       implements FilenameFilter {
     private String m_ext;
 
-    public ExtensionsFilter(String a_extension, boolean a_dummy) {
+    public ExtensionsFilter(final String a_extension, final boolean a_dummy) {
       m_ext = a_extension;
     }
 
-    public boolean accept(File a_dir, String a_name) {
-      if (a_name != null && a_name.endsWith("." + m_ext)) {
-        return true;
-      }
-      else {
-        return false;
-      }
+    public boolean accept(final File a_dir, final String a_name) {
+      return a_name != null && a_name.endsWith("." + m_ext);
     }
   }
 }
