@@ -25,7 +25,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -437,7 +437,7 @@ public class ChromosomeTest
   }
 
   /**
-   * Test clone with setting a configuration
+   * Test clone with configuration set
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -524,6 +524,33 @@ public class ChromosomeTest
     assertTrue(chrom.equals(chrom2));
     assertEquals(appObj, chrom2.getApplicationData());
     assertFalse(appObj == chrom2.getApplicationData());
+  }
+
+  /**
+   * Test clone with Gene's energy set (value should be considered, too)
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testClone_4()
+      throws InvalidConfigurationException {
+    Gene[] genes = new Gene[2];
+    genes[0] = new IntegerGene();
+    genes[0].setEnergy(47.11d);
+    genes[1] = new IntegerGene();
+    genes[1].setEnergy(8.15d);
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(20));
+    Chromosome chrom3 = new Chromosome(genes);
+    conf.setSampleChromosome(chrom3);
+    conf.setPopulationSize(5);
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(genes);
+    Chromosome chrom2 = (Chromosome) chrom.clone();
+    Gene[] clonedGenes = chrom2.getGenes();
+    assertEquals(genes[0].getEnergy(), clonedGenes[0].getEnergy(), DELTA);
+    assertEquals(genes[1].getEnergy(), clonedGenes[1].getEnergy(), DELTA);
   }
 
   private final static int MAX_CHROMOSOME_TO_TEST = 1000;
