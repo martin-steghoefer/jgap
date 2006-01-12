@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -786,10 +786,11 @@ public class Chromosome
    * This sets the application-specific data that is attached to this
    * Chromosome. Attaching application-specific data may be useful for
    * some applications when it comes time to evaluate this Chromosome
-   * in the fitness function. JGAP ignores this data.
+   * in the fitness function. JGAP ignores this data, except for cloning and
+   * comparison (latter only if opted in via setCompareApplicationData(..))
    *
    * @param a_newData the new application-specific data to attach to this
-   * Chromosome
+   * Chromosome. Should be an instance of IApplicationData
    *
    * @author Neil Rotstan
    * @since 1.1
