@@ -23,7 +23,7 @@ import org.jgap.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -33,6 +33,8 @@ public class RootConfigurationHandler
   private final static String GENETIC_OPS = "GeneticOperators";
 
   private final static String NATURAL_SELS = "NaturalSelectors";
+
+  private Configurable m_configurable;
 
   /**
    * @return Name of this Configuration Object (name of what you are
@@ -80,8 +82,9 @@ public class RootConfigurationHandler
     // set the namespace to get the properties from
     ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
     String value = ConfigFileReader.instance().getValue("m_populationSize");
-    if (value != null)
-      configurable.setConfigProperty("m_populationSize", value);
+    if (value != null) {
+      m_configurable.setConfigProperty("m_populationSize", value);
+    }
       // go through all genetic operators and configure them
     try {
       ConfigurationHelper.configureClass(GENETIC_OPS);
@@ -103,15 +106,14 @@ public class RootConfigurationHandler
 
   /**
    * Set the Configurable to which this ConfigurationHandler belongs.
-   * @param _configurable The Configurable to which this ConfigurationHandler
-   * belongs.
+   * @param a_configurable the Configurable to which this ConfigurationHandler
+   * belongs
    *
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public void setConfigurable(Configurable _configurable) {
-    configurable = _configurable;
+  public void setConfigurable(Configurable a_configurable) {
+    m_configurable = a_configurable;
   }
 
-  Configurable configurable;
 }
