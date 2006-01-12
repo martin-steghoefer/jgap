@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -265,5 +265,34 @@ public class SwappingMutationOperatorTest
     assertEquals(1, op.getStartOffset());
     op.setStartOffset(0);
     assertEquals(0, op.getStartOffset());
+  }
+
+  /**
+   * Ensures the operator is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    SwappingMutationOperator op = new SwappingMutationOperator();
+    assertTrue(isSerializable(op));
+  }
+
+  /**
+   * Ensures that the operator and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    // construct object to be serialized
+    SwappingMutationOperator op = new SwappingMutationOperator(
+        new DefaultCrossoverRateCalculator());
+    SwappingMutationOperator o = (SwappingMutationOperator) doSerialize(op);
+    assertEquals(o, op);
   }
 }

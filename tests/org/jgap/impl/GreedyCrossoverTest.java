@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -457,5 +457,33 @@ public class GreedyCrossoverTest
     assertEquals(1, op.getStartOffset());
     op.setStartOffset(0);
     assertEquals(0, op.getStartOffset());
+  }
+
+  /**
+   * Ensures the operator is implementing Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    GreedyCrossover op = new GreedyCrossover();
+    assertTrue(isSerializable(op));
+  }
+
+  /**
+   * Ensures that the operator and all objects contained implement Serializable
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    // construct object to be serialized
+    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover o = (GreedyCrossover) doSerialize(op);
+    assertEquals(o, op);
   }
 }
