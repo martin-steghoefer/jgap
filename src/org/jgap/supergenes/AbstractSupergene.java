@@ -30,7 +30,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * This field separates gene class name from
@@ -160,7 +160,7 @@ public abstract class AbstractSupergene
    * (for example, if it is not public or  the parameterless constructor is
    * not provided).
    * */
-  public Gene newGene() {
+  protected Gene newGeneInternal() {
     Gene[] g = new Gene[m_genes.length];
     for (int i = 0; i < m_genes.length; i++) {
       g[i] = m_genes[i].newGene();

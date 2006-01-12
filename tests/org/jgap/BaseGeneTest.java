@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -214,7 +214,7 @@ public class BaseGeneTest
       return m_compareTo_result;
     }
 
-    public Gene newGene() {
+    protected Gene newGeneInternal() {
       return null;
     }
 

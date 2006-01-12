@@ -19,7 +19,7 @@ import junit.framework.*;
 public class SupergeneInternalParserTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   class TestClass
       extends AbstractSupergene {
@@ -80,7 +80,7 @@ public class SupergeneInternalParserTest
       throw new Error("Should never be called.");
     }
 
-    public Gene newGene() {
+    protected Gene newGeneInternal() {
       throw new Error("Should never be called.");
     }
   }
