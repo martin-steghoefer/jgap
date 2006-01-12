@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.63 $";
+  private final static String CVS_REVISION = "$Revision: 1.64 $";
 
   /**
    * The current active Configuration instance.
@@ -363,38 +363,6 @@ public class Genotype
    * The population of Chromosomes will created according to the setup of
    * the sample Chromosome in the Configuration object, but the gene values
    * (alleles) will be set to random legal values.
-   * <p>
-   * Note that the given Configuration instance must be in a valid state
-   * at the time this method is invoked, or an InvalidConfigurationException
-   * will be thrown.
-   *
-   * @param a_activeConfiguration the current active Configuration object
-   * @return a newly constructed Genotype instance
-   *
-   * @throws IllegalArgumentException if the given Configuration object is
-   * null
-   * @throws InvalidConfigurationException if the given Configuration instance
-   * is not in a valid state
-   *
-   * @author Klaus Meffert
-   * @since 1.0
-   */
-  public static Genotype randomInitialGenotype(Configuration
-                                               a_activeConfiguration)
-      throws InvalidConfigurationException {
-    return randomInitialGenotype(a_activeConfiguration, Chromosome.class);
-  }
-
-  /**
-   * Convenience method that returns a newly constructed Genotype
-   * instance configured according to the given Configuration instance.
-   * The population of Chromosomes will created according to the setup of
-   * the sample Chromosome in the Configuration object, but the gene values
-   * (alleles) will be set to random legal values.
-   * <p>
-   * Note that the given Configuration instance must be in a valid state
-   * at the time this method is invoked, or an InvalidConfigurationException
-   * will be thrown.
    *
    * @param a_activeConfiguration the current active Configuration object
    * @param a_chromosome class of Chromosome offspring (or null to use
@@ -411,8 +379,7 @@ public class Genotype
    * @since 2.3
    */
   public static Genotype randomInitialGenotype(Configuration
-                                               a_activeConfiguration,
-                                               Class a_chromosome)
+                                               a_activeConfiguration)
       throws InvalidConfigurationException {
     if (a_activeConfiguration == null) {
       throw new IllegalArgumentException(
@@ -424,51 +391,28 @@ public class Genotype
     // active Configuration and then populate that array with Chromosome
     // instances constructed according to the setup in the sample
     // Chromosome, but with random gene values (alleles). The Chromosome
-    // class' randomInitialChromosome() method will take care of that for
+    // class randomInitialChromosome() method will take care of that for
     // us.
     // ------------------------------------------------------------------
     int populationSize = a_activeConfiguration.getPopulationSize();
+    Chromosome sampleChrom = getConfiguration().getSampleChromosome();
+    IInitializer chromIniter = getConfiguration().getJGAPFactory().
+        getInitializerFor(sampleChrom, sampleChrom.getClass());
+    if (chromIniter == null) {
+      throw new InvalidConfigurationException("No initializer found for"
+                                              +" Chromosome class!");
+    }
     Population pop = new Population(populationSize);
-    if (a_chromosome == null ||
-        a_chromosome.getName().equals(Chromosome.class.getName())) {
-      // Do default randomized initialization.
-      // -------------------------------------
+    // Do randomized initialization.
+    // -----------------------------
+    try {
       for (int i = 0; i < populationSize; i++) {
-        pop.addChromosome(Chromosome.randomInitialChromosome());
+        pop.addChromosome( (Chromosome) chromIniter.perform(sampleChrom,
+            sampleChrom.getClass(), null));
       }
     }
-    else {
-      // Use user-provided randomized initialization.
-      // --------------------------------------------
-      for (int i = 0; i < populationSize; i++) {
-        Object chrom = null;
-        try {
-          // TODO fix, because method Chromosome.randomInitialChromosome is
-          // static! Currently, only a quick fix for bug 1371577
-          chrom = a_chromosome.newInstance();
-          Method m = a_chromosome.getDeclaredMethod("randomInitialChromosome2",
-              new Class[] {});
-          chrom = m.invoke(chrom
-                   , new Object[] {});
-        }
-        catch (InstantiationException oex) {
-          throw new InvalidConfigurationException("InstantiationException: "
-                                                  + oex.getMessage());
-        }
-        catch (NoSuchMethodException nom) {
-          throw new InvalidConfigurationException("NoSuchMethodException: "
-                                                  + nom.getMessage());
-        }
-        catch (IllegalAccessException iex) {
-          throw new InvalidConfigurationException("IllegalAccessException: "
-                                                  + iex.getMessage());
-        }
-        catch (InvocationTargetException ite) {
-          throw new InvalidConfigurationException("InvocationTargetException: "
-                                                  + ite.getMessage());
-        }
-        pop.addChromosome((Chromosome)chrom);
-      }
+    catch (Exception ex) {
+      throw new IllegalStateException(ex.getMessage());
     }
     return new Genotype(a_activeConfiguration, pop);
   }
