@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.66 $";
+  private final static String CVS_REVISION = "$Revision: 1.67 $";
 
   /**
    * The current active Configuration instance.
@@ -44,7 +44,7 @@ public class Genotype
    * The array of Chromosomes that makeup the Genotype's population.
    * @since 2.0
    */
-  protected Population m_population;
+  private Population m_population;
 
   /**
    * Constructs a new Genotype instance with the given array of
