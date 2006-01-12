@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.64 $";
+  private final static String CVS_REVISION = "$Revision: 1.65 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -87,7 +87,7 @@ public class Chromosome
   /**
    * The array of Genes contained in this Chromosome.
    */
-  protected Gene[] m_genes;
+  private Gene[] m_genes;
 
   /**
    * Keeps track of whether or not this Chromosome has been selected by
