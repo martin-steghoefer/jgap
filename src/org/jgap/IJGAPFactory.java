@@ -19,7 +19,7 @@ import java.util.*;
  */
 public interface IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   void setParameters(Collection a_parameters);
 
@@ -35,7 +35,7 @@ public interface IJGAPFactory {
    * @since 2.6
    */
 
-  ICloneHandler getCloneHandlerFor(Class a_classToClone);
+  ICloneHandler getCloneHandlerFor(Object a_obj, Class a_classToClone);
 
   /**
    * Registers a clone handler that could be retrieved by
@@ -49,4 +49,27 @@ public interface IJGAPFactory {
    */
 
   int registerCloneHandler(ICloneHandler a_cloneHandler);
+
+  /**
+   * Retrieves an initializer capable of initializing the Object of the given
+   * class
+   * @param a_objToInit the object class to init
+   * @return  the initializer found capable of initializing an object of the
+   * given class, or null if none registered
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  IInitializer getInitializerFor(Object a_obj, Class a_objToInit);
+
+  /**
+   * Registers an initializer that could be retrieved by getInitializerFor(Class)
+   * @param a_chromIniter the IChromosomeInitializer to register
+   * @return index of the added initializer, needed when
+   * removeChromosomeInitializer will be called
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  int registerInitializer(IInitializer a_chromIniter);
 }
