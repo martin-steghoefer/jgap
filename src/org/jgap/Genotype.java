@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.64 $";
+  private final static String CVS_REVISION = "$Revision: 1.65 $";
 
   /**
    * The current active Configuration instance.
@@ -248,11 +248,15 @@ public class Genotype
       applyGeneticOperator(operator, getPopulation(),
                            getPopulation().getChromosomes());
     }
-    // Reset fitness value of genetically operated Chromosomes.
+    // Reset fitness value of genetically operated chromosomes.
+    // Normally, this should not be necessary as the Chromosome
+    // class initializes each newly created chromosome with
+    // FitnessFunction.NO_FITNESS_VALUE. But who knows which
+    // Chromosome implementation is used...
     // --------------------------------------------------------
-    int originalPopSize = getPopulation().size();
-    int size = getPopulation().size();
-    for (int i = originalPopSize; i < size; i++) {
+    int originalPopSize = m_activeConfiguration.getPopulationSize();
+    int currentPopSize = getPopulation().size();
+    for (int i = originalPopSize; i < currentPopSize; i++) {
       Chromosome chrom = getPopulation().getChromosome(i);
       chrom.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
     }
@@ -365,8 +369,6 @@ public class Genotype
    * (alleles) will be set to random legal values.
    *
    * @param a_activeConfiguration the current active Configuration object
-   * @param a_chromosome class of Chromosome offspring (or null to use
-   * Chromosome class itself) to use for calling randomInitialChromosome
    * @return a newly constructed Genotype instance
    *
    * @throws IllegalArgumentException if the given Configuration object is
