@@ -51,7 +51,8 @@ import org.jgap.*;
  *     ...
  *     </font>
  *     long duration = System.currentTimeMillis();
- * <font color="#999999">// You certainly will use an advanced StopWatch...</font>
+ * <font color="#999999">
+ * // You certainly will use an advanced StopWatch...</font>
  *     this.bbox.service();
  * <font color="#999999">// The black boxes service to optimize.</font>
  *     duration = System.currentTimeMillis()-duration;
@@ -222,7 +223,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /*
    * Replace this member by the Configuration as

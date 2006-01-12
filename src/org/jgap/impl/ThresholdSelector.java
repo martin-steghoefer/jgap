@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -52,17 +52,17 @@ public class ThresholdSelector
    * @param a_bestChromosomes_Percentage indicates the number of best
    * chromosomes from the population to be selected for granted. All other
    * chromosomes will be selected in a random fashion. The value must be in
-   * the range from 0.0 to 1.0
+   * the range from 0.0 to 1.0.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public ThresholdSelector(final double a_bestChromosomes_Percentage) {
     super();
-    if (a_bestChromosomes_Percentage < 0.0000000d ||
-        a_bestChromosomes_Percentage > 1.0000000d) {
+    if (a_bestChromosomes_Percentage < 0.0000000d
+        || a_bestChromosomes_Percentage > 1.0000000d) {
       throw new IllegalArgumentException("Percentage must be between 0.0"
-                                         +" and 1.0 !");
+                                         + " and 1.0 !");
     }
     m_bestChroms_Percentage = a_bestChromosomes_Percentage;
     m_chromosomes = new Vector();
@@ -155,14 +155,14 @@ public class ThresholdSelector
 
   /**
    * Comparator regarding only the fitness value. Best fitness value will
-   * be on first position of resulting sorted list
+   * be on first position of resulting sorted list.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   private class FitnessValueComparator
       implements Comparator {
-    public int compare(Object a_first, Object a_second) {
+    public int compare(final Object a_first, final Object a_second) {
       Chromosome chrom1 = (Chromosome) a_first;
       Chromosome chrom2 = (Chromosome) a_second;
 

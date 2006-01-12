@@ -27,7 +27,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   // data members of class ConfigFrame
   private ConfigurationHandler m_conHandler;
@@ -113,7 +113,8 @@ public class ConfigFrame
     }
     catch (MetaConfigException mcEx) {
       JOptionPane.showMessageDialog(null,
-                                    "Exception while parsing JGAP Meta Config file "
+                                    "Exception while parsing JGAP Meta"
+                                    +" Config file "
                                     + mcEx.getMessage(),
                                     "Meta Config Exception",
                                     JOptionPane.ERROR_MESSAGE);
@@ -229,7 +230,8 @@ public class ConfigFrame
                                     JOptionPane.INFORMATION_MESSAGE);
       return;
     }
-    for (Iterator iter = props.iterator(); iter.hasNext(); ) {
+    Iterator iter = props.iterator();
+    while(iter.hasNext()) {
       try {
         ConfigProperty prop = (ConfigProperty) iter.next();
         if (prop.getWidget().equals("JList")) {

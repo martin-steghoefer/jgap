@@ -29,7 +29,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -38,7 +38,8 @@ public class SetGene
   /**
    * Represents the constant range of values supported by integers.
    */
-  public SetGene() {}
+  public SetGene() {
+  }
 
   protected Gene newGeneInternal() {
     return new SetGene();
@@ -49,7 +50,7 @@ public class SetGene
    *
    * @param a_value the Integer value to be added
    */
-  public void addAllele(Object a_value) {
+  public void addAllele(final Object a_value) {
     m_geneSet.add(a_value);
   }
 
@@ -58,7 +59,7 @@ public class SetGene
    *
    * @param a_alleles the set of alleles to be added
    */
-  public void addAlleles(Collection a_alleles) {
+  public void addAlleles(final Collection a_alleles) {
     m_geneSet.addAll(a_alleles);
   }
 
@@ -67,7 +68,7 @@ public class SetGene
    *
    * @param a_key the unique value(s) of the object(s) to be removed
    */
-  public void removeAlleles(Object a_key) {
+  public void removeAlleles(final Object a_key) {
     m_geneSet.remove(a_key);
   }
 
@@ -79,7 +80,7 @@ public class SetGene
    *
    * @param a_numberGenerator RandomGenerator
    */
-  public void setToRandomValue(RandomGenerator a_numberGenerator) {
+  public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     m_value = ( (List) m_geneSet).get(a_numberGenerator.nextInt(
         m_geneSet.size()));
   }
@@ -100,7 +101,7 @@ public class SetGene
    * @author Johnathan Kool
    * @since 2.4
    */
-  public void applyMutation(int a_index, double a_percentage) {
+  public void applyMutation(final int a_index, final double a_percentage) {
     RandomGenerator rn;
     if (Genotype.getConfiguration() != null) {
       rn = Genotype.getConfiguration().getRandomGenerator();
@@ -120,13 +121,9 @@ public class SetGene
    * implementation is provided.
    *
    * @param a_representation the string representation retrieved from a
-   *                         prior call to the getPersistentRepresentation()
-   *                         method.
-   *
-   * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   * prior call to the getPersistentRepresentation() method
    * @throws UnsupportedRepresentationException if this Gene implementation
-   *         does not support the given string representation.
+   * does not support the given string representation
    *
    * @author Neil Rostan
    * @since 1.0
@@ -225,8 +222,9 @@ public class SetGene
       m_value = a_newValue;
     }
     else {
-      throw new IllegalArgumentException("Allele value being set is not an " +
-                                         "element of the set of permitted values.");
+      throw new IllegalArgumentException("Allele value being set is not an "
+                                         + "element of the set of permitted"
+                                         + " values.");
     }
   }
 

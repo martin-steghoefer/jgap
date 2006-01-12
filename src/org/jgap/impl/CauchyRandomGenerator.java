@@ -22,7 +22,7 @@ import org.jgap.*;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private double m_scale;
 
@@ -87,8 +87,8 @@ public class CauchyRandomGenerator
    * @since 1.1
    */
   public double nextCauchy() {
-    return 0.5 +
-        Math.atan( (m_rn.nextDouble() - m_location) / m_scale) / Math.PI;
+    return 0.5
+        + Math.atan( (m_rn.nextDouble() - m_location) / m_scale) / Math.PI;
   }
 
   /**

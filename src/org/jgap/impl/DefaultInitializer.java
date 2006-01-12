@@ -21,9 +21,9 @@ import java.lang.reflect.*;
 public class DefaultInitializer
     implements IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
-  public boolean isHandlerFor(Object a_obj, Class a_class) {
+  public boolean isHandlerFor(final Object a_obj, final Class a_class) {
     if (Chromosome.class.isAssignableFrom(a_class)) {
       return true;
     }
@@ -38,7 +38,8 @@ public class DefaultInitializer
     }
   }
 
-  public Object perform(Object a_obj, Class a_class, Object a_params)
+  public Object perform(final Object a_obj, final Class a_class,
+                        final Object a_params)
       throws Exception {
     if (IInitializer.class.isAssignableFrom(a_class)) {
       return ((IInitializer)a_obj).perform(null, a_class, a_params);
