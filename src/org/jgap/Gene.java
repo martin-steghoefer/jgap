@@ -30,7 +30,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.19 $";
+  final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -229,4 +229,16 @@ public interface Gene
    * @since 2.3
    */
   void setEnergy(double a_energy);
+
+  /**
+   * Sets the constraint checker to be used for this gene whenever method
+   * setAllele(Object) is called.
+   * @param a_constraintChecker the constraint checker to be set
+   *
+   * @author Klaus Meffert
+   * @since 2.6 (moved from CompositeGene, where it was since 2.0)
+   */
+  void setConstraintChecker(
+         final IGeneConstraintChecker a_constraintChecker);
+
 }
