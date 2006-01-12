@@ -114,4 +114,18 @@ public class ChromosomeForTest
   public static class TestResultHolder {
     static int computedTimes;
   }
+
+  public boolean isHandlerFor(Object a_obj, Class a_class) {
+    if (a_class == this.getClass()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public Object perform(Object a_obj, Class a_class, Object a_params)
+      throws Exception {
+    return randomInitialChromosome2();
+  }
 }

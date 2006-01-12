@@ -59,9 +59,9 @@ import java.io.*;
  * @since 1.0
  */
 public class Chromosome
-    implements Comparable, Cloneable, Serializable {
+    implements Comparable, Cloneable, Serializable, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.61 $";
+  private final static String CVS_REVISION = "$Revision: 1.62 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -171,9 +171,9 @@ public class Chromosome
   public Chromosome(Gene a_sampleGene, int a_desiredSize,
                     IGeneConstraintChecker a_constraintChecker)
       throws InvalidConfigurationException {
-   this(a_desiredSize);
-   initFromGene(a_sampleGene);
-   setConstraintChecker(a_constraintChecker);
+    this(a_desiredSize);
+    initFromGene(a_sampleGene);
+    setConstraintChecker(a_constraintChecker);
   }
 
   protected void initFromGene(Gene a_sampleGene) {
@@ -314,7 +314,12 @@ public class Chromosome
     }
     // Also clone the IApplicationData object.
     // ---------------------------------------
-    copy.setApplicationData(cloneObject(getApplicationData()));
+    try {
+      copy.setApplicationData(cloneObject(getApplicationData()));
+    }
+    catch (Exception ex) {
+      throw new IllegalStateException(ex.getMessage());
+    }
     // Reset fitness value.
     // --------------------
     copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
@@ -326,20 +331,22 @@ public class Chromosome
    * return the reference.
    * @param a_object the object to clone
    * @return the cloned object, or the object itself if no coning supported
+   * @throws Exception
    *
-   * @authro Klaus Meffert
+   * @author Klaus Meffert
    * @since 2.6
    */
-  protected Object cloneObject(Object a_object) {
+  protected Object cloneObject(Object a_object)
+      throws Exception {
     if (a_object == null) {
       return null;
     }
     // Try to clone via a registered clone handler.
     // --------------------------------------------
     ICloneHandler cloner = Genotype.getConfiguration().getJGAPFactory().
-        getCloneHandlerFor(a_object.getClass());
+        getCloneHandlerFor(a_object, a_object.getClass());
     if (cloner != null) {
-      return cloner.doClone(a_object, this);
+      return cloner.perform(a_object, null, this);
     }
     else {
       // No cloning supported, so just return the reference.
@@ -536,7 +543,7 @@ public class Chromosome
     // First see if we can get a Chromosome instance from the pool.
     // If we can, we'll randomize its gene values (alleles) and then
     // return it.
-    // ------------------------------------------------------------
+    // -------------------------------------------------------------
     IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
       Chromosome randomChromosome = pool.acquireChromosome();
@@ -551,17 +558,15 @@ public class Chromosome
         return randomChromosome;
       }
     }
-    // If we got this far, then we weren't able to get a Chromosome from
-    // the pool, so we have to construct a new instance and build it from
-    // scratch.
+    // Wwe weren't able to get a Chromosome from the pool, so we have to
+    // construct a new instance and build it from scratch.
     // ------------------------------------------------------------------
     Chromosome sampleChromosome =
         Genotype.getConfiguration().getSampleChromosome();
     sampleChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
-    RandomGenerator generator =
-       Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
     for (int i = 0; i < newGenes.length; i++) {
       // We use the newGene() method on each of the genes in the
       // sample Chromosome to generate our new Gene instances for
@@ -821,7 +826,8 @@ public class Chromosome
    *
    * @author Klaus Meffert
    */
-  public void setGenes(Gene[] a_genes) throws InvalidConfigurationException{
+  public void setGenes(Gene[] a_genes)
+      throws InvalidConfigurationException {
 //    for (int i=0;i<a_genes.length;i++) {
 //      if (a_genes[i]==null) {
 //        throw new RuntimeException("Gene may not be null!");
@@ -898,13 +904,34 @@ public class Chromosome
       for (int i = 0; i < len; i++) {
         Gene gene = getGene(i);
         if (!getConstraintChecker().verify(gene, null)) {
-          throw new InvalidConfigurationException("The gene type "
-                                      + gene.getClass().getName()
-                                      + " is not allowed to be used in"
-                                      + " the chromosome due to the"
-                                      + " constraint checker used.");
+          throw new InvalidConfigurationException(
+              "The gene type "
+              + gene.getClass().getName()
+              + " is not allowed to be used in the chromosome due to the"
+              + " constraint checker used.");
         }
       }
     }
   }
+
+  // Implementations of IInitializer Begin
+  // -------------------------------------
+
+  /**{@inheritDoc}*/
+  public boolean isHandlerFor(Object a_obj, Class a_class) {
+    if (a_class == Chromosome.class) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  /**{@inheritDoc}*/
+  public Object perform(Object a_obj, Class a_class, Object a_params)
+      throws Exception {
+    return randomInitialChromosome();
+  }
+  // -----------------------------------
+  // Implementations of IInitializer End
 }
