@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
+  private final static String CVS_REVISION = "$Revision: 1.61 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -279,49 +279,46 @@ public class Chromosome
           "The active Configuration object must be set on this " +
           "Chromosome prior to invocation of the clone() method.");
     }
+    Chromosome copy = null;
     // Now, first see if we can pull a Chromosome from the pool and just
     // set its gene values (alleles) appropriately.
     // ------------------------------------------------------------
     IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
-      Chromosome copy = pool.acquireChromosome();
+      copy = pool.acquireChromosome();
       if (copy != null) {
         Gene[] genes = copy.getGenes();
         for (int i = 0; i < size(); i++) {
           genes[i].setAllele(m_genes[i].getAllele());
         }
-        // Also clone the IApplicationData object.
-        // ---------------------------------------
-        copy.setApplicationData(cloneObject(getApplicationData()));
-        // Reset fitness value
-        // -------------------
-        copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
-        return copy;
       }
     }
-    // If we get this far, then we couldn't fetch a Chromosome from the
-    // pool, so we need to create a new one. First we make a copy of each
-    // of the Genes. We explicity use the Gene at each respective gene
-    // location (locus) to create the new Gene that is to occupy that same
-    // locus in the new Chromosome.
-    // -------------------------------------------------------------------
-    Gene[] copyOfGenes = new Gene[size()];
+    if (copy == null) {
+      // We couldn't fetch a Chromosome from the pool, so we need to create
+      // a new one. First we make a copy of each of the Genes. We explicity
+      // use the Gene at each respective gene location (locus) to create the
+      // new Gene that is to occupy that same locus in the new Chromosome.
+      // -------------------------------------------------------------------
+      Gene[] copyOfGenes = new Gene[size()];
 //    if (m_genes.length == 0 || copyOfGenes.length == 0) {
 //      throw new IllegalArgumentException("Genes length = 0!");
 //    }
-    for (int i = 0; i < copyOfGenes.length; i++) {
-      copyOfGenes[i] = m_genes[i].newGene();
-      copyOfGenes[i].setAllele(m_genes[i].getAllele());
+      for (int i = 0; i < copyOfGenes.length; i++) {
+        copyOfGenes[i] = m_genes[i].newGene();
+        copyOfGenes[i].setAllele(m_genes[i].getAllele());
+      }
+      // Now construct a new Chromosome with the copies of the genes and
+      // return it. Also clone the IApplicationData object.
+      // ---------------------------------------------------------------
+      copy = new Chromosome(copyOfGenes);
     }
-    // Now construct a new Chromosome with the copies of the genes and
-    // return it. Also clone the IApplicationData object.
-    // ---------------------------------------------------------------
-    Chromosome ret = new Chromosome(copyOfGenes);
-    ret.setApplicationData(cloneObject(getApplicationData()));
+    // Also clone the IApplicationData object.
+    // ---------------------------------------
+    copy.setApplicationData(cloneObject(getApplicationData()));
     // Reset fitness value.
     // --------------------
-    ret.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
-    return ret;
+    copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+    return copy;
   }
 
   /**
