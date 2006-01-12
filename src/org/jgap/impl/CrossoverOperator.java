@@ -31,13 +31,13 @@ import org.jgap.*;
  * @since 1.0
  */
 public class CrossoverOperator
-    implements GeneticOperator, java.io.Serializable, Comparable {
+    implements GeneticOperator, Comparable {
   /**@todo add base class, also use for other GeneticOperator's.
    * Move compareTo there etc.
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -116,6 +116,9 @@ public class CrossoverOperator
       numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    IGeneticOperatorConstraint constraint = Genotype.getConfiguration().
+        getJGAPFactory().getGeneticOperatorConstraint();
+
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
     // to the "right" (those with greater loci) of that gene between
@@ -127,6 +130,21 @@ public class CrossoverOperator
       index2 = generator.nextInt(size);
       Chromosome chrom1 = a_population.getChromosome(index1);
       Chromosome chrom2 = a_population.getChromosome(index2);
+
+      // Verify that crossover allowed.
+      // ------------------------------
+      /**@todo move to base class, refactor*/
+      if (constraint != null) {
+        List v = new Vector();
+        v.add(chrom1);
+        v.add(chrom2);
+        if (!constraint.isValid(a_population, v, this)) {
+          continue;
+        }
+      }
+
+      // Clone the chromosomes.
+      // ----------------------
       Chromosome firstMate = (Chromosome) chrom1.clone();
       Chromosome secondMate = (Chromosome) chrom2.clone();
       Gene[] firstGenes = firstMate.getGenes();

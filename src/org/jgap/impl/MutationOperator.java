@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -148,6 +148,9 @@ public class MutationOperator
           mutate = (generator.nextInt(m_mutationRate) == 0);
         }
         if (mutate) {
+          // Verify that crossover allowed.
+          // ------------------------------
+          /**@todo move to base class, refactor*/
           if (constraint != null) {
             List v = new Vector();
             v.add(chrom);
