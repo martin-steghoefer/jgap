@@ -18,16 +18,16 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
 
   /**
-   * Application-specific data that is attached to the Gene.
-   * This data may assist the application in labelling this Gene.
-   * in JGAP completely ignores the data, aside from allowing it to be set and
-   * retrieved.
+   * Application-specific data that is attached to the Gene. This data may
+   * assist the application in labelling this Gene.
+   * JGAP ignores the data, aside from allowing it to be set and
+   * retrieved and considering it in clone() and compareTo().
    *
    * @since 2.4
    */
