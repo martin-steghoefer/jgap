@@ -225,6 +225,16 @@ practice!&nbsp;</p>
 <a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/DoubleGene.html">DoubleGene</a>.m_lowerBounds.
 Use setters resp. constructors instead!</p>
 
+<h4 class="subHeader">Since 2.6: Method(s) Genotype.randomInitialGenotype</h4>
+<p>The above method now uses the sample Chromosome provided with the
+Configuration to determine the class of new Chromosomes to be created. The
+method with signature (Configuration, Class) has been removed for that!</p>
+
+<h4 class="subHeader">Since 2.6: Gene's new method newGeneInternal()</h4>
+<p>Now the newGene() method is a template method in BaseGene calling protected
+method newGeneInternal. The latter needs to be implemented in all offsprings of
+BaseGene.</p>
+
 <h2 class="docTitle">Final remarks</h2>
 
 <p>It should be quite straight forward upgrading from version 1.1 to 2.0. With
