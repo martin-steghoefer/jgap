@@ -26,18 +26,22 @@ public class DefaultCloneHandler
    * Handles all implementations of IApplicationData as well as all of
    * java.lang.Cloneable (for which the clone-method is accessible via
    * reflection. This is not the case for package protected classes, e.g.).
-   * @param a_clazz the class to check for whether it is handles
+   *
+   * @param a_obj the object to check for (maybe null)
+   * @param a_clazz the class to check for whether it is handled (maybe null)
    * @return true in case class is clonable via this handler
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public boolean isHandlerFor(Class a_clazz) {
+  public boolean isHandlerFor(Object a_obj, Class a_clazz) {
     if (IApplicationData.class.isAssignableFrom(a_clazz)) {
       return true;
     }
     if (Cloneable.class.isAssignableFrom(a_clazz)) {
       // Ensure access via reflection is possible
+      // Thank you Java for providing only a marker interface and not
+      // something convenient :-(
       try {
         Method m = a_clazz.getMethod("clone", new Class[] {});
         if (!m.isAccessible()) {
@@ -57,13 +61,14 @@ public class DefaultCloneHandler
   /**
    *
    * @param a_objToClone the object to clone
+   * @param a_class not considered here
    * @param a_params not considered here
    * @return Object
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public Object doClone(Object a_objToClone, Object a_params) {
+  public Object perform(Object a_objToClone, Class a_class, Object a_params) {
     if (IApplicationData.class.isAssignableFrom(a_objToClone.getClass())) {
       try {
         return ( (IApplicationData) a_objToClone).clone();
