@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.63 $";
+  private final static String CVS_REVISION = "$Revision: 1.64 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -124,7 +124,7 @@ public class Chromosome
   private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
-   * Default constructor
+   * Default constructor, provided for dynamic instantiation
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -320,9 +320,6 @@ public class Chromosome
     catch (Exception ex) {
       throw new IllegalStateException(ex.getMessage());
     }
-    // Reset fitness value.
-    // --------------------
-    copy.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
     return copy;
   }
 
@@ -579,6 +576,7 @@ public class Chromosome
       // Set the gene's value (allele) to a random value.
       // ------------------------------------------------
       newGenes[i].setToRandomValue(generator);
+      /**@todo what about Gene's energy?*/
     }
     // Finally, construct the new chromosome with the new random
     // genes values and return it.
