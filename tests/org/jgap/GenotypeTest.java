@@ -11,10 +11,8 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.impl.*;
 import org.jgap.util.*;
-
 import junit.framework.*;
 
 /**
@@ -26,7 +24,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -470,13 +468,17 @@ public class GenotypeTest
   public void testEvolve_5_1()
       throws Exception {
     Configuration config = new ConfigurationForTest();
+    Gene[] genes = new Gene[]{new BooleanGene()};
+    config.setSampleChromosome(new ChromosomeForTest(genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
         getNaturalSelector(true, 0);
     sel.setDoubletteChromosomesAllowed(true);
     config.getGeneticOperators().clear();
-    config.addGeneticOperator(new SwappingMutationOperator(1));
+    SwappingMutationOperator op = new SwappingMutationOperator(1);
+    op.setStartOffset(0); // because size is 1
+    config.addGeneticOperator(op);
     assertTrue(doTestEvolve_5(config) > 0);
   }
 
@@ -491,7 +493,8 @@ public class GenotypeTest
   public void testEvolve_5_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-
+    Gene[] genes = new Gene[]{new BooleanGene()};
+    config.setSampleChromosome(new ChromosomeForTest(genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
@@ -514,6 +517,8 @@ public class GenotypeTest
   public void testEvolve_5_3()
       throws Exception {
     Configuration config = new ConfigurationForTest();
+    Gene[] genes = new Gene[]{new BooleanGene()};
+    config.setSampleChromosome(new ChromosomeForTest(genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
@@ -521,16 +526,23 @@ public class GenotypeTest
     sel.setDoubletteChromosomesAllowed(true);
     config.getGeneticOperators().clear();
     config.addGeneticOperator(new MutationOperator(0));
-    assertTrue(doTestEvolve_5(config) == 0);
+    assertEquals(0, doTestEvolve_5(config));
   }
 
+  /**
+   * Helper: used in tests for evolve method
+   * @param config Configuration
+   * @throws Exception
+   * @return number of times the fitness value has been computed for the first
+   * chromosome
+   *
+   * @author Klaus Meffert
+   * @since 2.5
+   */
   private int doTestEvolve_5(Configuration config)
       throws Exception {
-    Genotype genotype = Genotype.randomInitialGenotype(config,
-        ChromosomeForTest.class);
-
+    Genotype genotype = Genotype.randomInitialGenotype(config);
     genotype.evolve(2);
-
     // Reset counter. Because of static state holder we only need to do this
     // for one chromosome referencing the same global state holder as well as
     // all other chromosomes (of class ChromosomeForTest) do.
@@ -538,14 +550,12 @@ public class GenotypeTest
         getChromosome(0);
     chrom.resetComputedTimes();
     // Mark any chromosome as original (that is not cloned)
-    for (int i=0;i<genotype.getPopulation().size();i++) {
-      chrom = (ChromosomeForTest)genotype.getPopulation().getChromosome(i);
+    for (int i = 0; i < genotype.getPopulation().size(); i++) {
+      chrom = (ChromosomeForTest) genotype.getPopulation().getChromosome(i);
       chrom.resetIsCloned();
     }
-
     // Now do the test evolution --> new fitness values must be recomputed!
     genotype.evolve(2);
-
     // Check if global state holder indicates that getFitnessValue() has been
     // called at least once for a cloned (e.g. mutated) chromosome and that for
     // this call the to date fitness value is initial (i.e. not set).
@@ -573,7 +583,7 @@ public class GenotypeTest
     Genotype genotype = new Genotype(conf, chroms);
     assertTrue(genotype.toString() != null);
     assertTrue(genotype.toString().length() > 0);
-    assertEquals(Chromosome.S_SIZE+":1, "
+    assertEquals(Chromosome.S_SIZE + ":1, "
                  + Chromosome.S_FITNESS_VALUE + ":"
                  + FitnessFunction.NO_FITNESS_VALUE
                  + ", "
@@ -607,7 +617,7 @@ public class GenotypeTest
     assertTrue(genotype.toString().length() > 0);
     // compute fitness of Genotype thus of all contained chromosomes
     genotype.getFittestChromosome();
-    assertEquals(Chromosome.S_SIZE+":1, "
+    assertEquals(Chromosome.S_SIZE + ":1, "
                  + Chromosome.S_FITNESS_VALUE + ":"
                  + fitnessvalue
                  + ", "
@@ -615,8 +625,9 @@ public class GenotypeTest
                  + Chromosome.S_APPLICATION_DATA + ":null"
                  + " ["
                  + fitnessvalue
-                 +"]\n", genotype.toString());
+                 + "]\n", genotype.toString());
   }
+
   /**
    * @throws Exception
    *
@@ -645,6 +656,25 @@ public class GenotypeTest
     Configuration conf = new DefaultConfiguration();
     Chromosome chrom = new Chromosome(new Gene[] {
                                       new IntegerGene(1, 9999)});
+    conf.setPopulationSize(7777);
+    conf.setFitnessFunction(new StaticFitnessFunction(5));
+    conf.setSampleChromosome(chrom);
+    Genotype genotype = Genotype.randomInitialGenotype(conf);
+    assertEquals(7777, genotype.getChromosomes().length);
+  }
+
+  /**
+   * Test for a Chromosome class not equal to org.jgap.Chromosome
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testRandomInitialGenotype_2()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Chromosome chrom = new ChromosomeForTest2(new Gene[] {
+                                              new IntegerGene(1, 9999)});
     conf.setPopulationSize(7777);
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(chrom);
@@ -716,7 +746,6 @@ public class GenotypeTest
     List UniqueChromosome = new ArrayList();
     List EqualChromosome = new ArrayList();
     Genotype geno;
-
     //Build Random Chromosomes
     for (Count = 0; Count < MAX_CHROMOSOME_TO_TEST; Count++) {
       NumGenes = (int) (Math.random() * MAX_GENES_TO_TEST) + 1;
@@ -758,7 +787,6 @@ public class GenotypeTest
         UniqueChromosome.add(geno);
       }
     }
-
     //Test to see if enough hashcodes are unique
     thc.setFractionUnique(.95);
     if (!thc.testHashCodeUniqueness(UniqueChromosome)) {
@@ -767,7 +795,6 @@ public class GenotypeTest
           thc.getActualFractionUnique());
       fail();
     }
-
     //Test mathematical average and dispersion of hashcode
     //I am not sure of the value of this test since boundary values are
     //pretty much arbitrary
@@ -858,7 +885,6 @@ public class GenotypeTest
                                new IntegerGene(1, 5)});
     Configuration conf = new ConfigurationForTest();
     Genotype genotype = new Genotype(conf, chroms);
-
     // serialize genotype to a file
     File f = new File("genotype.ser");
     OutputStream os = new FileOutputStream(f);
@@ -866,6 +892,27 @@ public class GenotypeTest
     oos.writeObject(genotype);
     InputStream oi = new FileInputStream(f);
     ObjectInputStream ois = new ObjectInputStream(oi);
-    assertEquals(genotype,(Genotype)ois.readObject());
+    assertEquals(genotype, (Genotype) ois.readObject());
+  }
+
+  public class ChromosomeForTest2
+      extends ChromosomeForTest {
+    public ChromosomeForTest2(final Gene[] a_initialGenes) {
+      super(a_initialGenes);
+    }
+
+    public boolean isHandlerFor(Class a_class) {
+      if (a_class == ChromosomeForTest2.class) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+
+    public Object perform(Object a_obj, Class a_class, Object a_params)
+        throws Exception {
+      return randomInitialChromosome2();
+    }
   }
 }
