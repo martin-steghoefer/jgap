@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -187,7 +187,7 @@ public class BooleanGene
    * Retrieves the boolean value of this Gene. This may be more convenient
    * in some cases than the more general getAllele() method.
    *
-   * @return the boolean value of this Gene.
+   * @return the boolean value of this Gene
    */
   public boolean booleanValue() {
     return m_value.booleanValue();
@@ -207,7 +207,7 @@ public class BooleanGene
    * @param a_numberGenerator The random number generator that should be
    * used to create any random values. It's important to use this generator to
    * maintain the user's flexibility to configure the genetic engine to use the
-   * random number generator of their choice.
+   * random number generator of their choice
    */
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
     if (a_numberGenerator.nextBoolean() == true) {
@@ -223,19 +223,19 @@ public class BooleanGene
    * false value is considered to be less than a true value. A null value
    * is considered to be less than any non-null value.
    *
-   * @param  other the BooleanGene to be compared.
+   * @param a_other the BooleanGene to be compared
    * @return  a negative integer, zero, or a positive integer as this object
-   * is less than, equal to, or greater than the specified object.
+   * is less than, equal to, or greater than the specified object
    *
    * @throws ClassCastException if the specified object's type prevents it
-   * from being compared to this BooleanGene.
+   * from being compared to this BooleanGene
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public int compareTo(Object other) {
-    BooleanGene otherBooleanGene = (BooleanGene) other;
+  public int compareTo(Object a_other) {
+    BooleanGene otherBooleanGene = (BooleanGene) a_other;
     // First, if the other gene is null, then this is the greater gene.
     // ----------------------------------------------------------------
     if (otherBooleanGene == null) {
@@ -282,14 +282,14 @@ public class BooleanGene
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
    * element at given index
-   * @param index not used here
+   * @param a_index not used here
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    * than 1).
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void applyMutation(int index, double a_percentage) {
+  public void applyMutation(int a_index, double a_percentage) {
     if (m_value == null) {
       m_value = Boolean.valueOf(false);
     }
