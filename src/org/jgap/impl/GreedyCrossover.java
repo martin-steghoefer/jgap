@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -283,5 +283,55 @@ public class GreedyCrossover
    */
   public int getStartOffset() {
     return m_startOffset;
+  }
+
+  /**
+   * Compares this GeneticOperator against the specified object. The result is
+   * true if and the argument is an instance of this class and is equal wrt the
+   * data.
+   *
+   * @param a_other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public boolean equals(final Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  /**
+   * Compares the given GeneticOperator to this GeneticOperator.
+   *
+   * @param a_other the instance against which to compare this instance
+   * @return a negative number if this instance is "less than" the given
+   * instance, zero if they are equal to each other, and a positive number if
+   * this is "greater than" the given instance
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    GreedyCrossover op = (GreedyCrossover) a_other;
+    if (getStartOffset() < op.getStartOffset()) {
+      // start offset less, meaning more to do --> return 1 for "is greater than"
+      return 1;
+    }
+    else if (getStartOffset() > op.getStartOffset()) {
+      return -1;
+    }
+    else {
+      // Everything is equal. Return zero.
+      // ---------------------------------
+      return 0;
+    }
   }
 }
