@@ -1,5 +1,6 @@
 2.6
 -----------------------------------------------------------
+* Improved general archictecture a lot!
 * Added new mechanism for creating default objects, such
   as random generators etc.
   --> interface org.jgap.IJAGPFactory as well as impl.
@@ -7,7 +8,9 @@
   JGAPFactory Could be replaced by a user-defined factory
   via System.setproperty(...)
 * Introduced ICloneHandler, accessable via JGAPFactory
-* Added equals and  compareTo to CrossoverOperator
+* Introduced IInitializer, accessable via JGAPFactory
+* Introduced hook method newGeneInternal in BaseGene
+* Added equals and compareTo to CrossoverOperator
 * Added interface org.jgap.ICompsiteGene for
   genes that may contain other genes
 * Added interface org.jgap.IChromosomePool for
