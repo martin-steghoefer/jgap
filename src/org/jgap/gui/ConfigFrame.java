@@ -10,11 +10,14 @@
 package org.jgap.gui;
 
 import java.util.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
 import org.jgap.data.config.*;
+
 import info.clearthought.layout.*;
 
 /**
@@ -27,7 +30,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   // data members of class ConfigFrame
   private ConfigurationHandler m_conHandler;
@@ -75,7 +78,9 @@ public class ConfigFrame
 
   /**
    * Constructor
+   * @param a_parent
    * @param a_title the title of the frame
+   * @param a_isRoot
    * @author Siddhartha Azad
    * @since 2.3
    * */
@@ -94,8 +99,7 @@ public class ConfigFrame
 
   /**
    * Does the initial setup of the JFrame and shows it.
-   * @param _conHandler The configuration handler from which this
-   * ConfigFrame
+   * @param a_conHandler the configuration handler from which this ConfigFrame
    * would get information.
    * @author Siddhartha Azad.
    * @since 2.3
@@ -104,17 +108,17 @@ public class ConfigFrame
     JFrame.setDefaultLookAndFeelDecorated(true);
     m_conHandler = a_conHandler;
     // display
-    this.pack();
-    this.setVisible(true);
-    this.setBounds(100, 100, 300, 300);
-    this.setSize(500, 300);
+    pack();
+    setVisible(true);
+    setBounds(100, 100, 300, 300);
+    setSize(500, 300);
     try {
       MetaConfig mt = MetaConfig.getInstance();
     }
     catch (MetaConfigException mcEx) {
       JOptionPane.showMessageDialog(null,
                                     "Exception while parsing JGAP Meta"
-                                    +" Config file "
+                                    + " Config file "
                                     + mcEx.getMessage(),
                                     "Meta Config Exception",
                                     JOptionPane.ERROR_MESSAGE);
@@ -130,10 +134,10 @@ public class ConfigFrame
     setup();
     show();
     if (m_isRoot) {
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     else {
-      this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+      setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
   }
 
@@ -231,7 +235,7 @@ public class ConfigFrame
       return;
     }
     Iterator iter = props.iterator();
-    while(iter.hasNext()) {
+    while (iter.hasNext()) {
       try {
         ConfigProperty prop = (ConfigProperty) iter.next();
         if (prop.getWidget().equals("JList")) {
@@ -299,7 +303,7 @@ public class ConfigFrame
       tableArray[1][i] = TableLayout.FILL;
       // single column can take all the space available
       tableArray[0][0] = TableLayout.FILL;
-      this.getContentPane().setLayout(new TableLayout(tableArray));
+      getContentPane().setLayout(new TableLayout(tableArray));
       // add the panels to the frame now
       int panelsAdded = 0;
       JPanel panel;
