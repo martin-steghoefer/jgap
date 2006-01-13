@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -289,6 +289,26 @@ public class StringGeneTest
     gene2.setApplicationData(new Double(2.3d));
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
+    gene2.setAllele(null);
+    assertEquals(1, gene1.compareTo(gene2));
+    gene2.setApplicationData(null);
+    assertEquals(1, gene1.compareTo(gene2));
+  }
+
+  /**
+   * class cast exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCompareTo_1() {
+    Gene gene1 = new StringGene(2, 6);
+    try {
+      gene1.compareTo(new Chromosome());
+      fail();
+    } catch (ClassCastException cex) {
+      ; // this is OK
+    }
   }
 
   /**
@@ -570,6 +590,97 @@ public class StringGeneTest
     assertEquals("null:2:10:ABCDE", gene1.getPersistentRepresentation());
   }
 
+
+  /**
+   * Invalid number in second argument
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentRepresentation_10() throws Exception {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+    try {
+      gene1.setValueFromPersistentRepresentation("null:a:10:ABCDE");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Invalid number in third argument
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentRepresentation_11() throws Exception {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+    try {
+      gene1.setValueFromPersistentRepresentation("null:2:3b:ABCDE");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Minlen to great
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentRepresentation_12() throws Exception {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+    try {
+      gene1.setValueFromPersistentRepresentation("nada:7:6:ABCDE");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Maxlen to small
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentRepresentation_14() throws Exception {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+    try {
+      gene1.setValueFromPersistentRepresentation("nada:1:3:ABCDE");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Illegal character
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentRepresentation_15() throws Exception {
+    StringGene gene1 = new StringGene(2, 10, "ABCDE");
+    gene1.setAllele(null);
+    try {
+      gene1.setValueFromPersistentRepresentation("ABHJ:4:7:ABCDE");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
   /**
    * @throws Exception
    * @author Klaus Meffert
@@ -657,6 +768,25 @@ public class StringGeneTest
     gene1.setAllele("ijklmn");
     gene1.applyMutation(0, 0.0d);
     assertEquals(gene1.getAllele(), "ijklmn");
+  }
+
+  /**
+   * applyMutation with empty alphabet
+   * @throws Exception
+   * @author Klaus Meffert
+   */
+  public void testApplyMutation_6()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
+    StringGene gene1 = new StringGene(6, 6);
+    gene1.setAllele("ijklmn");
+    gene1.setAlphabet("");
+    try {
+      gene1.applyMutation(0, 0.0d);
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
   }
 
   /**
