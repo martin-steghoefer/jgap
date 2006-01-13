@@ -22,7 +22,7 @@ import junit.framework.*;
 public class AveragingCrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AveragingCrossoverOperatorTest.class);
@@ -364,5 +364,24 @@ public class AveragingCrossoverOperatorTest
   public void testEquals_0() throws Exception {
     GeneticOperator op = new AveragingCrossoverOperator();
     assertFalse(op.equals(new Chromosome()));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCompareTo_0() {
+    AveragingCrossoverOperator op = new AveragingCrossoverOperator();
+    assertEquals(1, op.compareTo(null));
+    AveragingCrossoverOperator op2 = new AveragingCrossoverOperator();
+    assertEquals(0, op.compareTo(op2));
+    op = new AveragingCrossoverOperator(new StockRandomGenerator());
+    assertEquals(0, op.compareTo(op2));
+    assertEquals(0, op2.compareTo(op));
+    op = new AveragingCrossoverOperator(new DefaultCrossoverRateCalculator());
+    assertEquals(1, op.compareTo(op2));
+    assertEquals(-1, op2.compareTo(op));
+    op2 = new AveragingCrossoverOperator(new DefaultCrossoverRateCalculator());
+    assertEquals(0, op.compareTo(op2));
   }
 }

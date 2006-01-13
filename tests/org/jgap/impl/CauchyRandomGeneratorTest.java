@@ -21,7 +21,7 @@ import junit.framework.*;
 public class CauchyRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);
@@ -61,5 +61,18 @@ public class CauchyRandomGeneratorTest
     final double stdDev = 0.04d;
     CauchyRandomGenerator calc = new CauchyRandomGenerator(0.0d, stdDev);
     assertEquals(stdDev, calc.getCauchyStandardDeviation(), DELTA);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testNextInt_0() {
+    final double stdDev = 0.04d;
+    CauchyRandomGenerator calc = new CauchyRandomGenerator(0.0d, stdDev);
+    int i = calc.nextInt(2);
+    assertTrue(i < 2 && i >= 0);
+    i = calc.nextInt(1);
+    assertEquals(0, i);
   }
 }
