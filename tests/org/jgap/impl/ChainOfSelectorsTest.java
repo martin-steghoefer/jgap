@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class ChainOfSelectorsTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);
@@ -51,6 +49,8 @@ public class ChainOfSelectorsTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -66,6 +66,8 @@ public class ChainOfSelectorsTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -138,5 +140,35 @@ public class ChainOfSelectorsTest
     c2.clear();
     c2.addNaturalSelector(t1);
     assertTrue(c1.equals(c2));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_1()
+      throws Exception {
+    ChainOfSelectors c1 = new ChainOfSelectors();
+    assertFalse(c1.equals(new BooleanGene()));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testHashCode_0()
+      throws Exception {
+    ChainOfSelectors c1 = new ChainOfSelectors();
+    ChainOfSelectors c2 = new ChainOfSelectors();
+    assertEquals(c1.hashCode(), c2.hashCode());
+    c1.addNaturalSelector(new BestChromosomesSelector());
+    assertFalse(c1.hashCode() == c2.hashCode());
+    assertEquals(c1.hashCode(), c1.hashCode());
+    c2.addNaturalSelector(new BestChromosomesSelector());
+    assertFalse(c1.hashCode() == c2.hashCode());
   }
 }
