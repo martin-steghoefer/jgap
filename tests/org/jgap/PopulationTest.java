@@ -9,7 +9,6 @@
  */
 package org.jgap;
 
-import java.io.*;
 import java.util.*;
 import org.jgap.impl.*;
 import junit.framework.*;
@@ -24,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -422,17 +421,17 @@ public class PopulationTest
 
   /**
    * Ensures that the Population class is implementing the Serializable
-   * interface
+   * interface.
    *
    * @author Klaus Meffert
    * @since 2.3
    */
   public void testIsSerializable_0() {
-    assertTrue(Serializable.class.isInstance(new Population()));
+    assertTrue(super.isSerializable(new Population()));
   }
 
   /**
-   * Ensures that Population and all objects contained implement Serializable
+   * Ensures that Population and all objects contained implement Serializable.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -445,11 +444,7 @@ public class PopulationTest
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
     Population pop = new Population(chroms);
-    // serialize population to a file
-    File f = new File("population.ser");
-    OutputStream os = new FileOutputStream(f);
-    ObjectOutputStream oos = new ObjectOutputStream(os);
-    oos.writeObject(pop);
+    assertEquals(pop, super.doSerialize(pop));
   }
 
   /**
@@ -473,7 +468,7 @@ public class PopulationTest
   }
 
   /**
-   * With illegal index
+   * With illegal index.
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -493,7 +488,7 @@ public class PopulationTest
   }
 
   /**
-   * With illegal index
+   * With illegal index.
    *
    * @author Klaus Meffert
    * @since 2.4

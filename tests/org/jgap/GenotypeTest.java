@@ -9,7 +9,6 @@
  */
 package org.jgap;
 
-import java.io.*;
 import java.util.*;
 import org.jgap.impl.*;
 import org.jgap.util.*;
@@ -24,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -871,7 +870,7 @@ public class GenotypeTest
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
     Configuration conf = new ConfigurationForTest();
-    assertTrue(Serializable.class.isInstance(new Genotype(conf, chroms)));
+    assertTrue(isSerializable(new Genotype(conf, chroms)));
   }
 
   /**
@@ -890,13 +889,7 @@ public class GenotypeTest
     Configuration conf = new ConfigurationForTest();
     Genotype genotype = new Genotype(conf, chroms);
     // serialize genotype to a file
-    File f = new File("genotype.ser");
-    OutputStream os = new FileOutputStream(f);
-    ObjectOutputStream oos = new ObjectOutputStream(os);
-    oos.writeObject(genotype);
-    InputStream oi = new FileInputStream(f);
-    ObjectInputStream ois = new ObjectInputStream(oi);
-    assertEquals(genotype, (Genotype) ois.readObject());
+    assertEquals(genotype, super.doSerialize(genotype)) ;
   }
 
   public class ChromosomeForTest2
