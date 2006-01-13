@@ -78,22 +78,16 @@ public class DefaultCloneHandler
         throw new IllegalStateException(cex.getMessage());
       }
     }
-    // Support Cloneable interface by look for clone() method via
-    // introspection.
-    // ----------------------------------------------------------
+    // Support Cloneable interface by looking for clone() method
+    // via introspection.
+    // ---------------------------------------------------------
     try {
       Method cloneMethod = a_objToClone.getClass().getMethod(
           "clone", new Class[] {});
       return cloneMethod.invoke(a_objToClone, new Object[] {});
     }
-    catch (NoSuchMethodException nex) {
-      throw new IllegalStateException(nex.getMessage());
-    }
-    catch (IllegalAccessException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
-    catch (InvocationTargetException tex) {
-      throw new IllegalStateException(tex.getMessage());
+    catch (Throwable ex) {
+      throw new IllegalStateException(ex.getMessage());
     }
   }
 }
