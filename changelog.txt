@@ -38,6 +38,7 @@
   class SupergenePersistentRepresentationTest
   to InstantiableSupergene
 * Renamed class TestGenetics to SimpleExample
+* Improved TournamentSelector
 * Capitalized supergene-related classes
 
 2.5
