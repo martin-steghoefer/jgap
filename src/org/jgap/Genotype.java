@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.67 $";
+  private final static String CVS_REVISION = "$Revision: 1.68 $";
 
   /**
    * The current active Configuration instance.
@@ -226,7 +226,12 @@ public class Genotype
    * @since 1.0
    */
   public synchronized void evolve() {
-    verifyConfigurationAvailable();
+    if (m_activeConfiguration == null) {
+      throw new IllegalStateException(
+          "The active Configuration object must be set on this " +
+          "Genotype prior to invocation of other operations.");
+    }
+
     // Adjust population size to configured size (if wanted).
     // ------------------------------------------------------
     if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
@@ -467,23 +472,6 @@ public class Genotype
     }
     catch (ClassCastException e) {
       return false;
-    }
-  }
-
-  /**
-   * Verifies that a Configuration object has been properly set on this
-   * Genotype instance. If not, then an IllegalStateException is thrown.
-   * In general, this method should be invoked by any operation on this
-   * Genotype that makes use of the Configuration instance.
-   *
-   * @author Neil Rotstan
-   * @since 1.0
-   */
-  private void verifyConfigurationAvailable() {
-    if (m_activeConfiguration == null) {
-      throw new IllegalStateException(
-          "The active Configuration object must be set on this " +
-          "Genotype prior to invocation of other operations.");
     }
   }
 
