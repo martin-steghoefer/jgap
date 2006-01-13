@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.30 $";
+  private static final String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -430,5 +430,25 @@ public class MutationOperatorTest
   public void testEquals_0() throws Exception {
     GeneticOperator op = new MutationOperator();
     assertFalse(op.equals(new Chromosome()));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCompareTo_0() {
+    MutationOperator op = new MutationOperator();
+    assertEquals(1, op.compareTo(null));
+    MutationOperator op2 = new MutationOperator();
+    assertEquals(0, op.compareTo(op2));
+    op = new MutationOperator(3);
+    assertEquals(-1, op.compareTo(op2));
+    assertEquals(1, op2.compareTo(op));
+    op = new MutationOperator(new DefaultMutationRateCalculator());
+    assertEquals(0, op.compareTo(op2));
+    op = new MutationOperator(3);
+    op2 = new MutationOperator(4);
+    assertEquals(-1, op.compareTo(op2));
+    assertEquals(1, op2.compareTo(op));
   }
 }
