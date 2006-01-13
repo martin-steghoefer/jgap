@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -367,7 +367,8 @@ public class StringGeneTest
     //following should be possible
     gene1.setAllele("A");
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -384,7 +385,8 @@ public class StringGeneTest
     //following should be possible
     gene1.setAllele("A");
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return true;
       }
     });
@@ -805,7 +807,8 @@ public class StringGeneTest
     StringGene gene = new StringGene(1, 6, "ABC");
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -852,7 +855,8 @@ public class StringGeneTest
 
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue) {
+    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
+                          int a_index) {
       return true;
     }
   }

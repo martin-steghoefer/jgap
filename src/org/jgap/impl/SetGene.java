@@ -17,7 +17,7 @@ import org.jgap.*;
  * Creates a gene instance in which individual alleles have both a label (key)
  * and a value with a distinct meaning. For example, IntegerGene only allows
  * for values having a continuous range, and does not have a function where it
- * is possible to specify setValue...</p>
+ * is possible to specify setValue...
  *
  * <p>Copyright: Copyright (c) 2005</p>
  *
@@ -29,7 +29,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private HashSet m_geneSet = new HashSet();
 

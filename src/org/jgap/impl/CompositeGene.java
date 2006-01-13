@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   /**
    * This field separates gene class name from
@@ -366,7 +366,7 @@ public class CompositeGene
           + " is a List descendent.");
     }
     if (getConstraintChecker() != null) {
-      if (!getConstraintChecker().verify(this, a_newValue)) {
+      if (!getConstraintChecker().verify(this, a_newValue, null, -1)) {
         return;
       }
     }

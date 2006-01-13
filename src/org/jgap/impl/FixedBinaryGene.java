@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   private int m_length;
 
@@ -102,7 +102,7 @@ public class FixedBinaryGene
                                          + ")");
     }
     if (getConstraintChecker() != null) {
-      if (!getConstraintChecker().verify(this, a_newValue)) {
+      if (!getConstraintChecker().verify(this, a_newValue, null, -1)) {
         return;
       }
     }

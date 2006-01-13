@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.27 $";
+  private static final String CVS_REVISION = "$Revision: 1.28 $";
 
   public void setUp() {
     super.setUp();
@@ -38,7 +38,8 @@ public class DoubleGeneTest
    *
    * @author Klaus Meffert
    */
-  public void testConstruct_0() throws Exception {
+  public void testConstruct_0()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene = new DoubleGene(1.1d, 100.0d);
     //following should be possible without exception
@@ -186,12 +187,13 @@ public class DoubleGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_8() throws Exception {
+  public void testEquals_8()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene1 = new DoubleGene(1.2d, 100.3d);
     gene1.setAllele(new Double(1));
     Gene gene2 = new DoubleGene(1.2d, 99.5d);
-    gene2.setAllele(new Double(-1));
+    gene2.setAllele(new Double( -1));
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
@@ -272,7 +274,7 @@ public class DoubleGeneTest
         "m_lowerBounds");
     Double upper1 = (Double) privateAccessor.getField(gene1,
         "m_upperBounds");
-    DoubleGene gene2 = (DoubleGene)gene1.newGene();
+    DoubleGene gene2 = (DoubleGene) gene1.newGene();
     Double lower2 = (Double) privateAccessor.getField(gene2,
         "m_lowerBounds");
     Double upper2 = (Double) privateAccessor.getField(gene2,
@@ -412,7 +414,6 @@ public class DoubleGeneTest
   public void testSetToRandomValue_0() {
     Gene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.789d));
     assertEquals(new Double(0.789d * (6.5d - 1.3d) + 1.3d), gene.getAllele());
   }
@@ -426,11 +427,9 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene = new DoubleGene( -1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
-
     Configuration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
     Genotype.setConfiguration(conf);
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.014));
     assertEquals(new Double(0.014d * (6.5d + 1.3d) - 1.3d), gene.getAllele());
   }
@@ -445,11 +444,9 @@ public class DoubleGeneTest
     Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene = new DoubleGene( -1.3d, -0.5d);
     gene.setAllele(new Double(5.8d));
-
     Configuration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
     Genotype.setConfiguration(conf);
-
     gene.setToRandomValue(new RandomGeneratorForTest(0.83d));
     assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
   }
@@ -461,7 +458,6 @@ public class DoubleGeneTest
     DoubleGene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
-
     if (gene.doubleValue() < 1.3d
         || gene.doubleValue() > 6.5d) {
       fail();
@@ -475,7 +471,6 @@ public class DoubleGeneTest
     DoubleGene gene = new DoubleGene(1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
-
     if (gene.doubleValue() < 1.3d
         || gene.doubleValue() > 6.5d) {
       fail();
@@ -664,7 +659,8 @@ public class DoubleGeneTest
     DoubleGene gene = new DoubleGene(0, 100);
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -677,7 +673,7 @@ public class DoubleGeneTest
    */
   public void testHashCode_0() {
     DoubleGene gene = new DoubleGene(0, 100);
-    assertEquals(-3, gene.hashCode());
+    assertEquals( -3, gene.hashCode());
   }
 
   /**
@@ -697,15 +693,17 @@ public class DoubleGeneTest
     BaseGene gene = new DoubleGene();
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
-    gene.setEnergy(-55.8);
-    assertEquals(-55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy( -55.8);
+    assertEquals( -55.8, gene.getEnergy(), DELTA);
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
   }
 
-  class GeneConstraintChecker implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue) {
+  class GeneConstraintChecker
+      implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
+                          int a_index) {
       return true;
     }
   }

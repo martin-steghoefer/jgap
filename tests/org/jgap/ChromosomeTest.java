@@ -10,10 +10,8 @@
 package org.jgap;
 
 import java.util.*;
-
 import org.jgap.impl.*;
 import org.jgap.util.*;
-
 import junit.framework.*;
 
 /**
@@ -25,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -235,7 +233,7 @@ public class ChromosomeTest
       fail();
     }
     catch (InvalidConfigurationException cex) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
@@ -493,7 +491,7 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(genes);
     Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
-    Chromosome cloned = (Chromosome)chrom.clone();
+    Chromosome cloned = (Chromosome) chrom.clone();
     assertTrue(appObj == cloned.getApplicationData());
   }
 
@@ -1254,7 +1252,8 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.5
    */
-  public void testSetConstraintChecker_0() throws Exception {
+  public void testSetConstraintChecker_0()
+      throws Exception {
     Chromosome c = new Chromosome(2);
     assertNull(c.getConstraintChecker());
     IGeneConstraintChecker cc = new MyConstraintChecker();
@@ -1271,7 +1270,8 @@ public class ChromosomeTest
    * @author Klaus Meffert
    * @since 2.5
    */
-  public void testSetConstraintChecker_1() throws Exception {
+  public void testSetConstraintChecker_1()
+      throws Exception {
     Gene gene = new IntegerGene();
     Chromosome c = new Chromosome(gene, 2);
     assertNull(c.getConstraintChecker());
@@ -1279,16 +1279,19 @@ public class ChromosomeTest
     try {
       c.setConstraintChecker(cc);
       fail();
-    } catch (InvalidConfigurationException cex) {
-      ;//this is OK
+    }
+    catch (InvalidConfigurationException cex) {
+      ; //this is OK
     }
     assertEquals(cc, c.getConstraintChecker());
-    Gene[] genes = new Gene[]{gene};
+    Gene[] genes = new Gene[] {
+        gene};
     try {
       c.setGenes(genes);
       fail();
-    } catch (InvalidConfigurationException cex) {
-      ;//this is OK
+    }
+    catch (InvalidConfigurationException cex) {
+      ; //this is OK
     }
     c.setConstraintChecker(null);
     assertNull(c.getConstraintChecker());
@@ -1323,24 +1326,26 @@ public class ChromosomeTest
       return new MyAppObject2();
     }
   }
-
-  class MyConstraintChecker implements IGeneConstraintChecker {
+  class MyConstraintChecker
+      implements IGeneConstraintChecker {
     private Class m_forbidden;
-    public MyConstraintChecker () {
+
+    public MyConstraintChecker() {
       this(null);
     }
-    public MyConstraintChecker (Class a_forbiddenClass) {
+
+    public MyConstraintChecker(Class a_forbiddenClass) {
       m_forbidden = a_forbiddenClass;
     }
 
-    public boolean verify(Gene a_gene, Object a_value) {
+    public boolean verify(final Gene a_gene, final Object a_value,
+                          final Chromosome a_chrom, final int a_geneIndex) {
       if (m_forbidden == null) {
         return true;
       }
-      return !(a_gene.getClass().equals(m_forbidden));
+      return! (a_gene.getClass().equals(m_forbidden));
     }
   }
-
   /**
    * Ensures Chromosome is implementing Serializable
    * @throws Exception
@@ -1351,7 +1356,7 @@ public class ChromosomeTest
   public void testIsSerializable_0()
       throws Exception {
     Chromosome chrom = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
+                                      new IntegerGene(1, 5)});
     assertTrue(isSerializable(chrom));
   }
 
@@ -1366,11 +1371,10 @@ public class ChromosomeTest
       throws Exception {
     // construct chromosome to be serialized
     Chromosome chrom = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
+                                      new IntegerGene(1, 5)});
     IGeneConstraintChecker checker = new MyConstraintChecker();
     chrom.setConstraintChecker(checker);
     Object o = doSerialize(chrom);
     assertEquals(o, chrom);
- }
-
+  }
 }

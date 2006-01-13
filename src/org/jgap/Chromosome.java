@@ -61,7 +61,7 @@ import java.io.*;
 public class Chromosome
     implements Comparable, Cloneable, Serializable, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.65 $";
+  private final static String CVS_REVISION = "$Revision: 1.66 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -311,6 +311,14 @@ public class Chromosome
       // return it. Also clone the IApplicationData object.
       // ---------------------------------------------------------------
       copy = new Chromosome(copyOfGenes);
+    }
+    // Clone constraint checker.
+    // -------------------------
+    try {
+      copy.setConstraintChecker(getConstraintChecker());
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
     }
     // Also clone the IApplicationData object.
     // ---------------------------------------
@@ -898,11 +906,11 @@ public class Chromosome
    */
   protected void verify()
       throws InvalidConfigurationException {
-    if (getConstraintChecker() != null) {
+    if (getConstraintChecker() != null && getGenes() != null) {
       int len = getGenes().length;
       for (int i = 0; i < len; i++) {
         Gene gene = getGene(i);
-        if (!getConstraintChecker().verify(gene, null)) {
+        if (!getConstraintChecker().verify(gene, null, this, i)) {
           throw new InvalidConfigurationException(
               "The gene type "
               + gene.getClass().getName()

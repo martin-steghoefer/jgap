@@ -20,7 +20,7 @@ import org.jgap.*;
 public abstract class NumberGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -132,7 +132,7 @@ public abstract class NumberGene
    */
   public void setAllele(final Object a_newValue) {
     if (getConstraintChecker() != null) {
-      if (!getConstraintChecker().verify(this, a_newValue)) {
+      if (!getConstraintChecker().verify(this, a_newValue, null, -1)) {
         return;
       }
     }

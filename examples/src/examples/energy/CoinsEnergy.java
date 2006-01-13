@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class CoinsEnergy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -193,7 +193,8 @@ public class CoinsEnergy {
      * @author Klaus Meffert
      * @since 2.4
      */
-    public boolean verify(Gene a_gene, final Object a_alleleValue)
+    public boolean verify(Gene a_gene, final Object a_alleleValue,
+                          final Chromosome a_chrom, final int a_geneIndex)
         throws RuntimeException {
       double computedWeight = 0.0d;
       // We need to figure out what type of coin (penny, nickle, dime, quarter)

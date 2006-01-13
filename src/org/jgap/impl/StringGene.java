@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   private int m_minLength;
 
@@ -335,7 +335,7 @@ public class StringGene
                                            + " at least one invalid character.");
       }
       if (getConstraintChecker() != null) {
-        if (!getConstraintChecker().verify(this, a_newValue)) {
+        if (!getConstraintChecker().verify(this, a_newValue, null, -1)) {
           return;
         }
       }

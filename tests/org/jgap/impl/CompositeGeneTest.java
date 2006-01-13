@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   private static int cleanedUp = 0;
 
@@ -272,8 +272,9 @@ public class CompositeGeneTest
     try {
       gene1.addGene(null, false);
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;// this is expected
+    }
+    catch (IllegalArgumentException iex) {
+      ; // this is expected
     }
   }
 
@@ -393,7 +394,8 @@ public class CompositeGeneTest
     gene2.setAllele(new Double(1.0d));
     gene.addGene(gene2);
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -413,7 +415,8 @@ public class CompositeGeneTest
     gene2.setAllele(new Double(1.0d));
     gene.addGene(gene2);
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return true;
       }
     });
@@ -484,7 +487,6 @@ public class CompositeGeneTest
     CompositeGene composite1 = new CompositeGene();
     Gene strgene = new DoubleGene(2.05d, 7.53d);
     strgene.setAllele(new Double(7.52d));
-
     composite1.addGene(strgene, false);
     composite1.addGene(new DoubleGene(128.35d, 155.90d), false);
     strgene = new IntegerGene(3, 8);
@@ -492,25 +494,19 @@ public class CompositeGeneTest
     composite1.addGene(strgene, false);
     strgene = new BooleanGene();
     strgene.setAllele(Boolean.valueOf(true));
-
     composite1.addGene(strgene, false);
     composite1.addGene(new StringGene(), false);
     composite1.addGene(new StringGene(2, 5), false);
-
     String string = "<!-- many:various:chars &%$§/()=<>C:CA/ -->";
     strgene = new StringGene(6, 50, "CA! many:various:chars<>:&%$§/()-=");
     strgene.setAllele(string);
-
     // remember where, we will check the value later
     int stringPosition = composite1.size();
     composite1.addGene(strgene, false);
-
     CompositeGene compositeInside = new CompositeGene();
-
     Gene istrgene = new DoubleGene(2.05d, 17.53d);
     istrgene.setAllele(new Double(3.33));
     compositeInside.addGene(istrgene, false);
-
     compositeInside.addGene(new DoubleGene(128.35d, 155.90d), false);
     istrgene = new IntegerGene(3, 8);
     istrgene.setAllele(new Integer(5));
@@ -521,31 +517,23 @@ public class CompositeGeneTest
     compositeInside.addGene(new StringGene(), false);
     compositeInside.addGene(new StringGene(2, 5), false);
     istrgene = new StringGene(6, 11, "&xyzab<:>");
-
     String string2 = "<:yzab:>";
     istrgene.setAllele(string2);
     int position2 = compositeInside.size();
     compositeInside.addGene(istrgene, false);
-
     int whereCompositeGene = composite1.size();
     composite1.addGene(compositeInside);
-
     String pres1 = composite1.getPersistentRepresentation();
     CompositeGene gene2 = new CompositeGene();
-
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
-
     assertEquals(pres1, pres2);
-
     // check the string
     StringGene s = (StringGene) gene2.geneAt(stringPosition);
     assertTrue(string.equals(s.getAllele()));
-
     // check also in the composite gene
     CompositeGene cg = (CompositeGene) gene2.geneAt(whereCompositeGene);
     s = (StringGene) cg.geneAt(position2);
-
     assertTrue(string2.equals(s.getAllele()));
   }
 
@@ -677,7 +665,8 @@ public class CompositeGeneTest
     CompositeGene gene = new CompositeGene();
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
-      public boolean verify(Gene a_gene, Object a_alleleValue) {
+      public boolean verify(Gene a_gene, Object a_alleleValue,
+                            Chromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -760,7 +749,7 @@ public class CompositeGeneTest
     CompositeGene gene2 = new CompositeGene();
     gene2.addGene(newGene2, false);
     assertEquals(1, gene1.compareTo(gene2));
-    assertEquals(-1, gene2.compareTo(gene1));
+    assertEquals( -1, gene2.compareTo(gene1));
   }
 
   /**
@@ -790,7 +779,6 @@ public class CompositeGeneTest
     gene2.addGene(newGene2, false);
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
-
   }
 
   /**
@@ -812,7 +800,8 @@ public class CompositeGeneTest
     }
   }
 
-  public void testCompareTo_3_2() throws Exception {
+  public void testCompareTo_3_2()
+      throws Exception {
     Genotype.setConfiguration(new ConfigurationForTest());
     CompositeGene gene1 = new CompositeGene();
     Gene newGene1 = new IntegerGene(3, 5);
@@ -821,7 +810,7 @@ public class CompositeGeneTest
     Gene newGene2 = new IntegerGene(3, 5);
     newGene2.setAllele(new Integer(2));
     gene2.addGene(newGene2, false);
-    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals( -1, gene1.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene1));
   }
 
@@ -867,23 +856,24 @@ public class CompositeGeneTest
     assertEquals(0, gene2.compareTo(gene1));
     gene1.setApplicationData(new Integer(2));
     assertEquals(1, gene1.compareTo(gene2));
-    assertEquals(-1, gene2.compareTo(gene1));
+    assertEquals( -1, gene2.compareTo(gene1));
     gene2.setApplicationData(new Integer(3));
-    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals( -1, gene1.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene1));
     newGene1.setApplicationData(new Integer(5));
     newGene2.setApplicationData(new Integer(4));
-    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals( -1, gene1.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene1));
     newGene1.setCompareApplicationData(true);
     newGene2.setCompareApplicationData(true);
     assertEquals(1, gene1.compareTo(gene2));
-    assertEquals(-1, gene2.compareTo(gene1));
-
+    assertEquals( -1, gene2.compareTo(gene1));
   }
 
-  class GeneConstraintChecker implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue) {
+  class GeneConstraintChecker
+      implements IGeneConstraintChecker {
+    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
+                          int a_index) {
       return true;
     }
   }

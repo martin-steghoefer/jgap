@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -353,7 +353,7 @@ public class IntegerGeneTest
     gene1.setValueFromPersistentRepresentation("null"
                                                + IntegerGene.
                                                PERSISTENT_FIELD_DELIMITER
-                                               +  "3"
+                                               + "3"
                                                + IntegerGene.
                                                PERSISTENT_FIELD_DELIMITER
                                                + "4");
@@ -793,7 +793,8 @@ public class IntegerGeneTest
   }
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue) {
+    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
+                          int a_index) {
       return true;
     }
   }
