@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1246,6 +1246,27 @@ public class ChromosomeTest
   }
 
   /**
+   * Application data
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testToString_2()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome(3);
+    chrom.setApplicationData("uIoP");
+    assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
+                 + ", " + Chromosome.S_FITNESS_VALUE + ":" +
+                 FitnessFunction.NO_FITNESS_VALUE
+                 + ", " + Chromosome.S_ALLELES + ":[null, null, null]"
+                 + ", " + Chromosome.S_APPLICATION_DATA + ":uIoP",
+                 chrom.toString());
+  }
+
+  /**
    * Test setter/getter of constraint checker
    * @throws Exception
    *
@@ -1377,4 +1398,19 @@ public class ChromosomeTest
     Object o = doSerialize(chrom);
     assertEquals(o, chrom);
   }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testIsHandlerFor_0()
+      throws Exception {
+    Chromosome chrom = new Chromosome(3);
+    assertTrue(chrom.isHandlerFor(chrom, Chromosome.class));
+    assertFalse(chrom.isHandlerFor(chrom, ChromosomeForTest.class));
+    assertFalse(chrom.isHandlerFor(chrom, Object.class));
+  }
+
 }
