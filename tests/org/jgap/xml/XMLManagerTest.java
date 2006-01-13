@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -62,8 +62,6 @@ public class XMLManagerTest
       m_chrom = new Chromosome(m_genes);
       m_conf.setSampleChromosome(m_chrom);
       m_genotype = new Genotype(m_conf, new Chromosome[] {m_chrom});
-      // delete file perhaps created during test
-      new File(FILENAME_WRITE).delete();
       m_chromosome_tag = (String) privateAccessor.getField(XMLManager.class,
           "CHROMOSOME_TAG");
       m_genes_tag = (String) privateAccessor.getField(XMLManager.class,
@@ -197,9 +195,8 @@ public class XMLManagerTest
 
   public void testReadFile_0()
       throws Exception {
-    new File(FILENAME_WRITE).delete();
     try {
-      XMLManager.readFile(new File(FILENAME_WRITE));
+      XMLManager.readFile(File.createTempFile("FILENAME_WRITE", "tmp"));
       fail();
     }
     catch (Exception ex) {
@@ -210,9 +207,10 @@ public class XMLManagerTest
   public void testReadFile_1()
       throws Exception {
     Document doc = XMLManager.representGenotypeAsDocument(m_genotype);
+    File f = File.createTempFile("FILENAME_WRITE", "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
-                         new File(FILENAME_WRITE));
-    XMLManager.readFile(new File(FILENAME_WRITE));
+                         f);
+    XMLManager.readFile(f);
     Genotype population = XMLManager.getGenotypeFromDocument(m_conf, doc);
     assertEquals(m_genotype, population);
   }
@@ -220,8 +218,9 @@ public class XMLManagerTest
   public void testWriteFile_0()
       throws Exception {
     XMLManager.representGenotypeAsDocument(m_genotype);
+    File f = File.createTempFile("FILENAME_WRITE", "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
-                         new File(FILENAME_WRITE));
+                         f);
   }
 
   /**
@@ -231,7 +230,8 @@ public class XMLManagerTest
   public void testWriteFile_1()
       throws Exception {
     XMLManager.representGenotypeAsDocument(m_genotype);
+    File f = File.createTempFile("FILENAME_WRITE", "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
-                         new File(FILENAME_WRITE));
+                         f);
   }
 }
