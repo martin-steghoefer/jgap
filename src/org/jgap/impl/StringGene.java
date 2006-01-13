@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   private int m_minLength;
 
@@ -163,8 +163,6 @@ public class StringGene
    * @param a_representation the string representation retrieved from a prior
    * call to the getPersistentRepresentation() method
    *
-   * @throws UnsupportedOperationException to indicate that no implementation
-   * is provided for this method
    * @throws UnsupportedRepresentationException if this Gene implementation
    * does not support the given string representation
    *
@@ -550,6 +548,8 @@ public class StringGene
     if (m_alphabet != null) {
       len = m_alphabet.length();
       if (len < 1) {
+        // Does mutation make sense here?
+        // ------------------------------
         randomize = true;
       }
       else {
