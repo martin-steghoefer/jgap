@@ -26,7 +26,7 @@ import org.jgap.data.config.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -186,7 +186,7 @@ public class TournamentSelector
    */
   private class FitnessValueComparator
       implements Comparator {
-    public int compare(Object a_first, Object a_second) {
+    public int compare(final Object a_first, final Object a_second) {
       Chromosome chrom1 = (Chromosome) a_first;
       Chromosome chrom2 = (Chromosome) a_second;
       if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
