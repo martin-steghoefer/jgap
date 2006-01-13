@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -25,7 +24,7 @@ import org.jgap.*;
  */
 public class ChainOfSelectors {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
@@ -98,26 +97,35 @@ public class ChainOfSelectors {
 
   /**
    *
-   * @param o Object
+   * @param a_obj Object
    * @return boolean
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public boolean equals(Object o) {
-    return m_selectors.equals(o);
+  public boolean equals(final Object a_obj) {
+    try {
+      ChainOfSelectors c2 = (ChainOfSelectors) a_obj;
+      if (c2 == null) {
+        return false;
+      }
+      return m_selectors.equals(c2.m_selectors);
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
   }
 
   /**
    * Returns a Selector with specific index in the list
-   * @param index the index of the Selector to read from the list
+   * @param a_index the index of the Selector to read from the list
    * @return NaturalSelector
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public NaturalSelector get(int index) {
-    return (NaturalSelector) m_selectors.get(index);
+  public NaturalSelector get(final int a_index) {
+    return (NaturalSelector) m_selectors.get(a_index);
   }
 
   /**
