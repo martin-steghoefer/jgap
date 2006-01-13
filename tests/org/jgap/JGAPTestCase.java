@@ -23,7 +23,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -40,6 +40,8 @@ public abstract class JGAPTestCase
 
   public void setUp() {
     Genotype.setConfiguration(null);
+    // reset property --> use JGAPFactory
+    System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS, "");
   }
 
   /**
