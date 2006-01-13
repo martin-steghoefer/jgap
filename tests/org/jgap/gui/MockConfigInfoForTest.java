@@ -9,7 +9,6 @@
  */
 package org.jgap.gui;
 
-import org.jgap.*;
 import org.jgap.data.config.*;
 import java.util.*;
 
@@ -19,9 +18,9 @@ import java.util.*;
  * @author Siddhartha Azad
  * @since 2.3
  * */
-public class MockIConfigInfo
+public class MockConfigInfoForTest
     implements IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.1 $";
 
   // The ConfigData instance that will be populated and returned
   private ConfigData m_conData;
@@ -30,7 +29,7 @@ public class MockIConfigInfo
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public MockIConfigInfo() {
+  public MockConfigInfoForTest() {
     m_conData = new ConfigData();
     // populate the ConfigData instance
     m_conData.setNS("Configurable");
