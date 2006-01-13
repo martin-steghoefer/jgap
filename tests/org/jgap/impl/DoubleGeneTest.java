@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.28 $";
+  private static final String CVS_REVISION = "$Revision: 1.29 $";
 
   public void setUp() {
     super.setUp();
@@ -257,6 +257,16 @@ public class DoubleGeneTest
     catch (ClassCastException classex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * setAllele without Configuration and with need of mapping to bounds
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetAllele_3() {
+    Gene gene1 = new DoubleGene(1.0d, 1000.0d);
+    gene1.setAllele(new Double(2000.0d));
   }
 
   /**
