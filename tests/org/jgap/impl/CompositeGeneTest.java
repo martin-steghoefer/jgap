@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   private static int cleanedUp = 0;
 
@@ -32,6 +32,7 @@ public class CompositeGeneTest
   }
 
   /**
+   * @throws Exception
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -789,7 +790,6 @@ public class CompositeGeneTest
     CompositeGene gene1 = new CompositeGene();
     Gene newGene1 = new IntegerGene(3, 5);
     gene1.addGene(newGene1, false);
-    CompositeGene gene2 = new CompositeGene();
     Gene newGene2 = new IntegerGene(3, 5);
     try {
       newGene2.setAllele(new Integer(2));
@@ -814,29 +814,6 @@ public class CompositeGeneTest
     assertEquals(1, gene2.compareTo(gene1));
   }
 
-//  /**
-//   * @author Klaus Meffert
-//   * @since 2.4
-//   */
-//  public void testCompareTo_4()
-//      throws Exception {
-//    Genotype.setConfiguration(new ConfigurationForTest());
-//    CompositeGene gene1 = new CompositeGene();
-//    Gene newGene1 = new IntegerGene(3, 5);
-//    newGene1.setAllele(new Integer(1));
-//    Gene newGene2 = new IntegerGene(3, 5);
-//    newGene2.setAllele(new Integer(2));
-//    gene1.addGene(newGene1, false);
-//    gene1.addGene(newGene2, false);
-//    CompositeGene gene2 = new CompositeGene();
-//    Gene newGene3 = new IntegerGene(3, 5);
-//    newGene3.setAllele(new Integer(1));
-//    newGene3.setAllele(new Integer( -2));
-//    gene2.addGene(newGene3, false);
-//    assertEquals(1, gene1.compareTo(gene2));
-//    assertEquals( -1, gene2.compareTo(gene1));
-//  }
-//
   /**
    * Using application data
    *
@@ -868,6 +845,32 @@ public class CompositeGeneTest
     newGene2.setCompareApplicationData(true);
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals( -1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testApplyMutation_0()
+      throws Exception {
+    CompositeGene gene = new CompositeGene();
+    try {
+      gene.applyMutation(0, 0.5d);
+      fail();
+    }
+    catch (RuntimeException rex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testGetAllele_3() {
+    CompositeGene gene = new CompositeGene();
+    assertNull(gene.getInternalValue());
   }
 
   class GeneConstraintChecker

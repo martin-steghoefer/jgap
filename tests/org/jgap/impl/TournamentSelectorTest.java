@@ -10,9 +10,7 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -24,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -40,7 +38,9 @@ public class TournamentSelectorTest
    */
   public void testConstruct_0()
       throws Exception {
-    new TournamentSelector(1, 1.0d);
+    TournamentSelector sel = new TournamentSelector(1, 1.0d);
+    assertNotNull(privateAccessor.getField(sel, "m_chromosomes"));
+    assertNotNull(privateAccessor.getField(sel, "m_fitnessValueComparator"));
     new TournamentSelector(1, 0.5d);
     new TournamentSelector(10, 0.00001d);
     new TournamentSelector(50, 0.4d);
@@ -123,7 +123,6 @@ public class TournamentSelectorTest
     TournamentSelector selector = new TournamentSelector(5, 0.5d);
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
@@ -212,7 +211,6 @@ public class TournamentSelectorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
-
     TournamentSelector selector = new TournamentSelector(4, 0.3d);
     Gene gene = new IntegerGene();
     gene.setAllele(new Integer(444));
@@ -242,7 +240,6 @@ public class TournamentSelectorTest
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
     Genotype.setConfiguration(conf);
-
     TournamentSelector selector = new TournamentSelector(4, 1.0d);
     // add first chromosome
     // --------------------
@@ -458,11 +455,8 @@ public class TournamentSelectorTest
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
     Genotype.setConfiguration(conf);
-
     TournamentSelector selector = new TournamentSelector(4, 1.0d);
-
     Population toAddFrom = new Population();
-
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();
@@ -513,5 +507,44 @@ public class TournamentSelectorTest
   public void testReturnsUniqueChromosomes_0() {
     TournamentSelector selector = new TournamentSelector(2, 0.5d);
     assertFalse(selector.returnsUniqueChromosomes());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetTournametSize_0()
+      throws Exception {
+    TournamentSelector sel = new TournamentSelector(1, 1.0d);
+    sel.setTournamentSize(5);
+    assertEquals(5, sel.getTournamentSize());
+    try {
+      sel.setTournamentSize(0);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetProbability_0()
+      throws Exception {
+    TournamentSelector sel = new TournamentSelector(1, 1.0d);
+    sel.setProbability(0.6d);
+    assertEquals(0.6d, sel.getProbability(), DELTA);
+    try {
+      sel.setProbability(1.6d);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ;// this is OK
+    }
   }
 }

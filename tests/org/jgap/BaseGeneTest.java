@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -55,6 +55,18 @@ public class BaseGeneTest
     Gene gene = new BaseGeneImpl();
     gene.setAllele(new Integer(98));
     assertEquals("98, " + BaseGene.S_APPLICATION_DATA + ":null",
+                 gene.toString());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testToString_2() {
+    Gene gene = new BaseGeneImpl();
+    gene.setAllele(new Integer(98));
+    gene.setApplicationData("myAppData");
+    assertEquals("98, " + BaseGene.S_APPLICATION_DATA + ":myAppData",
                  gene.toString());
   }
 

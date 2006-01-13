@@ -24,7 +24,7 @@ import junit.framework.*;
 public class ChainOfSelectorsTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);
@@ -119,5 +119,24 @@ public class ChainOfSelectorsTest
     catch (InvalidConfigurationException inex) {
       ; //this is OK
     }
+  }
+
+  public void testEquals_0()
+      throws Exception {
+    ChainOfSelectors c1 = new ChainOfSelectors();
+    ChainOfSelectors c2 = new ChainOfSelectors();
+    assertFalse(c1.equals(null));
+    assertTrue(c1.equals(c2));
+    TournamentSelector t1 = new TournamentSelector();
+    c1.addNaturalSelector(t1);
+    assertFalse(c1.equals(c2));
+    c2.addNaturalSelector(new TournamentSelector());
+    /**@todo improve: 2 unsame selectors of same class with same params should
+     * make the chain equal!
+     */
+    assertFalse(c1.equals(c2));
+    c2.clear();
+    c2.addNaturalSelector(t1);
+    assertTrue(c1.equals(c2));
   }
 }

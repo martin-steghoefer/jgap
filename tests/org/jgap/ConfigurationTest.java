@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -934,8 +934,40 @@ public class ConfigurationTest
     assertEquals(true, conf.isKeepPopulationSizeConstant());
     conf.setKeepPopulationSizeConstant(false);
     assertEquals(false, conf.isKeepPopulationSizeConstant());
+    assertEquals(JGAPFactory.class, conf.getJGAPFactory().getClass());
   }
 
+  /**
+   * With valid System property for JGAPFactory set
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testConstruct_0() {
+    System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS,
+                       "org.jgap.MyFactoryTest");
+    Configuration conf = new Configuration();
+    assertEquals(MyFactoryTest.class, conf.getJGAPFactory().getClass());
+  }
+
+  /**
+   * With invalid System property for JGAPFactory set
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testConstruct_1() {
+    System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS,
+                       "org.jgap.myFactoryTest");
+    try {
+      new Configuration();
+      fail();
+    }
+    catch (RuntimeException rex) {
+      ; //this is OK
+    }
+  }
+}
+class MyFactoryTest
+    extends JGAPFactory {
 }
 class TestBulkFitnessFunction
     extends BulkFitnessFunction {

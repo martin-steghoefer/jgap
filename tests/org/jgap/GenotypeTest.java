@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -299,6 +299,28 @@ public class GenotypeTest
   }
 
   /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testGetFittestChromosomes_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(5));
+    Chromosome[] chroms = new Chromosome[1];
+    Chromosome chrom = new Chromosome(new Gene[] {
+                                      new IntegerGene(1, 5)});
+    chroms[0] = chrom;
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(7);
+    Genotype genotype = new Genotype(conf, chroms);
+    List l = genotype.getFittestChromosomes(1);
+    Chromosome chrom2 = (Chromosome)l.get(0);
+    assertEquals(chrom, chrom2);
+  }
+
+  /**
    * Assert population size shrinks when using special configuration and by
    * overwriting default setting for keeping population size constant
    * @throws Exception
@@ -564,6 +586,30 @@ public class GenotypeTest
   }
 
   /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEvolve_6()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Add another NaturalSelector (others already exist within
+    // ConfigurationForTest)
+    BestChromosomesSelector bcs = new BestChromosomesSelector();
+    bcs.setOriginalRate(1);
+    bcs.setDoubletteChromosomesAllowed(true);
+    config.addNaturalSelector(bcs, false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    genotype.setConfiguration(null);
+    try {
+      genotype.evolve();
+      fail();
+    }
+    catch (IllegalStateException iex) {
+      ; // this is OK
+    }
+  }
+
+  /**
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -706,6 +752,7 @@ public class GenotypeTest
     assertTrue(genotype.equals(genotype2));
     assertEquals(genotype.toString(), genotype2.toString());
     assertEquals(genotype.toString(), genotype2.toString());
+    assertFalse(genotype.equals(new Chromosome()));
   }
 
   /**
@@ -855,6 +902,24 @@ public class GenotypeTest
     catch (InvalidConfigurationException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetActiveConfiguration_2()
+      throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new ConfigurationForTest();
+    Genotype genotype = new Genotype(conf, chroms);
+    genotype.setConfiguration(null);
+    Configuration conf2 = new ConfigurationForTest();
+    genotype.setActiveConfiguration(conf2);
+    assertTrue(genotype.getConfiguration().isLocked());
   }
 
   /**
