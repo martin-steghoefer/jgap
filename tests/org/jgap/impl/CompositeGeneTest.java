@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   private static int cleanedUp = 0;
 
@@ -852,6 +852,22 @@ public class CompositeGeneTest
    * @author Klaus Meffert
    * @since 2.6
    */
+  public void testCompareTo_6()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
+    CompositeGene gene1 = new CompositeGene();
+    Gene newGene1 = new IntegerGene(3, 5);
+    gene1.addGene(newGene1, false);
+    CompositeGene gene2 = new CompositeGene();
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals( -1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
   public void testApplyMutation_0()
       throws Exception {
     CompositeGene gene = new CompositeGene();
@@ -873,6 +889,28 @@ public class CompositeGeneTest
     assertNull(gene.getInternalValue());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testHashCode_0()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
+    CompositeGene c1 = new CompositeGene();
+    CompositeGene c2 = new CompositeGene();
+    assertEquals(c1.hashCode(), c2.hashCode());
+    Gene newGene1 = new IntegerGene(3, 5);
+    c1.addGene(newGene1, false);
+    assertFalse(c1.hashCode() == c2.hashCode());
+    assertEquals(c1.hashCode(), c1.hashCode());
+    Gene newGene2 = new IntegerGene(2, 5);
+    c2.addGene(newGene2, false);
+    assertTrue(c1.hashCode() == c2.hashCode());
+    newGene1.setAllele(new Integer(2));
+    assertFalse(c1.hashCode() == c2.hashCode());
+  }
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
     public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,

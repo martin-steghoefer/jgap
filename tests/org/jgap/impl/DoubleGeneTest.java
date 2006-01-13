@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.29 $";
+  private static final String CVS_REVISION = "$Revision: 1.30 $";
 
   public void setUp() {
     super.setUp();
@@ -78,6 +78,15 @@ public class DoubleGeneTest
     Gene gene = new DoubleGene( -100.0d, 100.0d);
     gene.setAllele(new Double( -88.75286d));
     assertEquals("DoubleGene(-100.0,100.0)=-88.75286", gene.toString());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testToString_2() {
+    Gene gene = new DoubleGene(1.2d, 99.7d);
+    assertEquals("DoubleGene(1.2,99.7)=null", gene.toString());
   }
 
   /**
@@ -686,6 +695,24 @@ public class DoubleGeneTest
     assertEquals( -3, gene.hashCode());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testHashCode_1()
+      throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
+    DoubleGene c1 = new DoubleGene();
+    DoubleGene c2 = new DoubleGene();
+    assertEquals(c1.hashCode(), c2.hashCode());
+    c1.setAllele(new Double(2));
+    assertFalse(c1.hashCode() == c2.hashCode());
+    assertEquals(c1.hashCode(), c1.hashCode());
+    c2.setAllele(new Double(2));
+    assertTrue(c1.hashCode() == c2.hashCode());
+  }
   /**
    * @author Klaus Meffert
    * @since 2.4

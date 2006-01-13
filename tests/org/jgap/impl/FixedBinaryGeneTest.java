@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -1001,6 +1001,8 @@ public class FixedBinaryGeneTest
     Gene gene2 = new FixedBinaryGene(2);
     gene1.setAllele(new int[] {1, 0});
     assertFalse(gene1.hashCode() == gene2.hashCode());
+    assertTrue(gene1.hashCode() == gene1.hashCode());
+    assertTrue(gene2.hashCode() == gene2.hashCode());
   }
 
   /**
