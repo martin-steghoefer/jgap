@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * This field separates gene class name from
@@ -127,7 +127,7 @@ public class CompositeGene
    * @since 1.1
    */
   public void addGene(final Gene a_gene, final boolean a_strict) {
-    if ( a_gene == null) {
+    if (a_gene == null) {
       throw new IllegalArgumentException("Gene instance must not be null!");
     }
     if (m_geneTypeAllowed != null) {
@@ -252,15 +252,13 @@ public class CompositeGene
         m_genes.clear();
         ArrayList r = split(a_representation);
         Iterator iter = r.iterator();
-
         StringTokenizer st;
         String clas;
         String representation;
         String g;
         Gene gene;
-
         while (iter.hasNext()) {
-          g = decode( (String) iter.next());
+          g = URLDecoder.decode( (String) iter.next(), "UTF-8");
           st = new StringTokenizer(g, GENE_DELIMITER);
           if (st.countTokens() != 2)
             throw new UnsupportedRepresentationException("In " + g + ", " +
@@ -314,13 +312,17 @@ public class CompositeGene
     while (iter.hasNext()) {
       gene = (Gene) iter.next();
       b.append(GENE_DELIMITER_HEADING);
-      b.append(
-          encode
-          (
-          gene.getClass().getName() +
-          GENE_DELIMITER +
-          gene.getPersistentRepresentation())
-          );
+      try {
+        b.append(
+            URLEncoder.encode(
+            gene.getClass().getName() +
+            GENE_DELIMITER +
+            gene.getPersistentRepresentation(), "UTF-8"
+            ));
+      }
+      catch (UnsupportedEncodingException uex) {
+        throw new RuntimeException("UTF-8 should always be supported!");
+      }
       b.append(GENE_DELIMITER_CLOSING);
     }
     return b.toString();
@@ -423,7 +425,6 @@ public class CompositeGene
     if (a_other == null) {
       return 1;
     }
-
     if (! (a_other instanceof CompositeGene)) {
       return this.getClass().getName().compareTo(a_other.getClass().getName());
     }
@@ -598,43 +599,10 @@ public class CompositeGene
   }
 
   /**
-   * Encode string, doubling the separators.
-   * @param a_string the string to encode (arbitrary characters)
-   * @return the encoded string, containing only characters, valid in URL's
-   *
-   * @author Audrius Meskauskas
-   * @since 2.0
-   */
-  protected static final String encode(String a_string) {
-    try {
-      return URLEncoder.encode(a_string, "UTF-8");
-    }
-    catch (UnsupportedEncodingException ex) {
-      throw new Error("This should never happen!");
-    }
-  }
-
-  /** Decode string, undoubling the separators.
-   * @param a_encoded the URL-encoded string with restricted character set
-   * @return decoded the decoded string
-   *
-   * @author Audrius Meskauskas
-   * @since 2.0
-   */
-  protected static final String decode(String a_encoded) {
-    try {
-      return URLDecoder.decode(a_encoded, "UTF-8");
-    }
-    catch (UnsupportedEncodingException ex) {
-      throw new Error("This should never happen!");
-    }
-  }
-
-  /**
-   * Splits the string a_x into individual gene representations
+   * Splits the string a_string into individual gene representations
    * @param a_string the string to split
    * @return the elements of the returned array are the persistent
-   * representation strings of the genes - components
+   * representation strings of the gene's components
    * @throws UnsupportedRepresentationException
    *
    * @author Audrius Meskauskas
@@ -643,10 +611,8 @@ public class CompositeGene
   protected static final ArrayList split(String a_string)
       throws UnsupportedRepresentationException {
     ArrayList a = new ArrayList();
-
     StringTokenizer st = new StringTokenizer
         (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
-
     while (st.hasMoreTokens()) {
       if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
         throw new UnsupportedRepresentationException(a_string + " no open tag");
@@ -683,6 +649,11 @@ public class CompositeGene
     return hashCode;
   }
 
+  /**
+   * This method is not called internally because BaseGene.getAllele() is
+   * overridden here!
+   * @return always null
+   */
   protected Object getInternalValue() {
     return null;
   }
