@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   private int m_length;
 
@@ -348,7 +348,7 @@ public class FixedBinaryGene
   /**
    * Applies a mutation of a given intensity (percentage) onto the atomic
    * element at given index
-   * @param index index of atomic element, between 0 and size()-1
+   * @param a_index index of atomic element, between 0 and size()-1
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    * than 1)
    *
@@ -430,6 +430,10 @@ public class FixedBinaryGene
     return 0;
   }
 
+  /**
+   * Not called as getAllee() is overridden.
+   * @return Object
+   */
   protected Object getInternalValue() {
     return m_value;
   }
@@ -444,14 +448,8 @@ public class FixedBinaryGene
    * @since 2.2
    */
   public int hashCode() {
-    int result;
-    if (m_value.length < 1) {
-      result = -9945;
-    }
-    else {
-      result = 0;
-    }
-    for (int i=0;i<m_value.length;i++) {
+    int result = 0;
+    for (int i = 0; i < m_value.length; i++) {
       if (m_value[i] == 0) {
         result += 31 * result + 47;
       }
