@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -494,8 +494,23 @@ public class GreedyCrossoverTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testEquals_0() throws Exception {
+  public void testEquals_0()
+      throws Exception {
     GeneticOperator op = new GreedyCrossover();
     assertFalse(op.equals(new Chromosome()));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCompareTo_0() {
+    GreedyCrossover op = new GreedyCrossover();
+    assertEquals(1, op.compareTo(null));
+    GreedyCrossover op2 = new GreedyCrossover();
+    assertEquals(0, op.compareTo(op2));
+    op.setStartOffset(2);
+    assertEquals( -1, op.compareTo(op2));
+    assertEquals(1, op2.compareTo(op));
   }
 }
