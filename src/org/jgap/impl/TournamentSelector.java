@@ -26,7 +26,7 @@ import org.jgap.data.config.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -68,22 +68,7 @@ public class TournamentSelector
    */
   public TournamentSelector(final int a_tournament_size,
                             final double a_probability) {
-    super();
-    if (a_tournament_size < 1) {
-      throw new IllegalArgumentException("Tournament size must be at least 1!");
-    }
-    if (a_probability <= 0.0d || a_probability > 1.0d) {
-      throw new IllegalArgumentException("Probability must be greater 0.0 and"
-                                         + " less or equal than 1.0!");
-    }
-    m_tournament_size = a_tournament_size;
-    m_probability = a_probability;
-    m_chromosomes = new Vector();
-    m_fitnessValueComparator = new FitnessValueComparator();
-  }
-
-  public void setTournamentSize(final int a_tournament_size,
-                                final double a_probability) {
+    this();
     if (a_tournament_size < 1) {
       throw new IllegalArgumentException("Tournament size must be at least 1!");
     }
@@ -95,7 +80,27 @@ public class TournamentSelector
     m_probability = a_probability;
   }
 
-  public void setProbability() {
+  public void setTournamentSize(final int a_tournament_size) {
+    if (a_tournament_size < 1) {
+      throw new IllegalArgumentException("Tournament size must be at least 1!");
+    }
+    m_tournament_size = a_tournament_size;
+  }
+
+  public int getTournamentSize() {
+    return m_tournament_size;
+  }
+
+  public double getProbability() {
+    return m_probability;
+  }
+
+  public void setProbability(final double a_probability) {
+    if (a_probability <= 0.0d || a_probability > 1.0d) {
+      throw new IllegalArgumentException("Probability must be greater 0.0 and"
+                                         + " less or equal than 1.0!");
+    }
+    m_probability = a_probability;
   }
 
   /**
@@ -217,8 +222,8 @@ public class TournamentSelector
 
   /**
    * Pass the name and value of a property to be set.
-   * @param name The name of the property.
-   * @param value The value of the property.
+   * @param a_name the name of the property
+   * @param a_value the value of the property
    *
    * @author Siddhartha Azad.
    * @since 2.0
