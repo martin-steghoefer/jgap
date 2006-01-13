@@ -22,7 +22,7 @@ import junit.framework.*;
 public class AveragingCrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AveragingCrossoverOperatorTest.class);
@@ -81,7 +81,7 @@ public class AveragingCrossoverOperatorTest
   }
 
   /**
-   * Tests if crossing over produces same results for two operate-runs
+   * Tests if crossing over produces same results for two operate-runs.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -131,7 +131,7 @@ public class AveragingCrossoverOperatorTest
   }
 
   /**
-   * Using CompositeGene
+   * Using CompositeGene as first crossover candidate.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -183,6 +183,119 @@ public class AveragingCrossoverOperatorTest
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
     target = (Chromosome) chroms.get(3);
+    CompositeGene result = (CompositeGene) target.getGene(0);
+    assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0))
+                 .intValue());
+  }
+
+  /**
+   * Considers crossover rate calculator
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testOperate_3()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    GeneticOperator op = new AveragingCrossoverOperator(new
+        DefaultCrossoverRateCalculator());
+    conf.addGeneticOperator(op);
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    rand.setNextIntSequence(new int[] {
+                            0, 1, 0, 1, 2});
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(1, 10);
+    Chromosome chrom = new Chromosome(sampleGene, 2);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    Gene cgene1 = new IntegerGene(1, 10);
+    cgene1.setAllele(new Integer(6));
+    Gene[] genes1 = new Gene[] {
+        cgene1};
+    Chromosome chrom1 = new Chromosome(genes1);
+    Gene cgene2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(8));
+    Gene[] genes2 = new Gene[] {
+        cgene2};
+    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome[] population = new Chromosome[] {
+        chrom1, chrom2};
+    List chroms = new Vector();
+    Gene gene1 = new IntegerGene(1, 10);
+    gene1.setAllele(new Integer(5));
+    chroms.add(gene1);
+    Gene gene2 = new IntegerGene(1, 10);
+    gene2.setAllele(new Integer(7));
+    chroms.add(gene2);
+    Gene gene3 = new IntegerGene(1, 10);
+    gene3.setAllele(new Integer(4));
+    chroms.add(gene3);
+    op.operate(new Population(population), chroms);
+    assertEquals(3 + 2, chroms.size());
+    Chromosome target = (Chromosome) chroms.get(4);
+    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
+    target = (Chromosome) chroms.get(3);
+    assertEquals(8, ( (Integer) target.getGene(0).getAllele()).intValue());
+    op.operate(new Population(population), chroms);
+    assertEquals(3 + 2 + 2, chroms.size());
+  }
+
+  /**
+   * Using CompositeGene as second crossover candidate.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testOperate_4()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    GeneticOperator op = new AveragingCrossoverOperator();
+    conf.addGeneticOperator(op);
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    rand.setNextIntSequence(new int[] {
+                            0, 1, 0, 1, 2});
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(1, 10);
+    CompositeGene compGene = new CompositeGene();
+    compGene.addGene(sampleGene);
+    Chromosome chrom = new Chromosome(compGene, 3);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    Gene cgene1 = new IntegerGene(1, 10);
+    cgene1.setAllele(new Integer(6));
+    compGene = new CompositeGene();
+    compGene.addGene(cgene1);
+    Gene[] genes1 = new Gene[] {
+        compGene};
+    Chromosome chrom1 = new Chromosome(genes1);
+    Gene cgene2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(8));
+    Gene[] genes2 = new Gene[] {
+        cgene2};
+    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome[] population = new Chromosome[] {
+        chrom2, chrom1};
+    List chroms = new Vector();
+    Gene gene1 = new IntegerGene(1, 10);
+    gene1.setAllele(new Integer(5));
+    chroms.add(gene1);
+    Gene gene2 = new IntegerGene(1, 10);
+    gene2.setAllele(new Integer(7));
+    chroms.add(gene2);
+    Gene gene3 = new IntegerGene(1, 10);
+    gene3.setAllele(new Integer(4));
+    chroms.add(gene3);
+    op.operate(new Population(population), chroms);
+    assertEquals(5, chroms.size());
+    Chromosome target = (Chromosome) chroms.get(3);
+    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
+    target = (Chromosome) chroms.get(4);
     CompositeGene result = (CompositeGene) target.getGene(0);
     assertEquals(8, ( (Integer) ( (Vector) result.getAllele()).get(0))
                  .intValue());
@@ -241,4 +354,15 @@ public class AveragingCrossoverOperatorTest
     assertEquals(o, op);
   }
 
+  /**
+   * Test equals with classcast object.
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_0() throws Exception {
+    GeneticOperator op = new AveragingCrossoverOperator();
+    assertFalse(op.equals(new Chromosome()));
+  }
 }

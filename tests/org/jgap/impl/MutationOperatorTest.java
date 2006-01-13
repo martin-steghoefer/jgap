@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.29 $";
+  private static final String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -34,7 +34,7 @@ public class MutationOperatorTest
    */
   public void testConstruct_0() {
     MutationOperator mutOp = new MutationOperator(234);
-    assertEquals(234, mutOp.m_mutationRate);
+    assertEquals(234, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
@@ -43,7 +43,7 @@ public class MutationOperatorTest
    */
   public void testConstruct_1() {
     MutationOperator mutOp = new MutationOperator();
-    assertEquals(0, mutOp.m_mutationRate);
+    assertEquals(0, mutOp.getMutationRate());
     assertNotNull(mutOp.getMutationRateCalc());
   }
 
@@ -52,7 +52,7 @@ public class MutationOperatorTest
    */
   public void testConstruct_2() {
     MutationOperator mutOp = new MutationOperator(null);
-    assertEquals(0, mutOp.m_mutationRate);
+    assertEquals(0, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
@@ -62,7 +62,7 @@ public class MutationOperatorTest
   public void testConstruct_3() {
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     MutationOperator mutOp = new MutationOperator(calc);
-    assertEquals(0, mutOp.m_mutationRate);
+    assertEquals(0, mutOp.getMutationRate());
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
 
@@ -374,8 +374,8 @@ public class MutationOperatorTest
     //old gene
     assertFalse( ( (BooleanGene) pop.getChromosome(0).getGene(0)).booleanValue());
     //old gene
-    assertEquals(3,( (IntegerGene)  pop.getChromosome(1).
-                                  getGene(0)).intValue());
+    assertEquals(3, ( (IntegerGene) pop.getChromosome(1).
+                     getGene(0)).intValue());
     //mutated gene
     assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
                  ( (IntegerGene) pop.getChromosome(2).getGene(0)).intValue());
@@ -416,12 +416,19 @@ public class MutationOperatorTest
                            GeneticOperator a_caller) {
       Chromosome chrom = (Chromosome)a_chromosomes.get(0);
       Gene gene = chrom.getGene(0);
-      if (gene.getClass() == BooleanGene.class) {
-        return false;
-      }
-      else {
-        return true;
-      }
+      return gene.getClass() != BooleanGene.class;
     }
+  }
+
+  /**
+   * Test equals with classcast object.
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_0() throws Exception {
+    GeneticOperator op = new MutationOperator();
+    assertFalse(op.equals(new Chromosome()));
   }
 }

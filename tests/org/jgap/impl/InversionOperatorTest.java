@@ -23,7 +23,7 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
@@ -201,5 +201,91 @@ public class InversionOperatorTest
     target = (Chromosome) chroms.get(size + 1);
     IntegerGene result = (IntegerGene) target.getGene(0);
     assertEquals(8, ( (Integer) result.getAllele()).intValue());
+  }
+
+  /**
+   * Test equals with classcast object.
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_0()
+      throws Exception {
+    GeneticOperator op = new InversionOperator();
+    assertFalse(op.equals(new Chromosome()));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testOperate_3()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    // tupels: (index of chromosome; locus), see InversionOperator.operate
+    rand.setNextIntSequence(new int[] {
+                            0, 1, 1, 1, 2});
+    conf.setPopulationSize(6);
+    conf.setRandomGenerator(rand);
+    Gene sampleGene = new IntegerGene(1, 10);
+    Chromosome chrom = new Chromosome(sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    Gene gene1 = new IntegerGene(1, 10);
+    gene1.setAllele(new Integer(5));
+    Gene cgene1 = new IntegerGene(1, 10);
+    cgene1.setAllele(new Integer(6));
+    Gene cgene1_2 = new IntegerGene(1, 10);
+    cgene1_2.setAllele(new Integer(9));
+    CompositeGene compGene = new CompositeGene();
+    compGene.addGene(cgene1);
+    Gene[] genes1 = new Gene[] {
+        compGene};
+    Chromosome chrom1 = new Chromosome(genes1);
+    chrom1.setConstraintChecker(new TestConstraintChecker());
+    Gene cgene2 = new IntegerGene(1, 10);
+    cgene2.setAllele(new Integer(8));
+    Gene[] genes2 = new Gene[] {
+        cgene2, cgene1_2};
+    Chromosome chrom2 = new Chromosome();
+    chrom2.setGenes(genes2);
+    chrom2.setConstraintChecker(new TestConstraintChecker());
+    Chromosome[] population = new Chromosome[] {
+        chrom1, chrom2};
+    List chroms = new Vector();
+    chroms.add(gene1);
+    Gene gene2 = new IntegerGene(1, 10);
+    gene2.setAllele(new Integer(7));
+    chroms.add(gene2);
+    Gene gene3 = new IntegerGene(1, 10);
+    gene3.setAllele(new Integer(4));
+    chroms.add(gene3);
+    InversionOperator op = new InversionOperator();
+    try {
+      op.operate(new Population(population), chroms);
+      fail();
+    }
+    catch (Error iex) {
+      ; //this is OK
+    }
+  }
+
+  public class TestConstraintChecker
+      implements IGeneConstraintChecker {
+    private int m_callcount;
+
+    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
+                          int a_index) {
+      if (m_callcount++ >= 2) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   }
 }

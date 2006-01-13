@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -36,7 +36,7 @@ public class SwappingMutationOperatorTest
    */
   public void testConstruct_0() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator(234);
-    assertEquals(234, mutOp.m_mutationRate);
+    assertEquals(234, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
@@ -46,7 +46,7 @@ public class SwappingMutationOperatorTest
    */
   public void testConstruct_1() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator();
-    assertEquals(0, mutOp.m_mutationRate);
+    assertEquals(0, mutOp.getMutationRate());
     assertNotNull(mutOp.getMutationRateCalc());
   }
 
@@ -56,7 +56,7 @@ public class SwappingMutationOperatorTest
    */
   public void testConstruct_2() {
     SwappingMutationOperator mutOp = new SwappingMutationOperator(null);
-    assertEquals(0, mutOp.m_mutationRate);
+    assertEquals(0, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
@@ -67,7 +67,7 @@ public class SwappingMutationOperatorTest
   public void testConstruct_3() {
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
     MutationOperator mutOp = new MutationOperator(calc);
-    assertEquals(0, mutOp.m_mutationRate);
+    assertEquals(0, mutOp.getMutationRate());
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
 
@@ -294,5 +294,17 @@ public class SwappingMutationOperatorTest
         new DefaultCrossoverRateCalculator());
     SwappingMutationOperator o = (SwappingMutationOperator) doSerialize(op);
     assertEquals(o, op);
+  }
+
+  /**
+   * Test equals with classcast object.
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_0() throws Exception {
+    GeneticOperator op = new SwappingMutationOperator();
+    assertFalse(op.equals(new Chromosome()));
   }
 }
