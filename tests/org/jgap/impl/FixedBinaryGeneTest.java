@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -742,8 +742,18 @@ public class FixedBinaryGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testClone_9() {
+  public void testClone_0() {
     FixedBinaryGene gene1 = new FixedBinaryGene(1);
+    FixedBinaryGene gene2 = (FixedBinaryGene) gene1.clone();
+    assertEquals(gene1, gene2);
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testClone_1() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(3);
     FixedBinaryGene gene2 = (FixedBinaryGene) gene1.clone();
     assertEquals(gene1, gene2);
   }
@@ -773,9 +783,9 @@ public class FixedBinaryGeneTest
     gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
     gene1.setBit(2, 4, true);
     assertTrue(gene1.getBit(0));
-    assertTrue(gene1.getBit(0));
-    assertTrue(gene1.getBit(0));
-    assertTrue(gene1.getBit(0));
+    assertTrue(gene1.getBit(1));
+    assertTrue(gene1.getBit(2));
+    assertTrue(gene1.getBit(3));
   }
 
   /**
@@ -824,6 +834,26 @@ public class FixedBinaryGeneTest
     catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetBit_5() {
+    FixedBinaryGene gene1 = new FixedBinaryGene(7);
+    gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
+    FixedBinaryGene gene2 = new FixedBinaryGene(9);
+    gene2.setBit(2, 6, gene1);
+    assertTrue(gene2.getBit(2));
+    assertTrue(gene2.getBit(3));
+    assertTrue(gene2.getBit(6));
+    assertFalse(gene2.getBit(0));
+    assertFalse(gene2.getBit(1));
+    assertFalse(gene2.getBit(4));
+    assertFalse(gene2.getBit(5));
+    assertFalse(gene2.getBit(7));
+    assertFalse(gene2.getBit(8));
   }
 
   /**
