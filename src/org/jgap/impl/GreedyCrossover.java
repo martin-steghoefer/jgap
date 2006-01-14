@@ -57,12 +57,21 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.20 $";
+  private static final String CVS_REVISION = "$Revision: 1.21 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
 
   private int m_startOffset = 1;
+
+  /**
+   * Default constructor for dynamic instantiation
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public GreedyCrossover() {
+
+  }
 
   /** Compute the distance between "cities", indicated by these two
    * given genes. The default method expects the genes to be a
