@@ -7,8 +7,9 @@
        org.jgap.impl.JGAPFactory.
   JGAPFactory Could be replaced by a user-defined factory
   via System.setproperty(...)
-* Introduced ICloneHandler, accessable via JGAPFactory
-* Introduced IInitializer, accessable via JGAPFactory
+* Introduced ICloneHandler, accessible via JGAPFactory
+* Introduced IInitializer, accessible via JGAPFactory
+* Introduced ICompareToHandler, accessible via JGAPFactory
 * Introduced hook method newGeneInternal in BaseGene
 * Added equals and compareTo to CrossoverOperator
 * Added interface org.jgap.ICompsiteGene for
