@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -290,6 +290,24 @@ public class PopulationTest
     Chromosome fittest = (Chromosome) chromosomes.get(0);
     p.setChromosomes(chromosomes);
     assertEquals(fittest, p.determineFittestChromosome());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testDetermineFittestChromosome_4()
+      throws Exception {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    Population p = new Population();
+    Gene g = new DoubleGene();
+    Chromosome c = new Chromosome(g, 10);
+    c.setFitnessValue(22);
+    p.addChromosome(c);
+    assertEquals(null, p.determineFittestChromosomes(0));
+    assertEquals(c, p.determineFittestChromosomes(1).get(0));
   }
 
   public void testSize_0() {
