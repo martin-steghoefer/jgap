@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import java.util.*;
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * Central factory for creating default objects to use, e.g. random generators.
@@ -28,7 +29,7 @@ import org.jgap.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private List m_parameters;
 
@@ -46,15 +47,24 @@ public class JGAPFactory
 
   private IGeneticOperatorConstraint m_geneticOpConstraint;
 
-  public JGAPFactory() {
+  private LRUCache m_cache;
+
+  private boolean m_useCaching;
+
+  public JGAPFactory(boolean a_useCaching) {
     m_cloneHandlers = new Vector();
     m_initer = new Vector();
     m_compareHandlers = new Vector();
+    m_cache = new LRUCache(50);
+    m_useCaching = a_useCaching;
   }
 
   /**
-   * Allows setting (generic because unknown) parameters for creating objects
+   * Allows setting (generic because unknown) parameters for creating objects.
+   *
    * @param a_parameters Collection of generic parameters
+   * @author Klaus Meffert
+   * @since 2.6
    */
   public void setParameters(final Collection a_parameters) {
     m_parameters = new Vector(a_parameters);
@@ -66,7 +76,8 @@ public class JGAPFactory
 
   /**
    * Registers a clone handler that could be retrieved by
-   * getCloneHandlerFor(Class)
+   * getCloneHandlerFor(Class).
+   *
    * @param a_cloneHandler the ICloneHandler to register
    * @return index of the added clone handler, needed when removeCloneHandler
    * will be called
@@ -81,7 +92,8 @@ public class JGAPFactory
 
   /**
    * Removes a clone handler at a given index (which is obtained from
-   * registerCloneHandler)
+   * registerCloneHandler).
+   *
    * @param a_index the index of the clone handler to remove
    * @return the removed ICloneHandler, or null if not successfull
    *
@@ -109,12 +121,15 @@ public class JGAPFactory
       m_defaultCloneHandler = new DefaultCloneHandler();
     }
     return (ICloneHandler) findHandlerFor(a_obj, a_classToClone,
-                                          m_cloneHandlers.iterator(),
-                                          m_defaultCloneHandler);
+                                          m_cloneHandlers,
+                                          m_defaultCloneHandler,
+                                          "clone");
   }
 
   /**
-   * Registers an initializer that could be retrieved by getInitializerFor(Class)
+   * Registers an initializer that could be retrieved by
+   * getInitializerFor(Class).
+   *
    * @param a_chromIniter the IChromosomeInitializer to register
    * @return index of the added initializer, needed when
    * removeChromosomeInitializer will be called
@@ -129,7 +144,8 @@ public class JGAPFactory
 
   /**
    * Removes an initializer at a given index (which is obtained from
-   * registerInitializer)
+   * registerInitializer).
+   *
    * @param a_index the index of the initializer to remove
    * @return the removed IInitializer, or null if not successfull
    *
@@ -157,8 +173,9 @@ public class JGAPFactory
       m_defaultIniter = new DefaultInitializer();
     }
     return (IInitializer) findHandlerFor(a_obj, a_class,
-                                         m_initer.iterator(),
-                                         m_defaultIniter);
+                                         m_initer,
+                                         m_defaultIniter,
+                                         "init");
   }
 
   public void setGeneticOperatorConstraint(final IGeneticOperatorConstraint
@@ -171,7 +188,8 @@ public class JGAPFactory
   }
 
   /**
-   * Retrieves a handler capable of comparing two instances of the given class
+   * Retrieves a handler capable of comparing two instances of the given class.
+   *
    * @param a_obj the object to compare (maybe null)
    * @param a_classToCompareTo the class instances to compare (maybe null)
    * @return the handler found capable of comparing instances
@@ -186,13 +204,15 @@ public class JGAPFactory
       m_defaultComparer = new DefaultCompareToHandler();
     }
     return (ICompareToHandler) findHandlerFor(a_obj, a_classToCompareTo,
-                                              m_compareHandlers.iterator(),
-                                              m_defaultComparer);
+                                              m_compareHandlers,
+                                              m_defaultComparer,
+                                              "compare");
   }
 
   /**
    * Registers a compareTo-handler that could be retrieved by
-   * getCompareToHandlerFor(Class)
+   * getCompareToHandlerFor(Class).
+   *
    * @param a_compareToHandler the ICompareToHandler to register
    * @return index of the added handler, needed when removeCompareToHandler
    * will be called
@@ -207,7 +227,8 @@ public class JGAPFactory
 
   /**
    * Removes a compareTo-handler at a given index (which is obtained from
-   * registerCompareToHandler)
+   * registerCompareToHandler).
+   *
    * @param a_index the index of the handler to remove
    * @return the removed handler, or null if not successfull
    *
@@ -220,29 +241,74 @@ public class JGAPFactory
 
   /**
    * Helper: Finds a handler for a given Object or Class, returns the default
-   * handler, if one is provided
+   * handler, if one is provided. Uses an LRU cache to speedup things!
+   *
    * @param a_obj the object to find a handler for (maybe null)
    * @param a_class the class to find a handler for (maybe null)
-   * @param a_it iterator over the list of available handlers
+   * @param a_list list of available handlers
    * @param a_default a default handler to return in none other is found
+   * @param a_listID arbitrary unique string for accessing the cache
    * @return the handler found, or null if none registered
+   *
+   * @author Klaus Meffert
+   * @since 2.6
    */
   protected IHandler findHandlerFor(final Object a_obj,
                                     final Class a_class,
-                                    final Iterator a_it,
-                                    final IHandler a_default) {
-    while (a_it.hasNext()) {
-      IInitializer initer = (IInitializer) a_it.next();
+                                    final List a_list,
+                                    final IHandler a_default,
+                                    final String a_listID) {
+    String key = null;
+    String key1, key2;
+    if (m_useCaching) {
+      // Construct key for cache lookup:
+      // Class name of list + a_class-Name + a_obj.hashCode()
+      if (a_class == null) {
+        key1 = "null";
+      }
+      else {
+        key1 = a_class.getName();
+      }
+      if (a_obj == null) {
+        key2 = "null";
+      }
+      else {
+        key2 = a_obj.getClass().getName();
+      }
+      key = a_listID + "/" + key1 + "/" + key2;
+      // Lookup cache.
+      // -------------
+      Object handler = m_cache.get(key);
+      if (handler != null) {
+        return (IHandler) handler;
+      }
+      // Not found in cache. Search initially.
+      // -------------------------------------
+    }
+    IHandler result = null;
+    Iterator it = a_list.iterator();
+    while (it.hasNext()) {
+      IInitializer initer = (IInitializer) it.next();
       if (initer.isHandlerFor(a_obj, a_class)) {
-        return initer;
+        result = initer;
+        break;
       }
     }
-    // No registered handler found. Try the default handler
-    if (a_default != null) {
-      if (a_default.isHandlerFor(a_obj, a_class)) {
-        return a_default;
+    if (result == null) {
+      // No registered handler found. Try the default handler.
+      // -----------------------------------------------------
+      if (a_default != null) {
+        if (a_default.isHandlerFor(a_obj, a_class)) {
+          result = a_default;
+        }
       }
     }
-    return null;
+    if (m_useCaching) {
+      // Add to cache
+      if (result != null) {
+        m_cache.put(key, result);
+      }
+    }
+    return result;
   }
 }
