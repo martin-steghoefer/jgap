@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   private int m_length;
 
@@ -281,15 +281,12 @@ public class FixedBinaryGene
   /**
    * Verifies if the String is a valid representation of this Gene type
    * in general (bit values will not be checked)
-   * @param a_representation String
-   * @return boolean
+   * @param a_representation the representation to check
+   * @return true: representation is valid in general
    * @author Klaus Meffert
    * @since 2.0
    */
   private boolean isValidRepresentation(final String a_representation) {
-    if (a_representation == null) {
-      return false;
-    }
     if (!a_representation.startsWith("[") || !a_representation.endsWith("]")) {
       return false;
     }
