@@ -84,7 +84,11 @@ public class DefaultCloneHandler
     try {
       Method cloneMethod = a_objToClone.getClass().getMethod(
           "clone", new Class[] {});
+      cloneMethod.setAccessible(true);
       return cloneMethod.invoke(a_objToClone, new Object[] {});
+    }
+    catch (InvocationTargetException iex) {
+      throw new IllegalStateException(iex.getTargetException().getMessage());
     }
     catch (Throwable ex) {
       throw new IllegalStateException(ex.getMessage());
