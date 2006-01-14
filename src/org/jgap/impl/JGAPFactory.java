@@ -28,7 +28,7 @@ import org.jgap.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private List m_parameters;
 
@@ -36,15 +36,20 @@ public class JGAPFactory
 
   private List m_initer;
 
+  private List m_compareHandlers;
+
   private ICloneHandler m_defaultCloneHandler;
 
   private IInitializer m_defaultIniter;
+
+  private ICompareToHandler m_defaultComparer;
 
   private IGeneticOperatorConstraint m_geneticOpConstraint;
 
   public JGAPFactory() {
     m_cloneHandlers = new Vector();
     m_initer = new Vector();
+    m_compareHandlers = new Vector();
   }
 
   /**
@@ -76,7 +81,7 @@ public class JGAPFactory
 
   /**
    * Removes a clone handler at a given index (which is obtained from
-   * registerCloneHandler
+   * registerCloneHandler)
    * @param a_index the index of the clone handler to remove
    * @return the removed ICloneHandler, or null if not successfull
    *
@@ -100,22 +105,12 @@ public class JGAPFactory
    */
   public ICloneHandler getCloneHandlerFor(final Object a_obj,
                                           final Class a_classToClone) {
-    Iterator it = m_cloneHandlers.iterator();
-    while (it.hasNext()) {
-      ICloneHandler handler = (ICloneHandler) it.next();
-      if (handler.isHandlerFor(a_obj, a_classToClone)) {
-        return handler;
-      }
-    }
-    // No registered handler found. Try the DefaultCloneHandler that supports
-    // cloning classes implementing the Cloneable interface
     if (m_defaultCloneHandler == null) {
       m_defaultCloneHandler = new DefaultCloneHandler();
     }
-    if (m_defaultCloneHandler.isHandlerFor(a_obj, a_classToClone)) {
-      return m_defaultCloneHandler;
-    }
-    return null;
+    return (ICloneHandler) findHandlerFor(a_obj, a_classToClone,
+                                          m_cloneHandlers.iterator(),
+                                          m_defaultCloneHandler);
   }
 
   /**
@@ -134,7 +129,7 @@ public class JGAPFactory
 
   /**
    * Removes an initializer at a given index (which is obtained from
-   * registerInitializer
+   * registerInitializer)
    * @param a_index the index of the initializer to remove
    * @return the removed IInitializer, or null if not successfull
    *
@@ -158,23 +153,12 @@ public class JGAPFactory
    */
   public IInitializer getInitializerFor(final Object a_obj,
                                         final Class a_class) {
-    Iterator it = m_initer.iterator();
-    while (it.hasNext()) {
-      IInitializer initer = (IInitializer) it.next();
-      if (initer.isHandlerFor(a_obj, a_class)) {
-        return initer;
-      }
-    }
-    // No registered handler found. Try the DefaultInitializer
-    // that supports init for Chromosomes
-    // via Chromosome.randomInitialChromosome()
     if (m_defaultIniter == null) {
       m_defaultIniter = new DefaultInitializer();
     }
-    if (m_defaultIniter.isHandlerFor(a_obj, a_class)) {
-      return m_defaultIniter;
-    }
-    return null;
+    return (IInitializer) findHandlerFor(a_obj, a_class,
+                                         m_initer.iterator(),
+                                         m_defaultIniter);
   }
 
   public void setGeneticOperatorConstraint(final IGeneticOperatorConstraint
@@ -184,5 +168,81 @@ public class JGAPFactory
 
   public IGeneticOperatorConstraint getGeneticOperatorConstraint() {
     return m_geneticOpConstraint;
+  }
+
+  /**
+   * Retrieves a handler capable of comparing two instances of the given class
+   * @param a_obj the object to compare (maybe null)
+   * @param a_classToCompareTo the class instances to compare (maybe null)
+   * @return the handler found capable of comparing instances
+   * of the given class, or null if none registered
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public ICompareToHandler getCompareToHandlerFor(Object a_obj,
+                                                  Class a_classToCompareTo) {
+    if (m_defaultComparer == null) {
+      m_defaultComparer = new DefaultCompareToHandler();
+    }
+    return (ICompareToHandler) findHandlerFor(a_obj, a_classToCompareTo,
+                                              m_compareHandlers.iterator(),
+                                              m_defaultComparer);
+  }
+
+  /**
+   * Registers a compareTo-handler that could be retrieved by
+   * getCompareToHandlerFor(Class)
+   * @param a_compareToHandler the ICompareToHandler to register
+   * @return index of the added handler, needed when removeCompareToHandler
+   * will be called
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int registerCompareToHandler(ICompareToHandler a_compareToHandler) {
+    m_compareHandlers.add(a_compareToHandler);
+    return m_compareHandlers.size() - 1;
+  }
+
+  /**
+   * Removes a compareTo-handler at a given index (which is obtained from
+   * registerCompareToHandler)
+   * @param a_index the index of the handler to remove
+   * @return the removed handler, or null if not successfull
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public ICompareToHandler removeCompareToHandler(final int a_index) {
+    return (ICompareToHandler) m_compareHandlers.remove(a_index);
+  }
+
+  /**
+   * Helper: Finds a handler for a given Object or Class, returns the default
+   * handler, if one is provided
+   * @param a_obj the object to find a handler for (maybe null)
+   * @param a_class the class to find a handler for (maybe null)
+   * @param a_it iterator over the list of available handlers
+   * @param a_default a default handler to return in none other is found
+   * @return the handler found, or null if none registered
+   */
+  protected IHandler findHandlerFor(final Object a_obj,
+                                    final Class a_class,
+                                    final Iterator a_it,
+                                    final IHandler a_default) {
+    while (a_it.hasNext()) {
+      IInitializer initer = (IInitializer) a_it.next();
+      if (initer.isHandlerFor(a_obj, a_class)) {
+        return initer;
+      }
+    }
+    // No registered handler found. Try the default handler
+    if (a_default != null) {
+      if (a_default.isHandlerFor(a_obj, a_class)) {
+        return a_default;
+      }
+    }
+    return null;
   }
 }
