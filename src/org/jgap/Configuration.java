@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -289,7 +289,7 @@ public class Configuration
       }
     }
     else {
-      m_factory = new JGAPFactory();
+      m_factory = new JGAPFactory(false);
     }
   }
 

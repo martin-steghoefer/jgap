@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -968,6 +968,9 @@ public class ConfigurationTest
 }
 class MyFactoryTest
     extends JGAPFactory {
+  public MyFactoryTest() {
+    super(false);
+  }
 }
 class TestBulkFitnessFunction
     extends BulkFitnessFunction {
