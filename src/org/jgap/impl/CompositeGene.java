@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   /**
    * This field separates gene class name from
@@ -233,7 +233,7 @@ public class CompositeGene
   }
 
   /**
-   * See interface Gene for description
+   * See interface Gene for description.
    * @param a_representation the string representation retrieved from a prior
    * call to the getPersistentRepresentation() method
    *
@@ -449,19 +449,9 @@ public class CompositeGene
       for (int i = 0; i < numberGenes; i++) {
         gene1 = geneAt(i);
         gene2 = otherCompositeGene.geneAt(i);
-        if (gene1 == null) {
-          if (gene2 == null) {
-            continue;
-          }
-          else {
-            return -1;
-          }
-        }
-        else {
-          int result = gene1.compareTo(gene2);
-          if (result != 0) {
-            return result;
-          }
+        int result = gene1.compareTo(gene2);
+        if (result != 0) {
+          return result;
         }
       }
       // If everything is equal until now the CompositeGene with more
@@ -599,7 +589,7 @@ public class CompositeGene
   }
 
   /**
-   * Splits the string a_string into individual gene representations
+   * Splits the string a_string into individual gene representations.
    * @param a_string the string to split
    * @return the elements of the returned array are the persistent
    * representation strings of the gene's components
@@ -623,9 +613,10 @@ public class CompositeGene
       }
       else {
         a.add(n);
-        if (!st.nextToken().equals(GENE_DELIMITER_CLOSING))
+        if (!st.nextToken().equals(GENE_DELIMITER_CLOSING)) {
           throw new UnsupportedRepresentationException
               (a_string + " no close tag");
+        }
       }
     }
     return a;
