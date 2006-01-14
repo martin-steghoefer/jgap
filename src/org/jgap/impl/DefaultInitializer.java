@@ -10,7 +10,6 @@
 package org.jgap.impl;
 
 import org.jgap.*;
-import java.lang.reflect.*;
 
 /**
  * Default implementation for initializing Chromosome's.
@@ -21,7 +20,7 @@ import java.lang.reflect.*;
 public class DefaultInitializer
     implements IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_class) {
     if (Chromosome.class.isAssignableFrom(a_class)) {
