@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   private int m_length;
 
@@ -86,9 +86,7 @@ public class FixedBinaryGene
   }
 
   public Object clone() {
-    FixedBinaryGene copy = new FixedBinaryGene(getLength());
-    System.arraycopy(m_value, 0, copy.getValue(), 0, copy.getLength());
-    return copy;
+    return new FixedBinaryGene(this);
   }
 
   public void setAllele(final Object a_newValue) {
