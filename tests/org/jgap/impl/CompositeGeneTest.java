@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   private static int cleanedUp = 0;
 
@@ -548,6 +548,7 @@ public class CompositeGeneTest
       throws Exception {
     CompositeGene gene1 = new CompositeGene();
     gene1.setValueFromPersistentRepresentation(null);
+    assertEquals(0, gene1.size());
   }
 
   /**
@@ -568,6 +569,7 @@ public class CompositeGeneTest
   }
 
   /**
+   * Invalid Gene class.
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -600,7 +602,25 @@ public class CompositeGeneTest
   }
 
   /**
-   * Tests if removal from empty list returns false no matter what to remove
+   * No closing tag.
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentPresentation_6() {
+    CompositeGene gene1 = new CompositeGene();
+    try {
+      gene1.setValueFromPersistentRepresentation("<IntegerGene"
+                                                 + CompositeGene.GENE_DELIMITER
+                                                 + "2<");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Tests if removal from empty list returns false no matter what to remove.
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -911,6 +931,7 @@ public class CompositeGeneTest
     newGene1.setAllele(new Integer(2));
     assertFalse(c1.hashCode() == c2.hashCode());
   }
+
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
     public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
