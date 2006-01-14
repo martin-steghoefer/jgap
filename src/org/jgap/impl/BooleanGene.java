@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -232,6 +232,7 @@ public class BooleanGene
    * @since 1.0
    */
   public int compareTo(Object a_other) {
+    /**@todo consider application data*/
     BooleanGene otherBooleanGene = (BooleanGene) a_other;
     // First, if the other gene is null, then this is the greater gene.
     // ----------------------------------------------------------------
