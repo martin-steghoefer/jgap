@@ -21,10 +21,12 @@ public class AllDataTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
+    suite.addTest(DataElementTest.suite());
+    suite.addTest(DataElementsDocumentTest.suite());
     suite.addTest(DataTreeBuilderTest.suite());
     return suite;
   }
