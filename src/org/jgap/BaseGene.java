@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -274,17 +274,21 @@ public abstract class BaseGene
       return 1;
     }
     else {
-      if (a_appdata1 instanceof Comparable) {
+      // The above code is contained in the following, but for performance
+      // issues we keep it here redundantly.
+      // -----------------------------------------------------------------
+      ICompareToHandler handler = Genotype.getConfiguration().getJGAPFactory().
+          getCompareToHandlerFor(a_appdata1, a_appdata2.getClass());
+      if (handler != null) {
         try {
-          return ( (Comparable)a_appdata1).compareTo(a_appdata2);
-        }
-        catch (ClassCastException cex) {
-          return 0;
+          return ( (Integer) handler.perform(a_appdata1, null, a_appdata2)).
+              intValue();
+        }catch (Exception ex) {
+          throw new Error(ex);
         }
       }
       else {
-        return a_appdata1.getClass().getName().compareTo(
-            a_appdata2.getClass().getName());
+        return 0;
       }
     }
   }

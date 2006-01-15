@@ -32,7 +32,7 @@ package org.jgap;
 public abstract class FitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -50,7 +50,7 @@ public abstract class FitnessFunction
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
-  public final double getFitnessValue(final Chromosome a_subject) {
+  public final double getFitnessValue(final IChromosome a_subject) {
     // Delegate to the evaluate() method to actually compute the
     // fitness value. If the returned value is less than one,
     // then we throw a runtime exception.
@@ -68,7 +68,7 @@ public abstract class FitnessFunction
   /**
    * @return the last fitness value computed via method getFitnessValue(
    * Chromosome), or NO_FITNES_VALUE if the former method has not been called
-   * yet.
+   * yet
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -92,17 +92,5 @@ public abstract class FitnessFunction
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
-  protected abstract double evaluate(Chromosome a_subject);
-
-  /**
-   * @return the double value that indicated that there is no fitness value
-   * assigned yet
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   * @deprecated use NO_FITNESS_VALUE instead
-   */
-  public double getNoFitnessValue() {
-    return NO_FITNESS_VALUE;
-  }
+  protected abstract double evaluate(IChromosome a_subject);
 }
