@@ -59,7 +59,7 @@ package org.jgap;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.68 $";
+  private final static String CVS_REVISION = "$Revision: 1.69 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -420,6 +420,10 @@ public class Chromosome
     }
   }
 
+  public double getFitnessValueDirectly() {
+    return m_fitnessValue;
+  }
+
   /**
    * @return fitness value of this chromosome determined via the registered
    * fitness function
@@ -457,6 +461,10 @@ public class Chromosome
         Math.abs(m_fitnessValue - a_newFitnessValue) > 0.0000001) {
       m_fitnessValue = a_newFitnessValue;
     }
+  }
+
+  public void setFitnessValueDirectly(double a_newFitnessValue) {
+    m_fitnessValue = a_newFitnessValue;
   }
 
   /**
