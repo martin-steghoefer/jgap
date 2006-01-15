@@ -59,20 +59,7 @@ package org.jgap;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.67 $";
-
-  public static final double DELTA = 0.000000001d;
-
-  /**
-   * Constants for toString()
-   */
-  public final static String S_FITNESS_VALUE = "Fitness value";
-
-  public final static String S_ALLELES = "Alleles";
-
-  public final static String S_APPLICATION_DATA = "Application data";
-
-  public final static String S_SIZE = "Size";
+  private final static String CVS_REVISION = "$Revision: 1.68 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
