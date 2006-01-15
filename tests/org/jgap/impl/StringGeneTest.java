@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -248,6 +248,7 @@ public class StringGeneTest
    * @since 2.4
    */
   public void testEquals_9() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     Gene gene1 = new StringGene(2, 6);
     gene1.setAllele("hallo");
     gene1.setApplicationData(new Double(2.3d));
@@ -273,6 +274,7 @@ public class StringGeneTest
    * @since 2.4
    */
   public void testCompareTo_0() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     Gene gene1 = new StringGene(2, 6);
     gene1.setAllele("hallo");
     gene1.setApplicationData(new Double(2.3d));
@@ -388,7 +390,7 @@ public class StringGeneTest
     gene1.setAllele("A");
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -406,7 +408,7 @@ public class StringGeneTest
     gene1.setAllele("A");
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return true;
       }
     });
@@ -938,7 +940,7 @@ public class StringGeneTest
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -985,7 +987,7 @@ public class StringGeneTest
 
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
+    public boolean verify(Gene a_gene, Object a_alleleValue, IChromosome a_chrom,
                           int a_index) {
       return true;
     }

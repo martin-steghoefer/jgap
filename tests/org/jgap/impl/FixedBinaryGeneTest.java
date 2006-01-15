@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -389,7 +389,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -407,7 +407,7 @@ public class FixedBinaryGeneTest
     FixedBinaryGene gene1 = new FixedBinaryGene(3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return true;
       }
     });
@@ -426,7 +426,7 @@ public class FixedBinaryGeneTest
     assertNull(gene1.getConstraintChecker());
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -1061,8 +1061,8 @@ public class FixedBinaryGeneTest
 
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
-                          int a_index) {
+    public boolean verify(Gene a_gene, Object a_alleleValue,
+                          IChromosome a_chrom, int a_index) {
       return true;
     }
   }

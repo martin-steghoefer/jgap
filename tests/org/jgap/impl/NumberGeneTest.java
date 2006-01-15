@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -222,7 +222,7 @@ public class NumberGeneTest
     NumberGene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     }
@@ -238,7 +238,7 @@ public class NumberGeneTest
     NumberGene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return true;
       }
     }
@@ -341,6 +341,7 @@ public class NumberGeneTest
    * @since 2.4
    */
   public void testCompareTo_3() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     Gene gene1 = new NumberGeneImpl(1, 10000);
     gene1.setAllele(new Integer(4711));
     gene1.setApplicationData(new Integer(2));
@@ -360,7 +361,7 @@ public class NumberGeneTest
     NumberGene gene1 = new NumberGeneImpl(1, 3);
     gene1.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     }

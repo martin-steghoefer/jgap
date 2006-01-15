@@ -28,7 +28,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -120,7 +120,7 @@ public class ConfigWriterTest
     sampleGenes[1] = new IntegerGene(1, 50);
     sampleGenes[2] = new IntegerGene(100, 150);
     Chromosome sampleChromosome = new Chromosome(sampleGenes);
-    FitnessFunction fitFunc = new MockFitnessFunction();
+    FitnessFunction fitFunc = new StaticFitnessFunction(100.0d);
     config.setFitnessFunction(fitFunc);
     // The higher the value, the better
     config.setFitnessEvaluator(new DefaultFitnessEvaluator());

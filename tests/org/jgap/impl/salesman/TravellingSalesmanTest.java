@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -41,9 +41,8 @@ public class TravellingSalesmanTest
   }
 
   public void testSampleTravellingSalesmanApp() {
-    boolean expectedReturn = true;
     boolean actualReturn = m_testTravellingSalesman.runTest();
-    assertEquals("return value", expectedReturn, actualReturn);
+    assertEquals(true, actualReturn);
   }
 
   /**

@@ -23,7 +23,7 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
@@ -278,8 +278,8 @@ public class InversionOperatorTest
       implements IGeneConstraintChecker {
     private int m_callcount;
 
-    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
-                          int a_index) {
+    public boolean verify(Gene a_gene, Object a_alleleValue,
+                          IChromosome a_chrom, int a_index) {
       if (m_callcount++ >= 2) {
         return false;
       }

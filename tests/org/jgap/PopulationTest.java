@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -181,10 +181,10 @@ public class PopulationTest
     }
     Population p = new Population();
     p.setChromosomes(chromosomes);
-    Chromosome[] aChromosome = p.toChromosomes();
-    assertEquals(aChromosome.length, chromosomes.size());
+    Chromosome[] aChrom = p.toChromosomes();
+    assertEquals(aChrom.length, chromosomes.size());
     for (int i = 0; i < nTot; i++) {
-      assertTrue(chromosomes.contains(aChromosome[i]));
+      assertTrue(chromosomes.contains(aChrom[i]));
     }
   }
 

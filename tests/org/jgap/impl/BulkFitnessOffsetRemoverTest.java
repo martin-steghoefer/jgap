@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BulkFitnessOffsetRemoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection! */
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   // A plainforward implementation for this test.
   //---------------------------------------------
@@ -334,20 +334,18 @@ public class BulkFitnessOffsetRemoverTest
   private class DummyFitnessFunction
       extends FitnessFunction {
     /**
-     * <p>
      * Casts every Gene to the subtype of NumberGene and calculates the sum
      * of the numerical values obtained.
-     * </p>
+     *
      * @param a_subject the Chromosome to be evaluated
-     * @return The sum of all numerical values of the Genes within the
-     *         given Chromosome that only consists of NumberGene instances.
-     * @throws ClassCastException
-     *             if a Gene within the Chromosome is not derived from
-     *             {@link NumberGene}.
+     * @return the sum of all numerical values of the Genes within the
+     * given Chromosome that only consists of NumberGene instances
+     * @throws ClassCastException if a Gene within the Chromosome is not derived
+     * from {@link NumberGene}
      *
      * @see org.jgap.FitnessFunction#evaluate(org.jgap.Chromosome)
      */
-    protected double evaluate(Chromosome a_subject) {
+    protected double evaluate(IChromosome a_subject) {
       double ret = 0d;
       Gene[] genes = a_subject.getGenes();
       for (int i = genes.length - 1; i > -1; i--) {

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   private static int cleanedUp = 0;
 
@@ -396,7 +396,7 @@ public class CompositeGeneTest
     gene.addGene(gene2);
     gene.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -417,7 +417,7 @@ public class CompositeGeneTest
     gene.addGene(gene2);
     gene.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return true;
       }
     });
@@ -687,7 +687,7 @@ public class CompositeGeneTest
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -841,6 +841,7 @@ public class CompositeGeneTest
    * @since 2.4
    */
   public void testCompareTo_5() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     CompositeGene gene1 = new CompositeGene();
     gene1.setCompareApplicationData(true);
     Gene newGene1 = new IntegerGene(3, 5);
@@ -934,8 +935,8 @@ public class CompositeGeneTest
 
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
-                          int a_index) {
+    public boolean verify(Gene a_gene, Object a_alleleValue,
+                          IChromosome a_chrom, int a_index) {
       return true;
     }
   }

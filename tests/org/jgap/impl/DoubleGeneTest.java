@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.30 $";
+  private static final String CVS_REVISION = "$Revision: 1.31 $";
 
   public void setUp() {
     super.setUp();
@@ -679,7 +679,7 @@ public class DoubleGeneTest
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
       public boolean verify(Gene a_gene, Object a_alleleValue,
-                            Chromosome a_chrom, int a_index) {
+                            IChromosome a_chrom, int a_index) {
         return false;
       }
     });
@@ -739,8 +739,8 @@ public class DoubleGeneTest
 
   class GeneConstraintChecker
       implements IGeneConstraintChecker {
-    public boolean verify(Gene a_gene, Object a_alleleValue, Chromosome a_chrom,
-                          int a_index) {
+    public boolean verify(Gene a_gene, Object a_alleleValue,
+                          IChromosome a_chrom, int a_index) {
       return true;
     }
   }

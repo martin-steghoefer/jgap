@@ -21,7 +21,7 @@ public class TestOverallPerformanceFitnessFunc
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final int m_targetAmount;
 
@@ -42,7 +42,7 @@ public class TestOverallPerformanceFitnessFunc
    * @return a positive integer reflecting the fitness rating of the given
    * Chromosome
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     // The fitness value measures both how close the value is to the
     // target amount supplied by the user and the total number of coins
     // represented by the solution. We do this in two steps: first,
@@ -88,7 +88,7 @@ public class TestOverallPerformanceFitnessFunc
    * @return the total amount of change (in cents) represented by the
    * given solution
    */
-  public static int amountOfChange(Chromosome a_potentialSolution) {
+  public static int amountOfChange(IChromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution, 0);
     int numDimes = getNumberOfCoinsAtGene(a_potentialSolution, 1);
     int numNickels = getNumberOfCoinsAtGene(a_potentialSolution, 2);
@@ -113,7 +113,7 @@ public class TestOverallPerformanceFitnessFunc
    * @return the number of coins represented by the potential solution
    * at the given gene position
    */
-  public static int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
+  public static int getNumberOfCoinsAtGene(IChromosome a_potentialSolution,
                                            int a_position) {
     Integer numCoins =
         (Integer) a_potentialSolution.getGene(a_position).getAllele();
@@ -127,7 +127,7 @@ public class TestOverallPerformanceFitnessFunc
    * @param a_potentialsolution the potential solution to evaluate
    * @return the total number of coins represented by the given Chromosome
    */
-  public static int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
+  public static int getTotalNumberOfCoins(IChromosome a_potentialsolution) {
     int totalCoins = 0;
     int numberOfGenes = a_potentialsolution.size();
     for (int i = 0; i < numberOfGenes; i++) {

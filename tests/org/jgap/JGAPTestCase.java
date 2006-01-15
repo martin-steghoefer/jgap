@@ -23,7 +23,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -52,8 +52,8 @@ public abstract class JGAPTestCase
    *
    * @author Klaus Meffert
    */
-  public static boolean isChromosomesEqual(Chromosome[] a_list1,
-                                           Chromosome[] a_list2) {
+  public static boolean isChromosomesEqual(IChromosome[] a_list1,
+                                           IChromosome[] a_list2) {
     if (a_list1 == null) {
       return (a_list2 == null);
     }
@@ -66,8 +66,8 @@ public abstract class JGAPTestCase
       }
       else {
         for (int i = 0; i < a_list1.length; i++) {
-          Chromosome c1 = (Chromosome) a_list1[i];
-          Chromosome c2 = (Chromosome) a_list2[i];
+          IChromosome c1 = (IChromosome) a_list1[i];
+          IChromosome c2 = (IChromosome) a_list2[i];
           if (!c1.equals(c2)) {
             return false;
           }
@@ -88,7 +88,7 @@ public abstract class JGAPTestCase
      * @return double
      * @since 2.0 (until 1.1: return type int)
      */
-    protected double evaluate(Chromosome a_subject) {
+    protected double evaluate(IChromosome a_subject) {
       //result does not matter here
       return 1.0000000d;
     }
