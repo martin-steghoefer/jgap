@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -100,14 +100,14 @@ public class TravellingSalesmanTest
      * @param a_initial_data Object
      * @return Chromosome
      */
-    public Chromosome createSampleChromosome(Object a_initial_data) {
+    public IChromosome createSampleChromosome(Object a_initial_data) {
       Gene[] genes = new Gene[CITIES];
       for (int i = 0; i < genes.length; i++) {
         genes[i] = new IntegerGene(0, CITIES - 1);
         genes[i].setAllele(new Integer(i));
       }
 
-      Chromosome sample = new Chromosome(genes);
+      IChromosome sample = new Chromosome(genes);
 
 //            System.out.println("Optimal way "+sample);
 //            System.out.println("Fitness "+
@@ -155,7 +155,7 @@ public class TravellingSalesmanTest
         int oks = 0;
         for (int i = 0; i < 7; i++) {
           TravellingSalesmanForTest t = new TravellingSalesmanForTest();
-          Chromosome optimal = t.findOptimalPath(null);
+          IChromosome optimal = t.findOptimalPath(null);
           if (Integer.MAX_VALUE / 2 - optimal.getFitnessValue() <= 7) {
             oks++;
           }

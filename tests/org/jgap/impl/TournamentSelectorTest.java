@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -124,7 +124,7 @@ public class TournamentSelectorTest
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    IChromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
     List chromosomes = ( (Vector) privateAccessor.getField(selector,
         "m_chromosomes"));
@@ -143,7 +143,7 @@ public class TournamentSelectorTest
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    IChromosome chrom = new Chromosome(gene, 5);
     selector.add(chrom);
     selector.empty();
     List chromosomes = ( (Vector) privateAccessor.getField(selector,
@@ -266,7 +266,7 @@ public class TournamentSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 3 chromosomes
@@ -314,7 +314,7 @@ public class TournamentSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 30 chromosomes.
@@ -363,7 +363,7 @@ public class TournamentSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertFalse(bestChroms[0].equals(bestChrom));
   }
 
@@ -430,13 +430,13 @@ public class TournamentSelectorTest
     // ---------------------
     gene = new BooleanGene();
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    IChromosome bestChrom = new Chromosome(gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 30 chromosomes.
     // ---------------------------
     Population pop = new Population();
-    Chromosome[] bestChroms;
+    IChromosome[] bestChroms;
     selector.select(5, null, pop);
     bestChroms = pop.toChromosomes();
     assertEquals(thirdBestChrom, bestChroms[0]);
@@ -482,7 +482,7 @@ public class TournamentSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     // nothing selected (from nothing!)
     assertEquals(0, bestChroms.length);
     selector.select(1, toAddFrom, pop);

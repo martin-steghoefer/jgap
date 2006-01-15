@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -162,7 +162,7 @@ public class FormulaFinder {
       comp.addGene(gene);
       termGenes[i] = comp;
     }
-    Chromosome termChromosome = new Chromosome(termGenes);
+    IChromosome termChromosome = new Chromosome(termGenes);
     conf.setSampleChromosome(termChromosome);
     conf.setPopulationSize(POPULATION_SIZE);
     Genotype population = Genotype.randomInitialGenotype(conf);
@@ -171,7 +171,7 @@ public class FormulaFinder {
     double localBestFitness = myFunc.worstFitness();
     double localCurrentFitness;
     String bestSolutionSoFar = null;
-    Chromosome chrom;
+    IChromosome chrom;
     // Do the evolution.
     // -----------------
     while (i < MAX_ALLOWED_EVOLUTIONS_HARDLIMIT) {

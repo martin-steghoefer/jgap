@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -287,14 +287,14 @@ public class GenotypeTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
-    Chromosome[] chroms = new Chromosome[1];
-    Chromosome chrom = new Chromosome(new Gene[] {
+    IChromosome[] chroms = new Chromosome[1];
+    IChromosome chrom = new Chromosome(new Gene[] {
                                       new IntegerGene(1, 5)});
     chroms[0] = chrom;
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
-    Chromosome chrom2 = genotype.getFittestChromosome();
+    IChromosome chrom2 = genotype.getFittestChromosome();
     assertEquals(chrom, chrom2);
   }
 
@@ -632,9 +632,32 @@ public class GenotypeTest
     config.setPopulationSize(10);
     config.setPreservFittestIndividual(false);
     Genotype genotype = Genotype.randomInitialGenotype(config);
-    int popSize = config.getPopulationSize();
     genotype.evolve(1);
-    assertEquals((int)(10*290.0/100),genotype.getPopulation().size());
+    assertEquals( (int) (10 * 290.0 / 100), genotype.getPopulation().size());
+  }
+
+  /**
+   * Preserve fittest Chromosome.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEvolve_8()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.setMinimumPopSizePercent(290);
+    // Overwrite default setting
+    config.setKeepPopulationSizeConstant(!true);
+    config.setPopulationSize(10);
+    config.setPreservFittestIndividual(true);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    genotype.evolve(1);
+    IChromosome fittest = genotype.getFittestChromosome();
+    genotype.evolve(1);
+    assertEquals(fittest, genotype.getFittestChromosome());
   }
 
   /**
@@ -1068,8 +1091,26 @@ public class GenotypeTest
     public double getFitnessValue() {
       return 0;
     }
+    public void setFitnessValueDirectly(double a_newFitnessValue) {
+
+    }
+    public double getFitnessValueDirectly() {
+      return getFitnessValue();
+    }
     public int compareTo(Object other) {
       return 0;
+    }
+
+    public void setGenes(Gene[] a_genes)
+        throws InvalidConfigurationException {
+    }
+    public void setIsSelectedForNextGeneration(boolean a_isSelected) {
+    }
+    public boolean isSelectedForNextGeneration() {
+      return true;
+    }
+    public Object clone() {
+      return null;
     }
   }
 }

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -131,7 +131,7 @@ public class WeightedRouletteSelectorTest
     conf.setRandomGenerator(randgen);
     Population popNew = new Population();
     selector.select(1, null, popNew);
-    Chromosome[] bestChroms = popNew.toChromosomes();
+    IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)
@@ -183,7 +183,7 @@ public class WeightedRouletteSelectorTest
     conf.setRandomGenerator(randgen);
     Population popNew = new Population();
     selector.select(1, toAddFrom, popNew);
-    Chromosome[] bestChroms = popNew.toChromosomes();
+    IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)
@@ -283,7 +283,7 @@ public class WeightedRouletteSelectorTest
     conf.setRandomGenerator(randgen);
     Population popNew = new Population();
     selector.select(1, toAddFrom, popNew);
-    Chromosome[] bestChroms = popNew.toChromosomes();
+    IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)

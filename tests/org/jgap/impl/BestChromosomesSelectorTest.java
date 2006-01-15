@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -165,7 +165,7 @@ public class BestChromosomesSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     selector.setOriginalRate(1.0d);
@@ -211,7 +211,7 @@ public class BestChromosomesSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     selector.setOriginalRate(1.0d);
@@ -306,7 +306,7 @@ public class BestChromosomesSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 3 chromosomes

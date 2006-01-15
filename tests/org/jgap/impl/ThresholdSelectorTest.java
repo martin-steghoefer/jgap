@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -148,7 +148,7 @@ public class ThresholdSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 3 chromosomes
@@ -192,7 +192,7 @@ public class ThresholdSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 30 chromosomes.
@@ -240,7 +240,7 @@ public class ThresholdSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertFalse(bestChroms[0].equals(bestChrom));
   }
 
@@ -311,7 +311,7 @@ public class ThresholdSelectorTest
     // ---------------------------------
     Population pop = new Population();
     selector.select(1, null, pop);
-    Chromosome[] bestChroms = pop.toChromosomes();
+    IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     // receive top 30 chromosomes.

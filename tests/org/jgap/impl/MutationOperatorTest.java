@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.31 $";
+  private static final String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -195,7 +195,7 @@ public class MutationOperatorTest
   }
 
   /**
-   * Nothing to do. Test that nothing is done, then
+   * Nothing to do. Test that nothing is done.
    *
    * @author Klaus Meffert
    * @since 2.4
