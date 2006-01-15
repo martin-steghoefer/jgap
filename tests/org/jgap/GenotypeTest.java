@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -612,6 +612,29 @@ public class GenotypeTest
     catch (IllegalStateException iex) {
       ; // this is OK
     }
+  }
+
+  /**
+   * minimumPopSizePercent > 0.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEvolve_7()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.setMinimumPopSizePercent(290);
+    // Overwrite default setting
+    config.setKeepPopulationSizeConstant(!true);
+    config.setPopulationSize(10);
+    config.setPreservFittestIndividual(false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
+    genotype.evolve(1);
+    assertEquals((int)(10*290.0/100),genotype.getPopulation().size());
   }
 
   /**
