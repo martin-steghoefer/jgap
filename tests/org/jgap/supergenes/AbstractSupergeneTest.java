@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  * */
 abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Gene index for the dimes gene
@@ -111,9 +111,9 @@ abstract class AbstractSupergeneTest {
    * @param a_population Genotype
    * @return Chromosome
    */
-  public Chromosome report(SupergeneChangeFitnessFunction a_fitnessFunction,
+  public IChromosome report(SupergeneChangeFitnessFunction a_fitnessFunction,
                            Genotype a_population) {
-    Chromosome bestSolutionSoFar = a_population.getFittestChromosome();
+    IChromosome bestSolutionSoFar = a_population.getFittestChromosome();
     if (!REPORT_ENABLED) {
       return bestSolutionSoFar;
     }
@@ -186,7 +186,7 @@ abstract class AbstractSupergeneTest {
                       SupergeneChangeFitnessFunction a_fitnessFunction,
                       Gene[] a_sampleGenes)
       throws InvalidConfigurationException {
-    Chromosome sampleChromosome = new Chromosome(a_sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(a_sampleGenes);
     a_conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
@@ -214,7 +214,7 @@ abstract class AbstractSupergeneTest {
     }
     // Display the best solution we found.
     // -----------------------------------
-    Chromosome bestSolutionSoFar = report(a_fitnessFunction, population);
+    IChromosome bestSolutionSoFar = report(a_fitnessFunction, population);
     s = Math.abs(a_fitnessFunction.amountOfChange(bestSolutionSoFar)
                  - a_targetChangeAmount);
     return s;
