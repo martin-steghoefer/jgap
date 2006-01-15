@@ -20,7 +20,9 @@ import java.io.*;
 public interface IChromosome
     extends Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  Gene getGene(int a_desiredLocus);
 
   Gene[] getGenes();
 
