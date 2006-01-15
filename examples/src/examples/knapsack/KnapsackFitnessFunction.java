@@ -21,7 +21,7 @@ public class KnapsackFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final double m_knapsackVolume;
 
@@ -45,15 +45,14 @@ public class KnapsackFitnessFunction
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject The Chromosome instance to evaluate.
-   *
-   * @return A positive double reflecting the fitness rating of the given
-   * Chromosome.
+   * @param a_subject the Chromosome instance to evaluate
+   * @return a positive double reflecting the fitness rating of the given
+   * Chromosome
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     // The fitness value measures both how close the value is to the
     // target amount supplied by the user and the total number of items
     // represented by the solution. We do this in two steps: first,
@@ -151,14 +150,14 @@ public class KnapsackFitnessFunction
    * Calculates the total amount of change (in cents) represented by
    * the given potential solution and returns that amount.
    *
-   * @param a_potentialSolution The pontential solution to evaluate.
-   * @return The total amount of change (in cents) represented by the
-   *         given solution.
+   * @param a_potentialSolution the pontential solution to evaluate
+   * @return the total amount of change (in cents) represented by the
+   * given solution
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public static double getTotalVolume(Chromosome a_potentialSolution) {
+  public static double getTotalVolume(IChromosome a_potentialSolution) {
     double volume = 0.0d;
     for (int i = 0; i < a_potentialSolution.size(); i++) {
       volume += getNumberOfItemsAtGene(a_potentialSolution, i) *
@@ -171,15 +170,15 @@ public class KnapsackFitnessFunction
    * Retrieves the number of items represented by the given potential
    * solution at the given gene position.
    *
-   * @param a_potentialSolution The potential solution to evaluate.
-   * @param a_position The gene position to evaluate.
+   * @param a_potentialSolution the potential solution to evaluate
+   * @param a_position the gene position to evaluate
    * @return the number of items represented by the potential solution
-   * at the given gene position.
+   * at the given gene position
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public static int getNumberOfItemsAtGene(Chromosome a_potentialSolution,
+  public static int getNumberOfItemsAtGene(IChromosome a_potentialSolution,
                                            int a_position) {
     Integer numItems =
         (Integer) a_potentialSolution.getGene(a_position).getAllele();
@@ -190,13 +189,13 @@ public class KnapsackFitnessFunction
    * Returns the total number of items represented by all of the genes in
    * the given potential solution.
    *
-   * @param a_potentialsolution The potential solution to evaluate.
-   * @return The total number of items represented by the given Chromosome.
+   * @param a_potentialsolution the potential solution to evaluate
+   * @return the total number of items represented by the given Chromosome
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public static int getTotalNumberOfItems(Chromosome a_potentialsolution) {
+  public static int getTotalNumberOfItems(IChromosome a_potentialsolution) {
     int totalItems = 0;
     int numberOfGenes = a_potentialsolution.size();
     for (int i = 0; i < numberOfGenes; i++) {

@@ -27,7 +27,7 @@ import org.jgap.*;
 public abstract class TruthTableFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Map m_truthTable;
 
@@ -81,7 +81,7 @@ public abstract class TruthTableFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public abstract double evaluate(Chromosome a_chromosome);
+  public abstract double evaluate(IChromosome a_chromosome);
 
   /**
    * Fitness value calculation for a given table of input/output tupels

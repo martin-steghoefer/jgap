@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.68 $";
+  private final static String CVS_REVISION = "$Revision: 1.69 $";
 
   /**
    * The current active Configuration instance.
@@ -402,12 +402,13 @@ public class Genotype
     // us.
     // ------------------------------------------------------------------
     int populationSize = a_activeConfiguration.getPopulationSize();
-    Chromosome sampleChrom = getConfiguration().getSampleChromosome();
+    IChromosome sampleChrom = getConfiguration().getSampleChromosome();
     IInitializer chromIniter = getConfiguration().getJGAPFactory().
         getInitializerFor(sampleChrom, sampleChrom.getClass());
     if (chromIniter == null) {
       throw new InvalidConfigurationException("No initializer found for"
-                                              +" Chromosome class!");
+                                              + " class "
+                                              + sampleChrom.getClass());
     }
     Population pop = new Population(populationSize);
     // Do randomized initialization.

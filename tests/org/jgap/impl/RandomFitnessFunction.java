@@ -23,7 +23,7 @@ public class RandomFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private Random m_rand;
 
@@ -33,10 +33,10 @@ public class RandomFitnessFunction
 
   /**
    * @param a_chrom ignored: the Chromosome to evaluate
-   * @return double
+   * @return randomized fitness value
    * @since 2.0 (until 1.1: return type int)
    */
-  public double evaluate(Chromosome a_chrom) {
+  public double evaluate(IChromosome a_chrom) {
     double result;
     result = m_rand.nextDouble();
     return result;

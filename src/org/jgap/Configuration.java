@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -127,7 +127,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  private Chromosome m_sampleChromosome;
+  private IChromosome m_sampleChromosome;
 
   /**
    * References the random number generator implementation that is to be
@@ -441,7 +441,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setSampleChromosome(Chromosome a_sampleChromosomeToSet)
+  public void setSampleChromosome(IChromosome a_sampleChromosomeToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given chromosome isn't null.
@@ -464,7 +464,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public Chromosome getSampleChromosome() {
+  public IChromosome getSampleChromosome() {
     return m_sampleChromosome;
   }
 

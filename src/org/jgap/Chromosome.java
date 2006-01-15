@@ -42,8 +42,6 @@
  */
 package org.jgap;
 
-import java.io.*;
-
 /**
  * Chromosomes represent potential solutions and consist of a fixed-length
  * collection of genes. Each gene represents a discrete part of the solution.
@@ -59,9 +57,9 @@ import java.io.*;
  * @since 1.0
  */
 public class Chromosome
-    implements Comparable, Cloneable, Serializable, IInitializer {
+    implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.66 $";
+  private final static String CVS_REVISION = "$Revision: 1.67 $";
 
   public static final double DELTA = 0.000000001d;
 
@@ -567,9 +565,9 @@ public class Chromosome
     // Wwe weren't able to get a Chromosome from the pool, so we have to
     // construct a new instance and build it from scratch.
     // ------------------------------------------------------------------
-    Chromosome sampleChromosome =
+    IChromosome sampleChromosome =
         Genotype.getConfiguration().getSampleChromosome();
-    sampleChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+    sampleChromosome.setFitnessValue(FitnessFunction.NO_FITNESS_VALUE);
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
     RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();

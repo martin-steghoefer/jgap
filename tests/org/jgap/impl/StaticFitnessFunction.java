@@ -22,7 +22,7 @@ public class StaticFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * @since 2.0 (until 1.1: type int)
@@ -41,12 +41,12 @@ public class StaticFitnessFunction
 
   /**
    * @param a_chrom ignored: the Chromosome to evaluate
-   * @return double
+   * @return static fitness value
    *
    * @author Klaus  Meffert
    * @since 2.0 (until 1.1: return type int)
    */
-  public double evaluate(Chromosome a_chrom) {
+  public double evaluate(IChromosome a_chrom) {
     double result = m_staticFitnessValue;
     return result;
   }

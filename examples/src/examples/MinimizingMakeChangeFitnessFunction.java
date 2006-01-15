@@ -21,7 +21,7 @@ import org.jgap.*;
 public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private final int m_targetAmount;
 
@@ -49,7 +49,7 @@ public class MinimizingMakeChangeFitnessFunction
    * @since 2.0 (until 1.1: return type int)
    * @author Neil Rotstan, Klaus Meffert, John Serri
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     // Take care of the fitness evaluator. It could either be weighting higher
     // fitness values higher (e.g.DefaultFitnessEvaluator). Or it could weight
     // lower fitness values higher, because the fitness value is seen as a
@@ -166,7 +166,7 @@ public class MinimizingMakeChangeFitnessFunction
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static int amountOfChange(Chromosome a_potentialSolution) {
+  public static int amountOfChange(IChromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution, 0);
     int numDimes = getNumberOfCoinsAtGene(a_potentialSolution, 1);
     int numNickels = getNumberOfCoinsAtGene(a_potentialSolution, 2);
@@ -187,7 +187,7 @@ public class MinimizingMakeChangeFitnessFunction
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
+  public static int getNumberOfCoinsAtGene(IChromosome a_potentialSolution,
                                            int a_position) {
     Integer numCoins =
         (Integer) a_potentialSolution.getGene(a_position).getAllele();
@@ -204,7 +204,7 @@ public class MinimizingMakeChangeFitnessFunction
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
+  public static int getTotalNumberOfCoins(IChromosome a_potentialsolution) {
     int totalCoins = 0;
     int numberOfGenes = a_potentialsolution.size();
     for (int i = 0; i < numberOfGenes; i++) {

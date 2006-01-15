@@ -17,7 +17,7 @@ import org.jgap.*;
 public class MaximizingFunctionFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Determine the fitness of the given Chromosome instance. The higher the
@@ -28,7 +28,7 @@ public class MaximizingFunctionFitnessFunction
    * @return a positive integer reflecting the fitness rating of the given
    * Chromosome
    */
-  public double evaluate(Chromosome chromosome) {
+  public double evaluate(IChromosome chromosome) {
     int numGenes = chromosome.size();
     if (numGenes != 3) {
       throw new IllegalArgumentException("Chromosome for " +

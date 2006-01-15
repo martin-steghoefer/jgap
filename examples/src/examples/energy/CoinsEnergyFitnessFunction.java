@@ -21,7 +21,7 @@ import org.jgap.*;
 public class CoinsEnergyFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final int m_targetAmount;
 
@@ -59,7 +59,7 @@ public class CoinsEnergyFitnessFunction
    * @since 2.0 (until 1.1: return type int)
    * @author Neil Rotstan, Klaus Meffert, John Serri
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     // The fitness value measures both how close the value is to the
     // target amount supplied by the user and the total number of coins
     // represented by the solution. We do this in two steps: first,
@@ -192,7 +192,7 @@ public class CoinsEnergyFitnessFunction
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static int amountOfChange(Chromosome a_potentialSolution) {
+  public static int amountOfChange(IChromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution, 0);
     int numDimes = getNumberOfCoinsAtGene(a_potentialSolution, 1);
     int numNickels = getNumberOfCoinsAtGene(a_potentialSolution, 2);
@@ -213,7 +213,7 @@ public class CoinsEnergyFitnessFunction
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
+  public static int getNumberOfCoinsAtGene(IChromosome a_potentialSolution,
                                            int a_position) {
     Integer numCoins =
         (Integer) a_potentialSolution.getGene(a_position).getAllele();
@@ -230,7 +230,7 @@ public class CoinsEnergyFitnessFunction
    * @author Neil Rotstan
    * @since 2.4
    */
-  public static int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
+  public static int getTotalNumberOfCoins(IChromosome a_potentialsolution) {
     int totalCoins = 0;
     int numberOfGenes = a_potentialsolution.size();
     for (int i = 0; i < numberOfGenes; i++) {
@@ -248,7 +248,7 @@ public class CoinsEnergyFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public static double getTotalWeight(Chromosome a_potentialSolution) {
+  public static double getTotalWeight(IChromosome a_potentialSolution) {
     double totalWeight = 0.0d;
     int numberOfGenes = a_potentialSolution.size();
     for (int i = 0; i < numberOfGenes; i++) {
@@ -260,9 +260,9 @@ public class CoinsEnergyFitnessFunction
 
   /**
    *
-   * @param a_maxFitness
-   * @param a_weight
-   * @return
+   * @param a_maxFitness the maximum fitness value allowed
+   * @param a_weight the coins weight of the current solution
+   * @return the penalty computed
    * @author Klaus Meffert
    * @since 2.4
    */

@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MaxFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * See examples.simpleBoolean.MaxFunction for description.
@@ -35,7 +35,7 @@ public class MaxFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     int total = 0;
 
     for (int i = 0; i < a_subject.size(); i++) {

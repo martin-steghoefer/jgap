@@ -20,7 +20,7 @@ import org.jgap.*;
 public class CoinsExampleFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final int m_targetAmount;
 
@@ -39,14 +39,15 @@ public class CoinsExampleFitnessFunction
    * return value, the more fit the instance. This method should always
    * return the same fitness value for two equivalent Chromosome instances.
    *
-   * @param a_subject The Chromosome instance to evaluate.
+   * @param a_subject the Chromosome instance to evaluate
    *
-   * @return A positive integer reflecting the fitness rating of the given
-   *         Chromosome.
+   * @return a positive integer reflecting the fitness rating of the given
+   * Chromosome
    *
+   * @author Klaus Meffert
    * @since 2.2
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     // The fitness value measures both how close the value is to the
     // target amount supplied by the user and the total number of coins
     // represented by the solution. We do this in two steps: first,
@@ -89,13 +90,14 @@ public class CoinsExampleFitnessFunction
    * Calculates the total amount of change (in cents) represented by
    * the given potential solution and returns that amount.
    *
-   * @param a_potentialSolution The pontential solution to evaluate.
-   * @return The total amount of change (in cents) represented by the
-   *         given solution.
+   * @param a_potentialSolution the pontential solution to evaluate
+   * @return the total amount of change (in cents) represented by the
+   * given solution
    *
+   * @author Klaus Meffert
    * @since 2.2
    */
-  public static int amountOfChange(Chromosome a_potentialSolution) {
+  public static int amountOfChange(IChromosome a_potentialSolution) {
     int numQuarters = getNumberOfCoinsAtGene(a_potentialSolution, 0);
     int numDimes = getNumberOfCoinsAtGene(a_potentialSolution, 1);
     int numNickels = getNumberOfCoinsAtGene(a_potentialSolution, 2);
@@ -108,14 +110,15 @@ public class CoinsExampleFitnessFunction
    * Retrieves the number of coins represented by the given potential
    * solution at the given gene position.
    *
-   * @param a_potentialSolution The potential solution to evaluate.
-   * @param a_position The gene position to evaluate.
+   * @param a_potentialSolution the potential solution to evaluate
+   * @param a_position the gene position to evaluate
    * @return the number of coins represented by the potential solution
-   *         at the given gene position.
+   * at the given gene position.
    *
+   * @author Klaus Meffert
    * @since 2.2
    */
-  public static int getNumberOfCoinsAtGene(Chromosome a_potentialSolution,
+  public static int getNumberOfCoinsAtGene(IChromosome a_potentialSolution,
                                            int a_position) {
     Integer numCoins =
         (Integer) a_potentialSolution.getGene(a_position).getAllele();
@@ -131,7 +134,7 @@ public class CoinsExampleFitnessFunction
    *
    * @since 2.2
    */
-  public static int getTotalNumberOfCoins(Chromosome a_potentialsolution) {
+  public static int getTotalNumberOfCoins(IChromosome a_potentialsolution) {
     int totalCoins = 0;
     int numberOfGenes = a_potentialsolution.size();
     for (int i = 0; i < numberOfGenes; i++) {
