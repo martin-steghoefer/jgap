@@ -1,6 +1,8 @@
 2.6
 -----------------------------------------------------------
 * Improved general archictecture a lot!
+* Added interface IChromosome for Chromosome class and used
+  it instead of Chromosome wherever possible!
 * Added new mechanism for creating default objects, such
   as random generators etc.
   --> interface org.jgap.IJAGPFactory as well as impl.
