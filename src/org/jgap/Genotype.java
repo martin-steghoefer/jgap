@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.69 $";
+  private final static String CVS_REVISION = "$Revision: 1.70 $";
 
   /**
    * The current active Configuration instance.
@@ -283,8 +283,8 @@ public class Genotype
       int sizeWanted = m_activeConfiguration.getPopulationSize();
       int popSize;
 
-      int minSize = (int) (sizeWanted *
-                           m_activeConfiguration.getMinimumPopSizePercent()
+      int minSize = (int)Math.round (sizeWanted *
+                           (double)m_activeConfiguration.getMinimumPopSizePercent()
                            / 100);
       popSize = getPopulation().size();
       if (popSize < minSize) {
