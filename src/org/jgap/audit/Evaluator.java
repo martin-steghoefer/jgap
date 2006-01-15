@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Each data has its own data container
@@ -284,7 +284,7 @@ public class Evaluator {
     data.chromosomeData = new ChromosomeData[popSize];
     data.size = popSize;
     // gather data of Chromosomes
-    Chromosome chrom;
+    IChromosome chrom;
     ChromosomeData chromData;
     for (int i = 0; i < popSize; i++) {
       chrom = pop.getChromosome(i);

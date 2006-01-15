@@ -10,7 +10,7 @@
 package org.jgap.util;
 
 import java.util.Comparator;
-import org.jgap.Chromosome;
+import org.jgap.*;
 
 /**
  * Simple comparator to allow the sorting of Chromosome lists.
@@ -25,7 +25,7 @@ import org.jgap.Chromosome;
 public class ChromosomeFitnessComparator
     implements Comparator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /* (non-Javadoc)
    * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
@@ -37,8 +37,8 @@ public class ChromosomeFitnessComparator
     if (a_chromosome2 == null) {
       return 1;
     }
-    Chromosome chromosomeOne = (Chromosome) a_chromosome1;
-    Chromosome chromosomeTwo = (Chromosome) a_chromosome2;
+    IChromosome chromosomeOne = (IChromosome) a_chromosome1;
+    IChromosome chromosomeTwo = (IChromosome) a_chromosome2;
     return (int) (chromosomeTwo.getFitnessValue()
                   - chromosomeOne.getFitnessValue());
   }

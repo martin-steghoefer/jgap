@@ -27,7 +27,7 @@ import org.jgap.*;
 public abstract class TruthTableFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Map m_truthTable;
 
@@ -53,6 +53,7 @@ public abstract class TruthTableFitnessFunction
   /**
    * Constructor for registering a truth table. Use this constructor if the
    * truth table is fix over generations.
+   *
    * @param a_truthTable table of input/output pairs for feeding the formula
    * and determining the fitness value thru delta computation
    *
@@ -81,7 +82,7 @@ public abstract class TruthTableFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public abstract double evaluate(IChromosome a_chromosome);
+  protected abstract double evaluate(IChromosome a_chromosome);
 
   /**
    * Fitness value calculation for a given table of input/output tupels
@@ -104,16 +105,21 @@ public abstract class TruthTableFitnessFunction
     Iterator keys = keySet.iterator();
     while (keys.hasNext()) {
       inputValueWanted = (Double) keys.next();
-      outputValueGiven = ( (Double) a_actualInputOutput.get(inputValueWanted)).
-          doubleValue();
       outputValueWanted = ( (Double) getTruthTable().get(inputValueWanted)).
           doubleValue();
-      // determine current value (evolved formula) minus reference value
-      if (Double.isNaN(outputValueWanted)) {
-        return Double.NaN;
+      Double output = ( (Double) a_actualInputOutput.get(inputValueWanted));
+      if (output != null) {
+        outputValueGiven = output.doubleValue();
+        // determine current value (evolved formula) minus reference value
+        if (Double.isNaN(outputValueWanted)) {
+          return Double.NaN;
+        }
+        delta = outputValueGiven - outputValueWanted;
+        deltaAbs = (float) Math.abs(delta);
       }
-      delta = outputValueGiven - outputValueWanted;
-      deltaAbs = (float) Math.abs(delta);
+      else {
+        deltaAbs = Math.abs(outputValueWanted);
+      }
       diffAbs += deltaAbs;
     }
     /**@todo consider length of formula (i.e. number of terms, e.g.) for
