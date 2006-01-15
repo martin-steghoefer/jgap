@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -659,6 +659,33 @@ public class IntegerGeneTest
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -0.4d);
     assertEquals(Math.round(60 + (100 * ( -0.4d))), gene.intValue());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testApplyMutation_7() {
+    IntegerGene gene = new IntegerGene(0, 100);
+    gene.setAllele(null);
+    gene.applyMutation(0, 0.4d);
+    assertEquals(Math.round((100 * ( 0.4d))), gene.intValue());
+  }
+
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testApplyMutation_8()
+      throws Exception {
+    IntegerGene gene = new IntegerGene(5, 100);
+    gene.setAllele(null);
+    Configuration conf = new DefaultConfiguration();
+    conf.setRandomGenerator(new RandomGeneratorForTest(10));
+    Genotype.setConfiguration(conf);
+    gene.applyMutation(0, -0.4d);
+    assertEquals(Math.round(10 + 5), gene.intValue());
   }
 
   /**

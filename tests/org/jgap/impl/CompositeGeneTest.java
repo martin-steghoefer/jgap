@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   private static int cleanedUp = 0;
 
@@ -615,6 +615,27 @@ public class CompositeGeneTest
       fail();
     }
     catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Empty representation
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentPresentation_7() {
+    CompositeGene gene1 = new CompositeGene();
+    try {
+      gene1.setValueFromPersistentRepresentation("<org.jgap.impl.IntegerGene"
+                                                 + CompositeGene.GENE_DELIMITER
+                                                 + "2:4:4"
+                                                 + CompositeGene.GENE_DELIMITER
+                                                 + "><>");
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      assertEquals(1, gene1.size());
       ; //this is OK
     }
   }
