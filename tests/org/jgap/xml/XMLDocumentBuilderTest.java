@@ -24,7 +24,7 @@ import org.w3c.dom.*;
 public class XMLDocumentBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -52,7 +52,9 @@ public class XMLDocumentBuilderTest
     assertEquals(null, result.getParentNode());
     assertEquals(1, result.getChildNodes().getLength());
     Node child = result.getChildNodes().item(0);
-    assertEquals("chromosome", result.getNodeName());
-    assertEquals(2, child.getChildNodes().getLength());
+    assertEquals("chromosome", child.getNodeName());
+    assertEquals(1, child.getChildNodes().getLength());
+    Node genes = child.getChildNodes().item(0);
+    assertEquals(2, genes.getChildNodes().getLength());
   }
 }
