@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -111,7 +111,7 @@ public class ThresholdSelector
     int bestToBeSelected = (int) Math.round(canBeSelected
                                             * m_bestChroms_Percentage);
     for (int i = 0; i < bestToBeSelected; i++) {
-      a_to_pop.addChromosome((Chromosome)m_chromosomes.get(i));
+      a_to_pop.addChromosome((IChromosome)m_chromosomes.get(i));
     }
 
     // Fill up the rest by randomly selecting chromosomes
@@ -121,7 +121,7 @@ public class ThresholdSelector
     int size = m_chromosomes.size();
     for (int i = 0; i < missing; i++) {
       index = rn.nextInt(size);
-      a_to_pop.addChromosome((Chromosome)m_chromosomes.get(index));
+      a_to_pop.addChromosome((IChromosome)m_chromosomes.get(index));
     }
   }
 
@@ -147,7 +147,7 @@ public class ThresholdSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  protected void add(final Chromosome a_chromosomeToAdd) {
+  protected void add(final IChromosome a_chromosomeToAdd) {
     m_chromosomes.add(a_chromosomeToAdd);
     m_needsSorting = true;
   }
@@ -164,8 +164,8 @@ public class ThresholdSelector
   private class FitnessValueComparator
       implements Comparator {
     public int compare(final Object a_first, final Object a_second) {
-      Chromosome chrom1 = (Chromosome) a_first;
-      Chromosome chrom2 = (Chromosome) a_second;
+      IChromosome chrom1 = (IChromosome) a_first;
+      IChromosome chrom2 = (IChromosome) a_second;
 
       if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {

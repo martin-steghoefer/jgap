@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -99,10 +99,10 @@ public class GreedyCrossover
     // Grefenstette et al say.
     // --------------------------------------------------------------
     for (int i = 0; i < numCrossovers; i++) {
-      Chromosome firstMate = (Chromosome)
+      IChromosome firstMate = (IChromosome)
           a_population.getChromosome(generator.
                                      nextInt(size)).clone();
-      Chromosome secondMate = (Chromosome)
+      IChromosome secondMate = (IChromosome)
           a_population.getChromosome(generator.
                                      nextInt(size)).clone();
       operate(firstMate, secondMate);
@@ -125,8 +125,8 @@ public class GreedyCrossover
    * @author Audrius Meskauskas
    * @since 2.1
    */
-  public void operate(final Chromosome a_firstMate,
-                      final Chromosome a_secondMate) {
+  public void operate(final IChromosome a_firstMate,
+                      final IChromosome a_secondMate) {
     Gene[] g1 = a_firstMate.getGenes();
     Gene[] g2 = a_secondMate.getGenes();
     Gene[] c1, c2;
@@ -169,8 +169,8 @@ public class GreedyCrossover
         if (!not_picked.contains(a_g2[j])) {
           if (!a_g1[m_startOffset].equals(a_g2[j])) {
             throw new Error("Chromosome gene sets must be identical."
-                            + " First Chrom: " + new Chromosome(a_g1)
-                            + ". Second Chrom: " + new Chromosome(a_g2));
+                            + " First Chrom: " + new Chromosome(a_g1) /**@todo fix*/
+                            + ". Second Chrom: " + new Chromosome(a_g2)); /**@todo fix*/
           }
         }
       }

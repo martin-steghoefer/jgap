@@ -23,7 +23,7 @@ import org.jgap.*;
 public class InversionOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Constructs a new instance of this operator.
@@ -52,8 +52,8 @@ public class InversionOperator
     // -------------------------------------------------------------------
     int index1;
     index1 = generator.nextInt(size);
-    Chromosome chrom1 = a_population.getChromosome(index1);
-    Chromosome firstMate = (Chromosome) chrom1.clone();
+    IChromosome chrom1 = a_population.getChromosome(index1);
+    IChromosome firstMate = (IChromosome) chrom1.clone();
     Gene[] firstGenes = firstMate.getGenes();
     int locus = generator.nextInt(firstGenes.length);
     // Swap the genes.

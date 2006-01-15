@@ -37,7 +37,7 @@ public class CrossoverOperator
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -128,8 +128,8 @@ public class CrossoverOperator
     for (int i = 0; i < numCrossovers; i++) {
       index1 = generator.nextInt(size);
       index2 = generator.nextInt(size);
-      Chromosome chrom1 = a_population.getChromosome(index1);
-      Chromosome chrom2 = a_population.getChromosome(index2);
+      IChromosome chrom1 = a_population.getChromosome(index1);
+      IChromosome chrom2 = a_population.getChromosome(index2);
 
       // Verify that crossover allowed.
       // ------------------------------
@@ -145,8 +145,8 @@ public class CrossoverOperator
 
       // Clone the chromosomes.
       // ----------------------
-      Chromosome firstMate = (Chromosome) chrom1.clone();
-      Chromosome secondMate = (Chromosome) chrom2.clone();
+      IChromosome firstMate = (IChromosome) chrom1.clone();
+      IChromosome secondMate = (IChromosome) chrom2.clone();
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = generator.nextInt(firstGenes.length);

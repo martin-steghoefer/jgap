@@ -31,7 +31,7 @@ import org.jgap.data.config.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -81,7 +81,7 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  protected synchronized void add(final Chromosome a_chromosomeToAdd) {
+  protected synchronized void add(final IChromosome a_chromosomeToAdd) {
     // The "roulette wheel" is represented by a Map. Each key is a
     // Chromosome and each value is an instance of the SlotCounter inner
     // class. The counter keeps track of the total number of slots that
@@ -159,13 +159,13 @@ public class WeightedRouletteSelector
     int numberOfEntries = entries.size();
     double[] fitnessValues = new double[numberOfEntries];
     double[] counterValues = new double[numberOfEntries];
-    Chromosome[] chromosomes = new Chromosome[numberOfEntries];
+    IChromosome[] chromosomes = new Chromosome[numberOfEntries];
     m_totalNumberOfUsedSlots = 0.0;
     Iterator entryIterator = entries.iterator();
     for (int i = 0; i < numberOfEntries; i++) {
       Map.Entry chromosomeEntry = (Map.Entry) entryIterator.next();
-      Chromosome currentChromosome =
-          (Chromosome) chromosomeEntry.getKey();
+      IChromosome currentChromosome =
+          (IChromosome) chromosomeEntry.getKey();
       SlotCounter currentCounter =
           (SlotCounter) chromosomeEntry.getValue();
       fitnessValues[i] = currentCounter.getFitnessValue();
@@ -184,7 +184,7 @@ public class WeightedRouletteSelector
     // To select each chromosome, we just "spin" the wheel and grab
     // whichever chromosome it lands on.
     // ------------------------------------------------------------
-    Chromosome selectedChromosome;
+    IChromosome selectedChromosome;
     for (int i = 0; i < a_howManyToSelect; i++) {
       selectedChromosome = spinWheel(generator, fitnessValues, counterValues,
                                      chromosomes);
@@ -212,10 +212,10 @@ public class WeightedRouletteSelector
    * @author Klaus Meffert
    * @since 1.0
    */
-  private Chromosome spinWheel(final RandomGenerator a_generator,
+  private IChromosome spinWheel(final RandomGenerator a_generator,
                                final double[] a_fitnessValues,
                                final double[] a_counterValues,
-                               final Chromosome[] a_chromosomes) {
+                               final IChromosome[] a_chromosomes) {
     // Randomly choose a slot on the wheel.
     // ------------------------------------
     double selectedSlot =

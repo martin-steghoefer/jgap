@@ -26,7 +26,7 @@ import org.jgap.data.config.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -153,7 +153,7 @@ public class TournamentSelector
         }
         while (index < m_tournament_size - 1);
       }
-      a_to_pop.addChromosome( (Chromosome) tournament.get(index));
+      a_to_pop.addChromosome( (IChromosome) tournament.get(index));
     }
   }
 
@@ -178,7 +178,7 @@ public class TournamentSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  protected void add(final Chromosome a_chromosomeToAdd) {
+  protected void add(final IChromosome a_chromosomeToAdd) {
     m_chromosomes.add(a_chromosomeToAdd);
   }
 
@@ -192,8 +192,8 @@ public class TournamentSelector
   private class FitnessValueComparator
       implements Comparator {
     public int compare(final Object a_first, final Object a_second) {
-      Chromosome chrom1 = (Chromosome) a_first;
-      Chromosome chrom2 = (Chromosome) a_second;
+      IChromosome chrom1 = (IChromosome) a_first;
+      IChromosome chrom2 = (IChromosome) a_second;
       if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {
         return 1;

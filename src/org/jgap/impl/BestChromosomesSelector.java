@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -76,7 +76,7 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  protected synchronized void add(final Chromosome a_chromosomeToAdd) {
+  protected synchronized void add(final IChromosome a_chromosomeToAdd) {
     // If opted-in: Check if chromosome already added
     // This speeds up the process by orders of magnitude but could lower the
     // quality of evolved results because of fewer Chromosome's used!!!
@@ -138,7 +138,7 @@ public class BestChromosomesSelector
     }
     // To select a chromosome, we just go thru the sorted list.
     // --------------------------------------------------------
-    Chromosome selectedChromosome;
+    IChromosome selectedChromosome;
     for (int i = 0; i < canBeSelected; i++) {
       selectedChromosome = m_chromosomes.getChromosome(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);

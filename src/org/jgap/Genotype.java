@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.70 $";
+  private final static String CVS_REVISION = "$Revision: 1.71 $";
 
   /**
    * The current active Configuration instance.
@@ -65,7 +65,7 @@ public class Genotype
    * @deprecated use Genotype(Configuration, Population) instead
    */
   public Genotype(Configuration a_activeConfiguration,
-                  Chromosome[] a_initialChromosomes)
+                  IChromosome[] a_initialChromosomes)
       throws InvalidConfigurationException {
     this(a_activeConfiguration, new Population(a_initialChromosomes));
   }
@@ -163,12 +163,12 @@ public class Genotype
    * @since 1.0
    * @deprecated uses getPopulation() instead
    */
-  public synchronized Chromosome[] getChromosomes() {
+  public synchronized IChromosome[] getChromosomes() {
     Iterator it = getPopulation().iterator();
-    Chromosome[] result = new Chromosome[getPopulation().size()];
+    IChromosome[] result = new Chromosome[getPopulation().size()];
     int i = 0;
     while (it.hasNext()) {
-      result[i++] = (Chromosome) it.next();
+      result[i++] = (IChromosome) it.next();
     }
     return result;
   }
@@ -194,7 +194,7 @@ public class Genotype
    * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized Chromosome getFittestChromosome() {
+  public synchronized IChromosome getFittestChromosome() {
     return getPopulation().determineFittestChromosome();
   }
 
@@ -262,8 +262,8 @@ public class Genotype
     int originalPopSize = m_activeConfiguration.getPopulationSize();
     int currentPopSize = getPopulation().size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
-      Chromosome chrom = getPopulation().getChromosome(i);
-      chrom.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+      IChromosome chrom = getPopulation().getChromosome(i);
+      chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
     }
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
@@ -288,7 +288,7 @@ public class Genotype
                            / 100);
       popSize = getPopulation().size();
       if (popSize < minSize) {
-        Chromosome newChrom;
+        IChromosome newChrom;
         try {
           while (getPopulation().size() < minSize) {
             newChrom = Chromosome.randomInitialChromosome();
@@ -304,7 +304,7 @@ public class Genotype
     if (getConfiguration().isPreserveFittestIndividual()) {
       // Determine the fittest chromosome in the population.
       // ---------------------------------------------------
-      Chromosome fittest = null;
+      IChromosome fittest = null;
       fittest = getPopulation().determineFittestChromosome();
 
       if (!getPopulation().contains(fittest)) {
@@ -359,7 +359,7 @@ public class Genotype
     for (int i = 0; i < getPopulation().size(); i++) {
       buffer.append(getPopulation().getChromosome(i).toString());
       buffer.append(" [");
-      buffer.append(getPopulation().getChromosome(i).m_fitnessValue);
+      buffer.append(getPopulation().getChromosome(i).getFitnessValueDirectly());
       buffer.append(']');
       buffer.append('\n');
     }
@@ -415,7 +415,7 @@ public class Genotype
     // -----------------------------
     try {
       for (int i = 0; i < populationSize; i++) {
-        pop.addChromosome( (Chromosome) chromIniter.perform(sampleChrom,
+        pop.addChromosome( (IChromosome) chromIniter.perform(sampleChrom,
             sampleChrom.getClass(), null));
       }
     }
@@ -566,7 +566,7 @@ public class Genotype
    */
   public int hashCode() {
     int i, size = getPopulation().size();
-    Chromosome s;
+    IChromosome s;
     int twopower = 1;
     // For empty genotype we want a special value different from other hashcode
     // implementations.

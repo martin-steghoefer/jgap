@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -129,9 +129,9 @@ public class MutationOperator
     IGeneticOperatorConstraint constraint = Genotype.getConfiguration().
         getJGAPFactory().getGeneticOperatorConstraint();
     for (int i = 0; i < size; i++) {
-      Chromosome chrom = a_population.getChromosome(i);
+      IChromosome chrom = a_population.getChromosome(i);
       Gene[] genes = chrom.getGenes();
-      Chromosome copyOfChromosome = null;
+      IChromosome copyOfChromosome = null;
       // For each Chromosome in the population...
       // ----------------------------------------
       for (int j = 0; j < genes.length; j++) {
