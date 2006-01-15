@@ -23,7 +23,7 @@ import org.jgap.data.config.*;
 public abstract class NaturalSelector
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -33,7 +33,7 @@ public abstract class NaturalSelector
    * @author Neil Rotstan
    * @since 1.0
    */
-  protected abstract void add(Chromosome a_chromosomeToAdd);
+  protected abstract void add(IChromosome a_chromosomeToAdd);
 
   // Default implementation for the Configurable Interface
   /**
@@ -86,8 +86,8 @@ public abstract class NaturalSelector
   public class FitnessValueComparator
       implements Comparator {
     public int compare(Object first, Object second) {
-      Chromosome chrom1 = (Chromosome) first;
-      Chromosome chrom2 = (Chromosome) second;
+      IChromosome chrom1 = (IChromosome) first;
+      IChromosome chrom2 = (IChromosome) second;
 
       if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {

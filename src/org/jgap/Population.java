@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.29 $";
+  private static final String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -33,7 +33,7 @@ public class Population
   /**
    * The fittest Chromosome of the population.
    */
-  private Chromosome m_fittestChromosome;
+  private IChromosome m_fittestChromosome;
 
   /**
    * Indicates whether at least one of the chromosomes has been changed
@@ -49,7 +49,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(final Chromosome[] a_chromosomes) {
+  public Population(final IChromosome[] a_chromosomes) {
     this(a_chromosomes.length);
     for (int i = 0; i < a_chromosomes.length; i++) {
       m_chromosomes.add(a_chromosomes[i]);
@@ -87,7 +87,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void addChromosome(final Chromosome a_toAdd) {
+  public void addChromosome(final IChromosome a_toAdd) {
     if (a_toAdd != null) {
       m_chromosomes.add(a_toAdd);
       setChanged(true);
@@ -110,7 +110,7 @@ public class Population
 //      if (a_population.getChromosomes() != null) {
 //        int size = a_population.getChromosomes().size();
 //        for (int i = 0; i < size; i++) {
-//          Chromosome chrom = a_population.getChromosome(i);
+//          IChromosome chrom = a_population.getChromosome(i);
 //          m_chromosomes.add(chrom);
 //        }
 //      }
@@ -138,7 +138,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void setChromosome(final int a_index, final Chromosome a_chromosome) {
+  public void setChromosome(final int a_index, final IChromosome a_chromosome) {
     m_chromosomes.set(a_index, a_chromosome);
     setChanged(true);
   }
@@ -161,8 +161,8 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Chromosome getChromosome(final int a_index) {
-    return (Chromosome) m_chromosomes.get(a_index);
+  public IChromosome getChromosome(final int a_index) {
+    return (IChromosome) m_chromosomes.get(a_index);
   }
 
   /**
@@ -191,10 +191,10 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Chromosome[] toChromosomes() {
-    Chromosome[] result = new Chromosome[m_chromosomes.size()];
+  public IChromosome[] toChromosomes() {
+    IChromosome[] result = new IChromosome[m_chromosomes.size()];
     for (int i = 0; i < m_chromosomes.size(); i++) {
-      result[i] = (Chromosome) m_chromosomes.get(i);
+      result[i] = (IChromosome) m_chromosomes.get(i);
     }
     return result;
   }
@@ -207,7 +207,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Chromosome determineFittestChromosome() {
+  public IChromosome determineFittestChromosome() {
     if (!m_changed) {
       return m_fittestChromosome;
     }
@@ -217,7 +217,7 @@ public class Population
         getFitnessEvaluator();
     double fitness;
     while (it.hasNext()) {
-      Chromosome chrom = (Chromosome) it.next();
+      IChromosome chrom = (IChromosome) it.next();
       fitness = chrom.getFitnessValue();
       if (evaluator.isFitter(fitness, bestFitness)
           || m_fittestChromosome == null) {
@@ -250,7 +250,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.1
    */
-  public boolean contains(final Chromosome a_chromosome) {
+  public boolean contains(final IChromosome a_chromosome) {
     return m_chromosomes.contains(a_chromosome);
   }
 
@@ -265,12 +265,12 @@ public class Population
    * @author Klaus Meffert
    * @since 2.4
    */
-  Chromosome removeChromosome(final int a_index) {
+  IChromosome removeChromosome(final int a_index) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Index must be within bounds!");
     }
     setChanged(true);
-    return (Chromosome) m_chromosomes.remove(a_index);
+    return (IChromosome) m_chromosomes.remove(a_index);
   }
 
   /**
@@ -313,7 +313,7 @@ public class Population
     List chroms = getChromosomes();
     int len = chroms.size();
     for (int i = 0; i < len; i++) {
-      Chromosome chrom = (Chromosome) chroms.get(i);
+      IChromosome chrom = (IChromosome) chroms.get(i);
       Gene[] genes = chrom.getGenes();
       int len2 = genes.length;
       for (int j = 0; j < len2; j++) {
