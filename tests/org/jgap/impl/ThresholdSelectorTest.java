@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -89,7 +89,7 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Test if below functionality available without error
+   * Test if below functionality available without error.
    *
    * @throws Exception
    * @author Klaus Meffert
@@ -163,7 +163,7 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Always select best chromosome if threshold is 1.0d
+   * Always select best chromosome if threshold is 1.0d.
    *
    * @throws Exception
    * @author Klaus Meffert
@@ -278,6 +278,51 @@ public class ThresholdSelectorTest
     List chromosomes = (Vector) PrivateAccessor.getField(selector,
         "m_chromosomes");
     assertFalse(bestChroms.equals(chromosomes));
+  }
+
+  /**
+   * Always select best chromosome if threshold is 1.0d. Targte population not
+   * empty.
+   *
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSelect_5()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Genotype.setConfiguration(conf);
+    ThresholdSelector selector = new ThresholdSelector(1.0d);
+    // add first chromosome
+    // --------------------
+    Gene gene = new BooleanGene();
+    gene.setAllele(Boolean.valueOf(true));
+    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    thirdBestChrom.setFitnessValue(10);
+    selector.add(thirdBestChrom);
+    // add second chromosome
+    // ---------------------
+    gene = new BooleanGene();
+    gene.setAllele(Boolean.valueOf(false));
+    Chromosome bestChrom = new Chromosome(gene, 3);
+    bestChrom.setFitnessValue(12);
+    selector.add(bestChrom);
+    // receive top 1 (= best) chromosome
+    // ---------------------------------
+    Population pop = new Population();
+    selector.select(1, null, pop);
+    Chromosome[] bestChroms = pop.toChromosomes();
+    assertEquals(1, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    // receive top 30 chromosomes.
+    // ---------------------------
+    selector.select(30, pop, pop);
+    bestChroms = pop.toChromosomes();
+    assertEquals(31, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    assertEquals(thirdBestChrom, bestChroms[30]);
+    assertTrue(bestChrom == bestChroms[0]);
+    assertTrue(bestChrom == bestChroms[29]);
   }
 
   /**

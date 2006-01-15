@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -242,6 +242,31 @@ public class SwappingMutationOperatorTest
         }
       }
     }
+  }
+
+  /**
+   * Nothing to do. Test that nothing is done.
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testOperate_5() {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(0);
+    mutOp.setMutationRateCalc(null);
+    List candChroms = new Vector();
+    BooleanGene gene1 = new BooleanGene();
+    Chromosome chrom1 = new Chromosome(gene1, 1);
+    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
+    IntegerGene gene2 = new IntegerGene(0, 10);
+    Chromosome chrom2 = new Chromosome(gene2, 1);
+    chrom2.getGene(0).setAllele(new Integer(3));
+    candChroms.add(chrom1);
+    candChroms.add(chrom2);
+    mutOp.operate(null, candChroms);
+    assertEquals(2, candChroms.size());
+    assertEquals(chrom1, candChroms.get(0));
+    assertEquals(chrom2, candChroms.get(1));
   }
 
   private long checksum(Gene[] a_genes) {
