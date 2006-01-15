@@ -20,7 +20,18 @@ import java.io.*;
 public interface IChromosome
     extends Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
+
+  /**
+   * Constants for toString()
+   */
+  public final static String S_FITNESS_VALUE = "Fitness value";
+
+  public final static String S_ALLELES = "Alleles";
+
+  public final static String S_APPLICATION_DATA = "Application data";
+
+  public final static String S_SIZE = "Size";
 
   Gene getGene(int a_desiredLocus);
 
@@ -29,4 +40,6 @@ public interface IChromosome
   int size();
 
   void setFitnessValue(double a_newFitnessValue);
+
+  double getFitnessValue();
 }
