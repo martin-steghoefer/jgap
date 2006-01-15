@@ -32,7 +32,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -113,7 +113,7 @@ public class XMLManager {
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Document representChromosomeAsDocument(final Chromosome
+  public static Document representChromosomeAsDocument(final IChromosome
       a_subject) {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
@@ -200,7 +200,7 @@ public class XMLManager {
 
   /**
    *
-   * @param gene Gene
+   * @param a_gene Gene
    * @param a_xmlDocument Document
    * @return Element
    *
@@ -232,7 +232,7 @@ public class XMLManager {
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Element representChromosomeAsElement(final Chromosome a_subject,
+  public static Element representChromosomeAsElement(final IChromosome a_subject,
       final Document a_xmlDocument) {
     // Start by creating an element for the chromosome and its size
     // attribute, which represents the number of genes in the chromosome.

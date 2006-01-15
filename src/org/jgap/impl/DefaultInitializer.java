@@ -20,10 +20,10 @@ import org.jgap.*;
 public class DefaultInitializer
     implements IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_class) {
-    if (Chromosome.class.isAssignableFrom(a_class)) {
+    if (IChromosome.class.isAssignableFrom(a_class)) {
       return true;
     }
     else {
@@ -43,7 +43,7 @@ public class DefaultInitializer
     if (IInitializer.class.isAssignableFrom(a_class)) {
       return ((IInitializer)a_obj).perform(null, a_class, a_params);
     }
-//    if (Chromosome.class.isAssignableFrom(a_class)) {
+//    if (IChromosome.class.isAssignableFrom(a_class)) {
 //      Method m = a_class.getMethod("randomInitialChromosome",
 //                                   new Class[] {});
 //      return m.invoke(null, new Object[] {});

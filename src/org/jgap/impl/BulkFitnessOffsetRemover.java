@@ -223,7 +223,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /*
    * Replace this member by the Configuration as
@@ -277,9 +277,9 @@ public class BulkFitnessOffsetRemover
     double offset = Double.MAX_VALUE;
     double curFitness;
     Iterator itChromosomes = a_chromosomes.iterator();
-    Chromosome Chromosome;
+    IChromosome chromosome;
     while (itChromosomes.hasNext()) {
-      Chromosome = (Chromosome) itChromosomes.next();
+      chromosome = (Chromosome) itChromosomes.next();
       /*
        * This is a workaround:
        * We have to check, wethter a Chromosome has
@@ -294,12 +294,12 @@ public class BulkFitnessOffsetRemover
        * If a redesign of that method is made, this has to be changed
        * here too.. .
        */
-      curFitness = Chromosome.getFitnessValue();
+      curFitness = chromosome.getFitnessValue();
       if (curFitness < 0) {
         // OK, get it from our fitness function.
-        curFitness = m_ff.getFitnessValue(Chromosome);
+        curFitness = m_ff.getFitnessValue(chromosome);
         // And store it to avoid evaluation of the same Chromosome again:
-        Chromosome.setFitnessValue(curFitness);
+        chromosome.setFitnessValue(curFitness);
       }
       else {
         /*
@@ -310,7 +310,7 @@ public class BulkFitnessOffsetRemover
          * additionally disallow cutting a huge offset from the others.
          */
         curFitness += m_previousOffset;
-        Chromosome.setFitnessValue(curFitness);
+        chromosome.setFitnessValue(curFitness);
       }
       // search for the offset that is to be cut:
       offset = (offset < curFitness) ? offset : curFitness;
@@ -336,8 +336,8 @@ public class BulkFitnessOffsetRemover
     // finally remove the offset from every fitness value:
     itChromosomes = a_chromosomes.iterator();
     while (itChromosomes.hasNext()) {
-      Chromosome = (Chromosome) itChromosomes.next();
-      Chromosome.setFitnessValue(Chromosome.getFitnessValue() - offset);
+      chromosome = (IChromosome) itChromosomes.next();
+      chromosome.setFitnessValue(chromosome.getFitnessValue() - offset);
     }
   }
 
@@ -436,7 +436,7 @@ public class BulkFitnessOffsetRemover
    * @return the original fitness value as returned by the registered
    * {@link #ff fitnessFunction} instance.
    */
-  public double getAbsoluteFitness(final Chromosome a_individuum) {
+  public double getAbsoluteFitness(final IChromosome a_individuum) {
     double fitness = a_individuum.getFitnessValue();
     if (fitness < 0.0) {
       // OK, get it from our fitness function.

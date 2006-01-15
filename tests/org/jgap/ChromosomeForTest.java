@@ -81,7 +81,7 @@ public class ChromosomeForTest
     // the pool, so we have to construct a new instance and build it from
     // scratch.
     // ------------------------------------------------------------------
-    Chromosome sampleChromosome =
+    IChromosome sampleChromosome =
         Genotype.getConfiguration().getSampleChromosome();
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];

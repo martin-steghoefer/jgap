@@ -19,9 +19,8 @@ import junit.framework.*;
  */
 public class FitnessFunctionTest
     extends JGAPTestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FitnessFunctionTest.class);
@@ -55,23 +54,39 @@ public class FitnessFunctionTest
   }
 
   /**
-   * Implementing class of abstract FitnessFunction class
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testLastComputedValue_0()
+      throws Exception {
+    FitnessFunctionImpl fitfunc = new FitnessFunctionImpl(0);
+    assertEquals(FitnessFunction.NO_FITNESS_VALUE,
+                 fitfunc.getLastComputedFitnessValue(), DELTA);
+    privateAccessor.setField(fitfunc, "m_lastComputedFitnessValue",
+                             new Double(47.11d));
+    assertEquals(47.11d, fitfunc.getLastComputedFitnessValue(), DELTA);
+  }
+
+  /**
+   * Implementing class of abstract FitnessFunction class.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   private class FitnessFunctionImpl
       extends FitnessFunction {
-
     /**
      * @since 2.0 (until 1.1: type int)
      */
     private double m_evaluationValue;
+
     public FitnessFunctionImpl(double a_evaluationValue) {
       m_evaluationValue = a_evaluationValue;
     }
 
-    protected double evaluate(Chromosome a_subject) {
+    protected double evaluate(IChromosome a_subject) {
       return m_evaluationValue;
     }
   }

@@ -17,7 +17,7 @@ import com.eteks.parser.*;
 import java.io.*;
 
 /**
- * Fitness Function validating against a value table
+ * Fitness Function validating against a value table.
  *
  * @author Klaus Meffert
  * @since 2.4
@@ -25,7 +25,7 @@ import java.io.*;
 public class FormulaFitnessFunction
     extends TruthTableFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static Syntax m_syntax;
 
@@ -67,7 +67,7 @@ public class FormulaFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public double evaluate(Chromosome a_chromosome) {
+  public double evaluate(IChromosome a_chromosome) {
     String formula = null;
     try {
       //Calculcate result of formula

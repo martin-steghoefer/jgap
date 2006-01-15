@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DataTreeBuilder {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -161,7 +161,7 @@ public class DataTreeBuilder {
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataCreators representChromosomeAsDocument(final Chromosome a_subject)
+  public IDataCreators representChromosomeAsDocument(final IChromosome a_subject)
       throws Exception {
     // DocumentBuilders do not have to be thread safe, so we have to
     // protect creation of the Document with a synchronized block.
@@ -196,7 +196,7 @@ public class DataTreeBuilder {
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IDataElement representChromosomeAsElement(final Chromosome a_subject)
+  public IDataElement representChromosomeAsElement(final IChromosome a_subject)
       throws Exception {
     // Start by creating an element for the chromosome and its size
     // attribute, which represents the number of genes in the chromosome.
@@ -271,7 +271,7 @@ public class DataTreeBuilder {
   /**
    * Represent an Allele as a generic data element
    *
-   * @param gene the gene holding the allele
+   * @param a_gene the gene holding the allele
    * @throws Exception
    * @return IDataElement created data element
    *

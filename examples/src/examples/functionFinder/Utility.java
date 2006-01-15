@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  */
 public class Utility {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private static int numberOfFunctions;
 
@@ -102,7 +102,7 @@ public class Utility {
     return elem;
   }
 
-  public static String getFormulaFromChromosome(Chromosome chromosome) {
+  public static String getFormulaFromChromosome(IChromosome chromosome) {
     List terms = constructTerms(chromosome.getGenes());
     return getFormula(terms);
   }

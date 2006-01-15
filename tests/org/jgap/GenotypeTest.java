@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -316,7 +316,7 @@ public class GenotypeTest
     conf.setPopulationSize(7);
     Genotype genotype = new Genotype(conf, chroms);
     List l = genotype.getFittestChromosomes(1);
-    Chromosome chrom2 = (Chromosome)l.get(0);
+    Chromosome chrom2 = (Chromosome) l.get(0);
     assertEquals(chrom, chrom2);
   }
 
@@ -489,7 +489,8 @@ public class GenotypeTest
   public void testEvolve_5_1()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    Gene[] genes = new Gene[]{new BooleanGene()};
+    Gene[] genes = new Gene[] {
+        new BooleanGene()};
     config.setSampleChromosome(new ChromosomeForTest(genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
@@ -514,7 +515,8 @@ public class GenotypeTest
   public void testEvolve_5_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    Gene[] genes = new Gene[]{new BooleanGene()};
+    Gene[] genes = new Gene[] {
+        new BooleanGene()};
     config.setSampleChromosome(new ChromosomeForTest(genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
@@ -538,7 +540,8 @@ public class GenotypeTest
   public void testEvolve_5_3()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    Gene[] genes = new Gene[]{new BooleanGene()};
+    Gene[] genes = new Gene[] {
+        new BooleanGene()};
     config.setSampleChromosome(new ChromosomeForTest(genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
@@ -586,6 +589,8 @@ public class GenotypeTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -628,12 +633,12 @@ public class GenotypeTest
     Genotype genotype = new Genotype(conf, chroms);
     assertTrue(genotype.toString() != null);
     assertTrue(genotype.toString().length() > 0);
-    assertEquals(Chromosome.S_SIZE + ":1, "
-                 + Chromosome.S_FITNESS_VALUE + ":"
+    assertEquals(IChromosome.S_SIZE + ":1, "
+                 + IChromosome.S_FITNESS_VALUE + ":"
                  + FitnessFunction.NO_FITNESS_VALUE
                  + ", "
-                 + Chromosome.S_ALLELES + ":[IntegerGene(1,55)=null], "
-                 + Chromosome.S_APPLICATION_DATA + ":null"
+                 + IChromosome.S_ALLELES + ":[IntegerGene(1,55)=null], "
+                 + IChromosome.S_APPLICATION_DATA + ":null"
                  + " ["
                  + FitnessFunction.NO_FITNESS_VALUE
                  + "]\n", genotype.toString());
@@ -662,12 +667,12 @@ public class GenotypeTest
     assertTrue(genotype.toString().length() > 0);
     // compute fitness of Genotype thus of all contained chromosomes
     genotype.getFittestChromosome();
-    assertEquals(Chromosome.S_SIZE + ":1, "
-                 + Chromosome.S_FITNESS_VALUE + ":"
+    assertEquals(IChromosome.S_SIZE + ":1, "
+                 + IChromosome.S_FITNESS_VALUE + ":"
                  + fitnessvalue
                  + ", "
-                 + Chromosome.S_ALLELES + ":[IntegerGene(1,55)=null], "
-                 + Chromosome.S_APPLICATION_DATA + ":null"
+                 + IChromosome.S_ALLELES + ":[IntegerGene(1,55)=null], "
+                 + IChromosome.S_APPLICATION_DATA + ":null"
                  + " ["
                  + fitnessvalue
                  + "]\n", genotype.toString());
@@ -726,9 +731,31 @@ public class GenotypeTest
     conf.setSampleChromosome(chrom);
     Genotype genotype = Genotype.randomInitialGenotype(conf);
     assertEquals(7777, genotype.getPopulation().size());
-    Chromosome c = (Chromosome)genotype.getPopulation().getChromosome(0);
+    Chromosome c = (Chromosome) genotype.getPopulation().getChromosome(0);
     Gene g = c.getGene(0);
     assertEquals(aGene.getEnergy(), g.getEnergy(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testRandomInitialGenotype_3()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    IChromosome chrom = new MyChromosome();
+    conf.setPopulationSize(7777);
+    conf.setFitnessFunction(new StaticFitnessFunction(5));
+    conf.setSampleChromosome(chrom);
+    try {
+      Genotype.randomInitialGenotype(conf);
+      fail();
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
+    }
   }
 
   /**
@@ -740,8 +767,7 @@ public class GenotypeTest
   public void testEquals_0()
       throws Exception {
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
+    chroms[0] = new Chromosome(new Gene[] {new IntegerGene(1, 5)});
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
@@ -753,6 +779,29 @@ public class GenotypeTest
     assertEquals(genotype.toString(), genotype2.toString());
     assertEquals(genotype.toString(), genotype2.toString());
     assertFalse(genotype.equals(new Chromosome()));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_1()
+      throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(5));
+    conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
+    conf.setPopulationSize(99999);
+    Genotype genotype = new Genotype(conf, chroms);
+    Chromosome[] chroms2 = new Chromosome[2];
+    chroms2[0] = new Chromosome(new Gene[] {new IntegerGene(1, 5)});
+    chroms2[1] = new Chromosome(new Gene[] {new IntegerGene(2, 4)});
+    Genotype genotype2 = new Genotype(conf, chroms2);
+    assertFalse(genotype.equals(genotype2));
   }
 
   /**
@@ -954,7 +1003,7 @@ public class GenotypeTest
     Configuration conf = new ConfigurationForTest();
     Genotype genotype = new Genotype(conf, chroms);
     // serialize genotype to a file
-    assertEquals(genotype, super.doSerialize(genotype)) ;
+    assertEquals(genotype, super.doSerialize(genotype));
   }
 
   public class ChromosomeForTest2
@@ -975,6 +1024,29 @@ public class GenotypeTest
     public Object perform(Object a_obj, Class a_class, Object a_params)
         throws Exception {
       return randomInitialChromosome2();
+    }
+  }
+  public class MyChromosome
+      implements IChromosome {
+    public Gene getGene(int a_desiredLocus) {
+      return new IntegerGene();
+    }
+    public Gene[] getGenes() {
+      return new Gene[] {};
+    }
+
+    public int size() {
+      return 1;
+    }
+
+    public void setFitnessValue(double a_newFitnessValue) {
+    }
+
+    public double getFitnessValue() {
+      return 0;
+    }
+    public int compareTo(Object other) {
+      return 0;
     }
   }
 }

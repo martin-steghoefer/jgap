@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1133,6 +1133,27 @@ public class ChromosomeTest
   }
 
   /**
+   * Use Chromosome Pool
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testRandomInitialChromosome_3()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    conf.setChromosomePool(new ChromosomePool());
+    conf.setRandomGenerator(new RandomGeneratorForTest(true));
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = Chromosome.randomInitialChromosome();
+    chrom.cleanup(); //fill the pool
+    chrom = Chromosome.randomInitialChromosome();
+    assertEquals(FitnessFunction.NO_FITNESS_VALUE, chrom.m_fitnessValue,
+                 DELTA);
+    assertTrue(((BooleanGene)chrom.getGene(0)).booleanValue());
+  }
+
+  /**
    *
    * @throws Exception
    *
@@ -1209,11 +1230,11 @@ public class ChromosomeTest
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(3);
-    assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
-                 + ", " + Chromosome.S_FITNESS_VALUE + ":" +
+    assertEquals(IChromosome.S_SIZE + ":" + chrom.size()
+                 + ", " + IChromosome.S_FITNESS_VALUE + ":" +
                  FitnessFunction.NO_FITNESS_VALUE
-                 + ", " + Chromosome.S_ALLELES + ":[null, null, null]"
-                 + ", " + Chromosome.S_APPLICATION_DATA + ":null",
+                 + ", " + IChromosome.S_ALLELES + ":[null, null, null]"
+                 + ", " + IChromosome.S_APPLICATION_DATA + ":null",
                  chrom.toString());
   }
 
@@ -1236,12 +1257,12 @@ public class ChromosomeTest
     Chromosome chrom = new Chromosome(2);
     chrom.setFitnessValue(47.11d);
     chrom.setGenes(genes);
-    assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
-                 + ", " + Chromosome.S_FITNESS_VALUE + ":" +
+    assertEquals(IChromosome.S_SIZE + ":" + chrom.size()
+                 + ", " + IChromosome.S_FITNESS_VALUE + ":" +
                  47.11d
-                 + ", " + Chromosome.S_ALLELES + ":[IntegerGene(0,77)=47,"
+                 + ", " + IChromosome.S_ALLELES + ":[IntegerGene(0,77)=47,"
                  + " IntegerGene(2,333)=55]"
-                 + ", " + Chromosome.S_APPLICATION_DATA + ":null",
+                 + ", " + IChromosome.S_APPLICATION_DATA + ":null",
                  chrom.toString());
   }
 
@@ -1258,11 +1279,11 @@ public class ChromosomeTest
     Genotype.setConfiguration(conf);
     Chromosome chrom = new Chromosome(3);
     chrom.setApplicationData("uIoP");
-    assertEquals(Chromosome.S_SIZE + ":" + chrom.size()
-                 + ", " + Chromosome.S_FITNESS_VALUE + ":" +
+    assertEquals(IChromosome.S_SIZE + ":" + chrom.size()
+                 + ", " + IChromosome.S_FITNESS_VALUE + ":" +
                  FitnessFunction.NO_FITNESS_VALUE
-                 + ", " + Chromosome.S_ALLELES + ":[null, null, null]"
-                 + ", " + Chromosome.S_APPLICATION_DATA + ":uIoP",
+                 + ", " + IChromosome.S_ALLELES + ":[null, null, null]"
+                 + ", " + IChromosome.S_APPLICATION_DATA + ":uIoP",
                  chrom.toString());
   }
 
@@ -1360,7 +1381,7 @@ public class ChromosomeTest
     }
 
     public boolean verify(final Gene a_gene, final Object a_value,
-                          final Chromosome a_chrom, final int a_geneIndex) {
+                          final IChromosome a_chrom, final int a_geneIndex) {
       if (m_forbidden == null) {
         return true;
       }
