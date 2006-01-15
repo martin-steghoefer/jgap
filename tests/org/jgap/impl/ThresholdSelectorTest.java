@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -320,9 +320,9 @@ public class ThresholdSelectorTest
     bestChroms = pop.toChromosomes();
     assertEquals(31, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
-    assertEquals(thirdBestChrom, bestChroms[30]);
+    assertEquals(thirdBestChrom, bestChroms[3]);
     assertTrue(bestChrom == bestChroms[0]);
-    assertTrue(bestChrom == bestChroms[29]);
+    assertTrue(bestChrom == bestChroms[30]);
   }
 
   /**

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   private static int cleanedUp = 0;
 
@@ -832,13 +832,9 @@ public class CompositeGeneTest
     Gene newGene1 = new IntegerGene(3, 5);
     gene1.addGene(newGene1, false);
     Gene newGene2 = new IntegerGene(3, 5);
-    try {
-      newGene2.setAllele(new Integer(2));
-      fail();
-    }
-    catch (NullPointerException nex) {
-      ; // this is OK
-    }
+    newGene2.setAllele(new Integer(2));
+    int i = ( (Integer) newGene2.getAllele()).intValue();
+    assertTrue(i >= 3 && i <= 5);
   }
 
   public void testCompareTo_3_2()
