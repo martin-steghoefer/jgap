@@ -13,6 +13,8 @@
 * Introduced IInitializer, accessible via JGAPFactory
 * Introduced ICompareToHandler, accessible via JGAPFactory
 * Introduced hook method newGeneInternal in BaseGene
+* Introduced base class BaseConfigurable for interface
+  Configurable
 * Added equals and compareTo to CrossoverOperator
 * Added interface org.jgap.ICompsiteGene for
   genes that may contain other genes
@@ -42,6 +44,7 @@
   to InstantiableSupergene
 * Renamed class TestGenetics to SimpleExample
 * Improved TournamentSelector
+* Fixed bug in TruthTableFitnessFunction
 * Capitalized supergene-related classes
 
 2.5
