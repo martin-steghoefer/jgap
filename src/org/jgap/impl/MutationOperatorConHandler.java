@@ -15,7 +15,9 @@ import java.util.ArrayList;
 
 public class MutationOperatorConHandler
     implements ConfigurationHandler {
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  /**@todo replace this class entirely with a configuration file, create
+   * forms with BeanUtils or similar*/
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   // Must be the fully qualified class name
   private final static String CONFIG_NAMESPACE =
@@ -26,7 +28,7 @@ public class MutationOperatorConHandler
   /**
    * Return the name of this Configuration Object to be used in the properties
    * file.
-   * @return Name of this Configuration Object (name of what you are configuring)
+   * @return name of this Configuration Object (name of what is configured)
    * */
   public String getName() {
     return CONFIG_NAMESPACE;
@@ -34,13 +36,11 @@ public class MutationOperatorConHandler
 
   /**
    * Return the information to generate the GUI for configuring this class.
-   * @return A list of ConfigProperty objects.
-   * */
+   * @return a list of ConfigProperty objects
+   */
   public ArrayList getConfigProperties() {
     ArrayList cProps = new ArrayList();
-    // NaturalSelectors available. This information will be renders as a JList.
     ConfigProperty cp;
-    // The population size
     cp = new ConfigProperty();
     cp.setName("m_mutationRate");
     cp.setWidget("JTextField");
@@ -51,9 +51,10 @@ public class MutationOperatorConHandler
   /**
    * Get the namespace to be used in the config file for the Configurable
    * this ConfigurationHandler belongs to.
-   * @author Siddhartha Azad.
-   * @return The namepsace of the Configurable
-   * */
+   * @return the namepsace of the Configurable
+   *
+   * @author Siddhartha Azad
+   */
   public String getNS() {
     return CONFIG_NAMESPACE;
   }
@@ -62,7 +63,7 @@ public class MutationOperatorConHandler
    * Method that will populate an Configurable with the properties in the
    * config file.
    * @author Siddhartha Azad
-   * */
+   */
   public void readConfig()
       throws ConfigException, InvalidConfigurationException {
     ConfigFileReader.instance().setNS(CONFIG_NAMESPACE);
@@ -78,7 +79,7 @@ public class MutationOperatorConHandler
    * belongs to
    *
    * @author Siddhartha Azad
-   * */
+   */
   public void setConfigurable(Configurable a_configurable) {
     m_configurable = a_configurable;
   }
