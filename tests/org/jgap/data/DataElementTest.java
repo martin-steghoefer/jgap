@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DataElementTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DataElementTest.class);
@@ -52,9 +52,11 @@ public class DataElementTest
       throws Exception {
     DataElement el = new DataElement("xyz");
     assertEquals("xyz", el.getTagName());
+    IDataElementList list = el.getElementsByTagName("myTag");
+    assertEquals(0, list.getLength());
     DataElement child = new DataElement("tag1");
     el.appendChild(child);
-    IDataElementList list = el.getElementsByTagName("myTag");
+    list = el.getElementsByTagName("myTag");
     assertEquals(0, list.getLength());
     DataElement child2 = new DataElement("myTag");
     el.appendChild(child2);
