@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Starts the example
@@ -40,7 +40,7 @@ public class SimpleExample {
                            "Chromosomes greater than 32 bits in length.");
         System.exit( -1);
       }
-      Chromosome sampleChromosome = new Chromosome(new BooleanGene(),
+      IChromosome sampleChromosome = new Chromosome(new BooleanGene(),
           chromeSize);
       gaConf.setSampleChromosome(sampleChromosome);
       gaConf.setPopulationSize(20);
@@ -59,14 +59,14 @@ public class SimpleExample {
       // ---------------
       if (percentEvolution > 0 && i % percentEvolution == 0) {
         progress++;
-        Chromosome fittest = genotype.getFittestChromosome();
+        IChromosome fittest = genotype.getFittestChromosome();
         double fitness = fittest.getFitnessValue();
         System.out.println("Currently fittest Chromosome has fitness " + fitness);
       }
     }
     // Print summary.
     // --------------
-    Chromosome fittest = genotype.getFittestChromosome();
+    IChromosome fittest = genotype.getFittestChromosome();
     System.out.println("Fittest Chromosome has fitness " +
                        fittest.getFitnessValue());
   }

@@ -29,7 +29,7 @@ import org.jgap.audit.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -146,7 +146,7 @@ public class CoinsExample {
       }
       // Display the best solution we found.
       // -----------------------------------
-      Chromosome bestSolutionSoFar = population.getFittestChromosome();
+      IChromosome bestSolutionSoFar = population.getFittestChromosome();
       System.out.println("The best solution has a fitness value of " +
                          bestSolutionSoFar.getFitnessValue());
       System.out.println("It contained the following: ");

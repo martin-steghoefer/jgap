@@ -24,7 +24,7 @@ import org.w3c.dom.*;
 public class TestXML {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public static void main(String[] args) {
     try {
@@ -38,13 +38,13 @@ public class TestXML {
 
       // Test Chromsome manipulation methods.
       // ------------------------------------
-      Chromosome chromosome =
+      IChromosome chromosome =
           Chromosome.randomInitialChromosome();
 
       Document chromosomeDoc =
           XMLManager.representChromosomeAsDocument(chromosome);
 
-      Chromosome chromosomeFromXML =
+      IChromosome chromosomeFromXML =
           XMLManager.getChromosomeFromDocument(activeConfiguration,
                                                chromosomeDoc);
 

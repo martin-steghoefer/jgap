@@ -59,7 +59,7 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
@@ -74,13 +74,13 @@ public class TravellingSalesman
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public Chromosome createSampleChromosome(Object initial_data) {
+  public IChromosome createSampleChromosome(Object initial_data) {
     Gene[] genes = new Gene[CITIES];
     for (int i = 0; i < genes.length; i++) {
       genes[i] = new IntegerGene(0, CITIES - 1);
       genes[i].setAllele(new Integer(i));
     }
-    Chromosome sample = new Chromosome(genes);
+    IChromosome sample = new Chromosome(genes);
     System.out.println("Optimal way " + sample);
     System.out.println("Score " +
                        (Integer.MAX_VALUE / 2 -
@@ -134,7 +134,7 @@ public class TravellingSalesman
   public static void main(String[] args) {
     try {
       TravellingSalesman t = new TravellingSalesman();
-      Chromosome optimal = t.findOptimalPath(null);
+      IChromosome optimal = t.findOptimalPath(null);
       System.out.println("Solution: ");
       System.out.println(optimal);
       System.out.println("Score " +

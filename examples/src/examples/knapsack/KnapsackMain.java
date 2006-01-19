@@ -29,7 +29,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -89,7 +89,7 @@ public class KnapsackMain {
                                        (int) Math.ceil(a_knapsackVolume /
           itemVolumes[i]));
     }
-    Chromosome sampleChromosome = new Chromosome(sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
@@ -132,7 +132,7 @@ public class KnapsackMain {
     XMLManager.writeFile(xmlDoc, new File("knapsackJGAP.xml"));
     // Display the best solution we found.
     // -----------------------------------
-    Chromosome bestSolutionSoFar = population.getFittestChromosome();
+    IChromosome bestSolutionSoFar = population.getFittestChromosome();
     System.out.println("The best solution has a fitness value of " +
                        bestSolutionSoFar.getFitnessValue());
     System.out.println("It contained the following: ");

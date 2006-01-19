@@ -27,7 +27,7 @@ import org.jgap.impl.*;
  * */
 public class MaximizingFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Constructor
@@ -57,7 +57,7 @@ public class MaximizingFunction {
     sampleGenes[0] = new IntegerGene(60, 100);
     sampleGenes[1] = new IntegerGene(1, 50);
     sampleGenes[2] = new IntegerGene(100, 150);
-    Chromosome sampleChromosome = new Chromosome(sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(sampleGenes);
     Genotype population;
     FitnessFunction fitFunc = new MaximizingFunctionFitnessFunction();
     try {
@@ -86,7 +86,7 @@ public class MaximizingFunction {
     for (int i = 0; i < 10; i++) {
       population.evolve();
     }
-    Chromosome bestSolutionSoFar = population.getFittestChromosome();
+    IChromosome bestSolutionSoFar = population.getFittestChromosome();
     System.out.println("The best solution has a fitness value of " +
                        bestSolutionSoFar.getFitnessValue());
     Integer aVal = (Integer) bestSolutionSoFar.getGene(0).getAllele();
