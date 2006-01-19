@@ -26,7 +26,7 @@ import org.jgap.data.config.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The probability for selecting the best chromosome in a tournament.
@@ -173,7 +173,7 @@ public class TournamentSelector
 
   /**
    *
-   * @param a_chromosomeToAdd Chromosome
+   * @param a_chromosomeToAdd the Chromosome to add
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -234,20 +234,8 @@ public class TournamentSelector
       m_probability = Double.parseDouble(a_name);
     }
     else {
-      System.err.println("TournamentSelector:Unknown property " + a_name);
+      super.setConfigProperty(a_name, a_value);
     }
   }
 
-  /**
-   * Pass the name and values of a property to be set.
-   * @param name The name of the property.
-   * @param values The different values of the property.
-   *
-   * @author Siddhartha Azad.
-   * @since 2.0
-   * */
-  public void setConfigMultiProperty(String name, ArrayList values)
-      throws ConfigException, InvalidConfigurationException {
-    // currently no multi-properties defined for TournamentSelectors
-  }
 }

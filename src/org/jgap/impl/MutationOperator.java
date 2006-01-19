@@ -31,22 +31,23 @@ import org.jgap.data.config.*;
  * @since 1.0
  */
 public class MutationOperator
+    extends BaseConfigurable
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
-   * the denominator in the 1 / X ratio. For example, a value of 1000 would
+   * the denominator in the 1 / X ratio. For example, X = 1000 would
    * mean that, on average, 1 / 1000 genes would be mutated. A value of zero
-   * disabled mutation entirely.
+   * disables mutation entirely.
    */
   private int m_mutationRate;
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
-   * null the value of m_mutationRate will be used.
-   * Replaces the previously used boolean m_dynamicMutationRate
+   * null the value of m_mutationRate will be used. Replaces the previously used
+   * boolean m_dynamicMutationRate.
    */
   private IUniversalRateCalculator m_mutationRateCalc;
 
@@ -269,22 +270,8 @@ public class MutationOperator
       m_mutationRate = Integer.parseInt(a_value);
     }
     else {
-      System.out.println("MutationOperator:Unknown property " + a_name);
+      super.setConfigProperty(a_name, a_value);
     }
-  }
-
-  /**
-   * Pass the name and values of a property to be set.
-   * @param a_name the name of the property
-   * @param a_values the different values of the property
-   *
-   * @author Siddhartha Azad
-   * @since 2.4
-   * */
-  public void setConfigMultiProperty(final String a_name,
-                                     final ArrayList a_values)
-      throws ConfigException, InvalidConfigurationException {
-    // no multi-properties defined for a MutationOperator yet
   }
 
   /**
