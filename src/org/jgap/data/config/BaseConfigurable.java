@@ -21,11 +21,11 @@ import org.jgap.*;
 public abstract class BaseConfigurable
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setConfigProperty(String a_name, String a_value)
       throws ConfigException, InvalidConfigurationException {
-    throw new ConfigException("Unknown multi property: " + a_name);
+    throw new ConfigException("Unknown property: " + a_name);
   }
 
   public void setConfigMultiProperty(String a_name, ArrayList a_values)
