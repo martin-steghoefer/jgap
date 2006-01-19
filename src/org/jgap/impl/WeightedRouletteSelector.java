@@ -12,7 +12,6 @@ package org.jgap.impl;
 import java.math.*;
 import java.util.*;
 import org.jgap.*;
-import org.jgap.data.config.*;
 
 /**
  * A basic implementation of NaturalSelector that models a roulette wheel.
@@ -31,7 +30,7 @@ import org.jgap.data.config.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
