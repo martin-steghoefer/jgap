@@ -12,18 +12,16 @@ package org.jgap.data;
 import java.util.*;
 
 /**
- * Element owning of a tag name and holding attributes.
- * <p>
+ * Element owning a tag name and holding attributes.
  * Used by the DataTreeBuilder.
  *
  * @author Klaus Meffert
  * @since 2.0
  */
-
 public class DataElement
     implements IDataElement {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private IDataElementList m_elements;
 

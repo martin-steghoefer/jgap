@@ -20,38 +20,43 @@ import org.jgap.*;
  * */
 public interface Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Return a ConfigurationHandler specific to the concrete class implementing
    * this interface.
    * @return a concrete ConfigurationHandler
+   * @throws ConfigException
    *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
-  ConfigurationHandler getConfigurationHandler() throws ConfigException;
+   */
+  ConfigurationHandler getConfigurationHandler()
+      throws ConfigException;
 
   /**
    * Pass the name and value of a property to be set.
-   * @param name The name of the property.
-   * @param value The value of the property.
+   * @param a_name the name of the property
+   * @param a_value the value of the property
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
    *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
-
-  void setConfigProperty(String name, String value)
+   */
+  void setConfigProperty(String a_name, String a_value)
       throws ConfigException, InvalidConfigurationException;
 
   /**
    * Pass the name and values of a property to be set.
-   * @param name The name of the property.
-   * @param values The different values of the property.
+   * @param a_name the name of the property
+   * @param a_values the different values of the property
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
    *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
-  void setConfigMultiProperty(String name, ArrayList values)
+   */
+  void setConfigMultiProperty(String a_name, ArrayList a_values)
       throws ConfigException, InvalidConfigurationException;
 }

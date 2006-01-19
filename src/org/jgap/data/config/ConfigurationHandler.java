@@ -13,7 +13,7 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- * The interface for the GUI to retrieve the information about what a#
+ * The interface for the GUI to retrieve the information about what a
  * Configurable looks like and how it must be rendered.
  *
  * @author Siddhartha Azad
@@ -21,20 +21,19 @@ import org.jgap.*;
  * */
 public interface ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
    * file.
-   * @return name of this config. Object (name of what you are configuring)
-   * */
+   * @return name of this config Object (name of what you are configuring)
+   */
   String getName();
 
   /**
    * Return the information to generate the GUI for configuring this class.
-   * @return A list of ConfigProperty objects.
-   * */
-
+   * @return a list of ConfigProperty objects
+   */
   ArrayList getConfigProperties();
 
   /**
@@ -43,8 +42,7 @@ public interface ConfigurationHandler {
    *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
-
+   */
   void readConfig()
       throws ConfigException, InvalidConfigurationException;
 
@@ -55,7 +53,7 @@ public interface ConfigurationHandler {
    *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   String getNS();
 
   /**

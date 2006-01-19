@@ -36,10 +36,10 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 1.0
  */
-public class Configuration
+public class Configuration extends BaseConfigurable
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -1085,6 +1085,9 @@ public class Configuration
         throw new ConfigException("Value for property " + a_name + " must be " +
                                   "an Integer, value is " + a_value);
       }
+    }
+    else {
+      super.setConfigProperty(a_name, a_value);
     }
   }
 

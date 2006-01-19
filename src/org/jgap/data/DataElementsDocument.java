@@ -19,9 +19,10 @@ package org.jgap.data;
 public class DataElementsDocument
     implements IDataCreators {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private IDataElementList m_tree;
+
 
   public void setTree(final IDataElementList a_tree) {
     m_tree = a_tree;

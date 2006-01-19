@@ -23,7 +23,7 @@ import org.jgap.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -101,7 +101,6 @@ public class RootConfigurationHandler
       conEx.printStackTrace();
       System.err.println("Error while configuring " + NATURAL_SELS);
     }
-    // go through all natural selectors and configure them
   }
 
   /**
