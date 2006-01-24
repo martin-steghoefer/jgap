@@ -214,13 +214,20 @@ name should begin with a capital letter!</p>
 
 <h4 class="subHeader">Since 2.6: Configuration must be set before calling
 Gene.setAllele or applyMutation</h4>
-<p>As setAllele and applyMutation (and possibly other methods) in Gene classes may call mapToValueWithinBounds, which in turn
-accesses the configuration via Genotype.getConfiguration, the configuration must
-be set before the call to setAllele, applyMutation and possibly other methods. However, this should be good
+<p>As <font face="Courier New"> setAllele</font> and <font face="Courier New"> applyMutation</font> (and possibly other methods) in Gene classes may call
+<font face="Courier New">mapToValueWithinBounds</font>, which in turn
+accesses the configuration via <font face="Courier New">Genotype.getConfiguration</font>, the configuration must
+be set before the call to <font face="Courier New">setAllele</font>, <font face="Courier New"> applyMutation</font> and possibly other methods. However, this should be good
 practice!&nbsp;</p>
 
 <h4 class="subHeader">Since 2.6: Several fields private instead of protected</h4>
-<p>These fields are <a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/CrossoverOperator.html"> CrossoverOperator</a>.m_crossoverRate,
+<p>These fields are <a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Genotype.html">Genotype</a>.m_population,
+<a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Chromosome.html">Chromosome</a>.m_genes,
+<a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Genotype.html">Genotype</a>.m_activeConfiguration,
+<a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/CrossoverOperator.html">CrossoverOperator</a>.m_crossoverRate,
+<a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/MutationOperator.html">MutationOperator</a>.m_mutationRate,
+<a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/IntegerGene.html">IntegerGene</a>.m_upperBounds,
+<a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/IntegerGene.html">IntegerGene</a>.m_lowerBounds,
 <a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/DoubleGene.html">DoubleGene</a>.m_upperBounds and
 <a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/DoubleGene.html">DoubleGene</a>.m_lowerBounds.
 Use setters resp. constructors instead!</p>
@@ -231,9 +238,19 @@ Configuration to determine the class of new Chromosomes to be created. The
 method with signature (Configuration, Class) has been removed for that!</p>
 
 <h4 class="subHeader">Since 2.6: Gene's new method newGeneInternal()</h4>
-<p>Now the newGene() method is a template method in BaseGene calling protected
-method newGeneInternal. The latter needs to be implemented in all offsprings of
-BaseGene.</p>
+<p>Now the <font face="Courier New"> newGene()</font> method is a template method in
+<font face="Courier New"> BaseGene</font> calling protected
+method <font face="Courier New">newGeneInternal</font>. The latter needs to be implemented in all offsprings of
+<font face="Courier New">BaseGene</font>.</p>
+
+<h4 class="subHeader">Since 2.6: Interface IGeneConstraintChecker changed</h4>
+<p>For method <font face="Courier New">verify</font> there are two new
+paramaters: <font face="Courier New">a_chromosome</font> and <font face="Courier New">a_geneIndex</font>.</p>
+
+<h4 class="subHeader">Since 2.6: Removed method getNoFitnessValue() in class
+FitnessFunction</h4>
+<p>Use the constant <font face="Courier New">FitnessFunction.NO_FITNESS_VALUE</font>
+instead.</p>
 
 <h2 class="docTitle">Final remarks</h2>
 
