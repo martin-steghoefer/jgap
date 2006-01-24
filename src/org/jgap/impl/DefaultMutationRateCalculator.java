@@ -21,7 +21,7 @@ public class DefaultMutationRateCalculator
     implements IUniversalRateCalculator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Calculates the mutation rate
@@ -47,7 +47,7 @@ public class DefaultMutationRateCalculator
    * @author Chris Knowles
    * @since 2.0
    */
-  public boolean toBePermutated() {
+  public boolean toBePermutated(IChromosome a_chrom, int a_geneIndex) {
     RandomGenerator generator
         = Genotype.getConfiguration().getRandomGenerator();
     return (generator.nextInt(calculateCurrentRate()) == 0);

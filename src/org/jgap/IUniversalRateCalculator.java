@@ -19,7 +19,7 @@ import java.io.*;
  */
 public interface IUniversalRateCalculator extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Calculates the required dynamic rate.
@@ -37,5 +37,5 @@ public interface IUniversalRateCalculator extends Serializable {
    * @author Chris Knowles
    * @since 2.0
    */
-  boolean toBePermutated();
+  boolean toBePermutated(IChromosome a_chrom, int a_geneIndex);
 }
