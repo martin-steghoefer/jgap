@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1111,6 +1111,20 @@ public class GenotypeTest
     }
     public Object clone() {
       return null;
+    }
+
+    public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker)
+        throws InvalidConfigurationException {
+    }
+
+    public void setApplicationData(Object a_newData) {
+    }
+
+    public Object getApplicationData() {
+      return null;
+    }
+
+    public void cleanup() {
     }
   }
 }

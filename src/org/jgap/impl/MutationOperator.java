@@ -34,7 +34,7 @@ public class MutationOperator
     extends BaseConfigurable
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -140,7 +140,7 @@ public class MutationOperator
           // If it's a dynamic mutation rate then let the calculator decide
           // whether the current gene should be mutated.
           // --------------------------------------------------------------
-          mutate = m_mutationRateCalc.toBePermutated();
+          mutate = m_mutationRateCalc.toBePermutated(chrom, j);
         }
         else {
           // Non-dynamic, so just mutate based on the the current rate.
@@ -170,8 +170,7 @@ public class MutationOperator
           if (copyOfChromosome == null) {
             // ...take a copy of it...
             // -----------------------
-            copyOfChromosome
-                = (Chromosome) chrom.clone();
+            copyOfChromosome = (IChromosome) chrom.clone();
             // ...add it to the candidate pool...
             // ----------------------------------
             a_candidateChromosomes.add(copyOfChromosome);

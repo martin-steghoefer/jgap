@@ -17,7 +17,7 @@ package org.jgap;
  */
 public interface IChromosomePool {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Attempts to acquire an Chromosome instance from the chromosome pool.
@@ -28,7 +28,7 @@ public interface IChromosomePool {
    * @author Neil Rostan
    * @since 2.6 (since 1.0 in ChromosomePool)
    */
-  Chromosome acquireChromosome();
+  IChromosome acquireChromosome();
 
   /**
    * Releases a Chromosome to the pool. It's not required that the Chromosome
@@ -41,5 +41,5 @@ public interface IChromosomePool {
    * @author Neil Rostan
    * @since 2.6 (since 1.0 in ChromosomePool)
    */
-  void releaseChromosome(Chromosome a_chromosome);
+  void releaseChromosome(IChromosome a_chromosome);
 }

@@ -47,7 +47,7 @@ public class ChromosomeForTest
     m_isCloned = false;
   }
 
-  public Chromosome randomInitialChromosome2()
+  public IChromosome randomInitialChromosome2()
       throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
@@ -65,7 +65,7 @@ public class ChromosomeForTest
     // ------------------------------------------------------------
     IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
-      Chromosome randomChromosome = pool.acquireChromosome();
+      IChromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {
         Gene[] genes = randomChromosome.getGenes();
         RandomGenerator generator = Genotype.getConfiguration().
@@ -73,7 +73,8 @@ public class ChromosomeForTest
         for (int i = 0; i < genes.length; i++) {
           genes[i].setToRandomValue(generator);
         }
-        randomChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+        randomChromosome.setFitnessValueDirectly(FitnessFunction.
+                                                 NO_FITNESS_VALUE);
         return randomChromosome;
       }
     }

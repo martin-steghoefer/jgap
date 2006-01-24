@@ -59,7 +59,7 @@ package org.jgap;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.69 $";
+  private final static String CVS_REVISION = "$Revision: 1.70 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -264,7 +264,7 @@ public class Chromosome
           "The active Configuration object must be set on this " +
           "Chromosome prior to invocation of the clone() method.");
     }
-    Chromosome copy = null;
+    IChromosome copy = null;
     // Now, first see if we can pull a Chromosome from the pool and just
     // set its gene values (alleles) appropriately.
     // ------------------------------------------------------------
@@ -526,7 +526,7 @@ public class Chromosome
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static Chromosome randomInitialChromosome()
+  public static IChromosome randomInitialChromosome()
       throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
@@ -544,7 +544,7 @@ public class Chromosome
     // -------------------------------------------------------------
     IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
     if (pool != null) {
-      Chromosome randomChromosome = pool.acquireChromosome();
+      IChromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {
         Gene[] genes = randomChromosome.getGenes();
         RandomGenerator generator = Genotype.getConfiguration().
@@ -553,7 +553,8 @@ public class Chromosome
           genes[i].setToRandomValue(generator);
           /**@todo what about Gene's energy?*/
         }
-        randomChromosome.m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
+        randomChromosome.setFitnessValueDirectly(FitnessFunction.
+                                                 NO_FITNESS_VALUE);
         return randomChromosome;
       }
     }
@@ -662,8 +663,8 @@ public class Chromosome
       return 1;
     }
     int size = size();
-    Chromosome otherChromosome = (Chromosome) other;
-    Gene[] otherGenes = otherChromosome.m_genes;
+    IChromosome otherChromosome = (IChromosome) other;
+    Gene[] otherGenes = otherChromosome.getGenes();
     // If the other Chromosome doesn't have the same number of genes,
     // then whichever has more is the "greater" Chromosome.
     // --------------------------------------------------------------

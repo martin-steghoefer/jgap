@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1103,7 +1103,7 @@ public class ChromosomeTest
     conf.setChromosomePool(new ChromosomePool());
     conf.setRandomGenerator(new RandomGeneratorForTest(true));
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    IChromosome chrom = Chromosome.randomInitialChromosome();
     //The BooleanGene comes from the sample chrom set in ConfigurationForTest
     assertTrue( ( (BooleanGene) chrom.getGene(0)).booleanValue());
     try {
@@ -1127,7 +1127,7 @@ public class ChromosomeTest
     conf.setChromosomePool(new ChromosomePool());
     conf.setRandomGenerator(new RandomGeneratorForTest(false));
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    IChromosome chrom = Chromosome.randomInitialChromosome();
     //The BooleanGene comes from the sample chrom set in ConfigurationForTest
     assertFalse( ( (BooleanGene) chrom.getGene(0)).booleanValue());
   }
@@ -1145,11 +1145,11 @@ public class ChromosomeTest
     conf.setChromosomePool(new ChromosomePool());
     conf.setRandomGenerator(new RandomGeneratorForTest(true));
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    IChromosome chrom = Chromosome.randomInitialChromosome();
     chrom.cleanup(); //fill the pool
     chrom = Chromosome.randomInitialChromosome();
-    assertEquals(FitnessFunction.NO_FITNESS_VALUE, chrom.m_fitnessValue,
-                 DELTA);
+    assertEquals(FitnessFunction.NO_FITNESS_VALUE,
+                 chrom.getFitnessValueDirectly(), DELTA);
     assertTrue(((BooleanGene)chrom.getGene(0)).booleanValue());
   }
 
@@ -1163,7 +1163,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    IChromosome chrom = Chromosome.randomInitialChromosome();
     chrom.cleanup();
   }
 
@@ -1177,7 +1177,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    IChromosome chrom = Chromosome.randomInitialChromosome();
     Genotype.setConfiguration(null);
     try {
       chrom.cleanup();
@@ -1199,7 +1199,7 @@ public class ChromosomeTest
     Configuration conf = new ConfigurationForTest();
     conf.setChromosomePool(new ChromosomePool());
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    IChromosome chrom = Chromosome.randomInitialChromosome();
     chrom.cleanup();
   }
 
@@ -1212,7 +1212,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
-    Chromosome chrom = Chromosome.randomInitialChromosome();
+    Chromosome chrom = (Chromosome)Chromosome.randomInitialChromosome();
     assertFalse(chrom.isCompareApplicationData());
     chrom.setCompareApplicationData(true);
     assertTrue(chrom.isCompareApplicationData());

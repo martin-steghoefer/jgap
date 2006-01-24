@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     implements GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -149,8 +149,8 @@ public class AveragingCrossoverOperator
     for (int i = 0; i < numCrossovers; i++) {
       index1 = generator.nextInt(size);
       index2 = generator.nextInt(size);
-      Chromosome firstMate = (Chromosome) a_population.getChromosome(index1);
-      Chromosome secondMate = (Chromosome) a_population.getChromosome(index2);
+      IChromosome firstMate = (IChromosome) a_population.getChromosome(index1);
+      IChromosome secondMate = (IChromosome) a_population.getChromosome(index2);
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = getLocus(m_crossoverGenerator, i, firstGenes.length);
@@ -160,20 +160,20 @@ public class AveragingCrossoverOperator
       Gene gene2;
       Object firstAllele;
       for (int j = locus; j < firstGenes.length; j++) {
-        //Make a distinction to CompositeGene for the first gene
-        if (firstGenes[j] instanceof CompositeGene) {
+        //Make a distinction to ICompositeGene for the first gene
+        if (firstGenes[j] instanceof ICompositeGene) {
           //randomly determine gene to be considered
           index1 = generator.nextInt(firstGenes[j].size());
-          gene1 = ( (CompositeGene) firstGenes[j]).geneAt(index1);
+          gene1 = ( (ICompositeGene) firstGenes[j]).geneAt(index1);
         }
         else {
           gene1 = firstGenes[j];
         }
-        //Make a distinction to CompositeGene fot the second gene
+        //Make a distinction to ICompositeGene fot the second gene
         if (secondGenes[j] instanceof CompositeGene) {
           //randomly determine gene to be considered
           index2 = generator.nextInt(secondGenes[j].size());
-          gene2 = ( (CompositeGene) secondGenes[j]).geneAt(index2);
+          gene2 = ( (ICompositeGene) secondGenes[j]).geneAt(index2);
         }
         else {
           gene2 = secondGenes[j];

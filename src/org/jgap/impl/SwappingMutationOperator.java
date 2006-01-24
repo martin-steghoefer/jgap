@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private int m_startOffset = 1;
 
@@ -84,9 +84,9 @@ public class SwappingMutationOperator
     // ----------------------------------------------------------------
     int size = a_population.size();
     for (int i = 0; i < size; i++) {
-      Chromosome x = (Chromosome) a_population.getChromosome(i);
+      IChromosome x = (IChromosome) a_population.getChromosome(i);
       // This returns null if not mutated:
-      Chromosome xm = operate(x, currentRate, generator);
+      IChromosome xm = operate(x, currentRate, generator);
       if (xm != null) {
         a_candidateChromosomes.add(xm);
       }
@@ -103,16 +103,16 @@ public class SwappingMutationOperator
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  protected Chromosome operate(final Chromosome a_x, final int a_rate,
-                               final RandomGenerator a_generator) {
-    Chromosome chromosome = null;
+  protected IChromosome operate(final IChromosome a_x, final int a_rate,
+                                final RandomGenerator a_generator) {
+    IChromosome chromosome = null;
     // ----------------------------------------
     for (int j = m_startOffset; j < a_x.size(); j++) {
       // Ensure probability of 1/currentRate for applying mutation.
       // ----------------------------------------------------------
       if (a_generator.nextInt(a_rate) == 0) {
         if (chromosome == null) {
-          chromosome = (Chromosome) a_x.clone();
+          chromosome = (IChromosome) a_x.clone();
         }
         Gene[] genes = chromosome.getGenes();
         Gene[] mutated = operate(a_generator, j, genes);

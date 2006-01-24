@@ -223,7 +223,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /*
    * Replace this member by the Configuration as
@@ -279,7 +279,7 @@ public class BulkFitnessOffsetRemover
     Iterator itChromosomes = a_chromosomes.iterator();
     IChromosome chromosome;
     while (itChromosomes.hasNext()) {
-      chromosome = (Chromosome) itChromosomes.next();
+      chromosome = (IChromosome) itChromosomes.next();
       /*
        * This is a workaround:
        * We have to check, wethter a Chromosome has
@@ -294,7 +294,7 @@ public class BulkFitnessOffsetRemover
        * If a redesign of that method is made, this has to be changed
        * here too.. .
        */
-      curFitness = chromosome.getFitnessValue();
+      curFitness = chromosome.getFitnessValueDirectly();
       if (curFitness < 0) {
         // OK, get it from our fitness function.
         curFitness = m_ff.getFitnessValue(chromosome);
