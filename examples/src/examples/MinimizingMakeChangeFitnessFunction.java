@@ -21,11 +21,11 @@ import org.jgap.*;
 public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private final int m_targetAmount;
 
-  public static final int MAX_BOUND = 1000;
+  public static final int MAX_BOUND = 4000;
 
   private static final double ZERO_DIFFERENCE_FITNESS = Math.sqrt(MAX_BOUND);
 
@@ -71,12 +71,12 @@ public class MinimizingMakeChangeFitnessFunction
     int totalCoins = getTotalNumberOfCoins(a_subject);
     int changeDifference = Math.abs(m_targetAmount - changeAmount);
     double fitness;
-   if (defaultComparation) {
-     fitness = 0.0d;
-   }
-   else {
-     fitness = MAX_BOUND;
-   }
+    if (defaultComparation) {
+      fitness = 0.0d;
+    }
+    else {
+      fitness = MAX_BOUND/2;
+    }
     // Step 1: Determine distance of amount represented by solution from
     // the target amount. If the change difference is greater than zero we
     // will divide one by the difference in change between the
@@ -88,10 +88,10 @@ public class MinimizingMakeChangeFitnessFunction
     // the correct amount and we assign a higher fitness value.
     // ---------------------------------------------------------------------
     if (defaultComparation) {
-      fitness += changeDifferenceBonus(MAX_BOUND, changeDifference);
+      fitness += changeDifferenceBonus(MAX_BOUND/2, changeDifference);
     }
     else {
-      fitness -= changeDifferenceBonus(MAX_BOUND, changeDifference);
+      fitness -= changeDifferenceBonus(MAX_BOUND/2, changeDifference);
     }
     // Step 2: We divide the fitness value by a penalty based on the number of
     // coins. The higher the number of coins the higher the penalty and the
@@ -100,10 +100,10 @@ public class MinimizingMakeChangeFitnessFunction
     // the resulting fitness value.
     // -----------------------------------------------------------------------
     if (defaultComparation) {
-      fitness -= computeCoinNumberPenalty(MAX_BOUND, totalCoins);
+      fitness -= computeCoinNumberPenalty(MAX_BOUND/2, totalCoins);
     }
     else {
-      fitness += computeCoinNumberPenalty(MAX_BOUND, totalCoins);
+      fitness += computeCoinNumberPenalty(MAX_BOUND/2, totalCoins);
     }
     // Make sure fitness value is always positive.
     // -------------------------------------------
@@ -127,7 +127,12 @@ public class MinimizingMakeChangeFitnessFunction
     else {
       // we arbitrarily work with half of the maximum fitness as basis for non-
       // optimal solutions (concerning change difference)
-      return a_maxFitness / 2 - a_changeDifference * a_changeDifference;
+      if (a_changeDifference * a_changeDifference >= a_maxFitness / 2) {
+        return 0.0d;
+      }
+      else {
+        return a_maxFitness / 2 - a_changeDifference * a_changeDifference;
+      }
     }
   }
 
