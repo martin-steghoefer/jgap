@@ -29,7 +29,7 @@ import org.jgap.audit.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -88,6 +88,10 @@ public class CoinsExample {
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
     conf.setPopulationSize(50);
+    // Added here for demonstrating purposes is a permuting configuration.
+    // It allows for evaluating which configuration could work best for
+    // the given problem.
+    // -------------------------------------------------------------------
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     pconf.addGeneticOperatorSlot(new CrossoverOperator());
     pconf.addGeneticOperatorSlot(new MutationOperator());
