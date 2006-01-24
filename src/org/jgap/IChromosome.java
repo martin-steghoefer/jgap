@@ -20,7 +20,7 @@ import java.io.*;
 public interface IChromosome
     extends Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Constants for toString()
@@ -55,4 +55,11 @@ public interface IChromosome
   boolean isSelectedForNextGeneration();
 
   Object clone();
+
+  void setConstraintChecker(IGeneConstraintChecker a_constraintChecker)
+      throws InvalidConfigurationException;
+
+  void setApplicationData(Object a_newData);
+
+  Object getApplicationData();
 }
