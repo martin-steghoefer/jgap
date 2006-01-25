@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -233,7 +233,7 @@ public class DoubleGene
    * @since 1.1
    */
   protected int compareToNative(Object o1, Object o2) {
-    return ( (Double) o1).compareTo(o2);
+    return ( (Double) o1).compareTo( (Double) o2);
   }
 
   /**
