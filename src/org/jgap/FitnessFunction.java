@@ -13,10 +13,10 @@ package org.jgap;
  * Fitness functions are used to determine how optimal a particular solution
  * is relative to other solutions. This abstract class should be extended and
  * the evaluate() method implemented. The fitness function is given a Chromosome
- * to evaluate and should return a positive integer that reflects its fitness
+ * to evaluate and should return a positive double that reflects its fitness
  * value. The higher the value, the more fit the Chromosome. The actual range
  * of fitness values isn't important (other than the fact that they must be
- * positive integers): it's the relative difference as a percentage that
+ * positive doubles): it's the relative difference as a percentage that
  * tends to determine the success or failure of a Chromosome. So in other words,
  * two Chromosomes with respective fitness values of 1 and 100 have the same
  * relative fitness to each other as two Chromosomes with respective fitness
@@ -32,7 +32,7 @@ package org.jgap;
 public abstract class FitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
