@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.31 $";
+  private static final String CVS_REVISION = "$Revision: 1.32 $";
 
   public void setUp() {
     super.setUp();
@@ -504,8 +504,8 @@ public class DoubleGeneTest
     gene1.setAllele(new Double(5.8d));
     Gene gene2 = new DoubleGene(5.3d, 6.7d);
     gene2.setAllele(new Double(5.9d));
-    assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
-                 gene1.compareTo(gene2));
+    assertEquals( ( (Double) gene1.getAllele()).compareTo( (Double) gene2.
+        getAllele()), gene1.compareTo(gene2));
   }
 
   /**
@@ -516,8 +516,8 @@ public class DoubleGeneTest
     gene1.setAllele(new Double(5.8d));
     Gene gene2 = new DoubleGene(5.3d, 6.7d);
     gene2.setAllele(new Double(5.8d));
-    assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
-                 gene1.compareTo(gene2));
+    assertEquals( ( (Double) gene1.getAllele()).compareTo( (Double) gene2.
+        getAllele()), gene1.compareTo(gene2));
   }
 
   /**
@@ -528,8 +528,8 @@ public class DoubleGeneTest
     gene1.setAllele(new Double(5.9d));
     Gene gene2 = new DoubleGene(5.3d, 6.7d);
     gene2.setAllele(new Double(5.8d));
-    assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
-                 gene1.compareTo(gene2));
+    assertEquals( ( (Double) gene1.getAllele()).compareTo( (Double) gene2.
+        getAllele()), gene1.compareTo(gene2));
   }
 
   /**
@@ -540,8 +540,8 @@ public class DoubleGeneTest
     gene1.setAllele(new Double(5.9d));
     Gene gene2 = new DoubleGene(5.3d, 6.7d);
     gene2.setAllele(new Double(5.4d));
-    assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
-                 gene1.compareTo(gene2));
+    assertEquals( ( (Double) gene1.getAllele()).compareTo( (Double) gene2.
+        getAllele()), gene1.compareTo(gene2));
   }
 
   /**
@@ -552,8 +552,8 @@ public class DoubleGeneTest
     gene1.setAllele(new Double(0.0d));
     Gene gene2 = new DoubleGene( -5.3d, 6.7d);
     gene2.setAllele(new Double( -0.0d));
-    assertEquals( ( (Double) gene1.getAllele()).compareTo(gene2.getAllele()),
-                 gene1.compareTo(gene2));
+    assertEquals( ( (Double) gene1.getAllele()).compareTo( (Double) gene2.
+        getAllele()), gene1.compareTo(gene2));
   }
 
   /**

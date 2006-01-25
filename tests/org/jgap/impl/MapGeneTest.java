@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -403,7 +403,7 @@ public class MapGeneTest
     gene1.setAllele(new Integer(58));
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer(59));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -412,7 +412,7 @@ public class MapGeneTest
     gene1.setAllele(new Integer(58));
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer(58));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -421,7 +421,7 @@ public class MapGeneTest
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer(58));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -432,7 +432,7 @@ public class MapGeneTest
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer( -59));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -443,7 +443,7 @@ public class MapGeneTest
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene(53, 67);
     gene2.setAllele(new Integer( -0));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo(gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
