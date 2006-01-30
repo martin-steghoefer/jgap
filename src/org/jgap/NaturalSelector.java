@@ -13,7 +13,7 @@ import java.util.*;
 import org.jgap.data.config.*;
 
 /**
- * Abstract implementation of interface INaturalSelector.
+ * Abstract base implementation of interface INaturalSelector.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -23,7 +23,7 @@ public abstract class NaturalSelector
     extends BaseConfigurable
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
@@ -47,12 +47,12 @@ public abstract class NaturalSelector
     public int compare(Object first, Object second) {
       IChromosome chrom1 = (IChromosome) first;
       IChromosome chrom2 = (IChromosome) second;
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
-          getFitnessValue(), chrom1.getFitnessValue())) {
+      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2,
+          chrom1)) {
         return 1;
       }
       else if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
-          chrom1.getFitnessValue(), chrom2.getFitnessValue())) {
+          chrom1, chrom2)) {
         return -1;
       }
       else {
