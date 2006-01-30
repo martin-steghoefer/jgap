@@ -16,6 +16,8 @@
 * Introduced hook method newGeneInternal in BaseGene
 * Introduced base class BaseConfigurable for interface
   Configurable
+* Added example for multiobjectives
+* Enhanced interface FitnessEvaluator
 * Added equals and compareTo to CrossoverOperator
 * Added interface org.jgap.ICompsiteGene for
   genes that may contain other genes
