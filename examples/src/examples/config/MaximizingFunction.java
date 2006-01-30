@@ -22,17 +22,17 @@ import org.jgap.impl.*;
  * demonstration of the working of JGAP with a config file. Reasonable bounds
  * have been set up for the values of a, b and c.
  *
- * @author Siddhartha Azad.
- * @since 2.
+ * @author Siddhartha Azad
+ * @since 2.3
  * */
 public class MaximizingFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
-   * Constructor
-   * @author Siddhartha Azad.
-   * @sincd 2.3
+   * Default Constructor
+   * @author Siddhartha Azad
+   * @since 2.3
    * */
   public MaximizingFunction() {
   }
@@ -40,8 +40,8 @@ public class MaximizingFunction {
   /**
    * Starting the example
    * @param args not used
-   * @author Siddhartha Azad.
-   * @sincd 2.3
+   * @author Siddhartha Azad
+   * @since 2.3
    */
   public static void main(String args[]) {
     Configuration config;
