@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -93,7 +93,7 @@ public class BestChromosomesSelector
   }
 
   /**
-   * Select a given number of Chromosomes from the pool that will move on
+   * Selects a given number of Chromosomes from the pool that will move on
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
    *
@@ -162,7 +162,7 @@ public class BestChromosomesSelector
   }
 
   /**
-   * Empty out the working pool of Chromosomes.
+   * Empties out the working pool of Chromosomes.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -189,7 +189,7 @@ public class BestChromosomesSelector
   }
 
   /**
-   * @return TRUE: doublette chromosomes allowed to be added to the selector
+   * @return true: doublette chromosomes allowed to be added to the selector
    *
    * @author Klaus Meffert
    * @since 2.0
