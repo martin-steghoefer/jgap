@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 2.6
  */
-public class MinimizingMakeChange {
+public class MultiObjectiveExample {
   /** String containing the CVS revision. Read out via reflection!*/
   private final static String CVS_REVISION = "$Revision: 1.1 $";
 
@@ -32,21 +32,27 @@ public class MinimizingMakeChange {
   private static final int MAX_ALLOWED_EVOLUTIONS = 200;
 
   /**
-   * Executes the genetic algorithm to determine the minimum number of
-   * coins necessary to make up the given target amount of change. The
-   * solution will then be written to System.out.
+   * Executes the genetic algorithm.
    *
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void makeChangeForAmount()
+  public void execute()
       throws Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
+    // Add BestChromosomesSelector with doublettes allowed.
+    // ----------------------------------------------------
+    conf.getNaturalSelectors(true).clear();
+    BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
+        0.95d);
+    bestChromsSelector.setDoubletteChromosomesAllowed(true);
+    conf.addNaturalSelector(bestChromsSelector, true);
+
     conf.setFitnessEvaluator(new MOFitnessEvaluator());
     conf.setPreservFittestIndividual(false);
     conf.setKeepPopulationSizeConstant(false);
@@ -142,8 +148,8 @@ public class MinimizingMakeChange {
    */
   public static void main(String[] args)
       throws Exception {
-    MinimizingMakeChange instance = new MinimizingMakeChange();
-    instance.makeChangeForAmount();
+    MultiObjectiveExample instance = new MultiObjectiveExample();
+    instance.execute();
   }
 
   /**

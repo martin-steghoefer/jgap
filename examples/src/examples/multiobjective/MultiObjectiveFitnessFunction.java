@@ -19,7 +19,7 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 2.6
  */
-public class MinimizingMakeChangeFitnessFunction
+public class MultiObjectiveFitnessFunction
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
   private final static String CVS_REVISION = "$Revision: 1.1 $";
