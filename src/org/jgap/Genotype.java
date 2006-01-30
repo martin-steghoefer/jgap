@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.71 $";
+  private final static String CVS_REVISION = "$Revision: 1.72 $";
 
   /**
    * The current active Configuration instance.
@@ -229,7 +229,7 @@ public class Genotype
     if (m_activeConfiguration == null) {
       throw new IllegalStateException(
           "The active Configuration object must be set on this " +
-          "Genotype prior to invocation of other operations.");
+          "Genotype prior to evolution.");
     }
 
     // Adjust population size to configured size (if wanted).
@@ -305,7 +305,7 @@ public class Genotype
       // Determine the fittest chromosome in the population.
       // ---------------------------------------------------
       IChromosome fittest = null;
-      fittest = getPopulation().determineFittestChromosome();
+      fittest = getFittestChromosome();
 
       if (!getPopulation().contains(fittest)) {
         // Re-add fittest chromosome to current population.
