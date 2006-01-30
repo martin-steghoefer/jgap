@@ -1,8 +1,8 @@
 /**
  * JGAP offers a dual license model(see below for specific license information):
- * +The LGPL may be used anytime.
- * +The MPL may be used if at least $20 have been donated to the JGAP project
- *  thru PayPal (see http://www.sourceforge.net/projects/jgap).
+ * + The LGPL may be used anytime.
+ * + The MPL may be used if at least $20 have been donated to the JGAP project
+ *   thru PayPal (see http://www.sourceforge.net/projects/jgap).
  *
  * Specific license information (MPL and LGPL)
  * -------------------------------------------
@@ -42,6 +42,8 @@
  */
 package org.jgap;
 
+import java.util.*;
+
 /**
  * Chromosomes represent potential solutions and consist of a fixed-length
  * collection of genes. Each gene represents a discrete part of the solution.
@@ -59,7 +61,7 @@ package org.jgap;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.70 $";
+  private final static String CVS_REVISION = "$Revision: 1.71 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -68,6 +70,14 @@ public class Chromosome
    * from allowing it to be set and retrieved.
    */
   private Object m_applicationData;
+
+  /**
+   * Holding multiobjective values
+   * @since 2.6
+   * @todo move to new subclass of Chromosome (and introduce new interface
+   * IMultiObjective with that)
+   */
+  private List m_multiObjective;
 
   /**
    * The array of Genes contained in this Chromosome.
@@ -479,13 +489,12 @@ public class Chromosome
     StringBuffer representation = new StringBuffer();
     representation.append(S_SIZE + ":" + size());
     // Don't use getFitnessValue() here as it would then be initialized anyway!
-    // Also see bug
     // ------------------------------------------------------------------------
     representation.append(", " + S_FITNESS_VALUE + ":" + m_fitnessValue);
     representation.append(", " + S_ALLELES + ":");
     representation.append("[");
-    // Append the representations of each of the gene Alleles.
-    // -------------------------------------------------------
+    // Append the representations of each of the genes' alleles.
+    // ---------------------------------------------------------
     for (int i = 0; i < m_genes.length; i++) {
       if (i > 0) {
         representation.append(", ");
@@ -935,4 +944,16 @@ public class Chromosome
   }
   // -----------------------------------
   // Implementations of IInitializer End
+
+  public void setMultiObjectives(List a_values) {
+    if (m_multiObjective == null) {
+      m_multiObjective = new Vector();
+    }
+    m_multiObjective.clear();
+    m_multiObjective.addAll(a_values);
+  }
+
+  public List getMultiObjectives() {
+    return m_multiObjective;
+  }
 }
