@@ -19,7 +19,7 @@ The Initial Developer of the Original Code is Neil Rotstan. Portions created by
 the Initial Developer are Copyright (C) 2002- 2003 by Neil Rotstan.
 All Rights Reserved.
 Co-Developer of the code is Klaus Meffert. Portions created by the Co-Developer
-are Copyright (C) 2003-2005 by Klaus Meffert. All Rights Reserved.
+are Copyright (C) 2003-2006 by Klaus Meffert. All Rights Reserved.
 
 Contributor(s): all the names of the contributors are added in the source code
 where applicable.

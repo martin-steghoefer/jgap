@@ -19,7 +19,7 @@
  * by the Initial Developer are Copyright (C) 2002- 2003 by Neil Rotstan.
  * All Rights Reserved.
  * Co-developer of the code is Klaus Meffert. Portions created by the co-
- * developer are Copyright (C) 2003-2005 by Klaus Meffert. All Rights Reserved.
+ * developer are Copyright (C) 2003-2006 by Klaus Meffert. All Rights Reserved.
  * Contributor(s): all the names of the contributors are added in the source
  * code where applicable.
  *
@@ -61,7 +61,7 @@ import java.util.*;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.71 $";
+  private final static String CVS_REVISION = "$Revision: 1.72 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
