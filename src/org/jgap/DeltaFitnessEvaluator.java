@@ -11,7 +11,7 @@ package org.jgap;
 
 /**
  * An implementation of a fitness evaluator interpreting the fitness as delta
- * value
+ * value.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -19,7 +19,7 @@ package org.jgap;
 public class DeltaFitnessEvaluator
     implements FitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -33,5 +33,9 @@ public class DeltaFitnessEvaluator
   public boolean isFitter(final double a_fitness_value1,
                           final double a_fitness_value2) {
     return a_fitness_value1 < a_fitness_value2;
+  }
+
+  public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
+    return isFitter(a_chrom1.getFitnessValue(), a_chrom2.getFitnessValue());
   }
 }
