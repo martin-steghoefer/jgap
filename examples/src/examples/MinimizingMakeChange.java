@@ -10,8 +10,8 @@
 package examples;
 
 import java.io.*;
-import java.util.*;
 //JFreeChart-related
+//import java.util.*;
 //import java.awt.image.*;
 //import org.jfree.chart.*;
 //import org.jfree.chart.plot.*;
@@ -35,7 +35,7 @@ import org.w3c.dom.*;
  * over the problem space towards the optimum solution. This problem exhibits
  * a more choppy space with more local optima. However, as can be seen from
  * running this example, the genetic algorithm still will get the correct
- * answer virtually everytime.
+ * (or a very close) answer virtually everytime.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -43,7 +43,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -100,11 +100,6 @@ public class MinimizingMakeChange {
     sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
     sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
     sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
-//    Map alleles = new Hashtable();
-//    for (int i=0;i<40;i++) {
-//      alleles.put(new Integer(i), new Integer(i));
-//    }
-//    sampleGenes[3] = new MapGene(alleles);
     IChromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
@@ -128,7 +123,7 @@ public class MinimizingMakeChange {
       population = XMLManager.getGenotypeFromDocument(conf, doc);
     }
     catch (UnsupportedRepresentationException uex) {
-      // code might have changed between two consecutive runs
+      // JGAP codebase might have changed between two consecutive runs
       population = Genotype.randomInitialGenotype(conf);
     }
     catch (FileNotFoundException fex) {
@@ -238,4 +233,5 @@ public class MinimizingMakeChange {
       }
     }
   }
+
 }
