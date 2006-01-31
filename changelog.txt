@@ -17,6 +17,7 @@
 * Introduced base class BaseConfigurable for interface
   Configurable
 * Added example for multiobjectives
+* Added example for dynamic mutation
 * Enhanced interface FitnessEvaluator
 * Added equals and compareTo to CrossoverOperator
 * Added interface org.jgap.ICompsiteGene for
@@ -38,6 +39,7 @@
   (was protected)
 * Made field m_activeConfiguration in class Genotype
   private (was protected)
+* Added new GeneticOperator: TwoWayMutationOperator
 * Extensively took care of coding conventions
   (Checkstyle, Findbugs)
 * Extensively fixed code smells
