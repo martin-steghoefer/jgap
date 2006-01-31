@@ -21,13 +21,11 @@ import org.jgap.*;
 public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private final int m_targetAmount;
 
   public static final int MAX_BOUND = 4000;
-
-  private static final double ZERO_DIFFERENCE_FITNESS = Math.sqrt(MAX_BOUND);
 
   public MinimizingMakeChangeFitnessFunction(int a_targetAmount) {
     if (a_targetAmount < 1 || a_targetAmount >= MAX_BOUND) {
