@@ -24,7 +24,7 @@ import org.jgap.impl.*;
  */
 public class MultiObjectiveExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -61,14 +61,14 @@ public class MultiObjectiveExample {
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
     BulkFitnessFunction myFunc =
-        new MinimizingMakeChangeFitnessFunction();
+        new MultiObjectiveFitnessFunction();
     conf.setBulkFitnessFunction(myFunc);
 
     // Set sample chromosome.
     // ----------------------
     Gene[] sampleGenes = new Gene[1];
-    sampleGenes[0] = new DoubleGene(MinimizingMakeChangeFitnessFunction.MIN_X,
-                                    MinimizingMakeChangeFitnessFunction.MAX_X);
+    sampleGenes[0] = new DoubleGene(MultiObjectiveFitnessFunction.MIN_X,
+                                    MultiObjectiveFitnessFunction.MAX_X);
     IChromosome sampleChromosome = new Chromosome(sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
 
@@ -132,7 +132,7 @@ public class MultiObjectiveExample {
     Collections.sort(chroms, comp);
     for (int k=0;k<chroms.size();k++) {
       Chromosome bestSolutionSoFar = (Chromosome) chroms.get(k);
-      System.out.println(MinimizingMakeChangeFitnessFunction.
+      System.out.println(MultiObjectiveFitnessFunction.
                          getVector(bestSolutionSoFar));
     }
   }
