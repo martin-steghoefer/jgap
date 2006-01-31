@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.30 $";
+  private static final String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -290,7 +290,7 @@ public class Population
       return null;
     }
     if (!m_changed) {
-      return getChromosomes().subList(0, a_numberOfChromosomes - 1);
+      return getChromosomes().subList(0, a_numberOfChromosomes);
     }
     // Sort the list of chromosomes using the fitness comparator
     Collections.sort(getChromosomes(), new ChromosomeFitnessComparator());
