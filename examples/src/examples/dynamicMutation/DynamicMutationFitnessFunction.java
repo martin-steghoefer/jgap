@@ -14,20 +14,17 @@ import org.jgap.*;
 /**
  * Sample fitness function for the DynamicMutation example.
  *
- * @author Neil Rotstan
  * @author Klaus Meffert
- * @since 1.0
+ * @since 2.6
  */
 public class DynamicMutationFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final int m_targetAmount;
 
   public static final int MAX_BOUND = 4000;
-
-  private static final double ZERO_DIFFERENCE_FITNESS = Math.sqrt(MAX_BOUND);
 
   public DynamicMutationFitnessFunction(int a_targetAmount) {
     if (a_targetAmount < 1 || a_targetAmount >= MAX_BOUND) {
