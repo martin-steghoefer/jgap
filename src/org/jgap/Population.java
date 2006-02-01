@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.31 $";
+  private static final String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -278,7 +278,8 @@ public class Population
    * the population.
    * @param a_numberOfChromosomes number of top performer chromosomes to be
    * returned
-   * @return list of the fittest Chromosomes of the population
+   * @return list of the fittest n Chromosomes of the population, or the fittest
+   * x Chromosomes with x = number of chromosomes in case n > x.
    *
    * @author Charles Kevin Hill
    * @since 2.4
@@ -290,12 +291,12 @@ public class Population
       return null;
     }
     if (!m_changed) {
-      return getChromosomes().subList(0, a_numberOfChromosomes);
+      return getChromosomes().subList(0, numberOfChromosomes);
     }
     // Sort the list of chromosomes using the fitness comparator
     Collections.sort(getChromosomes(), new ChromosomeFitnessComparator());
     setChanged(false);
-    return getChromosomes().subList(0, a_numberOfChromosomes);
+    return getChromosomes().subList(0, numberOfChromosomes);
   }
 
   /**
