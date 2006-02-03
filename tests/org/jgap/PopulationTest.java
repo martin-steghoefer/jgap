@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -319,19 +319,63 @@ public class PopulationTest
   public void testDetermineFittestChromosomes_1()
       throws Exception {
     Genotype.setConfiguration(new DefaultConfiguration());
-    Population p = new Population();
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
-    c.setFitnessValue(22);
-    p.addChromosome(c);
-    p.addChromosome(c);
-    p.addChromosome(c);
-    p.addChromosome(c);
+    Population p = getNewPopulation();
     assertEquals(1, p.determineFittestChromosomes(1).size());
     assertEquals(1, p.determineFittestChromosomes(1).size());
     assertEquals(3, p.determineFittestChromosomes(3).size());
     assertEquals(3, p.determineFittestChromosomes(3).size());
     assertEquals(4, p.determineFittestChromosomes(5).size());
+  }
+
+  /**
+   * Exposes bug 1422962
+   * @throws Exception
+   *
+   * @author Fanguad, Klaus Meffert
+   * @since 2.6
+   */
+  public void testFittestChromosomes_2()
+      throws Exception {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    Population population = getNewPopulation();
+    // this first block works fine
+    IChromosome topC = population.determineFittestChromosome();
+    List top = population.determineFittestChromosomes(1);
+    assertEquals(topC, population.determineFittestChromosome());
+    assertEquals(top.get(0), population.determineFittestChromosome());
+    top = population.determineFittestChromosomes(2);
+    assertEquals(top.get(0), population.determineFittestChromosome());
+    top = population.determineFittestChromosomes(3);
+    assertEquals(top.get(0), population.determineFittestChromosome());
+    // but this did not
+    population = getNewPopulation();
+    top = population.determineFittestChromosomes(1);
+    assertEquals(top.get(0), population.determineFittestChromosome());
+    top = population.determineFittestChromosomes(2);
+    assertEquals(top.get(0), population.determineFittestChromosome());
+    top = population.determineFittestChromosomes(3);
+    assertEquals(top.get(0), population.determineFittestChromosome());
+
+    population = getNewPopulation();
+    assertEquals(23, population.determineFittestChromosome().getFitnessValue(),
+                 DELTA);
+    top = population.determineFittestChromosomes(1);
+    assertEquals(23, ((IChromosome)top.get(0)).getFitnessValue(), DELTA);
+  }
+
+  private static Population getNewPopulation()
+      throws InvalidConfigurationException {
+    Population population = new Population();
+    Gene g = new DoubleGene();
+    Chromosome c = new Chromosome(g, 10);
+    c.setFitnessValue(22);
+    population.addChromosome(c);
+    c = new Chromosome(g, 10);
+    c.setFitnessValue(23);
+    population.addChromosome(c);
+    population.addChromosome(c);
+    population.addChromosome(c);
+    return population;
   }
 
   public void testSize_0() {
@@ -555,7 +599,8 @@ public class PopulationTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testRemoveChromosome_3() throws Exception {
+  public void testRemoveChromosome_3()
+      throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(new Gene[] {
                                new IntegerGene(1, 5)});
