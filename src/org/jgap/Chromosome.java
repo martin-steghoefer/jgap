@@ -2,7 +2,10 @@
  * JGAP offers a dual license model(see below for specific license information):
  * + The LGPL may be used anytime.
  * + The MPL may be used if at least $20 have been donated to the JGAP project
- *   thru PayPal (see http://www.sourceforge.net/projects/jgap).
+ *   thru PayPal (see http://www.sourceforge.net/projects/jgap or, directly,
+ *   http://sourceforge.net/donate/index.php?group_id=11618).
+ *   Details about usage of JGAP under the MPL can be found at the homepage
+ *   http://jgap.sourceforge.net/.
  *
  * Specific license information (MPL and LGPL)
  * -------------------------------------------
@@ -61,7 +64,7 @@ import java.util.*;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.72 $";
+  private final static String CVS_REVISION = "$Revision: 1.73 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
