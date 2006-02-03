@@ -20,8 +20,8 @@ import org.jgap.*;
  *  <i>Genetic algorithms for the traveling salesman problem</i>.
  * In Proceedings of the Second International Conference on Genetic Algorithms.
  *  Lawrence Eribaum Associates, Mahwah, NJ, 1985.
- * and also {@link http://ecsl.cs.unr.edu/docs/techreports/gong/node3.html
- * Sushil J. Louis & Gong Li  }
+ * and also <a href="http://ecsl.cs.unr.edu/docs/techreports/gong/node3.html">
+ * Sushil J. Louis & Gong Li</a>  }
  *
  * @author Audrius Meskauskas
  * @author <font size=-1>Neil Rotstan, Klaus Meffert (reused code
@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private int m_startOffset = 1;
 

@@ -223,7 +223,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /*
    * Replace this member by the Configuration as
@@ -246,11 +246,9 @@ public class BulkFitnessOffsetRemover
   /**
    * <p>
    * The last generations offset.
-   * This has to be stored because Chromosomes that
-   * were put by a {@link org.jgap.ReproductionOperator} into
-   * the new generation's candidate list already have the
-   * fitness value without offset from their previous
-   * evaluation.
+   * This has to be stored because Chromosomes that were put into the new
+   * generation's candidate list already have the fitness value without offset
+   * from their previous evaluation.
    * </p>
    * <P>
    * We try to avoid evaluations of the fitness function

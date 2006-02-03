@@ -22,7 +22,7 @@ import org.jgap.*;
 public class SalesmanFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private final Salesman m_salesman;
 
@@ -32,8 +32,7 @@ public class SalesmanFitnessFunction
 
   /**
    * Computes the distance by calling salesman
-   * {@link org.jgap.impl.salesman.distance
-   * salesman.distance(Gene from, Gene to) }
+   * {@link org.jgap.impl.salesman.Salesman#distance(org.jgap.Gene, org.jgap.Gene) }
    *
    * @param a_subject chromosome representing cities
    * @return distance of the journey thru the cities represented in the
