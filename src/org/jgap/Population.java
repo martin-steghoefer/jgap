@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.33 $";
+  private static final String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -184,7 +184,8 @@ public class Population
   }
 
   /**
-   * @return Iterator for the Chromosome list in the Population
+   * @return Iterator for the Chromosome list in the Population. Please be aware
+   * that using remove() forces you to call setChanged(true)
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -249,6 +250,7 @@ public class Population
    */
   protected void setChanged(final boolean a_changed) {
     m_changed = a_changed;
+    setSorted(false);
   }
 
   /**
@@ -307,7 +309,7 @@ public class Population
    */
   public List determineFittestChromosomes(final int a_numberOfChromosomes) {
     int numberOfChromosomes = Math.min(a_numberOfChromosomes,
-                                     getChromosomes().size());
+                                       getChromosomes().size());
     if (numberOfChromosomes <= 0) {
       return null;
     }
@@ -387,7 +389,6 @@ public class Population
   }
 
   /**@todo add equals and compareTo*/
-
   public boolean getSorted() {
     return m_sorted;
   }
