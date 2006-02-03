@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.32 $";
+  private static final String CVS_REVISION = "$Revision: 1.33 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -40,6 +40,11 @@ public class Population
    * (deleted, added, modified).
    */
   private boolean m_changed;
+
+  /**
+   * Indicates that the list of Chromosomes has been sorted.
+   */
+  private boolean m_sorted;
 
   /*
    * Constructs the Population from a list of Chromosomes.
@@ -67,6 +72,7 @@ public class Population
    */
   public Population(final int a_size) {
     m_chromosomes = new ArrayList(a_size);
+    setChanged(true);
   }
 
   /*
@@ -144,7 +150,9 @@ public class Population
   }
 
   /**
-   * @return the list of Chromosome's in the Population
+   * @return the list of Chromosome's in the Population. Don't modify the
+   * retrieved list by using clear(), remove(int) etc. If you do so, you need to
+   * call setChanged(true)
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -201,14 +209,15 @@ public class Population
 
   /**
    * Determines the fittest Chromosome in the population (the one with the
-   * highest fitness value) and memorizes it.
+   * highest fitness value) and memorizes it. This is an optimized version
+   * compared to calling determineFittesChromosomes(1).
    * @return the fittest Chromosome of the population
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public IChromosome determineFittestChromosome() {
-    if (!m_changed) {
+    if (!m_changed && m_fittestChromosome != null) {
       return m_fittestChromosome;
     }
     Iterator it = m_chromosomes.iterator();
@@ -240,6 +249,18 @@ public class Population
    */
   protected void setChanged(final boolean a_changed) {
     m_changed = a_changed;
+  }
+
+  /**
+   * Mark the population as sorted.
+   * @param a_changed true: mark population as changed; false: mark as not
+   * changed (meaning: changes already acknowledged)
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  protected void setSorted(final boolean a_sorted) {
+    m_sorted = a_sorted;
   }
 
   /**
@@ -290,12 +311,13 @@ public class Population
     if (numberOfChromosomes <= 0) {
       return null;
     }
-    if (!m_changed) {
+    if (!m_changed && m_sorted) {
       return getChromosomes().subList(0, numberOfChromosomes);
     }
     // Sort the list of chromosomes using the fitness comparator
     Collections.sort(getChromosomes(), new ChromosomeFitnessComparator());
     setChanged(false);
+    setSorted(true);
     return getChromosomes().subList(0, numberOfChromosomes);
   }
 
@@ -364,5 +386,9 @@ public class Population
     a_result.add(a_gene);
   }
 
-  /**@todo add equals und compareTo*/
+  /**@todo add equals and compareTo*/
+
+  public boolean getSorted() {
+    return m_sorted;
+  }
 }
