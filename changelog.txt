@@ -50,6 +50,7 @@
   to InstantiableSupergene
 * Renamed class TestGenetics to SimpleExample
 * Improved TournamentSelector
+* Improved DeltaFitnessEvaluator
 * Fixed bug in TruthTableFitnessFunction
 * Fixed several bugs in Population (thanx Fanguad)
 * Capitalized supergene-related classes
