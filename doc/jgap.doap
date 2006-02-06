@@ -1,0 +1,40 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns="http://usefulinc.com/ns/doap#">
+
+	<name>JGAP - Java Genetic Algorithms Package</name>
+	<homepage rdf:resource="http://jgap.sourceforge.net/" />
+	<created>2006-02-05</created>
+
+	<shortdesc xml:lang="en">
+        Support for Genetic Algorithms with Java
+	</shortdesc>
+
+	<description xml:lang="en">
+	JGAP is a framework dedicated to realizing Genetic Algorithms with Java.
+        Many examples included demonstrate JGAP's usage. Nearly 1000 unit tests
+        ensure a stable code basis and allows for continuous improvements without
+        introducing new errors.
+	</description>
+
+	<maintainer>
+		<foaf:Person>
+			<foaf:name>Klaus Meffert</foaf:name>
+			<foaf:homepage rdf:resource="http://jgap.sourceforge.net" />
+		</foaf:Person>
+	</maintainer>
+
+	<release>
+		<Version>
+			<name>productive</name>
+			<created>2006-05-02</created>
+			<revision>2.6</revision>
+		</Version>
+	</release>
+
+	<license rdf:resource="http://jgap.sourceforge.net/#license" />
+
+    <bug-database rdf:resource="http://sourceforge.net/tracker/?group_id=11618&atid=111618" />
+
+    <screenshots rdf:resource="http://sourceforge.net/project/screenshots.php?group_id=11618" />
+
