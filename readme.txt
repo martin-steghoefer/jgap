@@ -32,15 +32,17 @@ Ant home page at http://ant.apache.org
 
 4. Javadocs can be found in the javadocs/ directory. Other documentation,
 including basic documents to help you get started, can be found in the
-docs/ directory. A simple example can be found in the src/examples
+docs/ directory. Quite simple example can be found under the src/examples
 directory.
 
 --------------------------------------------------------------------------
 
 About This Release:
 
-This represents a release introducing major enhancements to the second big
-production release of JGAP, the Java Genetic Algorithms Package. 
+This represents a release introducing new features, documentation,
+examples and of course many new unit tests. Several feature requests have
+been implemented. The next release will definitiely deliver support for
+Genetic Programming!
 
 For a general list of changes, fixes, and enhancements that have been
 included in this version, please see the changelog.txt file.
@@ -66,9 +68,8 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP was compiled and tested with Java 1.4 on Windows 2000.
-Prior versions of JGAP have been testes with Linux, MacOS and Windows XP
-as well.
+JGAP was compiled and tested with Java 1.4 on Windows 2000 and XP
+Prior versions of JGAP have been testes with Linux, MacOS as well.
 
 This release contains code that is based on external libraries. You could
 find it in the src-3rdparty library. Due to licensing issues the needed
