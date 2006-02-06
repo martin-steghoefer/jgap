@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -109,7 +109,7 @@ public class FormulaFinder {
     FileInputStream fin = new FileInputStream(f);
     Properties props = new Properties();
     props.load(fin);
-    Enumeration enum = props.keys();
+    Enumeration anEnum = props.keys();
     // Read in problem configuration.
     // ------------------------------
     float factor = Float.parseFloat( (String) props.remove("minFitness"));
@@ -127,8 +127,8 @@ public class FormulaFinder {
     POPULATION_SIZE = Integer.parseInt( (String) props.remove("populationSize"));
     //Read in input-/output-value pairs
     Map truthTable = new HashMap();
-    while (enum.hasMoreElements()) {
-      String s = (String) enum.nextElement();
+    while (anEnum.hasMoreElements()) {
+      String s = (String) anEnum.nextElement();
       float inputValue = Float.parseFloat(s);
       String outS = (String) props.get(s);
       float outputValue = Float.parseFloat(outS);
