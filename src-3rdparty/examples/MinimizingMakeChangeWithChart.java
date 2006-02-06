@@ -15,10 +15,7 @@ import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
 import org.jfree.data.category.*;
 import org.jgap.*;
-import org.jgap.data.*;
 import org.jgap.impl.*;
-import org.jgap.xml.*;
-import org.w3c.dom.*;
 
 /**
  * Copy of class MinimizingMakeChange with added support for JFreeChart, see
@@ -34,7 +31,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChangeWithChart {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -121,17 +118,6 @@ public class MinimizingMakeChangeWithChart {
         dataset.setValue(fitness, "Fitness", s);
       }
     }
-    // Save progress to file. A new run of this example will then be able to
-    // resume where it stopped before!
-    // ---------------------------------------------------------------------
-
-    // represent Genotype as tree with elements Chromomes and Genes
-    DataTreeBuilder builder = DataTreeBuilder.getInstance();
-    IDataCreators doc2 = builder.representGenotypeAsDocument(population);
-    // create XML document from generated tree
-    XMLDocumentBuilder docbuilder = new XMLDocumentBuilder();
-    Document xmlDoc = (Document) docbuilder.buildDocument(doc2);
-    XMLManager.writeFile(xmlDoc, new File("testJGAP.xml"));
     // Display the best solution we found.
     // -----------------------------------
     IChromosome bestSolutionSoFar = population.getFittestChromosome();
