@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1404,6 +1404,7 @@ public class ChromosomeTest
 
   /**
    * Ensures that Chromosome and all objects contained implement Serializable
+   * correctly.
    * @throws Exception
    *
    * @author Klaus Meffert
