@@ -1,4 +1,5 @@
 <project name="jgap" default="jar" basedir=".">
+  <property name="baseDir" value="."/>
   <property name="src" value="./src"/>
   <property name="test" value="./tests"/>
   <property name="examples" value="./examples"/>
@@ -68,6 +69,8 @@
        <include name="org/jgap/gp/*.class"/>
        <include name="org/jgap/gui/*.class"/>
        <include name="org/jgap/impl/*.class"/>
+       <include name="org/jgap/impl/fitness/*.class"/>
+       <include name="org/jgap/impl/salesman/*.class"/>
        <include name="org/jgap/perf/*.class"/>
        <include name="org/jgap/supergenes/*.class"/>
        <include name="org/jgap/util/*.class"/>
@@ -100,6 +103,8 @@
         <include name="org/jgap/gp/*.class"/>
         <include name="org/jgap/gui/*.class"/>
         <include name="org/jgap/impl/*.class"/>
+        <include name="org/jgap/impl/fitness/*.class"/>
+        <include name="org/jgap/impl/salesman/*.class"/>
         <include name="org/jgap/perf/*.class"/>
         <include name="org/jgap/supergenes/*.class"/>
         <include name="org/jgap/xml/*.class"/>
@@ -113,7 +118,7 @@
     <javadoc sourcepath="${src}"
              destdir="javadocs/"
              Public="true"
-             packagenames="org.jgap, org.jgap.audit, org.jgap.data, org.gap.data.config, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.gui, org.jgap.impl, org.jgap.supergenes, org.jgap.util, org.jgap.xml">
+             packagenames="org.jgap, org.jgap.audit, org.jgap.data, org.gap.data.config, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.gui, org.jgap.impl, org.jgap.supergenes, org.jgap.util, org.jgap.xml, org.jgap.impl.fitness, org.jgap.impl.salesman">
     </javadoc>
   </target>
 
