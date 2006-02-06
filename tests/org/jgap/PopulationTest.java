@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -99,8 +99,10 @@ public class PopulationTest
     Gene g = new DoubleGene();
     Chromosome c = new Chromosome(g, 10);
     Population p = new Population();
+    p.setChromosome(0, c);
+    p.setChromosome(0, c);
     try {
-      p.setChromosome(0, c);
+      p.setChromosome(2, c);
       fail();
     }
     catch (IndexOutOfBoundsException oex) {
