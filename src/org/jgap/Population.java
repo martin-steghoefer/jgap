@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.35 $";
+  private static final String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -260,11 +260,10 @@ public class Population
 
   /**
    * Mark the population as sorted.
-   * @param a_changed true: mark population as changed; false: mark as not
-   * changed (meaning: changes already acknowledged)
+   * @param a_sorted true: mark population as sorted
    *
    * @author Klaus Meffert
-   * @since 2.2
+   * @since 2.6
    */
   protected void setSorted(final boolean a_sorted) {
     m_sorted = a_sorted;
@@ -393,8 +392,9 @@ public class Population
     a_result.add(a_gene);
   }
 
-  /**@todo add equals and compareTo*/
   public boolean getSorted() {
     return m_sorted;
   }
+
+  /**@todo add equals and compareTo*/
 }
