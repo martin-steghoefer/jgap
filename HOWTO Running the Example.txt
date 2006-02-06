@@ -25,5 +25,7 @@ You can start it without parameters:
 java -classpath ".;jgap-examples.jar;jgap.jar" examples.simpleBoolean.SimpleExample
 
 
-Klaus Meffert, 2005-01-01
+For further examples, examine all classes under package "examples".
+
+Klaus Meffert, 2006-01-01
 klausikm@users.sourceforge.net
