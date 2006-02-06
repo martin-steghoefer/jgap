@@ -30,7 +30,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * This field separates gene class name from
@@ -186,7 +186,7 @@ public abstract class AbstractSupergene
    * at the given index. Retries while isValid() returns true for the
    * supergene. The method is delegated to the first element [0] of the
    * gene, indexed by <code>index</code>.
-   * @see org.jgap.supergenes.abstractSupergene.isValid()
+   * See org.jgap.supergenes.AbstractSupergene.isValid()
    */
   public void applyMutation(final int a_index, final double a_percentage) {
     // Return immediately the current value is found in
