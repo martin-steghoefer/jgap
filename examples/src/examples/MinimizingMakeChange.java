@@ -10,12 +10,7 @@
 package examples;
 
 import java.io.*;
-//JFreeChart-related
-//import java.util.*;
-//import java.awt.image.*;
-//import org.jfree.chart.*;
-//import org.jfree.chart.plot.*;
-//import org.jfree.data.category.*;
+
 import org.jgap.*;
 import org.jgap.data.*;
 import org.jgap.impl.*;
@@ -43,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -109,17 +104,14 @@ public class MinimizingMakeChange {
     // the population (which could be seen as bad).
     // ------------------------------------------------------------
     conf.setPopulationSize(80);
-    // JFreeChart: setup
-//    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-//    PlotOrientation or = PlotOrientation.VERTICAL;
 
     // Create random initial population of Chromosomes.
     // Here we try to read in a previous run via XMLManager.readFile(..)
-    // for demonstration purpose!
+    // for demonstration purpose only!
     // -----------------------------------------------------------------
     Genotype population;
     try {
-      Document doc = XMLManager.readFile(new File("testJGAP.xml"));
+      Document doc = XMLManager.readFile(new File("JGAPExample26.xml"));
       population = XMLManager.getGenotypeFromDocument(conf, doc);
     }
     catch (UnsupportedRepresentationException uex) {
@@ -137,24 +129,18 @@ public class MinimizingMakeChange {
     // ---------------------------------------------------------------
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
-      // JFreeChart: add current best fitness to chart
-//      double fitness = population.getFittestChromosome().getFitnessValue();
-//      if (i % 3 == 0) {
-//        String s = String.valueOf(i);
-//        dataset.setValue(fitness, "Fitness", s);
-//      }
     }
     // Save progress to file. A new run of this example will then be able to
     // resume where it stopped before!
     // ---------------------------------------------------------------------
 
-    // represent Genotype as tree with elements Chromomes and Genes
+    // Represent Genotype as tree with elements Chromomes and Genes.
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
     IDataCreators doc2 = builder.representGenotypeAsDocument(population);
     // create XML document from generated tree
     XMLDocumentBuilder docbuilder = new XMLDocumentBuilder();
     Document xmlDoc = (Document) docbuilder.buildDocument(doc2);
-    XMLManager.writeFile(xmlDoc, new File("testJGAP.xml"));
+    XMLManager.writeFile(xmlDoc, new File("JGAPExample26.xml"));
     // Display the best solution we found.
     // -----------------------------------
     IChromosome bestSolutionSoFar = population.getFittestChromosome();
@@ -183,15 +169,6 @@ public class MinimizingMakeChange {
                        MinimizingMakeChangeFitnessFunction.
                        getTotalNumberOfCoins(
         bestSolutionSoFar) + " coins.");
-    // JFreeChart: Create chart
-//    JFreeChart chart = ChartFactory.createLineChart("JGAP: Evolution progress",
-//        "Evolution cycle", "Fitness value", dataset, or, true /*legend*/,
-//        true
-//        /*tooltips*/
-//        , false /*urls*/);
-//    BufferedImage image = chart.createBufferedImage(640, 480);
-//    FileOutputStream fo = new FileOutputStream("c:\\chart.jpg");
-//    ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
   }
 
   /**
