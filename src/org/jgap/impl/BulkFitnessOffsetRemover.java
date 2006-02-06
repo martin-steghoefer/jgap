@@ -15,7 +15,7 @@ import org.jgap.*;
 /**
  * <p>
  * Takes away the fitness offset of the population to evolve.
- * The fitness function values of the population of {@link org.jgap.Chromosome}
+ * The fitness function values of the population of {@link org.jgap.IChromosome}
  * instances will start from a minimum of 1 afterwards.
  * </p>
  * <p>
@@ -28,10 +28,10 @@ import org.jgap.*;
  * <h3>Example of applicability</h3>
  * <p>
  * You are optimizing a black box with <i>n</i> parameters that are mapped
- * to {@link org.jgap.Chromosome} instances each having <i>n</i>
+ * to {@link org.jgap.IChromosome} instances each having <i>n</i>
  * {@link org.jgap.Gene} instances.<br>
  * You want to minimize the answer time of the black box and provide
- * a {@link org.jgap.FitnessFunction#evaluate(org.jgap.Chromosome)}
+ * a {@link org.jgap.FitnessFunction#evaluate(org.jgap.IChromosome)}
  * that takes the genes out of the chromosome, put's it's
  * {@link org.jgap.Gene#getAllele()}
  * values to the parameters and measures the answer time of the black box
@@ -45,7 +45,7 @@ import org.jgap.*;
  *   private BlackBox bbox;
  *   <font color="#999999">//Additional code: constructors</font>
  *   <font color="#999999">...</font>
- *   public double evaluate(org.jgap.Chromosome chromosome){
+ *   public double evaluate(org.jgap.IChromosome chromosome){
  *     double fitness = 0;
  *     <font color="#999999">// get the Gene[] & put the parameters into the box.
  *     ...
@@ -192,12 +192,12 @@ import org.jgap.*;
  * class BlackBoxOptimizer extends org.jgap.FitnessFunction{
  *   <font color="#999999">// Additional code: constructors
  *   ...</font>
- *   public double evaluate(org.jgap.Chromosome chromosome){
+ *   public double evaluate(org.jgap.IChromosome chromosome){
  *     <font color="#999999">.... // As shown above.</font>
  *   }
  *
- *   public void startOptimization(org.jgap.Configuration gaConf)t
-*       hrows InvalidConfigurationException{
+ *   public void startOptimization(org.jgap.Configuration gaConf)
+ *       throws InvalidConfigurationException{
  *     <font color="#999999">
  *     // The given Configuration may be preconfigured with
  *     // NaturalSelector & GeneticOperator instances,.
@@ -207,10 +207,10 @@ import org.jgap.*;
  *     <font color="#999999">// Why does it work? We implement FitnessFunction!
  *     // Still to do here:
  *     // - Create a sample chromosome according to your blackbox & set it to
-*      //   the configuration.
+ *      //   the configuration.
  *     // - Create a random inital Genotype.
  *     // - loop over a desired amount of generations invoking
-*      //   aGenotype.evolve()..</font>
+ *      //   aGenotype.evolve()..</font>
  *   }
  * }
  * </font>
@@ -223,7 +223,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /*
    * Replace this member by the Configuration as
@@ -232,11 +232,9 @@ public class BulkFitnessOffsetRemover
    */
   private FitnessFunction m_ff;
 
-  /*
-   * This constructor is planned but not possible yet,
+  /**@todo This constructor is planned but not possible yet,
    * as the Configuration permits bulk fitness function and
-   * simple fitness function both existing in it at the
-   * same time.
+   * simple fitness function both existing in it at the same time.
    */
   /*
     public BulkFitnessOffsetRemover(Configuration conf){
@@ -419,20 +417,20 @@ public class BulkFitnessOffsetRemover
    *
    * F<sub>0</sub> = F<sub>n</sub> + O<sub>n</sub> - O<sub>0</sub>
    *
-   * And our initial offset {@link #previousOffset O<sub>0</sub>} is zero!
+   * And our initial offset {@link #m_previousOffset O<sub>0</sub>} is zero!
    * </pre>
    * </p>
    * <p>
    * This shows, that it is possible to compute the original fitness value of a
    * Chromosome from it's current fitness value and the
-   * {@link #previousOffset previous offset}
+   * {@link #m_previousOffset previous offset}
    * regardless of the amounts of generations between original evaluation and
    * the current generation.
    * </p>
    * @param a_individuum any Chromosome that is normally being evaluated by
    * this <tt>BulkFitnessFunction</tt>
    * @return the original fitness value as returned by the registered
-   * {@link #ff fitnessFunction} instance.
+   * {@link #m_ff fitnessFunction} instance.
    */
   public double getAbsoluteFitness(final IChromosome a_individuum) {
     double fitness = a_individuum.getFitnessValue();

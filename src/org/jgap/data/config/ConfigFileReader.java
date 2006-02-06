@@ -20,7 +20,7 @@ import java.io.*;
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   // Name of the config file to read
   private String m_fileName;
@@ -78,7 +78,7 @@ public class ConfigFileReader {
   /**
    * Retrieve the values for the property with the name as in param name.
    *
-   * @param name the name of the property of which the value is required
+   * @param a_name the name of the property of which the value is required
    * @return ArrayList of Strings with values for the property with the name as
    * in param name, null if property not found
    *

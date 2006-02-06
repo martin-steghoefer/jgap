@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BulkFitnessOffsetRemoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection! */
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   // A plainforward implementation for this test.
   //---------------------------------------------
@@ -39,7 +39,7 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
-   * Test the inner class {@link DummyFitnessFunction}that is needed for
+   * Test the inner class DummyFitnessFunction that is needed for
    * this test with IntegerGenes in a Chromosome.
    */
   public void testDummyFitnessFunction_0() {
@@ -67,7 +67,7 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
-   * Test the inner class {@link DummyFitnessFunction}that is needed for
+   * Test the inner class DummyFitnessFunction that is needed for
    * this test with a mix of IntegerGenes and DoubleGenes in a Chromosome.
    */
   public void testDummyFitnessFunction_1() {
@@ -111,7 +111,7 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
-   * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)}with a
+   * Tests the method BulkFitnessOffsetRemover.evaluate(java.util.List) with a
    * list of two Chromosomes with each one IntegerGene with the allele 100.
    *
    * @author Achim Westermann
@@ -144,7 +144,7 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
-   * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)} with a
+   * Tests the method BulkFitnessOffsetRemover.evaluate(List) with a
    * list of two Chromosomes with one IntegerGene with the allele 100. The
    * IntegerGene is the same instance in both Chromosomes.
    *
@@ -176,7 +176,7 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
-   * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)}with a
+   * Tests the method BulkFitnessOffsetRemover.evaluate(List) with a
    * list of two Chromosomes with each one IntegerGene with the allele 200.
    * The Chromosomes ar the same instance in the List that is evaluated.
    *
@@ -206,7 +206,7 @@ public class BulkFitnessOffsetRemoverTest
   }
 
   /**
-   * Tests the method {@link BulkFitnessOffsetRemover#evaluate(List)}with a
+   * Tests the method BulkFitnessOffsetRemover.evaluate(List) with a
    * list of two Chromosomes with each two NumberGenes.
    *
    * <pre>

@@ -24,7 +24,7 @@ import org.jgap.*;
  * is in use.
  * <p>
  * Partly adapted stuff from the JAGA (Java API for Genetic Algorithms)
- * package (see {@link http://www.jaga.org}).
+ * package (see <a href="http://www.jaga.org">jaga</a>).
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   private int m_length;
 

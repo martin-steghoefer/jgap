@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -57,7 +57,7 @@ public class TravellingSalesmanTest
    * all the cities and returning to your starting point.
    * </p></font>
    *
-   * @see
+   * See
    *  <ul>
    *   <li>J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
    *     <i>Genetic algorithms for the traveling salesman problem</i>.

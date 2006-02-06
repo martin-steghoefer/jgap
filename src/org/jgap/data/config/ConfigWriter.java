@@ -22,7 +22,7 @@ import javax.swing.*;
  * */
 public final class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Singleton instance of ConfigWriter
@@ -61,7 +61,7 @@ public final class ConfigWriter {
 
   /**
    * Persist the configuration information as selected by the user.
-   * @param cInfo configuration Information to persist
+   * @param a_cInfo configuration Information to persist
    *
    * @author Siddhartha Azad
    * @since 2.3
