@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.73 $";
+  private final static String CVS_REVISION = "$Revision: 1.74 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -201,7 +201,9 @@ public class Chromosome
    * @since 1.0
    */
   public Chromosome(Gene[] a_initialGenes) {
-    initWithGenes(a_initialGenes);
+    this(a_initialGenes == null ? 0 : a_initialGenes.length);
+    checkGenes(a_initialGenes);
+    m_genes = a_initialGenes;
   }
 
   /**
@@ -222,18 +224,20 @@ public class Chromosome
   public Chromosome(Gene[] a_initialGenes,
                     IGeneConstraintChecker a_constraintChecker)
       throws InvalidConfigurationException {
-    initWithGenes(a_initialGenes);
+    this(a_initialGenes.length);
+    checkGenes(a_initialGenes);
+    m_genes = a_initialGenes;
     setConstraintChecker(a_constraintChecker);
   }
 
   /**
-   * Helper: called by constructors only
-   * @param a_initialGenes the initial genes of this Chromosome
+   * Helper: called by constructors only to verify the initial genes.
+   * @param a_initialGenes the initial genes of this Chromosome to verify
    *
    * @author Klaus Meffert
    * @since 2.5
    */
-  protected void initWithGenes(Gene[] a_initialGenes) {
+  protected void checkGenes(Gene[] a_initialGenes) {
     // Sanity checks: make sure the genes array isn't null and
     // that none of the genes contained within it are null.
     // -------------------------------------------------------
@@ -249,7 +253,6 @@ public class Chromosome
             "may be null.");
       }
     }
-    m_genes = a_initialGenes;
   }
 
   /**
@@ -297,18 +300,24 @@ public class Chromosome
       // use the Gene at each respective gene location (locus) to create the
       // new Gene that is to occupy that same locus in the new Chromosome.
       // -------------------------------------------------------------------
-      Gene[] copyOfGenes = new Gene[size()];
+      int size = size();
+      if (size > 0) {
+        Gene[] copyOfGenes = new Gene[size];
 //    if (m_genes.length == 0 || copyOfGenes.length == 0) {
 //      throw new IllegalArgumentException("Genes length = 0!");
 //    }
-      for (int i = 0; i < copyOfGenes.length; i++) {
-        copyOfGenes[i] = m_genes[i].newGene();
-        copyOfGenes[i].setAllele(m_genes[i].getAllele());
+        for (int i = 0; i < copyOfGenes.length; i++) {
+          copyOfGenes[i] = m_genes[i].newGene();
+          copyOfGenes[i].setAllele(m_genes[i].getAllele());
+        }
+        // Now construct a new Chromosome with the copies of the genes and
+        // return it. Also clone the IApplicationData object.
+        // ---------------------------------------------------------------
+        copy = new Chromosome(copyOfGenes);
       }
-      // Now construct a new Chromosome with the copies of the genes and
-      // return it. Also clone the IApplicationData object.
-      // ---------------------------------------------------------------
-      copy = new Chromosome(copyOfGenes);
+      else {
+        copy = new Chromosome();
+      }
     }
     // Clone constraint checker.
     // -------------------------
@@ -847,7 +856,7 @@ public class Chromosome
 //      }
 //    }
     m_genes = a_genes;
-    verify();
+    verify(getConstraintChecker());
   }
 
   /**
@@ -886,8 +895,8 @@ public class Chromosome
    */
   public void setConstraintChecker(IGeneConstraintChecker a_constraintChecker)
       throws InvalidConfigurationException {
+    verify(a_constraintChecker);
     m_geneAlleleChecker = a_constraintChecker;
-    verify();
   }
 
   /**
@@ -903,20 +912,21 @@ public class Chromosome
 
   /**
    * Verifies the state of the chromosome. Especially takes care of the
-   * constraint checker set (if any).
+   * given constraint checker.
+   * @param a_constraintChecker the constraint checker to verify
    *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.5
    */
-  protected void verify()
+  protected void verify(IGeneConstraintChecker a_constraintChecker)
       throws InvalidConfigurationException {
-    if (getConstraintChecker() != null && getGenes() != null) {
+    if (a_constraintChecker != null && getGenes() != null) {
       int len = getGenes().length;
       for (int i = 0; i < len; i++) {
         Gene gene = getGene(i);
-        if (!getConstraintChecker().verify(gene, null, this, i)) {
+        if (!a_constraintChecker.verify(gene, null, this, i)) {
           throw new InvalidConfigurationException(
               "The gene type "
               + gene.getClass().getName()
