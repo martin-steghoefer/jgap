@@ -37,6 +37,9 @@
   DoubleGene private (they were protected)
 * Made field m_genes in class Chromosome private
   (was protected)
+* Enhanced the architecture of Chromosome due to helpful
+  comments from Dan (involved with that was the
+  improvement of the according unit tests)
 * Made field m_activeConfiguration in class Genotype
   private (was protected)
 * Added new GeneticOperator: TwoWayMutationOperator
