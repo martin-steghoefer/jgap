@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -180,22 +180,6 @@ public class ChromosomeTest
     }
   }
 
-  /**
-   * Illegal constructions regarding an element of the only parameter
-   *
-   * @author Klaus Meffert
-   */
-  public void testConstruct_5_1() {
-    try {
-      Gene[] genes = new IntegerGene[2];
-      genes[0] = new IntegerGene();
-      genes[1] = null;
-      new Chromosome(genes);
-    }
-    catch (IllegalArgumentException iex) {
-      ; //this is OK
-    }
-  }
 
   /**
    * Illegal constructions regarding an element of the only parameter
@@ -207,6 +191,7 @@ public class ChromosomeTest
       Gene[] genes = new IntegerGene[1];
       genes[0] = null;
       new Chromosome(genes);
+      fail();
     }
     catch (IllegalArgumentException iex) {
       ; //this is OK
@@ -351,6 +336,7 @@ public class ChromosomeTest
     assertEquals(3, chrom.size());
     assertEquals(genes[0], chrom.getGene(0));
     assertEquals(genes[1], chrom.getGene(1));
+    assertEquals(genes[2], chrom.getGene(2));
   }
 
   /**
@@ -380,7 +366,7 @@ public class ChromosomeTest
       throws Exception {
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 7);
-    Gene[] genes = (Gene[]) privateAccessor.getField(chrom, "m_genes");
+    Gene[] genes = chrom.getGenes();
     assertEquals(7, genes.length);
     Gene sample;
     for (int i = 0; i < genes.length; i++) {
@@ -390,14 +376,36 @@ public class ChromosomeTest
   }
 
   /**
-   * Test the default constructor (initializes nothing, therefor check for
-   * NullPointerException)
+   * Tests cloning and cleanup of a chromosome
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_15()
+  public void testClone_5()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new RandomFitnessFunction());
+    Genotype.setConfiguration(conf);
+    Chromosome chrom = new Chromosome();
+    assertEquals(0, chrom.size());
+    Chromosome chrom2 = (Chromosome) chrom.clone();
+    assertEquals(chrom, chrom2);
+    conf.getChromosomePool().releaseChromosome(chrom);
+    assertEquals(Chromosome.class, chrom.clone().getClass());
+    chrom.cleanup();
+    conf.setChromosomePool(null);
+    chrom.cleanup();
+  }
+
+  /**
+   * Tests cloning and cleanup of a chromosome
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void testClone_6()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
@@ -581,7 +589,7 @@ public class ChromosomeTest
     List equalChromosome = new ArrayList();
     // Build Random Chromosomes
     for (count = 0; count < MAX_CHROMOSOME_TO_TEST; count++) {
-      numGenes = (int) (Math.random() * MAX_GENES_TO_TEST);
+      numGenes = (int) (Math.random() * (MAX_GENES_TO_TEST - 1)) + 1;
       genes = new Gene[numGenes];
       for (geneCount = 0; geneCount < numGenes; geneCount++) {
         geneType = (int) (Math.random() * MAX_GENES_TYPES);
@@ -676,12 +684,7 @@ public class ChromosomeTest
     genes[0] = new BooleanGene();
     genes[1] = new BooleanGene();
     Chromosome chrom2 = new Chromosome(genes);
-    try {
-      assertFalse(chrom.equals(chrom2));
-    }
-    catch (ClassCastException castex) {
-      ; //this is OK
-    }
+    assertFalse(chrom.equals(chrom2));
   }
 
   /**
@@ -823,8 +826,12 @@ public class ChromosomeTest
   public void testSize_2()
       throws Exception {
     Gene[] genes = new IntegerGene[0];
-    Chromosome chrom = new Chromosome(genes);
-    assertEquals(0, chrom.size());
+    try {
+      Chromosome chrom = new Chromosome(genes);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ;//this is OK
+    }
   }
 
   /**
@@ -1197,10 +1204,13 @@ public class ChromosomeTest
   public void testCleanup_2()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-    conf.setChromosomePool(new ChromosomePool());
+    ChromosomePool chromosomePool = new ChromosomePool();
+    assertNull( chromosomePool.acquireChromosome() );
+    conf.setChromosomePool(chromosomePool);
     Genotype.setConfiguration(conf);
     IChromosome chrom = Chromosome.randomInitialChromosome();
     chrom.cleanup();
+    assertSame( chrom, chromosomePool.acquireChromosome() );
   }
 
   /**
@@ -1325,18 +1335,63 @@ public class ChromosomeTest
     catch (InvalidConfigurationException cex) {
       ; //this is OK
     }
-    assertEquals(cc, c.getConstraintChecker());
+  }
+
+  /**
+   * Test setter/getter of constraint checker
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetConstraintChecker_2()
+      throws Exception {
+    Gene gene = new IntegerGene();
+    Chromosome c = new Chromosome(gene, 2);
     Gene[] genes = new Gene[] {
         gene};
-    try {
-      c.setGenes(genes);
-      fail();
-    }
-    catch (InvalidConfigurationException cex) {
-      ; //this is OK
-    }
     c.setConstraintChecker(null);
     assertNull(c.getConstraintChecker());
+    // the following should be possible without exception
+    c.setGenes(genes);
+  }
+
+  /**
+   * Test setter/getter of constraint checker which forbids the used gene type.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetConstraintChecker_3()
+      throws Exception {
+    Gene gene = new IntegerGene();
+    Chromosome c = new Chromosome(gene, 2);
+    IGeneConstraintChecker cc = new MyConstraintChecker(IntegerGene.class);
+    try {
+      c.setConstraintChecker(cc);
+      fail();
+    } catch (InvalidConfigurationException iex) {
+      ;//this is OK
+    }
+  }
+
+  /**
+   * Test setter/getter of constraint checker which allows ther used gene type.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSetConstraintChecker_4()
+      throws Exception {
+    Gene gene = new IntegerGene();
+    Chromosome c = new Chromosome(gene, 2);
+    IGeneConstraintChecker cc = new MyConstraintChecker(DoubleGene.class);
+    c.setConstraintChecker(cc);
+    Gene[] genes = new Gene[] {
+        gene};
+    // the following should be possible without exception
     c.setGenes(genes);
   }
 
@@ -1368,6 +1423,7 @@ public class ChromosomeTest
       return new MyAppObject2();
     }
   }
+
   class MyConstraintChecker
       implements IGeneConstraintChecker {
     private Class m_forbidden;
@@ -1433,6 +1489,9 @@ public class ChromosomeTest
     assertTrue(chrom.isHandlerFor(chrom, Chromosome.class));
     assertFalse(chrom.isHandlerFor(chrom, ChromosomeForTest.class));
     assertFalse(chrom.isHandlerFor(chrom, Object.class));
+    Genotype.setConfiguration(new ConfigurationForTest());
+    assertTrue(chrom.perform(chrom,Chromosome.class,null) instanceof Chromosome);
   }
+
 
 }
