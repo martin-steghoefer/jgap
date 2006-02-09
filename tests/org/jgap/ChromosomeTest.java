@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomeTest.class);
@@ -1335,6 +1335,7 @@ public class ChromosomeTest
     catch (InvalidConfigurationException cex) {
       ; //this is OK
     }
+    assertNull(c.getConstraintChecker());
   }
 
   /**
@@ -1424,7 +1425,13 @@ public class ChromosomeTest
     }
   }
 
-  class MyConstraintChecker
+  /**
+   * Class needs to be static, otherwise the serialization of the Chromosome
+   * does not work properly (in JBuilder it does but running the test wit ant
+   * fails).
+   * @author Klaus Meffert
+   */
+  static class MyConstraintChecker
       implements IGeneConstraintChecker {
     private Class m_forbidden;
 
