@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -274,15 +274,11 @@ public class IntegerGeneTest
     IGeneConstraintChecker checker = new GeneConstraintChecker();
     gene1.setConstraintChecker(checker);
     gene1.setAllele(new Integer(4711));
-    Integer lower1 = (Integer) privateAccessor.getField(gene1,
-        "m_lowerBounds");
-    Integer upper1 = (Integer) privateAccessor.getField(gene1,
-        "m_upperBounds");
+    int lower1 = gene1.getLowerBounds();
+    int upper1 = gene1.getUpperBounds();
     IntegerGene gene2 = (IntegerGene) gene1.newGene();
-    Integer lower2 = (Integer) privateAccessor.getField(gene2,
-        "m_lowerBounds");
-    Integer upper2 = (Integer) privateAccessor.getField(gene2,
-        "m_upperBounds");
+    int lower2 = gene2.getLowerBounds();
+    int upper2 = gene2.getUpperBounds();
     assertEquals(lower1, lower2);
     assertEquals(upper1, upper2);
     assertEquals(checker, gene2.getConstraintChecker());
@@ -329,7 +325,7 @@ public class IntegerGeneTest
    */
   public void testPersistentRepresentation_2()
       throws Exception {
-    Gene gene1 = new IntegerGene(2, 753);
+    IntegerGene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("2"
                                                + IntegerGene.
@@ -339,10 +335,8 @@ public class IntegerGeneTest
                                                PERSISTENT_FIELD_DELIMITER
                                                + "4");
     assertEquals(2, ( (Integer) gene1.getAllele()).intValue());
-    assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
-        "m_lowerBounds")).intValue());
-    assertEquals(4, ( (Integer) privateAccessor.getField(gene1,
-        "m_upperBounds")).intValue());
+    assertEquals(3, gene1.getLowerBounds());
+    assertEquals(4, gene1.getUpperBounds());
   }
 
   /**
@@ -353,20 +347,18 @@ public class IntegerGeneTest
    */
   public void testPersistentRepresentation_3()
       throws Exception {
-    Gene gene1 = new IntegerGene(2, 753);
+    IntegerGene gene1 = new IntegerGene(2, 753);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("null"
                                                + IntegerGene.
                                                PERSISTENT_FIELD_DELIMITER
-                                               + "3"
+                                               + "-3"
                                                + IntegerGene.
                                                PERSISTENT_FIELD_DELIMITER
                                                + "4");
     assertNull(gene1.getAllele());
-    assertEquals(3, ( (Integer) privateAccessor.getField(gene1,
-        "m_lowerBounds")).intValue());
-    assertEquals(4, ( (Integer) privateAccessor.getField(gene1,
-        "m_upperBounds")).intValue());
+    assertEquals(-3, gene1.getLowerBounds());
+    assertEquals(4, gene1.getUpperBounds());
   }
 
   /**
@@ -829,5 +821,15 @@ public class IntegerGeneTest
                           IChromosome a_chrom, int a_index) {
       return true;
     }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testGetBounds_0() {
+    IntegerGene gene = new IntegerGene(2,5);
+    assertEquals(2, gene.getLowerBounds());
+    assertEquals(5, gene.getUpperBounds());
   }
 }
