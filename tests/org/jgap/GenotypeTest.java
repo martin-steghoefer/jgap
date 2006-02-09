@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -980,6 +980,7 @@ public class GenotypeTest
     Genotype genotype = new Genotype(conf, chroms);
     genotype.setActiveConfiguration(conf);
     genotype.setActiveConfiguration(null);
+    assertNull(genotype.getConfiguration());
   }
 
   public void testSetActiveConfiguration_1()
