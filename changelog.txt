@@ -54,6 +54,8 @@
 * Renamed class TestGenetics to SimpleExample
 * Improved TournamentSelector
 * Improved DeltaFitnessEvaluator
+* Added getters for lower and upper bounds in
+  IntegerGene
 * Fixed bug in TruthTableFitnessFunction
 * Fixed several bugs in Population (thanx Fanguad)
 * Capitalized supergene-related classes
