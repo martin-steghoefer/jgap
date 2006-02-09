@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.33 $";
+  private static final String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -338,4 +338,23 @@ public class IntegerGene
     }
     return s;
   }
+
+  /**
+   * @return the lower bounds of the integer gene
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int getLowerBounds() {
+    return m_lowerBounds;
+  }
+
+  /**
+   * @return the upper bounds of the integer gene
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int getUpperBounds() {
+    return m_upperBounds;
+  }
 }
+
