@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -47,11 +47,6 @@ public class PopulationTest
     catch (IllegalArgumentException iae) {
       ; //this is ok
     }
-  }
-
-  public void testConstruct_2() {
-    Population pop = new Population();
-    assertNotNull(pop);
   }
 
   public void testConstruct_3() {
@@ -101,6 +96,7 @@ public class PopulationTest
     Population p = new Population();
     p.setChromosome(0, c);
     p.setChromosome(0, c);
+    assertEquals(1, p.size());
     try {
       p.setChromosome(2, c);
       fail();
@@ -315,7 +311,7 @@ public class PopulationTest
   /**
    * @throws Exception
    *
-   * @author Fanguad,Klaus Meffert
+   * @author Dan Clark,Klaus Meffert
    * @since 2.6
    */
   public void testDetermineFittestChromosomes_1()
@@ -326,24 +322,23 @@ public class PopulationTest
     assertEquals(1, p.determineFittestChromosomes(1).size());
     assertEquals(3, p.determineFittestChromosomes(3).size());
     assertEquals(3, p.determineFittestChromosomes(3).size());
-    // Expect result list with 4 entries (not 5) as population consists
-    // of 4 entries. Even if more are requested, the maximum returned is 4
+    // Expect result list with 5 entries (not 6) as population consists
+    // of 5 entries. Even if more are requested, the maximum returned is 5
     // in this case.
-    assertEquals(4, p.determineFittestChromosomes(5).size());
+    assertEquals(5, p.determineFittestChromosomes(6).size());
   }
 
   /**
    * Exposes bug 1422962
    * @throws Exception
    *
-   * @author Fanguad, Klaus Meffert
+   * @author Dan Clark, Klaus Meffert
    * @since 2.6
    */
-  public void testFittestChromosomes_2()
+  public void testDetermineFittestChromosomes_2()
       throws Exception {
     Genotype.setConfiguration(new DefaultConfiguration());
     Population population = getNewPopulation();
-    // this first block works fine
     IChromosome topC = population.determineFittestChromosome();
     List top = population.determineFittestChromosomes(1);
     assertEquals(topC, population.determineFittestChromosome());
@@ -352,9 +347,21 @@ public class PopulationTest
     assertEquals(top.get(0), population.determineFittestChromosome());
     top = population.determineFittestChromosomes(3);
     assertEquals(top.get(0), population.determineFittestChromosome());
-    // but this did not
-    population = getNewPopulation();
-    top = population.determineFittestChromosomes(1);
+  }
+
+  /**
+   * Exposes bug 1422962
+   * @throws Exception
+   *
+   * @author Dan Clark, Klaus Meffert
+   * @since 2.6
+   */
+  public void testDetermineFittestChromosomes_3()
+      throws Exception {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    Population population = getNewPopulation();
+    assertTrue( population.isChanged());
+    List top = population.determineFittestChromosomes(1);
     assertEquals(top.get(0), population.determineFittestChromosome());
     top = population.determineFittestChromosomes(2);
     assertEquals(top.get(0), population.determineFittestChromosome());
@@ -362,10 +369,21 @@ public class PopulationTest
     assertEquals(top.get(0), population.determineFittestChromosome());
 
     population = getNewPopulation();
-    assertEquals(23, population.determineFittestChromosome().getFitnessValue(),
+    assertEquals(24, population.determineFittestChromosome().getFitnessValue(),
                  DELTA);
-    top = population.determineFittestChromosomes(1);
-    assertEquals(23, ((IChromosome)top.get(0)).getFitnessValue(), DELTA);
+    top = population.determineFittestChromosomes(5);
+    assertFalse( population.isChanged());
+    assertEquals(24, ((IChromosome)top.get(0)).getFitnessValue(), DELTA);
+    assertEquals(23, ((IChromosome)top.get(1)).getFitnessValue(), DELTA);
+    assertEquals(23, ((IChromosome)top.get(2)).getFitnessValue(), DELTA);
+    assertEquals(23, ((IChromosome)top.get(3)).getFitnessValue(), DELTA);
+    assertEquals(22, ((IChromosome)top.get(4)).getFitnessValue(), DELTA);
+    double oldFitness = population.getChromosome(0).getFitnessValue();
+    for (int i = 1; i < population.size(); i++) {
+      double currFitness = population.getChromosome(i).getFitnessValue();
+      assertTrue(currFitness <= oldFitness);
+      oldFitness = currFitness;
+    }
   }
 
   private static Population getNewPopulation()
@@ -374,6 +392,9 @@ public class PopulationTest
     Gene g = new DoubleGene();
     Chromosome c = new Chromosome(g, 10);
     c.setFitnessValue(22);
+    population.addChromosome(c);
+    c = new Chromosome(g, 10);
+    c.setFitnessValue(24);
     population.addChromosome(c);
     c = new Chromosome(g, 10);
     c.setFitnessValue(23);
@@ -449,6 +470,7 @@ public class PopulationTest
    */
   public void testGetGenome_1() {
     Population pop = new Population();
+    assertTrue( pop.isChanged());
     Gene g1 = new DoubleGene();
     Gene g2 = new StringGene();
     Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
@@ -493,6 +515,7 @@ public class PopulationTest
     g4.addGene(g6);
     Chromosome c2 = new Chromosome(new Gene[] {g3, g4});
     pop.addChromosome(c2);
+    assertTrue( pop.isChanged());
     // resolve CompositeGene with the following call
     List genes = pop.getGenome(true);
     assertEquals(5, genes.size());
@@ -536,6 +559,7 @@ public class PopulationTest
                                new IntegerGene(1, 5)});
     Population pop = new Population(chroms);
     assertEquals(pop, super.doSerialize(pop));
+    assertTrue( pop.isChanged());
   }
 
   /**
@@ -612,7 +636,66 @@ public class PopulationTest
     Population pop = new Population(chroms);
     IChromosome c = pop.removeChromosome(0);
     assertEquals(chroms[0], c);
-    assertTrue( ( (Boolean) privateAccessor.getField(pop, "m_changed")).
-               booleanValue());
+    assertTrue( pop.isChanged());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSortByFitness_0() {
+    IChromosome[] chroms = new Chromosome[3];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new DoubleGene(1, 5)});
+    chroms[0].setFitnessValueDirectly(45d);
+    chroms[1] = new Chromosome(new Gene[] {
+                               new DoubleGene(1, 5)});
+    chroms[1].setFitnessValueDirectly(41d);
+    chroms[2] = new Chromosome(new Gene[] {
+                               new DoubleGene(1, 5)});
+    chroms[2].setFitnessValueDirectly(47d);
+    Population pop = new Population(chroms);
+    assertTrue(pop.isChanged());
+    assertFalse(pop.isSorted());
+    pop.sortByFitness();
+    assertFalse(pop.isChanged());
+    assertTrue(pop.isSorted());
+    double oldFitness = pop.getChromosome(0).getFitnessValue();
+    for (int i = 1; i < pop.size(); i++) {
+      double currFitness = pop.getChromosome(i).getFitnessValue();
+      assertTrue(currFitness <= oldFitness);
+      oldFitness = currFitness;
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testSortByFitness_1() {
+    Population pop = new Population();
+    Gene g = new DoubleGene();
+    Chromosome c = new Chromosome(g, 10);
+    c.setFitnessValue(4.5d);
+    pop.addChromosome(c);
+    g = new DoubleGene();
+    c = new Chromosome(g, 10);
+    c.setFitnessValue(4.1d);
+    pop.addChromosome(c);
+    g = new DoubleGene();
+    c = new Chromosome(g, 10);
+    c.setFitnessValue(4.7d);
+    pop.addChromosome(c);
+    assertTrue(pop.isChanged());
+    assertFalse(pop.isSorted());
+    pop.sortByFitness();
+    assertFalse(pop.isChanged());
+    assertTrue(pop.isSorted());
+    double oldFitness = pop.getChromosome(0).getFitnessValue();
+    for (int i = 1; i < pop.size(); i++) {
+      double currFitness = pop.getChromosome(i).getFitnessValue();
+      assertTrue(currFitness <= oldFitness);
+      oldFitness = currFitness;
+    }
   }
 }
