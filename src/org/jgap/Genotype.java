@@ -32,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.73 $";
+  private final static String CVS_REVISION = "$Revision: 1.74 $";
 
   /**
    * The current active Configuration instance.
@@ -47,11 +47,10 @@ public class Genotype
   private Population m_population;
 
   /**
-   * Constructs a new Genotype instance with the given array of
-   * Chromosomes and the given active Configuration instance. Note
-   * that the Configuration object must be in a valid state
-   * when this method is invoked, or a InvalidconfigurationException
-   * will be thrown.
+   * Constructs a new Genotype instance with the given array of Chromosomes and
+   * the given active Configuration instance. Note that the Configuration object
+   * must be in a valid state when this method is invoked, or a
+   * InvalidConfigurationException will be thrown.
    *
    * @param a_activeConfiguration the current active Configuration object
    * @param a_initialChromosomes the Chromosome population to be managed by
@@ -369,7 +368,7 @@ public class Genotype
   /**
    * Convenience method that returns a newly constructed Genotype
    * instance configured according to the given Configuration instance.
-   * The population of Chromosomes will created according to the setup of
+   * The population of Chromosomes will be created according to the setup of
    * the sample Chromosome in the Configuration object, but the gene values
    * (alleles) will be set to random legal values.
    *
@@ -536,7 +535,7 @@ public class Genotype
   }
 
   /**
-   * Sets the configuration to use with the Genetic Algorithm
+   * Sets the configuration to use with the Genetic Algorithm.
    * @param a_configuration the configuration to use
    *
    * @author Klaus Meffert
@@ -558,7 +557,7 @@ public class Genotype
    *    n  31*y(n-1) + hashcode_n-1 = y(n)
    *
    * Each hashcode is a number and the binary equivalent is computed and
-   * reported.
+   * returned.
    * @return the computed hashcode
    *
    * @author vamsi
