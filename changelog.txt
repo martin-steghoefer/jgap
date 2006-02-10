@@ -57,7 +57,8 @@
 * Added getters for lower and upper bounds in
   IntegerGene
 * Fixed bug in TruthTableFitnessFunction
-* Fixed several bugs in Population (thanx Fanguad)
+* Fixed several bugs in Population (thanx Dan)
+* Fixed bug in ChromosomeFitnessComparator
 * Capitalized supergene-related classes
 
 2.5
