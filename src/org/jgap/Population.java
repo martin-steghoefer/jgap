@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.36 $";
+  private static final String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -65,7 +65,7 @@ public class Population
   /*
    * Constructs an empty Population with the given initial size.
    * @param a_size the initial size of the empty Population. The initial size
-   * is not fix, it is just for optimized list creation
+   * is not fix, it is just for optimized list creation.
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -76,7 +76,7 @@ public class Population
   }
 
   /*
-   * Constructs an empty Population with initial size 100.
+   * Constructs an empty Population with initial array size 100.
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -245,10 +245,11 @@ public class Population
   }
 
   /**
-   * Mark the population as changed. Look for usage of variable m_changed
-   * for details.
-   * @param a_changed true: mark population as changed; false: mark as not
-   * changed (meaning: changes already acknowledged)
+   * Mark that the population needs sorting for returning the fittest
+   * chromosome.
+   *
+   * @param a_changed true: population needs sorting for returning the fittest
+   * chromosome. false: pop. needs no sorting for this
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -258,6 +259,15 @@ public class Population
     setSorted(false);
   }
 
+  /**
+   * @return true: population's chromosomes (maybe) have been changed.
+   * false: not changed for sure
+   *
+   * @since 2.6
+   */
+  public boolean isChanged() {
+    return m_changed;
+  }
   /**
    * Mark the population as sorted.
    * @param a_sorted true: mark population as sorted
@@ -321,10 +331,34 @@ public class Population
       return getChromosomes().subList(0, numberOfChromosomes);
     }
     // Sort the list of chromosomes using the fitness comparator
-    Collections.sort(getChromosomes(), new ChromosomeFitnessComparator());
+    sortByFitness();
+    return getChromosomes().subList(0, numberOfChromosomes);
+  }
+
+  /**
+   * Sorts the chromosomes within the population according to their fitness
+   * value using ChromosomFitnessComparator.
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void sortByFitness() {
+    sort(new ChromosomeFitnessComparator());
     setChanged(false);
     setSorted(true);
-    return getChromosomes().subList(0, numberOfChromosomes);
+    m_fittestChromosome = (IChromosome)m_chromosomes.get(0);
+  }
+
+  /**
+   * Sorts the chromosomes within the population utilzing the given comparator.
+   *
+   * @param a_comparator the comparator to utilize for sorting
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void sort(Comparator a_comparator) {
+    Collections.sort(getChromosomes(), a_comparator);
   }
 
   /**
@@ -392,7 +426,7 @@ public class Population
     a_result.add(a_gene);
   }
 
-  public boolean getSorted() {
+  public boolean isSorted() {
     return m_sorted;
   }
 
