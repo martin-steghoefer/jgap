@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -171,6 +171,7 @@ public class GenotypeTest
     Genotype genotype = new Genotype(conf, chroms);
     assertTrue(genotype.getConfiguration().getFitnessEvaluator()
                instanceof DefaultFitnessEvaluator);
+    assertSame(conf, Genotype.getConfiguration());
   }
 
   /**
@@ -195,6 +196,11 @@ public class GenotypeTest
   }
 
   /**
+   * Tests that construction is possible without exception. Here, the sample
+   * chromosome is of a different type than the chromosome(s) making up the
+   * population. This is possible because the sample chromosome comes into play
+   * just with Genotype.randomInitialGenotype.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -289,7 +295,7 @@ public class GenotypeTest
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     IChromosome[] chroms = new Chromosome[1];
     IChromosome chrom = new Chromosome(new Gene[] {
-                                      new IntegerGene(1, 5)});
+                                       new IntegerGene(1, 5)});
     chroms[0] = chrom;
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(7);
@@ -454,28 +460,6 @@ public class GenotypeTest
     int popSize = config.getPopulationSize();
     genotype.evolve();
     assertTrue(popSize < genotype.getPopulation().size());
-  }
-
-  /**
-   * GeneticOperators missing
-   * @throws Exception
-   *
-   * @author Klaus Meffert
-   * @since 2.3
-   */
-  public void testEvolve_4()
-      throws Exception {
-    Configuration config = new ConfigurationForTest();
-    // Remove all genetic operators
-    config.getGeneticOperators().clear();
-    config.addNaturalSelector(new WeightedRouletteSelector(), true);
-    try {
-      Genotype.randomInitialGenotype(config);
-      fail();
-    }
-    catch (InvalidConfigurationException iex) {
-      ; //this is OK
-    }
   }
 
   /**
@@ -805,6 +789,28 @@ public class GenotypeTest
   }
 
   /**
+   * GeneticOperators missing
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testRandomInitialGenotype_4()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all genetic operators
+    config.getGeneticOperators().clear();
+    config.addNaturalSelector(new WeightedRouletteSelector(), true);
+    try {
+      Genotype.randomInitialGenotype(config);
+      fail();
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -819,7 +825,7 @@ public class GenotypeTest
     conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
     conf.setPopulationSize(99999);
     Genotype genotype = new Genotype(conf, chroms);
-    assertFalse(genotype.equals(null));
+    assertNotNull(genotype);
     Genotype genotype2 = new Genotype(conf, chroms);
     assertTrue(genotype.equals(genotype2));
     assertEquals(genotype.toString(), genotype2.toString());
@@ -1078,6 +1084,7 @@ public class GenotypeTest
     public Gene getGene(int a_desiredLocus) {
       return new IntegerGene();
     }
+
     public Gene[] getGenes() {
       return new Gene[] {};
     }
@@ -1092,12 +1099,14 @@ public class GenotypeTest
     public double getFitnessValue() {
       return 0;
     }
-    public void setFitnessValueDirectly(double a_newFitnessValue) {
 
+    public void setFitnessValueDirectly(double a_newFitnessValue) {
     }
+
     public double getFitnessValueDirectly() {
       return getFitnessValue();
     }
+
     public int compareTo(Object other) {
       return 0;
     }
@@ -1105,11 +1114,14 @@ public class GenotypeTest
     public void setGenes(Gene[] a_genes)
         throws InvalidConfigurationException {
     }
+
     public void setIsSelectedForNextGeneration(boolean a_isSelected) {
     }
+
     public boolean isSelectedForNextGeneration() {
       return true;
     }
+
     public Object clone() {
       return null;
     }
