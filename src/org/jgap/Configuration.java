@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration extends BaseConfigurable
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -983,6 +983,13 @@ public class Configuration extends BaseConfigurable
     }
   }
 
+  /**
+   * Minimum size guaranteed for population. This is significant during evolution
+   * as natural selectors could select fewer chromosomes for the next generation
+   * than the initial population size was.
+   * @param a_minimumSizeGuaranteedPercent if zero or below then no ensurance
+   * for size given, see Genotype.evolve()
+   */
   public void setMinimumPopSizePercent(int a_minimumSizeGuaranteedPercent) {
     m_minPercentageSizePopulation = a_minimumSizeGuaranteedPercent;
   }
