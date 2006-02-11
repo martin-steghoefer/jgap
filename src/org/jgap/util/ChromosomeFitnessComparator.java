@@ -20,32 +20,60 @@ import org.jgap.*;
  *     population.getPopulation().getChromosomes(),
  *     new ChromosomeFitnessComparator() );
  *
- * @author Charles Kevin Hill
+ * @author Charles Kevin Hill, Klaus Meffert
  * @since 2.4
  */
 public class ChromosomeFitnessComparator
     implements Comparator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
-  /* (non-Javadoc)
-   * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+  private FitnessEvaluator m_fitnessEvaluator;
+
+  /**
+   * Constructs the comparator using the DefaultFitnessEvaluator
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public ChromosomeFitnessComparator() {
+    this(new DefaultFitnessEvaluator());
+  }
+
+  /**
+   * @param a_evaluator the fitness evaluator to use
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public ChromosomeFitnessComparator(FitnessEvaluator a_evaluator) {
+    if (a_evaluator == null) {
+      throw new IllegalArgumentException("Evaluator must not be null");
+    }
+    m_fitnessEvaluator = a_evaluator;
+  }
+
+  /**
+   * Compares two chromosomes by using a FitnessEvaluator.
+   *
+   * @param a_chromosome1 the first chromosome to compare
+   * @param a_chromosome2 the second chromosome to compare
+   * @return -1 if a_chromosome1 is fitter than chromosome2, 1 if it is the other
+   * way round and 0 if both are equal
+   * @author Charles Kevin Hill, Klaus Meffert
+   * @since 2.6
    */
   public int compare(final Object a_chromosome1, final Object a_chromosome2) {
     IChromosome chromosomeOne = (IChromosome) a_chromosome1;
     IChromosome chromosomeTwo = (IChromosome) a_chromosome2;
-    double diff = Math.abs(chromosomeTwo.getFitnessValue() -
-                           chromosomeOne.getFitnessValue());
-    if (diff < 0.0000001) {
-      return 0;
+    if (m_fitnessEvaluator.isFitter(chromosomeOne, chromosomeTwo)) {
+      return -1;
+    }
+    else if (m_fitnessEvaluator.isFitter(chromosomeTwo, chromosomeOne)) {
+      return 1;
     }
     else {
-      if (chromosomeOne.getFitnessValue() > chromosomeTwo.getFitnessValue()) {
-        return -1;
-      }
-      else {
-        return 1;
-      }
+      return 0;
     }
   }
 }
