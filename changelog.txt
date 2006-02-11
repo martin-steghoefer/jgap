@@ -58,7 +58,9 @@
   IntegerGene
 * Fixed bug in TruthTableFitnessFunction
 * Fixed several bugs in Population (thanx Dan)
-* Fixed bug in ChromosomeFitnessComparator
+* Added equals and compareTo to Population
+* Fixed severe bug and design flaw in
+  ChromosomeFitnessComparator
 * Capitalized supergene-related classes
 
 2.5
