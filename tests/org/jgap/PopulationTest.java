@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -175,15 +175,29 @@ public class PopulationTest
     for (int i = 0; i < nTot; i++) {
       g = new DoubleGene();
       c = new Chromosome(g, 10);
+      c.getGene(0).setAllele( new Double( i ) );
       chromosomes.add(c);
     }
     Population p = new Population();
     p.setChromosomes(chromosomes);
     IChromosome[] aChrom = p.toChromosomes();
     assertEquals(aChrom.length, chromosomes.size());
-    for (int i = 0; i < nTot; i++) {
-      assertTrue(chromosomes.contains(aChrom[i]));
-    }
+    // compare populations with unsorted list of chromosomes
+    Population newPop = new Population(aChrom);
+    assertEquals(p, newPop);
+    assertEquals(newPop, p);
+    // compare list of chromosomes
+    Collections.sort(chromosomes);
+    List toChromosomes = Arrays.asList( aChrom );
+    Collections.sort(toChromosomes);
+    assertEquals(chromosomes, toChromosomes);
+    // compare populations with sorted list of chromosomes
+    Population newPop2 = new Population();
+    newPop2.setChromosomes(toChromosomes);
+    assertEquals(p, newPop2);
+    assertEquals(newPop, newPop2);
+    assertEquals(newPop2, p);
+    assertEquals(newPop2, newPop);
   }
 
   /**
@@ -644,6 +658,7 @@ public class PopulationTest
    * @since 2.6
    */
   public void testSortByFitness_0() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     IChromosome[] chroms = new Chromosome[3];
     chroms[0] = new Chromosome(new Gene[] {
                                new DoubleGene(1, 5)});
@@ -673,6 +688,7 @@ public class PopulationTest
    * @since 2.6
    */
   public void testSortByFitness_1() {
+    Genotype.setConfiguration(new DefaultConfiguration());
     Population pop = new Population();
     Gene g = new DoubleGene();
     Chromosome c = new Chromosome(g, 10);
