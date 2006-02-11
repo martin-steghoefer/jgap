@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.37 $";
+  private static final String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -146,7 +146,7 @@ public class Population
    */
   public void setChromosome(final int a_index, final IChromosome a_chromosome) {
     if (m_chromosomes.size() == a_index) {
-     addChromosome(a_chromosome);
+      addChromosome(a_chromosome);
     }
     else {
       m_chromosomes.set(a_index, a_chromosome);
@@ -268,6 +268,7 @@ public class Population
   public boolean isChanged() {
     return m_changed;
   }
+
   /**
    * Mark the population as sorted.
    * @param a_sorted true: mark population as sorted
@@ -343,10 +344,13 @@ public class Population
    * @since 2.6
    */
   public void sortByFitness() {
-    sort(new ChromosomeFitnessComparator());
+    /**@todo the following construction could be cached but wrt that the
+     * evaluator registered with the configuration could change!*/
+    sort(new ChromosomeFitnessComparator(Genotype.getConfiguration().
+                                         getFitnessEvaluator()));
     setChanged(false);
     setSorted(true);
-    m_fittestChromosome = (IChromosome)m_chromosomes.get(0);
+    m_fittestChromosome = (IChromosome) m_chromosomes.get(0);
   }
 
   /**
@@ -430,5 +434,60 @@ public class Population
     return m_sorted;
   }
 
-  /**@todo add equals and compareTo*/
+  /**
+   *
+   * @param a_pop the population instance to compare with
+   * @return true: given object equal to comparing one
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public boolean equals(Object a_pop) {
+    try {
+      return compareTo(a_pop) == 0;
+    }
+    catch (ClassCastException e) {
+      // If the other object isn't an Population instance
+      // then we're not equal.
+      // ------------------------------------------------
+      return false;
+    }
+  }
+
+  /**
+   * This method is not producing symmetric results as -1 is more often returned
+   * than 1 (see description of return value).
+   *
+   * @param a_pop the other population to compare
+   * @return -1: other object null or with fewer chromosomes or with equal number
+   * of chromosomes but at least one not contained. 0: both populations
+   * containing the same chromosomes. 1: this population contains fewer
+   * chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(Object a_pop) {
+    Population other = (Population) a_pop;
+    if (a_pop == null) {
+      return 1;
+    }
+    int size1 = size();
+    int size2 = other.size();
+    if (size1 != size2) {
+      if (size1 < size2) {
+        return -1;
+      }
+      else {
+        return 1;
+      }
+    }
+    List chroms2 = other.getChromosomes();
+    for (int i = 0; i < size1; i++) {
+      if (!chroms2.contains(m_chromosomes.get(i))) {
+        return 1;
+      }
+    }
+    return 0;
+  }
 }
