@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -224,7 +224,7 @@ public class BestChromosomesSelectorTest
     assertEquals(2, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(thirdBestChrom, bestChroms[1]);
-    assertTrue(bestChrom == bestChroms[0]);
+    assertNotSame(bestChrom, bestChroms[0]);
   }
 
   /**
@@ -266,7 +266,7 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Test selection algorithm with allowed doublettes
+   * Test selection algorithm with allowed doublettes.
    *
    * @throws Exception
    *
@@ -280,6 +280,9 @@ public class BestChromosomesSelectorTest
 
     BestChromosomesSelector selector = new BestChromosomesSelector();
     selector.setDoubletteChromosomesAllowed(true);
+    // the following original rate controls that only 30% of the chromosomes
+    // will be considered for selection as given with BestChromosomesSelector.
+    // The last 70% will be added as doublettes in this case.
     selector.setOriginalRate(0.3d);
     // add first chromosome
     // --------------------
@@ -318,6 +321,9 @@ public class BestChromosomesSelectorTest
     assertEquals(bestChrom, bestChroms[0]);
     assertEquals(bestChrom, bestChroms[1]);
     assertEquals(secondBestChrom, bestChroms[2]);
+
+    // non-unique chromosomes should have been returned
+    assertNotSame( "returned non-unique chromosomes", bestChroms[0], bestChroms[1] );
   }
 
   /**
@@ -357,8 +363,6 @@ public class BestChromosomesSelectorTest
     Genotype.setConfiguration(conf);
     Gene gene = new BooleanGene();
     Chromosome chrom = new Chromosome(gene, 5);
-    Population pop = new Population(1);
-    pop.addChromosome(chrom);
     selector.add(chrom);
     Population popNew = new Population();
     selector.select(1, null, popNew);
@@ -384,13 +388,11 @@ public class BestChromosomesSelectorTest
     Chromosome chrom = new Chromosome(gene, 5);
     Population pop = new Population(1);
     pop.addChromosome(chrom);
-    selector.add(chrom);
     Population popNew = new Population();
-    selector.select(1, null, popNew);
-    pop = popNew;
+    selector.select(1, pop, popNew);
     selector.empty();
-    assertEquals(1, pop.size());
-    assertNotNull(pop.getChromosome(0));
+    assertEquals(1, popNew.size());
+    assertNotNull(popNew.getChromosome(0));
   }
 
   /**
@@ -458,3 +460,6 @@ public class BestChromosomesSelectorTest
 
   }
 }
+
+
+
