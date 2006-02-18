@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.32 $";
+  private static final String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -194,6 +194,67 @@ public class MutationOperatorTest
     assertEquals(3 + 2 + 2, chroms.size());
   }
 
+  private Chromosome[] setUpPopulation(GeneticOperator op, RandomGenerator rand)
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    conf.addGeneticOperator(op);
+    Genotype.setConfiguration(conf);
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(0, 9);
+    Chromosome chrom = new Chromosome(sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    Gene[] genes1 = new Gene[3];
+    for (int i = 0; i < genes1.length; i++) {
+      genes1[i] = new IntegerGene(0, 9);
+      genes1[i].setAllele(new Integer(i));
+    }
+    Chromosome chrom1 = new Chromosome(genes1);
+    Gene[] genes2 = new Gene[3];
+    for (int i = 0; i < genes2.length; i++) {
+      genes2[i] = new IntegerGene(0, 9);
+      genes2[i].setAllele(new Integer(i + 3));
+    }
+    Chromosome chrom2 = new Chromosome(genes2);
+    return new Chromosome[] {
+        chrom1, chrom2};
+  }
+
+  /**
+   * @throws Exception
+   * @author Dan Clark
+   * @since 2.6
+   */
+  public void testOperate_3_1()
+      throws Exception {
+    GeneticOperator op = new MutationOperator(10);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    // 0 in this sequence represents a gene to be mutated
+    // thus, the middle gene of each chromosome should be mutated
+    rand.setNextIntSequence(new int[] {1, 0, 1});
+    rand.setNextDouble(0.7d);
+    // this will cause an increase of 4 in mutated values
+    // original + (0.7*2 - 1) * 10 (range of allele values)
+    Chromosome[] population = setUpPopulation(op, rand);
+    List chroms = new Vector();
+    Population pop = new Population(population);
+    op.operate(pop, chroms);
+    assertEquals(2, chroms.size());
+    // test chromosome 1 - 2nd gene should be different
+    Chromosome c1 = (Chromosome) chroms.get(0);
+    assertEquals(new Integer(0), c1.getGene(0).getAllele());
+    assertEquals(new Integer(1 + 4), c1.getGene(1).getAllele());
+    assertEquals(new Integer(2), c1.getGene(2).getAllele());
+    // test chromosome 2 - 2nd gene should be different
+    Chromosome c2 = (Chromosome) chroms.get(1);
+    assertEquals(new Integer(3), c2.getGene(0).getAllele());
+    assertEquals(new Integer(4 + 4), c2.getGene(1).getAllele());
+    assertEquals(new Integer(5), c2.getGene(2).getAllele());
+    op.operate(pop, chroms);
+    assertEquals(4, chroms.size());
+  }
+
   /**
    * Nothing to do. Test that nothing is done.
    *
@@ -248,7 +309,7 @@ public class MutationOperatorTest
     assertEquals(2 + 2, pop.getChromosomes().size());
     //old gene
     assertFalse( ( (BooleanGene) pop.getChromosome(0).getGene(0))
-                 .booleanValue());
+                .booleanValue());
     //mutated gene
     assertTrue( ( (BooleanGene) pop.getChromosome(2).getGene(0)).booleanValue());
     //old gene
@@ -346,7 +407,6 @@ public class MutationOperatorTest
     BooleanGene gene1 = new BooleanGene();
     Chromosome chrom1 = new Chromosome(gene1, 1);
     chrom1.getGene(0).setAllele(Boolean.valueOf(false));
-
     IntegerGene gene2 = new IntegerGene(0, 10);
     Chromosome chrom2 = new Chromosome(gene2, 1);
     chrom2.getGene(0).setAllele(new Integer(3));
@@ -355,18 +415,15 @@ public class MutationOperatorTest
     Configuration conf = new Configuration();
     conf.setPopulationSize(5);
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
-
     rn.setNextInt(0);
     rn.setNextInt(0);
     rn.setNextDouble(0.8d);
     conf.setRandomGenerator(rn);
     Genotype.setConfiguration(conf);
-
     IGeneticOperatorConstraint constraint = new
         GeneticOperatorConstraintForTest();
     Genotype.getConfiguration().getJGAPFactory().setGeneticOperatorConstraint(
         constraint);
-
     Population pop = new Population(chroms);
     mutOp.operate(pop, pop.getChromosomes());
     // +1 (not +2) because only IntegerGene should have been mutated.
@@ -414,12 +471,11 @@ public class MutationOperatorTest
       implements IGeneticOperatorConstraint {
     public boolean isValid(Population a_pop, List a_chromosomes,
                            GeneticOperator a_caller) {
-      Chromosome chrom = (Chromosome)a_chromosomes.get(0);
+      Chromosome chrom = (Chromosome) a_chromosomes.get(0);
       Gene gene = chrom.getGene(0);
       return gene.getClass() != BooleanGene.class;
     }
   }
-
   /**
    * Test equals with classcast object.
    *
@@ -427,7 +483,8 @@ public class MutationOperatorTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testEquals_0() throws Exception {
+  public void testEquals_0()
+      throws Exception {
     GeneticOperator op = new MutationOperator();
     assertFalse(op.equals(new Chromosome()));
   }
@@ -442,13 +499,13 @@ public class MutationOperatorTest
     MutationOperator op2 = new MutationOperator();
     assertEquals(0, op.compareTo(op2));
     op = new MutationOperator(3);
-    assertEquals(-1, op.compareTo(op2));
+    assertEquals( -1, op.compareTo(op2));
     assertEquals(1, op2.compareTo(op));
     op = new MutationOperator(new DefaultMutationRateCalculator());
     assertEquals(0, op.compareTo(op2));
     op = new MutationOperator(3);
     op2 = new MutationOperator(4);
-    assertEquals(-1, op.compareTo(op2));
+    assertEquals( -1, op.compareTo(op2));
     assertEquals(1, op2.compareTo(op));
   }
 }
