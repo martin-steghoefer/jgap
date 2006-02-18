@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -142,7 +142,7 @@ public class BestChromosomesSelector
     for (int i = 0; i < canBeSelected; i++) {
       selectedChromosome = m_chromosomes.getChromosome(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);
-      a_to_pop.addChromosome(selectedChromosome);
+      a_to_pop.addChromosome((IChromosome)selectedChromosome.clone());
     }
     if (getDoubletteChromosomesAllowed()) {
       int toAdd;
@@ -152,9 +152,10 @@ public class BestChromosomesSelector
         // result to contain the desired number of Chromosome's.
         // ---------------------------------------------------------------
         for (int i = 0; i < toAdd; i++) {
+          /**@todo add ramdonization*/
           selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
           selectedChromosome.setIsSelectedForNextGeneration(true);
-          a_to_pop.addChromosome(selectedChromosome);
+          a_to_pop.addChromosome((IChromosome)selectedChromosome.clone());
         }
       }
       while (toAdd > 0);
@@ -209,7 +210,12 @@ public class BestChromosomesSelector
   }
 
   /**
-   *
+   * Setting this parameter controls how many chromosomes of the original
+   * population will be considered for selection to the next population. If
+   * the value is 1 then the whole original population is considered, if it is
+   * 0.5 only half of the chromosomes are considered. If doublettes are allowed,
+   * then a number of chromosomes missing (number of to be selected minus number
+   * selected) will be added.
    * @param a_originalRate the rate of how many of the original chromosomes
    * will be selected according to BestChromosomeSelector's strategy. The rest
    * (non-original) of the chromosomes is added as duplicates
