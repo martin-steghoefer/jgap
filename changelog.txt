@@ -1,6 +1,7 @@
 2.6
 -----------------------------------------------------------
 * Improved general archictecture a lot!
+* Extended the javadoc documentation a lot
 * Added some type casts to make JGAP compatible with Java 5
 * Added interface IChromosome for Chromosome class and used
   it instead of Chromosome wherever possible!
