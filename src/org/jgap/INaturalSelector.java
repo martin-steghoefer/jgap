@@ -24,7 +24,7 @@ package org.jgap;
 public interface INaturalSelector {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.8 $";
+  final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Select a given number of Chromosomes from the pool that will move on
@@ -35,10 +35,10 @@ public interface INaturalSelector {
    * be selected than those with lower fitness values, but it should not be
    * guaranteed.
    *
-   * @param a_howManyToSelect The number of Chromosomes to select.
+   * @param a_howManyToSelect the number of Chromosomes to select
    * @param a_from_population the population the Chromosomes will be
-   * selected from.
-   * @param a_to_population the population the Chromosomes will be added to.
+   * selected from
+   * @param a_to_population the population the Chromosomes will be added to
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
