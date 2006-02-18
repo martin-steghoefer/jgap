@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.38 $";
+  private static final String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -138,6 +138,9 @@ public class Population
 
   /**
    * Sets in the given Chromosome on the given index in the list of chromosomes.
+   * If the given index is exceeding the list by one, the chromosome is
+   * appended.
+   *
    * @param a_index the index to set the Chromosome in
    * @param a_chromosome the Chromosome to be set in
    *
@@ -202,15 +205,12 @@ public class Population
   /**
    * @return the Population converted into a list of Chromosome's
    *
-   * @author Klaus Meffert
+   * @author Klaus Meffert, Dan Clark
    * @since 2.0
    */
   public IChromosome[] toChromosomes() {
-    IChromosome[] result = new IChromosome[m_chromosomes.size()];
-    for (int i = 0; i < m_chromosomes.size(); i++) {
-      result[i] = (IChromosome) m_chromosomes.get(i);
-    }
-    return result;
+    return (IChromosome[]) m_chromosomes.toArray(
+        new IChromosome[m_chromosomes.size()]);
   }
 
   /**
@@ -245,11 +245,10 @@ public class Population
   }
 
   /**
-   * Mark that the population needs sorting for returning the fittest
-   * chromosome.
+   * Mark that for the population the fittest chromosome may have changed.
    *
-   * @param a_changed true: population needs sorting for returning the fittest
-   * chromosome. false: pop. needs no sorting for this
+   * @param a_changed true: population'fittest chromosome may have changed
+   * false: fittest chromosome is known
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -361,7 +360,7 @@ public class Population
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void sort(Comparator a_comparator) {
+  protected void sort(Comparator a_comparator) {
     Collections.sort(getChromosomes(), a_comparator);
   }
 
@@ -459,10 +458,10 @@ public class Population
    * than 1 (see description of return value).
    *
    * @param a_pop the other population to compare
-   * @return -1: other object null or with fewer chromosomes or with equal number
+   * @return 1: a_pop is null or having fewer chromosomes or equal number
    * of chromosomes but at least one not contained. 0: both populations
-   * containing the same chromosomes. 1: this population contains fewer
-   * chromosomes
+   * containing exactly the same chromosomes. -1: this population contains fewer
+   * chromosomes than a_pop
    *
    * @author Klaus Meffert
    * @since 2.6
@@ -491,3 +490,7 @@ public class Population
     return 0;
   }
 }
+
+
+
+
