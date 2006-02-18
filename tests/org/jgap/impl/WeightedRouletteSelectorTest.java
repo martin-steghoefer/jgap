@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -134,6 +134,7 @@ public class WeightedRouletteSelectorTest
     IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
+    assertSame(thirdBestChrom, bestChroms[0]);
     // now select top 4 chromosomes (should only select 3!)
     // ----------------------------------------------------
     popNew.getChromosomes().clear();
