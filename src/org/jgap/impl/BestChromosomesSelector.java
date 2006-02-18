@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -142,23 +142,20 @@ public class BestChromosomesSelector
     for (int i = 0; i < canBeSelected; i++) {
       selectedChromosome = m_chromosomes.getChromosome(i);
       selectedChromosome.setIsSelectedForNextGeneration(true);
-      a_to_pop.addChromosome((IChromosome)selectedChromosome.clone());
+      a_to_pop.addChromosome(selectedChromosome);
     }
     if (getDoubletteChromosomesAllowed()) {
       int toAdd;
-      do {
-        toAdd = neededSize - a_to_pop.size();
-        // Add existing Chromosome's by cloning them to fill up the return
-        // result to contain the desired number of Chromosome's.
-        // ---------------------------------------------------------------
-        for (int i = 0; i < toAdd; i++) {
+      toAdd = neededSize - a_to_pop.size();
+      // Add existing Chromosome's to fill up the return
+      // result to contain the desired number of Chromosome's.
+      // -----------------------------------------------------
+      for (int i = 0; i < toAdd; i++) {
           /**@todo add ramdonization*/
-          selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
-          selectedChromosome.setIsSelectedForNextGeneration(true);
-          a_to_pop.addChromosome((IChromosome)selectedChromosome.clone());
-        }
+        selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
+        selectedChromosome.setIsSelectedForNextGeneration(true);
+        a_to_pop.addChromosome(selectedChromosome);
       }
-      while (toAdd > 0);
     }
   }
 
