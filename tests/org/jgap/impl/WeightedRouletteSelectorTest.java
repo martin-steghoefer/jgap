@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -371,4 +371,24 @@ public class WeightedRouletteSelectorTest
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     assertFalse(selector.returnsUniqueChromosomes());
   }
+
+  /**@todo add test*/
+//  public void test_WeightedSelection_0() {
+//    WeightedRouletteSelector ws = new WeightedRouletteSelector();
+//    // set a population of size 2
+//    int numCrossovers = 100;
+//    int crossoversSoFar = 0;
+//    while (crossoversSoFar < numCrossovers) {
+//      ws.select(2, a_population, parents);
+//      Chromosome mother = parents.getChromosome(0);
+//      Chromosome father = parents.getChromosome(1);
+//      parents.removeChromosome(1);
+//      parents.removeChromosome(0);
+//      if (father.equals(mother)) {
+//        continue;
+//      }
+//      // I had some crossover function here yet you don't need it for the test case.
+//      crossoversSoFar++;
+//    }
+//  }
 }
