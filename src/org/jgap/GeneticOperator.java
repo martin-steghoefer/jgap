@@ -27,7 +27,7 @@ public interface GeneticOperator
     extends java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -43,7 +43,12 @@ public interface GeneticOperator
    * list of chromosomes for performance issues. Thus would mean an in-place
    * modification. In ealier JGAP versions it was suggested never modifying the
    * input population. Please refer to implementations delivered with JGAP to
-   * get a picture of the way in-place modifications are possible.
+   * get a picture of the way non-susceptible in-place modifications are
+   * possible. If wrongly done, ConcurrentModificationException could be risen
+   * when accessing the population by an iterator in a GeneticOperator.
+   * Or, if population.getChromosomes().size() was used inside a loop where
+   * chromosomes were added to the input population this could lead to an
+   * infinite loop in worst case.
    *
    * @param a_population the population of chromosomes from the current
    * evolution prior to exposure to any genetic operators. Chromosomes in this

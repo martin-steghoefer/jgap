@@ -10,7 +10,6 @@
 package org.jgap;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.jgap.event.*;
@@ -32,7 +31,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.74 $";
+  private final static String CVS_REVISION = "$Revision: 1.75 $";
 
   /**
    * The current active Configuration instance.
@@ -218,7 +217,8 @@ public class Genotype
    * configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population. Note
    * that the population size not always remains constant (dependent on the
-   * NaturalSelectors used!).
+   * NaturalSelectors used!).<p>
+   * To consecutively call this method, use evolve(int).
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -232,7 +232,14 @@ public class Genotype
     }
 
     // Adjust population size to configured size (if wanted).
-    // ------------------------------------------------------
+    // Theoretically, this should be done at the end of this method.
+    // But for optimization issues it is not. If it is the last call to
+    // evolve() then the resulting population possibly contains more
+    // chromosomes than the wanted number. But this is no bad thing as
+    // more alternatives mean better chances having a fit candidate.
+    // If it is not the last call to evolve() then the next call will
+    // ensure the correct population size by calling keepPopSizeConstant.
+    // ------------------------------------------------------------------
     if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
       keepPopSizeConstant(getPopulation(),
                           m_activeConfiguration.getPopulationSize());
