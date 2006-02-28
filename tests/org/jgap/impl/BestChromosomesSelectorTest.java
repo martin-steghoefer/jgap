@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -312,18 +312,29 @@ public class BestChromosomesSelectorTest
     IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
-    // receive top 3 chromosomes
-    // -------------------------
+    // receive top 4 chromosomes with original rate = 0.3
+    // --------------------------------------------------
     pop.getChromosomes().clear();
-    selector.select(3, null, pop);
+    selector.select(4, null, pop);
     bestChroms = pop.toChromosomes();
-    assertEquals(3, bestChroms.length);
+    assertEquals(4, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
-    assertEquals(bestChrom, bestChroms[1]);
+    assertEquals(bestChrom, bestChroms[1]);//because of originalRate = 0.3
     assertEquals(secondBestChrom, bestChroms[2]);
-
-    // unique chromosomes should have been returned
+    assertEquals(thirdBestChrom, bestChroms[3]);
+    // non-unique chromosomes should have been returned
     assertSame(bestChroms[0], bestChroms[1] );
+    // receive top 4 chromosomes with original rate = 1
+    // ------------------------------------------------
+    pop.getChromosomes().clear();
+    selector.setOriginalRate(1.0d);
+    selector.select(4, null, pop);
+    bestChroms = pop.toChromosomes();
+    assertEquals(4, bestChroms.length);
+    assertEquals(bestChrom, bestChroms[0]);
+    assertEquals(secondBestChrom, bestChroms[1]);
+    assertEquals(thirdBestChrom, bestChroms[2]);
+    assertEquals(bestChrom, bestChroms[3]);
   }
 
   /**
