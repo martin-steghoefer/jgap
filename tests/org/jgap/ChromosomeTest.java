@@ -23,11 +23,10 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite(ChromosomeTest.class);
-    return suite;
+    return new TestSuite(ChromosomeTest.class);
   }
 
   /**
