@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -168,7 +168,7 @@ public class WeightedRouletteSelector
       SlotCounter currentCounter =
           (SlotCounter) chromosomeEntry.getValue();
       fitnessValues[i] = currentCounter.getFitnessValue();
-      counterValues[i] = currentCounter.getFitnessValue()
+      counterValues[i] = fitnessValues[i] //currentCounter.getFitnessValue()
           * currentCounter.getCounterValue();
       chromosomes[i] = currentChromosome;
       // We're also keeping track of the total number of slots,
@@ -213,12 +213,12 @@ public class WeightedRouletteSelector
    */
   private IChromosome spinWheel(final RandomGenerator a_generator,
                                final double[] a_fitnessValues,
-                               final double[] a_counterValues,
+                               double[] a_counterValues,
                                final IChromosome[] a_chromosomes) {
     // Randomly choose a slot on the wheel.
     // ------------------------------------
     double selectedSlot =
-        Math.abs(a_generator.nextDouble() * m_totalNumberOfUsedSlots);
+        a_generator.nextDouble() * m_totalNumberOfUsedSlots;
     if (selectedSlot > m_totalNumberOfUsedSlots) {
       selectedSlot = m_totalNumberOfUsedSlots;
     }
@@ -248,17 +248,25 @@ public class WeightedRouletteSelector
       currentSlot += a_counterValues[i];
       boolean found;
       if (evaluator.isFitter(2, 1)) {
-        found = currentSlot > selectedSlot - DELTA;
+        found = currentSlot >= selectedSlot;
       }
       else {
-        found = currentSlot <= selectedSlot - DELTA;
+        found = currentSlot <= selectedSlot;
       }
       if (found) {
         // Remove one instance of the chromosome from the wheel by
-        // decrementing the slot counter by the fitness value.
+        // decrementing the slot counter by the fitness value resp.
+        // resetting the counter if doublette chromosomes are not
+        // allowed.
         // -------------------------------------------------------
-        a_counterValues[i] -= a_fitnessValues[i];
-        m_totalNumberOfUsedSlots -= a_fitnessValues[i];
+         if ( !getDoubletteChromosomesAllowed() ) {
+           m_totalNumberOfUsedSlots -= a_counterValues[i];
+           a_counterValues[i] = 0;
+         }
+         else {
+           a_counterValues[i] -= a_fitnessValues[i];
+           m_totalNumberOfUsedSlots -= a_fitnessValues[i];
+         }
         // Now return our selected Chromosome.
         // -----------------------------------
         return a_chromosomes[i];
