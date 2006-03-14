@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -159,7 +159,7 @@ public class WeightedRouletteSelector
     double[] fitnessValues = new double[numberOfEntries];
     double[] counterValues = new double[numberOfEntries];
     IChromosome[] chromosomes = new Chromosome[numberOfEntries];
-    m_totalNumberOfUsedSlots = 0.0;
+    m_totalNumberOfUsedSlots = 0.0d;
     Iterator entryIterator = entries.iterator();
     for (int i = 0; i < numberOfEntries; i++) {
       Map.Entry chromosomeEntry = (Map.Entry) entryIterator.next();
@@ -238,7 +238,7 @@ public class WeightedRouletteSelector
     // reaches or exceeds the chosen slot number. When that happenes,
     // we've found the chromosome sitting in that slot and we return it.
     // --------------------------------------------------------------------
-    double currentSlot = 0.0;
+    double currentSlot = 0.0d;
     FitnessEvaluator evaluator = Genotype.getConfiguration().
         getFitnessEvaluator();
     for (int i = 0; i < a_counterValues.length; i++) {
@@ -248,10 +248,12 @@ public class WeightedRouletteSelector
       currentSlot += a_counterValues[i];
       boolean found;
       if (evaluator.isFitter(2, 1)) {
-        found = currentSlot >= selectedSlot;
+        // Introduced DELTA to fix bug 1449651
+        found = selectedSlot - currentSlot <= DELTA;
       }
       else {
-        found = currentSlot <= selectedSlot;
+        // Introduced DELTA to fix bug 1449651
+        found = currentSlot - selectedSlot <= DELTA;
       }
       if (found) {
         // Remove one instance of the chromosome from the wheel by
@@ -266,6 +268,10 @@ public class WeightedRouletteSelector
          else {
            a_counterValues[i] -= a_fitnessValues[i];
            m_totalNumberOfUsedSlots -= a_fitnessValues[i];
+         }
+        // Introduced DELTA to fix bug 1449651
+         if (Math.abs(m_totalNumberOfUsedSlots) < DELTA) {
+           m_totalNumberOfUsedSlots = 0.0d;
          }
         // Now return our selected Chromosome.
         // -----------------------------------
