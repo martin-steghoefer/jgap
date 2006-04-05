@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public void setUp() {
     super.setUp();
@@ -96,8 +96,8 @@ public class EvaluatorTest
     assertEquals( (7.3 + 4.8 + 11.4) / 3, avg.avgFitnessValue, DELTA);
     assertEquals( (Math.abs(4.8 - 7.3) / 2 + Math.abs(11.4 - 4.8) / 2) / 1,
                  avg.avgDiversityFitnessValue, DELTA);
-   assertEquals(0.0d, avg.avgBestDeltaFitnessValue, DELTA); //because only 1 run
- }
+    assertEquals(0.0d, avg.avgBestDeltaFitnessValue, DELTA); //because only 1 run
+  }
 
   public void testCalcPerformance_1()
       throws Exception {
@@ -275,5 +275,34 @@ public class EvaluatorTest
     assertEquals( (Math.abs(28 - 9)) / (double) 1, avg.avgBestDeltaFitnessValue,
                  DELTA);
     assertEquals( (double) 3 / 2 + (double) 3 / 2, avg.sizeAvg, DELTA);
+  }
+
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testConstruct_0()
+      throws Exception {
+    try {
+      Evaluator eval = new Evaluator(null);
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testHasNext_0()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    assertEquals(pconf.hasNext(), eval.hasNext());
   }
 }

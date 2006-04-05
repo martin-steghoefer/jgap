@@ -15,7 +15,7 @@ import junit.framework.*;
 public class PermutingConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public void setUp() {
     super.setUp();
@@ -31,6 +31,9 @@ public class PermutingConfigurationTest
    * generator initial, sample chromosome initial of reference configuration.
    * No error should occur.
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
    */
   public void testConstruct_0()
       throws Exception {
@@ -38,6 +41,12 @@ public class PermutingConfigurationTest
     new PermutingConfiguration(conf1);
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void testConstruct_1()
       throws Exception {
     Configuration conf1 = new DefaultConfiguration();
@@ -60,6 +69,9 @@ public class PermutingConfigurationTest
    * Tests if the correct number of permutations appears and that they are
    * unique.
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
    */
   public void testPermute_0()
       throws Exception {
@@ -96,5 +108,54 @@ public class PermutingConfigurationTest
       cache.put(hashI, hashI);
     }
     assertFalse(conf.hasNext());
+  }
+
+  /**
+   * Permutation without chromosome pool
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPermute_1()
+      throws Exception {
+    Configuration conf1 = new DefaultConfiguration();
+    conf1.setChromosomePool(null);
+    conf1.setFitnessFunction(new StaticFitnessFunction(0.5d));
+    PermutingConfiguration conf = new PermutingConfiguration(conf1);
+    assertFalse(conf.hasNext());
+    conf.addFitnessFunctionSlot(new StaticFitnessFunction(0.5d));
+    conf.addRandomGeneratorSlot(new StockRandomGenerator());
+    conf.addNaturalSelectorSlot(new BestChromosomesSelector());
+    conf.addGeneticOperatorSlot(new MutationOperator());
+    assertTrue(conf.hasNext());
+    Configuration c = conf.next();
+    assertNull(c.getChromosomePool());
+  }
+
+  /**
+   * Ensures that not supported methods throw an exception
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
+  public void testNotSupported_1()
+      throws Exception {
+    Configuration conf1 = new DefaultConfiguration();
+    conf1.setFitnessFunction(new StaticFitnessFunction(0.5d));
+    PermutingConfiguration conf = new PermutingConfiguration(conf1);
+    try {
+      conf.addNaturalSelector(null, true);
+      fail();
+    } catch (UnsupportedOperationException uex) {
+      ;//this is OK
+    }
+    try {
+      conf.addGeneticOperator(null);
+      fail();
+    } catch (UnsupportedOperationException uex) {
+      ;//this is OK
+    }
   }
 }
