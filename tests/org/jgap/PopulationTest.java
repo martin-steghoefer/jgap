@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -713,5 +713,19 @@ public class PopulationTest
       assertTrue(currFitness <= oldFitness);
       oldFitness = currFitness;
     }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCompareTo_0() {
+    Population pop = new Population();
+    assertEquals(1, pop.compareTo(null));
+    Population pop2 = new Population();
+    assertEquals(0, pop.compareTo(pop2));
+    pop2.addChromosome(new Chromosome());
+    assertEquals(-1, pop.compareTo(pop2));
+    assertEquals(1, pop2.compareTo(pop));
   }
 }

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -268,7 +268,7 @@ public class StringGeneTest
   }
 
   /**
-   * Using application data
+   * Comparation using application data
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -311,6 +311,32 @@ public class StringGeneTest
     } catch (ClassCastException cex) {
       ; // this is OK
     }
+  }
+
+  /**
+   * Comparation using application data and null allele
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCompareTo_2() {
+    Genotype.setConfiguration(new DefaultConfiguration());
+    Gene gene1 = new StringGene(2, 6);
+    gene1.setApplicationData(new Double(2.3d));
+    Gene gene2 = new StringGene(2, 6);
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+    gene1.setCompareApplicationData(true);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+    gene2.setCompareApplicationData(true);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals( -1, gene2.compareTo(gene1));
+    gene2.setApplicationData(new Double(2.3d));
+    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+    gene2.setApplicationData(null);
+    assertEquals(1, gene1.compareTo(gene2));
   }
 
   /**

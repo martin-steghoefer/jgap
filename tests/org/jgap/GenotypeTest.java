@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -854,6 +854,25 @@ public class GenotypeTest
     chroms2[1] = new Chromosome(new Gene[] {new IntegerGene(2, 4)});
     Genotype genotype2 = new Genotype(conf, chroms2);
     assertFalse(genotype.equals(genotype2));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_2()
+      throws Exception {
+    Chromosome[] chroms = new Chromosome[1];
+    chroms[0] = new Chromosome(new Gene[] {
+                               new IntegerGene(1, 5)});
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(5));
+    conf.setSampleChromosome(new Chromosome(new BooleanGene(), 9));
+    conf.setPopulationSize(99999);
+    Genotype genotype = new Genotype(conf, chroms);
+    assertFalse(genotype.equals(null));
   }
 
   /**

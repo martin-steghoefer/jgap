@@ -21,7 +21,7 @@ public final class DeltaFitnessEvaluatorTest
     extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DeltaFitnessEvaluatorTest.class);
@@ -60,5 +60,18 @@ public final class DeltaFitnessEvaluatorTest
     FitnessEvaluator evaluator = new DeltaFitnessEvaluator();
     assertEquals(false, evaluator.isFitter( -3, -1));
     assertEquals(false, evaluator.isFitter( -1, -3));
+  }
+
+  public void testIsFitter_6() {
+    FitnessEvaluator evaluator = new DeltaFitnessEvaluator();
+    Chromosome chrom1 = new Chromosome();
+    chrom1.setFitnessValue(2);
+    Chromosome chrom2 = new Chromosome();
+    chrom2.setFitnessValue(2);
+    assertEquals(false, evaluator.isFitter( chrom1, chrom2));
+    assertEquals(false, evaluator.isFitter( chrom2, chrom1));
+    chrom2.setFitnessValue(3);
+    assertEquals(true, evaluator.isFitter( chrom1, chrom2));
+    assertEquals(false, evaluator.isFitter( chrom2, chrom1));
   }
 }

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -403,6 +403,22 @@ public class IntegerGeneTest
     catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * Constructed IntegerGene without user initialization.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testPersistentRepresentation_6()
+      throws Exception {
+    IntegerGene gene1 = new IntegerGene();
+    assertEquals("null" + IntegerGene.PERSISTENT_FIELD_DELIMITER
+                 + Integer.MIN_VALUE + IntegerGene.PERSISTENT_FIELD_DELIMITER
+                 + Integer.MAX_VALUE,
+                 gene1.getPersistentRepresentation());
   }
 
   /**

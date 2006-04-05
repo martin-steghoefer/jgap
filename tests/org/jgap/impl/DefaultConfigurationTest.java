@@ -11,7 +11,6 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import org.jgap.event.*;
-
 import junit.framework.*;
 
 /**
@@ -22,9 +21,8 @@ import junit.framework.*;
  */
 public class DefaultConfigurationTest
     extends JGAPTestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -33,6 +31,7 @@ public class DefaultConfigurationTest
 
   /**
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testConstruct_0() {
     Configuration conf = new DefaultConfiguration();
@@ -61,5 +60,29 @@ public class DefaultConfigurationTest
       }
     }
     assertEquals(5, code);
+  }
+
+  /**
+   * Provoke error during initialization.
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testConstruct_1() {
+    try {
+      Configuration conf = new DefaultConfigForTest();
+      fail();
+    }
+    catch (RuntimeException rex) {
+      ; //this is OK
+    }
+  }
+
+  class DefaultConfigForTest
+      extends DefaultConfiguration {
+    public void setRandomGenerator(RandomGenerator a_generatorToSet)
+        throws InvalidConfigurationException {
+      throw new InvalidConfigurationException("For Test only");
+    }
   }
 }

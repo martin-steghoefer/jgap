@@ -22,7 +22,7 @@ import org.jgap.*;
 public class TruthTableFitnessFunctionTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TruthTableFitnessFunctionTest.class);
@@ -50,6 +50,25 @@ public class TruthTableFitnessFunctionTest
   }
 
   /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCalcFitness_1()
+      throws Exception {
+    Map inout = new HashMap();
+    inout.put(new Double(2), new Double(3));
+    inout.put(new Double(9), new Double(11));
+    Map truthTable = new HashMap();
+    truthTable.put(new Double(2), new Double(4));
+    truthTable.put(new Double(8), new Double(1));
+    truthTable.put(new Double(9), new Double(11));
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(7, truthTable);
+    assertEquals(2.0d, fitfunc.calcFitness(inout), DELTA);
+  }
+
+  /**
    * Implementing class of abstract TruthTableFitnessFunction class.
    *
    * @author Klaus Meffert
@@ -61,6 +80,11 @@ public class TruthTableFitnessFunctionTest
      * @since 2.0 (until 1.1: type int)
      */
     private double m_evaluationValue;
+
+    public TruthTableFitnessFunctionImpl(double a_evaluationValue, Map a_values) {
+      super(a_values);
+      m_evaluationValue = a_evaluationValue;
+    }
 
     public TruthTableFitnessFunctionImpl(double a_evaluationValue) {
       m_evaluationValue = a_evaluationValue;

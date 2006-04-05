@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultCloneHandlerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCloneHandlerTest.class);
@@ -87,6 +87,31 @@ public class DefaultCloneHandlerTest
     FixedBinaryGene clone = (FixedBinaryGene) handler.perform(orig,
         FixedBinaryGene.class, null);
     assertEquals(orig, clone);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus meffert
+   * @since 2.6
+   */
+  public void testIsHandlerFor_2()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    Object app = new MyAppDataForTest();
+    assertFalse(handler.isHandlerFor(app,
+        app.getClass()));
+  }
+
+  class MyAppDataForTest implements Cloneable {
+    public int compareTo(Object o) {
+      return 0;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+      throw new CloneNotSupportedException();
+    }
+
   }
 
   class MyCloneHandlerForTest
