@@ -22,7 +22,7 @@ import java.util.*;
 public class PermutingConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private List m_randomGeneratorSlots;
 
@@ -88,9 +88,7 @@ public class PermutingConfiguration
     if (a_conf.getSampleChromosome() != null) {
       setSampleChromosome(a_conf.getSampleChromosome());
     }
-    if (a_conf.getRandomGenerator() != null) {
-      setRandomGenerator(a_conf.getRandomGenerator());
-    }
+    setRandomGenerator(a_conf.getRandomGenerator());
     if (a_conf.getChromosomePool() != null) {
       setChromosomePool(a_conf.getChromosomePool());
     }
@@ -137,9 +135,7 @@ public class PermutingConfiguration
     if (getSampleChromosome() != null) {
       m_configuration.setSampleChromosome(getSampleChromosome());
     }
-    if (getRandomGenerator() != null) {
-      m_configuration.setRandomGenerator(getRandomGenerator());
-    }
+    m_configuration.setRandomGenerator(getRandomGenerator());
     if (getChromosomePool() != null) {
       m_configuration.setChromosomePool(getChromosomePool());
     }
