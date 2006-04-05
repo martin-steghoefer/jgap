@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -124,6 +124,27 @@ public class BaseGeneTest
     assertFalse(gene.equals(gene));
     assertFalse(gene.equals(new Integer(2)));
   }
+
+  /**
+   * Compare Application data
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testEquals_3() throws Exception {
+    Genotype.setConfiguration(new ConfigurationForTest());
+    Genotype.getConfiguration().getJGAPFactory();
+    BaseGeneImpl gene = new BaseGeneImpl();
+    gene.m_compareTo_result = 0;
+    gene.setApplicationData(new AppDataForTest());
+    BaseGeneImpl gene2 = new BaseGeneImpl();
+    gene2.m_compareTo_result = 0;
+    gene2.setApplicationData(new AppDataForTest());
+    gene.setCompareApplicationData(true);
+    assertTrue(gene.equals(gene2));
+    /**@todo use other than JGAPFactory to be able to receive a null
+     * CompareToHandler for the application data object
+     */
+    }
 
   /**
    * Simple cleanup should be possible without exception
@@ -249,6 +270,15 @@ public class BaseGeneTest
 
     protected Object getInternalValue() {
       return m_allele;
+    }
+  }
+
+  class AppDataForTest implements IApplicationData {
+    public int compareTo(Object o2) {
+      return 0;
+    }
+    public Object clone() throws CloneNotSupportedException {
+      return null;
     }
   }
 }

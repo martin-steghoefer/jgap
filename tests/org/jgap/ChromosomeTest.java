@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -33,6 +33,7 @@ public class ChromosomeTest
    * Illegal constructions regarding first parameter
    *
    * @author Klaus Meffert
+   * @since 2.5
    */
   public void testConstruct_0() {
     try {
@@ -394,30 +395,30 @@ public class ChromosomeTest
     assertEquals(Chromosome.class, chrom.clone().getClass());
     chrom.cleanup();
     conf.setChromosomePool(null);
-    chrom.cleanup();
   }
 
   /**
-   * Tests cloning and cleanup of a chromosome
+   * Tests cloning of a chromosome with genes using the chromosome pool
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 2.4
+   * @since 2.6
    */
   public void testClone_6()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new RandomFitnessFunction());
     Genotype.setConfiguration(conf);
-    Chromosome chrom = new Chromosome();
-    assertEquals(0, chrom.size());
+    Gene[] genes = new IntegerGene[2];
+    genes[0] = new IntegerGene();
+    genes[1] = new IntegerGene();
+    Chromosome chrom = new Chromosome(genes);
+    chrom.cleanup();
+    assertEquals(2, chrom.size());
     Chromosome chrom2 = (Chromosome) chrom.clone();
     assertEquals(chrom, chrom2);
-    conf.getChromosomePool().releaseChromosome(chrom);
-    assertEquals(Chromosome.class, chrom.clone().getClass());
-    chrom.cleanup();
-    conf.setChromosomePool(null);
-    chrom.cleanup();
+    Chromosome chrom3 = (Chromosome) chrom.clone();
+    assertEquals(chrom3, chrom2);
   }
 
   /**
@@ -499,7 +500,7 @@ public class ChromosomeTest
     Object appObj = new MyAppObject();
     chrom.setApplicationData(appObj);
     Chromosome cloned = (Chromosome) chrom.clone();
-    assertTrue(appObj == cloned.getApplicationData());
+    assertSame(appObj, cloned.getApplicationData());
   }
 
   /**

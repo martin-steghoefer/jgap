@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -756,6 +756,10 @@ public class ConfigurationTest
   public void testToString_0()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
+    conf.addGeneticOperator(new MutationOperator());
+    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    conf.addNaturalSelector(new BestChromosomesSelector(), false);
     String s = trimString(conf.toString());
     String eventmgr = conf.getEventManager() != null ?
         conf.getEventManager().getClass().getName() : conf.S_NONE;
@@ -766,7 +770,7 @@ public class ConfigurationTest
     else {
       for (int i = 0; i < conf.getGeneticOperators().size(); i++) {
         if (i > 0) {
-          genops += ";";
+          genops += "; ";
         }
         genops += conf.getGeneticOperators().get(i).getClass().getName(); ;
       }
@@ -839,6 +843,64 @@ public class ConfigurationTest
                             ), s);
   }
 
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testToString_1()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    conf.getGeneticOperators().clear();
+    conf.getNaturalSelectors(false).clear();
+    conf.getNaturalSelectors(true).clear();
+    privateAccessor.setField(conf,"m_eventManager",null);
+    String s = trimString(conf.toString());
+    String eventmgr = conf.S_NONE;
+    String genops = conf.S_NONE;
+    // natural selectors (pre)
+    String natselsPre = conf.S_NONE;
+    // natural selectors (post)
+    String natselsPost = conf.S_NONE;
+    assertEquals(trimString(conf.S_CONFIGURATION + ":"
+                            + conf.S_CONFIGURATION_NAME + ":"
+                            + conf.getName() + " "
+                            + conf.S_POPULATION_SIZE + ":"
+                            + conf.getPopulationSize() + " "
+                            + conf.S_MINPOPSIZE + ":"
+                            + conf.getMinimumPopSizePercent() + " "
+                            + conf.S_CHROMOSOME_SIZE + ":"
+                            + conf.getChromosomeSize() + " "
+                            + conf.S_SAMPLE_CHROM + ":"
+                            + conf.S_SIZE + ":"
+                            + conf.getSampleChromosome().size() + " "
+                            + conf.S_TOSTRING + ":"
+                            + conf.getSampleChromosome().toString() + " "
+                            + conf.S_RANDOM_GENERATOR + ":"
+                            + conf.getRandomGenerator().getClass().getName() +
+                            " "
+                            + conf.S_EVENT_MANAGER + ":"
+                            + eventmgr + " "
+                            + conf.S_CONFIGURATION_HANDLER + ":"
+                            + conf.getConfigurationHandler().getName() + " "
+                            + conf.S_FITNESS_FUNCTION + ":"
+                            + conf.getFitnessFunction().getClass().getName() +
+                            " "
+                            + conf.S_FITNESS_EVALUATOR + ":"
+                            + conf.getFitnessEvaluator().getClass().getName() +
+                            " "
+                            + conf.S_GENETIC_OPERATORS + ":"
+                            + genops + " "
+                            + conf.S_NATURAL_SELECTORS + "(" + conf.S_PRE + ")" +
+                            ":"
+                            + natselsPre + " "
+                            + conf.S_NATURAL_SELECTORS + "(" + conf.S_POST +
+                            ")" + ":"
+                            + natselsPost + " "
+                            ), s);
+  }
   /**
    *
    * @param s1 String
