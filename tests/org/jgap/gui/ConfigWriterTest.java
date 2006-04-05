@@ -28,7 +28,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -109,7 +109,7 @@ public class ConfigWriterTest
    */
   public void testConfigReader_0()
       throws Exception {
-    Configuration config = new CustomConfiguration("jgapTest.con");
+    Configuration config = new Configuration("jgapTest.con", false);
     assertEquals(config.getPopulationSize(), 35);
     // Some setup so that the Configuration doesn't throw an Exception. We do
     // not set the population size of the Configuration since this is supposed
