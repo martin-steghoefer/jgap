@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -418,7 +418,7 @@ public class TournamentSelectorTest
     conf.setRandomGenerator(rn);
     Genotype.setConfiguration(conf);
     TournamentSelector selector = new TournamentSelector(4, 0.00001d);
-    privateAccessor.setField(selector, "m_probability", new Double(0.0d));
+    setNestedField(selector, "m_config", "m_probability", new Double(0.0d));
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene();

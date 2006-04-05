@@ -10,12 +10,14 @@
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 import junitx.util.*;
 
 /**
- * Tests for ThresholdSelector class
+ * Tests for ThresholdSelector class.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -23,7 +25,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -55,11 +57,11 @@ public class ThresholdSelectorTest
   public void testConstruct_2()
       throws Exception {
     ThresholdSelector selector = new ThresholdSelector(0.5d);
-    Double m_bestChroms_Percentage = (Double) PrivateAccessor.getField(selector,
-        "m_bestChroms_Percentage");
+    Double m_bestChroms_Percentage = (Double) getNestedField(selector,
+        "m_config","m_bestChroms_Percentage");
     assertEquals(0.5d, m_bestChroms_Percentage.doubleValue(), DELTA);
     assertFalse(selector.returnsUniqueChromosomes());
-    Object m_fitnessValueComparator = PrivateAccessor.getField(selector,
+    Object m_fitnessValueComparator = privateAccessor.getField(selector,
         "m_fitnessValueComparator");
     assertTrue(m_fitnessValueComparator != null);
   }
@@ -281,7 +283,7 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Always select best chromosome if threshold is 1.0d. Targte population not
+   * Always select best chromosome if threshold is 1.0d. Target population not
    * empty.
    *
    * @throws Exception
@@ -347,7 +349,7 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Test if clear()-method does not affect original Population.
+   * Test if method clear() does not affect original Population.
    *
    * @throws Exception
    * @author Klaus Meffert
@@ -371,7 +373,7 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Test if clear()-method does not affect return value.
+   * Test if method clear() does not affect return value.
    *
    * @throws Exception
    * @author Klaus Meffert
