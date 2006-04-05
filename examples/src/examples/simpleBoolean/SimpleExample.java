@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Starts the example
@@ -33,7 +33,13 @@ public class SimpleExample {
     gaConf.setPreservFittestIndividual(true);
     gaConf.setKeepPopulationSizeConstant(false);
     Genotype genotype = null;
-    int chromeSize = 16;
+    int chromeSize;
+    if (args.length > 0) {
+      chromeSize = Integer.parseInt(args[0]);
+    }
+    else {
+      chromeSize = 16;
+    }
     double maxFitness = Math.pow(2.0, (double)chromeSize) -1;
     if (chromeSize > 32) {
       System.err.println("This example does not handle " +
