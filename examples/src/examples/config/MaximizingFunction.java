@@ -27,7 +27,7 @@ import org.jgap.impl.*;
  * */
 public class MaximizingFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Default Constructor
@@ -46,7 +46,7 @@ public class MaximizingFunction {
   public static void main(String args[]) {
     Configuration config;
     try {
-      config = new CustomConfiguration("jgapTest.con");
+      config = new Configuration("jgapTest.con", false);
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -79,8 +79,8 @@ public class MaximizingFunction {
       icEx.printStackTrace();
       return;
     }
-    // We expect the rest of the config parameter for example the population
-    // size to be set via the config file
+    // We expect the rest of the config parameter, for example the population
+    // size, to be set via the config file
 
     // Evolve the population
     for (int i = 0; i < 10; i++) {
