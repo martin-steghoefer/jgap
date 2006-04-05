@@ -11,7 +11,6 @@ package org.jgap.impl;
 
 import java.util.*;
 import org.jgap.*;
-import org.jgap.data.config.*;
 
 /**
  * Implementation of a NaturalSelector that plays tournaments to determine
@@ -26,20 +25,10 @@ import org.jgap.data.config.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
-  /**
-   * The probability for selecting the best chromosome in a tournament.
-   * For the second-best chromosome it would be p * (1 - p).
-   * For the third-best chromosome it would be p * (p * (1 - p)) and so forth.
-   */
-  private double m_probability;
-
-  /**
-   * Size of a tournament to be played, i.e. number of chromosomes taken into
-   * account for one selection round
-   */
-  private int m_tournament_size;
+  private TournamentSelectorConfigurable m_config
+      = new TournamentSelectorConfigurable();
 
   private List m_chromosomes;
 
@@ -49,8 +38,9 @@ public class TournamentSelector
   private FitnessValueComparator m_fitnessValueComparator;
 
   /**
-   * Default Constructor, needed to create Configurable via Class class.
-   * @author Siddhartha Azad.
+   * Default Constructor
+   *
+   * @author Siddhartha Azad
    */
   public TournamentSelector() {
     super();
@@ -76,23 +66,23 @@ public class TournamentSelector
       throw new IllegalArgumentException("Probability must be greater 0.0 and"
                                          + " less or equal than 1.0!");
     }
-    m_tournament_size = a_tournament_size;
-    m_probability = a_probability;
+    m_config.m_tournament_size = a_tournament_size;
+    m_config.m_probability = a_probability;
   }
 
   public void setTournamentSize(final int a_tournament_size) {
     if (a_tournament_size < 1) {
       throw new IllegalArgumentException("Tournament size must be at least 1!");
     }
-    m_tournament_size = a_tournament_size;
+    m_config.m_tournament_size = a_tournament_size;
   }
 
   public int getTournamentSize() {
-    return m_tournament_size;
+    return m_config.m_tournament_size;
   }
 
   public double getProbability() {
-    return m_probability;
+    return m_config.m_probability;
   }
 
   public void setProbability(final double a_probability) {
@@ -100,7 +90,7 @@ public class TournamentSelector
       throw new IllegalArgumentException("Probability must be greater 0.0 and"
                                          + " less or equal than 1.0!");
     }
-    m_probability = a_probability;
+    m_config.m_probability = a_probability;
   }
 
   /**
@@ -132,26 +122,26 @@ public class TournamentSelector
     for (int i = 0; i < a_howManyToSelect; i++) {
       // choose [tournament size] individuals from the population at random
       tournament.clear();
-      for (int j = 0; j < m_tournament_size; j++) {
+      for (int j = 0; j < m_config.m_tournament_size; j++) {
         k = rn.nextInt(size);
         tournament.add(m_chromosomes.get(k));
       }
       Collections.sort(tournament, m_fitnessValueComparator);
       double prob = rn.nextDouble();
-      double probAccumulated = m_probability;
+      double probAccumulated = m_config.m_probability;
       int index = 0;
       //play the tournament
-      if (m_tournament_size > 1) {
+      if (m_config.m_tournament_size > 1) {
         do {
           if (prob <= probAccumulated) {
             break;
           }
           else {
-            probAccumulated += probAccumulated * (1 - m_probability);
+            probAccumulated += probAccumulated * (1 - m_config.m_probability);
             index++;
           }
         }
-        while (index < m_tournament_size - 1);
+        while (index < m_config.m_tournament_size - 1);
       }
       a_to_pop.addChromosome( (IChromosome) tournament.get(index));
     }
@@ -207,35 +197,20 @@ public class TournamentSelector
       }
     }
   }
-  /**
-   * Get the ConfigurationHandler for this class.
-   *
-   * @author Siddhartha Azad
-   * @since 2.0
-   * */
-  public ConfigurationHandler getConfigurationHandler()
-      throws ConfigException {
-    TournamentSelectorConHandler conHandler = new TournamentSelectorConHandler();
-    conHandler.setConfigurable(this);
-    return conHandler;
-  }
 
-  /**
-   * Pass the name and value of a property to be set.
-   * @param a_name the name of the property
-   * @param a_value the value of the property
-   *
-   * @author Siddhartha Azad.
-   * @since 2.0
-   * */
-  public void setConfigProperty(String a_name, String a_value)
-      throws ConfigException, InvalidConfigurationException {
-    if (a_name.equals("m_probability")) {
-      m_probability = Double.parseDouble(a_name);
-    }
-    else {
-      super.setConfigProperty(a_name, a_value);
-    }
-  }
+  class TournamentSelectorConfigurable {
+    /**
+     * The probability for selecting the best chromosome in a tournament.
+     * For the second-best chromosome it would be p * (1 - p).
+     * For the third-best chromosome it would be p * (p * (1 - p)) and so forth.
+     */
+    public double m_probability;
 
+    /**
+     * Size of a tournament to be played, i.e. number of chromosomes taken into
+     * account for one selection round
+     */
+    public int m_tournament_size;
+
+  }
 }

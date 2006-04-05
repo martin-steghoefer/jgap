@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -58,17 +58,17 @@ public class WeightedRouletteSelector
    */
   private Pool m_counterPool = new Pool();
 
-  /**
-   * Allows or disallows doublette chromosomes to be added to the selector
-   */
-  private boolean m_doublettesAllowed;
+  private WeightedRouletteSelConfig m_config
+      = new WeightedRouletteSelConfig();
 
   /**
+   * Default Constructor.
+   *
    * @author Klaus Meffert
-   * @since 2.0 (prior: existent thru super class)
+   * @since 2.0
    */
   public WeightedRouletteSelector() {
-    m_doublettesAllowed = true;
+    m_config.m_doublettesAllowed = true;
   }
 
   /**
@@ -278,6 +278,7 @@ public class WeightedRouletteSelector
         return a_chromosomes[i];
       }
     }
+    /**@todo remove the following code after we are sure that this class works*/
     // If we have reached here, it means we have not found any chromosomes
     // to select and something is wrong with our logic. For some reason
     // the selected slot has exceeded the slots on our wheel. To help
@@ -372,7 +373,7 @@ public class WeightedRouletteSelector
    * @since 2.0
    */
   public void setDoubletteChromosomesAllowed(final boolean a_doublettesAllowed) {
-    m_doublettesAllowed = a_doublettesAllowed;
+    m_config.m_doublettesAllowed = a_doublettesAllowed;
   }
 
   /**
@@ -382,11 +383,18 @@ public class WeightedRouletteSelector
    * @since 2.0
    */
   public boolean getDoubletteChromosomesAllowed() {
-    return m_doublettesAllowed;
+    return m_config.m_doublettesAllowed;
   }
   // methods derived from the Configurable interface
 
 
+  class WeightedRouletteSelConfig {
+    /**
+     * Allows or disallows doublette chromosomes to be added to the selector
+     */
+    public boolean m_doublettesAllowed;
+
+  }
 }
 
 /**
@@ -479,4 +487,5 @@ class SlotCounter {
   public void scaleFitnessValue(final double a_scalingFactor) {
     m_fitnessValue /= a_scalingFactor;
   }
+
 }

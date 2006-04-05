@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -45,14 +45,10 @@ public class BestChromosomesSelector
    */
   private FitnessValueComparator m_fitnessValueComparator;
 
-  /**
-   * The rate of original Chromosomes selected. This is because we otherwise
-   * would always return the original input as output
-   */
-  private double m_originalRate;
+  private BestChromosomesSelectorConfig m_config = new BestChromosomesSelectorConfig();
 
   /**
-   * Constructor
+   * Default constructor
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -123,8 +119,8 @@ public class BestChromosomesSelector
       canBeSelected = a_howManyToSelect;
     }
     int neededSize = a_howManyToSelect;
-    if (m_originalRate < 1.0d) {
-      canBeSelected = (int) Math.round( (double) canBeSelected * m_originalRate);
+    if (m_config.m_originalRate < 1.0d) {
+      canBeSelected = (int) Math.round( (double) canBeSelected * m_config.m_originalRate);
       if (canBeSelected < 1) {
         canBeSelected = 1;
       }
@@ -226,7 +222,7 @@ public class BestChromosomesSelector
       throw new IllegalArgumentException("Original rate must be greater than"
                                          + " zero and not greater than one!");
     }
-    m_originalRate = a_originalRate;
+    m_config.m_originalRate = a_originalRate;
   }
 
   /**
@@ -237,7 +233,20 @@ public class BestChromosomesSelector
    * @since 2.0
    */
   public double getOriginalRate() {
-    return m_originalRate;
+    return m_config.m_originalRate;
   }
 
+//  public String getConfigVarName() {
+//    return "m_config";
+//  }
+
+  class BestChromosomesSelectorConfig {
+
+    /**
+     * The rate of original Chromosomes selected. This is because we otherwise
+     * would always return the original input as output
+     */
+    public double m_originalRate;
+
+  }
 }

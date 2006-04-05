@@ -31,18 +31,9 @@ import org.jgap.data.config.*;
  * @since 1.0
  */
 public class MutationOperator
-    extends BaseConfigurable
     implements GeneticOperator, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
-
-  /**
-   * The current mutation rate used by this MutationOperator, expressed as
-   * the denominator in the 1 / X ratio. For example, X = 1000 would
-   * mean that, on average, 1 / 1000 genes would be mutated. A value of zero
-   * disables mutation entirely.
-   */
-  private int m_mutationRate;
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -50,6 +41,8 @@ public class MutationOperator
    * boolean m_dynamicMutationRate.
    */
   private IUniversalRateCalculator m_mutationRateCalc;
+
+  private MutationOperatorConfigurable m_config = new MutationOperatorConfigurable();
 
   /**
    * Constructs a new instance of this MutationOperator without a specified
@@ -92,7 +85,7 @@ public class MutationOperator
    * @since 1.1
    */
   public MutationOperator(final int a_desiredMutationRate) {
-    m_mutationRate = a_desiredMutationRate;
+    m_config.m_mutationRate = a_desiredMutationRate;
     setMutationRateCalc(null);
   }
 
@@ -109,7 +102,7 @@ public class MutationOperator
       // -----------------------------------------------
       return;
     }
-    if (m_mutationRate == 0 && m_mutationRateCalc == null) {
+    if (m_config.m_mutationRate == 0 && m_mutationRateCalc == null) {
       // If the mutation rate is set to zero and dynamic mutation rate is
       // disabled, then we don't perform any mutation.
       // ----------------------------------------------------------------
@@ -146,7 +139,7 @@ public class MutationOperator
           // Non-dynamic, so just mutate based on the the current rate.
           // In fact we use a rate of 1/m_mutationRate.
           // ----------------------------------------------------------
-          mutate = (generator.nextInt(m_mutationRate) == 0);
+          mutate = (generator.nextInt(m_config.m_mutationRate) == 0);
         }
         if (mutate) {
           // Verify that crossover allowed.
@@ -238,38 +231,7 @@ public class MutationOperator
                                   a_mutationRateCalc) {
     m_mutationRateCalc = a_mutationRateCalc;
     if (m_mutationRateCalc != null) {
-      m_mutationRate = 0;
-    }
-  }
-
-  /**
-   * Get the ConfigurationHandler for this class.
-   *
-   * @author Siddhartha Azad
-   * @since 2.4
-   * */
-  public ConfigurationHandler getConfigurationHandler()
-      throws ConfigException {
-    MutationOperatorConHandler conHandler = new MutationOperatorConHandler();
-    conHandler.setConfigurable(this);
-    return conHandler;
-  }
-
-  /**
-   * Pass the name and value of a property to be set.
-   * @param a_name the name of the property
-   * @param a_value the value of the property
-   *
-   * @author Siddhartha Azad
-   * @since 2.4
-   * */
-  public void setConfigProperty(final String a_name, final String a_value)
-      throws ConfigException, InvalidConfigurationException {
-    if (a_name.equals("m_mutationRate")) {
-      m_mutationRate = Integer.parseInt(a_value);
-    }
-    else {
-      super.setConfigProperty(a_name, a_value);
+      m_config.m_mutationRate = 0;
     }
   }
 
@@ -321,8 +283,8 @@ public class MutationOperator
       else {
       }
     }
-    if (m_mutationRate != op.m_mutationRate) {
-      if (m_mutationRate > op.m_mutationRate) {
+    if (m_config.m_mutationRate != op.m_config.m_mutationRate) {
+      if (m_config.m_mutationRate > op.m_config.m_mutationRate) {
         return 1;
       }
       else {
@@ -335,6 +297,19 @@ public class MutationOperator
   }
 
   public int getMutationRate() {
-    return m_mutationRate;
+    return m_config.m_mutationRate;
+  }
+
+  class MutationOperatorConfigurable implements java.io.Serializable {
+
+    /**
+     * The current mutation rate used by this MutationOperator, expressed as
+     * the denominator in the 1 / X ratio. For example, X = 1000 would
+     * mean that, on average, 1 / 1000 genes would be mutated. A value of zero
+     * disables mutation entirely.
+     */
+    public int m_mutationRate;
+
+
   }
 }
