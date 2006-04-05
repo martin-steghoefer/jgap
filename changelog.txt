@@ -1,6 +1,6 @@
 2.6
 -----------------------------------------------------------
-* Improved general archictecture a lot!
+* Improved general architecture a lot
 * Extended the javadoc documentation a lot
 * Added some type casts to make JGAP compatible with Java 5
 * Added interface IChromosome for Chromosome class and used
@@ -47,18 +47,22 @@
 * Extensively took care of coding conventions
   (Checkstyle, Findbugs)
 * Extensively fixed code smells
+* Added tests for class KeyedValue
 * Extended and fixed javadoc
 * Removed some unneeded local variables
 * Renamed class instantiableSupergene in 
   class SupergenePersistentRepresentationTest
   to InstantiableSupergene
 * Renamed class TestGenetics to SimpleExample
+* Removed class NonValidatingSupergene, use CompositeGene
+  instead
 * Improved TournamentSelector
 * Improved DeltaFitnessEvaluator
 * Added getters for lower and upper bounds in
   IntegerGene
 * Fixed bug in TruthTableFitnessFunction
 * Fixed several bugs in Population (thanx Dan)
+* Fixed bug in WeightedRouletteSelector (thanx Dan)
 * Added equals and compareTo to Population
 * Fixed severe bug and design flaw in
   ChromosomeFitnessComparator
