@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -179,7 +179,6 @@ public class ChromosomeTest
       ; //this is OK
     }
   }
-
 
   /**
    * Illegal constructions regarding an element of the only parameter
@@ -829,8 +828,9 @@ public class ChromosomeTest
     try {
       Chromosome chrom = new Chromosome(genes);
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;//this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
     }
   }
 
@@ -1113,13 +1113,6 @@ public class ChromosomeTest
     IChromosome chrom = Chromosome.randomInitialChromosome();
     //The BooleanGene comes from the sample chrom set in ConfigurationForTest
     assertTrue( ( (BooleanGene) chrom.getGene(0)).booleanValue());
-    try {
-      conf.setRandomGenerator(new RandomGeneratorForTest(true));
-      fail();
-    }
-    catch (InvalidConfigurationException iex) {
-      ; //this is OK
-    }
   }
 
   /**
@@ -1157,7 +1150,37 @@ public class ChromosomeTest
     chrom = Chromosome.randomInitialChromosome();
     assertEquals(FitnessFunction.NO_FITNESS_VALUE,
                  chrom.getFitnessValueDirectly(), DELTA);
-    assertTrue(((BooleanGene)chrom.getGene(0)).booleanValue());
+    assertTrue( ( (BooleanGene) chrom.getGene(0)).booleanValue());
+  }
+
+  /**
+   * Setting random generator not allowed after configuration has been locked.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testRandomInitialChromosome_4()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setFitnessFunction(new StaticFitnessFunction(2.5d));
+    Genotype.setConfiguration(conf);
+    Gene[] genes = new Gene[1];
+    Gene gene = new BooleanGene();
+    genes[0] = gene;
+    Chromosome chrom = new Chromosome(genes);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(5);
+    // following command locks configuration
+    Chromosome.randomInitialChromosome();
+    try {
+      conf.setRandomGenerator(new RandomGeneratorForTest(true));
+      fail();
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
+    }
   }
 
   /**
@@ -1205,12 +1228,12 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     ChromosomePool chromosomePool = new ChromosomePool();
-    assertNull( chromosomePool.acquireChromosome() );
+    assertNull(chromosomePool.acquireChromosome());
     conf.setChromosomePool(chromosomePool);
     Genotype.setConfiguration(conf);
     IChromosome chrom = Chromosome.randomInitialChromosome();
     chrom.cleanup();
-    assertSame( chrom, chromosomePool.acquireChromosome() );
+    assertSame(chrom, chromosomePool.acquireChromosome());
   }
 
   /**
@@ -1222,7 +1245,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     Genotype.setConfiguration(conf);
-    Chromosome chrom = (Chromosome)Chromosome.randomInitialChromosome();
+    Chromosome chrom = (Chromosome) Chromosome.randomInitialChromosome();
     assertFalse(chrom.isCompareApplicationData());
     chrom.setCompareApplicationData(true);
     assertTrue(chrom.isCompareApplicationData());
@@ -1372,8 +1395,9 @@ public class ChromosomeTest
     try {
       c.setConstraintChecker(cc);
       fail();
-    } catch (InvalidConfigurationException iex) {
-      ;//this is OK
+    }
+    catch (InvalidConfigurationException iex) {
+      ; //this is OK
     }
   }
 
@@ -1424,7 +1448,6 @@ public class ChromosomeTest
       return new MyAppObject2();
     }
   }
-
   /**
    * Class needs to be static, otherwise the serialization of the Chromosome
    * does not work properly (in JBuilder it does but running the test wit ant
@@ -1497,8 +1520,29 @@ public class ChromosomeTest
     assertFalse(chrom.isHandlerFor(chrom, ChromosomeForTest.class));
     assertFalse(chrom.isHandlerFor(chrom, Object.class));
     Genotype.setConfiguration(new ConfigurationForTest());
-    assertTrue(chrom.perform(chrom,Chromosome.class,null) instanceof Chromosome);
+    assertTrue(chrom.perform(chrom, Chromosome.class, null) instanceof
+               Chromosome);
   }
 
-
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetMultiObjectives_0()
+      throws Exception {
+    Chromosome chrom = new Chromosome(3);
+    List l = new Vector();
+    l.add("Entry_1");
+    l.add("Entry_2");
+    chrom.setMultiObjectives(l);
+    assertEquals(l, chrom.getMultiObjectives());
+    List l2 = new Vector();
+    l2.add("Entry_3");
+    l2.add("Entry_4");
+    chrom.setMultiObjectives(l2);
+    assertEquals(l2, chrom.getMultiObjectives());
+    assertEquals(2, chrom.getMultiObjectives().size());
+  }
 }
