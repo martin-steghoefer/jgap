@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class ConfigurationForTest
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public final static double STATIC_FITNESS_VALUE = 2.3d;
 
@@ -52,5 +52,25 @@ public class ConfigurationForTest
     genes[2] = gene;
     Chromosome chrom = new Chromosome(genes);
     setSampleChromosome(chrom);
+  }
+
+  /**
+   * Allows to set the random generator freely, also to null (normally
+   * forbidden).
+   * @param a_generatorToSet the random generator to set
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public synchronized void setRandomGenerator(RandomGenerator a_generatorToSet)
+      throws InvalidConfigurationException {
+    try {
+      junitx.util.PrivateAccessor.setField(this, "m_randomGenerator",
+                                           a_generatorToSet);
+    }
+    catch (NoSuchFieldException nex) {
+      throw new InvalidConfigurationException(nex.getMessage());
+    }
   }
 }
