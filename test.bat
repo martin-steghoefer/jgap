@@ -1,2 +1,0 @@
-call ant test
-pause
