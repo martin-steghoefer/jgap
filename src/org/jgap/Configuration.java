@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -299,6 +299,7 @@ public class Configuration
    * Reading in the configuration from the given file.
    * @param a_configFileName the config file from which to load the
    * configuration
+   * @param a_ignore just there to create distinct signatures :-(
    *
    * @throws ConfigException
    * @throws InvalidConfigurationException
@@ -826,7 +827,7 @@ public class Configuration
    * options have been properly set. If it detects a problem, it will
    * throw an InvalidConfigurationException and leave the object unlocked.
    * <p>
-   * It's possible to test whether is object is locked through the
+   * It's possible to test whether this object is locked through the
    * isLocked() method.
    * <p>
    * It is ok to lock an object more than once. In that case, this method
@@ -844,8 +845,7 @@ public class Configuration
       verifyStateIsValid();
       // Make genetic operators list immutable.
       // --------------------------------------
-      m_geneticOperators =
-          Collections.unmodifiableList(m_geneticOperators);
+      m_geneticOperators = Collections.unmodifiableList(m_geneticOperators);
       m_settingsLocked = true;
     }
   }
@@ -1076,8 +1076,7 @@ public class Configuration
    * @throws ConfigException
    * @author Siddhartha Azad
    */
-  public ConfigurationHandler getConfigurationHandler()
-      throws ConfigException {
+  public ConfigurationHandler getConfigurationHandler() {
     return m_conHandler;
   }
 
@@ -1116,13 +1115,8 @@ public class Configuration
     }
     // Configuration handler.
     // ----------------------
-    try {
-      result += "\n " + S_CONFIGURATION_HANDLER + ": " +
-          getConfigurationHandler().getName();
-    }
-    catch (ConfigException conEx) {
-      conEx.printStackTrace();
-    }
+    result += "\n " + S_CONFIGURATION_HANDLER + ": " +
+        getConfigurationHandler().getName();
     // Fitness function.
     // -----------------
     result += "\n " + S_FITNESS_FUNCTION + ": " +
