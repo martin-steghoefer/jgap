@@ -1,3 +1,12 @@
+3.0
+-----------------------------------------------------------
+* Enhanced logic in StringGene.applyMutation(..)
+* Added convenience methods to JGAPFactory
+* Added setter to ConfigurationForTest allowing to set a
+  null RandomGenerator for testing purposes
+* Added a lot of new unit tests (now over 1000 unit tests!)
+* Fixed a few spelling errors in javadocs
+
 2.6
 -----------------------------------------------------------
 * Improved general architecture a lot
