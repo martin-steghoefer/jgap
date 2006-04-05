@@ -44,7 +44,7 @@ import org.jgap.impl.*;
  */
 public abstract class Salesman implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private int m_maxEvolution = 128;
 
@@ -148,7 +148,7 @@ public abstract class Salesman implements java.io.Serializable {
    * after getMaxEvolution() iterations.
    *
    * @return satisfying cost allowed to conditionally stop before an optimal
-   * solution has been found.
+   * solution has been found
    *
    * @author Audrius Meskauskas
    * @since 2.0
@@ -162,7 +162,7 @@ public abstract class Salesman implements java.io.Serializable {
   }
 
   /**
-   * @return maximal number of iterations for population to evolve.
+   * @return maximal number of iterations for population to evolve
    *
    * @author Audrius Meskauskas
    * @since 2.0
