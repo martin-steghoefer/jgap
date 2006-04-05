@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public void setUp() {
     super.setUp();
@@ -279,6 +279,7 @@ public class EvaluatorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -295,6 +296,22 @@ public class EvaluatorTest
 
   /**
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testConstruct_1()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    assertEquals(0, eval.getData().getRowCount());
+    assertEquals(0, eval.getData().getColumnCount());
+  }
+
+  /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -304,5 +321,64 @@ public class EvaluatorTest
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     assertEquals(pconf.hasNext(), eval.hasNext());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetValue_0()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    Comparable rowKey = new Integer(4);
+    Comparable colKey = new Integer(6);
+    double value = 2.3d;
+    eval.setValue(value, rowKey, colKey);
+    assertEquals(value, eval.getValue(rowKey, colKey).doubleValue(), DELTA);
+    assertNull(eval.getValue(rowKey, rowKey));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetValue_1()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    Comparable rowKey = new Integer(4);
+    Comparable colKey = new Integer(6);
+    double value = 2.3d;
+    eval.setValue(1, 2, value, rowKey, colKey);
+    assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
+    assertNull(eval.getValue(1,1, rowKey, colKey));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetValue_2()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    Comparable rowKey = new Integer(4);
+    Comparable colKey = new Integer(6);
+    double value = 2.3d;
+    eval.setValue(1, 2, value, rowKey, colKey);
+    double value2 = 4.8d;
+    eval.setValue(2, 2, value2, rowKey, colKey);
+    assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
+    assertEquals(value2, eval.getValue(2, 2, rowKey, colKey).doubleValue(), DELTA);
   }
 }

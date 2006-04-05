@@ -22,7 +22,7 @@ import junit.framework.*;
 public class KeyedValuesTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setUp() {
     super.setUp();
@@ -35,6 +35,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -47,6 +48,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -67,6 +69,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -83,6 +86,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -105,6 +109,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -125,6 +130,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -142,6 +148,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -155,6 +162,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -172,6 +180,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -185,6 +194,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -207,6 +217,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -223,6 +234,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -239,6 +251,7 @@ public class KeyedValuesTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -251,4 +264,49 @@ public class KeyedValuesTest
     Object data = privateAccessor.getField(kv, "m_data");
     assertEquals(data.hashCode(), kv.hashCode());
   }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGetIndex_0()
+      throws Exception {
+    KeyedValues kv = new KeyedValues();
+    Comparable key = null;
+    Number value = new Double(4.5d);
+    kv.setValue(key, value);
+    assertEquals(0, kv.getIndex(null));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGetIndex_1()
+      throws Exception {
+    KeyedValues kv = new KeyedValues();
+    Comparable key = new Double(23.11d);
+    Number value = new Double(4.5d);
+    kv.setValue(key, value);
+    assertEquals(-1, kv.getIndex(null));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGetIndex_2()
+      throws Exception {
+    KeyedValues kv = new KeyedValues();
+    Number value = new Double(4.5d);
+    kv.setValue(null, value);
+    assertEquals(-1, kv.getIndex(new Double(23.11d)));
+  }
+
 }
