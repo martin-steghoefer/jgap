@@ -15,7 +15,7 @@ import junit.framework.*;
 import junitx.util.*;
 
 /**
- * Abstract test case for all JGAP test cases providing a common infrastructure
+ * Abstract test case for all JGAP test cases providing a common infrastructure.
  *
  * @author Klaus Meffert
  * @since 2.4
@@ -23,7 +23,7 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -143,5 +143,42 @@ public abstract class JGAPTestCase
     Object result = ois.readObject();
     ois.close();
     return result;
+  }
+
+  /**
+   * Retrieves a nested (private) field, that is field2 from "field1.field2".
+   * @param a_instance the instance the parent field is located in
+   * @param a_parentFieldName the name of the parent field (case sensitive!)
+   * @param a_childFieldName the name of the child field (case sensitive!)
+   * @throws NoSuchFieldException
+   * @return the value of the child field
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public Object getNestedField(Object a_instance, String a_parentFieldName,
+                               String a_childFieldName)
+      throws NoSuchFieldException {
+    Object parentField = privateAccessor.getField(a_instance, a_parentFieldName);
+    Object childField = privateAccessor.getField(parentField, a_childFieldName);
+    return childField;
+  }
+
+  /**
+   * Sets a nested (private) field, that is field2 from "field1.field2".
+   * @param a_instance the instance the parent field is located in
+   * @param a_parentFieldName the name of the parent field (case sensitive!)
+   * @param a_childFieldName the name of the child field (case sensitive!)
+   * @param a_value the value to set the child field to
+   * @throws NoSuchFieldException
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void setNestedField(Object a_instance, String a_parentFieldName,
+                               String a_childFieldName, Object a_value)
+      throws NoSuchFieldException {
+    Object parentField = privateAccessor.getField(a_instance, a_parentFieldName);
+    privateAccessor.setField(parentField, a_childFieldName, a_value);
   }
 }
