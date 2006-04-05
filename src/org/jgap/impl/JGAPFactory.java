@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private List m_parameters;
 
@@ -63,11 +63,22 @@ public class JGAPFactory
    * Allows setting (generic because unknown) parameters for creating objects.
    *
    * @param a_parameters Collection of generic parameters
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void setParameters(final Collection a_parameters) {
     m_parameters = new Vector(a_parameters);
+  }
+
+  /**
+   * @return Collection of generic parameters
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Collection getParameters() {
+    return m_parameters;
   }
 
   public RandomGenerator createRandomGenerator() {
@@ -95,7 +106,7 @@ public class JGAPFactory
    * registerCloneHandler).
    *
    * @param a_index the index of the clone handler to remove
-   * @return the removed ICloneHandler, or null if not successfull
+   * @return the removed ICloneHandler, or Exception if not successfull
    *
    * @author Klaus Meffert
    * @since 2.6
@@ -230,7 +241,7 @@ public class JGAPFactory
    * registerCompareToHandler).
    *
    * @param a_index the index of the handler to remove
-   * @return the removed handler, or null if not successfull
+   * @return the removed handler, or Exception if not successfull
    *
    * @author Klaus Meffert
    * @since 2.6
@@ -310,5 +321,13 @@ public class JGAPFactory
       }
     }
     return result;
+  }
+
+  /**
+   * @return true: caching sued, false: no caching used
+   * @since 3.0
+   */
+  public boolean isUseCaching() {
+    return m_useCaching;
   }
 }
