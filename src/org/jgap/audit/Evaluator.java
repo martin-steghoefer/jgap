@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Each data has its own data container
@@ -86,11 +86,12 @@ public class Evaluator {
 
   public void setValue(int a_permutation, int a_run, double a_value,
                        Comparable a_rowKey, Comparable a_columnKey) {
+    Object key = createKey(a_permutation, a_run);
     KeyedValues2D a_data = (KeyedValues2D) m_permutationData.get(
-        createKey(a_permutation, a_run));
+        key);
     if (a_data == null) {
       a_data = new KeyedValues2D();
-      m_permutationData.put(createKey(a_permutation, a_run), a_data);
+      m_permutationData.put(key, a_data);
     }
     // Add run-number (index).
     // -----------------------
@@ -111,7 +112,10 @@ public class Evaluator {
                          Comparable columnKey) {
     KeyedValues2D a_data = (KeyedValues2D) m_permutationData.get(
         createKey(a_permutation, a_run));
-    return a_data.getValue(rowKey + String.valueOf(a_run), columnKey);
+    if (a_data == null) {
+      return null;
+    }
+    return a_data.getValue(rowKey, columnKey);
   }
 
   public Number getAvgValue(int a_permutation, Comparable rowKey,
