@@ -31,7 +31,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.75 $";
+  private final static String CVS_REVISION = "$Revision: 1.76 $";
 
   /**
    * The current active Configuration instance.
@@ -382,8 +382,7 @@ public class Genotype
    * @param a_activeConfiguration the current active Configuration object
    * @return a newly constructed Genotype instance
    *
-   * @throws IllegalArgumentException if the given Configuration object is
-   * null
+   * @throws IllegalArgumentException if the given Configuration object is null
    * @throws InvalidConfigurationException if the given Configuration
    * instance is not in a valid state
    *
@@ -412,8 +411,7 @@ public class Genotype
     IInitializer chromIniter = getConfiguration().getJGAPFactory().
         getInitializerFor(sampleChrom, sampleChrom.getClass());
     if (chromIniter == null) {
-      throw new InvalidConfigurationException("No initializer found for"
-                                              + " class "
+      throw new InvalidConfigurationException("No initializer found for class "
                                               + sampleChrom.getClass());
     }
     Population pop = new Population(populationSize);
