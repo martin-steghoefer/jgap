@@ -43,12 +43,11 @@ class WithoutSupergeneTest
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
-    // Set the fitness function we want to use, which is our
-    // MinimizingMakeChangeFitnessFunction. We construct it with
+    // Set the fitness function we want to use. We construct it with
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
-    WithoutSupergeneChangeFitnessFunction fitnessFunction =
-        new WithoutSupergeneChangeFitnessFunction(a_targetChangeAmount);
+    WithoutSupergeneChangeFitFuncForTest fitnessFunction =
+        new WithoutSupergeneChangeFitFuncForTest(a_targetChangeAmount);
     conf.setFitnessFunction(fitnessFunction);
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a

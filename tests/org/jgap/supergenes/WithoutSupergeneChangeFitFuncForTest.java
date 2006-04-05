@@ -18,12 +18,12 @@ import org.jgap.impl.IntegerGene;
  * @author Neil Rotstan, Klaus Meffert
  * @author Audrius Meskauskas (subsequent adaptation)
  */
-class WithoutSupergeneChangeFitnessFunction
+class WithoutSupergeneChangeFitFuncForTest
     extends SupergeneChangeFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
   private final static String CVS_REVISION = "$Revision: 1.1 $";
 
-  public WithoutSupergeneChangeFitnessFunction(int a_targetAmount) {
+  public WithoutSupergeneChangeFitFuncForTest(int a_targetAmount) {
     super(a_targetAmount);
   }
 
