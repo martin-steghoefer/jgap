@@ -39,10 +39,10 @@ directory.
 
 About This Release:
 
-This represents a release introducing new features, documentation,
-examples and of course many new unit tests. Several feature requests have
-been implemented. The next release will definitiely deliver support for
-Genetic Programming!
+This represents a release introducing conceptual clean-up, better javadoc,
+bug fixes and of course many new unit tests. Several requests communicated
+by feedback-parties have been implemented. The next release will definitively
+deliver support for Genetic Programming!
 
 For a general list of changes, fixes, and enhancements that have been
 included in this version, please see the changelog.txt file.
