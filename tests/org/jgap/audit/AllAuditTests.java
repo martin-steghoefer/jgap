@@ -20,12 +20,14 @@ import junit.framework.*;
 public class AllAuditTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
     suite.addTest(EvaluatorTest.suite());
     suite.addTest(KeyedValueTest.suite());
+    suite.addTest(KeyedValuesTest.suite());
+    suite.addTest(KeyedValues2DTest.suite());
     suite.addTest(PermutingConfigurationTest.suite());
     return suite;
   }
