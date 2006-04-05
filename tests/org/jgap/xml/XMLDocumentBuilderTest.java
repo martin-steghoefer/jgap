@@ -24,7 +24,7 @@ import org.w3c.dom.*;
 public class XMLDocumentBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -56,5 +56,31 @@ public class XMLDocumentBuilderTest
     assertEquals(1, child.getChildNodes().getLength());
     Node genes = child.getChildNodes().item(0);
     assertEquals(2, genes.getChildNodes().getLength());
+  }
+
+  /**
+   * Artifically create a null node
+   * @throws Exception
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testBuildDocument_1()
+      throws Exception {
+    XMLDocumentBuilder doc = new XMLDocumentBuilder();
+    DataTreeBuilder builder = DataTreeBuilder.getInstance();
+    Chromosome chrom = new Chromosome(new Gene[] {
+                                      new IntegerGene(1, 5),
+                                      new IntegerGene(1, 10)});
+    chrom.getGene(0).setAllele(new Integer(1));
+    chrom.getGene(1).setAllele(new Integer( -3));
+    IDataCreators doc2 = builder.representChromosomeAsDocument(chrom);
+    IDataElement elem = doc2.getTree().item(0);
+    privateAccessor.setField(elem, "m_elements", null);
+    Document result = (Document)doc.buildDocument(doc2);
+    assertEquals(null, result.getParentNode());
+    assertEquals(1, result.getChildNodes().getLength());
+    Node child = result.getChildNodes().item(0);
+    assertEquals("chromosome", child.getNodeName());
+    assertEquals(0, child.getChildNodes().getLength());
   }
 }

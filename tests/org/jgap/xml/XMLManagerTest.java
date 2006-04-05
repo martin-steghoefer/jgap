@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -126,6 +126,22 @@ public class XMLManagerTest
     }
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testGetGenesFromElement_1()
+      throws Exception {
+    try {
+      XMLManager.getGenesFromElement(m_conf, null);
+      fail();
+    } catch (ImproperXMLException iex) {
+      ;//this is OK
+    }
+  }
+
   public void testGetGenotypeFromDocument_0()
       throws Exception {
     Document doc = XMLManager.representChromosomeAsDocument(m_chrom);
@@ -152,6 +168,22 @@ public class XMLManagerTest
     Element elem = doc.getDocumentElement();
     Genotype genotype2 = XMLManager.getGenotypeFromElement(m_conf, elem);
     assertEquals(m_genotype, genotype2);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testGetGenotypeFromElement_1()
+      throws Exception {
+    try {
+      XMLManager.getGenotypeFromElement(m_conf, null);
+      fail();
+    } catch (ImproperXMLException iex) {
+      ;//this is OK
+    }
   }
 
   public void testRepresentChromosomeAsDocument_0()
