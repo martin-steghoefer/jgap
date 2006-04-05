@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   private int m_minLength;
 
@@ -555,18 +555,13 @@ public class StringGene
     }
     char newValue;
     RandomGenerator rn;
-    if (Genotype.getConfiguration() != null) {
-      rn = Genotype.getConfiguration().getRandomGenerator();
-    }
-    else {
-      /**@required configurable object creation*/
-      rn = Genotype.getConfiguration().getJGAPFactory().createRandomGenerator();
-    }
+    rn = Genotype.getConfiguration().getRandomGenerator();
     if (!randomize) {
       int indexC = m_alphabet.indexOf(s.charAt(index));
       index2 = indexC + (int) Math.round(len * a_percentage);
       // If index of new character out of bounds then randomly choose a new
-      // character. This randomness helps in the process of evolution.
+      // character. This randomness is assumed to help in the process of
+      // evolution.
       // ------------------------------------------------------------------
       if (index2 < 0 || index2 >= len) {
         index2 = rn.nextInt(len);
