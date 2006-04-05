@@ -19,10 +19,13 @@ import java.util.*;
  */
 public interface IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   void setParameters(Collection a_parameters);
 
+  /**
+   * @return newly created instance of a RandomGenerator
+   */
   RandomGenerator createRandomGenerator();
 
   /**
