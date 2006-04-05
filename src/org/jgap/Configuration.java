@@ -36,10 +36,10 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 1.0
  */
-public class Configuration extends BaseConfigurable
+public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -86,6 +86,8 @@ public class Configuration extends BaseConfigurable
   public static final String S_PRE = "pre";
 
   public static final String S_POST = "post";
+
+  private ConfigurationConfigurable m_config = new ConfigurationConfigurable();
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -174,11 +176,6 @@ public class Configuration extends BaseConfigurable
    * population.
    */
   private int m_chromosomeSize;
-
-  /**
-   * The number of chromosomes that will be stored in the Genotype.
-   */
-  private int m_populationSize;
 
   /**
    * Indicates whether the settings of this Configuration instance have
@@ -296,6 +293,24 @@ public class Configuration extends BaseConfigurable
   public Configuration(final String a_name) {
     this();
     setName(a_name);
+  }
+
+  /**
+   * Reading in the configuration from the given file.
+   * @param a_configFileName the config file from which to load the
+   * configuration
+   *
+   * @throws ConfigException
+   * @throws InvalidConfigurationException
+   *
+   * @author Siddhartha Azad
+   * @since 2.3
+   */
+  public Configuration(String a_configFileName, boolean a_ignore)
+      throws ConfigException, InvalidConfigurationException {
+    this();
+    ConfigFileReader.instance().setFileName(a_configFileName);
+    getConfigurationHandler().readConfig();
   }
 
   /**
@@ -714,7 +729,7 @@ public class Configuration extends BaseConfigurable
       throw new InvalidConfigurationException(
           "The population size must be positive.");
     }
-    m_populationSize = a_sizeOfPopulation;
+    m_config.m_populationSize = a_sizeOfPopulation;
   }
 
   /**
@@ -723,7 +738,7 @@ public class Configuration extends BaseConfigurable
    * @return population size
    */
   public synchronized int getPopulationSize() {
-    return m_populationSize;
+    return m_config.m_populationSize;
   }
 
   /**
@@ -901,7 +916,7 @@ public class Configuration extends BaseConfigurable
           "A chromosome size greater than zero must be specified in " +
           "the active configuration.");
     }
-    if (m_populationSize <= 0) {
+    if (m_config.m_populationSize <= 0) {
       throw new InvalidConfigurationException(
           "A genotype size greater than zero must be specified in " +
           "the active configuration.");
@@ -1063,54 +1078,7 @@ public class Configuration extends BaseConfigurable
    */
   public ConfigurationHandler getConfigurationHandler()
       throws ConfigException {
-    if (m_conHandler == null) {
-      m_conHandler = new RootConfigurationHandler();
-      m_conHandler.setConfigurable(this);
-    }
     return m_conHandler;
-  }
-
-  /**
-   * Pass the name and value of a property to be set.
-   *
-   * @param a_name the name of the property
-   * @param a_value the value of the property
-   * @throws ConfigException
-   * @throws InvalidConfigurationException
-   *
-   * @author Siddhartha Azad
-   * @since 2.3
-   * */
-  public void setConfigProperty(String a_name, String a_value)
-      throws ConfigException, InvalidConfigurationException {
-    if (a_name.equals("m_populationSize")) {
-      try {
-        Integer popSize = new Integer(a_value);
-        this.setPopulationSize(popSize.intValue());
-      }
-      catch (NumberFormatException numEx) {
-        throw new ConfigException("Value for property " + a_name + " must be " +
-                                  "an Integer, value is " + a_value);
-      }
-    }
-    else {
-      super.setConfigProperty(a_name, a_value);
-    }
-  }
-
-  /**
-   * Pass the name and values of a property to be set.
-   * @param name the name of the property
-   * @param values the different values of the property
-   * @throws ConfigException
-   * @throws InvalidConfigurationException
-   *
-   * @author Siddhartha Azad
-   * @since 2.3
-   * */
-  public void setConfigMultiProperty(String name, ArrayList values)
-      throws ConfigException, InvalidConfigurationException {
-    /**@todo implement*/
   }
 
   /**
@@ -1242,5 +1210,12 @@ public class Configuration extends BaseConfigurable
 
   public IJGAPFactory getJGAPFactory() {
     return m_factory;
+  }
+
+  class ConfigurationConfigurable {
+    /**
+     * The number of chromosomes that will be stored in the Genotype.
+     */
+    int m_populationSize;
   }
 }

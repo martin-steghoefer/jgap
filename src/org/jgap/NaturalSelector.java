@@ -20,10 +20,9 @@ import org.jgap.data.config.*;
  * @since 2.0
  */
 public abstract class NaturalSelector
-    extends BaseConfigurable
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.20 $";
+  private static final String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
