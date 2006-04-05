@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.74 $";
+  private final static String CVS_REVISION = "$Revision: 1.75 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -240,11 +240,8 @@ public class Chromosome
   protected void checkGenes(Gene[] a_initialGenes) {
     // Sanity checks: make sure the genes array isn't null and
     // that none of the genes contained within it are null.
+    // Check against null already done in constructors!
     // -------------------------------------------------------
-    if (a_initialGenes == null) {
-      throw new IllegalArgumentException(
-          "The given array of genes cannot be null.");
-    }
     for (int i = 0; i < a_initialGenes.length; i++) {
       if (a_initialGenes[i] == null) {
         throw new IllegalArgumentException(
