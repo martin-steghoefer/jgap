@@ -21,7 +21,7 @@ import java.util.*;
 public class KeyedValues
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /** Data storage */
   private List m_data;
@@ -33,7 +33,7 @@ public class KeyedValues
    * @since 2.3
    */
   public KeyedValues() {
-    m_data = new java.util.ArrayList();
+    m_data = new ArrayList();
   }
 
   /**
@@ -99,8 +99,15 @@ public class KeyedValues
     final Iterator iterator = m_data.iterator();
     while (iterator.hasNext()) {
       final KeyedValue kv = (KeyedValue) iterator.next();
-      if (kv.getKey().equals(a_key)) {
-        return i;
+      if (kv.getKey() != null) {
+        if (kv.getKey().equals(a_key)) {
+          return i;
+        }
+      }
+      else {
+        if (a_key == null) {
+          return i;
+        }
       }
       i++;
     }
@@ -223,7 +230,7 @@ public class KeyedValues
    * @since 2.3
    */
   public int hashCode() {
-    if (m_data == null) {
+    if (m_data.size() == 0) {
       return -29;
     }
     else {

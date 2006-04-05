@@ -21,7 +21,7 @@ import java.util.*;
 public class KeyedValues2D
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   /** The row keys */
   private List m_rowKeys;
@@ -54,9 +54,9 @@ public class KeyedValues2D
    * @since 2.3
    */
   public KeyedValues2D(final boolean a_sortRowKeys) {
-    m_rowKeys = new java.util.ArrayList();
-    m_columnKeys = new java.util.ArrayList();
-    m_rows = new java.util.ArrayList();
+    m_rowKeys = new ArrayList();
+    m_columnKeys = new ArrayList();
+    m_rows = new ArrayList();
     m_sortRowKeys = a_sortRowKeys;
   }
 
@@ -94,11 +94,9 @@ public class KeyedValues2D
   public Number getValue(final int a_row, final int a_column) {
     Number result = null;
     final KeyedValues rowData = (KeyedValues) m_rows.get(a_row);
-    if (rowData != null) {
-      final Comparable columnKey = (Comparable) m_columnKeys.get(a_column);
-      if (columnKey != null) {
-        result = rowData.getValue(columnKey);
-      }
+    final Comparable columnKey = (Comparable) m_columnKeys.get(a_column);
+    if (columnKey != null) {
+      result = rowData.getValue(columnKey);
     }
     return result;
   }
@@ -250,14 +248,8 @@ public class KeyedValues2D
     if (!getColumnKeys().equals(kv2D.getColumnKeys())) {
       return false;
     }
-    final int rowCount = getRowCount();
-    if (rowCount != kv2D.getRowCount()) {
-      return false;
-    }
-    final int colCount = getColumnCount();
-    if (colCount != kv2D.getColumnCount()) {
-      return false;
-    }
+    int rowCount = getRowCount();
+    int colCount = getColumnCount();
     for (int r = 0; r < rowCount; r++) {
       for (int c = 0; c < colCount; c++) {
         final Number v1 = getValue(r, c);
