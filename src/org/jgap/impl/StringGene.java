@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   private int m_minLength;
 
@@ -402,24 +402,18 @@ public class StringGene
       }
     }
     else {
-      try {
-        int res = m_value.compareTo(otherStringGene.m_value);
-        if (res == 0) {
-          if (isCompareApplicationData()) {
-            return compareApplicationData(getApplicationData(),
-                                          otherStringGene.getApplicationData());
-          }
-          else {
-            return 0;
-          }
+      int res = m_value.compareTo(otherStringGene.m_value);
+      if (res == 0) {
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherStringGene.getApplicationData());
         }
         else {
-          return res;
+          return 0;
         }
       }
-      catch (ClassCastException e) {
-        e.printStackTrace();
-        throw e;
+      else {
+        return res;
       }
     }
   }
