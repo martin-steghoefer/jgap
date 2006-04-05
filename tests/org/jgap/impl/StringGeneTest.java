@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -710,7 +710,10 @@ public class StringGeneTest
   }
 
   /**
+   * Following should be possible without exception.
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_0()
@@ -723,7 +726,10 @@ public class StringGeneTest
   }
 
   /**
+   * Following should be possible without exception.
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_1()
@@ -735,9 +741,10 @@ public class StringGeneTest
   }
 
   /**
-   * Invalid index specified
+   * Invalid index specified.
    *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_2()
@@ -755,9 +762,10 @@ public class StringGeneTest
   }
 
   /**
-   * No allele set
+   * No allele set.
    *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_3()
@@ -784,7 +792,7 @@ public class StringGeneTest
   }
 
   /**
-   * Mutation 0.0 should not change anything
+   * Mutation 0.0 should not change anything.
    *
    * @throws Exception
    * @author Klaus Meffert
@@ -799,8 +807,10 @@ public class StringGeneTest
   }
 
   /**
-   * applyMutation with empty alphabet
+   * applyMutation with empty alphabet.
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_6()
@@ -814,6 +824,28 @@ public class StringGeneTest
     }
     catch (IllegalArgumentException iex) {
       ; //this is OK
+    }
+  }
+
+  /**
+   * null random generator should lead to NullPointerException.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   */
+  public void testApplyMutation_7()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    conf.setRandomGenerator(null);
+    Genotype.setConfiguration(conf);
+    Gene gene1 = new StringGene(5, 5);
+    gene1.setAllele("12345");
+    try {
+      gene1.applyMutation(0, 0.99d);
+      fail();
+    }catch (NullPointerException nex) {
+      ;//this is OK
     }
   }
 
