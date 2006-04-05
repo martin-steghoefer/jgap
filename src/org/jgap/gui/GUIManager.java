@@ -9,10 +9,12 @@
  */
 package org.jgap.gui;
 
+import java.util.*;
+
+import javax.swing.*;
+
 import org.jgap.*;
 import org.jgap.data.config.*;
-import javax.swing.*;
-import java.util.ArrayList;
 
 /**
  * Singleton GUIManager for the JGAP Configurator.
@@ -22,11 +24,12 @@ import java.util.ArrayList;
  * are in turn Configurable.
  *
  * @author Siddhartha Azad
+ * @author Klaus Meffert
  * @since 2.3
  */
 public class GUIManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   // The root frame
   private ConfigFrame m_frame;
@@ -73,28 +76,31 @@ public class GUIManager {
   /**
    * Create and show a new frame for a Configurable.
    * @param a_con configurable to use
+   *
    * @author Siddhartha Azad
    * @since 2.3
    */
   public void showFrame(final ConfigFrame a_parent, final Configurable a_con)
       throws Exception {
     try {
+      // TODO add edit-components for configurable properties
+
       // create the frame
-      if (a_con.getConfigurationHandler().getName().equals("Configuration")) {
-        m_frame = new ConfigFrame(null, "JGAP Configurator:"
-                                  + a_con.getConfigurationHandler().getName(),
+      if (a_con.getClass() == Configuration.class) {
+        m_frame = new ConfigFrame(null, "JGAP Configurator: "
+                                  + "Configuration",
                                   true);
         m_con = a_con;
-        m_frame.createAndShowGUI(a_con.getConfigurationHandler());
+        m_frame.createAndShowGUI(a_con);
       }
       else {
         ConfigFrame tmpFrame =
-            new ConfigFrame(a_parent, "JGAP Configurator:"
-                            + a_con.getConfigurationHandler().getName(),
+            new ConfigFrame(a_parent, "JGAP Configurator: "
+                            + "Unknown Title",
                             false);
         m_childCons.add(a_con);
         m_childFrames.add(tmpFrame);
-        tmpFrame.createAndShowGUI(a_con.getConfigurationHandler());
+        tmpFrame.createAndShowGUI(a_con);
       }
     }
     catch (Exception ex) {

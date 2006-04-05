@@ -30,10 +30,10 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   // data members of class ConfigFrame
-  private ConfigurationHandler m_conHandler;
+  private Object m_conHandler;
 
   private boolean m_isRoot;
 
@@ -104,7 +104,7 @@ public class ConfigFrame
    * @author Siddhartha Azad.
    * @since 2.3
    */
-  public void createAndShowGUI(final ConfigurationHandler a_conHandler) {
+  public void createAndShowGUI(final Object a_conHandler) {
     JFrame.setDefaultLookAndFeelDecorated(true);
     m_conHandler = a_conHandler;
     // display
@@ -150,7 +150,7 @@ public class ConfigFrame
    * */
   public ConfigData getConfigData() {
     ConfigData cd = new ConfigData();
-    cd.setNS(m_conHandler.getNS());
+    cd.setNS(m_conHandler.getClass().getName());
     // add lists
     ArrayList values;
     try {
@@ -217,13 +217,13 @@ public class ConfigFrame
     ArrayList props = null;
     try {
       /** @todo find a better way to get the classname than getNS() */
-      props = MetaConfig.getInstance().getConfigProperty(m_conHandler.getNS());
+      props = MetaConfig.getInstance().getConfigProperty(m_conHandler.getClass().getName());
     }
     catch (Exception ex) {
       JOptionPane.showMessageDialog(null, ex.getMessage(),
                                     "Configuration Error: Could not get"
                                     + " properties for class "
-                                    + m_conHandler.getNS(),
+                                    + m_conHandler.getClass().getName(),
                                     JOptionPane.INFORMATION_MESSAGE);
     }
     if (props == null) {
