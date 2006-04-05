@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -645,6 +645,28 @@ public class GenotypeTest
   }
 
   /**
+   * Preserve fittest Chromosome.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testEvolve_9()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    config.setMinimumPopSizePercent(290);
+    // Overwrite default setting
+    config.setKeepPopulationSizeConstant(!true);
+    config.setPopulationSize(10);
+    config.setPreservFittestIndividual(true);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    genotype.evolve(1);
+  }
+
+  /**
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -996,6 +1018,11 @@ public class GenotypeTest
     }
   }
 
+  /**
+   * @Todo this test currently fails --> revamp configuration object handling
+   * @throws Exception
+   * @author Klaus Meffert
+   */
   public void testSetActiveConfiguration_0()
       throws Exception {
     Chromosome[] chroms = new Chromosome[1];
