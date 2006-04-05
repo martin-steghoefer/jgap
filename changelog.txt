@@ -1,5 +1,7 @@
 3.0
 -----------------------------------------------------------
+* Fixed error in method KeyedValues.getIndex()
+* Fixed error in method Evaluator.getValue(int, int..)
 * Enhanced logic in StringGene.applyMutation(..)
 * Added convenience methods to JGAPFactory
 * Added setter to ConfigurationForTest allowing to set a
