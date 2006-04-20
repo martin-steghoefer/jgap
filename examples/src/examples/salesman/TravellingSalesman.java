@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import org.jgap.impl.salesman.*;
 
 /**
- * Explains how to use JGap extensions, needed to solve the task group,
+ * Explains how to use JGAP extensions, needed to solve the task group,
  * known as the <i>Problem of the travelling salesman</i>. The extensions are
  * defined in {@link org.jgap.impl.salesman org.jgap.impl.salesman}
  *
@@ -59,22 +59,22 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
 
   /**
    * Create an array of the given number of integer genes. The first gene is
-   * always 0, this is a city where the salesman starts the journey.
+   * always 0, this is the city where the salesman starts the journey.
    *
-   * @param initial_data Object
+   * @param a_initial_data ignored
    * @return Chromosome
    *
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public IChromosome createSampleChromosome(Object initial_data) {
+  public IChromosome createSampleChromosome(Object a_initial_data) {
     Gene[] genes = new Gene[CITIES];
     for (int i = 0; i < genes.length; i++) {
       genes[i] = new IntegerGene(0, CITIES - 1);
