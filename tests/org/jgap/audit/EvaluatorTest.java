@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public void setUp() {
     super.setUp();
@@ -380,5 +380,25 @@ public class EvaluatorTest
     eval.setValue(2, 2, value2, rowKey, colKey);
     assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
     assertEquals(value2, eval.getValue(2, 2, rowKey, colKey).doubleValue(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetValue_3()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    Comparable rowKey = new Integer(4);
+    Comparable colKey = new Integer(6);
+    double value = 2.3d;
+    eval.setValue(1, 2, value, rowKey, colKey);
+    double value2 = 4.8d;
+    eval.setValue(1, 2, value2, rowKey, colKey);
+    assertEquals(value2, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
   }
 }
