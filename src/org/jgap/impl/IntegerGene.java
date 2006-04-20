@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.34 $";
+  private static final String CVS_REVISION = "$Revision: 1.35 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -137,7 +137,8 @@ public class IntegerGene
    * @author Neil Rostan
    * @since 1.0
    */
-  public void setValueFromPersistentRepresentation(final String a_representation)
+  public void setValueFromPersistentRepresentation(final String
+      a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
@@ -322,7 +323,7 @@ public class IntegerGene
 
   /**
    * @return string representation of this Gene's value that may be useful for
-   * display purposes.
+   * display purposes
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -341,6 +342,7 @@ public class IntegerGene
 
   /**
    * @return the lower bounds of the integer gene
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -350,6 +352,7 @@ public class IntegerGene
 
   /**
    * @return the upper bounds of the integer gene
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -357,4 +360,3 @@ public class IntegerGene
     return m_upperBounds;
   }
 }
-
