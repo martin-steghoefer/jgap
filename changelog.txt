@@ -1,5 +1,7 @@
 3.0
 -----------------------------------------------------------
+* Added abstract base class org.jgap.BaseGeneticOperator
+  and made any GeneticOperator's descend from it
 * Fixed error in method KeyedValues.getIndex()
 * Fixed error in method Evaluator.getValue(int, int..)
 * Fixed error in method MapGene.compareTo(Object)
