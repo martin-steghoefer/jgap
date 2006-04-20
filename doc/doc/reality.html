@@ -17,13 +17,19 @@
 
 <hr>
 
-<p>A Genetic Algorithm is an idealized model of processes and structures
-occuring in nature. It is by no means meant to follow or copy nature completely.
-To clarify this <b>partial </b>plagiarism, here are some few examples.<h2>Mitosis
+<p>A Genetic Algorithm is an idealized model of processes and structures occurring
+in nature. It is by no means meant to follow or copy nature completely.
+To clarify this <b>partial </b>plagiarism, here are some few examples.<h2>General
+Architecture</h2>
+<p>We are referring to the interesting article <a href="http://www.nature.com/nature/journal/v440/n7083/full/440416a.html" target="_blank">2020
+Computing:&nbsp;Can computers help to explain biology?</a>, from which the
+following picture was taken.</p>
+<p align="center"><img src="http://www.nature.com/nature/journal/v440/n7083/images/440416a-f1.2.jpg"></p>
+<h2>Mitosis
 and Meiosis</h2>
 <p><a href="http://en.wikipedia.org/wiki/Mitosis">Mitosis</a> is the process
 where a cell separates. <a href="http://en.wikipedia.org/wiki/Meiosis">Meiosis</a>
-occurs for eucaryotes and transforms one diploid cell into four haploid cells.
+occurs for eukaryotes and transforms one diploid cell into four haploid cells.
 Both processes are important for the sexual reproduction of humans.</p>
 <p>Mitosis and meiosis are complex processes containing sub-processes. In
 nature, especially <a href="http://en.wikipedia.org/wiki/Mitosis#Errors_in_mitosis">errors
@@ -32,7 +38,7 @@ does not have problems producing offsprings (asexually) with 100% correctness.</
 <h2>Wobble-Hypothesis</h2>
 
 <p>Following the <a href="http://en.wikipedia.org/wiki/Wobble_base_pair">Wobble
-hypothesis</a>, amino acids are encoded assymetrically by three codons. Some
+hypothesis</a>, amino acids are encoded asymmetrically by three codons. Some
 amino acids are more common than others. Stop codons mark the end of a protein
 synthesis. As stop codons are not present with Genetic Algorithms, effects
 depending on them (such as interpreting errors) could not occur.</p>
@@ -41,7 +47,7 @@ depending on them (such as interpreting errors) could not occur.</p>
           Mendelian inheritance
           </h2>
 
-<p>In nature, the phenotypical expression of genotypical characteristics allows
+<p>In nature, the phenotypic expression of genotypic characteristics allows
 for intermediary inheritance. For Genetic Algorithms, this holds only true for
 special implementations of interpretations of the current genotype.
           </p>
@@ -54,15 +60,14 @@ X-chromosomes, one is always inactivated.</p>
 <h2>Conclusion</h2>
 
 <p>As it is not meant copying nature, we are free in implementing a Genetic
-Algorithm as it seems most senseful. Aspects involved in judging was could be
-senseful are easy of use, capability and performance (time, memory,
-convergation). One example for a difference between JGAP and other Genetic
-Algorithms packages is the Genotype.evolve() method. In JGAP, we don't use a
+Algorithm as it seems most reasonable. Aspects involved in judging what could be
+reasonable are ease of use, capability and performance (time, memory, convergence). One example for a difference between JGAP and other Genetic
+Algorithms packages is the <i> Genotype.evolve()</i> method. In JGAP, we don't use a
 pool of candidate chromosomes any more, although it is an established concept in
-other packages. We have not noticed any losses because of this, but noticed a
+other packages. We have not noticed any losses because of this, but instead a
 speedup.</p>
 
-<p class="copyright">Copyright © 2005&nbsp; Klaus Meffert. All rights
+<p class="copyright">Copyright © 2005-2006&nbsp; Klaus Meffert. All rights
 reserved. </p>
 
 <hr>
