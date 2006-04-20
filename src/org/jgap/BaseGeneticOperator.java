@@ -19,7 +19,10 @@ import java.util.*;
  */
 public abstract class BaseGeneticOperator
     implements GeneticOperator, Comparable {
-  private Configuration m_configuration;
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  private transient Configuration m_configuration;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
@@ -45,8 +48,8 @@ public abstract class BaseGeneticOperator
 
   /**
    * Compares this GeneticOperator against the specified object. The result is
-   * true if and the argument is an instance of this class and is equal wrt the
-   * data.
+   * true if the argument is an instance of this class and is equal with respect
+   * to the data.
    *
    * @param a_other the object to compare against
    * @return true: if the objects are the same, false otherwise
@@ -56,6 +59,7 @@ public abstract class BaseGeneticOperator
    */
   public boolean equals(final Object a_other) {
     try {
+      /**@todo also compare Configuration*/
       return compareTo(a_other) == 0;
     }
     catch (ClassCastException cex) {
