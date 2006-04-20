@@ -23,7 +23,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -68,6 +68,8 @@ public class CrossoverOperatorTest
   }
 
   /**
+   * Use flat crossover rate and just exchange two alleles via crossover.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -79,22 +81,24 @@ public class CrossoverOperatorTest
     Genotype.setConfiguration(conf);
     CrossoverOperator op = new CrossoverOperator();
     conf.addGeneticOperator(op);
+    // preset "random" values: index first chromosome, index second chromosome,
+    // locus (index of gene on chromosome)
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
-                            0, 1, 0, 1, 2});
+                            0, 1, 0});
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene sampleGene = new IntegerGene(1, 10);
     Chromosome chrom = new Chromosome(sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
-    cgene1.setAllele(new Integer(6));
+    Gene cgene1 = new IntegerGene(1, 100);
+    cgene1.setAllele(new Integer(66));
     Gene[] genes1 = new Gene[] {
         cgene1};
     Chromosome chrom1 = new Chromosome(genes1);
-    Gene cgene2 = new IntegerGene(1, 10);
-    cgene2.setAllele(new Integer(8));
+    Gene cgene2 = new IntegerGene(1, 100);
+    cgene2.setAllele(new Integer(88));
     Gene[] genes2 = new Gene[] {
         cgene2};
     Chromosome chrom2 = new Chromosome(genes2);
@@ -110,16 +114,27 @@ public class CrossoverOperatorTest
     Gene gene3 = new IntegerGene(1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
+    // following crossover-operation should exchange alleles of cgene1 and
+    // cgene2.
     op.operate(new Population(population), chroms);
+    // chroms size = 3 + 2 genes
+    //               3 = number of already existent genes
+    //               2 = number of genes added from "population" (which contains
+    //                   2 genes)
     assertEquals(5, chroms.size());
-    Chromosome target = (Chromosome) chroms.get(4);
-    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
-    target = (Chromosome) chroms.get(3);
-    assertEquals(8, ( (Integer) target.getGene(0).getAllele()).intValue());
+    // get Gene 3 = first new gene (0..2 = old genes, 3..4 = new genes)
+    Chromosome target = (Chromosome) chroms.get(3);
+    // 88 = allele of cgene2
+    assertEquals(88, ( (Integer) target.getGene(0).getAllele()).intValue());
+    // get Gene 4 = second new gene (0..2 = old genes, 3..4 = new genes)
+    target = (Chromosome) chroms.get(4);
+    // 66 = allele of cgene1
+    assertEquals(66, ( (Integer) target.getGene(0).getAllele()).intValue());
   }
 
   /**
    * Consider crossover rate calculator.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -132,9 +147,11 @@ public class CrossoverOperatorTest
     CrossoverOperator op = new CrossoverOperator(
         new DefaultCrossoverRateCalculator());
     conf.addGeneticOperator(op);
+    // preset "random" values: index first chromosome, index second chromosome,
+    // locus (index of gene on chromosome)
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
-                            0, 1, 0, 1, 2});
+                            0, 1, 0});
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
     Gene sampleGene = new IntegerGene(1, 10);
@@ -157,24 +174,29 @@ public class CrossoverOperatorTest
     Gene gene1 = new IntegerGene(1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
-    gene2.setAllele(new Integer(7));
-    chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
-    gene3.setAllele(new Integer(4));
-    chroms.add(gene3);
     op.operate(new Population(population), chroms);
-    assertEquals(3 + 2, chroms.size());
-    Chromosome target = (Chromosome) chroms.get(4);
-    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
-    target = (Chromosome) chroms.get(3);
+    // chroms size = 1 + 2 genes
+    //               1 = number of already existent genes
+    //               2 = number of genes added from "population" (which contains
+    //                   2 genes)
+    assertEquals(1 + 2, chroms.size());
+    // get Gene 1 = first new gene (0..0 = old genes, 1..2 = new genes)
+    Chromosome target = (Chromosome) chroms.get(1);
     assertEquals(8, ( (Integer) target.getGene(0).getAllele()).intValue());
+    // get Gene 2 = second new gene (0..0 = old genes, 1..2 = new genes)
+    target = (Chromosome) chroms.get(2);
+    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
+    // chroms size = 1 + 2 + 2 genes
+    //               1 + 2 = number of already existent genes
+    //               2     = number of genes added from "population" (which
+    //                       contains 2 genes)
     op.operate(new Population(population), chroms);
-    assertEquals(3 + 2 + 2, chroms.size());
+    assertEquals(1 + 2 + 2, chroms.size());
   }
 
   /**
    * Tests if crossing over produces same results for two operate-runs.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -208,23 +230,25 @@ public class CrossoverOperatorTest
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
+    // add some genes to chroms that should not be overridden
     Gene gene1 = new IntegerGene(1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
     Gene gene2 = new IntegerGene(1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
-    gene3.setAllele(new Integer(4));
-    chroms.add(gene3);
     Chromosome[] population2 = (Chromosome[]) population.clone();
     op.operate(new Population(population), chroms);
     op.operate(new Population(population2), chroms);
     assertTrue(isChromosomesEqual(population, population2));
+    // check that original genes have not been modified
+    assertSame(gene1, chroms.get(0));
+    assertSame(gene2, chroms.get(1));
   }
 
   /**
    * Test with CompositeGene.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -265,17 +289,17 @@ public class CrossoverOperatorTest
     Gene gene2 = new IntegerGene(1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
-    gene3.setAllele(new Integer(4));
-    chroms.add(gene3);
+    // Do the crossing over.
+    // ---------------------
     op.operate(new Population(population), chroms);
-    assertEquals(5, chroms.size());
-    Chromosome target = (Chromosome) chroms.get(4);
-    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
-    target = (Chromosome) chroms.get(3);
+    // new size of chroms = 2 (original chromosomes) + 2 (from "population")
+    assertEquals(2 + 2, chroms.size());
+    Chromosome target = (Chromosome) chroms.get(2);
     CompositeGene result = (CompositeGene) target.getGene(0);
     assertEquals(8, ( (Integer) ( (Vector) result.getAllele())
                  .get(0)).intValue());
+    target = (Chromosome) chroms.get(3);
+    assertEquals(6, ( (Integer) target.getGene(0).getAllele()).intValue());
   }
 
   /**
@@ -326,7 +350,7 @@ public class CrossoverOperatorTest
     Chromosome chrom2 = new Chromosome(genes2);
     Chromosome[] population = new Chromosome[] {
         chrom0, chrom1, chrom2};
-    // add some nonsense objects to results list (to see if they are kept)
+    // Add some nonsense objects to results list (to see if they are kept).
     List chroms = new Vector();
     Gene gene1 = new IntegerGene(1, 10);
     gene1.setAllele(new Integer(5));
