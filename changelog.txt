@@ -2,6 +2,7 @@
 -----------------------------------------------------------
 * Fixed error in method KeyedValues.getIndex()
 * Fixed error in method Evaluator.getValue(int, int..)
+* Fixed error in method MapGene.compareTo(Object)
 * Enhanced logic in StringGene.applyMutation(..)
 * Added convenience methods to JGAPFactory
 * Added setter to ConfigurationForTest allowing to set a
