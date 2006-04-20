@@ -16,6 +16,7 @@ import org.jgap.*;
 /**
  * ATTENTION: This class is preliminary and subject of future adaptations! Use
  * with care or wait for a more mature version we are working on.
+ * <p>
  * Creates a gene instance in which individual alleles have both a label (key)
  * and a value with a distinct meaning. For example, IntegerGene only allows
  * for values having a continuous range, and does not have a function where it
@@ -32,7 +33,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Container for valid alleles
@@ -141,6 +142,16 @@ public class MapGene
   }
 
   /**
+   * @return the map of alleles
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Map getAlleles() {
+    return m_geneMap;
+  }
+
+  /**
    * Sets the allele value to be a random value using a defined random number
    * generator. If no valid alleles are defined, any allele is allowed. Then,
    * a new Integer with random value is set as random value. Override this
@@ -163,16 +174,16 @@ public class MapGene
   }
 
   /**
-   * See interface Gene for description of applyMutation
+   * See interface Gene for description of applyMutation.
    *
-   * For this kind of gene, providing an index and a magnitude have no
-   * significance because the individual allele forms are independent
-   * of one another.  In mutating, they can only cange from one form to
-   * another.  It may be possible to weight the likelihood of mutation
-   * to different forms, but that is not currently implemented.
+   * For this kind of gene, providing an index and a percentage of mutation
+   * would have no significance because the individual allele forms are
+   * independent of one another.  In mutating, they can only change from one
+   * form to another. It may be possible to weight the likelihood of mutation
+   * to different forms, but that is not implemented currently.
    *
-   * @param a_index todo
-   * @param a_percentage todo
+   * @param a_index ignored here
+   * @param a_percentage ignored here
    *
    * @author Klaus Meffert
    * @author Johnathan Kool
@@ -180,12 +191,7 @@ public class MapGene
    */
   public void applyMutation(final int a_index, final double a_percentage) {
     RandomGenerator rn;
-    if (Genotype.getConfiguration() != null) {
-      rn = Genotype.getConfiguration().getRandomGenerator();
-    }
-    else {
-      rn = Genotype.getConfiguration().getJGAPFactory().createRandomGenerator();
-    }
+    rn = Genotype.getConfiguration().getRandomGenerator();
     setToRandomValue(rn);
   }
 
@@ -281,7 +287,7 @@ public class MapGene
    *
    * @return string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
-   * is provided for this method.
+   * is provided for this method
    *
    * @author Neil Rostan
    * @author Klaus Meffert
@@ -387,17 +393,38 @@ public class MapGene
         while (it1.hasNext()) {
           Object key1 = it1.next();
           if (!otherGene.m_geneMap.keySet().contains(key1)) {
-            // arbitrarily returning -1
-            return -1;
+            Object key2 = otherGene.m_geneMap.keySet().iterator().next();
+            if (Comparable.class.isAssignableFrom(key1.getClass())
+                && Comparable.class.isAssignableFrom(key2.getClass())) {
+              return ((Comparable)key1).compareTo(key2);
+            }
+            else {
+              // arbitrarily return -1
+              return -1;
+            }
           }
           Object value1 = m_geneMap.get(key1);
           Object value2 = otherGene.m_geneMap.get(key1);
           if (value1 == null && value2 != null) {
             return -1;
           }
-          else if (value1 == null || !value1.equals(value2)) {
-            // arbitrarily returning -1
+          else if (value1 == null && value2 != null) {
             return -1;
+          }
+          else if (!value1.equals(value2)) {
+            if (value2 == null) {
+              return 1;
+            }
+            else {
+              if (Comparable.class.isAssignableFrom(value1.getClass())
+                  && Comparable.class.isAssignableFrom(value2.getClass())) {
+                return ((Comparable)value1).compareTo(value2);
+              }
+              else {
+                // arbitrarily return -1
+                return -1;
+              }
+            }
           }
         }
       }
