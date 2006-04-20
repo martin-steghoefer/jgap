@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Each data has its own data container
@@ -215,9 +215,10 @@ public class Evaluator {
    * @param a_data DefaultKeyedValues2D
    * @return List
    */
-  public List getTable(KeyedValues2D a_data) {
-    return null;
-  }
+  /**@todo implement*/
+//  public List getTable(KeyedValues2D a_data) {
+//    return null;
+//  }
 
   /**
    * Calculates average fitness value improvement per generation.
