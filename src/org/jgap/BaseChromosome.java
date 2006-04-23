@@ -17,9 +17,8 @@ package org.jgap;
  */
 public abstract class BaseChromosome
     implements IChromosome, IInitializer {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private transient Configuration m_configuration;
 
@@ -35,7 +34,6 @@ public abstract class BaseChromosome
   }
 
   /**
-   * @todo make returned object immutable
    * @return the configuration set
    *
    * @author Klaus Meffert
@@ -45,5 +43,12 @@ public abstract class BaseChromosome
     return m_configuration;
   }
 
+  /**
+   * Creates and returns a copy of this object.
+   * @return a clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public abstract Object clone();
 }
