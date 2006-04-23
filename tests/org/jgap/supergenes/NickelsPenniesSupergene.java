@@ -22,13 +22,14 @@ import org.jgap.impl.*;
 public class NickelsPenniesSupergene
     extends AbstractSupergene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
-  public NickelsPenniesSupergene() {
+  public NickelsPenniesSupergene() throws InvalidConfigurationException {
+    super(Genotype.getConfiguration(), null);
   }
 
-  public NickelsPenniesSupergene(Gene[] a_genes) {
-    super(a_genes);
+  public NickelsPenniesSupergene(Configuration a_conf, Gene[] a_genes) throws InvalidConfigurationException {
+    super(a_conf, a_genes);
   }
 
   public boolean isValid(Gene[] a_genes, Supergene a_supergene) {

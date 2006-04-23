@@ -28,7 +28,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -38,23 +38,32 @@ public class SetGene
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    */
-  public SetGene() {
+  public SetGene()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
   /**
    * @param a_conf the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public SetGene(final Configuration a_conf) {
+  public SetGene(final Configuration a_conf)
+      throws InvalidConfigurationException {
     super(a_conf);
   }
 
   protected Gene newGeneInternal() {
-    return new SetGene();
+    try {
+      return new SetGene(getConfiguration());
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**

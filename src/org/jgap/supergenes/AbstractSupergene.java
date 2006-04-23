@@ -30,7 +30,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * This field separates gene class name from
@@ -93,11 +93,14 @@ public abstract class AbstractSupergene
     return m_genes[a_index];
   };
 
-  /** Constructs abstract supergene with the given gene list.
+  /**
+   * Constructs abstract supergene with the given gene list.
    * @param a_conf the configuration to use
    * @param a_genes array of genes for this Supergene
+   * @throws InvalidConfigurationException
    */
-  public AbstractSupergene(final Configuration a_conf, final Gene[] a_genes) {
+  public AbstractSupergene(final Configuration a_conf, final Gene[] a_genes)
+      throws InvalidConfigurationException {
     super(a_conf);
     m_genes = a_genes;
   }
@@ -110,8 +113,9 @@ public abstract class AbstractSupergene
    * assign the private <code>genes</code> array.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    */
-  public AbstractSupergene() {
+  public AbstractSupergene() throws InvalidConfigurationException {
     super(Genotype.getConfiguration());
   }
 

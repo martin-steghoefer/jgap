@@ -33,7 +33,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Container for valid alleles
@@ -49,17 +49,32 @@ public class MapGene
    * Represents the delimiter that is used to mark the allele map.
    */
   final static String ALLELEMAP_BEGIN_DELIMITER = "[";
+
   final static String ALLELEMAP_END_DELIMITER = "]";
 
   /**
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @since 2.4
    */
-  public MapGene() {
-    super(Genotype.getConfiguration());
+  public MapGene()
+      throws InvalidConfigurationException {
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public MapGene(final Configuration a_config)
+      throws InvalidConfigurationException {
+    super(a_config);
     m_geneMap = new HashMap();
   }
 
@@ -67,22 +82,29 @@ public class MapGene
    * Constructor setting up valid alleles directly.
    * @param a_config the configuration to use
    * @param a_alleles the valid alleles of the gene
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public MapGene(final Configuration a_config, final Map a_alleles) {
+  public MapGene(final Configuration a_config, final Map a_alleles)
+      throws InvalidConfigurationException {
     super(a_config);
     m_geneMap = new HashMap();
     addAlleles(a_alleles);
   }
 
   protected Gene newGeneInternal() {
-    MapGene result = new MapGene(getConfiguration(), m_geneMap);
-    // get m_value from original
-    Object value = getAllele();
-    result.setAllele(value);
-    return result;
+    try {
+      MapGene result = new MapGene(getConfiguration(), m_geneMap);
+      // get m_value from original
+      Object value = getAllele();
+      result.setAllele(value);
+      return result;
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**
@@ -175,7 +197,7 @@ public class MapGene
     }
     else {
       m_value = m_geneMap.get(m_geneMap.keySet().toArray()[a_numberGenerator.
-                            nextInt(m_geneMap.size())]);
+                              nextInt(m_geneMap.size())]);
     }
   }
 
@@ -221,7 +243,8 @@ public class MapGene
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void setValueFromPersistentRepresentation(final String a_representation)
+  public void setValueFromPersistentRepresentation(final String
+      a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer = new StringTokenizer(a_representation,
@@ -254,14 +277,14 @@ public class MapGene
       // Parse gene map.
       // ---------------
       String s = tokenizer.nextToken();
-      tokenizer = new StringTokenizer(s,",");
+      tokenizer = new StringTokenizer(s, ",");
       boolean lastWasOpening = false;
       String key = null;
       while (tokenizer.hasMoreTokens()) {
         String element = tokenizer.nextToken(",");
         if (lastWasOpening) {
           if (element.endsWith(")")) {
-            element = element.substring(0,element.length()-1);
+            element = element.substring(0, element.length() - 1);
             addAllele(key, element);
             lastWasOpening = false;
           }
@@ -343,9 +366,9 @@ public class MapGene
     }
     else {
       throw new IllegalArgumentException("Allele value being set ("
-                                         +a_newValue
-                                         +") is not an element of the set of"
-                                         +" permitted values.");
+                                         + a_newValue
+                                         + ") is not an element of the set of"
+                                         + " permitted values.");
     }
   }
 
@@ -402,7 +425,7 @@ public class MapGene
             Object key2 = otherGene.m_geneMap.keySet().iterator().next();
             if (Comparable.class.isAssignableFrom(key1.getClass())
                 && Comparable.class.isAssignableFrom(key2.getClass())) {
-              return ((Comparable)key1).compareTo(key2);
+              return ( (Comparable) key1).compareTo(key2);
             }
             else {
               // arbitrarily return -1
@@ -424,7 +447,7 @@ public class MapGene
             else {
               if (Comparable.class.isAssignableFrom(value1.getClass())
                   && Comparable.class.isAssignableFrom(value2.getClass())) {
-                return ((Comparable)value1).compareTo(value2);
+                return ( (Comparable) value1).compareTo(value2);
               }
               else {
                 // arbitrarily return -1
