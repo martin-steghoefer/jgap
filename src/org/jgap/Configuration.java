@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -465,7 +465,11 @@ public class Configuration
     // -----------------------------------------------------------
     if (a_sampleChromosomeToSet == null) {
       throw new InvalidConfigurationException(
-          "The sample Chromosome instance may not be null.");
+          "The sample chromosome instance may not be null.");
+    }
+    if (a_sampleChromosomeToSet.getConfiguration() == null) {
+      throw new InvalidConfigurationException(
+          "The sample chromosome's configuration may not be null.");
     }
     m_sampleChromosome = a_sampleChromosomeToSet;
     m_chromosomeSize = m_sampleChromosome.size();
@@ -486,10 +490,10 @@ public class Configuration
 
   /**
    * Retrieves the chromosome size being used by this genetic
-   * algorithm. This value is set automatically when the sample Chromosome
+   * algorithm. This value is set automatically when the sample chromosome
    * is provided.
    *
-   * @return chromosome size used in this Configuration
+   * @return chromosome size used in this configuration
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -505,7 +509,7 @@ public class Configuration
    * round of evolution (usually guided by the fitness values
    * provided by the fitness function). This setting is required.
    *
-   * @param a_selectorToSet the natural selector to be used.
+   * @param a_selectorToSet the natural selector to be used
    *
    * @throws InvalidConfigurationException if the natural selector is null or
    * this Configuration object is locked
@@ -1176,7 +1180,7 @@ public class Configuration
   /**
    * See setKeepPopulationSizeConstant for description.
    * @return true: population size will always be
-   * the same size (as given with Configuration.setPopulationSize(int).
+   * the same size (as given with Configuration.setPopulationSize(int)
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -1193,7 +1197,7 @@ public class Configuration
    * higher population size is necessary (e.g. for the MinimizingMakeChange
    * example)!
    * @param a_keepPopSizeConstant true: population size will always be
-   * the same size (as given with Configuration.setPopulationSize(int).
+   * the same size (as given with Configuration.setPopulationSize(int)
    *
    * @author Klaus Meffert
    * @since 2.4
