@@ -31,26 +31,29 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private int m_startOffset = 1;
 
   /** {@inheritDoc} */
-  public SwappingMutationOperator() {
+  public SwappingMutationOperator()
+      throws InvalidConfigurationException {
     super();
   }
 
   /** {@inheritDoc} */
   public SwappingMutationOperator(final Configuration a_config,
                                   final IUniversalRateCalculator
-                                  a_mutationRateCalculator) {
+                                  a_mutationRateCalculator)
+      throws InvalidConfigurationException {
     super(a_config, a_mutationRateCalculator);
   }
 
   /** {@inheritDoc} */
   public SwappingMutationOperator(final Configuration a_config,
-                                  final int a_desiredMutationRate) {
-    super(a_config,a_desiredMutationRate);
+                                  final int a_desiredMutationRate)
+      throws InvalidConfigurationException {
+    super(a_config, a_desiredMutationRate);
   }
 
   /**
