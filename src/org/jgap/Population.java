@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.40 $";
+  private static final String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -53,7 +53,8 @@ public class Population
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Population(final Configuration a_config) {
+  public Population(final Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, 100);
   }
 
@@ -65,7 +66,9 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(final Configuration a_config, final IChromosome[] a_chromosomes) {
+  public Population(final Configuration a_config,
+                    final IChromosome[] a_chromosomes)
+      throws InvalidConfigurationException {
     this(a_config, a_chromosomes.length);
     for (int i = 0; i < a_chromosomes.length; i++) {
       m_chromosomes.add(a_chromosomes[i]);
@@ -81,7 +84,11 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(final Configuration a_config, final int a_size) {
+  public Population(final Configuration a_config, final int a_size)
+      throws InvalidConfigurationException {
+    if (a_config == null) {
+      throw new InvalidConfigurationException("Configuration must not be null!");
+    }
     m_config = a_config;
     m_chromosomes = new ArrayList(a_size);
     setChanged(true);
@@ -93,8 +100,8 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population() {
-    /**@todo replace call to this constructor with (config)*/
+  public Population()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 

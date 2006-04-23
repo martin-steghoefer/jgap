@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   /**
    * This field separates gene class name from
@@ -75,21 +75,25 @@ public class CompositeGene
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public CompositeGene() {
+  public CompositeGene()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
   /**
    * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public CompositeGene(Configuration a_config) {
+  public CompositeGene(Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, null);
   }
 
@@ -100,12 +104,14 @@ public class CompositeGene
    * @param a_config the configuration to use
    * @param a_geneTypeAllowed the class of Genes to be allowed to be added to
    * the CompositeGene
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public CompositeGene(final Configuration a_config,
-                       final Gene a_geneTypeAllowed) {
+                       final Gene a_geneTypeAllowed)
+      throws InvalidConfigurationException {
     super(a_config);
     m_genes = new Vector();
     if (a_geneTypeAllowed != null) {
@@ -408,15 +414,20 @@ public class CompositeGene
    * @since 1.1
    */
   protected Gene newGeneInternal() {
-    CompositeGene compositeGene = new CompositeGene(getConfiguration());
-    compositeGene.setConstraintChecker(getConstraintChecker());
-    Gene gene;
-    int geneSize = m_genes.size();
-    for (int i = 0; i < geneSize; i++) {
-      gene = (Gene) m_genes.get(i);
-      compositeGene.addGene(gene.newGene(), false);
+    try {
+      CompositeGene compositeGene = new CompositeGene(getConfiguration());
+      compositeGene.setConstraintChecker(getConstraintChecker());
+      Gene gene;
+      int geneSize = m_genes.size();
+      for (int i = 0; i < geneSize; i++) {
+        gene = (Gene) m_genes.get(i);
+        compositeGene.addGene(gene.newGene(), false);
+      }
+      return compositeGene;
     }
-    return compositeGene;
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**

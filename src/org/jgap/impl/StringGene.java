@@ -12,7 +12,6 @@ package org.jgap.impl;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
 import org.jgap.*;
 
 /**
@@ -41,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   private int m_minLength;
 
@@ -59,11 +58,13 @@ public class StringGene
    * You need to set the valid alphabet later!<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public StringGene() {
+  public StringGene()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
@@ -71,11 +72,12 @@ public class StringGene
    * Default constructor, sets minimum and maximum length to arbitrary.
    * You need to set the valid alphabet later!
    * @param a_config the configuration to use
-   *
+   * @throws InvalidConfigurationException
    * @author Klaus Meffert
    * @since3.0
    */
-  public StringGene(final Configuration a_config) {
+  public StringGene(final Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, 0, 0);
   }
 
@@ -85,12 +87,14 @@ public class StringGene
    * @param a_config the configuration to use
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public StringGene(final Configuration a_config, final int a_minLength,
-                    final int a_maxLength) {
+                    final int a_maxLength)
+      throws InvalidConfigurationException {
     this(a_config, a_minLength, a_maxLength, null);
   }
 
@@ -101,12 +105,14 @@ public class StringGene
    * @param a_minLength minimum valid length of an allele
    * @param a_maxLength maximum valid length of an allele
    * @param a_alphabet valid alphabet for an allele
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public StringGene(final Configuration a_config, final int a_minLength,
-                    final int a_maxLength, final String a_alphabet) {
+                    final int a_maxLength, final String a_alphabet)
+      throws InvalidConfigurationException {
     super(a_config);
     if (a_minLength < 0) {
       throw new IllegalArgumentException(
@@ -187,7 +193,8 @@ public class StringGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void setValueFromPersistentRepresentation(final String a_representation)
+  public void setValueFromPersistentRepresentation(final String
+      a_representation)
       throws UnsupportedRepresentationException {
     if (a_representation != null) {
       StringTokenizer tokenizer =
@@ -373,10 +380,15 @@ public class StringGene
    * @since 1.1
    */
   protected Gene newGeneInternal() {
-    StringGene result = new StringGene(getConfiguration(), m_minLength,
-                                       m_maxLength, m_alphabet);
-    result.setConstraintChecker(getConstraintChecker());
-    return result;
+    try {
+      StringGene result = new StringGene(getConfiguration(), m_minLength,
+                                         m_maxLength, m_alphabet);
+      result.setConstraintChecker(getConstraintChecker());
+      return result;
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**
@@ -484,16 +496,16 @@ public class StringGene
    * @since 1.1
    */
   public String toString() {
-    String s ="StringGene=";
+    String s = "StringGene=";
     if (m_value == null) {
-      s+= "null";
+      s += "null";
     }
     else {
       if (m_value.equals("")) {
-        s+= "\"\"";
+        s += "\"\"";
       }
       else {
-        s+= m_value;
+        s += m_value;
       }
     }
     return s;

@@ -11,7 +11,6 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.event.*;
 
 /**
@@ -31,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.78 $";
+  private final static String CVS_REVISION = "$Revision: 1.79 $";
 
   /**
    * The current active Configuration instance.
@@ -231,7 +230,6 @@ public class Genotype
           "The active Configuration object must be set on this " +
           "Genotype prior to evolution.");
     }
-
     // Adjust population size to configured size (if wanted).
     // Theoretically, this should be done at the end of this method.
     // But for optimization issues it is not. If it is the last call to
@@ -245,16 +243,13 @@ public class Genotype
       keepPopSizeConstant(getPopulation(),
                           m_activeConfiguration.getPopulationSize());
     }
-
     // Apply certain NaturalSelectors before GeneticOperators will be applied.
     // -----------------------------------------------------------------------
     applyNaturalSelectors(true);
-
     // Execute all of the Genetic Operators.
     // -------------------------------------
     List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
-
     while (operatorIterator.hasNext()) {
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
       applyGeneticOperator(operator, getPopulation(),
@@ -275,7 +270,6 @@ public class Genotype
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     applyNaturalSelectors(false);
-
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction =
@@ -289,10 +283,10 @@ public class Genotype
     if (m_activeConfiguration.getMinimumPopSizePercent() > 0) {
       int sizeWanted = m_activeConfiguration.getPopulationSize();
       int popSize;
-
-      int minSize = (int)Math.round (sizeWanted *
-                           (double)m_activeConfiguration.getMinimumPopSizePercent()
-                           / 100);
+      int minSize = (int) Math.round(sizeWanted *
+                                     (double) m_activeConfiguration.
+                                     getMinimumPopSizePercent()
+                                     / 100);
       popSize = getPopulation().size();
       if (popSize < minSize) {
         IChromosome newChrom;
@@ -307,20 +301,17 @@ public class Genotype
         }
       }
     }
-
     if (getConfiguration().isPreserveFittestIndividual()) {
       // Determine the fittest chromosome in the population.
       // ---------------------------------------------------
       IChromosome fittest = null;
       fittest = getFittestChromosome();
-
       if (!getPopulation().contains(fittest)) {
         // Re-add fittest chromosome to current population.
         // ------------------------------------------------
         getPopulation().addChromosome(fittest);
       }
     }
-
     // Increase number of generation.
     // ------------------------------
     m_activeConfiguration.incrementGenerationNr();
@@ -345,7 +336,6 @@ public class Genotype
     for (int i = 0; i < a_numberOfEvolutions; i++) {
       evolve();
     }
-
     if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
       keepPopSizeConstant(getPopulation(),
                           m_activeConfiguration.getPopulationSize());
@@ -491,41 +481,48 @@ public class Genotype
    */
   protected void applyNaturalSelectors(
       boolean a_processBeforeGeneticOperators) {
-    // Process all natural selectors applicable before executing the
-    // genetic operators (reproduction, crossing over, mutation...).
-    // -------------------------------------------------------------
-    int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(
-        a_processBeforeGeneticOperators);
-    if (selectorSize > 0) {
-      int m_population_size = m_activeConfiguration.getPopulationSize();
-      int m_single_selection_size;
-      Population m_new_population;
-      m_new_population = new Population(m_activeConfiguration, m_population_size);
-      NaturalSelector selector;
-      // Repopulate the population of chromosomes with those selected
-      // by the natural selector. Iterate over all natural selectors.
-      // ------------------------------------------------------------
-      for (int i = 0; i < selectorSize; i++) {
-        selector = m_activeConfiguration.getNaturalSelector(
-            a_processBeforeGeneticOperators, i);
-        if (i == selectorSize - 1 && i > 0) {
-          // Ensure the last NaturalSelector adds the remaining Chromosomes.
-          // ---------------------------------------------------------------
-          m_single_selection_size = m_population_size - getPopulation().size();
+    try {
+      // Process all natural selectors applicable before executing the
+      // genetic operators (reproduction, crossing over, mutation...).
+      // -------------------------------------------------------------
+      int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(
+          a_processBeforeGeneticOperators);
+      if (selectorSize > 0) {
+        int m_population_size = m_activeConfiguration.getPopulationSize();
+        int m_single_selection_size;
+        Population m_new_population;
+        m_new_population = new Population(m_activeConfiguration,
+                                          m_population_size);
+        NaturalSelector selector;
+        // Repopulate the population of chromosomes with those selected
+        // by the natural selector. Iterate over all natural selectors.
+        // ------------------------------------------------------------
+        for (int i = 0; i < selectorSize; i++) {
+          selector = m_activeConfiguration.getNaturalSelector(
+              a_processBeforeGeneticOperators, i);
+          if (i == selectorSize - 1 && i > 0) {
+            // Ensure the last NaturalSelector adds the remaining Chromosomes.
+            // ---------------------------------------------------------------
+            m_single_selection_size = m_population_size - getPopulation().size();
+          }
+          else {
+            m_single_selection_size = m_population_size / selectorSize;
+          }
+          // Do selection of Chromosomes.
+          // ----------------------------
+          selector.select(m_single_selection_size, getPopulation(),
+                          m_new_population);
+          // Clean up the natural selector.
+          // ------------------------------
+          selector.empty();
         }
-        else {
-          m_single_selection_size = m_population_size / selectorSize;
-        }
-        // Do selection of Chromosomes.
-        // ----------------------------
-        selector.select(m_single_selection_size, getPopulation(),
-                        m_new_population);
-        // Clean up the natural selector.
-        // ------------------------------
-        selector.empty();
+        setPopulation(new Population(getConfiguration()));
+        getPopulation().addChromosomes(m_new_population);
       }
-      setPopulation(new Population());
-      getPopulation().addChromosomes(m_new_population);
+    }
+    catch (InvalidConfigurationException iex) {
+      // This exception should never be reached
+      throw new IllegalStateException(iex.getMessage());
     }
   }
 
@@ -614,7 +611,6 @@ public class Genotype
    * @since 2.5
    */
   protected void keepPopSizeConstant(Population a_pop, int a_maxSize) {
-
     int popSize = a_pop.size();
     if (popSize > a_maxSize) {
       // See request  1213752.

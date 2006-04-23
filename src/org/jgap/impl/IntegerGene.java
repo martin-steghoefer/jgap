@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.36 $";
+  private static final String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -50,13 +50,28 @@ public class IntegerGene
    * than the standard range of integer values.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Neil Rostan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public IntegerGene() {
-    this(Genotype.getConfiguration(), Integer.MIN_VALUE, Integer.MAX_VALUE);
+  public IntegerGene() throws InvalidConfigurationException {
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * Constructs a new IntegerGene with default settings. No bounds will
+   * be put into effect for values (alleles) of this Gene instance, other
+   * than the standard range of integer values.<p>
+   * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public IntegerGene(final Configuration a_config) throws InvalidConfigurationException{
+    this(a_config, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
 
   /**
@@ -68,12 +83,14 @@ public class IntegerGene
    * inclusive
    * @param a_upperBounds the highest value that this Gene may possess,
    * inclusive
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public IntegerGene(final Configuration a_config, final int a_lowerBounds,
-                     final int a_upperBounds) {
+                     final int a_upperBounds)
+      throws InvalidConfigurationException {
     super(a_config);
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
@@ -90,9 +107,14 @@ public class IntegerGene
    * @since 2.6 (was newGene since 1.0, moved to BaseGene)
    */
   protected Gene newGeneInternal() {
-    IntegerGene result = new IntegerGene(getConfiguration(), m_lowerBounds,
-                                         m_upperBounds);
-    return result;
+    try {
+      IntegerGene result = new IntegerGene(getConfiguration(), m_lowerBounds,
+                                           m_upperBounds);
+      return result;
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**

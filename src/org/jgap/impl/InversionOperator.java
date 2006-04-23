@@ -23,7 +23,7 @@ import org.jgap.*;
 public class InversionOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Default constructor.<p>
@@ -33,7 +33,8 @@ public class InversionOperator
    * @author Klaus Meffert
    * @since 2.3
    */
-  public InversionOperator() {
+  public InversionOperator()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
@@ -44,7 +45,8 @@ public class InversionOperator
    * @author Klaus Meffert
    * @since 3.0
    */
-  public InversionOperator(Configuration a_config) {
+  public InversionOperator(Configuration a_config)
+      throws InvalidConfigurationException {
     super(a_config);
   }
 

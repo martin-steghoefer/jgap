@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -52,29 +52,34 @@ public class BestChromosomesSelector
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public BestChromosomesSelector() {
+  public BestChromosomesSelector()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
   /**
    * Using original rate of 1.0
    * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public BestChromosomesSelector(final Configuration a_config) {
+  public BestChromosomesSelector(final Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, 1.0d);
   }
 
   public BestChromosomesSelector(final Configuration a_config,
-                                 final double a_originalRate) {
+                                 final double a_originalRate)
+      throws InvalidConfigurationException {
     super(a_config);
-    m_chromosomes = new Population();
+    m_chromosomes = new Population(a_config);
     m_needsSorting = false;
     m_doublettesAllowed = false;
     setOriginalRate(a_originalRate);

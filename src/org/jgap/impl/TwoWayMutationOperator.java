@@ -28,7 +28,7 @@ import org.jgap.*;
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -49,12 +49,16 @@ public class TwoWayMutationOperator
    * Constructs a new instance of this MutationOperator without a specified
    * mutation rate, which results in dynamic mutation being turned on. This
    * means that the mutation rate will be automatically determined by this
-   * operator based upon the number of genes present in the chromosomes.
+   * operator based upon the number of genes present in the chromosomes.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public TwoWayMutationOperator() {
+  public TwoWayMutationOperator()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration(),
          new DefaultMutationRateCalculator(Genotype.getConfiguration()));
   }
@@ -66,13 +70,15 @@ public class TwoWayMutationOperator
    * @param a_config the configuration to use
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    * computation
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.6
    */
   public TwoWayMutationOperator(final Configuration a_config,
                                 final IUniversalRateCalculator
-                                a_mutationRateCalculator) {
+                                a_mutationRateCalculator)
+      throws InvalidConfigurationException {
     super(a_config);
     setMutationRateCalc(a_mutationRateCalculator);
   }
@@ -85,13 +91,15 @@ public class TwoWayMutationOperator
    * @param a_desiredMutationRate desired rate of mutation, expressed as
    * the denominator of the 1 / X fraction. For example, 1000 would result
    * in 1/1000 genes being mutated on average. A mutation rate of zero disables
-   * mutation entirely.
+   * mutation entirely
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.6
    */
   public TwoWayMutationOperator(final Configuration a_config,
-                                final int a_desiredMutationRate) {
+                                final int a_desiredMutationRate)
+      throws InvalidConfigurationException {
     super(a_config);
     m_mutationRate = a_desiredMutationRate;
     setMutationRateCalc(null);

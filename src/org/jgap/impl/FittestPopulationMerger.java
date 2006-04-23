@@ -25,32 +25,39 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public Population mergePopulations(final Population a_population1,
                                      final Population a_population2,
                                      final int a_new_population_size) {
     /**@todo check if configurations of both pops are equal resp.
      * their fitness evaluators!*/
-    //All the chromosomes are placed in the first population for sorting.
-    a_population1.addChromosomes(a_population2);
-    //A sorting is made according to the chromosomes fitness values
-    //See the private class FitnessChromosomeComparator below to understand.
-    List allChromosomes = a_population1.getChromosomes();
-    Collections.sort(allChromosomes,
-                     new FitnessChromosomeComparator(a_population1.
-        getConfiguration()));
-    //Then a new population is created and the fittest "a_new_population_size"
-    //chromosomes are added.
-    Chromosome[] chromosomes = (Chromosome[]) allChromosomes.toArray(new
-        Chromosome[0]);
-    Population mergedPopulation = new Population(a_population1.getConfiguration(),
-                                                 a_new_population_size);
-    for (int i = 0; i < a_new_population_size && i < chromosomes.length; i++) {
-      mergedPopulation.addChromosome(chromosomes[i]);
+    try {
+      //All the chromosomes are placed in the first population for sorting.
+      a_population1.addChromosomes(a_population2);
+      //A sorting is made according to the chromosomes fitness values
+      //See the private class FitnessChromosomeComparator below to understand.
+      List allChromosomes = a_population1.getChromosomes();
+      Collections.sort(allChromosomes,
+                       new FitnessChromosomeComparator(a_population1.
+          getConfiguration()));
+      //Then a new population is created and the fittest "a_new_population_size"
+      //chromosomes are added.
+      Chromosome[] chromosomes = (Chromosome[]) allChromosomes.toArray(new
+          Chromosome[0]);
+      Population mergedPopulation = new Population(a_population1.
+          getConfiguration(),
+          a_new_population_size);
+      for (int i = 0; i < a_new_population_size && i < chromosomes.length; i++) {
+        mergedPopulation.addChromosome(chromosomes[i]);
+      }
+      //The merged population is then returned.
+      return mergedPopulation;
     }
-    //The merged population is then returned.
-    return mergedPopulation;
+    catch (InvalidConfigurationException iex) {
+      //this should never happen
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**

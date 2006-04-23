@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -65,7 +65,8 @@ public class AveragingCrossoverOperator
    * @author Klaus Meffert
    * @since 2.0
    */
-  public AveragingCrossoverOperator() {
+  public AveragingCrossoverOperator()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration(), (RandomGenerator)null);
   }
 
@@ -77,7 +78,8 @@ public class AveragingCrossoverOperator
    * @author Klaus Meffert
    * @since 3.0
    */
-  public AveragingCrossoverOperator(final Configuration a_configuration) {
+  public AveragingCrossoverOperator(final Configuration a_configuration)
+      throws InvalidConfigurationException {
     this(a_configuration, (RandomGenerator)null);
   }
 
@@ -91,7 +93,9 @@ public class AveragingCrossoverOperator
    * @since 3.0 (since 2.0 without a_configuration)
    */
   public AveragingCrossoverOperator(final Configuration a_configuration,
-                                    final RandomGenerator a_generatorForAveraging) {
+                                    final RandomGenerator
+                                    a_generatorForAveraging)
+      throws InvalidConfigurationException {
     super(a_configuration);
     init();
     m_crossoverGenerator = a_generatorForAveraging;
@@ -110,7 +114,8 @@ public class AveragingCrossoverOperator
    */
   public AveragingCrossoverOperator(final Configuration a_configuration,
                                     final IUniversalRateCalculator
-                                    a_crossoverRateCalculator) {
+                                    a_crossoverRateCalculator)
+      throws InvalidConfigurationException {
     super(a_configuration);
     init();
     setCrossoverRateCalc(a_crossoverRateCalculator);

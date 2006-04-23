@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -44,12 +44,14 @@ public class DoubleGene
    * than the standard range of double values.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.1
    */
-  public DoubleGene() {
+  public DoubleGene()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
@@ -58,11 +60,13 @@ public class DoubleGene
    * be put into effect for values (alleles) of this Gene instance, other
    * than the standard range of double values.
    * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public DoubleGene(final Configuration a_config) {
+  public DoubleGene(final Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, - (Double.MAX_VALUE / 2),
          Double.MAX_VALUE);
   }
@@ -76,12 +80,14 @@ public class DoubleGene
    * inclusive
    * @param a_upperBounds the highest value that this Gene may possess,
    * inclusive
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public DoubleGene(final Configuration a_config, final double a_lowerBounds,
-                    final double a_upperBounds) {
+                    final double a_upperBounds)
+      throws InvalidConfigurationException {
     super(a_config);
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
@@ -98,9 +104,14 @@ public class DoubleGene
    * @since 1.1
    */
   protected Gene newGeneInternal() {
-    DoubleGene result = new DoubleGene(getConfiguration(), m_lowerBounds,
-                                       m_upperBounds);
-    return result;
+    try {
+      DoubleGene result = new DoubleGene(getConfiguration(), m_lowerBounds,
+                                         m_upperBounds);
+      return result;
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**
@@ -288,7 +299,7 @@ public class DoubleGene
           rn = new StockRandomGenerator();
         }
         setAllele(new Double(rn.nextDouble()
-            *(m_upperBounds - m_lowerBounds) + m_lowerBounds));
+                             * (m_upperBounds - m_lowerBounds) + m_lowerBounds));
       }
     }
   }
@@ -333,15 +344,14 @@ public class DoubleGene
    * @since 2.4
    */
   public String toString() {
-    String s = "DoubleGene("+m_lowerBounds+","+m_upperBounds+")"
-        +"=";
+    String s = "DoubleGene(" + m_lowerBounds + "," + m_upperBounds + ")"
+        + "=";
     if (getInternalValue() == null) {
       s += "null";
     }
     else {
-      s+= getInternalValue().toString();
+      s += getInternalValue().toString();
     }
     return s;
   }
-
 }

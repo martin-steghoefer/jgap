@@ -20,7 +20,7 @@ import org.jgap.*;
 public abstract class NumberGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -28,7 +28,7 @@ public abstract class NumberGene
    */
   private Object m_value;
 
-  public NumberGene(Configuration a_config) {
+  public NumberGene(Configuration a_config) throws InvalidConfigurationException {
     super(a_config);
   }
 

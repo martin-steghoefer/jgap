@@ -20,18 +20,23 @@ import java.util.*;
 public abstract class BaseGeneticOperator
     implements GeneticOperator, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient Configuration m_configuration;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
-   * @param a_configuration the configuration to set
-   *
+   * @param a_configuration the configuration to set (must not be null)
+   * @throws InvalidConfigurationException
    * @author Klaus Meffert
    * @since 3.0
    */
-  public BaseGeneticOperator(Configuration a_configuration) {
+  public BaseGeneticOperator(Configuration a_configuration)
+      throws InvalidConfigurationException {
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException("Configuration to set may not be"
+                                              +" null!");
+    }
     m_configuration = a_configuration;
   }
 

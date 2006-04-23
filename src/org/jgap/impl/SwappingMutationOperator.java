@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private int m_startOffset = 1;
 
@@ -39,6 +39,12 @@ public class SwappingMutationOperator
   public SwappingMutationOperator()
       throws InvalidConfigurationException {
     super();
+  }
+
+  /** {@inheritDoc} */
+  public SwappingMutationOperator(final Configuration a_config)
+      throws InvalidConfigurationException {
+    super(a_config);
   }
 
   /** {@inheritDoc} */

@@ -18,18 +18,25 @@ package org.jgap;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient Configuration m_configuration;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
    * @param a_configuration the configuration to set
+   * @throws InvalidConfigurationException if configuration is null
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public BaseChromosome(Configuration a_configuration) {
+  public BaseChromosome(Configuration a_configuration)
+      throws InvalidConfigurationException {
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
     m_configuration = a_configuration;
   }
 

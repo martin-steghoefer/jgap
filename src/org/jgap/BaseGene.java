@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -52,10 +52,16 @@ public abstract class BaseGene
   /**
    *
    * @param a_configuration the configuration to use
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public BaseGene(Configuration a_configuration) {
+  public BaseGene(Configuration a_configuration)
+      throws InvalidConfigurationException {
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException("Configuration must not be null!");
+    }
     m_configuration = a_configuration;
   }
 
@@ -160,11 +166,10 @@ public abstract class BaseGene
       int result = compareTo(a_other);
       if (result == 0) {
         if (isCompareApplicationData()) {
-          Gene otherGene = (Gene)a_other;
+          Gene otherGene = (Gene) a_other;
           int resultAppData = compareApplicationData(getApplicationData(),
               otherGene.getApplicationData());
           return resultAppData == 0;
-
         }
         else {
           return true;
@@ -295,7 +300,8 @@ public abstract class BaseGene
         try {
           return ( (Integer) handler.perform(a_appdata1, null, a_appdata2)).
               intValue();
-        }catch (Exception ex) {
+        }
+        catch (Exception ex) {
           throw new Error(ex);
         }
       }
@@ -323,7 +329,7 @@ public abstract class BaseGene
    * @since 2.5 (moved from CompositeGene, where it was since 2.0)
    */
   public void setConstraintChecker(
-         final IGeneConstraintChecker a_constraintChecker) {
+      final IGeneConstraintChecker a_constraintChecker) {
     m_geneAlleleChecker = a_constraintChecker;
   }
 
@@ -365,7 +371,7 @@ public abstract class BaseGene
 
   protected abstract Gene newGeneInternal();
 
- /**
+  /**
    * @return the configuration used
    *
    * @author Klaus Meffert

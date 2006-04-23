@@ -34,7 +34,7 @@ public class MutationOperator
     extends BaseGeneticOperator
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -53,22 +53,26 @@ public class MutationOperator
    * operator based upon the number of genes present in the chromosomes.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public MutationOperator() {
+  public MutationOperator()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
   /**
    * @param a_conf the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public MutationOperator(final Configuration a_conf) {
+  public MutationOperator(final Configuration a_conf)
+      throws InvalidConfigurationException {
     super(a_conf);
     setMutationRateCalc(new DefaultMutationRateCalculator(a_conf));
   }
@@ -80,13 +84,15 @@ public class MutationOperator
    * @param a_config the configuration to use
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    * computation
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public MutationOperator(final Configuration a_config,
                           final IUniversalRateCalculator
-                          a_mutationRateCalculator) {
+                          a_mutationRateCalculator)
+      throws InvalidConfigurationException {
     super(a_config);
     setMutationRateCalc(a_mutationRateCalculator);
   }
@@ -99,13 +105,15 @@ public class MutationOperator
    * @param a_desiredMutationRate desired rate of mutation, expressed as
    * the denominator of the 1 / X fraction. For example, 1000 would result
    * in 1/1000 genes being mutated on average. A mutation rate of zero disables
-   * mutation entirely.
+   * mutation entirely
+   * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
    * @since 1.1
    */
   public MutationOperator(final Configuration a_config,
-                          final int a_desiredMutationRate) {
+                          final int a_desiredMutationRate)
+      throws InvalidConfigurationException {
     super(a_config);
     m_config.m_mutationRate = a_desiredMutationRate;
     setMutationRateCalc(null);

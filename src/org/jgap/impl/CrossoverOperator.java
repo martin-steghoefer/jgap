@@ -33,9 +33,8 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator
     implements Comparable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -54,11 +53,13 @@ public class CrossoverOperator
    * This means that the crossover rate will be fixed at populationsize/2.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Chris Knowles
    * @since 2.0
    */
-  public CrossoverOperator() {
+  public CrossoverOperator()
+      throws InvalidConfigurationException {
     super(Genotype.getConfiguration());
     //set the default crossoverRate to be populationsize/2
     m_crossoverRate = 2;
@@ -71,11 +72,13 @@ public class CrossoverOperator
    * This means that the crossover rate will be fixed at populationsize/2.
    *
    * @param a_configuration the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public CrossoverOperator(final Configuration a_configuration) {
+  public CrossoverOperator(final Configuration a_configuration)
+      throws InvalidConfigurationException {
     super(a_configuration);
     //set the default crossoverRate to be populationsize/2
     m_crossoverRate = 2;
@@ -90,6 +93,7 @@ public class CrossoverOperator
    * @param a_configuration the configuration to use
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
    * computation
+   * @throws InvalidConfigurationException
    *
    * @author Chris Knowles
    * @author Klaus Meffert
@@ -97,7 +101,8 @@ public class CrossoverOperator
    */
   public CrossoverOperator(final Configuration a_configuration,
                            final IUniversalRateCalculator
-                           a_crossoverRateCalculator) {
+                           a_crossoverRateCalculator)
+      throws InvalidConfigurationException {
     super(a_configuration);
     setCrossoverRateCalc(a_crossoverRateCalculator);
   }
@@ -108,13 +113,15 @@ public class CrossoverOperator
    *
    * @param a_configuration the configuration to use
    * @param a_desiredCrossoverRate the desired rate of crossover
+   * @throws InvalidConfigurationException
    *
    * @author Chris Knowles
    * @author Klaus Meffert
    * @since 3.0 (since 2.0 without a_configuration)
    */
   public CrossoverOperator(final Configuration a_configuration,
-                           final int a_desiredCrossoverRate) {
+                           final int a_desiredCrossoverRate)
+      throws InvalidConfigurationException {
     super(a_configuration);
     if (a_desiredCrossoverRate < 1) {
       throw new IllegalArgumentException("Crossover rate must be greater zero");
@@ -144,7 +151,6 @@ public class CrossoverOperator
     RandomGenerator generator = getConfiguration().getRandomGenerator();
     IGeneticOperatorConstraint constraint = getConfiguration().
         getJGAPFactory().getGeneticOperatorConstraint();
-
     // For each crossover, grab two random chromosomes, pick a random
     // locus (gene location), and then swap that gene and all genes
     // to the "right" (those with greater loci) of that gene between
@@ -156,7 +162,6 @@ public class CrossoverOperator
       index2 = generator.nextInt(size);
       IChromosome chrom1 = a_population.getChromosome(index1);
       IChromosome chrom2 = a_population.getChromosome(index2);
-
       // Verify that crossover allowed.
       // ------------------------------
       /**@todo move to base class, refactor*/
@@ -168,7 +173,6 @@ public class CrossoverOperator
           continue;
         }
       }
-
       // Clone the chromosomes.
       // ----------------------
       IChromosome firstMate = (IChromosome) chrom1.clone();

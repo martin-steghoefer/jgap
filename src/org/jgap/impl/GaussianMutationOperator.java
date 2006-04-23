@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   private double m_deviation;
 
@@ -33,11 +33,13 @@ public class GaussianMutationOperator
    * deviation of 0.05.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public GaussianMutationOperator() {
+  public GaussianMutationOperator()
+      throws InvalidConfigurationException {
     this(Genotype.getConfiguration());
   }
 
@@ -45,11 +47,13 @@ public class GaussianMutationOperator
    * Constructs a GaussianMutationOperator with a default
    * deviation of 0.05.
    * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GaussianMutationOperator(Configuration a_config) {
+  public GaussianMutationOperator(Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, 0.05d);
   }
 
@@ -57,11 +61,13 @@ public class GaussianMutationOperator
    * Constructs a GaussianMutationOperator with the given deviation.
    * @param a_configuration the configuration to use
    * @param a_deviation sic
+   * @throws InvalidConfigurationException
    *
    * @since 3.0 (since 2.0 without a_configuration)
    */
   public GaussianMutationOperator(final Configuration a_configuration,
-                                  final double a_deviation) {
+                                  final double a_deviation)
+      throws InvalidConfigurationException {
     super(a_configuration);
     m_deviation = a_deviation;
   }
@@ -94,20 +100,16 @@ public class GaussianMutationOperator
       for (int j = 0; j < genes.length; j++) {
         double nextGaussian = m_rg.nextDouble();
         double diff = nextGaussian * m_deviation;
-
         // ...take a copy of it...
         // -----------------------
         if (copyOfChromosome == null) {
           copyOfChromosome = (IChromosome) a_population.getChromosome(i).clone();
-
           // ...add it to the candidate pool...
           // ----------------------------------
           a_candidateChromosomes.add(copyOfChromosome);
-
           // ...then Gaussian mutate all its genes
           genes = copyOfChromosome.getGenes();
         }
-
         // Process all atomic elements in the gene. For a StringGene this
         // would be the length of the string, for an IntegerGene, it is
         // always one element.

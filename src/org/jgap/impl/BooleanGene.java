@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -51,23 +51,41 @@ public class BooleanGene
   private Boolean m_value;
 
   /**
-   * Default constructor.
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
-   * @since 2.4 (previously: implicitely existent)
+   * @since 2.4
    */
-  public BooleanGene() {
-    super(Genotype.getConfiguration());
+  public BooleanGene()
+      throws InvalidConfigurationException {
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public BooleanGene(final Configuration a_config)
+      throws InvalidConfigurationException {
+    super(a_config);
   }
 
   /**
    * @param a_config the configuration to use
    * @param a_value allele value to setup the gene with
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public BooleanGene(final Configuration a_config, final boolean a_value) {
+  public BooleanGene(final Configuration a_config, final boolean a_value)
+      throws InvalidConfigurationException {
     super(a_config);
     m_value = new Boolean(a_value);
   }
@@ -75,11 +93,13 @@ public class BooleanGene
   /**
    * @param a_config the configuration to use
    * @param a_value allele value to setup the gene with
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public BooleanGene(final Configuration a_config, final Boolean a_value) {
+  public BooleanGene(final Configuration a_config, final Boolean a_value)
+      throws InvalidConfigurationException {
     super(a_config);
     if (a_value == null) {
       throw new IllegalArgumentException("Allele value may not be null. Use"
@@ -103,7 +123,12 @@ public class BooleanGene
    * @author Klaus Meffert
    */
   protected Gene newGeneInternal() {
-    return new BooleanGene();
+    try {
+      return new BooleanGene(getConfiguration());
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**

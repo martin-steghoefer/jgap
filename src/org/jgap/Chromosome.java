@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.76 $";
+  private final static String CVS_REVISION = "$Revision: 1.77 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -125,22 +125,25 @@ public class Chromosome
    * Default constructor, provided for dynamic instantiation.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
-   *
+   * @throws InvalidConfigurationException
    * @author Klaus Meffert
    * @since 2.4
    */
-  public Chromosome() {
+  public Chromosome()
+      throws InvalidConfigurationException {
     super(Genotype.getConfiguration());
   }
 
   /**
    * Default constructor, provided for dynamic instantiation.
    * @param a_configuration the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Chromosome(final Configuration a_configuration) {
+  public Chromosome(final Configuration a_configuration)
+      throws InvalidConfigurationException {
     super(a_configuration);
   }
 
@@ -148,12 +151,14 @@ public class Chromosome
    * Constructor for specifying the number of genes.
    * @param a_configuration the configuration to use
    * @param a_desiredSize number of genes the chromosome contains of
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.2
    */
   public Chromosome(final Configuration a_configuration,
-                    final int a_desiredSize) {
+                    final int a_desiredSize)
+      throws InvalidConfigurationException {
     super(a_configuration);
     if (a_desiredSize <= 0) {
       throw new IllegalArgumentException(
@@ -174,13 +179,15 @@ public class Chromosome
    * @param a_sampleGene a concrete sampleGene instance that will be used
    * as a template for all of the genes in this Chromosome
    * @param a_desiredSize the desired size (number of genes) of this Chromosome
+   * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
   public Chromosome(final Configuration a_configuration,
-                    final Gene a_sampleGene, final int a_desiredSize) {
+                    final Gene a_sampleGene, final int a_desiredSize)
+      throws InvalidConfigurationException {
     this(a_configuration, a_desiredSize);
     initFromGene(a_sampleGene);
   }
@@ -217,11 +224,13 @@ public class Chromosome
    *
    * @param a_configuration the configuration to use
    * @param a_initialGenes the initial genes of this Chromosome
+   * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  public Chromosome(final Configuration a_configuration, Gene[] a_initialGenes) {
+  public Chromosome(final Configuration a_configuration, Gene[] a_initialGenes)
+      throws InvalidConfigurationException {
     this(a_configuration, a_initialGenes == null ? 0 : a_initialGenes.length);
     checkGenes(a_initialGenes);
     m_genes = a_initialGenes;
@@ -313,34 +322,34 @@ public class Chromosome
         }
       }
     }
-    if (copy == null) {
-      // We couldn't fetch a Chromosome from the pool, so we need to create
-      // a new one. First we make a copy of each of the Genes. We explicity
-      // use the Gene at each respective gene location (locus) to create the
-      // new Gene that is to occupy that same locus in the new Chromosome.
-      // -------------------------------------------------------------------
-      int size = size();
-      if (size > 0) {
-        Gene[] copyOfGenes = new Gene[size];
+    try {
+      if (copy == null) {
+        // We couldn't fetch a Chromosome from the pool, so we need to create
+        // a new one. First we make a copy of each of the Genes. We explicity
+        // use the Gene at each respective gene location (locus) to create the
+        // new Gene that is to occupy that same locus in the new Chromosome.
+        // -------------------------------------------------------------------
+        int size = size();
+        if (size > 0) {
+          Gene[] copyOfGenes = new Gene[size];
 //    if (m_genes.length == 0 || copyOfGenes.length == 0) {
 //      throw new IllegalArgumentException("Genes length = 0!");
 //    }
-        for (int i = 0; i < copyOfGenes.length; i++) {
-          copyOfGenes[i] = m_genes[i].newGene();
-          copyOfGenes[i].setAllele(m_genes[i].getAllele());
+          for (int i = 0; i < copyOfGenes.length; i++) {
+            copyOfGenes[i] = m_genes[i].newGene();
+            copyOfGenes[i].setAllele(m_genes[i].getAllele());
+          }
+          // Now construct a new Chromosome with the copies of the genes and
+          // return it. Also clone the IApplicationData object.
+          // ---------------------------------------------------------------
+          copy = new Chromosome(getConfiguration(), copyOfGenes);
         }
-        // Now construct a new Chromosome with the copies of the genes and
-        // return it. Also clone the IApplicationData object.
-        // ---------------------------------------------------------------
-        copy = new Chromosome(getConfiguration(), copyOfGenes);
+        else {
+          copy = new Chromosome(getConfiguration());
+        }
       }
-      else {
-        copy = new Chromosome();
-      }
-    }
-    // Clone constraint checker.
-    // -------------------------
-    try {
+      // Clone constraint checker.
+      // -------------------------
       copy.setConstraintChecker(getConstraintChecker());
     }
     catch (InvalidConfigurationException iex) {
@@ -567,7 +576,8 @@ public class Chromosome
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static IChromosome randomInitialChromosome(Configuration a_configuration)
+  public static IChromosome randomInitialChromosome(Configuration
+      a_configuration)
       throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
@@ -974,9 +984,9 @@ public class Chromosome
       throws Exception {
     return randomInitialChromosome(getConfiguration());
   }
+
   // -----------------------------------
   // Implementations of IInitializer End
-
   public void setMultiObjectives(List a_values) {
     if (m_multiObjective == null) {
       m_multiObjective = new Vector();
