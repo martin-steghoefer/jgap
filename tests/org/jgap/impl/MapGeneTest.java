@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -31,7 +31,7 @@ public class MapGeneTest
 
   public void testConstruct_0()
       throws Exception {
-    Gene gene = new MapGene();
+    Gene gene = new MapGene(conf);
     assertNotNull(privateAccessor.getField(gene, "m_geneMap"));
   }
 
@@ -39,7 +39,7 @@ public class MapGeneTest
       throws Exception {
     Map map = new HashMap();
     map.put(new Integer(2), new Integer(3));
-    MapGene gene = new MapGene(map);
+    MapGene gene = new MapGene(conf, map);
     Map geneMap = (Map) privateAccessor.getField(gene, "m_geneMap");
     assertNotNull(geneMap);
     assertEquals(new Integer(3), geneMap.get(new Integer(2)));
@@ -49,7 +49,7 @@ public class MapGeneTest
   public void testConstruct_2()
       throws Exception {
     try {
-      new MapGene(null);
+      new MapGene(conf, null);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -57,26 +57,30 @@ public class MapGeneTest
     }
   }
 
-  public void testToString_0() {
-    MapGene gene = new MapGene();
+  public void testToString_0()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     assertEquals("[null]", gene.toString());
   }
 
-  public void testToString_1() {
-    MapGene gene = new MapGene();
+  public void testToString_1()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     gene.addAllele(new Integer(102));
     assertEquals("[(102,102)]", gene.toString());
   }
 
-  public void testToString_2() {
-    MapGene gene = new MapGene();
+  public void testToString_2()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     gene.addAllele(new Integer(3), new Integer(102));
     gene.addAllele(new Integer(7), new Integer( -55));
     assertEquals("[(3,102),(7,-55)]", gene.toString());
   }
 
-  public void testToString_3() {
-    MapGene gene = new MapGene();
+  public void testToString_3()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     gene.addAllele(new Double(3), new Integer(102));
     gene.addAllele(new Double(7), new Integer( -55));
     assertEquals("[(3.0,102),(7.0,-55)]", gene.toString());
@@ -88,8 +92,9 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testToString_4() {
-    MapGene gene = new MapGene();
+  public void testToString_4()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     gene.addAllele(new Integer(3), new Double(102));
     gene.addAllele(new Double(7), new Integer( -55));
     assertEquals("[(7.0,-55),(3,102.0)]", gene.toString());
@@ -101,15 +106,17 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testToString_5() {
-    MapGene gene = new MapGene();
+  public void testToString_5()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     gene.addAllele(new Double(7), new Integer( -55));
     gene.addAllele(new Integer(3), new Double(102));
     assertEquals("[(7.0,-55),(3,102.0)]", gene.toString());
   }
 
-  public void testGetAllele_0() {
-    MapGene gene = new MapGene();
+  public void testGetAllele_0()
+      throws Exception {
+    MapGene gene = new MapGene(conf);
     gene.addAllele(1);
     gene.addAllele(7);
     gene.addAllele( -5);
@@ -131,53 +138,60 @@ public class MapGeneTest
     }
   }
 
-  public void testEquals_0() {
-    Gene gene1 = new MapGene();
-    Gene gene2 = new MapGene();
+  public void testEquals_0()
+      throws Exception {
+    Gene gene1 = new MapGene(conf);
+    Gene gene2 = new MapGene(conf);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
   }
 
-  public void testEquals_1() {
-    Gene gene1 = new MapGene();
+  public void testEquals_1()
+      throws Exception {
+    Gene gene1 = new MapGene(conf);
     assertFalse(gene1.equals(null));
   }
 
-  public void testEquals_2() {
+  public void testEquals_2()
+      throws Exception {
     Map alleles = new HashMap();
     alleles.put(new Integer(1), new Integer(1));
-    Gene gene1 = new MapGene(alleles);
-    assertFalse(gene1.equals(new BooleanGene()));
+    Gene gene1 = new MapGene(conf, alleles);
+    assertFalse(gene1.equals(new BooleanGene(conf)));
   }
 
-  public void testEquals_3() {
-    Gene gene1 = new MapGene();
+  public void testEquals_3()
+      throws Exception {
+    Gene gene1 = new MapGene(conf);
     assertFalse(gene1.equals(new Vector()));
   }
 
-  public void testEquals_4() {
+  public void testEquals_4()
+      throws Exception {
     Map alleles = new HashMap();
     alleles.put(new Integer(1), new Integer(1));
-    Gene gene1 = new MapGene(alleles);
-    Gene gene2 = new MapGene(alleles);
+    Gene gene1 = new MapGene(conf, alleles);
+    Gene gene2 = new MapGene(conf, alleles);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
   }
 
-  public void testEquals_4_2() {
+  public void testEquals_4_2()
+      throws Exception {
     Map alleles1 = new HashMap();
     alleles1.put(new Integer(1), new Integer(1));
-    Gene gene1 = new MapGene(alleles1);
+    Gene gene1 = new MapGene(conf, alleles1);
     Map alleles2 = new HashMap();
     alleles1.put(new Integer(2), new Integer(3));
-    Gene gene2 = new MapGene(alleles2);
+    Gene gene2 = new MapGene(conf, alleles2);
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
 
-  public void testEquals_5() {
-    Gene gene1 = new MapGene();
-    Gene gene2 = new DoubleGene(1, 99);
+  public void testEquals_5()
+      throws Exception {
+    Gene gene1 = new MapGene(conf);
+    Gene gene2 = new DoubleGene(null, 1, 99);
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
@@ -185,18 +199,21 @@ public class MapGeneTest
   /**
    * Set Allele to null, no exception should occur
    */
-  public void testSetAllele_0() {
-    MapGene gene1 = new MapGene();
+  public void testSetAllele_0()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     gene1.setAllele(null);
   }
 
-  public void testSetAllele_1() {
-    MapGene gene1 = new MapGene();
+  public void testSetAllele_1()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     gene1.setAllele("22");
   }
 
-  public void testSetAllele_2() {
-    Gene gene = new MapGene();
+  public void testSetAllele_2()
+      throws Exception {
+    Gene gene = new MapGene(conf);
     gene.setAllele(new Integer(101));
   }
 
@@ -206,7 +223,7 @@ public class MapGeneTest
    */
   public void testNewGene_0()
       throws Exception {
-    MapGene gene1 = new MapGene();
+    MapGene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(4711));
     Object value1 = privateAccessor.getField(gene1, "m_value");
     MapGene gene2 = (MapGene) gene1.newGene();
@@ -223,7 +240,7 @@ public class MapGeneTest
    */
   public void testNewGene_1()
       throws Exception {
-    MapGene gene1 = new MapGene();
+    MapGene gene1 = new MapGene(conf);
     MapGene gene2 = (MapGene) gene1.newGene();
     assertEquals(gene1, gene2);
   }
@@ -238,14 +255,15 @@ public class MapGeneTest
     for (int i = 0; i < 40; i++) {
       alleles.put(new Integer(i), new Integer(i));
     }
-    MapGene gene1 = new MapGene(alleles);
+    MapGene gene1 = new MapGene(conf, alleles);
     MapGene gene2 = (MapGene) gene1.newGene();
     assertTrue(gene1.equals(gene2));
   }
 
-  public void testCleanup() {
+  public void testCleanup()
+      throws Exception {
     //cleanup should do nothing!
-    Gene gene = new MapGene();
+    Gene gene = new MapGene(conf);
     gene.setAllele("Hello");
     Gene copy = gene.newGene();
     gene.cleanup();
@@ -264,10 +282,10 @@ public class MapGeneTest
     for (int i = -3; i < 45; i = i + 2) {
       alleles.put(new Integer(i), new Integer(i));
     }
-    Gene gene1 = new MapGene(alleles);
+    Gene gene1 = new MapGene(conf, alleles);
     gene1.setAllele(new Integer(17));
     String pres1 = gene1.getPersistentRepresentation();
-    Gene gene2 = new MapGene();
+    Gene gene2 = new MapGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     /**@todo compare two maps independent of the order of their elements*/
@@ -283,7 +301,7 @@ public class MapGeneTest
    */
   public void testPersistentRepresentation_1()
       throws Exception {
-    Gene gene1 = new MapGene();
+    Gene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation(null);
   }
@@ -296,7 +314,7 @@ public class MapGeneTest
    */
   public void testPersistentRepresentation_2()
       throws Exception {
-    MapGene gene1 = new MapGene();
+    MapGene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("6"
                                                +
@@ -316,7 +334,7 @@ public class MapGeneTest
    */
   public void testPersistentRepresentation_3()
       throws Exception {
-    Gene gene1 = new MapGene();
+    Gene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("null"
                                                + MapGene.
@@ -335,7 +353,7 @@ public class MapGeneTest
    */
   public void testPersistentRepresentation_4()
       throws Exception {
-    Gene gene1 = new MapGene();
+    Gene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(45));
     try {
       gene1.setValueFromPersistentRepresentation("null"
@@ -359,7 +377,7 @@ public class MapGeneTest
    */
   public void testPersistentRepresentation_5()
       throws Exception {
-    Gene gene1 = new MapGene();
+    Gene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("null"
                                                + MapGene.
@@ -370,6 +388,7 @@ public class MapGeneTest
   /**
    *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.5
    */
@@ -379,12 +398,13 @@ public class MapGeneTest
     for (int i = -49; i < -3; i++) {
       alleles.put(new Integer(i), new Integer(i + 1));
     }
-    Gene gene1 = new MapGene(alleles);
+    Gene gene1 = new MapGene(conf, alleles);
     gene1.setAllele(new Integer( -23));
     String pres1 = gene1.getPersistentRepresentation();
-    Gene gene2 = new MapGene();
+    Gene gene2 = new MapGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
+    /**@todo compare two maps independent of the order of their elements*/
     assertEquals(pres1, pres2);
   }
 
@@ -392,12 +412,13 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testCompareTo_0() {
-    MapGene gene1 = new MapGene();
+  public void testCompareTo_0()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     gene1.addAllele(new Integer(58), new Integer(1));
-    MapGene gene2 = new MapGene();
+    MapGene gene2 = new MapGene(conf);
     gene2.addAllele(new Integer(59), new Integer(2));
-    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals( -1, gene1.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene1));
   }
 
@@ -405,10 +426,11 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testCompareTo_1() {
-    MapGene gene1 = new MapGene();
+  public void testCompareTo_1()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     gene1.addAllele(new Integer(58), new Integer(1));
-    MapGene gene2 = new MapGene();
+    MapGene gene2 = new MapGene(conf);
     gene2.addAllele(new Integer(58), new Integer(1));
     assertEquals(0, gene1.compareTo(gene2));
   }
@@ -417,12 +439,13 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testCompareTo_2() {
-    MapGene gene1 = new MapGene();
+  public void testCompareTo_2()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     gene1.addAllele(new Integer(58), null);
-    MapGene gene2 = new MapGene();
+    MapGene gene2 = new MapGene(conf);
     gene2.addAllele(new Integer(58), new Integer(1));
-    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals( -1, gene1.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene1));
   }
 
@@ -430,8 +453,9 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testRemoveAlleles_0() {
-    MapGene gene1 = new MapGene();
+  public void testRemoveAlleles_0()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     Object key = new Integer(58);
     gene1.addAllele(key, null);
     assertEquals(1, gene1.getAlleles().size());
@@ -443,8 +467,9 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testRemoveAlleles_1() {
-    MapGene gene1 = new MapGene();
+  public void testRemoveAlleles_1()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
     Object key = new Integer(58);
     gene1.addAllele(key, new Double(5));
     assertEquals(1, gene1.getAlleles().size());
@@ -452,7 +477,7 @@ public class MapGeneTest
     assertEquals(1, gene1.getAlleles().size());
   }
 
-/**@todo add test fro applyMutation*/
+  /**@todo add test fro applyMutation*/
 //  public void testApplyMutation_1()
 //      throws Exception {
 //    DefaultConfiguration config = new DefaultConfiguration();
@@ -463,16 +488,16 @@ public class MapGeneTest
 //    gene.applyMutation(0, 0.5d);
 //    assertEquals(Math.round(50 + (100 - 0) * 0.5d), gene.intValue());
 //  }
-
-  public void testSetToRandomValue_0() {
-    Gene gene = new MapGene();
+  public void testSetToRandomValue_0()
+      throws Exception {
+    Gene gene = new MapGene(conf);
     gene.setToRandomValue(new RandomGeneratorForTest(3));
     assertEquals(new Integer(3), gene.getAllele());
   }
 
   public void testSetToRandomValue_1()
       throws Exception {
-    MapGene gene = new MapGene();
+    MapGene gene = new MapGene(conf);
     gene.addAllele(new Integer(2), new Integer(3));
     Configuration conf = new DefaultConfiguration();
     Genotype.setConfiguration(conf);
@@ -480,5 +505,4 @@ public class MapGeneTest
     assertEquals(new Integer(2), gene.getAlleles().keySet().iterator().next());
     assertEquals(new Integer(3), gene.getAlleles().values().iterator().next());
   }
-
 }
