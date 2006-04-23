@@ -1,10 +1,8 @@
 package examples.functionFinder.test;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.impl.*;
-
 import examples.functionFinder.*;
 
 /**
@@ -13,13 +11,15 @@ import examples.functionFinder.*;
  * @author Klaus Meffert
  * @since 2.2
  */
-public class GeneExtractorTest extends JGAPTestCase {
-
+public class GeneExtractorTest
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   private static int numberOfFunctions;
+
   private static int numberOfConstants;
+
   private static int numberOfOperators;
 
   public GeneExtractorTest(String name) {
@@ -45,67 +45,73 @@ public class GeneExtractorTest extends JGAPTestCase {
    * Use a function
    * @author Klaus Meffert
    */
-  public void testGene_0() {
-    Gene[] genes = new Gene[ 2 ];
-    genes[ 0 ] = new TestGene(3);
+  public void testGene_0() throws Exception {
+    Gene[] genes = new Gene[2];
+    genes[0] = new TestGene(conf, 3);
     final int opNr = 2;
-    genes[ 1 ] = new TestGene(opNr);
+    genes[1] = new TestGene(conf, opNr);
     Term elem = constructTerm(genes);
     assertEquals(Repository.getFunctions().get(3), elem.termName);
     assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0)
-        ,elem.operator);
+                 , elem.operator);
   }
 
   /**
    * Use a constant
    * @author Klaus Meffert
    */
-  public void testGene_1() {
-    Gene[] genes = new Gene[ 2 ];
-    genes[ 0 ] = new TestGene(numberOfFunctions + 0);
-    genes[ 1 ] = new TestGene(2);
+  public void testGene_1() throws Exception {
+    Gene[] genes = new Gene[2];
+    genes[0] = new TestGene(conf, numberOfFunctions + 0);
+    genes[1] = new TestGene(conf, 2);
     Term elem = constructTerm(genes);
     assertEquals(Repository.getConstants().get(0), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),elem.operator);
+    assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),
+                 elem.operator);
   }
 
   /**
-   * Use a constant (forcing modulo for functions)
+   * Use a constant (forcing modulo for functions).
+   *
    * @author Klaus Meffert
    */
-  public void testGene_2() {
-    Gene[] genes = new Gene[ 2 ];
-    genes[ 0 ] = new TestGene( (numberOfFunctions + 0) + 33 * (numberOfConstants
-                 + numberOfFunctions));
-    genes[ 1 ] = new TestGene(2);
+  public void testGene_2() throws Exception {
+    Gene[] genes = new Gene[2];
+    genes[0] = new TestGene(conf,
+                            (numberOfFunctions + 0) + 33 * (numberOfConstants
+        + numberOfFunctions));
+    genes[1] = new TestGene(conf, 2);
     Term elem = constructTerm(genes);
     assertEquals(Repository.getConstants().get(0), elem.termName);
-    assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),elem.operator);
+    assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),
+                 elem.operator);
   }
 
   /**
-   * Use a function (forcing modulo for operator)
+   * Use a function (forcing modulo for operator).
+   *
    * @author Klaus Meffert
    */
-  public void testGene_3() {
-    Gene[] genes = new Gene[ 2 ];
-    genes[ 0 ] = new TestGene(3);
+  public void testGene_3() throws Exception {
+    Gene[] genes = new Gene[2];
+    genes[0] = new TestGene(conf, 3);
     final int opNr = 1;
-    genes[ 1 ] = new TestGene(numberOfOperators * 24 + opNr);
+    genes[1] = new TestGene(conf, numberOfOperators * 24 + opNr);
     Term elem = constructTerm(genes);
     assertEquals(Repository.getFunctions().get(3), elem.termName);
     assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0)
-        ,elem.operator);
+                 , elem.operator);
   }
 
   /**
    * Use a function
    * @author Klaus Meffert
    */
-  public void testGene_4() {
-    CompositeGene comp = new CompositeGene();
+  public void testGene_4()
+      throws Exception {
+    CompositeGene comp = new CompositeGene(conf);
     Gene[] genes = new Gene[2];
-    comp.addGene(new TestGene(3));
+    comp.addGene(new TestGene(null, 3));
     genes[0] = comp;
     try {
       constructTerms(genes);
@@ -119,19 +125,20 @@ public class GeneExtractorTest extends JGAPTestCase {
   /**
    * @author Klaus Meffert
    */
-  public void testGene_5() {
-    CompositeGene comp = new CompositeGene();
-    Gene[] genes = new Gene[ 1 ];
+  public void testGene_5()
+      throws Exception {
+    CompositeGene comp = new CompositeGene(conf);
+    Gene[] genes = new Gene[1];
     final int fktNr = 4;
-    comp.addGene(new TestGene(fktNr));
+    comp.addGene(new TestGene(conf, fktNr));
     final int opNr = 2;
-    comp.addGene(new TestGene(opNr));
-    genes[ 0 ] = comp;
+    comp.addGene(new TestGene(conf, opNr));
+    genes[0] = comp;
     Vector elems = constructTerms(genes);
-    Term elem = (Term)elems.elementAt(0);
+    Term elem = (Term) elems.elementAt(0);
     assertEquals(Repository.getFunctions().get(fktNr), elem.termName);
     assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0),
-        elem.operator);
+                 elem.operator);
   }
 
   /**
@@ -153,14 +160,13 @@ public class GeneExtractorTest extends JGAPTestCase {
       comp = (CompositeGene) genes[i];
       gene1 = comp.geneAt(0);
       gene2 = comp.geneAt(1);
-      geneTupel = new Gene[] {gene1, gene2};
+      geneTupel = new Gene[] {
+          gene1, gene2};
       term = constructTerm(geneTupel);
-
       //Alle Tiefen von Funktionen addieren (nicht die von Konstanten)
       if (term.termType == 2) {
         totalTiefe += term.depth;
       }
-
       result.add(term);
     }
     //Die Tiefe pro Term anpassen: Reicht die Anzahl der Terme insgesamt nicht aus,
@@ -235,8 +241,8 @@ public class GeneExtractorTest extends JGAPTestCase {
    * @author Klaus Meffert
    */
   private Term constructTerm(Gene[] genes) {
-    Gene fkt = genes[ 0 ];
-    Gene op = genes[ 1 ];
+    Gene fkt = genes[0];
+    Gene op = genes[1];
     Integer allele = (Integer) fkt.getAllele();
     int fktNr = allele.intValue();
     fktNr = fktNr % (numberOfFunctions + numberOfConstants);
@@ -244,7 +250,8 @@ public class GeneExtractorTest extends JGAPTestCase {
     int type;
     if (fktNr >= numberOfFunctions) {
       //Konstante auslesen
-      fktName = (String) Repository.getConstants().get(fktNr - numberOfFunctions);
+      fktName = (String) Repository.getConstants().get(fktNr -
+          numberOfFunctions);
       type = 1;
     }
     else {
@@ -252,7 +259,6 @@ public class GeneExtractorTest extends JGAPTestCase {
       fktName = (String) Repository.getFunctions().get(fktNr);
       type = 2;
     }
-
     allele = (Integer) op.getAllele();
     int opNr = allele.intValue();
     opNr = opNr % numberOfOperators;
@@ -266,10 +272,13 @@ public class GeneExtractorTest extends JGAPTestCase {
    *
    * @author Klaus Meffert
    */
-  private class TestGene extends BaseGene {
+  private class TestGene
+      extends BaseGene {
     private int value;
 
-    public TestGene(int value) {
+    public TestGene(final Configuration a_conf, int value)
+        throws InvalidConfigurationException {
+      super(a_conf);
       this.value = value;
     }
 
@@ -282,12 +291,11 @@ public class GeneExtractorTest extends JGAPTestCase {
     }
 
     public void setToRandomValue(RandomGenerator a_numberGenerator) {
-
     }
 
     public void setValueFromPersistentRepresentation(String a_representation)
-        throws UnsupportedOperationException, UnsupportedRepresentationException {
-
+        throws UnsupportedOperationException,
+        UnsupportedRepresentationException {
     }
 
     public String getPersistentRepresentation()
@@ -296,7 +304,6 @@ public class GeneExtractorTest extends JGAPTestCase {
     }
 
     public void setAllele(Object a_newValue) {
-
     }
 
     public int compareTo(Object o) {
@@ -304,7 +311,6 @@ public class GeneExtractorTest extends JGAPTestCase {
     }
 
     public void applyMutation(int index, double a_percentage) {
-
     }
 
     public int size() {
@@ -314,6 +320,5 @@ public class GeneExtractorTest extends JGAPTestCase {
     protected Gene newGeneInternal() {
       return null;
     }
-
   }
 }
