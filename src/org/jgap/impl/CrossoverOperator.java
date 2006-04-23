@@ -31,13 +31,11 @@ import org.jgap.*;
  * @since 1.0
  */
 public class CrossoverOperator
-    implements GeneticOperator, Comparable {
-  /**@todo add base class, also use for other GeneticOperator's.
-   * Move compareTo there etc.
-   */
+    extends BaseGeneticOperator
+    implements Comparable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -53,12 +51,32 @@ public class CrossoverOperator
   /**
    * Constructs a new instance of this CrossoverOperator without a specified
    * crossover rate, this results in dynamic crossover rate being turned off.
-   * This means that the crossover rate will be fixed at populationsize/2.
+   * This means that the crossover rate will be fixed at populationsize/2.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Chris Knowles
    * @since 2.0
    */
   public CrossoverOperator() {
+    super(Genotype.getConfiguration());
+    //set the default crossoverRate to be populationsize/2
+    m_crossoverRate = 2;
+    setCrossoverRateCalc(null);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator without a specified
+   * crossover rate, this results in dynamic crossover rate being turned off.
+   * This means that the crossover rate will be fixed at populationsize/2.
+   *
+   * @param a_configuration the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public CrossoverOperator(final Configuration a_configuration) {
+    super(a_configuration);
     //set the default crossoverRate to be populationsize/2
     m_crossoverRate = 2;
     setCrossoverRateCalc(null);
@@ -69,14 +87,18 @@ public class CrossoverOperator
    * crossover rate calculator, which results in dynamic crossover being turned
    * on.
    *
+   * @param a_configuration the configuration to use
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
    * computation
    *
    * @author Chris Knowles
-   * @since 2.0
+   * @author Klaus Meffert
+   * @since 3.0 (since 2.0 without a_configuration)
    */
-  public CrossoverOperator(final IUniversalRateCalculator
+  public CrossoverOperator(final Configuration a_configuration,
+                           final IUniversalRateCalculator
                            a_crossoverRateCalculator) {
+    super(a_configuration);
     setCrossoverRateCalc(a_crossoverRateCalculator);
   }
 
@@ -84,12 +106,16 @@ public class CrossoverOperator
    * Constructs a new instance of this CrossoverOperator with the given
    * crossover rate.
    *
+   * @param a_configuration the configuration to use
    * @param a_desiredCrossoverRate the desired rate of crossover
    *
    * @author Chris Knowles
-   * @since 2.0
+   * @author Klaus Meffert
+   * @since 3.0 (since 2.0 without a_configuration)
    */
-  public CrossoverOperator(final int a_desiredCrossoverRate) {
+  public CrossoverOperator(final Configuration a_configuration,
+                           final int a_desiredCrossoverRate) {
+    super(a_configuration);
     if (a_desiredCrossoverRate < 1) {
       throw new IllegalArgumentException("Crossover rate must be greater zero");
     }
@@ -106,7 +132,7 @@ public class CrossoverOperator
                       final List a_candidateChromosomes) {
     // Work out the number of crossovers that should be performed.
     // -----------------------------------------------------------
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = 0;
     if (m_crossoverRateCalc == null) {
@@ -115,8 +141,8 @@ public class CrossoverOperator
     else {
       numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
-    IGeneticOperatorConstraint constraint = Genotype.getConfiguration().
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
+    IGeneticOperatorConstraint constraint = getConfiguration().
         getJGAPFactory().getGeneticOperatorConstraint();
 
     // For each crossover, grab two random chromosomes, pick a random
@@ -204,26 +230,6 @@ public class CrossoverOperator
   }
 
   /**
-   * Compares this GeneticOperator against the specified object. The result is
-   * true if and the argument is an instance of this class and is equal wrt the
-   * data.
-   *
-   * @param a_other the object to compare against
-   * @return true: if the objects are the same, false otherwise
-   *
-   * @author Klaus Meffert
-   * @since 2.6
-   */
-  public boolean equals(final Object a_other) {
-    try {
-      return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
-      return false;
-    }
-  }
-
-  /**
    * Compares the given GeneticOperator to this GeneticOperator.
    *
    * @param a_other the instance against which to compare this instance
@@ -235,6 +241,7 @@ public class CrossoverOperator
    * @since 2.6
    */
   public int compareTo(final Object a_other) {
+    /**@todo consider Configuration*/
     if (a_other == null) {
       return 1;
     }

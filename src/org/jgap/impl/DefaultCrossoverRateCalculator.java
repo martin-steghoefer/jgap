@@ -12,15 +12,22 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * Default implementation of a dynamic CrossoverRateCalculator
+ * Default implementation of a dynamic CrossoverRateCalculator.
  *
  * @author Chris Knowles
  * @since 2.0
  */
 public class DefaultCrossoverRateCalculator
     implements IUniversalRateCalculator {
+/**@todo add abstract base class*/
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
+
+  private transient Configuration m_config;
+
+  public DefaultCrossoverRateCalculator(Configuration a_config) {
+    m_config = a_config;
+  }
 
   /**
    * Calculates the dynamic crossover rate. This is chosen to be the chromosome
@@ -33,7 +40,7 @@ public class DefaultCrossoverRateCalculator
    * @since 2.0
    */
   public int calculateCurrentRate() {
-    int size = Genotype.getConfiguration().getChromosomeSize();
+    int size = m_config.getChromosomeSize();
     if (size < 1) {
       size = 1;
     }
@@ -42,7 +49,9 @@ public class DefaultCrossoverRateCalculator
 
   /**
    * Determines whether crossover is to be carried out for a given population.
-   * @return true the DefaultCrossoverRateCalculator always returns a finite
+   * @param a_chrom ignored
+   * @param a_geneIndex ignored
+   * @return true: the DefaultCrossoverRateCalculator always returns a finite
    * rate
    *
    * @author Chris Knowles

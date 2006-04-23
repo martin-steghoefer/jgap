@@ -11,7 +11,6 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import org.jgap.event.*;
-import org.jgap.data.config.*;
 
 /**
  * The DefaultConfiguration class simplifies the JGAP configuration
@@ -28,11 +27,11 @@ import org.jgap.data.config.*;
 public class DefaultConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Constructs a new DefaultConfiguration instance with a number of
-   * Configuration settings set to default values. It is still necessary
+   * configuration settings set to default values. It is still necessary
    * to set the sample Chromosome, population size, and desired fitness
    * function. Other settings may optionally be altered as desired.
    *
@@ -43,18 +42,18 @@ public class DefaultConfiguration
   public DefaultConfiguration() {
     super();
     try {
+      setRandomGenerator(new StockRandomGenerator());
+      setEventManager(new EventManager());
       BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
-          0.95d);
+          this, 0.95d);
       bestChromsSelector.setDoubletteChromosomesAllowed(false);
       addNaturalSelector(bestChromsSelector, true);
-      setRandomGenerator(new StockRandomGenerator());
       setMinimumPopSizePercent(0);
       setKeepPopulationSizeConstant(true);
-      setEventManager(new EventManager());
       setFitnessEvaluator(new DefaultFitnessEvaluator());
       setChromosomePool(new ChromosomePool());
-      addGeneticOperator(new CrossoverOperator());
-      addGeneticOperator(new MutationOperator(15));
+      addGeneticOperator(new CrossoverOperator(this));
+      addGeneticOperator(new MutationOperator(this, 15));
     }
     catch (InvalidConfigurationException e) {
       throw new RuntimeException(

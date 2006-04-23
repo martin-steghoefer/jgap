@@ -31,7 +31,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.77 $";
+  private final static String CVS_REVISION = "$Revision: 1.78 $";
 
   /**
    * The current active Configuration instance.
@@ -65,7 +65,8 @@ public class Genotype
   public Genotype(Configuration a_activeConfiguration,
                   IChromosome[] a_initialChromosomes)
       throws InvalidConfigurationException {
-    this(a_activeConfiguration, new Population(a_initialChromosomes));
+    this(a_activeConfiguration,
+         new Population(a_activeConfiguration, a_initialChromosomes));
   }
 
   /**
@@ -107,14 +108,14 @@ public class Genotype
     }
     m_population = a_population;
     m_activeConfiguration = a_activeConfiguration;
-    // Lock the settings of the Configuration object so that the cannot
+    // Lock the settings of the configuration object so that it cannot
     // be altered.
-    // ----------------------------------------------------------------
-    a_activeConfiguration.lockSettings();
+    // ---------------------------------------------------------------
+    m_activeConfiguration.lockSettings();
   }
 
   /**
-   * Sets the active Configuration object on this Genotype and its
+   * Sets the active configuration object on this Genotype and its
    * member Chromosomes. This method should be invoked immediately following
    * deserialization of this Genotype. If an active Configuration has already
    * been set on this Genotype, then this method will do nothing.
@@ -297,7 +298,7 @@ public class Genotype
         IChromosome newChrom;
         try {
           while (getPopulation().size() < minSize) {
-            newChrom = Chromosome.randomInitialChromosome();
+            newChrom = Chromosome.randomInitialChromosome(m_activeConfiguration);
             getPopulation().addChromosome(newChrom);
           }
         }
@@ -397,7 +398,6 @@ public class Genotype
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
     }
-    Genotype.setConfiguration(a_activeConfiguration);
     a_activeConfiguration.lockSettings();
     // Create an array of chromosomes equal to the desired size in the
     // active Configuration and then populate that array with Chromosome
@@ -407,14 +407,14 @@ public class Genotype
     // us.
     // ------------------------------------------------------------------
     int populationSize = a_activeConfiguration.getPopulationSize();
-    IChromosome sampleChrom = getConfiguration().getSampleChromosome();
-    IInitializer chromIniter = getConfiguration().getJGAPFactory().
+    IChromosome sampleChrom = a_activeConfiguration.getSampleChromosome();
+    IInitializer chromIniter = a_activeConfiguration.getJGAPFactory().
         getInitializerFor(sampleChrom, sampleChrom.getClass());
     if (chromIniter == null) {
       throw new InvalidConfigurationException("No initializer found for class "
                                               + sampleChrom.getClass());
     }
-    Population pop = new Population(populationSize);
+    Population pop = new Population(a_activeConfiguration, populationSize);
     // Do randomized initialization.
     // -----------------------------
     try {
@@ -500,7 +500,7 @@ public class Genotype
       int m_population_size = m_activeConfiguration.getPopulationSize();
       int m_single_selection_size;
       Population m_new_population;
-      m_new_population = new Population(m_population_size);
+      m_new_population = new Population(m_activeConfiguration, m_population_size);
       NaturalSelector selector;
       // Repopulate the population of chromosomes with those selected
       // by the natural selector. Iterate over all natural selectors.

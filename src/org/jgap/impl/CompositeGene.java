@@ -40,7 +40,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   /**
    * This field separates gene class name from
@@ -72,24 +72,41 @@ public class CompositeGene
   private List m_genes;
 
   /**
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
   public CompositeGene() {
-    this(null);
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public CompositeGene(Configuration a_config) {
+    this(a_config, null);
   }
 
   /**
    * Allows to specify which Gene implementation is allowed to be added to the
    * CompositeGene.
    *
+   * @param a_config the configuration to use
    * @param a_geneTypeAllowed the class of Genes to be allowed to be added to
    * the CompositeGene
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public CompositeGene(final Gene a_geneTypeAllowed) {
+  public CompositeGene(final Configuration a_config,
+                       final Gene a_geneTypeAllowed) {
+    super(a_config);
     m_genes = new Vector();
     if (a_geneTypeAllowed != null) {
       m_geneTypeAllowed = a_geneTypeAllowed;
@@ -391,7 +408,7 @@ public class CompositeGene
    * @since 1.1
    */
   protected Gene newGeneInternal() {
-    CompositeGene compositeGene = new CompositeGene();
+    CompositeGene compositeGene = new CompositeGene(getConfiguration());
     compositeGene.setConstraintChecker(getConstraintChecker());
     Gene gene;
     int geneSize = m_genes.size();

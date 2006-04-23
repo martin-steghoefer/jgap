@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -51,31 +51,36 @@ public class BooleanGene
   private Boolean m_value;
 
   /**
-   * Constructor
+   * Default constructor.
    *
    * @author Klaus Meffert
    * @since 2.4 (previously: implicitely existent)
    */
   public BooleanGene() {
+    super(Genotype.getConfiguration());
   }
 
   /**
+   * @param a_config the configuration to use
    * @param a_value allele value to setup the gene with
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public BooleanGene(final boolean a_value) {
+  public BooleanGene(final Configuration a_config, final boolean a_value) {
+    super(a_config);
     m_value = new Boolean(a_value);
   }
 
   /**
+   * @param a_config the configuration to use
    * @param a_value allele value to setup the gene with
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public BooleanGene(final Boolean a_value) {
+  public BooleanGene(final Configuration a_config, final Boolean a_value) {
+    super(a_config);
     if (a_value == null) {
       throw new IllegalArgumentException("Allele value may not be null. Use"
                                          + " no argument constructor if you"

@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -45,20 +45,35 @@ public class BestChromosomesSelector
    */
   private FitnessValueComparator m_fitnessValueComparator;
 
-  private BestChromosomesSelectorConfig m_config = new BestChromosomesSelectorConfig();
+  private BestChromosomesSelectorConfig m_config = new
+      BestChromosomesSelectorConfig();
 
   /**
-   * Default constructor
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public BestChromosomesSelector() {
-    this(1.0d);
+    this(Genotype.getConfiguration());
   }
 
-  public BestChromosomesSelector(final double a_originalRate) {
-    super();
+  /**
+   * Using original rate of 1.0
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public BestChromosomesSelector(final Configuration a_config) {
+    this(a_config, 1.0d);
+  }
+
+  public BestChromosomesSelector(final Configuration a_config,
+                                 final double a_originalRate) {
+    super(a_config);
     m_chromosomes = new Population();
     m_needsSorting = false;
     m_doublettesAllowed = false;
@@ -120,7 +135,8 @@ public class BestChromosomesSelector
     }
     int neededSize = a_howManyToSelect;
     if (m_config.m_originalRate < 1.0d) {
-      canBeSelected = (int) Math.round( (double) canBeSelected * m_config.m_originalRate);
+      canBeSelected = (int) Math.round( (double) canBeSelected *
+                                       m_config.m_originalRate);
       if (canBeSelected < 1) {
         canBeSelected = 1;
       }
@@ -148,7 +164,7 @@ public class BestChromosomesSelector
       // result to contain the desired number of Chromosome's.
       // -----------------------------------------------------
       for (int i = 0; i < toAdd; i++) {
-          /**@todo add ramdonization*/
+        /**@todo add ramdonization*/
         selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
         selectedChromosome.setIsSelectedForNextGeneration(true);
         a_to_pop.addChromosome(selectedChromosome);
@@ -236,17 +252,11 @@ public class BestChromosomesSelector
     return m_config.m_originalRate;
   }
 
-//  public String getConfigVarName() {
-//    return "m_config";
-//  }
-
   class BestChromosomesSelectorConfig {
-
     /**
      * The rate of original Chromosomes selected. This is because we otherwise
      * would always return the original input as output
      */
     public double m_originalRate;
-
   }
 }

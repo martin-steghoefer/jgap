@@ -62,9 +62,9 @@ import java.util.*;
  * @since 1.0
  */
 public class Chromosome
-    implements IChromosome, IInitializer {
+    extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.75 $";
+  private final static String CVS_REVISION = "$Revision: 1.76 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -122,22 +122,39 @@ public class Chromosome
   private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
-   * Default constructor, provided for dynamic instantiation
+   * Default constructor, provided for dynamic instantiation.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 2.4
    */
   public Chromosome() {
+    super(Genotype.getConfiguration());
   }
 
   /**
-   * Constructor for specifying the number of genes
+   * Default constructor, provided for dynamic instantiation.
+   * @param a_configuration the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Chromosome(final Configuration a_configuration) {
+    super(a_configuration);
+  }
+
+  /**
+   * Constructor for specifying the number of genes.
+   * @param a_configuration the configuration to use
    * @param a_desiredSize number of genes the chromosome contains of
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public Chromosome(final int a_desiredSize) {
+  public Chromosome(final Configuration a_configuration,
+                    final int a_desiredSize) {
+    super(a_configuration);
     if (a_desiredSize <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -153,6 +170,7 @@ public class Chromosome
    * chromosomes that use the same Gene type for all of their genes and that
    * are to be used to setup a Configuration object.
    *
+   * @param a_configuration the configuration to use
    * @param a_sampleGene a concrete sampleGene instance that will be used
    * as a template for all of the genes in this Chromosome
    * @param a_desiredSize the desired size (number of genes) of this Chromosome
@@ -161,15 +179,17 @@ public class Chromosome
    * @author Klaus Meffert
    * @since 1.0
    */
-  public Chromosome(final Gene a_sampleGene, final int a_desiredSize) {
-    this(a_desiredSize);
+  public Chromosome(final Configuration a_configuration,
+                    final Gene a_sampleGene, final int a_desiredSize) {
+    this(a_configuration, a_desiredSize);
     initFromGene(a_sampleGene);
   }
 
-  public Chromosome(Gene a_sampleGene, int a_desiredSize,
+  public Chromosome(final Configuration a_configuration, Gene a_sampleGene,
+                    int a_desiredSize,
                     IGeneConstraintChecker a_constraintChecker)
       throws InvalidConfigurationException {
-    this(a_desiredSize);
+    this(a_configuration, a_desiredSize);
     initFromGene(a_sampleGene);
     setConstraintChecker(a_constraintChecker);
   }
@@ -195,13 +215,14 @@ public class Chromosome
    * can be useful for constructing sample chromosomes that are to be used
    * to setup a Configuration object.
    *
+   * @param a_configuration the configuration to use
    * @param a_initialGenes the initial genes of this Chromosome
    *
    * @author Neil Rotstan
    * @since 1.0
    */
-  public Chromosome(Gene[] a_initialGenes) {
-    this(a_initialGenes == null ? 0 : a_initialGenes.length);
+  public Chromosome(final Configuration a_configuration, Gene[] a_initialGenes) {
+    this(a_configuration, a_initialGenes == null ? 0 : a_initialGenes.length);
     checkGenes(a_initialGenes);
     m_genes = a_initialGenes;
   }
@@ -213,6 +234,7 @@ public class Chromosome
    * specified. It is used right here to verify the validity of the gene types
    * supplied.
    *
+   * @param a_configuration the configuration to use
    * @param a_initialGenes the initial genes of this Chromosome
    * @param a_constraintChecker constraint checker to use
    * @throws InvalidConfigurationException in case the constraint checker
@@ -221,10 +243,10 @@ public class Chromosome
    * @author Klaus Meffert
    * @since 2.5
    */
-  public Chromosome(Gene[] a_initialGenes,
+  public Chromosome(final Configuration a_configuration, Gene[] a_initialGenes,
                     IGeneConstraintChecker a_constraintChecker)
       throws InvalidConfigurationException {
-    this(a_initialGenes.length);
+    this(a_configuration, a_initialGenes.length);
     checkGenes(a_initialGenes);
     m_genes = a_initialGenes;
     setConstraintChecker(a_constraintChecker);
@@ -272,7 +294,7 @@ public class Chromosome
     // has been set on this Chromosome. If not, then throw an
     // IllegalStateException.
     // ------------------------------------------------------------
-    if (Genotype.getConfiguration() == null) {
+    if (getConfiguration() == null) {
       throw new IllegalStateException(
           "The active Configuration object must be set on this " +
           "Chromosome prior to invocation of the clone() method.");
@@ -281,7 +303,7 @@ public class Chromosome
     // Now, first see if we can pull a Chromosome from the pool and just
     // set its gene values (alleles) appropriately.
     // ------------------------------------------------------------
-    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = getConfiguration().getChromosomePool();
     if (pool != null) {
       copy = pool.acquireChromosome();
       if (copy != null) {
@@ -310,7 +332,7 @@ public class Chromosome
         // Now construct a new Chromosome with the copies of the genes and
         // return it. Also clone the IApplicationData object.
         // ---------------------------------------------------------------
-        copy = new Chromosome(copyOfGenes);
+        copy = new Chromosome(getConfiguration(), copyOfGenes);
       }
       else {
         copy = new Chromosome();
@@ -352,7 +374,7 @@ public class Chromosome
     }
     // Try to clone via a registered clone handler.
     // --------------------------------------------
-    ICloneHandler cloner = Genotype.getConfiguration().getJGAPFactory().
+    ICloneHandler cloner = getConfiguration().getJGAPFactory().
         getCloneHandlerFor(a_object, a_object.getClass());
     if (cloner != null) {
       return cloner.perform(a_object, null, this);
@@ -451,9 +473,9 @@ public class Chromosome
    * @since 2.4
    */
   protected double calcFitnessValue() {
-    if (Genotype.getConfiguration() != null) {
-      FitnessFunction normalFitnessFunction =
-          Genotype.getConfiguration().getFitnessFunction();
+    if (getConfiguration() != null) {
+      FitnessFunction normalFitnessFunction = getConfiguration().
+          getFitnessFunction();
       if (normalFitnessFunction != null) {
         // Grab the "normal" fitness function and ask it to calculate our
         // fitness value.
@@ -535,6 +557,7 @@ public class Chromosome
    * Chromosome cannot be acquired from the pool, then a new instance will
    * be constructed and its gene values randomized before returning it.
    *
+   * @param a_configuration the configuration to use
    * @return randomly initialized Chromosome
    * @throws InvalidConfigurationException if the given Configuration
    * instance is invalid
@@ -544,29 +567,28 @@ public class Chromosome
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static IChromosome randomInitialChromosome()
+  public static IChromosome randomInitialChromosome(Configuration a_configuration)
       throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
-    if (Genotype.getConfiguration() == null) {
+    if (a_configuration == null) {
       throw new IllegalArgumentException(
           "Configuration instance must not be null");
     }
     // Lock the configuration settings so that they can't be changed
     // from now on.
     // -------------------------------------------------------------
-    Genotype.getConfiguration().lockSettings();
+    a_configuration.lockSettings();
     // First see if we can get a Chromosome instance from the pool.
     // If we can, we'll randomize its gene values (alleles) and then
     // return it.
     // -------------------------------------------------------------
-    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = a_configuration.getChromosomePool();
     if (pool != null) {
       IChromosome randomChromosome = pool.acquireChromosome();
       if (randomChromosome != null) {
         Gene[] genes = randomChromosome.getGenes();
-        RandomGenerator generator = Genotype.getConfiguration().
-            getRandomGenerator();
+        RandomGenerator generator = a_configuration.getRandomGenerator();
         for (int i = 0; i < genes.length; i++) {
           genes[i].setToRandomValue(generator);
           /**@todo what about Gene's energy?*/
@@ -580,11 +602,11 @@ public class Chromosome
     // construct a new instance and build it from scratch.
     // ------------------------------------------------------------------
     IChromosome sampleChromosome =
-        Genotype.getConfiguration().getSampleChromosome();
+        a_configuration.getSampleChromosome();
     sampleChromosome.setFitnessValue(FitnessFunction.NO_FITNESS_VALUE);
     Gene[] sampleGenes = sampleChromosome.getGenes();
     Gene[] newGenes = new Gene[sampleGenes.length];
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = a_configuration.getRandomGenerator();
     for (int i = 0; i < newGenes.length; i++) {
       // We use the newGene() method on each of the genes in the
       // sample Chromosome to generate our new Gene instances for
@@ -601,7 +623,7 @@ public class Chromosome
     // Finally, construct the new chromosome with the new random
     // genes values and return it.
     // ---------------------------------------------------------
-    return new Chromosome(newGenes);
+    return new Chromosome(a_configuration, newGenes);
   }
 
   /**
@@ -768,14 +790,14 @@ public class Chromosome
    * @since 1.0
    */
   public void cleanup() {
-    if (Genotype.getConfiguration() == null) {
+    if (getConfiguration() == null) {
       throw new IllegalStateException(
           "The active Configuration object must be set on this " +
           "Chromosome prior to invocation of the cleanup() method.");
     }
     // First, reset our internal state.
     // --------------------------------
-    m_fitnessValue = Genotype.getConfiguration().getFitnessFunction().
+    m_fitnessValue = getConfiguration().getFitnessFunction().
         NO_FITNESS_VALUE;
     m_isSelectedForNextGeneration = false;
     // Next we want to try to release this Chromosome to a ChromosomePool
@@ -785,7 +807,7 @@ public class Chromosome
     // Now fetch the active ChromosomePool from the Configuration object
     // and, if the pool exists, release this Chromosome to it.
     // -----------------------------------------------------------------
-    IChromosomePool pool = Genotype.getConfiguration().getChromosomePool();
+    IChromosomePool pool = getConfiguration().getChromosomePool();
     if (pool != null) {
       // Note that the pool will take care of any gene cleanup for us,
       // so we don't need to worry about it here.
@@ -950,7 +972,7 @@ public class Chromosome
   /**{@inheritDoc}*/
   public Object perform(Object a_obj, Class a_class, Object a_params)
       throws Exception {
-    return randomInitialChromosome();
+    return randomInitialChromosome(getConfiguration());
   }
   // -----------------------------------
   // Implementations of IInitializer End

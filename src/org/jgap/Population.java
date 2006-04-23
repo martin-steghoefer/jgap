@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.39 $";
+  private static final String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -46,6 +46,17 @@ public class Population
    */
   private boolean m_sorted;
 
+  private transient Configuration m_config;
+
+  /*
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Population(final Configuration a_config) {
+    this(a_config, 100);
+  }
+
   /*
    * Constructs the Population from a list of Chromosomes.
    * @param a_chromosomes the Chromosome's to be used for building the
@@ -54,8 +65,8 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(final IChromosome[] a_chromosomes) {
-    this(a_chromosomes.length);
+  public Population(final Configuration a_config, final IChromosome[] a_chromosomes) {
+    this(a_config, a_chromosomes.length);
     for (int i = 0; i < a_chromosomes.length; i++) {
       m_chromosomes.add(a_chromosomes[i]);
     }
@@ -70,7 +81,8 @@ public class Population
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Population(final int a_size) {
+  public Population(final Configuration a_config, final int a_size) {
+    m_config = a_config;
     m_chromosomes = new ArrayList(a_size);
     setChanged(true);
   }
@@ -82,7 +94,12 @@ public class Population
    * @since 2.0
    */
   public Population() {
-    this(100);
+    /**@todo replace call to this constructor with (config)*/
+    this(Genotype.getConfiguration());
+  }
+
+  public Configuration getConfiguration() {
+    return m_config;
   }
 
   /**
@@ -228,8 +245,7 @@ public class Population
     }
     Iterator it = m_chromosomes.iterator();
     double bestFitness = -1.0d;
-    FitnessEvaluator evaluator = Genotype.getConfiguration().
-        getFitnessEvaluator();
+    FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
     double fitness;
     while (it.hasNext()) {
       IChromosome chrom = (IChromosome) it.next();
@@ -345,7 +361,7 @@ public class Population
   public void sortByFitness() {
     /**@todo the following construction could be cached but wrt that the
      * evaluator registered with the configuration could change!*/
-    sort(new ChromosomeFitnessComparator(Genotype.getConfiguration().
+    sort(new ChromosomeFitnessComparator(getConfiguration().
                                          getFitnessEvaluator()));
     setChanged(false);
     setSorted(true);
@@ -490,7 +506,3 @@ public class Population
     return 0;
   }
 }
-
-
-
-

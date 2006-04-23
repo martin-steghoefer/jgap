@@ -26,9 +26,9 @@ import org.jgap.*;
  * @since 2.0
  */
 public class AveragingCrossoverOperator
-    implements GeneticOperator {
+    extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -53,47 +53,66 @@ public class AveragingCrossoverOperator
 
   private void init() {
     m_loci = new Hashtable();
+    m_crossoverRate = 2;
   }
 
   /**
    * Using the same random generator for randomizing the loci for crossing
-   * over as for selecting the genes to be crossed over
+   * over as for selecting the genes to be crossed over.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public AveragingCrossoverOperator() {
-    this( (RandomGenerator)null);
+    this(Genotype.getConfiguration(), (RandomGenerator)null);
+  }
+
+  /**
+   * Using the same random generator for randomizing the loci for crossing
+   * over as for selecting the genes to be crossed over.
+   * @param a_configuration the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public AveragingCrossoverOperator(final Configuration a_configuration) {
+    this(a_configuration, (RandomGenerator)null);
   }
 
   /**
    * Using a different random generator for randomizing the loci for
    * crossing over than for selecting the genes to be crossed over
+   * @param a_configuration the configuration to use
    * @param a_generatorForAveraging RandomGenerator to use
    *
    * @author Klaus Meffert
-   * @since 2.0
+   * @since 3.0 (since 2.0 without a_configuration)
    */
-  public AveragingCrossoverOperator(final RandomGenerator
-                                    a_generatorForAveraging) {
+  public AveragingCrossoverOperator(final Configuration a_configuration,
+                                    final RandomGenerator a_generatorForAveraging) {
+    super(a_configuration);
     init();
     m_crossoverGenerator = a_generatorForAveraging;
-    m_crossoverRate = 2;
   }
 
   /**
    * Constructs a new instance of this CrossoverOperator with a specified
    * crossover rate calculator, which results in dynamic crossover being turned
    * on.
+   * @param a_configuration the configuration to use
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
    * computation
    *
-   * @author Klaus Meffert (copied from CrossoverOperator)
-   * @since 2.0
+   * @author Klaus Meffert
+   * @since 3.0 (since 2.0 without a_configuration)
    */
-  public AveragingCrossoverOperator(final IUniversalRateCalculator
+  public AveragingCrossoverOperator(final Configuration a_configuration,
+                                    final IUniversalRateCalculator
                                     a_crossoverRateCalculator) {
-    this();
+    super(a_configuration);
+    init();
     setCrossoverRateCalc(a_crossoverRateCalculator);
   }
 
@@ -126,7 +145,7 @@ public class AveragingCrossoverOperator
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
     // Determine the number of crossovers that should be performed
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = 0;
     if (m_crossoverRateCalc == null) {
@@ -135,8 +154,7 @@ public class AveragingCrossoverOperator
     else {
       numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
-    RandomGenerator generator
-        = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     if (m_crossoverGenerator == null) {
       m_crossoverGenerator = generator;
     }

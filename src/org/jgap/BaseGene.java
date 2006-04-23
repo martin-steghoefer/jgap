@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -42,10 +42,22 @@ public abstract class BaseGene
    */
   private boolean m_compareAppData;
 
+  private transient Configuration m_configuration;
+
   /**
    * Constants for toString()
    */
   public final static String S_APPLICATION_DATA = "Application data";
+
+  /**
+   *
+   * @param a_configuration the configuration to use
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public BaseGene(Configuration a_configuration) {
+    m_configuration = a_configuration;
+  }
 
   /**
    * Retrieves the allele value represented by this Gene.
@@ -277,7 +289,7 @@ public abstract class BaseGene
       // The above code is contained in the following, but for performance
       // issues we keep it here redundantly.
       // -----------------------------------------------------------------
-      ICompareToHandler handler = Genotype.getConfiguration().getJGAPFactory().
+      ICompareToHandler handler = getConfiguration().getJGAPFactory().
           getCompareToHandlerFor(a_appdata1, a_appdata2.getClass());
       if (handler != null) {
         try {
@@ -352,4 +364,14 @@ public abstract class BaseGene
   }
 
   protected abstract Gene newGeneInternal();
+
+ /**
+   * @return the configuration used
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Configuration getConfiguration() {
+    return m_configuration;
+  }
 }
