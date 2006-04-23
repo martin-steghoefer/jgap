@@ -31,9 +31,10 @@ import org.jgap.data.config.*;
  * @since 1.0
  */
 public class MutationOperator
-    implements GeneticOperator, Configurable {
+    extends BaseGeneticOperator
+    implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -42,33 +43,51 @@ public class MutationOperator
    */
   private IUniversalRateCalculator m_mutationRateCalc;
 
-  private MutationOperatorConfigurable m_config = new MutationOperatorConfigurable();
+  private MutationOperatorConfigurable m_config = new
+      MutationOperatorConfigurable();
 
   /**
    * Constructs a new instance of this MutationOperator without a specified
    * mutation rate, which results in dynamic mutation being turned on. This
    * means that the mutation rate will be automatically determined by this
-   * operator based upon the number of genes present in the chromosomes.
+   * operator based upon the number of genes present in the chromosomes.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public MutationOperator() {
-    setMutationRateCalc(new DefaultMutationRateCalculator());
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * @param a_conf the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public MutationOperator(final Configuration a_conf) {
+    super(a_conf);
+    setMutationRateCalc(new DefaultMutationRateCalculator(a_conf));
   }
 
   /**
    * Constructs a new instance of this MutationOperator with a specified
    * mutation rate calculator, which results in dynamic mutation being turned
    * on.
+   * @param a_config the configuration to use
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    * computation
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public MutationOperator(final IUniversalRateCalculator
+  public MutationOperator(final Configuration a_config,
+                          final IUniversalRateCalculator
                           a_mutationRateCalculator) {
+    super(a_config);
     setMutationRateCalc(a_mutationRateCalculator);
   }
 
@@ -76,6 +95,7 @@ public class MutationOperator
    * Constructs a new instance of this MutationOperator with the given
    * mutation rate.
    *
+   * @param a_config the configuration to use
    * @param a_desiredMutationRate desired rate of mutation, expressed as
    * the denominator of the 1 / X fraction. For example, 1000 would result
    * in 1/1000 genes being mutated on average. A mutation rate of zero disables
@@ -84,7 +104,9 @@ public class MutationOperator
    * @author Neil Rotstan
    * @since 1.1
    */
-  public MutationOperator(final int a_desiredMutationRate) {
+  public MutationOperator(final Configuration a_config,
+                          final int a_desiredMutationRate) {
+    super(a_config);
     m_config.m_mutationRate = a_desiredMutationRate;
     setMutationRateCalc(null);
   }
@@ -113,14 +135,14 @@ public class MutationOperator
     // Otherwise, go with the mutation rate set upon construction.
     // -------------------------------------------------------------
     boolean mutate = false;
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
     // ----------------------------------------------------------------
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
-    IGeneticOperatorConstraint constraint = Genotype.getConfiguration().
+    IGeneticOperatorConstraint constraint = getConfiguration().
         getJGAPFactory().getGeneticOperatorConstraint();
     for (int i = 0; i < size; i++) {
       IChromosome chrom = a_population.getChromosome(i);
@@ -300,8 +322,8 @@ public class MutationOperator
     return m_config.m_mutationRate;
   }
 
-  class MutationOperatorConfigurable implements java.io.Serializable {
-
+  class MutationOperatorConfigurable
+      implements java.io.Serializable {
     /**
      * The current mutation rate used by this MutationOperator, expressed as
      * the denominator in the 1 / X ratio. For example, X = 1000 would
@@ -309,7 +331,5 @@ public class MutationOperator
      * disables mutation entirely.
      */
     public int m_mutationRate;
-
-
   }
 }
