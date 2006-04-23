@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   private int m_minLength;
 
@@ -64,7 +64,19 @@ public class StringGene
    * @since 1.1
    */
   public StringGene() {
-    this(Genotype.getConfiguration(), 0, 0);
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * Default constructor, sets minimum and maximum length to arbitrary.
+   * You need to set the valid alphabet later!
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since3.0
+   */
+  public StringGene(final Configuration a_config) {
+    this(a_config, 0, 0);
   }
 
   /**
