@@ -26,9 +26,9 @@ import org.jgap.*;
  * @since 2.6
  */
 public class TwoWayMutationOperator
-    implements GeneticOperator {
+    extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -55,21 +55,25 @@ public class TwoWayMutationOperator
    * @since 2.6
    */
   public TwoWayMutationOperator() {
-    setMutationRateCalc(new DefaultMutationRateCalculator());
+    this(Genotype.getConfiguration(),
+         new DefaultMutationRateCalculator(Genotype.getConfiguration()));
   }
 
   /**
    * Constructs a new instance of this MutationOperator with a specified
    * mutation rate calculator, which results in dynamic mutation being turned
    * on.
+   * @param a_config the configuration to use
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    * computation
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public TwoWayMutationOperator(final IUniversalRateCalculator
+  public TwoWayMutationOperator(final Configuration a_config,
+                                final IUniversalRateCalculator
                                 a_mutationRateCalculator) {
+    super(a_config);
     setMutationRateCalc(a_mutationRateCalculator);
   }
 
@@ -77,6 +81,7 @@ public class TwoWayMutationOperator
    * Constructs a new instance of this MutationOperator with the given
    * mutation rate.
    *
+   * @param a_config the configuration to use
    * @param a_desiredMutationRate desired rate of mutation, expressed as
    * the denominator of the 1 / X fraction. For example, 1000 would result
    * in 1/1000 genes being mutated on average. A mutation rate of zero disables
@@ -85,7 +90,9 @@ public class TwoWayMutationOperator
    * @author Klaus Meffert
    * @since 2.6
    */
-  public TwoWayMutationOperator(final int a_desiredMutationRate) {
+  public TwoWayMutationOperator(final Configuration a_config,
+                                final int a_desiredMutationRate) {
+    super(a_config);
     m_mutationRate = a_desiredMutationRate;
     setMutationRateCalc(null);
   }
@@ -113,14 +120,14 @@ public class TwoWayMutationOperator
     // Otherwise, go with the mutation rate set upon construction.
     // -------------------------------------------------------------
     boolean mutate = false;
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.
     // ----------------------------------------------------------------
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
-    IGeneticOperatorConstraint constraint = Genotype.getConfiguration().
+    IGeneticOperatorConstraint constraint = getConfiguration().
         getJGAPFactory().getGeneticOperatorConstraint();
     for (int i = 0; i < size; i++) {
       IChromosome chrom = a_population.getChromosome(i);
