@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -41,20 +41,37 @@ public class DoubleGene
   /**
    * Constructs a new DoubleGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
-   * than the standard range of double values.
+   * than the standard range of double values.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.1
    */
   public DoubleGene() {
-    this( - (Double.MAX_VALUE / 2), Double.MAX_VALUE);
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * Constructs a new DoubleGene with default settings. No bounds will
+   * be put into effect for values (alleles) of this Gene instance, other
+   * than the standard range of double values.
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public DoubleGene(final Configuration a_config) {
+    this(a_config, - (Double.MAX_VALUE / 2),
+         Double.MAX_VALUE);
   }
 
   /**
    * Constructs a new DoubleGene with the specified lower and upper
    * bounds for values (alleles) of this Gene instance.
    *
+   * @param a_config the configuration to use
    * @param a_lowerBounds the lowest value that this Gene may possess,
    * inclusive
    * @param a_upperBounds the highest value that this Gene may possess,
@@ -63,7 +80,9 @@ public class DoubleGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public DoubleGene(final double a_lowerBounds, final double a_upperBounds) {
+  public DoubleGene(final Configuration a_config, final double a_lowerBounds,
+                    final double a_upperBounds) {
+    super(a_config);
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
   }
@@ -79,7 +98,8 @@ public class DoubleGene
    * @since 1.1
    */
   protected Gene newGeneInternal() {
-    DoubleGene result = new DoubleGene(m_lowerBounds, m_upperBounds);
+    DoubleGene result = new DoubleGene(getConfiguration(), m_lowerBounds,
+                                       m_upperBounds);
     return result;
   }
 
@@ -206,7 +226,7 @@ public class DoubleGene
    * Sets the value (allele) of this Gene to a random Double value between
    * the lower and upper bounds (if any) of this Gene.
    *
-   * @param a_numberGenerator The random number generator that should be used
+   * @param a_numberGenerator the random number generator that should be used
    * to create any random values. It's important to use this generator to
    * maintain the user's flexibility to configure the genetic engine to use the
    * random number generator of their choice
@@ -261,8 +281,8 @@ public class DoubleGene
       if (d_value.doubleValue() > m_upperBounds ||
           d_value.doubleValue() < m_lowerBounds) {
         RandomGenerator rn;
-        if (Genotype.getConfiguration() != null) {
-          rn = Genotype.getConfiguration().getRandomGenerator();
+        if (getConfiguration() != null) {
+          rn = getConfiguration().getRandomGenerator();
         }
         else {
           rn = new StockRandomGenerator();
@@ -274,7 +294,7 @@ public class DoubleGene
   }
 
   /**
-   * See interface Gene for description
+   * See interface Gene for description.
    * @param index ignored (because there is only 1 atomic element)
    * @param a_percentage percentage of mutation (greater than -1 and smaller
    * than 1)
@@ -290,7 +310,7 @@ public class DoubleGene
 
   /**
    * Modified hashCode() function to return different hashcodes for differently
-   * ordered genes in a chromosome
+   * ordered genes in a chromosome.
    * @return -3 if no allele set, otherwise value return by BaseGene.hashCode()
    *
    * @author Klaus Meffert
@@ -307,7 +327,7 @@ public class DoubleGene
 
   /**
    * @return string representation of this Gene's value that may be useful for
-   * display purposes.
+   * display purposes
    *
    * @author Klaus Meffert
    * @since 2.4

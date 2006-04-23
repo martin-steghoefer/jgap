@@ -21,14 +21,13 @@ import org.jgap.impl.*;
  */
 public class ChromosomeInit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static void main(String[] args) {
     int numEvolutions = 500;
     Configuration gaConf = new DefaultConfiguration();
     gaConf.setPreservFittestIndividual(true);
     gaConf.setKeepPopulationSizeConstant(false);
-    Genotype.setConfiguration(gaConf);
     try {
       int chromeSize = 16;
       if (chromeSize > 32) {
@@ -36,7 +35,7 @@ public class ChromosomeInit {
                            "Chromosomes greater than 32 bits in length.");
         System.exit( -1);
       }
-      IChromosome sampleChromosome = new Chromosome(new BooleanGene(),
+      IChromosome sampleChromosome = new Chromosome(gaConf, new BooleanGene(),
           chromeSize);
       gaConf.setSampleChromosome(sampleChromosome);
       gaConf.setPopulationSize(20);
@@ -46,7 +45,7 @@ public class ChromosomeInit {
       // each other Chromosome.
       // ------------------------------------------------------
       int populationSize = gaConf.getPopulationSize();
-      Population pop = new Population(populationSize);
+      Population pop = new Population(gaConf, populationSize);
       for (int i = 0; i < populationSize; i++) {
         int mult;
         // Every second Chromosome has double the number of Gene's.
@@ -57,11 +56,10 @@ public class ChromosomeInit {
         else {
           mult = 2;
         }
-        IChromosome chrom = Chromosome.randomInitialChromosome();
+        IChromosome chrom = Chromosome.randomInitialChromosome(gaConf);
         Gene[] sampleGenes = sampleChromosome.getGenes();
         Gene[] newGenes = new Gene[sampleGenes.length * mult];
-        RandomGenerator generator = Genotype.getConfiguration().
-            getRandomGenerator();
+        RandomGenerator generator = gaConf.getRandomGenerator();
         for (int j = 0; j < newGenes.length; j = j + mult) {
           // We use the newGene() method on each of the genes in the
           // sample Chromosome to generate our new Gene instances for

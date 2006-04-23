@@ -28,16 +28,29 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private HashSet m_geneSet = new HashSet();
 
   private Object m_value;
 
   /**
-   * Represents the constant range of values supported by integers.
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    */
   public SetGene() {
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * @param a_conf the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public SetGene(final Configuration a_conf) {
+    super(a_conf);
   }
 
   protected Gene newGeneInternal() {

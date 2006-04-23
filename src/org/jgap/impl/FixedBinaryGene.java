@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   private int m_length;
 
@@ -42,12 +42,14 @@ public class FixedBinaryGene
 
   /**
    *
+   * @param a_config the configuration to use
    * @param a_length the fixed length of the gene
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public FixedBinaryGene(final int a_length) {
+  public FixedBinaryGene(final Configuration a_config, final int a_length) {
+    super(a_config);
     if (a_length < 1) {
       throw new IllegalArgumentException("Length must be greater than zero!");
     }
@@ -63,11 +65,13 @@ public class FixedBinaryGene
   }
 
   protected Gene newGeneInternal() {
-    FixedBinaryGene result = new FixedBinaryGene(m_length);
+    FixedBinaryGene result = new FixedBinaryGene(getConfiguration(), m_length);
     return result;
   }
 
-  public FixedBinaryGene(final FixedBinaryGene a_toCopy) {
+  public FixedBinaryGene(final Configuration a_config,
+                         final FixedBinaryGene a_toCopy) {
+    super(a_config);
     m_length = a_toCopy.getLength();
     int bufSize = m_length / WORD_LEN_BITS;
     if (0 != m_length % WORD_LEN_BITS) {
@@ -86,7 +90,7 @@ public class FixedBinaryGene
   }
 
   public Object clone() {
-    return new FixedBinaryGene(this);
+    return new FixedBinaryGene(getConfiguration(), this);
   }
 
   public void setAllele(final Object a_newValue) {
@@ -176,7 +180,7 @@ public class FixedBinaryGene
 
   public FixedBinaryGene substring(final int a_from, final int a_to) {
     int len = checkSubLength(a_from, a_to);
-    FixedBinaryGene substring = new FixedBinaryGene(len);
+    FixedBinaryGene substring = new FixedBinaryGene(getConfiguration(), len);
     for (int i = a_from; i <= a_to; i++) {
       substring.setUnchecked(i - a_from, getUnchecked(i));
     }
@@ -422,7 +426,6 @@ public class FixedBinaryGene
         }
       }
     }
-    // Determine int value of binary representation
     return 0;
   }
 

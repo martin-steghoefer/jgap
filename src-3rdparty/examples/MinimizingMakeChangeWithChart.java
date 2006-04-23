@@ -31,7 +31,7 @@ import org.jgap.impl.*;
  */
 public class MinimizingMakeChangeWithChart {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -87,11 +87,11 @@ public class MinimizingMakeChangeWithChart {
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    sampleGenes[0] = new IntegerGene(0, 3 * 10); // Quarters
-    sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
-    sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
-    sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
-    IChromosome sampleChromosome = new Chromosome(sampleGenes);
+    sampleGenes[0] = new IntegerGene(conf, 0, 3 * 10); // Quarters
+    sampleGenes[1] = new IntegerGene(conf, 0, 2 * 10); // Dimes
+    sampleGenes[2] = new IntegerGene(conf, 0, 1 * 10); // Nickels
+    sampleGenes[3] = new IntegerGene(conf, 0, 4 * 10); // Pennies
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
@@ -153,8 +153,10 @@ public class MinimizingMakeChangeWithChart {
         /*tooltips*/
         , false /*urls*/);
     BufferedImage image = chart.createBufferedImage(640, 480);
-    FileOutputStream fo = new FileOutputStream(a_chartDirectory + "chart.jpg");
+    String imagefile = "chart.jpg";
+    FileOutputStream fo = new FileOutputStream(a_chartDirectory + imagefile);
     ChartUtilities.writeBufferedImageAsJPEG(fo, 0.7f, image);
+    System.out.println("Chart written to image file "+a_chartDirectory+imagefile);
   }
 
   /**

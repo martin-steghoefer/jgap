@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -43,16 +43,19 @@ public class ThresholdSelector
       = new ThresholdSelectorConfigurable();
 
   /**
-   * Default constructor
+   * Default constructor. Uses threshold of 30 percent.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 2.6
    */
   public ThresholdSelector() {
-    this(0.3d);
+    this(Genotype.getConfiguration(), 0.3d);
   }
 
   /**
+   * @param a_config the configuration to use
    * @param a_bestChromosomes_Percentage indicates the number of best
    * chromosomes from the population to be selected for granted. All other
    * chromosomes will be selected in a random fashion. The value must be in
@@ -61,8 +64,9 @@ public class ThresholdSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public ThresholdSelector(final double a_bestChromosomes_Percentage) {
-    super();
+  public ThresholdSelector(final Configuration a_config,
+                           final double a_bestChromosomes_Percentage) {
+    super(a_config);
     if (a_bestChromosomes_Percentage < 0.0000000d
         || a_bestChromosomes_Percentage > 1.0000000d) {
       throw new IllegalArgumentException("Percentage must be between 0.0"
@@ -116,7 +120,7 @@ public class ThresholdSelector
     }
     // Fill up the rest by randomly selecting chromosomes
     int missing = a_howManyToSelect - bestToBeSelected;
-    RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator rn = getConfiguration().getRandomGenerator();
     int index;
     int size = m_chromosomes.size();
     for (int i = 0; i < missing; i++) {
@@ -164,11 +168,11 @@ public class ThresholdSelector
     public int compare(final Object a_first, final Object a_second) {
       IChromosome chrom1 = (IChromosome) a_first;
       IChromosome chrom2 = (IChromosome) a_second;
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
+      if (getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {
         return 1;
       }
-      else if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
+      else if (getConfiguration().getFitnessEvaluator().isFitter(
           chrom1.getFitnessValue(), chrom2.getFitnessValue())) {
         return -1;
       }

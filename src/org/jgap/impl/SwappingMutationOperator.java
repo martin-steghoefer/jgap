@@ -31,23 +31,26 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private int m_startOffset = 1;
 
   /** {@inheritDoc} */
   public SwappingMutationOperator() {
+    super();
   }
 
   /** {@inheritDoc} */
-  public SwappingMutationOperator(final IUniversalRateCalculator
+  public SwappingMutationOperator(final Configuration a_config,
+                                  final IUniversalRateCalculator
                                   a_mutationRateCalculator) {
-    super(a_mutationRateCalculator);
+    super(a_config, a_mutationRateCalculator);
   }
 
   /** {@inheritDoc} */
-  public SwappingMutationOperator(final int a_desiredMutationRate) {
-    super(a_desiredMutationRate);
+  public SwappingMutationOperator(final Configuration a_config,
+                                  final int a_desiredMutationRate) {
+    super(a_config,a_desiredMutationRate);
   }
 
   /**
@@ -76,8 +79,7 @@ public class SwappingMutationOperator
     else {
       currentRate = getMutationRate();
     }
-    RandomGenerator generator = Genotype.getConfiguration().
-        getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     // It would be inefficient to create copies of each Chromosome just
     // to decide whether to mutate them. Instead, we only make a copy
     // once we've positively decided to perform a mutation.

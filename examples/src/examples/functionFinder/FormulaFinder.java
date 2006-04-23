@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -95,14 +95,13 @@ public class FormulaFinder {
     // --------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
-    Genotype.setConfiguration(conf);
     // Fitness Evaluator (lower is better).
     // ------------------------------------
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     // Selector.
     // ---------
     conf.getNaturalSelectors(false).clear();
-    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     // Read in related data.
     // ----------------------
     File f = new File(werteTabelleFile);
@@ -113,7 +112,7 @@ public class FormulaFinder {
     // Read in problem configuration.
     // ------------------------------
     float factor = Float.parseFloat( (String) props.remove("minFitness"));
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(1, 2)) {
+    if (conf.getFitnessEvaluator().isFitter(1, 2)) {
       MIN_FITNESS_WANTED = (int) (FormulaFitnessFunction.MAX_FITNESS *
                                   (1 - factor));
     }
@@ -155,14 +154,14 @@ public class FormulaFinder {
     for (int i = 0; i < maxTerms; i++) {
       comp = new CompositeGene();
       // Funtions, constants
-      gene = new IntegerGene(0, max);
+      gene = new IntegerGene(conf, 0, max);
       comp.addGene(gene);
       // Operators
-      gene = new IntegerGene(0, Repository.getOperators().size() - 1);
+      gene = new IntegerGene(conf, 0, Repository.getOperators().size() - 1);
       comp.addGene(gene);
       termGenes[i] = comp;
     }
-    IChromosome termChromosome = new Chromosome(termGenes);
+    IChromosome termChromosome = new Chromosome(conf, termGenes);
     conf.setSampleChromosome(termChromosome);
     conf.setPopulationSize(POPULATION_SIZE);
     Genotype population = Genotype.randomInitialGenotype(conf);
@@ -178,7 +177,7 @@ public class FormulaFinder {
       population.evolve();
       chrom = population.getFittestChromosome();
       localCurrentFitness = chrom.getFitnessValue();
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
+      if (conf.getFitnessEvaluator().isFitter(
           localCurrentFitness, localBestFitness)) {
         // Found a new best solution
         localBestFitness = localCurrentFitness;
@@ -192,7 +191,7 @@ public class FormulaFinder {
           break;
         }
       }
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
+      if (conf.getFitnessEvaluator().isFitter(
           localBestFitness, MIN_FITNESS_WANTED)) {
         if (i > MIN_WANTED_EVOLUTIONS) {
           break;

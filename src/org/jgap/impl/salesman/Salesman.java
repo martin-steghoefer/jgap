@@ -42,9 +42,12 @@ import org.jgap.impl.*;
  *  </li>
  * </ul>
  */
-public abstract class Salesman implements java.io.Serializable {
+public abstract class Salesman
+    implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
+
+  private Configuration m_config;
 
   private int m_maxEvolution = 128;
 
@@ -120,7 +123,7 @@ public abstract class Salesman implements java.io.Serializable {
       // -----------------------------------------
       Configuration config = new Configuration();
       BestChromosomesSelector bestChromsSelector =
-          new BestChromosomesSelector(1.0d);
+          new BestChromosomesSelector(config, 1.0d);
       bestChromsSelector.setDoubletteChromosomesAllowed(false);
       config.addNaturalSelector(bestChromsSelector, true);
       config.setRandomGenerator(new StockRandomGenerator());
@@ -130,8 +133,8 @@ public abstract class Salesman implements java.io.Serializable {
       config.setChromosomePool(new ChromosomePool());
       // These are different:
       // --------------------
-      config.addGeneticOperator(new GreedyCrossover());
-      config.addGeneticOperator(new SwappingMutationOperator(20));
+      config.addGeneticOperator(new GreedyCrossover(config));
+      config.addGeneticOperator(new SwappingMutationOperator(config, 20));
       return config;
     }
     catch (InvalidConfigurationException e) {
@@ -219,16 +222,16 @@ public abstract class Salesman implements java.io.Serializable {
    */
   public IChromosome findOptimalPath(final Object a_initial_data)
       throws Exception {
-    Genotype.setConfiguration(createConfiguration(a_initial_data));
+    m_config = createConfiguration(a_initial_data);
     FitnessFunction myFunc = createFitnessFunction(a_initial_data);
-    Genotype.getConfiguration().setFitnessFunction(myFunc);
+    m_config.setFitnessFunction(myFunc);
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
     // sample Chromosome and then setting it on the Configuration
     // object.
     // --------------------------------------------------------------
     IChromosome sampleChromosome = createSampleChromosome(a_initial_data);
-    Genotype.getConfiguration().setSampleChromosome(sampleChromosome);
+    m_config.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -236,7 +239,7 @@ public abstract class Salesman implements java.io.Serializable {
     // the population (which could be seen as bad). We'll just set
     // the population size to 500 here.
     // ------------------------------------------------------------
-    Genotype.getConfiguration().setPopulationSize(getPopulationSize());
+    m_config.setPopulationSize(getPopulationSize());
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
 
@@ -244,7 +247,7 @@ public abstract class Salesman implements java.io.Serializable {
     // we need multiple calls to createSampleChromosome.
     // -----------------------------------------------------
     IChromosome[] chromosomes =
-        new IChromosome[Genotype.getConfiguration().getPopulationSize()];
+        new IChromosome[m_config.getPopulationSize()];
     Gene[] samplegenes = sampleChromosome.getGenes();
     for (int i = 0; i < chromosomes.length; i++) {
       Gene[] genes = new Gene[samplegenes.length];
@@ -253,10 +256,10 @@ public abstract class Salesman implements java.io.Serializable {
         genes[k].setAllele(samplegenes[k].getAllele());
       }
       shuffle(genes);
-      chromosomes[i] = new Chromosome(genes);
+      chromosomes[i] = new Chromosome(m_config, genes);
     }
-    Genotype population = new Genotype(Genotype.getConfiguration(),
-                                       new Population(chromosomes));
+    Genotype population = new Genotype(m_config,
+                                       new Population(m_config, chromosomes));
     IChromosome best = null;
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
@@ -280,7 +283,7 @@ public abstract class Salesman implements java.io.Serializable {
     for (int r = 0; r < 10 * a_genes.length; r++) {
       for (int i = m_startOffset; i < a_genes.length; i++) {
         int p = m_startOffset
-            + Genotype.getConfiguration().getRandomGenerator().
+            + m_config.getRandomGenerator().
             nextInt(a_genes.length - m_startOffset);
         t = a_genes[i];
         a_genes[i] = a_genes[p];
@@ -317,5 +320,9 @@ public abstract class Salesman implements java.io.Serializable {
    */
   public int getStartOffset() {
     return m_startOffset;
+  }
+
+  public Configuration getConfiguration() {
+    return m_config;
   }
 }

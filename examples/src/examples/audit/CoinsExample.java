@@ -29,7 +29,7 @@ import org.jgap.audit.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -75,11 +75,11 @@ public class CoinsExample {
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    sampleGenes[0] = new IntegerGene(0, 3 * 10); // Quarters
-    sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
-    sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
-    sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
-    Chromosome sampleChromosome = new Chromosome(sampleGenes);
+    sampleGenes[0] = new IntegerGene(conf, 0, 3 * 10); // Quarters
+    sampleGenes[1] = new IntegerGene(conf, 0, 2 * 10); // Dimes
+    sampleGenes[2] = new IntegerGene(conf, 0, 1 * 10); // Nickels
+    sampleGenes[3] = new IntegerGene(conf, 0, 4 * 10); // Pennies
+    Chromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
@@ -93,10 +93,10 @@ public class CoinsExample {
     // the given problem.
     // -------------------------------------------------------------------
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
-    pconf.addGeneticOperatorSlot(new CrossoverOperator());
-    pconf.addGeneticOperatorSlot(new MutationOperator());
-    pconf.addNaturalSelectorSlot(new BestChromosomesSelector());
-    pconf.addNaturalSelectorSlot(new WeightedRouletteSelector());
+    pconf.addGeneticOperatorSlot(new CrossoverOperator(conf));
+    pconf.addGeneticOperatorSlot(new MutationOperator(conf));
+    pconf.addNaturalSelectorSlot(new BestChromosomesSelector(conf));
+    pconf.addNaturalSelectorSlot(new WeightedRouletteSelector(conf));
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
     rn.setNextDouble(0.7d);

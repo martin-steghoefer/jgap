@@ -30,7 +30,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * This field separates gene class name from
@@ -50,13 +50,17 @@ public abstract class AbstractSupergene
    */
   public final static String GENE_DELIMITER_CLOSING = ">";
 
-  /** Maximal number of retries for applyMutation and setToRandomValue.
+  /**
+   * Maximal number of retries for applyMutation and setToRandomValue.
    * If the valid supergen cannot be created after this number of iterations,
-   * the error message is printed and the unchanged instance is returned. */
+   * the error message is printed and the unchanged instance is returned.
+   * */
   public final static int MAX_RETRIES = 1;
 
-  /** Maximal number of notes about immutable genes per
-   * single gene position */
+  /**
+   * Maximal number of notes about immutable genes per
+   * single gene position
+   * */
   public final static int MAX_IMMUTABLE_GENES = 100000;
 
   /** Holds the genes of this supergene. */
@@ -90,9 +94,11 @@ public abstract class AbstractSupergene
   };
 
   /** Constructs abstract supergene with the given gene list.
+   * @param a_conf the configuration to use
    * @param a_genes array of genes for this Supergene
    */
-  public AbstractSupergene(final Gene[] a_genes) {
+  public AbstractSupergene(final Configuration a_conf, final Gene[] a_genes) {
+    super(a_conf);
     m_genes = a_genes;
   }
 
@@ -100,16 +106,18 @@ public abstract class AbstractSupergene
    * <b>Always provide the parameterless
    * constructor</b> for the derived class. This is required to
    * create a new instance of supergene and should be used inside
-   * <code>newGene</code> only. The parameterless
-   * constructor need not (and cannot) assign the private
-   * <code>genes</code> array.
+   * method newGene only. The parameterless constructor need not (and cannot)
+   * assign the private <code>genes</code> array.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    */
   public AbstractSupergene() {
+    super(Genotype.getConfiguration());
   }
 
   /**
-   * Test the allele combination of this supergene for validity.
-   * This method calls isValid for the current gene list.
+   * Test the allele combination of this supergene for validity. This method
+   * calls isValid for the current gene list.
    * @return true only if the supergene allele combination is valid
    * or the setValidator (<i>null</i>) has been previously called
    */
@@ -166,6 +174,7 @@ public abstract class AbstractSupergene
       g[i] = m_genes[i].newGene();
     }
     try {
+      /**@todo construct by using current configuration*/
       AbstractSupergene age =
           (AbstractSupergene) getClass().newInstance();
       if (m_validator != this) {
@@ -201,6 +210,9 @@ public abstract class AbstractSupergene
         }
       }
     }
+    // Following commented out because if only very few valid states exist it
+    // may be that they are not reached within a given number of tries.
+    // ----------------------------------------------------------------------
 //    if (!isValid()) {
 //      throw new Error("Should be valid on entry");
 //    }

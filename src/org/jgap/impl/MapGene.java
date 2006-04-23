@@ -33,7 +33,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Container for valid alleles
@@ -52,27 +52,33 @@ public class MapGene
   final static String ALLELEMAP_END_DELIMITER = "]";
 
   /**
-   * Default constructor
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
+   *
    * @since 2.4
    */
   public MapGene() {
+    super(Genotype.getConfiguration());
     m_geneMap = new HashMap();
   }
 
   /**
-   * Constructor setting up valid alleles directly
+   * Constructor setting up valid alleles directly.
+   * @param a_config the configuration to use
    * @param a_alleles the valid alleles of the gene
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public MapGene(final Map a_alleles) {
-    this();
+  public MapGene(final Configuration a_config, final Map a_alleles) {
+    super(a_config);
+    m_geneMap = new HashMap();
     addAlleles(a_alleles);
   }
 
   protected Gene newGeneInternal() {
-    MapGene result = new MapGene(m_geneMap);
+    MapGene result = new MapGene(getConfiguration(), m_geneMap);
     // get m_value from original
     Object value = getAllele();
     result.setAllele(value);

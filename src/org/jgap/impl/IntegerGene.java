@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.35 $";
+  private static final String CVS_REVISION = "$Revision: 1.36 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -47,20 +47,23 @@ public class IntegerGene
   /**
    * Constructs a new IntegerGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
-   * than the standard range of integer values.
+   * than the standard range of integer values.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Neil Rostan
    * @author Klaus Meffert
    * @since 1.0
    */
   public IntegerGene() {
-    this(Integer.MIN_VALUE, Integer.MAX_VALUE);
+    this(Genotype.getConfiguration(), Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
 
   /**
    * Constructs a new IntegerGene with the specified lower and upper
    * bounds for values (alleles) of this Gene instance.
    *
+   * @param a_config the configuration to use
    * @param a_lowerBounds the lowest value that this Gene may possess,
    * inclusive
    * @param a_upperBounds the highest value that this Gene may possess,
@@ -69,7 +72,9 @@ public class IntegerGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public IntegerGene(final int a_lowerBounds, final int a_upperBounds) {
+  public IntegerGene(final Configuration a_config, final int a_lowerBounds,
+                     final int a_upperBounds) {
+    super(a_config);
     m_lowerBounds = a_lowerBounds;
     m_upperBounds = a_upperBounds;
   }
@@ -85,7 +90,8 @@ public class IntegerGene
    * @since 2.6 (was newGene since 1.0, moved to BaseGene)
    */
   protected Gene newGeneInternal() {
-    IntegerGene result = new IntegerGene(m_lowerBounds, m_upperBounds);
+    IntegerGene result = new IntegerGene(getConfiguration(), m_lowerBounds,
+                                         m_upperBounds);
     return result;
   }
 

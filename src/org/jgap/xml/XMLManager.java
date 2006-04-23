@@ -32,7 +32,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -456,7 +456,7 @@ public class XMLManager {
                                              genesElement);
     // Construct the new Chromosome with the genes and return it.
     // ----------------------------------------------------------
-    return new Chromosome(geneAlleles);
+    return new Chromosome(a_activeConfiguration, geneAlleles);
   }
 
   /**
@@ -507,7 +507,7 @@ public class XMLManager {
     NodeList chromosomes =
         a_xmlElement.getElementsByTagName(CHROMOSOME_TAG);
     int numChromosomes = chromosomes.getLength();
-    Population population = new Population(numChromosomes);
+    Population population = new Population(a_activeConfiguration, numChromosomes);
     for (int i = 0; i < numChromosomes; i++) {
       population.addChromosome(getChromosomeFromElement(a_activeConfiguration,
                                                (Element) chromosomes.item(i)));

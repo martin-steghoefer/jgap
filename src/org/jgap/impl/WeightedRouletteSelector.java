@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -62,19 +62,32 @@ public class WeightedRouletteSelector
       = new WeightedRouletteSelConfig();
 
   /**
-   * Default Constructor.
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public WeightedRouletteSelector() {
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public WeightedRouletteSelector(Configuration a_config) {
+    super(a_config);
     m_config.m_doublettesAllowed = true;
   }
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
    *
-   * @param a_chromosomeToAdd the specimen to add to the pool
+   * @param a_chromosomeToAdd the chromosom to add to the pool
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -143,8 +156,7 @@ public class WeightedRouletteSelector
       }
     }
 
-    RandomGenerator generator = Genotype.getConfiguration().
-        getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
     // that contains the fitness values for each chromosome, one that
@@ -239,8 +251,7 @@ public class WeightedRouletteSelector
     // we've found the chromosome sitting in that slot and we return it.
     // --------------------------------------------------------------------
     double currentSlot = 0.0d;
-    FitnessEvaluator evaluator = Genotype.getConfiguration().
-        getFitnessEvaluator();
+    FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
     for (int i = 0; i < a_counterValues.length; i++) {
       // Increment our ongoing total and see if we've landed on the
       // selected slot.

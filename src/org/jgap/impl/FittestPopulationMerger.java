@@ -25,22 +25,27 @@ import org.jgap.distr.*;
 public class FittestPopulationMerger
     implements IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public Population mergePopulations(final Population a_population1,
                                      final Population a_population2,
                                      final int a_new_population_size) {
+    /**@todo check if configurations of both pops are equal resp.
+     * their fitness evaluators!*/
     //All the chromosomes are placed in the first population for sorting.
     a_population1.addChromosomes(a_population2);
     //A sorting is made according to the chromosomes fitness values
     //See the private class FitnessChromosomeComparator below to understand.
     List allChromosomes = a_population1.getChromosomes();
-    Collections.sort(allChromosomes, new FitnessChromosomeComparator());
+    Collections.sort(allChromosomes,
+                     new FitnessChromosomeComparator(a_population1.
+        getConfiguration()));
     //Then a new population is created and the fittest "a_new_population_size"
     //chromosomes are added.
     Chromosome[] chromosomes = (Chromosome[]) allChromosomes.toArray(new
         Chromosome[0]);
-    Population mergedPopulation = new Population(a_new_population_size);
+    Population mergedPopulation = new Population(a_population1.getConfiguration(),
+                                                 a_new_population_size);
     for (int i = 0; i < a_new_population_size && i < chromosomes.length; i++) {
       mergedPopulation.addChromosome(chromosomes[i]);
     }
@@ -59,17 +64,25 @@ public class FittestPopulationMerger
    */
   private class FitnessChromosomeComparator
       implements Comparator {
+    private transient Configuration m_config;
+
     //Reference to the current FitnessEvaluator Object, used for comparing
     //chromosomes
-    private FitnessEvaluator m_fEvaluator = Genotype.getConfiguration().
-        getFitnessEvaluator();
+    private FitnessEvaluator m_fEvaluator;
+
+    public FitnessChromosomeComparator(Configuration a_config) {
+      m_config = a_config;
+      m_fEvaluator = m_config.getFitnessEvaluator();
+    }
 
     /**
      * Implements the compare method using the fitness function.
      * The comparation is implemented in a reverse way to make the
      * merging easier (the list of chromosomes is sorted in a
      * descending fitness value order).
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     * @param a_o1 first IChromosome to compare
+     * @param a_o2 second IChromosome to compare
+     * @return @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     public int compare(final Object a_o1, final Object a_o2) {
       //The two objects passed are always Chromosomes, so a cast must be made.

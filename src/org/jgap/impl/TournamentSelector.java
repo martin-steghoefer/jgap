@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private TournamentSelectorConfigurable m_config
       = new TournamentSelectorConfigurable();
@@ -38,27 +38,36 @@ public class TournamentSelector
   private FitnessValueComparator m_fitnessValueComparator;
 
   /**
-   * Default Constructor
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Siddhartha Azad
+   * @author Klaus Meffert
    */
   public TournamentSelector() {
-    super();
+    super(Genotype.getConfiguration());
+    init();
+  }
+
+  private void init() {
     m_chromosomes = new Vector();
     m_fitnessValueComparator = new FitnessValueComparator();
   }
 
   /**
-   * Constructor
+   * @param a_config the configuration to use
    * @param a_tournament_size the size of each tournament to play
    * @param a_probability probability for selecting the best individuals
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public TournamentSelector(final int a_tournament_size,
+  public TournamentSelector(final Configuration a_config,
+                            final int a_tournament_size,
                             final double a_probability) {
-    this();
+    super(a_config);
+    init();
     if (a_tournament_size < 1) {
       throw new IllegalArgumentException("Tournament size must be at least 1!");
     }
@@ -113,7 +122,7 @@ public class TournamentSelector
       }
     }
     List tournament = new Vector();
-    RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator rn = getConfiguration().getRandomGenerator();
     int size = m_chromosomes.size();
     if (size == 0) {
       return;
@@ -184,11 +193,11 @@ public class TournamentSelector
     public int compare(final Object a_first, final Object a_second) {
       IChromosome chrom1 = (IChromosome) a_first;
       IChromosome chrom2 = (IChromosome) a_second;
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(chrom2.
+      if (getConfiguration().getFitnessEvaluator().isFitter(chrom2.
           getFitnessValue(), chrom1.getFitnessValue())) {
         return 1;
       }
-      else if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
+      else if (getConfiguration().getFitnessEvaluator().isFitter(
           chrom1.getFitnessValue(), chrom2.getFitnessValue())) {
         return -1;
       }

@@ -41,7 +41,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   private int m_minLength;
 
@@ -56,31 +56,36 @@ public class StringGene
 
   /**
    * Default constructor, sets minimum and maximum length to arbitrary.
-   * You need to set the valid alphabet later!
+   * You need to set the valid alphabet later!<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 1.1
    */
   public StringGene() {
-    this(0, 0);
+    this(Genotype.getConfiguration(), 0, 0);
   }
 
   /**
    * Constructor, allows to specify minimum and maximum lengths of the string
    * held by this gene.
+   * @param a_config the configuration to use
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public StringGene(final int a_minLength, final int a_maxLength) {
-    this(a_minLength, a_maxLength, null);
+  public StringGene(final Configuration a_config, final int a_minLength,
+                    final int a_maxLength) {
+    this(a_config, a_minLength, a_maxLength, null);
   }
 
   /**
    * Constructor, allows to specify minimum and maximum lengths of the string
    * held by this gene, as well as the valid alphabet.
+   * @param a_config the configuration to use
    * @param a_minLength minimum valid length of an allele
    * @param a_maxLength maximum valid length of an allele
    * @param a_alphabet valid alphabet for an allele
@@ -88,8 +93,9 @@ public class StringGene
    * @author Klaus Meffert
    * @since 2.0
    */
-  public StringGene(final int a_minLength, final int a_maxLength,
-                    final String a_alphabet) {
+  public StringGene(final Configuration a_config, final int a_minLength,
+                    final int a_maxLength, final String a_alphabet) {
+    super(a_config);
     if (a_minLength < 0) {
       throw new IllegalArgumentException(
           "minimum length must be greater than"
@@ -355,7 +361,8 @@ public class StringGene
    * @since 1.1
    */
   protected Gene newGeneInternal() {
-    StringGene result = new StringGene(m_minLength, m_maxLength, m_alphabet);
+    StringGene result = new StringGene(getConfiguration(), m_minLength,
+                                       m_maxLength, m_alphabet);
     result.setConstraintChecker(getConstraintChecker());
     return result;
   }

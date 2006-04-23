@@ -55,9 +55,9 @@ import org.jgap.*;
  * @since 2.0
  */
 public class GreedyCrossover
-    implements GeneticOperator {
+    extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.23 $";
+  private static final String CVS_REVISION = "$Revision: 1.24 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -65,15 +65,31 @@ public class GreedyCrossover
   private int m_startOffset = 1;
 
   /**
-   * Default constructor for dynamic instantiation
+   * Default constructor for dynamic instantiation.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
+   *
    * @author Klaus Meffert
    * @since 2.6
+   * @since 3.0 (since 2.0 without a_configuration)
    */
   public GreedyCrossover() {
-
+    super(Genotype.getConfiguration());
   }
 
-  /** Compute the distance between "cities", indicated by these two
+  /**
+   * Using the given configuration.
+   * @param a_configuration the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0 (since 2.6 without a_configuration)
+   */
+  public GreedyCrossover(Configuration a_configuration) {
+    super(a_configuration);
+  }
+
+  /**
+   * Compute the distance between "cities", indicated by these two
    * given genes. The default method expects the genes to be a
    * IntegerGenes's and returns they absolute difference, that
    * makes sense only for tests.
@@ -90,11 +106,10 @@ public class GreedyCrossover
 
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = size / 2;
-    RandomGenerator generator
-        = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     // For each crossover, grab two random chromosomes and do what
     // Grefenstette et al say.
     // --------------------------------------------------------------
@@ -169,8 +184,8 @@ public class GreedyCrossover
         if (!not_picked.contains(a_g2[j])) {
           if (!a_g1[m_startOffset].equals(a_g2[j])) {
             throw new Error("Chromosome gene sets must be identical."
-                            + " First Chrom: " + new Chromosome(a_g1) /**@todo fix*/
-                            + ". Second Chrom: " + new Chromosome(a_g2)); /**@todo fix*/
+                            + " First gene set: " + a_g1
+                            + ", second gene set: " + a_g2);
           }
         }
       }
@@ -261,26 +276,6 @@ public class GreedyCrossover
    */
   public int getStartOffset() {
     return m_startOffset;
-  }
-
-  /**
-   * Compares this GeneticOperator against the specified object. The result is
-   * true if and the argument is an instance of this class and is equal wrt the
-   * data.
-   *
-   * @param a_other the object to compare against
-   * @return true: if the objects are the same, false otherwise
-   *
-   * @author Klaus Meffert
-   * @since 2.6
-   */
-  public boolean equals(final Object a_other) {
-    try {
-      return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
-      return false;
-    }
   }
 
   /**
