@@ -15,15 +15,14 @@ import org.jgap.*;
 /**
  * This genetic operator performs Gaussian mutation across
  * all genes in a given Chromosome.
- * Taken from JOONEGAP
  *
  * @author Klaus Meffert (modified JOONEGAP source)
  * @since 2.0
  */
 public class GaussianMutationOperator
-    implements GeneticOperator {
+    extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   private double m_deviation;
 
@@ -31,22 +30,39 @@ public class GaussianMutationOperator
 
   /**
    * Constructs a GaussianMutationOperator with a default
-   * deviation of 0.05.
+   * deviation of 0.05.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public GaussianMutationOperator() {
-    this(0.05d);
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * Constructs a GaussianMutationOperator with a default
+   * deviation of 0.05.
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GaussianMutationOperator(Configuration a_config) {
+    this(a_config, 0.05d);
   }
 
   /**
    * Constructs a GaussianMutationOperator with the given deviation.
-   * @param a_deviation sic.
+   * @param a_configuration the configuration to use
+   * @param a_deviation sic
    *
-   * @since 2.0
+   * @since 3.0 (since 2.0 without a_configuration)
    */
-  public GaussianMutationOperator(final double a_deviation) {
+  public GaussianMutationOperator(final Configuration a_configuration,
+                                  final double a_deviation) {
+    super(a_configuration);
     m_deviation = a_deviation;
   }
 
@@ -60,10 +76,10 @@ public class GaussianMutationOperator
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
     /**@todo do as in AveragingCrossoverOperator*/
-    RandomGenerator rn = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator rn = getConfiguration().getRandomGenerator();
     if (rn instanceof RandomGenerator) {
       setRandomGenerator(rn);
     }
@@ -110,7 +126,7 @@ public class GaussianMutationOperator
   }
 
   /**
-   * Helper: mutate all atomic elements of a gene
+   * Helper: mutate all atomic elements of a gene.
    * @param a_gene the gene to be mutated
    * @param a_percentage the percentage the gene is to be mutated with
    *
@@ -127,5 +143,34 @@ public class GaussianMutationOperator
 
   private void setRandomGenerator(final RandomGenerator a_rg) {
     m_rg = a_rg;
+  }
+
+  /**
+   * Compares the given GeneticOperator to this GeneticOperator.
+   *
+   * @param a_other the instance against which to compare this instance
+   * @return a negative number if this instance is "less than" the given
+   * instance, zero if they are equal to each other, and a positive number if
+   * this is "greater than" the given instance
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(final Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    GaussianMutationOperator op = (GaussianMutationOperator) a_other;
+    if (m_deviation != op.m_deviation) {
+      if (m_deviation > op.m_deviation) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    }
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
   }
 }
