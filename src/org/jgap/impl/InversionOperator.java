@@ -21,17 +21,31 @@ import org.jgap.*;
  * @since 2.3
  */
 public class InversionOperator
-    implements GeneticOperator {
+    extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
-   * Constructs a new instance of this operator.
+   * Default constructor.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
    *
    * @author Klaus Meffert
    * @since 2.3
    */
   public InversionOperator() {
+    this(Genotype.getConfiguration());
+  }
+
+  /**
+   * Constructs a new instance of this operator.
+   * @param a_config the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public InversionOperator(Configuration a_config) {
+    super(a_config);
   }
 
   /**
@@ -42,9 +56,9 @@ public class InversionOperator
                       final List a_candidateChromosomes) {
     // Work out the number of crossovers that should be performed.
     // -----------------------------------------------------------
-    int size = Math.min(Genotype.getConfiguration().getPopulationSize(),
+    int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
-    RandomGenerator generator = Genotype.getConfiguration().getRandomGenerator();
+    RandomGenerator generator = getConfiguration().getRandomGenerator();
     // For the inversion, grab a random chromosome, pick a random
     // locus (gene location), and then swap that gene and all genes
     // to the "right" (those with greater loci) of that gene with the left
@@ -79,5 +93,26 @@ public class InversionOperator
     // considered for natural selection during the next phase of evolution.
     // --------------------------------------------------------------------
     a_candidateChromosomes.add(firstMate);
+  }
+
+  /**
+   * Compares the given GeneticOperator to this GeneticOperator.
+   *
+   * @param a_other the instance against which to compare this instance
+   * @return a negative number if this instance is "less than" the given
+   * instance, zero if they are equal to each other, and a positive number if
+   * this is "greater than" the given instance
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(final Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    InversionOperator op = (InversionOperator) a_other;
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
   }
 }
