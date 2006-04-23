@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -33,16 +33,18 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testConstruct_0() {
-    assertNotNull(new BaseGeneImpl());
+  public void testConstruct_0()
+      throws Exception {
+    assertNotNull(new BaseGeneImpl(conf));
   }
 
   /**
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testToString_0() {
-    Gene gene = new BaseGeneImpl();
+  public void testToString_0()
+      throws Exception {
+    Gene gene = new BaseGeneImpl(conf);
     assertEquals("null, " + BaseGene.S_APPLICATION_DATA + ":null",
                  gene.toString());
   }
@@ -51,8 +53,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testToString_1() {
-    Gene gene = new BaseGeneImpl();
+  public void testToString_1()
+      throws Exception {
+    Gene gene = new BaseGeneImpl(conf);
     gene.setAllele(new Integer(98));
     assertEquals("98, " + BaseGene.S_APPLICATION_DATA + ":null",
                  gene.toString());
@@ -62,8 +65,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testToString_2() {
-    Gene gene = new BaseGeneImpl();
+  public void testToString_2()
+      throws Exception {
+    Gene gene = new BaseGeneImpl(conf);
     gene.setAllele(new Integer(98));
     gene.setApplicationData("myAppData");
     assertEquals("98, " + BaseGene.S_APPLICATION_DATA + ":myAppData",
@@ -74,8 +78,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testGetAllele_0() {
-    Gene gene = new BaseGeneImpl();
+  public void testGetAllele_0()
+      throws Exception {
+    Gene gene = new BaseGeneImpl(conf);
     gene.setAllele(new Double(75));
     assertEquals(new Double(75), gene.getAllele());
   }
@@ -84,8 +89,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSize_0() {
-    Gene gene = new BaseGeneImpl();
+  public void testSize_0()
+      throws Exception {
+    Gene gene = new BaseGeneImpl(conf);
     assertEquals(1, gene.size());
   }
 
@@ -93,8 +99,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_0() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testEquals_0()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.m_compareTo_result = 0;
     assertTrue(gene.equals(null));
     assertTrue(gene.equals(gene));
@@ -105,8 +112,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_1() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testEquals_1()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.m_compareTo_result = -1;
     assertFalse(gene.equals(null));
     assertFalse(gene.equals(gene));
@@ -117,8 +125,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_2() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testEquals_2()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.m_compareTo_result = 1;
     assertFalse(gene.equals(null));
     assertFalse(gene.equals(gene));
@@ -126,17 +135,21 @@ public class BaseGeneTest
   }
 
   /**
-   * Compare Application data
+   * Compare application data.
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testEquals_3() throws Exception {
-    Genotype.setConfiguration(new ConfigurationForTest());
-    Genotype.getConfiguration().getJGAPFactory();
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testEquals_3()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+//    Genotype.setConfiguration(new ConfigurationForTest());
+//    Genotype.getConfiguration().getJGAPFactory();
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.m_compareTo_result = 0;
     gene.setApplicationData(new AppDataForTest());
-    BaseGeneImpl gene2 = new BaseGeneImpl();
+    BaseGeneImpl gene2 = new BaseGeneImpl(conf);
     gene2.m_compareTo_result = 0;
     gene2.setApplicationData(new AppDataForTest());
     gene.setCompareApplicationData(true);
@@ -144,16 +157,17 @@ public class BaseGeneTest
     /**@todo use other than JGAPFactory to be able to receive a null
      * CompareToHandler for the application data object
      */
-    }
+  }
 
   /**
-   * Simple cleanup should be possible without exception
+   * Simple cleanup should be possible without exception.
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testCleanup_0() {
-    Gene gene = new BaseGeneImpl();
+  public void testCleanup_0()
+      throws Exception {
+    Gene gene = new BaseGeneImpl(conf);
     gene.setAllele(new Double(75));
     gene.cleanup();
   }
@@ -162,8 +176,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testHashCode_0() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testHashCode_0()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     assertEquals( -79, gene.hashCode());
   }
 
@@ -171,8 +186,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testHashCode_1() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testHashCode_1()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.setAllele(new Double(1.5d));
     assertEquals(new Double(1.5d).hashCode(), gene.hashCode());
   }
@@ -181,8 +197,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_0() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testSetEnergy_0()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     assertEquals(0.0, gene.getEnergy(), DELTA);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
@@ -192,8 +209,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_1() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testSetEnergy_1()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
     gene.setEnergy( -55.8);
@@ -207,8 +225,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetApplicationData_0() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testSetApplicationData_0()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     assertNull(gene.getApplicationData());
     Integer i = new Integer(23);
     gene.setApplicationData(i);
@@ -222,8 +241,9 @@ public class BaseGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testIsCompareApplicationData_0() {
-    BaseGeneImpl gene = new BaseGeneImpl();
+  public void testIsCompareApplicationData_0()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
     assertFalse(gene.isCompareApplicationData());
     gene.setCompareApplicationData(false);
     assertFalse(gene.isCompareApplicationData());
@@ -245,6 +265,11 @@ public class BaseGeneTest
 
     public int compareTo(Object a_o) {
       return m_compareTo_result;
+    }
+
+    public BaseGeneImpl(final Configuration a_config)
+        throws InvalidConfigurationException {
+      super(a_config);
     }
 
     protected Gene newGeneInternal() {
@@ -272,12 +297,14 @@ public class BaseGeneTest
       return m_allele;
     }
   }
-
-  class AppDataForTest implements IApplicationData {
+  class AppDataForTest
+      implements IApplicationData {
     public int compareTo(Object o2) {
       return 0;
     }
-    public Object clone() throws CloneNotSupportedException {
+
+    public Object clone()
+        throws CloneNotSupportedException {
       return null;
     }
   }

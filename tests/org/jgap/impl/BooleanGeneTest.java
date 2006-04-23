@@ -21,15 +21,16 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
     return suite;
   }
 
-  public void testConstruct_0() {
-    Gene gene = new BooleanGene();
+  public void testConstruct_0()
+      throws Exception {
+    Gene gene = new BooleanGene(conf);
     //following should be possible without exception
     gene.setAllele(Boolean.valueOf(true));
     gene.setAllele(Boolean.valueOf(false));
@@ -39,10 +40,11 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_1() {
-    BooleanGene gene = new BooleanGene(true);
+  public void testConstruct_1()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf, true);
     assertEquals(true, gene.booleanValue());
-    gene = new BooleanGene(false);
+    gene = new BooleanGene(conf, false);
     assertEquals(false, gene.booleanValue());
   }
 
@@ -50,10 +52,11 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_2() {
-    BooleanGene gene = new BooleanGene(Boolean.valueOf(true));
+  public void testConstruct_2()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf, Boolean.valueOf(true));
     assertEquals(true, gene.booleanValue());
-    gene = new BooleanGene(Boolean.valueOf(false));
+    gene = new BooleanGene(conf, Boolean.valueOf(false));
     assertEquals(false, gene.booleanValue());
   }
 
@@ -61,9 +64,10 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testConstruct_3() {
+  public void testConstruct_3()
+      throws Exception {
     try {
-      new BooleanGene(null);
+      new BooleanGene(conf, null);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -71,14 +75,16 @@ public class BooleanGeneTest
     }
   }
 
-  public void testToString_0() {
-    Gene gene = new BooleanGene();
+  public void testToString_0()
+      throws Exception {
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     assertEquals("BooleanGene=true", gene.toString());
   }
 
-  public void testToString_1() {
-    Gene gene = new BooleanGene();
+  public void testToString_1()
+      throws Exception {
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     assertEquals("BooleanGene=false", gene.toString());
   }
@@ -87,25 +93,29 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testToString_2() {
-    Gene gene = new BooleanGene(true);
+  public void testToString_2()
+      throws Exception {
+    Gene gene = new BooleanGene(conf, true);
     assertEquals("BooleanGene=true", gene.toString());
   }
 
-  public void testGetAllele_0() {
-    Gene gene = new BooleanGene();
+  public void testGetAllele_0()
+      throws Exception {
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     assertEquals(Boolean.valueOf(true), gene.getAllele());
   }
 
-  public void testGetAllele_1() {
-    Gene gene = new BooleanGene();
+  public void testGetAllele_1()
+      throws Exception {
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     assertEquals(Boolean.valueOf(false), gene.getAllele());
   }
 
-  public void testGetAllele_2() {
-    Gene gene = new BooleanGene();
+  public void testGetAllele_2()
+      throws Exception {
+    Gene gene = new BooleanGene(conf);
     try {
       gene.setAllele(new Integer(100));
       fail();
@@ -115,59 +125,68 @@ public class BooleanGeneTest
     }
   }
 
-  public void testEquals_0() {
-    Gene gene1 = new BooleanGene();
-    Gene gene2 = new BooleanGene();
+  public void testEquals_0()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new BooleanGene(conf);
     assertTrue(gene1.equals(gene2));
   }
 
-  public void testEquals_1() {
-    Gene gene1 = new BooleanGene();
+  public void testEquals_1()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     assertFalse(gene1.equals(null));
   }
 
-  public void testEquals_2() {
-    Gene gene1 = new BooleanGene();
+  public void testEquals_2()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(true));
-    Gene gene2 = new BooleanGene();
+    Gene gene2 = new BooleanGene(conf);
     gene2.setAllele(Boolean.valueOf(false));
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
 
-  public void testEquals_3() {
-    Gene gene1 = new BooleanGene();
+  public void testEquals_3()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     assertFalse(gene1.equals(new IntegerGene()));
   }
 
-  public void testEquals_4() {
-    Gene gene1 = new BooleanGene();
-    Gene gene2 = new IntegerGene();
+  public void testEquals_4()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new IntegerGene(conf);
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
 
-  public void testEquals_5() {
-    Gene gene1 = new BooleanGene();
-    Gene gene2 = new FixedBinaryGene(1);
+  public void testEquals_5()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new FixedBinaryGene(conf, 1);
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
 
-  public void testBooleanValue_0() {
-    BooleanGene gene1 = new BooleanGene();
+  public void testBooleanValue_0()
+      throws Exception {
+    BooleanGene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(true));
     assertEquals(true, gene1.booleanValue());
   }
 
-  public void testBooleanValue_1() {
-    BooleanGene gene1 = new BooleanGene();
+  public void testBooleanValue_1()
+      throws Exception {
+    BooleanGene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(false));
     assertEquals(false, gene1.booleanValue());
   }
 
-  public void testBooleanValue_2() {
-    BooleanGene gene1 = new BooleanGene();
+  public void testBooleanValue_2()
+      throws Exception {
+    BooleanGene gene1 = new BooleanGene(conf);
     gene1.setAllele(null);
     try {
       assertEquals(true, gene1.booleanValue());
@@ -179,15 +198,17 @@ public class BooleanGeneTest
   }
 
   /**
-   * Set Allele to null, no exception should occur
+   * Set Allele to null, no exception should occur.
    */
-  public void testSetAllele_0() {
-    Gene gene1 = new BooleanGene();
+  public void testSetAllele_0()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(null);
   }
 
-  public void testSetAllele_1() {
-    Gene gene1 = new BooleanGene();
+  public void testSetAllele_1()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     try {
       gene1.setAllele("22");
       fail();
@@ -198,37 +219,42 @@ public class BooleanGeneTest
   }
 
   /**
-   * Set Allele to boolean value, no exception should occur
+   * Set Allele to boolean value, no exception should occur.
    */
-  public void testSetAllele_2() {
-    Gene gene1 = new BooleanGene();
+  public void testSetAllele_2()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(true));
   }
 
   /**
-   * Set Allele to boolean value, no exception should occur
+   * Set Allele to boolean value, no exception should occur.
    */
-  public void testSetAllele_3() {
-    Gene gene1 = new BooleanGene();
+  public void testSetAllele_3()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(false));
   }
 
-  public void testCompareTo_0() {
-    Gene gene1 = new BooleanGene();
+  public void testCompareTo_0()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     assertEquals(1, gene1.compareTo(null));
   }
 
-  public void testCompareTo_1() {
-    Gene gene1 = new BooleanGene();
-    Gene gene2 = new BooleanGene();
+  public void testCompareTo_1()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new BooleanGene(conf);
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
   }
 
-  public void testCompareTo_2() {
-    Gene gene1 = new BooleanGene();
+  public void testCompareTo_2()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(true));
-    Gene gene2 = new BooleanGene();
+    Gene gene2 = new BooleanGene(conf);
     gene2.setAllele(Boolean.valueOf(true));
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene2.compareTo(gene1));
@@ -238,10 +264,11 @@ public class BooleanGeneTest
     assertEquals(0, gene2.compareTo(gene1));
   }
 
-  public void testCompareTo_3() {
-    Gene gene1 = new BooleanGene();
+  public void testCompareTo_3()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(true));
-    Gene gene2 = new BooleanGene();
+    Gene gene2 = new BooleanGene(conf);
     gene2.setAllele(Boolean.valueOf(false));
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals( -1, gene2.compareTo(gene1));
@@ -251,10 +278,11 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareTo_4() {
-    Gene gene1 = new BooleanGene();
+  public void testCompareTo_4()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
     gene1.setAllele(Boolean.valueOf(true));
-    Gene gene2 = new BooleanGene();
+    Gene gene2 = new BooleanGene(conf);
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals( -1, gene2.compareTo(gene1));
   }
@@ -263,9 +291,10 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareTo_5() {
-    Gene gene1 = new BooleanGene();
-    Gene gene2 = new BooleanGene();
+  public void testCompareTo_5()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new BooleanGene(conf);
     assertEquals(0, gene1.compareTo(gene2));
     assertEquals(0, gene1.compareTo(gene2));
   }
@@ -273,8 +302,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_0() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_0()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, 0.0d);
     assertEquals(true, gene.booleanValue());
@@ -283,8 +313,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_1() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_1()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(1, 0.000001d); //index 1 should be ignored
     assertEquals(true, gene.booleanValue());
@@ -293,8 +324,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_2() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_2()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(333, -0.000001d); //index 333 should be ignored
     assertEquals(false, gene.booleanValue());
@@ -303,8 +335,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_3() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_3()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, -1.0d);
     assertEquals(false, gene.booleanValue());
@@ -313,8 +346,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_4() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_4()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, -2.0d);
     assertEquals(false, gene.booleanValue());
@@ -323,8 +357,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_5() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_5()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, 2.0d);
     assertEquals(true, gene.booleanValue());
@@ -333,8 +368,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_6() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_6()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(0, 2.0d);
     assertEquals(true, gene.booleanValue());
@@ -343,8 +379,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_7() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_7()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(0, -1.0d);
     assertEquals(false, gene.booleanValue());
@@ -353,8 +390,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_8() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_8()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(22, -0.5d); //22 should be ignored
     assertEquals(false, gene.booleanValue());
@@ -363,8 +401,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testApplyMutation_9() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_9()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     gene.applyMutation(22, 0.5d); //22 should be ignored
     assertEquals(true, gene.booleanValue());
@@ -374,8 +413,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testApplyMutation_10() {
-    BooleanGene gene = new BooleanGene();
+  public void testApplyMutation_10()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.applyMutation(0, 0.0d);
     assertEquals(false, gene.booleanValue());
   }
@@ -384,8 +424,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testSetValueFromPersistentRepresentation_0() {
-    BooleanGene gene = new BooleanGene();
+  public void testSetValueFromPersistentRepresentation_0()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     try {
       gene.setValueFromPersistentRepresentation(null);
       fail();
@@ -402,7 +443,7 @@ public class BooleanGeneTest
    */
   public void testSetValueFromPersistentRepresentation_1()
       throws Exception {
-    BooleanGene gene = new BooleanGene();
+    BooleanGene gene = new BooleanGene(conf);
     gene.setValueFromPersistentRepresentation("null");
     assertEquals(null, gene.getAllele());
   }
@@ -414,7 +455,7 @@ public class BooleanGeneTest
    */
   public void testSetValueFromPersistentRepresentation_2()
       throws Exception {
-    BooleanGene gene = new BooleanGene();
+    BooleanGene gene = new BooleanGene(conf);
     gene.setValueFromPersistentRepresentation("true");
     assertEquals(Boolean.TRUE, gene.getAllele());
   }
@@ -426,7 +467,7 @@ public class BooleanGeneTest
    */
   public void testSetValueFromPersistentRepresentation_3()
       throws Exception {
-    BooleanGene gene = new BooleanGene();
+    BooleanGene gene = new BooleanGene(conf);
     gene.setValueFromPersistentRepresentation("false");
     assertEquals(Boolean.FALSE, gene.getAllele());
   }
@@ -435,8 +476,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testSetValueFromPersistentRepresentation_4() {
-    BooleanGene gene = new BooleanGene();
+  public void testSetValueFromPersistentRepresentation_4()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     try {
       gene.setValueFromPersistentRepresentation("True");
       fail();
@@ -450,8 +492,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testSetValueFromPersistentRepresentation_5() {
-    BooleanGene gene = new BooleanGene();
+  public void testSetValueFromPersistentRepresentation_5()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     try {
       gene.setValueFromPersistentRepresentation("False");
       fail();
@@ -465,8 +508,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void testSetValueFromPersistentRepresentation_6() {
-    BooleanGene gene = new BooleanGene();
+  public void testSetValueFromPersistentRepresentation_6()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     try {
       gene.setValueFromPersistentRepresentation("X");
       fail();
@@ -479,8 +523,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testGetPersistentRepresentation_0() {
-    BooleanGene gene = new BooleanGene();
+  public void testGetPersistentRepresentation_0()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
     String s = gene.getPersistentRepresentation();
     assertEquals("true", s);
@@ -489,8 +534,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testGetPersistentRepresentation_1() {
-    BooleanGene gene = new BooleanGene();
+  public void testGetPersistentRepresentation_1()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
     String s = gene.getPersistentRepresentation();
     assertEquals("false", s);
@@ -499,8 +545,9 @@ public class BooleanGeneTest
   /**
    * @author Klaus Meffert
    */
-  public void testGetPersistentRepresentation_2() {
-    BooleanGene gene = new BooleanGene();
+  public void testGetPersistentRepresentation_2()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     String s = gene.getPersistentRepresentation();
     assertEquals("null", s);
   }
@@ -509,8 +556,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testHashCode_0() {
-    BooleanGene gene = new BooleanGene();
+  public void testHashCode_0()
+      throws Exception {
+    BooleanGene gene = new BooleanGene(conf);
     assertEquals( -2, gene.hashCode());
   }
 
@@ -518,8 +566,9 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_0() {
-    BaseGene gene = new BooleanGene();
+  public void testSetEnergy_0()
+      throws Exception {
+    BaseGene gene = new BooleanGene(conf);
     assertEquals(0.0, gene.getEnergy(), DELTA);
   }
 
@@ -527,12 +576,13 @@ public class BooleanGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_1() {
-    BaseGene gene = new BooleanGene();
+  public void testSetEnergy_1()
+      throws Exception {
+    BaseGene gene = new BooleanGene(conf);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
-    gene.setEnergy(-55.8);
-    assertEquals(-55.8, gene.getEnergy(), DELTA);
+    gene.setEnergy( -55.8);
+    assertEquals( -55.8, gene.getEnergy(), DELTA);
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
