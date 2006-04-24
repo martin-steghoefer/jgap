@@ -10,6 +10,7 @@
 package org.jgap.supergenes;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 import org.jgap.*;
@@ -30,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * This field separates gene class name from
@@ -115,7 +116,8 @@ public abstract class AbstractSupergene
    * Genotype.setConfiguration.
    * @throws InvalidConfigurationException
    */
-  public AbstractSupergene() throws InvalidConfigurationException {
+  public AbstractSupergene()
+      throws InvalidConfigurationException {
     super(Genotype.getConfiguration());
   }
 
@@ -178,9 +180,9 @@ public abstract class AbstractSupergene
       g[i] = m_genes[i].newGene();
     }
     try {
-      /**@todo construct by using current configuration*/
+      Constructor constr = getClass().getConstructor(new Class[] {Configuration.class});
       AbstractSupergene age =
-          (AbstractSupergene) getClass().newInstance();
+          (AbstractSupergene) constr.newInstance(new Object[] {getConfiguration()});
       if (m_validator != this) {
         age.setValidator(m_validator);
       }
@@ -189,15 +191,17 @@ public abstract class AbstractSupergene
     }
     catch (Exception ex) {
       ex.printStackTrace();
-      throw new Error("This should not happen. Is the parameterless "
-                      + "constructor provided fo " + getClass().getName() + "?");
+      throw new Error(
+          "This should not happen. Is the constructor with parameter "
+          + "org.jgap.Configuration provided for "
+          + getClass().getName() + "?");
     }
   }
 
   /**
    * Applies a mutation of a given intensity (percentage) onto the gene
    * at the given index. Retries while isValid() returns true for the
-   * supergene. The method is delegated to the first element [0] of the
+   * supergene. The method is delegated to the first element ] of the
    * gene, indexed by <code>index</code>.
    * See org.jgap.supergenes.AbstractSupergene.isValid()
    */
@@ -422,18 +426,28 @@ public abstract class AbstractSupergene
            GENE_DELIMITER);
       String clas = vo.nextToken();
       SupergeneValidator sv;
-      if (clas.equals("this")) sv = this;
-      else
-      if (clas.equals("null")) sv = null;
-      else sv = (SupergeneValidator)
-          Class.forName(clas).newInstance();
-      if (sv != null) sv.setFromPersistent(decode(vo.nextToken()));
+      if (clas.equals("this")) {
+        sv = this;
+      }
+      else if (clas.equals("null")) {
+        sv = null;
+      }
+      else {
+//        sv = (SupergeneValidator) Class.forName(clas).newInstance();
+        Class svClass = Class.forName(clas);
+        Constructor constr = svClass.getConstructor(new Class[] {Configuration.class});
+        sv = (SupergeneValidator) constr.newInstance(new Object[] {
+            getConfiguration()});
+      }
+      if (sv != null) {
+        sv.setFromPersistent(decode(vo.nextToken()));
+      }
       return sv;
     }
     catch (Exception ex) {
       ex.printStackTrace();
       throw new Error
-          ("Unable to crate validator from '" + a_rep + "' for " +
+          ("Unable to create validator from '" + a_rep + "' for " +
            getClass().getName());
     }
   }
@@ -443,7 +457,8 @@ public abstract class AbstractSupergene
                             String a_persistentRepresentation)
       throws Exception {
     Class geneClass = Class.forName(a_geneClassName);
-    Gene gene = (Gene) geneClass.newInstance();
+    Constructor constr = geneClass.getConstructor(new Class[] {Configuration.class});
+    Gene gene = (Gene) constr.newInstance(new Object[] {getConfiguration()});
     gene.setValueFromPersistentRepresentation(a_persistentRepresentation);
     return gene;
   }
