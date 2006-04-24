@@ -1,5 +1,8 @@
 3.0
 -----------------------------------------------------------
+* Added abstract base class org.jgap.BaseChromosome
+  and made Chromosome descend from it
+* Added method getConfiguration to interface IChromosome
 * Added abstract base class org.jgap.BaseGeneticOperator
   and made any GeneticOperator's descend from it
 * Fixed error in method KeyedValues.getIndex()
@@ -13,6 +16,8 @@
 * Fixed a few spelling errors in javadocs
 * Added documentation to tests for MutationOperator and
   CrossoverOPerator (see request 1434187)
+* Added verbose output for chart example indicating where the
+  created chart image has been put
 
 2.6
 -----------------------------------------------------------
