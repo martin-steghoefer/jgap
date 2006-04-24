@@ -10,53 +10,54 @@
 package org.jgap.supergenes;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 
 /** Tests the Supergene internal parser. */
 public class SupergeneInternalParserTest
-    extends TestCase {
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
+
+  public static Test suite() {
+    TestSuite suite =
+        new TestSuite(SupergeneInternalParserTest.class);
+    return suite;
+  }
+
+  public void testSupergeneInternalParser()
+      throws Exception {
+    TestClass m_test = new TestClass(conf);
+    /* Undocumented test statements. */
+    String expectedResponse =
+        "----'0'"
+        + "----'1'"
+        + "----'2'"
+        + "----''"
+        + "--------'i1'"
+        + "--------'ib'"
+        + "--------'ic'"
+        + "--------'k1'"
+        + "--------'k2'"
+        + "------------'hn1'"
+        + "----------------''"
+        + "----------------'a'"
+        + "------------'hn2'"
+        + "------------'hn3'";
+    String s = "<0><1><2><><" + m_test.encode("<i1><ib><ic>")
+        + "><" + m_test.encode("<k1><k2><"
+                               + m_test.encode("<hn1><" + m_test.encode("<><a>")
+                                               + "><hn2><hn3>") + ">") + ">";
+    StringBuffer b = new StringBuffer();
+    m_test.splitRecursive(s, b, "", false);
+    assertEquals(b.toString(), expectedResponse);
+  }
 
   class TestClass
       extends AbstractSupergene {
-
-    public TestClass() throws InvalidConfigurationException {
-      super();
-    }
-    public boolean testInternalParser() {
-      /* Undocumented test statements. */
-      String expectedResponse =
-          "----'0'"
-          + "----'1'"
-          + "----'2'"
-          + "----''"
-          + "--------'i1'"
-          + "--------'ib'"
-          + "--------'ic'"
-          + "--------'k1'"
-          + "--------'k2'"
-          + "------------'hn1'"
-          + "----------------''"
-          + "----------------'a'"
-          + "------------'hn2'"
-          + "------------'hn3'";
-      String s = "<0><1><2><><" + encode("<i1><ib><ic>")
-          + "><" + encode("<k1><k2><"
-                          + encode("<hn1><" + encode("<><a>")
-                                   + "><hn2><hn3>") + ">") + ">";
-      StringBuffer b = new StringBuffer();
-      try {
-        splitRecursive(s, b, "", false);
-      }
-      catch (UnsupportedRepresentationException ex) {
-        ex.printStackTrace();
-        return false;
-      }
-      return b.toString().equals(expectedResponse);
+    public TestClass(final Configuration a_conf)
+        throws InvalidConfigurationException {
+      super(a_conf, null);
     }
 
     //Used in test only
@@ -87,30 +88,5 @@ public class SupergeneInternalParserTest
     protected Gene newGeneInternal() {
       throw new Error("Should never be called.");
     }
-  }
-  public static Test suite() {
-    TestSuite suite =
-        new TestSuite(SupergenePersistentRepresentationTest.class);
-    return suite;
-  }
-
-  TestClass m_test;
-
-  protected void setUp()
-      throws Exception {
-    super.setUp();
-    m_test = new TestClass();
-  }
-
-  protected void tearDown()
-      throws Exception {
-    m_test = null;
-    super.tearDown();
-  }
-
-  public void testSupergeneInternalParser() {
-    boolean expectedReturn = true;
-    boolean actualReturn = m_test.testInternalParser();
-    assertEquals("return value", expectedReturn, actualReturn);
   }
 }
