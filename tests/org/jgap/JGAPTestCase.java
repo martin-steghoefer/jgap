@@ -13,6 +13,7 @@ import java.util.*;
 import java.io.*;
 import junit.framework.*;
 import junitx.util.*;
+import org.jgap.impl.*;
 
 /**
  * Abstract test case for all JGAP test cases providing a common infrastructure.
@@ -23,12 +24,13 @@ import junitx.util.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
 
   public final static PrivateAccessor privateAccessor = null;
+  public Configuration conf;
 
   public JGAPTestCase(String a_name) {
     super(a_name);
@@ -42,6 +44,7 @@ public abstract class JGAPTestCase
     Genotype.setConfiguration(null);
     // reset property --> use JGAPFactory
     System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS, "");
+    conf = new DefaultConfiguration();
   }
 
   /**
