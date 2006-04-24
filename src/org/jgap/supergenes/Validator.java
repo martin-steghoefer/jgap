@@ -20,7 +20,13 @@ import org.jgap.*;
 public abstract class Validator
     implements SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
+
+  private transient Configuration m_conf;
+
+  public Validator(Configuration a_conf) {
+    m_conf = a_conf;
+  }
 
   /** {@inheritDoc} */
   public abstract boolean isValid(Gene[] a_genes, Supergene a_for_supergene);
@@ -34,5 +40,15 @@ public abstract class Validator
   /** {@inheritDoc}
    * The default implementation does nothing. */
   public void setFromPersistent(final String a_from) {
+  }
+
+  /**
+   * @return the configuration used
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Configuration getConfiguration() {
+    return m_conf;
   }
 }
