@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationHistoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -76,12 +76,12 @@ public class PopulationHistoryTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     Population pop = new Population(conf);
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 4);
     chrom.setFitnessValue(17);
     pop.addChromosome(chrom);
     Population pop2 = new Population(conf);
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     chrom = new Chromosome(conf, gene, 3);
     chrom.setFitnessValue(3);
     pop2.addChromosome(chrom);
