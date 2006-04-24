@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -262,7 +262,6 @@ public class BooleanGene
    * @since 1.0
    */
   public int compareTo(Object a_other) {
-    /**@todo consider application data*/
     BooleanGene otherBooleanGene = (BooleanGene) a_other;
     // First, if the other gene is null, then this is the greater gene.
     // ----------------------------------------------------------------
@@ -276,16 +275,33 @@ public class BooleanGene
       return m_value == null ? 0 : 1;
     }
     else if (m_value == null) {
-      return otherBooleanGene.m_value == null ? 0 : -1;
+      if (otherBooleanGene.m_value == null) {
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherBooleanGene.getApplicationData());
+        }
+        else {
+          return 0;
+        }
+      }
+      else {
+        return -1;
+      }
     }
     // The Boolean class doesn't implement the Comparable interface, so
     // we have to do the comparison ourselves.
     // ----------------------------------------------------------------
     if (m_value.booleanValue() == false) {
       if (otherBooleanGene.m_value.booleanValue() == false) {
-        // Both are false and therefore the same. Return zero.
-        // ---------------------------------------------------
-        return 0;
+        // Both are false and therefore the same. Compare application data.
+        // ----------------------------------------------------------------
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherBooleanGene.getApplicationData());
+        }
+        else {
+          return 0;
+        }
       }
       else {
         // This allele is false, but the other one is true. This
@@ -295,9 +311,15 @@ public class BooleanGene
       }
     }
     else if (otherBooleanGene.m_value.booleanValue() == true) {
-      // Both alleles are true and therefore the same. Return zero.
-      // ----------------------------------------------------------
-      return 0;
+      // Both alleles are true and therefore the same. Compare application data.
+      // -----------------------------------------------------------------------
+      if (isCompareApplicationData()) {
+        return compareApplicationData(getApplicationData(),
+                                      otherBooleanGene.getApplicationData());
+      }
+      else {
+        return 0;
+      }
     }
     else {
       // This allele is true, but the other is false. This allele is
