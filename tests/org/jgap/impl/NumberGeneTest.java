@@ -22,7 +22,7 @@ import junit.framework.*;
 public class NumberGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(NumberGeneTest.class);
@@ -30,6 +30,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -41,6 +43,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -53,6 +57,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -66,6 +72,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -77,6 +85,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -88,6 +98,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -99,6 +111,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -110,6 +124,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -123,6 +139,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -136,6 +154,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -148,6 +168,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -158,16 +180,20 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void testEquals_2()
       throws Exception {
     Gene gene1 = new NumberGeneImpl(conf, 1, 100);
-    assertFalse(gene1.equals(new BooleanGene()));
+    assertFalse(gene1.equals(new BooleanGene(conf)));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -178,6 +204,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -190,6 +218,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -205,6 +235,7 @@ public class NumberGeneTest
 
   /**
    * Set Allele to null, no exception should occur
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -216,6 +247,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -232,6 +265,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -249,6 +284,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -322,7 +359,7 @@ public class NumberGeneTest
       throws Exception {
     Gene gene1 = new NumberGeneImpl(conf, 1, 10000);
     gene1.setAllele(new Integer(4711));
-    Gene gene2 = new DoubleGene();
+    Gene gene2 = new DoubleGene(conf);
     try {
       assertEquals(0, gene1.compareTo(gene2));
       fail();
@@ -342,7 +379,7 @@ public class NumberGeneTest
       throws Exception {
     Gene gene1 = new NumberGeneImpl(conf, 1, 10000);
     gene1.setAllele(new Integer(4711));
-    Gene gene2 = new DoubleGene();
+    Gene gene2 = new DoubleGene(conf);
     gene2.setAllele(new Double(4711.0d));
     try {
       assertEquals(0, gene1.compareTo(gene2));
@@ -354,7 +391,8 @@ public class NumberGeneTest
   }
 
   /**
-   * Using application data
+   * Using application data.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -391,6 +429,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -401,6 +441,8 @@ public class NumberGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */

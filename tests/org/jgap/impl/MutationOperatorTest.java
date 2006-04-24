@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the MutationOperator class
+ * Tests the MutationOperator class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.34 $";
+  private static final String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -30,38 +30,50 @@ public class MutationOperatorTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testConstruct_0() {
-    MutationOperator mutOp = new MutationOperator(234);
+  public void testConstruct_0()
+      throws Exception {
+    MutationOperator mutOp = new MutationOperator(conf, 234);
     assertEquals(234, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testConstruct_1() {
-    MutationOperator mutOp = new MutationOperator();
+  public void testConstruct_1()
+      throws Exception {
+    MutationOperator mutOp = new MutationOperator(conf);
     assertEquals(0, mutOp.getMutationRate());
     assertNotNull(mutOp.getMutationRateCalc());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testConstruct_2() {
-    MutationOperator mutOp = new MutationOperator(null);
+  public void testConstruct_2()
+      throws Exception {
+    MutationOperator mutOp = new MutationOperator(conf, null);
     assertEquals(0, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testConstruct_3() {
-    IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
-    MutationOperator mutOp = new MutationOperator(calc);
+  public void testConstruct_3()
+      throws Exception {
+    IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
+    MutationOperator mutOp = new MutationOperator(conf, calc);
     assertEquals(0, mutOp.getMutationRate());
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
@@ -69,7 +81,6 @@ public class MutationOperatorTest
   /**
    * Ensure that size of mutated set of chromosomes equals the size of original
    * chromosomes.
-   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -78,11 +89,10 @@ public class MutationOperatorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Genotype.setConfiguration(conf);
-    MutationOperator mutOp = new MutationOperator();
+    MutationOperator mutOp = new MutationOperator(conf);
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[] {};
-    mutOp.operate(new Population(population), candChroms);
+    mutOp.operate(new Population(conf, population), candChroms);
     assertEquals(candChroms.size(), population.length);
   }
 
@@ -98,28 +108,28 @@ public class MutationOperatorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Genotype.setConfiguration(conf);
-    MutationOperator mutOp = new MutationOperator();
+    MutationOperator mutOp = new MutationOperator(conf,
+                                                  new
+                                                  DefaultMutationRateCalculator(
+        conf));
     List candChroms = new Vector();
-
     RandomGeneratorForTest gen = new RandomGeneratorForTest();
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
-    Genotype.setConfiguration(conf);
-    Chromosome c1 = new Chromosome(new BooleanGene(), 9);
+    Chromosome c1 = new Chromosome(conf, new BooleanGene(conf), 9);
     conf.setSampleChromosome(c1);
-    conf.addNaturalSelector(new BestChromosomesSelector(), true);
+    conf.addNaturalSelector(new BestChromosomesSelector(conf), true);
     conf.setPopulationSize(5);
     for (int i = 0; i < c1.getGenes().length; i++) {
       c1.getGene(i).setAllele(Boolean.TRUE);
     }
-    Chromosome c2 = new Chromosome(new IntegerGene(), 4);
+    Chromosome c2 = new Chromosome(conf, new IntegerGene(conf), 4);
     for (int i = 0; i < c2.getGenes().length; i++) {
       c2.getGene(i).setAllele(new Integer(27));
     }
     Chromosome[] population = new Chromosome[] {
         c1, c2};
-    mutOp.operate(new Population(population), candChroms);
+    mutOp.operate(new Population(conf, population), candChroms);
     assertEquals(candChroms.size(), population.length);
   }
 
@@ -133,34 +143,38 @@ public class MutationOperatorTest
    */
   public void testOperate_1()
       throws Exception {
-    MutationOperator mutOp = new MutationOperator();
     List candChroms = new Vector();
-    Chromosome[] population = new Chromosome[] {
-        new Chromosome(new BooleanGene(), 9),
-        (new Chromosome(new IntegerGene(), 4))};
     Configuration conf = new Configuration();
     conf.setPopulationSize(3);
     conf.setRandomGenerator(new StockRandomGenerator());
-    Genotype.setConfiguration(conf);
-    mutOp.operate(new Population(population), candChroms);
+    MutationOperator mutOp = new MutationOperator(conf,
+                                                  new
+                                                  DefaultMutationRateCalculator(
+        conf));
+    Chromosome[] population = new Chromosome[] {
+        new Chromosome(conf, new BooleanGene(conf), 9),
+        (new Chromosome(conf, new IntegerGene(conf), 4))};
+    mutOp.operate(new Population(conf, population), candChroms);
   }
 
   /**
-   * NullpointerException because of null Configuration
+   * NullpointerException because of null Configuration.
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
-  public void testOperate_2() {
-    MutationOperator mutOp = new MutationOperator();
+  public void testOperate_2()
+      throws Exception {
+    MutationOperator mutOp = new MutationOperator(conf);
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[] {
-        new Chromosome(new BooleanGene(), 9),
-        (new Chromosome(new IntegerGene(), 4))};
+        new Chromosome(conf, new BooleanGene(conf), 9),
+        (new Chromosome(conf, new IntegerGene(conf), 4))};
     try {
-      mutOp.operate(new Population(population), candChroms);
+      mutOp.operate(new Population(null, population), candChroms);
       fail();
     }
-    catch (NullPointerException nex) {
+    catch (InvalidConfigurationException nex) {
       ; //this is OK
     }
   }
@@ -176,76 +190,49 @@ public class MutationOperatorTest
   public void testOperate_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    GeneticOperator op = new MutationOperator();
+    MutationOperator op = new MutationOperator(conf,
+                                               new
+                                               DefaultMutationRateCalculator(
+        conf));
     conf.addGeneticOperator(op);
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextInt(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
     Gene[] genes1 = new Gene[] {
         cgene1};
-    Chromosome chrom1 = new Chromosome(genes1);
-    Gene cgene2 = new IntegerGene(1, 10);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(9));
     Gene[] genes2 = new Gene[] {
         cgene2};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
+    Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     assertEquals(3, chroms.size());
-
-    Population pop = new Population(population);
+    Population pop = new Population(conf, population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
     assertEquals(3 + 2, chroms.size());
-
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
     assertEquals(3 + 2 + 2, chroms.size());
-  }
-
-  private Chromosome[] setUpPopulation(GeneticOperator op, RandomGenerator rand)
-      throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
-    conf.addGeneticOperator(op);
-    Genotype.setConfiguration(conf);
-    conf.setRandomGenerator(rand);
-    conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(0, 9);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
-    conf.setSampleChromosome(chrom);
-    conf.setPopulationSize(6);
-    Gene[] genes1 = new Gene[3];
-    for (int i = 0; i < genes1.length; i++) {
-      genes1[i] = new IntegerGene(0, 9);
-      genes1[i].setAllele(new Integer(i));
-    }
-    Chromosome chrom1 = new Chromosome(genes1);
-    Gene[] genes2 = new Gene[3];
-    for (int i = 0; i < genes2.length; i++) {
-      genes2[i] = new IntegerGene(0, 9);
-      genes2[i].setAllele(new Integer(i + 3));
-    }
-    Chromosome chrom2 = new Chromosome(genes2);
-    return new Chromosome[] {
-        chrom1, chrom2};
   }
 
   /**
@@ -256,17 +243,38 @@ public class MutationOperatorTest
    */
   public void testOperate_3_1()
       throws Exception {
-    GeneticOperator op = new MutationOperator(10);
+    DefaultConfiguration conf = new DefaultConfiguration();
+    GeneticOperator op = new MutationOperator(conf, 10);
+    conf.addGeneticOperator(op);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     // 0 in this sequence represents a gene to be mutated
     // thus, the middle gene of each chromosome should be mutated
     rand.setNextIntSequence(new int[] {1, 0, 1});
     rand.setNextDouble(0.7d);
+    conf.setRandomGenerator(rand);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene sampleGene = new IntegerGene(conf, 0, 9);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(6);
+    Gene[] genes1 = new Gene[3];
+    for (int i = 0; i < genes1.length; i++) {
+      genes1[i] = new IntegerGene(conf, 0, 9);
+      genes1[i].setAllele(new Integer(i));
+    }
+    Chromosome chrom1 = new Chromosome(conf, genes1);
+    Gene[] genes2 = new Gene[3];
+    for (int i = 0; i < genes2.length; i++) {
+      genes2[i] = new IntegerGene(conf, 0, 9);
+      genes2[i].setAllele(new Integer(i + 3));
+    }
+    Chromosome chrom2 = new Chromosome(conf, genes2);
+    Chromosome[] population = new Chromosome[] {
+        chrom1, chrom2};
     // this will cause an increase of 4 in mutated values
     // original + (0.7*2 - 1) * 10 (range of allele values)
-    Chromosome[] population = setUpPopulation(op, rand);
     List chroms = new Vector();
-    Population pop = new Population(population);
+    Population pop = new Population(conf, population);
     op.operate(pop, chroms);
     assertEquals(2, chroms.size());
     // test chromosome 1 - 2nd gene should be different
@@ -284,21 +292,23 @@ public class MutationOperatorTest
   }
 
   /**
-   * Test that nothing is done.
+   * Ensure that nothing is done.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testOperate_4() {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    MutationOperator mutOp = new MutationOperator(0);
+  public void testOperate_4()
+      throws Exception {
+    DefaultConfiguration conf = new DefaultConfiguration();
+    MutationOperator mutOp = new MutationOperator(conf, 0);
     mutOp.setMutationRateCalc(null);
     List candChroms = new Vector();
-    BooleanGene gene1 = new BooleanGene();
-    Chromosome chrom1 = new Chromosome(gene1, 1);
+    BooleanGene gene1 = new BooleanGene(conf);
+    Chromosome chrom1 = new Chromosome(conf, gene1, 1);
     chrom1.getGene(0).setAllele(Boolean.valueOf(false));
-    IntegerGene gene2 = new IntegerGene(0, 10);
-    Chromosome chrom2 = new Chromosome(gene2, 1);
+    IntegerGene gene2 = new IntegerGene(conf, 0, 10);
+    Chromosome chrom2 = new Chromosome(conf, gene2, 1);
     chrom2.getGene(0).setAllele(new Integer(3));
     candChroms.add(chrom1);
     candChroms.add(chrom2);
@@ -318,23 +328,25 @@ public class MutationOperatorTest
    */
   public void testOperate_5()
       throws Exception {
-    MutationOperator mutOp = new MutationOperator();
-    BooleanGene gene1 = new BooleanGene();
-    Chromosome chrom1 = new Chromosome(gene1, 1);
-    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
-    IntegerGene gene2 = new IntegerGene(0, 10); //B: B1, B2
-    Chromosome chrom2 = new Chromosome(gene2, 1);
-    chrom2.getGene(0).setAllele(new Integer(3)); //A
-    Chromosome[] chroms = new Chromosome[] {
-        chrom1, chrom2};
     Configuration conf = new Configuration();
     conf.setPopulationSize(5);
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
     rn.setNextInt(0);
     rn.setNextDouble(0.8d); //C
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    Population pop = new Population(chroms);
+    BooleanGene gene1 = new BooleanGene(conf);
+    Chromosome chrom1 = new Chromosome(conf, gene1, 1);
+    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
+    IntegerGene gene2 = new IntegerGene(conf, 0, 10); //B: B1, B2
+    Chromosome chrom2 = new Chromosome(conf, gene2, 1);
+    chrom2.getGene(0).setAllele(new Integer(3)); //A
+    Chromosome[] chroms = new Chromosome[] {
+        chrom1, chrom2};
+    MutationOperator mutOp = new MutationOperator(conf,
+                                                  new
+                                                  DefaultMutationRateCalculator(
+        conf));
+    Population pop = new Population(conf, chroms);
     mutOp.operate(pop, pop.getChromosomes());
     // now we should have the double number of chromosomes because the target
     // list is the same as the source list of chromosomes
@@ -363,28 +375,30 @@ public class MutationOperatorTest
    */
   public void testOperate_5_2()
       throws Exception {
-    MutationOperator mutOp = new MutationOperator();
-    BooleanGene gene1 = new BooleanGene();
-    CompositeGene comp1 = new CompositeGene();
+    Configuration conf = new Configuration();
+    conf.setPopulationSize(5);
+    BooleanGene gene1 = new BooleanGene(conf);
+    CompositeGene comp1 = new CompositeGene(conf);
     comp1.addGene(gene1);
-    Chromosome chrom1 = new Chromosome(comp1, 1);
+    Chromosome chrom1 = new Chromosome(conf, comp1, 1);
     ( (CompositeGene) chrom1.getGene(0)).geneAt(0).setAllele(
         Boolean.valueOf(false));
-    IntegerGene gene2 = new IntegerGene(0, 10);
-    CompositeGene comp2 = new CompositeGene();
+    IntegerGene gene2 = new IntegerGene(conf, 0, 10);
+    CompositeGene comp2 = new CompositeGene(conf);
     comp2.addGene(gene2);
-    Chromosome chrom2 = new Chromosome(comp2, 1);
+    Chromosome chrom2 = new Chromosome(conf, comp2, 1);
     ( (CompositeGene) chrom2.getGene(0)).geneAt(0).setAllele(new Integer(3));
     Chromosome[] chroms = new Chromosome[] {
         chrom1, chrom2};
-    Configuration conf = new Configuration();
-    conf.setPopulationSize(5);
+    MutationOperator mutOp = new MutationOperator(conf,
+                                                  new
+                                                  DefaultMutationRateCalculator(
+        conf));
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
     rn.setNextInt(0);
     rn.setNextDouble(0.8d);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    Population pop = new Population(chroms);
+    Population pop = new Population(conf, chroms);
     mutOp.operate(pop, pop.getChromosomes());
     assertEquals(2 + 2, pop.getChromosomes().size());
     //old gene
@@ -397,9 +411,9 @@ public class MutationOperatorTest
     assertEquals(3,
                  ( (IntegerGene) ( (CompositeGene) pop.getChromosome(1).
                                   getGene(0)).geneAt(0)).intValue());
-   //mutated gene: A + (B2-B1) * (-1 + C * 2) --> see IntegerGene.applyMutation
-   //        A, B1, B2, C: see comments above
-   //        -1 + C * 2: see IntegerGene.applyMutation
+    //mutated gene: A + (B2-B1) * (-1 + C * 2) --> see IntegerGene.applyMutation
+    //        A, B1, B2, C: see comments above
+    //        -1 + C * 2: see IntegerGene.applyMutation
     assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
                  ( (
         IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
@@ -408,25 +422,30 @@ public class MutationOperatorTest
 
   /**
    * Following should be possible without exception.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testOperate_6() {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    MutationOperator mutOp = new MutationOperator(0);
+  public void testOperate_6()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    MutationOperator mutOp = new MutationOperator(conf, 0);
     mutOp.setMutationRateCalc(null);
     mutOp.operate(null, null);
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testOperate_6_2() {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    MutationOperator mutOp = new MutationOperator(0);
-    mutOp.setMutationRateCalc(new DefaultMutationRateCalculator());
+  public void testOperate_6_2()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    MutationOperator mutOp = new MutationOperator(conf, 0);
+    mutOp.setMutationRateCalc(new DefaultMutationRateCalculator(conf));
     mutOp.operate(null, null);
   }
 
@@ -441,15 +460,6 @@ public class MutationOperatorTest
    */
   public void testOperate_8()
       throws Exception {
-    MutationOperator mutOp = new MutationOperator();
-    BooleanGene gene1 = new BooleanGene();
-    Chromosome chrom1 = new Chromosome(gene1, 1);
-    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
-    IntegerGene gene2 = new IntegerGene(0, 10);
-    Chromosome chrom2 = new Chromosome(gene2, 1);
-    chrom2.getGene(0).setAllele(new Integer(3));
-    Chromosome[] chroms = new Chromosome[] {
-        chrom1, chrom2};
     Configuration conf = new Configuration();
     conf.setPopulationSize(5);
     RandomGeneratorForTest rn = new RandomGeneratorForTest();
@@ -457,12 +467,23 @@ public class MutationOperatorTest
     rn.setNextInt(0);
     rn.setNextDouble(0.8d);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
+    BooleanGene gene1 = new BooleanGene(conf);
+    Chromosome chrom1 = new Chromosome(conf, gene1, 1);
+    chrom1.getGene(0).setAllele(Boolean.valueOf(false));
+    IntegerGene gene2 = new IntegerGene(conf, 0, 10);
+    Chromosome chrom2 = new Chromosome(conf, gene2, 1);
+    chrom2.getGene(0).setAllele(new Integer(3));
+    Chromosome[] chroms = new Chromosome[] {
+        chrom1, chrom2};
+    MutationOperator mutOp = new MutationOperator(conf,
+                                                  new
+                                                  DefaultMutationRateCalculator(
+        conf));
     IGeneticOperatorConstraint constraint = new
         GeneticOperatorConstraintForTest();
-    Genotype.getConfiguration().getJGAPFactory().setGeneticOperatorConstraint(
+    conf.getJGAPFactory().setGeneticOperatorConstraint(
         constraint);
-    Population pop = new Population(chroms);
+    Population pop = new Population(conf, chroms);
     mutOp.operate(pop, pop.getChromosomes());
     // +1 (not +2) because only IntegerGene should have been mutated.
     assertEquals(2 + 1, pop.getChromosomes().size());
@@ -485,12 +506,12 @@ public class MutationOperatorTest
    */
   public void testIsSerializable_0()
       throws Exception {
-    MutationOperator op = new MutationOperator();
+    MutationOperator op = new MutationOperator(conf);
     assertTrue(isSerializable(op));
   }
 
   /**
-   * Ensures that operator and all objects contained implement Serializable
+   * Ensures that operator and all objects contained implement Serializable.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -499,8 +520,8 @@ public class MutationOperatorTest
   public void testDoSerialize_0()
       throws Exception {
     // construct object to be serialized
-    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
-    MutationOperator op = new MutationOperator(calc);
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(conf);
+    MutationOperator op = new MutationOperator(conf, calc);
     Object o = doSerialize(op);
     assertEquals(o, op);
   }
@@ -523,26 +544,29 @@ public class MutationOperatorTest
    */
   public void testEquals_0()
       throws Exception {
-    GeneticOperator op = new MutationOperator();
-    assertFalse(op.equals(new Chromosome()));
+    GeneticOperator op = new MutationOperator(conf);
+    assertFalse(op.equals(new Chromosome(conf)));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testCompareTo_0() {
-    MutationOperator op = new MutationOperator();
+  public void testCompareTo_0()
+      throws Exception {
+    MutationOperator op = new MutationOperator(conf);
     assertEquals(1, op.compareTo(null));
-    MutationOperator op2 = new MutationOperator();
+    MutationOperator op2 = new MutationOperator(conf);
     assertEquals(0, op.compareTo(op2));
-    op = new MutationOperator(3);
+    op = new MutationOperator(conf, 3);
     assertEquals( -1, op.compareTo(op2));
     assertEquals(1, op2.compareTo(op));
-    op = new MutationOperator(new DefaultMutationRateCalculator());
+    op = new MutationOperator(conf, new DefaultMutationRateCalculator(conf));
     assertEquals(0, op.compareTo(op2));
-    op = new MutationOperator(3);
-    op2 = new MutationOperator(4);
+    op = new MutationOperator(conf, 3);
+    op2 = new MutationOperator(conf, 4);
     assertEquals( -1, op.compareTo(op2));
     assertEquals(1, op2.compareTo(op));
   }

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -59,24 +59,25 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testAddGeneticOperator_2()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     assertEquals(1, conf.getGeneticOperators().size());
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     assertEquals(2, conf.getGeneticOperators().size());
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_0()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
@@ -90,16 +91,16 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_1()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
     try {
       conf.verifyStateIsValid();
       fail();
@@ -110,17 +111,17 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_2()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), false);
     try {
       conf.verifyStateIsValid();
       fail();
@@ -131,17 +132,17 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_3()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     conf.setRandomGenerator(new StockRandomGenerator());
     try {
       conf.verifyStateIsValid();
@@ -153,17 +154,17 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_4()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), false);
     conf.setRandomGenerator(new StockRandomGenerator());
     conf.setEventManager(new EventManager());
     try {
@@ -176,20 +177,20 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_5()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     conf.setRandomGenerator(new StockRandomGenerator());
     conf.setEventManager(new EventManager());
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     try {
       conf.verifyStateIsValid();
       fail();
@@ -200,40 +201,40 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_6()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     conf.setRandomGenerator(new StockRandomGenerator());
     conf.setEventManager(new EventManager());
     conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     conf.setPopulationSize(1);
     conf.verifyStateIsValid();
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_7()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     conf.setRandomGenerator(new StockRandomGenerator());
     conf.setEventManager(new EventManager());
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     conf.setPopulationSize(1);
     try {
       conf.verifyStateIsValid();
@@ -245,16 +246,17 @@ public class ConfigurationTest
   }
 
   /**
-   * Configuration with sample chromosome that has no genes
-   * @throws InvalidConfigurationException
+   * Configuration with sample chromosome that contains no genes.
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void testVerifyStateIsValid_8()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Chromosome sample = new Chromosome();
+    Chromosome sample = new Chromosome(conf);
     conf.setSampleChromosome(sample);
     conf.setPopulationSize(5);
     try {
@@ -267,39 +269,42 @@ public class ConfigurationTest
   }
 
   /**
-   * Configuration with sample chromosome that has a gene with allele value null
-   * @throws InvalidConfigurationException
+   * Configuration with sample chromosome that has a gene with allele value
+   * null.
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void testVerifyStateIsValid_9()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    BooleanGene gene = new BooleanGene();
+    BooleanGene gene = new BooleanGene(conf);
     gene.setAllele(null);
-    Chromosome sample = new Chromosome(gene, 55);
+    Chromosome sample = new Chromosome(conf, gene, 55);
     conf.setSampleChromosome(sample);
     conf.setPopulationSize(5);
     conf.verifyStateIsValid();
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testIsLocked_0()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     conf.setFitnessFunction(new StaticFitnessFunction(2));
     conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
-    Gene gene = new BooleanGene();
-    conf.setSampleChromosome(new Chromosome(gene, 5));
-    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), false);
     conf.setRandomGenerator(new StockRandomGenerator());
     conf.setEventManager(new EventManager());
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     conf.setPopulationSize(1);
     assertEquals(false, conf.isLocked());
     conf.lockSettings();
@@ -307,17 +312,18 @@ public class ConfigurationTest
   }
 
   /**
-   * @throws InvalidConfigurationException
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGetter_0()
-      throws InvalidConfigurationException {
+      throws Exception {
     Configuration conf = new Configuration();
     assertEquals(false, conf.isLocked());
     FitnessFunction fitFunc = new StaticFitnessFunction(2);
     conf.setFitnessFunction(fitFunc);
-    Gene gene = new BooleanGene();
-    Chromosome sample = new Chromosome(gene, 55);
+    Gene gene = new BooleanGene(conf);
+    Chromosome sample = new Chromosome(conf, gene, 55);
     conf.setSampleChromosome(sample);
     NaturalSelector natSel = new WeightedRouletteSelector();
     conf.addNaturalSelector(natSel, false);
@@ -325,9 +331,9 @@ public class ConfigurationTest
     conf.setRandomGenerator(randGen);
     IEventManager evMan = new EventManager();
     conf.setEventManager(evMan);
-    GeneticOperator mutOp = new MutationOperator();
+    GeneticOperator mutOp = new MutationOperator(conf);
     conf.addGeneticOperator(mutOp);
-    GeneticOperator croOp = new CrossoverOperator();
+    GeneticOperator croOp = new CrossoverOperator(conf);
     conf.addGeneticOperator(croOp);
     conf.setPopulationSize(7);
     assertEquals(fitFunc, conf.getFitnessFunction());
@@ -371,7 +377,7 @@ public class ConfigurationTest
   public void testGetNaturalSelector_1()
       throws Exception {
     Configuration conf = new Configuration();
-    NaturalSelector selector = new BestChromosomesSelector();
+    NaturalSelector selector = new BestChromosomesSelector(conf);
     conf.addNaturalSelector(selector, false);
     assertEquals(selector, conf.getNaturalSelector());
   }
@@ -417,7 +423,7 @@ public class ConfigurationTest
   public void testGetNaturalSelector_4()
       throws Exception {
     Configuration conf = new Configuration();
-    NaturalSelector selector = new BestChromosomesSelector();
+    NaturalSelector selector = new BestChromosomesSelector(conf);
     conf.addNaturalSelector(selector, false);
     assertEquals(selector, conf.getNaturalSelector(false, 0));
   }
@@ -694,14 +700,14 @@ public class ConfigurationTest
       throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene gene = new BooleanGene();
-    Chromosome sample = new Chromosome(gene, 55);
+    Gene gene = new BooleanGene(conf);
+    Chromosome sample = new Chromosome(conf, gene, 55);
     conf.setSampleChromosome(sample);
-    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), false);
     conf.setRandomGenerator(new GaussianRandomGenerator());
     conf.setEventManager(new EventManager());
     conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
-    conf.addGeneticOperator(new MutationOperator());
+    conf.addGeneticOperator(new MutationOperator(conf));
     conf.setPopulationSize(1);
     conf.lockSettings();
     assertEquals(true, conf.isLocked());
@@ -721,8 +727,8 @@ public class ConfigurationTest
   public void testSetSampleChromosome_0()
       throws Exception {
     Configuration conf = new Configuration();
-    Gene gene = new BooleanGene();
-    new Chromosome(gene, 55);
+    Gene gene = new BooleanGene(conf);
+    new Chromosome(conf, gene, 55);
     try {
       conf.setSampleChromosome(null);
       fail();
@@ -739,9 +745,9 @@ public class ConfigurationTest
   public void testGetChromosomeSize_0()
       throws Exception {
     Configuration conf = new Configuration();
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     final int SIZE = 55;
-    Chromosome sample = new Chromosome(gene, SIZE);
+    Chromosome sample = new Chromosome(conf, gene, SIZE);
     conf.setSampleChromosome(sample);
     assertEquals(SIZE, conf.getChromosomeSize());
   }
@@ -756,10 +762,10 @@ public class ConfigurationTest
   public void testToString_0()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-    conf.addGeneticOperator(new MutationOperator());
-    conf.addNaturalSelector(new WeightedRouletteSelector(), true);
-    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
-    conf.addNaturalSelector(new BestChromosomesSelector(), false);
+    conf.addGeneticOperator(new MutationOperator(conf));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), false);
+    conf.addNaturalSelector(new BestChromosomesSelector(conf), false);
     String s = trimString(conf.toString());
     String eventmgr = conf.getEventManager() != null ?
         conf.getEventManager().getClass().getName() : conf.S_NONE;
@@ -856,7 +862,7 @@ public class ConfigurationTest
     conf.getGeneticOperators().clear();
     conf.getNaturalSelectors(false).clear();
     conf.getNaturalSelectors(true).clear();
-    privateAccessor.setField(conf,"m_eventManager",null);
+    privateAccessor.setField(conf, "m_eventManager", null);
     String s = trimString(conf.toString());
     String eventmgr = conf.S_NONE;
     String genops = conf.S_NONE;
@@ -901,6 +907,7 @@ public class ConfigurationTest
                             + natselsPost + " "
                             ), s);
   }
+
   /**
    *
    * @param s1 String

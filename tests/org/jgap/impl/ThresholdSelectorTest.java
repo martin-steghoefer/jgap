@@ -10,14 +10,12 @@
 package org.jgap.impl;
 
 import java.util.*;
-
 import org.jgap.*;
-
 import junit.framework.*;
 import junitx.util.*;
 
 /**
- * Tests for ThresholdSelector class.
+ * Tests the ThresholdSelector class.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -25,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -35,7 +33,7 @@ public class ThresholdSelectorTest
   public void testConstruct_0()
       throws Exception {
     try {
-      new ThresholdSelector(1.1d);
+      new ThresholdSelector(null, 1.1d);
       fail();
     }
     catch (IllegalArgumentException ex) {
@@ -46,7 +44,7 @@ public class ThresholdSelectorTest
   public void testConstruct_1()
       throws Exception {
     try {
-      new ThresholdSelector( -0.5d);
+      new ThresholdSelector(null, -0.5d);
       fail();
     }
     catch (IllegalArgumentException ex) {
@@ -56,9 +54,9 @@ public class ThresholdSelectorTest
 
   public void testConstruct_2()
       throws Exception {
-    ThresholdSelector selector = new ThresholdSelector(0.5d);
+    ThresholdSelector selector = new ThresholdSelector(null, 0.5d);
     Double m_bestChroms_Percentage = (Double) getNestedField(selector,
-        "m_config","m_bestChroms_Percentage");
+        "m_config", "m_bestChroms_Percentage");
     assertEquals(0.5d, m_bestChroms_Percentage.doubleValue(), DELTA);
     assertFalse(selector.returnsUniqueChromosomes());
     Object m_fitnessValueComparator = privateAccessor.getField(selector,
@@ -73,11 +71,10 @@ public class ThresholdSelectorTest
    */
   public void testAdd_0()
       throws Exception {
-    ThresholdSelector selector = new ThresholdSelector(0.5d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    ThresholdSelector selector = new ThresholdSelector(conf, 0.5d);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
     List chromosomes = ( (Vector) PrivateAccessor.getField(selector,
         "m_chromosomes"));
@@ -100,19 +97,18 @@ public class ThresholdSelectorTest
   public void testSelect_0()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    ThresholdSelector selector = new ThresholdSelector(0.3d);
-    Gene gene = new IntegerGene();
+    ThresholdSelector selector = new ThresholdSelector(conf, 0.3d);
+    Gene gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 3);
     secondBestChrom.setFitnessValue(11);
     selector.add(secondBestChrom);
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
-    selector.select(1, null, new Population());
+    selector.select(1, null, new Population(conf));
   }
 
   /**
@@ -123,32 +119,31 @@ public class ThresholdSelectorTest
   public void testSelect_1()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // add third chromosome
     // ---------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 3);
     secondBestChrom.setFitnessValue(11);
     selector.add(secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -174,25 +169,24 @@ public class ThresholdSelectorTest
   public void testSelect_2()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -222,25 +216,24 @@ public class ThresholdSelectorTest
     //1 because the best chromosome will be index 0 and the other one has
     // index 1.
     conf.setRandomGenerator(new RandomGeneratorForTest(1));
-    Genotype.setConfiguration(conf);
-    ThresholdSelector selector = new ThresholdSelector(0.0d);
+    ThresholdSelector selector = new ThresholdSelector(conf, 0.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertFalse(bestChroms[0].equals(bestChrom));
@@ -256,25 +249,24 @@ public class ThresholdSelectorTest
   public void testSelect_4()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 30 chromosomes.
     // ---------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(30, null, pop);
     Population bestChroms = pop;
     List chromosomes = (Vector) PrivateAccessor.getField(selector,
@@ -293,25 +285,24 @@ public class ThresholdSelectorTest
   public void testSelect_5()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -333,11 +324,10 @@ public class ThresholdSelectorTest
    */
   public void testEmpty_0()
       throws Exception {
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
     selector.empty();
     Boolean needsSorting = (Boolean) PrivateAccessor.getField(selector,
@@ -357,15 +347,14 @@ public class ThresholdSelectorTest
    */
   public void testEmpty_1()
       throws Exception {
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
-    Population pop = new Population(1);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
+    Population pop = new Population(conf, 1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     selector.empty();
     assertEquals(1, popNew.size());
@@ -381,15 +370,14 @@ public class ThresholdSelectorTest
    */
   public void testEmpty_2()
       throws Exception {
-    ThresholdSelector selector = new ThresholdSelector(1.0d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
-    Population pop = new Population(1);
+    ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
+    Population pop = new Population(conf, 1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     pop = popNew;
     selector.empty();

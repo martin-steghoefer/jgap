@@ -26,7 +26,7 @@ import org.jgap.impl.*;
 class SupergeneTest
     extends AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -46,6 +46,7 @@ class SupergeneTest
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
+    setConfiguration(conf);
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
@@ -68,12 +69,12 @@ class SupergeneTest
     Gene[] sampleGenes = new Gene[3];
     sampleGenes[DIMES] = getDimesGene();
     sampleGenes[QUARTERS] = getQuartersGene();
-    sampleGenes[2] = new NickelsPenniesSupergene(
+    sampleGenes[2] = new NickelsPenniesSupergene(conf,
         new Gene[] {
         getNickelsGene(),
         getPenniesGene(),
     });
-    int s = solve(a_targetChangeAmount, conf, fitnessFunction, sampleGenes);
+    int s = solve(a_targetChangeAmount, fitnessFunction, sampleGenes);
     return s;
   }
 

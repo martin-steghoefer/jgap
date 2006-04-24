@@ -10,6 +10,7 @@
 package org.jgap.xml;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -32,7 +33,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -352,8 +353,9 @@ public class XMLManager {
           thisGeneElement.getAttribute(CLASS_ATTRIBUTE);
       Gene thisGeneObject;
       try {
-        thisGeneObject =
-            (Gene) Class.forName(geneClassName).newInstance();
+        Class geneClass = Class.forName(geneClassName);
+        Constructor constr = geneClass.getConstructor(new Class[] {Configuration.class});
+        thisGeneObject = (Gene) constr.newInstance(new Object[] {a_activeConfiguration});
       }
       catch (Exception e) {
         throw new GeneCreationException(e.getMessage());

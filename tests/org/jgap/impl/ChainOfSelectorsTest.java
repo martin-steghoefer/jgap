@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for ChainOfSelectors class
+ * Tests the ChainOfSelectors class.
  *
  * @since 1.1
  * @author Klaus Meffert
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChainOfSelectorsTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);
@@ -58,7 +58,7 @@ public class ChainOfSelectorsTest
       throws Exception {
     ChainOfSelectors c = new ChainOfSelectors();
     assertEquals(0, c.size());
-    c.addNaturalSelector(new BestChromosomesSelector());
+    c.addNaturalSelector(new BestChromosomesSelector(conf));
     assertEquals(1, c.size());
     assertFalse(c.isEmpty());
     c.clear();
@@ -75,8 +75,8 @@ public class ChainOfSelectorsTest
       throws Exception {
     ChainOfSelectors c = new ChainOfSelectors();
     Collection l = new Vector();
-    l.add(new BestChromosomesSelector());
-    l.add(new WeightedRouletteSelector());
+    l.add(new BestChromosomesSelector(conf));
+    l.add(new WeightedRouletteSelector(conf));
     c.addAll(l);
     assertEquals(2, c.size());
     c.clear();
@@ -94,8 +94,8 @@ public class ChainOfSelectorsTest
       throws Exception {
     ChainOfSelectors c = new ChainOfSelectors();
     Collection l = new Vector();
-    l.add(new BestChromosomesSelector());
-    l.add(new WeightedRouletteSelector());
+    l.add(new BestChromosomesSelector(conf));
+    l.add(new WeightedRouletteSelector(conf));
     c.addAll(l);
     Iterator it = c.iterator();
     assertTrue(it.hasNext());
@@ -151,7 +151,7 @@ public class ChainOfSelectorsTest
   public void testEquals_1()
       throws Exception {
     ChainOfSelectors c1 = new ChainOfSelectors();
-    assertFalse(c1.equals(new BooleanGene()));
+    assertFalse(c1.equals(new BooleanGene(conf)));
   }
 
   /**
@@ -165,10 +165,10 @@ public class ChainOfSelectorsTest
     ChainOfSelectors c1 = new ChainOfSelectors();
     ChainOfSelectors c2 = new ChainOfSelectors();
     assertEquals(c1.hashCode(), c2.hashCode());
-    c1.addNaturalSelector(new BestChromosomesSelector());
+    c1.addNaturalSelector(new BestChromosomesSelector(conf));
     assertFalse(c1.hashCode() == c2.hashCode());
     assertEquals(c1.hashCode(), c1.hashCode());
-    c2.addNaturalSelector(new BestChromosomesSelector());
+    c2.addNaturalSelector(new BestChromosomesSelector(conf));
     assertFalse(c1.hashCode() == c2.hashCode());
   }
 }

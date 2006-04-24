@@ -15,7 +15,7 @@ import junit.framework.*;
 public class PermutingConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public void setUp() {
     super.setUp();
@@ -82,11 +82,11 @@ public class PermutingConfigurationTest
     conf.addRandomGeneratorSlot(new StockRandomGenerator());
     conf.addRandomGeneratorSlot(new GaussianRandomGenerator());
     // 3 possible combinations (multiple NaturalSelector's possible)
-    conf.addNaturalSelectorSlot(new BestChromosomesSelector());
-    conf.addNaturalSelectorSlot(new WeightedRouletteSelector());
+    conf.addNaturalSelectorSlot(new BestChromosomesSelector(conf));
+    conf.addNaturalSelectorSlot(new WeightedRouletteSelector(conf));
     // 3 possible combinations (multiple GeneticOperator's possible)
-    conf.addGeneticOperatorSlot(new MutationOperator());
-    conf.addGeneticOperatorSlot(new CrossoverOperator());
+    conf.addGeneticOperatorSlot(new MutationOperator(conf));
+    conf.addGeneticOperatorSlot(new CrossoverOperator(conf));
     // 1 possible combinations
     conf.addFitnessFunctionSlot(new StaticFitnessFunction(0.5d));
     assertTrue(conf.hasNext());
@@ -126,8 +126,8 @@ public class PermutingConfigurationTest
     assertFalse(conf.hasNext());
     conf.addFitnessFunctionSlot(new StaticFitnessFunction(0.5d));
     conf.addRandomGeneratorSlot(new StockRandomGenerator());
-    conf.addNaturalSelectorSlot(new BestChromosomesSelector());
-    conf.addGeneticOperatorSlot(new MutationOperator());
+    conf.addNaturalSelectorSlot(new BestChromosomesSelector(conf));
+    conf.addGeneticOperatorSlot(new MutationOperator(conf));
     assertTrue(conf.hasNext());
     Configuration c = conf.next();
     assertNull(c.getChromosomePool());

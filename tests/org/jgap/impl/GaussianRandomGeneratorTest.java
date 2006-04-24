@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for GaussianRandomGenerator class
+ * Tests the GaussianRandomGenerator class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class GaussianRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianRandomGeneratorTest.class);
@@ -73,8 +73,8 @@ public class GaussianRandomGeneratorTest
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGetGaussianStdDeviation_0()
@@ -89,8 +89,8 @@ public class GaussianRandomGeneratorTest
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testNextInt_0()

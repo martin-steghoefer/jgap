@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests the Population class
+ * Tests the Population class.
  *
  * @author Klaus Meffert
  * @author Chris Knowles
@@ -23,16 +23,17 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
     return suite;
   }
 
-  public void testConstruct_0() {
+  public void testConstruct_0()
+      throws Exception {
     try {
-      new Population(null);
+      new Population(new ConfigurationForTest(), null);
       fail();
     }
     catch (NullPointerException e) {
@@ -40,60 +41,68 @@ public class PopulationTest
     }
   }
 
-  public void testConstruct_1() {
+  public void testConstruct_1()
+      throws Exception {
     try {
-      new Population( -1);
+      new Population(conf, -1);
     }
     catch (IllegalArgumentException iae) {
       ; //this is ok
     }
   }
 
-  public void testConstruct_3() {
+  public void testConstruct_3()
+      throws Exception {
     int nTot = 100;
     Chromosome[] chromosomes = new Chromosome[nTot];
-    Population pop = new Population(chromosomes);
+    Population pop = new Population(conf, chromosomes);
     assertNotNull(pop);
     //check size is correct
     assertEquals(nTot, pop.size());
   }
 
-  public void testAddChromosome_0() {
-    Gene g = new IntegerGene();
-    Chromosome c = new Chromosome(g, 29);
+  public void testAddChromosome_0()
+      throws Exception {
+    Gene g = new IntegerGene(conf);
+    Chromosome c = new Chromosome(conf, g, 29);
     c.setFitnessValue(45);
-    Population p = new Population();
+    Population p = new Population(conf);
     p.addChromosome(c);
     assertEquals(1, p.size());
   }
 
-  public void testAddChromosome_1() {
-    Population p = new Population();
+  public void testAddChromosome_1()
+      throws Exception {
+    Population p = new Population(conf);
     p.addChromosome(null);
     assertEquals(0, p.size());
   }
 
-  public void testAddChromosomes_0() {
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
+  public void testAddChromosomes_0()
+      throws Exception {
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 10);
     c.setFitnessValue(45);
-    Population p1 = new Population();
+    Population p1 = new Population(conf);
     p1.addChromosome(c);
-    Population p2 = new Population();
+    Population p2 = new Population(conf);
     p2.addChromosomes(p1);
     assertEquals(p1.size(), p2.size());
   }
 
-  public void testAddChromosomes_1() {
-    Population p = new Population();
+  public void testAddChromosomes_1()
+      throws Exception {
+    Population p = new Population(conf);
     p.addChromosomes(null);
     assertEquals(0, p.size());
   }
 
-  public void testSetChromosome_0() {
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
-    Population p = new Population();
+  public void testSetChromosome_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 10);
+    Population p = new Population(conf);
     p.setChromosome(0, c);
     p.setChromosome(0, c);
     assertEquals(1, p.size());
@@ -106,93 +115,101 @@ public class PopulationTest
     }
   }
 
-  public void testSetChromosome_1() {
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
-    Population p = new Population();
+  public void testSetChromosome_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 10);
+    Population p = new Population(conf);
     p.addChromosome(c);
-    Chromosome c2 = new Chromosome(g, 20);
+    Chromosome c2 = new Chromosome(conf, g, 20);
     p.setChromosome(0, c2);
     assertEquals(1, p.size());
     assertEquals(p.getChromosome(0), c2);
     assertFalse(c.equals(c2));
   }
 
-  public void testSetChromosomes_0() {
+  public void testSetChromosomes_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
     int nTot = 200;
     for (int i = 0; i < nTot; i++) {
-      g = new DoubleGene();
-      c = new Chromosome(g, 10);
+      g = new DoubleGene(conf);
+      c = new Chromosome(conf, g, 10);
       chromosomes.add(c);
     }
-    Population p = new Population();
+    Population p = new Population(conf);
     p.setChromosomes(chromosomes);
     assertEquals(nTot, p.size());
   }
 
-  public void testGetChromosomes_0() {
+  public void testGetChromosomes_0()
+      throws Exception {
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
     int nTot = 200;
     for (int i = 0; i < nTot; i++) {
-      g = new DoubleGene();
-      c = new Chromosome(g, 10);
+      g = new DoubleGene(conf);
+      c = new Chromosome(conf, g, 10);
       chromosomes.add(c);
     }
-    Population p = new Population();
+    Population p = new Population(conf);
     p.setChromosomes(chromosomes);
     assertEquals(chromosomes, p.getChromosomes());
   }
 
-  public void testGetChromosome_0() {
+  public void testGetChromosome_0()
+      throws Exception {
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
     Chromosome thechosenone = null;
     int nTot = 200;
     for (int i = 0; i < nTot; i++) {
-      g = new DoubleGene();
-      c = new Chromosome(g, 10);
+      g = new DoubleGene(conf);
+      c = new Chromosome(conf, g, 10);
       chromosomes.add(c);
       if (i == 100) {
         thechosenone = c;
       }
     }
-    Population p = new Population();
+    Population p = new Population(conf);
     p.setChromosomes(chromosomes);
     assertEquals(thechosenone, p.getChromosome(100));
   }
 
-  public void testToChromosomes_0() {
+  public void testToChromosomes_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
     int nTot = 200;
     for (int i = 0; i < nTot; i++) {
-      g = new DoubleGene();
-      c = new Chromosome(g, 10);
-      c.getGene(0).setAllele( new Double( i ) );
+      g = new DoubleGene(conf);
+      c = new Chromosome(conf, g, 10);
+      c.getGene(0).setAllele(new Double(i));
       chromosomes.add(c);
     }
-    Population p = new Population();
+    Population p = new Population(conf);
     p.setChromosomes(chromosomes);
     IChromosome[] aChrom = p.toChromosomes();
     assertEquals(aChrom.length, chromosomes.size());
     // compare populations with unsorted list of chromosomes
-    Population newPop = new Population(aChrom);
+    Population newPop = new Population(conf, aChrom);
     assertEquals(p, newPop);
     assertEquals(newPop, p);
     // compare list of chromosomes
     Collections.sort(chromosomes);
-    List toChromosomes = Arrays.asList( aChrom );
+    List toChromosomes = Arrays.asList(aChrom);
     Collections.sort(toChromosomes);
     assertEquals(chromosomes, toChromosomes);
     // compare populations with sorted list of chromosomes
-    Population newPop2 = new Population();
+    Population newPop2 = new Population(conf);
     newPop2.setChromosomes(toChromosomes);
     assertEquals(p, newPop2);
     assertEquals(newPop, newPop2);
@@ -209,8 +226,7 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_0()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Population p = new Population();
+    Population p = new Population(conf);
     assertEquals(null, p.determineFittestChromosome());
   }
 
@@ -223,25 +239,25 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_1()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
+    Configuration config = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
-    Population p = new Population();
-    g = new DoubleGene();
-    c = new Chromosome(g, 10);
+    Population p = new Population(config);
+    g = new DoubleGene(conf);
+    c = new Chromosome(config, g, 10);
     c.setFitnessValue(5);
     p.addChromosome(c);
     chromosomes.add(c);
-    c = new Chromosome(g, 3);
+    c = new Chromosome(config, g, 3);
     c.setFitnessValue(19);
     p.addChromosome(c);
     chromosomes.add(c);
-    c = new Chromosome(g, 1);
+    c = new Chromosome(config, g, 1);
     c.setFitnessValue(11);
     p.addChromosome(c);
     chromosomes.add(c);
-    c = new Chromosome(g, 8);
+    c = new Chromosome(config, g, 8);
     c.setFitnessValue(18);
     p.addChromosome(c);
     chromosomes.add(c);
@@ -256,15 +272,15 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_2()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
+    Configuration config = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
-    Population p = new Population();
+    Population p = new Population(config);
     int nTot = 100;
     for (int i = 0; i < nTot; i++) {
-      g = new DoubleGene();
-      c = new Chromosome(g, 10);
+      g = new DoubleGene(conf);
+      c = new Chromosome(config, g, 10);
       c.setFitnessValue(i);
       p.addChromosome(c);
       chromosomes.add(c);
@@ -284,17 +300,16 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_3()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Genotype.getConfiguration().setFitnessEvaluator(
-        new DeltaFitnessEvaluator());
+    Configuration config = new DefaultConfiguration();
+    config.setFitnessEvaluator(new DeltaFitnessEvaluator());
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
-    Population p = new Population();
+    Population p = new Population(config);
     int nTot = 100;
     for (int i = 0; i < nTot; i++) {
-      g = new DoubleGene();
-      c = new Chromosome(g, 10);
+      g = new DoubleGene(conf);
+      c = new Chromosome(config, g, 10);
       c.setFitnessValue(i);
       p.addChromosome(c);
       chromosomes.add(c);
@@ -312,10 +327,9 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_4()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Population p = new Population();
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
+    Population p = new Population(conf);
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 10);
     c.setFitnessValue(22);
     p.addChromosome(c);
     assertEquals(null, p.determineFittestChromosomes(0));
@@ -330,8 +344,8 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosomes_1()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Population p = getNewPopulation();
+    Configuration conf = new DefaultConfiguration();
+    Population p = getNewPopulation(conf);
     assertEquals(1, p.determineFittestChromosomes(1).size());
     assertEquals(1, p.determineFittestChromosomes(1).size());
     assertEquals(3, p.determineFittestChromosomes(3).size());
@@ -351,8 +365,8 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosomes_2()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Population population = getNewPopulation();
+    Configuration conf = new DefaultConfiguration();
+    Population population = getNewPopulation(conf);
     IChromosome topC = population.determineFittestChromosome();
     List top = population.determineFittestChromosomes(1);
     assertEquals(topC, population.determineFittestChromosome());
@@ -372,26 +386,25 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosomes_3()
       throws Exception {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Population population = getNewPopulation();
-    assertTrue( population.isChanged());
+    Configuration conf = new DefaultConfiguration();
+    Population population = getNewPopulation(conf);
+    assertTrue(population.isChanged());
     List top = population.determineFittestChromosomes(1);
     assertEquals(top.get(0), population.determineFittestChromosome());
     top = population.determineFittestChromosomes(2);
     assertEquals(top.get(0), population.determineFittestChromosome());
     top = population.determineFittestChromosomes(3);
     assertEquals(top.get(0), population.determineFittestChromosome());
-
-    population = getNewPopulation();
+    population = getNewPopulation(conf);
     assertEquals(24, population.determineFittestChromosome().getFitnessValue(),
                  DELTA);
     top = population.determineFittestChromosomes(5);
-    assertFalse( population.isChanged());
-    assertEquals(24, ((IChromosome)top.get(0)).getFitnessValue(), DELTA);
-    assertEquals(23, ((IChromosome)top.get(1)).getFitnessValue(), DELTA);
-    assertEquals(23, ((IChromosome)top.get(2)).getFitnessValue(), DELTA);
-    assertEquals(23, ((IChromosome)top.get(3)).getFitnessValue(), DELTA);
-    assertEquals(22, ((IChromosome)top.get(4)).getFitnessValue(), DELTA);
+    assertFalse(population.isChanged());
+    assertEquals(24, ( (IChromosome) top.get(0)).getFitnessValue(), DELTA);
+    assertEquals(23, ( (IChromosome) top.get(1)).getFitnessValue(), DELTA);
+    assertEquals(23, ( (IChromosome) top.get(2)).getFitnessValue(), DELTA);
+    assertEquals(23, ( (IChromosome) top.get(3)).getFitnessValue(), DELTA);
+    assertEquals(22, ( (IChromosome) top.get(4)).getFitnessValue(), DELTA);
     double oldFitness = population.getChromosome(0).getFitnessValue();
     for (int i = 1; i < population.size(); i++) {
       double currFitness = population.getChromosome(i).getFitnessValue();
@@ -400,17 +413,17 @@ public class PopulationTest
     }
   }
 
-  private static Population getNewPopulation()
+  private static Population getNewPopulation(Configuration a_conf)
       throws InvalidConfigurationException {
-    Population population = new Population();
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
+    Population population = new Population(a_conf);
+    Gene g = new DoubleGene(a_conf);
+    Chromosome c = new Chromosome(a_conf, g, 10);
     c.setFitnessValue(22);
     population.addChromosome(c);
-    c = new Chromosome(g, 10);
+    c = new Chromosome(a_conf, g, 10);
     c.setFitnessValue(24);
     population.addChromosome(c);
-    c = new Chromosome(g, 10);
+    c = new Chromosome(a_conf, g, 10);
     c.setFitnessValue(23);
     population.addChromosome(c);
     population.addChromosome(c);
@@ -418,54 +431,64 @@ public class PopulationTest
     return population;
   }
 
-  public void testSize_0() {
-    Population p = new Population(10);
+  public void testSize_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Population p = new Population(conf, 10);
     // size only counts number of "real" chromosomes not placeholders
     assertEquals(0, p.size());
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 5);
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 5);
     p.addChromosome(c);
     assertEquals(1, p.size());
-    c = new Chromosome(g, 3);
+    c = new Chromosome(conf, g, 3);
     p.addChromosome(c);
     assertEquals(2, p.size());
   }
 
-  public void testIterator_0() {
-    Population p = new Population(10);
+  public void testIterator_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Population p = new Population(conf, 10);
     Iterator it = p.iterator();
     assertFalse(it.hasNext());
     // size only counts number of "real" chromosomes not placeholders
     assertEquals(0, p.size());
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 5);
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 5);
     p.addChromosome(c);
     assertTrue(it.hasNext());
   }
 
-  public void testContains_0() {
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
+  public void testContains_0()
+      throws Exception {
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 10);
     c.setFitnessValue(45);
-    Population p1 = new Population();
+    Population p1 = new Population(conf);
     assertFalse(p1.contains(c));
     assertFalse(p1.contains(null));
     p1.addChromosome(c);
     assertTrue(p1.contains(c));
     assertFalse(p1.contains(null));
-    assertFalse(p1.contains(new Chromosome(g, 5)));
+    assertFalse(p1.contains(new Chromosome(conf, g, 5)));
   }
 
   /**
-   * Single chromosome
+   * Single chromosome.
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testGetGenome_0() {
-    Population pop = new Population();
-    Gene g1 = new DoubleGene();
-    Gene g2 = new StringGene();
-    Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
+  public void testGetGenome_0()
+      throws Exception {
+    Population pop = new Population(conf);
+    Gene g1 = new DoubleGene(conf);
+    Gene g2 = new StringGene(conf);
+    Chromosome c1 = new Chromosome(conf, new Gene[] {
+                                   g1, g2
+    });
     pop.addChromosome(c1);
     List genes = pop.getGenome(true);
     assertEquals(2, genes.size());
@@ -478,21 +501,25 @@ public class PopulationTest
   }
 
   /**
-   * Two chromosomes
+   * Two chromosomes.
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testGetGenome_1() {
-    Population pop = new Population();
-    assertTrue( pop.isChanged());
-    Gene g1 = new DoubleGene();
-    Gene g2 = new StringGene();
-    Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
+  public void testGetGenome_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Population pop = new Population(conf);
+    assertTrue(pop.isChanged());
+    Gene g1 = new DoubleGene(conf);
+    Gene g2 = new StringGene(conf);
+    Chromosome c1 = new Chromosome(conf, new Gene[] {g1, g2});
     pop.addChromosome(c1);
-    Gene g3 = new BooleanGene();
-    Gene g4 = new IntegerGene(0, 10);
-    Gene g5 = new FixedBinaryGene(4);
-    Chromosome c2 = new Chromosome(new Gene[] {g3, g4, g5});
+    Gene g3 = new BooleanGene(conf);
+    Gene g4 = new IntegerGene(conf, 0, 10);
+    Gene g5 = new FixedBinaryGene(conf, 4);
+    Chromosome c2 = new Chromosome(conf, new Gene[] {g3, g4, g5});
     pop.addChromosome(c2);
     List genes = pop.getGenome(true);
     assertEquals(5, genes.size());
@@ -511,25 +538,29 @@ public class PopulationTest
   }
 
   /**
-   * CompositeGene
+   * CompositeGene.
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testGetGenome_2() {
-    Population pop = new Population();
-    Gene g1 = new DoubleGene();
-    Gene g2 = new StringGene();
-    Chromosome c1 = new Chromosome(new Gene[] {g1, g2});
+  public void testGetGenome_2()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Population pop = new Population(conf);
+    Gene g1 = new DoubleGene(conf);
+    Gene g2 = new StringGene(conf);
+    Chromosome c1 = new Chromosome(conf, new Gene[] {g1, g2});
     pop.addChromosome(c1);
-    Gene g3 = new BooleanGene();
-    CompositeGene g4 = new CompositeGene();
-    Gene g5 = new FixedBinaryGene(4);
+    Gene g3 = new BooleanGene(conf);
+    CompositeGene g4 = new CompositeGene(conf);
+    Gene g5 = new FixedBinaryGene(conf, 4);
     g4.addGene(g5);
-    Gene g6 = new DoubleGene(1.0d, 4.0d);
+    Gene g6 = new DoubleGene(conf, 1.0d, 4.0d);
     g4.addGene(g6);
-    Chromosome c2 = new Chromosome(new Gene[] {g3, g4});
+    Chromosome c2 = new Chromosome(conf, new Gene[] {g3, g4});
     pop.addChromosome(c2);
-    assertTrue( pop.isChanged());
+    assertTrue(pop.isChanged());
     // resolve CompositeGene with the following call
     List genes = pop.getGenome(true);
     assertEquals(5, genes.size());
@@ -550,12 +581,14 @@ public class PopulationTest
   /**
    * Ensures that the Population class is implementing the Serializable
    * interface.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testIsSerializable_0() {
-    assertTrue(super.isSerializable(new Population()));
+  public void testIsSerializable_0()
+      throws Exception {
+    assertTrue(isSerializable(new Population(conf)));
   }
 
   /**
@@ -569,22 +602,27 @@ public class PopulationTest
       throws Exception {
     // construct genotype to be serialized
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
-    Population pop = new Population(chroms);
-    assertEquals(pop, super.doSerialize(pop));
-    assertTrue( pop.isChanged());
+    chroms[0] = new Chromosome(conf, new Gene[] {
+                               new IntegerGene(conf, 1, 5)
+    });
+    Population pop = new Population(conf, chroms);
+    assertEquals(pop, doSerialize(pop));
+    assertTrue(pop.isChanged());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testRemoveChromosome_0() {
+  public void testRemoveChromosome_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
-    Population pop = new Population(chroms);
+    chroms[0] = new Chromosome(conf, new Gene[] {
+                               new IntegerGene(conf, 1, 5)});
+    Population pop = new Population(conf, chroms);
     assertEquals(chroms[0], pop.removeChromosome(0));
     assertEquals(0, pop.size());
     try {
@@ -598,15 +636,18 @@ public class PopulationTest
 
   /**
    * With illegal index.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testRemoveChromosome_1() {
+  public void testRemoveChromosome_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
-    Population pop = new Population(chroms);
+    chroms[0] = new Chromosome(conf, new Gene[] {
+                               new IntegerGene(conf, 1, 5)});
+    Population pop = new Population(conf, chroms);
     try {
       pop.removeChromosome(1);
       fail();
@@ -618,15 +659,18 @@ public class PopulationTest
 
   /**
    * With illegal index.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testRemoveChromosome_2() {
+  public void testRemoveChromosome_2()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
-    Population pop = new Population(chroms);
+    chroms[0] = new Chromosome(conf, new Gene[] {
+                               new IntegerGene(conf, 1, 5)});
+    Population pop = new Population(conf, chroms);
     try {
       pop.removeChromosome( -1);
       fail();
@@ -644,32 +688,36 @@ public class PopulationTest
    */
   public void testRemoveChromosome_3()
       throws Exception {
+    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new IntegerGene(1, 5)});
-    Population pop = new Population(chroms);
+    chroms[0] = new Chromosome(conf, new Gene[] {
+                               new IntegerGene(conf, 1, 5)});
+    Population pop = new Population(conf, chroms);
     IChromosome c = pop.removeChromosome(0);
     assertEquals(chroms[0], c);
-    assertTrue( pop.isChanged());
+    assertTrue(pop.isChanged());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testSortByFitness_0() {
-    Genotype.setConfiguration(new DefaultConfiguration());
+  public void testSortByFitness_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
     IChromosome[] chroms = new Chromosome[3];
-    chroms[0] = new Chromosome(new Gene[] {
-                               new DoubleGene(1, 5)});
+    chroms[0] = new Chromosome(conf, new Gene[] {
+                               new DoubleGene(conf, 1, 5)});
     chroms[0].setFitnessValueDirectly(45d);
-    chroms[1] = new Chromosome(new Gene[] {
-                               new DoubleGene(1, 5)});
+    chroms[1] = new Chromosome(conf, new Gene[] {
+                               new DoubleGene(conf, 1, 5)});
     chroms[1].setFitnessValueDirectly(41d);
-    chroms[2] = new Chromosome(new Gene[] {
-                               new DoubleGene(1, 5)});
+    chroms[2] = new Chromosome(conf, new Gene[] {
+                               new DoubleGene(conf, 1, 5)});
     chroms[2].setFitnessValueDirectly(47d);
-    Population pop = new Population(chroms);
+    Population pop = new Population(conf, chroms);
     assertTrue(pop.isChanged());
     assertFalse(pop.isSorted());
     pop.sortByFitness();
@@ -684,22 +732,25 @@ public class PopulationTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testSortByFitness_1() {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    Population pop = new Population();
-    Gene g = new DoubleGene();
-    Chromosome c = new Chromosome(g, 10);
+  public void testSortByFitness_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Population pop = new Population(conf);
+    Gene g = new DoubleGene(conf);
+    Chromosome c = new Chromosome(conf, g, 10);
     c.setFitnessValue(4.5d);
     pop.addChromosome(c);
-    g = new DoubleGene();
-    c = new Chromosome(g, 10);
+    g = new DoubleGene(conf);
+    c = new Chromosome(conf, g, 10);
     c.setFitnessValue(4.1d);
     pop.addChromosome(c);
-    g = new DoubleGene();
-    c = new Chromosome(g, 10);
+    g = new DoubleGene(conf);
+    c = new Chromosome(conf, g, 10);
     c.setFitnessValue(4.7d);
     pop.addChromosome(c);
     assertTrue(pop.isChanged());
@@ -716,16 +767,19 @@ public class PopulationTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testCompareTo_0() {
-    Population pop = new Population();
+  public void testCompareTo_0()
+      throws Exception {
+    Population pop = new Population(conf);
     assertEquals(1, pop.compareTo(null));
-    Population pop2 = new Population();
+    Population pop2 = new Population(conf);
     assertEquals(0, pop.compareTo(pop2));
-    pop2.addChromosome(new Chromosome());
-    assertEquals(-1, pop.compareTo(pop2));
+    pop2.addChromosome(new Chromosome(conf));
+    assertEquals( -1, pop.compareTo(pop2));
     assertEquals(1, pop2.compareTo(pop));
   }
 }

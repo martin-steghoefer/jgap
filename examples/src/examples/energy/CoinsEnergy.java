@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class CoinsEnergy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -75,7 +75,7 @@ public class CoinsEnergy {
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    IntegerGene gene = new IntegerGene(0, 3 * 10);
+    IntegerGene gene = new IntegerGene(conf, 0, 3 * 10);
     gene.setConstraintChecker(new EnergyGeneConstraintChecker());
     // Initialize energys of Gene's. Each Gene represents a coin with a
     // specific value, and each coin with different value has a specific
@@ -83,13 +83,13 @@ public class CoinsEnergy {
     // (as in real life!).
     sampleGenes[0] = gene; // Quarters
     sampleGenes[0].setEnergy(20.0d);
-    sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
+    sampleGenes[1] = new IntegerGene(conf, 0, 2 * 10); // Dimes
     sampleGenes[1].setEnergy(10.0d);
-    sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
+    sampleGenes[2] = new IntegerGene(conf, 0, 1 * 10); // Nickels
     sampleGenes[2].setEnergy(11.0d);
-    sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
+    sampleGenes[3] = new IntegerGene(conf, 0, 4 * 10); // Pennies
     sampleGenes[3].setEnergy(7.0d);
-    IChromosome sampleChromosome = new Chromosome(sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
@@ -186,6 +186,8 @@ public class CoinsEnergy {
      * Check if a given allele value is valid for the given gene instance.
      * @param a_gene the gene the given allele is to be validated for
      * @param a_alleleValue the allele value to be validated
+     * @param a_chrom not used yet
+     * @param a_geneIndex not used yet
      * @return true: allele may be set for gene; false: validity check failed
      * @throws RuntimeException if the checker cannot decide whether the given
      * allele is valid or not

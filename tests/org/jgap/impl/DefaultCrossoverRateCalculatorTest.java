@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for DefaultCrossoverRateCalculator class
+ * Tests the DefaultCrossoverRateCalculator class.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultCrossoverRateCalculatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCrossoverRateCalculatorTest.class);
@@ -37,14 +37,13 @@ public class DefaultCrossoverRateCalculatorTest
   public void testCalculateCurrentRate_0()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
-    Gene gene = new IntegerGene(1, 5);
-    Chromosome chrom = new Chromosome(gene, 50);
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(conf);
+    Gene gene = new IntegerGene(conf, 1, 5);
+    Chromosome chrom = new Chromosome(conf, gene, 50);
     conf.setSampleChromosome(chrom);
     int rate = calc.calculateCurrentRate();
     assertEquals(conf.getChromosomeSize(), rate);
-    chrom = new Chromosome(gene, 30);
+    chrom = new Chromosome(conf, gene, 30);
     conf.setSampleChromosome(chrom);
     rate = calc.calculateCurrentRate();
     assertEquals(conf.getChromosomeSize(), rate);
@@ -62,8 +61,7 @@ public class DefaultCrossoverRateCalculatorTest
   public void testCalculateCurrentRate_1()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(conf);
     int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);
   }
@@ -73,7 +71,7 @@ public class DefaultCrossoverRateCalculatorTest
    * @since 2.2
    */
   public void testToBePermutated_0() {
-    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator();
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(null);
     assertTrue(calc.toBePermutated(null, 0));
   }
 }

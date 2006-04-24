@@ -22,48 +22,40 @@ import org.w3c.dom.*;
  * @since 2.0
  */
 public class TestXML {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public static void main(String[] args) {
     try {
       Configuration activeConfiguration = new DefaultConfiguration();
-
       activeConfiguration.setSampleChromosome(
-          new Chromosome(new BooleanGene(), 8));
+          new Chromosome(activeConfiguration,
+                         new BooleanGene(activeConfiguration), 8));
       activeConfiguration.setPopulationSize(10);
       activeConfiguration.setFitnessFunction(new MaxFunction());
-      Genotype.setConfiguration(activeConfiguration);
+//      Genotype.setConfiguration(activeConfiguration);
 
       // Test Chromsome manipulation methods.
       // ------------------------------------
-      IChromosome chromosome =
-          Chromosome.randomInitialChromosome();
-
+      IChromosome chromosome = Chromosome.randomInitialChromosome(
+          activeConfiguration);
       Document chromosomeDoc =
           XMLManager.representChromosomeAsDocument(chromosome);
-
       IChromosome chromosomeFromXML =
           XMLManager.getChromosomeFromDocument(activeConfiguration,
                                                chromosomeDoc);
-
       if (! (chromosomeFromXML.equals(chromosome))) {
         System.out.println("Chromosome test failed.");
         System.exit( -1);
       }
-
       // Test Genotype manipulation methods.
       // -----------------------------------
       Genotype genotype =
           Genotype.randomInitialGenotype(activeConfiguration);
-
       Document genotypeDoc =
           XMLManager.representGenotypeAsDocument(genotype);
-
       Genotype genotypeFromXML =
           XMLManager.getGenotypeFromDocument(activeConfiguration, genotypeDoc);
-
       if (! (genotypeFromXML.equals(genotype))) {
         System.out.println("Genotype test failed.");
         System.exit( -1);
@@ -73,7 +65,6 @@ public class TestXML {
       System.out.println("Test failed due to error:");
       e.printStackTrace();
     }
-
     System.out.println("Tests successful.");
   }
 }

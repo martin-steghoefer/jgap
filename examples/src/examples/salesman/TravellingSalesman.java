@@ -59,7 +59,7 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
@@ -75,24 +75,29 @@ public class TravellingSalesman
    * @since 2.0
    */
   public IChromosome createSampleChromosome(Object a_initial_data) {
-    Gene[] genes = new Gene[CITIES];
-    for (int i = 0; i < genes.length; i++) {
-      genes[i] = new IntegerGene(0, CITIES - 1);
-      genes[i].setAllele(new Integer(i));
+    try {
+      Gene[] genes = new Gene[CITIES];
+      for (int i = 0; i < genes.length; i++) {
+        genes[i] = new IntegerGene(getConfiguration(), 0, CITIES - 1);
+        genes[i].setAllele(new Integer(i));
+      }
+      IChromosome sample = new Chromosome(getConfiguration(), genes);
+      System.out.println("Optimal way " + sample);
+      System.out.println("Score " +
+                         (Integer.MAX_VALUE / 2 -
+                          getConfiguration().getFitnessFunction()
+                          .getFitnessValue(sample)));
+      shuffle(genes);
+      System.out.println("Sample chromosome " + sample);
+      System.out.println("Score " +
+                         (Integer.MAX_VALUE / 2 -
+                          getConfiguration().getFitnessFunction()
+                          .getFitnessValue(sample)));
+      return sample;
     }
-    IChromosome sample = new Chromosome(genes);
-    System.out.println("Optimal way " + sample);
-    System.out.println("Score " +
-                       (Integer.MAX_VALUE / 2 -
-                        Genotype.getConfiguration().getFitnessFunction()
-                        .getFitnessValue(sample)));
-    shuffle(genes);
-    System.out.println("Sample chromosome " + sample);
-    System.out.println("Score " +
-                       (Integer.MAX_VALUE / 2 -
-                        Genotype.getConfiguration().getFitnessFunction()
-                        .getFitnessValue(sample)));
-    return sample;
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**

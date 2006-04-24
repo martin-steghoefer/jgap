@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the DoubleGene class
+ * Tests the DoubleGene class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.33 $";
+  private static final String CVS_REVISION = "$Revision: 1.34 $";
 
   public void setUp() {
     super.setUp();
@@ -41,86 +41,112 @@ public class DoubleGeneTest
   public void testConstruct_0()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-//    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene = new DoubleGene(conf, 1.1d, 100.0d);
     //following should be possible without exception
     gene.setAllele(new Double(101.1d));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testConstruct_1() throws Exception {
+  public void testConstruct_1()
+      throws Exception {
     Gene gene = new DoubleGene(conf);
     gene.setAllele(new Double(Double.MAX_VALUE));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testConstruct_2() throws Exception {
+  public void testConstruct_2()
+      throws Exception {
     Gene gene = new DoubleGene(conf);
     gene.setAllele(new Double( - (Double.MAX_VALUE / 2)));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testToString_0() throws Exception {
+  public void testToString_0()
+      throws Exception {
     Gene gene = new DoubleGene(conf, 1.2d, 99.7d);
     gene.setAllele(new Double(47.3d));
     assertEquals("DoubleGene(1.2,99.7)=47.3", gene.toString());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testToString_1() throws Exception {
-    Gene gene = new DoubleGene(conf,  -100.0d, 100.0d);
+  public void testToString_1()
+      throws Exception {
+    Gene gene = new DoubleGene(conf, -100.0d, 100.0d);
     gene.setAllele(new Double( -88.75286d));
     assertEquals("DoubleGene(-100.0,100.0)=-88.75286", gene.toString());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testToString_2() throws Exception {
+  public void testToString_2()
+      throws Exception {
     Gene gene = new DoubleGene(conf, 1.2d, 99.7d);
     assertEquals("DoubleGene(1.2,99.7)=null", gene.toString());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testGetAllele_0() throws Exception {
+  public void testGetAllele_0()
+      throws Exception {
     Gene gene = new DoubleGene(conf, 1.9d, 100.4d);
     gene.setAllele(new Double(33.0d));
     assertEquals(new Double(33.0d), gene.getAllele());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testGetAllele_1() throws Exception {
+  public void testGetAllele_1()
+      throws Exception {
     Gene gene = new DoubleGene(conf, 1.8d, 100.1d);
     gene.setAllele(new Double(1.9d));
     assertEquals(new Double(1.9d), gene.getAllele());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testGetAllele_2() throws Exception {
+  public void testGetAllele_2()
+      throws Exception {
     Gene gene = new DoubleGene(conf, 1.0d, 100.0d);
     gene.setAllele(new Double(100.0d));
     assertEquals(new Double(100.0d), gene.getAllele());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_0() throws Exception {
+  public void testEquals_0()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.1d, 100.2d);
     Gene gene2 = new DoubleGene(conf, 1.1d, 100.2d);
     assertTrue(gene1.equals(gene2));
@@ -128,33 +154,45 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_1() throws Exception {
+  public void testEquals_1()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.9d, 100.4d);
     assertFalse(gene1.equals(null));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_2() throws Exception {
+  public void testEquals_2()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 11.2d, 100.7d);
-    assertFalse(gene1.equals(new BooleanGene()));
+    assertFalse(gene1.equals(new BooleanGene(conf)));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_3() throws Exception {
+  public void testEquals_3()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.0d, 100.7d);
     assertFalse(gene1.equals(new Vector()));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_4() throws Exception {
+  public void testEquals_4()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.2d, 100.3d);
     Gene gene2 = new DoubleGene(conf, 1.2d, 99.5d);
     assertTrue(gene1.equals(gene2));
@@ -162,9 +200,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_5() throws Exception {
+  public void testEquals_5()
+      throws Exception {
     Gene gene1 = new FixedBinaryGene(conf, 5);
     Gene gene2 = new DoubleGene(conf, 1, 99);
     assertFalse(gene1.equals(gene2));
@@ -172,9 +213,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_6() throws Exception {
+  public void testEquals_6()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1, 99);
     Gene gene2 = new BooleanGene(conf);
     assertFalse(gene1.equals(gene2));
@@ -182,9 +226,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testEquals_7() throws Exception {
+  public void testEquals_7()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1, 99);
     Gene gene2 = new IntegerGene(conf);
     assertFalse(gene1.equals(gene2));
@@ -209,18 +256,24 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testDoubleValue_0() throws Exception {
+  public void testDoubleValue_0()
+      throws Exception {
     DoubleGene gene1 = new DoubleGene(conf, 1.0d, 10000.0d);
     gene1.setAllele(new Double(4711.0d));
     assertEquals(4711.0d, gene1.doubleValue(), DELTA);
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testDoubleValue_1() throws Exception {
+  public void testDoubleValue_1()
+      throws Exception {
     DoubleGene gene1 = new DoubleGene(conf, 1.765d, 10000.0d);
     gene1.setAllele(null);
     try {
@@ -234,18 +287,23 @@ public class DoubleGeneTest
 
   /**
    * Set allele to null, no exception should occur.
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
-  public void testSetAllele_0() throws Exception {
+  public void testSetAllele_0()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.0d, 10000.0d);
     gene1.setAllele(null);
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testSetAllele_1() throws Exception {
+  public void testSetAllele_1()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.0d, 10000.0d);
     try {
       gene1.setAllele("22");
@@ -257,9 +315,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testSetAllele_2() throws Exception {
+  public void testSetAllele_2()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.0d, 10000.0d);
     try {
       gene1.setAllele(new Integer(22));
@@ -271,19 +332,21 @@ public class DoubleGeneTest
   }
 
   /**
-   * call setAllele with need of mapping to bounds.
+   * Call setAllele with need of mapping to bounds.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testSetAllele_3() throws Exception {
+  public void testSetAllele_3()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.0d, 1000.0d);
     gene1.setAllele(new Double(2000.0d));
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testNewGene_0()
@@ -316,7 +379,7 @@ public class DoubleGeneTest
     Gene gene1 = new DoubleGene(conf, 2.05d, 7.53d);
     gene1.setAllele(new Double(4.5d));
     String pres1 = gene1.getPersistentRepresentation();
-    Gene gene2 = new DoubleGene();
+    Gene gene2 = new DoubleGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     assertEquals(pres1, pres2);
@@ -420,9 +483,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testCleanup_0() throws Exception {
+  public void testCleanup_0()
+      throws Exception {
     //cleanup should do nothing!
     Gene gene = new DoubleGene(conf, 1.3d, 6.5d);
     Gene copy = gene.newGene();
@@ -431,9 +497,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testSetToRandomValue_0() throws Exception {
+  public void testSetToRandomValue_0()
+      throws Exception {
     Gene gene = new DoubleGene(conf, 1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(0.789d));
@@ -441,17 +510,16 @@ public class DoubleGeneTest
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testSetToRandomValue_1()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Gene gene = new DoubleGene(conf,  -1.3d, 6.5d);
+    Gene gene = new DoubleGene(conf, -1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-    Genotype.setConfiguration(conf);
     gene.setToRandomValue(new RandomGeneratorForTest(0.014));
     assertEquals(new Double(0.014d * (6.5d + 1.3d) - 1.3d), gene.getAllele());
   }
@@ -465,20 +533,20 @@ public class DoubleGeneTest
       throws Exception {
     /**@todo test needed any longer?*/
     Configuration conf = new ConfigurationForTest();
-//    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene = new DoubleGene(conf, -1.3d, -0.5d);
     gene.setAllele(new Double(5.8d));
-//    Configuration conf2 = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-//    Genotype.setConfiguration(conf2);
     gene.setToRandomValue(new RandomGeneratorForTest(0.83d));
     assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testSetToRandomValue_3()throws Exception  {
+  public void testSetToRandomValue_3()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
@@ -489,9 +557,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testSetToRandomValue_4() throws Exception {
+  public void testSetToRandomValue_4()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
@@ -502,9 +573,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testCompareToNative_0() throws Exception {
+  public void testCompareToNative_0()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.3d, 6.5d);
     gene1.setAllele(new Double(5.8d));
     Gene gene2 = new DoubleGene(conf, 5.3d, 6.7d);
@@ -514,9 +588,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testCompareToNative_1() throws Exception {
+  public void testCompareToNative_1()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.3d, 6.5d);
     gene1.setAllele(new Double(5.8d));
     Gene gene2 = new DoubleGene(conf, 5.3d, 6.7d);
@@ -526,9 +603,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testCompareToNative_2() throws Exception {
+  public void testCompareToNative_2()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.3d, 6.5d);
     gene1.setAllele(new Double(5.9d));
     Gene gene2 = new DoubleGene(conf, 5.3d, 6.7d);
@@ -538,9 +618,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testCompareToNative_3() throws Exception {
+  public void testCompareToNative_3()
+      throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.3d, 6.5d);
     gene1.setAllele(new Double(5.9d));
     Gene gene2 = new DoubleGene(conf, 5.3d, 6.7d);
@@ -550,12 +633,15 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testCompareToNative_4() throws Exception {
-    Gene gene1 = new DoubleGene(conf,  -1.3d, 6.5d);
+  public void testCompareToNative_4()
+      throws Exception {
+    Gene gene1 = new DoubleGene(conf, -1.3d, 6.5d);
     gene1.setAllele(new Double(0.0d));
-    Gene gene2 = new DoubleGene(conf,  -5.3d, 6.7d);
+    Gene gene2 = new DoubleGene(conf, -5.3d, 6.7d);
     gene2.setAllele(new Double( -0.0d));
     assertEquals( ( (Double) gene1.getAllele()).compareTo( (Double) gene2.
         getAllele()), gene1.compareTo(gene2));
@@ -563,9 +649,11 @@ public class DoubleGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
-  public void testApplyMutation_0() throws Exception {
+  public void testApplyMutation_0()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 0.0d);
@@ -580,7 +668,6 @@ public class DoubleGeneTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(15.0d));
-//    Genotype.setConfiguration(conf);
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 0.5d);
@@ -646,10 +733,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
-  public void testApplyMutation_6() throws Exception {
+  public void testApplyMutation_6()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(60));
     gene.applyMutation(77, -0.4d);
@@ -657,10 +746,12 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
-  public void testApplyMutation_7() throws Exception {
+  public void testApplyMutation_7()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     try {
       gene.applyMutation(0, -0.4d);
@@ -672,10 +763,13 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testSetConstraintChecker_0() throws Exception {
+  public void testSetConstraintChecker_0()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
@@ -688,10 +782,13 @@ public class DoubleGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testHashCode_0() throws Exception {
+  public void testHashCode_0()
+      throws Exception {
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     assertEquals( -3, gene.hashCode());
   }
@@ -714,20 +811,27 @@ public class DoubleGeneTest
     c2.setAllele(new Double(2));
     assertTrue(c1.hashCode() == c2.hashCode());
   }
+
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_0() throws Exception {
+  public void testSetEnergy_0()
+      throws Exception {
     BaseGene gene = new DoubleGene(conf);
     assertEquals(0.0, gene.getEnergy(), DELTA);
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_1() throws Exception {
+  public void testSetEnergy_1()
+      throws Exception {
     BaseGene gene = new DoubleGene(conf);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);

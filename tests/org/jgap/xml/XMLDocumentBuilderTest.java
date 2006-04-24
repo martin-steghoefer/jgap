@@ -24,7 +24,7 @@ import org.w3c.dom.*;
 public class XMLDocumentBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -42,9 +42,9 @@ public class XMLDocumentBuilderTest
       throws Exception {
     XMLDocumentBuilder doc = new XMLDocumentBuilder();
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
-    Chromosome chrom = new Chromosome(new Gene[] {
-                                      new IntegerGene(1, 5),
-                                      new IntegerGene(1, 10)});
+    Chromosome chrom = new Chromosome(conf, new Gene[] {
+                                      new IntegerGene(conf, 1, 5),
+                                      new IntegerGene(conf, 1, 10)});
     chrom.getGene(0).setAllele(new Integer(1));
     chrom.getGene(1).setAllele(new Integer( -3));
     IDataCreators doc2 = builder.representChromosomeAsDocument(chrom);
@@ -68,9 +68,9 @@ public class XMLDocumentBuilderTest
       throws Exception {
     XMLDocumentBuilder doc = new XMLDocumentBuilder();
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
-    Chromosome chrom = new Chromosome(new Gene[] {
-                                      new IntegerGene(1, 5),
-                                      new IntegerGene(1, 10)});
+    Chromosome chrom = new Chromosome(conf, new Gene[] {
+                                      new IntegerGene(conf, 1, 5),
+                                      new IntegerGene(conf, 1, 10)});
     chrom.getGene(0).setAllele(new Integer(1));
     chrom.getGene(1).setAllele(new Integer( -3));
     IDataCreators doc2 = builder.representChromosomeAsDocument(chrom);

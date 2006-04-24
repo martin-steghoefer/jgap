@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the ChromosomePool class
+ * Tests the ChromosomePool class.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class ChromosomePoolTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomePoolTest.class);
@@ -64,7 +64,7 @@ public class ChromosomePoolTest
   }
 
   /**
-   *
+   * Should be possible without exception.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -76,8 +76,8 @@ public class ChromosomePoolTest
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
     conf.setPopulationSize(5);
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     pool.releaseChromosome(chrom);
   }

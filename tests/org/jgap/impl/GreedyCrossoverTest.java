@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Teste the GreedyCrossover class
+ * Teste the GreedyCrossover class.
  *
  * @author Klaus Meffert
  * @since 2.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.18 $";
+  private static final String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -38,42 +38,41 @@ public class GreedyCrossoverTest
   public void testOperate_0()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     op.setStartOffset(0);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
-    Gene cgene2 = new IntegerGene(1, 10);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(8));
     Gene[] genes1 = new Gene[] {
         cgene1, cgene2};
-    Chromosome chrom1 = new Chromosome(genes1);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
     Gene[] genes2 = new Gene[] {
         cgene2, cgene1};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
+    Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
-    op.operate(new Population(population), chroms);
+    op.operate(new Population(conf, population), chroms);
     assertEquals(5, chroms.size());
     Chromosome target = (Chromosome) chroms.get(4);
     assertEquals(8, ( (Integer) target.getGene(0).getAllele()).intValue());
@@ -82,7 +81,7 @@ public class GreedyCrossoverTest
   }
 
   /**
-   * Same as testOperate_0 except op.setStartOffset(1) instead of 0
+   * Same as testOperate_0 except op.setStartOffset(1) instead of 0.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -91,40 +90,39 @@ public class GreedyCrossoverTest
   public void testOperate_1()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     op.setStartOffset(1);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
-    Gene cgene2 = new IntegerGene(1, 10);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(8));
     Gene[] genes1 = new Gene[] {
         cgene1, cgene2};
-    Chromosome chrom1 = new Chromosome(genes1);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
     Gene[] genes2 = new Gene[] {
         cgene2, cgene1};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
     try {
-      op.operate(new Population(population), chroms);
+      op.operate(new Population(conf, population), chroms);
       fail();
     }
     catch (Error e) {
@@ -133,7 +131,7 @@ public class GreedyCrossoverTest
   }
 
   /**
-   * Test with CompositeGene
+   * Test with CompositeGene.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -142,38 +140,37 @@ public class GreedyCrossoverTest
   public void testOperate_2()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
-    CompositeGene compGene = new CompositeGene();
+    CompositeGene compGene = new CompositeGene(conf);
     compGene.addGene(cgene1);
-    Gene cgene2 = new IntegerGene(1, 10);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(8));
     Gene[] genes1 = new Gene[] {
         cgene1, cgene2};
-    Chromosome chrom1 = new Chromosome(genes1);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
     Gene[] genes2 = new Gene[] {
         cgene1, cgene2, cgene1};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
     try {
-      op.operate(new Population(population), chroms);
+      op.operate(new Population(conf, population), chroms);
       fail();
     }
     catch (Error e) {
@@ -182,7 +179,7 @@ public class GreedyCrossoverTest
   }
 
   /**
-   * Test with CompositeGene and two identical Genes in a Chromosome
+   * Test with CompositeGene and two identical Genes in a Chromosome.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -191,45 +188,44 @@ public class GreedyCrossoverTest
   public void testOperate_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     op.setStartOffset(0);
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
-    CompositeGene compGene = new CompositeGene();
+    CompositeGene compGene = new CompositeGene(conf);
     compGene.addGene(cgene1);
-    Gene cgene2 = new IntegerGene(1, 10);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(8));
     Gene[] genes1 = new Gene[] {
         compGene, cgene1, cgene1};
-    Chromosome chrom1 = new Chromosome(genes1);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
     Gene[] genes2 = new Gene[] {
         compGene, cgene1, cgene1};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
+    Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     try {
-      op.operate(new Population(population), chroms);
+      op.operate(new Population(conf, population), chroms);
       fail();
     }
     catch (Error e) {
@@ -249,8 +245,7 @@ public class GreedyCrossoverTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Genotype.setConfiguration(conf);
-    GreedyCrossover cross = new GreedyCrossover() {
+    GreedyCrossover cross = new GreedyCrossover(conf) {
       /* Computes the distances how it was described in the
          literature example */
       public double distance(Object a_from, Object a_to) {
@@ -290,10 +285,8 @@ public class GreedyCrossoverTest
     };
     cross.ASSERTIONS = true;
     cross.setStartOffset(0);
-    Chromosome a =
-        chromosome(new int[] {1, 2, 3, 4, 5, 0});
-    Chromosome b =
-        chromosome(new int[] {4, 1, 3, 2, 0, 5});
+    Chromosome a = chromosome(new int[] {1, 2, 3, 4, 5, 0});
+    Chromosome b = chromosome(new int[] {4, 1, 3, 2, 0, 5});
     // in the literature example it was 1, 2, 0, 5, 4, 3, but the random
     // choice is involved in the last step. In this implementation
     // the choice is not random and the last two genes are always
@@ -318,48 +311,47 @@ public class GreedyCrossoverTest
   public void testOperate_5()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     conf.addGeneticOperator(op);
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextDouble(0.45d);
     rand.setNextInt(0);
     op.setStartOffset(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
-    Gene cgene1_2 = new IntegerGene(1, 150);
+    Gene cgene1_2 = new IntegerGene(conf, 1, 150);
     cgene1.setAllele(new Integer(99));
     Gene[] genes1 = new Gene[] {
         cgene1, cgene1_2};
-    Chromosome chrom1 = new Chromosome(genes1);
-    Gene cgene2 = new IntegerGene(1, 10);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(9));
-    Gene cgene2_2 = new IntegerGene(1, 10);
+    Gene cgene2_2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(1));
     Gene[] genes2 = new Gene[] {
         cgene2, cgene2_2};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
+    Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     assertEquals(3, chroms.size());
-    Population pop = new Population(population);
+    Population pop = new Population(conf, population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
     assertEquals(3 + 2, chroms.size());
@@ -378,44 +370,43 @@ public class GreedyCrossoverTest
   public void testOperate_6()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     conf.addGeneticOperator(op);
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextDouble(0.45d);
     rand.setNextInt(0);
     op.setStartOffset(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
     Gene[] genes1 = new Gene[] {
         cgene1};
-    Chromosome chrom1 = new Chromosome(genes1);
-    Gene cgene2 = new IntegerGene(1, 10);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(9));
     Gene[] genes2 = new Gene[] {
         cgene2};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
+    Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     assertEquals(3, chroms.size());
-    Population pop = new Population(population);
+    Population pop = new Population(conf, population);
     try {
       op.operate(pop, chroms);
       fail();
@@ -438,18 +429,21 @@ public class GreedyCrossoverTest
       throws Exception {
     IntegerGene[] ig = new IntegerGene[a_genes.length];
     for (int i = 0; i < ig.length; i++) {
-      ig[i] = new IntegerGene(0, 5);
+      ig[i] = new IntegerGene(conf, 0, 5);
       ig[i].setAllele(new Integer(a_genes[i]));
     }
-    return new Chromosome(ig);
+    return new Chromosome(conf, ig);
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testStartoffset_0() {
-    GreedyCrossover op = new GreedyCrossover();
+  public void testStartoffset_0()
+      throws Exception {
+    GreedyCrossover op = new GreedyCrossover(conf);
     assertEquals(1, op.getStartOffset());
     op.setStartOffset(2);
     assertEquals(2, op.getStartOffset());
@@ -468,7 +462,7 @@ public class GreedyCrossoverTest
    */
   public void testIsSerializable_0()
       throws Exception {
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     assertTrue(isSerializable(op));
   }
 
@@ -482,32 +476,35 @@ public class GreedyCrossoverTest
   public void testDoSerialize_0()
       throws Exception {
     // construct object to be serialized
-    GreedyCrossover op = new GreedyCrossover();
+    GreedyCrossover op = new GreedyCrossover(conf);
     GreedyCrossover o = (GreedyCrossover) doSerialize(op);
     assertEquals(o, op);
   }
 
   /**
    * Test equals with classcast object.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void testEquals_0()
       throws Exception {
-    GeneticOperator op = new GreedyCrossover();
-    assertFalse(op.equals(new Chromosome()));
+    GeneticOperator op = new GreedyCrossover(conf);
+    assertFalse(op.equals(new Chromosome(conf)));
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testCompareTo_0() {
-    GreedyCrossover op = new GreedyCrossover();
+  public void testCompareTo_0()
+      throws Exception {
+    GreedyCrossover op = new GreedyCrossover(conf);
     assertEquals(1, op.compareTo(null));
-    GreedyCrossover op2 = new GreedyCrossover();
+    GreedyCrossover op2 = new GreedyCrossover(conf);
     assertEquals(0, op.compareTo(op2));
     op.setStartOffset(2);
     assertEquals( -1, op.compareTo(op2));

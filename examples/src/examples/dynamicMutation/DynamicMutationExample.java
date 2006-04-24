@@ -23,7 +23,7 @@ import org.jgap.impl.*;
  */
 public class DynamicMutationExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -52,7 +52,7 @@ public class DynamicMutationExample {
     // Add custom mutation operator
     conf.getGeneticOperators().clear();
 //    IUniversalRateCalculator mutCalc = new CoinsMutationRateCalc();
-    TwoWayMutationOperator mutOp = new TwoWayMutationOperator(7); //mutCalc);
+    TwoWayMutationOperator mutOp = new TwoWayMutationOperator(conf, 7);
     conf.addGeneticOperator(mutOp);
     conf.addGeneticOperator(new CrossoverOperator());
     conf.setPreservFittestIndividual(!true);
@@ -78,11 +78,11 @@ public class DynamicMutationExample {
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    sampleGenes[0] = new IntegerGene(0, 3 * 10); // Quarters
-    sampleGenes[1] = new IntegerGene(0, 2 * 10); // Dimes
-    sampleGenes[2] = new IntegerGene(0, 1 * 10); // Nickels
-    sampleGenes[3] = new IntegerGene(0, 4 * 10); // Pennies
-    IChromosome sampleChromosome = new Chromosome(sampleGenes);
+    sampleGenes[0] = new IntegerGene(conf, 0, 3 * 10); // Quarters
+    sampleGenes[1] = new IntegerGene(conf, 0, 2 * 10); // Dimes
+    sampleGenes[2] = new IntegerGene(conf, 0, 1 * 10); // Nickels
+    sampleGenes[3] = new IntegerGene(conf, 0, 4 * 10); // Pennies
+    IChromosome sampleChromosome = new Chromosome(null, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -31,7 +31,6 @@ public class IntegerGeneTest
 
   public void testConstruct_0()
       throws Exception {
-    Genotype.setConfiguration(new ConfigurationForTest());
     Gene gene = new IntegerGene(conf, 1, 100);
     //following should be possible without exception
     gene.setAllele(new Integer(101));
@@ -81,7 +80,7 @@ public class IntegerGeneTest
 
   public void testEquals_2() throws Exception{
     Gene gene1 = new IntegerGene(conf, 1, 100);
-    assertFalse(gene1.equals(new BooleanGene()));
+    assertFalse(gene1.equals(new BooleanGene(conf)));
   }
 
   public void testEquals_3() throws Exception{
@@ -105,6 +104,7 @@ public class IntegerGeneTest
 
   /**
    * Uses subclass of IntegerGene.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -119,7 +119,8 @@ public class IntegerGeneTest
   }
 
   /**
-   * Uses subclass of IntegerGene
+   * Uses subclass of IntegerGene.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -135,6 +136,7 @@ public class IntegerGeneTest
 
   /**
    * Compare with application data set and option for comparation activated.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -155,6 +157,7 @@ public class IntegerGeneTest
 
   /**
    * Compare with application data set and option for comparation activated.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -175,6 +178,7 @@ public class IntegerGeneTest
 
   /**
    * Compare with application data set and option for comparation activated.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -203,7 +207,6 @@ public class IntegerGeneTest
       throws Exception {
     Configuration conf = new ConfigurationForTest();
     conf.setRandomGenerator(new RandomGeneratorForTest(5));
-    Genotype.setConfiguration(conf);
     Gene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(8));
     Gene gene2 = new IntegerGene(conf, 1, 99);
@@ -214,6 +217,7 @@ public class IntegerGeneTest
 
   /**
    * Compare with application data set but option for comparation deactivated.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -251,6 +255,7 @@ public class IntegerGeneTest
 
   /**
    * Set Allele to null, no exception should occur.
+   * @throws Exception
    */
   public void testSetAllele_0() throws Exception{
     Gene gene1 = new IntegerGene(conf, 1, 10000);
@@ -297,7 +302,7 @@ public class IntegerGeneTest
     Gene gene1 = new IntegerGene(conf, 2, 753);
     gene1.setAllele(new Integer(45));
     String pres1 = gene1.getPersistentRepresentation();
-    Gene gene2 = new IntegerGene();
+    Gene gene2 = new IntegerGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     assertEquals(pres1, pres2);
@@ -362,6 +367,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -384,6 +391,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -422,6 +431,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -435,6 +446,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -448,6 +461,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -517,6 +532,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -529,6 +546,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -541,6 +560,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -554,6 +575,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -565,6 +588,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -585,7 +610,7 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(conf, 0, 100);
+    IntegerGene gene = new IntegerGene(config, 0, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.5d);
     assertEquals(Math.round(50 + (100 - 0) * 0.5d), gene.intValue());
@@ -601,7 +626,7 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(conf, 44, 100);
+    IntegerGene gene = new IntegerGene(config, 44, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.3d);
     assertEquals(Math.round(50 + (100 - 44) * 0.3d), gene.intValue());
@@ -617,7 +642,7 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(conf, 33, 100);
+    IntegerGene gene = new IntegerGene(config, 33, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 1.9d);
     assertEquals(Math.round(33 + 15), gene.intValue());
@@ -633,7 +658,7 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(conf, 2, 100);
+    IntegerGene gene = new IntegerGene(config, 2, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, 1.9d);
     assertEquals(Math.round(2 + 15), gene.intValue());
@@ -649,13 +674,15 @@ public class IntegerGeneTest
       throws Exception {
     DefaultConfiguration config = new DefaultConfiguration();
     config.setRandomGenerator(new RandomGeneratorForTest(15));
-    IntegerGene gene = new IntegerGene(conf, 0, 100);
+    IntegerGene gene = new IntegerGene(config, 0, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -1.0d);
     assertEquals(Math.round(0 + 15), gene.intValue());
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -667,6 +694,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -679,6 +708,7 @@ public class IntegerGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -693,6 +723,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -734,6 +766,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -748,6 +782,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
@@ -762,7 +798,7 @@ public class IntegerGeneTest
   }
 
   /**
-   * Exposing bug #1357474
+   * Exposing bug #1357474.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -773,8 +809,6 @@ public class IntegerGeneTest
     Configuration conf = new ConfigurationForTest();
     Gene gene = new IntegerGene(conf, 1, 3);
     gene.setAllele(new Integer(4));
-//    Configuration conf = new DefaultConfiguration();
-//    Genotype.setConfiguration(conf);
     gene.setToRandomValue(new RandomGeneratorForTest(0.95d));
     assertEquals(new Integer(3), gene.getAllele());
     gene.setToRandomValue(new RandomGeneratorForTest(0.05d));
@@ -782,6 +816,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -791,6 +827,8 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -831,11 +869,13 @@ public class IntegerGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void testGetBounds_0() throws Exception{
-    IntegerGene gene = new IntegerGene(null, 2,5);
+    IntegerGene gene = new IntegerGene(conf, 2,5);
     assertEquals(2, gene.getLowerBounds());
     assertEquals(5, gene.getUpperBounds());
   }

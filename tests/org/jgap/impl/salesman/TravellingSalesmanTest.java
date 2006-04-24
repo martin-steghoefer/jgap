@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -30,19 +30,32 @@ public class TravellingSalesmanTest
     TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
     return suite;
   }
+
   public void setUp() {
     super.setUp();
     m_testTravellingSalesman = new TravellingSalesmanForTest();
   }
 
-  public void tearDown() throws Exception {
+  public void tearDown()
+      throws Exception {
     m_testTravellingSalesman = null;
     super.tearDown();
   }
 
-  public void testSampleTravellingSalesmanApp() {
-    boolean actualReturn = m_testTravellingSalesman.runTest();
-    assertEquals(true, actualReturn);
+  public void testSampleTravellingSalesmanApp()
+      throws Exception {
+    // With 7 cities, should find the best solution with score 7
+    int oks = 0;
+    for (int i = 0; i < 7; i++) {
+      TravellingSalesmanForTest t = new TravellingSalesmanForTest();
+      IChromosome optimal = t.findOptimalPath(null);
+      if (Integer.MAX_VALUE / 2 - optimal.getFitnessValue() <= 7) {
+        oks++;
+      }
+    }
+    if (oks < 6) {
+      fail("Less than 6 cities computed correctly!");
+    }
   }
 
   /**
@@ -101,27 +114,27 @@ public class TravellingSalesmanTest
      * @return Chromosome
      */
     public IChromosome createSampleChromosome(Object a_initial_data) {
-      Gene[] genes = new Gene[CITIES];
-      for (int i = 0; i < genes.length; i++) {
-        genes[i] = new IntegerGene(0, CITIES - 1);
-        genes[i].setAllele(new Integer(i));
-      }
-
-      IChromosome sample = new Chromosome(genes);
-
+      try {
+        Gene[] genes = new Gene[CITIES];
+        for (int i = 0; i < genes.length; i++) {
+          genes[i] = new IntegerGene(getConfiguration(), 0, CITIES - 1);
+          genes[i].setAllele(new Integer(i));
+        }
+        IChromosome sample = new Chromosome(getConfiguration(), genes);
 //            System.out.println("Optimal way "+sample);
 //            System.out.println("Fitness "+
 //             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
 //              .getFitnessValue(sample)));
-
-      shuffle(genes);
-
+        shuffle(genes);
 //            System.out.println("Sample chromosome "+sample);
 //            System.out.println("Fitness "+
 //             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
 //              .getFitnessValue(sample)));
-
-      return sample;
+        return sample;
+      }
+      catch (InvalidConfigurationException iex) {
+        throw new IllegalStateException(iex.getMessage());
+      }
     }
 
     /** Distance is equal to the difference between city numbers,
@@ -135,17 +148,14 @@ public class TravellingSalesmanTest
     public double distance(Gene a_from, Gene a_to) {
       IntegerGene a = (IntegerGene) a_from;
       IntegerGene b = (IntegerGene) a_to;
-
       int A = a.intValue();
       int B = b.intValue();
-
       if (A == 0 && B == CITIES - 1) {
         return 1;
       }
       if (B == 0 && A == CITIES - 1) {
         return 1;
       }
-
       return Math.abs(A - B);
     }
 
@@ -170,5 +180,4 @@ public class TravellingSalesmanTest
       return false;
     }
   }
-
 }

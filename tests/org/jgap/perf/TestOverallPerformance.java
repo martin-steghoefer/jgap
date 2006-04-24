@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class TestOverallPerformance {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -81,17 +81,17 @@ public class TestOverallPerformance {
     // consumed for test performance test!
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[10];
-    sampleGenes[0] = new IntegerGene(0, 3); // Quarters
-    sampleGenes[1] = new IntegerGene(0, 2); // Dimes
-    sampleGenes[2] = new IntegerGene(0, 1); // Nickels
-    sampleGenes[3] = new IntegerGene(0, 4); // Pennies
-    sampleGenes[4] = new IntegerGene(0, 3); // A
-    sampleGenes[5] = new IntegerGene(0, 1); // B
-    sampleGenes[6] = new IntegerGene(0, 1); // C
-    sampleGenes[7] = new IntegerGene(0, 2); // D
-    sampleGenes[8] = new IntegerGene(0, 3); // E
-    sampleGenes[9] = new IntegerGene(0, 1); // F
-    Chromosome sampleChromosome = new Chromosome(sampleGenes);
+    sampleGenes[0] = new IntegerGene(conf, 0, 3); // Quarters
+    sampleGenes[1] = new IntegerGene(conf, 0, 2); // Dimes
+    sampleGenes[2] = new IntegerGene(conf, 0, 1); // Nickels
+    sampleGenes[3] = new IntegerGene(conf, 0, 4); // Pennies
+    sampleGenes[4] = new IntegerGene(conf, 0, 3); // A
+    sampleGenes[5] = new IntegerGene(conf, 0, 1); // B
+    sampleGenes[6] = new IntegerGene(conf, 0, 1); // C
+    sampleGenes[7] = new IntegerGene(conf, 0, 2); // D
+    sampleGenes[8] = new IntegerGene(conf, 0, 3); // E
+    sampleGenes[9] = new IntegerGene(conf, 0, 1); // F
+    Chromosome sampleChromosome = new Chromosome(null, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,

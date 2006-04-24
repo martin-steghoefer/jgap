@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for DefaultInitializer class
+ * Tests the DefaultInitializer class.
  *
  * @author Klaus Meffert
  * @since 2.6
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultInitializerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultInitializerTest.class);
@@ -55,12 +55,12 @@ public class DefaultInitializerTest
   public void testPerform_0()
       throws Exception {
     IHandler handler = new DefaultInitializer();
-    Chromosome orig = new Chromosome();
+    Chromosome orig = new Chromosome(conf);
     try {
       handler.perform(orig, Chromosome.class, null);
       fail();
     }
-    catch (IllegalArgumentException iex) {
+    catch (InvalidConfigurationException iex) {
       ; //this is OK (Configuration is null)
     }
   }
@@ -74,7 +74,7 @@ public class DefaultInitializerTest
   public void testPerform_1()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    FixedBinaryGene orig = new FixedBinaryGene(3);
+    FixedBinaryGene orig = new FixedBinaryGene(conf, 3);
     FixedBinaryGene clone = (FixedBinaryGene) handler.perform(orig,
         FixedBinaryGene.class, null);
     assertEquals(orig, clone);

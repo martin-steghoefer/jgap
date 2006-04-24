@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -88,6 +88,7 @@ public class MapGeneTest
 
   /**
    * Using different types as keys. Order of adding alleles not important!
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -102,6 +103,7 @@ public class MapGeneTest
 
   /**
    * Using different types as keys. Order of adding alleles not important!
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -191,13 +193,14 @@ public class MapGeneTest
   public void testEquals_5()
       throws Exception {
     Gene gene1 = new MapGene(conf);
-    Gene gene2 = new DoubleGene(null, 1, 99);
+    Gene gene2 = new DoubleGene(conf, 1, 99);
     assertFalse(gene1.equals(gene2));
     assertFalse(gene2.equals(gene1));
   }
 
   /**
    * Set Allele to null, no exception should occur
+   * @throws Exception
    */
   public void testSetAllele_0()
       throws Exception {
@@ -409,6 +412,8 @@ public class MapGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -423,6 +428,8 @@ public class MapGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -436,6 +443,8 @@ public class MapGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -450,6 +459,8 @@ public class MapGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -464,6 +475,8 @@ public class MapGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -477,7 +490,7 @@ public class MapGeneTest
     assertEquals(1, gene1.getAlleles().size());
   }
 
-  /**@todo add test fro applyMutation*/
+  /**@todo add test for applyMutation*/
 //  public void testApplyMutation_1()
 //      throws Exception {
 //    DefaultConfiguration config = new DefaultConfiguration();
@@ -488,6 +501,7 @@ public class MapGeneTest
 //    gene.applyMutation(0, 0.5d);
 //    assertEquals(Math.round(50 + (100 - 0) * 0.5d), gene.intValue());
 //  }
+
   public void testSetToRandomValue_0()
       throws Exception {
     Gene gene = new MapGene(conf);

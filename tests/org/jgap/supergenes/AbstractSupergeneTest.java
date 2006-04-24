@@ -21,7 +21,9 @@ import org.jgap.impl.*;
  * */
 abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
+
+  private transient Configuration m_conf;
 
   /**
    * Gene index for the dimes gene
@@ -56,31 +58,51 @@ abstract class AbstractSupergeneTest {
   public static boolean REPORT_ENABLED = true;
 
   /**
-   * @return Created Dimes gene instance.
+   * @return created Dimes gene instance
    */
   protected Gene getDimesGene() {
-    return new IntegerGene(0, 2); // 10?
+    try {
+      return new IntegerGene(m_conf, 0, 2); // 10?
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   };
 
   /**
-   * @return Created Nickels gene instance.
+   * @return created Nickels gene instance
    */
   protected Gene getNickelsGene() {
-    return new IntegerGene(0, 5);
+    try {
+      return new IntegerGene(m_conf, 0, 5);
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**
-   * @return Created Pennies (1) gene instance.
+   * @return created Pennies (1) gene instance
    */
   protected Gene getPenniesGene() {
-    return new IntegerGene(0, 7);
+    try {
+      return new IntegerGene(m_conf, 0, 7);
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /**
-   * @return Created Quarters gene instance.
+   * @return created Quarters gene instance
    */
   protected Gene getQuartersGene() {
-    return new IntegerGene(0, 3);
+    try {
+      return new IntegerGene(m_conf, 0, 3);
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
   }
 
   /** Compute the money value from the coin information. */
@@ -95,7 +117,7 @@ abstract class AbstractSupergeneTest {
    * coins necessary to make up the given target amount of change. The
    * solution will then be written to System.out.
    *
-   * @param a_targetChangeAmount The target amount of change for which this
+   * @param a_targetChangeAmount the target amount of change for which this
    * method is attempting to produce the minimum number of coins
    *
    * @return absolute difference between the required and computed change
@@ -112,7 +134,7 @@ abstract class AbstractSupergeneTest {
    * @return Chromosome
    */
   public IChromosome report(SupergeneChangeFitnessFunction a_fitnessFunction,
-                           Genotype a_population) {
+                            Genotype a_population) {
     IChromosome bestSolutionSoFar = a_population.getFittestChromosome();
     if (!REPORT_ENABLED) {
       return bestSolutionSoFar;
@@ -141,7 +163,8 @@ abstract class AbstractSupergeneTest {
    */
   public static boolean EXISTING_SOLUTIONS_ONLY = false;
 
-  /** Test the method, returns the sum of all differences between
+  /**
+   * Test the method, returns the sum of all differences between
    * the required and obtained excange amount. One exception counts
    * as 1000 on the error score.
    */
@@ -182,12 +205,12 @@ abstract class AbstractSupergeneTest {
    * Find and print the solution, return the solution error.
    * @return absolute difference between the required and computed change
    */
-  protected int solve(int a_targetChangeAmount, Configuration a_conf,
+  protected int solve(int a_targetChangeAmount,
                       SupergeneChangeFitnessFunction a_fitnessFunction,
                       Gene[] a_sampleGenes)
       throws InvalidConfigurationException {
-    IChromosome sampleChromosome = new Chromosome(a_sampleGenes);
-    a_conf.setSampleChromosome(sampleChromosome);
+    IChromosome sampleChromosome = new Chromosome(m_conf, a_sampleGenes);
+    m_conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -195,11 +218,11 @@ abstract class AbstractSupergeneTest {
     // the population (which could be seen as bad). We'll just set
     // the population size to 500 here.
     // ------------------------------------------------------------
-    a_conf.setPopulationSize(POPULATION_SIZE);
+    m_conf.setPopulationSize(POPULATION_SIZE);
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
     Genotype population;
-    population = Genotype.randomInitialGenotype(a_conf);
+    population = Genotype.randomInitialGenotype(m_conf);
     int s;
     Evolution:
         // Evolve the population, break if the the change solution is found.
@@ -207,7 +230,7 @@ abstract class AbstractSupergeneTest {
         for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
       s = Math.abs(a_fitnessFunction.amountOfChange(population.
-                                                  getFittestChromosome())
+          getFittestChromosome())
                    - a_targetChangeAmount);
       if (s == 0)break Evolution;
       // System.out.print(s+".");
@@ -218,5 +241,9 @@ abstract class AbstractSupergeneTest {
     s = Math.abs(a_fitnessFunction.amountOfChange(bestSolutionSoFar)
                  - a_targetChangeAmount);
     return s;
+  }
+
+  public void setConfiguration(Configuration a_conf) {
+    m_conf = a_conf;
   }
 }

@@ -23,7 +23,7 @@ import junit.framework.*;
 public class DataTreeBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
@@ -43,24 +43,24 @@ public class DataTreeBuilderTest
    */
   public void testRepresentGenotypeAsDocument_0()
       throws Exception {
-    //Create a Genotype with a population of NUM_CHROMS Chromosomes, each
-    //Chromosome with NUM_GENES Genes.
-    Chromosome[] chroms = new Chromosome[NUM_CHROMS];
-    for (int i = 0; i < NUM_CHROMS; i++) {
-      chroms[i] = new Chromosome(new Gene[] {
-                                 new IntegerGene(1, 5),
-                                 new IntegerGene(1, 10)});
-      chroms[i].getGene(0).setAllele(new Integer(i + 1));
-      chroms[i].getGene(1).setAllele(new Integer(i + 1));
-    }
     // configuration setup
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setPopulationSize(NUM_CHROMS);
-    conf.setSampleChromosome(new Chromosome(new Gene[] {
-                                            new IntegerGene(1, 5),
-                                            new IntegerGene(1, 3)}));
-    Population popul = new Population(chroms);
+    conf.setSampleChromosome(new Chromosome(conf, new Gene[] {
+                                            new IntegerGene(conf, 1, 5),
+                                            new IntegerGene(conf, 1, 3)}));
+    //Create a Genotype with a population of NUM_CHROMS Chromosomes, each
+    //Chromosome with NUM_GENES Genes.
+    Chromosome[] chroms = new Chromosome[NUM_CHROMS];
+    for (int i = 0; i < NUM_CHROMS; i++) {
+      chroms[i] = new Chromosome(conf, new Gene[] {
+                                 new IntegerGene(conf, 1, 5),
+                                 new IntegerGene(conf, 1, 10)});
+      chroms[i].getGene(0).setAllele(new Integer(i + 1));
+      chroms[i].getGene(1).setAllele(new Integer(i + 1));
+    }
+    Population popul = new Population(conf, chroms);
     Genotype genotype = new Genotype(conf, popul);
     // write the genotype as a document
     IDataCreators doc = DataTreeBuilder.getInstance().
@@ -106,9 +106,10 @@ public class DataTreeBuilderTest
    */
   public void testRepresentChromosomeAsDocument_0()
       throws Exception {
-    Chromosome chrom = new Chromosome(new Gene[] {
-                                      new IntegerGene(1, 5),
-                                      new IntegerGene(1, 10)});
+    Configuration conf = new DefaultConfiguration();
+    Chromosome chrom = new Chromosome(conf, new Gene[] {
+                                      new IntegerGene(conf, 1, 5),
+                                      new IntegerGene(conf, 1, 10)});
     chrom.getGene(0).setAllele(new Integer(1));
     chrom.getGene(1).setAllele(new Integer( -3));
     // write the chromosome as a document

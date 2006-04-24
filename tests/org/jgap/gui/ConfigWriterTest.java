@@ -28,7 +28,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -109,30 +109,30 @@ public class ConfigWriterTest
    */
   public void testConfigReader_0()
       throws Exception {
-    Configuration config = new Configuration("jgapTest.con", false);
-    assertEquals(config.getPopulationSize(), 35);
+    Configuration conf = new Configuration("jgapTest.con", false);
+    assertEquals(conf.getPopulationSize(), 35);
     // Some setup so that the Configuration doesn't throw an Exception. We do
     // not set the population size of the Configuration since this is supposed
     // to be read directly from the config file.
     // set up a sample chromosome
     Gene[] sampleGenes = new Gene[3];
-    sampleGenes[0] = new IntegerGene(60, 100);
-    sampleGenes[1] = new IntegerGene(1, 50);
-    sampleGenes[2] = new IntegerGene(100, 150);
-    Chromosome sampleChromosome = new Chromosome(sampleGenes);
+    sampleGenes[0] = new IntegerGene(conf, 60, 100);
+    sampleGenes[1] = new IntegerGene(conf, 1, 50);
+    sampleGenes[2] = new IntegerGene(conf, 100, 150);
+    Chromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     FitnessFunction fitFunc = new StaticFitnessFunction(100.0d);
-    config.setFitnessFunction(fitFunc);
+    conf.setFitnessFunction(fitFunc);
     // The higher the value, the better
-    config.setFitnessEvaluator(new DefaultFitnessEvaluator());
-    config.setSampleChromosome(sampleChromosome);
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
+    conf.setSampleChromosome(sampleChromosome);
     BestChromosomesSelector bestChromsSelector = new
-        BestChromosomesSelector(1.0d);
+        BestChromosomesSelector(conf, 1.0d);
     bestChromsSelector.setDoubletteChromosomesAllowed(false);
-    config.addNaturalSelector(bestChromsSelector, true);
-    config.setRandomGenerator(new StockRandomGenerator());
-    config.setEventManager(new EventManager());
-    config.addGeneticOperator(new CrossoverOperator());
-    config.addGeneticOperator(new MutationOperator(15));
-    Genotype.randomInitialGenotype(config);
+    conf.addNaturalSelector(bestChromsSelector, true);
+    conf.setRandomGenerator(new StockRandomGenerator());
+    conf.setEventManager(new EventManager());
+    conf.addGeneticOperator(new CrossoverOperator(conf));
+    conf.addGeneticOperator(new MutationOperator(conf, 15));
+    Genotype.randomInitialGenotype(conf);
   }
 }

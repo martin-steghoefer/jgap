@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the CompositeGene class
+ * Tests the CompositeGene class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   private static int cleanedUp = 0;
 
@@ -39,15 +39,14 @@ public class CompositeGeneTest
   public void testCompareTo_4()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-//    Genotype.setConfiguration(new ConfigurationForTest());
-    CompositeGene gene1 = new CompositeGene();
+    CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     newGene1.setAllele(new Integer(4));
     Gene newGene2 = new IntegerGene(conf, 3, 5);
     newGene2.setAllele(new Integer(2));
     gene1.addGene(newGene1, false);
     gene1.addGene(newGene2, false);
-    CompositeGene gene2 = new CompositeGene();
+    CompositeGene gene2 = new CompositeGene(conf);
     Gene newGene3 = new IntegerGene(conf, 3, 5);
     newGene3.setAllele(new Integer(1));
     newGene3.setAllele(new Integer(3));
@@ -57,27 +56,34 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
-  public void testConstruct_0() throws Exception {
+  public void testConstruct_0()
+      throws Exception {
     //following should be possible without exception
-    CompositeGene gene = new CompositeGene();
+    CompositeGene gene = new CompositeGene(conf);
     assertEquals(null, gene.getGeneTypeAllowed());
   }
 
   /**
    * Ensures that a CompositeGene may be added to a CompositeGene
+   *
    * @author Audrius Meskauskas
    * @author Klaus Meffert
    * @since 2.0
+   * @throws Exception
    */
-  public void testAddGene_0() throws Exception {
+  public void testAddGene_0()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     gene.addGene(new CompositeGene(conf), false);
     assertEquals(1, gene.size());
   }
 
-  public void testAddGene_1() throws Exception {
+  public void testAddGene_1()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     Gene newGene = new DoubleGene(conf);
     gene.addGene(newGene, false);
@@ -98,21 +104,27 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testAddGene_2() throws Exception {
-    CompositeGene gene = new CompositeGene(conf, new DoubleGene(null, 2, 3));
+  public void testAddGene_2()
+      throws Exception {
+    CompositeGene gene = new CompositeGene(conf, new DoubleGene(conf, 2, 3));
     assertEquals(new DoubleGene(conf), gene.getGeneTypeAllowed());
     gene.addGene(new DoubleGene(conf), false);
     assertEquals(1, gene.size());
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testAddGene_3() throws Exception {
+  public void testAddGene_3()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf, new DoubleGene(conf, 2, 3));
     try {
       gene.addGene(new CompositeGene(conf), false);
@@ -124,20 +136,26 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testAddGene_4() throws Exception {
+  public void testAddGene_4()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     gene.addGene(new CompositeGene(conf), true);
     assertEquals(1, gene.size());
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testAddGene_5() throws Exception {
+  public void testAddGene_5()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     CompositeGene gene2 = new CompositeGene(conf);
     gene.addGene(gene2, true);
@@ -151,13 +169,14 @@ public class CompositeGeneTest
   }
 
   /**
-   * Adding two different initial genes with strict parameter set is not
-   * allowed.
+   * Adding two different initial genes with strict parameter set is not allowed.
    *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testAddGene_6() throws Exception {
+  public void testAddGene_6()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     gene.addGene(new CompositeGene(conf), true);
     try {
@@ -175,17 +194,22 @@ public class CompositeGeneTest
    *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testAddGene_7() throws Exception {
+  public void testAddGene_7()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     gene.addGene(new CompositeGene(conf), true);
     gene.addGene(new CompositeGene(conf), false);
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
-  public void testToString_0() throws Exception {
+  public void testToString_0()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     Gene newGene1 = new DoubleGene(conf);
     newGene1.setAllele(new Double(47.123d));
@@ -199,21 +223,26 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testToString_1() throws Exception {
+  public void testToString_1()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     assertEquals("CompositeGene=null", gene.toString());
   }
 
-  public void testGetAllele_0() throws Exception {
+  public void testGetAllele_0()
+      throws Exception {
     Gene gene = new CompositeGene(conf);
     //this should be possible without exception
     gene.setAllele(new Vector());
   }
 
-  public void testGetAllele_1() throws Exception {
+  public void testGetAllele_1()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 1, 5);
     gene.addGene(newGene1, false);
@@ -225,7 +254,8 @@ public class CompositeGeneTest
     assertEquals(1, v.size());
   }
 
-  public void testGetAllele_2() throws Exception {
+  public void testGetAllele_2()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 1, 5);
     gene.addGene(newGene1, false);
@@ -241,24 +271,28 @@ public class CompositeGeneTest
     assertEquals(2, v.size());
   }
 
-  public void testEquals_0() throws Exception {
+  public void testEquals_0()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     Gene gene2 = new CompositeGene(conf);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
   }
 
-  public void testEquals_1() throws Exception {
+  public void testEquals_1()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     assertFalse(gene1.equals(null));
   }
 
-  public void testEquals_2() throws Exception {
+  public void testEquals_2()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     assertFalse(gene1.equals(new BooleanGene(conf)));
   }
 
-  public void testEquals_3() throws Exception {
+  public void testEquals_3()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     assertFalse(gene1.equals(new Vector()));
   }
@@ -268,8 +302,10 @@ public class CompositeGeneTest
    *
    * @author Klaus Meffert
    * @since 2.6
+   * @throws Exception
    */
-  public void testEquals_4_2() throws Exception {
+  public void testEquals_4_2()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf, new BooleanGene(conf));
     try {
       gene1.addGene(null, false);
@@ -280,7 +316,8 @@ public class CompositeGeneTest
     }
   }
 
-  public void testEquals_5() throws Exception {
+  public void testEquals_5()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -291,10 +328,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testEquals_5_2() throws Exception {
+  public void testEquals_5_2()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     Gene newGene2 = new IntegerGene(conf, 3, 7);
@@ -306,7 +346,8 @@ public class CompositeGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
-  public void testEquals_6() throws Exception {
+  public void testEquals_6()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -317,7 +358,8 @@ public class CompositeGeneTest
     assertEquals(newGene2.equals(newGene1), gene2.equals(gene1));
   }
 
-  public void testEquals_7() throws Exception {
+  public void testEquals_7()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -329,10 +371,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testEquals_8() throws Exception {
+  public void testEquals_8()
+      throws Exception {
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     newGene1.setAllele(new Integer(3));
     Gene newGene2 = new IntegerGene(conf, 3, 15);
@@ -345,7 +390,8 @@ public class CompositeGeneTest
     assertFalse(gene2.equals(gene1));
   }
 
-  public void testSetAllele_0() throws Exception {
+  public void testSetAllele_0()
+      throws Exception {
     Gene gene = new CompositeGene(conf);
     try {
       gene.setAllele(null);
@@ -356,7 +402,8 @@ public class CompositeGeneTest
     }
   }
 
-  public void testSetAllele_1() throws Exception {
+  public void testSetAllele_1()
+      throws Exception {
     Gene gene = new CompositeGene(conf);
     try {
       gene.setAllele(new Double(2.3d));
@@ -369,13 +416,17 @@ public class CompositeGeneTest
 
   /**
    * Set Allele to empty Vector, no exception should occur.
+   *
+   * @throws Exception
    */
-  public void testSetAllele_2() throws Exception {
+  public void testSetAllele_2()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     gene1.setAllele(new Vector());
   }
 
-  public void testSetAllele_3() throws Exception {
+  public void testSetAllele_3()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     try {
       gene1.setAllele("22");
@@ -387,10 +438,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testSetAllele_4() throws Exception {
+  public void testSetAllele_4()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     DoubleGene gene2 = new DoubleGene(conf, 1.0d, 3.0d);
     gene2.setAllele(new Double(1.0d));
@@ -408,10 +462,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testSetAllele_5() throws Exception {
+  public void testSetAllele_5()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     DoubleGene gene2 = new DoubleGene(conf, 1.0d, 3.0d);
     gene2.setAllele(new Double(1.0d));
@@ -462,16 +519,16 @@ public class CompositeGeneTest
     gene0 = new IntegerGene(conf, 3, 8);
     gene0.setAllele(new Integer(5));
     gene1.addGene(gene0, false);
-    gene0 = new BooleanGene();
+    gene0 = new BooleanGene(conf);
     gene0.setAllele(Boolean.valueOf(true));
     gene1.addGene(gene0, false);
     gene1.addGene(new StringGene(conf), false);
     gene1.addGene(new StringGene(conf, 2, 5), false);
-    gene0 = new StringGene(null, 6, 11, ":ABC"); // using ':'
+    gene0 = new StringGene(conf, 6, 11, ":ABC"); // using ':'
     gene0.setAllele("B:BCBCCA");
     gene1.addGene(gene0, false);
     String pres1 = gene1.getPersistentRepresentation();
-    CompositeGene gene2 = new CompositeGene();
+    CompositeGene gene2 = new CompositeGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
     assertEquals(pres1, pres2);
@@ -500,7 +557,7 @@ public class CompositeGeneTest
     composite1.addGene(new StringGene(conf), false);
     composite1.addGene(new StringGene(conf, 2, 5), false);
     String string = "<!-- many:various:chars &%$§/()=<>C:CA/ -->";
-    strgene = new StringGene(null, 6, 50, "CA! many:various:chars<>:&%$§/()-=");
+    strgene = new StringGene(conf, 6, 50, "CA! many:various:chars<>:&%$§/()-=");
     strgene.setAllele(string);
     // remember where, we will check the value later
     int stringPosition = composite1.size();
@@ -510,10 +567,10 @@ public class CompositeGeneTest
     istrgene.setAllele(new Double(3.33));
     compositeInside.addGene(istrgene, false);
     compositeInside.addGene(new DoubleGene(conf, 128.35d, 155.90d), false);
-    istrgene = new IntegerGene(null, 3, 8);
+    istrgene = new IntegerGene(conf, 3, 8);
     istrgene.setAllele(new Integer(5));
     compositeInside.addGene(istrgene, false);
-    istrgene = new BooleanGene();
+    istrgene = new BooleanGene(conf);
     istrgene.setAllele(Boolean.valueOf(true));
     compositeInside.addGene(istrgene, false);
     compositeInside.addGene(new StringGene(conf), false);
@@ -553,10 +610,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testPersistentPresentation_3() throws Exception {
+  public void testPersistentPresentation_3()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     try {
       gene1.setValueFromPersistentRepresentation("1"
@@ -571,10 +631,13 @@ public class CompositeGeneTest
 
   /**
    * Invalid Gene class.
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testPersistentPresentation_4() throws Exception {
+  public void testPersistentPresentation_4()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     try {
       gene1.setValueFromPersistentRepresentation("<1"
@@ -588,10 +651,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testPersistentPresentation_5() throws Exception {
+  public void testPersistentPresentation_5()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     try {
       gene1.setValueFromPersistentRepresentation("<1>");
@@ -607,8 +673,10 @@ public class CompositeGeneTest
    *
    * @author Klaus Meffert
    * @since 2.6
+   * @throws Exception
    */
-  public void testPersistentPresentation_6() throws Exception {
+  public void testPersistentPresentation_6()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     try {
       gene1.setValueFromPersistentRepresentation("<IntegerGene"
@@ -626,8 +694,10 @@ public class CompositeGeneTest
    *
    * @author Klaus Meffert
    * @since 2.6
+   * @throws Exception
    */
-  public void testPersistentPresentation_7() throws Exception {
+  public void testPersistentPresentation_7()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     try {
       gene1.setValueFromPersistentRepresentation("<org.jgap.impl.IntegerGene"
@@ -648,18 +718,23 @@ public class CompositeGeneTest
    *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testRemoveGeneByIdentity_0() throws Exception {
+  public void testRemoveGeneByIdentity_0()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     assertFalse(gene1.removeGeneByIdentity(gene1));
     assertFalse(gene1.removeGeneByIdentity(null));
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testRemoveGeneByIdentity_1() throws Exception {
+  public void testRemoveGeneByIdentity_1()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     DoubleGene gene2 = new DoubleGene(conf, 1.0d, 4.0d);
     gene1.addGene(gene2);
@@ -670,10 +745,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testCleanup_0() throws Exception {
+  public void testCleanup_0()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     CompositeGene gene2 = new CompositeGene(conf) {
       public void cleanup() {
@@ -693,20 +771,26 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testCleanup_1() throws Exception {
+  public void testCleanup_1()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     gene.cleanup();
     assertEquals(0, gene.size());
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testSetConstraintChecker_0() throws Exception {
+  public void testSetConstraintChecker_0()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     assertNull(gene.getConstraintChecker());
     gene.setConstraintChecker(new IGeneConstraintChecker() {
@@ -719,10 +803,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testSetToRandomValue_0() throws Exception {
+  public void testSetToRandomValue_0()
+      throws Exception {
     Gene gene1 = new CompositeGene(conf);
     try {
       gene1.setToRandomValue(null);
@@ -734,10 +821,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testSetToRandomValue_1() throws Exception {
+  public void testSetToRandomValue_1()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     DoubleGene d = new DoubleGene(conf, 0.0d, 1.0d);
     gene1.addGene(d);
@@ -746,10 +836,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testSetToRandomValue_2() throws Exception {
+  public void testSetToRandomValue_2()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     DoubleGene d = new DoubleGene(conf, 0.5d, 1.8d);
     gene1.addGene(d);
@@ -758,19 +851,25 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testSetEnergy_0() throws Exception {
+  public void testSetEnergy_0()
+      throws Exception {
     BaseGene gene = new CompositeGene(conf);
     assertEquals(0.0, gene.getEnergy(), DELTA);
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testSetEnergy_1() throws Exception {
+  public void testSetEnergy_1()
+      throws Exception {
     BaseGene gene = new CompositeGene(conf);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
@@ -782,10 +881,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testCompareTo_0() throws Exception {
+  public void testCompareTo_0()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     Gene newGene2 = new IntegerGene(conf, 3, 7);
@@ -798,10 +900,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testCompareTo_1() throws Exception {
+  public void testCompareTo_1()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -812,10 +917,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testCompareTo_2() throws Exception {
+  public void testCompareTo_2()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -827,10 +935,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testCompareTo_3() throws Exception {
+  public void testCompareTo_3()
+      throws Exception {
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -843,7 +954,6 @@ public class CompositeGeneTest
   public void testCompareTo_3_2()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-    Genotype.setConfiguration(new ConfigurationForTest());
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -860,8 +970,10 @@ public class CompositeGeneTest
    *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
-  public void testCompareTo_5() throws Exception {
+  public void testCompareTo_5()
+      throws Exception {
     Configuration conf = new DefaultConfiguration();
     CompositeGene gene1 = new CompositeGene(conf);
     gene1.setCompareApplicationData(true);
@@ -901,7 +1013,7 @@ public class CompositeGeneTest
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
-    CompositeGene gene2 = new CompositeGene();
+    CompositeGene gene2 = new CompositeGene(conf);
     assertEquals(1, gene1.compareTo(gene2));
     assertEquals( -1, gene2.compareTo(gene1));
   }
@@ -924,10 +1036,13 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.6
+   * @throws Exception
    */
-  public void testGetAllele_3() throws Exception {
+  public void testGetAllele_3()
+      throws Exception {
     CompositeGene gene = new CompositeGene(conf);
     assertNull(gene.getInternalValue());
   }

@@ -43,6 +43,7 @@ class WithoutSupergeneTest
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
+    setConfiguration(conf);
     // Set the fitness function we want to use. We construct it with
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
@@ -65,7 +66,7 @@ class WithoutSupergeneTest
     sampleGenes[NICKELS] = getNickelsGene(); // Nickels
     sampleGenes[QUARTERS] = getQuartersGene(); // Quarters
     sampleGenes[PENNIES] = getPenniesGene(); // Pennies
-    int s = solve(a_targetChangeAmount, conf, fitnessFunction, sampleGenes);
+    int s = solve(a_targetChangeAmount, fitnessFunction, sampleGenes);
     return s;
   }
 

@@ -12,16 +12,15 @@ package org.jgap;
 import junit.framework.*;
 
 /**
- * Test cases for clasfs DeltaFitnessEvaluator
+ * Test cases for class DeltaFitnessEvaluator.
  *
  * @author Klaus Meffert
  * @since 2.2
  */
 public final class DeltaFitnessEvaluatorTest
     extends JGAPTestCase {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DeltaFitnessEvaluatorTest.class);
@@ -62,16 +61,18 @@ public final class DeltaFitnessEvaluatorTest
     assertEquals(false, evaluator.isFitter( -1, -3));
   }
 
-  public void testIsFitter_6() {
+  public void testIsFitter_6()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
     FitnessEvaluator evaluator = new DeltaFitnessEvaluator();
-    Chromosome chrom1 = new Chromosome();
+    Chromosome chrom1 = new Chromosome(conf);
     chrom1.setFitnessValue(2);
-    Chromosome chrom2 = new Chromosome();
+    Chromosome chrom2 = new Chromosome(conf);
     chrom2.setFitnessValue(2);
-    assertEquals(false, evaluator.isFitter( chrom1, chrom2));
-    assertEquals(false, evaluator.isFitter( chrom2, chrom1));
+    assertEquals(false, evaluator.isFitter(chrom1, chrom2));
+    assertEquals(false, evaluator.isFitter(chrom2, chrom1));
     chrom2.setFitnessValue(3);
-    assertEquals(true, evaluator.isFitter( chrom1, chrom2));
-    assertEquals(false, evaluator.isFitter( chrom2, chrom1));
+    assertEquals(true, evaluator.isFitter(chrom1, chrom2));
+    assertEquals(false, evaluator.isFitter(chrom2, chrom1));
   }
 }

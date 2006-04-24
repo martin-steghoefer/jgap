@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the BooleanGene class
+ * Tests the BooleanGene class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -37,6 +37,8 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -49,6 +51,8 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -61,6 +65,8 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -90,6 +96,8 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
@@ -151,7 +159,7 @@ public class BooleanGeneTest
   public void testEquals_3()
       throws Exception {
     Gene gene1 = new BooleanGene(conf);
-    assertFalse(gene1.equals(new IntegerGene()));
+    assertFalse(gene1.equals(new IntegerGene(conf)));
   }
 
   public void testEquals_4()
@@ -199,6 +207,8 @@ public class BooleanGeneTest
 
   /**
    * Set Allele to null, no exception should occur.
+   *
+   * @throws Exception
    */
   public void testSetAllele_0()
       throws Exception {
@@ -220,6 +230,8 @@ public class BooleanGeneTest
 
   /**
    * Set Allele to boolean value, no exception should occur.
+   *
+   * @throws Exception
    */
   public void testSetAllele_2()
       throws Exception {
@@ -229,6 +241,8 @@ public class BooleanGeneTest
 
   /**
    * Set Allele to boolean value, no exception should occur.
+   *
+   * @throws Exception
    */
   public void testSetAllele_3()
       throws Exception {
@@ -275,8 +289,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
   public void testCompareTo_4()
       throws Exception {
@@ -288,8 +304,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
   public void testCompareTo_5()
       throws Exception {
@@ -300,7 +318,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_0()
       throws Exception {
@@ -311,7 +331,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_1()
       throws Exception {
@@ -322,7 +344,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_2()
       throws Exception {
@@ -333,7 +357,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_3()
       throws Exception {
@@ -344,7 +370,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_4()
       throws Exception {
@@ -355,7 +383,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_5()
       throws Exception {
@@ -366,7 +396,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_6()
       throws Exception {
@@ -377,7 +409,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_7()
       throws Exception {
@@ -388,7 +422,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_8()
       throws Exception {
@@ -399,7 +435,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testApplyMutation_9()
       throws Exception {
@@ -410,8 +448,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
   public void testApplyMutation_10()
       throws Exception {
@@ -421,8 +461,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.0
+   * @throws Exception
    */
   public void testSetValueFromPersistentRepresentation_0()
       throws Exception {
@@ -438,6 +480,7 @@ public class BooleanGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -450,6 +493,7 @@ public class BooleanGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -473,8 +517,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.0
+   * @throws Exception
    */
   public void testSetValueFromPersistentRepresentation_4()
       throws Exception {
@@ -489,8 +535,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.0
+   * @throws Exception
    */
   public void testSetValueFromPersistentRepresentation_5()
       throws Exception {
@@ -505,8 +553,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.0
+   * @throws Exception
    */
   public void testSetValueFromPersistentRepresentation_6()
       throws Exception {
@@ -521,7 +571,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testGetPersistentRepresentation_0()
       throws Exception {
@@ -532,7 +584,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testGetPersistentRepresentation_1()
       throws Exception {
@@ -543,7 +597,9 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
+   * @throws Exception
    */
   public void testGetPersistentRepresentation_2()
       throws Exception {
@@ -553,8 +609,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
   public void testHashCode_0()
       throws Exception {
@@ -563,8 +621,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
   public void testSetEnergy_0()
       throws Exception {
@@ -573,8 +633,10 @@ public class BooleanGeneTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.4
+   * @throws Exception
    */
   public void testSetEnergy_1()
       throws Exception {

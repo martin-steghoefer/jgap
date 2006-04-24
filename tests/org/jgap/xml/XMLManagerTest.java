@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -53,13 +53,13 @@ public class XMLManagerTest
     try {
       m_conf = new DefaultConfiguration();
       m_genes = new IntegerGene[2];
-      m_genes[0] = new IntegerGene(0, 100);
+      m_genes[0] = new IntegerGene(conf, 0, 100);
       m_genes[0].setAllele(new Integer(54));
-      m_genes[1] = new IntegerGene(22, 44);
+      m_genes[1] = new IntegerGene(conf, 22, 44);
       m_genes[1].setAllele(new Integer(37));
       m_conf.setFitnessFunction(new RandomFitnessFunction());
       m_conf.setPopulationSize(8);
-      m_chrom = new Chromosome(m_genes);
+      m_chrom = new Chromosome(conf, m_genes);
       m_conf.setSampleChromosome(m_chrom);
       m_genotype = new Genotype(m_conf, new Chromosome[] {m_chrom});
       m_chromosome_tag = (String) privateAccessor.getField(XMLManager.class,

@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for TournamentSelector class
+ * Tests the TournamentSelector class.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -38,16 +38,16 @@ public class TournamentSelectorTest
    */
   public void testConstruct_0()
       throws Exception {
-    TournamentSelector sel = new TournamentSelector(1, 1.0d);
+    TournamentSelector sel = new TournamentSelector(null, 1, 1.0d);
     assertNotNull(privateAccessor.getField(sel, "m_chromosomes"));
     assertNotNull(privateAccessor.getField(sel, "m_fitnessValueComparator"));
-    new TournamentSelector(1, 0.5d);
-    new TournamentSelector(10, 0.00001d);
-    new TournamentSelector(50, 0.4d);
+    new TournamentSelector(null, 1, 0.5d);
+    new TournamentSelector(null, 10, 0.00001d);
+    new TournamentSelector(null, 50, 0.4d);
   }
 
   /**
-   * Invalid construction
+   * Invalid construction.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -56,7 +56,7 @@ public class TournamentSelectorTest
   public void testConstruct_1()
       throws Exception {
     try {
-      new TournamentSelector(0, 0.5d);
+      new TournamentSelector(null, 0, 0.5d);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -65,7 +65,7 @@ public class TournamentSelectorTest
   }
 
   /**
-   * Invalid construction
+   * Invalid construction,
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -74,7 +74,7 @@ public class TournamentSelectorTest
   public void testConstruct_2()
       throws Exception {
     try {
-      new TournamentSelector( -1, 0.5d);
+      new TournamentSelector(null, -1, 0.5d);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -83,7 +83,7 @@ public class TournamentSelectorTest
   }
 
   /**
-   * Invalid construction
+   * Invalid construction.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -92,7 +92,7 @@ public class TournamentSelectorTest
   public void testConstruct_3()
       throws Exception {
     try {
-      new TournamentSelector(4, 0.0d);
+      new TournamentSelector(null, 4, 0.0d);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -101,7 +101,7 @@ public class TournamentSelectorTest
   }
 
   /**
-   * Invalid construction
+   * Invalid construction.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -110,7 +110,7 @@ public class TournamentSelectorTest
   public void testConstruct_4()
       throws Exception {
     try {
-      new TournamentSelector(4, 1.0001d);
+      new TournamentSelector(null, 4, 1.0001d);
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -120,11 +120,10 @@ public class TournamentSelectorTest
 
   public void testAdd_0()
       throws Exception {
-    TournamentSelector selector = new TournamentSelector(5, 0.5d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    IChromosome chrom = new Chromosome(gene, 5);
+    TournamentSelector selector = new TournamentSelector(conf, 5, 0.5d);
+    Gene gene = new BooleanGene(conf);
+    IChromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
     List chromosomes = ( (Vector) privateAccessor.getField(selector,
         "m_chromosomes"));
@@ -139,11 +138,10 @@ public class TournamentSelectorTest
 
   public void testEmpty_0()
       throws Exception {
-    TournamentSelector selector = new TournamentSelector(4, 0.1d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    IChromosome chrom = new Chromosome(gene, 5);
+    TournamentSelector selector = new TournamentSelector(conf, 4, 0.1d);
+    Gene gene = new BooleanGene(conf);
+    IChromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
     selector.empty();
     List chromosomes = ( (Vector) privateAccessor.getField(selector,
@@ -160,15 +158,14 @@ public class TournamentSelectorTest
    */
   public void testEmpty_1()
       throws Exception {
-    TournamentSelector selector = new TournamentSelector(4, 0.1d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
-    Population pop = new Population(1);
+    TournamentSelector selector = new TournamentSelector(conf, 4, 0.1d);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
+    Population pop = new Population(conf, 1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     selector.empty();
     assertEquals(1, popNew.size());
@@ -184,15 +181,14 @@ public class TournamentSelectorTest
    */
   public void testEmpty_2()
       throws Exception {
-    TournamentSelector selector = new TournamentSelector(10, 1.0d);
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
-    Population pop = new Population(1);
+    TournamentSelector selector = new TournamentSelector(conf, 10, 1.0d);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
+    Population pop = new Population(conf, 1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     pop = popNew;
     selector.empty();
@@ -201,7 +197,7 @@ public class TournamentSelectorTest
   }
 
   /**
-   * Test if below functionality working without error
+   * Test if below functionality working without error.
    *
    * @throws Exception
    * @author Klaus Meffert
@@ -210,19 +206,18 @@ public class TournamentSelectorTest
   public void testSelect_0()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(4, 0.3d);
-    Gene gene = new IntegerGene();
+    TournamentSelector selector = new TournamentSelector(conf, 4, 0.3d);
+    Gene gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 3);
     secondBestChrom.setFitnessValue(11);
     selector.add(secondBestChrom);
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
-    selector.select(1, null, new Population());
+    selector.select(1, null, new Population(conf));
   }
 
   /**
@@ -239,32 +234,31 @@ public class TournamentSelectorTest
     // random generator always returning 1 (index of best chromosome below)
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(4, 1.0d);
+    TournamentSelector selector = new TournamentSelector(conf, 4, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // add third chromosome
     // ---------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 3);
     secondBestChrom.setFitnessValue(11);
     selector.add(secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -294,25 +288,24 @@ public class TournamentSelectorTest
     // random generator always returning 1 (index of best chromosome below)
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(4, 1.0d);
+    TournamentSelector selector = new TournamentSelector(conf, 4, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -343,25 +336,24 @@ public class TournamentSelectorTest
     RandomGeneratorForTest rn = new RandomGeneratorForTest(0);
     rn.setNextDouble(0.0d);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(2, 1.0d);
+    TournamentSelector selector = new TournamentSelector(conf, 2, 1.0d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     assertFalse(bestChroms[0].equals(bestChrom));
@@ -377,25 +369,24 @@ public class TournamentSelectorTest
   public void testSelect_4()
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(1, 0.2d);
+    TournamentSelector selector = new TournamentSelector(conf, 1, 0.2d);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // receive top 30 chromosomes.
     // ---------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(30, null, pop);
     Population bestChroms = pop;
     List chromosomes = (Vector) privateAccessor.getField(selector,
@@ -416,26 +407,25 @@ public class TournamentSelectorTest
     Configuration conf = new DefaultConfiguration();
     RandomGeneratorForTest rn = new RandomGeneratorForTest(0);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(4, 0.00001d);
+    TournamentSelector selector = new TournamentSelector(conf, 4, 0.00001d);
     setNestedField(selector, "m_config", "m_probability", new Double(0.0d));
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    IChromosome bestChrom = new Chromosome(gene, 3);
+    IChromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
-    // receive top 30 chromosomes.
+    // receive top 5 chromosomes.
     // ---------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     IChromosome[] bestChroms;
     selector.select(5, null, pop);
     bestChroms = pop.toChromosomes();
@@ -454,33 +444,32 @@ public class TournamentSelectorTest
     // random generator always returning 1 (index of best chromosome below)
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
-    Genotype.setConfiguration(conf);
-    TournamentSelector selector = new TournamentSelector(4, 1.0d);
-    Population toAddFrom = new Population();
+    TournamentSelector selector = new TournamentSelector(conf, 4, 1.0d);
+    Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 7);
     thirdBestChrom.setFitnessValue(10);
     toAddFrom.addChromosome(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(false));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     toAddFrom.addChromosome(bestChrom);
     // add third chromosome
     // ---------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 3);
     secondBestChrom.setFitnessValue(11);
     toAddFrom.addChromosome(secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    Population pop = new Population();
+    Population pop = new Population(conf);
     selector.select(1, null, pop);
     IChromosome[] bestChroms = pop.toChromosomes();
     // nothing selected (from nothing!)
@@ -505,7 +494,7 @@ public class TournamentSelectorTest
    * @since 2.2
    */
   public void testReturnsUniqueChromosomes_0() {
-    TournamentSelector selector = new TournamentSelector(2, 0.5d);
+    TournamentSelector selector = new TournamentSelector(null, 2, 0.5d);
     assertFalse(selector.returnsUniqueChromosomes());
   }
 
@@ -517,7 +506,7 @@ public class TournamentSelectorTest
    */
   public void testSetTournametSize_0()
       throws Exception {
-    TournamentSelector sel = new TournamentSelector(1, 1.0d);
+    TournamentSelector sel = new TournamentSelector(null, 1, 1.0d);
     sel.setTournamentSize(5);
     assertEquals(5, sel.getTournamentSize());
     try {
@@ -537,14 +526,15 @@ public class TournamentSelectorTest
    */
   public void testSetProbability_0()
       throws Exception {
-    TournamentSelector sel = new TournamentSelector(1, 1.0d);
+    TournamentSelector sel = new TournamentSelector(null, 1, 1.0d);
     sel.setProbability(0.6d);
     assertEquals(0.6d, sel.getProbability(), DELTA);
     try {
       sel.setProbability(1.6d);
       fail();
-    } catch (IllegalArgumentException iex) {
-      ;// this is OK
+    }
+    catch (IllegalArgumentException iex) {
+      ; // this is OK
     }
   }
 }

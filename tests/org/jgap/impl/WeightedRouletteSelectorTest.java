@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the WeightedRouletteSelector class
+ * Tests the WeightedRouletteSelector class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -45,14 +45,13 @@ public class WeightedRouletteSelectorTest
    */
   public void testAdd_0()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
     Configuration conf = new DefaultConfiguration();
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
     conf.setFitnessFunction(new TestFitnessFunction());
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(5);
-    Genotype.setConfiguration(conf);
     selector.add(chrom);
     Map chromosomes = (Map) privateAccessor.getField(selector,
         "m_wheel");
@@ -66,7 +65,6 @@ public class WeightedRouletteSelectorTest
   }
 
   /**
-   * Provoke NullPointerException
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -74,20 +72,16 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_0()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
-    // --------------------
-    Gene gene = new BooleanGene();
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 7);
-    thirdBestChrom.setFitnessValue(10);
-    selector.add(thirdBestChrom);
-    try {
-      selector.select(1, null, new Population());
-      fail();
-    }
-    catch (NullPointerException nex) {
-      ; //this is OK
-    }
+    Chromosome bestChrom = new Chromosome(conf, gene, 7);
+    bestChrom.setFitnessValue(10);
+    selector.add(bestChrom);
+    Population p = new Population(conf);
+    selector.select(1, null, p);
+    assertSame(bestChrom, p.getChromosome(0));
+    assertEquals(1, p.size());
   }
 
   /**
@@ -99,37 +93,36 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_1()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    randgen.setNextDouble(0.9999d);
+    conf.setRandomGenerator(randgen);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
     selector.setDoubletteChromosomesAllowed(false);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 4);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 4);
     thirdBestChrom.setFitnessValue(10);
     selector.add(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new DoubleGene();
+    gene = new DoubleGene(conf);
     gene.setAllele(new Double(2.3d));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     selector.add(bestChrom);
     // add third chromosome
     // ---------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 2);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 2);
     secondBestChrom.setFitnessValue(11);
     selector.add(secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    DefaultConfiguration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
-    randgen.setNextDouble(0.9999d);
-    conf.setRandomGenerator(randgen);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -151,38 +144,37 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_2()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    randgen.setNextDouble(0.9999d);
+    conf.setRandomGenerator(randgen);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
     selector.setDoubletteChromosomesAllowed(false);
-    Population toAddFrom = new Population();
+    Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 4);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 4);
     thirdBestChrom.setFitnessValue(10);
     toAddFrom.addChromosome(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new DoubleGene();
+    gene = new DoubleGene(conf);
     gene.setAllele(new Double(2.3d));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(12);
     toAddFrom.addChromosome(bestChrom);
     // add third chromosome
     // --------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 2);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 2);
     secondBestChrom.setFitnessValue(11);
     toAddFrom.addChromosome(secondBestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    DefaultConfiguration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
-    randgen.setNextDouble(0.9999d);
-    conf.setRandomGenerator(randgen);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, toAddFrom, popNew);
     IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -205,39 +197,38 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_3()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
+    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    randgen.setNextDouble(0.0d);
+    conf.setRandomGenerator(randgen);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
     selector.setDoubletteChromosomesAllowed(false);
-    Population toAddFrom = new Population();
+    Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 4);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 4);
     thirdBestChrom.setFitnessValue(0);
     toAddFrom.addChromosome(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new DoubleGene();
+    gene = new DoubleGene(conf);
     gene.setAllele(new Double(2.3d));
-    Chromosome bestChrom = new Chromosome(gene, 3);
+    Chromosome bestChrom = new Chromosome(conf, gene, 3);
     bestChrom.setFitnessValue(1.0d);
     toAddFrom.addChromosome(bestChrom);
     // add third chromosome
     // ---------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome secondBestChrom = new Chromosome(gene, 2);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 2);
     secondBestChrom.setFitnessValue( -1.0d);
     toAddFrom.addChromosome(secondBestChrom);
     // receive top 3 chromosomes, no error should occur
     // ------------------------------------------------
-    DefaultConfiguration conf = new DefaultConfiguration();
-    conf.addNaturalSelector(new WeightedRouletteSelector(), false);
-    Genotype.setConfiguration(conf);
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
-    randgen.setNextDouble(0.0d);
-    conf.setRandomGenerator(randgen);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(3, toAddFrom, popNew);
   }
 
@@ -250,39 +241,38 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_4()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    randgen.setNextDouble(0.9999d);
+    conf.setRandomGenerator(randgen);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
     selector.setDoubletteChromosomesAllowed(false);
-    Population toAddFrom = new Population();
+    Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
-    Gene gene = new BooleanGene();
+    Gene gene = new BooleanGene(conf);
     gene.setAllele(Boolean.valueOf(true));
-    Chromosome thirdBestChrom = new Chromosome(gene, 4);
+    Chromosome thirdBestChrom = new Chromosome(conf, gene, 4);
     thirdBestChrom.setFitnessValue(1);
     toAddFrom.addChromosome(thirdBestChrom);
     // add second chromosome
     // ---------------------
-    gene = new DoubleGene();
+    gene = new DoubleGene(conf);
     gene.setAllele(new Double(2.3d));
-    Chromosome secondBestChrom = new Chromosome(gene, 3);
+    Chromosome secondBestChrom = new Chromosome(conf, gene, 3);
     secondBestChrom.setFitnessValue(2);
     toAddFrom.addChromosome(secondBestChrom);
     // add third chromosome
     // --------------------
-    gene = new IntegerGene();
+    gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
-    Chromosome bestChrom = new Chromosome(gene, 2);
+    Chromosome bestChrom = new Chromosome(conf, gene, 2);
     bestChrom.setFitnessValue(3);
     toAddFrom.addChromosome(bestChrom);
     // receive top 1 (= best) chromosome
     // ---------------------------------
-    DefaultConfiguration conf = new DefaultConfiguration();
-    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
-    Genotype.setConfiguration(conf);
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
-    randgen.setNextDouble(0.9999d);
-    conf.setRandomGenerator(randgen);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, toAddFrom, popNew);
     IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
@@ -308,9 +298,8 @@ public class WeightedRouletteSelectorTest
     Configuration conf = new DefaultConfiguration();
     conf.setPopulationSize(7);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
     conf.setSampleChromosome(chrom);
     selector.add(chrom);
     selector.empty();
@@ -319,46 +308,44 @@ public class WeightedRouletteSelectorTest
   }
 
   /**
-   * Test if clear()-method does not affect original Population
+   * Test if clear()-method does not affect original Population.
    * @throws Exception
    *
    * @author Klaus Meffert
    */
   public void testEmpty_1()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
     chrom.setFitnessValue(3);
-    Population pop = new Population(1);
+    Population pop = new Population(conf, 1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     selector.empty();
     assertEquals(1, popNew.size());
   }
 
   /**
-   * Test if clear()-method does not affect return value
+   * Test if clear()-method does not affect return value.
    * @throws Exception
    *
    * @author Klaus Meffert
    */
   public void testEmpty_2()
       throws Exception {
-    WeightedRouletteSelector selector = new WeightedRouletteSelector();
     Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
-    Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 5);
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, gene, 5);
     chrom.setFitnessValue(7);
-    Population pop = new Population(1);
+    Population pop = new Population(conf, 1);
     pop.addChromosome(chrom);
     selector.add(chrom);
-    Population popNew = new Population();
+    Population popNew = new Population(conf);
     selector.select(1, null, popNew);
     selector.empty();
     assertEquals(1, popNew.size());
@@ -372,7 +359,6 @@ public class WeightedRouletteSelectorTest
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     assertFalse(selector.returnsUniqueChromosomes());
   }
-
   /**@todo add test*/
 //  public void test_WeightedSelection_0() {
 //    WeightedRouletteSelector ws = new WeightedRouletteSelector();

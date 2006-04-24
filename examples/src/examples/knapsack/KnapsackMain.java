@@ -29,7 +29,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -85,11 +85,11 @@ public class KnapsackMain {
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[itemVolumes.length];
     for (int i = 0; i < itemVolumes.length; i++) {
-      sampleGenes[i] = new IntegerGene(0,
+      sampleGenes[i] = new IntegerGene(conf, 0,
                                        (int) Math.ceil(a_knapsackVolume /
           itemVolumes[i]));
     }
-    IChromosome sampleChromosome = new Chromosome(sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,

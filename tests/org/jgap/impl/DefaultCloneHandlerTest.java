@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for DefaultCloneHandler class
+ * Tests the DefaultCloneHandler class.
  *
  * @author Klaus Meffert
  * @since 2.6
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultCloneHandlerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCloneHandlerTest.class);
@@ -55,26 +55,6 @@ public class DefaultCloneHandlerTest
   }
 
   /**
-   * Try to clone object without initializing it properly.
-   * @throws Exception
-   *
-   * @author Klaus meffert
-   * @since 2.6
-   */
-  public void testPerform_0()
-      throws Exception {
-    IHandler handler = new DefaultCloneHandler();
-    Chromosome orig = new Chromosome();
-    try {
-      handler.perform(orig, Chromosome.class, null);
-      fail();
-    }
-    catch (IllegalStateException ix) {
-      ; //this is OK as no config set for Chromosome
-    }
-  }
-
-  /**
    * @throws Exception
    *
    * @author Klaus meffert
@@ -83,7 +63,7 @@ public class DefaultCloneHandlerTest
   public void testPerform_1()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    FixedBinaryGene orig = new FixedBinaryGene(3);
+    FixedBinaryGene orig = new FixedBinaryGene(conf, 3);
     FixedBinaryGene clone = (FixedBinaryGene) handler.perform(orig,
         FixedBinaryGene.class, null);
     assertEquals(orig, clone);

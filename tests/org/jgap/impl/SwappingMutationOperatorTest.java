@@ -15,7 +15,7 @@ import org.jgap.JGAPTestCase.*;
 import junit.framework.*;
 
 /**
- * Tests the SwappingMutationOperator class
+ * Tests the SwappingMutationOperator class.
  *
  * @author Klaus Meffert
  * @since 2.1
@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -31,42 +31,54 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.1
+   * @throws Exception
    */
-  public void testConstruct_0() {
-    SwappingMutationOperator mutOp = new SwappingMutationOperator(234);
+  public void testConstruct_0()
+      throws Exception {
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf, 234);
     assertEquals(234, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.1
+   * @throws Exception
    */
-  public void testConstruct_1() {
-    SwappingMutationOperator mutOp = new SwappingMutationOperator();
+  public void testConstruct_1()
+      throws Exception {
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf);
     assertEquals(0, mutOp.getMutationRate());
     assertNotNull(mutOp.getMutationRateCalc());
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.1
+   * @throws Exception
    */
-  public void testConstruct_2() {
-    SwappingMutationOperator mutOp = new SwappingMutationOperator(null);
+  public void testConstruct_2()
+      throws Exception {
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf, null);
     assertEquals(0, mutOp.getMutationRate());
     assertNull(mutOp.getMutationRateCalc());
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.1
+   * @throws Exception
    */
-  public void testConstruct_3() {
-    IUniversalRateCalculator calc = new DefaultMutationRateCalculator();
-    MutationOperator mutOp = new MutationOperator(calc);
+  public void testConstruct_3()
+      throws Exception {
+    IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
+    MutationOperator mutOp = new MutationOperator(conf, calc);
     assertEquals(0, mutOp.getMutationRate());
     assertEquals(calc, mutOp.getMutationRateCalc());
   }
@@ -81,31 +93,30 @@ public class SwappingMutationOperatorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Genotype.setConfiguration(conf);
-    SwappingMutationOperator mutOp = new SwappingMutationOperator();
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf,
+        new DefaultMutationRateCalculator(conf));
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[] {};
-    mutOp.operate(new Population(population), candChroms);
+    mutOp.operate(new Population(conf, population), candChroms);
     assertEquals(candChroms.size(), population.length);
     candChroms.clear();
     RandomGeneratorForTest gen = new RandomGeneratorForTest();
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
-    Genotype.setConfiguration(conf);
-    Chromosome c1 = new Chromosome(new BooleanGene(), 9);
+    Chromosome c1 = new Chromosome(conf, new BooleanGene(conf), 9);
     conf.setSampleChromosome(c1);
-    conf.addNaturalSelector(new BestChromosomesSelector(), true);
+    conf.addNaturalSelector(new BestChromosomesSelector(conf), true);
     conf.setPopulationSize(5);
     for (int i = 0; i < c1.getGenes().length; i++) {
       c1.getGene(i).setAllele(Boolean.TRUE);
     }
-    Chromosome c2 = new Chromosome(new IntegerGene(), 4);
+    Chromosome c2 = new Chromosome(conf, new IntegerGene(conf), 4);
     for (int i = 0; i < c2.getGenes().length; i++) {
       c2.getGene(i).setAllele(new Integer(27));
     }
     population = new Chromosome[] {
         c1, c2};
-    mutOp.operate(new Population(population), candChroms);
+    mutOp.operate(new Population(conf, population), candChroms);
     assertEquals(candChroms.size(), population.length);
     assertEquals(c1, candChroms.get(0));
     assertFalse(candChroms.get(0) == c1);
@@ -121,33 +132,35 @@ public class SwappingMutationOperatorTest
    */
   public void testOperate_1()
       throws Exception {
-    SwappingMutationOperator mutOp = new SwappingMutationOperator();
     List candChroms = new Vector();
-    Chromosome[] population = new Chromosome[] {
-        new Chromosome(new BooleanGene(), 9),
-        (new Chromosome(new IntegerGene(), 4))};
     Configuration conf = new Configuration();
     conf.setRandomGenerator(new StockRandomGenerator());
-    Genotype.setConfiguration(conf);
-    mutOp.operate(new Population(population), candChroms);
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf, null);
+    Chromosome[] population = new Chromosome[] {
+        new Chromosome(conf, new BooleanGene(conf), 9),
+        (new Chromosome(conf, new IntegerGene(conf), 4))};
+    mutOp.operate(new Population(conf, population), candChroms);
     /**@todo assert result is correct*/
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.1
+   * @throws Exception
    */
-  public void testOperate_2() {
-    SwappingMutationOperator mutOp = new SwappingMutationOperator();
+  public void testOperate_2()
+      throws Exception {
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf);
     List candChroms = new Vector();
     Chromosome[] population = new Chromosome[] {
-        new Chromosome(new BooleanGene(), 9),
-        (new Chromosome(new IntegerGene(), 4))};
+        new Chromosome(conf, new BooleanGene(conf), 9),
+        (new Chromosome(conf, new IntegerGene(conf), 4))};
     try {
-      mutOp.operate(new Population(population), candChroms);
+      mutOp.operate(new Population(null, population), candChroms);
       fail();
     }
-    catch (NullPointerException nex) {
+    catch (InvalidConfigurationException nex) {
       ; //this is OK
     }
   }
@@ -162,43 +175,43 @@ public class SwappingMutationOperatorTest
   public void testOperate_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    SwappingMutationOperator op = new SwappingMutationOperator();
+    SwappingMutationOperator op = new SwappingMutationOperator(conf,
+        new DefaultMutationRateCalculator(conf));
     op.setStartOffset(0);
     conf.addGeneticOperator(op);
-    Genotype.setConfiguration(conf);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextDouble(0.45d);
     rand.setNextInt(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
-    Gene sampleGene = new IntegerGene(1, 10);
-    Chromosome chrom = new Chromosome(sampleGene, 3);
+    Gene sampleGene = new IntegerGene(conf, 1, 10);
+    Chromosome chrom = new Chromosome(conf, sampleGene, 3);
     conf.setSampleChromosome(chrom);
     conf.setPopulationSize(6);
-    Gene cgene1 = new IntegerGene(1, 10);
+    Gene cgene1 = new IntegerGene(conf, 1, 10);
     cgene1.setAllele(new Integer(6));
     Gene[] genes1 = new Gene[] {
         cgene1};
-    Chromosome chrom1 = new Chromosome(genes1);
-    Gene cgene2 = new IntegerGene(1, 10);
+    Chromosome chrom1 = new Chromosome(conf, genes1);
+    Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(9));
     Gene[] genes2 = new Gene[] {
         cgene2};
-    Chromosome chrom2 = new Chromosome(genes2);
+    Chromosome chrom2 = new Chromosome(conf, genes2);
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
-    Gene gene1 = new IntegerGene(1, 10);
+    Gene gene1 = new IntegerGene(conf, 1, 10);
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
-    Gene gene2 = new IntegerGene(1, 10);
+    Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    Gene gene3 = new IntegerGene(1, 10);
+    Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
     assertEquals(3, chroms.size());
-    Population pop = new Population(population);
+    Population pop = new Population(conf, population);
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
     assertEquals(3 + 2, chroms.size());
@@ -220,15 +233,14 @@ public class SwappingMutationOperatorTest
       throws Exception {
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
-    Genotype.setConfiguration(conf);
     int n_iterations = 20;
     RandomGenerator generator = new StockRandomGenerator();
-    SwappingMutationOperator mutOp = new SwappingMutationOperator();
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf);
     mutOp.setStartOffset(0);
     for (int n_genes = 0; n_genes < 20; n_genes++) {
       Gene[] genes = new IntegerGene[n_genes];
       for (int i = 0; i < genes.length; i++) {
-        genes[i] = new IntegerGene( -1000, 1000);
+        genes[i] = new IntegerGene(conf, -1000, 1000);
         genes[i].setToRandomValue(generator);
       }
       final long checksum = checksum(genes);
@@ -249,17 +261,19 @@ public class SwappingMutationOperatorTest
    *
    * @author Klaus Meffert
    * @since 2.6
+   * @throws Exception
    */
-  public void testOperate_5() {
-    Genotype.setConfiguration(new DefaultConfiguration());
-    SwappingMutationOperator mutOp = new SwappingMutationOperator(0);
+  public void testOperate_5()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf, 0);
     mutOp.setMutationRateCalc(null);
     List candChroms = new Vector();
-    BooleanGene gene1 = new BooleanGene();
-    Chromosome chrom1 = new Chromosome(gene1, 1);
+    BooleanGene gene1 = new BooleanGene(conf);
+    Chromosome chrom1 = new Chromosome(conf, gene1, 1);
     chrom1.getGene(0).setAllele(Boolean.valueOf(false));
-    IntegerGene gene2 = new IntegerGene(0, 10);
-    Chromosome chrom2 = new Chromosome(gene2, 1);
+    IntegerGene gene2 = new IntegerGene(conf, 0, 10);
+    Chromosome chrom2 = new Chromosome(conf, gene2, 1);
     chrom2.getGene(0).setAllele(new Integer(3));
     candChroms.add(chrom1);
     candChroms.add(chrom2);
@@ -278,11 +292,14 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   *
    * @author Klaus Meffert
    * @since 2.2
+   * @throws Exception
    */
-  public void testStartoffset_0() {
-    SwappingMutationOperator op = new SwappingMutationOperator();
+  public void testStartoffset_0()
+      throws Exception {
+    SwappingMutationOperator op = new SwappingMutationOperator(conf);
     assertEquals(1, op.getStartOffset());
     op.setStartOffset(2);
     assertEquals(2, op.getStartOffset());
@@ -301,7 +318,7 @@ public class SwappingMutationOperatorTest
    */
   public void testIsSerializable_0()
       throws Exception {
-    SwappingMutationOperator op = new SwappingMutationOperator();
+    SwappingMutationOperator op = new SwappingMutationOperator(conf);
     assertTrue(isSerializable(op));
   }
 
@@ -315,8 +332,8 @@ public class SwappingMutationOperatorTest
   public void testDoSerialize_0()
       throws Exception {
     // construct object to be serialized
-    SwappingMutationOperator op = new SwappingMutationOperator(
-        new DefaultCrossoverRateCalculator());
+    SwappingMutationOperator op = new SwappingMutationOperator(conf,
+        new DefaultCrossoverRateCalculator(conf));
     SwappingMutationOperator o = (SwappingMutationOperator) doSerialize(op);
     assertEquals(o, op);
   }
@@ -328,8 +345,9 @@ public class SwappingMutationOperatorTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testEquals_0() throws Exception {
-    GeneticOperator op = new SwappingMutationOperator();
-    assertFalse(op.equals(new Chromosome()));
+  public void testEquals_0()
+      throws Exception {
+    GeneticOperator op = new SwappingMutationOperator(conf);
+    assertFalse(op.equals(new Chromosome(conf)));
   }
 }

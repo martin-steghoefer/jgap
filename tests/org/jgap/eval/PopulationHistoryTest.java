@@ -10,10 +10,8 @@
 package org.jgap.eval;
 
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.impl.*;
-
 import junit.framework.*;
 
 /**
@@ -25,7 +23,7 @@ import junit.framework.*;
 public class PopulationHistoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -74,26 +72,25 @@ public class PopulationHistoryTest
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testGetPopulation_1() {
-    Population pop = new Population();
+  public void testGetPopulation_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Population pop = new Population(conf);
     Gene gene = new BooleanGene();
-    Chromosome chrom = new Chromosome(gene, 4);
+    Chromosome chrom = new Chromosome(conf, gene, 4);
     chrom.setFitnessValue(17);
     pop.addChromosome(chrom);
-
-    Population pop2 = new Population();
+    Population pop2 = new Population(conf);
     gene = new IntegerGene();
-    chrom = new Chromosome(gene, 3);
+    chrom = new Chromosome(conf, gene, 3);
     chrom.setFitnessValue(3);
     pop2.addChromosome(chrom);
-
     //ensure we have not two populations seen as equal.
     assertFalse(pop.equals(pop2));
     PopulationHistory ph = new PopulationHistory(0);
     ph.addPopulation(pop);
     ph.addPopulation(pop2);
     assertEquals(2, ph.size());
-
     //lastly added population has index 0!
     Population result = ph.getPopulation(1);
     assertEquals(pop, result);
@@ -105,10 +102,11 @@ public class PopulationHistoryTest
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testRemoveAllPopulations_0() {
+  public void testRemoveAllPopulations_0()
+      throws Exception {
     PopulationHistory ph = new PopulationHistory(0);
-    Population pop = new Population();
-    Population pop2 = new Population();
+    Population pop = new Population(conf);
+    Population pop2 = new Population(conf);
     ph.addPopulation(pop);
     ph.addPopulation(pop2);
     ph.removeAllPopulations();
@@ -116,16 +114,17 @@ public class PopulationHistoryTest
   }
 
   /**
-   * Limited capacity of 2 Population objects
+   * Limited capacity of 2 Population objects.
    *
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testAddPopulation_0() {
+  public void testAddPopulation_0()
+      throws Exception {
     PopulationHistory ph = new PopulationHistory(2);
-    Population pop = new Population();
-    Population pop2 = new Population();
-    Population pop3 = new Population();
+    Population pop = new Population(conf);
+    Population pop2 = new Population(conf);
+    Population pop3 = new Population(conf);
     ph.addPopulation(pop);
     assertEquals(1, ph.size());
     ph.addPopulation(pop2);
@@ -135,16 +134,17 @@ public class PopulationHistoryTest
   }
 
   /**
-   * Unlimited capacity of Population objects
+   * Unlimited capacity of Population objects.
    *
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testAddPopulation_1() {
+  public void testAddPopulation_1()
+      throws Exception {
     PopulationHistory ph = new PopulationHistory(0);
-    Population pop = new Population();
-    Population pop2 = new Population();
-    Population pop3 = new Population();
+    Population pop = new Population(conf);
+    Population pop2 = new Population(conf);
+    Population pop3 = new Population(conf);
     ph.addPopulation(pop);
     assertEquals(1, ph.size());
     ph.addPopulation(pop2);
@@ -154,15 +154,16 @@ public class PopulationHistoryTest
   }
 
   /**
-   * Unlimited capacity of Population objects
+   * Unlimited capacity of Population objects.
    *
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testSetPopulations_0() {
-    Population pop = new Population();
-    Population pop2 = new Population();
-    Population pop3 = new Population();
+  public void testSetPopulations_0()
+      throws Exception {
+    Population pop = new Population(conf);
+    Population pop2 = new Population(conf);
+    Population pop3 = new Population(conf);
     List pops = new Vector();
     pops.add(pop);
     pops.add(pop2);
@@ -176,15 +177,16 @@ public class PopulationHistoryTest
   }
 
   /**
-   * Limited capacity of Population objects
+   * Limited capacity of Population objects.
    *
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testSetPopulations_1() {
-    Population pop = new Population();
-    Population pop2 = new Population();
-    Population pop3 = new Population();
+  public void testSetPopulations_1()
+      throws Exception {
+    Population pop = new Population(conf);
+    Population pop2 = new Population(conf);
+    Population pop3 = new Population(conf);
     List pops = new Vector();
     pops.add(pop);
     pops.add(pop2);
@@ -197,14 +199,15 @@ public class PopulationHistoryTest
   }
 
   /**
-   * Limited capacity of Population objects
+   * Limited capacity of Population objects.
    *
    * @author Klaus Meffert
    * @since 2.1
    */
-  public void testSize_0() {
-    Population pop = new Population();
-    Population pop2 = new Population();
+  public void testSize_0()
+      throws Exception {
+    Population pop = new Population(conf);
+    Population pop2 = new Population(conf);
     PopulationHistory ph = new PopulationHistory(2);
     ph.addPopulation(pop);
     assertEquals(1, ph.size());
@@ -223,14 +226,15 @@ public class PopulationHistoryTest
   /**
    * @author Klaus Meffert
    */
-  public void testGetPopulations_0() {
+  public void testGetPopulations_0()
+      throws Exception {
     PopulationHistory ph = new PopulationHistory(3);
     List l = ph.getPopulations();
     assertEquals(0, l.size());
-    Population pop = new Population();
+    Population pop = new Population(conf);
     ph.addPopulation(pop);
     assertEquals(1, l.size());
-    Population pop2 = new Population();
+    Population pop2 = new Population(conf);
     ph.addPopulation(pop2);
     assertEquals(2, l.size());
     ph.addPopulation(pop2);

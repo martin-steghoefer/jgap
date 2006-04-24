@@ -19,10 +19,14 @@ import junit.framework.*;
 public class SupergeneInternalParserTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   class TestClass
       extends AbstractSupergene {
+
+    public TestClass() throws InvalidConfigurationException {
+      super();
+    }
     public boolean testInternalParser() {
       /* Undocumented test statements. */
       String expectedResponse =
