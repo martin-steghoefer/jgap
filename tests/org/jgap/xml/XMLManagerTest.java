@@ -17,7 +17,7 @@ import org.w3c.dom.*;
 import junit.framework.*;
 
 /**
- * Tests for XMLManager class
+ * Tests the XMLManager class.
  *
  * @author Klaus Meffert
  * @since 1.0
@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -137,8 +137,9 @@ public class XMLManagerTest
     try {
       XMLManager.getGenesFromElement(m_conf, null);
       fail();
-    } catch (ImproperXMLException iex) {
-      ;//this is OK
+    }
+    catch (ImproperXMLException iex) {
+      ; //this is OK
     }
   }
 
@@ -181,8 +182,9 @@ public class XMLManagerTest
     try {
       XMLManager.getGenotypeFromElement(m_conf, null);
       fail();
-    } catch (ImproperXMLException iex) {
-      ;//this is OK
+    }
+    catch (ImproperXMLException iex) {
+      ; //this is OK
     }
   }
 
@@ -256,7 +258,7 @@ public class XMLManagerTest
   }
 
   /**
-   * Do the same as above test to verify that overriding existing file works
+   * Do the same as above test to verify that overriding existing file works.
    * @throws Exception
    */
   public void testWriteFile_1()
@@ -265,5 +267,58 @@ public class XMLManagerTest
     File f = File.createTempFile("FILENAME_WRITE", "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
                          f);
+  }
+
+  /**
+   * Tests XML capabilities of JGAP. Moved from examples.simpleBoolean.TestXML.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testChromosome_0()
+      throws Exception {
+    Configuration activeConfiguration = new DefaultConfiguration();
+    activeConfiguration.setSampleChromosome(
+        new Chromosome(activeConfiguration,
+                       new BooleanGene(activeConfiguration), 8));
+    activeConfiguration.setPopulationSize(10);
+    activeConfiguration.setFitnessFunction(new TestFitnessFunction());
+    // Test Chromsome manipulation methods.
+    // ------------------------------------
+    IChromosome chromosome = Chromosome.randomInitialChromosome(
+        activeConfiguration);
+    Document chromosomeDoc =
+        XMLManager.representChromosomeAsDocument(chromosome);
+    IChromosome chromosomeFromXML =
+        XMLManager.getChromosomeFromDocument(activeConfiguration,
+                                             chromosomeDoc);
+    assertEquals(chromosomeFromXML, chromosome);
+  }
+
+  /**
+   * Tests XML capabilities of JGAP. Moved from examples.simpleBoolean.TestXML.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGenotype_0()
+      throws Exception {
+    Configuration activeConfiguration = new DefaultConfiguration();
+    activeConfiguration.setSampleChromosome(
+        new Chromosome(activeConfiguration,
+                       new BooleanGene(activeConfiguration), 8));
+    activeConfiguration.setPopulationSize(10);
+    activeConfiguration.setFitnessFunction(new TestFitnessFunction());
+    // Test Genotype manipulation methods.
+    // -----------------------------------
+    Genotype genotype =
+        Genotype.randomInitialGenotype(activeConfiguration);
+    Document genotypeDoc =
+        XMLManager.representGenotypeAsDocument(genotype);
+    Genotype genotypeFromXML =
+        XMLManager.getGenotypeFromDocument(activeConfiguration, genotypeDoc);
+    assertEquals(genotypeFromXML, genotype);
   }
 }
