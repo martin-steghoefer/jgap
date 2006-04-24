@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for Culture class
+ * Tests the Culture class.
  *
  * @author Klaus Meffert
  * @since 2.3
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CultureTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
@@ -67,6 +67,8 @@ public class CultureTest
   }
 
   /**
+   * Illegal index.
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
@@ -82,6 +84,8 @@ public class CultureTest
   }
 
   /**
+   * Illegal index (too high).
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
@@ -102,8 +106,9 @@ public class CultureTest
    */
   public void testGet_2() {
     Culture c = new Culture(9);
-    c.set(3, 5.7d, 0, "");
+    CultureMemoryCell cell1 = c.set(3, 5.7d, 0, "");
     CultureMemoryCell cell = c.get(3);
+    assertSame(cell1, cell);
     assertEquals(5.7d, cell.getCurrentValueAsDouble(), DELTA);
     assertEquals(0, cell.getHistorySize());
     assertEquals("", cell.getName());
@@ -115,8 +120,9 @@ public class CultureTest
    */
   public void testGet_3() {
     Culture c = new Culture(9);
-    c.set(3, -5.7d, -1, null);
+    CultureMemoryCell cell1 = c.set(3, -5.7d, -1, null);
     CultureMemoryCell cell = c.get(3);
+    assertSame(cell1, cell);
     assertEquals( -5.7d, cell.getCurrentValueAsDouble(), DELTA);
     assertEquals(0, cell.getHistorySize());
     assertEquals(null, cell.getName());
@@ -128,8 +134,9 @@ public class CultureTest
    */
   public void testGet_4() {
     Culture c = new Culture(11);
-    c.set(0, 0.0d, 17, "aName");
+    CultureMemoryCell cell1 = c.set(0, 0.0d, 17, "aName");
     CultureMemoryCell cell = c.get(0);
+    assertSame(cell1, cell);
     assertEquals(0.0d, cell.getCurrentValueAsDouble(), DELTA);
     assertEquals(17, cell.getHistorySize());
     assertEquals("aName", cell.getName());
