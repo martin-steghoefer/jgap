@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Test persistent representation of the abstractSupergene.
+ * Test persistent representation of the AbstractSupergene.
  *
  * @author Meskauskas Audrius
  * @since 2.0
@@ -22,7 +22,13 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
+  public static Test suite() {
+    TestSuite suite =
+        new TestSuite(SupergenePersistentRepresentationTest.class);
+    return suite;
+  }
 
   public static class InstantiableSupergene
       extends AbstractSupergene {
@@ -58,11 +64,7 @@ public class SupergenePersistentRepresentationTest
     nested.addGene(n2);
     gene.addGene(nested);
     InstantiableSupergene nested2 = new InstantiableSupergene(conf);
-    nested2.setValidator(new Validator() {
-      public boolean isValid(Gene[] a_gene, Supergene a_supergene) {
-        return true;
-      }
-    });
+    nested2.setValidator(new TestValidator(conf));
     Gene nn1 = new IntegerGene(conf, 1, 1000);
     Gene nn2 = new DoubleGene(conf, 0, 1000);
     nn1.setAllele(new Integer(22));
@@ -81,25 +83,19 @@ public class SupergenePersistentRepresentationTest
     nested2.addGene(nested3);
     String representation =
         gene.getPersistentRepresentation();
-//            System.out.println ("Old representation: " + representation);
     InstantiableSupergene restored = new InstantiableSupergene(conf);
     restored.setValueFromPersistentRepresentation(representation);
-//            System.out.println ("New representation: " +
-//                                restored.getPersistentRepresentation ());
-
-//            System.out.println("Old gene "+gene);
-//            System.out.println("New gene "+restored);
     assertTrue(gene.equals(restored));
   }
 
-  public static Test suite() {
-    TestSuite suite =
-        new TestSuite(SupergenePersistentRepresentationTest.class);
-    return suite;
-  }
+  public class TestValidator
+      extends Validator {
+    public TestValidator(final Configuration a_conf) {
+      super(a_conf);
+    }
 
-  protected void tearDown()
-      throws Exception {
-    super.tearDown();
+    public boolean isValid(Gene[] a_gene, Supergene a_supergene) {
+      return true;
+    }
   }
 }
