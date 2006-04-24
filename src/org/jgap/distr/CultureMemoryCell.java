@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -73,7 +73,8 @@ public class CultureMemoryCell {
   private long m_dateTimeVersion;
 
   /**
-   * Minimal constructor
+   * Default constructor.
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
@@ -82,7 +83,7 @@ public class CultureMemoryCell {
   }
 
   /**
-   * Sets history size to 3
+   * Sets history size to 3.
    * @param a_name informative name of the memory cell
    *
    * @author Klaus Meffert
@@ -205,6 +206,7 @@ public class CultureMemoryCell {
   }
 
   /**
+   * Increment version number and keep track of current time.
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -237,7 +239,7 @@ public class CultureMemoryCell {
 
   /**
    * Creates a new instance of CultureMemoryCell preset with the given
-   * parameters. Used for creating history entries
+   * parameters. Used for creating history entries.
    *
    * @param a_value memory value to store
    * @param a_version version of the value
@@ -290,7 +292,7 @@ public class CultureMemoryCell {
 
   /**
    * Sets the size of the history and scales down the history log it is larger
-   * than the given size
+   * than the given size.
    * @param a_size new size of the history log = how many entries to store
    *
    * @author Klaus Meffert
@@ -310,7 +312,7 @@ public class CultureMemoryCell {
   }
 
   /**
-   * Trims the history to the given size
+   * Trims the history to the given size.
    * @param a_size new size of history
    *
    * @author Klaus Meffert
@@ -348,7 +350,7 @@ public class CultureMemoryCell {
   }
 
   /**
-   * Recursive part of toString()
+   * Recursive part of toString().
    * @param a_result gathered result so far and modified here
    * @param a_historySize history size just for information purpose
    *

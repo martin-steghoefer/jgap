@@ -11,23 +11,23 @@ package org.jgap.distr;
 
 /**
  * Culture is a memory not being bound to a generation, but possibly persistent
- * during the whole history of a genotype (over all generations).
+ * during the whole history of a genotype (over all generations).<p>
+ * Also see http://cs.gmu.edu/~sean/papers/culture-gp96.pdf
  *
  * @author Klaus Meffert
  * @since 2.3
  */
 public class Culture {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
-   * The storage to use. I decided to use double values as they are as
-   * performant as integers (or even faster) and are usable generically.
+   * The storage to use.
    */
   private CultureMemoryCell[] m_memory;
 
   /**
-   * Constructor
+   * Constructor.
    * @param a_size size of the memory
    *
    * @author Klaus Meffert
@@ -41,17 +41,19 @@ public class Culture {
   }
 
   /**
-   * Sets a memory cell with a given value
+   * Sets a memory cell with a given value. The memory cell will be newly
+   * created for that.
    * @param a_index index of the memory cell
    * @param a_value value to set in the memory
    * @param a_historySize size of history to use, or less than 1 for turning
    * history off
    * @param a_name informative name of the memory cell
+   * @return newly created memory cell set with the given value
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void set(final int a_index, final double a_value,
+  public CultureMemoryCell set(final int a_index, final double a_value,
                   final int a_historySize, final String a_name) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
@@ -59,10 +61,11 @@ public class Culture {
     CultureMemoryCell cell = new CultureMemoryCell(a_name, a_historySize);
     cell.setDouble(a_value);
     m_memory[a_index] = cell;
+    return cell;
   }
 
   /**
-   * Retrieves the memory cell at the given index
+   * Retrieves the memory cell at the given index.
    * @param a_index index of the memory cell to read out
    * @return stored memory cell at given index
    *

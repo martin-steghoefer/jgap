@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Test class for CultureMemoryCell class
+ * Tests the CultureMemoryCell class.
  *
  * @author Klaus Meffert
  * @since 2.3
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CultureMemoryCellTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureMemoryCellTest.class);
@@ -66,7 +66,7 @@ public class CultureMemoryCellTest
   }
 
   /**
-   * Empty cell
+   * Empty cell.
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -91,7 +91,7 @@ public class CultureMemoryCellTest
   }
 
   /*
-   * Tests main functionality of CultureMemoryCell
+   * Tests main functionality of CultureMemoryCell.
    *
    * @author Klaus Meffert
    * @since 2.3
