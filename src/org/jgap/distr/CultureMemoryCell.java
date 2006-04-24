@@ -16,14 +16,14 @@ import java.util.*;
  * special form of memory.
  * <P>
  * CultureMemoryCell also stores metadata along with the value-to-store, like
- * date/time of setting a value, change history
+ * date/time of setting a value, change history.
  *
  * @author Klaus Meffert
  * @since 2.3
  */
 public class CultureMemoryCell {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -67,6 +67,12 @@ public class CultureMemoryCell {
   private List m_history;
 
   /**
+   * Time in milliseconds when the version number is incremented (e.g. when
+   * setting the value of the cell)
+   */
+  private long m_dateTimeVersion;
+
+  /**
    * Minimal constructor
    * @author Klaus Meffert
    * @since 2.3
@@ -103,7 +109,7 @@ public class CultureMemoryCell {
   }
 
   /**
-   * Sets the informative name of the memory cell
+   * Sets the informative name of the memory cell.
    * @param a_name informative name
    *
    * @author Klaus Meffert
@@ -124,7 +130,7 @@ public class CultureMemoryCell {
   }
 
   /**
-   * Sets a new memory value
+   * Sets a new memory value.
    * @param a_value the memory value to set
    *
    * @author Klaus Meffert
@@ -205,6 +211,8 @@ public class CultureMemoryCell {
    */
   protected void incrementVersion() {
     m_version++;
+    // Memorize current time.
+    m_dateTimeVersion = System.currentTimeMillis();
   }
 
   /**
@@ -366,5 +374,15 @@ public class CultureMemoryCell {
       a_result.append("]");
     }
     a_result.append("]");
+  }
+
+  /**
+   * @return time in milliseconds when the current version has been created
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public long getVersionTimeMilliseconds() {
+    return m_dateTimeVersion;
   }
 }
