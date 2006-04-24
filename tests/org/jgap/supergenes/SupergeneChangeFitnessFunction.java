@@ -22,14 +22,15 @@ import org.jgap.*;
 class SupergeneChangeFitnessFunction
     extends AbstractChangFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public SupergeneChangeFitnessFunction(int a_targetAmount) {
     super(a_targetAmount);
   }
 
-  /** Dimes and nickels are taken from the chromosome, and
-   * quarters and pennies are taken from the supergene (gene number 2)
+  /**
+   * Dimes and nickels are taken from the chromosome, and
+   * quarters and pennies are taken from the supergene (gene number 2).
    */
   public Gene getResponsibleGene(IChromosome a_chromosome, int a_code) {
     switch (a_code) {
