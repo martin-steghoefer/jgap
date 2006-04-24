@@ -11,14 +11,14 @@ package org.jgap.distr;
 
 /**
  * Culture is a memory not being bound to a generation, but possibly persistent
- * during the whole history of a genotype (over all generations)
+ * during the whole history of a genotype (over all generations).
  *
  * @author Klaus Meffert
  * @since 2.3
  */
 public class Culture {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The storage to use. I decided to use double values as they are as
