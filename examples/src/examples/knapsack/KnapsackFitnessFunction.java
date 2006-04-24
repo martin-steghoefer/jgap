@@ -19,9 +19,8 @@ import org.jgap.*;
  */
 public class KnapsackFitnessFunction
     extends FitnessFunction {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final double m_knapsackVolume;
 
@@ -29,15 +28,12 @@ public class KnapsackFitnessFunction
 
   private static final double ZERO_DIFFERENCE_FITNESS = Math.sqrt(MAX_BOUND);
 
-  public KnapsackFitnessFunction( double a_knapsackVolume )
-  {
-      if( a_knapsackVolume < 1 || a_knapsackVolume >= MAX_BOUND )
-      {
-          throw new IllegalArgumentException(
-              "Knapsack volumen must be between 1 and "+MAX_BOUND+"." );
-      }
-
-      m_knapsackVolume = a_knapsackVolume;
+  public KnapsackFitnessFunction(double a_knapsackVolume) {
+    if (a_knapsackVolume < 1 || a_knapsackVolume >= MAX_BOUND) {
+      throw new IllegalArgumentException(
+          "Knapsack volumen must be between 1 and " + MAX_BOUND + ".");
+    }
+    m_knapsackVolume = a_knapsackVolume;
   }
 
   /**
@@ -66,9 +62,7 @@ public class KnapsackFitnessFunction
     double totalVolume = getTotalVolume(a_subject);
     int numberOfItems = getTotalNumberOfItems(a_subject);
     double volumeDifference = Math.abs(m_knapsackVolume - totalVolume);
-
     double fitness = 0.0d;
-
     // Step 1: Determine distance of amount represented by solution from
     // the target amount. If the change difference is greater than zero we
     // will divide one by the difference in change between the
@@ -79,9 +73,7 @@ public class KnapsackFitnessFunction
     // In the case where the change difference is zero it means that we have
     // the correct amount and we assign a higher fitness value
     // -----------------------------------------------------------------
-
     fitness += volumeDifferenceBonus(MAX_BOUND, volumeDifference);
-
     // Step 2: We divide the fitness value by a penalty based on the number of
     // items. The higher the number of items the higher the penalty and the
     // smaller the fitness value.
@@ -89,12 +81,10 @@ public class KnapsackFitnessFunction
     // the resulting fitness value.
     // -----------------------------------------------------------------------
     fitness -= computeItemNumberPenalty(MAX_BOUND, numberOfItems);
-
     // Make sure fitness value is always positive.
     // -------------------------------------------
     return Math.max(1.0d, fitness);
   }
-
 
   /**
    * Bonus calculation of fitness value.
@@ -130,18 +120,15 @@ public class KnapsackFitnessFunction
    */
   protected double computeItemNumberPenalty(double a_maxFitness, int a_items) {
     if (a_items == 0) {
-      // we know the solution cannot have less than zero items
+      // We know the solution cannot have less than zero items.
+      // ------------------------------------------------------
       return 0;
     }
     else {
       // The more items the more penalty, but not more than the maximum fitness
       // value possible. Let's avoid linear behavior and use
-      // exponential penalty calculation instead
-
-      /**@todo consider that having fewer different item types is better than
-       * having more types (at least if number of items in total is equal)
-       */
-
+      // exponential penalty calculation instead.
+      // ----------------------------------------------------------------------
       return (Math.min(a_maxFitness, a_items * a_items));
     }
   }
@@ -203,5 +190,4 @@ public class KnapsackFitnessFunction
     }
     return totalItems;
   }
-
 }
