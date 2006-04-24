@@ -40,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   private int m_minLength;
 
@@ -586,7 +586,7 @@ public class StringGene
     }
     char newValue;
     RandomGenerator rn;
-    rn = Genotype.getConfiguration().getRandomGenerator();
+    rn = getConfiguration().getRandomGenerator();
     if (!randomize) {
       int indexC = m_alphabet.indexOf(s.charAt(index));
       index2 = indexC + (int) Math.round(len * a_percentage);

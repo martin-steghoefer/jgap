@@ -12,6 +12,7 @@ package org.jgap.impl;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.lang.reflect.*;
 import org.jgap.*;
 
 /**
@@ -40,7 +41,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   /**
    * This field separates gene class name from
@@ -313,7 +314,8 @@ public class CompositeGene
                             String a_persistentRepresentation)
       throws Exception {
     Class geneClass = Class.forName(a_geneClassName);
-    Gene gene = (Gene) geneClass.newInstance();
+    Constructor constr = geneClass.getConstructor(new Class[] {Configuration.class});
+    Gene gene = (Gene) constr.newInstance(new Object[] {getConfiguration()});
     gene.setValueFromPersistentRepresentation(a_persistentRepresentation);
     return gene;
   }
