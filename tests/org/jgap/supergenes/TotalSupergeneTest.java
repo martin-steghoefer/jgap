@@ -23,7 +23,7 @@ import junit.framework.*;
 public class TotalSupergeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Test supported Supegene features, including performance tests.
@@ -36,8 +36,8 @@ public class TotalSupergeneTest
       AbstractSupergeneTest.REPORT_ENABLED = false;
       Force.REPORT_ENABLED = false;
       System.out.println("Testing Persistent representation");
-      assertTrue("Persistent representation",
-          SupergenePersistentRepresentationTest.testRepresentation());
+//      assertTrue("Persistent representation",
+//          SupergenePersistentRepresentationTest.testRepresentation());
       System.out.println("Testing Supergene 150 % performance benefit ");
       AbstractSupergeneTest.MAX_ALLOWED_EVOLUTIONS = 512;
       AbstractSupergeneTest.POPULATION_SIZE = 256;
