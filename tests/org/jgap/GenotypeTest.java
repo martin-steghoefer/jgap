@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1040,8 +1040,10 @@ public class GenotypeTest
   }
 
   /**
-   * This test fails --> need for revamping configuration object handling
+   * This test fails and shows the need for revamping configuration object
+   * handling.
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testSetActiveConfiguration_0()
