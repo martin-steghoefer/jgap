@@ -1,10 +1,16 @@
 3.0
 -----------------------------------------------------------
+* Added genetic programming capabilities to JGAP.
+  The classes are put into package org.jgap.gp.
+  An example could be found in package examples.gp.
+  In CVS, the directory's name is gp-src holding both pieces 
 * Added abstract base class org.jgap.BaseChromosome
   and made Chromosome descend from it
 * Added method getConfiguration to interface IChromosome
 * Added abstract base class org.jgap.BaseGeneticOperator
   and made any GeneticOperator's descend from it
+* Enhanced BooleanGene.compareTo to consider application
+  data
 * Fixed error in method KeyedValues.getIndex()
 * Fixed error in method Evaluator.getValue(int, int..)
 * Fixed error in method MapGene.compareTo(Object)
