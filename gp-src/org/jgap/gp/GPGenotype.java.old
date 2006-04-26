@@ -1,0 +1,120 @@
+package org.jgap.gp;
+
+import java.util.*;
+import org.jgap.*;
+import org.jgap.event.*;
+import org.jgap.impl.*;
+import org.jgap.gp.*;
+import examples.gp.function.*;
+
+/**
+ * Genotype for GP Programs. This Genotype knows an Interpreter it calls in the
+ * evolve() method.
+ *
+ * @author Klaus Meffert
+ * @since 2.0
+ */
+public class GPGenotype
+    extends Genotype {
+
+  private static Map m_variables;
+
+
+  public GPGenotype(Configuration a_activeConfiguration,
+                    Population a_population)
+      throws InvalidConfigurationException {
+    super(a_activeConfiguration, a_population);
+    m_variables = new Hashtable();
+  }
+
+  public static Genotype randomInitialGenotype(Configuration
+                                               a_activeConfiguration)
+      throws InvalidConfigurationException {
+    GPGenotype.setConfiguration(a_activeConfiguration);
+    int populationSize = a_activeConfiguration.getPopulationSize();
+    Population pop = new Population(populationSize);
+    for (int i = 0; i < populationSize; i++) {
+
+      /**@todo implement: create random though valid collection of CommandGene's*/
+      Gene[] genes = new Gene[1];
+      // + (* 2 3) * (4 5) = 26
+      CommandGene gene = new AddCommand();
+      genes[0] = gene;
+//    CommandGene gene2 = new MultiplyCommand();
+//    genes[1] = gene2;
+//    Terminal gene3 = new Terminal();
+//    gene3.setValue(2.0d);
+//    genes[2] = gene3;
+//    Terminal gene4 = new Terminal();
+//    gene4.setValue(3.0d);
+//    genes[3] = gene4;
+//    CommandGene gene5 = new MultiplyCommand();
+//    genes[4] = gene5;
+//    Terminal gene6 = new Terminal();
+//    gene6.setValue(4.0d);
+//    genes[5] = gene6;
+//    Terminal gene7 = new Terminal();
+//    gene7.setValue(5.0d);
+//    genes[6] = gene7;
+      ProgramChromosome chrom = new ProgramChromosome(genes);
+      chrom.setLanguage(new MathLanguage());
+      chrom.getLanguage().fillProgram(chrom);
+
+      pop.addChromosome(chrom);
+    }
+
+    return new GPGenotype(a_activeConfiguration, pop);
+  }
+
+  public void evolve(int i) {
+    for (int j = 0; j < i; j++) {
+      super.evolve();
+      Chromosome bestSolutionSoFar = getFittestChromosome();
+      System.out.println(bestSolutionSoFar.getFitnessValue());
+    }
+  }
+
+  // Method for testing purpose only during development phase
+  public static void main(String[] args)
+      throws Exception {
+    Configuration conf = new MathConfiguration(null);
+    conf.setEventManager(new EventManager());
+
+    // Set the fitness function we want to use, which is our
+    // MinimizingMakeChangeFitnessFunction. We construct it with
+    // the target amount of change passed in to this method.
+    // ---------------------------------------------------------
+//    FitnessFunction myFunc = new FormulaFitnessFunction();
+//    conf.setFitnessFunction(myFunc);
+    conf.setPopulationSize(100);
+
+    Gene[] sampleGenes = new Gene[3];
+    sampleGenes[0] = new AddCommand();
+    sampleGenes[1] = new Terminal();
+    sampleGenes[2] = new Terminal();
+    Chromosome sampleChromosome = new Chromosome(sampleGenes);
+    conf.setSampleChromosome(sampleChromosome);
+    conf.addNaturalSelector(new BestChromosomesSelector(), true);
+    conf.addGeneticOperator(new MutationOperator());
+    conf.setEventManager(new EventManager());
+    conf.setChromosomePool(new ChromosomePool());
+    conf.addGeneticOperator(new AveragingCrossoverOperator());
+    conf.setRandomGenerator(new StockRandomGenerator());
+
+    GPGenotype population;
+    population = (GPGenotype) GPGenotype.randomInitialGenotype(conf);
+    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    population.evolve(50);
+    Chromosome bestSolutionSoFar = population.getFittestChromosome();
+    System.out.println(bestSolutionSoFar.getFitnessValue());
+    MathLanguage.printProgram((ProgramChromosome)bestSolutionSoFar);
+  }
+
+  public static void setVariable(String varName, Object value) {
+    m_variables.put(varName, value);
+  }
+
+  public static Object getVariable(String varName) {
+    return m_variables.get(varName);
+  }
+}
