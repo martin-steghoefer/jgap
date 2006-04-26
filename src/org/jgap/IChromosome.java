@@ -20,7 +20,7 @@ import java.io.*;
 public interface IChromosome
     extends Comparable, Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
+  final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Constants for toString()
@@ -58,6 +58,7 @@ public interface IChromosome
    * Creates and returns a copy of this object. Added to this interface to
    * ensure that each chromosome implementation supports cloning.
    * @return a clone of this instance
+   * @throws IllegalStateException instead of CloneNotSupportedException
    *
    * @author Klaus Meffert
    * @since 2.6
@@ -80,5 +81,4 @@ public interface IChromosome
    * @since 3.0
    */
   public Configuration getConfiguration();
-
 }

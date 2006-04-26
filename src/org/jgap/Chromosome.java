@@ -64,13 +64,14 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.77 $";
+  private final static String CVS_REVISION = "$Revision: 1.78 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
-   * in the fitness function. JGAP completely ignores the data, aside
-   * from allowing it to be set and retrieved.
+   * in the fitness function. JGAP does not operate on the data, aside
+   * from allowing it to be set and retrieved, and considering it with
+   * comparations (if user opted in to do so).
    */
   private Object m_applicationData;
 
@@ -126,6 +127,7 @@ public class Chromosome
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 2.4
    */
