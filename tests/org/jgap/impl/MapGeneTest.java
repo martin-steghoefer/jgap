@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -291,8 +291,12 @@ public class MapGeneTest
     Gene gene2 = new MapGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
-    /**@todo compare two maps independent of the order of their elements*/
-    assertEquals(pres1, pres2);
+    // Compare genes itself, not string representation as the latter does not
+    // have a well-defined order of elements.
+    Gene gene3 = new MapGene(conf);
+    gene3.setValueFromPersistentRepresentation(pres2);
+    assertEquals(gene1, gene3);
+    assertEquals(gene2, gene3);
   }
 
   /**
@@ -323,7 +327,12 @@ public class MapGeneTest
                                                +
                                                MapGene.
                                                PERSISTENT_FIELD_DELIMITER
-                                               + "(0,1.0d),(2,3.0d),(4,5.0d)");
+                                               +
+        "(java.lang.Integer,0,java.lang.Double,1.0d),"
+                                               +
+        "(java.lang.Integer,2,java.lang.Double,3.0d),"
+                                               +
+        "(java.lang.Integer,4,java.lang.Double,5.0d)");
     assertEquals(6, ( (Integer) gene1.getAllele()).intValue());
     assertEquals(3, ( (Map) privateAccessor.getField(gene1,
         "m_geneMap")).size());
@@ -342,7 +351,9 @@ public class MapGeneTest
     gene1.setValueFromPersistentRepresentation("null"
                                                + MapGene.
                                                PERSISTENT_FIELD_DELIMITER
-                                               + "(0,1.0d),(2,3.0d),(4,5.0d)");
+                                               + "(java.lang.Integer,0,java.lang.Double,1.0d),"
+                                               + "(java.lang.Double, 2,java.lang.Double,3.0d),"
+                                               + "(java.lang.Double,4,java.lang.Double,5.0d)");
     assertNull(gene1.getAllele());
     assertEquals(3, ( (Map) privateAccessor.getField(gene1,
         "m_geneMap")).size());
@@ -383,13 +394,13 @@ public class MapGeneTest
     Gene gene1 = new MapGene(conf);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("null"
-                                               + MapGene.
-                                               PERSISTENT_FIELD_DELIMITER
-                                               + "(0,1.0d),");
+                                               +
+                                               MapGene.PERSISTENT_FIELD_DELIMITER
+                                               +
+        "(java.lang.Double,0,java.lang.Double,1.0d),");
   }
 
   /**
-   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -407,8 +418,12 @@ public class MapGeneTest
     Gene gene2 = new MapGene(conf);
     gene2.setValueFromPersistentRepresentation(pres1);
     String pres2 = gene2.getPersistentRepresentation();
-    /**@todo compare two maps independent of the order of their elements*/
-    assertEquals(pres1, pres2);
+    // Compare genes itself, not string representation as the latter does not
+    // have a well-defined order of elements.
+    Gene gene3 = new MapGene(conf);
+    gene3.setValueFromPersistentRepresentation(pres2);
+    assertEquals(gene1, gene3);
+    assertEquals(gene2, gene3);
   }
 
   /**
@@ -464,6 +479,25 @@ public class MapGeneTest
    * @author Klaus Meffert
    * @since 3.0
    */
+  public void testCompareTo_3()
+      throws Exception {
+    MapGene gene1 = new MapGene(conf);
+    gene1.addAllele(new Integer(58), new Integer(1));
+    gene1.addAllele(new Integer(77), new Integer(1));
+    gene1.addAllele(new Integer(62), new Integer(1));
+    MapGene gene2 = new MapGene(conf);
+    gene2.addAllele(new Integer(58), new Integer(1));
+    gene2.addAllele(new Integer(62), new Integer(1));
+    gene2.addAllele(new Integer(77), new Integer(1));
+    assertEquals(0, gene1.compareTo(gene2));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void testRemoveAlleles_0()
       throws Exception {
     MapGene gene1 = new MapGene(conf);
@@ -502,6 +536,9 @@ public class MapGeneTest
 //    assertEquals(Math.round(50 + (100 - 0) * 0.5d), gene.intValue());
 //  }
 
+  /**
+   * @throws Exception
+   */
   public void testSetToRandomValue_0()
       throws Exception {
     Gene gene = new MapGene(conf);
