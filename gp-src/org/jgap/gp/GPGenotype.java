@@ -1,3 +1,12 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.gp;
 
 import java.util.*;
@@ -6,16 +15,15 @@ import org.jgap.gp.*;
 import org.jgap.gp.*;
 
 /**
- * Genotype for GP Programs. This Genotype knows an Interpreter it calls in the
- * evolve() method.
+ * Genotype for GP Programs.
  *
  * @author Klaus Meffert
- * @since 2.0
+ * @since 3.0
  */
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static Map m_variables;
 
@@ -74,23 +82,26 @@ public class GPGenotype
    * {@link com.groovyj.jgprog.functions.ADF ADF}),
    * and restored after the call.
    *
-   * @param popSize the number of individuals in the population
-   * @param types the type of each chromosome, the length is
+   * @param a_conf the configuration to use
+   * @param a_types the type of each chromosome, the length is
    * the number of chromosomes
-   * @param argTypes the types of the arguments to each chromosome, must be an array
+   * @param a_argTypes the types of the arguments to each chromosome, must be an array
    * of arrays, the first dimension of which is the number of chromosomes and the
    * second dimension of which is the number of arguments to the chromosome.
-   * @param nodeSets the nodes which are allowed to be used by each chromosome, must
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome, must
    * be an array of arrays, the first dimension of which is the number of chromosomes
    * and the second dimension of which is the number of nodes. Note that it is not necessary
    * to include the arguments of a chromosome as terminals in the chromosome's node set.
-   * This is done automatically for you.
+   * This is done automatically for you
+   * @return created population
+   * @throws InvalidConfigurationException
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
-  public static GPPopulation create(final GPConfiguration a_conf, Class[] types,
-                                    Class[][] argTypes,
-                                    CommandGene[][] nodeSets)
+  public static GPPopulation create(final GPConfiguration a_conf, Class[] a_types,
+                                    Class[][] a_argTypes,
+                                    CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
     System.gc();
     System.out.println("Memory before create: "
@@ -101,7 +112,7 @@ public class GPGenotype
 //      ( (GPListener) listeners[ i ]).setPopulationSize(popSize);
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
-    pop.create(a_conf, types, argTypes, nodeSets);
+    pop.create(a_conf, a_types, a_argTypes, a_nodeSets);
     System.gc();
     System.out.println("Memory before computing initial fitnesses: "
                        + (Runtime.getRuntime().totalMemory() / 1024 / 1024) +

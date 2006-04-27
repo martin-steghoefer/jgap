@@ -12,19 +12,18 @@ package org.jgap.gp;
 import org.jgap.*;
 
 /**
- * Abstract base class for all GP commands.
- * A CommandGene can hold additional CommandGene's, it acts sort of like a
- * Composite (also see CompositeGene for a smiliar characteristics, although
- * for a GA).
+ * Abstract base class for all GP commands. A CommandGene can hold additional
+ * CommandGene's, it acts sort of like a Composite (also see CompositeGene for
+ * a smiliar characteristics, although for a GA).
  *
  * @author Klaus Meffert
- * @since 2.0
+ * @since 3.0
  */
 public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   //jg
   public final static Class booleanClass = Boolean.class;
@@ -56,8 +55,6 @@ public abstract class CommandGene
 
   //JG
   private int m_arity;
-
-  private ILanguage m_language;
 
   /**@todo how to represent a Command parameter?
    * --> Allel = parameter
@@ -137,10 +134,6 @@ public abstract class CommandGene
         return -1;
       }
     }
-    if (getLanguage() != o2.getLanguage()) {
-      /**@todo do it more precisely*/
-      return -1;
-    }
     if (getClass() != o2.getClass()) {
       /**@todo do it more precisely*/
       return -1;
@@ -148,18 +141,6 @@ public abstract class CommandGene
     else {
       return 0;
     }
-  }
-
-  /**
-   * Every command can have a different language.
-   * @param a_language ther language to use
-   */
-  public void setLanguage(ILanguage a_language) {
-    m_language = a_language;
-  }
-
-  public ILanguage getLanguage() {
-    return m_language;
   }
 
   public abstract void evaluate(Configuration config, java.util.List parameters);

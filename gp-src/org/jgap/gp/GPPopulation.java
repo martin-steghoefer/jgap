@@ -1,12 +1,27 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.gp;
 
 import org.jgap.*;
 import java.util.*;
 
+/**
+ * Population for GP programs.
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public transient float[] fitnessRank; /**@todo fill, see jg.Population*/
 
@@ -48,33 +63,32 @@ public class GPPopulation
    * Creates a population using the ramped half-and-half method.
    *
    * @param a_conf the configuration to use
-   * @param types the type of each chromosome, the length
+   * @param a_types the type of each chromosome, the length
    * is the number of chromosomes
-   * @param argTypes the types of the arguments to each chromosome, must be an
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
    * array of arrays, the first dimension of which is the number of chromosomes
    * and the second dimension of which is the number of arguments to the
    * chromosome
-   * @param nodeSets the nodes which are allowed to be used by each chromosome,
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
    * must be an array of arrays, the first dimension of which is the number of
    * chromosomes and the second dimension of which is the number of nodes.
    * Note that it is not necessary to include the arguments of a chromosome as
    * terminals in the chromosome's node set. This is done automatically for you
    * @throws InvalidConfigurationException
    */
-  public void create(final GPConfiguration a_conf, Class[] types,
-                     Class[][] argTypes,
-                     CommandGene[][] nodeSets)
+  public void create(final GPConfiguration a_conf, Class[] a_types,
+                     Class[][] a_argTypes,
+                     CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
     for (int i = 0; i < m_popSize - 1; i++) {
       int depth = 2 + (a_conf.getMaxInitDepth() - 1) * i /
           (m_popSize - 1);
-//      ProgramChromosome chrom = new ProgramChromosome(types.length);//KM:auskommentiert 040206
       ProgramChromosome chrom = new ProgramChromosome(getConfiguration());
       if ( (i % 2) == 0) {
-        chrom.grow(depth, types, argTypes, nodeSets);
+        chrom.grow(depth, a_types, a_argTypes, a_nodeSets);
       }
       else {
-        chrom.full(depth, types, argTypes, nodeSets);
+        chrom.full(depth, a_types, a_argTypes, a_nodeSets);
       }
       // Debug-Ausgaben
 //      for (int k=0;k<chrom.getGenes().length;k++) {

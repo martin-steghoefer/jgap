@@ -1,3 +1,12 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.gp;
 
 import org.jgap.*;
@@ -7,9 +16,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
-
-  private ILanguage m_language;
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Object m_state;
 
@@ -58,10 +65,9 @@ public class GPConfiguration
   protected static CrossMethod crossMethod;
 
   /**
-   * @param a_language default language for all commands. But for each command
-   * a different language can be set!
+   * @throws InvalidConfigurationException
    */
-  public GPConfiguration(ILanguage a_language)
+  public GPConfiguration()
       throws InvalidConfigurationException {
     super();
     crossMethod = new BranchTypingCross(this);
@@ -69,12 +75,6 @@ public class GPConfiguration
     setRandomGenerator(new StockRandomGenerator());
 //    setFitnessEvaluator(new DefaultFitnessEvaluator());
     setFitnessEvaluator(new DeltaFitnessEvaluator());
-    m_language = a_language;
-  }
-
-  /**@todo needed?*/
-  public ILanguage getLanguage() {
-    return m_language;
   }
 
   public Object getState() {

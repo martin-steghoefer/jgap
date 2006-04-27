@@ -1,14 +1,28 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.gp;
 
 import java.util.*;
 import org.jgap.gp.*;
 import org.jgap.*;
-import org.jgap.impl.*;
 
+/**
+ * A Terminal having no children. Practically, it may be a static number.
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private double m_value;
 
@@ -35,7 +49,7 @@ public class Terminal
                   double a_maxValue)
       throws InvalidConfigurationException {
     super(a_conf, 0, null);
-    /**@todo min, max considern*/
+    /**@todo consider min, max*/
     m_lowerBounds = a_minValue;
     m_upperBounds = a_maxValue;
     m_minmax = true;
