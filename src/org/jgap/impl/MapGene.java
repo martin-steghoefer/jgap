@@ -33,7 +33,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * Container for valid alleles
@@ -278,15 +278,37 @@ public class MapGene
       // ---------------
       String s = tokenizer.nextToken();
       tokenizer = new StringTokenizer(s, ",");
-      boolean lastWasOpening = false;
+      int lastWasOpening = 0;
       String key = null;
+      String keyClass = null;
+      String valueClass = null;
       while (tokenizer.hasMoreTokens()) {
         String element = tokenizer.nextToken(",");
-        if (lastWasOpening) {
+        if (lastWasOpening == 1) {
+          key = element.substring(0);
+          lastWasOpening = 2;
+        }
+        else if (lastWasOpening == 2) {
+          valueClass = element.substring(0);
+          lastWasOpening = 3;
+        }
+        else if (lastWasOpening == 3) {
           if (element.endsWith(")")) {
             element = element.substring(0, element.length() - 1);
-            addAllele(key, element);
-            lastWasOpening = false;
+            try {
+              Class keyType = Class.forName(keyClass);
+              Constructor keyC = keyType.getConstructor(new Class[]{String.class});
+              Object keyObject = keyC.newInstance(new Object[]{key});
+
+              Class valueType = Class.forName(valueClass);
+              Constructor valueC = valueType.getConstructor(new Class[]{String.class});
+              Object valueObject = valueC.newInstance(new Object[]{element});
+              addAllele(keyObject, valueObject);
+              lastWasOpening = 0;
+            } catch (Exception cex) {
+              throw new UnsupportedRepresentationException("Invalid class: "
+                  + keyClass);
+            }
           }
           else {
             throw new IllegalStateException("Closing bracket missing");
@@ -294,13 +316,16 @@ public class MapGene
         }
         else {
           if (element.startsWith("(")) {
-            key = element.substring(1);
-            lastWasOpening = true;
+            keyClass = element.substring(1);
+            lastWasOpening = 1;
           }
           else {
             throw new IllegalStateException("Opening bracket missing");
           }
         }
+      }
+      if (lastWasOpening != 0) {
+        throw new IllegalStateException("Elements missing");
       }
     }
   }
@@ -336,7 +361,8 @@ public class MapGene
       }
       Object key = it.next();
       Object value = m_geneMap.get(key);
-      strbf.append("(" + key.toString() + "," + value.toString() + ")");
+      strbf.append("(" + key.getClass().getName() + "," + key.toString() + "," +
+                   value.getClass().getName() + "," + value.toString() + ")");
       first = false;
     }
     return m_value.toString() + MapGene.PERSISTENT_FIELD_DELIMITER +
@@ -416,7 +442,7 @@ public class MapGene
         }
       }
       else {
-        //compare geneMap keys and values
+        // Compare geneMap keys and values.
         Iterator it1 = m_geneMap.keySet().iterator();
 //        Iterator it2 = otherGene.m_geneMap.keySet().iterator();
         while (it1.hasNext()) {
@@ -428,7 +454,7 @@ public class MapGene
               return ( (Comparable) key1).compareTo(key2);
             }
             else {
-              // arbitrarily return -1
+              // Arbitrarily return -1
               return -1;
             }
           }
@@ -450,7 +476,7 @@ public class MapGene
                 return ( (Comparable) value1).compareTo(value2);
               }
               else {
-                // arbitrarily return -1
+                // Arbitrarily return -1
                 return -1;
               }
             }
@@ -527,10 +553,10 @@ public class MapGene
   }
 
   /**
-   * Retrieves a string representation of this Gene's value that
-   * may be useful for display purposes.
+   * Retrieves a string representation of this Gene's value that may be useful
+   * for display purposes.
    *
-   * @return a string representation of this Gene's value.
+   * @return a string representation of this Gene's value
    *
    * @author Klaus Meffert
    * @since 2.4
