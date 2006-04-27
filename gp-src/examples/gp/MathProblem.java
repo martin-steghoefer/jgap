@@ -1,14 +1,29 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package examples.gp;
 
 import org.jgap.gp.*;
-import org.jgap.impl.*;
 import org.jgap.*;
 import java.util.*;
 
+/**
+ * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
+ * The problem is to find a formula for a given truth table (X/Y-pairs).
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   static Variable vx;
 
@@ -58,44 +73,13 @@ public class MathProblem
   public static void main(String[] args)
       throws Exception {
     System.out.println("Formula to discover: x^4+x^3+x^2+x");
-    GPConfiguration config = new GPConfiguration(null);
+    GPConfiguration config = new GPConfiguration();
     config.setMaxInitDepth(8);
     config.setPopulationSize(800);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
     GPGenotype gp = new GPGenotype(config, create(config));
     gp.computeAll(800);
     gp.outputSolution(gp.getAllTimeBest());
-    /**@todo remove?*/
-    /*
-        Configuration conf = new MathConfiguration(null);
-        conf.setEventManager(new EventManager());
-        // Set the fitness function we want to use, which is our
-        // MinimizingMakeChangeFitnessFunction. We construct it with
-        // the target amount of change passed in to this method.
-        // ---------------------------------------------------------
-//    FitnessFunction myFunc = new FormulaFitnessFunction();
-//    conf.setFitnessFunction(myFunc);
-        conf.setPopulationSize(100);
-        Gene[] sampleGenes = new Gene[3];
-        sampleGenes[0] = new AddCommand();
-        sampleGenes[1] = new Terminal();
-        sampleGenes[2] = new Terminal();
-        Chromosome sampleChromosome = new Chromosome(sampleGenes);
-        conf.setSampleChromosome(sampleChromosome);
-        conf.addNaturalSelector(new BestChromosomesSelector(), true);
-        conf.addGeneticOperator(new MutationOperator());
-        conf.setEventManager(new EventManager());
-        conf.setChromosomePool(new ChromosomePool());
-        conf.addGeneticOperator(new AveragingCrossoverOperator());
-        conf.setRandomGenerator(new StockRandomGenerator());
-        GPGenotype population;
-        population = (GPGenotype) GPGenotype.randomInitialGenotype(conf);
-        conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
-        population.evolve(50);
-        Chromosome bestSolutionSoFar = population.getFittestChromosome();
-        System.out.println(bestSolutionSoFar.getFitnessValue());
-        MathLanguage.printProgram((ProgramChromosome)bestSolutionSoFar);
-     */
   }
 
   public static class FormulaFitnessFunction
