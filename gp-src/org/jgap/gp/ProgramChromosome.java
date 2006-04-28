@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /*wodka:
    void add(Command cmd);
@@ -100,8 +100,8 @@ public class ProgramChromosome
 
   protected void init(int a_size)
       throws InvalidConfigurationException {
-    depth = new int[a_size]; //jg
-    setFunctions(new CommandGene[a_size]); //jg
+    depth = new int[a_size];
+    setFunctions(new CommandGene[a_size]);
   }
 
   public synchronized Object clone() {
@@ -116,7 +116,6 @@ public class ProgramChromosome
     }
     catch (Exception cex) {
       // rethrow to have a more convenient handling
-      cex.printStackTrace();
       throw new IllegalStateException(cex.getMessage());
     }
   }
@@ -147,19 +146,6 @@ public class ProgramChromosome
     setGenes(genes);
   }
 
-  public String[] printProgram() {
-    /**@todo output all commands/terminals in the correct order*/
-    //Result of this will be printed out
-    return null;
-  }
-
-  public void clearProgram()
-      throws InvalidConfigurationException {
-    super.setGenes(new Gene[0]);
-    System.err.println("clearProgram");
-  }
-
-  //BEGIN JG
   /**
    * Initialize this chromosome using the full method.
    *
@@ -169,7 +155,8 @@ public class ProgramChromosome
    * @param a_argTypes the array of types of arguments for this chromosome
    * @param a_functionSet the set of nodes valid to pick from
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void full(int num, int depth, Class type, Class[] a_argTypes,
                    CommandGene[] a_functionSet) {
@@ -201,7 +188,8 @@ public class ProgramChromosome
    * @param a_argTypes the array of types of arguments for this chromosome
    * @param a_functionSet the set of nodes valid to pick from
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void grow(int num, int depth, Class type, Class[] a_argTypes,
                    CommandGene[] a_functionSet) {
@@ -399,6 +387,9 @@ public class ProgramChromosome
    *
    * @returns the index of the next node of the same depth as the
    * current node (i.e. the next sibling node)
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   protected int redepth(int n) {
     int num = n + 1;
