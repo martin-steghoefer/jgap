@@ -9,8 +9,8 @@
  */
 package org.jgap.gp;
 
-import java.io.Serializable;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 /**
  * Selects individuals proportionally according to their adjusted fitness.
@@ -22,7 +22,7 @@ public class FitnessProportionateSelection
     extends SelectionMethod
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public ProgramChromosome select(GPGenotype world) {
     double chosen = world.getConfiguration().getRandomGenerator().nextFloat() *
@@ -45,23 +45,5 @@ public class FitnessProportionateSelection
       }
       return (ProgramChromosome) pop.getChromosome(num);
     }
-    /*
-         for (num=0; chosen>=0 && num<popSize; num++)
-           try {
-            chosen -= world.getPopulation().getIndividual(num).getFitness();
-           } catch (ArrayIndexOutOfBoundsException ex) {
-             System.out.println("FitnessProportionateSelection:");
-             System.out.println("pop size = " + popSize);
-             System.out.println("num = " + num);
-             System.out.println("chosen = " + chosen);
-             System.out.println("origChosen = " + origChosen);
-            System.out.println("World fitness = " + world.getTotalFitness());
-             throw ex;
-           }
-         if (num>=popSize) // Can happen if chosen==totalFitness
-           num=popSize-1;
-     */
-
-//    return world.getPopulation().getIndividual(num);
   }
 }
