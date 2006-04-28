@@ -21,9 +21,9 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  public transient float[] fitnessRank; /**@todo fill, see jg.Population*/
+  public transient float[] fitnessRank;
 
   private int m_popSize;
 
@@ -42,10 +42,10 @@ public class GPPopulation
   }
 
   /**
-   * Sorts the population into "ascending" order using some criterion for "ascending".
-   * A Comparator is given which will compare two individuals, and if one individual
-   * compares as lower than another individual, the first individual will appear
-   * in the population before the second individual.
+   * Sorts the population into "ascending" order using some criterion for
+   * "ascending". A Comparator is given which will compare two individuals,
+   * and if one individual compares as lower than another individual, the first
+   * individual will appear in the population before the second individual.
    * <p>
    * @param c the Comparator to use
    */
@@ -90,7 +90,7 @@ public class GPPopulation
       else {
         chrom.full(depth, a_types, a_argTypes, a_nodeSets);
       }
-      // Debug-Ausgaben
+      // Debug
 //      for (int k=0;k<chrom.getGenes().length;k++) {
 //        Gene g = chrom.getGene(k);
 //        if (g==null) { break;}
