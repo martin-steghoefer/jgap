@@ -12,7 +12,7 @@ package org.jgap.gp;
 import org.jgap.*;
 
 /**
- * A genetic operator suitable for GP.
+ * Interface for genetic operators suitable for GP.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -20,5 +20,5 @@ import org.jgap.*;
 public interface GPGeneticOperator
     extends GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  static final String CVS_REVISION = "$Revision: 1.2 $";
+  static final String CVS_REVISION = "$Revision: 1.3 $";
 }
