@@ -19,16 +19,16 @@ package org.jgap.gp;
 public abstract class SelectionMethod
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Select an individual based on some method.
    *
-   * @param random the random number generator to use
-   * @param world the World for the run
+   * @param a_world the World for the run
    * @return the individual chosen from the world's population
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
-  public abstract ProgramChromosome select(GPGenotype world);
+  public abstract ProgramChromosome select(GPGenotype a_world);
 }
