@@ -12,7 +12,7 @@ package org.jgap.gp;
 import org.jgap.*;
 
 /**
- * Crossing over.
+ * Crossing over for GP.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -33,6 +33,9 @@ public class BranchTypingCross
    * @param i1 the first individual to cross
    * @param i2 the second individual to cross
    * @return an array of the two resulting individuals
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public ProgramChromosome[] cross(ProgramChromosome i1, ProgramChromosome i2) {
     try {
@@ -89,27 +92,24 @@ public class BranchTypingCross
 
   /**
    * Crosses two chromsomes using branch-typing.
-   * <p>
-   * A random point in the first chromosome is chosen,
-   * with 90% probability it will be a function and 10% probability it will be
-   * a terminal. A random point in the second chromosome
-   * is chosen using the same
-   * probability distribution, but the node chosen must be of the same type as the chosen node
-   * in the first chromosome.
-   * <p>
+   * A random point in the first chromosome is chosen, with 90% probability it
+   * will be a function and 10% probability it will be a terminal. A random
+   * point in the second chromosome is chosen using the same probability
+   * distribution, but the node chosen must be of the same type as the chosen
+   * node in the first chromosome.<p>
    * If a suitable point in the second chromosome couldn't be found then the
-   * chromosomes are not crossed.
-   * <p>
-   * If a resulting chromosome's depth is larger than the World's maximum crossover depth
-   * then that chromosome is simply copied from the original rather than crossed.
-   * <p>
+   * chromosomes are not crossed.<p>
+   * If a resulting chromosome's depth is larger than the World's maximum
+   * crossover depth then that chromosome is simply copied from the original
+   * rather than crossed.
    * @param a_config the configuration to use
    * @param c0 the first chromosome to cross
    * @param c1 the second chromosome to cross
    * @return an array of the two resulting chromosomes
    * @throws InvalidConfigurationException
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
   protected static ProgramChromosome[] doCross(GPConfiguration a_config,
                                                ProgramChromosome c0,
@@ -135,16 +135,9 @@ public class BranchTypingCross
                           nextInt(nf));
     }
     else {
-      //040206:folgendes auskommentiert, da es gehen MUSSS!
       // choose a terminal
-      if (c0.numTerminals() < 1) { //KM
-//        return new ProgramChromosome[]{c0,c1};//KM
-        int oo = 2;
-      }
-//      else { //KM
       p0 = c0.getTerminal(a_config.getRandomGenerator().
                           nextInt(c0.numTerminals()));
-//      }
     }
     // Choose a point in c2 matching the type
     int p1;
@@ -175,8 +168,6 @@ public class BranchTypingCross
     int d1 = c1.getDepth(p1);
     int c0s = c0.getSize(0);
     int c1s = c1.getSize(0);
-//    System.out.println("Cross p0 " + p0 + " s0 " + s0 + " d0 " + d0 +
-//      " p1 " + p1 + " s1 " + s1 + " d1 " + d1 + " c0s " + c0s + " c1s " + c1s);
 
     // Check for depth constraint for p1 inserted into c0
     if (d0 - 1 + s1 > a_config.getMaxCrossoverDepth()) {
@@ -184,16 +175,15 @@ public class BranchTypingCross
       c[0] = c1;
     }
     else {
-//      c[0] = new ProgramChromosome(c0s - s0 + s1, c[0].functionSet,
       c[0] = new ProgramChromosome(a_config, c0s - s0 + s1, c[0].getFunctionSet(),
                                    c[0].getFunctions(),
                                    c[0].getArgTypes());
       System.arraycopy(c0.getFunctions(), 0, c[0].getFunctions(), 0, p0);
       System.arraycopy(c1.getFunctions(), p1, c[0].getFunctions(), p0, s1);
-      if (c0s - p0 - s0 < 1 && false) {
-        int i = 1;
+      if (c0s - p0 - s0 < 1 && false) {//KM
+        int i = 1;//KM
       }
-      else { //KM: if-else eingeführt
+      else {
         System.arraycopy(c0.getFunctions(), p0 + s0, c[0].getFunctions(),
                          p0 + s1,
                          c0s - p0 - s0);
@@ -206,16 +196,15 @@ public class BranchTypingCross
       c[1] = c0;
     }
     else {
-//      c[1] = new ProgramChromosome(c1s - s1 + s0, c[1].functionSet,
       c[1] = new ProgramChromosome(a_config, c1s - s1 + s0, c[1].getFunctionSet(),
                                    c[0].getFunctions(),
                                    c[1].getArgTypes());
       System.arraycopy(c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
       System.arraycopy(c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
-      if (c1s - p1 - s1 < 1 && false) {
-        int i = 1;
+      if (c1s - p1 - s1 < 1 && false) { //KM
+        int i = 1;//KM
       }
-      else { //KM: if-else eingeführt
+      else {
         System.arraycopy(c1.getFunctions(), p1 + s1, c[1].getFunctions(),
                          p1 + s0,
                          c1s - p1 - s1);

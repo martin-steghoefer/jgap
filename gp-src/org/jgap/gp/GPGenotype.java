@@ -23,9 +23,11 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private static Map m_variables;
+  private double m_bestFitness;
+
+  private Map m_variables;
 
   private double m_totalFitness;
 
@@ -46,29 +48,8 @@ public class GPGenotype
   public static Genotype randomInitialGenotype(Configuration
                                                a_activeConfiguration)
       throws InvalidConfigurationException {
-    /**@todo needed?*/
+    /**@todo not needed --> remove resp. provide µwith base class*/
     return null;
-  }
-
-  public void evolve(int i) {
-    for (int j = 0; j < i; j++) {
-      super.evolve();
-      IChromosome bestSolutionSoFar = getFittestChromosome();
-      if (bestSolutionSoFar != null) {
-        System.out.println(bestSolutionSoFar.getFitnessValue());
-      }
-      else {
-        System.out.println("bestSolutionSoFar is null!");
-      }
-    }
-  }
-
-  public static void setVariable(String varName, Object value) {
-    m_variables.put(varName, value);
-  }
-
-  public static Object getVariable(String varName) {
-    return m_variables.get(varName);
   }
 
   /**
@@ -76,30 +57,32 @@ public class GPGenotype
    * of all the individuals in the initial population.
    * <p>
    * Implementation note: the arguments of a chromosome, if any, are treated as
-   * {@link com.groovyj.jgprog.functions.Variable Variable}s of name "ARG"+argnum
-   * (ARG0, ARG1, etc). These variables
-   * are automatically saved, loaded before a call to the chromosome (via
-   * {@link com.groovyj.jgprog.functions.ADF ADF}),
-   * and restored after the call.
+   * {@link com.groovyj.jgprog.functions.Variable Variable}s of name
+   * "ARG"+argnum ARG0, ARG1, etc). These variables are automatically saved,
+   * loaded before a call to the chromosome (via
+   * {@link com.groovyj.jgprog.functions.ADF ADF}), and restored after the call.
    *
    * @param a_conf the configuration to use
-   * @param a_types the type of each chromosome, the length is
-   * the number of chromosomes
-   * @param a_argTypes the types of the arguments to each chromosome, must be an array
-   * of arrays, the first dimension of which is the number of chromosomes and the
-   * second dimension of which is the number of arguments to the chromosome.
-   * @param a_nodeSets the nodes which are allowed to be used by each chromosome, must
-   * be an array of arrays, the first dimension of which is the number of chromosomes
-   * and the second dimension of which is the number of nodes. Note that it is not necessary
-   * to include the arguments of a chromosome as terminals in the chromosome's node set.
-   * This is done automatically for you
+   * @param a_types the type of each chromosome, the length is the number of
+   * chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each
+   * chromosome, must be an array of arrays, the first dimension of which is the
+   * number of chromosomes and the second dimension of which is the number of
+   * nodes. Note that it is not necessary to include the arguments of a
+   * chromosome as terminals in the chromosome's node set. This is done
+   * automatically
    * @return created population
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static GPPopulation create(final GPConfiguration a_conf, Class[] a_types,
+  public static GPPopulation create(final GPConfiguration a_conf,
+                                    Class[] a_types,
                                     Class[][] a_argTypes,
                                     CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
@@ -137,12 +120,12 @@ public class GPGenotype
 //      return f1 > f2 ? -1 : (f1 == f2 ? 0 : 1);
     }
   }
-  public void computeAll(int n) {
+  public void evolve(int n) {
     ( (GPPopulation) getPopulation()).sort(new FitnessComparator());
     //Here, we could do threading
     for (int i = 0; i < n; i++) {
-      double bestFitness = computeSome(getPopulation().size());
-      if (bestFitness < 0.000001) {/**@todo make configurable*/
+      evolve();
+      if (m_bestFitness < 0.000001) { /**@todo make configurable*/
         // Optimal solution found.
         return;
       }
@@ -153,9 +136,9 @@ public class GPGenotype
     }
   }
 
-  protected double computeSome(int popsize) {
+  public void evolve() {
     double totalFitness = 0.0d;
-    for (int i = 0; i < popsize; i++) {
+    for (int i = 0; i < getPopulation().size(); i++) {
       IChromosome chrom = getPopulation().getChromosome(i);
       if (chrom.getFitnessValue() < 0.0d) {
         // Chromosome wasn't reproduced from the previous generation.
@@ -179,15 +162,14 @@ public class GPGenotype
     ProgramChromosome best = (ProgramChromosome) getPopulation().
         determineFittestChromosome();
     // do something siliar here as preserveFittestChromosome
-    double bestFitness = best.getFitnessValue();
+    m_bestFitness = best.getFitnessValue();
     if (m_allTimeBest == null ||
-        bestFitness < m_allTimeBest.getFitnessValue()) {
-      if (Math.abs(bestFitness) < 0.000001) {
+        m_bestFitness < m_allTimeBest.getFitnessValue()) {
+      if (Math.abs(m_bestFitness) < 0.000001) {
       }
       m_allTimeBest = best;
       outputSolution(best);
     }
-    return bestFitness;
   }
 
   public ProgramChromosome getAllTimeBest() {
@@ -209,7 +191,7 @@ public class GPGenotype
   public void nextGeneration() {
     try {
       int popSize = getGPConfiguration().getPopulationSize();
-      /**@todo eigentlich: nextGeneration = evolve und computeAll = fitness bestimmen*/
+      /**@todo normally: nextGeneration = evolve,  computeAll = calc fitness*/
       GPPopulation newPopulation = new GPPopulation(getGPConfiguration(),
           popSize);
       float val;
@@ -248,7 +230,7 @@ public class GPGenotype
       setPopulation(newPopulation);
     }
     catch (InvalidConfigurationException iex) {
-      //this should never happen
+      // This should never happen.
       throw new IllegalStateException(iex.getMessage());
     }
   }
