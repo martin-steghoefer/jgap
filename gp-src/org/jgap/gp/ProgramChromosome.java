@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /*wodka:
    void add(Command cmd);
@@ -279,6 +279,7 @@ public class ProgramChromosome
   }
 
   public boolean isPossible(CommandGene f) {
+    /**@todo not used*/
     for (int i = 0; i < getFunctionSet().length; i++) {
       if (getFunctionSet()[i] == f) {
         return true;
@@ -290,6 +291,7 @@ public class ProgramChromosome
   /**
    * Randomly chooses a node from the node set.
    *
+   * @param a_config the configuration to use
    * @param type the type of node to choose
    * @param function true to choose a function, false to choose a terminal
    * @param growing true to ignore the function parameter, false otherwise
@@ -335,7 +337,6 @@ public class ProgramChromosome
    * @since 3.0
    */
   protected void fullNode(int a_depth, Class type, CommandGene[] a_functionSet) {
-    // Generate the node.
     CommandGene n = selectNode( (GPConfiguration) getConfiguration(), type,
                                a_functionSet, a_depth > 1, false);
     depth[index] = maxDepth - a_depth;
@@ -351,7 +352,6 @@ public class ProgramChromosome
    * @param a_depth the maximum depth of the tree to create
    * @param type the type of node to start with
    * @param a_functionSet the set of function valid to pick from
-   * @return a node which is the root of the generated tree
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -369,6 +369,9 @@ public class ProgramChromosome
 
   /**
    * Recalculate the depths of each node.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void redepth() {
     depth[0] = 0;
@@ -378,13 +381,12 @@ public class ProgramChromosome
   /**
    * Calculate the depth of the next node and the indices of the children
    * of the current node.
+   * The depth of the next node is just one plus the depth of the current node.
+   * The index of the first child is always the next node. The index of the
+   * second child is found by recursively calling this method on the tree
+   * starting with the first child.
    *
-   * The depth of the next node is
-   * just one plus the depth of the current node. The index of the first
-   * child is always the next node. The index of the second child is found
-   * by recursively calling this method on the tree starting with the first
-   * child.
-   *
+   * @param n the index of the reference depth
    * @returns the index of the next node of the same depth as the
    * current node (i.e. the next sibling node)
    *
@@ -711,6 +713,7 @@ public class ProgramChromosome
   /**
    * Executes this node as a boolean.
    *
+   * @param args the arguments for execution
    * @return the boolean return value of this node
    * @throws UnsupportedOperationException if the type of this node is not
    * boolean
@@ -729,6 +732,7 @@ public class ProgramChromosome
    *
    * @param n the index of the parent node
    * @param child the child number of the node to execute
+   * @param args the arguments for execution
    * @return the boolean return value of this node
    * @throws UnsupportedOperationException if the type of this node is not
    * boolean
@@ -746,6 +750,7 @@ public class ProgramChromosome
   /**
    * Executes this node, returning nothing.
    *
+   * @param args the arguments for execution
    * @throws UnsupportedOperationException if the type of this node is not void
    *
    * @author Klaus Meffert
@@ -766,6 +771,7 @@ public class ProgramChromosome
   /**
    * Executes this node as an integer.
    *
+   * @param args the arguments for execution
    * @return the integer return value of this node
    * @throws UnsupportedOperationException if the type of this node is not
    * integer
@@ -789,6 +795,7 @@ public class ProgramChromosome
   /**
    * Executes this node as a long.
    *
+   * @param args the arguments for execution
    * @return the long return value of this node
    * @throws UnsupportedOperationException if the type of this node is not long
    *
@@ -811,6 +818,7 @@ public class ProgramChromosome
   /**
    * Executes this node as a float.
    *
+   * @param args the arguments for execution
    * @return the float return value of this node
    * @throws UnsupportedOperationException if the type of this node is not float
    *
@@ -840,6 +848,7 @@ public class ProgramChromosome
   /**
    * Executes this node as a double.
    *
+   * @param args the arguments for execution
    * @return the double return value of this node
    * @throws UnsupportedOperationException if this node's type is not double
    *
@@ -862,6 +871,7 @@ public class ProgramChromosome
   /**
    * Executes this node as an object.
    *
+   * @param args the arguments for execution
    * @return the object return value of this node
    * @throws UnsupportedOperationException if the type of this node is not
    * of type Object
@@ -885,6 +895,7 @@ public class ProgramChromosome
   /**
    * Executes this node without knowing its return type.
    *
+   * @param args the arguments for execution
    * @return the Object which wraps the return value of this node, or null
    * if the return type is null or unknown
    *
@@ -901,10 +912,11 @@ public class ProgramChromosome
 
   /**
    * Initializes all chromosomes in this individual using the grow method.
-   * <p>
+   *
+   * @param depth the depth of the chromosome to create
    * @param types the type of each chromosome, must be an array of the same
    * length as the number of chromosomes
-   * @param argTypes the types of the arguments to each chromosome, must be an
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
    * array of arrays, the first dimension of which is the number of chromosomes
    * and the second dimension of which is the number of arguments to the
    * chromosome.
@@ -934,10 +946,11 @@ public class ProgramChromosome
 
   /**
    * Initializes all chromosomes in this individual using the full method.
-   * <p>
+   *
+   * @param depth the depth of the chromosome to create
    * @param types the type of each chromosome, must be an array of the same length
    * as the number of chromosomes
-   * @param argTypes the types of the arguments to each chromosome, must be an array
+   * @param a_argTypes the types of the arguments to each chromosome, must be an array
    * of arrays, the first dimension of which is the number of chromosomes and the
    * second dimension of which is the number of arguments to the chromosome.
    * @param nodeSets the nodes which are allowed to be used by each chromosome, must
