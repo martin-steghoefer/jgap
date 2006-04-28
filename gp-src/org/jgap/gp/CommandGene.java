@@ -23,9 +23,8 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  //jg
   public final static Class booleanClass = Boolean.class;
 
   public final static Class integerClass = Integer.class;
@@ -39,30 +38,14 @@ public abstract class CommandGene
   public final static Class voidClass = Void.class;
 
   /**
-   * The individual currently being evaluated. This is here for nodes
-   * (such as ADF) whose execution depends on the individual. It is
-   * automatically set by the {@link World World} when it evaluates an
-   * individual.
-   */
-  transient private static ProgramChromosome individual = null;
-
-  /**
    * The return type of this node.
-   *
-   * @JG
    */
   private Class returnType;
 
-  //JG
   private int m_arity;
 
-  /**@todo how to represent a Command parameter?
-   * --> Allel = parameter
-   * --> Command = SingleCommand || Tree of Command's (CompositeCommand)
-   * */
-  /**@todo what is the allele in the CommandGene ?*/
   /**
-   * Initializations, called from each Constructor
+   * Initializations, called from each Constructor.
    */
   protected void init() {
   }
@@ -82,7 +65,6 @@ public abstract class CommandGene
   }
 
   public Object getAllele() {
-    /**@todo Implement this org.jgap.Gene method*/
     throw new java.lang.UnsupportedOperationException(
         "Method getAllele() not used.");
   }
@@ -106,7 +88,7 @@ public abstract class CommandGene
   }
 
   public void cleanup() {
-    /**@todo Implement this org.jgap.Gene method*/
+    // do nothing for GP here!
   }
 
   public int size() {
@@ -114,14 +96,12 @@ public abstract class CommandGene
   }
 
   public int getArity() {
-    /**@todo entweder das oder size()*/
-    return m_arity;
+    return size();
   }
 
   public void applyMutation(int index, double a_percentage) {
-    /**@todo Implement this org.jgap.Gene method*/
     throw new java.lang.UnsupportedOperationException(
-        "Method applyMutation() not yet implemented.");
+        "Method applyMutation() not used.");
   }
 
   public int compareTo(Object o) {
@@ -151,16 +131,19 @@ public abstract class CommandGene
 
   /**
    * @return the string representation of the command. Especially usefull to
-   * output a resulting formula in human-readable form
+   * output a resulting formula in human-readable form.
    */
   public abstract String toString();
 
-  //BEGIN JG
   /**
    * Executes this node without knowing its return type.
    *
-   * @return the Object which wraps the return value of this node, or null
+   * @param c the current Chromosome which is executing
+   * @param n the index of the Function in the Chromosome's Function array which is executing
+   * @param args the arguments to the current Chromosome which is executing
+   * @return the object which wraps the return value of this node, or null
    * if the return type is null or unknown.
+   * @throws UnsupportedOperationException if the type of this node is not boolean
    *
    * @since 1.0
    */
@@ -207,11 +190,11 @@ public abstract class CommandGene
   /**
    * Executes this node as a boolean.
    *
-   * @param c the current Chromosome which is executing
-   * @param n the index of the Function in the Chromosome's Function array which is executing
-   * @param args the arguments to the current Chromosome which is executing
-   * @return the boolean return value of this node
-   * @throws UnsupportedOperationException if the type of this node is not boolean
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -223,7 +206,10 @@ public abstract class CommandGene
   /**
    * Executes this node, returning nothing.
    *
-   * @throws UnsupportedOperationException if the type of this node is not void
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -235,8 +221,11 @@ public abstract class CommandGene
   /**
    * Executes this node as an integer.
    *
-   * @return the integer return value of this node
-   * @throws UnsupportedOperationException if the type of this node is not integer
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -248,8 +237,11 @@ public abstract class CommandGene
   /**
    * Executes this node as a long.
    *
-   * @return the long return value of this node
-   * @throws UnsupportedOperationException if the type of this node is not long
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -261,8 +253,11 @@ public abstract class CommandGene
   /**
    * Executes this node as a float.
    *
-   * @return the float return value of this node
-   * @throws UnsupportedOperationException if the type of this node is not float
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -274,8 +269,11 @@ public abstract class CommandGene
   /**
    * Executes this node as a double.
    *
-   * @return the double return value of this node
-   * @throws UnsupportedOperationException if the type of this node is not double
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -287,8 +285,11 @@ public abstract class CommandGene
   /**
    * Executes this node as an object.
    *
-   * @return the object return value of this node
-   * @throws UnsupportedOperationException if the type of this node is not object
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
    *
    * @since 1.0
    */
@@ -309,17 +310,6 @@ public abstract class CommandGene
    * @return the type of node allowed for that child
    */
   public abstract Class getChildType(int i);
-
-  /**
-   * Sets the individual currently being evaluated.
-   *
-   * @param individual the individual currently being evaluated
-   *
-   * @since 1.0
-   */
-  public static void setIndividual(ProgramChromosome individual) {
-    CommandGene.individual = individual;
-  }
 
   public Object getInternalValue() {
     /**@todo is this correct?*/
