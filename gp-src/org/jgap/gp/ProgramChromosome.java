@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /*wodka:
    void add(Command cmd);
@@ -102,27 +102,6 @@ public class ProgramChromosome
       throws InvalidConfigurationException {
     depth = new int[a_size]; //jg
     setFunctions(new CommandGene[a_size]); //jg
-  }
-
-//  public abstract Interpreter interpreter();
-  public Object evaluate() {
-    /**@todo set the variable terminals with the values currently set with the
-     * ProgramChromosome
-     */
-
-    // set the program to the configuration by pushing its commands (=Gene's)
-    /**@todo solve more elegantly --> e.g., use list and iterate thru it*/
-    MathConfiguration config = (MathConfiguration) getConfiguration();
-    for (int i = 0; i < getGenes().length; i++) {
-      config.push(getGene(i));
-    }
-//    for (int i = config.stackSize() - 1; i >= 0; i--) {
-    for (int i = 0; i < config.stackSize(); i++) {
-      CommandGene gene = (CommandGene) config.getStack(i);
-      gene.evaluate(config, null);
-    }
-    Double res = (Double) config.popTerminal();
-    return res;
   }
 
   public synchronized Object clone() {

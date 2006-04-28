@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public final static Class booleanClass = Boolean.class;
 
@@ -122,8 +122,6 @@ public abstract class CommandGene
       return 0;
     }
   }
-
-  public abstract void evaluate(Configuration config, java.util.List parameters);
 
   public boolean equals(Object other) {
     return hashCode() == other.hashCode();

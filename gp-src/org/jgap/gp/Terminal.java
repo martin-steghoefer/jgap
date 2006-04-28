@@ -9,7 +9,6 @@
  */
 package org.jgap.gp;
 
-import java.util.*;
 import org.jgap.gp.*;
 import org.jgap.*;
 
@@ -22,7 +21,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private double m_value;
 
@@ -66,13 +65,6 @@ public class Terminal
 
   public void setValue(double a_value) {
     m_value = a_value;
-  }
-
-  public void evaluate(Configuration config, List parameters) {
-    //todo wird res überhaupt benötigt?*/
-//    Terminal res = new Terminal();
-//    res.setValue(m_value);
-   ( (MathConfiguration) config).pushTerminal(new Double(m_value));
   }
 
   public void applyMutation(int index, double a_percentage) {

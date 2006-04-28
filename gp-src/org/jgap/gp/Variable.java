@@ -21,12 +21,12 @@ import org.jgap.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Hashtable vars = new Hashtable();
 
   /**
-   * unique name of the variable
+   * Unique name of the variable.
    */
   private String m_name;
 
@@ -49,11 +49,6 @@ public class Variable
 
   public void applyMutation(int index, double a_percentage) {
     // do nothing here!
-  }
-
-  public void evaluate(Configuration a_config, List a_parameters) {
-    Double d = (Double) GPGenotype.getVariable(m_name);
-    ( (MathConfiguration) a_config).pushTerminal(d); //m_name);
   }
 
   protected Gene newGeneInternal() {

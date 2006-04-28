@@ -9,7 +9,6 @@
  */
 package org.jgap.gp;
 
-import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 
@@ -22,7 +21,7 @@ import org.jgap.gp.*;
 public class SinCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public SinCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -46,13 +45,6 @@ public class SinCommand
 
   public CommandGene mutateCommand() {
     return null; //new CosCommand();
-  }
-
-  public void evaluate(Configuration config, List parameters) {
-    MathConfiguration mConfig = (MathConfiguration) config;
-    double newResult = ( (Double) mConfig.popTerminal()).doubleValue();
-    newResult = Math.sin(newResult);
-    mConfig.pushTerminal(new Double(newResult));
   }
 
   public String toString() {

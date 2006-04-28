@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * Abstract base class for HP-commands related to mathematical calculation.
+ * Abstract base class for GP-commands related to mathematical calculation.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public abstract class MathCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public MathCommand(final Configuration a_conf, int a_arity,
                      Class a_returnType)

@@ -9,7 +9,6 @@
  */
 package org.jgap.gp;
 
-import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 
@@ -22,7 +21,7 @@ import org.jgap.gp.*;
 public class AddCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public AddCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -54,14 +53,6 @@ public class AddCommand
      * @todo muss aber irgendwo durchgeführt werden, ist noch nicht der Fall
      */
     return null; //new MultiplyCommand();
-  }
-
-  public void evaluate(Configuration config, List parameters) {
-    MathConfiguration mConfig = (MathConfiguration) config;
-    double newResult = ( (Double) mConfig.popTerminal()).doubleValue();
-    Double d1 = (Double) mConfig.popTerminal();
-    newResult = newResult + d1.doubleValue();
-    mConfig.pushTerminal(new Double(newResult));
   }
 
   public String toString() {
