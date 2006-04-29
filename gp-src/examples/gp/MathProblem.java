@@ -23,7 +23,7 @@ import java.util.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   static Variable vx;
 
@@ -72,7 +72,7 @@ public class MathProblem
   // Method for testing purpose only during development phase
   public static void main(String[] args)
       throws Exception {
-    System.out.println("Formula to discover: x^4+x^3+x^2+x");
+    System.out.println("Formula to discover: x^4+x^3+x^2-x");
     GPConfiguration config = new GPConfiguration();
     config.setMaxInitDepth(8);
     config.setPopulationSize(800);
