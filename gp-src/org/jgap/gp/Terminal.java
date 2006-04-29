@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   private double m_value;
 
@@ -29,7 +29,7 @@ public class Terminal
 
   private double m_upperBounds;
 
-  private boolean m_minmax;
+//  private boolean m_minmax;
 
   public Terminal()
       throws InvalidConfigurationException {
@@ -51,7 +51,7 @@ public class Terminal
     /**@todo consider min, max*/
     m_lowerBounds = a_minValue;
     m_upperBounds = a_maxValue;
-    m_minmax = true;
+//    m_minmax = true;
   }
 
   protected Gene newGeneInternal() {

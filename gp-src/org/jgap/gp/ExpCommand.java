@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ExpCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public ExpCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -41,11 +41,6 @@ public class ExpCommand
   public void applyMutation(int index, double a_percentage) {
     // Here, we could mutate the parameter of the command.
     // This is not applicable for this command, just do nothing
-  }
-
-  /**@todo currently not used*/
-  public CommandGene mutateCommand() {
-    return null; //new SinCommand();
   }
 
   public String toString() {

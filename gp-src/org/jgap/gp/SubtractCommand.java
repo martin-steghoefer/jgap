@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class SubtractCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public SubtractCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -41,13 +41,6 @@ public class SubtractCommand
   public void applyMutation(int index, double a_percentage) {
     // Here, we could mutate the parameter of the command.
     // This is not applicable for this command, just do nothing
-  }
-
-  public CommandGene mutateCommand() {
-    /**@todo ist überflüssig, sollte aber möglich sein, um manuell übersteuern
-     * zu können
-     */
-    return null; //new AddCommand();
   }
 
   public String toString() {

@@ -23,7 +23,7 @@ import java.util.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   static Variable vx;
 
@@ -36,9 +36,9 @@ public class MathProblem
     super(a_pop);
   }
 
-  /**@todo this should be randomInitializeGenotype*/
   public static Population create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
+    /**@todo this should be randomInitializeGenotype*/
     Class[] types = {
         CommandGene.floatClass};
     Class[][] argTypes = {
@@ -78,7 +78,7 @@ public class MathProblem
     config.setPopulationSize(800);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
     GPGenotype gp = new GPGenotype(config, create(config));
-    gp.computeAll(800);
+    gp.evolve(800);
     gp.outputSolution(gp.getAllTimeBest());
   }
 

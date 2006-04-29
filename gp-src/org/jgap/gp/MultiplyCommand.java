@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class MultiplyCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public MultiplyCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -41,10 +41,6 @@ public class MultiplyCommand
   public void applyMutation(int index, double a_percentage) {
     // Here, we could mutate the parameter of the command.
     // This is not applicable for this command, just do nothing
-  }
-
-  public CommandGene mutateCommand() {
-    return null; //new AddCommand();
   }
 
   public String toString() {

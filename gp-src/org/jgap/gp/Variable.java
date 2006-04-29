@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -98,6 +98,9 @@ public class Variable
    *
    * @param name the name of the variable to get
    * @return the named variable, or null if that name wasn't found.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public static Variable getVariable(String name) {
     return (Variable) vars.get(name);
@@ -106,13 +109,16 @@ public class Variable
   /**
    * Creates an instance of a Variable.
    * If a Variable of that name already exists, that is returned.
-   * Otherwise a new instance is created, its value is initialized to null, and it
-   * is placed into the static hashtable for later retrieval by name via {@link #get get} or
-   * {@link #getVariable getVariable}.
+   * Otherwise a new instance is created, its value is initialized to null, and
+   * it is placed into the static hashtable for later retrieval by name via
+   * getVariable.
    *
    * @param name the name of the Variable to create
    * @param type the type of the Variable to create
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public static Variable create(Configuration a_conf, String name, Class type)
       throws InvalidConfigurationException {
@@ -134,15 +140,4 @@ public class Variable
     value = a_value;
   }
 
-  /**
-   * Gets the value of this named variable.
-   *
-   * @return an Object representing the value of this variable, or null if this
-   * variable has not yet been set.
-   *
-   * @since 1.0
-   */
-  public Object get() {
-    return value;
-  }
 }

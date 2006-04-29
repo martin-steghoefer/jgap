@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class SinCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public SinCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -41,10 +41,6 @@ public class SinCommand
   public void applyMutation(int index, double a_percentage) {
     // Here, we could mutate the parameter of the command.
     // This is not applicable for this command, just do nothing
-  }
-
-  public CommandGene mutateCommand() {
-    return null; //new CosCommand();
   }
 
   public String toString() {
