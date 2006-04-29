@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.54 $";
+  private final static String CVS_REVISION = "$Revision: 1.55 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -101,12 +101,12 @@ public class Configuration
 
   /**
    * The fitness evaluator. See interface class FitnessEvaluator for details
-   * @since 2.0 (since 1.1 in class Genotype)
+   * @since 2.0 (since 1.1 in class Genotype).
    */
   private FitnessEvaluator m_fitnessEvaluator;
 
   /**
-   * Minimum size guaranteed for population. If zero or below then no ensurance
+   * Minimum size guaranteed for population. If zero or below then no ensurance.
    */
   private int m_minPercentageSizePopulation;
 
@@ -1003,11 +1003,13 @@ public class Configuration
   }
 
   /**
-   * Minimum size guaranteed for population. This is significant during evolution
-   * as natural selectors could select fewer chromosomes for the next generation
-   * than the initial population size was.
+   * Minimum size guaranteed for population. This is significant during
+   * evolution as natural selectors could select fewer chromosomes for the next
+   * generation than the initial population size was.
    * @param a_minimumSizeGuaranteedPercent if zero or below then no ensurance
    * for size given, see Genotype.evolve()
+   *
+   * @author Klaus Meffert
    */
   public void setMinimumPopSizePercent(int a_minimumSizeGuaranteedPercent) {
     m_minPercentageSizePopulation = a_minimumSizeGuaranteedPercent;
@@ -1078,6 +1080,7 @@ public class Configuration
    * Implementation of the Configurable interface.
    * @return ConfigurationHandler
    * @throws ConfigException
+   *
    * @author Siddhartha Azad
    */
   public ConfigurationHandler getConfigurationHandler() {
@@ -1085,7 +1088,7 @@ public class Configuration
   }
 
   /**
-   * @return String representation of the configuration containing all
+   * @return string representation of the configuration containing all
    * configurable elements
    *
    * @author Klaus Meffert
@@ -1179,8 +1182,8 @@ public class Configuration
 
   /**
    * See setKeepPopulationSizeConstant for description.
-   * @return true: population size will always be
-   * the same size (as given with Configuration.setPopulationSize(int)
+   * @return true: population size will always be the same size
+   * (as given with Configuration.setPopulationSize(int)
    *
    * @author Klaus Meffert
    * @since 2.4
