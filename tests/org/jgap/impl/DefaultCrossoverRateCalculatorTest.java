@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultCrossoverRateCalculatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCrossoverRateCalculatorTest.class);
@@ -67,11 +67,14 @@ public class DefaultCrossoverRateCalculatorTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testToBePermutated_0() {
-    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(null);
+  public void testToBePermutated_0()
+      throws Exception {
+    IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(conf);
     assertTrue(calc.toBePermutated(null, 0));
   }
 }
