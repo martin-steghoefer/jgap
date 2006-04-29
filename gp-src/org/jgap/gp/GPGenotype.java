@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private double m_bestFitness;
 
@@ -200,7 +200,7 @@ public class GPGenotype
           ProgramChromosome i2 = getGPConfiguration().getSelectionMethod().
               select(this);
           ProgramChromosome[] newIndividuals = getGPConfiguration().
-              getCrossMethod().cross(i1, i2);
+              getCrossMethod().operate(i1, i2);
           newPopulation.setChromosome(i++, newIndividuals[0]);
           newPopulation.setChromosome(i, newIndividuals[1]);
 //        for (int j = listeners.length - 1; j >= 0; j -= 2) {

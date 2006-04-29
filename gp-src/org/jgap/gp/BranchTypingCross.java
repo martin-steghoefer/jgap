@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -37,7 +37,8 @@ public class BranchTypingCross
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ProgramChromosome[] cross(ProgramChromosome i1, ProgramChromosome i2) {
+  public ProgramChromosome[] operate(final ProgramChromosome i1,
+                                     final ProgramChromosome i2) {
     try {
       // The following was adapted from JGProg to work with a model where no
       // individuals exist.
@@ -80,7 +81,6 @@ public class BranchTypingCross
       // even if two individuals' chromosomes point to the same chromosome,
       // the only change in a chromosome is crossing, which generates
       // deep-copied chromosomes anyway.
-
       return newChromosomes;
     }
     catch (InvalidConfigurationException iex) {
@@ -110,8 +110,8 @@ public class BranchTypingCross
    * @since 3.0
    */
   protected ProgramChromosome[] doCross(GPConfiguration a_config,
-                                               ProgramChromosome c0,
-                                               ProgramChromosome c1)
+                                        ProgramChromosome c0,
+                                        ProgramChromosome c1)
       throws InvalidConfigurationException {
     /**@todo here we need to work with details of ProgramChromosome (i.e.
      * CommandGenes in the context of JGAP. But this does not work as a
@@ -166,7 +166,6 @@ public class BranchTypingCross
     int d1 = c1.getDepth(p1);
     int c0s = c0.getSize(0);
     int c1s = c1.getSize(0);
-
     // Check for depth constraint for p1 inserted into c0
     if (d0 - 1 + s1 > a_config.getMaxCrossoverDepth()) {
       // choose the other parent
@@ -178,8 +177,8 @@ public class BranchTypingCross
                                    c[0].getArgTypes());
       System.arraycopy(c0.getFunctions(), 0, c[0].getFunctions(), 0, p0);
       System.arraycopy(c1.getFunctions(), p1, c[0].getFunctions(), p0, s1);
-      if (c0s - p0 - s0 < 1 && false) {//KM
-        int i = 1;//KM
+      if (c0s - p0 - s0 < 1 && false) { //KM
+        int i = 1; //KM
       }
       else {
         System.arraycopy(c0.getFunctions(), p0 + s0, c[0].getFunctions(),
@@ -200,7 +199,7 @@ public class BranchTypingCross
       System.arraycopy(c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
       System.arraycopy(c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
       if (c1s - p1 - s1 < 1 && false) { //KM
-        int i = 1;//KM
+        int i = 1; //KM
       }
       else {
         System.arraycopy(c1.getFunctions(), p1 + s1, c[1].getFunctions(),
