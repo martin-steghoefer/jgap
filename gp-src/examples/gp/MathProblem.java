@@ -9,9 +9,9 @@
  */
 package examples.gp;
 
-import org.jgap.gp.*;
-import org.jgap.*;
 import java.util.*;
+import org.jgap.*;
+import org.jgap.gp.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -23,7 +23,7 @@ import java.util.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   static Variable vx;
 
@@ -33,12 +33,11 @@ public class MathProblem
 
   public MathProblem(Population a_pop)
       throws InvalidConfigurationException {
-    super(a_pop);
+    super(getGPConfiguration(), a_pop);
   }
 
   public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
-    /**@todo this should be randomInitializeGenotype*/
     Class[] types = {
         CommandGene.floatClass};
     Class[][] argTypes = {
@@ -50,11 +49,10 @@ public class MathProblem
         new AddCommand(a_conf, CommandGene.floatClass),
         new SubtractCommand(a_conf, CommandGene.floatClass),
         new MultiplyCommand(a_conf, CommandGene.floatClass),
-//            new DivideCommand(a_conf, CommandGene.floatClass),
-//        new SinCommand(a_conf, CommandGene.floatClass),
-//        new CosCommand(a_conf, CommandGene.floatClass),
+        new DivideCommand(a_conf, CommandGene.floatClass),
+        new SinCommand(a_conf, CommandGene.floatClass),
+        new CosCommand(a_conf, CommandGene.floatClass),
         new ExpCommand(a_conf, CommandGene.floatClass),
-//        new NaturalLogarithmCommand(a_conf, CommandGene.floatClass),
     }
     };
     Random random = new Random();
@@ -69,7 +67,14 @@ public class MathProblem
     return randomInitialGenotype(a_conf, types, argTypes, nodeSets);
   }
 
-  // Method for testing purpose only during development phase
+  /**
+   * Starts the example
+   * @param args ignored
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public static void main(String[] args)
       throws Exception {
     System.out.println("Formula to discover: x^4+x^3+x^2-x");
