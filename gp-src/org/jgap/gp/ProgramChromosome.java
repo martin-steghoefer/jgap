@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /*wodka:
    void add(Command cmd);
@@ -289,38 +289,40 @@ public class ProgramChromosome
   }
 
   /**
-   * Randomly chooses a node from the node set.
+   * Randomly chooses a valid node from the node set.
    *
    * @param a_config the configuration to use
-   * @param type the type of node to choose
-   * @param function true to choose a function, false to choose a terminal
-   * @param growing true to ignore the function parameter, false otherwise
+   * @param a_type the type of node to choose
+   * @param a_functionSet the functions to use
+   * @param a_function true to choose a function, false to choose a terminal
+   * @param a_growing true to ignore the function parameter, false otherwise
    * @return the node chosen
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected CommandGene selectNode(GPConfiguration a_config, Class type,
-                                       CommandGene[] functionSet,
-                                       boolean function, boolean growing) {
-    if (!isPossible(type, functionSet, function))
+  protected CommandGene selectNode(GPConfiguration a_config, Class a_type,
+                                       CommandGene[] a_functionSet,
+                                       boolean a_function, boolean a_growing) {
+    if (!isPossible(a_type, a_functionSet, a_function))
       throw new IllegalArgumentException("Chromosome requires a " +
-                                         (function ?
+                                         (a_function ?
                                           ("function" +
-                                           (growing ? " or terminal" : ""))
+                                           (a_growing ? " or terminal" : ""))
                                           : "terminal") + " of type " +
-                                         type +
+                                         a_type +
                                          " but there is no such node available");
     CommandGene n = null;
     int lindex;
     while (n == null) {
-      lindex = a_config.getRandomGenerator().nextInt(
-          functionSet.length);
-      if (functionSet[lindex].getReturnType() == type) {
-        if (functionSet[lindex].getArity() == 0 && (!function || growing))
+      lindex = a_config.getRandomGenerator().nextInt(functionSet.length);
+      if (functionSet[lindex].getReturnType() == a_type) {
+        if (functionSet[lindex].getArity() == 0 && (!a_function || a_growing)) {
           n = functionSet[lindex];
-        if (functionSet[lindex].getArity() != 0 && function)
+        }
+        if (functionSet[lindex].getArity() != 0 && a_function) {
           n = functionSet[lindex];
+        }
       }
     }
     return n;
@@ -330,41 +332,45 @@ public class ProgramChromosome
    * Create a tree of nodes using the full method.
    *
    * @param a_depth the depth of the tree to create
-   * @param type the type of node to start with
+   * @param a_type the type of node to start with
    * @param a_functionSet the set of function valid to pick from
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void fullNode(int a_depth, Class type, CommandGene[] a_functionSet) {
-    CommandGene n = selectNode( (GPConfiguration) getConfiguration(), type,
+  protected void fullNode(int a_depth, Class a_type, CommandGene[] a_functionSet) {
+    CommandGene n = selectNode( (GPConfiguration) getConfiguration(), a_type,
                                a_functionSet, a_depth > 1, false);
     depth[index] = maxDepth - a_depth;
     getFunctions()[index++] = n;
-    if (a_depth > 1)
-      for (int i = 0; i < n.getArity(); i++)
+    if (a_depth > 1) {
+      for (int i = 0; i < n.getArity(); i++) {
         fullNode(a_depth - 1, n.getChildType(i), a_functionSet);
+      }
+    }
   }
 
   /**
    * Create a tree of nodes using the grow method.
    *
    * @param a_depth the maximum depth of the tree to create
-   * @param type the type of node to start with
+   * @param a_type the type of node to start with
    * @param a_functionSet the set of function valid to pick from
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void growNode(int a_depth, Class type, CommandGene[] a_functionSet) {
+  protected void growNode(int a_depth, Class a_type, CommandGene[] a_functionSet) {
     // Generate the node.
-    CommandGene n = selectNode( (GPConfiguration) getConfiguration(), type,
+    CommandGene n = selectNode( (GPConfiguration) getConfiguration(), a_type,
                                a_functionSet, a_depth > 1, true);
     depth[index] = maxDepth - a_depth;
     getFunctions()[index++] = n;
-    if (a_depth > 1)
-      for (int i = 0; i < n.getArity(); i++)
+    if (a_depth > 1) {
+      for (int i = 0; i < n.getArity(); i++) {
         growNode(a_depth - 1, n.getChildType(i), a_functionSet);
+      }
+    }
   }
 
   /**
@@ -386,19 +392,19 @@ public class ProgramChromosome
    * second child is found by recursively calling this method on the tree
    * starting with the first child.
    *
-   * @param n the index of the reference depth
+   * @param a_index the index of the reference depth
    * @returns the index of the next node of the same depth as the
    * current node (i.e. the next sibling node)
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected int redepth(int n) {
-    int num = n + 1;
-    CommandGene command = getNode(n);
+  protected int redepth(int a_index) {
+    int num = a_index + 1;
+    CommandGene command = getNode(a_index);
     int arity = command.getArity();
     for (int i = 0; i < arity; i++) {
-      depth[num] = depth[n] + 1;
+      depth[num] = depth[a_index] + 1;
       // children[i][n] = num;
       num = redepth(num);
       if (num < 0) {
@@ -443,17 +449,17 @@ public class ProgramChromosome
   /**
    * Counts the number of terminals of the given type in this chromosome.
    *
-   * @param type the type of terminal to count
+   * @param a_type the type of terminal to count
    * @return the number of terminals in this chromosome
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int numTerminals(Class type) {
+  public int numTerminals(Class a_type) {
     int count = 0;
     for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
       if (getFunctions()[i].getArity() == 0
-          && getFunctions()[i].getReturnType() == type) {
+          && getFunctions()[i].getReturnType() == a_type) {
         count++;
       }
     }
@@ -463,17 +469,17 @@ public class ProgramChromosome
   /**
    * Counts the number of functions of the given type in this chromosome.
    *
-   * @param type the type of function to count
+   * @param a_type the type of function to count
    * @return the number of functions in this chromosome.
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int numFunctions(Class type) {
+  public int numFunctions(Class a_type) {
     int count = 0;
     for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
       if (getFunctions()[i].getArity() != 0
-          && getFunctions()[i].getReturnType() == type) {
+          && getFunctions()[i].getReturnType() == a_type) {
         count++;
       }
     }
@@ -484,42 +490,44 @@ public class ProgramChromosome
    * Gets the i'th node in this chromosome. The nodes are counted in a
    * depth-first manner, with node 0 being the root of this chromosome.
    *
-   * @param i the node number to get
+   * @param a_index the node number to get
    * @return the node
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public CommandGene getNode(int i) {
-    if (i >= getFunctions().length || getFunctions()[i] == null) {
+  public CommandGene getNode(int a_index) {
+    if (a_index >= getFunctions().length || getFunctions()[a_index] == null) {
       return null;
     }
-    return getFunctions()[i];
+    return getFunctions()[a_index];
   }
 
   /**
-   * Gets the child'th child of the n'th node in this chromosome. This is the same
-   * as the child'th node whose depth is one more than the depth of the n'th node.
+   * Gets the child'th child of the n'th node in this chromosome. This is the
+   * same as the child'th node whose depth is one more than the depth of the
+   * n'th node.
    *
-   * @param n the node number of the parent
-   * @param child the child number (starting from 0) of the parent
+   * @param a_index the node number of the parent
+   * @param a_child the child number (starting from 0) of the parent
    * @returns the node number of the child, or -1 if not found
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getChild(int n, int child) {
-    for (int i = n + 1; i < getFunctions().length; i++) {
-      if (depth[i] <= depth[n]) {
+  public int getChild(int a_index, int a_child) {
+    for (int i = a_index + 1; i < getFunctions().length; i++) {
+      if (depth[i] <= depth[a_index]) {
         return -1;
       }
-      if (depth[i] == depth[n] + 1) {
-        if (--child < 0) {
+      if (depth[i] == depth[a_index] + 1) {
+        if (--a_child < 0) {
           return i;
         }
       }
     }
-    throw new RuntimeException("Bad child " + child + " of n " + n);
+    throw new RuntimeException("Bad child " + a_child + " of node with index = "
+                               + a_index);
   }
 
   /**
@@ -527,17 +535,17 @@ public class ProgramChromosome
    * counted in a depth-first manner, with node 0 being the first node of the
    * given type in this chromosome.
    *
-   * @param i the node number to get
-   * @param type the type of node to get
+   * @param a_index the node number to get
+   * @param a_type the type of node to get
    * @return the node
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getNode(int i, Class type) {
+  public int getNode(int a_index, Class a_type) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getReturnType() == type) {
-        if (--i < 0) {
+      if (getFunctions()[j].getReturnType() == a_type) {
+        if (--a_index < 0) {
           return j;
         }
       }
@@ -549,16 +557,16 @@ public class ProgramChromosome
    * Gets the i'th terminal in this chromosome. The nodes are counted in a
    * depth-first manner, with node 0 being the first terminal in this chromosome.
    *
-   * @param i the terminal number to get
+   * @param a_index the terminal number to get
    * @return the terminal
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getTerminal(int i) {
+  public int getTerminal(int a_index) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
       if (getFunctions()[j].getArity() == 0) {
-        if (--i < 0) {
+        if (--a_index < 0) {
           return j;
         }
       }
@@ -570,16 +578,16 @@ public class ProgramChromosome
    * Gets the i'th function in this chromosome. The nodes are counted in a
    * depth-first manner, with node 0 being the first function in this chromosome.
    *
-   * @param i the function number to get
+   * @param a_index the function number to get
    * @return the function
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getFunction(int i) {
+  public int getFunction(int a_index) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
       if (getFunctions()[j].getArity() != 0) {
-        if (--i < 0) {
+        if (--a_index < 0) {
           return j;
         }
       }
@@ -592,19 +600,22 @@ public class ProgramChromosome
    * counted in a depth-first manner, with node 0 being the first terminal of
    * the given type in this chromosome.
    *
-   * @param i the terminal number to get
-   * @param type the type of terminal to get
+   * @param a_index the terminal number to get
+   * @param a_type the type of terminal to get
    * @return the terminal
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getTerminal(int i, Class type) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++)
-      if (getFunctions()[j].getReturnType() == type
-          && getFunctions()[j].getArity() == 0)
-        if (--i < 0)
+  public int getTerminal(int a_index, Class a_type) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getReturnType() == a_type
+          && getFunctions()[j].getArity() == 0) {
+        if (--a_index < 0) {
           return j;
+        }
+      }
+    }
     return -1;
   }
 
@@ -613,19 +624,22 @@ public class ProgramChromosome
    * counted in a depth-first manner, with node 0 being the first function of
    * the given type in this chromosome.
    *
-   * @param i the function number to get
-   * @param type the type of function to get
+   * @param a_index the function number to get
+   * @param a_type the type of function to get
    * @return the function
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getFunction(int i, Class type) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++)
-      if (getFunctions()[j].getReturnType() == type
-          && getFunctions()[j].getArity() != 0)
-        if (--i < 0)
+  public int getFunction(int a_index, Class a_type) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getReturnType() == a_type
+          && getFunctions()[j].getArity() != 0) {
+        if (--a_index < 0) {
           return j;
+        }
+      }
+    }
     return -1;
   }
 
@@ -649,43 +663,45 @@ public class ProgramChromosome
   /**
    * Gets the number of nodes in the branch starting at the n'th node.
    *
-   * @param n the index of the node at which to start counting
+   * @param a_index the index of the node at which to start counting
    * @returns the number of nodes in the branch starting at the n'th node
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getSize(int n) {
+  public int getSize(int a_index) {
     int i;
     // Get the node at which the depth is <= depth[n].
-    for (i = n + 1; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (depth[i] <= depth[n]) {
+    for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
+         i++) {
+      if (depth[i] <= depth[a_index]) {
         break;
       }
     }
-    return i - n;
+    return i - a_index;
   }
 
   /**
    * Gets the depth of the branch starting at the n'th node.
    *
-   * @param n the index of the node at which to check the depth.
+   * @param a_index the index of the node at which to check the depth.
    * @returns the depth of the branch starting at the n'th node
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getDepth(int n) {
-    int i, maxdepth = depth[n];
-    for (i = n + 1; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (depth[i] <= depth[n]) {
+  public int getDepth(int a_index) {
+    int i, maxdepth = depth[a_index];
+    for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
+         i++) {
+      if (depth[i] <= depth[a_index]) {
         break;
       }
       if (depth[i] > maxdepth) {
         maxdepth = depth[i];
       }
     }
-    return maxdepth - depth[n];
+    return maxdepth - depth[a_index];
   }
 
   /**
@@ -693,17 +709,18 @@ public class ProgramChromosome
    * the child is at depth d then the parent is the first function at depth d-1
    * when iterating backwards through the function list starting from the child.
    *
-   * @param child the child node
+   * @param a_child the child node
    * @return the parent node, or null if the child is the root node
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getParentNode(int child) {
-    if (child >= getFunctions().length || getFunctions()[child] == null)
+  public int getParentNode(int a_child) {
+    if (a_child >= getFunctions().length || getFunctions()[a_child] == null) {
       return -1;
-    for (int i = child - 1; i >= 0; i--) {
-      if (depth[i] == depth[child] - 1) {
+    }
+    for (int i = a_child - 1; i >= 0; i--) {
+      if (depth[i] == depth[a_child] - 1) {
         return i;
       }
     }
@@ -741,8 +758,9 @@ public class ProgramChromosome
    * @since 3.0
    */
   public boolean execute_boolean(int n, int child, Object[] args) {
-    if (child == 0)
+    if (child == 0) {
       return getFunctions()[n + 1].execute_boolean(this, n + 1, args);
+    }
     int other = getChild(n, child);
     return getFunctions()[other].execute_boolean(this, other, args);
   }
@@ -762,8 +780,9 @@ public class ProgramChromosome
   }
 
   public void execute_void(int n, int child, Object[] args) {
-    if (child == 0)
+    if (child == 0) {
       getFunctions()[n + 1].execute_void(this, n + 1, args);
+    }
     int other = getChild(n, child);
     getFunctions()[other].execute_void(this, other, args);
   }
@@ -786,8 +805,9 @@ public class ProgramChromosome
   }
 
   public int execute_int(int n, int child, Object[] args) {
-    if (child == 0)
+    if (child == 0) {
       return getFunctions()[n + 1].execute_int(this, n + 1, args);
+    }
     int other = getChild(n, child);
     return getFunctions()[other].execute_int(this, other, args);
   }
@@ -809,8 +829,9 @@ public class ProgramChromosome
   }
 
   public long execute_long(int n, int child, Object[] args) {
-    if (child == 0)
+    if (child == 0) {
       return getFunctions()[n + 1].execute_long(this, n + 1, args);
+    }
     int other = getChild(n, child);
     return getFunctions()[other].execute_long(this, other, args);
   }
@@ -862,8 +883,9 @@ public class ProgramChromosome
   }
 
   public double execute_double(int n, int child, Object[] args) {
-    if (child == 0)
+    if (child == 0) {
       return getFunctions()[n + 1].execute_double(this, n + 1, args);
+    }
     int other = getChild(n, child);
     return getFunctions()[other].execute_double(this, other, args);
   }
@@ -886,8 +908,9 @@ public class ProgramChromosome
   }
 
   public Object execute_object(int n, int child, Object[] args) {
-    if (child == 0)
+    if (child == 0) {
       return getFunctions()[n + 1].execute_object(this, n + 1, args);
+    }
     int other = getChild(n, child);
     return getFunctions()[other].execute_object(this, other, args);
   }
@@ -936,7 +959,7 @@ public class ProgramChromosome
     // If there are any ADF's in the nodeSet, then set its type
     // according to the chromosome it references
     for (int j = 0; j < nodeSets[0].length; j++) {
-      /**@todo ADF impl und folgendes reaktivieren*/
+      /**@todo implement ADF impl and reactivate the following*/
 //        if (nodeSets[0][j] instanceof ADF)
 //          ( (ADF) nodeSets[i][j]).setReturnType(
 //              types[ ( (ADF) nodeSets[0][j]).getChromosomeNum()]);
@@ -969,7 +992,7 @@ public class ProgramChromosome
     // If there are any ADF's in the nodeSet, then set its type
     // according to the chromosome it references
     for (int j = 0; j < nodeSets[0].length; j++) {
-      /**@todo ADF impl und folgendes reaktivieren*/
+      /**@todo implement ADF impl and reactivate the following*/
 //      if (nodeSets[0][j] instanceof ADF)
 //        ( (ADF) nodeSets[i][j]).setReturnType(
 //            types[ ( (ADF) nodeSets[0][j]).getChromosomeNum()]);
