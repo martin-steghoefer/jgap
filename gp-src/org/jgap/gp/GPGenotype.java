@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private double m_bestFitness;
 
@@ -48,7 +48,7 @@ public class GPGenotype
   public static Genotype randomInitialGenotype(Configuration
                                                a_activeConfiguration)
       throws InvalidConfigurationException {
-    /**@todo not needed --> remove resp. provide µwith base class*/
+    /**@todo not needed --> remove resp. provide it with base class*/
     return null;
   }
 
@@ -124,7 +124,7 @@ public class GPGenotype
     ( (GPPopulation) getPopulation()).sort(new FitnessComparator());
     //Here, we could do threading
     for (int i = 0; i < n; i++) {
-      evolve();
+      calcFitness();
       if (m_bestFitness < 0.000001) { /**@todo make configurable*/
         // Optimal solution found.
         return;
@@ -132,11 +132,12 @@ public class GPGenotype
       if (i % 25 == 0) { /**@todo make configurable*/
         System.out.println("Evolving generation " + i);
       }
-      nextGeneration();
+      evolve();
     }
+    calcFitness();
   }
 
-  public void evolve() {
+  public void calcFitness() {
     double totalFitness = 0.0d;
     for (int i = 0; i < getPopulation().size(); i++) {
       IChromosome chrom = getPopulation().getChromosome(i);
@@ -184,14 +185,13 @@ public class GPGenotype
   /**
    * Evolve the population by one generation. Probabilistically reproduces
    * and crosses individuals into a new population which then overwrites the
-   * original population. Computes the population's fitnesses before returning.
+   * original population.
    *
    * @since 1.0
    */
-  public void nextGeneration() {
+  public void evolve() {
     try {
       int popSize = getGPConfiguration().getPopulationSize();
-      /**@todo normally: nextGeneration = evolve,  computeAll = calc fitness*/
       GPPopulation newPopulation = new GPPopulation(getGPConfiguration(),
           popSize);
       float val;
