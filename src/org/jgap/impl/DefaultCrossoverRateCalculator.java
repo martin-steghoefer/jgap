@@ -18,15 +18,18 @@ import org.jgap.*;
  * @since 2.0
  */
 public class DefaultCrossoverRateCalculator
-    implements IUniversalRateCalculator {
-/**@todo add abstract base class*/
+    extends BaseRateCalculator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
-  private transient Configuration m_config;
-
-  public DefaultCrossoverRateCalculator(Configuration a_config) {
-    m_config = a_config;
+  /**
+   *
+   * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
+   */
+  public DefaultCrossoverRateCalculator(Configuration a_config)
+      throws InvalidConfigurationException {
+    super(a_config);
   }
 
   /**
@@ -40,7 +43,7 @@ public class DefaultCrossoverRateCalculator
    * @since 2.0
    */
   public int calculateCurrentRate() {
-    int size = m_config.getChromosomeSize();
+    int size = getConfiguration().getChromosomeSize();
     if (size < 1) {
       size = 1;
     }
@@ -49,6 +52,7 @@ public class DefaultCrossoverRateCalculator
 
   /**
    * Determines whether crossover is to be carried out for a given population.
+   *
    * @param a_chrom ignored
    * @param a_geneIndex ignored
    * @return true: the DefaultCrossoverRateCalculator always returns a finite
