@@ -18,17 +18,22 @@ package org.jgap;
 public abstract class BaseRateCalculator
     implements IUniversalRateCalculator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private transient Configuration m_config;
 
   /**
    * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public BaseRateCalculator(Configuration a_config) {
+  public BaseRateCalculator(Configuration a_config)
+      throws InvalidConfigurationException {
+    if (a_config == null) {
+      throw new InvalidConfigurationException("Configuration must not be null!");
+    }
     m_config = a_config;
   }
 
