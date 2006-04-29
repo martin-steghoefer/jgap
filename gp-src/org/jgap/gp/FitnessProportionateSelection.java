@@ -19,10 +19,9 @@ import java.util.*;
  * @since 3.0
  */
 public class FitnessProportionateSelection
-    extends SelectionMethod
-    implements Serializable {
+    implements INaturalGPSelector, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public ProgramChromosome select(GPGenotype world) {
     double chosen = world.getConfiguration().getRandomGenerator().nextFloat() *
