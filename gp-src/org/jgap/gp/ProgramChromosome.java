@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /*wodka:
    void add(Command cmd);
@@ -125,8 +125,8 @@ public class ProgramChromosome
   }
 
   protected void cleanup(int n) {
-    if (n < 0) { //KM
-      return; //KM
+    if (n < 0) {
+      return;
     }
     for (int i = 0; i < getFunctions()[n].getArity(); i++) {
       cleanup(getChild(n, i));
@@ -213,8 +213,8 @@ public class ProgramChromosome
   }
 
   public String toString(int n) {
-    if (n < 0) { //KM
-      return ""; //KM
+    if (n < 0) {
+      return "";
     }
     if (getFunctions()[n].getArity() == 0)
       return getFunctions()[n].getName() + " ";
@@ -227,8 +227,8 @@ public class ProgramChromosome
   }
 
   public String toString2(int n) {
-    if (n < 0) { //KM
-      return ""; //KM
+    if (n < 0) {
+      return "";
     }
     if (getFunctions()[n].getArity() == 0) {
       return getFunctions()[n].getName() + " ";
@@ -278,18 +278,8 @@ public class ProgramChromosome
     return false;
   }
 
-  public boolean isPossible(CommandGene f) {
-    /**@todo not used*/
-    for (int i = 0; i < getFunctionSet().length; i++) {
-      if (getFunctionSet()[i] == f) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   /**
-   * Randomly chooses a valid node from the node set.
+   * Randomly chooses a valid node from the functions set.
    *
    * @param a_config the configuration to use
    * @param a_type the type of node to choose
