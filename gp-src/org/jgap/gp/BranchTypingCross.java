@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -172,15 +172,10 @@ public class BranchTypingCross
                                    c[0].getArgTypes());
       System.arraycopy(c0.getFunctions(), 0, c[0].getFunctions(), 0, p0);
       System.arraycopy(c1.getFunctions(), p1, c[0].getFunctions(), p0, s1);
-      if (c0s - p0 - s0 < 1 && false) { //KM
-        int i = 1; //KM
-      }
-      else {
-        System.arraycopy(c0.getFunctions(), p0 + s0, c[0].getFunctions(),
-                         p0 + s1,
-                         c0s - p0 - s0);
-        c[0].redepth();
-      }
+      System.arraycopy(c0.getFunctions(), p0 + s0, c[0].getFunctions(),
+                       p0 + s1,
+                       c0s - p0 - s0);
+      c[0].redepth();
     }
     // Check for depth constraint for p0 inserted into c1
     if (d1 - 1 + s0 > a_config.getMaxCrossoverDepth()) {
@@ -193,15 +188,10 @@ public class BranchTypingCross
                                    c[1].getArgTypes());
       System.arraycopy(c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
       System.arraycopy(c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
-      if (c1s - p1 - s1 < 1 && false) { //KM
-        int i = 1; //KM
-      }
-      else {
-        System.arraycopy(c1.getFunctions(), p1 + s1, c[1].getFunctions(),
-                         p1 + s0,
-                         c1s - p1 - s1);
-        c[1].redepth();
-      }
+      System.arraycopy(c1.getFunctions(), p1 + s1, c[1].getFunctions(),
+                       p1 + s0,
+                       c1s - p1 - s1);
+      c[1].redepth();
     }
     return c;
   }
