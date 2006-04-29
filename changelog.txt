@@ -8,7 +8,9 @@
   and made Chromosome descend from it
 * Added method getConfiguration to interface IChromosome
 * Added abstract base class org.jgap.BaseGeneticOperator
-  and made any GeneticOperator's descend from it
+  and made any GeneticOperator descend from it
+* Added abstract base class org.jgap.BaseRateCalculator
+  and made any rate calculator descend from it
 * Enhanced BooleanGene.compareTo to consider application
   data
 * Fixed error in method KeyedValues.getIndex()
