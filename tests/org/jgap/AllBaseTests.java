@@ -12,7 +12,7 @@ package org.jgap;
 import junit.framework.*;
 
 /**
- * Test suite for all tests of package org.jgap
+ * Test suite for all tests of package org.jgap.
 *
  * @author Klaus Meffert
  * @since 1.1
@@ -21,11 +21,12 @@ public class AllBaseTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
     suite.addTest(BaseGeneTest.suite());
+    suite.addTest(BaseRateCalculatorTest.suite());
     suite.addTest(ChromosomeTest.suite());
     suite.addTest(ConfigurationTest.suite());
     suite.addTest(DefaultFitnessEvaluatorTest.suite());
