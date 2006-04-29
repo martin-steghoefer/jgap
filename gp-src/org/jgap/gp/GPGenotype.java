@@ -23,22 +23,46 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
+  /**
+   * Fitness value of the best solution.
+   */
   private double m_bestFitness;
 
   /**
-   * Sum of fitness values over all chromosomes
+   * Sum of fitness values over all chromosomes.
    */
   private double m_totalFitness;
 
+  /**
+   * Best solution found.
+   */
   private static ProgramChromosome m_allTimeBest;
 
-  public GPGenotype(Population a_population)
+  /**
+   * Default constructor. Ony use with dynamic instantiation.
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPGenotype()
       throws InvalidConfigurationException {
-    this(GPGenotype.getGPConfiguration(), a_population);
+    this(GPGenotype.getGPConfiguration(),
+         new GPPopulation(GPGenotype.getGPConfiguration(),
+                          GPGenotype.getGPConfiguration().getPopulationSize()));
   }
 
+  /**
+   * Preferred constructor to use, if not randomInitialGenotype.
+   * @param a_activeConfiguration the configuration to use
+   * @param a_population the initialized population to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public GPGenotype(GPConfiguration a_activeConfiguration,
                     Population a_population)
       throws InvalidConfigurationException {
@@ -68,9 +92,9 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                    Class[] a_types,
-                                    Class[][] a_argTypes,
-                                    CommandGene[][] a_nodeSets)
+                                                 Class[] a_types,
+                                                 Class[][] a_argTypes,
+                                                 CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
     /**@todo use listener*/
     System.gc();
@@ -115,12 +139,21 @@ public class GPGenotype
       }
     }
   }
-  public void evolve(int n) {
+
+  /**
+   * Evolves the population n times
+   * @param a_evolutions number of evolution
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void evolve(int a_evolutions) {
     ( (GPPopulation) getPopulation()).sort(new FitnessComparator());
     // Here, we could do threading.
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < a_evolutions; i++) {
       calcFitness();
-      if (m_bestFitness < 0.000001) { /**@todo make configurable --> use listener*/
+      if (m_bestFitness < 0.000001) {
+          /**@todo make configurable --> use listener*/
         // Optimal solution found, quit.
         // -----------------------------
         return;
@@ -133,6 +166,13 @@ public class GPGenotype
     calcFitness();
   }
 
+  /**
+   * Calculates the fitness value of all chromosomes, of the best solution as
+   * well as the total fitness (sum of all fitness values).
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void calcFitness() {
     double totalFitness = 0.0d;
     for (int i = 0; i < getPopulation().size(); i++) {
@@ -166,10 +206,23 @@ public class GPGenotype
     }
   }
 
+  /**
+   * @return the all-time best solution found
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public ProgramChromosome getAllTimeBest() {
     return m_allTimeBest;
   }
 
+  /**
+   * Outputs the best solution currently found.
+   * @param best the fittest ProgramChromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void outputSolution(ProgramChromosome best) {
     System.out.println(" Best solution fitness: " + best.getFitnessValue());
     System.out.println(" Best solution(normalized): " + best.toString2(0));
