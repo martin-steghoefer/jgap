@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.80 $";
+  private final static String CVS_REVISION = "$Revision: 1.81 $";
 
   /**
    * The current active Configuration instance.
@@ -106,11 +106,11 @@ public class Genotype
       }
     }
     m_population = a_population;
-    setConfiguration(m_activeConfiguration);
+    setConfiguration(a_activeConfiguration);
     // Lock the settings of the configuration object so that it cannot
     // be altered.
     // ---------------------------------------------------------------
-    m_activeConfiguration.lockSettings();
+    getConfiguration().lockSettings();
   }
 
   /**
