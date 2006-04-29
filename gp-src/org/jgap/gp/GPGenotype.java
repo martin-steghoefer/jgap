@@ -23,11 +23,9 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private double m_bestFitness;
-
-  private Map m_variables;
 
   private double m_totalFitness;
 
@@ -42,7 +40,6 @@ public class GPGenotype
                     Population a_population)
       throws InvalidConfigurationException {
     super(a_activeConfiguration, a_population);
-    m_variables = new Hashtable();
   }
 
   /**
@@ -104,13 +101,20 @@ public class GPGenotype
             "FitnessComparator must operate on ProgramChromosomes");
       double f1 = ( (ProgramChromosome) o1).getFitnessValue();
       double f2 = ( (ProgramChromosome) o2).getFitnessValue();
-      return f1 > f2 ? 1 : (f1 == f2 ? 0 : -1);
-//      return f1 > f2 ? -1 : (f1 == f2 ? 0 : 1);
+      if (f1 > f2) {
+        return 1;
+      }
+      else if (Math.abs(f1 - f2) < 0.000001) {
+        return 0;
+      }
+      else {
+        return -1;
+      }
     }
   }
   public void evolve(int n) {
     ( (GPPopulation) getPopulation()).sort(new FitnessComparator());
-    //Here, we could do threading
+    // Here, we could do threading.
     for (int i = 0; i < n; i++) {
       calcFitness();
       if (m_bestFitness < 0.000001) { /**@todo make configurable --> use listener*/
@@ -132,6 +136,7 @@ public class GPGenotype
       IChromosome chrom = getPopulation().getChromosome(i);
       if (chrom.getFitnessValue() < 0.0d) {
         // Chromosome wasn't reproduced from the previous generation.
+        // ----------------------------------------------------------
         try {
           chrom.setFitnessValue(chrom.getFitnessValue());
         }
@@ -147,7 +152,7 @@ public class GPGenotype
     m_totalFitness = totalFitness;
     ProgramChromosome best = (ProgramChromosome) getPopulation().
         determineFittestChromosome();
-    // do something siliar here as preserveFittestChromosome
+    // Do something similar here as with Genotype.preserveFittestChromosome.
     m_bestFitness = best.getFitnessValue();
     if (m_allTimeBest == null ||
         m_bestFitness < m_allTimeBest.getFitnessValue()) {
@@ -172,7 +177,8 @@ public class GPGenotype
    * and crosses individuals into a new population which then overwrites the
    * original population.
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void evolve() {
     try {

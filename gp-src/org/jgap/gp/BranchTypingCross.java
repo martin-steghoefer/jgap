@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -39,9 +39,12 @@ public class BranchTypingCross
    */
   public ProgramChromosome[] cross(ProgramChromosome i1, ProgramChromosome i2) {
     try {
+      // The following was adapted from JGProg to work with a model where no
+      // individuals exist.
+
       // Determine which chromosome we'll cross, probabilistically determined
-      // by the sizes of the chromosomes of the first individual --
-      // equivalent to Koza's branch typing.
+      // by the sizes of the chromosomes of the first individual.
+      // Equivalent to Koza's branch typing.
       int numChroms = 1; //i1.size();
       int[] sizes = new int[numChroms];
       int totalSize = 0;
@@ -66,23 +69,18 @@ public class BranchTypingCross
         if (nodeNum < 0)
           break;
       }
-      // Cross the selected chromosomes
+      // Cross the selected chromosomes.
       ProgramChromosome[] newChromosomes = doCross(getConfiguration(),
           i1, //.chromosomes[chromosomeNum],
           i2); //.chromosomes[chromosomeNum]);
+      // Following not necessary as no individuals exist!
       // Create the new individuals by copying the uncrossed chromosomes
       // and setting the crossed chromosome. There's no need to deep-copy
       // the uncrossed chromosomes because they don't change. That is,
       // even if two individuals' chromosomes point to the same chromosome,
       // the only change in a chromosome is crossing, which generates
       // deep-copied chromosomes anyway.
-      if (i1.getGenes() == null || i2.getGenes() == null ||
-          newChromosomes[0].getGenes() == null
-          || newChromosomes[1].getGenes() == null ||
-          newChromosomes[0].getGene(0) == null
-          || newChromosomes[1].getGene(0) == null) {
-        throw new RuntimeException("NIX");
-      }
+
       return newChromosomes;
     }
     catch (InvalidConfigurationException iex) {
@@ -111,7 +109,7 @@ public class BranchTypingCross
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected static ProgramChromosome[] doCross(GPConfiguration a_config,
+  protected ProgramChromosome[] doCross(GPConfiguration a_config,
                                                ProgramChromosome c0,
                                                ProgramChromosome c1)
       throws InvalidConfigurationException {
