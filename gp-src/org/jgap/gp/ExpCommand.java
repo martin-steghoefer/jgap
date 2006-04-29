@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * The expontial command.
+ * The exponential operation.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ExpCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public ExpCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {

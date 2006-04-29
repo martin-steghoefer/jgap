@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * The subtract command.
+ * The subtract operation.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class SubtractCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public SubtractCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {

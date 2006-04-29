@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * The consine command.
+ * The cosine command.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class CosCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public CosCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -54,9 +54,9 @@ public class CosCommand
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    double f = c.execute_double(n, 0, args);
+    double d = c.execute_double(n, 0, args);
     // clip to -10000 -> 10000
-    return Math.cos(Math.max( -10000.0, Math.min(f, 10000.0)));
+    return Math.cos(Math.max( -10000.0, Math.min(d, 10000.0)));
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {

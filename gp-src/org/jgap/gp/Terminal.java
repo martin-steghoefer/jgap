@@ -13,7 +13,7 @@ import org.jgap.gp.*;
 import org.jgap.*;
 
 /**
- * A Terminal having no children. Practically, it may be a static number.
+ * A terminal having no children. Practically, it may be a static number.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private double m_value;
 
@@ -68,8 +68,7 @@ public class Terminal
   }
 
   public void applyMutation(int index, double a_percentage) {
-    /**@todo implement correctly*/
-    /**@todo consider min/max boundaries*/
+    /**@todo not used, implement correctly*/
 
     /**@todo decide whether adding or subtracting a delta*/
 
@@ -79,7 +78,7 @@ public class Terminal
     /**@todo add delta to current value to receive new value*/
     double range = (m_upperBounds - m_lowerBounds) * a_percentage;
     double newValue = m_value +
-        (Genotype.getConfiguration().getRandomGenerator().nextDouble() * range);
+        (getConfiguration().getRandomGenerator().nextDouble() * range);
 //    setAllele(new Double(newValue));
     setValue(newValue);
   }

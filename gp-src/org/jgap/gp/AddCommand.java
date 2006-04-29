@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * The add command.
+ * The add operation.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class AddCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public AddCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -29,6 +29,7 @@ public class AddCommand
   }
 
   protected Gene newGeneInternal() {
+    /**@todo not used for GP*/
     try {
       Gene gene = new AddCommand(getConfiguration(), getReturnType());
       return gene;
@@ -42,17 +43,6 @@ public class AddCommand
     // Here, we could mutate the parameter of the command.
     // This is not applicable for this command, just do nothing
     System.err.println("appliedMutation");
-  }
-
-  public CommandGene mutateCommand() {
-    /**@todo muss nicht hier gemacht werden, denn Mutationsergebnis ist (immer)
-     * eine Funktion mit selbser Arität! Aber: Wertebereich kann unterschiedlich
-     * sein! Also zu jeder Funktion angeben, welche anderen als äquivalent
-     * für die Aufgabe angesehen werden (Wurzel ginge nicht für EXP, wenn auch
-     * negative x vorkommen könnten).
-     * @todo muss aber irgendwo durchgeführt werden, ist noch nicht der Fall
-     */
-    return null; //new MultiplyCommand();
   }
 
   public String toString() {

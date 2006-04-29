@@ -16,7 +16,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Object m_state;
 
@@ -46,7 +46,7 @@ public class GPConfiguration
   /**
    * The method of choosing an individual to perform an evolution operation on.
    */
-  private SelectionMethod selectionMethod;
+  private INaturalGPSelector selectionMethod;
 
   private CrossMethod crossMethod;
 
@@ -111,7 +111,7 @@ public class GPConfiguration
     this.maxCrossoverDepth = maxCrossoverDepth;
   }
 
-  public SelectionMethod getSelectionMethod() {
+  public INaturalGPSelector getSelectionMethod() {
     return selectionMethod;
   }
 
