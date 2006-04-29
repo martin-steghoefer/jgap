@@ -23,7 +23,7 @@ import java.util.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   static Variable vx;
 
@@ -36,7 +36,7 @@ public class MathProblem
     super(a_pop);
   }
 
-  public static Population create(GPConfiguration a_conf)
+  public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     /**@todo this should be randomInitializeGenotype*/
     Class[] types = {
@@ -65,8 +65,8 @@ public class MathProblem
       y[i] = f * f * f * f + f * f * f + f * f - f;
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
-    // Create initial population
-    return create(a_conf, types, argTypes, nodeSets);
+    // Create genotype with initial population
+    return randomInitialGenotype(a_conf, types, argTypes, nodeSets);
   }
 
   // Method for testing purpose only during development phase
@@ -77,7 +77,7 @@ public class MathProblem
     config.setMaxInitDepth(8);
     config.setPopulationSize(800);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
-    GPGenotype gp = new GPGenotype(config, create(config));
+    GPGenotype gp = create(config);
     gp.evolve(800);
     gp.outputSolution(gp.getAllTimeBest());
   }
@@ -99,7 +99,7 @@ public class MathProblem
           error += Math.abs(result - y[i]);
         }
         catch (ArithmeticException ex) {
-          System.out.println("x=" + x[i].floatValue());
+          System.out.println("x = " + x[i].floatValue());
           System.out.println(ind);
           throw ex;
         }

@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private double m_bestFitness;
 
@@ -45,22 +45,8 @@ public class GPGenotype
     m_variables = new Hashtable();
   }
 
-  public static Genotype randomInitialGenotype(Configuration
-                                               a_activeConfiguration)
-      throws InvalidConfigurationException {
-    /**@todo not needed --> remove resp. provide it with base class*/
-    return null;
-  }
-
   /**
-   * Creates the initial population for the world and computes the fitnesses
-   * of all the individuals in the initial population.
-   * <p>
-   * Implementation note: the arguments of a chromosome, if any, are treated as
-   * {@link com.groovyj.jgprog.functions.Variable Variable}s of name
-   * "ARG"+argnum ARG0, ARG1, etc). These variables are automatically saved,
-   * loaded before a call to the chromosome (via
-   * {@link com.groovyj.jgprog.functions.ADF ADF}), and restored after the call.
+   * Creates a genotype with initial population for the world set.
    *
    * @param a_conf the configuration to use
    * @param a_types the type of each chromosome, the length is the number of
@@ -81,13 +67,14 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static GPPopulation create(final GPConfiguration a_conf,
+  public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
                                     Class[] a_types,
                                     Class[][] a_argTypes,
                                     CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
+    /**@todo use listener*/
     System.gc();
-    System.out.println("Memory before create: "
+    System.out.println("Memory consumed before creating population: "
                        + (Runtime.getRuntime().totalMemory() / 1024 / 1024) +
                        "M");
 //    Object[] listeners = GPListeners.getListenerList();
@@ -96,11 +83,12 @@ public class GPGenotype
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
     pop.create(a_conf, a_types, a_argTypes, a_nodeSets);
+    /**@todo use listener*/
     System.gc();
-    System.out.println("Memory before computing initial fitnesses: "
+    System.out.println("Memory used after creating population: "
                        + (Runtime.getRuntime().totalMemory() / 1024 / 1024) +
                        "M");
-    return pop;
+    return new GPGenotype(a_conf, pop);
   }
 
   public static GPConfiguration getGPConfiguration() {
@@ -125,11 +113,12 @@ public class GPGenotype
     //Here, we could do threading
     for (int i = 0; i < n; i++) {
       calcFitness();
-      if (m_bestFitness < 0.000001) { /**@todo make configurable*/
-        // Optimal solution found.
+      if (m_bestFitness < 0.000001) { /**@todo make configurable --> use listener*/
+        // Optimal solution found, quit.
+        // -----------------------------
         return;
       }
-      if (i % 25 == 0) { /**@todo make configurable*/
+      if (i % 25 == 0) { /**@todo make configurable --> use listener*/
         System.out.println("Evolving generation " + i);
       }
       evolve();
@@ -151,15 +140,11 @@ public class GPGenotype
           System.exit(1);
         }
       }
-      else {
-        /**@todo do crossing over etc.*/
-      }
       totalFitness += chrom.getFitnessValue();
 //      for (int j = listeners.length - 1; j >= 0; j -= 2)
 //        ( (GPListener) listeners[ j ]).bumpEvaluationProgress();
     }
     m_totalFitness = totalFitness;
-//    System.err.println("Total fitness: " + totalFitness);
     ProgramChromosome best = (ProgramChromosome) getPopulation().
         determineFittestChromosome();
     // do something siliar here as preserveFittestChromosome
