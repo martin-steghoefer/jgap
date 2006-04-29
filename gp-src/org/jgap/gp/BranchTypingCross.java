@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -113,11 +113,6 @@ public class BranchTypingCross
                                         ProgramChromosome c0,
                                         ProgramChromosome c1)
       throws InvalidConfigurationException {
-    /**@todo here we need to work with details of ProgramChromosome (i.e.
-     * CommandGenes in the context of JGAP. But this does not work as a
-     * CommandGene does not have a collection of function and therefor not a
-     * method "int numFunctions()".
-     */
     ProgramChromosome[] c = {
         c0, c1};
     // Choose a point in c1

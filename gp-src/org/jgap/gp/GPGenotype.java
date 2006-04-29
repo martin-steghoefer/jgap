@@ -23,10 +23,13 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private double m_bestFitness;
 
+  /**
+   * Sum of fitness values over all chromosomes
+   */
   private double m_totalFitness;
 
   private static ProgramChromosome m_allTimeBest;
@@ -230,6 +233,12 @@ public class GPGenotype
     return (GPPopulation)super.getPopulation();
   }
 
+  /**
+   * @return the total fitness, that is the fitness over all chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public double getTotalFitness() {
     return m_totalFitness;
   }
