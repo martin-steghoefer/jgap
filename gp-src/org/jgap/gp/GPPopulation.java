@@ -21,7 +21,7 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public transient float[] fitnessRank;
 
@@ -29,7 +29,7 @@ public class GPPopulation
 
   /*
    * @author Klaus Meffert
-   * @since 2.2
+   * @since 3.0
    */
   public GPPopulation(GPConfiguration a_conf, int a_size)
       throws InvalidConfigurationException {
@@ -46,8 +46,11 @@ public class GPPopulation
    * "ascending". A Comparator is given which will compare two individuals,
    * and if one individual compares as lower than another individual, the first
    * individual will appear in the population before the second individual.
-   * <p>
+   *
    * @param c the Comparator to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void sort(Comparator c) {
     IChromosome[] chroms = super.toChromosomes();
@@ -60,7 +63,8 @@ public class GPPopulation
   }
 
   /**
-   * Creates a population using the ramped half-and-half method.
+   * Creates a population using the ramped half-and-half method. Adapted from
+   * JGProg.
    *
    * @param a_conf the configuration to use
    * @param a_types the type of each chromosome, the length
@@ -73,7 +77,7 @@ public class GPPopulation
    * must be an array of arrays, the first dimension of which is the number of
    * chromosomes and the second dimension of which is the number of nodes.
    * Note that it is not necessary to include the arguments of a chromosome as
-   * terminals in the chromosome's node set. This is done automatically for you
+   * terminals in the chromosome's node set. This is done automatically
    * @throws InvalidConfigurationException
    */
   public void create(final GPConfiguration a_conf, Class[] a_types,
@@ -90,15 +94,6 @@ public class GPPopulation
       else {
         chrom.full(depth, a_types, a_argTypes, a_nodeSets);
       }
-      // Debug
-//      for (int k=0;k<chrom.getGenes().length;k++) {
-//        Gene g = chrom.getGene(k);
-//        if (g==null) { break;}
-//        if (g.getClass() == examples.gp.function.AddCommand.class) {
-//          System.err.println("AddCommand at Chromosome "+i);
-//          break;
-//        }
-//      }
       addChromosome(chrom);
     }
     setChanged(true);
