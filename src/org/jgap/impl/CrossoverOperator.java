@@ -34,7 +34,7 @@ public class CrossoverOperator
     extends BaseGeneticOperator
     implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -164,7 +164,6 @@ public class CrossoverOperator
       IChromosome chrom2 = a_population.getChromosome(index2);
       // Verify that crossover allowed.
       // ------------------------------
-      /**@todo move to base class, refactor*/
       if (constraint != null) {
         List v = new Vector();
         v.add(chrom1);
