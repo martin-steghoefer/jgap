@@ -23,19 +23,19 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  public final static Class booleanClass = Boolean.class;
+  public final static Class BooleanClass = Boolean.class;
 
-  public final static Class integerClass = Integer.class;
+  public final static Class IntegerClass = Integer.class;
 
-  public final static Class longClass = Long.class;
+  public final static Class LongClass = Long.class;
 
-  public final static Class floatClass = Float.class;
+  public final static Class FloatClass = Float.class;
 
-  public final static Class doubleClass = Double.class;
+  public final static Class DoubleClass = Double.class;
 
-  public final static Class voidClass = Void.class;
+  public final static Class VoidClass = Void.class;
 
   /**
    * The return type of this node.
@@ -124,7 +124,13 @@ public abstract class CommandGene
   }
 
   public boolean equals(Object other) {
-    return hashCode() == other.hashCode();
+    if (other == null) {
+      return false;
+    }
+    else {
+      /**@todo rework*/
+      return hashCode() == other.hashCode();
+    }
   }
 
   /**
@@ -137,26 +143,28 @@ public abstract class CommandGene
    * Executes this node without knowing its return type.
    *
    * @param c the current Chromosome which is executing
-   * @param n the index of the Function in the Chromosome's Function array which is executing
+   * @param n the index of the Function in the Chromosome's Function array which
+   * is executing
    * @param args the arguments to the current Chromosome which is executing
    * @return the object which wraps the return value of this node, or null
-   * if the return type is null or unknown.
-   * @throws UnsupportedOperationException if the type of this node is not boolean
+   * if the return type is null or unknown
+   * @throws UnsupportedOperationException if the type of this node is not
+   * boolean
    *
-   * @since 1.0
+   * @since 3.0
    */
   public Object execute(ProgramChromosome c, int n, Object[] args) {
-    if (returnType == booleanClass)
+    if (returnType == BooleanClass)
       return new Boolean(execute_boolean(c, n, args));
-    if (returnType == integerClass)
+    if (returnType == IntegerClass)
       return new Integer(execute_int(c, n, args));
-    if (returnType == longClass)
+    if (returnType == LongClass)
       return new Long(execute_long(c, n, args));
-    if (returnType == floatClass)
+    if (returnType == FloatClass)
       return new Float(execute_float(c, n, args));
-    if (returnType == doubleClass)
+    if (returnType == DoubleClass)
       return new Double(execute_double(c, n, args));
-    if (returnType == voidClass)
+    if (returnType == VoidClass)
       execute_void(c, n, args);
     else
       return execute_object(c, n, args);
@@ -168,7 +176,7 @@ public abstract class CommandGene
    *
    * @return the return type of this node
    *
-   * @since 1.0
+   * @since 3.0
    */
   public Class getReturnType() {
     return returnType;
@@ -179,7 +187,7 @@ public abstract class CommandGene
    *
    * @param type the type to set the return type to
    *
-   * @since 1.0
+   * @since 3.0
    */
   public void setReturnType(Class type) {
     returnType = type;
@@ -194,7 +202,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -209,7 +217,7 @@ public abstract class CommandGene
    * @param args ignored here
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -225,7 +233,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -241,7 +249,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -257,7 +265,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -273,7 +281,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -289,7 +297,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
-   * @since 1.0
+   * @since 3.0
    */
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
@@ -309,8 +317,31 @@ public abstract class CommandGene
    */
   public abstract Class getChildType(int i);
 
-  public Object getInternalValue() {
+  protected Object getInternalValue() {
     /**@todo is this correct?*/
     return null;
   }
+
+  /**
+   * Retrieves the hash code value for a Gene.
+   * Override if another hashCode() implementation is necessary or more
+   * appropriate than this default implementation.
+   *
+   * @return this Gene's hash code
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int hashCode() {
+    // If our internal value is null, then return zero. Otherwise,
+    // just return the hash code of the allele Object.
+    // -----------------------------------------------------------
+    if (getInternalValue() == null) {
+      return -81;
+    }
+    else {
+      return getInternalValue().hashCode();
+    }
+  }
+
 }
