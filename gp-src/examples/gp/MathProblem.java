@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   static Variable vx;
 
@@ -39,20 +39,20 @@ public class MathProblem
   public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     Class[] types = {
-        CommandGene.floatClass};
+        CommandGene.FloatClass};
     Class[][] argTypes = {
         {}
     };
     CommandGene[][] nodeSets = {
         {
-        vx = Variable.create(a_conf, "X", CommandGene.floatClass),
-        new AddCommand(a_conf, CommandGene.floatClass),
-        new SubtractCommand(a_conf, CommandGene.floatClass),
-        new MultiplyCommand(a_conf, CommandGene.floatClass),
-        new DivideCommand(a_conf, CommandGene.floatClass),
-        new SinCommand(a_conf, CommandGene.floatClass),
-        new CosCommand(a_conf, CommandGene.floatClass),
-        new ExpCommand(a_conf, CommandGene.floatClass),
+        vx = Variable.create(a_conf, "X", CommandGene.FloatClass),
+        new AddCommand(a_conf, CommandGene.FloatClass),
+        new SubtractCommand(a_conf, CommandGene.FloatClass),
+        new MultiplyCommand(a_conf, CommandGene.FloatClass),
+        new DivideCommand(a_conf, CommandGene.FloatClass),
+        new SinCommand(a_conf, CommandGene.FloatClass),
+        new CosCommand(a_conf, CommandGene.FloatClass),
+        new ExpCommand(a_conf, CommandGene.FloatClass),
     }
     };
     Random random = new Random();
