@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  * */
 abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private transient Configuration m_conf;
 
@@ -221,26 +221,25 @@ abstract class AbstractSupergeneTest {
     m_conf.setPopulationSize(POPULATION_SIZE);
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
-    Genotype population;
-    population = Genotype.randomInitialGenotype(m_conf);
+    Genotype population = Genotype.randomInitialGenotype(m_conf);
     int s;
     Evolution:
         // Evolve the population, break if the the change solution is found.
-        // ----------------------------------------------------------------
+        // -----------------------------------------------------------------
         for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
       s = Math.abs(a_fitnessFunction.amountOfChange(population.
           getFittestChromosome())
                    - a_targetChangeAmount);
-      if (s == 0)break Evolution;
-      // System.out.print(s+".");
+      if (s == 0) {
+          break Evolution;
+      }
     }
     // Display the best solution we found.
     // -----------------------------------
     IChromosome bestSolutionSoFar = report(a_fitnessFunction, population);
-    s = Math.abs(a_fitnessFunction.amountOfChange(bestSolutionSoFar)
+    return Math.abs(a_fitnessFunction.amountOfChange(bestSolutionSoFar)
                  - a_targetChangeAmount);
-    return s;
   }
 
   public void setConfiguration(Configuration a_conf) {
