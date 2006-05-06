@@ -40,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   private int m_minLength;
 
@@ -520,7 +520,7 @@ public class StringGene
    * @since 1.1
    */
   public String stringValue() {
-    return (String) m_value;
+    return m_value;
   }
 
   /**
@@ -585,8 +585,7 @@ public class StringGene
       randomize = true;
     }
     char newValue;
-    RandomGenerator rn;
-    rn = getConfiguration().getRandomGenerator();
+    RandomGenerator rn = getConfiguration().getRandomGenerator();
     if (!randomize) {
       int indexC = m_alphabet.indexOf(s.charAt(index));
       index2 = indexC + (int) Math.round(len * a_percentage);

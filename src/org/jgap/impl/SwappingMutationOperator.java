@@ -31,7 +31,7 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private int m_startOffset = 1;
 
@@ -95,7 +95,7 @@ public class SwappingMutationOperator
     // ----------------------------------------------------------------
     int size = a_population.size();
     for (int i = 0; i < size; i++) {
-      IChromosome x = (IChromosome) a_population.getChromosome(i);
+      IChromosome x = a_population.getChromosome(i);
       // This returns null if not mutated:
       IChromosome xm = operate(x, currentRate, generator);
       if (xm != null) {

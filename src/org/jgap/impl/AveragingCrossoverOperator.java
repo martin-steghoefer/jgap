@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -172,8 +172,8 @@ public class AveragingCrossoverOperator
     for (int i = 0; i < numCrossovers; i++) {
       index1 = generator.nextInt(size);
       index2 = generator.nextInt(size);
-      IChromosome firstMate = (IChromosome) a_population.getChromosome(index1);
-      IChromosome secondMate = (IChromosome) a_population.getChromosome(index2);
+      IChromosome firstMate = a_population.getChromosome(index1);
+      IChromosome secondMate = a_population.getChromosome(index2);
       Gene[] firstGenes = firstMate.getGenes();
       Gene[] secondGenes = secondMate.getGenes();
       int locus = getLocus(m_crossoverGenerator, i, firstGenes.length);
