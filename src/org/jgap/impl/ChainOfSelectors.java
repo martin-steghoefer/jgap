@@ -22,9 +22,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 1.1
  */
-public class ChainOfSelectors {
+public class ChainOfSelectors
+    implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
