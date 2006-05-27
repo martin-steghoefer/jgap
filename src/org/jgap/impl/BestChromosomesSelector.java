@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -257,7 +257,8 @@ public class BestChromosomesSelector
     return m_config.m_originalRate;
   }
 
-  class BestChromosomesSelectorConfig {
+  class BestChromosomesSelectorConfig
+      implements java.io.Serializable {
     /**
      * The rate of original Chromosomes selected. This is because we otherwise
      * would always return the original input as output

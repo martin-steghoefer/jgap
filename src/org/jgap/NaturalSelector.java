@@ -22,7 +22,7 @@ import org.jgap.data.config.*;
 public abstract class NaturalSelector
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   private transient Configuration m_config;
   /**
@@ -64,7 +64,7 @@ public abstract class NaturalSelector
    * @since 1.1
    */
   public class FitnessValueComparator
-      implements Comparator {
+      implements Comparator, java.io.Serializable  {
     public int compare(Object first, Object second) {
       IChromosome chrom1 = (IChromosome) first;
       IChromosome chrom2 = (IChromosome) second;

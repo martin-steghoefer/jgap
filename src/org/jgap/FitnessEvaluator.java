@@ -18,9 +18,10 @@ package org.jgap;
  * @author Klaus Meffert
  * @since 1.1
  */
-public interface FitnessEvaluator {
+public interface FitnessEvaluator
+    extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Compares the first given fitness value with the second and returns true

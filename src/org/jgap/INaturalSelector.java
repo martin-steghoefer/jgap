@@ -21,10 +21,10 @@ package org.jgap;
  * @author Klaus Meffert
  * @since 2.0 (previously named "NaturalSelector")
  */
-public interface INaturalSelector {
-
+public interface INaturalSelector
+    extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.9 $";
+  final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Select a given number of Chromosomes from the pool that will move on
@@ -55,7 +55,6 @@ public interface INaturalSelector {
    * @author Neil Rotstan
    * @since 1.0
    */
-
   void empty();
 
   /**
