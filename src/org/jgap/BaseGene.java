@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
@@ -42,7 +42,7 @@ public abstract class BaseGene
    */
   private boolean m_compareAppData;
 
-  private transient Configuration m_configuration;
+  private /*transient*/ Configuration m_configuration;
 
   /**
    * Constants for toString()

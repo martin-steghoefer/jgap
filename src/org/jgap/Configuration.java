@@ -37,9 +37,9 @@ import org.jgap.impl.*;
  * @since 1.0
  */
 public class Configuration
-    implements Configurable {
+    implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -148,7 +148,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  private IEventManager m_eventManager;
+  private transient IEventManager m_eventManager;
 
   /**
    * References the chromosome pool, if any, that is to be used to pool
@@ -158,7 +158,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  private IChromosomePool m_chromosomePool;
+  private transient IChromosomePool m_chromosomePool;
 
   /**
    * Stores all of the GeneticOperator implementations that are to be used
@@ -228,7 +228,7 @@ public class Configuration
    * @author Siddhartha Azad
    * @since 2.3
    */
-  private RootConfigurationHandler m_conHandler;
+  private transient RootConfigurationHandler m_conHandler;
 
   /**
    * Informative name for output
@@ -255,7 +255,7 @@ public class Configuration
    * @author Klaus Meffert
    * @since 2.6
    */
-  private IJGAPFactory m_factory;
+  private transient IJGAPFactory m_factory;
 
   /**
    * @author Neil Rotstan
@@ -1213,7 +1213,8 @@ public class Configuration
     return m_factory;
   }
 
-  class ConfigurationConfigurable {
+  class ConfigurationConfigurable
+      implements java.io.Serializable {
     /**
      * The number of chromosomes that will be stored in the Genotype.
      */

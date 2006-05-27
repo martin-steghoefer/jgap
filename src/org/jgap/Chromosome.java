@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.78 $";
+  private final static String CVS_REVISION = "$Revision: 1.79 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -932,7 +932,7 @@ public class Chromosome
 
   /**
    * @return IGeneConstraintChecker the constraint checker to be used whenever
-   * method setAllele(Object) is called.
+   * method setGenes(Gene[]) is called.
    *
    * @author Klaus Meffert
    * @since 2.5
