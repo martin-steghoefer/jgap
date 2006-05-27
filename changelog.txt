@@ -4,6 +4,8 @@
   The classes are put into package org.jgap.gp.
   An example could be found in package examples.gp.
   In CVS, the directory's name is gp-src holding both pieces 
+* Made configuration serializable and marked some references
+  in it as transient
 * Added abstract base class org.jgap.BaseChromosome
   and made Chromosome descend from it
 * Added method getConfiguration to interface IChromosome
