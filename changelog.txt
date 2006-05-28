@@ -4,6 +4,9 @@
   The classes are put into package org.jgap.gp.
   An example could be found in package examples.gp.
   In CVS, the directory's name is gp-src holding both pieces 
+* Made JGAP distributed by converting several fields to
+  transient, making classes serializable, and using
+  synchronized lists instead of pure ArrayList's.
 * Made configuration serializable and marked some references
   in it as transient
 * Added abstract base class org.jgap.BaseChromosome
