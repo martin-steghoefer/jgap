@@ -33,7 +33,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -327,7 +327,7 @@ public class XMLManager {
           "Unable to build Chromosome instance from XML Element: " +
           "given Element is not a 'genes' element.");
     }
-    List genes = new ArrayList();
+    List genes = Collections.synchronizedList(new ArrayList());
     // Extract the nested gene elements.
     // ---------------------------------------------------------
     NodeList geneElements = a_xmlElement.getElementsByTagName(GENE_TAG);

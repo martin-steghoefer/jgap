@@ -20,7 +20,7 @@ import java.util.*;
  * */
 public class ConfigData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // name of the object being configured
   private String m_name;
@@ -28,19 +28,19 @@ public class ConfigData {
   // value in the text field for this object
   private String m_value;
 
-  private ArrayList m_listData;
+  private List m_listData;
 
-  private ArrayList m_textData;
+  private List m_textData;
 
   // The namespace for the properties file
   private String m_ns;
 
   public ConfigData() {
-    m_listData = new ArrayList();
-    m_textData = new ArrayList();
+    m_listData = Collections.synchronizedList(new ArrayList());
+    m_textData = Collections.synchronizedList(new ArrayList());
   }
 
-  public void addListData(final String a_name, final ArrayList a_values) {
+  public void addListData(final String a_name, final List a_values) {
     ListData ld = new ListData(a_name, a_values);
     m_listData.add(ld);
   }
@@ -83,7 +83,7 @@ public class ConfigData {
    * @author Siddhartha Azad
    * @since 2.3
    * */
-  public ArrayList getListValuesAt(final int a_index) {
+  public List getListValuesAt(final int a_index) {
     ListData ld = (ListData) m_listData.get(a_index);
     return ld.getListData();
   }
@@ -157,14 +157,14 @@ public class ConfigData {
     private String m_name;
 
     // values selected for this object, to be written in the config file
-    private ArrayList m_data;
+    private List m_data;
     /**
      * Constructor.
      * @param a_name Name of the object being configured, to be used as the
      * key in the config properties file.
      * @param a_data Data associated with the List (Data selected by the user)
      */
-    ListData(final String a_name, final ArrayList a_data) {
+    ListData(final String a_name, final List a_data) {
       m_data = a_data;
       m_name = a_name;
     }
@@ -173,7 +173,7 @@ public class ConfigData {
       return m_data.iterator();
     }
 
-    public ArrayList getListData() {
+    public List getListData() {
       return m_data;
     }
 

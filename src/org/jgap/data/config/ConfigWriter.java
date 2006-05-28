@@ -22,7 +22,7 @@ import javax.swing.*;
  * */
 public final class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Singleton instance of ConfigWriter
@@ -71,7 +71,7 @@ public final class ConfigWriter {
       ConfigData cd = a_cInfo.getConfigData();
       String nsPrefix = cd.getNS() + ".";
       String name;
-      ArrayList values;
+      List values;
       // construct name-value pairs from the information in the lists
       for (int i = 0; i < cd.getNumLists(); i++) {
         name = cd.getListNameAt(i);

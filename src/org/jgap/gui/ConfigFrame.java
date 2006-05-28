@@ -11,7 +11,7 @@ package org.jgap.gui;
 
 import java.util.*;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -30,7 +30,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   // data members of class ConfigFrame
   private Object m_conHandler;
@@ -38,19 +38,19 @@ public class ConfigFrame
   private boolean m_isRoot;
 
   // list of JPanel objects added in this frame
-  private ArrayList m_panels;
+  private List m_panels;
 
   // ListBox properties
-  private ArrayList m_listProps;
+  private List m_listProps;
 
   // TextBox properties
-  private ArrayList m_textProps;
+  private List m_textProps;
 
   // list of ListGroups
-  private ArrayList m_listGroups;
+  private List m_listGroups;
 
   // list of TextGroups
-  private ArrayList m_textGroups;
+  private List m_textGroups;
 
   private JPanel m_listPanel;
 
@@ -87,11 +87,11 @@ public class ConfigFrame
   ConfigFrame(final ConfigFrame a_parent, final String a_title,
               final boolean a_isRoot) {
     super(a_title);
-    m_panels = new ArrayList();
-    m_textProps = new ArrayList();
-    m_listProps = new ArrayList();
-    m_listGroups = new ArrayList();
-    m_textGroups = new ArrayList();
+    m_panels = Collections.synchronizedList(new ArrayList());
+    m_textProps = Collections.synchronizedList(new ArrayList());
+    m_listProps = Collections.synchronizedList(new ArrayList());
+    m_listGroups = Collections.synchronizedList(new ArrayList());
+    m_textGroups = Collections.synchronizedList(new ArrayList());
     m_cbl = new ConfigButtonListener(this);
     m_isRoot = a_isRoot;
     m_parent = a_parent;
@@ -152,12 +152,12 @@ public class ConfigFrame
     ConfigData cd = new ConfigData();
     cd.setNS(m_conHandler.getClass().getName());
     // add lists
-    ArrayList values;
+    List values;
     try {
       Iterator lIter = m_listGroups.iterator();
       while (lIter.hasNext()) {
         ListGroup lg = (ListGroup) lIter.next();
-        values = new ArrayList();
+        values = Collections.synchronizedList(new ArrayList());
         Enumeration e = lg.getOutListModel().elements();
         while (e.hasMoreElements()) {
           String val = (String) e.nextElement();
@@ -214,7 +214,7 @@ public class ConfigFrame
    */
   private void setup() {
     int numLists = 0, numTexts = 0;
-    ArrayList props = null;
+    List props = null;
     try {
       /** @todo find a better way to get the classname than getNS() */
       props = MetaConfig.getInstance().getConfigProperty(m_conHandler.getClass().getName());

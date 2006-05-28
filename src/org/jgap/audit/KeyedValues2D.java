@@ -21,7 +21,7 @@ import java.util.*;
 public class KeyedValues2D
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /** The row keys */
   private List m_rowKeys;
@@ -46,7 +46,7 @@ public class KeyedValues2D
   }
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param a_sortRowKeys true: row keys should be sorted
    *
@@ -54,9 +54,9 @@ public class KeyedValues2D
    * @since 2.3
    */
   public KeyedValues2D(final boolean a_sortRowKeys) {
-    m_rowKeys = new ArrayList();
-    m_columnKeys = new ArrayList();
-    m_rows = new ArrayList();
+    m_rowKeys = Collections.synchronizedList(new ArrayList());
+    m_columnKeys = Collections.synchronizedList(new ArrayList());
+    m_rows = Collections.synchronizedList(new ArrayList());
     m_sortRowKeys = a_sortRowKeys;
   }
 

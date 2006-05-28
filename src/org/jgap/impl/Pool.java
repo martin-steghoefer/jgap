@@ -32,7 +32,7 @@ import java.util.*;
 public class Pool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The List of Objects currently in the pool.
@@ -46,7 +46,7 @@ public class Pool {
    * @since 1.0
    */
   public Pool() {
-    m_pooledObjects = new ArrayList();
+    m_pooledObjects = Collections.synchronizedList(new ArrayList());
   }
 
   /**

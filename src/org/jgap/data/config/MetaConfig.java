@@ -64,15 +64,16 @@ public class MetaConfig {
 
   /**
    * Read the meta-config file and load it in memory.
+   * @param className the name of the class of which the properties are
+   * required
+   * @return the list of properties for this class, if class is registered,
+   * otherwise null
+   *
    * @author Siddhartha Azad
    * @since 2.4
-   * @param className The name of the class of which the properties are
-   * required
-   * @return The list of properties for this class, if class is registered,
-   * otherwise null.
    * */
-  public ArrayList getConfigProperty(String className) {
-    return (ArrayList) (m_metaMap.get(className));
+  public List getConfigProperty(String className) {
+    return (List)m_metaMap.get(className);
   }
 
   /**
@@ -227,15 +228,15 @@ public class MetaConfig {
    * Add a new ConfigProperty for a certain class to the hashtable of
    * properties.
    * @param currName name of the class to which the property belongs
-   * @param a_cp CofigProperty to be added to the class.
+   * @param a_cp ConfigProperty to be added to the class.
    *
    * @author Siddhartha Azad
    * @since 2.4
    * */
   private void add(final String currName, ConfigProperty a_cp) {
-    ArrayList props = (ArrayList) m_metaMap.get(currName);
+    List props = (List) m_metaMap.get(currName);
     if (null == props) {
-      props = new ArrayList();
+      props = Collections.synchronizedList(new ArrayList());
       m_metaMap.put(currName, props);
     }
     props.add(a_cp);

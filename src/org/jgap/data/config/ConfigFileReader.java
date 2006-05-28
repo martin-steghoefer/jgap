@@ -20,7 +20,7 @@ import java.io.*;
  * @since 2.3
  */
 public class ConfigFileReader {
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   // Name of the config file to read
   private String m_fileName;
@@ -84,12 +84,12 @@ public class ConfigFileReader {
    *
    * @author Siddhartha Azad
    * */
-  public ArrayList getValues(final String a_name) {
+  public List getValues(final String a_name) {
     String val = "";
     boolean done = false;
     String tmpName = "";
     int idx = 0;
-    ArrayList values = new ArrayList();
+    List values = Collections.synchronizedList(new ArrayList());
     while (!done) {
       tmpName = m_ns + "." + a_name + "[" + idx + "]";
       val = m_props.getProperty(tmpName);

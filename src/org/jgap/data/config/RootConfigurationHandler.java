@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -53,7 +53,7 @@ public class RootConfigurationHandler
    * @return a list of ConfigProperty objects
    * @since 2.3
    * */
-  public ArrayList getConfigProperties() {
+  public List getConfigProperties() {
     return null;
   }
 
@@ -208,7 +208,7 @@ public class RootConfigurationHandler
    * */
   public static void configureClass(String className)
       throws ConfigException {
-    ArrayList values = ConfigFileReader.instance().getValues(className);
+    List values = ConfigFileReader.instance().getValues(className);
     if (values != null && values.size() > 0) {
       String cName = "";
       // iterate through all instances of this property and create Configurables

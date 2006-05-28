@@ -29,22 +29,22 @@ import org.jgap.data.config.*;
  */
 public class GUIManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   // The root frame
   private ConfigFrame m_frame;
 
   // the children frames
-  private ArrayList m_childFrames;
+  private List m_childFrames;
 
   // children configurables, one to one mapping with childFrames
-  private ArrayList m_childCons;
+  private List m_childCons;
 
   // The entity to configure
   private Configurable m_con;
 
   /**
-   * Singleton Instance of GUIManager;
+   * Singleton instance of GUIManager
    */
   private static GUIManager m_gm;
 
@@ -62,15 +62,15 @@ public class GUIManager {
   }
 
   /**
-   * Constructor for the frame
+   * Constructor for the frame.
    *
    * @author Siddhartha Azad
    * @since 2.3
    */
   private GUIManager() {
     m_frame = null;
-    m_childFrames = new ArrayList();
-    m_childCons = new ArrayList();
+    m_childFrames = Collections.synchronizedList(new ArrayList());
+    m_childCons = Collections.synchronizedList(new ArrayList());
   }
 
   /**

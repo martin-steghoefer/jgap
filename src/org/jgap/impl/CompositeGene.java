@@ -41,7 +41,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   /**
    * This field separates gene class name from
@@ -274,7 +274,7 @@ public class CompositeGene
         // Remove the old content.
         // -----------------------
         m_genes.clear();
-        ArrayList r = split(a_representation);
+        List r = split(a_representation);
         Iterator iter = r.iterator();
         StringTokenizer st;
         String clas;
@@ -619,7 +619,7 @@ public class CompositeGene
   }
 
   /**
-   * Splits the string a_string into individual gene representations.
+   * Splits the input a_string into individual gene representations.
    * @param a_string the string to split
    * @return the elements of the returned array are the persistent
    * representation strings of the gene's components
@@ -628,9 +628,9 @@ public class CompositeGene
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  protected static final ArrayList split(String a_string)
+  protected static final List split(String a_string)
       throws UnsupportedRepresentationException {
-    ArrayList a = new ArrayList();
+    List a = Collections.synchronizedList(new ArrayList());
     StringTokenizer st = new StringTokenizer
         (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
     while (st.hasMoreTokens()) {

@@ -21,19 +21,19 @@ import java.util.*;
 public class KeyedValues
     implements Cloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /** Data storage */
   private List m_data;
 
   /**
-   * Creates a new collection (initially empty)
+   * Creates a new collection (initially empty).
    *
    * @author Klaus Meffert
    * @since 2.3
    */
   public KeyedValues() {
-    m_data = new ArrayList();
+    m_data = Collections.synchronizedList(new ArrayList());
   }
 
   /**
@@ -48,7 +48,6 @@ public class KeyedValues
 
   /**
    * @param a_index the index of the item to return the value for
-   *
    * @return the value at given index
    *
    * @author Klaus Meffert
@@ -249,7 +248,7 @@ public class KeyedValues
   public Object clone()
       throws CloneNotSupportedException {
     final KeyedValues clone = (KeyedValues)super.clone();
-    clone.m_data = new java.util.ArrayList();
+    clone.m_data = Collections.synchronizedList(new ArrayList());
     final Iterator iterator = m_data.iterator();
     while (iterator.hasNext()) {
       final KeyedValue kv = (KeyedValue) iterator.next();

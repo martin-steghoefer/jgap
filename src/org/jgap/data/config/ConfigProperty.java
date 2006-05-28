@@ -12,14 +12,14 @@ package org.jgap.data.config;
 import java.util.*;
 
 /**
- * Represents a property to be shown on the Configuration Screen.
+ * Represents a property to be shown on the configuration screen.
  *
  * @author Siddhartha Azad
  * @since 2.3
  */
 public class ConfigProperty {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   // name of the property
   private String m_name;
@@ -30,8 +30,8 @@ public class ConfigProperty {
   // label with which to display this property
   private String m_label;
 
-  // allowable values for this property (if applicable)
-  private ArrayList m_values;
+  // allowed values for this property (if applicable)
+  private List m_values;
 
   /**
    * Default Constructor for a ConfigProperty.
@@ -44,11 +44,11 @@ public class ConfigProperty {
     m_name = "";
     m_label = "";
     m_widget = "JTextField";
-    m_values = new ArrayList();
+    m_values = Collections.synchronizedList(new ArrayList());
   }
 
   /**
-   * @return name associated with this property.
+   * @return name associated with this property
    *
    * @author Siddhartha Azad
    * @since 2.3
@@ -59,9 +59,9 @@ public class ConfigProperty {
 
   /**
    * Setter for the name of this property.
-   * @param a_name The name associated with this property.
-   * This name will be used as the key in the properties file for persisting
-   * configuration information.
+   * @param a_name the name associated with this property. This name will be
+   * used as the key in the properties file for persisting
+   * configuration information
    *
    * @author Siddhartha Azad
    * @since 2.3
@@ -76,7 +76,7 @@ public class ConfigProperty {
 
 
   /**
-   * @return name of the widget associated with this property.
+   * @return name of the widget associated with this property
    *
    * @author Siddhartha Azad
    * @since 2.3
@@ -86,8 +86,8 @@ public class ConfigProperty {
   }
 
   /**
-   * Sets the widget
-   * @param a_widget Either "JList" or "JTextField" for now.
+   * Sets the widget.
+   * @param a_widget either "JList" or "JTextField" for now
    *
    * @author Siddhartha Azad
    * @since 2.3
@@ -107,7 +107,7 @@ public class ConfigProperty {
   }
 
   /**
-   * Sets the label
+   * Sets the label.
    * @param a_label the label of this property, by default the same as the
    * name of the property
    *
@@ -132,8 +132,7 @@ public class ConfigProperty {
   }
 
   /**
-   * Get the iterator on the values associated with this property.
-   * @return Iterator on the values ArrayList for this property.
+   * @return iterator on the values ArrayList for this property
    *
    * @author Siddhartha Azad
    * @since 2.3

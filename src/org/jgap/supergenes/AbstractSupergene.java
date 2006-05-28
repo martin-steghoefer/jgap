@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * This field separates gene class name from
@@ -384,7 +384,7 @@ public abstract class AbstractSupergene
       try {
         /// Remove the old content.
         // ------------------------
-        ArrayList r = split(a_representation);
+        List r = split(a_representation);
         Iterator iter = r.iterator();
         m_genes = new Gene[r.size() - 1];
         // The first member in array is a validator representation.
@@ -569,9 +569,9 @@ public abstract class AbstractSupergene
    *
    * @author Audrius Meskauskas
    */
-  protected static final ArrayList split(String a_string)
+  protected static final List split(String a_string)
       throws UnsupportedRepresentationException {
-    ArrayList a = new ArrayList();
+    List a = Collections.synchronizedList(new ArrayList());
     StringTokenizer st = new StringTokenizer
         (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
     while (st.hasMoreTokens()) {

@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   /**
    * Constant for clazz name of JGAP Factory to use. Use as:
@@ -267,7 +267,7 @@ public class Configuration
     m_postSelectors = new ChainOfSelectors();
     m_sizeNaturalSelectorsPre = 0;
     m_sizeNaturalSelectorsPost = 0;
-    m_geneticOperators = new ArrayList();
+    m_geneticOperators = Collections.synchronizedList(new ArrayList());
     m_conHandler = new RootConfigurationHandler();
     m_conHandler.setConfigurable(this);
     m_keepPopulationSizeConstant = true;
@@ -296,7 +296,7 @@ public class Configuration
   }
 
   /**
-   * Reading in the configuration from the given file.
+   * Reads in the configuration from the given file.
    * @param a_configFileName the config file from which to load the
    * configuration
    * @param a_ignore just there to create distinct signatures :-(

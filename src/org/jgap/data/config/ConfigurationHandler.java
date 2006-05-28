@@ -21,7 +21,7 @@ import org.jgap.*;
  * */
 public interface ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Return the name of this Configuration Object to be used in the properties
@@ -34,7 +34,7 @@ public interface ConfigurationHandler {
    * Return the information to generate the GUI for configuring this class.
    * @return a list of ConfigProperty objects
    */
-  ArrayList getConfigProperties();
+  List getConfigProperties();
 
   /**
    * Method that will populate a Configurable with the properties in the
