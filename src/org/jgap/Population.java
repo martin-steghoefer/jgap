@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.42 $";
+  private static final String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -70,8 +70,10 @@ public class Population
                     final IChromosome[] a_chromosomes)
       throws InvalidConfigurationException {
     this(a_config, a_chromosomes.length);
-    for (int i = 0; i < a_chromosomes.length; i++) {
-      m_chromosomes.add(a_chromosomes[i]);
+    synchronized(m_chromosomes) {
+      for (int i = 0; i < a_chromosomes.length; i++) {
+        m_chromosomes.add(a_chromosomes[i]);
+      }
     }
     setChanged(true);
   }
@@ -90,7 +92,8 @@ public class Population
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
     m_config = a_config;
-    m_chromosomes = new ArrayList(a_size);
+    // Use a synchronized ArrayList (important for distributed computing!)
+    m_chromosomes = Collections.synchronizedList(new  ArrayList(a_size));
     setChanged(true);
   }
 
@@ -119,7 +122,9 @@ public class Population
    */
   public void addChromosome(final IChromosome a_toAdd) {
     if (a_toAdd != null) {
-      m_chromosomes.add(a_toAdd);
+      synchronized(m_chromosomes) {
+        m_chromosomes.add(a_toAdd);
+      }
       setChanged(true);
     }
   }
@@ -135,7 +140,9 @@ public class Population
    */
   public void addChromosomes(final Population a_population) {
     if (a_population != null) {
-      m_chromosomes.addAll(a_population.getChromosomes());
+      synchronized(m_chromosomes) {
+        m_chromosomes.addAll(a_population.getChromosomes());
+      }
       // The following would do the same:
 //      if (a_population.getChromosomes() != null) {
 //        int size = a_population.getChromosomes().size();
@@ -150,13 +157,15 @@ public class Population
 
   /**
    * Replaces all chromosomes in the population with the give list of
-   * chromosomes
+   * chromosomes.
    * @param a_chromosomes the chromosomes to make the population up from
    *
    * @author Klaus Meffert
    */
   public void setChromosomes(final List a_chromosomes) {
-    m_chromosomes = a_chromosomes;
+    synchronized(m_chromosomes) {
+      m_chromosomes = a_chromosomes;
+    }
     setChanged(true);
   }
 
@@ -176,7 +185,9 @@ public class Population
       addChromosome(a_chromosome);
     }
     else {
-      m_chromosomes.set(a_index, a_chromosome);
+      synchronized(m_chromosomes) {
+        m_chromosomes.set(a_index, a_chromosome);
+      }
       setChanged(true);
     }
   }
