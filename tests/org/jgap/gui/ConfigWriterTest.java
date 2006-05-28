@@ -28,7 +28,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -57,7 +57,7 @@ public class ConfigWriterTest
       ConfigData cd = ici.getConfigData();
       String nsPrefix = cd.getNS() + ".";
       String name;
-      ArrayList values;
+      List values;
       for (int i = 0; i < cd.getNumLists(); i++) {
         name = cd.getListNameAt(i);
         values = cd.getListValuesAt(i);

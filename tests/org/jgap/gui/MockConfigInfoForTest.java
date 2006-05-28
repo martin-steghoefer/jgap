@@ -20,7 +20,7 @@ import java.util.*;
  * */
 public class MockConfigInfoForTest
     implements IConfigInfo {
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // The ConfigData instance that will be populated and returned
   private ConfigData m_conData;
@@ -38,7 +38,7 @@ public class MockConfigInfoForTest
     m_conData.addTextData("text2", "text2_value");
     m_conData.addTextData("text3", "text3_value");
     // add the List properties
-    ArrayList listData;
+    List listData;
     String listName = "";
     for (int i = 0; i < 3; i++) {
       listName = "List" + (i + 1);
@@ -56,7 +56,7 @@ public class MockConfigInfoForTest
 
   /**
    * Get the config file to write to.
-   * @return The config file name to write to.
+   * @return the config file name to write to
    * */
   public String getFileName() {
     // A temporary config file
