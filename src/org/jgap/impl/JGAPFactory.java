@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private List m_parameters;
 
@@ -47,7 +47,7 @@ public class JGAPFactory
 
   private IGeneticOperatorConstraint m_geneticOpConstraint;
 
-  private LRUCache m_cache;
+  private transient LRUCache m_cache;
 
   private boolean m_useCaching;
 
