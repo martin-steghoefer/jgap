@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.43 $";
+  private static final String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -92,8 +92,8 @@ public class Population
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
     m_config = a_config;
-    // Use a synchronized ArrayList (important for distributed computing!)
-    m_chromosomes = Collections.synchronizedList(new  ArrayList(a_size));
+    // Use a synchronized list (important for distributed computing!)
+    m_chromosomes = new Vector(a_size);
     setChanged(true);
   }
 
