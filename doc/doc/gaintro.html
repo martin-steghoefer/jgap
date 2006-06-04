@@ -1,7 +1,11 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="Brief introductin to JGAP and genetic algorithms in general">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, evolutionary, open source, genes, alleles, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
 <title>A Brief Introduction to Genetic Algorithms</title>
 </head>
 
@@ -16,71 +20,76 @@
 
 <h3 class="subheader">What are Genetic Algorithms?</h3>
 
-<p>Genetic algorithms (GA's) are search algorithms that work via the process of natural
+<p class="text">Genetic algorithms (GA's) are search algorithms that work via the process of natural
 selection. They begin with a sample set of potential solutions which then evolves toward a
 set of more optimal solutions. Within the sample set, solutions that are poor tend to die
-out while better solutions mate and propegate their advantageous traits, thus introducing
+out while better solutions mate and propagate their advantageous traits, thus introducing
 more solutions into the set that boast greater potential (the total set size remains
 constant; for each new solution added, an old one is removed). A little random mutation
 helps guarantee that a set won't stagnate and simply fill up with numerous copies of the
 same solution. </p>
 
-<p>In general, genetic algorithms tend to work better than traditional optimization
+<p class="text">In general, genetic algorithms tend to work better than traditional optimization
 algorithms because they're less likely to be led astray by local optima. This is because
 they don't make use of single-point transition rules to move from one single instance in
 the solution space to another. Instead, GA's take advantage of an entire set of solutions
 spread throughout the solution space, all of which are experimenting upon many potential
 optima. </p>
 
-<p>However, in order for genetic algorithms to work effectively, a few criteria must be
+<p class="text">However, in order for genetic algorithms to work effectively, a few criteria must be
 met: 
 
 <ul>
-  <li>It must be relatively easy to evaluate how &quot;good&quot; a potential solution is
+  <li>
+    <p class="text">It must be relatively easy to evaluate how &quot;good&quot; a potential solution is
     relative to other potential solutions. </li>
-  <li>It must be possible to break a potential solution into discrete parts that can vary
+  <li>
+    <p class="text">It must be possible to break a potential solution into discrete parts that can vary
     independently. These parts become the &quot;genes&quot; in the genetic algorithm. </li>
-  <li>Finally, genetic algorithms are best suited for situations where a &quot;good&quot;
+  <li>
+    <p class="text">Finally, genetic algorithms are best suited for situations where a &quot;good&quot;
     answer will suffice, even if it's not the absolute best answer. </li>
 </ul>
 
 <h3 class="subheader">Basic Mechanics of Genetic Algorithms</h3>
 
-<p>The basic operations of the genetic algorithm are simple and straight-forward: 
+<p class="text">The basic operations of the genetic algorithm are simple and straight-forward: 
+
+<blockquote>
 
 <dl>
-  <dt>Reproduction:</dt>
-  <dd>The act of making a copy of a potential solution. </dd>
-  <dt>Crossover:</dt>
-  <dd>The act of swappings gene values between two potential solutions, simulating the
-    &quot;mating&quot; of the two solutions. </dd>
-  <dt>Mutation:</dt>
-  <dd>The act of randomly altering the value of a gene in a potential solution. </dd>
+  <dt class="text"><b>Reproduction</b>: The act of making a copy of a potential
+    solution:</dt>
+  <dt class="text"><b>Crossover</b>: The act of swapping gene values between two potential solutions, simulating the
+    &quot;mating&quot; of the two solutions.</dt>
+  <dt class="text"><b>Mutation</b>: The act of randomly altering the value of a gene in a potential solution.</dt>
 </dl>
+
+</blockquote>
 
 <h3 class="subheader">Fitness Functions and Natural Selection</h3>
 
-<p>As mentioned earlier, it's necessary to be able to evaluate how &quot;good&quot; a
+<p class="text">As mentioned earlier, it's necessary to be able to evaluate how &quot;good&quot; a
 potential solution is relative to other potential solutions. The &quot;fitness
 function&quot; is responsible for performing this evaluation and returning a positive
 integer number, or &quot;fitness value&quot;, that reflects how optimal the solution is:
 the higher the number, the better the solution. </p>
 
-<p>The fitness values are then used in a process of natural selection to choose which
+<p class="text">The fitness values are then used in a process of natural selection to choose which
 potential solutions will continue on to the next generation, and which will die out. It
 should be noted, however, that natural selection process does not merely choose the top <i>x</i>
 number of solutions; the solutions are instead chosen statistically such that it is more
 likely that a solution with a higher fitness value will be chosen, but it is not
 guaranteed. This tends to correspond to the natural world. </p>
 
-<p>A common metaphor for the selection process is that of a large roulette wheel.
+<p class="text">A common metaphor for the selection process is that of a large roulette wheel.
 Remembering that fitness values are positive integers, imagine that each potential
 solution gets a number of slots on the wheel equal to its fitness value. Then the wheel is
 spun and the solution on which it stops is selected. Statistically speaking, solutions
 with a higher fitness value will have a greater chance of being selected since they occupy
 more slots on the wheel, but even solutions with just a single slot still have a chance. </p>
 
-<p>The above metaphor can also be useful for illustrating an additional point: relative
+<p class="text">The above metaphor can also be useful for illustrating an additional point: relative
 fitness is measured as a <em>percentage</em>, not an absolute value. As a result, a
 solution with a fitness value of 255 has only about 0.4% chance of being selected over a
 solution with a fitness of 254. At higher fitness values, this problem is even more
@@ -93,13 +102,13 @@ required in these cases. </p>
 
 <h3 class="subheader">Learning more about Genetic Algorithms</h3>
 
-<p>To learn more about genetic algorithms, we highly recommend the book <a
+<p class="text">To learn more about genetic algorithms, we highly recommend the book <a
 href="http://www.amazon.com/exec/obidos/search-handle-url/index=books&amp;field-keywords=genetic%20algorithms%20in%20search&amp;bq=1/102-3988748-9834523">Genetic
 Algorithms in Search, Optimization, and Machine Learning</a> by David Goldberg. To learn
 more about using JGAP, please see the tutorial: <a href="tutorial.html">Getting Started
 with JGAP</a>. </p>
 
-<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+<p class="copyright">Copyright © 2002- 2006 Neil Rotstan / Klaus Meffert. All rights
 reserved. </p>
 
 <hr>
