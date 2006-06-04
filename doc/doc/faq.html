@@ -1,7 +1,11 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="FAQ - Frequently asked questions about JGAP, Genetic Algorithms and Genetic Programming.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, faq, questions,
+                   optimization, evolutionary, open source, genes, alleles, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
 <title>JGAP Frequently Asked Questions</title>
 </head>
 
@@ -15,71 +19,72 @@
 <hr>
 <a name="top">
 
-<p>The following is a brief collection of questions and answers that come up periodically
+<p class="text">The following is a brief collection of questions and answers that come up periodically
 on the JGAP mailing lists. If you have suggestions for additional questions, please feel
 free to post them to the jgap-users mailing list! 
 
 <ol>
-  <li><p class="question">Is there a way to create a fitness function that can evaluate all of
+  <li><p class="text">Is there a way to create a fitness function that can evaluate all of
     the Chromosomes in a population at once? </p>
-    <p class="answer">Yes, a bulk fitness-function can be used. The bulk fitness function is
+    <p class="text">Yes, a bulk fitness-function can be used. The bulk fitness function is
     passed all of the Chromosomes in a population at once, and then is responsible for
     evaluating each of those Chromosomes and setting their fitness values. This can be
     especially useful when you want to evaluate Chromosomes in relationship to each other
     (rather than in isolation of each other), or if you want to make use of an external
     service to actually perform the evaluation. </p>
-    <p class="answer">For more information on bulk fitness-functions, please see the javadocs
-    for the </a><a href="../javadoc/2.0/org/jgap/BulkFitnessFunction.html">org.jgap.BulkFitnessFunction</a>
+    <p class="text">For more information on bulk fitness-functions, please see the javadocs
+    for the </a><a href="../javadoc/2.6/org/jgap/BulkFitnessFunction.html">org.jgap.BulkFitnessFunction</a>
     class. </p>
   </li>
-  <li><p class="question">Does JGAP support real-valued fitness values or alleles? </p>
-    <p class="answer">Yes, double typed fitness values have been introduced with release 1.1.
-    Before that thet type was int.</p>
+  <li><p class="text">Does JGAP support real-valued fitness values or alleles? </p>
+    <p class="text">Yes, double typed fitness values have been introduced with release 1.1.
+    Before that the type was int.</p>
   </li>
-  <li><p class="question">How can I select the top n performers of a population? </p>
-    <p class="answer">During evolution, to select the best performing
+  <li><p class="text">How can I select the top n performers of a population? </p>
+    <p class="text">During evolution, to select the best performing
     chromosomes for the next generation, use the <font face="Courier New">org.jgap.impl.BestChromosomesSelector</font>.
     See <font face="Courier New">org.jgap.impl.DefaultConfiguration</font> for
     an example.</p>
-    <p class="answer">To select the top n performers after evolution, you could
+    <p class="text">To select the top n performers after evolution, you could
     use <font face="Courier New">Genotype.getPopulation.toChromosomes()</font>.
     After that, sort the returned array of Chromosomes via <font face="Courier New">Arrays.sort(chromosomesArrayFromPopulation,
     yourComparator)</font>. <font face="Courier New">yourComparator</font> sorts
     the array of chromosomes by the fitness value of each Chromosome.</p>
   </li>
-  <li><p class="question">Does JGAP support multiple threads? </p>
-    <p class="answer">JGAP does not currently offer any support for multi-threaded or
+  <li><p class="text">Does JGAP support multiple threads? </p>
+    <p class="text">JGAP does not currently offer any support for multi-threaded or
     distributed evaluation, but this is something we're considering for a future (after
     version 2.0) release. </p>
   </li>
-  <li><p class="question">I notice that sometimes the fittest chromosome doesn't get selected
+  <li><p class="text">I notice that sometimes the fittest chromosome doesn't get selected
     for the next generation. What's up with that? </p>
-    <p class="answer">Natural selection in JGAP is statistical, so chromosomes that are more
+    <p class="text">Natural selection in JGAP is statistical, so chromosomes that are more
     fit have a better statistical chance of being selected over chromosomes that are less fit,
     but it's not guaranteed. This is much like nature, where even the fittest of us can
     sometimes be unlucky! </p>
-    <p class="answer">Incidentally, JGAP is designed to be very pluggable, and it's possible
+    <p class="text">Incidentally, JGAP is designed to be very pluggable, and it's possible
     for you to write your own natural selector and plug it into JGAP in place of the default
     version, if that better suits your needs. </p>
   </li>
-  <li><p class="question">Why aren't the chromosomes in my population ever candidates for
+  <li><p class="text">Why aren't the chromosomes in my population ever candidates for
     natural selection? </p>
-    <p class="answer">This should not happen if you properly use a
+    <p class="text">This should not happen if you properly use a
     NaturalSelector resp. if this selector is implemented correctly. The
-    reproduction operator is deprecated in newer JGAp versions due to
+    reproduction operator is deprecated in newer JGAP versions due to
     performance reasons and due to the fact that the current architecture
-    delivers such funtionality itself. </p>
-    <p class="question">Has anyone used JGAP in combination with the JOONE neural networks
+    delivers such functionality itself. </p>
+    <p class="text">Has anyone used JGAP in combination with the JOONE neural networks
     package? </p>
-    <p class="answer">Yes, as a matter of a fact there is a whole open-source project
-    dedicated to integration of JGAP with JOONE! You can find out more about the JOONEJGAP
+    <p class="text">Yes, as a matter of a fact there is a whole open-source project
+    dedicated to integration of JGAP with JOONE! You can find out more about the
+    JOONEGAP
     project on their <a href="http://joonegap.sourceforge.net/">homepage</a>. </p>
-    <p class="answer">Additionally (among others), there is a dissertation about Genetic
+    <p class="text">Additionally (among others), there is a dissertation about Genetic
     Algorithms playing together with Neural Nets to play Backgammon!</p>
   </li>
 </ol>
 
-<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+<p class="copyright">Copyright © 2002-2006 Neil Rotstan / Klaus Meffert. All rights
 reserved. </p>
 
 <hr>
