@@ -1,7 +1,11 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="Tutorial on how to use JGAP to utilize the genetic algorithms framework.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, evolutionary, open source">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
 <title>Getting Started with JGAP</title>
 </head>
 
@@ -15,24 +19,33 @@
 <hr>
 <a name="top">
 
-<p>To use JGAP in an application, there are five basic things that you must do: 
+<p class="text"><b>Preface: Please note that this documentation could be correlated to a
+former JGAP version. Therefor we recommend having a look at the examples
+provided with JGAP and then read this document in order to get an idea.</b>
+
+<p class="text">To use JGAP in an application, there are five basic things that you must do: 
 
 <ol>
-  <li></a><a href="#step1">Plan your Chromosome.</a></li>
-  <li><a href="#step2">Implement a &quot;fitness function.&quot;</a></li>
-  <li><a href="#step3">Setup a Configuration object.</a></li>
-  <li><a href="#step4">Create a population of potential solutions.</a></li>
-  <li><a href="#step5">Evolve the population!</a></li>
+  <li></a>
+  <p class="text"><a href="#step1">Plan your Chromosome.</a></li>
+  <li>
+    <p class="text"><a href="#step2">Implement a &quot;fitness function&quot;.</a></li>
+  <li>
+    <p class="text"><a href="#step3">Setup a Configuration object.</a></li>
+  <li>
+    <p class="text"><a href="#step4">Create a population of potential solutions.</a></li>
+  <li>
+    <p class="text"><a href="#step5">Evolve the population!</a></li>
 </ol>
 
-<p>Through the course of this tutorial, we'll build a simple example program that makes
+<p class="text">Through the course of this tutorial, we'll build a simple example program that makes
 use of JGAP. The goal of our program will be to produce a user-specified amount of change
 in the fewest possible American coins (quarters, dimes, nickels, and pennies). </p>
 <a name="step1">
 
 <h3 class="subheader">Step 1: Plan your Chromosome</h3>
 
-<p>At the heart of the genetic algorithm is the Chromosome. The Chromosome represents a
+<p class="text">At the heart of the genetic algorithm is the Chromosome. The Chromosome represents a
 potential solution and is divided into multiple genes. Genes in JGAP represent distinct
 aspects of the solution as a whole, just as human genes represent distinct aspects of
 individual people, such as their sex or eye color. During the JGAP evolution process,
@@ -42,7 +55,7 @@ upon their &quot;fitness,&quot; which is a measure of how optimal that solution 
 relative to other potential solutions. The entire goal of the genetic algorithm is to
 mimic the natural process of evolution in order to produce superior solutions. </p>
 
-<p>Step 1, therefore, is to decide on the makeup of your chromosomes, which includes how
+<p class="text">Step 1, therefore, is to decide on the makeup of your chromosomes, which includes how
 many genes you want and what those genes will represent. In our sample program, we want to
 create a pile of change that contains the fewest possible American coins that total up to
 the amount specified by the user. Since a chromosome represents a potential solution, in
@@ -54,13 +67,13 @@ different denominations of coins so that we'll have a total of four genes per ch
 alt="(Diagram of a Chromosome with four genes: quarters, dimes, nickels, and pennies.)"
 width="300" height="150"> </p>
 
-<p>We'll actually write the code to setup our Chromosome objects in </a><a href="#step3">step
+<p class="text">We'll actually write the code to setup our Chromosome objects in </a><a href="#step3">step
 3</a>. </p>
 <a name="step2">
 
 <h3 class="subheader">Step 2: Implementing a Fitness Function</h3>
 
-<p>JGAP is designed to do almost all of the evolutionary work for you in a relatively
+<p class="text">JGAP is designed to do almost all of the evolutionary work for you in a relatively
 generic fashion. However, it has no knowledge of the specific problem you're actually
 trying to solve, and hence has no intrinsic way of deciding if one potential solution is
 any better than another potential solution for your specific problem. That's where the
@@ -71,7 +84,7 @@ number, the better the solution. The lower the number (1 being the lowest legal 
 value), the poorer the solution. JGAP will use these fitness measurements to evolve the
 population of solutions toward a more optimal set of solutions. </p>
 
-<p>Let's start with a fully-working example of a fitness function, the details of which
+<p class="text">Let's start with a fully-working example of a fitness function, the details of which
 will be explained below. Since the goal of our small program is to produce an amount of
 change in American coins equal to a target amount in the fewest possible number of coins,
 it seems reasonable that the measure of fitness for a particular solution would be a
@@ -79,9 +92,7 @@ combination of the relative closeness of the amount of change it represented to 
 amount of change, and the total number of coins represented by the solution (fewer being
 better). </p>
 
-<pre class="code">
-<tt>
-<b><font color="#000080">package</font></b> <font color="#000000">examples;</font>
+<pre class="Listing"><tt><b><font color="#000080">package</font></b> <font color="#000000">examples;</font>
 
 <b><font
 color="#000080">import</font></b> <font color="#000000">org.jgap.Chromosome;</font>
@@ -385,23 +396,20 @@ color="#000000">);</font>
 color="#000080">return</font></b> <font color="#000000">totalCoins;</font>
     <font
 color="#000000">}</font>
-<font color="#000000">}</font>
+<font color="#000000">}</font></tt></pre>
 
-</tt>
-</pre>
-
-<p>Let's tackle our example fitness function bit by bit. To start, we define our own class
+<p class="text">Let's tackle our example fitness function bit by bit. To start, we define our own class
 and extend the org.jgap.FitnessFunction class. All fitness functions must extend the
 FitnessFunction class. We then define a constructor and an evaluate() method. The
 evaluate() method is a standard method that all fitness functions must implement. That is
 the method that will be called by the genetic engine when it needs to know the fitness
 value of a chromosome. </p>
 
-<p>Our constructor isn't very exciting: it merely accepts a target change amount that the
+<p class="text">Our constructor isn't very exciting: it merely accepts a target change amount that the
 user desires, verifies that the amount meets our constraint of being between 1 and 99
 cents, and then stores the amount in an instance variable for later use. </p>
 
-<p>The interesting part of the whole class is the evaluate() method, which is where the
+<p class="text">The interesting part of the whole class is the evaluate() method, which is where the
 work is done. The evaluate method is always passed in a Chromosome, which represents a
 potential solution. A Chromosome is made up of genes, each of which represents a
 respective part of the solution. In our example, the Chromosome represents an amount of
@@ -410,7 +418,7 @@ gene, dimes for the second gene, nickels for the third gene, and pennies for the
 gene. The value of a gene is called an allele. In our example, the allele would be the
 number of a given type of coin (for example, 2 pennies). </p>
 
-<p>The first thing the evaluate() method does is invoke a couple of helper methods which
+<p class="text">The first thing the evaluate() method does is invoke a couple of helper methods which
 conveniently return the total amount of change that is represented by the potential
 solution and the total number of coins represented by the solution. We'll take a closer
 look at how these work later. It then subtracts the amount of change represented by the
@@ -418,7 +426,7 @@ solution from the target amount, and takes the absolute value of the difference 
 how close the solution amount is to the target amount. We then set about calculating our
 fitness value. </p>
 
-<p>As the comments indicate, we're going to calculate fitness in two stages. The first
+<p class="text">As the comments indicate, we're going to calculate fitness in two stages. The first
 stage calculates an initial fitness value based on how far away the solution amount is
 from the target amount. Then, if the solution amount happens to equal the target amount,
 we go to stage two, which adjusts the fitness value based upon the total number of coins
@@ -427,24 +435,24 @@ solutions that match the target amount with very few coins, and return lower fit
 values for solutions that are far away from the target amount or represent a large number
 of coins. </p>
 
-<p>Moving beyond the evaluate() method, we encounter those helper methods we mentioned
+<p class="text">Moving beyond the evaluate() method, we encounter those helper methods we mentioned
 earlier. The amountOfChange() method calculates the total amount of change (in cents)
 represented by a Chromosome that is passed to it. Internally, it defers to the
 getNumberOfCoinsAtGene() method to actually extract the number of each type of coin. It
 then calculates the total amount of change and returns it. </p>
 
-<p>The next convenience method, getNumberOfCoinsAtGene(), is responsible for determining
+<p class="text">The next convenience method, getNumberOfCoinsAtGene(), is responsible for determining
 the number of coins represented by a specific gene in the given Chromosome. As mentioned
 earlier, the value of each gene in the Chromosome is called an allele. This method gets
 the allele for the gene at the provided position in the Chromosome and then returns it as
 an int primitive. </p>
 
-<p>Finally, there's a getTotalNumberOfCoins() method that determines the total number of
+<p class="text">Finally, there's a getTotalNumberOfCoins() method that determines the total number of
 coins represented by a given Chromosome. It simply tallies up the number of coins
 represented by each gene--using the getNumberOfCoinsAtGene() method--and then returns the
 tally. </p>
 
-<p>And that's the end of the fitness function. If you're feeling a little bit overwhelmed,
+<p class="text">And that's the end of the fitness function. If you're feeling a little bit overwhelmed,
 don't worry about it and take some comfort in the fact that it's all down hill from here!
 The fitness function is the hardest part of using JGAP and, after writing a few, you'll
 get the hang of it. </p>
@@ -452,7 +460,7 @@ get the hang of it. </p>
 
 <h3 class="subheader">Step 3: Setup a Configuration Object</h3>
 
-<p>JGAP is designed to be very flexible and pluggable. If you want, you can create your
+<p class="text">JGAP is designed to be very flexible and pluggable. If you want, you can create your
 own genetic operators, random number generators, natural selectors, and so on. To support
 all of this, JGAP uses a Configuration object that must be setup with all of the settings
 you want prior to using the genetic engine. Fortunately, we realize that most people will
@@ -462,9 +470,7 @@ pieces of information: what fitness function you want to use, how you want your
 Chromosomes to be setup, and how many Chromosomes you want in your population. Let's look
 at some sample code. </p>
 
-<pre class="code">
-<tt>
-<i><font color="#808080">// Start with a DefaultConfiguration, which comes setup with the</font></i>
+<pre class="Listing"><tt><i><font color="#808080">// Start with a DefaultConfiguration, which comes setup with the</font></i>
 <i><font
 color="#808080">// most common settings.</font></i>
 <i><font color="#808080">// -------------------------------------------------------------</font></i>
@@ -560,14 +566,12 @@ color="#808080">// 500 here.</font></i>
 <i><font color="#808080">// --------------------------------------------------------------</font></i>
 <font
 color="#000000">conf.setPopulationSize(</font> <font color="#0000FF">500</font> <font
-color="#000000">);</font>
-</tt>
-</pre>
+color="#000000">);</font></tt></pre>
 
-<p>Hopefully most of the above code is pretty self-explanatory, with maybe the exception
+<p class="text">Hopefully most of the above code is pretty self-explanatory, with maybe the exception
 of setting up the sample Chromosome. Let's look at that bit in a little more detail. </p>
 
-<p>As mentioned earlier, a Chromosome is made up of genes. JGAP lets you choose what Gene
+<p class="text">As mentioned earlier, a Chromosome is made up of genes. JGAP lets you choose what Gene
 class to use to represent each gene in the Chromosome (for more information on creating
 custom Gene classes, please see the </a><a href="genes.html">Creating Custom Genes</a>
 document). That provides the most flexibility and convenience. If we wanted to, we could
@@ -575,7 +579,7 @@ have actually written a separate Gene class for each coin type in our example, s
 QuarterGene, DimeGene, NickelGene, and PennyGene. In fact, we look at what a QuarterGene
 might look like in the <i>Creating Custom Genes</i> document that we just mentioned. </p>
 
-<p>As it happens, we decided that the IntegerGene (which comes with JGAP) would suffice.
+<p class="text">As it happens, we decided that the IntegerGene (which comes with JGAP) would suffice.
 You'll notice, however, that we did take advantage of the ability to specify different
 Gene implementations for each gene in the Chromosome by creating separate IntegerGenes
 with different lower and upper bounds for each coin type. We set the upper bounds to be
@@ -583,13 +587,13 @@ the largest number of coins of that respective type that would appear in an opti
 solution. Limiting the solution space this way helps JGAP arrive at better solutions with
 fewer evolutions. </p>
 
-<p>So to get back to the code, we first create an array of Genes with a length of 4, since
+<p class="text">So to get back to the code, we first create an array of Genes with a length of 4, since
 we want to represent 4 genes (one for each coin type). We then set each Gene in the array
 to an IntegerGene that is constructed with appropriate lower and upper bounds for that
 coin type. Finally, we construct a new Chromosome and pass it the array of Genes, and then
 set that sample Chromosome on the Configuration object. </p>
 
-<p>The final part of this step is setting the population size, which is the number of
+<p class="text">The final part of this step is setting the population size, which is the number of
 Chromosomes we want in the population. A larger population size means more potential
 solutions to choose from and more genetic diversity, but it also means more work to evolve
 that population. Ultimately, you'll need to settle on a value that balances your need for
@@ -608,21 +612,16 @@ size. </p>
 
 <h3 class="subheader">Step 4: Create a Population</h3>
 
-<p>Recall that each potential solution is represented by a Chromosome. A population of
+<p class="text">Recall that each potential solution is represented by a Chromosome. A population of
 Chromosomes is called a Genotype, and that is the class we need to construct to create our
 population. If you want, you can construct each Chromosome individually and then pass them
 all into a new Genotype (much like we constructed each Gene and passed them into the
 sample Chromosome in step 3), but JGAP provides a much quicker and easier way of creating
 a random population. In fact, it only takes one line of code! </p>
 
-<pre class="code">
-<tt>
-<font color="#000000">Genotype</font> <font color="#000000">population</font> <font
+<pre class="Listing"><tt><font color="#000000">Genotype</font> <font color="#000000">population</font> <font
 color="#000000">=</font> <font color="#000000">Genotype.randomInitialGenotype(</font> <font
-color="#000000">conf</font> <font color="#000000">);</font>
-
-</tt>
-</pre>
+color="#000000">conf</font> <font color="#000000">);</font></tt></pre>
 
 <p>The randomInitialGenotype() method takes in a Configuration object (which we setup in
 step 3) and returns a Genotype with the correct number of Chromosomes, each of which has
@@ -633,38 +632,26 @@ solutions. </p>
 
 <h3 class="subheader">Step 5: Evolve the Population!</h3>
 
-<p>Now that we've gotten everything setup and ready to go, it's time to start evolving the
+<p class="text">Now that we've gotten everything setup and ready to go, it's time to start evolving the
 population until it contains some potential solutions that we're satisfied with. Evolving
 the population one cycle is another one-liner: </p>
 
-<pre class="code">
-<tt>
-<font color="#000000">population.evolve();</font>
+<pre class="Listing"><tt><font color="#000000">population.evolve();</font></tt></pre>
 
-</tt>
-</pre>
-
-<p>Typically, after each evolution cycle, you'll want to check if the population contains
+<p class="text">Typically, after each evolution cycle, you'll want to check if the population contains
 any satisfactory solutions. The easiest way to do this is to invoke the
 getFittestChromosome() method on the population: </p>
 
-<pre class="code">
-<tt>
-<font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar</font> <font
-color="#000000">=</font> <font color="#000000">population.getFittestChromosome();</font>
+<pre class="Listing"><tt><font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar</font> <font
+color="#000000">=</font> <font color="#000000">population.getFittestChromosome();</font></tt></pre>
 
-</tt>
-</pre>
-
-<p>If the best solution so far is good enough for you, then you're done. If not, then you
+<p class="text">If the best solution so far is good enough for you, then you're done. If not, then you
 can evolve the population again. Alternatively, you may just choose to evolve the
 population a set number of times and then see what the best solution is that was produced
 at the end (or a combination thereof). For our example problem, we'll take this latter
 approach. </p>
 
-<pre class="code">
-<tt>
-<font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar;</font>
+<pre class="Listing"><tt><font color="#000000">Chromosome</font> <font color="#000000">bestSolutionSoFar;</font>
 
 <b><font
 color="#000080">for</font></b><font color="#000000">(</font> <b><font color="#000080">int</font></b> <font
@@ -725,17 +712,14 @@ color="#000000">+</font>
         <font
 color="#000000">bestSolutionSoFar</font> <font color="#000000">)</font> <font
 color="#000000">+</font> <b><font color="#009900">&quot; coins.&quot;</font></b> <font
-color="#000000">);</font>
+color="#000000">);</font></tt></pre>
 
-</tt>
-</pre>
-
-<p>Now we've got ourselves a full-fledged genetic application! To view all of the code for
+<p class="text">Now we've got ourselves a full-fledged genetic application! To view all of the code for
 this example, see the MinimizingMakeChange.java and
 MinimizingMakeChangeFitnessFunction.java files in the src/examples/ directory of the JGAP
 distribution. </p>
 
-<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+<p class="copyright">Copyright © 2002-2006 Neil Rotstan / Klaus Meffert. All rights
 reserved. </p>
 
 <hr>

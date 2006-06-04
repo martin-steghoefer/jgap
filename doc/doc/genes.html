@@ -1,7 +1,11 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="stylesheet.css" type="text/css">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="Tutorial on how to create custom genes with JGAP to make up a genetic algorithm.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, evolutionary, open source, genes, alleles, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
 <title>Creating Custom Genes</title>
 </head>
 
@@ -15,11 +19,11 @@
 <hr>
 <a name="top">
 
-<p><b>Preface: Please note that this documentation could be correlated to a
-former JGAP version. Therefor we recommend having a look at the examples
+<p class="text"><b>Preface: Please note that this documentation could be correlated to a
+former JGAP version. Therefore we recommend having a look at the examples
 provided with JGAP and then read this document in order to get an idea.</b> </p>
 
-<p>Genes represent the discrete components of a problem solution (chromosome) that can
+<p class="text">Genes represent the discrete components of a problem solution (chromosome) that can
 vary independently of each other throughout the evolution process. Just as genes control
 various independent features within our own genetic makeup, such as sex or eye color, so
 too do genes in JGAP control various aspects of the overall makeup of a solution. JGAP
@@ -30,7 +34,7 @@ handy. They're also easy to create, as we'll soon see. </p>
 
 <h3 class="subheader">How Genes are Used</h3>
 
-<p>First, let's talk about what genes are and how genes are created and used by JGAP.
+<p class="text">First, let's talk about what genes are and how genes are created and used by JGAP.
 Simply put, a gene represents some characteristic of a solution that can be varied
 indepedently from the other characteristics of that solution. For example, let's assume
 that a solution (chromosome) represents a pile of American change. Then the genes in that
@@ -46,7 +50,7 @@ Gene number 2 in all of those chromosomes may be using some completely different
 implementation, such as a DimeGene. Of course, all of the genes in a Chromosome may also
 use the exact same Gene implementation if that's desirable. </p>
 
-<p>You convey your desired Gene settings to JGAP by creating a sample Chromosome instance
+<p class="text">You convey your desired Gene settings to JGAP by creating a sample Chromosome instance
 that is setup just the way you want all of the chromosomes in your population setup. You
 then pass that sample Chromosome to the active Configuration object. Each time JGAP needs
 to create a new Chromosome, it will reference the sample Chromosome to see how it's set
@@ -60,16 +64,14 @@ setup exactly like the Genes in the sample Chromosome. </p>
 
 <h3 class="subheader">QuarterGene: an Example</h3>
 
-<p>As an example of a custom Gene implementation, we'll create a QuarterGene class which
+<p class="text">As an example of a custom Gene implementation, we'll create a QuarterGene class which
 could be used to represent the number of quarters in a pile of change. Before diving in,
 we should say that if we were implementing this in the real world, we would have extended
 the IntegerGene class to save ourselves most of the effort. But since this is supposed to
 be a demonstrative example, we'll implement it here from scratch. First the code: </p>
 <!-- What follows is the source-highlighted code -->
 
-<pre class="code">
-<tt>
-<b><font color="#000080">package</font></b> <font color="#000000">hypothetical.examples;</font>
+<pre class="Listing"><tt><b><font color="#000080">package</font></b> <font color="#000000">hypothetical.examples;</font>
 
 <b><font
 color="#000080">import</font></b> <font color="#000000">org.jgap.*;</font>
@@ -580,10 +582,9 @@ color="#000080"><b>int</fon></b> <font color="#000000">hashCode()</font>
 color="#000000">{</font>
         <b><font color="#000080">return</font></b> <font
 color="#000000">m_numberOfQuarters;</font>
-    <font color="#000000">}</font>
-</font></tt></pre>
+    <font color="#000000">}
 
-<pre class="code"><tt>    <b><font color="#000080">public</font></b> <font
+</font></font>    <b><font color="#000080">public</font></b> <font
 color="#000080">Object getInternalValue()</font><font color="#000000"> {</font><font
 color="#000080">
         <b>return</b> <font
@@ -595,16 +596,15 @@ color="#000000">;</font>
 color="#000000"></font></font><font
 color="#000080"><font
 color="#000000">}</font>
-</font></tt><font
-color="#000080"></pre>
+</font></tt></pre>
 
-<p>Hopefully most of the methods and code in the example above are pretty self-explanatory
+<p class="text">Hopefully most of the methods and code in the example above are pretty self-explanatory
 once the javadocs and comments are consulted. We start off with a couple of constructors,
 one of which lets the user specify an upper bound on the number of quarters that this
 specific QuarterGene instance may represent. We then move onto the newGene() method, which
 was mentioned earlier, but deserves a second look. </p>
 
-<p>The most important thing to note about the newGene() method is that it should return a
+<p class="text">The most important thing to note about the newGene() method is that it should return a
 new Gene that is setup with the same internal configuration as this Gene. The actual value
 of the returned Gene doesn't matter, but you'll notice that we make sure to pass on the
 same upper bound as our current QuarterGene instance. This is worth noting because JGAP
@@ -613,18 +613,16 @@ Genes in the new Chromosome are setup exactly the same way as the Genes in earli
 Chromosomes. By invoking the newGene() method on each of the Genes in a Chromosome, JGAP
 can be sure that the Genes in the new Chromosome will be setup the same way each time. </p>
 
-<p>Next come the setAllele() and getAllele() calls, which aren't very interesting. Values
+<p class="text">Next come the setAllele() and getAllele() calls, which aren't very interesting. Values
 (alleles) in Genes are represented as Objects, in order to be as flexible as possible, and
 so we use an Integer object in our QuarterGene implementation to represent the number of
 quarters. Following these is the setRandomValue() method, which sets the value of our
 QuarterGene to a legal random value--in this case, an Integer between zero and the upper
 bound. </p>
 
-<p>The next two methods deal with XML marshalling and are optional. (For more information
+<p class="text">The next two methods deal with XML marshalling and are optional. (For more information
 on XML marshalling, please see the
-</font>
- </a> <font
-color="#000080"><a href="marshalling.html">Marshalling Populations
+ </a> <a href="marshalling.html">Marshalling Populations
 to XML</a> document.) We've implemented them here to provide an example. The
 getPersistentRepresentation() method returns a String that represents not only the current
 value of our QuarterGene, but also the upper bound, so that this QuarterGene can be later
@@ -635,7 +633,7 @@ representation, parses it, and then sets the internal state of this QuarterGene
 accordingly. If there's anything wrong with the representation, an
 UnsupportedRepresentationException is thrown. </p>
 
-<p>The final three methods are cleanup(), which is invoked by JGAP when this Gene is no
+<p class="text">The final three methods are cleanup(), which is invoked by JGAP when this Gene is no
 longer needed; compareTo(), which compares this QuarterGene to another one and determines
 which is the &quot;greater&quot; of the two; equals(), which compares this QuarterGene to
 another one and determines if they are equal; and, finally, hashCode(), which generates a
@@ -645,7 +643,7 @@ implementations in java.lang.Object. </p>
 
 <h3 class="subheader">A Note about Serialization</h3>
 
-<p>As mentioned in the previous section, JGAP supports marshalling and unmarshalling
+<p class="text">As mentioned in the previous section, JGAP supports marshalling and unmarshalling
 genetic components to/from XML. It also supports the standard Java serialization
 mechanism, allowing Genotypes and Chromosomes to be serialied. In order for this to work
 properly, two things are required of your Gene implementation: first, it must implement
@@ -657,13 +655,13 @@ Gene state. </p>
 
 <h3 class="subheader">Conclusion</h3>
 
-<p>As can be seen from the above example, creating custom genes is an easy and
+<p class="text">As can be seen from the above example, creating custom genes is an easy and
 straight-forward process. We hope that you'll create your own Gene implementations
 whenever you feel the stock genes aren't exactly what you need. And hey--if you create a
 custom gene that you think might be useful to others, please feel free to post it on the
 jgap-users mailing list so that others can benefit from your work! </p>
 
-<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+<p class="copyright">Copyright © 2002- 2006 Neil Rotstan / Klaus Meffert. All rights
 reserved.</p>
 
 <hr>
@@ -673,6 +671,5 @@ reserved.</p>
 <a href="http://sourceforge.net/projects/jgap"><img
 src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
 border="0" alt="SourceForge Logo"></a> </p>
-</font>
 </body>
 </html>

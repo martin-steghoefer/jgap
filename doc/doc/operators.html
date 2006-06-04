@@ -2,9 +2,10 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<link rel="stylesheet" href="stylesheet.css" type="text/css">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
-<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta name="description" content="Tutorial on how to create custom genetic operators with JGAP to make up a genetic algorithm.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, evolutionary, open source, genetic operators, genes, alleles, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
 <title>Creating Custom Genetic Operators</title>
 </head>
 
@@ -17,11 +18,11 @@
 
 <hr>
 
-<p><b>Preface: This document corresponds to an earlier JGAP version. The
+<p class="text"><b>Preface: This document corresponds to an earlier JGAP version. The
 introduced ReproductionOperator is no longer in use. Now, reproduction takes
 place via natural selectors.</b> </p>
 
-<p>It may be you want to experiment around with new or different genetic operators to
+<p class="text">It may be you want to experiment around with new or different genetic operators to
 assess their impact upon the performance of the genetic algorithm. Or maybe you wish to
 replace the random number generator with a more rigorous implementation. Customizing JGAP
 is intended to be easy and straight-forward. JGAP supports a Configuration mechanism that
@@ -29,17 +30,20 @@ easily allows you to add your own genetic operators to the mix, as well as repla
 components such as the natural selector, the random number generator, and the event
 manager. </p>
 
-<p>Creating a new genetic operator is probably the second-most common form of JGAP
+<p class="text">Creating a new genetic operator is probably the second-most common form of JGAP
 customization, after the creation of custom Genes. We'll look at an existing operator, the
 ReproductionOperator, as an example of how to create your own genetic operator. As you'll
-see, it's extremly simple. </p>
+see, it's extremely simple. </p>
 
 <h3 class="subheader">Step 1: Implement GeneticOperator</h3>
 
-<p>To create your own genetic operator, you'll need to implement the
+<p class="text">To create your own genetic operator, you'll need to implement the
 org.jgap.GeneticOperator interface. This interface only has one method, operate(), which
 is the method that will be invoked by the genetic engine when it's time for your genetic
-operator to do its work. Let's look at the source for the ReproductionOperator:<br>
+operator to do its work. Let's look at the source for the ReproductionOperator:
+ </p>
+
+<p class="Listing"><br>
 <tt>
 <br>
 <b><font color="#000080">package</font></b> <font color="#000000">org.jgap.impl;</font>
@@ -219,7 +223,7 @@ color="#000000">}</font>
 </tt>
  </p>
 
-<p>The purpose of this operator is simply to create a copy of each of the Chromosomes in
+<p class="text">The purpose of this operator is simply to create a copy of each of the Chromosomes in
 the population. This is done to ensure that the original Chromosomes will have a chance to
 be selected, in addition to their offspring. As can be seen from the code, the operate()
 method accepts three parameters: the active Configuration object, an array of Chromosomes
@@ -233,17 +237,17 @@ chromosomes. </p>
 
 <h3 class="subheader">Step 2: Add the Operator to the Configuration</h3>
 
-<p>Now that we've written our operator, we need to tell JGAP to use it. This just requires
+<p class="text">Now that we've written our operator, we need to tell JGAP to use it. This just requires
 a single additional call to the Configuration object during your normal setup phase: </p>
 
-<pre class="code"><tt>              <font color="#000000">Configuration</font> <font
+<pre class="Listing"><tt><font color="#000000">Configuration</font> <font
 color="#000000">conf</font> <font color="#000000">=</font> <b><font color="#000080">new</font></b> <font
 color="#000000">DefaultConfiguration();</font>
-              <font color="#000000">conf.addGeneticOperator(</font> <b><font
+<font color="#000000">conf.addGeneticOperator(</font> <b><font
 color="#000080">new</font></b> <font color="#000000">ReproductionOperator()</font> <font
 color="#000000">);</font></tt></pre>
 
-<p>The genetic engine will run the population of Chromosomes through each of the active
+<p class="text">The genetic engine will run the population of Chromosomes through each of the active
 genetic operators in the order in which they were added to the Configuration object. It's
 worth noting that there is no way to remove an operator from the Configuration object,
 which means that if you want to replace an existing operator with your own implementation,
@@ -256,7 +260,7 @@ operators (and not replacing existing ones) and are content with them being at t
 the operator chain, then you should be able to continue using the DefaultConfiguration
 class. </p>
 
-<p><em>Important Note!</em> When using your own set of genetic operators, please be aware
+<p class="text"><em>Important Note!</em> When using your own set of genetic operators, please be aware
 that if you do not include a reproduction operator, then the chromosomes in your
 population will not automatically become candidates for natural selection. It is the
 reproduction operator that guarantees that each of the chromosones in the current
@@ -264,7 +268,7 @@ population become candidates for the next generation. </p>
 
 <h3 class="subheader">Other Customizations</h3>
 
-<p>As mentioned above, it's also possible to replace the JGAP natural selector, random
+<p class="text">As mentioned above, it's also possible to replace the JGAP natural selector, random
 number generator, and event manager. Details of these customizations are beyond the scope
 of this document, but performing them follows a similar process to creating a new genetic
 operator: first, the new implementation must be written and implement the appropriate
@@ -273,21 +277,25 @@ implementation. Unlike genetic operators, the Configuration object allows these 
 components to be replaced, so you can continue using the DefaultConfiguration convenience
 class if desired. </p>
 
-<p>The appropriate interfaces to implement for the various customizations are as follows: 
+<p class="text">The appropriate interfaces to implement for the various customizations are as follows: 
 
 <ul>
-  <li>To create your own natural selector, implement the <font face="Courier New"> org.jgap.NaturalSelector</font> interface. </li>
-  <li>To create your own random number generator, implement the <font face="Courier New"> org.jgap.RandomGenerator</font>
+  <li>
+    <p class="text">To create your own natural selector, implement the <font face="Courier New"> org.jgap.NaturalSelector</font> interface. </li>
+  <li>
+    <p class="text">To create your own random number generator, implement the <font face="Courier New"> org.jgap.RandomGenerator</font>
     interface. </li>
-  <li>To create your own event manager, subclass the <font face="Courier New"> org.jgap.event.EventManager</font>
+  <li>
+    <p class="text">To create your own event manager, subclass the <font face="Courier New"> org.jgap.event.EventManager</font>
     class. </li>
-  <li>To create your own Gene implementations, subclass <font face="Courier New">org.jgap.BaseGene</font>. </li>
+  <li>
+    <p class="text">To create your own Gene implementations, subclass <font face="Courier New">org.jgap.BaseGene</font>. </li>
 </ul>
 
-<p>Please see the javadocs for each of the above for further information on what is
+<p class="text">Please see the javadocs for each of the above for further information on what is
 required for each implementation. </p>
 
-<p class="copyright">Copyright © 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights
+<p class="copyright">Copyright © 2002- 2006 Neil Rotstan / Klaus Meffert. All rights
 reserved. </p>
 
 <hr>

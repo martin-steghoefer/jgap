@@ -1,6 +1,10 @@
 <html>
   <head>
-    <link rel=stylesheet href="stylesheet.css" type="text/css">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="Tutorial how to marshall genetic populations to xml with JGAP.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, populations, xml, open source, genes, alleles, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
     <title>Marshalling Populations to XML</title>
   </head>
 
@@ -10,7 +14,7 @@
     <hr>
 
     <a name="top">
-    <p>
+    <p class="text">
       For many applications, some sort of marshalling mechanism 
       can be very useful. Perhaps it's desirable to save the 
       current population to disk for later so that evolution can continue
@@ -26,7 +30,7 @@
     </p>
 
     <h3 class="subheader">Parser-specific Implementations</h3>
-    <p>
+    <p class="text">
       As a bit of an aside, it should be noted that, while the
       creation and traversing of an XML document object (DOM) has 
       been standardized by the <a href="http://www.w3.org">W3C</a>, the actual 
@@ -44,7 +48,7 @@
     </p>
 
     <h3 class="subheader">An Example</h3>
-    <p>
+    <p class="text">
       Let us say, for our example, that we are creating a chess
       program that, as one of its many selling points, will evolve
       its strategy to match any opponent. To implement this in our
@@ -62,9 +66,7 @@
     </p>
 
 
-<pre class="code">
-<tt>
-<i><font color=#808080>/**</font></i>
+<pre class="Listing"><tt><i><font color=#808080>/**</font></i>
 <i><font color=#808080> * Saves the given population to the given filename as an XML</font></i>
 <i><font color=#808080> * file. The population can later be reconstructed from the</font></i>
 <i><font color=#808080> * XML file through a call to the getSavedStrategyState() method.</font></i>
@@ -89,7 +91,7 @@
     <font color=#000000>Writer</font> <font color=#000000>documentWriter</font> <font color=#000000>=</font> <b><font color=#000080>new</font></b> <font color=#000000>FileWriter</font><font color=#000000>(</font> <font color=#000000>a_saveToFilename</font> <font color=#000000>)</font><font color=#000000>;</font>
 
     <font color=#000000>OutputFormat</font> <font color=#000000>formatting</font> <font color=#000000>=</font>
-        <b><font color=#000080>new</font></b> <font color=#000000>OutputFormat</font><font color=#000000>(</font> <font color=#000000>genotypeDoc</font><font color=#000000>,</font> <b><font color=#009900>"UTF-8"</font></b><font color=#000000>,</font> <font color=#000000>true</font> <font color=#000000>)</font><font color=#000000>;</font>
+        <b><font color=#000080>new</font></b> <font color=#000000>OutputFormat</font><font color=#000000>(</font> <font color=#000000>genotypeDoc</font><font color=#000000>,</font> <b><font color=#009900>&quot;UTF-8&quot;</font></b><font color=#000000>,</font> <font color=#000000>true</font> <font color=#000000>)</font><font color=#000000>;</font>
 
     <font color=#000000>SerializerFactory</font> <font color=#000000>factory</font> <font color=#000000>=</font>
         <font color=#000000>SerializerFactory</font><font color=#000000>.</font><font color=#000000>getSerializerFactory</font><font color=#000000>(</font> <font color=#000000>Method</font><font color=#000000>.</font><font color=#000000>XML</font> <font color=#000000>)</font><font color=#000000>;</font>
@@ -134,12 +136,9 @@
     <i><font color=#808080>// -----------------------------------------</font></i>
     <b><font color=#000080>return</font></b> <font color=#000000>XMLManager</font><font color=#000000>.</font><font color=#000000>getGenotypeFromDocument</font><font color=#000000>(</font> <font color=#000000>a_activeConfiguration</font><font color=#000000>,</font>
                                                <font color=#000000>genotypeDocument</font> <font color=#000000>)</font><font color=#000000>;</font>
-<font color=#000000>}</font>
+<font color=#000000>}</font></tt></pre>
 
-</tt>
-</pre>
-
-    <p>
+    <p class="text">
         As can be seen from the above, interaction with the JGAP
         XMLManager to create a DOM object from a Genotype--or recreate
         a Genotype from a DOM object--can typically be confined to a
@@ -151,7 +150,7 @@
     </p>
 
     <p class="copyright">
-      Copyright &copy 2002, 2003, 2004, 2005 Neil Rotstan / Klaus Meffert. All rights reserved.
+      Copyright &copy 2002- 2006 Neil Rotstan / Klaus Meffert. All rights reserved.
     </p>
 
     <hr>
