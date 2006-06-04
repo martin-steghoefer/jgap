@@ -2,12 +2,13 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<meta http-equiv="Content-Language" content="en-gb">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
-<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="Upgrading from older JGAP versions to newer versions.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, evolutionary, open source, genes, upgrade, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
 
-<title>Upgrade from versions prior to 2.0</title>
+<title>Upgrade from versions prior to 2.6</title>
 <link rel="stylesheet" href="../stylesheet.css" type="text/css">
 <base target="_blank">
 </head>
@@ -22,60 +23,60 @@
 
 <h2 class="docTitle">Introduction </h2>
 
-<p>JGAP version 2.4 introduced many concepts as well as many architectural
+<p class="text">JGAP version 2.4 introduced many concepts as well as many architectural
 changes. This was seen necessary to evolve the structure of the product.</p>
 
-<p> If you work with a JGAP version prior to 2.4 in use (i.e. 1.1 or 1.0), and want to upgrade
+<p class="text"> If you work with a JGAP version prior to 2.4 in use (i.e. 1.1 or 1.0), and want to upgrade
 to version 2.0 or higher, you should
 read this document. It will guide you thru the process of upgrading to version
 2.0 and later upcoming versions.</p>
 
-<p><b>Hint: If you try to upgrade from a version lower than 2.0 to a version
+<p class="text"><b>Hint: If you try to upgrade from a version lower than 2.0 to a version
 higher than 2.0, first upgrade to 2.0, then test your application. After that,
 upgrade to 2.4 (or a later version) and test again!</b></p>
 
 <h2 class="docTitle">Upgrade Instructions</h2>
 
 <h3 class="subHeader">Reproduction Operator</h3>
-<p>The ReproductionOperator class is no longer needed. Reproduction takes place
+<p class="text">The ReproductionOperator class is no longer needed. Reproduction takes place
 via implementations of NaturalSelector's. Main reason: Performance increase.<br>
 As this information has been added quite a time after releasing version 2.0, it
 could be that it applies not for version 2.0. But it applies&nbsp; for the
 latest JGAP versions for sure!</p>
 
 <h3 class="subHeader">Central Configuration Object</h3>
-<p>With version 2.0, the holder of the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html">org.jgap.Configuration</a></font> object has been made a
+<p class="text">With version 2.0, the holder of the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html">org.jgap.Configuration</a></font> object has been made a
 Singleton. That means you don't have to give it into any method as it was
 necessary earlier. After you set up the configuration object in the used manner,
-you only need to state:<pre><font color="#000080">Configuration myConfiguration;
+you only need to state:<pre class="Listing"><font color="#000080">Configuration myConfiguration;
 </font><font color="#008000">//Set up the configuration object
 </font><font color="#000080">...
 </font><font color="#008000">//Register the configuration object
 </font><b><font color="#000080">Genotype.setConfiguration(myConfiguration)</font><font color="#000000">;</font></b></pre>
 
-<p>As you see, the holder of the <font face="Courier New">Configuration</font>
+<p class="text">As you see, the holder of the <font face="Courier New">Configuration</font>
 object is <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Genotype.html"><font face="Courier New">org.jgap.Genotype</font></a>.</p>
 
 <h3 class="subHeader">Fitness value now of type double</h3>
 
-<p>The type of the fitness value has changed from <font face="Courier New">int</font>
+<p class="text">The type of the fitness value has changed from <font face="Courier New">int</font>
 to <font face="Courier New">double</font>. The fitness value can be obtained via</p>
 
-<pre><font color="#0000FF">double fitnessValue = <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Chromosome.html">Chromosome</a>.getFitnessValue();</font></pre>
+<pre class="Listing"><font color="#0000FF">double fitnessValue = <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Chromosome.html">Chromosome</a>.getFitnessValue();</font></pre>
 
-<p>Just change your implementation to work with <font face="Courier New">double</font>-typed
+<p class="text">Just change your implementation to work with <font face="Courier New">double</font>-typed
 variables instead of <font face="Courier New">int</font>-typed ones. There is no
 performance loss as our extended tests show!</p>
 
 <h3 class="subHeader">Fitness evaluator in Configuration Object</h3>
 
-<p>If you don't construct your <font face="Courier New">Configuration</font>
+<p class="text">If you don't construct your <font face="Courier New">Configuration</font>
 object via new something like</p>
-<pre><font color="#0000FF">Configuration myConfig = new DefaultConfiguration()</font></pre>
-<p>you need to make sure you set the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/FitnessEvaluator.html">FitnessEvaluator</a></font>.
+<pre class="Listing"><font color="#0000FF">Configuration myConfig = new DefaultConfiguration()</font></pre>
+<p class="text">you need to make sure you set the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/FitnessEvaluator.html">FitnessEvaluator</a></font>.
 You can easily do this by</p>
-<pre><font color="#0000FF">myConfig.setFitnessEvaluator(new DefaultFitnessEvaluator());</font></pre>
-<p>The fitness evaluator is responsible for deciding when a fitness value is
+<pre class="Listing"><font color="#0000FF">myConfig.setFitnessEvaluator(new DefaultFitnessEvaluator());</font></pre>
+<p class="text">The fitness evaluator is responsible for deciding when a fitness value is
 better and when it's not. If you are interpreting the fitness value as a defect
 rate then the lower the better. If your fitness value is a performace indicator,
 it should be higher to be better.</p>
@@ -84,37 +85,37 @@ it should be higher to be better.</p>
 
 <h4 class="subHeader">Change class declaration</h4>
 
-<p>The <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/NaturalSelector.html"> org.jgap.NaturalSelector</a></font> interface has become an abstract class. The
+<p class="text">The <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/NaturalSelector.html"> org.jgap.NaturalSelector</a></font> interface has become an abstract class. The
 interface definition has moved to <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/INaturalSelector.html">org.jgap.INaturalSelector</a></font>.</p>
 
-<p>So instead of writing</p>
+<p class="text">So instead of writing</p>
 
-<pre><font color="#000080">class MySelector <b>implements</b> NaturalSelector {...}</font></pre>
+<pre class="Listing"><font color="#000080">class MySelector <b>implements</b> NaturalSelector {...}</font></pre>
 
-<p>you should now write</p>
+<p class="text">you should now write</p>
 
-<pre><font color="#000080">class MySelector <b>extends</b> NaturalSelector {...}</font></pre>
+<pre class="Listing"><font color="#000080">class MySelector <b>extends</b> NaturalSelector {...}</font></pre>
 
 <h4 class="subheader">Implement new method returnsUniqueChromosomes()</h4>
 
-<p>Interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/INaturalSelector.html"> org.jgap.INaturalSelector</a></font> now holds method
+<p class="text">Interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/INaturalSelector.html"> org.jgap.INaturalSelector</a></font> now holds method
 <font face="Courier New">returnsUniqueChromosomes</font>:</p>
-<pre><font color="#008000">/**
+<pre class="Listing"><font color="#008000">/**
  * @return true: The implementation of the NaturalSelector only returns
  * unique Chromosome's (example: BestChromosomesSelector).
  * false: Also doublettes could be returned (example: WeightedRouletteSelector)
  */
 </font><font color="#0000FF">boolean returnsUniqueChromosomes();</font></pre>
-<p>Just implement something like</p>
-<pre><font color="#0000FF">public boolean returnsUniqueChromosomes() {
+<p class="text">Just implement something like</p>
+<pre class="Listing"><font color="#0000FF">public boolean returnsUniqueChromosomes() {
    return true;
 }</font></pre>
-<p>in your implementation of <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/NaturalSelector.html"><font face="Courier New">org.jgap.N</font><font face="Courier New">aturalSelector</font></a>.</p>
+<p class="text">in your implementation of <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/NaturalSelector.html"><font face="Courier New">org.jgap.N</font><font face="Courier New">aturalSelector</font></a>.</p>
 <h4 class="subHeader">Signature of method select changed</h4>
-<p>The new signature of the select method in <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/NaturalSelector.html">org.jgap.NaturalSelector</a></font>
+<p class="text">The new signature of the select method in <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/NaturalSelector.html">org.jgap.NaturalSelector</a></font>
 (declared in <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/INaturalSelector.html">INaturalSelector</a></font>)
 is as follows:</p>
-<pre><font color="#008000"> /**
+<pre class="Listing"><font color="#008000"> /**
   * Select a given number of Chromosomes from the pool that will move on
   * to the next generation population. This selection should be guided by
   * the fitness values, but fitness should be treated as a statistical
@@ -128,15 +129,15 @@ is as follows:</p>
   * @param a_to_population the population the Chromosomes will be added to
   */
 </font><font color="#0000FF">void select(int a_howManyToSelect, Population a_from_population, Population a_to_population);</font></pre>
-<p>Normally, calls to this method should only be made by <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Genotype.html">org.jgap.Genotype</a></font>
+<p class="text">Normally, calls to this method should only be made by <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Genotype.html">org.jgap.Genotype</a></font>
 in method <font face="Courier New">applyNaturalSelectors</font>. If you call the
 method yourself, adapt the parameters as shown above or have a look at the
 implementation in <font face="Courier New">Genotype</font>.</p>
 <h4 class="subHeader">Signature of method newGene changed</h4>
-<p>The new signature of the select method in interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Gene.html">org.jgap.Gene</a></font>
+<p class="text">The new signature of the select method in interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Gene.html">org.jgap.Gene</a></font>
 (used in all implementations, as in StringGene)
 is as follows:</p>
-<pre><font color="#008000">/**
+<pre class="Listing"><font color="#008000">/**
    * Provides an implementation-independent means for creating new Gene
    * instances. The new instance that is created and returned should be
    * setup with any implementation-dependent configuration that this Gene
@@ -157,36 +158,36 @@ is as follows:</p>
    * @since 1.0
    */
 </font><font color="#0000FF">Gene newGene();</font></pre>
-<p>Previous signatures included an input parameter of type <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html">org.jgap.Configuration</a></font>.
+<p class="text">Previous signatures included an input parameter of type <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html">org.jgap.Configuration</a></font>.
 The configuration is now set as described in this document (see above).</p>
 <h4 class="subHeader">Method add(Chromosome a_chromosomeToAdd) is private now</h4>
-<p>As method <font face="Courier New">add(<a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Chromosome.html">Chromosome</a> a_chromosomeToAdd)</font>
+<p class="text">As method <font face="Courier New">add(<a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Chromosome.html">Chromosome</a> a_chromosomeToAdd)</font>
 is private now, you need to adapt your implementations to reflect this: Just
 change the <font face="Courier New">public</font> keyword in your implementation
 to <font face="Courier New">protected</font>.</p>
-<p>If you call the <font face="Courier New">add</font>-method, remove these
+<p class="text">If you call the <font face="Courier New">add</font>-method, remove these
 calls. They are obsolete as the select method (see above) now calls the <font face="Courier New">add</font>-method
 itself.&nbsp;</p>
 
 <h4 class="subHeader">Since 2.2: New abstract base class for all Gene
 implementations</h4>
-<p>The abstract base class <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/BaseGene.html">org.jgap.BaseGene</a></font>
+<p class="text">The abstract base class <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/BaseGene.html">org.jgap.BaseGene</a></font>
 should be used as a base class for all <a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Gene.html"><font face="Courier New">org.jgap.Gene</font></a>
 implementations. With that you get all default logic for free.</p>
 
 <h4 class="subHeader">Since 2.4: toString() of classes&nbsp; implementing Gene
 interface changed</h4>
-<p>Please consider that the result of the <font face="Courier New"> toString()</font> methods in the classes
+<p class="text">Please consider that the result of the <font face="Courier New"> toString()</font> methods in the classes
 implementing the <a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Gene.html"><font face="Courier New"> Gene</font></a> interfaces
 (<a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/impl/DoubleGene.html"><font face="Courier New">DoubleGene</font></a>,
 <a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/impl/StringGene.html"><font face="Courier New">StringGene</font></a>,
 <a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/impl/CompositeGene.html"><font face="Courier New"> CompositeGene</font></a> etc.).</p>
-<p>In the new implementation, the class name is preceeding the rest of the
+<p class="text">In the new implementation, the class name is preceeding the rest of the
 output (e.g. &quot;CompositeGene(...)&quot; or &quot;BooleanGene=true&quot;).</p>
 
 <h4 class="subHeader">Since 2.4: New Method keepPopulationSizeConstant(boolean)
 in class org.jgap.Configuration</h4>
-<p>The new method <font face="Courier New">keepPopulationSizeConstant(boolean)</font>
+<p class="text">The new method <font face="Courier New">keepPopulationSizeConstant(boolean)</font>
 allows to keep the population size constant after each single evolution, even if
 no appropriate <font face="Courier New">NaturalSelector</font> has been
 registered with the <a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Configuration.html"><font face="Courier New">Configuration</font></a>
@@ -194,14 +195,14 @@ to be executed as postprocessor. The population size will be kept constant to
 the size specified with <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Configuration.html">Configuration</a>.setPopulationSize(int)</font>.</p>
 
 <h4 class="subHeader">Since 2.4: Extended interface org.jgap.Gene</h4>
-<p>In interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Gene.html">org.jgap.Gene</a></font>
+<p class="text">In interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Gene.html">org.jgap.Gene</a></font>
 two new methods have been introduced: <font face="Courier New">  Object
 getApplicationData()</font> and <font face="Courier New">boolean
 isCompareApplicationData()</font>. You could easiest adapt your existing Gene
 implementations without further modifications if you extended them from <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/BaseGene.html">org.jgap.BaseGene</a></font>.</p>
 
 <h4 class="subHeader">Since 2.4: Gene implementations: m_value is private</h4>
-<p>For all&nbsp; implementations of interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Gene.html">org.jgap.Gene</a></font>
+<p class="text">For all&nbsp; implementations of interface <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.4/org/jgap/Gene.html">org.jgap.Gene</a></font>
  their variable <font face="Courier New">Object m_gene</font> was made <font face="Courier New">private</font>
 (it was <font face="Courier New">protected</font> before). Now use the more
 sophisticated methods <font face="Courier New">getAllele()</font> and <font face="Courier New">setAllele(Object)</font>
@@ -209,19 +210,19 @@ instead. Reason for this change was the need of registering when the allele
 value changed..</p>
 
 <h4 class="subHeader">Since 2.6: Supergene-related classes capitalized</h4>
-<p>All names of classes related to supergenes have been capitalized. Each class
+<p class="text">All names of classes related to supergenes have been capitalized. Each class
 name should begin with a capital letter!</p>
 
 <h4 class="subHeader">Since 2.6: Configuration must be set before calling
 Gene.setAllele or applyMutation</h4>
-<p>As <font face="Courier New"> setAllele</font> and <font face="Courier New"> applyMutation</font> (and possibly other methods) in Gene classes may call
+<p class="text">As <font face="Courier New"> setAllele</font> and <font face="Courier New"> applyMutation</font> (and possibly other methods) in Gene classes may call
 <font face="Courier New">mapToValueWithinBounds</font>, which in turn
 accesses the configuration via <font face="Courier New">Genotype.getConfiguration</font>, the configuration must
 be set before the call to <font face="Courier New">setAllele</font>, <font face="Courier New"> applyMutation</font> and possibly other methods. However, this should be good
 practice!&nbsp;</p>
 
 <h4 class="subHeader">Since 2.6: Several fields private instead of protected</h4>
-<p>These fields are <a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Genotype.html">Genotype</a>.m_population,
+<p class="text">These fields are <a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Genotype.html">Genotype</a>.m_population,
 <a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Chromosome.html">Chromosome</a>.m_genes,
 <a href="jgap.sourceforge.net/javadoc/2.6/org/jgap/Genotype.html">Genotype</a>.m_activeConfiguration,
 <a href="http://jgap.sourceforge.net/javadoc/2.6/org/jgap/impl/CrossoverOperator.html">CrossoverOperator</a>.m_crossoverRate,
@@ -233,34 +234,34 @@ practice!&nbsp;</p>
 Use setters resp. constructors instead!</p>
 
 <h4 class="subHeader">Since 2.6: Method(s) Genotype.randomInitialGenotype</h4>
-<p>The above method now uses the sample Chromosome provided with the
+<p class="text">The above method now uses the sample Chromosome provided with the
 Configuration to determine the class of new Chromosomes to be created. The
 method with signature (Configuration, Class) has been removed for that!</p>
 
 <h4 class="subHeader">Since 2.6: Gene's new method newGeneInternal()</h4>
-<p>Now the <font face="Courier New"> newGene()</font> method is a template method in
+<p class="text">Now the <font face="Courier New"> newGene()</font> method is a template method in
 <font face="Courier New"> BaseGene</font> calling protected
 method <font face="Courier New">newGeneInternal</font>. The latter needs to be implemented in all offsprings of
 <font face="Courier New">BaseGene</font>.</p>
 
 <h4 class="subHeader">Since 2.6: Interface IGeneConstraintChecker changed</h4>
-<p>For method <font face="Courier New">verify</font> there are two new
+<p class="text">For method <font face="Courier New">verify</font> there are two new
 paramaters: <font face="Courier New">a_chromosome</font> and <font face="Courier New">a_geneIndex</font>.</p>
 
 <h4 class="subHeader">Since 2.6: Removed method getNoFitnessValue() in class
 FitnessFunction</h4>
-<p>Use the constant <font face="Courier New">FitnessFunction.NO_FITNESS_VALUE</font>
+<p class="text">Use the constant <font face="Courier New">FitnessFunction.NO_FITNESS_VALUE</font>
 instead.</p>
 
 <h2 class="docTitle">Final remarks</h2>
 
-<p>It should be quite straight forward upgrading from version 1.1 to 2.0. With
-version 1.0 it could be a bit more difficult, although realistic.<p>From version
+<p class="text">It should be quite straight forward upgrading from version 1.1 to 2.0. With
+version 1.0 it could be a bit more difficult, although realistic.<p class="text">From version
 2.0 to newer versions, mainly new functionality has been introduced and bugs
 have been fixed. Some few considerations still have to be made, which hopefully
 are contained within this document.
 
-<p> If you have <b>*any*</b>
+<p class="text"> If you have <b>*any*</b>
 problems accomplishing this or think this documentation is incomplete or
 inconsistent, feel yourself required to post a message to the forum!
 
@@ -269,7 +270,7 @@ inconsistent, feel yourself required to post a message to the forum!
 <pre><center><a href="../index.html" class="homeLink" target="_top">[Documentation Index]</a></pre>
 </center>
 
-<p class="copyright">This page is copyright © 2005, 2006 <a
+<p class="copyright">This page is copyright © 2005-2006 <a
 href="http://sourceforge.net/users/klausikm/">Klaus Meffert</a>, GNU free documentation <a
 href="http://www.gnu.org/licenses/fdl.html">license</a></p>
 
