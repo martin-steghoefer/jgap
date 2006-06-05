@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Fitness function for our example. See evolve() method for details
+ * Fitness function for our example. See evolve() method for details.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MaxFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * See examples.simpleBoolean.MaxFunction for description.
