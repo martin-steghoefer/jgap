@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Simple test class that demonstrates basic usage of JGAP.
+ * Simple class that demonstrates the basic usage of JGAP.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Starts the example
