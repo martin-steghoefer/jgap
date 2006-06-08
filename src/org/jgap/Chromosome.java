@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.79 $";
+  private final static String CVS_REVISION = "$Revision: 1.80 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -610,7 +610,7 @@ public class Chromosome
         return randomChromosome;
       }
     }
-    // Wwe weren't able to get a Chromosome from the pool, so we have to
+    // We weren't able to get a Chromosome from the pool, so we have to
     // construct a new instance and build it from scratch.
     // ------------------------------------------------------------------
     IChromosome sampleChromosome =
@@ -968,8 +968,9 @@ public class Chromosome
     }
   }
 
-  // Implementations of IInitializer Begin
-  // -------------------------------------
+  // ------------------------------------
+  // Begin of IInitializer implementation
+  // ------------------------------------
 
   /**{@inheritDoc}*/
   public boolean isHandlerFor(Object a_obj, Class a_class) {
@@ -987,8 +988,9 @@ public class Chromosome
     return randomInitialChromosome(getConfiguration());
   }
 
-  // -----------------------------------
-  // Implementations of IInitializer End
+  // ----------------------------------
+  // End of IInitializer implementation
+  // ----------------------------------
   public void setMultiObjectives(List a_values) {
     if (m_multiObjective == null) {
       m_multiObjective = new Vector();
