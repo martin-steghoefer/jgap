@@ -3,7 +3,6 @@
 * Added genetic programming capabilities to JGAP.
   The classes are put into package org.jgap.gp.
   An example could be found in package examples.gp.
-  In CVS, the directory's name is gp-src holding both pieces 
 * Made JGAP distributed by converting several fields to
   transient, making classes serializable, and using
   synchronized lists instead of pure ArrayList's.
@@ -32,8 +31,8 @@
 * Fixed a few spelling errors in javadocs
 * Added documentation to tests for MutationOperator and
   CrossoverOPerator (see request 1434187)
-* Added verbose output for chart example indicating where the
-  created chart image has been put
+* Added verbose output for chart example indicating in which
+  the created chart image has been put
 
 2.6
 -----------------------------------------------------------
