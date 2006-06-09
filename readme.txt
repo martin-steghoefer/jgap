@@ -30,19 +30,22 @@ be found in the src/ directory of the archive. For convenience, an Ant
 build script is included. For more information on Ant, please see the
 Ant home page at http://ant.apache.org
 
-4. Javadocs can be found in the javadocs/ directory. Other documentation,
-including basic documents to help you get started, can be found in the
-docs/ directory. Quite simple example can be found under the src/examples
-directory.
+4. Javadocs can be found in the doc/ directory (full or javadoc JGAP
+distribution). Other documentation, including basic documents to help
+you getting started, are put together on the JGAP homepage at
+     http://jgap.sourceforge.net
+Quite simple examples are included under the examples directory.
 
 --------------------------------------------------------------------------
 
 About This Release:
 
-This represents a release introducing conceptual clean-up, better javadoc,
-bug fixes and of course many new unit tests. Several requests communicated
-by feedback-parties have been implemented. The next release will definitively
-deliver support for Genetic Programming!
+This represents a major release introducing the long awaited Genetic
+Programming capabilities (see package org.jgap.gp, we promised it).
+As always, the javadocs have been improved, of curse new unit tests have
+been added, and a new example demonstrates custom randomized population
+initialization. The example was created due to a request on the jgap users
+list.
 
 For a general list of changes, fixes, and enhancements that have been
 included in this version, please see the changelog.txt file.
