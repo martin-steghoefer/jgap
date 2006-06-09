@@ -15,7 +15,8 @@ import org.jgap.impl.*;
 /**
  * Fitness function for our example. It's without sense, it's just to
  * demonstrate how to evaluate a chromosome with 40 4-field-genes and one
- * 3-field gene.
+ * 3-field gene. Each toplevel-gene is a CompositeGene, each "field" within
+ * a CompositeGene is a BooleanGene here (arbitrarily chosen).
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -23,7 +24,7 @@ import org.jgap.impl.*;
 public class SampleFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Calculate the fitness value of a Chromosome.

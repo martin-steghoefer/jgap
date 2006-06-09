@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.81 $";
+  private final static String CVS_REVISION = "$Revision: 1.82 $";
 
   /**
    * The current active Configuration instance.
@@ -129,6 +129,8 @@ public class Genotype
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
+   * @deprecated don't use any more, see
+   * GenotypeTest.testSetActiveConfiguration_0 for an example of the problem
    */
   public void setActiveConfiguration(Configuration a_activeConfiguration)
       throws InvalidConfigurationException {
