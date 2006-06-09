@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Determines if object should output debug information.
@@ -155,13 +155,13 @@ public class TestHashcode {
   }
 
   /**
-   * Test that veridies that a the fraction of unique hashCodes is greater
+   * Test that verifies that a the fraction of unique hashCodes is greater
    * than the one specified.
    *
    * @param a_ObjectList list of objects to test
    * @return true if the fraction of unique hashCodes is greater than the one
-   * specified. Else False
-   * @see setFractionUnique
+   * specified. Else false
+   * @see TestHashcode#setFractionUnique
    *
    * @author John Serri
    * @since 2.1
