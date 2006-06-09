@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Determines if object should output debug information.
@@ -31,7 +31,7 @@ public class TestHashcode {
    * Minimum average value of hashCodes needed to pass the testDispersion()
    * test
    *
-   * @see testDispersion(), m_AverageMax
+   * @see TestHashcode#testDispersion, m_AverageMax
    */
   private double m_AverageMin = 0.0d;
 
@@ -39,7 +39,7 @@ public class TestHashcode {
    * Maximum average value of hashCodes needed to pass the testDispersion()
    * test
    *
-   * @see testDispersion(), m_AverageMin
+   * @see TestHashcode#testDispersion, m_AverageMin
    */
   private double m_AverageMax = 1.0d;
 
@@ -89,7 +89,7 @@ public class TestHashcode {
    * testDispersion() test
    *
    * @param a_averageMax New Maximum average
-   * @see testDispersion(), m_AverageMax
+   * @see TestHascode#testDispersion, m_AverageMax
    */
   public void setAverageMax(double a_averageMax) {
     m_AverageMax = a_averageMax;
@@ -100,7 +100,7 @@ public class TestHashcode {
    * testDispersion() test
    *
    * @param a_averageMin new Minimum average
-   * @see testDispersion(), m_AverageMin
+   * @see TestHashcode#testDispersion, m_AverageMin
    */
   public void setAverageMin(double a_averageMin) {
     m_AverageMin = a_averageMin;
@@ -111,7 +111,7 @@ public class TestHashcode {
    * the testDispersion() test
    *
    * @param a_stdDevMax new Maximum standard deviation
-   * @see testDispersion(), m_stdDevMax
+   * @see TestHashcode#testDispersion, m_stdDevMax
    *
    * @since 2.1
    */
@@ -124,7 +124,7 @@ public class TestHashcode {
    * the testDispersion() test
    *
    * @param a_stdDevMin new Minimum standard deviation
-   * @see testDispersion(), m_stdDevMin
+   * @see TestHashcode#testDispersion, m_stdDevMin
    *
    * @since 2.1
    */
@@ -138,7 +138,7 @@ public class TestHashcode {
    *
    * @param a_fractionUnique new value, must be between 0.0 and 1.0
    * @throws IllegalArgumentException
-   * @see testHashCodeUniqueness
+   * @see TestHashcode#testHashCodeUniqueness
    *
    * @since 2.1
    */

@@ -19,7 +19,7 @@ import org.jgap.*;
  * Combined implementation of both Supergene and SupergeneValidator.
  * A working supergene can be easily created from this class just by
  * adding genes and overriding
- * {@link org.jgap.supergenes.abstractSupergene#isValid(Gene [] a_case,
+ * {@link org.jgap.supergenes.AbstractSupergene#isValid(Gene [] a_case,
  *  Supergene a_forSupergene) isValid (Gene [], Supergene)}
  *  method. For more complex cases, you may need to set your own
  * {@link org.jgap.supergenes.Validator Validator}.
@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * This field separates gene class name from
