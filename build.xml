@@ -2,17 +2,16 @@
   <property name="baseDir" value="."/>
   <property name="src" value="./src"/>
   <property name="test" value="./tests"/>
-  <property name="examples" value="./examples"/>
+  <property name="examples" value="./examples/src"/>
   <property name="lib" value="./lib"/>
   <property name="classDir" value="./classes"/>
   <property name="allTests" value="org.jgap.AllTests" />
-
 
   <path id="classpathCompile">
     <fileset dir="${lib}">
       <include name="junit-addons-1.4.jar"/>
       <include name="junit3.8.1.jar"/>
-      <include name="jeksparser.jar"/>
+<!--      <include name="jeksparser.jar"/> -->
       <include name="TableLayout.jar"/>
     </fileset>
     <pathelement path="${classDir}"/>
@@ -31,8 +30,8 @@
     </javac>
     <javac srcdir="${examples}"
            destdir="${classDir}"
-           classpathref="classpathCompile">
-    </javac>
+           classpathref="classpathCompile"
+           excludes="examples/functionFinder/**"/>
   </target>
 
   <target name="compile-debug">
@@ -77,8 +76,11 @@
        <include name="org/jgap/xml/*.class"/>
     </jar>
 
-    <jar jarfile="jgap-examples.jar" basedir="${classDir}"
-         includes="examples/*.class"/>
+    <jar jarfile="jgap-examples.jar" basedir="${classDir}">
+         <include name="examples/*.class"/>
+         <exclude name="examples/functionFinder/*.class"/>
+         <exclude name="examples/functionFinder/test/*.class"/>
+    </jar>
   </target>
 
   <target name="jar-debug" depends="compile-debug">
@@ -110,6 +112,7 @@
         <include name="org/jgap/xml/*.class"/>
         <include name="org/jgap/util/*.class"/>
         <include name="examples/*.class"/>
+        <include name="examples/test/*.class"/>
       </fileset>
     </delete>
   </target>
