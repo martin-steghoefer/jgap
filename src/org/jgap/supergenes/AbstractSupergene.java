@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * This field separates gene class name from
@@ -305,6 +305,10 @@ public abstract class AbstractSupergene
    * number of genes
    */
   public void setAllele(final Object a_superAllele) {
+    if (m_genes.length < 1) {
+      // Nothing to do
+      return;
+    }
     Object[] a = (Object[]) a_superAllele;
     if (a.length != m_genes.length) {
       throw new ClassCastException("Record length, " + a.length
