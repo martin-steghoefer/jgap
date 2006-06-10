@@ -28,7 +28,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -107,7 +107,7 @@ public class SetGene
   }
 
   /**
-   * See interface Gene for description of applyMutation
+   * See interface Gene for description of applyMutation.
    *
    * For this kind of gene, providing an index and a magnitude have no
    * significance because the individual allele forms are independent
@@ -182,7 +182,8 @@ public class SetGene
               "an integer value.");
         }
       }
-      //Parse the potential categories.
+      // Parse the potential categories.
+      // -------------------------------
       Integer allele;
       while (tokenizer.hasMoreTokens()) {
         try {
@@ -208,9 +209,9 @@ public class SetGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return A string representation of this Gene's current state.
+   * @return a string representation of this Gene's current state
    * @throws UnsupportedOperationException to indicate that no implementation
-   *         is provided for this method.
+   *         is provided for this method
    *
    * @author Neil Rostan
    * @since 1.0
@@ -330,7 +331,7 @@ public class SetGene
   /**
    * Modified hashCode() function to return different hashcodes for differently
    * ordered genes in a chromosome
-   * @return -1 if no allele set, otherwise value return by BaseGene.hashCode()
+   * @return -67 if no allele set, otherwise value return by BaseGene.hashCode()
    *
    * @author Klaus Meffert
    * @since 2.4
