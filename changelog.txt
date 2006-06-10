@@ -37,6 +37,8 @@
   and renamed the latter one appropriately
 * Slightly changed AbstractSupergene.toString()
 * Added method getConfiguration to interface org.jgap.Gene
+* Improved DefaultCompareTo handler to also handle Boolean
+  classed objects (as Boolean has no compareTo method!)
 
 2.6
 -----------------------------------------------------------
