@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * This field separates gene class name from
@@ -103,6 +103,9 @@ public abstract class AbstractSupergene
   public AbstractSupergene(final Configuration a_conf, final Gene[] a_genes)
       throws InvalidConfigurationException {
     super(a_conf);
+    if (a_genes == null) {
+      throw new RuntimeException("null value for genes not allowed!");
+    }
     m_genes = a_genes;
   }
 
@@ -414,6 +417,9 @@ public abstract class AbstractSupergene
             getMessage());
       }
     }
+    else {
+      throw new UnsupportedRepresentationException("null value not allowed");
+    }
   }
 
   /** Create validator from the string representation. */
@@ -594,15 +600,10 @@ public abstract class AbstractSupergene
 
   /** Append a new gene to the gene array. */
   public void addGene(Gene a_gene) {
-    if (m_genes == null)
-      m_genes = new Gene[] {
-          a_gene};
-    else {
-      Gene[] genes = new Gene[m_genes.length + 1];
-      System.arraycopy(m_genes, 0, genes, 0, m_genes.length);
-      genes[m_genes.length] = a_gene;
-      m_genes = genes;
-    }
+    Gene[] genes = new Gene[m_genes.length + 1];
+    System.arraycopy(m_genes, 0, genes, 0, m_genes.length);
+    genes[m_genes.length] = a_gene;
+    m_genes = genes;
   }
 
   /**
