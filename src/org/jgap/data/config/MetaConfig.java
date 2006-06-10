@@ -47,10 +47,10 @@ public class MetaConfig {
   private ConfigProperty m_currProperty;
 
   public static MetaConfig getInstance()
-      throws MetaConfigException,
-      IOException {
-    if (null == instance)
+      throws MetaConfigException, IOException {
+    if (null == instance) {
       instance = new MetaConfig();
+    }
     return instance;
   }
 
@@ -81,6 +81,8 @@ public class MetaConfig {
    * Having to read my own property file without using the Java Property
    * class since I need to preserve the order of these properties, plus
    * I have duplicate labels.
+   * @throws MetaConfigException
+   * @throws IOException
    *
    * @author Siddhartha Azad
    * @since 2.4
@@ -101,11 +103,12 @@ public class MetaConfig {
   }
 
   /**
-   * Check whether a line is a comment.
+   * Check whether a line is a comment. Any line starting with a '#' is a
+   * comment.
+   * @return true if a line is a comment, false if it is not
+   *
    * @author Siddhartha Azad
    * @since 2.4
-   * @return true if a line is a comment, false if it is not.
-   * Any line starting with a '#' is a comment.
    * */
   private boolean isComment(String line) {
     String tmpLine = line.trim();
@@ -118,6 +121,8 @@ public class MetaConfig {
   /**
    * Parse a line. This method is dispatches lines to other methods, hence
    * acting like a state machine.
+   * @throws MetaConfigException
+   *
    * @author Siddhartha Azad
    * @since 2.4
    * */
@@ -162,6 +167,8 @@ public class MetaConfig {
 
   /**
    * Handle the state when a 'property' tag is found.
+   * @throws MetaConfigException
+   *
    * @author Siddhartha Azad
    * @since 2.4
    * */
@@ -188,6 +195,8 @@ public class MetaConfig {
   /**
    * Handle the state when a 'values' tag is found.
    * @param a_token the rhs of the values property
+   * @throws MetaConfigException
+   *
    * @author Siddhartha Azad
    * @since 2.4
    *
