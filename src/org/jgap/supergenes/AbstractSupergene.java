@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * This field separates gene class name from
@@ -484,14 +484,15 @@ public abstract class AbstractSupergene
     StringBuffer b = new StringBuffer();
     b.append("Supergene " + getClass().getName() + " {");
     for (int i = 0; i < m_genes.length; i++) {
-      b.append(" ");
+      b.append("|");
       b.append(m_genes[i].toString());
+      b.append("|");
     }
     if (m_validator == null) {
-      b.append(" non validating ");
+      b.append(" non validating");
     }
-    else if (m_validator != this) {
-      b.append(m_validator.toString());
+    else {
+      b.append(" validator: "+m_validator.getClass().getName());
     }
     b.append("}");
     return b.toString();
@@ -507,7 +508,9 @@ public abstract class AbstractSupergene
   public int compareTo(Object o) {
     AbstractSupergene q = (AbstractSupergene) o;
     int c = m_genes.length - q.m_genes.length;
-    if (c != 0)return c;
+    if (c != 0) {
+      return c;
+    }
     for (int i = 0; i < m_genes.length; i++) {
       c = m_genes[i].compareTo(q.m_genes[i]);
       if (c != 0) {
