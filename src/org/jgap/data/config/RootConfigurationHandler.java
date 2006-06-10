@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -177,17 +177,16 @@ public class RootConfigurationHandler
   }
 
   /**
-   * Read a private field
+   * Helper method: Read a private field.
    * @param a_instance the instance the field is contained with
    * @param a_fieldName the name of the field to read
-   * @return Field object
+   * @return the Field object or null, if none found
    *
    * @author Klaus Meffert
    * @since 2.6
    */
   public static Field getPrivateField(Object a_instance, String a_fieldName) {
-    final Field fields[] =
-        a_instance.getClass().getDeclaredFields();
+    final Field fields[] = a_instance.getClass().getDeclaredFields();
     for (int i = 0; i < fields.length; ++i) {
       if (a_fieldName.equals(fields[i].getName())) {
         fields[i].setAccessible(true);
