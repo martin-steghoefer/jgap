@@ -35,6 +35,7 @@
   the created chart image has been put
 * Moved classes Force and SupergeneTest to examples folder
   and renamed the latter one appropriately
+* Slightly changed AbstractSupergene.toString()
 
 2.6
 -----------------------------------------------------------
