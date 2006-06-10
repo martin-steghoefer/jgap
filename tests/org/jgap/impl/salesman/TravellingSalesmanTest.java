@@ -23,7 +23,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -43,6 +43,12 @@ public class TravellingSalesmanTest
     super.tearDown();
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Audrius Meskauskas
+   * @since 2.0
+   */
   public void testSampleTravellingSalesmanApp()
       throws Exception {
     // With 7 cities, should find the best solution with score 7
@@ -80,7 +86,7 @@ public class TravellingSalesmanTest
    */
   public void testSetStartOffset_0() throws Exception {
     TravellingSalesmanForTest t = new TravellingSalesmanForTest();
-    assertEquals(-1, t.getStartOffset());
+    assertEquals(1, t.getStartOffset());
     t.setStartOffset(47);
     assertEquals(47, t.getStartOffset());
   }
