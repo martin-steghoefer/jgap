@@ -10,8 +10,8 @@
 package org.jgap.impl.salesman;
 
 import org.jgap.*;
-import org.jgap.event.*;
 import org.jgap.impl.*;
+import org.jgap.event.*;
 
 /**
  * The class solves the travelling salesman problem.
@@ -45,7 +45,7 @@ import org.jgap.impl.*;
 public abstract class Salesman
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private Configuration m_config;
 
@@ -117,9 +117,9 @@ public abstract class Salesman
    * @author Audrius Meskauskas
    * @since 2.0
    */
-  public Configuration createConfiguration(final Object a_initial_data) {
-    try {
-      // This is copied from DefaultConfiguration.
+  public Configuration createConfiguration(final Object a_initial_data)
+      throws InvalidConfigurationException {
+    // This is copied from DefaultConfiguration.
       // -----------------------------------------
       Configuration config = new Configuration();
       BestChromosomesSelector bestChromsSelector =
@@ -136,13 +136,6 @@ public abstract class Salesman
       config.addGeneticOperator(new GreedyCrossover(config));
       config.addGeneticOperator(new SwappingMutationOperator(config, 20));
       return config;
-    }
-    catch (InvalidConfigurationException e) {
-      throw new RuntimeException(
-          "Fatal error: DefaultConfiguration class could not use its "
-          + "own stock configuration values. This should never happen. "
-          + "Please report this as a bug to the JGAP team.");
-    }
   }
 
   /**
