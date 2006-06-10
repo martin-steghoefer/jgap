@@ -11,7 +11,6 @@ package examples.supergene;
 
 import org.jgap.*;
 import org.jgap.impl.*;
-import org.jgap.supergenes.*;
 
 /**
  * To test the Supergene, we created the "make change" version with
@@ -28,7 +27,7 @@ import org.jgap.supergenes.*;
 public class SupergeneSample
     extends AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -48,7 +47,6 @@ public class SupergeneSample
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
-    setConfiguration(conf);
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
@@ -69,14 +67,13 @@ public class SupergeneSample
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[3];
-    sampleGenes[DIMES] = getDimesGene();
-    sampleGenes[QUARTERS] = getQuartersGene();
-    sampleGenes[2] = new NickelsPenniesSupergene(conf,
-        new Gene[] {
-        getNickelsGene(),
-        getPenniesGene(),
+    sampleGenes[DIMES] = getDimesGene(conf);
+    sampleGenes[QUARTERS] = getQuartersGene(conf);
+    sampleGenes[2] = new NickelsPenniesSupergene(conf, new Gene[] {
+        getNickelsGene(conf),
+        getPenniesGene(conf),
     });
-    int s = solve(a_targetChangeAmount, fitnessFunction, sampleGenes);
+    int s = solve(conf, a_targetChangeAmount, fitnessFunction, sampleGenes);
     return s;
   }
 

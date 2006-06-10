@@ -43,7 +43,6 @@ class WithoutSupergeneSample
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
-    setConfiguration(conf);
     // Set the fitness function we want to use. We construct it with
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
@@ -62,11 +61,11 @@ class WithoutSupergeneSample
     // to sensible values for each coin type.
     // --------------------------------------------------------------
     Gene[] sampleGenes = new Gene[4];
-    sampleGenes[DIMES] = getDimesGene(); // Dimes
-    sampleGenes[NICKELS] = getNickelsGene(); // Nickels
-    sampleGenes[QUARTERS] = getQuartersGene(); // Quarters
-    sampleGenes[PENNIES] = getPenniesGene(); // Pennies
-    int s = solve(a_targetChangeAmount, fitnessFunction, sampleGenes);
+    sampleGenes[DIMES] = getDimesGene(conf); // Dimes
+    sampleGenes[NICKELS] = getNickelsGene(conf); // Nickels
+    sampleGenes[QUARTERS] = getQuartersGene(conf); // Quarters
+    sampleGenes[PENNIES] = getPenniesGene(conf); // Pennies
+    int s = solve(conf, a_targetChangeAmount, fitnessFunction, sampleGenes);
     return s;
   }
 

@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  * */
 public abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private transient Configuration m_conf;
 
@@ -61,9 +61,9 @@ public abstract class AbstractSupergeneTest {
   /**
    * @return created Dimes gene instance
    */
-  protected Gene getDimesGene() {
+  protected Gene getDimesGene(Configuration a_conf) {
     try {
-      return new IntegerGene(m_conf, 0, 2); // 10?
+      return new IntegerGene(a_conf, 0, 2); // 10?
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -73,9 +73,9 @@ public abstract class AbstractSupergeneTest {
   /**
    * @return created Nickels gene instance
    */
-  protected Gene getNickelsGene() {
+  protected Gene getNickelsGene(Configuration a_conf) {
     try {
-      return new IntegerGene(m_conf, 0, 5);
+      return new IntegerGene(a_conf, 0, 5);
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -85,9 +85,9 @@ public abstract class AbstractSupergeneTest {
   /**
    * @return created Pennies (1) gene instance
    */
-  protected Gene getPenniesGene() {
+  protected Gene getPenniesGene(Configuration a_conf) {
     try {
-      return new IntegerGene(m_conf, 0, 7);
+      return new IntegerGene(a_conf, 0, 7);
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -97,9 +97,9 @@ public abstract class AbstractSupergeneTest {
   /**
    * @return created Quarters gene instance
    */
-  protected Gene getQuartersGene() {
+  protected Gene getQuartersGene(Configuration a_conf) {
     try {
-      return new IntegerGene(m_conf, 0, 3);
+      return new IntegerGene(a_conf, 0, 3);
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -206,12 +206,12 @@ public abstract class AbstractSupergeneTest {
    * Find and print the solution, return the solution error.
    * @return absolute difference between the required and computed change
    */
-  protected int solve(int a_targetChangeAmount,
+  protected int solve(Configuration a_conf, int a_targetChangeAmount,
                       SupergeneChangeFitnessFunction a_fitnessFunction,
                       Gene[] a_sampleGenes)
       throws InvalidConfigurationException {
-    IChromosome sampleChromosome = new Chromosome(m_conf, a_sampleGenes);
-    m_conf.setSampleChromosome(sampleChromosome);
+    IChromosome sampleChromosome = new Chromosome(a_conf, a_sampleGenes);
+    a_conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -219,10 +219,10 @@ public abstract class AbstractSupergeneTest {
     // the population (which could be seen as bad). We'll just set
     // the population size to 500 here.
     // ------------------------------------------------------------
-    m_conf.setPopulationSize(POPULATION_SIZE);
+    a_conf.setPopulationSize(POPULATION_SIZE);
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
-    Genotype population = Genotype.randomInitialGenotype(m_conf);
+    Genotype population = Genotype.randomInitialGenotype(a_conf);
     int s;
     Evolution:
         // Evolve the population, break if the the change solution is found.
@@ -243,7 +243,4 @@ public abstract class AbstractSupergeneTest {
                     - a_targetChangeAmount);
   }
 
-  public void setConfiguration(Configuration a_conf) {
-    m_conf = a_conf;
-  }
 }
