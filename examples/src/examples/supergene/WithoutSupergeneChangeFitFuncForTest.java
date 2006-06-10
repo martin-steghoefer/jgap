@@ -22,13 +22,13 @@ import examples.supergene.*;
 class WithoutSupergeneChangeFitFuncForTest
     extends SupergeneChangeFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public WithoutSupergeneChangeFitFuncForTest(int a_targetAmount) {
     super(a_targetAmount);
   }
 
-  public Gene getResponsibleGene(Chromosome a_chromosome, int a_code) {
+  public Gene getResponsibleGene(IChromosome a_chromosome, int a_code) {
     return a_chromosome.getGene(a_code);
   }
 
@@ -36,7 +36,7 @@ class WithoutSupergeneChangeFitFuncForTest
    * Additionall check that the number of nickels and pennies should
    * be both even or odd.
    */
-  public double evaluate(Chromosome a_subject) {
+  public double evaluate(IChromosome a_subject) {
     IntegerGene nickels =
         (IntegerGene) a_subject.getGene(SupergeneSample.NICKELS);
     IntegerGene pennies =
