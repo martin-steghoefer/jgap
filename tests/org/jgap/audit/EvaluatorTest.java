@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests for Evaluator class
+ * Tests the Evaluator class.
  *
  * @author Klaus Meffert
  * @since 2.2
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public void setUp() {
     super.setUp();
@@ -321,6 +321,26 @@ public class EvaluatorTest
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     assertEquals(pconf.hasNext(), eval.hasNext());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testNext_0()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    pconf.addGeneticOperatorSlot(new MutationOperator(conf));
+    pconf.addRandomGeneratorSlot(new StockRandomGenerator());
+    pconf.addFitnessFunctionSlot(new TestFitnessFunction());
+    pconf.addNaturalSelectorSlot(new BestChromosomesSelector(conf));
+    Evaluator eval = new Evaluator(pconf);
+    assertTrue(eval.hasNext());
+    Configuration config = eval.next();
+    assertNotNull(config);
   }
 
   /**
