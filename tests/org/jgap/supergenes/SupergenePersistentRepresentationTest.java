@@ -9,6 +9,7 @@
  */
 package org.jgap.supergenes;
 
+import java.util.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 import junit.framework.*;
@@ -22,7 +23,7 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -34,7 +35,7 @@ public class SupergenePersistentRepresentationTest
       extends AbstractSupergene {
     public InstantiableSupergene(final Configuration a_config)
         throws InvalidConfigurationException {
-      super(a_config, null);
+      super(a_config, new Gene[] {});
     }
 
     public InstantiableSupergene()
@@ -86,6 +87,71 @@ public class SupergenePersistentRepresentationTest
     InstantiableSupergene restored = new InstantiableSupergene(conf);
     restored.setValueFromPersistentRepresentation(representation);
     assertTrue(gene.equals(restored));
+  }
+
+  public void testValidatorPers_0() {
+    Validator val = new TestValidator(conf);
+    String pers = val.getPersistent();
+    val.setFromPersistent(null);
+    assertSame(pers, val.getPersistent());
+    assertSame(conf, val.getConfiguration());
+  }
+
+  public void testGetGenes_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    assertEquals(0, gene.getGenes().length);
+    Gene subGene = new BooleanGene(conf);
+    gene.addGene(subGene);
+    assertEquals(1, gene.getGenes().length);
+    assertSame(subGene, gene.geneAt(0));
+  }
+
+  public void testIsValid_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    gene.m_validator = null;
+    assertTrue(gene.isValid());
+    gene.m_validator = gene;
+    try {
+      assertTrue(gene.isValid());
+      fail();
+    }catch (Error e) {
+      ;//this is OK
+    }
+  }
+
+  public void testReset_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    /**@todo care that m_immutable is filled*/
+    gene.reset();
+    Set []m = (Set[]) privateAccessor.getField(gene, "m_immutable");
+    assertEquals(1, m.length);
+  }
+
+  public void testPers_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    try {
+      gene.setValueFromPersistentRepresentation(null);
+      fail();
+    }
+    catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  public void testToString_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    gene.m_validator = null;
+    String s = gene.toString();
+    assertEquals("Supergene "+gene.getClass().getName()
+                 +" {"
+                 +" non validating "
+                 +"}"
+                 , s);
   }
 
   public class TestValidator
