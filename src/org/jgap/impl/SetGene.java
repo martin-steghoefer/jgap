@@ -28,7 +28,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -102,8 +102,9 @@ public class SetGene
    * @param a_numberGenerator RandomGenerator
    */
   public void setToRandomValue(final RandomGenerator a_numberGenerator) {
-    m_value = ( (List) m_geneSet).get(a_numberGenerator.nextInt(
-        m_geneSet.size()));
+    /**@todo make faster*/
+    m_value = m_geneSet.toArray()[a_numberGenerator.nextInt(
+        m_geneSet.size())];
   }
 
   /**
@@ -124,11 +125,11 @@ public class SetGene
    */
   public void applyMutation(final int a_index, final double a_percentage) {
     RandomGenerator rn;
-    if (Genotype.getConfiguration() != null) {
-      rn = Genotype.getConfiguration().getRandomGenerator();
+    if (getConfiguration() != null) {
+      rn = getConfiguration().getRandomGenerator();
     }
     else {
-      rn = Genotype.getConfiguration().getJGAPFactory().createRandomGenerator();
+      rn = getConfiguration().getJGAPFactory().createRandomGenerator();
     }
     setToRandomValue(rn);
   }
@@ -282,40 +283,19 @@ public class SetGene
       return m_value == null ? 0 : 1;
     }
     else {
-      try {
-        Method method = m_value.getClass().getMethod("compareTo",
-            new Class[] {otherGene.m_value.getClass()});
-        Integer i = (Integer) method.invoke(m_value,
-                                            new Object[] {otherGene.m_value});
-        return i.intValue();
+      ICompareToHandler handler = getConfiguration().getJGAPFactory().
+          getCompareToHandlerFor(m_value, m_value.getClass());
+      if (handler != null) {
+        try {
+          return ( (Integer) handler.perform(m_value, null, otherGene.m_value)).
+              intValue();
+        }
+        catch (Exception ex) {
+          throw new Error(ex);
+        }
       }
-      catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("CompareTo method of the Gene value" +
-                                           " object cannot be invoked.");
-      }
-      catch (IllegalArgumentException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The value object of the Gene does" +
-                                           " not have a compareTo method.  It" +
-                                           " cannot be compared.");
-      }
-      catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The compareTo method of the Gene" +
-                                           " value object cannot be accessed ");
-      }
-      catch (SecurityException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The compareTo method of the Gene" +
-                                           " value object cannot be accessed." +
-                                           "  Insufficient permission levels.");
-      }
-      catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-        throw new IllegalArgumentException("The value object of the Gene does" +
-                                           " not have a compareTo method.  It" +
-                                           " cannot be compared.");
+      else {
+        return 0;
       }
     }
   }
