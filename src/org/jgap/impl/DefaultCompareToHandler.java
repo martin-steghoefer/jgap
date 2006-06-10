@@ -12,7 +12,8 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * Default implementation for comparing Comparables.
+ * Default implementation for comparing Comparables. Boolean values are also
+ * covered with this handler as the Boolean class has no compareTo method.
  *
  * @author Klaus Meffert
  * @since 2.6
@@ -20,14 +21,19 @@ import org.jgap.*;
 public class DefaultCompareToHandler
     implements ICompareToHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_class) {
     if (Comparable.class.isAssignableFrom(a_class)) {
       return true;
     }
     else {
-      return false;
+      if (a_class != null && Boolean.class == a_class) {
+        return true;
+      }
+      else {
+        return false;
+      }
     }
   }
 
@@ -47,7 +53,21 @@ public class DefaultCompareToHandler
       i = 1;
     }
     else {
-      i = ( (Comparable) a_obj).compareTo(a_params);
+      if (a_obj.getClass() == Boolean.class) {
+        boolean b1 = ((Boolean)a_obj).booleanValue();
+        boolean b2 = ((Boolean)a_params).booleanValue();
+        if (b1 == b2) {
+          i = 0;
+        }
+        else if (b1) {
+          i = 1;
+        }
+        else
+          i = -1;
+      }
+      else {
+        i = ( (Comparable) a_obj).compareTo(a_params);
+      }
     }
     return new Integer(i);
   }
