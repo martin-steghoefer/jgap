@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -307,9 +307,14 @@ public class SupergenePersistentRepresentationTest
 //
   public static class InstantiableSupergene
       extends AbstractSupergene {
+    public InstantiableSupergene(final Configuration a_config, Gene[] a_genes)
+        throws InvalidConfigurationException {
+      super(a_config, a_genes);
+    }
+
     public InstantiableSupergene(final Configuration a_config)
         throws InvalidConfigurationException {
-      super(a_config, new Gene[] {});
+      super(a_config, new Gene[]{});
     }
 
     public InstantiableSupergene()
