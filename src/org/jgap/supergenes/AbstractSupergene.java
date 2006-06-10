@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * This field separates gene class name from
@@ -110,21 +110,6 @@ public abstract class AbstractSupergene
   }
 
   /**
-   * <b>Always provide the parameterless
-   * constructor</b> for the derived class. This is required to
-   * create a new instance of supergene and should be used inside
-   * method newGene only. The parameterless constructor need not (and cannot)
-   * assign the private <code>genes</code> array.<p>
-   * Attention: The configuration used is the one set with the static method
-   * Genotype.setConfiguration.
-   * @throws InvalidConfigurationException
-   */
-  public AbstractSupergene()
-      throws InvalidConfigurationException {
-    super(Genotype.getConfiguration());
-  }
-
-  /**
    * Test the allele combination of this supergene for validity. This method
    * calls isValid for the current gene list.
    * @return true only if the supergene allele combination is valid
@@ -183,9 +168,9 @@ public abstract class AbstractSupergene
       g[i] = m_genes[i].newGene();
     }
     try {
-      Constructor constr = getClass().getConstructor(new Class[] {Configuration.class});
+      Constructor constr = getClass().getConstructor(new Class[] {Configuration.class, Gene[].class});
       AbstractSupergene age =
-          (AbstractSupergene) constr.newInstance(new Object[] {getConfiguration()});
+          (AbstractSupergene) constr.newInstance(new Object[] {getConfiguration(), getGenes()});
       if (m_validator != this) {
         age.setValidator(m_validator);
       }
@@ -311,7 +296,7 @@ public abstract class AbstractSupergene
     }
     Object[] a = (Object[]) a_superAllele;
     if (a.length != m_genes.length) {
-      throw new ClassCastException("Record length, " + a.length
+      throw new IllegalArgumentException("Record length, " + a.length
                                    + " not equal to "
                                    + m_genes.length);
     }
@@ -455,7 +440,6 @@ public abstract class AbstractSupergene
       return sv;
     }
     catch (Exception ex) {
-      ex.printStackTrace();
       throw new Error
           ("Unable to create validator from '" + a_rep + "' for " +
            getClass().getName());
