@@ -17,7 +17,7 @@ import junit.framework.*;
 public class SupergeneInternalParserTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -57,7 +57,7 @@ public class SupergeneInternalParserTest
       extends AbstractSupergene {
     public TestClass(final Configuration a_conf)
         throws InvalidConfigurationException {
-      super(a_conf, null);
+      super(a_conf, new Gene[]{});
     }
 
     //Used in test only
