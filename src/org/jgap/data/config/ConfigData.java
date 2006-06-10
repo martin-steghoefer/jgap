@@ -20,7 +20,7 @@ import java.util.*;
  * */
 public class ConfigData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   // name of the object being configured
   private String m_name;
@@ -169,16 +169,8 @@ public class ConfigData {
       m_name = a_name;
     }
 
-    public Iterator getDataIter() {
-      return m_data.iterator();
-    }
-
     public List getListData() {
       return m_data;
-    }
-
-    public void setName(final String a_name) {
-      m_name = a_name;
     }
 
     public String getName() {
@@ -204,16 +196,8 @@ public class ConfigData {
       m_value = a_value;
     }
 
-    public void setName(final String a_name) {
-      m_name = a_name;
-    }
-
     public String getName() {
       return m_name;
-    }
-
-    public void setValue(final String a_value) {
-      m_value = a_value;
     }
 
     public String getValue() {
