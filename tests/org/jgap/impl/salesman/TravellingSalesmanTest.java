@@ -23,7 +23,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -57,6 +57,32 @@ public class TravellingSalesmanTest
     if (oks < 6) {
       fail("Less than 6 cities computed correctly!");
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetAcceptableCost_0() throws Exception {
+    TravellingSalesmanForTest t = new TravellingSalesmanForTest();
+    assertEquals(-1, t.getAcceptableCost());
+    t.setAcceptableCost(47);
+    assertEquals(47, t.getAcceptableCost());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetStartOffset_0() throws Exception {
+    TravellingSalesmanForTest t = new TravellingSalesmanForTest();
+    assertEquals(-1, t.getStartOffset());
+    t.setStartOffset(47);
+    assertEquals(47, t.getStartOffset());
   }
 
   /**
