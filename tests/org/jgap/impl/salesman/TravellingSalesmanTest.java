@@ -14,15 +14,16 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Test the travelling salesman
+ * Test JGAP's travelling salesman implementation.
  *
  * @author Audrius Meskauskas
+ * @author Klaus Meffert
  * @since 2.0
  */
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private TravellingSalesmanForTest m_testTravellingSalesman;
 
@@ -106,9 +107,8 @@ public class TravellingSalesmanTest
     public static final int CITIES = 7;
 
     /**
-     * Create an array of the given number of
-     * integer genes. The first gene is always 0, this is
-     * a city where the salesman starts the journey
+     * Create an array of the given number of integer genes. The first gene is
+     * always 0, this is a city where the salesman starts the journey.
      *
      * @param a_initial_data Object
      * @return Chromosome
@@ -137,7 +137,8 @@ public class TravellingSalesmanTest
       }
     }
 
-    /** Distance is equal to the difference between city numbers,
+    /**
+     * Distance is equal to the difference between city numbers,
      * except the distance between the last and first cities that
      * is equal to 1. In this way, we ensure that the optimal
      * soultion is 0 1 2 3 .. n - easy to check.
@@ -159,25 +160,5 @@ public class TravellingSalesmanTest
       return Math.abs(A - B);
     }
 
-    public boolean runTest() {
-      // With 7 cities, should find the best solution with score 7
-      try {
-        int oks = 0;
-        for (int i = 0; i < 7; i++) {
-          TravellingSalesmanForTest t = new TravellingSalesmanForTest();
-          IChromosome optimal = t.findOptimalPath(null);
-          if (Integer.MAX_VALUE / 2 - optimal.getFitnessValue() <= 7) {
-            oks++;
-          }
-        }
-        if (oks >= 6) {
-          return true;
-        }
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-      return false;
-    }
   }
 }
