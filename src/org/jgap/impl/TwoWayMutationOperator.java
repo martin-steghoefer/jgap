@@ -16,11 +16,11 @@ import org.jgap.*;
  * Considers two levels of mutation. At first, this mutation operator assumes
  * all genes within a chromosome to having a different impact on the result
  * when mutated. For that, a gene with fewer impact is selected for mutation more
- * like than one with bigger impact. After a gene has been selected for mutation,
- * it is indeed mutated in a traditional way.
+ * likely than one with bigger impact. After a gene has been selected for
+ * mutation, it is indeed mutated in a traditional way.
  * <p>
- * See class examples.dynamicMutation.DynamicMutationExample for usage, currently
- * this class only works with that example!
+ * See class examples.dynamicMutation.DynamicMutationExample for usage,
+ * currently this class only works with that example!
  *
  * @author Klaus Meffert
  * @since 2.6
@@ -28,7 +28,7 @@ import org.jgap.*;
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
