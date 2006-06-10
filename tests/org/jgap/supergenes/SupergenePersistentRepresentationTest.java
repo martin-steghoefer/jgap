@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -107,6 +107,15 @@ public class SupergenePersistentRepresentationTest
     assertSame(subGene, gene.geneAt(0));
   }
 
+  public void testSize_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    assertEquals(0, gene.size());
+    Gene subGene = new BooleanGene(conf);
+    gene.addGene(subGene);
+    assertEquals(1, gene.size());
+  }
+
   public void testIsValid_0()
       throws Exception {
     InstantiableSupergene gene = new InstantiableSupergene(conf);
@@ -149,9 +158,87 @@ public class SupergenePersistentRepresentationTest
     String s = gene.toString();
     assertEquals("Supergene "+gene.getClass().getName()
                  +" {"
-                 +" non validating "
+                 +" non validating"
                  +"}"
                  , s);
+  }
+
+  public void testToString_1()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    gene.m_validator = gene;
+    String s = gene.toString();
+    assertEquals("Supergene "+gene.getClass().getName()
+                 +" {"
+                 +" validator: "+gene.getClass().getName()
+                 +"}"
+                 , s);
+  }
+
+  public void testToString_2()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    Gene bgene = new BooleanGene(conf);
+    gene.addGene(bgene);
+    gene.m_validator = gene;
+    String s = gene.toString();
+    assertEquals("Supergene "+gene.getClass().getName()
+                 +" {|"
+                 +bgene.toString()
+                 +"|"
+                 +" validator: "+gene.getClass().getName()
+                 +"}"
+                 , s);
+  }
+
+  public void testCompareTo_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    assertEquals(0, gene.compareTo(gene));
+    InstantiableSupergene gene2 = new InstantiableSupergene(conf);
+    assertEquals(0, gene.compareTo(gene2));
+  }
+
+  public void testCompareTo_1()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    try {
+      gene.compareTo(new Vector());
+      fail();
+    }
+    catch (ClassCastException ex) {
+      ;//this is OK
+    }
+  }
+
+  public void testCompareTo_2()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    InstantiableSupergene gene2 = new InstantiableSupergene(conf);
+    gene2.addGene(new BooleanGene(conf));
+    assertEquals(-1, gene.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene));
+  }
+
+  public void testCompareTo_3()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    AbstractSupergene gene2 = new TestClass(conf);
+    assertTrue(gene.compareTo(gene2) != 0);
+    assertTrue(gene2.compareTo(gene) != 0);
+    gene2.addGene(new BooleanGene(conf));
+    assertEquals(-1, gene.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene));
+  }
+
+  public void testEquals_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    assertEquals(0, gene.compareTo(gene));
+    assertFalse(gene.equals(null));
+    assertFalse(gene.equals(new Vector()));
+    InstantiableSupergene gene2 = new InstantiableSupergene(conf);
+    assertTrue(gene.equals(gene2));
   }
 
   public class TestValidator
@@ -162,6 +249,22 @@ public class SupergenePersistentRepresentationTest
 
     public boolean isValid(Gene[] a_gene, Supergene a_supergene) {
       return true;
+    }
+  }
+
+  class TestClass
+      extends AbstractSupergene {
+    public TestClass(final Configuration a_conf)
+        throws InvalidConfigurationException {
+      super(a_conf, new Gene[]{});
+    }
+
+    public boolean isValid(Gene[] a) {
+      throw new Error("Should never be called.");
+    }
+
+    protected Gene newGeneInternal() {
+      throw new Error("Should never be called.");
     }
   }
 }
