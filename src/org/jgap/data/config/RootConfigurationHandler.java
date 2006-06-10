@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -221,7 +221,6 @@ public class RootConfigurationHandler
 //TODO          cHandler.readConfig();
         }
         catch (Exception ex) {
-          ex.printStackTrace();
           throw new ConfigException("Error while configuring " + className +
                                     "." + cName);
         }
