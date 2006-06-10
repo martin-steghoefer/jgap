@@ -3,19 +3,19 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<meta name="description" content="Upgrading from older JGAP versions to newer versions.">
+<meta name="description" content="Upgrading from older JGAP versions to newer versions, as concepts and program logic have changed.">
 <meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
                    optimization, evolutionary, open source, genes, upgrade, chromosomes">
 <link rel="stylesheet" href="../jgap.css" type="text/css">
 
-<title>Upgrade from versions prior to 2.6</title>
+<title>Upgrade from versions prior to 3.0</title>
 <link rel="stylesheet" href="../stylesheet.css" type="text/css">
 <base target="_blank">
 </head>
 
 <body class="documentText">
 
-<h1 class="docTitle">Upgrade from versions prior to 2.6</h1>
+<h1 class="docTitle">Upgrade from versions prior to 3.0</h1>
 <center>
       <a class="homeLink" href="../index.html" target="_top">[Documentation Index]</a>
     </center>
@@ -23,17 +23,18 @@
 
 <h2 class="docTitle">Introduction </h2>
 
-<p class="text">JGAP version 2.4 introduced many concepts as well as many architectural
+<p class="text">Some JGAP versions (such as 2.4 and 3.0) introduced many concepts as well as many architectural
 changes. This was seen necessary to evolve the structure of the product.</p>
 
-<p class="text"> If you work with a JGAP version prior to 2.4 in use (i.e. 1.1 or 1.0), and want to upgrade
-to version 2.0 or higher, you should
+<p class="text"> If you work with a JGAP version prior to 3.0&nbsp; (i.e. 1.1 or 1.0), and want to upgrade
+to a newer version , you should
 read this document. It will guide you thru the process of upgrading to version
 2.0 and later upcoming versions.</p>
 
 <p class="text"><b>Hint: If you try to upgrade from a version lower than 2.0 to a version
 higher than 2.0, first upgrade to 2.0, then test your application. After that,
-upgrade to 2.4 (or a later version) and test again!</b></p>
+upgrade to 2.4 (or a later version) and test again! The same holds true for
+upgrading from lower 2.6 to 3.0: First advance to 2.6, then to 3.0</b></p>
 
 <h2 class="docTitle">Upgrade Instructions</h2>
 
@@ -45,17 +46,30 @@ could be that it applies not for version 2.0. But it applies&nbsp; for the
 latest JGAP versions for sure!</p>
 
 <h3 class="subHeader">Central Configuration Object</h3>
-<p class="text">With version 2.0, the holder of the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html">org.jgap.Configuration</a></font> object has been made a
+<p class="text">With version 2.0, the holder of the <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Configuration.html" class="onlyText">org.jgap.Configuration</a> object has been made a
 Singleton. That means you don't have to give it into any method as it was
 necessary earlier. After you set up the configuration object in the used manner,
-you only need to state:<pre class="Listing"><font color="#000080">Configuration myConfiguration;
+you only need to state:<pre class="Listing"><font color="#0000FF">Configuration myConfiguration;
 </font><font color="#008000">//Set up the configuration object
-</font><font color="#000080">...
+</font><font color="#0000FF">...
 </font><font color="#008000">//Register the configuration object
-</font><b><font color="#000080">Genotype.setConfiguration(myConfiguration)</font><font color="#000000">;</font></b></pre>
+</font><b><font color="#0000FF">Genotype.setConfiguration(myConfiguration)</font><font color="#000000">;</font></b></pre>
 
 <p class="text">As you see, the holder of the <font face="Courier New">Configuration</font>
-object is <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Genotype.html"><font face="Courier New">org.jgap.Genotype</font></a>.</p>
+object is <a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/Genotype.html" class="onlyText">org.jgap.Genotype</a>.</p>
+
+<p class="text">With version 3.0, the configuration object is passed to any
+object needing it via each object's constructor. The access via <i>Genotype.getConfiguration()</i>
+and Genotype.setConfiguration(org.jgap.Configuration) is deprecated and no
+longer supported by most of the objects.&nbsp;</p>
+
+<pre class="Listing"><font color="#0000FF">Configuration myConfiguration;
+</font><font color="#008000">//Set up the configuration object
+</font><font color="#0000FF">...
+</font><font color="#008000">//Register the configuration object with each JGAP class used, e.g.:
+</font><font color="#0000FF">IChromosome sampleChromosome = new Chromosome(gaConf,
+            new BooleanGene(gaConf),
+            chromeSize);</font></pre>
 
 <h3 class="subHeader">Fitness value now of type double</h3>
 
@@ -71,7 +85,7 @@ performance loss as our extended tests show!</p>
 <h3 class="subHeader">Fitness evaluator in Configuration Object</h3>
 
 <p class="text">If you don't construct your <font face="Courier New">Configuration</font>
-object via new something like</p>
+object via something like</p>
 <pre class="Listing"><font color="#0000FF">Configuration myConfig = new DefaultConfiguration()</font></pre>
 <p class="text">you need to make sure you set the <font face="Courier New"><a href="http://jgap.sourceforge.net/javadoc/2.0/org/jgap/FitnessEvaluator.html">FitnessEvaluator</a></font>.
 You can easily do this by</p>
@@ -90,11 +104,11 @@ interface definition has moved to <font face="Courier New"><a href="http://jgap.
 
 <p class="text">So instead of writing</p>
 
-<pre class="Listing"><font color="#000080">class MySelector <b>implements</b> NaturalSelector {...}</font></pre>
+<pre class="Listing"><font color="#0000FF">class MySelector <b>implements</b> NaturalSelector {...}</font></pre>
 
 <p class="text">you should now write</p>
 
-<pre class="Listing"><font color="#000080">class MySelector <b>extends</b> NaturalSelector {...}</font></pre>
+<pre class="Listing"><font color="#0000FF">class MySelector <b>extends</b> NaturalSelector {...}</font></pre>
 
 <h4 class="subheader">Implement new method returnsUniqueChromosomes()</h4>
 
@@ -152,7 +166,7 @@ is as follows:</p>
    * of the returned Gene and it should therefore be considered to be
    * undefined.
    *
-   * @return A new Gene instance of the same type and with the same
+   * @return a new Gene instance of the same type and with the same
    * setup as this concrete Gene
    *
    * @since 1.0
@@ -256,10 +270,7 @@ instead.</p>
 <h2 class="docTitle">Final remarks</h2>
 
 <p class="text">It should be quite straight forward upgrading from version 1.1 to 2.0. With
-version 1.0 it could be a bit more difficult, although realistic.<p class="text">From version
-2.0 to newer versions, mainly new functionality has been introduced and bugs
-have been fixed. Some few considerations still have to be made, which hopefully
-are contained within this document.
+version 1.0 it could be a bit more difficult, although realistic.
 
 <p class="text"> If you have <b>*any*</b>
 problems accomplishing this or think this documentation is incomplete or
