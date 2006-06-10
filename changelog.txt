@@ -36,6 +36,7 @@
 * Moved classes Force and SupergeneTest to examples folder
   and renamed the latter one appropriately
 * Slightly changed AbstractSupergene.toString()
+* Added method getConfiguration to interface org.jgap.Gene
 
 2.6
 -----------------------------------------------------------
