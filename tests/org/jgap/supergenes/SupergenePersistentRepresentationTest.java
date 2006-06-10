@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -125,8 +125,9 @@ public class SupergenePersistentRepresentationTest
     try {
       assertTrue(gene.isValid());
       fail();
-    }catch (Error e) {
-      ;//this is OK
+    }
+    catch (Error e) {
+      ; //this is OK
     }
   }
 
@@ -135,7 +136,7 @@ public class SupergenePersistentRepresentationTest
     InstantiableSupergene gene = new InstantiableSupergene(conf);
     /**@todo care that m_immutable is filled*/
     gene.reset();
-    Set []m = (Set[]) privateAccessor.getField(gene, "m_immutable");
+    Set[] m = (Set[]) privateAccessor.getField(gene, "m_immutable");
     assertEquals(1, m.length);
   }
 
@@ -156,10 +157,10 @@ public class SupergenePersistentRepresentationTest
     InstantiableSupergene gene = new InstantiableSupergene(conf);
     gene.m_validator = null;
     String s = gene.toString();
-    assertEquals("Supergene "+gene.getClass().getName()
-                 +" {"
-                 +" non validating"
-                 +"}"
+    assertEquals("Supergene " + gene.getClass().getName()
+                 + " {"
+                 + " non validating"
+                 + "}"
                  , s);
   }
 
@@ -168,10 +169,10 @@ public class SupergenePersistentRepresentationTest
     InstantiableSupergene gene = new InstantiableSupergene(conf);
     gene.m_validator = gene;
     String s = gene.toString();
-    assertEquals("Supergene "+gene.getClass().getName()
-                 +" {"
-                 +" validator: "+gene.getClass().getName()
-                 +"}"
+    assertEquals("Supergene " + gene.getClass().getName()
+                 + " {"
+                 + " validator: " + gene.getClass().getName()
+                 + "}"
                  , s);
   }
 
@@ -182,12 +183,12 @@ public class SupergenePersistentRepresentationTest
     gene.addGene(bgene);
     gene.m_validator = gene;
     String s = gene.toString();
-    assertEquals("Supergene "+gene.getClass().getName()
-                 +" {|"
-                 +bgene.toString()
-                 +"|"
-                 +" validator: "+gene.getClass().getName()
-                 +"}"
+    assertEquals("Supergene " + gene.getClass().getName()
+                 + " {|"
+                 + bgene.toString()
+                 + "|"
+                 + " validator: " + gene.getClass().getName()
+                 + "}"
                  , s);
   }
 
@@ -207,7 +208,7 @@ public class SupergenePersistentRepresentationTest
       fail();
     }
     catch (ClassCastException ex) {
-      ;//this is OK
+      ; //this is OK
     }
   }
 
@@ -216,7 +217,7 @@ public class SupergenePersistentRepresentationTest
     InstantiableSupergene gene = new InstantiableSupergene(conf);
     InstantiableSupergene gene2 = new InstantiableSupergene(conf);
     gene2.addGene(new BooleanGene(conf));
-    assertEquals(-1, gene.compareTo(gene2));
+    assertEquals( -1, gene.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene));
   }
 
@@ -227,7 +228,7 @@ public class SupergenePersistentRepresentationTest
     assertTrue(gene.compareTo(gene2) != 0);
     assertTrue(gene2.compareTo(gene) != 0);
     gene2.addGene(new BooleanGene(conf));
-    assertEquals(-1, gene.compareTo(gene2));
+    assertEquals( -1, gene.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene));
   }
 
@@ -241,6 +242,57 @@ public class SupergenePersistentRepresentationTest
     assertTrue(gene.equals(gene2));
   }
 
+  public void testNewGene_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    gene.m_validator = null;
+    InstantiableSupergene gene2 = (InstantiableSupergene) gene.newGene();
+    assertEquals(gene, gene2);
+    assertEquals(gene2, gene);
+  }
+
+  public void testNewGene_1()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    for (int i = 0; i < 5; i++) {
+      Gene aGene = new DoubleGene(conf);
+      gene.addGene(aGene);
+    }
+    InstantiableSupergene gene2 = (InstantiableSupergene) gene.newGene();
+    assertEquals(gene, gene2);
+    assertEquals(gene2, gene);
+  }
+
+  public void testNewGene_2()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    gene.m_validator = gene;
+    InstantiableSupergene gene2 = (InstantiableSupergene) gene.newGene();
+    assertEquals(gene, gene2);
+    assertEquals(gene2, gene);
+  }
+
+  public void testSetAllele_0()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    gene.setAllele(new Double(23.4));
+    assertEquals(0, gene.size());
+  }
+
+  public void testSetAllele_1()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
+    for (int i = 0; i < 5; i++) {
+      Gene aGene = new DoubleGene(conf);
+      gene.addGene(aGene);
+    }
+    gene.setAllele(new Double(23.569));
+    for (int i = 0; i < 5; i++) {
+      DoubleGene aGene = new DoubleGene(conf);
+      assertEquals(23.569, aGene.doubleValue(), DELTA);
+    }
+  }
+
   public class TestValidator
       extends Validator {
     public TestValidator(final Configuration a_conf) {
@@ -251,12 +303,11 @@ public class SupergenePersistentRepresentationTest
       return true;
     }
   }
-
   class TestClass
       extends AbstractSupergene {
     public TestClass(final Configuration a_conf)
         throws InvalidConfigurationException {
-      super(a_conf, new Gene[]{});
+      super(a_conf, new Gene[] {});
     }
 
     public boolean isValid(Gene[] a) {
