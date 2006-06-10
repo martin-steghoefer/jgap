@@ -33,6 +33,7 @@
   CrossoverOPerator (see request 1434187)
 * Added verbose output for chart example indicating in which
   the created chart image has been put
+* Renamed class org.jgap.supergenes.Force to ForceForTest
 
 2.6
 -----------------------------------------------------------
