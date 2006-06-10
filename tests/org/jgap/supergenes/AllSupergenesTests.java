@@ -21,7 +21,7 @@ import junit.framework.*;
 public class AllSupergenesTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public AllSupergenesTests(String a_name) {
     super(a_name);
@@ -32,7 +32,7 @@ public class AllSupergenesTests
 
     suite.addTest(SupergeneInternalParserTest.suite());
     suite.addTest(SupergenePersistentRepresentationTest.suite());
-    suite.addTest(SupergeneSampleApplicationTest.suite());
+//    suite.addTest(SupergeneSampleApplicationTest.suite());
     return suite;
   }
 }
