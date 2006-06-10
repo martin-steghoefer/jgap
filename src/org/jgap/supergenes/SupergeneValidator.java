@@ -23,7 +23,7 @@ import org.jgap.Gene;
  */
 public interface SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Return true if this gene combination is valid for
@@ -31,15 +31,15 @@ public interface SupergeneValidator {
   boolean isValid(Gene[] a_genes, Supergene a_for_supergene);
 
   /**
-   * Get a persistent string representation (if needed) of this validator.
-   * The name is different allowing the same class to implement both
+   * @return persistent string representation (if needed) of this validator.
+   * The method name is different allowing the same class to implement both
    * Supergene and supergeneValidator.
    *  */
   String getPersistent();
 
   /**
    * Set a persistend string representation (if needed) for this validator.
-   * The name is different allowing the same class to implement both
+   * The method name is different allowing the same class to implement both
    * Supergene and supergeneValidator.
    */
 

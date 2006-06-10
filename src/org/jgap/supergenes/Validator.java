@@ -16,11 +16,12 @@ import org.jgap.*;
  * and setFromPersistent() methods that are not always required.
  *
  * @author Audrius Meskauskas
+ * @since 2.0
  */
 public abstract class Validator
     implements SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private transient Configuration m_conf;
 
