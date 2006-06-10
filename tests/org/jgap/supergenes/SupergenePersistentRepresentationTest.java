@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -31,22 +31,6 @@ public class SupergenePersistentRepresentationTest
     return suite;
   }
 
-  public static class InstantiableSupergene
-      extends AbstractSupergene {
-    public InstantiableSupergene(final Configuration a_config)
-        throws InvalidConfigurationException {
-      super(a_config, new Gene[] {});
-    }
-
-    public InstantiableSupergene()
-        throws InvalidConfigurationException {
-      super();
-    }
-
-    public boolean isValid(Gene[] a_gene) {
-      return true;
-    };
-  }
   public void testRepresentation()
       throws Exception {
     InstantiableSupergene gene = new InstantiableSupergene(conf);
@@ -282,14 +266,31 @@ public class SupergenePersistentRepresentationTest
   public void testSetAllele_1()
       throws Exception {
     InstantiableSupergene gene = new InstantiableSupergene(conf);
+    for (int i = 0; i < 2; i++) {
+      Gene aGene = new DoubleGene(conf);
+      gene.addGene(aGene);
+    }
+    try {
+      gene.setAllele(new Double[] {new Double(23.569)});
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  public void testSetAllele_2()
+      throws Exception {
+    InstantiableSupergene gene = new InstantiableSupergene(conf);
     for (int i = 0; i < 5; i++) {
       Gene aGene = new DoubleGene(conf);
       gene.addGene(aGene);
     }
-    gene.setAllele(new Double(23.569));
+    gene.setAllele(new Double[] {new Double(03.569), new Double(13.569),
+                   new Double(23.569), new Double(33.569), new Double(43.569)});
     for (int i = 0; i < 5; i++) {
-      DoubleGene aGene = new DoubleGene(conf);
-      assertEquals(23.569, aGene.doubleValue(), DELTA);
+      DoubleGene aGene = (DoubleGene) gene.geneAt(i);
+      assertEquals(i * 10 + 3.569, aGene.doubleValue(), DELTA);
     }
   }
 
@@ -303,6 +304,24 @@ public class SupergenePersistentRepresentationTest
       return true;
     }
   }
+//
+  public static class InstantiableSupergene
+      extends AbstractSupergene {
+    public InstantiableSupergene(final Configuration a_config)
+        throws InvalidConfigurationException {
+      super(a_config, new Gene[] {});
+    }
+
+    public InstantiableSupergene()
+        throws InvalidConfigurationException {
+      this(Genotype.getConfiguration());
+    }
+
+    public boolean isValid(Gene[] a_gene) {
+      return true;
+    };
+  }
+//
   class TestClass
       extends AbstractSupergene {
     public TestClass(final Configuration a_conf)
