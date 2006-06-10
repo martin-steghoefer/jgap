@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * This field separates gene class name from
@@ -180,8 +180,8 @@ public abstract class AbstractSupergene
     catch (Exception ex) {
       ex.printStackTrace();
       throw new Error(
-          "This should not happen. Is the constructor with parameter "
-          + "org.jgap.Configuration provided for "
+          "This should not happen. Is the constructor with parameters "
+          + "{org.jgap.Configuration, org,jgap,Gene[]} provided for "
           + getClass().getName() + "?");
     }
   }
