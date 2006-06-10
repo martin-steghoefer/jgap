@@ -22,7 +22,7 @@ import javax.swing.*;
  * */
 public final class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Singleton instance of ConfigWriter
@@ -31,9 +31,6 @@ public final class ConfigWriter {
 
   // The configuration stored as Properties
   private Properties m_config;
-
-  // namespace for the properties being written
-  private String m_ns; /**@todo is this var obsolete?*/
 
   /**
    * Method to create and access the Singleton ConfigWriter instance.
@@ -123,14 +120,4 @@ public final class ConfigWriter {
     }
   }
 
-  /**
-   * Set the namespace to be used in the config file for writing properties.
-   * @param a_ns the namepsace of the Configurable
-   *
-   * @author Siddhartha Azad
-   * @since 2.3
-   * */
-  public void setNS(final String a_ns) {
-    m_ns = a_ns;
-  }
 }
