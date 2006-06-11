@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private List m_parameters;
 
@@ -128,6 +128,7 @@ public class JGAPFactory
    */
   public ICloneHandler getCloneHandlerFor(final Object a_obj,
                                           final Class a_classToClone) {
+    /**@todo make thread-safe*/
     if (m_defaultCloneHandler == null) {
       m_defaultCloneHandler = new DefaultCloneHandler();
     }
@@ -180,6 +181,7 @@ public class JGAPFactory
    */
   public IInitializer getInitializerFor(final Object a_obj,
                                         final Class a_class) {
+    /**@todo make thread-safe*/
     if (m_defaultIniter == null) {
       m_defaultIniter = new DefaultInitializer();
     }
@@ -211,6 +213,7 @@ public class JGAPFactory
    */
   public ICompareToHandler getCompareToHandlerFor(Object a_obj,
                                                   Class a_classToCompareTo) {
+    /**@todo make thread-safe*/
     if (m_defaultComparer == null) {
       m_defaultComparer = new DefaultCompareToHandler();
     }
@@ -325,6 +328,8 @@ public class JGAPFactory
 
   /**
    * @return true: caching sued, false: no caching used
+   *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public boolean isUseCaching() {
