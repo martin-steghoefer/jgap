@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -113,26 +113,28 @@ public class Variable
    * it is placed into the static hashtable for later retrieval by name via
    * getVariable.
    *
-   * @param name the name of the Variable to create
-   * @param type the type of the Variable to create
+   * @param a_conf the configuration to use
+   * @param a_name the name of the Variable to create
+   * @param a_type the type of the Variable to create
+   * @return the variable object created
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static Variable create(Configuration a_conf, String name, Class type)
+  public static Variable create(Configuration a_conf, String a_name, Class a_type)
       throws InvalidConfigurationException {
     Variable var;
-    if ( (var = getVariable(name)) != null) {
+    if ( (var = getVariable(a_name)) != null) {
       return var;
     }
-    return new Variable(a_conf, name, type);
+    return new Variable(a_conf, a_name, a_type);
   }
 
   /**
    * Sets the value of this named variable.
    *
-   * @param value the value to set this variable with
+   * @param a_value the value to set this variable with
    *
    * @since 1.0
    */

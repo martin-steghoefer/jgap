@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /*wodka:
    void add(Command cmd);
@@ -390,7 +390,7 @@ public class ProgramChromosome
    * starting with the first child.
    *
    * @param a_index the index of the reference depth
-   * @returns the index of the next node of the same depth as the
+   * @return the index of the next node of the same depth as the
    * current node (i.e. the next sibling node)
    *
    * @author Klaus Meffert
@@ -507,7 +507,7 @@ public class ProgramChromosome
    *
    * @param a_index the node number of the parent
    * @param a_child the child number (starting from 0) of the parent
-   * @returns the node number of the child, or -1 if not found
+   * @return the node number of the child, or -1 if not found
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -661,7 +661,7 @@ public class ProgramChromosome
    * Gets the number of nodes in the branch starting at the n'th node.
    *
    * @param a_index the index of the node at which to start counting
-   * @returns the number of nodes in the branch starting at the n'th node
+   * @return the number of nodes in the branch starting at the n'th node
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -682,7 +682,7 @@ public class ProgramChromosome
    * Gets the depth of the branch starting at the n'th node.
    *
    * @param a_index the index of the node at which to check the depth.
-   * @returns the depth of the branch starting at the n'th node
+   * @return the depth of the branch starting at the n'th node
    *
    * @author Klaus Meffert
    * @since 3.0

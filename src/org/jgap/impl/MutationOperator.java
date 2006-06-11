@@ -34,7 +34,7 @@ public class MutationOperator
     extends BaseGeneticOperator
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -120,6 +120,14 @@ public class MutationOperator
   }
 
   /**
+   * @param a_population the population of chromosomes from the current
+   * evolution prior to exposure to any genetic operators. Chromosomes in this
+   * array should not be modified. Please, notice, that the call in
+   * Genotype.evolve() to the implementations of GeneticOperator overgoes this
+   * due to performance issues
+   * @param a_candidateChromosomes the pool of chromosomes that have been
+   * selected for the next evolved population
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0

@@ -23,7 +23,7 @@ import org.jgap.impl.*;
  */
 public class DynamicMutationExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -176,8 +176,9 @@ public class DynamicMutationExample {
 
   /**
    * This class only is an experiment!
+   *
    * @author Klaus Meffert
-   * @sicne 2.6
+   * @since 2.6
    */
   public static class CoinsMutationRateCalc
       implements IUniversalRateCalculator {

@@ -31,23 +31,47 @@ import org.jgap.*;
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private int m_startOffset = 1;
 
-  /** {@inheritDoc} */
+  /**
+   * Constructs a new instance of this operator.<p>
+   * Attention: The configuration used is the one set with the static method
+   * Genotype.setConfiguration.
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   */
   public SwappingMutationOperator()
       throws InvalidConfigurationException {
     super();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public SwappingMutationOperator(final Configuration a_config)
       throws InvalidConfigurationException {
     super(a_config);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Constructs a new instance of this operator with a specified
+   * mutation rate calculator, which results in dynamic mutation being turned
+   * on.
+   * @param a_config the configuration to use
+   * @param a_mutationRateCalculator calculator for dynamic mutation rate
+   * computation
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0 (previously: without a_config)
+   */
   public SwappingMutationOperator(final Configuration a_config,
                                   final IUniversalRateCalculator
                                   a_mutationRateCalculator)
@@ -55,7 +79,20 @@ public class SwappingMutationOperator
     super(a_config, a_mutationRateCalculator);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Constructs a new instance of this MutationOperator with the given
+   * mutation rate.
+   *
+   * @param a_config the configuration to use
+   * @param a_desiredMutationRate desired rate of mutation, expressed as
+   * the denominator of the 1 / X fraction. For example, 1000 would result
+   * in 1/1000 genes being mutated on average. A mutation rate of zero disables
+   * mutation entirely
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0 (previously: without a_config)
+   */
   public SwappingMutationOperator(final Configuration a_config,
                                   final int a_desiredMutationRate)
       throws InvalidConfigurationException {
@@ -63,6 +100,14 @@ public class SwappingMutationOperator
   }
 
   /**
+   * @param a_population the population of chromosomes from the current
+   * evolution prior to exposure to any genetic operators. Chromosomes in this
+   * array should not be modified. Please, notice, that the call in
+   * Genotype.evolve() to the implementations of GeneticOperator overgoes this
+   * due to performance issues
+   * @param a_candidateChromosomes the pool of chromosomes that have been
+   * selected for the next evolved population
+   *
    * @author Audrius Meskauskas
    * @author Klaus Meffert
    * @since 2.0

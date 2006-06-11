@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Determines if object should output debug information.
@@ -89,7 +89,7 @@ public class TestHashcode {
    * testDispersion() test
    *
    * @param a_averageMax New Maximum average
-   * @see TestHascode#testDispersion, m_AverageMax
+   * @see TestHascode#testDispersion
    */
   public void setAverageMax(double a_averageMax) {
     m_AverageMax = a_averageMax;
@@ -100,7 +100,7 @@ public class TestHashcode {
    * testDispersion() test
    *
    * @param a_averageMin new Minimum average
-   * @see TestHashcode#testDispersion, m_AverageMin
+   * @see TestHashcode#testDispersion
    */
   public void setAverageMin(double a_averageMin) {
     m_AverageMin = a_averageMin;
@@ -111,7 +111,7 @@ public class TestHashcode {
    * the testDispersion() test
    *
    * @param a_stdDevMax new Maximum standard deviation
-   * @see TestHashcode#testDispersion, m_stdDevMax
+   * @see TestHashcode#testDispersion
    *
    * @since 2.1
    */
@@ -124,7 +124,7 @@ public class TestHashcode {
    * the testDispersion() test
    *
    * @param a_stdDevMin new Minimum standard deviation
-   * @see TestHashcode#testDispersion, m_stdDevMin
+   * @see TestHashcode#testDispersion
    *
    * @since 2.1
    */
@@ -228,7 +228,10 @@ public class TestHashcode {
    * @param a_ObjectList list of objects to test
    * @return true if average and Standard deviation of hashCodes in List
    * match criterias. Else false
-   * @see setAverageMax(),setAverageMin(),setStdDevMax(),setStdDevMin()
+   * @see TestHashcode#setAverageMax
+   * @see TestHashcode#setAverageMin
+   * @see TestHashcode#setStdDevMax
+   * @see TestHashcode#setStdDevMin
    *
    * @author John Serri
    * @since 2.1

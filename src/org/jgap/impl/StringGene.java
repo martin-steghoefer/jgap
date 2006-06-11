@@ -40,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   private int m_minLength;
 
@@ -73,8 +73,9 @@ public class StringGene
    * You need to set the valid alphabet later!
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
-   * @since3.0
+   * @since 3.0
    */
   public StringGene(final Configuration a_config)
       throws InvalidConfigurationException {
