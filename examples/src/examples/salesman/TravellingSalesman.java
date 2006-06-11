@@ -20,13 +20,11 @@ import org.jgap.impl.salesman.*;
  *
  * <font size=-1><p>
  * The traveling salesman problem is the following: given a finite number of
- * 'cities' along with the
- * cost of travel between each pair of them, find the cheapest way of visiting
- * all the cities and returning to your starting point.
- * </font>
- * </p>
+ * 'cities' along with the cost of travel between each pair of them, find the
+ * cheapest way of visiting all the cities and returning to your starting point.
+ * </p></font>
  *
- * @see
+ * Also see
  *  <ul>
  *   <li>J. Grefenstette, R. Gopal, R. Rosmaita, and D. Gucht.
  *     <i>Genetic algorithms for the traveling salesman problem</i>.
@@ -40,7 +38,7 @@ import org.jgap.impl.salesman.*;
  *   <li>
  *     <a href="http://www.tsp.gatech.edu www.tsp.gatech.edu">
  *        <i>Travelling salesman</i> web site</a>
- *  </li>
+ *   </li>
  * </ul>
  *
  * This simple test and example shows how to use the Salesman class.
@@ -59,7 +57,7 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
