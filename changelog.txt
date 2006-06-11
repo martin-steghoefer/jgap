@@ -39,6 +39,8 @@
 * Added method getConfiguration to interface org.jgap.Gene
 * Improved DefaultCompareTo handler to also handle Boolean
   classed objects (as Boolean has no compareTo method!)
+* reorganized tests in examples-dir: moved them to new
+  subdir "tests"
 
 2.6
 -----------------------------------------------------------
