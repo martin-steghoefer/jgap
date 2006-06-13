@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   private int m_length;
 
@@ -412,7 +412,6 @@ public class FixedBinaryGene
    * @since 2.0
    */
   public int compareTo(final Object a_other) {
-    /**@todo consider application data*/
     FixedBinaryGene otherGene = (FixedBinaryGene) a_other;
     // First, if the other gene is null, then this is the greater gene.
     // ----------------------------------------------------------------
@@ -444,12 +443,20 @@ public class FixedBinaryGene
         }
       }
     }
-    return 0;
+    // Compare application data, if possible.
+    // --------------------------------------
+    if (isCompareApplicationData()) {
+      return compareApplicationData(getApplicationData(),
+                                    otherGene.getApplicationData());
+    }
+    else {
+      return 0;
+    }
   }
 
   /**
-   * Not called as getAllee() is overridden.
-   * @return Object
+   * Not called as getAllele() is overridden.
+   * @return same as getAllele()
    */
   protected Object getInternalValue() {
     return m_value;
