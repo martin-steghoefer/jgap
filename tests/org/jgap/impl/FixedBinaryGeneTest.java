@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -523,7 +523,7 @@ public class FixedBinaryGeneTest
   }
 
   /**
-   * Comparision should return 0 if same, -1 if less 1 if more.
+   * Comparison should return 0 if same, -1 if less 1 if more.
    *
    * @author vamsi
    * @throws Exception
@@ -1291,4 +1291,6 @@ public class FixedBinaryGeneTest
       return true;
     }
   }
+
+  /**@todo test compareTo with applicationcata*/
 }
