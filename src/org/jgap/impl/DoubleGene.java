@@ -24,19 +24,19 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Double.MAX_VALUE.
    */
-  private double m_upperBounds;
+  private double m_upperBound;
 
   /**
    * The lower bounds of values represented by this Gene. If not explicitly
    * provided by the user, this should be set to Double.MIN_VALUE
    */
-  private double m_lowerBounds;
+  private double m_lowerBound;
 
   /**
    * Constructs a new DoubleGene with default settings. No bounds will
@@ -76,21 +76,21 @@ public class DoubleGene
    * bounds for values (alleles) of this Gene instance.
    *
    * @param a_config the configuration to use
-   * @param a_lowerBounds the lowest value that this Gene may possess,
+   * @param a_lowerBound the lowest value that this Gene may possess,
    * inclusive
-   * @param a_upperBounds the highest value that this Gene may possess,
+   * @param a_upperBound the highest value that this Gene may possess,
    * inclusive
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public DoubleGene(final Configuration a_config, final double a_lowerBounds,
-                    final double a_upperBounds)
+  public DoubleGene(final Configuration a_config, final double a_lowerBound,
+                    final double a_upperBound)
       throws InvalidConfigurationException {
     super(a_config);
-    m_lowerBounds = a_lowerBounds;
-    m_upperBounds = a_upperBounds;
+    m_lowerBound = a_lowerBound;
+    m_upperBound = a_upperBound;
   }
 
   /**
@@ -105,8 +105,8 @@ public class DoubleGene
    */
   protected Gene newGeneInternal() {
     try {
-      DoubleGene result = new DoubleGene(getConfiguration(), m_lowerBounds,
-                                         m_upperBounds);
+      DoubleGene result = new DoubleGene(getConfiguration(), m_lowerBound,
+                                         m_upperBound);
       return result;
     }
     catch (InvalidConfigurationException iex) {
@@ -139,8 +139,8 @@ public class DoubleGene
     else {
       s = getInternalValue().toString();
     }
-    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBounds
-        + PERSISTENT_FIELD_DELIMITER + m_upperBounds;
+    return s + PERSISTENT_FIELD_DELIMITER + m_lowerBound
+        + PERSISTENT_FIELD_DELIMITER + m_upperBound;
   }
 
   /**
@@ -198,7 +198,7 @@ public class DoubleGene
       // Now parse and set the lower bound.
       // ----------------------------------
       try {
-        m_lowerBounds =
+        m_lowerBound =
             Double.parseDouble(lowerBoundRepresentation);
       }
       catch (NumberFormatException e) {
@@ -210,7 +210,7 @@ public class DoubleGene
       // Now parse and set the upper bound.
       // ----------------------------------
       try {
-        m_upperBounds =
+        m_upperBound =
             Double.parseDouble(upperBoundRepresentation);
       }
       catch (NumberFormatException e) {
@@ -248,8 +248,8 @@ public class DoubleGene
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
     // maps the randomly determined value to the current bounds.
     // ---------------------------------------------------------
-    setAllele(new Double( (m_upperBounds - m_lowerBounds) *
-                         a_numberGenerator.nextDouble() + m_lowerBounds));
+    setAllele(new Double( (m_upperBound - m_lowerBound) *
+                         a_numberGenerator.nextDouble() + m_lowerBound));
   }
 
   /**
@@ -289,8 +289,8 @@ public class DoubleGene
       // then multiply it with a random number and then care that the lower
       // boundary is added.
       // ------------------------------------------------------------------
-      if (d_value.doubleValue() > m_upperBounds ||
-          d_value.doubleValue() < m_lowerBounds) {
+      if (d_value.doubleValue() > m_upperBound ||
+          d_value.doubleValue() < m_lowerBound) {
         RandomGenerator rn;
         if (getConfiguration() != null) {
           rn = getConfiguration().getRandomGenerator();
@@ -299,7 +299,7 @@ public class DoubleGene
           rn = new StockRandomGenerator();
         }
         setAllele(new Double(rn.nextDouble()
-                             * (m_upperBounds - m_lowerBounds) + m_lowerBounds));
+                             * (m_upperBound - m_lowerBound) + m_lowerBound));
       }
     }
   }
@@ -314,7 +314,7 @@ public class DoubleGene
    * @since 1.1
    */
   public void applyMutation(int index, double a_percentage) {
-    double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+    double range = (m_upperBound - m_lowerBound) * a_percentage;
     double newValue = doubleValue() + range;
     setAllele(new Double(newValue));
   }
@@ -344,7 +344,7 @@ public class DoubleGene
    * @since 2.4
    */
   public String toString() {
-    String s = "DoubleGene(" + m_lowerBounds + "," + m_upperBounds + ")"
+    String s = "DoubleGene(" + m_lowerBound + "," + m_upperBound + ")"
         + "=";
     if (getInternalValue() == null) {
       s += "null";
@@ -353,5 +353,23 @@ public class DoubleGene
       s += getInternalValue().toString();
     }
     return s;
+  }
+
+  /**
+   * @return the lower bound set
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public double getLowerBound() {
+    return m_lowerBound;
+  }
+
+  /**
+   * @return the upper bound set
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public double getUpperBound() {
+    return m_upperBound;
   }
 }
