@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.34 $";
+  private static final String CVS_REVISION = "$Revision: 1.35 $";
 
   public void setUp() {
     super.setUp();
@@ -356,14 +356,14 @@ public class DoubleGeneTest
     gene1.setConstraintChecker(checker);
     gene1.setAllele(new Double(4711.0d));
     Double lower1 = (Double) privateAccessor.getField(gene1,
-        "m_lowerBounds");
+        "m_lowerBound");
     Double upper1 = (Double) privateAccessor.getField(gene1,
-        "m_upperBounds");
+        "m_upperBound");
     DoubleGene gene2 = (DoubleGene) gene1.newGene();
     Double lower2 = (Double) privateAccessor.getField(gene2,
-        "m_lowerBounds");
+        "m_lowerBound");
     Double upper2 = (Double) privateAccessor.getField(gene2,
-        "m_upperBounds");
+        "m_upperBound");
     assertEquals(lower1, lower2);
     assertEquals(upper1, upper2);
     assertEquals(checker, gene2.getConstraintChecker());
@@ -840,6 +840,33 @@ public class DoubleGeneTest
     gene.setEnergy(0.5);
     gene.setEnergy(0.8);
     assertEquals(0.8, gene.getEnergy(), DELTA);
+  }
+
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testBounds_0()
+      throws Exception {
+    DoubleGene gene = new DoubleGene(conf, -3.4d, +5.7d);
+    assertEquals( -3.4d, gene.getLowerBound(), DELTA);
+    assertEquals( 5.7d, gene.getUpperBound(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testBounds_1()
+      throws Exception {
+    DoubleGene gene = new DoubleGene(conf);
+    assertEquals( - (Double.MAX_VALUE / 2), gene.getLowerBound(), DELTA);
+    assertEquals(Double.MAX_VALUE / 2, gene.getUpperBound(), DELTA);
   }
 
   class GeneConstraintChecker
