@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.80 $";
+  private final static String CVS_REVISION = "$Revision: 1.81 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -472,6 +472,12 @@ public class Chromosome
     }
   }
 
+  /**
+   * @return the lastly computed fitness value, or FitnessFunction.NO_FITNESS_VALUE
+   * in case no value has been computed yet.
+   *
+   * @author Klaus Meffert
+   */
   public double getFitnessValueDirectly() {
     return m_fitnessValue;
   }
@@ -515,6 +521,17 @@ public class Chromosome
     }
   }
 
+  
+  /**
+   * Sets the fitness value of this Chromosome directly without any
+   * constraint checks, conversions or checks. Only use if you know what
+   * you do.
+   *
+   * @param a_newFitnessValue a positive integer representing the fitness
+   * of this Chromosome
+   *
+   * @author Klaus Meffert
+   */
   public void setFitnessValueDirectly(double a_newFitnessValue) {
     m_fitnessValue = a_newFitnessValue;
   }
