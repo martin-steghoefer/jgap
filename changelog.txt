@@ -44,6 +44,7 @@
 * Added methods getLowerBound and getUpperBound to
   DoubleGene, renamed the corresponding private fields
   (skipped the ending"s")
+* Added javadoc to interface IChromosome
 
 2.6
 -----------------------------------------------------------
