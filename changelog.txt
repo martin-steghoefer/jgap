@@ -18,6 +18,7 @@
 * Added example for distinct genes (examples.distinctGenes)
 * Enhanced BooleanGene.compareTo to consider application
   data
+* Added example for the multidimensional knapsack problem
 * Fixed error in method KeyedValues.getIndex()
 * Fixed error in method Evaluator.getValue(int, int..)
 * Fixed error in method MapGene.compareTo(Object)
