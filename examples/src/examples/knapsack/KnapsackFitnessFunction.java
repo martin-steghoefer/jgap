@@ -12,7 +12,7 @@ package examples.knapsack;
 import org.jgap.*;
 
 /**
- * Fitness function for the Knapsack example.
+ * Fitness function for the knapsack example.
  *
  * @author Klaus Meffert
  * @since 2.3
@@ -20,7 +20,7 @@ import org.jgap.*;
 public class KnapsackFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final double m_knapsackVolume;
 
@@ -109,7 +109,7 @@ public class KnapsackFitnessFunction
 
   /**
    * Calculates the penalty to apply to the fitness value based on the amount
-   * of items in the solution
+   * of items in the solution.
    *
    * @param a_maxFitness upper boundary for fitness value possible
    * @param a_items number of items in the solution
@@ -137,7 +137,7 @@ public class KnapsackFitnessFunction
    * Calculates the total amount of change (in cents) represented by
    * the given potential solution and returns that amount.
    *
-   * @param a_potentialSolution the pontential solution to evaluate
+   * @param a_potentialSolution the potential solution to evaluate
    * @return the total amount of change (in cents) represented by the
    * given solution
    *
@@ -176,17 +176,17 @@ public class KnapsackFitnessFunction
    * Returns the total number of items represented by all of the genes in
    * the given potential solution.
    *
-   * @param a_potentialsolution the potential solution to evaluate
+   * @param a_potentialSolution the potential solution to evaluate
    * @return the total number of items represented by the given Chromosome
    *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public static int getTotalNumberOfItems(IChromosome a_potentialsolution) {
+  public static int getTotalNumberOfItems(IChromosome a_potentialSolution) {
     int totalItems = 0;
-    int numberOfGenes = a_potentialsolution.size();
+    int numberOfGenes = a_potentialSolution.size();
     for (int i = 0; i < numberOfGenes; i++) {
-      totalItems += getNumberOfItemsAtGene(a_potentialsolution, i);
+      totalItems += getNumberOfItemsAtGene(a_potentialSolution, i);
     }
     return totalItems;
   }

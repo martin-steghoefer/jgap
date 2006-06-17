@@ -29,7 +29,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -155,7 +155,8 @@ public class KnapsackMain {
    * Main method. A single command-line argument is expected, which is the
    * volume to create (in other words, 75 would be equal to 75 ccm).
    *
-   * @param args volume of the knapsack to fill
+   * @param args first and single element in the array = volume of the knapsack
+   * to fill as a double value
    *
    * @author Klaus Meffert
    * @since 2.3
