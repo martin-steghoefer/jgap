@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests the Configuration class
+ * Tests the Configuration class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,11 +22,17 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    // reset the configurational parameters set
+    Configuration.reset();
   }
 
   /**
@@ -522,6 +528,73 @@ public class ConfigurationTest
   }
 
   /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetFitnessFunction_1() throws Exception {
+    Configuration conf = new Configuration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    try {
+      conf.setFitnessFunction(new StaticFitnessFunction(2.3d));
+      fail();
+    }
+    catch (RuntimeException invex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetFitnessFunction_2() throws Exception {
+    Configuration conf = new Configuration();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Configuration conf2 = new Configuration();
+    try {
+      conf2.setFitnessFunction(new StaticFitnessFunction(2.3d));
+      fail();
+    }
+    catch (RuntimeException invex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetFitnessFunction_3() throws Exception {
+    Configuration conf = new Configuration();
+    conf.setFitnessFunction(new StaticFitnessFunction(2.3d));
+    Configuration conf2 = new Configuration();
+    try {
+      conf2.setFitnessFunction(new StaticFitnessFunction(4.5d));
+      fail();
+    }
+    catch (RuntimeException invex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetFitnessFunction_4() throws Exception {
+    new Thread(new MyThread()).start();
+    new Thread(new MyThread()).start();
+  }
+
+  /**
    * @author Klaus Meffert
    */
   public void testSetFitnessEvaluator_0() {
@@ -850,7 +923,6 @@ public class ConfigurationTest
   }
 
   /**
-   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1007,7 +1079,8 @@ public class ConfigurationTest
   }
 
   /**
-   * With valid System property for JGAPFactory set
+   * Construct with valid System property for JGAPFactory set.
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -1019,7 +1092,8 @@ public class ConfigurationTest
   }
 
   /**
-   * With invalid System property for JGAPFactory set
+   * Construct with invalid System property for JGAPFactory set.
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -1034,6 +1108,19 @@ public class ConfigurationTest
       ; //this is OK
     }
   }
+
+  /**
+   * Construct with no System property for JGAPFactory set.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testConstruct_2() {
+    System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS, "");
+    Configuration conf = new Configuration();
+    assertEquals(JGAPFactory.class, conf.getJGAPFactory().getClass());
+  }
+
 }
 class MyFactoryTest
     extends JGAPFactory {
@@ -1046,3 +1133,18 @@ class TestBulkFitnessFunction
   public void evaluate(Population a_subjects) {
   }
 }
+
+class MyThread
+    implements Runnable {
+  public void run(){
+    Configuration conf = new Configuration();
+    try {
+      conf.setFitnessFunction(new StaticFitnessFunction(2.3));
+      Thread.sleep(100);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+}
+
