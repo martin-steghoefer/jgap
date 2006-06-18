@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -122,8 +122,8 @@ public class GenotypeTest
   public void testConstruct_3()
       throws Exception {
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new DefaultConfiguration(), new Gene[] {
-      new IntegerGene(new DefaultConfiguration(), 1, 5)
+    chroms[0] = new Chromosome(conf, new Gene[] {
+      new IntegerGene(conf, 1, 5)
     });
     try {
       new Genotype(new DefaultConfiguration(), chroms);
@@ -234,14 +234,12 @@ public class GenotypeTest
    */
   public void testConstruct_8()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
     conf.setFitnessFunction(new StaticFitnessFunction(5));
     conf.setSampleChromosome(new Chromosome(conf, new BooleanGene(conf), 9));
     conf.setPopulationSize(7);
-    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
     new Genotype(conf, chroms);
   }
 
@@ -964,7 +962,7 @@ public class GenotypeTest
     List UniqueChromosome = new ArrayList();
     List EqualChromosome = new ArrayList();
     Genotype geno;
-    //Build Random Chromosomes
+    //Build random Chromosomes
     for (Count = 0; Count < MAX_CHROMOSOME_TO_TEST; Count++) {
       NumGenes = (int) (Math.random() * MAX_GENES_TO_TEST) + 1;
       genes = new Gene[NumGenes];
@@ -991,6 +989,7 @@ public class GenotypeTest
             break;
         }
       }
+      Configuration.reset();
       Configuration conf = new DefaultConfiguration();
       chrom = new Chromosome(conf, genes);
       conf.setFitnessFunction(new StaticFitnessFunction(0.5d));
@@ -1028,6 +1027,7 @@ public class GenotypeTest
     for (Count = 0; Count < 3; Count++) {
       genes = new Gene[1];
       genes[0] = new IntegerGene();
+      Configuration.reset();
       Configuration conf = new DefaultConfiguration();
       chrom = new Chromosome(conf, genes);
       conf.setFitnessFunction(new StaticFitnessFunction(0.5d));
@@ -1060,7 +1060,8 @@ public class GenotypeTest
     Genotype genotype = new Genotype(conf, chroms);
     genotype.setActiveConfiguration(conf);
     genotype.setActiveConfiguration(null);
-    assertNull(genotype.getConfiguration());
+    // If working properly, the next call should return null!
+    assertNotNull(genotype.getConfiguration());
   }
 
   public void testSetActiveConfiguration_1()
