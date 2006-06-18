@@ -14,7 +14,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Tests for DataTreeBuilder class
+ * Tests the DataTreeBuilder class
  *
  * @author Klaus Meffert
  * @author Siddhartha Azad
@@ -23,7 +23,7 @@ import junit.framework.*;
 public class DataTreeBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
@@ -34,6 +34,11 @@ public class DataTreeBuilderTest
   public static Test suite() {
     TestSuite suite = new TestSuite(DataTreeBuilderTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   /**

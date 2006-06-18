@@ -23,9 +23,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
-
-  private TravellingSalesmanForTest m_testTravellingSalesman;
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
@@ -34,12 +32,11 @@ public class TravellingSalesmanTest
 
   public void setUp() {
     super.setUp();
-    m_testTravellingSalesman = new TravellingSalesmanForTest();
+    Configuration.reset();
   }
 
   public void tearDown()
       throws Exception {
-    m_testTravellingSalesman = null;
     super.tearDown();
   }
 
@@ -59,6 +56,7 @@ public class TravellingSalesmanTest
       if (Integer.MAX_VALUE / 2 - optimal.getFitnessValue() <= 7) {
         oks++;
       }
+      Configuration.reset();
     }
     if (oks < 6) {
       fail("Less than 6 cities computed correctly!");
