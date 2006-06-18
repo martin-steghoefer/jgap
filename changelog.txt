@@ -2,12 +2,15 @@
 -----------------------------------------------------------
 * Added genetic programming capabilities to JGAP.
   The classes are put into package org.jgap.gp.
-  An example could be found in package examples.gp.
+  An example could be found in package examples.gp
 * Made JGAP distributed by converting several fields to
   transient, making classes serializable, and using
-  synchronized lists instead of pure ArrayList's.
+  synchronized lists instead of pure ArrayList's
 * Made configuration serializable and marked some references
   in it as transient
+* Ensured that certain properties (such as fitness function)
+  can only be set once in the configuration for the current
+  thread
 * Added abstract base class org.jgap.BaseChromosome
   and made Chromosome descend from it
 * Added method getConfiguration to interface IChromosome
