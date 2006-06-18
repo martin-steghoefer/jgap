@@ -22,11 +22,16 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.35 $";
+  private static final String CVS_REVISION = "$Revision: 1.36 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   /**

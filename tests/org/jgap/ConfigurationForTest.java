@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class ConfigurationForTest
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public final static double STATIC_FITNESS_VALUE = 2.3d;
 
@@ -37,6 +37,7 @@ public class ConfigurationForTest
       throws InvalidConfigurationException {
     super();
     setPopulationSize(5);
+    reset();
     setFitnessFunction(new StaticFitnessFunction(STATIC_FITNESS_VALUE));
     setEventManager(new EventManager());
     setFitnessEvaluator(new DefaultFitnessEvaluator());

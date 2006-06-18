@@ -15,7 +15,7 @@ import org.jgap.util.*;
 import junit.framework.*;
 
 /**
- * Tests the Chromosome class
+ * Tests the Chromosome class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -23,10 +23,15 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   /**

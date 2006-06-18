@@ -23,11 +23,16 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   /**

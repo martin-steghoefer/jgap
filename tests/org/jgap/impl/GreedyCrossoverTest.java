@@ -22,11 +22,16 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   /**
@@ -361,7 +366,7 @@ public class GreedyCrossoverTest
   }
 
   /**
-   * Tests if error thrown because of wrong length of gene
+   * Tests if error thrown because of wrong length of gene.
    * @throws Exception
    *
    * @author Klaus Meffert

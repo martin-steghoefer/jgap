@@ -23,18 +23,23 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
     return suite;
   }
 
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
+  }
+
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
-   * @throws Exception
    */
   public void testConstruct_0()
       throws Exception {
@@ -44,10 +49,10 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
-   * @throws Exception
    */
   public void testConstruct_1()
       throws Exception {
@@ -57,10 +62,10 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
-   * @throws Exception
    */
   public void testConstruct_2()
       throws Exception {
@@ -70,10 +75,10 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
-   * @throws Exception
    */
   public void testConstruct_3()
       throws Exception {
@@ -144,10 +149,10 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.1
-   * @throws Exception
    */
   public void testOperate_2()
       throws Exception {
@@ -258,10 +263,10 @@ public class SwappingMutationOperatorTest
 
   /**
    * Nothing to do. Test that nothing is done.
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
-   * @throws Exception
    */
   public void testOperate_5()
       throws Exception {
@@ -292,10 +297,10 @@ public class SwappingMutationOperatorTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testStartoffset_0()
       throws Exception {
@@ -340,8 +345,8 @@ public class SwappingMutationOperatorTest
 
   /**
    * Test equals with classcast object.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */

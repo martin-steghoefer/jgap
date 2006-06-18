@@ -23,11 +23,16 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   /**

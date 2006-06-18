@@ -22,7 +22,7 @@ public class StaticFitnessFunction
     extends FitnessFunction {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * @since 2.0 (until 1.1: type int)
@@ -70,5 +70,10 @@ public class StaticFitnessFunction
    */
   public void setStaticFitnessValue(double a_staticFitnessValue) {
     m_staticFitnessValue = a_staticFitnessValue;
+  }
+
+  public int hashCode() {
+    int result = new Double(m_staticFitnessValue).hashCode();
+    return result;
   }
 }

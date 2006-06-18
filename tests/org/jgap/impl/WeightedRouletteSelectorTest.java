@@ -22,15 +22,20 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
     return suite;
   }
 
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
+  }
+
   /**
-   * Test if construction possible without failure
+   * Test if construction possible without failure.
    */
   public void testConstruct_0() {
     new WeightedRouletteSelector();

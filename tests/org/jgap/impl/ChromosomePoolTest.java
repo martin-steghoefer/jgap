@@ -21,15 +21,20 @@ import junit.framework.*;
 public class ChromosomePoolTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChromosomePoolTest.class);
     return suite;
   }
 
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
+  }
+
   /**
-   * Test if construction possible without failure
+   * Test if construction possible without failure.
    * @throws Exception
    *
    * @author Klaus Meffert
