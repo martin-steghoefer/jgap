@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -51,6 +51,7 @@ public class XMLManagerTest
   public void setUp() {
     super.setUp();
     try {
+      Configuration.reset();
       m_conf = new DefaultConfiguration();
       m_genes = new IntegerGene[2];
       m_genes[0] = new IntegerGene(conf, 0, 100);
@@ -278,21 +279,17 @@ public class XMLManagerTest
    */
   public void testChromosome_0()
       throws Exception {
-    Configuration activeConfiguration = new DefaultConfiguration();
-    activeConfiguration.setSampleChromosome(
-        new Chromosome(activeConfiguration,
-                       new BooleanGene(activeConfiguration), 8));
-    activeConfiguration.setPopulationSize(10);
-    activeConfiguration.setFitnessFunction(new TestFitnessFunction());
+    conf.setSampleChromosome(new Chromosome(conf, new BooleanGene(conf), 8));
+    conf.setPopulationSize(10);
+    conf.reset();
+    conf.setFitnessFunction(new TestFitnessFunction());
     // Test Chromsome manipulation methods.
     // ------------------------------------
-    IChromosome chromosome = Chromosome.randomInitialChromosome(
-        activeConfiguration);
+    IChromosome chromosome = Chromosome.randomInitialChromosome(conf);
     Document chromosomeDoc =
         XMLManager.representChromosomeAsDocument(chromosome);
     IChromosome chromosomeFromXML =
-        XMLManager.getChromosomeFromDocument(activeConfiguration,
-                                             chromosomeDoc);
+        XMLManager.getChromosomeFromDocument(conf, chromosomeDoc);
     assertEquals(chromosomeFromXML, chromosome);
   }
 
@@ -305,20 +302,16 @@ public class XMLManagerTest
    */
   public void testGenotype_0()
       throws Exception {
-    Configuration activeConfiguration = new DefaultConfiguration();
-    activeConfiguration.setSampleChromosome(
-        new Chromosome(activeConfiguration,
-                       new BooleanGene(activeConfiguration), 8));
-    activeConfiguration.setPopulationSize(10);
-    activeConfiguration.setFitnessFunction(new TestFitnessFunction());
+    conf.setSampleChromosome(new Chromosome(conf, new BooleanGene(conf), 8));
+    conf.setPopulationSize(10);
+    conf.reset();
+    conf.setFitnessFunction(new TestFitnessFunction());
     // Test Genotype manipulation methods.
     // -----------------------------------
-    Genotype genotype =
-        Genotype.randomInitialGenotype(activeConfiguration);
-    Document genotypeDoc =
-        XMLManager.representGenotypeAsDocument(genotype);
+    Genotype genotype = Genotype.randomInitialGenotype(conf);
+    Document genotypeDoc = XMLManager.representGenotypeAsDocument(genotype);
     Genotype genotypeFromXML =
-        XMLManager.getGenotypeFromDocument(activeConfiguration, genotypeDoc);
+        XMLManager.getGenotypeFromDocument(conf, genotypeDoc);
     assertEquals(genotypeFromXML, genotype);
   }
 }

@@ -7,7 +7,7 @@ import org.jgap.impl.*;
 import junit.framework.*;
 
 /**
- * Test class for PermutingConfiguration class
+ * Tests the PermutingConfiguration class
  *
  * @author Klaus Meffert
  * @since 2.2
@@ -15,10 +15,11 @@ import junit.framework.*;
 public class PermutingConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public void setUp() {
     super.setUp();
+    Configuration.reset();
   }
 
   public static Test suite() {

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.35 $";
+  private static final String CVS_REVISION = "$Revision: 1.36 $";
 
   public void setUp() {
     super.setUp();
@@ -516,7 +516,6 @@ public class DoubleGeneTest
    */
   public void testSetToRandomValue_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene gene = new DoubleGene(conf, -1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
@@ -662,11 +661,11 @@ public class DoubleGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_1()
       throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(15.0d));
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(50));
@@ -676,11 +675,11 @@ public class DoubleGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_2()
       throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(15.0d));
     DoubleGene gene = new DoubleGene(conf, 44, 100);
     gene.setAllele(new Double(50));
@@ -690,11 +689,11 @@ public class DoubleGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_3()
       throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(0.5d));
     DoubleGene gene = new DoubleGene(conf, 33, 100);
     gene.setAllele(new Double(50));
@@ -704,11 +703,11 @@ public class DoubleGeneTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testApplyMutation_4()
       throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(0.4d));
     DoubleGene gene = new DoubleGene(conf, 2, 100);
     gene.setAllele(new Double(60));
@@ -724,7 +723,6 @@ public class DoubleGeneTest
    */
   public void testApplyMutation_5()
       throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
     conf.setRandomGenerator(new RandomGeneratorForTest(0.8d));
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(60));

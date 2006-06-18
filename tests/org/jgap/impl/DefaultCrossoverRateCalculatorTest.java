@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultCrossoverRateCalculatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCrossoverRateCalculatorTest.class);
@@ -29,14 +29,13 @@ public class DefaultCrossoverRateCalculatorTest
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
   public void testCalculateCurrentRate_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(conf);
     Gene gene = new IntegerGene(conf, 1, 5);
     Chromosome chrom = new Chromosome(conf, gene, 50);
@@ -60,7 +59,6 @@ public class DefaultCrossoverRateCalculatorTest
    */
   public void testCalculateCurrentRate_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     IUniversalRateCalculator calc = new DefaultCrossoverRateCalculator(conf);
     int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);

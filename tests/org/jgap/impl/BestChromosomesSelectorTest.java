@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -76,7 +76,6 @@ public class BestChromosomesSelectorTest
   public void testAdd_0()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
-    Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
@@ -107,7 +106,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSelect_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     Gene gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
@@ -123,7 +121,7 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Test selection algorithm
+   * Test selection algorithm.
    *
    * @throws Exception
    *
@@ -132,7 +130,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSelect_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     // add first chromosome
     // --------------------
@@ -175,7 +172,7 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Test selection algorithm
+   * Test selection algorithm.
    *
    * @throws Exception
    *
@@ -184,7 +181,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSelect_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     // add first chromosome
     // --------------------
@@ -229,7 +225,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSelect_3()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     // add first chromosome
     // --------------------
@@ -267,7 +262,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSelect_4()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     selector.setDoubletteChromosomesAllowed(true);
     // the following original rate controls that only 30% of the chromosomes
@@ -336,7 +330,6 @@ public class BestChromosomesSelectorTest
   public void testEmpty_0()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
-    Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
@@ -359,7 +352,6 @@ public class BestChromosomesSelectorTest
   public void testEmpty_1()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
-    Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
@@ -381,7 +373,6 @@ public class BestChromosomesSelectorTest
   public void testEmpty_2()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
-    Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
     Population pop = new Population(conf, 1);
@@ -401,7 +392,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSetOriginalRate_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     try {
       selector.setOriginalRate(1.01d);
@@ -420,7 +410,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSetOriginalRate_0_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     try {
       selector.setOriginalRate( -0.1d);
@@ -439,7 +428,6 @@ public class BestChromosomesSelectorTest
    */
   public void testSetOriginalRate_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     selector.setOriginalRate(0.3d);
     assertEquals(0.3d, selector.getOriginalRate(), DELTA);

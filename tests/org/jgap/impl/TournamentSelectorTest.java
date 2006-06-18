@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -120,7 +120,6 @@ public class TournamentSelectorTest
 
   public void testAdd_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     TournamentSelector selector = new TournamentSelector(conf, 5, 0.5d);
     Gene gene = new BooleanGene(conf);
     IChromosome chrom = new Chromosome(conf, gene, 5);
@@ -138,7 +137,6 @@ public class TournamentSelectorTest
 
   public void testEmpty_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     TournamentSelector selector = new TournamentSelector(conf, 4, 0.1d);
     Gene gene = new BooleanGene(conf);
     IChromosome chrom = new Chromosome(conf, gene, 5);
@@ -158,7 +156,6 @@ public class TournamentSelectorTest
    */
   public void testEmpty_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     TournamentSelector selector = new TournamentSelector(conf, 4, 0.1d);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
@@ -181,7 +178,6 @@ public class TournamentSelectorTest
    */
   public void testEmpty_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     TournamentSelector selector = new TournamentSelector(conf, 10, 1.0d);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
@@ -205,7 +201,6 @@ public class TournamentSelectorTest
    */
   public void testSelect_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     TournamentSelector selector = new TournamentSelector(conf, 4, 0.3d);
     Gene gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
@@ -230,7 +225,6 @@ public class TournamentSelectorTest
    */
   public void testSelect_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     // random generator always returning 1 (index of best chromosome below)
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
@@ -284,7 +278,6 @@ public class TournamentSelectorTest
    */
   public void testSelect_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     // random generator always returning 1 (index of best chromosome below)
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);
@@ -329,7 +322,6 @@ public class TournamentSelectorTest
    */
   public void testSelect_3()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     //Set index of chromosome to be selected by ThresholdSelector to 1.
     //1 because the best chromosome will be index 0 and the other one has
     // index 1.
@@ -361,14 +353,13 @@ public class TournamentSelectorTest
 
   /**
    * Ensure that selected Chromosome's are not equal to added Chromosome's.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_4()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     TournamentSelector selector = new TournamentSelector(conf, 1, 0.2d);
     // add first chromosome
     // --------------------
@@ -397,14 +388,13 @@ public class TournamentSelectorTest
   /**
    * Never select best chromosome if prob is 0.0d. it is not allowed to select
    * probability to 0.0d therefor we set it via reflection.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_5()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     RandomGeneratorForTest rn = new RandomGeneratorForTest(0);
     conf.setRandomGenerator(rn);
     TournamentSelector selector = new TournamentSelector(conf, 4, 0.00001d);
@@ -435,12 +425,12 @@ public class TournamentSelectorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
   public void testSelect_6()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     // random generator always returning 1 (index of best chromosome below)
     RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
     conf.setRandomGenerator(rn);

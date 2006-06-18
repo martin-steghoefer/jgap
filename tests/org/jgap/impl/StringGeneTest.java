@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -305,7 +305,6 @@ public class StringGeneTest
    */
   public void testEquals_9()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene gene1 = new StringGene(conf, 2, 6);
     gene1.setAllele("hallo");
     gene1.setApplicationData(new Double(2.3d));
@@ -334,7 +333,6 @@ public class StringGeneTest
    */
   public void testCompareTo_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene gene1 = new StringGene(conf, 2, 6);
     gene1.setAllele("hallo");
     gene1.setApplicationData(new Double(2.3d));
@@ -387,7 +385,6 @@ public class StringGeneTest
    */
   public void testCompareTo_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene gene1 = new StringGene(conf, 2, 6);
     gene1.setApplicationData(new Double(2.3d));
     Gene gene2 = new StringGene(conf, 2, 6);
@@ -1011,7 +1008,6 @@ public class StringGeneTest
    */
   public void testSetToRandomValue_3()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     StringGene gene = new StringGene(conf, 1, 7, "DEF");
     gene.setToRandomValue(new RandomGeneratorForTest(2));
     assertEquals("FFF", gene.getAllele());
@@ -1025,7 +1021,6 @@ public class StringGeneTest
    */
   public void testSetToRandomValue_4()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     StringGene gene = new StringGene(conf, 1, 7, "DEF");
     gene.setAllele("EEFD");
     RandomGeneratorForTest rn = new RandomGeneratorForTest();

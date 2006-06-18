@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -246,7 +246,6 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_4()
       throws Exception {
-    DefaultConfiguration conf = new DefaultConfiguration();
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
     randgen.setNextDouble(0.9999d);

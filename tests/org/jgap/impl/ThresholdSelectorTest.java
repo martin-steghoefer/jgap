@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -65,13 +65,13 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * @author Klaus Meffert
    * @throws Exception
+   *
+   * @author Klaus Meffert
    * @since 2.1
    */
   public void testAdd_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 0.5d);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
@@ -89,14 +89,13 @@ public class ThresholdSelectorTest
 
   /**
    * Test if below functionality available without error.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 0.3d);
     Gene gene = new IntegerGene(conf);
     gene.setAllele(new Integer(444));
@@ -113,12 +112,12 @@ public class ThresholdSelectorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
@@ -161,14 +160,13 @@ public class ThresholdSelectorTest
 
   /**
    * Always select best chromosome if threshold is 1.0d.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
@@ -203,15 +201,14 @@ public class ThresholdSelectorTest
   }
 
   /**
-   * Never select best chromosome for granted if threshold is 0.0d
-   *
+   * Never select best chromosome for granted if threshold is 0.0d.
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_3()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     //Set index of chromosome to be selected by ThresholdSelector to 1.
     //1 because the best chromosome will be index 0 and the other one has
     // index 1.
@@ -241,14 +238,13 @@ public class ThresholdSelectorTest
 
   /**
    * Ensure that selected Chromosome's are not equal to added Chromosome's.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testSelect_4()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
@@ -277,14 +273,13 @@ public class ThresholdSelectorTest
   /**
    * Always select best chromosome if threshold is 1.0d. Target population not
    * empty.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void testSelect_5()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     // add first chromosome
     // --------------------
@@ -319,12 +314,12 @@ public class ThresholdSelectorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testEmpty_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
@@ -340,14 +335,13 @@ public class ThresholdSelectorTest
 
   /**
    * Test if method clear() does not affect original Population.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testEmpty_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
@@ -363,14 +357,13 @@ public class ThresholdSelectorTest
 
   /**
    * Test if method clear() does not affect return value.
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.1
    */
   public void testEmpty_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     ThresholdSelector selector = new ThresholdSelector(conf, 1.0d);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FittestPopulationMergerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FittestPopulationMergerTest.class);
@@ -47,7 +47,6 @@ public class FittestPopulationMergerTest
    */
   public void testMergePopulations_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 4);
     chrom.setFitnessValue(5);

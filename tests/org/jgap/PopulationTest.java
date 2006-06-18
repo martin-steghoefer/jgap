@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -99,7 +99,6 @@ public class PopulationTest
 
   public void testSetChromosome_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene g = new DoubleGene(conf);
     Chromosome c = new Chromosome(conf, g, 10);
     Population p = new Population(conf);
@@ -117,7 +116,6 @@ public class PopulationTest
 
   public void testSetChromosome_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Gene g = new DoubleGene(conf);
     Chromosome c = new Chromosome(conf, g, 10);
     Population p = new Population(conf);
@@ -131,7 +129,6 @@ public class PopulationTest
 
   public void testSetChromosomes_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
@@ -184,7 +181,6 @@ public class PopulationTest
 
   public void testToChromosomes_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
@@ -231,7 +227,7 @@ public class PopulationTest
   }
 
   /**
-   * Unordered list of fitness values of chroms in population
+   * Unordered list of fitness values of chroms in population.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -239,25 +235,24 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_1()
       throws Exception {
-    Configuration config = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
-    Population p = new Population(config);
+    Population p = new Population(conf);
     g = new DoubleGene(conf);
-    c = new Chromosome(config, g, 10);
+    c = new Chromosome(conf, g, 10);
     c.setFitnessValue(5);
     p.addChromosome(c);
     chromosomes.add(c);
-    c = new Chromosome(config, g, 3);
+    c = new Chromosome(conf, g, 3);
     c.setFitnessValue(19);
     p.addChromosome(c);
     chromosomes.add(c);
-    c = new Chromosome(config, g, 1);
+    c = new Chromosome(conf, g, 1);
     c.setFitnessValue(11);
     p.addChromosome(c);
     chromosomes.add(c);
-    c = new Chromosome(config, g, 8);
+    c = new Chromosome(conf, g, 8);
     c.setFitnessValue(18);
     p.addChromosome(c);
     chromosomes.add(c);
@@ -267,20 +262,19 @@ public class PopulationTest
   }
 
   /**
-   * Ordered list of fitness values of chroms in population
+   * Ordered list of fitness values of chroms in population.
    * @throws Exception
    */
   public void testDetermineFittestChromosome_2()
       throws Exception {
-    Configuration config = new DefaultConfiguration();
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
-    Population p = new Population(config);
+    Population p = new Population(conf);
     int nTot = 100;
     for (int i = 0; i < nTot; i++) {
       g = new DoubleGene(conf);
-      c = new Chromosome(config, g, 10);
+      c = new Chromosome(conf, g, 10);
       c.setFitnessValue(i);
       p.addChromosome(c);
       chromosomes.add(c);
@@ -292,7 +286,7 @@ public class PopulationTest
 
   /**
    * Ordered list of fitness values of chroms in population. Use fitness
-   * evaluator different from standard one
+   * evaluator different from standard one.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -300,16 +294,16 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosome_3()
       throws Exception {
-    Configuration config = new DefaultConfiguration();
-    config.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    conf.resetProperty(Configuration.PROPERTY_FITEVAL_INST);
+    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     List chromosomes = new ArrayList();
     Gene g = null;
     Chromosome c = null;
-    Population p = new Population(config);
+    Population p = new Population(conf);
     int nTot = 100;
     for (int i = 0; i < nTot; i++) {
       g = new DoubleGene(conf);
-      c = new Chromosome(config, g, 10);
+      c = new Chromosome(conf, g, 10);
       c.setFitnessValue(i);
       p.addChromosome(c);
       chromosomes.add(c);
@@ -344,7 +338,6 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosomes_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population p = getNewPopulation(conf);
     assertEquals(1, p.determineFittestChromosomes(1).size());
     assertEquals(1, p.determineFittestChromosomes(1).size());
@@ -357,7 +350,7 @@ public class PopulationTest
   }
 
   /**
-   * Exposes bug 1422962
+   * Exposes bug 1422962.
    * @throws Exception
    *
    * @author Dan Clark, Klaus Meffert
@@ -365,7 +358,6 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosomes_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population population = getNewPopulation(conf);
     IChromosome topC = population.determineFittestChromosome();
     List top = population.determineFittestChromosomes(1);
@@ -378,7 +370,7 @@ public class PopulationTest
   }
 
   /**
-   * Exposes bug 1422962
+   * Exposes bug 1422962.
    * @throws Exception
    *
    * @author Dan Clark, Klaus Meffert
@@ -386,7 +378,6 @@ public class PopulationTest
    */
   public void testDetermineFittestChromosomes_3()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population population = getNewPopulation(conf);
     assertTrue(population.isChanged());
     List top = population.determineFittestChromosomes(1);
@@ -433,7 +424,6 @@ public class PopulationTest
 
   public void testSize_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population p = new Population(conf, 10);
     // size only counts number of "real" chromosomes not placeholders
     assertEquals(0, p.size());
@@ -448,7 +438,6 @@ public class PopulationTest
 
   public void testIterator_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population p = new Population(conf, 10);
     Iterator it = p.iterator();
     assertFalse(it.hasNext());
@@ -509,7 +498,6 @@ public class PopulationTest
    */
   public void testGetGenome_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population pop = new Population(conf);
     assertTrue(pop.isChanged());
     Gene g1 = new DoubleGene(conf);
@@ -538,7 +526,7 @@ public class PopulationTest
   }
 
   /**
-   * CompositeGene.
+   * Using CompositeGene.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -546,7 +534,6 @@ public class PopulationTest
    */
   public void testGetGenome_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population pop = new Population(conf);
     Gene g1 = new DoubleGene(conf);
     Gene g2 = new StringGene(conf);
@@ -618,7 +605,6 @@ public class PopulationTest
    */
   public void testRemoveChromosome_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
@@ -643,7 +629,6 @@ public class PopulationTest
    */
   public void testRemoveChromosome_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
@@ -666,7 +651,6 @@ public class PopulationTest
    */
   public void testRemoveChromosome_2()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
@@ -688,7 +672,6 @@ public class PopulationTest
    */
   public void testRemoveChromosome_3()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
@@ -706,7 +689,6 @@ public class PopulationTest
    */
   public void testSortByFitness_0()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     IChromosome[] chroms = new Chromosome[3];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new DoubleGene(conf, 1, 5)});
@@ -739,7 +721,6 @@ public class PopulationTest
    */
   public void testSortByFitness_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population pop = new Population(conf);
     Gene g = new DoubleGene(conf);
     Chromosome c = new Chromosome(conf, g, 10);

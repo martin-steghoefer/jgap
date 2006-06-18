@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -550,8 +550,6 @@ public class MapGeneTest
       throws Exception {
     MapGene gene = new MapGene(conf);
     gene.addAllele(new Integer(2), new Integer(3));
-    Configuration conf = new DefaultConfiguration();
-    Genotype.setConfiguration(conf);
     gene.setToRandomValue(new StockRandomGenerator());
     assertEquals(new Integer(2), gene.getAlleles().keySet().iterator().next());
     assertEquals(new Integer(3), gene.getAlleles().values().iterator().next());

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DefaultConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -34,7 +34,6 @@ public class DefaultConfigurationTest
    * @since 1.1
    */
   public void testConstruct_0() {
-    Configuration conf = new DefaultConfiguration();
     assertEquals(EventManager.class, conf.getEventManager().getClass());
     assertEquals(DefaultFitnessEvaluator.class,
                  conf.getFitnessEvaluator().getClass());
@@ -44,7 +43,7 @@ public class DefaultConfigurationTest
                  conf.getRandomGenerator().getClass());
     assertEquals(ChromosomePool.class, conf.getChromosomePool().getClass());
     assertEquals(2, conf.getGeneticOperators().size());
-    //test if all 2 slots are occupied by the 2 default GeneticOperator's
+    // Test if all 2 slots are occupied by the 2 default GeneticOperator's
     int code = 0;
     GeneticOperator op;
     for (int i = 0; i < 2; i++) {

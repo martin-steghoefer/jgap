@@ -23,7 +23,7 @@ public class DefaultMutationRateCalculatorTest
     extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultMutationRateCalculatorTest.class);
@@ -31,12 +31,11 @@ public class DefaultMutationRateCalculatorTest
   }
 
   /**
-   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testCalculateCurrentRate_0() throws Exception {
-    Configuration conf = new DefaultConfiguration();
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
     Gene gene = new IntegerGene(conf, 1, 5);
     Chromosome chrom = new Chromosome(conf, gene, 50);
@@ -54,10 +53,10 @@ public class DefaultMutationRateCalculatorTest
    * nevertheless should be 1, because Random needs positive integers as input
    * (see MutationOperator.operate for calling Random class)
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testCalculateCurrentRate_1() throws Exception {
-    Configuration conf = new DefaultConfiguration();
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
     int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);
