@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -694,6 +694,50 @@ public class ConfigurationTest
 
   /**
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetBulkFitnessFunction_4()
+      throws Exception {
+    Configuration conf = new Configuration();
+    conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
+    try {
+      conf.setBulkFitnessFunction(new TestBulkFitnessFunction2());
+      fail();
+    }
+    catch (RuntimeException rex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Setting the same bulk fitness function should be possible without error.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetBulkFitnessFunction_5()
+      throws Exception {
+    Configuration conf = new Configuration();
+    conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
+    conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetBulkFitnessFunction_6() throws Exception {
+    new Thread(new MyThreadBulk()).start();
+    new Thread(new MyThreadBulk()).start();
+  }
+
+  /**
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testGetPopulationSize_0()
@@ -1132,6 +1176,19 @@ class TestBulkFitnessFunction
     extends BulkFitnessFunction {
   public void evaluate(Population a_subjects) {
   }
+
+  public int hashCode() {
+    return -199;
+  }
+}
+
+class TestBulkFitnessFunction2
+    extends BulkFitnessFunction {
+  public void evaluate(Population a_subjects) {
+  }
+  public int hashCode() {
+    return -297;
+  }
 }
 
 class MyThread
@@ -1148,3 +1205,16 @@ class MyThread
   }
 }
 
+class MyThreadBulk
+    implements Runnable {
+  public void run(){
+    Configuration conf = new Configuration();
+    try {
+      conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
+      Thread.sleep(100);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+}
