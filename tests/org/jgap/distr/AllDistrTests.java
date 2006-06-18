@@ -12,7 +12,7 @@ package org.jgap.distr;
 import junit.framework.*;
 
 /**
- * Test suite for all tests of package org.jgap.distr
+ * Test suite for all tests of package org.jgap.distr.
  *
  * @author Klaus Meffert
  * @since 1.0
@@ -20,12 +20,13 @@ import junit.framework.*;
 public class AllDistrTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
     suite.addTest(CultureTest.suite());
     suite.addTest(CultureMemoryCellTest.suite());
+    suite.addTest(ProblemTest.suite());
     return suite;
   }
 }
