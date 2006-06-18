@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -49,6 +49,10 @@ public class Configuration
   public static final String PROPERTY_JGAPFACTORY_CLASS = "JGAPFACTORYCLASS";
 
   public static final String PROPERTY_FITFUNC_INST = "JGAPFITFUNCINST";
+
+  public static final String PROPERTY_BFITFNC_INST = "JGAPBFITFNCINST";
+
+  public static final String PROPERTY_FITEVAL_INST = "JGAPBFITEVALINST";
 
   /**
    * Constants for toString()
@@ -330,10 +334,35 @@ public class Configuration
     getConfigurationHandler().readConfig();
   }
 
+  /**
+   * SHOULD NOT BE NECESSARY TO CALL UNDER NORMAL CIRCUMSTANCES (may be useful
+   * for unit tests).<p>
+   * Reset the configuration so that re-setting parameters such as fitness
+   * function is possible (without calling this method, an overwriting of a
+   * previously set fitness function results in a RuntimeException).
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public static void reset() {
     Thread current = Thread.currentThread();
     String threadKey = current.toString() + "|";
     System.setProperty(threadKey + Configuration.PROPERTY_FITFUNC_INST, "");
+    System.setProperty(threadKey + Configuration.PROPERTY_BFITFNC_INST, "");
+    System.setProperty(threadKey + Configuration.PROPERTY_FITEVAL_INST, "");
+  }
+
+  /**
+   * See Configuration.reset().
+   * @param a_propName the property to reset
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public static void resetProperty(String a_propName) {
+    Thread current = Thread.currentThread();
+    String threadKey = current.toString() + "|";
+    System.setProperty(threadKey + a_propName, "");
   }
 
   /**
@@ -401,6 +430,18 @@ public class Configuration
     m_objectiveFunction = a_functionToSet;
   }
 
+  /**
+   * Verifies that a property is not set. If not, set it, otherwise throw
+   * a RuntimeException with a_errmsg as text.
+   * @param a_propname the property to check (the current thread will be
+   * considered as a part of the property's name, too)
+   * @param a_obj the object that should be set in charge of the property
+   * @param a_errmsg the error message to throw in case the property is already
+   * set for the current thread
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   protected void checkProperty(String a_propname, Object a_obj, String a_errmsg) {
     String instanceHash = System.getProperty(threadKey + a_propname, null);
     String key = makeKey(a_obj);
@@ -408,10 +449,21 @@ public class Configuration
       System.setProperty(threadKey + a_propname, key);
     }
     else if (!instanceHash.equals(key)) {
-      throw new RuntimeException(a_errmsg);
+      throw new RuntimeException(a_errmsg+"\nMaybe "
+                                 +a_obj.getClass().getName()
+                                 +".hashCode() is not "
+                                 +"implemented accordingly.");
     }
   }
 
+  /**
+   * @param a_obj the object to make a key for, must not be null
+   * @return key produced for the object (hashCode() is used, so it should be
+   * implemented properly!)
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   protected String makeKey(Object a_obj) {
     String key = String.valueOf(a_obj.hashCode())
         + a_obj.getClass().getName();
@@ -470,6 +522,11 @@ public class Configuration
           "The bulk fitness function and normal fitness function " +
           "may not both be set.");
     }
+    // Ensure that no other bulk fitness function has been set in a
+    // different configuration object within the same thread!
+    // ------------------------------------------------------------
+    checkProperty(PROPERTY_BFITFNC_INST, a_functionToSet,
+                  "Bulk fitness function has already been set differently");
     m_bulkObjectiveFunction = a_functionToSet;
   }
 
@@ -1086,6 +1143,11 @@ public class Configuration
       throw new IllegalStateException(
           "The fitness evaluator object must not be null!");
     }
+    // Ensure that no other fitness evaluator has been set in a
+    // different configuration object within the same thread!
+    // --------------------------------------------------------
+    checkProperty(PROPERTY_FITEVAL_INST, a_fitnessEvaluator,
+                  "Fitness evaluator has already been set differently.");
     m_fitnessEvaluator = a_fitnessEvaluator;
   }
 
