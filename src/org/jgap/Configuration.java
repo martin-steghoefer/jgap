@@ -16,7 +16,7 @@ import org.jgap.impl.*;
 
 /**
  * The Configuration class represents the current configuration of
- * plugins and flags necessary to execute the genetic algorithm (such
+ * plugins and parameters necessary to execute the genetic algorithm (such
  * as fitness function, natural selector, genetic operators, and so on).
  * <p>
  * Note that, while during setup, the settings, flags, and other
@@ -39,14 +39,16 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   /**
-   * Constant for clazz name of JGAP Factory to use. Use as:
+   * Constant for class name of JGAP Factory to use. Use as:
    * System.setProperty(PROPERTY_JGAPFACTORY_CLASS,"myJGAPFactory");
    * If none such property set, class JGAPFactory will be used.
    */
   public static final String PROPERTY_JGAPFACTORY_CLASS = "JGAPFACTORYCLASS";
+
+  public static final String PROPERTY_FITFUNC_INST = "JGAPFITFUNCINST";
 
   /**
    * Constants for toString()
@@ -187,7 +189,7 @@ public class Configuration
 
   /**
    * Ordered chain of NaturalSelector's which will be executed before applying
-   * Genetic Operators
+   * Genetic Operators.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -196,7 +198,7 @@ public class Configuration
 
   /**
    * Ordered chain of NaturalSelector's which will be executed after applying
-   * Genetic Operators
+   * Genetic Operators.
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -231,7 +233,7 @@ public class Configuration
   private transient RootConfigurationHandler m_conHandler;
 
   /**
-   * Informative name for output
+   * Informative name for output.
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -257,12 +259,18 @@ public class Configuration
    */
   private transient IJGAPFactory m_factory;
 
+  private transient String threadKey;
+
   /**
+   * Initialize with default values.
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
   public Configuration() {
+    Thread current = Thread.currentThread();
+    threadKey = current.toString() + "|";
     m_preSelectors = new ChainOfSelectors();
     m_postSelectors = new ChainOfSelectors();
     m_sizeNaturalSelectorsPre = 0;
@@ -312,7 +320,20 @@ public class Configuration
       throws ConfigException, InvalidConfigurationException {
     this();
     ConfigFileReader.instance().setFileName(a_configFileName);
+    // Set the configuration statically for constructing classes by the
+    // default constructor.
+    // ----------------------------------------------------------------
+    Genotype.setConfiguration(this);
+    // Read in the config, thus creating instances of configurable classes
+    // by invoking their default constructor.
+    // -------------------------------------------------------------------
     getConfigurationHandler().readConfig();
+  }
+
+  public static void reset() {
+    Thread current = Thread.currentThread();
+    String threadKey = current.toString() + "|";
+    System.setProperty(threadKey + Configuration.PROPERTY_FITFUNC_INST, "");
   }
 
   /**
@@ -372,7 +393,29 @@ public class Configuration
           "The bulk fitness function and normal fitness function " +
           "may not both be set.");
     }
+    // Ensure that no other fitness function has been set in a different
+    // configuration object within the same thread!
+    // -----------------------------------------------------------------
+    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
+                  "Fitness function has already been set differently");
     m_objectiveFunction = a_functionToSet;
+  }
+
+  protected void checkProperty(String a_propname, Object a_obj, String a_errmsg) {
+    String instanceHash = System.getProperty(threadKey + a_propname, null);
+    String key = makeKey(a_obj);
+    if (instanceHash == null || instanceHash.length() < 1) {
+      System.setProperty(threadKey + a_propname, key);
+    }
+    else if (!instanceHash.equals(key)) {
+      throw new RuntimeException(a_errmsg);
+    }
+  }
+
+  protected String makeKey(Object a_obj) {
+    String key = String.valueOf(a_obj.hashCode())
+        + a_obj.getClass().getName();
+    return key;
   }
 
   /**
