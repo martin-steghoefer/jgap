@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.61 $";
+  private final static String CVS_REVISION = "$Revision: 1.62 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -55,6 +55,8 @@ public class Configuration
   public static final String PROPERTY_FITEVAL_INST = "JGAPBFITEVALINST";
 
   public static final String PROPERTY_SAMPLE_CHROM_INST = "JGAPSAMPLECHRMINST";
+
+  public static final String PROPERTY_EVENT_MGR_INST = "JGAPEVNTMGRINST";
 
   /**
    * Constants for toString()
@@ -353,6 +355,7 @@ public class Configuration
     System.setProperty(threadKey + Configuration.PROPERTY_BFITFNC_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_FITEVAL_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_SAMPLE_CHROM_INST, "");
+    System.setProperty(threadKey + Configuration.PROPERTY_EVENT_MGR_INST, "");
   }
 
   /**
@@ -429,7 +432,7 @@ public class Configuration
     // configuration object within the same thread!
     // -----------------------------------------------------------------
     checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
-                  "Fitness function has already been set differently");
+                  "Fitness function has already been set differently.");
     m_objectiveFunction = a_functionToSet;
   }
 
@@ -529,7 +532,7 @@ public class Configuration
     // different configuration object within the same thread!
     // ------------------------------------------------------------
     checkProperty(PROPERTY_BFITFNC_INST, a_functionToSet,
-                  "Bulk fitness function has already been set differently");
+                  "Bulk fitness function has already been set differently.");
     m_bulkObjectiveFunction = a_functionToSet;
   }
 
@@ -579,7 +582,7 @@ public class Configuration
     // different configuration object within the same thread!
     // --------------------------------------------------------
     checkProperty(PROPERTY_SAMPLE_CHROM_INST, a_sampleChromosomeToSet,
-                  "Sample chromosome has already been set differently");
+                  "Sample chromosome has already been set differently.");
     m_sampleChromosome = a_sampleChromosomeToSet;
     m_chromosomeSize = m_sampleChromosome.size();
   }
@@ -878,6 +881,11 @@ public class Configuration
       throw new InvalidConfigurationException(
           "The event manager instance may not be null.");
     }
+    // Ensure that no other event manager has been set in a different
+    // configuration object within the same thread!
+    // --------------------------------------------------------------
+    checkProperty(PROPERTY_EVENT_MGR_INST, a_eventManagerToSet,
+                  "Event manager has already been set differently.");
     m_eventManager = a_eventManagerToSet;
   }
 
