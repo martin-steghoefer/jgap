@@ -25,7 +25,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -279,6 +279,7 @@ public class XMLManagerTest
    */
   public void testChromosome_0()
       throws Exception {
+    Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
     conf.setSampleChromosome(new Chromosome(conf, new BooleanGene(conf), 8));
     conf.setPopulationSize(10);
     conf.reset();
@@ -302,6 +303,7 @@ public class XMLManagerTest
    */
   public void testGenotype_0()
       throws Exception {
+    Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
     conf.setSampleChromosome(new Chromosome(conf, new BooleanGene(conf), 8));
     conf.setPopulationSize(10);
     conf.reset();

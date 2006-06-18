@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationHistoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationHistoryTest.class);
@@ -74,7 +74,6 @@ public class PopulationHistoryTest
    */
   public void testGetPopulation_1()
       throws Exception {
-    Configuration conf = new DefaultConfiguration();
     Population pop = new Population(conf);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 4);

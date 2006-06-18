@@ -23,11 +23,17 @@ public class DefaultMutationRateCalculatorTest
     extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultMutationRateCalculatorTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    // reset the configurational parameters set
+    Configuration.reset();
   }
 
   /**
@@ -42,9 +48,20 @@ public class DefaultMutationRateCalculatorTest
     conf.setSampleChromosome(chrom);
     int rate = calc.calculateCurrentRate();
     assertEquals(conf.getChromosomeSize(), rate);
-    chrom = new Chromosome(conf, gene, 30);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testCalculateCurrentRate_1() throws Exception {
+    IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
+    Gene gene = new IntegerGene(conf, 1, 5);
+    Chromosome chrom = new Chromosome(conf, gene, 30);
     conf.setSampleChromosome(chrom);
-    rate = calc.calculateCurrentRate();
+    int rate = calc.calculateCurrentRate();
     assertEquals(conf.getChromosomeSize(), rate);
   }
 
@@ -56,7 +73,7 @@ public class DefaultMutationRateCalculatorTest
    *
    * @author Klaus Meffert
    */
-  public void testCalculateCurrentRate_1() throws Exception {
+  public void testCalculateCurrentRate_2() throws Exception {
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
     int rate = calc.calculateCurrentRate();
     assertEquals(1, rate);

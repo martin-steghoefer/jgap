@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.54 $";
+  private final static String CVS_REVISION = "$Revision: 1.55 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -499,6 +499,7 @@ public class GenotypeTest
     Configuration config = new ConfigurationForTest();
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
+    Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
     config.setSampleChromosome(new ChromosomeForTest(config, genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
@@ -525,6 +526,7 @@ public class GenotypeTest
     Configuration config = new ConfigurationForTest();
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
+    Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
     config.setSampleChromosome(new ChromosomeForTest(config, genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
@@ -550,6 +552,7 @@ public class GenotypeTest
     Configuration config = new ConfigurationForTest();
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
+    Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
     config.setSampleChromosome(new ChromosomeForTest(config, genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
