@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
+  private final static String CVS_REVISION = "$Revision: 1.61 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -53,6 +53,8 @@ public class Configuration
   public static final String PROPERTY_BFITFNC_INST = "JGAPBFITFNCINST";
 
   public static final String PROPERTY_FITEVAL_INST = "JGAPBFITEVALINST";
+
+  public static final String PROPERTY_SAMPLE_CHROM_INST = "JGAPSAMPLECHRMINST";
 
   /**
    * Constants for toString()
@@ -350,6 +352,7 @@ public class Configuration
     System.setProperty(threadKey + Configuration.PROPERTY_FITFUNC_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_BFITFNC_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_FITEVAL_INST, "");
+    System.setProperty(threadKey + Configuration.PROPERTY_SAMPLE_CHROM_INST, "");
   }
 
   /**
@@ -572,6 +575,11 @@ public class Configuration
       throw new InvalidConfigurationException(
           "The sample chromosome's configuration may not be null.");
     }
+    // Ensure that no other sample chromosome has been set in a
+    // different configuration object within the same thread!
+    // --------------------------------------------------------
+    checkProperty(PROPERTY_SAMPLE_CHROM_INST, a_sampleChromosomeToSet,
+                  "Sample chromosome has already been set differently");
     m_sampleChromosome = a_sampleChromosomeToSet;
     m_chromosomeSize = m_sampleChromosome.size();
   }
