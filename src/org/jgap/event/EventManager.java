@@ -25,7 +25,7 @@ import java.util.*;
 public class EventManager
     implements IEventManager {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * References a Map of subscribed event listeners. Each key is an event
@@ -99,5 +99,16 @@ public class EventManager
             geneticEventFired(a_eventToFire);
       }
     }
+  }
+
+  /**
+   * @return hashcode
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int hashCode() {
+    int result = m_listeners.hashCode();
+    return result;
   }
 }
