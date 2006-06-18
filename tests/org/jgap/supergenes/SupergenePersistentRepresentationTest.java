@@ -23,12 +23,17 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite =
         new TestSuite(SupergenePersistentRepresentationTest.class);
     return suite;
+  }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
   }
 
   public void testRepresentation()
