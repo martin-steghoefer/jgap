@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -795,6 +795,48 @@ public class ConfigurationTest
 
   /**
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetEventManager_1() throws Exception {
+    Configuration conf = new Configuration();
+    conf.setEventManager(new EventManager());
+    conf.setEventManager(new EventManager());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetEventManager_2()
+      throws Exception {
+    Configuration conf = new Configuration();
+    conf.setEventManager(new EventManager());
+    try {
+      conf.setEventManager(new TestEventManager());
+      fail();
+    }
+    catch (RuntimeException rex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSetEventManager_3() throws Exception {
+    new Thread(new MyThreadEvent()).start();
+    new Thread(new MyThreadEvent()).start();
+  }
+
+  /**
+   * @throws Exception
    * @author Klaus Meffert
    */
   public void testLock_0()
@@ -1217,4 +1259,22 @@ class MyThreadBulk
       ex.printStackTrace();
     }
   }
+}
+
+class MyThreadEvent
+    implements Runnable {
+  public void run(){
+    Configuration conf = new Configuration();
+    try {
+      conf.setEventManager(new EventManager());
+      Thread.sleep(100);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+}
+
+class TestEventManager extends EventManager {
+
 }
