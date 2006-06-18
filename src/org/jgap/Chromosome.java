@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.81 $";
+  private final static String CVS_REVISION = "$Revision: 1.82 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -521,7 +521,7 @@ public class Chromosome
     }
   }
 
-  
+
   /**
    * Sets the fitness value of this Chromosome directly without any
    * constraint checks, conversions or checks. Only use if you know what
@@ -702,9 +702,11 @@ public class Chromosome
     // --------------------------------------------
     int geneHashcode;
     int hashCode = 1;
-    for (int i = 0; i < m_genes.length; i++) {
-      geneHashcode = m_genes[i].hashCode();
-      hashCode = 31 * hashCode + geneHashcode;
+    if (m_genes != null) {
+      for (int i = 0; i < m_genes.length; i++) {
+        geneHashcode = m_genes[i].hashCode();
+        hashCode = 31 * hashCode + geneHashcode;
+      }
     }
     return hashCode;
   }
