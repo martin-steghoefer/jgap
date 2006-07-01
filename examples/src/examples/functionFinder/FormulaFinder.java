@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -97,6 +97,7 @@ public class FormulaFinder {
     conf.setPreservFittestIndividual(true);
     // Fitness Evaluator (lower is better).
     // ------------------------------------
+    conf.resetProperty(Configuration.PROPERTY_FITEVAL_INST);
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     // Selector.
     // ---------
@@ -152,7 +153,7 @@ public class FormulaFinder {
     CompositeGene comp;
     IntegerGene gene;
     for (int i = 0; i < maxTerms; i++) {
-      comp = new CompositeGene();
+      comp = new CompositeGene(conf);
       // Funtions, constants
       gene = new IntegerGene(conf, 0, max);
       comp.addGene(gene);

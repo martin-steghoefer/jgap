@@ -22,7 +22,7 @@ import java.util.*;
 public class PermutingConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private List m_randomGeneratorSlots;
 
@@ -126,6 +126,7 @@ public class PermutingConfiguration
     m_configuration.setEventManager(getEventManager());
     m_configuration.setFitnessEvaluator(getFitnessEvaluator());
     if (getFitnessFunction() != null) {
+      m_configuration.resetProperty(Configuration.PROPERTY_FITFUNC_INST);
       setFitnessFunction(getFitnessFunction());
     }
     m_configuration.setMinimumPopSizePercent(getMinimumPopSizePercent());
