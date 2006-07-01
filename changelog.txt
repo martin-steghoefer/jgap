@@ -49,6 +49,8 @@
   DoubleGene, renamed the corresponding private fields
   (skipped the ending"s")
 * Added javadoc to interface IChromosome
+* Adapted PermutingConfiguration to new config.paradigm
+* Adapted formula example to new config.paradigm
 
 2.6
 -----------------------------------------------------------
