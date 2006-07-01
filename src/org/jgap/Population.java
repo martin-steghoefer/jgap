@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.44 $";
+  private static final String CVS_REVISION = "$Revision: 1.45 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -275,6 +275,33 @@ public class Population
       }
     }
     setChanged(false);
+    return m_fittestChromosome;
+  }
+
+  /**
+   * Determines the fittest Chromosome in the population (the one with the
+   * highest fitness value) and memorizes it. This is an optimized version
+   * compared to calling determineFittesChromosomes(1).
+   * @return the fittest Chromosome of the population within the given indices
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public IChromosome determineFittestChromosome(int a_startIndex, int a_endIndex) {
+    double bestFitness = -1.0d;
+    FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
+    double fitness;
+    int startIndex = Math.max(0, a_startIndex);
+    int endIndex = Math.min(m_chromosomes.size() - 1, a_endIndex);
+    for (int i = startIndex; i < endIndex; i++) {
+      IChromosome chrom = (IChromosome) m_chromosomes.get(i);
+      fitness = chrom.getFitnessValue();
+      if (evaluator.isFitter(fitness, bestFitness)
+          || m_fittestChromosome == null) {
+        m_fittestChromosome = chrom;
+        bestFitness = fitness;
+      }
+    }
     return m_fittestChromosome;
   }
 
