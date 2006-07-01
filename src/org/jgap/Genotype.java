@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.82 $";
+  private final static String CVS_REVISION = "$Revision: 1.83 $";
 
   /**
    * The current active Configuration instance.
@@ -199,6 +199,21 @@ public class Genotype
   }
 
   /**
+   * Retrieves the Chromosome in the population with the highest fitness
+   * value within the given indices.
+   *
+   * @return the Chromosome with the highest fitness value within the given
+   * indices, or null if there are no chromosomes in this Genotype
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public synchronized IChromosome getFittestChromosome(int a_startIndex,
+      int a_endIndex) {
+    return getPopulation().determineFittestChromosome(a_startIndex, a_endIndex);
+  }
+
+  /**
    * Retrieves the top n Chromsomes in the population (the ones with the best
    * fitness values).
    *
@@ -250,13 +265,7 @@ public class Genotype
     applyNaturalSelectors(true);
     // Execute all of the Genetic Operators.
     // -------------------------------------
-    List geneticOperators = getConfiguration().getGeneticOperators();
-    Iterator operatorIterator = geneticOperators.iterator();
-    while (operatorIterator.hasNext()) {
-      GeneticOperator operator = (GeneticOperator) operatorIterator.next();
-      applyGeneticOperator(operator, getPopulation(),
-                           getPopulation().getChromosomes());
-    }
+    applyGeneticOperators();
     // Reset fitness value of genetically operated chromosomes.
     // Normally, this should not be necessary as the Chromosome
     // class initializes each newly created chromosome with
@@ -304,10 +313,15 @@ public class Genotype
       }
     }
     if (getConfiguration().isPreserveFittestIndividual()) {
+      IChromosome fittest = getFittestChromosome(0,
+                                                 getConfiguration().
+                                                 getPopulationSize() - 1);
+      if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
+        keepPopSizeConstant(getPopulation(),
+                            getConfiguration().getPopulationSize());
+      }
       // Determine the fittest chromosome in the population.
       // ---------------------------------------------------
-      IChromosome fittest = null;
-      fittest = getFittestChromosome();
       if (!getPopulation().contains(fittest)) {
         // Re-add fittest chromosome to current population.
         // ------------------------------------------------
@@ -473,7 +487,7 @@ public class Genotype
   }
 
   /**
-   * Applies all NaturalSelectors registered with the Configuration
+   * Applies all NaturalSelectors registered with the Configuration.
    * @param a_processBeforeGeneticOperators true apply NaturalSelectors
    * applicable before GeneticOperators, false: apply the ones applicable
    * after GeneticOperators
@@ -483,6 +497,7 @@ public class Genotype
    */
   protected void applyNaturalSelectors(
       boolean a_processBeforeGeneticOperators) {
+      /**@todo optionally use working pool*/
     try {
       // Process all natural selectors applicable before executing the
       // genetic operators (reproduction, crossing over, mutation...).
@@ -525,6 +540,26 @@ public class Genotype
     catch (InvalidConfigurationException iex) {
       // This exception should never be reached
       throw new IllegalStateException(iex.getMessage());
+    }
+  }
+
+  /**
+   * Applies all GeneticOperators registered with the Configuration.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void applyGeneticOperators() {
+    List geneticOperators = getConfiguration().getGeneticOperators();
+    Iterator operatorIterator = geneticOperators.iterator();
+    while (operatorIterator.hasNext()) {
+      GeneticOperator operator = (GeneticOperator) operatorIterator.next();
+      applyGeneticOperator(operator, getPopulation(),
+                           getPopulation().getChromosomes());
+
+//      List workingPool = new Vector();
+//      applyGeneticOperator(operator, getPopulation(),
+//                           workingPool);
     }
   }
 
@@ -592,8 +627,8 @@ public class Genotype
    * part of a_population resp. if you want to use a different list.
    *
    * @param a_operator the GeneticOperator to call
-   * @param a_population the Population to use
-   * @param a_chromosomes the List of Chromosome objects to return
+   * @param a_population the population to use
+   * @param a_chromosomes the list of Chromosome objects to return
    *
    * @author Klaus Meffert
    * @since 2.4
@@ -605,21 +640,22 @@ public class Genotype
   }
 
   /**
-   * Cares that the population size does not exceed the given maximum size
-   * @param a_pop the Population to keep constant in size
-   * @param a_maxSize the maximum size allowed for the Population
+   * Cares that the population size does not exceed the given maximum size.
+   * @param a_pop the population to keep constant in size
+   * @param a_maxSize the maximum size allowed for the population
    *
    * @author Klaus Meffert
    * @since 2.5
    */
   protected void keepPopSizeConstant(Population a_pop, int a_maxSize) {
     int popSize = a_pop.size();
-    if (popSize > a_maxSize) {
-      // See request  1213752.
-      // ---------------------
-      while (popSize > a_maxSize) {
-        a_pop.removeChromosome(--popSize);
-      }
+    // See request  1213752.
+    // ---------------------
+    while (popSize > a_maxSize) {
+      // Remove a chromosome.
+      // --------------------
+      a_pop.removeChromosome(0);
+      popSize--;
     }
   }
 }
