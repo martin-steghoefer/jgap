@@ -51,6 +51,7 @@
 * Added javadoc to interface IChromosome
 * Adapted PermutingConfiguration to new config.paradigm
 * Adapted formula example to new config.paradigm
+* Fixed example examples.chromInit.ChromosomeInit
 
 2.6
 -----------------------------------------------------------
