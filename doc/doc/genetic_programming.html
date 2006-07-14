@@ -1,0 +1,132 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="Tutorial on how to create custom genetic operators with JGAP to make up a genetic algorithm.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
+                   optimization, evolutionary, open source, genetic operators, genes, alleles, chromosomes">
+<link rel="stylesheet" href="../jgap.css" type="text/css">
+<title>Creating Custom Genetic Operators</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">Genetic Programming with JGAP</h1>
+<a class="homeLink" href="index.html">
+
+<p align="center">[Documentation Index]</a> </p>
+
+<hr>
+
+<p class="text">Genetic Programming (GP) was supposed to be introduced by John
+Koza. GP is sort of different to Genetic Algorithms (GA) as GP is more complex
+than GA. GP is about evolving programs with a given set of commands. Each
+command is assigned a number of parameters. That way, programs can be
+constructed. They are represented internally as a tree. </p>
+
+<p class="text">GP was introduced with JGAP 3.0. It is in its early stages,
+especially what concerns the documentation. This text is a first approach
+presenting some useful information about how to utilize JGAP for GP. </p>
+
+<h3 class="subheader">JGAP's Philosophy</h3>
+
+<p class="text">The main philosophy that was setup before extending JGAP towards
+GP was to reach the goal by adding parts to GA to get GP. Thus: GA + x =GP, with
+x being the added parts.
+ </p>
+
+<h3 class="subheader">A first start</h3>
+
+<p class="text">To get a feeling of how to implement your GP-Program with JGAP,
+please have a look at the example located in class&nbsp; <i>examples.gp.MathProblem</i>.
+This example tries to find a formula for a given truth table (X/Y value pairs)
+and a given set of operators (such as +, -, * etc). The mentioned example class
+also contains a fitness function named <i>FormulaFitnessFunction</i>.
+ </p>
+
+<p class="text">The example at a glance:
+ </p>
+
+<p class="text">1. Create configuration
+ </p>
+
+<p class="Listing">
+<tt>
+  /**<br>
+  &nbsp;* Starts the example<br>
+  &nbsp;* @param args ignored<br>
+  &nbsp;* @throws Exception<br>
+  &nbsp;*/<br>
+  public static void main(String[] args) throws Exception {<br>
+&nbsp; GPConfiguration config = new GPConfiguration();<br>
+&nbsp; config.setMaxInitDepth(8);<br>
+&nbsp; config.setPopulationSize(800);<br>
+&nbsp; config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());<br>
+&nbsp; ... // continued below<br>
+
+</tt>
+ </p>
+
+<p class="text">2. Create initial Genotype (continued in above method <i>main</i>): </p>
+
+<p class="Listing">    
+<tt>
+  GPGenotype gp = create(config);<br>
+<br>
+--&gt;<br>
+<br>
+  public static GPGenotype create(GPConfiguration a_conf) throws InvalidConfigurationException {<br>
+&nbsp; Class[] types = {<br>
+&nbsp;&nbsp;&nbsp; CommandGene.FloatClass};<br>
+&nbsp; Class[][] argTypes = {<br>
+&nbsp;&nbsp;&nbsp; {}<br>
+&nbsp; };<br>
+&nbsp; CommandGene[][] nodeSets = {<br>
+  &nbsp;&nbsp;&nbsp; {<br>
+  &nbsp;&nbsp;&nbsp; vx = Variable.create(a_conf, "X", CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new AddCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new SubtractCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new MultiplyCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new DivideCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new SinCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new CosCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new ExpCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp; }<br>
+  &nbsp; };<br>
+  &nbsp; Random random = new Random();<br>
+  &nbsp; // randomly initialize function data (X-Y table) for x^4+x^3+x^2+x<br>
+  &nbsp; for (int i = 0; i &lt; 20; i++) {<br>
+  &nbsp;&nbsp;&nbsp; float f = 2.0f * (random.nextFloat() - 0.5f);<br>
+  &nbsp;&nbsp;&nbsp; x[i] = new Float(f);<br>
+  &nbsp;&nbsp;&nbsp; y[i] = f * f * f * f + f * f * f + f * f - f;<br>
+  &nbsp;&nbsp;&nbsp; System.out.println(i + ") " + x[i] + "   " + y[i]);<br>
+  &nbsp; }<br>
+  &nbsp; // Create genotype with initial population<br>
+  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets);<br>
+  }
+</tt> </p>
+
+<p class="text">3. Start the evolution and output the result: (continued in above method <i>main</i>):&nbsp; </p>
+
+<p class="Listing">    <tt>
+    gp.evolve(800);<br>
+    gp.outputSolution(gp.getAllTimeBest());<br>
+<br>
+    } // end of method &quot;main&quot;
+<br>
+</tt> </p>
+
+<p class="text">A more detailed description will follow as available. If you
+like to provide one, please contact us!&nbsp; </p>
+
+<p class="copyright">Copyright © 2006-Klaus Meffert. All rights reserved. </p>
+
+<hr>
+<a class="homeLink" href="index.html">
+
+<p align="center">[Documentation Index]</a> <br>
+<a href="http://sourceforge.net/projects/jgap"><img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
+border="0" alt="SourceForge Logo"></a> </p>
+</body>
+</html>
