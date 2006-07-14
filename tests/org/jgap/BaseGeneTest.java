@@ -12,7 +12,7 @@ package org.jgap;
 import junit.framework.*;
 
 /**
- * Tests the BaseGene class
+ * Tests the BaseGene class.
  *
  * @author Klaus Meffert
  * @since 2.3
@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -339,4 +339,5 @@ public class BaseGeneTest
       return null;
     }
   }
+
 }
