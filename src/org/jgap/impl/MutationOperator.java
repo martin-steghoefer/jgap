@@ -22,9 +22,8 @@ import org.jgap.data.config.*;
  * This MutationOperator supports both fixed and dynamic mutation rates.
  * A fixed rate is one specified at construction time by the user. A dynamic
  * rate is determined by this class if no fixed rate is provided, and is
- * calculated based on the size of the Chromosomes in the population such
- * that, on average, one gene will be mutated for every ten Chromosomes
- * processed by this operator.
+ * calculated based on the size of the Chromosomes in the population. Details
+ * are specified in the DefaultMutationRateCalculator class.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -34,7 +33,7 @@ public class MutationOperator
     extends BaseGeneticOperator
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to

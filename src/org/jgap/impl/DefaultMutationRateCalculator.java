@@ -20,7 +20,7 @@ import org.jgap.*;
 public class DefaultMutationRateCalculator
     extends BaseRateCalculator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * @param a_config the configuration to use
@@ -40,7 +40,7 @@ public class DefaultMutationRateCalculator
    * @return calculated divisor of mutation rate probability (dividend is 1)
    *
    * @author Klaus Meffert
-   * @since 1.1 (same functionality since earlier, but not encapsulated)
+   * @since 1.1 (same functionality as earlier, but not encapsulated)
    */
   public int calculateCurrentRate() {
     int size = getConfiguration().getChromosomeSize();
