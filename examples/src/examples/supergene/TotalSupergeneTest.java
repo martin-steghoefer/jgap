@@ -24,11 +24,11 @@ import org.jgap.supergenes.*;
 public class TotalSupergeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Test supported Supegene features, including performance tests.
-   * @return true if the Supergene tests succeded
+   *  @throws Exception
    */
   public void testSupergeneTotal() throws Exception {
       System.out.println("Testing Supergene...");

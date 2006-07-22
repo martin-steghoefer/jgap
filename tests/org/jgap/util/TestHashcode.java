@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class TestHashcode {
   /** String containing the CVS revision. Read out via reflection! */
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Determines if object should output debug information.
@@ -85,18 +85,18 @@ public class TestHashcode {
   }
 
   /**
-   * Set's the Maximum average value of hashCodes needed to pass the
-   * testDispersion() test
+   * Set's the maximum average value of hashCodes needed to pass the
+   * testDispersion() test. Also see TestHascode#testDispersion.
    *
    * @param a_averageMax New Maximum average
-   * @see TestHascode#testDispersion
+   *
    */
   public void setAverageMax(double a_averageMax) {
     m_AverageMax = a_averageMax;
   }
 
   /**
-   * Set's the Minimum average value of hashCodes needed to pass the
+   * Set's the minimum average value of hashCodes needed to pass the
    * testDispersion() test
    *
    * @param a_averageMin new Minimum average
