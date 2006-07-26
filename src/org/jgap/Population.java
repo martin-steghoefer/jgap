@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.45 $";
+  private static final String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -280,8 +280,10 @@ public class Population
 
   /**
    * Determines the fittest Chromosome in the population (the one with the
-   * highest fitness value) and memorizes it. This is an optimized version
-   * compared to calling determineFittesChromosomes(1).
+   * highest fitness value) within the given indices and memorizes it. This is
+   * an optimized version compared to calling determineFittesChromosomes(1).
+   * @param a_startIndex index to begin the evaluation with
+   * @param a_endIndex index to end the evaluation with
    * @return the fittest Chromosome of the population within the given indices
    *
    * @author Klaus Meffert
@@ -308,8 +310,8 @@ public class Population
   /**
    * Mark that for the population the fittest chromosome may have changed.
    *
-   * @param a_changed true: population'fittest chromosome may have changed
-   * false: fittest chromosome is known
+   * @param a_changed true: population's fittest chromosome may have changed,
+   * false: fittest chromosome evaluated earlier is still valid
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -320,7 +322,7 @@ public class Population
   }
 
   /**
-   * @return true: population's chromosomes (maybe) have been changed.
+   * @return true: population's chromosomes (maybe) were changed,
    * false: not changed for sure
    *
    * @since 2.6
@@ -393,6 +395,7 @@ public class Population
     }
     // Sort the list of chromosomes using the fitness comparator
     sortByFitness();
+    // Return the top n chromosomes
     return getChromosomes().subList(0, numberOfChromosomes);
   }
 
@@ -404,8 +407,9 @@ public class Population
    * @since 2.6
    */
   public void sortByFitness() {
-    /**@todo the following construction could be cached but wrt that the
-     * evaluator registered with the configuration could change!*/
+    // The following construction could be cached but wrt that the
+    // evaluator registered with the configuration could change
+    // --> Don't cache it!
     sort(new ChromosomeFitnessComparator(getConfiguration().
                                          getFitnessEvaluator()));
     setChanged(false);
