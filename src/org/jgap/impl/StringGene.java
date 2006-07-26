@@ -40,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   private int m_minLength;
 
@@ -56,6 +56,8 @@ public class StringGene
   /**
    * Default constructor, sets minimum and maximum length to arbitrary.
    * You need to set the valid alphabet later!<p>
+   * Do not use this constructor with a sample chromosome set in the
+   * configuration.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    * @throws InvalidConfigurationException
@@ -70,7 +72,9 @@ public class StringGene
 
   /**
    * Default constructor, sets minimum and maximum length to arbitrary.
-   * You need to set the valid alphabet later!
+   * You need to set the valid alphabet later!<p>
+   * Do not use this constructor with a sample chromosome set in the
+   * configuration.
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -84,7 +88,9 @@ public class StringGene
 
   /**
    * Constructor, allows to specify minimum and maximum lengths of the string
-   * held by this gene.
+   * held by this gene. You need to set the valid alphabet later!<p>
+   * Do not use this constructor with a sample chromosome set in the
+   * configuration.
    * @param a_config the configuration to use
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele
@@ -101,7 +107,9 @@ public class StringGene
 
   /**
    * Constructor, allows to specify minimum and maximum lengths of the string
-   * held by this gene, as well as the valid alphabet.
+   * held by this gene, as well as the valid alphabet. This constructor can be
+   * used to construct a sample chromosome with a configuration.
+   *
    * @param a_config the configuration to use
    * @param a_minLength minimum valid length of an allele
    * @param a_maxLength maximum valid length of an allele
