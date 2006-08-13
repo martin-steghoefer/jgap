@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -69,15 +69,18 @@ public class Variable
   }
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
-    return ( (Boolean) args[m_argnum]).booleanValue();
+    return ( (Boolean) value).booleanValue();
+//    return ( (Boolean) args[m_argnum]).booleanValue();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return ( (Integer) args[m_argnum]).intValue();
+    return ( (Integer) value).intValue();
+//    return ( (Integer) args[m_argnum]).intValue();
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return ( (Long) args[m_argnum]).longValue();
+    return ( (Long) value).longValue();
+//    return ( (Long) args[m_argnum]).longValue();
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
@@ -86,11 +89,13 @@ public class Variable
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return ( (Double) args[m_argnum]).doubleValue();
+    return ( (Double) value).doubleValue();
+//    return ( (Double) args[m_argnum]).doubleValue();
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    return args[m_argnum];
+    return value;
+//    return args[m_argnum];
   }
 
   /**
