@@ -9,6 +9,7 @@
  */
 package org.jgap.gp;
 
+import java.util.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.event.*;
@@ -16,9 +17,11 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Object m_state;
+
+  private Stack m_stack = new Stack();
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -125,5 +128,25 @@ public class GPConfiguration
 
   public void setMaxInitDepth(int a_maxDepth) {
     maxInitDepth = a_maxDepth;
+  }
+
+  public void pushToStack(Object a_value) {
+    m_stack.push(a_value);
+  }
+
+  public Object popFromStack() {
+    return m_stack.pop();
+  }
+
+  public Object peekStack() {
+    return m_stack.peek();
+  }
+
+  public int stackSize() {
+    return m_stack.size();
+  }
+
+  public void clearStack() {
+    m_stack.clear();
   }
 }
