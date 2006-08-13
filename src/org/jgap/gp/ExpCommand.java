@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ExpCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public ExpCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -45,6 +45,12 @@ public class ExpCommand
 
   public String toString() {
     return "EXP";
+  }
+
+  public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    int i = c.execute_int(n, 0, args);
+    // clip to -10000 -> 20
+    return (int) Math.exp(Math.max( -10000.0f, Math.min(i, 20.0f)));
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
