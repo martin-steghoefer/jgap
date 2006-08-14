@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /*wodka:
    void add(Command cmd);
@@ -172,8 +172,8 @@ public class ProgramChromosome
       System.arraycopy(a_functionSet, 0, getFunctionSet(), 0,
                        a_functionSet.length);
       for (int i = 0; i < a_argTypes.length; i++) {
-        getFunctionSet()[a_functionSet.length +
-            i] = new Variable(getConfiguration(), "X", a_argTypes[i]);
+        getFunctionSet()[a_functionSet.length + i]
+            = new Argument(getConfiguration(),i,a_argTypes[i]);
       }
       index = 0;
       maxDepth = a_depth;
@@ -205,8 +205,8 @@ public class ProgramChromosome
       System.arraycopy(a_functionSet, 0, getFunctionSet(), 0,
                        a_functionSet.length);
       for (int i = 0; i < a_argTypes.length; i++) {
-        getFunctionSet()[a_functionSet.length +
-            i] = new Variable(getConfiguration(), "X", a_argTypes[i]);
+        getFunctionSet()[a_functionSet.length + i]
+            = new Argument(getConfiguration(),i,a_argTypes[i]);
       }
       index = 0;
       maxDepth = depth;
