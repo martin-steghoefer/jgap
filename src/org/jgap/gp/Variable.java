@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -70,32 +70,26 @@ public class Variable
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     return ( (Boolean) value).booleanValue();
-//    return ( (Boolean) args[m_argnum]).booleanValue();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     return ( (Integer) value).intValue();
-//    return ( (Integer) args[m_argnum]).intValue();
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     return ( (Long) value).longValue();
-//    return ( (Long) args[m_argnum]).longValue();
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     return ( (Float) value).floatValue();
-//    return ( (Float) args[m_argnum]).floatValue();
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     return ( (Double) value).doubleValue();
-//    return ( (Double) args[m_argnum]).doubleValue();
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     return value;
-//    return args[m_argnum];
   }
 
   /**
