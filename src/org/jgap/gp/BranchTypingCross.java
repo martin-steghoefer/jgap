@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -30,6 +30,7 @@ public class BranchTypingCross
    * Crosses two individuals. A random chromosome is chosen for crossing based
    * probabilistically on the proportion of nodes in each chromosome in the
    * first individual.
+   *
    * @param i1 the first individual to cross
    * @param i2 the second individual to cross
    * @return an array of the two resulting individuals
@@ -155,12 +156,14 @@ public class BranchTypingCross
       p1 = c1.getTerminal(a_config.getRandomGenerator().
                           nextInt(c1.numTerminals(t)), t);
     }
+
     int s0 = c0.getSize(p0);
     int s1 = c1.getSize(p1);
     int d0 = c0.getDepth(p0);
     int d1 = c1.getDepth(p1);
     int c0s = c0.getSize(0);
     int c1s = c1.getSize(0);
+
     // Check for depth constraint for p1 inserted into c0
     if (d0 - 1 + s1 > a_config.getMaxCrossoverDepth()) {
       // choose the other parent
