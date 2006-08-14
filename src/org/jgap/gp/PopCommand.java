@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PopCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public PopCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -52,7 +52,7 @@ public class PopCommand
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     // Pop from stack.
     if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
-      return 0;
+      throw new IllegalStateException("pop without push");
     }
     return ((Integer)((GPConfiguration)getConfiguration()).popFromStack()).intValue();
   }
