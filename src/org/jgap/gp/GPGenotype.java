@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Fitness value of the best solution.
@@ -141,7 +141,8 @@ public class GPGenotype
   }
 
   /**
-   * Evolves the population n times
+   * Evolves the population n times.
+   *
    * @param a_evolutions number of evolution
    *
    * @author Klaus Meffert
@@ -238,6 +239,7 @@ public class GPGenotype
    */
   public void evolve() {
     try {
+      getGPConfiguration().clearStack();
       int popSize = getGPConfiguration().getPopulationSize();
       GPPopulation newPopulation = new GPPopulation(getGPConfiguration(),
           popSize);
@@ -250,7 +252,10 @@ public class GPGenotype
         val = random.nextFloat();
         // Note that if we only have one slot left to fill, we don't do
         // crossover, but fall through to reproduction.
+        // ------------------------------------------------------------
         if (i < popSize - 1 && val < getGPConfiguration().getCrossoverProb()) {
+          // Do crossover.
+          // -------------
           ProgramChromosome i1 = getGPConfiguration().getSelectionMethod().
               select(this);
           ProgramChromosome i2 = getGPConfiguration().getSelectionMethod().
@@ -259,21 +264,22 @@ public class GPGenotype
               getCrossMethod().operate(i1, i2);
           newPopulation.setChromosome(i++, newIndividuals[0]);
           newPopulation.setChromosome(i, newIndividuals[1]);
-//        for (int j = listeners.length - 1; j >= 0; j -= 2) {
-//          ( (GPListener) listeners[j]).bumpEvolutionProgress();
-//          ( (GPListener) listeners[j]).bumpEvolutionProgress();
-//        }
         }
         else if (val <
                  getGPConfiguration().getCrossoverProb() +
                  getGPConfiguration().getReproductionProb()) {
+          // Reproduction only.
+          // ------------------
           newPopulation.setChromosome(i,
                                       getGPConfiguration().getSelectionMethod().
                                       select(this));
-//        for (int j = listeners.length - 1; j >= 0; j -= 2)
-//          ( (GPListener) listeners[j]).bumpEvolutionProgress();
         }
+        /**@todo inform listeners about evolution progress*/
+        //        for (int j = listeners.length - 1; j >= 0; j -= 2)
+        //          ( (GPListener) listeners[j]).bumpEvolutionProgress();
       }
+      // Now set the new population as the active one.
+      // ---------------------------------------------
       setPopulation(newPopulation);
     }
     catch (InvalidConfigurationException iex) {
