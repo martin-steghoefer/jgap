@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  * */
 public abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient Configuration m_conf;
 
@@ -184,6 +184,10 @@ public abstract class AbstractSupergeneTest {
             continue Test;
           }
         }
+        // Need to reset the configuration because it needs to be changed each
+        // time when looping.
+        // -------------------------------------------------------------------
+        DefaultConfiguration.reset();
         e = makeChangeForAmount(amount);
         if (REPORT_ENABLED) {
           System.out.println(" err " + e);
