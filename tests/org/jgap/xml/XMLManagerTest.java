@@ -12,6 +12,7 @@ package org.jgap.xml;
 import java.io.*;
 import javax.xml.parsers.*;
 import org.jgap.*;
+import org.jgap.supergenes.*;
 import org.jgap.impl.*;
 import org.w3c.dom.*;
 import junit.framework.*;
@@ -25,7 +26,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -37,8 +38,10 @@ public class XMLManagerTest
   private Configuration m_conf;
 
   private Chromosome m_chrom;
+  private Chromosome m_supergenechrom;
 
   private Gene[] m_genes;
+  private Gene[] m_supergenes;
 
   private Genotype m_genotype;
 
@@ -61,6 +64,10 @@ public class XMLManagerTest
       m_conf.setFitnessFunction(new RandomFitnessFunction());
       m_conf.setPopulationSize(8);
       m_chrom = new Chromosome(conf, m_genes);
+      InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf, new Gene[]{});
+      m_supergenes = new Supergene[]{gene};
+      m_supergenechrom = new Chromosome(conf, m_supergenes);
+
       m_conf.setSampleChromosome(m_chrom);
       m_genotype = new Genotype(m_conf, new Chromosome[] {m_chrom});
       m_chromosome_tag = (String) privateAccessor.getField(XMLManager.class,
@@ -124,6 +131,26 @@ public class XMLManagerTest
     assertEquals(m_genes.length, genes2.length);
     for (int i = 0; i < m_genes.length; i++) {
       assertEquals(m_genes[i], genes2[i]);
+    }
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGetGenesFromElement_2()
+      throws Exception {
+    Document doc = XMLManager.representChromosomeAsDocument(m_supergenechrom);
+    Element elem = doc.getDocumentElement();
+    NodeList chromElems = elem.getElementsByTagName(m_genes_tag);
+    Gene[] genes2 = XMLManager.getGenesFromElement(m_conf,
+        (Element) chromElems.item(0));
+    assertEquals(m_supergenes.length, genes2.length);
+    for (int i = 0; i < m_supergenes.length; i++) {
+      assertEquals(m_supergenes[i], genes2[i]);
     }
   }
 
@@ -316,4 +343,5 @@ public class XMLManagerTest
         XMLManager.getGenotypeFromDocument(conf, genotypeDoc);
     assertEquals(genotypeFromXML, genotype);
   }
+
 }
