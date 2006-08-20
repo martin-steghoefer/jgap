@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Fitness value of the best solution.
@@ -99,8 +99,7 @@ public class GPGenotype
     /**@todo use listener*/
     System.gc();
     System.out.println("Memory consumed before creating population: "
-                       + (Runtime.getRuntime().totalMemory() / 1024 / 1024) +
-                       "M");
+                       + getTotalMemoryMB() + "MB");
 //    Object[] listeners = GPListeners.getListenerList();
 //    for (int i = listeners.length - 1; i >= 0; i -= 2)
 //      ( (GPListener) listeners[ i ]).setPopulationSize(popSize);
@@ -110,9 +109,28 @@ public class GPGenotype
     /**@todo use listener*/
     System.gc();
     System.out.println("Memory used after creating population: "
-                       + (Runtime.getRuntime().totalMemory() / 1024 / 1024) +
-                       "M");
+                       + getTotalMemoryMB() + "MB");
     return new GPGenotype(a_conf, pop);
+  }
+
+  /**
+   * @return total memory available by the VM in megabytes.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public static double getTotalMemoryMB() {
+    return (Runtime.getRuntime().totalMemory() / 1024 / 1024);
+  }
+
+  /**
+   * @return free memory available in the VM in megabytes.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public static double getFreeMemoryMB() {
+    return (Runtime.getRuntime().freeMemory() / 1024 / 1024);
   }
 
   public static GPConfiguration getGPConfiguration() {
@@ -160,7 +178,8 @@ public class GPGenotype
         return;
       }
       if (i % 25 == 0) { /**@todo make configurable --> use listener*/
-        System.out.println("Evolving generation " + i);
+        System.out.println("Evolving generation " + i
+                           + ", memory free: " + getFreeMemoryMB() + " MB");
       }
       evolve();
     }
