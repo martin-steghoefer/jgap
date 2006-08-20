@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /*wodka:
    void add(Command cmd);
@@ -218,22 +218,63 @@ public class ProgramChromosome
     }
   }
 
+  /**
+   * Output program in left-hand notion (e.g.: "+ X Y" for "X + Y")
+   * @param a_n node to start with
+   * @return output in left-hand notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public String toString(final int a_n) {
     if (a_n < 0) {
       return "";
     }
+    // Replace any occurance of placeholders (e.g. &1, &2...) in the function's
+    // name.
+    // ------------------------------------------------------------------------
+    String funcName = getFunctions()[a_n].getName();
+    int j = 1;
+    do {
+      String placeHolder = "&"+j;
+      int foundIndex = funcName.indexOf(placeHolder);
+      if (foundIndex < 0) {
+        break;
+      }
+      funcName = funcName.replaceFirst(placeHolder,"");
+      j++;
+    } while(true);
+    // Now remove any leading and trailing spaces.
+    // -------------------------------------------
+    if (j>0) {
+      funcName = funcName.trim();
+    }
+
     if (getFunctions()[a_n].getArity() == 0) {
-      return getFunctions()[a_n].getName() + " ";
+      return funcName + " ";
     }
     String str = "";
-    str += getFunctions()[a_n].getName() + " ( ";
+    str += funcName + " ( ";
     for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
       str += toString(getChild(a_n, i));
     }
-    str += ") ";
+    if (a_n == 0) {
+      str += ")";
+    }
+    else {
+      str += ") ";
+    }
     return str;
   }
 
+  /**
+   * Output program in "natural" notion (e.g.: "X + Y" for "X + Y")
+   * @param a_n node to start with
+   * @return output in natural notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public String toString2(final int a_n) {
     if (a_n < 0) {
       return "";
