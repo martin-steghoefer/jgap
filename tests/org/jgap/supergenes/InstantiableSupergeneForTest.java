@@ -10,28 +10,45 @@
 package org.jgap.supergenes;
 
 import org.jgap.*;
-  public class InstantiableSupergeneForTest
-      extends AbstractSupergene {
-    public InstantiableSupergeneForTest(final Configuration a_config, Gene[] a_genes)
-        throws InvalidConfigurationException {
-      super(a_config, a_genes);
-    }
 
-    public InstantiableSupergeneForTest(final Configuration a_config)
-        throws InvalidConfigurationException {
-      super(a_config, new Gene[]{});
-    }
+/**
+ * Non-abstract Supergene ued for testing purposes only.
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
+public class InstantiableSupergeneForTest
+    extends AbstractSupergene {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-    public InstantiableSupergeneForTest()
-        throws InvalidConfigurationException {
-      this(Genotype.getConfiguration());
-    }
-
-    public boolean isValid(Gene[] a_gene) {
-      return true;
-    };
+  public InstantiableSupergeneForTest(final Configuration a_config,
+                                      Gene[] a_genes)
+      throws InvalidConfigurationException {
+    super(a_config, a_genes);
   }
-  class TestValidator
+
+  public InstantiableSupergeneForTest(final Configuration a_config)
+      throws InvalidConfigurationException {
+    super(a_config, new Gene[] {});
+  }
+
+  public InstantiableSupergeneForTest()
+      throws InvalidConfigurationException {
+    this(Genotype.getConfiguration());
+  }
+
+  public boolean isValid(Gene[] a_gene) {
+    return true;
+  };
+}
+/**
+ * Test implementation of a validator. Always returns true (i.e. valid).
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
+class TestValidator
     extends Validator {
   public TestValidator(final Configuration a_conf) {
     super(a_conf);
@@ -41,4 +58,3 @@ import org.jgap.*;
     return true;
   }
 }
-
