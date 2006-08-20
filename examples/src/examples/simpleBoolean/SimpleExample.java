@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Starts the example
@@ -48,8 +48,7 @@ public class SimpleExample {
     }
     try {
       IChromosome sampleChromosome = new Chromosome(gaConf,
-          new BooleanGene(gaConf),
-          chromeSize);
+          new BooleanGene(gaConf), chromeSize);
       gaConf.setSampleChromosome(sampleChromosome);
       gaConf.setPopulationSize(20);
       gaConf.setFitnessFunction(new MaxFunction());
