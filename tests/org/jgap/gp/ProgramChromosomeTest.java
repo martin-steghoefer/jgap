@@ -21,7 +21,7 @@ import org.jgap.*;
 public class ProgramChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GPConfiguration m_gpconf;
 
@@ -104,6 +104,82 @@ public class ProgramChromosomeTest
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("X  % Y ", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testToString2_4()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new ModCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toString2(1);
+    assertEquals("X ", s);
+    s = pc.toString2(2);
+    assertEquals("Y ", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testToString2_5()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new ModCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(1, new SubtractCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(4, new Variable(conf, "Z", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toString2(0);
+    assertEquals("(X  - Y ) % Z ", s);
+    s = pc.toString2(1);
+    assertEquals("(X  - Y )", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testToString_0()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new AddCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toString(0);
+    assertEquals("+ ( X Y )", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testToString_1()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new AddCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toString(1);
+    assertEquals("X ", s);
+    s = pc.toString(2);
+    assertEquals("Y ", s);
   }
 
   /**
