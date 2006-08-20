@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /*wodka:
    void add(Command cmd);
@@ -67,7 +67,7 @@ public class ProgramChromosome
     init();
   }
 
-  public ProgramChromosome(Configuration a_configuration, Gene[] a_initialGenes)
+  public ProgramChromosome(GPConfiguration a_configuration, Gene[] a_initialGenes)
       throws InvalidConfigurationException {
     super(a_configuration);
     int i = 0;
@@ -112,7 +112,7 @@ public class ProgramChromosome
 
   public synchronized Object clone() {
     try {
-      ProgramChromosome chrom = new ProgramChromosome(getConfiguration(),
+      ProgramChromosome chrom = new ProgramChromosome((GPConfiguration)getConfiguration(),
           (Gene[]) getGenes().clone());
       chrom.argTypes = (Class[]) argTypes.clone();
       chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
@@ -242,15 +242,29 @@ public class ProgramChromosome
       return getFunctions()[a_n].getName() + " ";
     }
     String str = "";
-    if (getFunctions()[a_n].getArity() == 1) {
+    boolean paramOutput = false;
+    if (getFunctions()[a_n].getArity() > 0) {
+      if (getFunctions()[a_n].getName().indexOf("&1")>=0) {
+        paramOutput = true;
+      }
+    }
+    if (getFunctions()[a_n].getArity() == 1 || paramOutput) {
       str += getFunctions()[a_n].getName();
     }
     if (a_n > 0) {
       str += "(";
     }
     for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
-      str += toString2(getChild(a_n, i));
-      if (i == 0 && getFunctions()[a_n].getArity() != 1) {
+      String childString = toString2(getChild(a_n, i));
+      String placeHolder = "&"+(i+1);
+      int placeholderIndex = str.indexOf(placeHolder);
+      if (placeholderIndex>=0) {
+        str = str.replaceFirst(placeHolder, childString);
+      }
+      else {
+        str += childString;
+      }
+      if (i == 0 && getFunctions()[a_n].getArity() != 1 && !paramOutput) {
         str += " " + getFunctions()[a_n].getName() + " ";
       }
     }
@@ -399,6 +413,9 @@ public class ProgramChromosome
   protected int redepth(int a_index) {
     int num = a_index + 1;
     CommandGene command = getNode(a_index);
+    if (command == null) {
+      throw new IllegalStateException("ProgramChromosome invalid");
+    }
     int arity = command.getArity();
     for (int i = 0; i < arity; i++) {
       depth[num] = depth[a_index] + 1;
