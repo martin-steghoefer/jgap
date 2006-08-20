@@ -13,21 +13,20 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * The increment operation.
+ * The increment-by-one operation.
  *
  * @author Konrad Odell
+ * @author Klaus Meffert
  * @since 3.0
  */
 public class IncrementCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
-  private double incAmt = 1;
-  
   public IncrementCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 2, a_type);
+    super(a_conf, 1, a_type);
   }
 
   protected Gene newGeneInternal() {
@@ -46,41 +45,30 @@ public class IncrementCommand
   }
 
   public String toString() {
-    return "+" + incAmt;
+    return "INC(&1)";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return new Double(c.execute_int(n, 0, args) + c.execute_int(n, 1, args) +incAmt).intValue();
+    return c.execute_int(n, 1, args) + 1;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return new Double(c.execute_long(n, 0, args) + c.execute_long(n, 1, args) +incAmt ).longValue();
+    return c.execute_long(n, 1, args) + 1;
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return new Double(c.execute_float(n, 0, args) + c.execute_float(n, 1, args) +incAmt).floatValue();
+    return c.execute_float(n, 1, args) + 1;
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_double(n, 0, args) + c.execute_double(n, 1, args) +incAmt;
+    return c.execute_double(n, 1, args) + 1;
   }
 
-  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    return ( (Compatible) c.execute_object(n, 0, args)).execute_increment(c.
-        execute_object(n, 1, args));
-  }
+/**@todo execute_object*/
 
   public static interface Compatible {
     public Object execute_increment(Object o);
   }
 
-  public double getIncAmt()
-  {
-    return incAmt; 
-  }
-  
-  public void setIncAmt(double incAmt)
-  {
-    this.incAmt = incAmt;
-  }
+
 }
