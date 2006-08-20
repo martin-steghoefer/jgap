@@ -12,6 +12,7 @@ package examples.supergene;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.supergenes.*;
+
 /**
  * Supergene to hold pennies and nickels. Valid if the number of
  * nickels and pennies is either both odd or both even.
@@ -22,16 +23,24 @@ import org.jgap.supergenes.*;
 public class NickelsPenniesSupergene
     extends AbstractSupergene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
+  /**
+   * Default constructor for dynamic instantiation
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public NickelsPenniesSupergene()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    super();
   }
 
   public NickelsPenniesSupergene(final Configuration a_conf)
       throws InvalidConfigurationException {
-    this(a_conf, null);
+    super(a_conf);
   }
 
   public NickelsPenniesSupergene(final Configuration a_conf, Gene[] a_genes)
