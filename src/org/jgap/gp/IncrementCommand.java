@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class IncrementCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public IncrementCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -49,19 +49,19 @@ public class IncrementCommand
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_int(n, 1, args) + 1;
+    return c.execute_int(n, 0, args) + 1;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_long(n, 1, args) + 1;
+    return c.execute_long(n, 0, args) + 1;
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_float(n, 1, args) + 1;
+    return c.execute_float(n, 0, args) + 1;
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_double(n, 1, args) + 1;
+    return c.execute_double(n, 0, args) + 1;
   }
 
 /**@todo execute_object*/
