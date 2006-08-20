@@ -26,9 +26,10 @@
 * Fixed error in method Evaluator.getValue(int, int..)
 * Fixed error in method MapGene.compareTo(Object)
 * Enhanced logic in StringGene.applyMutation(..)
-* Fixed bug in methods for persistent representation of
+* Fixed error in methods for persistent representation of
   MapGene
-* Fixed bug in AbstractSupergeneTest (reset of config)
+* Fixed error in AbstractSupergeneTest (reset of config)
+* Fixed error in XMLManager.getGenesFromElement
 * Added convenience methods to JGAPFactory
 * Added setter to ConfigurationForTest allowing to set a
   null RandomGenerator for testing purposes
