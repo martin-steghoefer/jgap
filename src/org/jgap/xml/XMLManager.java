@@ -16,6 +16,7 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
+import junitx.util.PrivateAccessor;
 
 import org.jgap.*;
 import org.w3c.dom.*;
@@ -33,7 +34,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -352,13 +353,26 @@ public class XMLManager {
       String geneClassName =
           thisGeneElement.getAttribute(CLASS_ATTRIBUTE);
       Gene thisGeneObject;
+      Class geneClass = null;
       try {
-        Class geneClass = Class.forName(geneClassName);
-        Constructor constr = geneClass.getConstructor(new Class[] {Configuration.class});
-        thisGeneObject = (Gene) constr.newInstance(new Object[] {a_activeConfiguration});
+        geneClass = Class.forName(geneClassName);
+        try {
+          Constructor constr = geneClass.getConstructor(new Class[] {
+              Configuration.class});
+          thisGeneObject = (Gene) constr.newInstance(new Object[] {
+              a_activeConfiguration});
+        }
+        catch (NoSuchMethodException nsme) {
+          // Try it by calling method newGeneInternal.
+          // -----------------------------------------
+          Constructor constr = geneClass.getConstructor(new Class[] {});
+          thisGeneObject = (Gene) constr.newInstance(new Object[] {});
+          thisGeneObject = (Gene) PrivateAccessor.invoke(thisGeneObject,
+              "newGeneInternal", new Class[] {}, new Object[] {});
+        }
       }
-      catch (Exception e) {
-        throw new GeneCreationException(e.getMessage());
+      catch (Throwable e) {
+        throw new GeneCreationException(geneClass, e);
       }
       // Find the text node and fetch the string representation of
       // the allele.
