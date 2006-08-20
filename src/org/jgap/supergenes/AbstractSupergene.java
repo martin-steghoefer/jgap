@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * This field separates gene class name from
@@ -105,6 +105,19 @@ public abstract class AbstractSupergene
   public AbstractSupergene()
       throws InvalidConfigurationException {
     this(Genotype.getConfiguration(), new Gene[]{});
+  }
+
+  /**
+   * Constructor for dynamic instantiation.
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public AbstractSupergene(final Configuration a_config)
+      throws InvalidConfigurationException {
+    this(a_config, new Gene[]{});
   }
 
   /**
@@ -456,7 +469,7 @@ public abstract class AbstractSupergene
     catch (Exception ex) {
       throw new Error
           ("Unable to create validator from '" + a_rep + "' for " +
-           getClass().getName());
+           getClass().getName(), ex);
     }
   }
 
