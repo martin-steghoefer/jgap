@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPGenotype
     extends Genotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Fitness value of the best solution.
@@ -239,7 +239,6 @@ public class GPGenotype
    */
   public void evolve() {
     try {
-      getGPConfiguration().clearStack();
       int popSize = getGPConfiguration().getPopulationSize();
       GPPopulation newPopulation = new GPPopulation(getGPConfiguration(),
           popSize);
@@ -249,6 +248,10 @@ public class GPGenotype
 //    for (int i = listeners.length - 1; i >= 0; i -= 2)
 //      ( (GPListener) listeners[i]).resetEvolutionProgress();
       for (int i = 0; i < popSize; i++) {
+        // Clear the stack for each GP program (=ProgramChromosome).
+        // ---------------------------------------------------------
+        getGPConfiguration().clearStack();
+
         val = random.nextFloat();
         // Note that if we only have one slot left to fill, we don't do
         // crossover, but fall through to reproduction.
