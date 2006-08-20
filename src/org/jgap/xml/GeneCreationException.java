@@ -25,9 +25,8 @@ package org.jgap.xml;
  */
 public class GeneCreationException
     extends Exception {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Constructs a new GeneCreationException instance with the given error
@@ -41,5 +40,21 @@ public class GeneCreationException
    */
   public GeneCreationException(final String a_message) {
     super(a_message);
+  }
+
+  /**
+   * Constructs a new GeneCreationException instance with the given error
+   * message.
+   *
+   * @param a_message an error message describing the reason this exception
+   * is being thrown
+   * @param a_geneClass the class of the gene that should be instantiated
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GeneCreationException(final Class a_geneClass, Throwable cause) {
+    super(a_geneClass != null ?
+          "Gene class " + a_geneClass.getName() : "", cause);
   }
 }
