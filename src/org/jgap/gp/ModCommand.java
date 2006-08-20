@@ -16,12 +16,15 @@ import org.jgap.gp.*;
  * The modulo operation.
  *
  * @author Konrad Odell
+ * @author Klaus Meffert
  * @since 3.0
  */
 public class ModCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
+
+  public static final double DELTA = 0.0000001;
 
   public ModCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -44,28 +47,53 @@ public class ModCommand
   }
 
   public String toString() {
-    return "%";
+    return "&1 % &2";
   }
 
-  public int execute_int(ProgramChromosome c, int n, Object[] args) throws ArithmeticException {
-    return c.execute_int(n, 0, args) % c.execute_int(n, 1, args);
+  public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    int v1 = c.execute_int(n, 0, args);
+    int v2 = c.execute_int(n, 1, args);
+    if (v2 == 0) {
+      return 0;
+    }
+    return v1 % v2;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_long(n, 0, args) % c.execute_long(n, 1, args);
+    long v1 = c.execute_long(n, 0, args);
+    long v2 = c.execute_long(n, 1, args);
+    if (v2 == 0) {
+      return 0;
+    }
+    return v1 % v2;
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_float(n, 0, args) % c.execute_float(n, 1, args);
+    float v1 = c.execute_float(n, 0, args);
+    float v2 = c.execute_float(n, 1, args);
+    if (Math.abs(v2) < DELTA) {
+      return 0;
+    }
+    return v1 % v2;
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_double(n, 0, args) % c.execute_double(n, 1, args);
+    double v1 = c.execute_double(n, 0, args);
+    double v2 = c.execute_double(n, 1, args);
+    if (Math.abs(v2) < DELTA) {
+      return 0;
+    }
+    return v1 % v2;
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    return ( (Compatible) c.execute_object(n, 0, args)).execute_mod(c.
-        execute_object(n, 1, args));
+    try {
+      return ( (Compatible) c.execute_object(n, 0, args)).execute_mod(c.
+          execute_object(n, 1, args));
+    }
+    catch (ArithmeticException aex) {
+      throw new IllegalStateException("mod with illegal arguments");
+    }
   }
 
   public static interface Compatible {
