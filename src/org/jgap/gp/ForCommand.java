@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ForCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public ForCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -38,10 +38,14 @@ public class ForCommand
   }
 
   public String toString() {
-    return "for-loop(int i=0;i<X;i++)";
+    return "for-loop(int i=0;i<&1;i++)";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    /**@todo check if elements deferring the state are available in the sub
+     * branch. If not, the sub branch needs only be executed once.
+     * Appropriate elements are, for example: PushCommand and PopCommand
+     */
     int x = c.execute_int(n, 0, args);
     if (x > 15) {
       x = 15;/**@todo parameterize*/
@@ -52,13 +56,6 @@ public class ForCommand
     }
     return value;
   }
-
-//  public Class getChildType(int i) {
-//    if (i < 0 || i > 2) {
-//      return null;
-//    }
-//    return getReturnType();
-//  }
 
   public static interface Compatible {
     public Object execute_add(Object o);
