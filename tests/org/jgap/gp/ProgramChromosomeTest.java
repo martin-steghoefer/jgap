@@ -21,7 +21,7 @@ import org.jgap.*;
 public class ProgramChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private GPConfiguration m_gpconf;
 
@@ -184,7 +184,27 @@ public class ProgramChromosomeTest
     pc.setGene(6, new Constant(conf, CommandGene.IntegerClass, new Integer(7)));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("(X  * Y ) --> (push X ) --> const(7) ", s);
+    assertEquals("sub((X  * Y ) --> (push X ) --> const(7) )", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testToString2_8()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new SubProgramCommand(conf, CommandGene.IntegerClass, 2));
+    pc.setGene(1, new MultiplyCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(4, new PushCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(5, new Constant(conf, CommandGene.IntegerClass, new Integer(7)));
+    pc.redepth();
+    String s = pc.toString2(0);
+    assertEquals("sub((X  * Y ) --> (push const(7) ))", s);
   }
 
   /**
