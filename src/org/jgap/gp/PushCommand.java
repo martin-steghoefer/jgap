@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PushCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public PushCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -91,5 +91,9 @@ public class PushCommand
 
   public static interface Compatible {
     public Object execute_push(Object o);
+  }
+
+  public boolean isAffectGlobalState() {
+    return true;
   }
 }

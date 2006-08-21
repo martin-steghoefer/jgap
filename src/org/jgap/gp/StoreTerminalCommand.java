@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class StoreTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_storageName;
 
@@ -92,5 +92,9 @@ public class StoreTerminalCommand
 
   public static interface Compatible {
     public Object execute_store(Object o);
+  }
+
+  public boolean isAffectGlobalState() {
+    return true;
   }
 }
