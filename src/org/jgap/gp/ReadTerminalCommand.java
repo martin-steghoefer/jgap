@@ -21,8 +21,12 @@ import org.jgap.gp.*;
 public class ReadTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
+  /**
+   * Symbolic name of the storage. Must correspond with a chose name for
+   * StoreTerminalCommand.
+   */
   private String m_storageName;
 
   public ReadTerminalCommand(final Configuration a_conf, Class type,
@@ -44,7 +48,7 @@ public class ReadTerminalCommand
   }
 
   public String toString() {
-    return "read_from(" + m_storageName + "&1)";
+    return "read_from(" + m_storageName + ")";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -63,7 +67,7 @@ public class ReadTerminalCommand
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     try {
       return ( (Long) ( (GPConfiguration) getConfiguration()).readFromMemory(
-          m_storageName)).intValue();
+          m_storageName)).longValue();
     }
     catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
@@ -74,7 +78,7 @@ public class ReadTerminalCommand
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     try {
       return ( (Double) ( (GPConfiguration) getConfiguration()).readFromMemory(
-          m_storageName)).intValue();
+          m_storageName)).doubleValue();
     }
     catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
@@ -85,7 +89,7 @@ public class ReadTerminalCommand
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     try {
       return ( (Float) ( (GPConfiguration) getConfiguration()).readFromMemory(
-          m_storageName)).intValue();
+          m_storageName)).floatValue();
     }
     catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
