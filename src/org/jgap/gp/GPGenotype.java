@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Fitness value of the best solution.
@@ -39,8 +39,6 @@ public class GPGenotype
    * Best solution found.
    */
   private static ProgramChromosome m_allTimeBest;
-
-  private GeneticEventListener m_listener;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -98,7 +96,6 @@ public class GPGenotype
                                                  Class[][] a_argTypes,
                                                  CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
-    /**@todo use listener*/
     System.gc();
     System.out.println("Memory consumed before creating population: "
                        + getTotalMemoryMB() + "MB");
@@ -246,7 +243,7 @@ public class GPGenotype
    */
   public void outputSolution(ProgramChromosome best) {
     System.out.println(" Best solution fitness: " + best.getFitnessValue());
-    System.out.println(" Best solution(normalized): " + best.toString2(0));
+    System.out.println(" Best solution: " + best.toString2(0));
   }
 
   /**
@@ -296,13 +293,17 @@ public class GPGenotype
                                       getGPConfiguration().getSelectionMethod().
                                       select(this));
         }
-        /**@todo inform listeners about evolution progress*/
-        //        for (int j = listeners.length - 1; j >= 0; j -= 2)
-        //          ( (GPListener) listeners[j]).bumpEvolutionProgress();
       }
       // Now set the new population as the active one.
       // ---------------------------------------------
       setPopulation(newPopulation);
+      // Increase number of generation.
+      // ------------------------------
+      getConfiguration().incrementGenerationNr();
+      // Fire an event to indicate we've performed an evolution.
+      // -------------------------------------------------------
+      getConfiguration().getEventManager().fireGeneticEvent(
+          new GeneticEvent(GeneticEvent.GPGENOTYPE_EVOLVED_EVENT, this));
     }
     catch (InvalidConfigurationException iex) {
       // This should never happen.
@@ -335,23 +336,13 @@ public class GPGenotype
       while (true) {
         calcFitness();
         evolve();
-        if (m_listener != null) {
-          GeneticEvent event = new GeneticEvent("evolved", this);
-          m_listener.geneticEventFired(event);
-        }
-        else {
-          // Pause between evolutions in case no listener is available.
-          Thread.sleep(30);
-        }
+        // Pause between evolutions to avoid 100% CPU load
+        Thread.sleep(10);
       }
     }
     catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
     }
-  }
-
-  public void registerListener(GeneticEventListener a_listener) {
-    m_listener = a_listener;
   }
 }
