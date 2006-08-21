@@ -21,7 +21,7 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public transient float[] fitnessRank;
 
@@ -91,7 +91,6 @@ public class GPPopulation
    * Creates a population using the ramped half-and-half method. Adapted from
    * JGProg.
    *
-   * @param a_conf the configuration to use
    * @param a_types the type of each chromosome, the length
    * is the number of chromosomes
    * @param a_argTypes the types of the arguments to each chromosome, must be an
@@ -108,17 +107,17 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void create(final GPConfiguration a_conf, Class[] a_types,
-                     Class[][] a_argTypes,
+  public void create(Class[] a_types, Class[][] a_argTypes,
                      CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
     m_avail_types = a_types;
     m_avail_argTypes = a_argTypes;
     m_avail_nodeSets = a_nodeSets;
     for (int i = 0; i < m_popSize - 1; i++) {
-      int depth = 2 + (a_conf.getMaxInitDepth() - 1) * i /
+      int depth = 2 +
+          ( getGPConfiguration().getMaxInitDepth() - 1) * i /
           (m_popSize - 1);
-      ProgramChromosome chrom = create(a_conf, depth, (i%2)==0);
+      ProgramChromosome chrom = create(depth, (i%2)==0);
       addChromosome(chrom);
     }
     setChanged(true);
@@ -127,7 +126,6 @@ public class GPPopulation
   /**
    * Creates a complete, valid ProgramChromosome.
    *
-   * @param a_conf GPConfiguration
    * @param a_depth int
    * @param a_grow boolean
    * @return ProgramChromosome
@@ -136,8 +134,7 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ProgramChromosome create(final GPConfiguration a_conf, int a_depth,
-                                  boolean a_grow)
+  public ProgramChromosome create(int a_depth, boolean a_grow)
       throws InvalidConfigurationException {
     ProgramChromosome chrom = new ProgramChromosome(getConfiguration());
     if (a_grow) {
@@ -151,5 +148,15 @@ public class GPPopulation
 
   public int getPopSize() {
     return m_popSize;
+  }
+
+  /**
+   * @return the GPConfiguration set
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPConfiguration getGPConfiguration() {
+    return (GPConfiguration)getConfiguration();
   }
 }
