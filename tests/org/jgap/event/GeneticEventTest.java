@@ -15,7 +15,7 @@ import junit.framework.*;
 import org.jgap.*;
 
 /**
- * Tests for GeneticEvent class
+ * Tests the GeneticEvent class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -23,7 +23,7 @@ import org.jgap.*;
 public class GeneticEventTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GeneticEventTest.class);
@@ -32,6 +32,7 @@ public class GeneticEventTest
 
   /**
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testConstruct_0() {
     try {
@@ -45,13 +46,35 @@ public class GeneticEventTest
 
   /**
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testConstruct_1() {
-    new GeneticEvent(null, this);
+    GeneticEvent event = new GeneticEvent(null, this);
+    assertNull(event.getEventName());
   }
 
   /**
    * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testConstruct_2() {
+    GeneticEvent event = new GeneticEvent("testName", this);
+    assertEquals("testName", event.getEventName());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testConstruct_3() {
+    GeneticEvent event = new GeneticEvent("testName", this, "aValue");
+    assertEquals("testName", event.getEventName());
+    assertEquals("aValue", event.getValue());
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 1.1
    */
   public void testGetEventName_0() {
     GeneticEvent event = new GeneticEvent("testEventName", this);
@@ -60,9 +83,11 @@ public class GeneticEventTest
 
   /**
    * @author Klaus Meffert
+   * @since 1.1
    */
   public void testGENOTYPE_EVOLVED_EVENT_0() {
     assertTrue(GeneticEvent.GENOTYPE_EVOLVED_EVENT != null);
     assertTrue(GeneticEvent.GENOTYPE_EVOLVED_EVENT.length() > 0);
   }
+
 }
