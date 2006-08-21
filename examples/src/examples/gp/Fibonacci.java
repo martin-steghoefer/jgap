@@ -30,7 +30,7 @@ import org.jgap.gp.*;
 public class Fibonacci
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   static Variable vx;
 
@@ -59,22 +59,22 @@ public class Fibonacci
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
 //        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
-//        new Terminal(a_conf, 0,100),
         new AddCommand(a_conf, CommandGene.IntegerClass),
-        new IncrementCommand(a_conf, CommandGene.IntegerClass),
+        new IncrementCommand(a_conf, CommandGene.IntegerClass, 1),
+        new ForCommand(a_conf, CommandGene.IntegerClass),
+        new SubProgramCommand(a_conf, CommandGene.IntegerClass, 3),
 //        new ModCommand(a_conf, CommandGene.IntegerClass),
 //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
-        new ForCommand(a_conf, CommandGene.IntegerClass),
     }
     };
     nodeSets[0] = CommandFactory.createStoreCommands(nodeSets[0], a_conf,
         CommandGene.IntegerClass, "mem", 4);
     nodeSets[0] = CommandFactory.createStackCommands(nodeSets[0], a_conf,
         CommandGene.IntegerClass);
-    Random random = new Random();
+    RandomGenerator random = a_conf.getRandomGenerator();
     // randomly initialize function data (X-Y table) for Fib(x)
     for (int i = 0; i < NUMFIB; i++) {
-      int index = random.nextInt(NUMFIB * 2);
+      int index = i;//random.nextInt(NUMFIB * 2);
       x[i] = new Integer(index);
       y[i] = Fib_array(index);
       System.out.println(i + ") " + x[i] + "   " + y[i]);
@@ -92,27 +92,33 @@ public class Fibonacci
 
   //(Sort of) This is what we would like to find via GP:
   private static int Fib_iter(int a_index) {
+    // 1
     if (a_index == 0 || a_index == 1) {
       return 1;
     }
+    // 2
     int a = 0;
     int b = 0;
-    int c = 0;
+    int x = 0;
+    // 3
     for (int i = 2; i <= a_index; i++) {
-      c = a + b;
+      x = a + b;
       a = b;
-      b = c;
+      b = x;
     }
-    return c;
+    return x;
   }
 
   //(Sort of) This is what we would like to find via GP:
   public static int Fib_array(int a_index) {
+    // 1
     if (a_index == 0 || a_index == 1) {
       return 1;
     }
+    // 2
     int[] numbers = new int[a_index + 1];
     numbers[0] = numbers[1] = 1;
+    // 3
     for (int i = 2; i <= a_index; i++) {
       numbers[i] = numbers[i - 1] + numbers[i - 2];
     }
@@ -152,6 +158,11 @@ public class Fibonacci
             t.stop();
           }
           else {
+            // Collect garbage if memory low.
+            // ------------------------------
+            if (getFreeMemoryMB() < 50) {
+              System.gc();
+            }
             try {
               // Avoid 100% CPU load
               t.sleep(30);
