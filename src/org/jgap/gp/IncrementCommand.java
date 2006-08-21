@@ -22,16 +22,26 @@ import org.jgap.gp.*;
 public class IncrementCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
+
+  private int m_increment;
 
   public IncrementCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
+    this(a_conf, a_type, 1);
+  }
+
+  public IncrementCommand(final Configuration a_conf, Class a_type,
+                          int a_increment)
+      throws InvalidConfigurationException {
     super(a_conf, 1, a_type);
+    m_increment = a_increment;
   }
 
   protected Gene newGeneInternal() {
     try {
-      Gene gene = new IncrementCommand(getConfiguration(), getReturnType());
+      Gene gene = new IncrementCommand(getConfiguration(), getReturnType(),
+                                       m_increment);
       return gene;
     }
     catch (InvalidConfigurationException iex) {
@@ -45,30 +55,28 @@ public class IncrementCommand
   }
 
   public String toString() {
-    return "INC(&1)";
+    return "INC(" + m_increment + ", &1)";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_int(n, 0, args) + 1;
+    return c.execute_int(n, 0, args) + m_increment;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_long(n, 0, args) + 1;
+    return c.execute_long(n, 0, args) + m_increment;
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_float(n, 0, args) + 1;
+    return c.execute_float(n, 0, args) + m_increment;
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return c.execute_double(n, 0, args) + 1;
+    return c.execute_double(n, 0, args) + m_increment;
   }
 
-/**@todo execute_object*/
+  /**@todo execute_object*/
 
   public static interface Compatible {
     public Object execute_increment(Object o);
   }
-
-
 }
