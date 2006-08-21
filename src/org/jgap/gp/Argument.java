@@ -13,7 +13,7 @@ import org.jgap.gp.*;
 import org.jgap.*;
 
 /**
- * An argument that will be used internallyn only.
+ * An argument that will be used internally only.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,14 +21,9 @@ import org.jgap.*;
 public class Argument
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_index;
-
-  public Argument()
-      throws InvalidConfigurationException {
-    this(Genotype.getConfiguration(),0, Integer.class);
-  }
 
   public Argument(final Configuration a_conf, int a_index, Class type)
       throws InvalidConfigurationException {
@@ -45,9 +40,6 @@ public class Argument
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
-  }
-
   public String toString() {
     return "Arg"+m_index;
   }
@@ -57,15 +49,15 @@ public class Argument
   }
 
   public long execute_long(Chromosome c, int n, Object[] args) {
-    return ((Long)args[m_index]).intValue();
+    return ((Long)args[m_index]).longValue();
   }
 
   public float execute_float(Chromosome c, int n, Object[] args) {
-    return ((Float)args[m_index]).intValue();
+    return ((Float)args[m_index]).floatValue();
   }
 
   public double execute_double(Chromosome c, int n, Object[] args) {
-    return ((Double)args[m_index]).intValue();
+    return ((Double)args[m_index]).doubleValue();
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
