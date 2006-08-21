@@ -22,7 +22,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_value;
 
@@ -81,8 +81,6 @@ public class Terminal
   }
 
   public void applyMutation(int index, double a_percentage) {
-    /**@todo decide whether adding or subtracting a delta*/
-
     // If very high then do mutation not relying on current value
     // random value.
     // ----------------------------------------------------------
@@ -90,12 +88,24 @@ public class Terminal
       setRandomValue();
     }
     else {
-      /**@todo add delta to current value to receive new value*/
       double range = (m_upperBounds - m_lowerBounds) * a_percentage;
-      double newValue = Double.parseDouble(m_value) +
-          (getConfiguration().getRandomGenerator().nextDouble() * range);
-      /**@todo ensure value is within bounds*/
-      setValue(newValue);
+      double newValue;
+      double value = Double.parseDouble(m_value);
+      if (value >= (m_upperBounds - m_lowerBounds) / 2) {
+          newValue = value -
+              (getConfiguration().getRandomGenerator().nextDouble() * range);
+      }
+      else {
+        newValue = value +
+            (getConfiguration().getRandomGenerator().nextDouble() * range);
+      }
+      // Ensure value is within bounds
+      if (newValue < m_lowerBounds || newValue > m_upperBounds) {
+        setRandomValue();
+      }
+      else {
+        setValue(newValue);
+      }
     }
   }
 
