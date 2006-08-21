@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Fitness value of the best solution.
@@ -99,13 +99,10 @@ public class GPGenotype
     System.gc();
     System.out.println("Memory consumed before creating population: "
                        + getTotalMemoryMB() + "MB");
-//    Object[] listeners = GPListeners.getListenerList();
-//    for (int i = listeners.length - 1; i >= 0; i -= 2)
-//      ( (GPListener) listeners[ i ]).setPopulationSize(popSize);
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
-    pop.create(a_conf, a_types, a_argTypes, a_nodeSets);
-    /**@todo use listener*/
+    pop.create(a_types, a_argTypes, a_nodeSets);
+    /**@todo inform listeners?*/
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");
@@ -299,8 +296,7 @@ public class GPGenotype
       for (int i = popSize1 - 1; i < popSize; i++) {
         int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i /
             (newPopulation.getPopSize() - 1);
-        ProgramChromosome chrom = newPopulation.create(getGPConfiguration(),
-            depth, (i % 2) == 0);
+        ProgramChromosome chrom = newPopulation.create(depth, (i % 2) == 0);
         newPopulation.setChromosome(i, chrom);
       }
       // Now set the new population as the active one.
