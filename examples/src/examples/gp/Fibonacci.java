@@ -11,6 +11,7 @@ package examples.gp;
 
 import java.util.*;
 import org.jgap.*;
+import org.jgap.event.*;
 import org.jgap.gp.*;
 
 /**
@@ -29,7 +30,7 @@ import org.jgap.gp.*;
 public class Fibonacci
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   static Variable vx;
 
@@ -56,24 +57,26 @@ public class Fibonacci
     CommandGene[][] nodeSets = {
         {
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
-//        new FreeVariable(a_conf, CommandGene.IntegerClass,"a"),
-//        new FreeVariable(a_conf, CommandGene.IntegerClass,"b"),
-//        new Terminal(a_conf, 0,100),
+//        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
 //        new Terminal(a_conf, 0,100),
         new AddCommand(a_conf, CommandGene.IntegerClass),
         new IncrementCommand(a_conf, CommandGene.IntegerClass),
+//        new ModCommand(a_conf, CommandGene.IntegerClass),
 //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
-        new PushCommand(a_conf, CommandGene.IntegerClass),
         new ForCommand(a_conf, CommandGene.IntegerClass),
-        new PopCommand(a_conf, CommandGene.IntegerClass),
     }
     };
+    nodeSets[0] = CommandFactory.createStoreCommands(nodeSets[0], a_conf,
+        CommandGene.IntegerClass, "mem", 4);
+    nodeSets[0] = CommandFactory.createStackCommands(nodeSets[0], a_conf,
+        CommandGene.IntegerClass);
     Random random = new Random();
     // randomly initialize function data (X-Y table) for Fib(x)
     for (int i = 0; i < NUMFIB; i++) {
       int index = random.nextInt(NUMFIB * 2);
       x[i] = new Integer(index);
-      y[i] = Fib(index);
+      y[i] = Fib_array(index);
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
     // Create genotype with initial population
@@ -103,6 +106,19 @@ public class Fibonacci
     return c;
   }
 
+  //(Sort of) This is what we would like to find via GP:
+  public static int Fib_array(int a_index) {
+    if (a_index == 0 || a_index == 1) {
+      return 1;
+    }
+    int[] numbers = new int[a_index + 1];
+    numbers[0] = numbers[1] = 1;
+    for (int i = 2; i <= a_index; i++) {
+      numbers[i] = numbers[i - 1] + numbers[i - 2];
+    }
+    return numbers[a_index];
+  }
+
   /**
    * Starts the example.
    *
@@ -114,16 +130,45 @@ public class Fibonacci
    */
   public static void main(String[] args) {
     try {
-      System.out.println("Formula to discover: Fibonacci(x)");
+      System.out.println("Program to discover: Fibonacci(x)");
       GPConfiguration config = new GPConfiguration();
-      config.setMaxInitDepth(8);
-      config.setPopulationSize(800);
+      config.setMaxInitDepth(9);
+      config.setPopulationSize(1200);
       config.setFitnessFunction(new Fibonacci.FormulaFitnessFunction());
       GPGenotype gp = create(config);
-      gp.evolve(1200);
-      gp.outputSolution(gp.getAllTimeBest());
+      final Thread t = new Thread(gp);
+      // Simple implementation of running evolution in a thread.
+      // -------------------------------------------------------
+      config.getEventManager().addEventListener(GeneticEvent.
+                                                GPGENOTYPE_EVOLVED_EVENT,
+                                                new GeneticEventListener() {
+        public void geneticEventFired(GeneticEvent a_firedEvent) {
+          int evno = getConfiguration().getGenerationNr();
+          if (evno % 25 == 0) { /**@todo make configurable --> use listener*/
+            System.out.println("Evolving generation " + evno
+                               + ", memory free: " + getFreeMemoryMB() + " MB");
+          }
+          if (evno > 3000) {
+            t.stop();
+          }
+          else {
+            try {
+              // Avoid 100% CPU load
+              t.sleep(30);
+            }
+            catch (InterruptedException iex) {
+              iex.printStackTrace();
+              System.exit(1);
+            }
+          }
+        }
+      });
+      t.start();
+//      gp.evolve(1200);
+//      gp.outputSolution(gp.getAllTimeBest());
     }
     catch (Exception ex) {
+      ex.printStackTrace();
       System.exit(1);
     }
   }
@@ -137,6 +182,12 @@ public class Fibonacci
     public double computeRawFitness(ProgramChromosome ind) {
       double error = 0.0f;
       Object[] noargs = new Object[0];
+      // Initialize local stores.
+      // ------------------------
+      ( (GPConfiguration) getConfiguration()).clearStack();
+      ( (GPConfiguration) getConfiguration()).clearMemory();
+      /**@todo store_in without read is useless and bloats the GP-code.
+       * Find such cases and eradicate them*/
       for (int i = 0; i < NUMFIB; i++) {
         vx.set(x[i]);
         try {
