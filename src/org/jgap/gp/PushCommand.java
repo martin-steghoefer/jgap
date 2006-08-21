@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PushCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public PushCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -51,13 +51,45 @@ public class PushCommand
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     int value = c.execute_int(n, 0, args);
-    //push onto stack
+    // Push onto stack.
+    // ----------------
     ((GPConfiguration)getConfiguration()).pushToStack(new Integer(value));
     return value;
   }
-  /**@todo execute for float, long, Object ...*/
+
+  public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    long value = c.execute_long(n, 0, args);
+    // Push onto stack.
+    // ----------------
+    ((GPConfiguration)getConfiguration()).pushToStack(new Long(value));
+    return value;
+  }
+
+  public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    double value = c.execute_double(n, 0, args);
+    // Push onto stack.
+    // ----------------
+    ((GPConfiguration)getConfiguration()).pushToStack(new Double(value));
+    return value;
+  }
+
+  public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    float value = c.execute_float(n, 0, args);
+    // Push onto stack.
+    // ----------------
+    ((GPConfiguration)getConfiguration()).pushToStack(new Float(value));
+    return value;
+  }
+
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    Object value = c.execute_object(n, 0, args);
+    // Push onto stack.
+    // ----------------
+    ((GPConfiguration)getConfiguration()).pushToStack(value);
+    return value;
+  }
 
   public static interface Compatible {
-    public Object execute_add(Object o);
+    public Object execute_push(Object o);
   }
 }

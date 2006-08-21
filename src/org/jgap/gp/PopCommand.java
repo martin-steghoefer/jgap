@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PopCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public PopCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -56,9 +56,40 @@ public class PopCommand
     }
     return ((Integer)((GPConfiguration)getConfiguration()).popFromStack()).intValue();
   }
-  /**@todo execute for float, long, Object ...*/
+
+  public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    // Pop from stack.
+    if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
+      throw new IllegalStateException("pop without push");
+    }
+    return ((Long)((GPConfiguration)getConfiguration()).popFromStack()).longValue();
+  }
+
+  public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    // Pop from stack.
+    if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
+      throw new IllegalStateException("pop without push");
+    }
+    return ((Double)((GPConfiguration)getConfiguration()).popFromStack()).doubleValue();
+  }
+
+  public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    // Pop from stack.
+    if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
+      throw new IllegalStateException("pop without push");
+    }
+    return ((Float)((GPConfiguration)getConfiguration()).popFromStack()).floatValue();
+  }
+
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    // Pop from stack.
+    if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
+      throw new IllegalStateException("pop without push");
+    }
+    return ((GPConfiguration)getConfiguration()).popFromStack();
+  }
 
   public static interface Compatible {
-    public Object execute_add(Object o);
+    public Object execute_pop(Object o);
   }
 }
