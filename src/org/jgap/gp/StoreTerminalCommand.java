@@ -21,8 +21,12 @@ import org.jgap.gp.*;
 public class StoreTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
+  /**
+   * Symbolic name of the storage. Must correspond with a chosen name for
+   * ReadTerminalCommand.
+   */
   private String m_storageName;
 
   public StoreTerminalCommand(final Configuration a_conf, Class type,
@@ -33,7 +37,6 @@ public class StoreTerminalCommand
   }
 
   protected Gene newGeneInternal() {
-    /**@todo not used for GP*/
     try {
       Gene gene = new StoreTerminalCommand(getConfiguration(), getReturnType(),
                                            m_storageName);
@@ -42,12 +45,6 @@ public class StoreTerminalCommand
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-    System.err.println("appliedMutation");
   }
 
   public String toString() {
