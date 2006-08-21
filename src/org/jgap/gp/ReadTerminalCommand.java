@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ReadTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private String m_storageName;
 
@@ -33,7 +33,6 @@ public class ReadTerminalCommand
   }
 
   protected Gene newGeneInternal() {
-    /**@todo not used for GP*/
     try {
       Gene gene = new ReadTerminalCommand(getConfiguration(), getReturnType(),
                                           m_storageName);
@@ -44,14 +43,8 @@ public class ReadTerminalCommand
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-    System.err.println("appliedMutation");
-  }
-
   public String toString() {
-    return "read_from(" + m_storageName + ", &1)";
+    return "read_from(" + m_storageName + "&1)";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

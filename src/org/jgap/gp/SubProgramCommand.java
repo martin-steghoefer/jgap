@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class SubProgramCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Number of subprograms.
@@ -50,11 +50,11 @@ public class SubProgramCommand
   }
 
   public String toString() {
-    String ret = "";
+    String ret = "sub[";
     for (int i = 1; i < m_subtrees; i++) {
       ret += "&" + i + " --> ";
     }
-    ret += "&" + m_subtrees;
+    ret += "&" + m_subtrees +"]";
     return ret;
   }
 
@@ -98,7 +98,4 @@ public class SubProgramCommand
     return value;
   }
 
-  public static interface Compatible {
-    public Object execute_subprogram(Object o);
-  }
 }
