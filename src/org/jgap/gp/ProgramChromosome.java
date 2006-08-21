@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /*wodka:
    void add(Command cmd);
@@ -999,12 +999,12 @@ public class ProgramChromosome
    * @param a_argTypes the types of the arguments to each chromosome, must be an
    * array of arrays, the first dimension of which is the number of chromosomes
    * and the second dimension of which is the number of arguments to the
-   * chromosome.
+   * chromosome
    * @param nodeSets the nodes which are allowed to be used by each chromosome,
    * must be an array of arrays, the first dimension of which is the number of
    * chromosomes and the second dimension of which is the number of nodes. Note
    * that it is not necessary to include the arguments of a chromosome as
-   * terminals in the chromosome's node set. This is done automatically for you.
+   * terminals in the chromosome's node set. This is done automatically for you
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -1028,16 +1028,17 @@ public class ProgramChromosome
    * Initializes all chromosomes in this individual using the full method.
    *
    * @param depth the depth of the chromosome to create
-   * @param types the type of each chromosome, must be an array of the same length
-   * as the number of chromosomes
-   * @param a_argTypes the types of the arguments to each chromosome, must be an array
-   * of arrays, the first dimension of which is the number of chromosomes and the
-   * second dimension of which is the number of arguments to the chromosome.
-   * @param nodeSets the nodes which are allowed to be used by each chromosome, must
-   * be an array of arrays, the first dimension of which is the number of chromosomes
-   * and the second dimension of which is the number of nodes. Note that it is not necessary
-   * to include the arguments of a chromosome as terminals in the chromosome's node set.
-   * This is done automatically for you.
+   * @param types the type of each chromosome, must be an array of the same
+   * length as the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes.
+   * Note that it is not necessary to include the arguments of a chromosome as
+   * terminals in the chromosome's node set. This is done automatically for you
    *
    * @author Klaus Meffert
    * @since 3.0
