@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class Culture implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * The storage to use.
@@ -34,6 +34,11 @@ public class Culture implements java.io.Serializable {
   private List m_memoryNames = new Vector();
 
   /**
+   * Number of memory cells available.
+   */
+  private int m_size;
+
+  /**
    * Constructor.
    * @param a_size size of the memory
    *
@@ -44,7 +49,8 @@ public class Culture implements java.io.Serializable {
     if (a_size < 1) {
       throw new IllegalArgumentException("Size must be greater than zero!");
     }
-    m_memory = new CultureMemoryCell[a_size];
+    m_size = a_size;
+    m_memory = new CultureMemoryCell[m_size];
   }
 
   /**
@@ -114,7 +120,8 @@ public class Culture implements java.io.Serializable {
     }
     int index = m_memoryNames.indexOf(a_name);
     if (index < 0) {
-      // Create new named index
+      // Create new named index.
+      // -----------------------
       m_memoryNames.add(a_name);
       index = m_memoryNames.size() -1;
     }
@@ -193,5 +200,26 @@ public class Culture implements java.io.Serializable {
     }
     result.append("]");
     return result.toString();
+  }
+
+  /**
+   * Clears the memory.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void clear() {
+    m_memory = new CultureMemoryCell[m_size];
+    m_memoryNames.clear();
+  }
+
+  /**
+   * @return cloned list of symbolic memory names
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public List getMemoryNames() {
+    return new Vector(m_memoryNames);
   }
 }

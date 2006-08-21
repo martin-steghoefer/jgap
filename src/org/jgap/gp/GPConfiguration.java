@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Object m_state;
 
@@ -180,6 +180,16 @@ public class GPConfiguration
    */
   public Object readFromMemory(String a_name)  {
     return m_memory.get(a_name).getCurrentValue();
+  }
+
+  /**
+   * Clears the memory.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void clearMemory() {
+    m_memory.clear();
   }
 
 }
