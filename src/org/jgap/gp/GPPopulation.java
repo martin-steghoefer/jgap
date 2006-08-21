@@ -21,7 +21,7 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public transient float[] fitnessRank;
 
@@ -104,6 +104,9 @@ public class GPPopulation
    * Note that it is not necessary to include the arguments of a chromosome as
    * terminals in the chromosome's node set. This is done automatically
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void create(final GPConfiguration a_conf, Class[] a_types,
                      Class[][] a_argTypes,
@@ -116,18 +119,23 @@ public class GPPopulation
       int depth = 2 + (a_conf.getMaxInitDepth() - 1) * i /
           (m_popSize - 1);
       ProgramChromosome chrom = create(a_conf, depth, (i%2)==0);
-//          new ProgramChromosome(getConfiguration());
-//      if ( (i % 2) == 0) {
-//        chrom.grow(depth, a_types, a_argTypes, a_nodeSets);
-//      }
-//      else {
-//        chrom.full(depth, a_types, a_argTypes, a_nodeSets);
-//      }
       addChromosome(chrom);
     }
     setChanged(true);
   }
 
+  /**
+   * Creates a complete, valid ProgramChromosome.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_depth int
+   * @param a_grow boolean
+   * @return ProgramChromosome
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public ProgramChromosome create(final GPConfiguration a_conf, int a_depth,
                                   boolean a_grow)
       throws InvalidConfigurationException {
