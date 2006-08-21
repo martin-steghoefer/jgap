@@ -21,14 +21,14 @@ import org.jgap.gp.*;
 public class ReadTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_storageName;
 
   public ReadTerminalCommand(final Configuration a_conf, Class type,
                              String a_storageName)
       throws InvalidConfigurationException {
-    super(a_conf, 1, type);
+    super(a_conf, 0, type);
     m_storageName = a_storageName;
   }
 
@@ -55,7 +55,6 @@ public class ReadTerminalCommand
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    int value = c.execute_int(n, 0, args);
     // Read from memory.
     // -----------------
     try {
@@ -69,26 +68,47 @@ public class ReadTerminalCommand
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    long value = c.execute_long(n, 0, args);
-    return ( (Long) ( (GPConfiguration) getConfiguration()).readFromMemory(
-        m_storageName)).intValue();
+    try {
+      return ( (Long) ( (GPConfiguration) getConfiguration()).readFromMemory(
+          m_storageName)).intValue();
+    }
+    catch (IllegalArgumentException iex) {
+      throw new IllegalStateException(
+          "ReadTerminal without preceeding StoreTerminal");
+    }
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    double value = c.execute_double(n, 0, args);
-    return ( (Double) ( (GPConfiguration) getConfiguration()).readFromMemory(
-        m_storageName)).intValue();
+    try {
+      return ( (Double) ( (GPConfiguration) getConfiguration()).readFromMemory(
+          m_storageName)).intValue();
+    }
+    catch (IllegalArgumentException iex) {
+      throw new IllegalStateException(
+          "ReadTerminal without preceeding StoreTerminal");
+    }
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    float value = c.execute_float(n, 0, args);
-    return ( (Float) ( (GPConfiguration) getConfiguration()).readFromMemory(
-        m_storageName)).intValue();
+    try {
+      return ( (Float) ( (GPConfiguration) getConfiguration()).readFromMemory(
+          m_storageName)).intValue();
+    }
+    catch (IllegalArgumentException iex) {
+      throw new IllegalStateException(
+          "ReadTerminal without preceeding StoreTerminal");
+    }
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    Object value = c.execute_object(n, 0, args);
-    return ( (GPConfiguration) getConfiguration()).readFromMemory(m_storageName);
+    try {
+      return ( (GPConfiguration) getConfiguration()).readFromMemory(
+          m_storageName);
+    }
+    catch (IllegalArgumentException iex) {
+      throw new IllegalStateException(
+          "ReadTerminal without preceeding StoreTerminal");
+    }
   }
 
   public static interface Compatible {
