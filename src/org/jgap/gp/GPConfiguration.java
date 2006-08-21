@@ -12,16 +12,24 @@ package org.jgap.gp;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.impl.*;
+import org.jgap.distr.*;
 import org.jgap.event.*;
 
+/**
+ * Configuration for a GP.
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Object m_state;
 
   private Stack m_stack = new Stack();
+  private Culture m_memory = new Culture(10);
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -149,4 +157,29 @@ public class GPConfiguration
   public void clearStack() {
     m_stack.clear();
   }
+
+  /**
+   * Stores a value in the internal memory
+   * @param a_name named index of the memory cell
+   * @param a_value the value to store
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void storeInMemory(String a_name, Object a_value) {
+    m_memory.set(a_name, a_value, -1);
+  }
+
+  /**
+   * Reads a value from the internal memory.
+   * @param a_name named index of the memory cell to read out
+   * @return read value
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object readFromMemory(String a_name)  {
+    return m_memory.get(a_name).getCurrentValue();
+  }
+
 }
