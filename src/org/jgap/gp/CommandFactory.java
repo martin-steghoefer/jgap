@@ -19,12 +19,12 @@ import org.jgap.*;
  */
 public class CommandFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static CommandGene[] createStoreCommands(CommandGene[] a_target,
-                                         Configuration a_conf,
-                                         Class a_type, String a_prefix,
-                                         int a_count)
+                                                  Configuration a_conf,
+                                                  Class a_type, String a_prefix,
+                                                  int a_count)
       throws InvalidConfigurationException {
     CommandGene[] result = new CommandGene[a_count * 2 + a_target.length];
     for (int i = 0; i < a_target.length; i++) {
@@ -37,6 +37,19 @@ public class CommandFactory {
           a_target.length] = new ReadTerminalCommand(a_conf, a_type,
           a_prefix + i);
     }
+    return result;
+  }
+
+  public static CommandGene[] createStackCommands(CommandGene[] a_target,
+                                                  Configuration a_conf,
+                                                  Class a_type)
+      throws InvalidConfigurationException {
+    CommandGene[] result = new CommandGene[a_target.length + 2];
+    for (int i = 0; i < a_target.length; i++) {
+      result[i] = a_target[i];
+    }
+    result[a_target.length] = new PushCommand(a_conf, a_type);
+    result[a_target.length + 1] = new PopCommand(a_conf, a_type);
     return result;
   }
 }
