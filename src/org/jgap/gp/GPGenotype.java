@@ -12,7 +12,7 @@ package org.jgap.gp;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.jgap.gp.*;
+import org.jgap.event.*;
 
 /**
  * Genotype for GP Programs.
@@ -21,9 +21,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class GPGenotype
-    extends Genotype {
+    extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Fitness value of the best solution.
@@ -39,6 +39,8 @@ public class GPGenotype
    * Best solution found.
    */
   private static ProgramChromosome m_allTimeBest;
+
+  private GeneticEventListener m_listener;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -157,7 +159,6 @@ public class GPGenotype
       }
     }
   }
-
   /**
    * Evolves the population n times.
    *
@@ -172,7 +173,7 @@ public class GPGenotype
     for (int i = 0; i < a_evolutions; i++) {
       calcFitness();
       if (m_bestFitness < 0.000001) {
-          /**@todo make configurable --> use listener*/
+        /**@todo make configurable --> use listener*/
         // Optimal solution found, quit.
         // -----------------------------
         return;
@@ -270,7 +271,6 @@ public class GPGenotype
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
         getGPConfiguration().clearStack();
-
         val = random.nextFloat();
         // Note that if we only have one slot left to fill, we don't do
         // crossover, but fall through to reproduction.
@@ -322,5 +322,36 @@ public class GPGenotype
    */
   public double getTotalFitness() {
     return m_totalFitness;
+  }
+
+  /**
+   * Sample implementation of method to run GPGenotype as a thread.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void run() {
+    try {
+      while (true) {
+        calcFitness();
+        evolve();
+        if (m_listener != null) {
+          GeneticEvent event = new GeneticEvent("evolved", this);
+          m_listener.geneticEventFired(event);
+        }
+        else {
+          // Pause between evolutions in case no listener is available.
+          Thread.sleep(30);
+        }
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+  public void registerListener(GeneticEventListener a_listener) {
+    m_listener = a_listener;
   }
 }
