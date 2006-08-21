@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class SubProgramCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Number of subprograms.
@@ -34,7 +34,7 @@ public class SubProgramCommand
   public SubProgramCommand(final Configuration a_conf, Class type,
                            int a_subtrees)
       throws InvalidConfigurationException {
-    super(a_conf, 2, type);
+    super(a_conf, a_subtrees, type);
     m_subtrees = a_subtrees;
   }
 
@@ -49,15 +49,10 @@ public class SubProgramCommand
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-  }
-
   public String toString() {
     String ret = "";
     for (int i = 1; i < m_subtrees; i++) {
-      ret += "&" + i + " -->";
+      ret += "&" + i + " --> ";
     }
     ret += "&" + m_subtrees;
     return ret;
