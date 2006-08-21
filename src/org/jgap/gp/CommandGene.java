@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -360,5 +360,15 @@ public abstract class CommandGene
 
   public boolean isFloatType() {
     return m_floatType;
+  }
+
+  /**
+   * @return true: command affects global state (i.e. stack or memory)
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean isAffectGlobalState() {
+    return false;
   }
 }
