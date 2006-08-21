@@ -21,7 +21,7 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public transient float[] fitnessRank;
 
@@ -43,6 +43,25 @@ public class GPPopulation
     m_popSize = a_size;
     fitnessRank = new float[a_size];
     for (int i = 0; i < a_size; i++) {
+      fitnessRank[i] = 0.5f;
+    }
+  }
+
+  /*
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPPopulation(GPPopulation a_pop)
+      throws InvalidConfigurationException {
+    super(a_pop.getConfiguration(), a_pop.getPopSize());
+
+    m_avail_argTypes = a_pop.m_avail_argTypes;
+    m_avail_types = a_pop.m_avail_types;
+    m_avail_nodeSets = a_pop.m_avail_nodeSets;
+
+    m_popSize = a_pop.getPopSize();
+    fitnessRank = new float[m_popSize];
+    for (int i = 0; i < m_popSize; i++) {
       fitnessRank[i] = 0.5f;
     }
   }
