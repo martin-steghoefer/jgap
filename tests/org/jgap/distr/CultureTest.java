@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CultureTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
@@ -198,4 +198,18 @@ public class CultureTest
     s += "]";
     assertEquals(s, c.toString());
   }
+
+  /**
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void testSerialize_0() throws Exception {
+    Culture c = new Culture(11);
+    c.set(0, 2.3d, -1, "no name");
+    Culture c2 = (Culture)doSerialize(c);
+    assertSame(c, c2);
+    /**@todo add equals and compareTo to Culture and CultureMemoryCell
+     * to make this test pass*/
+  }
+
 }

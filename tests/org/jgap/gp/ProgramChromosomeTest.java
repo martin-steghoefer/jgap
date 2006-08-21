@@ -21,7 +21,7 @@ import org.jgap.*;
 public class ProgramChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private GPConfiguration m_gpconf;
 
@@ -152,6 +152,26 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
+  public void testToString2_6()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new MultiplyCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(1, new PushCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.redepth();
+    String s = pc.toString2(1);
+    assertEquals("(push X )", s);
+    s = pc.toString2(0);
+    assertEquals("(push X ) * X ", s);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void testToString_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
@@ -200,5 +220,23 @@ public class ProgramChromosomeTest
     catch (IllegalStateException ise) {
       ; //this i expected
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSerialize_0()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new AddCommand(conf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.redepth();
+    ProgramChromosome pc2 = (ProgramChromosome)doSerialize(pc);
+    assertSame(pc, pc2);
+    /**@todo implement equals and compareTo to make this test pass*/
   }
 }
