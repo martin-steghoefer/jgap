@@ -9,6 +9,7 @@
  */
 package org.jgap.gp;
 
+import java.util.*;
 import junit.framework.*;
 import org.jgap.*;
 
@@ -21,7 +22,7 @@ import org.jgap.*;
 public class GPConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private GPConfiguration m_gpconf;
 
@@ -113,4 +114,114 @@ public class GPConfigurationTest
     assertEquals("test3", conf.readFromMemory("name3"));
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testMemory_3()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    conf.storeInMemory("name1", "test1");
+    conf.clearMemory();
+    try {
+      conf.readFromMemory("name1");
+      fail();
+    }
+    catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testStack_0()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    assertEquals(0, conf.stackSize());
+    try {
+      assertNull(conf.peekStack());
+      fail();
+    }
+    catch (EmptyStackException eex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testStack_1()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    conf.pushToStack("test1");
+    assertEquals(1, conf.stackSize());
+    conf.pushToStack("test2");
+    assertEquals(2, conf.stackSize());
+    assertEquals("test2", conf.popFromStack());
+    assertEquals(1, conf.stackSize());
+    assertEquals("test1", conf.popFromStack());
+    assertEquals(0, conf.stackSize());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testStack_2()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    Vector obj = new Vector();
+    conf.pushToStack(obj);
+    assertSame(obj, conf.peekStack());
+    assertSame(obj, conf.popFromStack());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testStack_3()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    try {
+      conf.popFromStack();
+      fail();
+    }
+    catch (EmptyStackException eex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testStack_4()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    conf.pushToStack("test1");
+    conf.clearStack();
+    assertEquals(0, conf.stackSize());
+  }
 }
