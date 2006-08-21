@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Fitness value of the best solution.
@@ -263,7 +263,6 @@ public class GPGenotype
       RandomGenerator random = getConfiguration().getRandomGenerator();
       /**@todo make configurable*/
       int popSize1 = (int)Math.round(popSize * 0.8d);
-      int popSize2 = popSize - popSize1;
 
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
@@ -297,7 +296,7 @@ public class GPGenotype
       }
       // Add new chromosomes randomly.
       // -----------------------------
-      for (int i = popSize2 - 1; i < popSize; i++) {
+      for (int i = popSize1 - 1; i < popSize; i++) {
         int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i /
             (newPopulation.getPopSize() - 1);
         ProgramChromosome chrom = newPopulation.create(getGPConfiguration(),
