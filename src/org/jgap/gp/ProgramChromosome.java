@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /*wodka:
    void add(Command cmd);
@@ -658,7 +658,8 @@ public class ProgramChromosome
    *
    * @param a_index the terminal number to get
    * @param a_type the type of terminal to get
-   * @return the terminal
+   * @return the index of the terminal found, or -1 if no appropriate terminal
+   * was found
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -682,8 +683,8 @@ public class ProgramChromosome
    *
    * @param a_index the function number to get
    * @param a_type the type of function to get
-   * @return the function
-   *
+   * @return the index of the function found, or -1 if no appropriate function
+   * was found
    * @author Klaus Meffert
    * @since 3.0
    */
