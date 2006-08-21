@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.62 $";
+  private final static String CVS_REVISION = "$Revision: 1.63 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1227,8 +1227,13 @@ public class Configuration
     // Sample chromosome.
     // ------------------
     result += "\n " + S_SAMPLE_CHROM + ":\n";
-    result += "\n    " + S_SIZE + ": " + getSampleChromosome().size();
-    result += "\n    " + S_TOSTRING + ": " + getSampleChromosome().toString();
+    if (getSampleChromosome() == null) {
+      result += "\n null";
+    }
+    else {
+      result += "\n    " + S_SIZE + ": " + getSampleChromosome().size();
+      result += "\n    " + S_TOSTRING + ": " + getSampleChromosome().toString();
+    }
     // Random generator.
     // -----------------
     result += "\n  " + S_RANDOM_GENERATOR + ": " +
@@ -1244,29 +1249,49 @@ public class Configuration
     }
     // Configuration handler.
     // ----------------------
-    result += "\n " + S_CONFIGURATION_HANDLER + ": " +
-        getConfigurationHandler().getName();
-    // Fitness function.
-    // -----------------
-    result += "\n " + S_FITNESS_FUNCTION + ": " +
-        getFitnessFunction().getClass().getName();
-    // Fitness evaluator.
-    // ------------------
-    result += "\n " + S_FITNESS_EVALUATOR + ": " +
-        getFitnessEvaluator().getClass().getName();
-    // Genetic operators.
-    // ------------------
-    int gensize = getGeneticOperators().size();
-    result += "\n  " + S_GENETIC_OPERATORS + ": ";
-    if (gensize < 1) {
-      result += S_NONE;
+    result += "\n " + S_CONFIGURATION_HANDLER + ": ";
+    if (getConfigurationHandler() == null) {
+      result += "null";
     }
     else {
-      for (int i = 0; i < gensize; i++) {
-        if (i > 0) {
-          result += "; ";
+      result += getConfigurationHandler().getName();
+    }
+    // Fitness function.
+    // -----------------
+    result += "\n " + S_FITNESS_FUNCTION + ": ";
+    if (getFitnessFunction() == null) {
+     result += "null";
+    }
+    else {
+      result += getFitnessFunction().getClass().getName();
+    }
+    // Fitness evaluator.
+    // ------------------
+    result += "\n " + S_FITNESS_EVALUATOR + ": ";
+    if (getFitnessEvaluator() == null) {
+     result += "null";
+    }
+    else {
+      result += getFitnessEvaluator().getClass().getName();
+    }
+    // Genetic operators.
+    // ------------------
+    result += "\n  " + S_GENETIC_OPERATORS + ": ";
+    if (getGeneticOperators() == null) {
+      result += "null";
+    }
+    else {
+      int gensize = getGeneticOperators().size();
+      if (gensize < 1) {
+        result += S_NONE;
+      }
+      else {
+        for (int i = 0; i < gensize; i++) {
+          if (i > 0) {
+            result += "; ";
+          }
+          result += " " + getGeneticOperators().get(i).getClass().getName();
         }
-        result += " " + getGeneticOperators().get(i).getClass().getName();
       }
     }
     // Natural selectors (pre).
