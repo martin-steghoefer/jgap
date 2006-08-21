@@ -19,6 +19,7 @@
 * Added abstract base class org.jgap.BaseRateCalculator
   and made any rate calculator descend from it
 * Added example for distinct genes (examples.distinctGenes)
+* Added multi-purpose value to GeneticEvent
 * Enhanced BooleanGene.compareTo to consider application
   data
 * Added example for the multidimensional knapsack problem
