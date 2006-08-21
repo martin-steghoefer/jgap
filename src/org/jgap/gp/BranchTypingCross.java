@@ -12,7 +12,7 @@ package org.jgap.gp;
 import org.jgap.*;
 
 /**
- * Crossing over for GP.
+ * Crossing over for GP ProgramChromosomes.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -118,7 +118,7 @@ public class BranchTypingCross
         c0, c1};
     // Choose a point in c1
     int p0;
-    if (a_config.getRandomGenerator().nextFloat() < 0.9f) {
+    if (a_config.getRandomGenerator().nextFloat() < 0.9f) {/**@todo make configurable*/
       // choose a function
       int nf = c0.numFunctions();
       if (nf == 0) {
@@ -136,7 +136,7 @@ public class BranchTypingCross
     // Choose a point in c2 matching the type
     int p1;
     Class t = c0.getNode(p0).getReturnType();
-    if (a_config.getRandomGenerator().nextFloat() < 0.9f) {
+    if (a_config.getRandomGenerator().nextFloat() < 0.9f) {/**@todo make configurable*/
       // choose a function
       int nf = c1.numFunctions(t);
       if (nf == 0) {
@@ -155,6 +155,13 @@ public class BranchTypingCross
       }
       p1 = c1.getTerminal(a_config.getRandomGenerator().
                           nextInt(c1.numTerminals(t)), t);
+      // Mutate the Terminal's value
+      /**@todo make this random and configurable*/
+      CommandGene command = c1.getNode(p1);
+      if (command.getClass() == Terminal.class) {/**@todo use marker interface*/
+        Terminal term = (Terminal) command;
+        term.applyMutation(0, 0.5d);
+      }
     }
 
     int s0 = c0.getSize(p0);
