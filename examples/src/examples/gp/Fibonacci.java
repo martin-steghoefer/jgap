@@ -30,7 +30,7 @@ import org.jgap.gp.*;
 public class Fibonacci
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   static Variable vx;
 
@@ -68,7 +68,7 @@ public class Fibonacci
     }
     };
     nodeSets[0] = CommandFactory.createStoreCommands(nodeSets[0], a_conf,
-        CommandGene.IntegerClass, "mem", 4);
+        CommandGene.IntegerClass, "mem", 3);
     nodeSets[0] = CommandFactory.createStackCommands(nodeSets[0], a_conf,
         CommandGene.IntegerClass);
     RandomGenerator random = a_conf.getRandomGenerator();
@@ -76,21 +76,22 @@ public class Fibonacci
     for (int i = 0; i < NUMFIB; i++) {
       int index = i;//random.nextInt(NUMFIB * 2);
       x[i] = new Integer(index);
-      y[i] = Fib_array(index);
+      y[i] = fib_array(index);
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
     // Create genotype with initial population
     return randomInitialGenotype(a_conf, types, argTypes, nodeSets);
   }
 
-  private static int Fib(int a_index) {
+  //(Sort of) This is what we would like to (but cannot) find via GP:
+  private static int fib(int a_index) {
     if (a_index == 0 || a_index == 1) {
       return 1;
     }
-    return Fib(a_index - 1) + Fib(a_index - 2);
+    return fib(a_index - 1) + fib(a_index - 2);
   }
 
-  //(Sort of) This is what we would like to find via GP:
+  //(Sort of) This is what we would like to (and can) find via GP:
   private static int Fib_iter(int a_index) {
     // 1
     if (a_index == 0 || a_index == 1) {
@@ -110,7 +111,7 @@ public class Fibonacci
   }
 
   //(Sort of) This is what we would like to find via GP:
-  public static int Fib_array(int a_index) {
+  public static int fib_array(int a_index) {
     // 1
     if (a_index == 0 || a_index == 1) {
       return 1;
@@ -150,9 +151,10 @@ public class Fibonacci
                                                 new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           int evno = getConfiguration().getGenerationNr();
-          if (evno % 25 == 0) { /**@todo make configurable --> use listener*/
+          double freeMem = getFreeMemoryMB();
+          if (evno % 100 == 0) { /**@todo make configurable --> use listener*/
             System.out.println("Evolving generation " + evno
-                               + ", memory free: " + getFreeMemoryMB() + " MB");
+                               + ", memory free: " + freeMem + " MB");
           }
           if (evno > 3000) {
             t.stop();
@@ -160,7 +162,7 @@ public class Fibonacci
           else {
             // Collect garbage if memory low.
             // ------------------------------
-            if (getFreeMemoryMB() < 50) {
+            if (freeMem < 50) {
               System.gc();
             }
             try {
