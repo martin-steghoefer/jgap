@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -155,11 +155,11 @@ public class BranchTypingCross
       }
       p1 = c1.getTerminal(a_config.getRandomGenerator().
                           nextInt(c1.numTerminals(t)), t);
-      // Mutate the Terminal's value
+      // Mutate the terminal's value
       /**@todo make this random and configurable*/
       CommandGene command = c1.getNode(p1);
-      if (command.getClass() == Terminal.class) {/**@todo use marker interface*/
-        Terminal term = (Terminal) command;
+      if (Mutateable.class.isInstance(command)) {
+        Mutateable term = (Mutateable) command;
         term.applyMutation(0, 0.5d);
       }
     }
