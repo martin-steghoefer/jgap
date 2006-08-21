@@ -21,11 +21,17 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public transient float[] fitnessRank;
 
   private int m_popSize;
+
+  private Class[] m_avail_types;
+
+  private Class[][] m_avail_argTypes;
+
+  private CommandGene[][] m_avail_nodeSets;
 
   /*
    * @author Klaus Meffert
@@ -84,18 +90,39 @@ public class GPPopulation
                      Class[][] a_argTypes,
                      CommandGene[][] a_nodeSets)
       throws InvalidConfigurationException {
+    m_avail_types = a_types;
+    m_avail_argTypes = a_argTypes;
+    m_avail_nodeSets = a_nodeSets;
     for (int i = 0; i < m_popSize - 1; i++) {
       int depth = 2 + (a_conf.getMaxInitDepth() - 1) * i /
           (m_popSize - 1);
-      ProgramChromosome chrom = new ProgramChromosome(getConfiguration());
-      if ( (i % 2) == 0) {
-        chrom.grow(depth, a_types, a_argTypes, a_nodeSets);
-      }
-      else {
-        chrom.full(depth, a_types, a_argTypes, a_nodeSets);
-      }
+      ProgramChromosome chrom = create(a_conf, depth, (i%2)==0);
+//          new ProgramChromosome(getConfiguration());
+//      if ( (i % 2) == 0) {
+//        chrom.grow(depth, a_types, a_argTypes, a_nodeSets);
+//      }
+//      else {
+//        chrom.full(depth, a_types, a_argTypes, a_nodeSets);
+//      }
       addChromosome(chrom);
     }
     setChanged(true);
+  }
+
+  public ProgramChromosome create(final GPConfiguration a_conf, int a_depth,
+                                  boolean a_grow)
+      throws InvalidConfigurationException {
+    ProgramChromosome chrom = new ProgramChromosome(getConfiguration());
+    if (a_grow) {
+      chrom.grow(a_depth, m_avail_types, m_avail_argTypes, m_avail_nodeSets);
+    }
+    else {
+      chrom.full(a_depth, m_avail_types, m_avail_argTypes, m_avail_nodeSets);
+    }
+    return chrom;
+  }
+
+  public int getPopSize() {
+    return m_popSize;
   }
 }
