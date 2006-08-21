@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class StoreTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private String m_storageName;
 
@@ -51,7 +51,7 @@ public class StoreTerminalCommand
   }
 
   public String toString() {
-    return "store_in &1";
+    return "store_in(" + m_storageName + ", &1)";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
