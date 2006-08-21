@@ -21,20 +21,12 @@ import org.jgap.gp.*;
 public abstract class MathCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public MathCommand(final Configuration a_conf, int a_arity,
                      Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, a_arity, a_returnType);
-  }
-
-  protected double getState(GPConfiguration config) {
-    return ( (Double) config.getState()).doubleValue();
-  }
-
-  protected void setState(GPConfiguration config, double a_state) {
-    config.setState(new Double(a_state));
   }
 
   public void setAllele(Object a_newValue) {
