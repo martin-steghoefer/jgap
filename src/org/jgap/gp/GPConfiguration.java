@@ -24,12 +24,17 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  private Object m_state;
-
+  /**
+   * Internal stack, see PushCommand for example.
+   */
   private Stack m_stack = new Stack();
-  private Culture m_memory = new Culture(10);
+
+  /**
+   * Internal memory, see StoreTerminalCommand for example.
+   */
+  private Culture m_memory = new Culture(20);
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -59,6 +64,9 @@ public class GPConfiguration
    */
   private INaturalGPSelector m_selectionMethod;
 
+  /**
+   * The method of crossing over two individuals during evolution.
+   */
   private CrossMethod m_crossMethod;
 
   /**
@@ -75,16 +83,10 @@ public class GPConfiguration
     setFitnessEvaluator(new DeltaFitnessEvaluator());
   }
 
-  public Object getState() {
-    return m_state;
-  }
-
-  public void setState(Object a_state) {
-    m_state = a_state;
-  }
-
   public synchronized void verifyStateIsValid()
       throws InvalidConfigurationException {
+    // Do nothing in here.
+    // -------------------
   }
 
   public synchronized void addGeneticOperator(GeneticOperator a_operatorToAdd)
