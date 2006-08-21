@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Object m_state;
 
@@ -35,31 +35,31 @@ public class GPConfiguration
    * The probability that a crossover operation is chosen during evolution. Must
    * be between 0.0d and 1.0d, inclusive.
    */
-  private double crossoverProb = 0.9d;
+  private double m_crossoverProb = 0.9d;
 
   /**
    * The probability that a reproduction operation is chosen during evolution.
    * Must be between 0.0d and 1.0d. crossoverProb + reproductionProb must equal
    * 1.0d.
    */
-  private double reproductionProb = 0.1d;
+  private double m_reproductionProb = 0.1d;
 
   /**
    * The maximum depth of an individual resulting from crossover.
    */
-  private int maxCrossoverDepth = 17;
+  private int m_maxCrossoverDepth = 17;
 
   /**
    * The maximum depth of an individual when the world is created.
    */
-  private int maxInitDepth = 6;
+  private int m_maxInitDepth = 6;
 
   /**
    * The method of choosing an individual to perform an evolution operation on.
    */
-  private INaturalGPSelector selectionMethod;
+  private INaturalGPSelector m_selectionMethod;
 
-  private CrossMethod crossMethod;
+  private CrossMethod m_crossMethod;
 
   /**
    * @throws InvalidConfigurationException
@@ -67,8 +67,8 @@ public class GPConfiguration
   public GPConfiguration()
       throws InvalidConfigurationException {
     super();
-    crossMethod = new BranchTypingCross(this);
-    selectionMethod = new FitnessProportionateSelection();
+    m_crossMethod = new BranchTypingCross(this);
+    m_selectionMethod = new FitnessProportionateSelection();
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
 //    setFitnessEvaluator(new DefaultFitnessEvaluator());
@@ -99,43 +99,43 @@ public class GPConfiguration
   }
 
   public double getCrossoverProb() {
-    return crossoverProb;
+    return m_crossoverProb;
   }
 
-  public void setCrossoverProb(float crossoverProb) {
-    this.crossoverProb = crossoverProb;
+  public void setCrossoverProb(float a_crossoverProb) {
+    m_crossoverProb = a_crossoverProb;
   }
 
   public double getReproductionProb() {
-    return reproductionProb;
+    return m_reproductionProb;
   }
 
-  public void setReproductionProb(float reproductionProb) {
-    this.reproductionProb = reproductionProb;
+  public void setReproductionProb(float a_reproductionProb) {
+    m_reproductionProb = a_reproductionProb;
   }
 
   public int getMaxCrossoverDepth() {
-    return maxCrossoverDepth;
+    return m_maxCrossoverDepth;
   }
 
-  public void setMaxCrossoverDepth(int maxCrossoverDepth) {
-    this.maxCrossoverDepth = maxCrossoverDepth;
+  public void setMaxCrossoverDepth(int a_maxCrossoverDepth) {
+    m_maxCrossoverDepth = a_maxCrossoverDepth;
   }
 
   public INaturalGPSelector getSelectionMethod() {
-    return selectionMethod;
+    return m_selectionMethod;
   }
 
   public CrossMethod getCrossMethod() {
-    return crossMethod;
+    return m_crossMethod;
   }
 
   public int getMaxInitDepth() {
-    return maxInitDepth;
+    return m_maxInitDepth;
   }
 
   public void setMaxInitDepth(int a_maxDepth) {
-    maxInitDepth = a_maxDepth;
+    m_maxInitDepth = a_maxDepth;
   }
 
   public void pushToStack(Object a_value) {
