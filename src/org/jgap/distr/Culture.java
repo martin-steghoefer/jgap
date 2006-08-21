@@ -9,6 +9,8 @@
  */
 package org.jgap.distr;
 
+import java.util.*;
+
 /**
  * Culture is a memory not being bound to a generation, but possibly persistent
  * during the whole history of a genotype (over all generations).<p>
@@ -17,14 +19,19 @@ package org.jgap.distr;
  * @author Klaus Meffert
  * @since 2.3
  */
-public class Culture {
+public class Culture implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The storage to use.
    */
   private CultureMemoryCell[] m_memory;
+
+  /**
+   * Storage for named indices.
+   */
+  private List m_memoryNames = new Vector();
 
   /**
    * Constructor.
@@ -65,6 +72,59 @@ public class Culture {
   }
 
   /**
+   * Sets a memory cell with a given value. The memory cell will be newly
+   * created for that.
+   * @param a_index index of the memory cell
+   * @param a_value value to set in the memory
+   * @param a_historySize size of history to use, or less than 1 for turning
+   * history off
+   * @param a_name informative name of the memory cell
+   * @return newly created memory cell set with the given value
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public CultureMemoryCell set(final int a_index, final Object a_value,
+                  final int a_historySize, final String a_name) {
+    if (a_index < 0 || a_index >= size()) {
+      throw new IllegalArgumentException("Illegal memory index!");
+    }
+    CultureMemoryCell cell = new CultureMemoryCell(a_name, a_historySize);
+    cell.setValue(a_value);
+    m_memory[a_index] = cell;
+    return cell;
+  }
+
+  /**
+   * Sets a memory cell with a given value. The memory cell will be newly
+   * created for that.
+   * @param a_name named index of the memory cell
+   * @param a_value value to set in the memory
+   * @param a_historySize size of history to use, or less than 1 for turning
+   * history off
+   * @return newly created memory cell set with the given value
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public CultureMemoryCell set(final String a_name, final Object a_value,
+                  final int a_historySize) {
+    if (a_name == null || a_name.length() < 1) {
+      throw new IllegalArgumentException("Illegal memory name!");
+    }
+    int index = m_memoryNames.indexOf(a_name);
+    if (index < 0) {
+      // Create new named index
+      m_memoryNames.add(a_name);
+      index = m_memoryNames.size() -1;
+    }
+    CultureMemoryCell cell = new CultureMemoryCell(a_name, a_historySize);
+    cell.setValue(a_value);
+    m_memory[index] = cell;
+    return cell;
+  }
+
+  /**
    * Retrieves the memory cell at the given index.
    * @param a_index index of the memory cell to read out
    * @return stored memory cell at given index
@@ -77,6 +137,25 @@ public class Culture {
       throw new IllegalArgumentException("Illegal memory index!");
     }
     return m_memory[a_index];
+  }
+
+  /**
+   * Retrieves the memory cell at the given index.
+   * @param a_name name of the memory cell to read out
+   * @return stored memory cell for given name, or null of name unknown
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public CultureMemoryCell get(final String a_name) {
+    if (a_name == null || a_name.length() < 1) {
+      throw new IllegalArgumentException("Illegal memory name!");
+    }
+    int index = m_memoryNames.indexOf(a_name);
+    if (index < 0) {
+      throw new IllegalArgumentException("Memory name unknown!");
+    }
+    return m_memory[index];
   }
 
   /**
