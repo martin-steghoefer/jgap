@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -44,6 +44,10 @@ public abstract class CommandGene
 
   private int m_arity;
 
+  private boolean m_integerType;
+
+  private boolean m_floatType;
+
   /**
    * Initializations, called from each Constructor.
    */
@@ -57,6 +61,14 @@ public abstract class CommandGene
     init();
     m_arity = a_arity;
     returnType = a_returnType;
+    if (a_returnType == Integer.class
+    || a_returnType == Long.class) {
+      m_integerType = true;
+    }
+    else if (a_returnType == Double.class
+    || a_returnType == Float.class) {
+      m_floatType = true;
+    }
   }
 
   public void setAllele(Object a_newValue) {
@@ -172,8 +184,6 @@ public abstract class CommandGene
   }
 
   /**
-   * Gets the return type of this node
-   *
    * @return the return type of this node
    *
    * @since 3.0
@@ -344,4 +354,11 @@ public abstract class CommandGene
     }
   }
 
+  public boolean isIntegerType() {
+    return m_integerType;
+  }
+
+  public boolean isFloatType() {
+    return m_floatType;
+  }
 }
