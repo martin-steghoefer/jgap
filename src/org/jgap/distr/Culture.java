@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class Culture implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The storage to use.
@@ -40,7 +40,7 @@ public class Culture implements java.io.Serializable {
 
   /**
    * Constructor.
-   * @param a_size size of the memory
+   * @param a_size the size of the memory in cells (CultureMemoryCell instances)
    *
    * @author Klaus Meffert
    * @since 2.3
@@ -149,7 +149,7 @@ public class Culture implements java.io.Serializable {
   /**
    * Retrieves the memory cell at the given index.
    * @param a_name name of the memory cell to read out
-   * @return stored memory cell for given name, or null of name unknown
+   * @return stored memory cell for given name, or null if name unknown
    *
    * @author Klaus Meffert
    * @since 3.0
