@@ -10,7 +10,6 @@
 package org.jgap.distr;
 
 import org.jgap.*;
-
 import junit.framework.*;
 
 /**
@@ -22,7 +21,7 @@ import junit.framework.*;
 public class CultureTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
@@ -200,16 +199,35 @@ public class CultureTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void testSerialize_0() throws Exception {
+  public void testSerialize_0()
+      throws Exception {
     Culture c = new Culture(11);
     c.set(0, 2.3d, -1, "no name");
-    Culture c2 = (Culture)doSerialize(c);
+    Culture c2 = (Culture) doSerialize(c);
     assertSame(c, c2);
     /**@todo add equals and compareTo to Culture and CultureMemoryCell
      * to make this test pass*/
   }
 
+  /**
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testClear_0() {
+    Culture c = new Culture(11);
+    c.set(1, 2.3d, -1, "no name");
+    c.set("hallo", new Double(2.3d), -1);
+    c.clear();
+    // Check named memory.
+    assertEquals(0, c.getMemoryNames().size());
+    // Check memory cells themselves.
+    for (int i = 0; i < c.size(); i++) {
+      assertNull(c.get(i));
+    }
+  }
 }
