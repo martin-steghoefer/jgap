@@ -9,7 +9,6 @@
  */
 package org.jgap.gp;
 
-import java.util.*;
 import org.jgap.gp.*;
 import org.jgap.*;
 
@@ -20,9 +19,10 @@ import org.jgap.*;
  * @since 3.0
  */
 public class Terminal
-    extends CommandGene {
+    extends CommandGene
+    implements Mutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private String m_value;
 
