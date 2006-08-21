@@ -22,9 +22,13 @@ import java.util.EventObject;
  */
 public class GeneticEvent
     extends EventObject {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
+
+  /**
+   * Multi-purpose value object
+   */
+  private Object m_value;
 
   /**
    * Public constant representing the name of the event that is fired each
@@ -57,6 +61,26 @@ public class GeneticEvent
   }
 
   /**
+   * Constructs a new GeneticEvent of the given name.
+   *
+   * @param a_eventName the name of the event
+   * @param a_source the genetic object that acted as the source of the event.
+   * The type of this object will be dependent on the kind of event (which can
+   * be identified by the event name). It may not be null
+   * @param a_value informative value of the event
+   *
+   * @throws IllegalArgumentException if the given source object is null
+   *
+   * @author Neil Rotstan
+   * @since 1.0
+   */
+  public GeneticEvent(final String a_eventName, final Object a_source,
+                      final Object a_value) {
+    this(a_eventName, a_source);
+    m_value = a_value;
+  }
+
+  /**
    * Retrieves the name of this event, which can be used to identify the
    * type of event.
    *
@@ -67,5 +91,15 @@ public class GeneticEvent
    */
   public String getEventName() {
     return m_eventName;
+  }
+
+  /**
+   * @return multi-purpose value of the event
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object getValue() {
+    return m_value;
   }
 }
