@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /*wodka:
    void add(Command cmd);
@@ -35,21 +35,21 @@ public class ProgramChromosome
   /**
    * The allowable function/terminal list.
    */
-  private transient CommandGene[] functionSet;
+  private transient CommandGene[] m_functionSet;
 
   /**
    * Array to hold the depths of each node.
    */
-  private int[] depth;
+  private int[] m_depth;
 
   /**
    * Array to hold the types of the arguments to this Chromosome.
    */
   private Class[] argTypes;
 
-  private transient int index;
+  private transient int m_index;
 
-  private transient int maxDepth;
+  private transient int m_maxDepth;
 
   public ProgramChromosome(GPConfiguration a_configuration, int a_size)
       throws InvalidConfigurationException {
@@ -62,7 +62,7 @@ public class ProgramChromosome
                            CommandGene[] a_functions, Class[] a_argTypes)
       throws InvalidConfigurationException {
     super(a_configuration, a_size);
-    functionSet = a_functionSet;
+    m_functionSet = a_functionSet;
     argTypes = a_argTypes;
     init();
   }
@@ -106,7 +106,7 @@ public class ProgramChromosome
 
   private void init(final int a_size)
       throws InvalidConfigurationException {
-    depth = new int[a_size];
+    m_depth = new int[a_size];
     setFunctions(new CommandGene[a_size]);
   }
 
@@ -117,7 +117,7 @@ public class ProgramChromosome
       chrom.argTypes = (Class[]) argTypes.clone();
       chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
       chrom.setFunctions( (CommandGene[]) getFunctions().clone());
-      chrom.depth = (int[]) depth.clone();
+      chrom.m_depth = (int[]) m_depth.clone();
       return chrom;
     }
     catch (Exception cex) {
@@ -175,8 +175,8 @@ public class ProgramChromosome
         getFunctionSet()[a_functionSet.length + i]
             = new Argument(getConfiguration(),i,a_argTypes[i]);
       }
-      index = 0;
-      maxDepth = a_depth;
+      m_index = 0;
+      m_maxDepth = a_depth;
       fullNode(a_depth, a_type, getFunctionSet());
       redepth();
     }
@@ -208,9 +208,20 @@ public class ProgramChromosome
         getFunctionSet()[a_functionSet.length + i]
             = new Argument(getConfiguration(),i,a_argTypes[i]);
       }
-      index = 0;
-      maxDepth = depth;
-      growNode(depth, type, getFunctionSet());
+      m_index = 0;
+      m_maxDepth = depth;
+      /**@todo init is experimental, make dynamic*/
+      // Initialization of genotype according to specific problem requirements.
+      // ----------------------------------------------------------------------
+      CommandGene n = null;
+      for (int i = 0; i < m_functionSet.length; i++) {
+        n = m_functionSet[i];
+        if (n.getClass() == SubProgramCommand.class) {
+          break;
+        }
+      }
+
+      growNode(depth, type, getFunctionSet(),n);
       redepth();
     }
     catch (InvalidConfigurationException iex) {
@@ -368,13 +379,13 @@ public class ProgramChromosome
     CommandGene n = null;
     int lindex;
     while (n == null) {
-      lindex = a_config.getRandomGenerator().nextInt(functionSet.length);
-      if (functionSet[lindex].getReturnType() == a_type) {
-        if (functionSet[lindex].getArity() == 0 && (!a_function || a_growing)) {
-          n = functionSet[lindex];
+      lindex = a_config.getRandomGenerator().nextInt(m_functionSet.length);
+      if (m_functionSet[lindex].getReturnType() == a_type) {
+        if (m_functionSet[lindex].getArity() == 0 && (!a_function || a_growing)) {
+          n = m_functionSet[lindex];
         }
-        if (functionSet[lindex].getArity() != 0 && a_function) {
-          n = functionSet[lindex];
+        if (m_functionSet[lindex].getArity() != 0 && a_function) {
+          n = m_functionSet[lindex];
         }
       }
     }
@@ -394,8 +405,8 @@ public class ProgramChromosome
   protected void fullNode(int a_depth, Class a_type, CommandGene[] a_functionSet) {
     CommandGene n = selectNode( (GPConfiguration) getConfiguration(), a_type,
                                a_functionSet, a_depth > 1, false);
-    depth[index] = maxDepth - a_depth;
-    getFunctions()[index++] = n;
+    m_depth[m_index] = m_maxDepth - a_depth;
+    getFunctions()[m_index++] = n;
     if (a_depth > 1) {
       for (int i = 0; i < n.getArity(); i++) {
         fullNode(a_depth - 1, n.getChildType(i), a_functionSet);
@@ -409,19 +420,24 @@ public class ProgramChromosome
    * @param a_depth the maximum depth of the tree to create
    * @param a_type the type of node to start with
    * @param a_functionSet the set of function valid to pick from
+   * @param a_rootNode null, or root node to use
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void growNode(int a_depth, Class a_type, CommandGene[] a_functionSet) {
+  protected void growNode(int a_depth, Class a_type,
+                          CommandGene[] a_functionSet, CommandGene a_rootNode) {
+    if (a_rootNode == null) {
+      a_rootNode = selectNode( (GPConfiguration) getConfiguration(), a_type,
+                     a_functionSet, a_depth > 1, true);
+    }
     // Generate the node.
-    CommandGene n = selectNode( (GPConfiguration) getConfiguration(), a_type,
-                               a_functionSet, a_depth > 1, true);
-    depth[index] = maxDepth - a_depth;
-    getFunctions()[index++] = n;
+    // ------------------
+    m_depth[m_index] = m_maxDepth - a_depth;
+    getFunctions()[m_index++] = a_rootNode;
     if (a_depth > 1) {
-      for (int i = 0; i < n.getArity(); i++) {
-        growNode(a_depth - 1, n.getChildType(i), a_functionSet);
+      for (int i = 0; i < a_rootNode.getArity(); i++) {
+        growNode(a_depth - 1, a_rootNode.getChildType(i), a_functionSet, null);
       }
     }
   }
@@ -433,7 +449,7 @@ public class ProgramChromosome
    * @since 3.0
    */
   public void redepth() {
-    depth[0] = 0;
+    m_depth[0] = 0;
     redepth(0);
   }
 
@@ -460,7 +476,7 @@ public class ProgramChromosome
     }
     int arity = command.getArity();
     for (int i = 0; i < arity; i++) {
-      depth[num] = depth[a_index] + 1;
+      m_depth[num] = m_depth[a_index] + 1;
       // children[i][n] = num;
       num = redepth(num);
       if (num < 0) {
@@ -573,10 +589,10 @@ public class ProgramChromosome
    */
   public int getChild(int a_index, int a_child) {
     for (int i = a_index + 1; i < getFunctions().length; i++) {
-      if (depth[i] <= depth[a_index]) {
+      if (m_depth[i] <= m_depth[a_index]) {
         return -1;
       }
-      if (depth[i] == depth[a_index] + 1) {
+      if (m_depth[i] == m_depth[a_index] + 1) {
         if (--a_child < 0) {
           return i;
         }
@@ -701,11 +717,11 @@ public class ProgramChromosome
   }
 
   public CommandGene[] getFunctionSet() {
-    return functionSet;
+    return m_functionSet;
   }
 
   public void setFunctionSet(CommandGene[] a_functionSet) {
-    functionSet = a_functionSet;
+    m_functionSet = a_functionSet;
   }
 
   public CommandGene[] getFunctions() {
@@ -731,7 +747,7 @@ public class ProgramChromosome
     // Get the node at which the depth is <= depth[n].
     for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
          i++) {
-      if (depth[i] <= depth[a_index]) {
+      if (m_depth[i] <= m_depth[a_index]) {
         break;
       }
     }
@@ -748,17 +764,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public int getDepth(int a_index) {
-    int i, maxdepth = depth[a_index];
+    int i, maxdepth = m_depth[a_index];
     for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
          i++) {
-      if (depth[i] <= depth[a_index]) {
+      if (m_depth[i] <= m_depth[a_index]) {
         break;
       }
-      if (depth[i] > maxdepth) {
-        maxdepth = depth[i];
+      if (m_depth[i] > maxdepth) {
+        maxdepth = m_depth[i];
       }
     }
-    return maxdepth - depth[a_index];
+    return maxdepth - m_depth[a_index];
   }
 
   /**
@@ -777,7 +793,7 @@ public class ProgramChromosome
       return -1;
     }
     for (int i = a_child - 1; i >= 0; i--) {
-      if (depth[i] == depth[a_child] - 1) {
+      if (m_depth[i] == m_depth[a_child] - 1) {
         return i;
       }
     }
