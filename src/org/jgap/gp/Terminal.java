@@ -9,6 +9,7 @@
  */
 package org.jgap.gp;
 
+import java.util.*;
 import org.jgap.gp.*;
 import org.jgap.*;
 
@@ -21,42 +22,43 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
-  private double m_value;
+  private String m_value;
 
   private double m_lowerBounds;
 
   private double m_upperBounds;
 
-//  private boolean m_minmax;
-
   public Terminal()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getConfiguration(), CommandGene.IntegerClass);
   }
 
-  public Terminal(final Configuration a_conf)
+  public Terminal(final Configuration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    this(a_conf, 0d, 99d);
-//    m_minmax = false;
-//    m_lowerBounds = 0;
-//    m_upperBounds = 99;
+    this(a_conf, 0d, 99d, a_returnType);
   }
 
   public Terminal(final Configuration a_conf, double a_minValue,
-                  double a_maxValue)
+                  double a_maxValue, Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf, 0, null);
-    /**@todo consider min, max*/
+    super(a_conf, 0, a_returnType);
     m_lowerBounds = a_minValue;
     m_upperBounds = a_maxValue;
-//    m_minmax = true;
+    setRandomValue();
+  }
+
+  protected void setRandomValue() {
+    RandomGenerator randomGen = getConfiguration().getRandomGenerator();
+    m_value = new Long(Math.round(randomGen.nextDouble() *
+                                  (m_upperBounds - m_lowerBounds) +
+                                  m_lowerBounds)).toString();
   }
 
   protected Gene newGeneInternal() {
     try {
-      return new Terminal(getConfiguration());
+      return new Terminal(getConfiguration(), getReturnType());
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -64,43 +66,57 @@ public class Terminal
   }
 
   public void setValue(double a_value) {
-    m_value = a_value;
+    if (isIntegerType()) {
+      m_value = new Long(Math.round(a_value)).toString();
+    }
+    else if (isFloatType()){
+      m_value = Double.toString(a_value);
+    }
+    else {
+      throw new UnsupportedOperationException("Setting a value for type "
+                                              + getReturnType()
+                                              +
+          " is not supported with Terminal!");
+    }
   }
 
   public void applyMutation(int index, double a_percentage) {
-    /**@todo not used, implement correctly*/
-
     /**@todo decide whether adding or subtracting a delta*/
 
-    /**@todo if a_percentage > 0.95 then do mutation not basing on current value
-     * --> random value*/
-
-    /**@todo add delta to current value to receive new value*/
-    double range = (m_upperBounds - m_lowerBounds) * a_percentage;
-    double newValue = m_value +
-        (getConfiguration().getRandomGenerator().nextDouble() * range);
-//    setAllele(new Double(newValue));
-    setValue(newValue);
+    // If very high then do mutation not relying on current value
+    // random value.
+    // ----------------------------------------------------------
+    if (a_percentage > 0.85d) {
+      setRandomValue();
+    }
+    else {
+      /**@todo add delta to current value to receive new value*/
+      double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+      double newValue = Double.parseDouble(m_value) +
+          (getConfiguration().getRandomGenerator().nextDouble() * range);
+      /**@todo ensure value is within bounds*/
+      setValue(newValue);
+    }
   }
 
   public String toString() {
     return m_value + "";
   }
 
-  public int execute_int(Chromosome c, int n, Object[] args) {
-    return 1;
+  public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    return Integer.parseInt((String)m_value);
   }
 
-  public long execute_long(Chromosome c, int n, Object[] args) {
-    return 1;
+  public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    return Long.parseLong((String)m_value);
   }
 
-  public float execute_float(Chromosome c, int n, Object[] args) {
-    return 1.0f;
+  public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    return Float.parseFloat((String)m_value);
   }
 
-  public double execute_double(Chromosome c, int n, Object[] args) {
-    return 1.0;
+  public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    return Double.parseDouble(m_value);
   }
 
   public Class getChildType(int i) {
