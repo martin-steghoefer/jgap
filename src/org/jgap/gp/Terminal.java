@@ -22,7 +22,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   private String m_value;
 
@@ -110,7 +110,7 @@ public class Terminal
   }
 
   public String toString() {
-    return m_value + "";
+    return "terminal(" + m_value + ")";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
