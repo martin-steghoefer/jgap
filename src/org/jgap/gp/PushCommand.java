@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PushCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public PushCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -46,7 +46,7 @@ public class PushCommand
   }
 
   public String toString() {
-    return "push";
+    return "push &1";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

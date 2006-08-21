@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /*wodka:
    void add(Command cmd);
@@ -293,7 +293,8 @@ public class ProgramChromosome
       str += getFunctions()[a_n].getName();
     }
     if (a_n > 0) {
-      str += "(";
+      str = "(" + str;
+//      str += "(";
     }
     for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
       String childString = toString2(getChild(a_n, i));
