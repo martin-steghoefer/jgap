@@ -21,16 +21,25 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public transient float[] fitnessRank;
 
   private int m_popSize;
 
+  /**
+   * Needed for cloning.
+   */
   private Class[] m_avail_types;
 
+  /**
+   * Needed for cloning.
+   */
   private Class[][] m_avail_argTypes;
 
+  /**
+   * Needed for cloning.
+   */
   private CommandGene[][] m_avail_nodeSets;
 
   /*
@@ -55,6 +64,8 @@ public class GPPopulation
       throws InvalidConfigurationException {
     super(a_pop.getConfiguration(), a_pop.getPopSize());
 
+    // Clone important state variables.
+    // --------------------------------
     m_avail_argTypes = a_pop.m_avail_argTypes;
     m_avail_types = a_pop.m_avail_types;
     m_avail_nodeSets = a_pop.m_avail_nodeSets;
@@ -117,7 +128,7 @@ public class GPPopulation
       int depth = 2 +
           ( getGPConfiguration().getMaxInitDepth() - 1) * i /
           (m_popSize - 1);
-      ProgramChromosome chrom = create(depth, (i%2)==0);
+      ProgramChromosome chrom = create(depth, (i % 2) == 0);
       addChromosome(chrom);
     }
     setChanged(true);
@@ -146,6 +157,12 @@ public class GPPopulation
     return chrom;
   }
 
+  /**
+   * @return fixed size of the population
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public int getPopSize() {
     return m_popSize;
   }
