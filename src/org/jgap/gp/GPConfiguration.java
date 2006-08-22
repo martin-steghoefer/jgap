@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Internal stack, see PushCommand for example.
@@ -57,7 +57,7 @@ public class GPConfiguration
   /**
    * The maximum depth of an individual when the world is created.
    */
-  private int m_maxInitDepth = 6;
+  private int m_maxInitDepth = 7;
 
   /**
    * The method of choosing an individual to perform an evolution operation on.
@@ -180,7 +180,7 @@ public class GPConfiguration
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Object readFromMemory(String a_name)  {
+  public Object readFromMemory(String a_name) {
     return m_memory.get(a_name).getCurrentValue();
   }
 
@@ -194,4 +194,11 @@ public class GPConfiguration
     m_memory.clear();
   }
 
+  public void storeThruput(int a_index, Object a_value) {
+    m_memory.set("thruput" + a_index, a_value, -1); /**@todo do it cleaner*/
+  }
+
+  public Object readThruput(int a_index) {
+    return m_memory.get("thruput" + a_index); /**@todo do it cleaner*/
+  }
 }
