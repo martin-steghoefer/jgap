@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /*wodka:
    void add(Command cmd);
@@ -576,9 +576,9 @@ public class ProgramChromosome
   }
 
   /**
-   * Gets the child'th child of the n'th node in this chromosome. This is the
-   * same as the child'th node whose depth is one more than the depth of the
-   * n'th node.
+   * Gets the a_child'th child of the a_index'th node in this chromosome. This
+   * is the same as the a_child'th node whose depth is one more than the depth
+   * of the a_index'th node.
    *
    * @param a_index the node number of the parent
    * @param a_child the child number (starting from 0) of the parent
@@ -607,7 +607,7 @@ public class ProgramChromosome
    * counted in a depth-first manner, with node 0 being the first node of the
    * given type in this chromosome.
    *
-   * @param a_index the node number to get
+   * @param a_index the i'th node to get
    * @param a_type the type of node to get
    * @return the node
    *
@@ -627,9 +627,10 @@ public class ProgramChromosome
 
   /**
    * Gets the i'th terminal in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the first terminal in this chromosome.
+   * depth-first manner, with node 0 being the first terminal in this
+   * chromosome.
    *
-   * @param a_index the terminal number to get
+   * @param a_index the i'th terminal to get
    * @return the terminal
    *
    * @author Klaus Meffert
@@ -648,9 +649,10 @@ public class ProgramChromosome
 
   /**
    * Gets the i'th function in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the first function in this chromosome.
+   * depth-first manner, with node 0 being the first function in this
+   * chromosome.
    *
-   * @param a_index the function number to get
+   * @param a_index the i'th function to get
    * @return the function
    *
    * @author Klaus Meffert
@@ -672,7 +674,7 @@ public class ProgramChromosome
    * counted in a depth-first manner, with node 0 being the first terminal of
    * the given type in this chromosome.
    *
-   * @param a_index the terminal number to get
+   * @param a_index the i'th terminal to get
    * @param a_type the type of terminal to get
    * @return the index of the terminal found, or -1 if no appropriate terminal
    * was found
@@ -697,7 +699,7 @@ public class ProgramChromosome
    * counted in a depth-first manner, with node 0 being the first function of
    * the given type in this chromosome.
    *
-   * @param a_index the function number to get
+   * @param a_index the i'th function to get
    * @param a_type the type of function to get
    * @return the index of the function found, or -1 if no appropriate function
    * was found
@@ -716,11 +718,16 @@ public class ProgramChromosome
     return -1;
   }
 
-  public int getTerminalOfClass(int a_index, Class a_terminalClass) {
+  /**
+   * Helper: Find GP command with given class and return index of it
+   * @param a_index the index to start with
+   * @param a_terminalClass the class to find a command for
+   * @return index of first found matching GP command, or -1 if none found
+   */
+  public int getCommandOfClass(int a_index, Class a_terminalClass) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getClass() == a_terminalClass
-          && getFunctions()[j].getArity() == 0) {
-        if (--a_index < 0) {
+      if (getFunctions()[j].getClass() == a_terminalClass) {
+        if (--a_index < 0) {/**@todo consider a_index>0*/
           return j;
         }
       }
@@ -769,7 +776,7 @@ public class ProgramChromosome
   /**
    * Gets the depth of the branch starting at the n'th node.
    *
-   * @param a_index the index of the node at which to check the depth.
+   * @param a_index the index of the node at which to check the depth
    * @return the depth of the branch starting at the n'th node
    *
    * @author Klaus Meffert
