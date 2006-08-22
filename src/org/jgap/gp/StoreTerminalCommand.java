@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class StoreTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -52,6 +52,7 @@ public class StoreTerminalCommand
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     int value = c.execute_int(n, 0, args);
     // Store in memory.
     // ----------------
@@ -61,6 +62,7 @@ public class StoreTerminalCommand
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     long value = c.execute_long(n, 0, args);
     ( (GPConfiguration) getConfiguration()).storeInMemory(m_storageName,
         new Long(value));
@@ -68,6 +70,7 @@ public class StoreTerminalCommand
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     double value = c.execute_double(n, 0, args);
     ( (GPConfiguration) getConfiguration()).storeInMemory(m_storageName,
         new Double(value));
@@ -75,6 +78,7 @@ public class StoreTerminalCommand
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     float value = c.execute_float(n, 0, args);
     ( (GPConfiguration) getConfiguration()).storeInMemory(m_storageName,
         new Float(value));
@@ -82,6 +86,7 @@ public class StoreTerminalCommand
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     Object value = c.execute_object(n, 0, args);
     ( (GPConfiguration) getConfiguration()).storeInMemory(m_storageName, value);
     return value;
@@ -93,5 +98,9 @@ public class StoreTerminalCommand
 
   public boolean isAffectGlobalState() {
     return true;
+  }
+
+  public boolean isValid(ProgramChromosome a_program) {
+    return a_program.getCommandOfClass(0,ReadTerminalCommand.class) >= 0;
   }
 }

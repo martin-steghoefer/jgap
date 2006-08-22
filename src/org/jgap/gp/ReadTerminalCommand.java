@@ -21,10 +21,10 @@ import org.jgap.gp.*;
 public class ReadTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
-   * Symbolic name of the storage. Must correspond with a chose name for
+   * Symbolic name of the storage. Must correspond with a chosen name for
    * StoreTerminalCommand.
    */
   private String m_storageName;
@@ -52,6 +52,7 @@ public class ReadTerminalCommand
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     // Read from memory.
     // -----------------
     try {
@@ -65,6 +66,7 @@ public class ReadTerminalCommand
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     try {
       return ( (Long) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).longValue();
@@ -76,6 +78,7 @@ public class ReadTerminalCommand
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     try {
       return ( (Double) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).doubleValue();
@@ -87,6 +90,7 @@ public class ReadTerminalCommand
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     try {
       return ( (Float) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).floatValue();
@@ -98,6 +102,7 @@ public class ReadTerminalCommand
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     try {
       return ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName);
@@ -110,5 +115,9 @@ public class ReadTerminalCommand
 
   public static interface Compatible {
     public Object execute_read(Object o);
+  }
+
+  public boolean isValid(ProgramChromosome a_program) {
+    return a_program.getCommandOfClass(0,StoreTerminalCommand.class) >= 0;
   }
 }

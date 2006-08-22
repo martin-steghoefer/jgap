@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PushCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public PushCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -50,42 +50,41 @@ public class PushCommand
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     int value = c.execute_int(n, 0, args);
     // Push onto stack.
     // ----------------
-    ((GPConfiguration)getConfiguration()).pushToStack(new Integer(value));
+    pushIt(new Integer(value));
     return value;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     long value = c.execute_long(n, 0, args);
     // Push onto stack.
     // ----------------
-    ((GPConfiguration)getConfiguration()).pushToStack(new Long(value));
+    pushIt(new Long(value));
     return value;
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     double value = c.execute_double(n, 0, args);
-    // Push onto stack.
-    // ----------------
-    ((GPConfiguration)getConfiguration()).pushToStack(new Double(value));
+    pushIt(new Double(value));
     return value;
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     float value = c.execute_float(n, 0, args);
-    // Push onto stack.
-    // ----------------
-    ((GPConfiguration)getConfiguration()).pushToStack(new Float(value));
+    pushIt(new Float(value));
     return value;
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     Object value = c.execute_object(n, 0, args);
-    // Push onto stack.
-    // ----------------
-    ((GPConfiguration)getConfiguration()).pushToStack(value);
+    pushIt(value);
     return value;
   }
 
@@ -96,4 +95,18 @@ public class PushCommand
   public boolean isAffectGlobalState() {
     return true;
   }
+
+  public boolean isValid(ProgramChromosome a_program) {
+    /**@todo consider n (execute_int...)*/
+    return a_program.getCommandOfClass(0,PopCommand.class) >= 0;
+  }
+
+  /**
+   * Helper method
+   * @param a_value the value to push onto the stack
+   */
+  protected void pushIt(Object a_value) {
+    ((GPConfiguration)getConfiguration()).pushToStack(a_value);
+  }
+
 }

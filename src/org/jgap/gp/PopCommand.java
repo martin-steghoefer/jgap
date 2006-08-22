@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class PopCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public PopCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -39,18 +39,14 @@ public class PopCommand
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-    System.err.println("appliedMutation");
-  }
-
   public String toString() {
     return "pop";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     // Pop from stack.
+    // ---------------
     if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
       throw new IllegalStateException("pop without push");
     }
@@ -58,7 +54,7 @@ public class PopCommand
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    // Pop from stack.
+    check(c);
     if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
       throw new IllegalStateException("pop without push");
     }
@@ -66,7 +62,7 @@ public class PopCommand
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    // Pop from stack.
+    check(c);
     if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
       throw new IllegalStateException("pop without push");
     }
@@ -74,7 +70,7 @@ public class PopCommand
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    // Pop from stack.
+    check(c);
     if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
       throw new IllegalStateException("pop without push");
     }
@@ -82,7 +78,7 @@ public class PopCommand
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    // Pop from stack.
+    check(c);
     if(((GPConfiguration)getConfiguration()).stackSize() < 1) {
       throw new IllegalStateException("pop without push");
     }
@@ -91,5 +87,9 @@ public class PopCommand
 
   public static interface Compatible {
     public Object execute_pop(Object o);
+  }
+
+  public boolean isValid(ProgramChromosome a_program) {
+    return a_program.getCommandOfClass(0,PushCommand.class) >= 0;
   }
 }

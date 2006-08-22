@@ -14,7 +14,7 @@ import org.jgap.gp.*;
 
 /**
  * A connector for indipendent subprograms (subtrees). Each subtree except the
- * last one must have a memory- or stak-modifying command (such as push or
+ * last one must have a memory- or stack-modifying command (such as push or
  * store), otherwise there is no connection between the subtrees (which would
  * be useless bloating).
  *
@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class SubProgramCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Number of subprograms.
@@ -54,11 +54,16 @@ public class SubProgramCommand
     for (int i = 1; i < m_subtrees; i++) {
       ret += "&" + i + " --> ";
     }
-    ret += "&" + m_subtrees +"]";
+    ret += "&" + m_subtrees + "]";
     return ret;
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    if (n > 0) {
+      /**@todo make following dynamic resp. add a parameter to the constructor*/
+      throw new IllegalStateException("Subprogram must be the root");
+    }
     int value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       value = c.execute_int(n, i, args);
@@ -67,6 +72,7 @@ public class SubProgramCommand
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     long value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       value = c.execute_long(n, i, args);
@@ -75,6 +81,7 @@ public class SubProgramCommand
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     float value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       value = c.execute_float(n, i, args);
@@ -83,6 +90,7 @@ public class SubProgramCommand
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     double value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       value = c.execute_double(n, i, args);
@@ -91,6 +99,7 @@ public class SubProgramCommand
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    check(c);
     Object value = null;
     for (int i = 0; i < m_subtrees; i++) {
       value = c.execute_object(n, i, args);
@@ -98,4 +107,26 @@ public class SubProgramCommand
     return value;
   }
 
+  public boolean isValid(ProgramChromosome a_program) {
+    // check:
+    //  1. to (last-1) branch: push or store
+    //  last branch: pop or read
+    boolean success = false;
+    /**@todo consider subtrees only!*/
+    for (int i = 0; i < m_subtrees - 1; i++) {
+      if (a_program.getCommandOfClass(i, PushCommand.class) >= 0
+          || a_program.getCommandOfClass(i, StoreTerminalCommand.class) >= 0) {
+        success = true;
+        break;
+      }
+    }
+    if (success) {
+      int i = m_subtrees - 1;
+      if (a_program.getCommandOfClass(i, PopCommand.class) >= 0
+          || a_program.getCommandOfClass(i, ReadTerminalCommand.class) >= 0) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
