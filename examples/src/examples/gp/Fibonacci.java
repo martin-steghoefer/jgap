@@ -27,10 +27,9 @@ import org.jgap.gp.*;
  * @author Klaus Meffert
  * @since 3.0
  */
-public class Fibonacci
-    extends GPGenotype {
+public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   static Variable vx;
 
@@ -42,11 +41,6 @@ public class Fibonacci
 
   static int[] y = new int[NUMFIB];
 
-  public Fibonacci(Population a_pop)
-      throws InvalidConfigurationException {
-    super(getGPConfiguration(), a_pop);
-  }
-
   public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     Class[] types = {
@@ -57,30 +51,33 @@ public class Fibonacci
     CommandGene[][] nodeSets = {
         {
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
-//        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
         new AddCommand(a_conf, CommandGene.IntegerClass),
         new IncrementCommand(a_conf, CommandGene.IntegerClass, 1),
         new ForXCommand(a_conf, CommandGene.IntegerClass),
         new SubProgramCommand(a_conf, CommandGene.IntegerClass, 3),
-//        new ModCommand(a_conf, CommandGene.IntegerClass),
-//        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
+        //        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
+        //        new ModCommand(a_conf, CommandGene.IntegerClass),
+        //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
     }
     };
+    // Add commands working with internal memory.
+    // ------------------------------------------
     nodeSets[0] = CommandFactory.createStoreCommands(nodeSets[0], a_conf,
         CommandGene.IntegerClass, "mem", 3);
     nodeSets[0] = CommandFactory.createStackCommands(nodeSets[0], a_conf,
         CommandGene.IntegerClass);
-    RandomGenerator random = a_conf.getRandomGenerator();
-    // randomly initialize function data (X-Y table) for Fib(x)
+    // Randomly initialize function data (X-Y table) for Fib(x).
+    // ---------------------------------------------------------
     for (int i = 0; i < NUMFIB; i++) {
-      int index = i;//random.nextInt(NUMFIB * 2);
+      int index = i;
       x[i] = new Integer(index);
-      y[i] = Fib_iter(index);//fib_array(index);
+      y[i] = fib_iter(index); //fib_array(index);
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
-    // Create genotype with initial population
-    return randomInitialGenotype(a_conf, types, argTypes, nodeSets);
+    // Create genotype with initial population.
+    // ----------------------------------------
+    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets);
   }
 
   //(Sort of) This is what we would like to (but cannot) find via GP:
@@ -92,7 +89,7 @@ public class Fibonacci
   }
 
   //(Sort of) This is what we would like to (and can) find via GP:
-  private static int Fib_iter(int a_index) {
+  private static int fib_iter(int a_index) {
     // 1
     if (a_index == 0 || a_index == 1) {
       return 1;
@@ -111,7 +108,7 @@ public class Fibonacci
   }
 
   //(Sort of) This is what we would like to find via GP:
-  public static int fib_array(int a_index) {
+  private int fib_array(int a_index) {
     // 1
     if (a_index == 0 || a_index == 1) {
       return 1;
@@ -150,13 +147,14 @@ public class Fibonacci
                                                 GPGENOTYPE_EVOLVED_EVENT,
                                                 new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
-          int evno = getConfiguration().getGenerationNr();
-          double freeMem = getFreeMemoryMB();
+          GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
+          int evno = genotype.getConfiguration().getGenerationNr();
+          double freeMem = GPGenotype.getFreeMemoryMB();
           if (evno % 1000 == 0) {
-            GPGenotype genotype = (GPGenotype)a_firedEvent.getSource();
-            double bestFitness = genotype.getFittestChromosome().getFitnessValue();
+            double bestFitness = genotype.getFittestChromosome().
+                getFitnessValue();
             System.out.println("Evolving generation " + evno
-                               + ", best fitness: "+bestFitness
+                               + ", best fitness: " + bestFitness
                                + ", memory free: " + freeMem + " MB");
           }
           if (evno > 300000) {
@@ -200,8 +198,8 @@ public class Fibonacci
       Object[] noargs = new Object[0];
       // Initialize local stores.
       // ------------------------
-      ( (GPConfiguration) getConfiguration()).clearStack();
-      ( (GPConfiguration) getConfiguration()).clearMemory();
+      GPGenotype.getGPConfiguration().clearStack();
+      GPGenotype.getGPConfiguration().clearMemory();
       for (int i = 0; i < NUMFIB; i++) {
         vx.set(x[i]);
         try {
@@ -220,7 +218,7 @@ public class Fibonacci
           throw ex;
         }
       }
-      if (getGPConfiguration().stackSize() > 0) {
+      if (GPGenotype.getGPConfiguration().stackSize() > 0) {
         error = Double.MAX_VALUE / 2;
       }
       if (error < 0.000001) {
