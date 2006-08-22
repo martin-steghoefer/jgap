@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ForCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public ForCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -29,7 +29,7 @@ public class ForCommand
   }
 
   protected Gene newGeneInternal() {
-    return null;
+    return null;/**@todo implement if necessary*/
   }
 
   public void applyMutation(int index, double a_percentage) {
@@ -38,7 +38,7 @@ public class ForCommand
   }
 
   public String toString() {
-    return "for-loop(int i=0;i<&1;i++)";
+    return "for(int i=0;i<&1;i++)";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -58,6 +58,6 @@ public class ForCommand
   }
 
   public static interface Compatible {
-    public Object execute_add(Object o);
+    public Object execute_for(Object o);
   }
 }
