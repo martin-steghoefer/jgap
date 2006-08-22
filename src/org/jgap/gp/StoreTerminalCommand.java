@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class StoreTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -33,6 +33,9 @@ public class StoreTerminalCommand
                               String a_storageName)
       throws InvalidConfigurationException {
     super(a_conf, 1, type);
+    if (a_storageName == null || a_storageName.length() < 1) {
+      throw new IllegalArgumentException("Memory name must not be empty!");
+    }
     m_storageName = a_storageName;
   }
 
@@ -101,6 +104,6 @@ public class StoreTerminalCommand
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    return a_program.getCommandOfClass(0,ReadTerminalCommand.class) >= 0;
+    return a_program.getCommandOfClass(0, ReadTerminalCommand.class) >= 0;
   }
 }
