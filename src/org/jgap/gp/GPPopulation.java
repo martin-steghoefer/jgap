@@ -21,7 +21,7 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public transient float[] fitnessRank;
 
@@ -145,16 +145,23 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ProgramChromosome create(int a_depth, boolean a_grow)
+  public ProgramChromosome create(Class[] a_types, Class[][] a_argTypes,
+                     CommandGene[][] a_nodeSets, int a_depth, boolean a_grow)
       throws InvalidConfigurationException {
     ProgramChromosome chrom = new ProgramChromosome(getConfiguration());
     if (a_grow) {
-      chrom.grow(a_depth, m_avail_types, m_avail_argTypes, m_avail_nodeSets);
+      chrom.grow(a_depth, a_types, a_argTypes, a_nodeSets);
     }
     else {
-      chrom.full(a_depth, m_avail_types, m_avail_argTypes, m_avail_nodeSets);
+      chrom.full(a_depth, a_types, a_argTypes, a_nodeSets);
     }
     return chrom;
+  }
+
+  protected ProgramChromosome create(int a_depth, boolean a_grow)
+      throws InvalidConfigurationException {
+    return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, a_depth,
+                  a_grow);
   }
 
   /**
