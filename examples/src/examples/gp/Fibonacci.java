@@ -30,7 +30,7 @@ import org.jgap.gp.*;
 public class Fibonacci
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   static Variable vx;
 
@@ -61,7 +61,7 @@ public class Fibonacci
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
         new AddCommand(a_conf, CommandGene.IntegerClass),
         new IncrementCommand(a_conf, CommandGene.IntegerClass, 1),
-        new ForCommand(a_conf, CommandGene.IntegerClass),
+        new ForXCommand(a_conf, CommandGene.IntegerClass),
         new SubProgramCommand(a_conf, CommandGene.IntegerClass, 3),
 //        new ModCommand(a_conf, CommandGene.IntegerClass),
 //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
@@ -76,7 +76,7 @@ public class Fibonacci
     for (int i = 0; i < NUMFIB; i++) {
       int index = i;//random.nextInt(NUMFIB * 2);
       x[i] = new Integer(index);
-      y[i] = fib_array(index);
+      y[i] = Fib_iter(index);//fib_array(index);
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
     // Create genotype with initial population
@@ -98,8 +98,8 @@ public class Fibonacci
       return 1;
     }
     // 2
-    int a = 0;
-    int b = 0;
+    int a = 1;
+    int b = 1;
     int x = 0;
     // 3
     for (int i = 2; i <= a_index; i++) {
@@ -152,11 +152,14 @@ public class Fibonacci
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           int evno = getConfiguration().getGenerationNr();
           double freeMem = getFreeMemoryMB();
-          if (evno % 100 == 0) { /**@todo make configurable --> use listener*/
+          if (evno % 1000 == 0) {
+            GPGenotype genotype = (GPGenotype)a_firedEvent.getSource();
+            double bestFitness = genotype.getFittestChromosome().getFitnessValue();
             System.out.println("Evolving generation " + evno
+                               + ", best fitness: "+bestFitness
                                + ", memory free: " + freeMem + " MB");
           }
-          if (evno > 3000) {
+          if (evno > 300000) {
             t.stop();
           }
           else {
@@ -199,8 +202,6 @@ public class Fibonacci
       // ------------------------
       ( (GPConfiguration) getConfiguration()).clearStack();
       ( (GPConfiguration) getConfiguration()).clearMemory();
-      /**@todo store_in without read is useless and bloats the GP-code.
-       * Find such cases and eradicate them*/
       for (int i = 0; i < NUMFIB; i++) {
         vx.set(x[i]);
         try {
