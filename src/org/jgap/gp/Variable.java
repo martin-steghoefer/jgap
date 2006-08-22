@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -30,7 +30,7 @@ public class Variable
    */
   private String m_name;
 
-  public Object value;
+  private Object m_value;
 
   /**@todo map varName to argNum and skip argNum in constructor*/
   private int m_argnum;
@@ -45,10 +45,6 @@ public class Variable
 
   public String getVarName() {
     return m_name + "/" + m_argnum;
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    // do nothing here!
   }
 
   protected Gene newGeneInternal() {
@@ -69,27 +65,27 @@ public class Variable
   }
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
-    return ( (Boolean) value).booleanValue();
+    return ( (Boolean) m_value).booleanValue();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return ( (Integer) value).intValue();
+    return ( (Integer) m_value).intValue();
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return ( (Long) value).longValue();
+    return ( (Long) m_value).longValue();
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return ( (Float) value).floatValue();
+    return ( (Float) m_value).floatValue();
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return ( (Double) value).doubleValue();
+    return ( (Double) m_value).doubleValue();
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    return value;
+    return m_value;
   }
 
   /**
@@ -135,10 +131,14 @@ public class Variable
    *
    * @param a_value the value to set this variable with
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void set(Object a_value) {
-    value = a_value;
+    m_value = a_value;
   }
 
+  public Object getValue() {
+    return m_value;
+  }
 }
