@@ -12,9 +12,9 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * A random generator only determined for testing purposes.
- * With this, you can specify the next value which will be returned.
- * It is also possible to specify a sequence to be appearing.
+ * A random generator only determined for testing purposes. With this, you can
+ * specify the next value which will be returned. It is also possible to
+ * specify a sequence to be produced.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -23,7 +23,7 @@ public class RandomGeneratorForTest
     implements RandomGenerator {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   private long m_nextLong;
   private double m_nextDouble;
