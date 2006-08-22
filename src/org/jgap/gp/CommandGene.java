@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -370,5 +370,24 @@ public abstract class CommandGene
    */
   public boolean isAffectGlobalState() {
     return false;
+  }
+
+  /**
+   * Subclasses capable of validating programs should overwrite this method.
+   * See PushCommand as a sample.
+   * @param a_program the ProgramChromosome to validate
+   * @return true: a_program is (superficially) valid with the current Command
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean isValid(ProgramChromosome a_program) {
+    return true;
+  }
+
+  protected void check(ProgramChromosome a_program) {
+    if (!isValid(a_program)) {
+      throw new IllegalStateException("State for GP-command not valid");
+    }
   }
 }
