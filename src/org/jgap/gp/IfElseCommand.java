@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class IfElseCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public IfElseCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -44,11 +44,47 @@ public class IfElseCommand
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     int x = c.execute_int(n, 0, args);
     int value = 0;
-    if (x>=0) {
+    if (x >= 0) {
       value = c.execute_int(n, 1, args);
     }
     else {
       value = c.execute_int(n, 2, args);
+    }
+    return value;
+  }
+
+  public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    long x = c.execute_long(n, 0, args);
+    long value = 0;
+    if (x >= 0) {
+      value = c.execute_long(n, 1, args);
+    }
+    else {
+      value = c.execute_long(n, 2, args);
+    }
+    return value;
+  }
+
+  public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    float x = c.execute_float(n, 0, args);
+    float value = 0;
+    if (x >= 0) {
+      value = c.execute_float(n, 1, args);
+    }
+    else {
+      value = c.execute_float(n, 2, args);
+    }
+    return value;
+  }
+
+  public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    double x = c.execute_double(n, 0, args);
+    double value = 0;
+    if (x >= 0) {
+      value = c.execute_double(n, 1, args);
+    }
+    else {
+      value = c.execute_double(n, 2, args);
     }
     return value;
   }
