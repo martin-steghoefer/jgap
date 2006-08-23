@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class AddCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public AddCommand(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -29,7 +29,6 @@ public class AddCommand
   }
 
   protected Gene newGeneInternal() {
-    /**@todo not used for GP*/
     try {
       Gene gene = new AddCommand(getConfiguration(), getReturnType());
       return gene;
@@ -37,12 +36,6 @@ public class AddCommand
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-    System.err.println("appliedMutation");
   }
 
   public String toString() {
