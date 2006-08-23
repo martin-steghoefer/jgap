@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ReadTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -121,7 +121,9 @@ public class ReadTerminalCommand
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    return m_storageName.startsWith("thruput") ||
-        a_program.getCommandOfClass(0, StoreTerminalCommand.class) >= 0;
+    return true;
+    /**@todo do it right*/
+//    return m_storageName.startsWith("thruput") ||
+//        a_program.getCommandOfClass(0, StoreTerminalCommand.class) >= 0;
   }
 }
