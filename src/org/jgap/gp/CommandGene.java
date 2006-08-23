@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -37,10 +37,12 @@ public abstract class CommandGene
 
   public final static Class VoidClass = Void.class;
 
+  private static GPProgram individual;/**@todo make nonstatic*/
+
   /**
    * The return type of this node.
    */
-  private Class returnType;
+  private Class m_returnType;
 
   private int m_arity;
 
@@ -60,7 +62,7 @@ public abstract class CommandGene
     super(a_conf);
     init();
     m_arity = a_arity;
-    returnType = a_returnType;
+    m_returnType = a_returnType;
     if (a_returnType == Integer.class
     || a_returnType == Long.class) {
       m_integerType = true;
@@ -111,11 +113,6 @@ public abstract class CommandGene
     return size();
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    throw new java.lang.UnsupportedOperationException(
-        "Method applyMutation() not used.");
-  }
-
   public int compareTo(Object o) {
     CommandGene o2 = (CommandGene) o;
     if (size() != o2.size()) {
@@ -163,48 +160,52 @@ public abstract class CommandGene
    * @throws UnsupportedOperationException if the type of this node is not
    * boolean
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public Object execute(ProgramChromosome c, int n, Object[] args) {
-    if (returnType == BooleanClass)
+    if (m_returnType == BooleanClass)
       return new Boolean(execute_boolean(c, n, args));
-    if (returnType == IntegerClass)
+    if (m_returnType == IntegerClass)
       return new Integer(execute_int(c, n, args));
-    if (returnType == LongClass)
+    if (m_returnType == LongClass)
       return new Long(execute_long(c, n, args));
-    if (returnType == FloatClass)
+    if (m_returnType == FloatClass)
       return new Float(execute_float(c, n, args));
-    if (returnType == DoubleClass)
+    if (m_returnType == DoubleClass)
       return new Double(execute_double(c, n, args));
-    if (returnType == VoidClass)
+    if (m_returnType == VoidClass)
       execute_void(c, n, args);
-    else
+    else {
       return execute_object(c, n, args);
+    }
     return null;
   }
 
   /**
    * @return the return type of this node
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public Class getReturnType() {
-    return returnType;
+    return m_returnType;
   }
 
   /**
-   * Sets the return type of this node
+   * Sets the return type of this node.
    *
-   * @param type the type to set the return type to
+   * @param a_type the type to set the return type to
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
-  public void setReturnType(Class type) {
-    returnType = type;
+  public void setReturnType(Class a_type) {
+    m_returnType = a_type;
   }
 
   /**
-   * Executes this node as a boolean.
+   * Executes this node as a boolean. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
@@ -212,6 +213,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
@@ -220,13 +222,14 @@ public abstract class CommandGene
   }
 
   /**
-   * Executes this node, returning nothing.
+   * Executes this node, returning nothing. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
    * @param args ignored here
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
@@ -235,7 +238,7 @@ public abstract class CommandGene
   }
 
   /**
-   * Executes this node as an integer.
+   * Executes this node as an integer. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
@@ -243,6 +246,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -251,7 +255,7 @@ public abstract class CommandGene
   }
 
   /**
-   * Executes this node as a long.
+   * Executes this node as a long. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
@@ -259,6 +263,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
@@ -267,7 +272,7 @@ public abstract class CommandGene
   }
 
   /**
-   * Executes this node as a float.
+   * Executes this node as a float. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
@@ -275,6 +280,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
@@ -283,7 +289,7 @@ public abstract class CommandGene
   }
 
   /**
-   * Executes this node as a double.
+   * Executes this node as a double. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
@@ -291,6 +297,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
@@ -299,7 +306,7 @@ public abstract class CommandGene
   }
 
   /**
-   * Executes this node as an object.
+   * Executes this node as an object. Override to implement.
    *
    * @param c ignored here
    * @param n ignored here
@@ -307,6 +314,7 @@ public abstract class CommandGene
    * @return nothing but exception
    * @throws UnsupportedOperationException
    *
+   * @author Klaus Meffert
    * @since 3.0
    */
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
@@ -324,6 +332,9 @@ public abstract class CommandGene
    *
    * @param i the child number
    * @return the type of node allowed for that child
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public abstract Class getChildType(int i);
 
@@ -389,5 +400,17 @@ public abstract class CommandGene
     if (!isValid(a_program)) {
       throw new IllegalStateException("State for GP-command not valid");
     }
+  }
+
+  protected GPProgram getIndividual() {
+    return individual;
+  }
+
+  protected static void setIndividual(GPProgram a_ind) {
+    individual = a_ind;
+  }
+
+  public void applyMutation(int index, double a_percentage){
+    //do nothing here
   }
 }
