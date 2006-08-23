@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /*wodka:
    void add(Command cmd);
@@ -161,7 +161,7 @@ public class ProgramChromosome
   /**
    * Initialize this chromosome using the full method.
    *
-   * @param a_num the number of this chromosome
+   * @param a_num the chromosome's index in the individual of this chromosome
    * @param a_depth the depth of the chromosome to create
    * @param a_type the type of the chromosome to create
    * @param a_argTypes the array of types of arguments for this chromosome
@@ -207,7 +207,7 @@ public class ProgramChromosome
   /**
    * Initialize this chromosome using the grow method.
    *
-   * @param a_num the chromosome number in the individual of this chromosome
+   * @param a_num the chromosome's index in the individual of this chromosome
    * @param depth the maximum depth of the chromosome to create
    * @param type the type of the chromosome to create
    * @param a_argTypes the array of types of arguments for this chromosome
