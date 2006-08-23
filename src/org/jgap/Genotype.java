@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.83 $";
+  private final static String CVS_REVISION = "$Revision: 1.84 $";
 
   /**
    * The current active Configuration instance.
@@ -50,7 +50,7 @@ public class Genotype
    * must be in a valid state when this method is invoked, or a
    * InvalidConfigurationException will be thrown.
    *
-   * @param a_activeConfiguration the current active Configuration object
+   * @param a_configuration the Configuration object to use
    * @param a_initialChromosomes the Chromosome population to be managed by
    * this Genotype instance
    * @throws InvalidConfigurationException if the given Configuration object is
@@ -61,11 +61,10 @@ public class Genotype
    * @since 1.0
    * @deprecated use Genotype(Configuration, Population) instead
    */
-  public Genotype(Configuration a_activeConfiguration,
+  public Genotype(Configuration a_configuration,
                   IChromosome[] a_initialChromosomes)
       throws InvalidConfigurationException {
-    this(a_activeConfiguration,
-         new Population(a_activeConfiguration, a_initialChromosomes));
+    this(a_configuration, new Population(a_configuration, a_initialChromosomes));
   }
 
   /**
@@ -75,7 +74,7 @@ public class Genotype
    * when this method is invoked, or a InvalidconfigurationException
    * will be thrown.
    *
-   * @param a_activeConfiguration the current active Configuration object
+   * @param a_configuration the Configuration object t use
    * @param a_population the Chromosome population to be managed by this
    * Genotype instance
    * @throws InvalidConfigurationException
@@ -84,12 +83,12 @@ public class Genotype
    * @author Klaus Meffert
    * @since 2.0
    */
-  public Genotype(Configuration a_activeConfiguration, Population a_population)
+  public Genotype(Configuration a_configuration, Population a_population)
       throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
     // ---------------------------------------------------------------
-    if (a_activeConfiguration == null) {
+    if (a_configuration == null) {
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
     }
@@ -106,11 +105,25 @@ public class Genotype
       }
     }
     m_population = a_population;
-    setConfiguration(a_activeConfiguration);
+    setConfiguration(a_configuration);
     // Lock the settings of the configuration object so that it cannot
     // be altered.
     // ---------------------------------------------------------------
     getConfiguration().lockSettings();
+  }
+
+  /**
+   * Don't use this constructor, it's only for internal use.
+   *
+   * @param a_configuration the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Genotype(Configuration a_configuration)
+      throws InvalidConfigurationException {
+
   }
 
   /**
@@ -202,6 +215,8 @@ public class Genotype
    * Retrieves the Chromosome in the population with the highest fitness
    * value within the given indices.
    *
+   * @param a_startIndex the index to start the determination with
+   * @param a_endIndex the index to end the determination with
    * @return the Chromosome with the highest fitness value within the given
    * indices, or null if there are no chromosomes in this Genotype
    *
