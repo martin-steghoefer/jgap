@@ -24,7 +24,15 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
+  /**
+   * References the current fitness function that will be used to evaluate
+   * chromosomes during the natural selection process. Note that only this
+   * or the bulk fitness function may be set - the two are mutually exclusive.
+   */
+  private GPFitnessFunction m_objectiveFunction;
+
 
   /**
    * Internal stack, see PushCommand for example.
@@ -200,5 +208,55 @@ public class GPConfiguration
 
   public Object readThruput(int a_index) {
     return m_memory.get("thruput" + a_index); /**@todo do it cleaner*/
+  }
+
+  public GPFitnessFunction getGPFitnessFunction() {
+    return m_objectiveFunction;
+  }
+
+  /**
+   * Sets the fitness function to be used for this genetic algorithm.
+   * The fitness function is responsible for evaluating a given
+   * Chromosome and returning a positive integer that represents its
+   * worth as a candidate solution. These values are used as a guide by the
+   * natural to determine which Chromosome instances will be allowed to move
+   * on to the next round of evolution, and which will instead be eliminated.
+   * <p>
+   * Note that it is illegal to set both this fitness function and a bulk
+   * fitness function. Although one or the other must be set, the two are
+   * mutually exclusive.
+   *
+   * @param a_functionToSet fitness function to be used
+   *
+   * @throws InvalidConfigurationException if the fitness function is null, a
+   * bulk fitness function has already been set, or if this Configuration
+   * object is locked.
+   *
+   * @author Neil Rotstan
+   * @since 1.1
+   */
+  public synchronized void setFitnessFunction(GPFitnessFunction a_functionToSet)
+      throws InvalidConfigurationException {
+    verifyChangesAllowed();
+    // Sanity check: Make sure that the given fitness function isn't null.
+    // -------------------------------------------------------------------
+    if (a_functionToSet == null) {
+      throw new InvalidConfigurationException(
+          "The FitnessFunction instance may not be null.");
+    }
+    // Make sure the bulk fitness function hasn't already been set.
+    // ------------------------------------------------------------
+    /**@todo re-add*/
+//    if (m_bulkObjectiveFunction != null) {
+//      throw new InvalidConfigurationException(
+//          "The bulk fitness function and normal fitness function " +
+//          "may not both be set.");
+//    }
+    // Ensure that no other fitness function has been set in a different
+    // configuration object within the same thread!
+    // -----------------------------------------------------------------
+    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
+                  "Fitness function has already been set differently.");
+    m_objectiveFunction = a_functionToSet;
   }
 }
