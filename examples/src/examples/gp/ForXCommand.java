@@ -21,11 +21,14 @@ import org.jgap.gp.*;
 public class ForXCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public ForXCommand(final Configuration a_conf, Class type)
+  private Class m_type;
+
+  public ForXCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, type);
+    super(a_conf, 1, VoidClass);
+    m_type = a_type;
   }
 
   protected Gene newGeneInternal() {
@@ -54,15 +57,54 @@ public class ForXCommand
     return value;
   }
 
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    int index = c.getTerminal(0,Variable.class);
+    if (index < 0) {
+      throw new IllegalStateException("Variable missing for forX");
+    }
+    Variable var = (Variable)c.getNode(index);
+    int x = ((Integer)var.getValue()).intValue();
+    if (x > 15) {
+      x = 15;
+    }
+    for (int i = 0; i < x; i++) {
+      c.execute_void(n, 1, args);
+    }
+  }
+
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    int index = c.getTerminal(0,Variable.class);
+    if (index < 0) {
+      throw new IllegalStateException("Variable missing for forX");
+    }
+    Variable var = (Variable)c.getNode(index);
+    int x = ((Integer)var.getValue()).intValue();
+    if (x > 15) {
+      x = 15;
+    }
+    Object value = null;
+    for (int i = 0; i < x; i++) {
+      value = c.execute(n, 1, args);
+    }
+    return value;
+  }
+
   public static interface Compatible {
     public Object execute_forX(Object o);
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    /**@todo check if elements deferring the state are available in the sub
-     * branch. If not, the sub branch needs only be executed once.
-     * Appropriate elements are, for example: PushCommand and PopCommand
-     */
-    return a_program.getCommandOfClass(0,Variable.class) >= 0;
+    return true;
+//    /**@todo check if elements deferring the state are available in the sub
+//     * branch. If not, the sub branch needs only be executed once.
+//     * Appropriate elements are, for example: PushCommand and PopCommand
+//     */
+//    return a_program.getCommandOfClass(0,Variable.class) >= 0;
+  }
+
+  public Class getChildType(int i) {
+    return m_type;
   }
 }
