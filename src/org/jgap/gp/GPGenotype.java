@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Fitness value of the best solution.
@@ -38,7 +38,8 @@ public class GPGenotype
   /**
    * Best solution found.
    */
-  private static ProgramChromosome m_allTimeBest;
+//  private static ProgramChromosome m_allTimeBest;
+  private static GPProgram m_allTimeBest;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -56,17 +57,41 @@ public class GPGenotype
 
   /**
    * Preferred constructor to use, if not randomInitialGenotype.
-   * @param a_activeConfiguration the configuration to use
+   * @param a_configuration the configuration to use
    * @param a_population the initialized population to use
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPGenotype(GPConfiguration a_activeConfiguration,
-                    Population a_population)
+  public GPGenotype(GPConfiguration a_configuration,
+                    GPPopulation a_population)
       throws InvalidConfigurationException {
-    super(a_activeConfiguration, a_population);
+    super(a_configuration);
+    // Sanity checks: Make sure neither the Configuration, the array
+    // of Chromosomes, nor any of the Genes inside the array are null.
+    // ---------------------------------------------------------------
+    if (a_configuration == null) {
+      throw new IllegalArgumentException(
+          "The Configuration instance may not be null.");
+    }
+    if (a_population == null) {
+      throw new IllegalArgumentException(
+          "The Population may not be null.");
+    }
+    for (int i = 0; i < a_population.size(); i++) {
+      if (a_population.getGPProgram(i) == null) {
+        throw new IllegalArgumentException(
+            "The GPProgram instance at index " + i + " in population" +
+            " is null, which is forbidden in general.");
+      }
+    }
+    setPopulation(a_population);
+    setConfiguration(a_configuration);
+    // Lock the settings of the configuration object so that it cannot
+    // be altered.
+    // ---------------------------------------------------------------
+    getConfiguration().lockSettings();
   }
 
   /**
@@ -94,15 +119,15 @@ public class GPGenotype
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
                                                  Class[] a_types,
                                                  Class[][] a_argTypes,
-                                                 CommandGene[][] a_nodeSets)
+                                                 CommandGene[][] a_nodeSets,
+                                                 int[] a_maxDepths)
       throws InvalidConfigurationException {
     System.gc();
     System.out.println("Memory consumed before creating population: "
                        + getTotalMemoryMB() + "MB");
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
-    pop.create(a_types, a_argTypes, a_nodeSets);
-    /**@todo inform listeners?*/
+    pop.create(a_types, a_argTypes, a_nodeSets, a_maxDepths);
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");
@@ -182,7 +207,7 @@ public class GPGenotype
   }
 
   /**
-   * Calculates the fitness value of all chromosomes, of the best solution as
+   * Calculates the fitness value of all programs, of the best solution as
    * well as the total fitness (sum of all fitness values).
    *
    * @author Klaus Meffert
@@ -190,32 +215,25 @@ public class GPGenotype
    */
   public void calcFitness() {
     double totalFitness = 0.0d;
-    for (int i = 0; i < getPopulation().size(); i++) {
-      IChromosome chrom = getPopulation().getChromosome(i);
-      if (chrom.getFitnessValue() < 0.0d) {
-        // Chromosome wasn't reproduced from the previous generation.
-        // ----------------------------------------------------------
-        try {
-          chrom.setFitnessValue(chrom.getFitnessValue());
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-          System.exit(1);
-        }
+    for (int i = 0;
+         i < getGPPopulation().size() && getGPPopulation().getGPProgram(i) != null;
+         i++) {
+      GPProgram program = getGPPopulation().getGPProgram(i);
+      if (program.getFitnessValue() < 0.0d) {
+        // Program wasn't reproduced from the previous generation.
+        // -------------------------------------------------------
+        System.err.println(" program.calcFitnessValue() begin: " + i);
+        program.calcFitnessValue();
+        System.err.println(" program.calcFitnessValue() end: " + i);
       }
-      totalFitness += chrom.getFitnessValue();
-//      for (int j = listeners.length - 1; j >= 0; j -= 2)
-//        ( (GPListener) listeners[ j ]).bumpEvaluationProgress();
+      totalFitness += program.getFitnessValue();
     }
     m_totalFitness = totalFitness;
-    ProgramChromosome best = (ProgramChromosome) getPopulation().
-        determineFittestChromosome();
-    // Do something similar here as with Genotype.preserveFittestChromosome.
+    GPProgram best = getGPPopulation().determineFittestProgram();
+    /**@todo Do something similar here as with Genotype.preserveFittestChromosome*/
     m_bestFitness = best.getFitnessValue();
-    if (m_allTimeBest == null ||
-        m_bestFitness < m_allTimeBest.getFitnessValue()) {
-      if (Math.abs(m_bestFitness) < 0.000001) {
-      }
+    if (m_allTimeBest == null
+        || m_bestFitness < m_allTimeBest.getFitnessValue()) {
       m_allTimeBest = best;
       outputSolution(best);
     }
@@ -227,7 +245,7 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ProgramChromosome getAllTimeBest() {
+  public GPProgram getAllTimeBest() {
     return m_allTimeBest;
   }
 
@@ -238,7 +256,7 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void outputSolution(ProgramChromosome best) {
+  public void outputSolution(GPProgram best) {
     System.out.println(" Best solution fitness: " + best.getFitnessValue());
     System.out.println(" Best solution: " + best.toString2(0));
   }
@@ -258,9 +276,8 @@ public class GPGenotype
       GPPopulation newPopulation = new GPPopulation(oldPop);
       float val;
       RandomGenerator random = getConfiguration().getRandomGenerator();
-      /**@todo make configurable*/
-      int popSize1 = (int)Math.round(popSize * 0.8d);
-
+      /**@todo make configurable, reactivate*/
+      int popSize1 = (int) Math.round(popSize * 0.8d);
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
@@ -272,32 +289,34 @@ public class GPGenotype
         if (i < popSize - 1 && val < getGPConfiguration().getCrossoverProb()) {
           // Do crossover.
           // -------------
-          ProgramChromosome i1 = getGPConfiguration().getSelectionMethod().
+          GPProgram i1 = getGPConfiguration().getSelectionMethod().
               select(this);
-          ProgramChromosome i2 = getGPConfiguration().getSelectionMethod().
+          GPProgram i2 = getGPConfiguration().getSelectionMethod().
               select(this);
-          ProgramChromosome[] newIndividuals = getGPConfiguration().
+          GPProgram[] newIndividuals = getGPConfiguration().
               getCrossMethod().operate(i1, i2);
-          newPopulation.setChromosome(i++, newIndividuals[0]);
-          newPopulation.setChromosome(i, newIndividuals[1]);
+          newPopulation.setGPProgram(i++, newIndividuals[0]);
+          newPopulation.setGPProgram(i, newIndividuals[1]);
         }
         else if (val <
                  getGPConfiguration().getCrossoverProb() +
                  getGPConfiguration().getReproductionProb()) {
           // Reproduction only.
           // ------------------
-          newPopulation.setChromosome(i,
-                                      getGPConfiguration().getSelectionMethod().
-                                      select(this));
+          newPopulation.setGPProgram(i,
+                                     getGPConfiguration().getSelectionMethod().
+                                     select(this));
         }
       }
       // Add new chromosomes randomly.
       // -----------------------------
-      for (int i = popSize1 - 1; i < popSize; i++) {
-        int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i /
-            (newPopulation.getPopSize() - 1);
-        ProgramChromosome chrom = newPopulation.create(depth, (i % 2) == 0);
-        newPopulation.setChromosome(i, chrom);
+      for (int i = popSize1; i < popSize; i++) {
+        // Determine depth randomly and between maxInitDepth and 2*maxInitDepth.
+        // ---------------------------------------------------------------------
+        int depth = getGPConfiguration().getMaxInitDepth() - 2
+            + random.nextInt(2);
+        GPProgram program = newPopulation.create(depth, (i % 2) == 0);
+        newPopulation.setGPProgram(i, program);
       }
       // Now set the new population as the active one.
       // ---------------------------------------------
@@ -339,9 +358,10 @@ public class GPGenotype
   public void run() {
     try {
       while (true) {
-        calcFitness();
         evolve();
-        // Pause between evolutions to avoid 100% CPU load
+        calcFitness();
+        // Pause between evolutions to avoid 100% CPU load.
+        // ------------------------------------------------
         Thread.sleep(10);
       }
     }
@@ -349,5 +369,20 @@ public class GPGenotype
       ex.printStackTrace();
       System.exit(1);
     }
+  }
+
+  /**
+   * Retrieves the GPProgram in the population with the highest fitness
+   * value.
+   *
+   * @return the GPProgram with the highest fitness value, or null if there
+   * are no programs in this Genotype
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 1.0
+   */
+  public synchronized GPProgram getFittestProgram() {
+    return getGPPopulation().determineFittestProgram();
   }
 }

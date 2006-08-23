@@ -21,11 +21,18 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
-  public transient float[] fitnessRank;
+  /**
+   * The array of Chromosomes that makeup the Genotype's population.
+   */
+  private GPProgram[] m_programs;
+
+  public transient float[] fitnessRank;/**@todo make private*/
 
   private int m_popSize;
+
+  private GPProgram m_fittestProgram;
 
   /**
    * Needed for cloning.
@@ -42,6 +49,7 @@ public class GPPopulation
    */
   private CommandGene[][] m_avail_nodeSets;
 
+  private int[] m_maxDepths;
   /*
    * @author Klaus Meffert
    * @since 3.0
@@ -49,6 +57,7 @@ public class GPPopulation
   public GPPopulation(GPConfiguration a_conf, int a_size)
       throws InvalidConfigurationException {
     super(a_conf, a_size);
+    m_programs = new GPProgram[a_size];
     m_popSize = a_size;
     fitnessRank = new float[a_size];
     for (int i = 0; i < a_size; i++) {
@@ -66,11 +75,16 @@ public class GPPopulation
 
     // Clone important state variables.
     // --------------------------------
-    m_avail_argTypes = a_pop.m_avail_argTypes;
-    m_avail_types = a_pop.m_avail_types;
-    m_avail_nodeSets = a_pop.m_avail_nodeSets;
+    m_avail_argTypes = (Class[][])a_pop.m_avail_argTypes.clone();
+    m_avail_types = (Class[])a_pop.m_avail_types.clone();
+    m_avail_nodeSets = (CommandGene[][])a_pop.m_avail_nodeSets.clone();
+
+    m_maxDepths = (int[])a_pop.m_maxDepths.clone();
 
     m_popSize = a_pop.getPopSize();
+
+    m_programs = new GPProgram[m_popSize];/**@todo is m_popSize correct?*/
+
     fitnessRank = new float[m_popSize];
     for (int i = 0; i < m_popSize; i++) {
       fitnessRank[i] = 0.5f;
@@ -80,7 +94,7 @@ public class GPPopulation
   /**
    * Sorts the population into "ascending" order using some criterion for
    * "ascending". A Comparator is given which will compare two individuals,
-   * and if one individual compares as lower than another individual, the first
+   * and if one individual compares lower than another individual, the first
    * individual will appear in the population before the second individual.
    *
    * @param c the Comparator to use
@@ -89,12 +103,11 @@ public class GPPopulation
    * @since 3.0
    */
   public void sort(Comparator c) {
-    IChromosome[] chroms = super.toChromosomes();
-    Arrays.sort(chroms, c);
+    Arrays.sort(m_programs, c);
     float f = 0;
-    for (int i = 0; i < chroms.length; i++) {
+    for (int i = 0; i < m_programs.length; i++) {
       fitnessRank[i] = f;
-      f += chroms[i].getFitnessValue();
+      f += m_programs[i].getFitnessValue();
     }
   }
 
@@ -110,26 +123,28 @@ public class GPPopulation
    * chromosome
    * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
    * must be an array of arrays, the first dimension of which is the number of
-   * chromosomes and the second dimension of which is the number of nodes.
-   * Note that it is not necessary to include the arguments of a chromosome as
-   * terminals in the chromosome's node set. This is done automatically
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
   public void create(Class[] a_types, Class[][] a_argTypes,
-                     CommandGene[][] a_nodeSets)
+                     CommandGene[][] a_nodeSets, int[] a_maxDepths)
       throws InvalidConfigurationException {
     m_avail_types = a_types;
     m_avail_argTypes = a_argTypes;
     m_avail_nodeSets = a_nodeSets;
-    for (int i = 0; i < m_popSize - 1; i++) {
+    m_maxDepths = a_maxDepths;
+    for (int i = 0; i < m_popSize; i++) {
+      // Vary depth dependent on run index.
+      // ----------------------------------
       int depth = 2 +
           ( getGPConfiguration().getMaxInitDepth() - 1) * i /
           (m_popSize - 1);
-      ProgramChromosome chrom = create(depth, (i % 2) == 0);
-      addChromosome(chrom);
+      GPProgram program = create(depth, (i % 2) == 0);
+      setGPProgram(i, program);
     }
     setChanged(true);
   }
@@ -137,31 +152,42 @@ public class GPPopulation
   /**
    * Creates a complete, valid ProgramChromosome.
    *
-   * @param a_depth int
-   * @param a_grow boolean
+   * @param a_types the type of each chromosome, the length
+   * is the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_depth the maximum depth of the program to create
+   * @param a_grow true: grow mode, false: full mode
    * @return ProgramChromosome
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ProgramChromosome create(Class[] a_types, Class[][] a_argTypes,
-                     CommandGene[][] a_nodeSets, int a_depth, boolean a_grow)
+  public GPProgram create(Class[] a_types, Class[][] a_argTypes,
+                     CommandGene[][] a_nodeSets, int[] a_maxDepths,
+                     int a_depth, boolean a_grow)
       throws InvalidConfigurationException {
-    ProgramChromosome chrom = new ProgramChromosome(getConfiguration());
+    GPProgram program = new GPProgram(getGPConfiguration(), a_types.length);
     if (a_grow) {
-      chrom.grow(a_depth, a_types, a_argTypes, a_nodeSets);
+      program.grow(a_depth, a_types, a_argTypes, a_nodeSets, a_maxDepths);
     }
     else {
-      chrom.full(a_depth, a_types, a_argTypes, a_nodeSets);
+      program.full(a_depth, a_types, a_argTypes, a_nodeSets, a_maxDepths);
     }
-    return chrom;
+    return program;
   }
 
-  protected ProgramChromosome create(int a_depth, boolean a_grow)
+  protected GPProgram create(int a_depth, boolean a_grow)
       throws InvalidConfigurationException {
-    return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, a_depth,
-                  a_grow);
+    return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, m_maxDepths,
+                  a_depth, a_grow);
   }
 
   /**
@@ -182,5 +208,60 @@ public class GPPopulation
    */
   public GPConfiguration getGPConfiguration() {
     return (GPConfiguration)getConfiguration();
+  }
+
+  /**
+   * Sets the given GPProgram at the given index in the list of GPProgram's.
+   * If the given index is exceeding the list by one, the chromosome is
+   * appended.
+   *
+   * @param a_index the index to set the GPProgram in
+   * @param a_program the GPProgram to be set
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void setGPProgram(final int a_index, final GPProgram a_program) {
+    synchronized(m_programs) {
+      m_programs[a_index] = a_program;
+    }
+    setChanged(true);
+  }
+
+  public GPProgram getGPProgram(int a_index) {
+    return m_programs[a_index];
+  }
+
+  public int size() {
+    return m_programs.length;
+  }
+
+  /**
+   * Determines the fittest GPProgram in the population (the one with the
+   * highest fitness value) and memorizes it. This is an optimized version
+   * compared to calling determineFittesPrograms(1).
+   * @return the fittest GPProgram of the population
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public GPProgram determineFittestProgram() {
+//    if (!m_changed && m_fittestChromosome != null) {
+//      return m_fittestChromosome;
+//    }
+    double bestFitness = -1.0d;
+    FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
+    double fitness;
+    for (int i=0;i<m_programs.length && m_programs[i] != null;i++) {
+      GPProgram program = m_programs[i];
+      fitness = program.getFitnessValue();
+      if (evaluator.isFitter(fitness, bestFitness)
+          || m_fittestProgram == null) {
+        m_fittestProgram = program;
+        bestFitness = fitness;
+      }
+    }
+    setChanged(false);
+    return m_fittestProgram;
   }
 }
