@@ -21,7 +21,7 @@ import org.jgap.*;
 public class GPProgram
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -75,16 +75,22 @@ public class GPProgram
           ( (ADF) a_nodeSets[i][j]).setReturnType(
               a_types[ ( (ADF) a_nodeSets[i][j]).getChromosomeNum()]);
     }
+    int depth;
     for (int i = 0; i < m_chromosomes.length; i++) {
+      // Restrict depth to input params.
+      // -------------------------------
       if (a_depth > a_maxDepths[i]) {
-        a_depth = a_maxDepths[i];
+        depth = a_maxDepths[i];
+      }
+      else {
+        depth = a_depth;
       }
       if (a_grow) {
-        m_chromosomes[i].grow(i, a_depth, a_types[i], a_argTypes[i],
+        m_chromosomes[i].grow(i, depth, a_types[i], a_argTypes[i],
                               a_nodeSets[i]);
       }
       else {
-        m_chromosomes[i].full(i, a_depth, a_types[i], a_argTypes[i],
+        m_chromosomes[i].full(i, depth, a_types[i], a_argTypes[i],
                               a_nodeSets[i]);
       }
     }
@@ -133,7 +139,7 @@ public class GPProgram
     String s = ""; /**@todo user StringBuffer*/
     for (int i = 0; i < m_chromosomes.length; i++) {
       if (i > 0) {
-        s += " --> ";
+        s += " ==> ";
       }
       s += m_chromosomes[i].toString2(a_n);
     }
