@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   static Variable vx;
 
@@ -31,7 +31,7 @@ public class MathProblem
 
   static float[] y = new float[20];
 
-  public MathProblem(Population a_pop)
+  public MathProblem(GPPopulation a_pop)
       throws InvalidConfigurationException {
     super(getGPConfiguration(), a_pop);
   }
@@ -64,7 +64,7 @@ public class MathProblem
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
     // Create genotype with initial population
-    return randomInitialGenotype(a_conf, types, argTypes, nodeSets);
+    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets, new int[999] );
   }
 
   /**
