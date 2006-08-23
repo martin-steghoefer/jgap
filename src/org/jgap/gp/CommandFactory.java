@@ -19,7 +19,7 @@ import org.jgap.*;
  */
 public class CommandFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static CommandGene[] createStoreCommands(CommandGene[] a_target,
                                                   Configuration a_conf,
@@ -31,8 +31,8 @@ public class CommandFactory {
       result[i] = a_target[i];
     }
     for (int i = 0; i < a_count; i++) {
-      result[i * 2 + a_target.length] = new StoreTerminalCommand(a_conf, a_type,
-          a_prefix + i);
+      result[i * 2 + a_target.length] = new StoreTerminalCommand(a_conf,
+          a_prefix + i, a_type);
       result[i * 2 + 1 +
           a_target.length] = new ReadTerminalCommand(a_conf, a_type,
           a_prefix + i);

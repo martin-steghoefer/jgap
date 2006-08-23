@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * Stored a value in the internal memory.
+ * Stores a value in the internal memory.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class StoreTerminalCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -29,10 +29,13 @@ public class StoreTerminalCommand
    */
   private String m_storageName;
 
-  public StoreTerminalCommand(final Configuration a_conf, Class type,
-                              String a_storageName)
+  private Class m_type;
+
+  public StoreTerminalCommand(final Configuration a_conf, String a_storageName,
+                              Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, type);
+    super(a_conf, 1, CommandGene.VoidClass);
+    m_type = a_type;
     if (a_storageName == null || a_storageName.length() < 1) {
       throw new IllegalArgumentException("Memory name must not be empty!");
     }
@@ -41,8 +44,8 @@ public class StoreTerminalCommand
 
   protected Gene newGeneInternal() {
     try {
-      Gene gene = new StoreTerminalCommand(getConfiguration(), getReturnType(),
-                                           m_storageName);
+      Gene gene = new StoreTerminalCommand(getConfiguration(), m_storageName,
+                                           m_type);
       return gene;
     }
     catch (InvalidConfigurationException iex) {
@@ -52,6 +55,22 @@ public class StoreTerminalCommand
 
   public String toString() {
     return "store_in(" + m_storageName + ", &1)";
+  }
+
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    Object value = null;
+    if (m_type == CommandGene.IntegerClass) {
+      value = new Integer(c.execute_int(n, 0, args));
+    }
+    /**@todo add additional types*/
+    else {
+      value = c.execute(n, 0, args);
+    }
+    // Store in memory.
+    // ----------------
+    ( (GPConfiguration) getConfiguration()).storeInMemory(m_storageName,
+        value);
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -95,15 +114,17 @@ public class StoreTerminalCommand
     return value;
   }
 
-  public static interface Compatible {
-    public Object execute_store(Object o);
-  }
-
   public boolean isAffectGlobalState() {
     return true;
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    return a_program.getCommandOfClass(0, ReadTerminalCommand.class) >= 0;
+    return true;
+    /**@todo reactivate*/
+//    return a_program.getCommandOfClass(0, ReadTerminalCommand.class) >= 0;
+  }
+
+  public Class getChildType(int i) {
+    return m_type;
   }
 }
