@@ -39,7 +39,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.63 $";
+  private final static String CVS_REVISION = "$Revision: 1.64 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -102,7 +102,7 @@ public class Configuration
   /**
    * References the current fitness function that will be used to evaluate
    * chromosomes during the natural selection process. Note that only this
-   * or the bulk fitness function may be set--the two are mutually exclusive.
+   * or the bulk fitness function may be set - the two are mutually exclusive.
    *
    * @author Neil Rotstan
    * @since 1.0
