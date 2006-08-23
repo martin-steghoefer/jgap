@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class IncrementCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_increment;
 
@@ -49,11 +49,6 @@ public class IncrementCommand
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-  }
-
   public String toString() {
     return "INC(" + m_increment + ", &1)";
   }
@@ -74,9 +69,11 @@ public class IncrementCommand
     return c.execute_double(n, 0, args) + m_increment;
   }
 
-  /**@todo execute_object*/
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    return ( (Compatible) c.execute_object(n, 0, args)).execute_increment();
+  }
 
   public static interface Compatible {
-    public Object execute_increment(Object o);
+    public Object execute_increment();
   }
 }
