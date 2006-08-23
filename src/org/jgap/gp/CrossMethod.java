@@ -18,7 +18,7 @@ package org.jgap.gp;
 public abstract class CrossMethod
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private transient GPConfiguration m_configuration;
 
@@ -30,6 +30,6 @@ public abstract class CrossMethod
     return m_configuration;
   }
 
-  public abstract ProgramChromosome[] operate(final ProgramChromosome i1,
-                                            final ProgramChromosome i2);
+  public abstract GPProgram[] operate(final GPProgram i1,
+                                      final GPProgram i2);
 }

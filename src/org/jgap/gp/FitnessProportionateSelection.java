@@ -21,16 +21,16 @@ import java.util.*;
 public class FitnessProportionateSelection
     implements INaturalGPSelector, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public ProgramChromosome select(GPGenotype world) {
-    double chosen = world.getConfiguration().getRandomGenerator().nextFloat() *
-        world.getTotalFitness();
+  public GPProgram select(GPGenotype a_genotype) {
+    double chosen = a_genotype.getConfiguration().getRandomGenerator().
+        nextFloat() * a_genotype.getTotalFitness();
     int num = 0;
-    GPPopulation pop = world.getGPPopulation();
+    GPPopulation pop = a_genotype.getGPPopulation();
     num = Arrays.binarySearch(pop.fitnessRank, (float) chosen);
     if (num >= 0) {
-      return (ProgramChromosome) pop.getChromosome(num);
+      return pop.getGPProgram(num);
     }
     else {
       for (num = 1; num < pop.size(); num++) {
@@ -40,9 +40,10 @@ public class FitnessProportionateSelection
       }
       num--;
       if (num >= pop.size() - 1) {
-        num = world.getConfiguration().getRandomGenerator().nextInt(pop.size());
+        num = a_genotype.getConfiguration().getRandomGenerator().
+            nextInt(pop.size() - 1);
       }
-      return (ProgramChromosome) pop.getChromosome(num);
+      return pop.getGPProgram(num);
     }
   }
 }

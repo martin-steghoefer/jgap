@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Argument
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_index;
 
@@ -41,23 +41,23 @@ public class Argument
   }
 
   public String toString() {
-    return "Arg"+m_index;
+    return "Arg(" + m_index + ")";
   }
 
-  public int execute_int(Chromosome c, int n, Object[] args) {
-    return ((Integer)args[m_index]).intValue();
+  public int execute_int(ProgramChromosome c, int n, Object[] args) {
+    return ( (Integer) args[m_index]).intValue();
   }
 
-  public long execute_long(Chromosome c, int n, Object[] args) {
-    return ((Long)args[m_index]).longValue();
+  public long execute_long(ProgramChromosome c, int n, Object[] args) {
+    return ( (Long) args[m_index]).longValue();
   }
 
-  public float execute_float(Chromosome c, int n, Object[] args) {
-    return ((Float)args[m_index]).floatValue();
+  public float execute_float(ProgramChromosome c, int n, Object[] args) {
+    return ( (Float) args[m_index]).floatValue();
   }
 
-  public double execute_double(Chromosome c, int n, Object[] args) {
-    return ((Double)args[m_index]).doubleValue();
+  public double execute_double(ProgramChromosome c, int n, Object[] args) {
+    return ( (Double) args[m_index]).doubleValue();
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
