@@ -29,7 +29,7 @@ import org.jgap.gp.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   static Variable vx;
 
@@ -44,18 +44,38 @@ public class Fibonacci {
   public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     Class[] types = {
-        CommandGene.IntegerClass};
+        CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = {
-        {}
+        {}, {}, //CommandGene.IntegerClass},
     };
+    int[] maxDepths = new int[]{3, 12};
+    /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = {
         {
-        vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
+          new SubProgramCommand(a_conf, new Class[] {CommandGene.VoidClass,
+                                CommandGene.VoidClass, CommandGene.VoidClass,}, 3),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
-        new AddCommand(a_conf, CommandGene.IntegerClass),
+        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
+        new StoreTerminalCommand(a_conf, "mem0", CommandGene.IntegerClass),
+        new StoreTerminalCommand(a_conf, "mem1", CommandGene.IntegerClass),
+        new StoreTerminalCommand(a_conf, "mem2", CommandGene.IntegerClass),
         new IncrementCommand(a_conf, CommandGene.IntegerClass, 1),
+        new PushCommand(a_conf, CommandGene.IntegerClass),
+        new NOP(a_conf),
+//        new ADF(a_conf, 1),
+    }, {
+        vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
+        new AddCommand(a_conf, CommandGene.IntegerClass),
         new ForXCommand(a_conf, CommandGene.IntegerClass),
-        new SubProgramCommand(a_conf, CommandGene.IntegerClass, 3),
+//        new SubProgramCommand(a_conf,
+//                              new Class[] {CommandGene.IntegerClass,
+//                              CommandGene.IntegerClass,
+//                              CommandGene.IntegerClass}, 3),
+//        new IncrementCommand(a_conf, CommandGene.IntegerClass, -1),
+//        new ReadTerminalCommand(a_conf, CommandGene.IntegerClass,
+//                                "thruput0"),
+//        new ReadTerminalCommand(a_conf, CommandGene.IntegerClass,
+//                                "thruput1"),
         //        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
         //        new ModCommand(a_conf, CommandGene.IntegerClass),
         //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
@@ -63,10 +83,11 @@ public class Fibonacci {
     };
     // Add commands working with internal memory.
     // ------------------------------------------
-    nodeSets[0] = CommandFactory.createStoreCommands(nodeSets[0], a_conf,
+    nodeSets[1] = CommandFactory.createStoreCommands(nodeSets[1], a_conf,
         CommandGene.IntegerClass, "mem", 3);
-    nodeSets[0] = CommandFactory.createStackCommands(nodeSets[0], a_conf,
-        CommandGene.IntegerClass);
+//    nodeSets[1] = CommandFactory.createStackCommands(nodeSets[1], a_conf,
+//        CommandGene.IntegerClass);
+
     // Randomly initialize function data (X-Y table) for Fib(x).
     // ---------------------------------------------------------
     for (int i = 0; i < NUMFIB; i++) {
@@ -77,9 +98,9 @@ public class Fibonacci {
     }
     // Create genotype with initial population.
     // ----------------------------------------
-    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets);
+    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
+                                            maxDepths);
   }
-
   //(Sort of) This is what we would like to (but cannot) find via GP:
   private static int fib(int a_index) {
     if (a_index == 0 || a_index == 1) {
@@ -150,8 +171,8 @@ public class Fibonacci {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getConfiguration().getGenerationNr();
           double freeMem = GPGenotype.getFreeMemoryMB();
-          if (evno % 1000 == 0) {
-            double bestFitness = genotype.getFittestChromosome().
+          if (evno % 50 == 0) {
+            double bestFitness = genotype.getFittestProgram().
                 getFitnessValue();
             System.out.println("Evolving generation " + evno
                                + ", best fitness: " + bestFitness
@@ -188,41 +209,58 @@ public class Fibonacci {
   }
 
   public static class FormulaFitnessFunction
-      extends FitnessFunction {
-    protected double evaluate(IChromosome a_subject) {
-      return computeRawFitness( (ProgramChromosome) a_subject);
+      extends GPFitnessFunction {
+    protected double evaluate(GPProgram a_subject) {
+      return computeRawFitness(a_subject);
     }
 
-    public double computeRawFitness(ProgramChromosome ind) {
+    public double computeRawFitness(GPProgram a_program) {
       double error = 0.0f;
       Object[] noargs = new Object[0];
       // Initialize local stores.
       // ------------------------
       GPGenotype.getGPConfiguration().clearStack();
       GPGenotype.getGPConfiguration().clearMemory();
-      for (int i = 0; i < NUMFIB; i++) {
-        vx.set(x[i]);
-        try {
+      // Compute fitness for each program.
+      // ---------------------------------
+      for (int j = 0; j < a_program.size(); j++) {
+        /**@todo check if program valid, i.e. worth evaluating*/
+        for (int i = 2; i < NUMFIB; i++) {
+          vx.set(x[i]);
           try {
-            double result = ind.execute_int(noargs);
-            error += Math.abs(result - y[i]);
+            try {
+//            double result = a_program.getChromosome(j).execute_int(noargs);
+              // Only evaluate after whole GP program was run.
+              // ---------------------------------------------
+              if (j == a_program.size() - 1) {
+                double result = a_program.execute_int(j, noargs);
+                error += Math.abs(result - y[i]);
+              }
+              else {
+                /**@todo use init. params to distinguish program flow*/
+                a_program.execute_void(j, noargs);
+              }
+            }
+            catch (IllegalStateException iex) {
+              error = Double.MAX_VALUE / 2; /**@todo use constant*/
+              break;
+            }
           }
-          catch (IllegalStateException iex) {
-            error = Double.MAX_VALUE / 2;
-            break;
+          catch (ArithmeticException ex) {
+            System.out.println("x = " + x[i].intValue());
+            System.out.println(a_program.getChromosome(j));
+            throw ex;
           }
-        }
-        catch (ArithmeticException ex) {
-          System.out.println("x = " + x[i].intValue());
-          System.out.println(ind);
-          throw ex;
         }
       }
       if (GPGenotype.getGPConfiguration().stackSize() > 0) {
-        error = Double.MAX_VALUE / 2;
+        error = Double.MAX_VALUE / 2; /**@todo use constant*/
       }
       if (error < 0.000001) {
         error = 0.0d;
+      }
+      else if (error < Double.MAX_VALUE / 2) { /**@todo use constant*/
+        /**@todo add penalty for longer solutions*/
       }
       return error;
     }
