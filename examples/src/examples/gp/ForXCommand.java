@@ -21,72 +21,72 @@ import org.jgap.gp.*;
 public class ForXCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_type;
 
   public ForXCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, VoidClass);
+    super(a_conf, 1, CommandGene.VoidClass);
     m_type = a_type;
   }
 
   protected Gene newGeneInternal() {
-    return null;/**@todo implement if necessary*/
+    return null; /**@todo implement if necessary*/
   }
 
   public String toString() {
-    return "for(int i=0;i<X;i++)";
+    return "for(int i=0;i<X;i++) { &1 }";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int index = c.getTerminal(0,Variable.class);
+    int index = c.getCommandOfClass(0, Variable.class);
     if (index < 0) {
       throw new IllegalStateException("Variable missing for forX");
     }
-    Variable var = (Variable)c.getNode(index);
-    int x = ((Integer)var.getValue()).intValue();
+    Variable var = (Variable) c.getNode(index);
+    int x = ( (Integer) var.getValue()).intValue();
     if (x > 15) {
       x = 15;
     }
     int value = 0;
     for (int i = 0; i < x; i++) {
-      value = c.execute_int(n, 1, args);
+      value = c.execute_int(n, 0, args);
     }
     return value;
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int index = c.getTerminal(0,Variable.class);
+    int index = c.getCommandOfClass(0, Variable.class);
     if (index < 0) {
       throw new IllegalStateException("Variable missing for forX");
     }
-    Variable var = (Variable)c.getNode(index);
-    int x = ((Integer)var.getValue()).intValue();
+    Variable var = (Variable) c.getNode(index);
+    int x = ( (Integer) var.getValue()).intValue();
     if (x > 15) {
       x = 15;
     }
     for (int i = 0; i < x; i++) {
-      c.execute_void(n, 1, args);
+      c.execute_void(n, 0, args);
     }
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int index = c.getTerminal(0,Variable.class);
+    int index = c.getCommandOfClass(0, Variable.class);
     if (index < 0) {
       throw new IllegalStateException("Variable missing for forX");
     }
-    Variable var = (Variable)c.getNode(index);
-    int x = ((Integer)var.getValue()).intValue();
+    Variable var = (Variable) c.getNode(index);
+    int x = ( (Integer) var.getValue()).intValue();
     if (x > 15) {
       x = 15;
     }
     Object value = null;
     for (int i = 0; i < x; i++) {
-      value = c.execute(n, 1, args);
+      value = c.execute(n, 0, args);
     }
     return value;
   }
@@ -94,7 +94,6 @@ public class ForXCommand
   public static interface Compatible {
     public Object execute_forX(Object o);
   }
-
   public boolean isValid(ProgramChromosome a_program) {
     return true;
 //    /**@todo check if elements deferring the state are available in the sub
