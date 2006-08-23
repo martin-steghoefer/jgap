@@ -21,11 +21,14 @@ import org.jgap.gp.*;
 public class PushCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public PushCommand(final Configuration a_conf, Class type)
+  private Class m_type;
+
+  public PushCommand(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, type);
+    super(a_conf, 1, CommandGene.VoidClass);
+    m_type = a_type;
   }
 
   protected Gene newGeneInternal() {
@@ -39,14 +42,16 @@ public class PushCommand
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
-    System.err.println("appliedMutation");
-  }
-
   public String toString() {
     return "push &1";
+  }
+
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    int value = c.execute_int(n, 0, args);
+    // Push onto stack.
+    // ----------------
+    pushIt(new Integer(value));
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -97,8 +102,9 @@ public class PushCommand
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    /**@todo consider n (execute_int...)*/
-    return a_program.getCommandOfClass(0,PopCommand.class) >= 0;
+    return true;/**@todo*/
+//    /**@todo consider n (execute_int...)*/
+//    return a_program.getCommandOfClass(0, PopCommand.class) >= 0;
   }
 
   /**
@@ -109,4 +115,7 @@ public class PushCommand
     ((GPConfiguration)getConfiguration()).pushToStack(a_value);
   }
 
+  public Class getChildType(int i) {
+    return m_type;
+  }
 }

@@ -24,23 +24,32 @@ import org.jgap.gp.*;
 public class SubProgramCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Number of subprograms.
    */
   private int m_subtrees;
 
-  public SubProgramCommand(final Configuration a_conf, Class type,
+  private Class[] m_type;
+
+  public SubProgramCommand(final Configuration a_conf, Class[] a_type,
                            int a_subtrees)
       throws InvalidConfigurationException {
-    super(a_conf, a_subtrees, type);
+    super(a_conf, a_subtrees, CommandGene.VoidClass);
+    if (a_subtrees < 1) {
+      throw new IllegalArgumentException("Number of subtrees must be >= 1");
+    }
+    if (a_type.length != a_subtrees) {
+      throw new IllegalArgumentException("a_type[] must be as long as a_subtrees");
+    }
+    m_type = a_type;
     m_subtrees = a_subtrees;
   }
 
   protected Gene newGeneInternal() {
     try {
-      Gene gene = new SubProgramCommand(getConfiguration(), getReturnType(),
+      Gene gene = new SubProgramCommand(getConfiguration(), m_type,
                                         m_subtrees);
       return gene;
     }
@@ -67,8 +76,23 @@ public class SubProgramCommand
     int value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       value = c.execute_int(n, i, args);
+      if (i < m_subtrees - 1) {
+        ( (GPConfiguration) getConfiguration()).storeThruput(i,
+            new Integer(value));
+      }
     }
     return value;
+  }
+
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    if (n > 0) {
+      /**@todo make following dynamic resp. add a parameter to the constructor*/
+      throw new IllegalStateException("Subprogram must be the root");
+    }
+    for (int i = 0; i < m_subtrees; i++) {
+      c.execute_void(n, i, args);
+    }
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
@@ -108,6 +132,7 @@ public class SubProgramCommand
   }
 
   public boolean isValid(ProgramChromosome a_program) {
+    if (true) return true;/**@todo just for testing*/
     // check:
     //  1. to (last-1) branch: push or store
     //  last branch: pop or read
@@ -128,5 +153,9 @@ public class SubProgramCommand
       }
     }
     return false;
+  }
+
+  public Class getChildType(int i) {
+    return m_type[i];
   }
 }
