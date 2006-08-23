@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /*wodka:
    void add(Command cmd);
@@ -59,7 +59,7 @@ public class ProgramChromosome
 
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
                            CommandGene[] a_functionSet,
-                           CommandGene[] a_functions, Class[] a_argTypes)
+                           Class[] a_argTypes)
       throws InvalidConfigurationException {
     super(a_configuration, a_size);
     m_functionSet = a_functionSet;
@@ -67,7 +67,8 @@ public class ProgramChromosome
     init();
   }
 
-  public ProgramChromosome(GPConfiguration a_configuration, Gene[] a_initialGenes)
+  public ProgramChromosome(GPConfiguration a_configuration,
+                           Gene[] a_initialGenes)
       throws InvalidConfigurationException {
     super(a_configuration);
     int i = 0;
@@ -79,6 +80,10 @@ public class ProgramChromosome
       genes[k] = a_initialGenes[k];
     }
     init(a_initialGenes.length);
+  }
+
+  public void setArgTypes(Class[] a_argTypes) {
+    argTypes = a_argTypes;
   }
 
   /**
@@ -112,7 +117,8 @@ public class ProgramChromosome
 
   public synchronized Object clone() {
     try {
-      ProgramChromosome chrom = new ProgramChromosome((GPConfiguration)getConfiguration(),
+      ProgramChromosome chrom = new ProgramChromosome( (GPConfiguration)
+          getConfiguration(),
           (Gene[]) getGenes().clone());
       chrom.argTypes = (Class[]) argTypes.clone();
       chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
@@ -166,30 +172,31 @@ public class ProgramChromosome
    */
   public void full(final int a_num, final int a_depth, final Class a_type,
                    final Class[] a_argTypes, final CommandGene[] a_functionSet) {
+    /**@todo consolidate with grow*/
     try {
       argTypes = a_argTypes;
       setFunctionSet(new CommandGene[a_functionSet.length + a_argTypes.length]);
-      System.arraycopy(a_functionSet, 0, getFunctionSet(), 0,
+      System.arraycopy(a_functionSet, 0, m_functionSet, 0,
                        a_functionSet.length);
       for (int i = 0; i < a_argTypes.length; i++) {
-        getFunctionSet()[a_functionSet.length + i]
-            = new Argument(getConfiguration(),i,a_argTypes[i]);
+        m_functionSet[a_functionSet.length + i]
+            = new Argument(getConfiguration(), i, a_argTypes[i]);
       }
       m_index = 0;
       m_maxDepth = a_depth;
-
       /**@todo init is experimental, make dynamic*/
       // Initialization of genotype according to specific problem requirements.
       // ----------------------------------------------------------------------
       CommandGene n = null;
+      if (a_num == 0) {
       for (int i = 0; i < m_functionSet.length; i++) {
         n = m_functionSet[i];
         if (n.getClass() == SubProgramCommand.class) {
           break;
         }
       }
-
-      fullNode(a_depth, a_type, getFunctionSet(), n, 0);
+      }
+      fullNode(a_num, a_depth, a_type, m_functionSet, n, 0);
       redepth();
     }
     catch (InvalidConfigurationException iex) {
@@ -200,7 +207,7 @@ public class ProgramChromosome
   /**
    * Initialize this chromosome using the grow method.
    *
-   * @param num the chromosome number in the individual of this chromosome
+   * @param a_num the chromosome number in the individual of this chromosome
    * @param depth the maximum depth of the chromosome to create
    * @param type the type of the chromosome to create
    * @param a_argTypes the array of types of arguments for this chromosome
@@ -209,7 +216,7 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void grow(final int num, final int depth, final Class type,
+  public void grow(final int a_num, final int depth, final Class type,
                    final Class[] a_argTypes, final CommandGene[] a_functionSet) {
     try {
       argTypes = a_argTypes;
@@ -217,8 +224,8 @@ public class ProgramChromosome
       System.arraycopy(a_functionSet, 0, getFunctionSet(), 0,
                        a_functionSet.length);
       for (int i = 0; i < a_argTypes.length; i++) {
-        getFunctionSet()[a_functionSet.length + i]
-            = new Argument(getConfiguration(),i,a_argTypes[i]);
+        m_functionSet[a_functionSet.length + i]
+            = new Argument(getConfiguration(), i, a_argTypes[i]);
       }
       m_index = 0;
       m_maxDepth = depth;
@@ -226,15 +233,16 @@ public class ProgramChromosome
       // Initialization of genotype according to specific problem requirements.
       // ----------------------------------------------------------------------
       CommandGene n = null;
-      for (int i = 0; i < m_functionSet.length; i++) {
-        CommandGene m = m_functionSet[i];
-        if (m.getClass() == SubProgramCommand.class) {
-          n = m;
-          break;
+      if (a_num == 0) {/**@todo experimental*/
+        for (int i = 0; i < m_functionSet.length; i++) {
+          CommandGene m = m_functionSet[i];
+          if (m.getClass() == SubProgramCommand.class) {
+            n = m;
+            break;
+          }
         }
       }
-
-      growNode(depth, type, getFunctionSet(), n, 0);
+      growNode(a_num, depth, type, getFunctionSet(), n, 0);
       redepth();
     }
     catch (InvalidConfigurationException iex) {
@@ -260,20 +268,20 @@ public class ProgramChromosome
     String funcName = getFunctions()[a_n].getName();
     int j = 1;
     do {
-      String placeHolder = "&"+j;
+      String placeHolder = "&" + j;
       int foundIndex = funcName.indexOf(placeHolder);
       if (foundIndex < 0) {
         break;
       }
-      funcName = funcName.replaceFirst(placeHolder,"");
+      funcName = funcName.replaceFirst(placeHolder, "");
       j++;
-    } while(true);
+    }
+    while (true);
     // Now remove any leading and trailing spaces.
     // -------------------------------------------
-    if (j>0) {
+    if (j > 0) {
       funcName = funcName.trim();
     }
-
     if (getFunctions()[a_n].getArity() == 0) {
       return funcName + " ";
     }
@@ -309,7 +317,7 @@ public class ProgramChromosome
     String str = "";
     boolean paramOutput = false;
     if (getFunctions()[a_n].getArity() > 0) {
-      if (getFunctions()[a_n].getName().indexOf("&1")>=0) {
+      if (getFunctions()[a_n].getName().indexOf("&1") >= 0) {
         paramOutput = true;
       }
     }
@@ -322,9 +330,9 @@ public class ProgramChromosome
     }
     for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
       String childString = toString2(getChild(a_n, i));
-      String placeHolder = "&"+(i+1);
+      String placeHolder = "&" + (i + 1);
       int placeholderIndex = str.indexOf(placeHolder);
-      if (placeholderIndex>=0) {
+      if (placeholderIndex >= 0) {
         str = str.replaceFirst(placeHolder, childString);
       }
       else {
@@ -347,18 +355,23 @@ public class ProgramChromosome
    * @param a_type the type to look for
    * @param a_nodeSet the array of nodes to look through
    * @param a_function true to look for a function, false to look for a terminal
+   * @param a_growing true: grow mode, false: full mode
    *
    * @return true if such a node exists, false otherwise
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
-                                   boolean a_function) {
+  public static boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
+                            boolean a_function, boolean a_growing) {
     for (int i = 0; i < a_nodeSet.length; i++) {
-      if (a_nodeSet[i].getReturnType() == a_type
-          && (a_nodeSet[i].getArity() != 0) == a_function) {
-        return true;
+      if (a_nodeSet[i].getReturnType() == a_type) {
+        if (a_nodeSet[i].getArity() == 0 && (!a_function || a_growing)) {
+          return true;
+        }
+        if (a_nodeSet[i].getArity() != 0 && a_function) {
+          return true;
+        }
       }
     }
     return false;
@@ -378,9 +391,9 @@ public class ProgramChromosome
    * @since 3.0
    */
   protected CommandGene selectNode(GPConfiguration a_config, Class a_type,
-                                       CommandGene[] a_functionSet,
-                                       boolean a_function, boolean a_growing) {
-    if (!isPossible(a_type, a_functionSet, a_function)) {
+                                   CommandGene[] a_functionSet,
+                                   boolean a_function, boolean a_growing) {
+    if (!isPossible(a_type, a_functionSet, a_function, a_growing)) {
       throw new IllegalArgumentException("Chromosome requires a " +
                                          (a_function ?
                                           ("function" +
@@ -417,22 +430,23 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void fullNode(int a_depth, Class a_type,
+  protected void fullNode(int num, int a_depth, Class a_type,
                           CommandGene[] a_functionSet, CommandGene a_rootNode,
                           int a_recurseLevel) {
     if (a_rootNode == null) {
       do {
-        a_rootNode = selectNode( (GPConfiguration) getConfiguration(), a_type,
-                                a_functionSet, a_depth > 1, false);
+      a_rootNode = selectNode( (GPConfiguration) getConfiguration(), a_type,
+                              a_functionSet, a_depth > 1, false);
       }
       /**@todo following is experimental*/
-      while (a_recurseLevel > 0 && a_rootNode.getClass() == SubProgramCommand.class);
+      while (num == 0 && a_recurseLevel > 0 &&
+             a_rootNode.getClass() == SubProgramCommand.class);
     }
     m_depth[m_index] = m_maxDepth - a_depth;
     getFunctions()[m_index++] = a_rootNode;
     if (a_depth > 1) {
       for (int i = 0; i < a_rootNode.getArity(); i++) {
-        fullNode(a_depth - 1, a_rootNode.getChildType(i), a_functionSet, null,
+        fullNode(num, a_depth - 1, a_rootNode.getChildType(i), a_functionSet, null,
                  a_recurseLevel + 1);
       }
     }
@@ -450,16 +464,17 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void growNode(int a_depth, Class a_type,
+  protected void growNode(int num, int a_depth, Class a_type,
                           CommandGene[] a_functionSet, CommandGene a_rootNode,
                           int a_recurseLevel) {
     if (a_rootNode == null) {
       do {
-        a_rootNode = selectNode( (GPConfiguration) getConfiguration(), a_type,
-                                a_functionSet, a_depth > 1, true);
+      a_rootNode = selectNode( (GPConfiguration) getConfiguration(), a_type,
+                              a_functionSet, a_depth > 1, true);
       }
       /**@todo following is experimental*/
-      while (a_recurseLevel > 0 && a_rootNode.getClass() == SubProgramCommand.class);
+      while (num == 0 && a_recurseLevel > 0 &&
+             a_rootNode.getClass() == SubProgramCommand.class);
     }
     // Generate the node.
     // ------------------
@@ -467,7 +482,7 @@ public class ProgramChromosome
     getFunctions()[m_index++] = a_rootNode;
     if (a_depth > 1) {
       for (int i = 0; i < a_rootNode.getArity(); i++) {
-        growNode(a_depth - 1, a_rootNode.getChildType(i), a_functionSet, null,
+        growNode(num, a_depth - 1, a_rootNode.getChildType(i), a_functionSet, null,
                  a_recurseLevel + 1);
       }
     }
@@ -629,7 +644,8 @@ public class ProgramChromosome
         }
       }
     }
-    throw new RuntimeException("Bad child " + a_child + " of node with index = "
+    throw new RuntimeException("Bad child " + a_child +
+                               " of node with index = "
                                + a_index);
   }
 
@@ -758,7 +774,7 @@ public class ProgramChromosome
   public int getCommandOfClass(int a_index, Class a_terminalClass) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
       if (getFunctions()[j].getClass() == a_terminalClass) {
-        if (--a_index < 0) {/**@todo consider a_index>0*/
+        if (--a_index < 0) { /**@todo consider a_index>0*/
           return j;
         }
       }
@@ -784,10 +800,10 @@ public class ProgramChromosome
   }
 
   /**
-   * Gets the number of nodes in the branch starting at the n'th node.
+   * Gets the number of nodes in the branch starting at the a_index'th node.
    *
    * @param a_index the index of the node at which to start counting
-   * @return the number of nodes in the branch starting at the n'th node
+   * @return the number of nodes in the branch starting at the a_index'th node
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -805,10 +821,10 @@ public class ProgramChromosome
   }
 
   /**
-   * Gets the depth of the branch starting at the n'th node.
+   * Gets the depth of the branch starting at the a_index'th node.
    *
    * @param a_index the index of the node at which to check the depth
-   * @return the depth of the branch starting at the n'th node
+   * @return the depth of the branch starting at the a_index'th node
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -923,7 +939,8 @@ public class ProgramChromosome
    */
   public int execute_int(Object[] args) {
     int rtn = getFunctions()[0].execute_int(this, 0, args);
-    cleanup();
+    /**@todo reactivate*/
+//    cleanup();
     return rtn;
   }
 
@@ -1049,7 +1066,8 @@ public class ProgramChromosome
    * @since 3.0
    */
   public Object execute(Object[] args) {
-    return execute_object(args);
+    return getFunctions()[0].execute_object(this, 0, args);
+//    return execute_object(args);
   }
 
   public Object execute(int n, int child, Object[] args) {
@@ -1077,12 +1095,13 @@ public class ProgramChromosome
    */
   public void grow(int depth, Class[] types,
                    Class[][] a_argTypes, CommandGene[][] nodeSets) {
+    /**@todo obsolete*/
 //    CommandGene.setIndividual(this);
     argTypes = a_argTypes[0];
     // If there are any ADF's in the nodeSet, then set its type
     // according to the chromosome it references
     for (int j = 0; j < nodeSets[0].length; j++) {
-      /**@todo implement ADF impl and reactivate the following*/
+      /**@todo implement ADF and reactivate the following*/
 //        if (nodeSets[0][j] instanceof ADF)
 //          ( (ADF) nodeSets[i][j]).setReturnType(
 //              types[ ( (ADF) nodeSets[0][j]).getChromosomeNum()]);
@@ -1112,6 +1131,7 @@ public class ProgramChromosome
   public void full(int depth, Class[] types,
                    Class[][] a_argTypes, CommandGene[][] nodeSets) {
 //    CommandGene.setIndividual(this);
+    /**@todo obsolete*/
     argTypes = a_argTypes[0];
     // If there are any ADF's in the nodeSet, then set its type
     // according to the chromosome it references
@@ -1133,6 +1153,10 @@ public class ProgramChromosome
 
   public Class[] getArgTypes() {
     return argTypes;
+  }
+
+  public int getArity() {
+    return argTypes.length;
   }
 
   public int size() {
