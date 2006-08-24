@@ -22,13 +22,19 @@ import org.jgap.impl.*;
 public class ProgramChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private GPConfiguration m_gpconf;
 
   private RandomGeneratorForTest rn;
 
   private Constant CMD_CONST0, CMD_CONST1, CMD_CONST2, CMD_CONST3, CMD_CONST4;
+
+  private AddCommand CMD_ADD;
+
+  private ForCommand CMD_FOR;
+
+  private SubProgramCommand CMD_SUB_V_I;
 
   private NOP CMD_NOP;
 
@@ -56,6 +62,11 @@ public class ProgramChromosomeTest
       CMD_CONST4 = new Constant(m_gpconf, CommandGene.IntegerClass,
                                 new Integer(4));
       CMD_NOP = new NOP(m_gpconf);
+      CMD_FOR = new ForCommand(m_gpconf, CommandGene.IntegerClass);
+      CMD_SUB_V_I = new SubProgramCommand(m_gpconf,
+                                          new Class[] {CommandGene.VoidClass,
+                                          CommandGene.IntegerClass});
+      CMD_ADD = new AddCommand(m_gpconf, CommandGene.IntegerClass);
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);
@@ -74,24 +85,19 @@ public class ProgramChromosomeTest
   public void testGrowNode_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
-    CommandGene CMD_SUB = new SubProgramCommand(m_gpconf,
-                                                new Class[] {CommandGene.
-                                                VoidClass,
-                                                CommandGene.IntegerClass}, 2);
-    CommandGene CMD_FOR = new ForCommand(m_gpconf, CommandGene.IntegerClass);
     CommandGene[] funcSet = new CommandGene[] {
-        CMD_SUB, //0
+        CMD_SUB_V_I, //0
         CMD_FOR, //1
         CMD_NOP, //2
-        new AddCommand(m_gpconf, CommandGene.IntegerClass), //3
+        CMD_ADD, //3
         CMD_CONST2, //4
         CMD_CONST3, //5
         CMD_CONST4, //6
     };
     rn.setNextIntSequence(new int[] {1, 4, 2, 5});
-    pc.growNode(0, 5, CommandGene.IntegerClass, funcSet, CMD_SUB, 0);
+    pc.growNode(0, 5, CommandGene.IntegerClass, funcSet, CMD_SUB_V_I, 0);
     pc.redepth();
-    assertSame(CMD_SUB, pc.getNode(0));
+    assertSame(CMD_SUB_V_I, pc.getNode(0));
     assertSame(CMD_FOR, pc.getNode(1));
     assertSame(CMD_CONST2, pc.getNode(2));
     assertSame(CMD_NOP, pc.getNode(3));
@@ -110,13 +116,8 @@ public class ProgramChromosomeTest
   public void testGrowNode_1()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
-    CommandGene CMD_SUB = new SubProgramCommand(m_gpconf,
-                                                new Class[] {CommandGene.
-                                                VoidClass,
-                                                CommandGene.IntegerClass}, 2);
-    CommandGene CMD_FOR = new ForCommand(m_gpconf, CommandGene.IntegerClass);
     CommandGene[] funcSet = new CommandGene[] {
-        CMD_SUB, //0
+        CMD_SUB_V_I, //0
         CMD_FOR, //1
         CMD_NOP, //2
         new AddCommand(m_gpconf, CommandGene.IntegerClass), //3
@@ -125,9 +126,9 @@ public class ProgramChromosomeTest
         CMD_CONST4, //6
     };
     rn.setNextIntSequence(new int[] {1, 2, 6, 2, 2, 5});
-    pc.growNode(0, 5, CommandGene.IntegerClass, funcSet, CMD_SUB, 0);
+    pc.growNode(0, 5, CommandGene.IntegerClass, funcSet, CMD_SUB_V_I, 0);
     pc.redepth();
-    assertSame(CMD_SUB, pc.getNode(0));
+    assertSame(CMD_SUB_V_I, pc.getNode(0));
     assertSame(CMD_FOR, pc.getNode(1));
     assertSame(CMD_CONST4, pc.getNode(2));
     assertSame(CMD_NOP, pc.getNode(3));
@@ -271,8 +272,7 @@ public class ProgramChromosomeTest
                new SubProgramCommand(conf,
                                      new Class[] {CommandGene.IntegerClass,
                                      CommandGene.IntegerClass,
-                                     CommandGene.IntegerClass},
-                                     3));
+                                     CommandGene.IntegerClass}));
     pc.setGene(1, new MultiplyCommand(conf, CommandGene.IntegerClass));
     pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
     pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
@@ -296,8 +296,7 @@ public class ProgramChromosomeTest
     pc.setGene(0,
                new SubProgramCommand(conf,
                                      new Class[] {CommandGene.IntegerClass,
-                                     CommandGene.IntegerClass},
-                                     2));
+                                     CommandGene.IntegerClass}));
     pc.setGene(1, new MultiplyCommand(conf, CommandGene.IntegerClass));
     pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
     pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
