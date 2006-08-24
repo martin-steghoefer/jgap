@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ForXCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_type;
 
@@ -39,32 +39,32 @@ public class ForXCommand
     return "for(int i=0;i<X;i++) { &1 }";
   }
 
-  public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    check(c);
-    int index = c.getCommandOfClass(0, Variable.class);
-    if (index < 0) {
-      throw new IllegalStateException("Variable missing for forX");
-    }
-    Variable var = (Variable) c.getNode(index);
-    int x = ( (Integer) var.getValue()).intValue();
-    if (x > 15) {
-      x = 15;
-    }
-    int value = 0;
-    for (int i = 0; i < x; i++) {
-      value = c.execute_int(n, 0, args);
-    }
-    return value;
-  }
-
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int index = c.getCommandOfClass(0, Variable.class);
+    int index = c.getVariableWithReturnType(0, m_type);
     if (index < 0) {
       throw new IllegalStateException("Variable missing for forX");
     }
+    /**@todo only consider variables appearing before FORX in the program tree*/
     Variable var = (Variable) c.getNode(index);
-    int x = ( (Integer) var.getValue()).intValue();
+    int x;
+    // Get variable's value as integer ("for" cannot do anything else here).
+    // ---------------------------------------------------------------------
+    if (m_type == CommandGene.IntegerClass) {
+      x = ( (Integer) var.getValue()).intValue();
+    }
+    else if (m_type == CommandGene.LongClass) {
+      x = ( (Long) var.getValue()).intValue();
+    }
+    else if (m_type == CommandGene.DoubleClass) {
+      x = ( (Double) var.getValue()).intValue();
+    }
+    else if (m_type == CommandGene.FloatClass) {
+      x = ( (Float) var.getValue()).intValue();
+    }
+    else {
+      throw new RuntimeException("Type " + m_type + " unknown in ForXCommand");
+    }
     if (x > 15) {
       x = 15;
     }
@@ -73,37 +73,15 @@ public class ForXCommand
     }
   }
 
-  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    check(c);
-    int index = c.getCommandOfClass(0, Variable.class);
-    if (index < 0) {
-      throw new IllegalStateException("Variable missing for forX");
-    }
-    Variable var = (Variable) c.getNode(index);
-    int x = ( (Integer) var.getValue()).intValue();
-    if (x > 15) {
-      x = 15;
-    }
-    Object value = null;
-    for (int i = 0; i < x; i++) {
-      value = c.execute(n, 0, args);
-    }
-    return value;
-  }
-
-  public static interface Compatible {
-    public Object execute_forX(Object o);
-  }
   public boolean isValid(ProgramChromosome a_program) {
-    return true;
-//    /**@todo check if elements deferring the state are available in the sub
-//     * branch. If not, the sub branch needs only be executed once.
-//     * Appropriate elements are, for example: PushCommand and PopCommand
-//     */
-//    return a_program.getCommandOfClass(0,Variable.class) >= 0;
+    return a_program.getVariableWithReturnType(0, m_type) >= 0;
   }
 
   public Class getChildType(int i) {
-    return m_type;
+    return CommandGene.VoidClass;
+  }
+
+  public Class getReturnType() {
+    return super.getReturnType();
   }
 }
