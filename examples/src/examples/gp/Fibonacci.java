@@ -13,6 +13,8 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.gp.function.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -29,7 +31,7 @@ import org.jgap.gp.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   static Variable vx;
 
@@ -44,50 +46,56 @@ public class Fibonacci {
   public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
     Class[] types = {
-        CommandGene.VoidClass, CommandGene.IntegerClass};
+        CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = {
-        {}, {},
+        {}, {}, {}
     };
-    int[] maxDepths = new int[]{3, 12};
+    int[] maxDepths = new int[] {
+        3, 5, 1};
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = {
         {
-        new SubProgramCommand(a_conf, new Class[] {CommandGene.VoidClass,
-                              CommandGene.VoidClass, CommandGene.VoidClass}),
+        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+                       CommandGene.VoidClass, CommandGene.VoidClass}),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
-        new StoreTerminalCommand(a_conf, "mem0", CommandGene.IntegerClass),
-        new StoreTerminalCommand(a_conf, "mem1", CommandGene.IntegerClass),
-        new StoreTerminalCommand(a_conf, "mem2", CommandGene.IntegerClass),
-        new IncrementCommand(a_conf, CommandGene.IntegerClass, 1),
-        new PushCommand(a_conf, CommandGene.IntegerClass),
+        new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
+        new StoreTerminal(a_conf, "mem1", CommandGene.IntegerClass),
+        new StoreTerminal(a_conf, "mem2", CommandGene.IntegerClass),
+        new Increment(a_conf, CommandGene.IntegerClass, 1),
+        new Push(a_conf, CommandGene.IntegerClass),
         new NOP(a_conf),
 //        new ADF(a_conf, 1),
     }, {
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
-        new AddCommand(a_conf, CommandGene.IntegerClass),
-        new ForXCommand(a_conf, CommandGene.IntegerClass),
-        new SubProgramCommand(a_conf,
-                              new Class[] {CommandGene.VoidClass,
-                              CommandGene.IntegerClass}),
+        new AddAndStore(a_conf, CommandGene.IntegerClass, "mem2"),
+        new ForLoop(a_conf, CommandGene.IntegerClass),
+        new Increment(a_conf, CommandGene.IntegerClass, 1),
         new NOP(a_conf),
-//        new IncrementCommand(a_conf, CommandGene.IntegerClass, -1),
-//        new ReadTerminalCommand(a_conf, CommandGene.IntegerClass,
+        new TransferMemory(a_conf, "mem2", "mem1"),
+        new TransferMemory(a_conf, "mem1", "mem0"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass,"mem0"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass,"mem1"),
+        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+                       CommandGene.VoidClass, CommandGene.VoidClass}),
+//        new ReadTerminal(a_conf, CommandGene.IntegerClass,
 //                                "thruput0"),
-//        new ReadTerminalCommand(a_conf, CommandGene.IntegerClass,
+//        new ReadTerminal(a_conf, CommandGene.IntegerClass,
 //                                "thruput1"),
         //        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
         //        new ModCommand(a_conf, CommandGene.IntegerClass),
         //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
+    }, {
     }
     };
     // Add commands working with internal memory.
     // ------------------------------------------
-    nodeSets[1] = CommandFactory.createStoreCommands(nodeSets[1], a_conf,
-        CommandGene.IntegerClass, "mem", 3);
-//    nodeSets[1] = CommandFactory.createStackCommands(nodeSets[1], a_conf,
-//        CommandGene.IntegerClass);
-
+//    nodeSets[1] = CommandFactory.createStoreCommands(nodeSets[1], a_conf,
+//        CommandGene.IntegerClass, "mem", 2);
+//    nodeSets[1] = CommandFactory.createReadOnlyCommands(nodeSets[1], a_conf,
+//        CommandGene.IntegerClass, "mem", 2, 0, !true);
+    nodeSets[2] = CommandFactory.createReadOnlyCommands(nodeSets[2], a_conf,
+        CommandGene.IntegerClass, "mem", 1, 2, !true);
     // Randomly initialize function data (X-Y table) for Fib(x).
     // ---------------------------------------------------------
     for (int i = 0; i < NUMFIB; i++) {
@@ -99,8 +107,9 @@ public class Fibonacci {
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
-                                            maxDepths);
+                                            maxDepths, new boolean[] {true, true, false});
   }
+
   //(Sort of) This is what we would like to (but cannot) find via GP:
   private static int fib(int a_index) {
     if (a_index == 0 || a_index == 1) {
@@ -116,16 +125,16 @@ public class Fibonacci {
       return 1;
     }
     // 2
-    int a = 1;
-    int b = 1;
-    int x = 0;
+    int a = 1;//Store("mem0", Constant(1))
+    int b = 1;//Store("mem1", Constant(1))
+    int x = 0;//Store("mem2", Constant(0))
     // 3
-    for (int i = 2; i <= a_index; i++) { //Subprogram(FORX(x)
-      x = a + b;// Store(x, Read(a)+Read(b))
-      a = b;//Store(a, Read(b))
-      b = x;//Store(b, Read(x))
+    for (int i = 2; i <= a_index; i++) { //FORX (Subprogram(A;B;C))
+      x = a + b; // A: AddAndStore(Read("mem0"),Read("mem1"),"mem2")
+      a = b; //B: TransferMemory("mem1","mem0")
+      b = x; //C: TransferMemory("mem2","mem1")
     }
-    return x;//Read(x)
+    return x; //Read("mem2")
   }
 
   //(Sort of) This is what we would like to find via GP:
@@ -182,19 +191,22 @@ public class Fibonacci {
             t.stop();
           }
           else {
-            // Collect garbage if memory low.
-            // ------------------------------
-            if (freeMem < 50) {
-              System.gc();
-            }
             try {
-              // Avoid 100% CPU load
-              t.sleep(30);
+              // Collect garbage if memory low.
+              // ------------------------------
+              if (freeMem < 50) {
+                System.gc();
+                t.sleep(500);
+              }
+              else {
+                // Avoid 100% CPU load
+                t.sleep(30);
+              }
             }
-            catch (InterruptedException iex) {
-              iex.printStackTrace();
-              System.exit(1);
-            }
+              catch (InterruptedException iex) {
+                iex.printStackTrace();
+                System.exit(1);
+              }
           }
         }
       });

@@ -12,6 +12,8 @@ package examples.gp;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.gp.function.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -23,7 +25,7 @@ import org.jgap.gp.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   static Variable vx;
 
@@ -46,13 +48,13 @@ public class MathProblem
     CommandGene[][] nodeSets = {
         {
         vx = Variable.create(a_conf, "X", CommandGene.FloatClass),
-        new AddCommand(a_conf, CommandGene.FloatClass),
-        new SubtractCommand(a_conf, CommandGene.FloatClass),
-        new MultiplyCommand(a_conf, CommandGene.FloatClass),
-        new DivideCommand(a_conf, CommandGene.FloatClass),
-        new SinCommand(a_conf, CommandGene.FloatClass),
-        new CosCommand(a_conf, CommandGene.FloatClass),
-        new ExpCommand(a_conf, CommandGene.FloatClass),
+        new Add(a_conf, CommandGene.FloatClass),
+        new Subtract(a_conf, CommandGene.FloatClass),
+        new Multiply(a_conf, CommandGene.FloatClass),
+        new Divide(a_conf, CommandGene.FloatClass),
+        new Sine(a_conf, CommandGene.FloatClass),
+        new Cosine(a_conf, CommandGene.FloatClass),
+        new Exp(a_conf, CommandGene.FloatClass),
     }
     };
     Random random = new Random();
@@ -64,7 +66,8 @@ public class MathProblem
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
     // Create genotype with initial population
-    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets, new int[999] );
+    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
+                                            new int[999], new boolean[] {true});
   }
 
   /**
