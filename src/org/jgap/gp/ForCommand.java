@@ -21,43 +21,58 @@ import org.jgap.gp.*;
 public class ForCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  public ForCommand(final Configuration a_conf, Class type)
+  private Class m_typeVar;
+
+  public ForCommand(final Configuration a_conf, Class a_typeVar)
       throws InvalidConfigurationException {
-    super(a_conf, 2, type);
+    super(a_conf, 2, CommandGene.VoidClass);
+    m_typeVar = a_typeVar;
   }
 
   protected Gene newGeneInternal() {
     return null;/**@todo implement if necessary*/
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // This is not applicable for this command, just do nothing
-    System.err.println("appliedMutation");
-  }
-
   public String toString() {
-    return "for(int i=0;i<&1;i++)";
+    return "for(int i=0;i<&1;i++) { &1 }";
   }
 
-  public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    /**@todo check if elements deferring the state are available in the sub
-     * branch. If not, the sub branch needs only be executed once.
-     * Appropriate elements are, for example: PushCommand and PopCommand
-     */
-    int x = c.execute_int(n, 0, args);
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    int x = c.execute_int(n, 0, args);/**@todo consider m_typeVar*/
     if (x > 15) {
       x = 15;/**@todo parameterize*/
     }
-    int value = 0;
     for (int i = 0; i < x; i++) {
-      value = c.execute_int(n, 1, args);
+      c.execute_void(n, 1, args);
     }
-    return value;
   }
 
-  public static interface Compatible {
-    public Object execute_for(Object o);
+//  public int execute_int(ProgramChromosome c, int n, Object[] args) {
+//    int x = c.execute_int(n, 0, args);
+//    if (x > 15) {
+//      x = 15;/**@todo parameterize*/
+//    }
+//    int value = 0;
+//    for (int i = 0; i < x; i++) {
+//      value = c.execute_int(n, 1, args);
+//    }
+//    return value;
+//  }
+
+  public boolean isValid(ProgramChromosome a_program) {
+    return true;
+  }
+
+  public Class getChildType(int i) {
+    if (i == 0) {
+      // Loop counter variable
+      return m_typeVar;
+    }
+    else {
+      // Subprogram
+      return CommandGene.VoidClass;
+    }
   }
 }
