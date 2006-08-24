@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -38,6 +38,11 @@ public abstract class CommandGene
   public final static Class VoidClass = Void.class;
 
   private static GPProgram individual;/**@todo make nonstatic*/
+
+  /**
+   * Should isValid() be called?
+   */
+  private boolean m_noValidation;
 
   /**
    * The return type of this node.
@@ -401,12 +406,18 @@ public abstract class CommandGene
   }
 
   protected void check(ProgramChromosome a_program) {
+    if (m_noValidation) {
+      return;
+    }
     if (!isValid(a_program)) {
       throw new IllegalStateException("State for GP-command not valid");
     }
   }
 
   protected void check(ProgramChromosome a_program, int a_index) {
+    if (m_noValidation) {
+      return;
+    }
     if (!isValid(a_program, a_index)) {
       throw new IllegalStateException("State for GP-command not valid");
     }
@@ -422,5 +433,9 @@ public abstract class CommandGene
 
   public void applyMutation(int index, double a_percentage){
     //do nothing here
+  }
+
+  public void setNoValidation(boolean a_noValidation) {
+    m_noValidation = a_noValidation;
   }
 }
