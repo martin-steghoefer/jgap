@@ -20,7 +20,7 @@ import org.jgap.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /*wodka:
    void add(Command cmd);
@@ -788,15 +788,35 @@ public class ProgramChromosome
 
   /**
    * Helper: Find GP command with given class and return index of it
-   * @param a_index the index to start with
+   * @param a_n return the n'th found command
    * @param a_terminalClass the class to find a command for
    * @return index of first found matching GP command, or -1 if none found
    */
-  public int getCommandOfClass(int a_index, Class a_terminalClass) {
+  public int getCommandOfClass(int a_n, Class a_terminalClass) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
       if (getFunctions()[j].getClass() == a_terminalClass) {
-        if (--a_index < 0) { /**@todo consider a_index>0*/
+        if (--a_n < 0) {
           return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Helper: Find GP Variable with given return type and return index of it
+   * @param a_n return the n'th found command
+   * @param a_returnType the return type to find a Variable for
+   * @return index of first found matching GP command, or -1 if none found
+   */
+  public int getVariableWithReturnType(int a_n, Class a_returnType) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getClass() == Variable.class) {
+        Variable v = (Variable) getFunctions()[j];
+        if (v.getReturnType() == a_returnType) {
+          if (--a_n < 0) {
+            return j;
+          }
         }
       }
     }
