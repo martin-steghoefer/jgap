@@ -20,18 +20,18 @@ import org.jgap.*;
  * @since 1.1
  */
 public class RandomGeneratorForTest
-    implements RandomGenerator {
+    implements RandomGenerator, java.io.Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   private long m_nextLong;
   private double m_nextDouble;
-  private float m_nextFloat;
   private boolean m_nextBoolean;
   private int[] m_nextIntSequence;
+  private float[] m_nextFloatSequence;
   private double m_nextGaussian;
-  private int m_intIndex;
+  private int m_intIndex, m_floatIndex;
 
   public RandomGeneratorForTest() {
   }
@@ -87,7 +87,11 @@ public class RandomGeneratorForTest
   }
 
   public float nextFloat() {
-    return m_nextFloat;
+    float result = m_nextFloatSequence[m_floatIndex++];
+    if (m_floatIndex >= m_nextFloatSequence.length) {
+      m_floatIndex = 0;
+    }
+    return result;
   }
 
   public boolean nextBoolean() {
@@ -107,7 +111,7 @@ public class RandomGeneratorForTest
   }
 
   public void setNextFloat(float a_nextFloat) {
-    m_nextFloat = a_nextFloat % 1.0f;
+    setNextFloatSequence(new float[] {a_nextFloat % 1.0f});
   }
 
   public void setNextInt(int a_nextInt) {
@@ -116,6 +120,11 @@ public class RandomGeneratorForTest
 
   public void setNextLong(long a_nextLong) {
     m_nextLong = a_nextLong;
+  }
+
+  public void setNextFloatSequence(float[] a_sequence) {
+    m_floatIndex = 0;
+    m_nextFloatSequence = a_sequence;
   }
 
   public void setNextIntSequence(int[] a_sequence) {
