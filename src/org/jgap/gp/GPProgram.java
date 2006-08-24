@@ -11,6 +11,8 @@ package org.jgap.gp;
 
 import java.io.*;
 import org.jgap.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.gp.function.*;
 
 /**
  * A GP program contains 1..n ProgramChromosome's.
@@ -21,7 +23,7 @@ import org.jgap.*;
 public class GPProgram
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -42,22 +44,11 @@ public class GPProgram
     m_chromosomes[a_index] = a_chrom;
   }
 
-  public void grow(int a_depth, Class[] a_types,
-                   Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-                   int[] a_maxDepths) {
-    growOrFull(a_depth, a_types, a_argTypes, a_nodeSets, a_maxDepths, true);
-  }
-
-  public void full(int a_depth, Class[] a_types,
-                   Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-                   int[] a_maxDepths) {
-    growOrFull(a_depth, a_types, a_argTypes, a_nodeSets, a_maxDepths, false);
-  }
-
-  protected void growOrFull(int a_depth, Class[] a_types,
-                            Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-                            int[] a_maxDepths,
-                            boolean a_grow) {
+  public void growOrFull(int a_depth, Class[] a_types,
+                         Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+                         int[] a_maxDepths,
+                         boolean a_grow,
+                         boolean[] a_fullModeAllowed) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
     for (int i = 0; i < m_chromosomes.length; i++) {
       try {
@@ -85,13 +76,15 @@ public class GPProgram
       else {
         depth = a_depth;
       }
-      if (a_grow) {
-        m_chromosomes[i].grow(i, depth, a_types[i], a_argTypes[i],
-                              a_nodeSets[i]);
+      // Decide whether to use grow mode or full mode.
+      // ---------------------------------------------
+      if (a_grow || !a_fullModeAllowed[i]) {
+        m_chromosomes[i].growOrFull(i, depth, a_types[i], a_argTypes[i],
+                                    a_nodeSets[i], true);
       }
       else {
-        m_chromosomes[i].full(i, depth, a_types[i], a_argTypes[i],
-                              a_nodeSets[i]);
+        m_chromosomes[i].growOrFull(i, depth, a_types[i], a_argTypes[i],
+                                    a_nodeSets[i], false);
       }
     }
   }
@@ -217,5 +210,15 @@ public class GPProgram
   public void execute_void(int a_chromosomeNum, Object[] a_args) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
     m_chromosomes[a_chromosomeNum].execute_void(a_args);
+  }
+
+  public int getCommandOfClass(int a_n, Class a_class) {
+    for (int i = a_n; i < m_chromosomes.length; i++) {
+      int j = m_chromosomes[i].getCommandOfClass(0, a_class);
+      if (j >= 0) {
+        return j;
+      }
+    }
+    return -1;
   }
 }
