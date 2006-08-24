@@ -10,6 +10,8 @@
 package org.jgap.gp;
 
 import org.jgap.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.gp.function.*;
 
 /**
  * Easily creates single and batched consistent command objects
@@ -19,7 +21,7 @@ import org.jgap.*;
  */
 public class CommandFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static CommandGene[] createStoreCommands(CommandGene[] a_target,
                                                   Configuration a_conf,
@@ -31,11 +33,50 @@ public class CommandFactory {
       result[i] = a_target[i];
     }
     for (int i = 0; i < a_count; i++) {
-      result[i * 2 + a_target.length] = new StoreTerminalCommand(a_conf,
+      result[i * 2 + a_target.length] = new StoreTerminal(a_conf,
           a_prefix + i, a_type);
       result[i * 2 + 1 +
-          a_target.length] = new ReadTerminalCommand(a_conf, a_type,
+          a_target.length] = new ReadTerminal(a_conf, a_type,
           a_prefix + i);
+    }
+    return result;
+  }
+
+  public static CommandGene[] createWriteOnlyCommands(CommandGene[] a_target,
+                                                  Configuration a_conf,
+                                                  Class a_type, String a_prefix,
+                                                  int a_count,
+                                                  boolean a_noValidation)
+      throws InvalidConfigurationException {
+    CommandGene[] result = new CommandGene[a_count + a_target.length];
+    for (int i = 0; i < a_target.length; i++) {
+      result[i] = a_target[i];
+    }
+    for (int i = 0; i < a_count; i++) {
+      CommandGene writeCommand = new StoreTerminal(a_conf,
+          a_prefix + i, a_type);
+      writeCommand.setNoValidation(a_noValidation);
+      result[i + a_target.length] = writeCommand;
+    }
+    return result;
+  }
+
+  public static CommandGene[] createReadOnlyCommands(CommandGene[] a_target,
+                                                  Configuration a_conf,
+                                                  Class a_type, String a_prefix,
+                                                  int a_count,
+                                                  int a_startIndex,
+                                                  boolean a_noValidation)
+      throws InvalidConfigurationException {
+    CommandGene[] result = new CommandGene[a_count + a_target.length];
+    for (int i = 0; i < a_target.length; i++) {
+      result[i] = a_target[i];
+    }
+    for (int i = 0; i < a_count; i++) {
+      CommandGene readCommand = new ReadTerminal(a_conf, a_type,
+                                                 a_prefix + (i + a_startIndex));
+      readCommand.setNoValidation(a_noValidation);
+      result[i + a_target.length] = readCommand;
     }
     return result;
   }
@@ -48,8 +89,8 @@ public class CommandFactory {
     for (int i = 0; i < a_target.length; i++) {
       result[i] = a_target[i];
     }
-    result[a_target.length] = new PushCommand(a_conf, a_type);
-    result[a_target.length + 1] = new PopCommand(a_conf, a_type);
+    result[a_target.length] = new Push(a_conf, a_type);
+    result[a_target.length + 1] = new Pop(a_conf, a_type);
     return result;
   }
 }
