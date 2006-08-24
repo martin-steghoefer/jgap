@@ -29,7 +29,7 @@ import org.jgap.gp.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   static Variable vx;
 
@@ -46,14 +46,14 @@ public class Fibonacci {
     Class[] types = {
         CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = {
-        {}, {}, //CommandGene.IntegerClass},
+        {}, {},
     };
     int[] maxDepths = new int[]{3, 12};
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = {
         {
-          new SubProgramCommand(a_conf, new Class[] {CommandGene.VoidClass,
-                                CommandGene.VoidClass, CommandGene.VoidClass,}, 3),
+        new SubProgramCommand(a_conf, new Class[] {CommandGene.VoidClass,
+                              CommandGene.VoidClass, CommandGene.VoidClass}),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
         new StoreTerminalCommand(a_conf, "mem0", CommandGene.IntegerClass),
@@ -67,10 +67,10 @@ public class Fibonacci {
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
         new AddCommand(a_conf, CommandGene.IntegerClass),
         new ForXCommand(a_conf, CommandGene.IntegerClass),
-//        new SubProgramCommand(a_conf,
-//                              new Class[] {CommandGene.IntegerClass,
-//                              CommandGene.IntegerClass,
-//                              CommandGene.IntegerClass}, 3),
+        new SubProgramCommand(a_conf,
+                              new Class[] {CommandGene.VoidClass,
+                              CommandGene.IntegerClass}),
+        new NOP(a_conf),
 //        new IncrementCommand(a_conf, CommandGene.IntegerClass, -1),
 //        new ReadTerminalCommand(a_conf, CommandGene.IntegerClass,
 //                                "thruput0"),
@@ -120,12 +120,12 @@ public class Fibonacci {
     int b = 1;
     int x = 0;
     // 3
-    for (int i = 2; i <= a_index; i++) {
-      x = a + b;
-      a = b;
-      b = x;
+    for (int i = 2; i <= a_index; i++) { //Subprogram(FORX(x)
+      x = a + b;// Store(x, Read(a)+Read(b))
+      a = b;//Store(a, Read(b))
+      b = x;//Store(b, Read(x))
     }
-    return x;
+    return x;//Read(x)
   }
 
   //(Sort of) This is what we would like to find via GP:
@@ -266,3 +266,5 @@ public class Fibonacci {
     }
   }
 }
+// Best solution fitness: 43.0
+// Best solution: sub[(store_in(mem0, const(1) )) --> (store_in(mem0, const(0) )) --> (store_in(mem2, const(1) ))] ==> store_in(mem2, (read_from(mem2)  + X ))
