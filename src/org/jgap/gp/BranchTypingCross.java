@@ -20,7 +20,7 @@ import org.jgap.*;
 public class BranchTypingCross
     extends CrossMethod {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -48,18 +48,23 @@ public class BranchTypingCross
       int[] sizes = new int[i1.size()];
       int totalSize = 0;
       for (int i = 0; i < i1.size(); i++) {
+        // Size of a chromosome = number of nodes.
+        // ---------------------------------------
         sizes[i] = i1.getChromosome(i).getSize(0);
         totalSize += sizes[i];
       }
       int nodeNum = getConfiguration().getRandomGenerator().nextInt(
           totalSize);
+      // Select the chromosome in which node "nodeNum" resides.
+      // ------------------------------------------------------
       int chromosomeNum;
       for (chromosomeNum = 0; chromosomeNum < i1.size(); chromosomeNum++) {
         nodeNum -= sizes[chromosomeNum];
         if (nodeNum < 0)
           break;
       }
-      // Cross the selected chromosomes
+      // Cross the selected chromosomes.
+      // -------------------------------
       ProgramChromosome[] newChromosomes = doCross(
           i1.getChromosome(chromosomeNum),
           i2.getChromosome(chromosomeNum));
@@ -163,12 +168,12 @@ public class BranchTypingCross
         term.applyMutation(0, 0.5d);
       }
     }
-    int s0 = c0.getSize(p0);
-    int s1 = c1.getSize(p1);
-    int d0 = c0.getDepth(p0);
-    int d1 = c1.getDepth(p1);
-    int c0s = c0.getSize(0);
-    int c1s = c1.getSize(0);
+    int s0 = c0.getSize(p0);//Number of nodes from index p0
+    int s1 = c1.getSize(p1);//Number of nodes from index p1
+    int d0 = c0.getDepth(p0);//Depth from index p0
+    int d1 = c1.getDepth(p1);//Depth from index p1
+    int c0s = c0.getSize(0);//Number of nodes in c0
+    int c1s = c1.getSize(0);//Number of nodes in c1
     // Check for depth constraint for p1 inserted into c0
     if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()) {
       // choose the other parent
