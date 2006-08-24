@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -396,8 +396,18 @@ public abstract class CommandGene
     return true;
   }
 
+  public boolean isValid(ProgramChromosome a_program, int a_index) {
+    return true;
+  }
+
   protected void check(ProgramChromosome a_program) {
     if (!isValid(a_program)) {
+      throw new IllegalStateException("State for GP-command not valid");
+    }
+  }
+
+  protected void check(ProgramChromosome a_program, int a_index) {
+    if (!isValid(a_program, a_index)) {
       throw new IllegalStateException("State for GP-command not valid");
     }
   }
