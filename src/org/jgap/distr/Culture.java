@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class Culture implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The storage to use.
@@ -160,7 +160,7 @@ public class Culture implements java.io.Serializable {
     }
     int index = m_memoryNames.indexOf(a_name);
     if (index < 0) {
-      throw new IllegalArgumentException("Memory name unknown!");
+      throw new IllegalArgumentException("Memory name unknown: "+a_name);
     }
     return m_memory[index];
   }
