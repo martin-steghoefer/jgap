@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class SubProgramCommand
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Number of subprograms.
@@ -33,23 +33,19 @@ public class SubProgramCommand
 
   private Class[] m_types;
 
-  public SubProgramCommand(final Configuration a_conf, Class[] a_types,
-                           int a_subtrees)
+  public SubProgramCommand(final Configuration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
-    super(a_conf, a_subtrees, a_types[a_types.length-1]);
-    if (a_subtrees < 1) {
+    super(a_conf, a_types.length, a_types[a_types.length-1]);
+    if (a_types.length < 1) {
       throw new IllegalArgumentException("Number of subtrees must be >= 1");
     }
-    if (a_types.length != a_subtrees) {
-      throw new IllegalArgumentException("a_type[] must be as long as a_subtrees");
-    }
     m_types = a_types;
-    m_subtrees = a_subtrees;
+    m_subtrees = a_types.length;
   }
 
   protected Gene newGeneInternal() {
     try {
-      Gene gene = new SubProgramCommand(getConfiguration(), m_types, m_subtrees);
+      Gene gene = new SubProgramCommand(getConfiguration(), m_types);
       return gene;
     }
     catch (InvalidConfigurationException iex) {
@@ -75,7 +71,7 @@ public class SubProgramCommand
     int value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       if (i < m_subtrees - 1) {
-        c.execute_void(n, i, args);/**@todo evaluate m_types?*/
+        c.execute_void(n, i, args);
       }
       else {
         value = c.execute_int(n, i, args);/**@todo evaluate m_types*/
