@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private GPConfiguration m_gpconf;
 
@@ -145,7 +145,7 @@ public class ProgramChromosomeTest
   }
 
   /**
-   * Produce a valid program that can compute Fibonacci.
+   * Produce a valid program that is similar to computing Fibonacci.
    *
    * @throws Exception
    *
@@ -177,6 +177,42 @@ public class ProgramChromosomeTest
     assertEquals(ReadTerminal.class, pc.getNode(4).getClass());
     assertEquals(TransferMemory.class, pc.getNode(5).getClass());
     assertEquals(TransferMemory.class, pc.getNode(6).getClass());
+  }
+
+  /**
+   * Produce a valid program that is similar to computing Fibonacci.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGrowNode_3()
+      throws Exception {
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
+    CommandGene[] funcSet = new CommandGene[] {
+        CMD_SUB_V_V_V, //0
+        CMD_FOR, //1
+        CMD_NOP, //2
+        Variable.create(m_gpconf, "X", CommandGene.IntegerClass),//3
+        new Increment(m_gpconf, CommandGene.IntegerClass), //4
+        new AddAndStore(m_gpconf, CommandGene.IntegerClass, "mem2"),//5
+        new TransferMemory(m_gpconf, "mem2", "mem1"),//6
+        new TransferMemory(m_gpconf, "mem1", "mem0"),//7
+        new ReadTerminal(m_gpconf, CommandGene.IntegerClass,"mem0"),//8
+        new ReadTerminal(m_gpconf, CommandGene.IntegerClass,"mem1"),//9
+    };
+    rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 6, 7});
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, funcSet, CMD_FOR, 0, true);
+    pc.redepth();
+    assertSame(CMD_FOR, pc.getNode(0));
+    assertEquals(Variable.class, pc.getNode(1).getClass());
+    assertSame(CMD_SUB_V_V_V, pc.getNode(2));
+    assertEquals(AddAndStore.class, pc.getNode(3).getClass());
+    assertEquals(ReadTerminal.class, pc.getNode(4).getClass());
+    assertEquals(ReadTerminal.class, pc.getNode(5).getClass());
+    assertEquals(TransferMemory.class, pc.getNode(6).getClass());
+    assertEquals(TransferMemory.class, pc.getNode(7).getClass());
   }
 
   /**

@@ -21,7 +21,7 @@ public class AllGPTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
@@ -29,6 +29,7 @@ public class AllGPTests
     suite.addTest(CommandGeneTest.suite());
     suite.addTest(GPConfigurationTest.suite());
     suite.addTest(GPPopulationTest.suite());
+    suite.addTest(GPProgramTest.suite());
     suite.addTest(ProgramChromosomeTest.suite());
     return suite;
   }
