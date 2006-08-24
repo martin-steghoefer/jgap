@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Fitness value of the best solution.
@@ -40,6 +40,11 @@ public class GPGenotype
    */
 //  private static ProgramChromosome m_allTimeBest;
   private static GPProgram m_allTimeBest;
+
+  /**
+   * Is full mode with program construction allowed?
+   */
+  private boolean m_fullModeAllowed[];
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -122,16 +127,58 @@ public class GPGenotype
                                                  CommandGene[][] a_nodeSets,
                                                  int[] a_maxDepths)
       throws InvalidConfigurationException {
+    boolean[] fullModeAllowed = new boolean[a_types.length];
+    for (int i = 0; i < a_types.length; i++) {
+      fullModeAllowed[i] = true;
+    }
+    return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
+                                 a_maxDepths, fullModeAllowed);
+  }
+
+  /**
+   * Creates a genotype with initial population for the world set.
+   *
+   * @param a_conf the configuration to use
+   * @param a_types the type of each chromosome, the length is the number of
+   * chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each
+   * chromosome, must be an array of arrays, the first dimension of which is the
+   * number of chromosomes and the second dimension of which is the number of
+   * nodes. Note that it is not necessary to include the arguments of a
+   * chromosome as terminals in the chromosome's node set. This is done
+   * automatically
+   * @param a_fullModeAllowed array of boolean values. Fr each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
+   * @return created population
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
+                                                 Class[] a_types,
+                                                 Class[][] a_argTypes,
+                                                 CommandGene[][] a_nodeSets,
+                                                 int[] a_maxDepths,
+                                                 boolean[] a_fullModeAllowed)
+      throws InvalidConfigurationException {
     System.gc();
     System.out.println("Memory consumed before creating population: "
                        + getTotalMemoryMB() + "MB");
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
-    pop.create(a_types, a_argTypes, a_nodeSets, a_maxDepths);
+    pop.create(a_types, a_argTypes, a_nodeSets, a_maxDepths, a_fullModeAllowed);
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");
-    return new GPGenotype(a_conf, pop);
+    GPGenotype gp = new GPGenotype(a_conf, pop);
+    gp.m_fullModeAllowed = a_fullModeAllowed;
+    return gp;
   }
 
   /**
@@ -315,7 +362,8 @@ public class GPGenotype
         // ---------------------------------------------------------------------
         int depth = getGPConfiguration().getMaxInitDepth() - 2
             + random.nextInt(2);
-        GPProgram program = newPopulation.create(depth, (i % 2) == 0);
+        GPProgram program = newPopulation.create(depth, (i % 2) == 0,
+                                                 m_fullModeAllowed);
         newPopulation.setGPProgram(i, program);
       }
       // Now set the new population as the active one.
