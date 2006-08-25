@@ -22,21 +22,15 @@ import org.jgap.gp.function.*;
  * @author Klaus Meffert
  * @since 3.0
  */
-public class MathProblem
-    extends GPGenotype {
+public class MathProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   static Variable vx;
 
   static Float[] x = new Float[20];
 
   static float[] y = new float[20];
-
-  public MathProblem(GPPopulation a_pop)
-      throws InvalidConfigurationException {
-    super(getGPConfiguration(), a_pop);
-  }
 
   public static GPGenotype create(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -49,27 +43,30 @@ public class MathProblem
         {
         vx = Variable.create(a_conf, "X", CommandGene.FloatClass),
         new Add(a_conf, CommandGene.FloatClass),
+        new Add3(a_conf, CommandGene.FloatClass),
         new Subtract(a_conf, CommandGene.FloatClass),
         new Multiply(a_conf, CommandGene.FloatClass),
+        new Multiply3(a_conf, CommandGene.FloatClass),
         new Divide(a_conf, CommandGene.FloatClass),
         new Sine(a_conf, CommandGene.FloatClass),
-        new Cosine(a_conf, CommandGene.FloatClass),
         new Exp(a_conf, CommandGene.FloatClass),
+        new Pow(a_conf, CommandGene.FloatClass),
+        new Terminal(a_conf, CommandGene.FloatClass,3.0d, 4.0d),
     }
     };
     Random random = new Random();
-    // randomly initialize function data (X-Y table) for x^4+x^3+x^2+x
+    // randomly initialize function data (X-Y table) for x^4+x^3+x^2-x
     for (int i = 0; i < 20; i++) {
-      float f = 2.0f * (random.nextFloat() - 0.5f);
+      float f = 8.0f * (random.nextFloat() - 0.3f);
       x[i] = new Float(f);
       y[i] = f * f * f * f + f * f * f + f * f - f;
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
-    // Create genotype with initial population
+    // Create genotype with initial population.
+    // ----------------------------------------
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
-                                            new int[1], new int[999], new boolean[] {true});
+        400);
   }
-
   /**
    * Starts the example.
    *
@@ -81,10 +78,10 @@ public class MathProblem
    */
   public static void main(String[] args)
       throws Exception {
-    System.out.println("Formula to discover: x^4+x^3+x^2-x");
+    System.out.println("Formula to discover: X^4 + X^3 + X^2 - X");
     GPConfiguration config = new GPConfiguration();
-    config.setMaxInitDepth(8);
-    config.setPopulationSize(800);
+    config.setMaxInitDepth(5);
+    config.setPopulationSize(1000);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
     GPGenotype gp = create(config);
     gp.evolve(800);
@@ -92,19 +89,18 @@ public class MathProblem
   }
 
   public static class FormulaFitnessFunction
-      extends FitnessFunction {
-    protected double evaluate(IChromosome a_subject) {
-//      return 1.0f / (1.0f + computeRawFitness( (ProgramChromosome) a_subject));
-      return computeRawFitness( (ProgramChromosome) a_subject);
+      extends GPFitnessFunction {
+    protected double evaluate(GPProgram a_subject) {
+      return computeRawFitness(a_subject);
     }
 
-    public double computeRawFitness(ProgramChromosome ind) {
+    public double computeRawFitness(GPProgram ind) {
       double error = 0.0f;
       Object[] noargs = new Object[0];
       for (int i = 0; i < 20; i++) {
         vx.set(x[i]);
         try {
-          double result = ind.execute_float(noargs);
+          double result = ind.execute_float(0, noargs);
           error += Math.abs(result - y[i]);
         }
         catch (ArithmeticException ex) {

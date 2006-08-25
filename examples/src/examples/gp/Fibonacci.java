@@ -31,7 +31,7 @@ import org.jgap.gp.function.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   static Variable vx;
 
@@ -49,48 +49,38 @@ public class Fibonacci {
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = { {}, {}, {}
     };
-    int[] minDepths = new int[] {3, 4, 1};
-    int[] maxDepths = new int[] {3, 4, 1};
+    int[] minDepths = new int[] {2, 4, 1};
+    int[] maxDepths = new int[] {3, 5, 1};
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = { {
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
-//        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
         new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
         new StoreTerminal(a_conf, "mem1", CommandGene.IntegerClass),
-//        new Increment(a_conf, CommandGene.IntegerClass, 1),
-        new Push(a_conf, CommandGene.IntegerClass),
+        new Increment(a_conf, CommandGene.IntegerClass),
         new NOP(a_conf),
-//        new ADF(a_conf, 1),
     }, {
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
         new AddAndStore(a_conf, CommandGene.IntegerClass, "mem2"),
-        new ForLoop(a_conf, CommandGene.IntegerClass),
-//        new Increment(a_conf, CommandGene.IntegerClass, 1),
-//        new NOP(a_conf),
+        new ForLoop(a_conf, CommandGene.IntegerClass, NUMFIB),
+        new Increment(a_conf, CommandGene.IntegerClass, -1),
         new TransferMemory(a_conf, "mem2", "mem1"),
         new TransferMemory(a_conf, "mem1", "mem0"),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem1"),
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
-//        new ReadTerminal(a_conf, CommandGene.IntegerClass,
-//                                "thruput0"),
-//        new ReadTerminal(a_conf, CommandGene.IntegerClass,
-//                                "thruput1"),
-        //        new Terminal(a_conf, 0,100, CommandGene.IntegerClass),
+        //        new Terminal(a_conf, CommandGene.IntegerClass, 0, 100),
         //        new ModCommand(a_conf, CommandGene.IntegerClass),
         //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
     }, {
+        // Commands will be added programmatically, see below.
+        // ---------------------------------------------------
     }
     };
     // Add commands working with internal memory.
     // ------------------------------------------
-//    nodeSets[1] = CommandFactory.createStoreCommands(nodeSets[1], a_conf,
-//        CommandGene.IntegerClass, "mem", 2);
-//    nodeSets[1] = CommandFactory.createReadOnlyCommands(nodeSets[1], a_conf,
-//        CommandGene.IntegerClass, "mem", 2, 0, !true);
     nodeSets[2] = CommandFactory.createReadOnlyCommands(nodeSets[2], a_conf,
         CommandGene.IntegerClass, "mem", 1, 2, !true);
     // Randomly initialize function data (X-Y table) for Fib(x).
@@ -104,15 +94,7 @@ public class Fibonacci {
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, new boolean[] {true, !true, false});
-  }
-
-  //(Sort of) This is what we would like to (but cannot) find via GP:
-  private static int fib(int a_index) {
-    if (a_index == 0 || a_index == 1) {
-      return 1;
-    }
-    return fib(a_index - 1) + fib(a_index - 2);
+        minDepths, maxDepths, 400, new boolean[] {!true, !true, false});
   }
 
   //(Sort of) This is what we would like to (and can) find via GP:
@@ -150,6 +132,14 @@ public class Fibonacci {
     return numbers[a_index];
   }
 
+  //(Sort of) This is what we would like to (but cannot) find via GP:
+  private static int fib(int a_index) {
+    if (a_index == 0 || a_index == 1) {
+      return 1;
+    }
+    return fib(a_index - 1) + fib(a_index - 2);
+  }
+
   /**
    * Starts the example.
    *
@@ -163,9 +153,18 @@ public class Fibonacci {
     try {
       System.out.println("Program to discover: Fibonacci(x)");
       GPConfiguration config = new GPConfiguration();
-      config.setMaxInitDepth(9);
-      config.setPopulationSize(1200);
+      int popSize;
+      if(args.length == 1) {
+        popSize = Integer.parseInt(args[0]);
+      }
+      else {
+        popSize = 1200;
+      }
+      config.setMaxInitDepth(6);
+      config.setPopulationSize(popSize);
       config.setFitnessFunction(new Fibonacci.FormulaFitnessFunction());
+      config.setStrictProgramCreation(!false);
+      config.setProgramCreationMaxTries(5);
       GPGenotype gp = create(config);
       final Thread t = new Thread(gp);
       // Simple implementation of running evolution in a thread.
@@ -183,8 +182,11 @@ public class Fibonacci {
             System.out.println("Evolving generation " + evno
                                + ", best fitness: " + bestFitness
                                + ", memory free: " + freeMem + " MB");
+            if (bestFitness < 10) {
+              t.stop();
+            }
           }
-          if (evno > 300000) {
+          if (evno > 3000) {
             t.stop();
           }
           else {
