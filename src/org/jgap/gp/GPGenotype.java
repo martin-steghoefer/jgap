@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * Fitness value of the best solution.
@@ -361,6 +361,7 @@ public class GPGenotype
     else {
       System.out.println(" Depths of chromosomes: " + depths);
     }
+    System.out.println(" --------");
   }
 
   /**
