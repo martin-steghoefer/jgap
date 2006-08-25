@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class Add
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Add(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -32,8 +32,7 @@ public class Add
     try {
       Gene gene = new Add(getConfiguration(), getReturnType());
       return gene;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -59,8 +58,8 @@ public class Add
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    return ( (Compatible) c.execute_object(n, 0, args)).execute_add(c.
-        execute_object(n, 1, args));
+    return ( (Compatible) c.execute_object(n, 0, args)).execute_add(
+        c.execute_object(n, 1, args));
   }
 
   public static interface Compatible {
