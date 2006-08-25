@@ -22,17 +22,35 @@ import org.jgap.gp.*;
 public class Increment
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_increment;
 
+  /**
+   * Constructor for using an increment of 1.
+   * @param a_conf the configuration to use
+   * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public Increment(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
     this(a_conf, a_type, 1);
   }
 
-  public Increment(final Configuration a_conf, Class a_type,
-                   int a_increment)
+  /**
+   * Constructor for freely choosable increment.
+   * @param a_conf the configuration to use
+   * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_increment the increment to use, may also be negative
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Increment(final Configuration a_conf, Class a_type, int a_increment)
       throws InvalidConfigurationException {
     super(a_conf, 1, a_type);
     m_increment = a_increment;
@@ -43,8 +61,7 @@ public class Increment
       Gene gene = new Increment(getConfiguration(), getReturnType(),
                                 m_increment);
       return gene;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
