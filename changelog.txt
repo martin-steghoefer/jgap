@@ -9,6 +9,7 @@
   synchronized lists instead of pure ArrayList's
 * Made configuration serializable and marked some references
   in it as transient
+* Removed method Genotype.setActiveConfiguration
 * Ensured that certain properties (such as fitness function)
   can only be set once in the configuration for the current
   thread
