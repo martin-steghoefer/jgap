@@ -13,16 +13,15 @@ import org.jgap.gp.*;
 import org.jgap.*;
 
 /**
- * A terminal having no children. Practically, it may be a static number.
+ * A terminal is a static number that can be mutated.
  *
  * @author Klaus Meffert
  * @since 3.0
  */
 public class Terminal
-    extends CommandGene
-    implements Mutateable {
+    extends CommandGene implements Mutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private String m_value;
 
@@ -37,11 +36,11 @@ public class Terminal
 
   public Terminal(final Configuration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    this(a_conf, 0d, 99d, a_returnType);
+    this(a_conf, a_returnType, 0d, 99d);
   }
 
-  public Terminal(final Configuration a_conf, double a_minValue,
-                  double a_maxValue, Class a_returnType)
+  public Terminal(final Configuration a_conf, Class a_returnType,
+                  double a_minValue, double a_maxValue)
       throws InvalidConfigurationException {
     super(a_conf, 0, a_returnType);
     m_lowerBounds = a_minValue;
@@ -59,8 +58,7 @@ public class Terminal
   protected Gene newGeneInternal() {
     try {
       return new Terminal(getConfiguration(), getReturnType());
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -69,14 +67,13 @@ public class Terminal
     if (isIntegerType()) {
       m_value = new Long(Math.round(a_value)).toString();
     }
-    else if (isFloatType()){
+    else if (isFloatType()) {
       m_value = Double.toString(a_value);
     }
     else {
       throw new UnsupportedOperationException("Setting a value for type "
-                                              + getReturnType()
-                                              +
-          " is not supported with Terminal!");
+          + getReturnType()
+          + " is not supported with Terminal!");
     }
   }
 
@@ -92,14 +89,15 @@ public class Terminal
       double newValue;
       double value = Double.parseDouble(m_value);
       if (value >= (m_upperBounds - m_lowerBounds) / 2) {
-          newValue = value -
-              (getConfiguration().getRandomGenerator().nextDouble() * range);
+        newValue = value -
+            (getConfiguration().getRandomGenerator().nextDouble() * range);
       }
       else {
         newValue = value +
             (getConfiguration().getRandomGenerator().nextDouble() * range);
       }
-      // Ensure value is within bounds
+      // Ensure value is within bounds.
+      // ------------------------------
       if (newValue < m_lowerBounds || newValue > m_upperBounds) {
         setRandomValue();
       }
@@ -110,19 +108,19 @@ public class Terminal
   }
 
   public String toString() {
-    return "terminal(" + m_value + ")";
+    return m_value;
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return Integer.parseInt((String)m_value);
+    return Integer.parseInt( (String) m_value);
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return Long.parseLong((String)m_value);
+    return Long.parseLong( (String) m_value);
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return Float.parseFloat((String)m_value);
+    return Float.parseFloat( (String) m_value);
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
