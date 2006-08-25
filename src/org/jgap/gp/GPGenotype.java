@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Fitness value of the best solution.
@@ -122,12 +122,13 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets)
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+      int a_maxNodes)
       throws InvalidConfigurationException {
     int[] minDepths = null;
     int[] maxDepths = null;
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
-                                 minDepths, maxDepths);
+                                 minDepths, maxDepths, a_maxNodes);
   }
 
   /**
@@ -148,7 +149,7 @@ public class GPGenotype
    * automatically
    * @param a_minDepths array of minimum depths to use: for each chromosome
    * one entry
-   * @param a_maxDepths  array of maximum depths to use: for each chromosome
+   * @param a_maxDepths array of maximum depths to use: for each chromosome
    * one entry
    * @return created population
    * @throws InvalidConfigurationException
@@ -158,14 +159,14 @@ public class GPGenotype
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
       Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-      int[] a_minDepths, int[] a_maxDepths)
+      int[] a_minDepths, int[] a_maxDepths, int a_maxNodes)
       throws InvalidConfigurationException {
     boolean[] fullModeAllowed = new boolean[a_types.length];
     for (int i = 0; i < a_types.length; i++) {
       fullModeAllowed[i] = true;
     }
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
-                                 a_minDepths, a_maxDepths, fullModeAllowed);
+                                 a_minDepths, a_maxDepths, a_maxNodes, fullModeAllowed);
   }
 
   /**
@@ -199,7 +200,8 @@ public class GPGenotype
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
       Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-      int[] a_minDepths, int[] a_maxDepths, boolean[] a_fullModeAllowed)
+      int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
+      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     System.gc();
     System.out.println("Memory consumed before creating population: "
@@ -207,7 +209,7 @@ public class GPGenotype
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
     pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
-               a_fullModeAllowed);
+               a_maxNodes, a_fullModeAllowed);
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");

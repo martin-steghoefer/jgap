@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class GPProgram
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -45,26 +45,14 @@ public class GPProgram
 
   public void growOrFull(int a_depth, Class[] a_types, Class[][] a_argTypes,
                          CommandGene[][] a_nodeSets, int[] a_minDepths,
-                         int[] a_maxDepths, boolean a_grow,
+                         int[] a_maxDepths, boolean a_grow, int a_maxNodes,
                          boolean[] a_fullModeAllowed) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
     for (int i = 0; i < m_chromosomes.length; i++) {
       try {
-        // Construct a chromosome with place for "size" nodes
-        int size;
-        if (a_maxDepths == null) {
-          size = 20;
-        }
-        else {
-          size = a_maxDepths[i];
-        }
-        if (size < 200) {
-          size *= a_nodeSets.length;
-        }
-        if (size < 200) {
-          size = 200;
-        }
-        m_chromosomes[i] = new ProgramChromosome(m_conf, size);
+        // Construct a chromosome with place for a_maxNodes nodes.
+        // -------------------------------------------------------
+        m_chromosomes[i] = new ProgramChromosome(m_conf, a_maxNodes);
       } catch (InvalidConfigurationException iex) {
         throw new RuntimeException(iex);
       }
