@@ -40,12 +40,12 @@ Quite simple examples are included under the examples directory.
 
 About This Release:
 
-This represents a major release introducing the long awaited Genetic
+This represents a major release manifesting the long awaited Genetic
 Programming capabilities (see package org.jgap.gp, we promised it).
 As always, the javadocs have been improved, of curse new unit tests have
-been added, and a new example demonstrates custom randomized population
-initialization. The example was created due to a request on the jgap users
-list.
+been added, and two new example demonstrate JGAP's GP capabilities.
+One of these two examples - Fibonacci calculation - is quite complex and
+demonstrates what is possible with JGAP.
 
 For a general list of changes, fixes, and enhancements that have been
 included in this version, please see the changelog.txt file.
