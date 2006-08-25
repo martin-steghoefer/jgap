@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /*wodka:
    void add(Command cmd);
@@ -300,7 +300,7 @@ public class ProgramChromosome
       return "";
     }
     if (getFunctions()[a_n].getArity() == 0) {
-      return getFunctions()[a_n].getName() + " ";
+      return getFunctions()[a_n].getName();
     }
     String str = "";
     boolean paramOutput = false;
@@ -314,7 +314,6 @@ public class ProgramChromosome
     }
     if (a_n > 0) {
       str = "(" + str;
-//      str += "(";
     }
     for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
       String childString = toString2(getChild(a_n, i));
