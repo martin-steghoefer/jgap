@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -60,18 +60,16 @@ public class GPPopulationTest
     GPPopulation gppop = new GPPopulation(m_gpconf, 10);
     Class[] types = {
         CommandGene.IntegerClass};
-    Class[][] argTypes = {
-        {}
+    Class[][] argTypes = { {}
     };
-    CommandGene[][] nodeSets = {
-        {
+    CommandGene[][] nodeSets = { {
     }
     };
     try {
-      gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 1, true, new boolean[] {true});
+      gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 1,
+                   true, 10, new boolean[] {true});
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -87,11 +85,9 @@ public class GPPopulationTest
     GPPopulation gppop = new GPPopulation(m_gpconf, 10);
     Class[] types = {
         CommandGene.IntegerClass};
-    Class[][] argTypes = {
-        {}
+    Class[][] argTypes = { {}
     };
-    CommandGene[][] nodeSets = {
-        {
+    CommandGene[][] nodeSets = { {
         new Add(m_gpconf, CommandGene.IntegerClass),
         Variable.create(m_gpconf, "X", CommandGene.IntegerClass),
         new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(1)),
@@ -116,11 +112,9 @@ public class GPPopulationTest
     GPPopulation gppop = new GPPopulation(m_gpconf, 10);
     Class[] types = {
         CommandGene.IntegerClass};
-    Class[][] argTypes = {
-        {}
+    Class[][] argTypes = { {}
     };
-    CommandGene[][] nodeSets = {
-        {
+    CommandGene[][] nodeSets = { {
         new Add(m_gpconf, CommandGene.IntegerClass),
         Variable.create(m_gpconf, "X", CommandGene.IntegerClass),
         new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(1)),
@@ -151,11 +145,9 @@ public class GPPopulationTest
     GPPopulation gppop = new GPPopulation(m_gpconf, 10);
     Class[] types = {
         CommandGene.IntegerClass};
-    Class[][] argTypes = {
-        {}
+    Class[][] argTypes = { {}
     };
-    CommandGene[][] nodeSets = {
-        {
+    CommandGene[][] nodeSets = { {
         new Add(m_gpconf, CommandGene.IntegerClass),
         new Subtract(m_gpconf, CommandGene.IntegerClass),
         new Push(m_gpconf, CommandGene.IntegerClass),
@@ -163,10 +155,10 @@ public class GPPopulationTest
     };
     m_gpconf.setRandomGenerator(new StockRandomGenerator());
     try {
-      gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 3, true, new boolean[] {true});
+      gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 3,
+                   true, 10, new boolean[] {true});
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
