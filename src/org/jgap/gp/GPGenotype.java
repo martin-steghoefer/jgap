@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Fitness value of the best solution.
@@ -159,18 +159,19 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                                 Class[] a_types,
-                                                 Class[][] a_argTypes,
-                                                 CommandGene[][] a_nodeSets,
-                                                 int[] a_minDepths, int[] a_maxDepths,
-                                                 boolean[] a_fullModeAllowed)
+      Class[] a_types,
+      Class[][] a_argTypes,
+      CommandGene[][] a_nodeSets,
+      int[] a_minDepths, int[] a_maxDepths,
+      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     System.gc();
     System.out.println("Memory consumed before creating population: "
                        + getTotalMemoryMB() + "MB");
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
-    pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths, a_fullModeAllowed);
+    pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
+               a_fullModeAllowed);
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");
@@ -280,6 +281,7 @@ public class GPGenotype
     if (m_allTimeBest == null
         || m_bestFitness < m_allTimeBest.getFitnessValue()) {
       m_allTimeBest = best;
+      /**@todo inform listeners*/
       outputSolution(best);
     }
   }
@@ -322,7 +324,7 @@ public class GPGenotype
       float val;
       RandomGenerator random = getConfiguration().getRandomGenerator();
       /**@todo make configurable, reactivate*/
-      int popSize1 = (int) Math.round(popSize * 0.8d);
+      int popSize1 = (int) Math.round(popSize * 0.7d);
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
@@ -360,9 +362,9 @@ public class GPGenotype
         // ---------------------------------------------------------------------
         int depth = getGPConfiguration().getMaxInitDepth() - 2
             + random.nextInt(2);
-        GPProgram program = newPopulation.create(depth, (i % 2) == 0,
-                                                 m_fullModeAllowed);
-        newPopulation.setGPProgram(i, program);
+            GPProgram program = newPopulation.create(depth, (i % 2) == 0,
+                m_fullModeAllowed);
+            newPopulation.setGPProgram(i, program);
       }
       // Now set the new population as the active one.
       // ---------------------------------------------
@@ -374,9 +376,9 @@ public class GPGenotype
       // -------------------------------------------------------
       getConfiguration().getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_EVOLVED_EVENT, this));
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       // This should never happen.
+      // -------------------------
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -410,8 +412,7 @@ public class GPGenotype
         // ------------------------------------------------
         Thread.sleep(10);
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
     }
