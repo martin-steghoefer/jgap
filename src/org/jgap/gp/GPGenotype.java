@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Fitness value of the best solution.
@@ -115,6 +115,7 @@ public class GPGenotype
    * nodes. Note that it is not necessary to include the arguments of a
    * chromosome as terminals in the chromosome's node set. This is done
    * automatically
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
    * @return created population
    * @throws InvalidConfigurationException
    *
@@ -151,6 +152,7 @@ public class GPGenotype
    * one entry
    * @param a_maxDepths array of maximum depths to use: for each chromosome
    * one entry
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
    * @return created population
    * @throws InvalidConfigurationException
    *
@@ -166,7 +168,8 @@ public class GPGenotype
       fullModeAllowed[i] = true;
     }
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
-                                 a_minDepths, a_maxDepths, a_maxNodes, fullModeAllowed);
+                                 a_minDepths, a_maxDepths, a_maxNodes,
+                                 fullModeAllowed);
   }
 
   /**
@@ -189,7 +192,8 @@ public class GPGenotype
    * one entry
    * @param a_maxDepths  array of maximum depths to use: for each chromosome
    * one entry
-   * @param a_fullModeAllowed array of boolean values. Fr each chromosome there
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
    * is one value indicating whether the full mode for creating chromosome
    * generations during evolution is allowed (true) or not (false)
    * @return created population
@@ -344,6 +348,20 @@ public class GPGenotype
   public void outputSolution(GPProgram best) {
     System.out.println(" Best solution fitness: " + best.getFitnessValue());
     System.out.println(" Best solution: " + best.toString2(0));
+    String depths = "";
+    int size = best.size();
+    for (int i = 0; i < size; i++) {
+      if (i > 0) {
+        depths += " / ";
+      }
+      depths += best.getChromosome(0).getDepth(0);
+    }
+    if (size == 1) {
+      System.out.println(" Depths of chromosome: " + depths);
+    }
+    else {
+      System.out.println(" Depths of chromosomes: " + depths);
+    }
   }
 
   /**
