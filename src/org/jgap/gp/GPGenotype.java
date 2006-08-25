@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Fitness value of the best solution.
@@ -122,6 +122,41 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets)
+      throws InvalidConfigurationException {
+    int[] minDepths = null;
+    int[] maxDepths = null;
+    return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
+                                 minDepths, maxDepths);
+  }
+
+  /**
+   * Creates a genotype with initial population for the world set.
+   *
+   * @param a_conf the configuration to use
+   * @param a_types the type of each chromosome, the length is the number of
+   * chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each
+   * chromosome, must be an array of arrays, the first dimension of which is the
+   * number of chromosomes and the second dimension of which is the number of
+   * nodes. Note that it is not necessary to include the arguments of a
+   * chromosome as terminals in the chromosome's node set. This is done
+   * automatically
+   * @param a_minDepths array of minimum depths to use: for each chromosome
+   * one entry
+   * @param a_maxDepths  array of maximum depths to use: for each chromosome
+   * one entry
+   * @return created population
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
       Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
       int[] a_minDepths, int[] a_maxDepths)
       throws InvalidConfigurationException {
@@ -149,6 +184,10 @@ public class GPGenotype
    * nodes. Note that it is not necessary to include the arguments of a
    * chromosome as terminals in the chromosome's node set. This is done
    * automatically
+   * @param a_minDepths array of minimum depths to use: for each chromosome
+   * one entry
+   * @param a_maxDepths  array of maximum depths to use: for each chromosome
+   * one entry
    * @param a_fullModeAllowed array of boolean values. Fr each chromosome there
    * is one value indicating whether the full mode for creating chromosome
    * generations during evolution is allowed (true) or not (false)
@@ -159,11 +198,8 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-      Class[] a_types,
-      Class[][] a_argTypes,
-      CommandGene[][] a_nodeSets,
-      int[] a_minDepths, int[] a_maxDepths,
-      boolean[] a_fullModeAllowed)
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+      int[] a_minDepths, int[] a_maxDepths, boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     System.gc();
     System.out.println("Memory consumed before creating population: "
@@ -204,15 +240,15 @@ public class GPGenotype
     return (GPConfiguration) getConfiguration();
   }
 
-  static class FitnessComparator
+  static class GPFitnessComparator
       implements Comparator {
     public int compare(Object o1, Object o2) {
-      if (! (o1 instanceof ProgramChromosome) ||
-          ! (o2 instanceof ProgramChromosome))
+      if (! (o1 instanceof GPProgram) ||
+          ! (o2 instanceof GPProgram))
         throw new ClassCastException(
-            "FitnessComparator must operate on ProgramChromosomes");
-      double f1 = ( (ProgramChromosome) o1).getFitnessValue();
-      double f2 = ( (ProgramChromosome) o2).getFitnessValue();
+            "FitnessComparator must operate on GPProgram's");
+      double f1 = ( (GPProgram) o1).getFitnessValue();
+      double f2 = ( (GPProgram) o2).getFitnessValue();
       if (f1 > f2) {
         return 1;
       }
@@ -233,7 +269,7 @@ public class GPGenotype
    * @since 3.0
    */
   public void evolve(int a_evolutions) {
-    ( (GPPopulation) getPopulation()).sort(new FitnessComparator());
+    ( (GPPopulation) getPopulation()).sort(new GPFitnessComparator());
     // Here, we could do threading.
     for (int i = 0; i < a_evolutions; i++) {
       calcFitness();
@@ -276,7 +312,7 @@ public class GPGenotype
     }
     m_totalFitness = totalFitness;
     GPProgram best = getGPPopulation().determineFittestProgram();
-    /**@todo Do something similar here as with Genotype.preserveFittestChromosome*/
+    /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     m_bestFitness = best.getFitnessValue();
     if (m_allTimeBest == null
         || m_bestFitness < m_allTimeBest.getFitnessValue()) {
@@ -362,9 +398,9 @@ public class GPGenotype
         // ---------------------------------------------------------------------
         int depth = getGPConfiguration().getMaxInitDepth() - 2
             + random.nextInt(2);
-            GPProgram program = newPopulation.create(depth, (i % 2) == 0,
-                m_fullModeAllowed);
-            newPopulation.setGPProgram(i, program);
+        GPProgram program = newPopulation.create(depth, (i % 2) == 0,
+            m_fullModeAllowed);
+        newPopulation.setGPProgram(i, program);
       }
       // Now set the new population as the active one.
       // ---------------------------------------------
