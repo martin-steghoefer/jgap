@@ -31,7 +31,7 @@ import org.jgap.gp.function.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   static Variable vx;
 
@@ -47,21 +47,19 @@ public class Fibonacci {
       throws InvalidConfigurationException {
     Class[] types = {
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
-    Class[][] argTypes = {
-        {}, {}, {}
+    Class[][] argTypes = { {}, {}, {}
     };
     int[] minDepths = new int[] {3, 4, 1};
     int[] maxDepths = new int[] {3, 4, 1};
     /**@todo allow to optionally preset a static program in each chromosome*/
-    CommandGene[][] nodeSets = {
-        {
+    CommandGene[][] nodeSets = { {
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
-        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
+//        new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
         new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
         new StoreTerminal(a_conf, "mem1", CommandGene.IntegerClass),
-        new Increment(a_conf, CommandGene.IntegerClass, 1),
+//        new Increment(a_conf, CommandGene.IntegerClass, 1),
         new Push(a_conf, CommandGene.IntegerClass),
         new NOP(a_conf),
 //        new ADF(a_conf, 1),
@@ -69,12 +67,12 @@ public class Fibonacci {
         vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
         new AddAndStore(a_conf, CommandGene.IntegerClass, "mem2"),
         new ForLoop(a_conf, CommandGene.IntegerClass),
-        new Increment(a_conf, CommandGene.IntegerClass, 1),
-        new NOP(a_conf),
+//        new Increment(a_conf, CommandGene.IntegerClass, 1),
+//        new NOP(a_conf),
         new TransferMemory(a_conf, "mem2", "mem1"),
         new TransferMemory(a_conf, "mem1", "mem0"),
-        new ReadTerminal(a_conf, CommandGene.IntegerClass,"mem0"),
-        new ReadTerminal(a_conf, CommandGene.IntegerClass,"mem1"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
+        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem1"),
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
 //        new ReadTerminal(a_conf, CommandGene.IntegerClass,
@@ -106,7 +104,7 @@ public class Fibonacci {
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
-                                            minDepths, maxDepths, new boolean[] {true, true, false});
+        minDepths, maxDepths, new boolean[] {true, !true, false});
   }
 
   //(Sort of) This is what we would like to (but cannot) find via GP:
@@ -124,9 +122,9 @@ public class Fibonacci {
       return 1;
     }
     // 2
-    int a = 1;//Store("mem0", Constant(1))
-    int b = 1;//Store("mem1", Constant(1))
-    int x = 0;//Store("mem2", Constant(0))
+    int a = 1; //Store("mem0", Constant(1))
+    int b = 1; //Store("mem1", Constant(1))
+    int x = 0; //Store("mem2", Constant(0))
     // 3
     for (int i = 2; i <= a_index; i++) { //FORX (Subprogram(A;B;C))
       x = a + b; // A: AddAndStore(Read("mem0"),Read("mem1"),"mem2")
@@ -173,8 +171,8 @@ public class Fibonacci {
       // Simple implementation of running evolution in a thread.
       // -------------------------------------------------------
       config.getEventManager().addEventListener(GeneticEvent.
-                                                GPGENOTYPE_EVOLVED_EVENT,
-                                                new GeneticEventListener() {
+          GPGENOTYPE_EVOLVED_EVENT,
+          new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getConfiguration().getGenerationNr();
@@ -201,19 +199,17 @@ public class Fibonacci {
                 // Avoid 100% CPU load
                 t.sleep(30);
               }
+            } catch (InterruptedException iex) {
+              iex.printStackTrace();
+              System.exit(1);
             }
-              catch (InterruptedException iex) {
-                iex.printStackTrace();
-                System.exit(1);
-              }
           }
         }
       });
       t.start();
 //      gp.evolve(1200);
 //      gp.outputSolution(gp.getAllTimeBest());
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
     }
@@ -234,9 +230,9 @@ public class Fibonacci {
       GPGenotype.getGPConfiguration().clearMemory();
       // Compute fitness for each program.
       // ---------------------------------
-      for (int j = 0; j < a_program.size(); j++) {
-        /**@todo check if program valid, i.e. worth evaluating*/
-        for (int i = 2; i < NUMFIB; i++) {
+      /**@todo check if program valid, i.e. worth evaluating*/
+      for (int i = 2; i < NUMFIB; i++) {
+        for (int j = 0; j < a_program.size(); j++) {
           vx.set(x[i]);
           try {
             try {
@@ -251,13 +247,11 @@ public class Fibonacci {
                 /**@todo use init. params to distinguish program flow*/
                 a_program.execute_void(j, noargs);
               }
-            }
-            catch (IllegalStateException iex) {
+            } catch (IllegalStateException iex) {
               error = Double.MAX_VALUE / 2; /**@todo use constant*/
               break;
             }
-          }
-          catch (ArithmeticException ex) {
+          } catch (ArithmeticException ex) {
             System.out.println("x = " + x[i].intValue());
             System.out.println(a_program.getChromosome(j));
             throw ex;
