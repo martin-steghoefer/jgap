@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -71,7 +71,6 @@ public class GPGenotypeTest
     assertSame(pop, gen.getGPPopulation());
   }
 
-
   public void testRandomInitialize_0()
       throws Exception {
     Variable vx;
@@ -95,6 +94,7 @@ public class GPGenotypeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //5
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //6
         CMD_SUB_V_V_V, //7
+        new Increment(m_gpconf, CommandGene.IntegerClass, -1), //8
     }, {
     }
     };
@@ -104,8 +104,8 @@ public class GPGenotypeTest
         CommandGene.IntegerClass, "mem", 1, 2, !true);
     // Execute the functionality to test.
     // ----------------------------------
-    rn.setNextIntSequence(new int[] {2, 1, 3, 1,
-                          0, 7, 1, 5, 6, 4, 3});
+    rn.setNextIntSequence(new int[] {0, 2, 1, 3, 1,
+                          2, 8, 0, 7, 1, 5, 6, 4, 3});
     m_gpconf.setPopulationSize(1);
     GPGenotype gen = GPGenotype.randomInitialGenotype(m_gpconf, types, argTypes,
         nodeSets, minDepths, maxDepths, 200, new boolean[] {true, true, false});
@@ -122,15 +122,17 @@ public class GPGenotypeTest
     assertSame(CMD_CONST1, p.getChromosome(0).getNode(4));
     // Evaluate program 2
     // ------------------
-    assertEquals(8, p.getChromosome(1).size());
-    assertSame(CMD_FOR, p.getChromosome(1).getNode(0));
-    assertEquals(Variable.class, p.getChromosome(1).getNode(1).getClass());
-    assertSame(CMD_SUB_V_V_V, p.getChromosome(1).getNode(2));
-    assertEquals(AddAndStore.class, p.getChromosome(1).getNode(3).getClass());
-    assertEquals(ReadTerminal.class, p.getChromosome(1).getNode(4).getClass());
-    assertEquals(ReadTerminal.class, p.getChromosome(1).getNode(5).getClass());
-    assertEquals(TransferMemory.class, p.getChromosome(1).getNode(6).getClass());
-    assertEquals(TransferMemory.class, p.getChromosome(1).getNode(7).getClass());
+    int node = 0;
+    assertEquals(9, p.getChromosome(1).size());
+    assertSame(CMD_FOR, p.getChromosome(1).getNode(node++));
+    assertEquals(Increment.class, p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(Variable.class, p.getChromosome(1).getNode(node++).getClass());
+    assertSame(CMD_SUB_V_V_V, p.getChromosome(1).getNode(node++));
+    assertEquals(AddAndStore.class, p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(ReadTerminal.class, p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(ReadTerminal.class, p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(TransferMemory.class, p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(TransferMemory.class, p.getChromosome(1).getNode(node++).getClass());
     // Evaluate program 3
     // ------------------
     assertEquals(1, p.getChromosome(2).size());
@@ -147,13 +149,11 @@ public class GPGenotypeTest
     GPGenotype.getGPConfiguration().clearMemory();
     // Compute fitness for each program.
     // ---------------------------------
-      /**@todo check if program valid, i.e. worth evaluating*/
-      for (int i = 2; i < 15; i++) {
-        for (int j = 0; j < a_program.size(); j++) {
+    for (int i = 2; i < 15; i++) {
+      for (int j = 0; j < a_program.size(); j++) {
         vx.set(new Integer(i));
         try {
           try {
-//            double result = a_program.getChromosome(j).execute_int(noargs);
             // Only evaluate after whole GP program was run.
             // ---------------------------------------------
             if (j == a_program.size() - 1) {
@@ -161,11 +161,10 @@ public class GPGenotypeTest
               error += Math.abs(result - fib_iter(i));
             }
             else {
-              /**@todo use init. params to distinguish program flow*/
               a_program.execute_void(j, noargs);
             }
           } catch (IllegalStateException iex) {
-            error = Double.MAX_VALUE / 2; /**@todo use constant*/
+            error = Double.MAX_VALUE / 2;
             break;
           }
         } catch (ArithmeticException ex) {
