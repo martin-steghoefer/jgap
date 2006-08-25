@@ -59,7 +59,7 @@ public abstract class GPTestCase
       CMD_CONST4 = new Constant(m_gpconf, CommandGene.IntegerClass,
                                 new Integer(4));
       CMD_NOP = new NOP(m_gpconf);
-      CMD_FOR = new ForLoop(m_gpconf, CommandGene.IntegerClass);
+      CMD_FOR = new ForLoop(m_gpconf, CommandGene.IntegerClass, 15);
       CMD_FORX = new ForXLoop(m_gpconf, CommandGene.IntegerClass);
       CMD_SUB_V_I = new SubProgram(m_gpconf,
                                    new Class[] {CommandGene.VoidClass,
@@ -80,5 +80,5 @@ public abstract class GPTestCase
 
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 }
