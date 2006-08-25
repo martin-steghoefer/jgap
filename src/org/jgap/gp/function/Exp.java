@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class Exp
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Exp(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -36,11 +36,6 @@ public class Exp
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
   }
 
   public String toString() {
