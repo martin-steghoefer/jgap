@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /*wodka:
    void add(Command cmd);
@@ -189,7 +189,7 @@ public class ProgramChromosome
       // Initialization of genotype according to specific problem requirements.
       // ----------------------------------------------------------------------
       CommandGene n = null;
-      if (a_num == 0) { /**@todo experimental*/
+      if (a_num == 0 && false) {
         for (int i = 0; i < m_functionSet.length; i++) {
           CommandGene m = m_functionSet[i];
           if (m.getClass() == SubProgram.class) {
@@ -198,7 +198,7 @@ public class ProgramChromosome
           }
         }
       }
-      else if (a_num == 1) { /**@todo experimental*/
+      else if (a_num == 1 && false) {
         for (int i = 0; i < m_functionSet.length; i++) {
           CommandGene m = m_functionSet[i];
           if (m.getClass() == ForLoop.class) {
@@ -1100,76 +1100,6 @@ public class ProgramChromosome
 
   public Object execute(int n, int child, Object[] args) {
     return execute_object(n, child, args);
-  }
-
-  /**
-   * Initializes all chromosomes in this individual using the grow method.
-   *
-   * @param depth the depth of the chromosome to create
-   * @param types the type of each chromosome, must be an array of the same
-   * length as the number of chromosomes
-   * @param a_argTypes the types of the arguments to each chromosome, must be an
-   * array of arrays, the first dimension of which is the number of chromosomes
-   * and the second dimension of which is the number of arguments to the
-   * chromosome
-   * @param nodeSets the nodes which are allowed to be used by each chromosome,
-   * must be an array of arrays, the first dimension of which is the number of
-   * chromosomes and the second dimension of which is the number of nodes. Note
-   * that it is not necessary to include the arguments of a chromosome as
-   * terminals in the chromosome's node set. This is done automatically for you
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public void grow(int depth, Class[] types,
-                   Class[][] a_argTypes, CommandGene[][] nodeSets) {
-    /**@todo obsolete*/
-//    CommandGene.setIndividual(this);
-    argTypes = a_argTypes[0];
-    // If there are any ADF's in the nodeSet, then set its type
-    // according to the chromosome it references
-    for (int j = 0; j < nodeSets[0].length; j++) {
-      /**@todo implement ADF and reactivate the following*/
-//        if (nodeSets[0][j] instanceof ADF)
-//          ( (ADF) nodeSets[i][j]).setReturnType(
-//              types[ ( (ADF) nodeSets[0][j]).getChromosomeNum()]);
-    }
-    growOrFull(0, depth, types[0], a_argTypes[0], nodeSets[0], true);
-  }
-
-  /**
-   * Initializes all chromosomes in this individual using the full method.
-   *
-   * @param depth the depth of the chromosome to create
-   * @param types the type of each chromosome, must be an array of the same
-   * length as the number of chromosomes
-   * @param a_argTypes the types of the arguments to each chromosome, must be an
-   * array of arrays, the first dimension of which is the number of chromosomes
-   * and the second dimension of which is the number of arguments to the
-   * chromosome
-   * @param nodeSets the nodes which are allowed to be used by each chromosome,
-   * must be an array of arrays, the first dimension of which is the number of
-   * chromosomes and the second dimension of which is the number of nodes.
-   * Note that it is not necessary to include the arguments of a chromosome as
-   * terminals in the chromosome's node set. This is done automatically for you
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public void full(int depth, Class[] types,
-                   Class[][] a_argTypes, CommandGene[][] nodeSets) {
-//    CommandGene.setIndividual(this);
-    /**@todo obsolete*/
-    argTypes = a_argTypes[0];
-    // If there are any ADF's in the nodeSet, then set its type
-    // according to the chromosome it references
-    for (int j = 0; j < nodeSets[0].length; j++) {
-      /**@todo implement ADF impl and reactivate the following*/
-//      if (nodeSets[0][j] instanceof ADF)
-//        ( (ADF) nodeSets[i][j]).setReturnType(
-//            types[ ( (ADF) nodeSets[0][j]).getChromosomeNum()]);
-    }
-    growOrFull(0, depth, types[0], a_argTypes[0], nodeSets[0], false);
   }
 
   public void setGene(int index, Gene a_gene) {
