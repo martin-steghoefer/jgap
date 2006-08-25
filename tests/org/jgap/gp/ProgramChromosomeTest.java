@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -180,7 +180,7 @@ public class ProgramChromosomeTest
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Variable(conf, "X", CommandGene.IntegerClass));
     pc.redepth();
-    assertEquals("X ", pc.toString2(0));
+    assertEquals("X", pc.toString2(0));
   }
 
   /**
@@ -196,7 +196,7 @@ public class ProgramChromosomeTest
     pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("INC(X )", s);
+    assertEquals("INC(X)", s);
   }
 
   /**
@@ -213,7 +213,7 @@ public class ProgramChromosomeTest
     pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("X  + Y ", s);
+    assertEquals("X + Y", s);
   }
 
   /**
@@ -230,7 +230,7 @@ public class ProgramChromosomeTest
     pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("X  % Y ", s);
+    assertEquals("X % Y", s);
   }
 
   /**
@@ -247,9 +247,9 @@ public class ProgramChromosomeTest
     pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(1);
-    assertEquals("X ", s);
+    assertEquals("X", s);
     s = pc.toString2(2);
-    assertEquals("Y ", s);
+    assertEquals("Y", s);
   }
 
   /**
@@ -268,9 +268,9 @@ public class ProgramChromosomeTest
     pc.setGene(4, new Variable(conf, "Z", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("(X  - Y ) % Z ", s);
+    assertEquals("(X - Y) % Z", s);
     s = pc.toString2(1);
-    assertEquals("(X  - Y )", s);
+    assertEquals("(X - Y)", s);
   }
 
   /**
@@ -288,9 +288,9 @@ public class ProgramChromosomeTest
     pc.setGene(3, new Variable(conf, "X", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(1);
-    assertEquals("(push X )", s);
+    assertEquals("(push X)", s);
     s = pc.toString2(0);
-    assertEquals("(push X ) * X ", s);
+    assertEquals("(push X) * X", s);
   }
 
   /**
@@ -315,7 +315,7 @@ public class ProgramChromosomeTest
     pc.setGene(6, new Constant(conf, CommandGene.IntegerClass, new Integer(7)));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("sub[(X  * Y ) --> (push X ) --> 7 ]", s);
+    assertEquals("sub[(X * Y) --> (push X) --> 7]", s);
   }
 
   /**
@@ -338,7 +338,7 @@ public class ProgramChromosomeTest
     pc.setGene(5, new Constant(conf, CommandGene.IntegerClass, new Integer(9)));
     pc.redepth();
     String s = pc.toString2(0);
-    assertEquals("sub[(X  * Y ) --> (push 9 )]", s);
+    assertEquals("sub[(X * Y) --> (push 9)]", s);
   }
 
   /**

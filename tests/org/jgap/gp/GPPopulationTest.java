@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -45,7 +45,7 @@ public class GPPopulationTest
       throws Exception {
     GPPopulation gppop = new GPPopulation(m_gpconf, 10);
     assertEquals(10, gppop.getPopSize());
-    assertEquals(0, gppop.size());
+    assertEquals(10, gppop.size());
   }
 
   /**

@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPProgramTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPProgramTest.class);
@@ -88,25 +88,25 @@ public class GPProgramTest
     vx.set(new Integer(2));
     prog.execute_void(1, noargs);
     int result = prog.execute_int(2, noargs);
-    assertEquals(2, result);
+    assertEquals(3, result);
     // 3
     prog.execute_void(0, noargs);
     vx.set(new Integer(3));
     prog.execute_void(1, noargs);
     result = prog.execute_int(2, noargs);
-    assertEquals(3, result);
+    assertEquals(5, result);
     // 4
     prog.execute_void(0, noargs);
     vx.set(new Integer(4));
     prog.execute_void(1, noargs);
     result = prog.execute_int(2, noargs);
-    assertEquals(5, result);
+    assertEquals(8, result);
     // 7
     prog.execute_void(0, noargs);
     vx.set(new Integer(7));
     prog.execute_void(1, noargs);
     result = prog.execute_int(2, noargs);
-    assertEquals(21, result);
+    assertEquals(34, result);
   }
 
   /**
