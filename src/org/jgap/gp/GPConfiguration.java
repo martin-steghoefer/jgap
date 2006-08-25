@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -32,7 +32,6 @@ public class GPConfiguration
    * or the bulk fitness function may be set - the two are mutually exclusive.
    */
   private GPFitnessFunction m_objectiveFunction;
-
 
   /**
    * Internal stack, see PushCommand for example.
@@ -76,6 +75,10 @@ public class GPConfiguration
    * The method of crossing over two individuals during evolution.
    */
   private CrossMethod m_crossMethod;
+
+  private boolean m_strictProgramCreation = true;
+
+  private int m_programCreationMaxTries = 3;
 
   /**
    * @throws InvalidConfigurationException
@@ -258,5 +261,21 @@ public class GPConfiguration
     checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
                   "Fitness function has already been set differently.");
     m_objectiveFunction = a_functionToSet;
+  }
+
+  public boolean isStrictProgramCreation() {
+      return m_strictProgramCreation;
+  }
+
+  public void setStrictProgramCreation(boolean a_strict) {
+    m_strictProgramCreation = a_strict;
+  }
+
+  public int getProgramCreationMaxtries() {
+    return m_programCreationMaxTries;
+  }
+
+  public void setProgramCreationMaxTries(int a_maxtries) {
+    m_programCreationMaxTries = a_maxtries;
   }
 }
