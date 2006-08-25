@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Fitness value of the best solution.
@@ -280,7 +280,6 @@ public class GPGenotype
     for (int i = 0; i < a_evolutions; i++) {
       calcFitness();
       if (m_bestFitness < 0.000001) {
-        /**@todo make configurable --> use listener*/
         // Optimal solution found, quit.
         // -----------------------------
         return;
@@ -340,24 +339,24 @@ public class GPGenotype
 
   /**
    * Outputs the best solution currently found.
-   * @param best the fittest ProgramChromosome
+   * @param a_best the fittest ProgramChromosome
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void outputSolution(GPProgram best) {
-    System.out.println(" Best solution fitness: " + best.getFitnessValue());
-    System.out.println(" Best solution: " + best.toString2(0));
+  public void outputSolution(GPProgram a_best) {
+    System.out.println(" Best solution fitness: " + a_best.getFitnessValue());
+    System.out.println(" Best solution: " + a_best.toString2(0));
     String depths = "";
-    int size = best.size();
+    int size = a_best.size();
     for (int i = 0; i < size; i++) {
       if (i > 0) {
         depths += " / ";
       }
-      depths += best.getChromosome(0).getDepth(0);
+      depths += a_best.getChromosome(i).getDepth(0);
     }
     if (size == 1) {
-      System.out.println(" Depths of chromosome: " + depths);
+      System.out.println(" Depth of chromosome: " + depths);
     }
     else {
       System.out.println(" Depths of chromosomes: " + depths);
@@ -379,7 +378,7 @@ public class GPGenotype
       GPPopulation newPopulation = new GPPopulation(oldPop);
       float val;
       RandomGenerator random = getConfiguration().getRandomGenerator();
-      /**@todo make configurable, reactivate*/
+      /**@todo make configurable*/
       int popSize1 = (int) Math.round(popSize * 0.7d);
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
