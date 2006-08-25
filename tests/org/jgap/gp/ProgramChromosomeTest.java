@@ -22,25 +22,9 @@ import org.jgap.gp.function.*;
  * @since 3.0
  */
 public class ProgramChromosomeTest
-    extends JGAPTestCase {
+    extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
-
-  private GPConfiguration m_gpconf;
-
-  private RandomGeneratorForTest rn;
-
-  private Constant CMD_CONST0, CMD_CONST1, CMD_CONST2, CMD_CONST3, CMD_CONST4;
-
-  private Add CMD_ADD;
-
-  private ForLoop CMD_FOR;
-  private ForXLoop CMD_FORX;
-
-  private SubProgram CMD_SUB_V_I;
-  private SubProgram CMD_SUB_V_V_V;
-
-  private NOP CMD_NOP;
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -49,37 +33,6 @@ public class ProgramChromosomeTest
 
   public void setUp() {
     super.setUp();
-    try {
-      GPConfiguration.reset();
-      m_gpconf = new GPConfiguration();
-      m_gpconf.setPopulationSize(10);
-      rn = new RandomGeneratorForTest(1);
-      m_gpconf.setRandomGenerator(rn);
-      CMD_CONST0 = new Constant(m_gpconf, CommandGene.IntegerClass,
-                                new Integer(0));
-      CMD_CONST1 = new Constant(m_gpconf, CommandGene.IntegerClass,
-                                new Integer(1));
-      CMD_CONST2 = new Constant(m_gpconf, CommandGene.IntegerClass,
-                                new Integer(2));
-      CMD_CONST3 = new Constant(m_gpconf, CommandGene.IntegerClass,
-                                new Integer(3));
-      CMD_CONST4 = new Constant(m_gpconf, CommandGene.IntegerClass,
-                                new Integer(4));
-      CMD_NOP = new NOP(m_gpconf);
-      CMD_FOR = new ForLoop(m_gpconf, CommandGene.IntegerClass);
-      CMD_FORX = new ForXLoop(m_gpconf, CommandGene.IntegerClass);
-      CMD_SUB_V_I = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.VoidClass,
-                                   CommandGene.IntegerClass});
-      CMD_SUB_V_V_V = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.VoidClass,
-                                   CommandGene.VoidClass,
-                                   CommandGene.VoidClass});
-      CMD_ADD = new Add(m_gpconf, CommandGene.IntegerClass);
-    }
-    catch (Exception ex) {
-      throw new RuntimeException(ex);
-    }
   }
 
   /**
@@ -205,6 +158,7 @@ public class ProgramChromosomeTest
     rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 6, 7});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, funcSet, CMD_FOR, 0, true);
     pc.redepth();
+    assertEquals(3, pc.getDepth(0));
     assertSame(CMD_FOR, pc.getNode(0));
     assertEquals(Variable.class, pc.getNode(1).getClass());
     assertSame(CMD_SUB_V_V_V, pc.getNode(2));

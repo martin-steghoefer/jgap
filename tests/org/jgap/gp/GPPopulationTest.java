@@ -22,13 +22,9 @@ import org.jgap.gp.function.*;
  * @since 3.0
  */
 public class GPPopulationTest
-    extends JGAPTestCase {
+    extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
-
-  private GPConfiguration m_gpconf;
-
-  private RandomGeneratorForTest rn;
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -37,16 +33,6 @@ public class GPPopulationTest
 
   public void setUp() {
     super.setUp();
-    try {
-      GPConfiguration.reset();
-      m_gpconf = new GPConfiguration();
-      rn = new RandomGeneratorForTest(3);
-      m_gpconf.setRandomGenerator(rn);
-      m_gpconf.setPopulationSize(10);
-    }
-    catch (Exception ex) {
-      throw new RuntimeException(ex);
-    }
   }
 
   /**
@@ -82,7 +68,7 @@ public class GPPopulationTest
     }
     };
     try {
-      gppop.create(types, argTypes, nodeSets, new int[] {1}, 1, true, new boolean[] {true});
+      gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 1, true, new boolean[] {true});
       fail();
     }
     catch (IllegalArgumentException iex) {
@@ -177,7 +163,7 @@ public class GPPopulationTest
     };
     m_gpconf.setRandomGenerator(new StockRandomGenerator());
     try {
-      gppop.create(types, argTypes, nodeSets, new int[] {1}, 3, true, new boolean[] {true});
+      gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 3, true, new boolean[] {true});
       fail();
     }
     catch (IllegalArgumentException iex) {

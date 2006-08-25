@@ -20,9 +20,9 @@ import org.jgap.*;
  * @since 3.0
  */
 public class GPConfigurationTest
-    extends JGAPTestCase {
+    extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private GPConfiguration m_gpconf;
 
@@ -33,14 +33,6 @@ public class GPConfigurationTest
 
   public void setUp() {
     super.setUp();
-    try {
-      GPConfiguration.reset();
-      m_gpconf = new GPConfiguration();
-      m_gpconf.setPopulationSize(10);
-    }
-    catch (Exception ex) {
-      throw new RuntimeException(ex);
-    }
   }
 
   /**
