@@ -21,7 +21,7 @@ import java.util.*;
 public class GPPopulation
     extends Population {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -80,9 +80,12 @@ public class GPPopulation
     m_avail_types = (Class[])a_pop.m_avail_types.clone();
     m_avail_nodeSets = (CommandGene[][])a_pop.m_avail_nodeSets.clone();
 
-    m_maxDepths = (int[])a_pop.m_maxDepths.clone();
-    m_minDepths = (int[])a_pop.m_minDepths.clone();
-
+    if (a_pop.m_maxDepths != null) {
+      m_maxDepths = (int[]) a_pop.m_maxDepths.clone();
+    }
+    if (a_pop.m_minDepths != null) {
+      m_minDepths = (int[]) a_pop.m_minDepths.clone();
+    }
     m_popSize = a_pop.getPopSize();
 
     m_programs = new GPProgram[m_popSize];/**@todo is m_popSize correct?*/
@@ -187,15 +190,15 @@ public class GPPopulation
                      int a_depth, boolean a_grow, boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     GPProgram program = new GPProgram(getGPConfiguration(), a_types.length);
-    program.growOrFull(a_depth, a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
-                       a_grow, a_fullModeAllowed);
+    program.growOrFull(a_depth, a_types, a_argTypes, a_nodeSets, a_minDepths,
+                       a_maxDepths, a_grow, a_fullModeAllowed);
     return program;
   }
 
   protected GPProgram create(int a_depth, boolean a_grow, boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
-    return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, m_minDepths, m_maxDepths,
-                  a_depth, a_grow, a_fullModeAllowed);
+    return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, m_minDepths,
+                  m_maxDepths, a_depth, a_grow, a_fullModeAllowed);
   }
 
   /**

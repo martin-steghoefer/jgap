@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class GPProgram
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -43,15 +43,21 @@ public class GPProgram
     m_chromosomes[a_index] = a_chrom;
   }
 
-  public void growOrFull(int a_depth, Class[] a_types,
-                         Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-                         int[] a_minDepths, int[] a_maxDepths,
-                         boolean a_grow, boolean[] a_fullModeAllowed) {
+  public void growOrFull(int a_depth, Class[] a_types, Class[][] a_argTypes,
+                         CommandGene[][] a_nodeSets, int[] a_minDepths,
+                         int[] a_maxDepths, boolean a_grow,
+                         boolean[] a_fullModeAllowed) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
     for (int i = 0; i < m_chromosomes.length; i++) {
       try {
         // Construct a chromosome with place for "size" nodes
-        int size = a_maxDepths[i];
+        int size;
+        if (a_maxDepths == null) {
+          size = 20;
+        }
+        else {
+          size = a_maxDepths[i];
+        }
         if (size < 200) {
           size *= a_nodeSets.length;
         }
@@ -75,11 +81,11 @@ public class GPProgram
     for (int i = 0; i < m_chromosomes.length; i++) {
       // Restrict depth to input params.
       // -------------------------------
-      if (a_depth > a_maxDepths[i]) {
+      if (a_maxDepths != null && a_depth > a_maxDepths[i]) {
         depth = a_maxDepths[i];
       }
       else {
-        if (a_depth < a_minDepths[i]) {
+        if (a_minDepths != null && a_depth < a_minDepths[i]) {
           depth = a_minDepths[i];
         }
         else {
