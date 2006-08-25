@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /*wodka:
    void add(Command cmd);
@@ -203,7 +203,7 @@ public class ProgramChromosome
       else if (a_num == 1) { /**@todo experimental*/
         for (int i = 0; i < m_functionSet.length; i++) {
           CommandGene m = m_functionSet[i];
-          if (m.getClass() == ForXLoop.class) {
+          if (m.getClass() == ForLoop.class) {
             n = m;
             break;
           }
@@ -413,12 +413,13 @@ public class ProgramChromosome
       while (/*(a_num == 0 && a_recurseLevel > 0 &&
              a_rootNode.getClass() == SubProgram.class)
              || */(a_num == 1 && ((a_recurseLevel > 0 &&
-             a_rootNode.getClass() == ForXLoop.class) || (a_recurseLevel == 0
-         && a_rootNode.getClass() != ForXLoop.class)
-                        || (a_recurseLevel == 1 && a_depth > 1
-         && a_rootNode.getClass() != SubProgram.class)
-                        || (a_recurseLevel > 1
-         && a_rootNode.getClass() == SubProgram.class))));
+             a_rootNode.getClass() == ForLoop.class) || (a_recurseLevel == 0
+         && a_rootNode.getClass() != ForLoop.class)
+//                        || (a_recurseLevel == 1 && a_depth > 1
+//         && a_rootNode.getClass() != SubProgram.class && a_rootNode.getClass() != Variable.class)
+//                        || (a_recurseLevel != 1
+//         && a_rootNode.getClass() == SubProgram.class)
+         )));
     }
     // Generate the node.
     // ------------------
