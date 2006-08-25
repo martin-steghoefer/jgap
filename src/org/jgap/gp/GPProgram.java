@@ -11,7 +11,6 @@ package org.jgap.gp;
 
 import java.io.*;
 import org.jgap.*;
-import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
 
 /**
@@ -23,7 +22,7 @@ import org.jgap.gp.function.*;
 public class GPProgram
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -60,8 +59,7 @@ public class GPProgram
           size = 200;
         }
         m_chromosomes[i] = new ProgramChromosome(m_conf, size);
-      }
-      catch (InvalidConfigurationException iex) {
+      } catch (InvalidConfigurationException iex) {
         throw new RuntimeException(iex);
       }
       m_chromosomes[i].setArgTypes(a_argTypes[i]);
@@ -82,7 +80,7 @@ public class GPProgram
       }
       else {
         if (a_depth < a_minDepths[i]) {
-         depth = a_minDepths[i];
+          depth = a_minDepths[i];
         }
         else {
           depth = a_depth;
