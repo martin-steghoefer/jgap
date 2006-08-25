@@ -2,7 +2,8 @@
 -----------------------------------------------------------
 * Added genetic programming capabilities to JGAP.
   The classes are put into package org.jgap.gp.
-  An example could be found in package examples.gp
+  An example could be found in package examples.gp.
+  Some unit tsts are available as well
 * Made JGAP distributed by converting several fields to
   transient, making classes serializable, and using
   synchronized lists instead of pure ArrayList's
