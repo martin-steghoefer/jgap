@@ -31,7 +31,7 @@ import org.jgap.gp.function.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   static Variable vx;
 
@@ -50,18 +50,17 @@ public class Fibonacci {
     Class[][] argTypes = {
         {}, {}, {}
     };
-    int[] maxDepths = new int[] {
-        3, 5, 1};
+    int[] minDepths = new int[] {3, 4, 1};
+    int[] maxDepths = new int[] {3, 4, 1};
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = {
         {
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass, CommandGene.VoidClass}),
+                       CommandGene.VoidClass}),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(a_conf, CommandGene.IntegerClass, new Integer(0)),
         new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
         new StoreTerminal(a_conf, "mem1", CommandGene.IntegerClass),
-        new StoreTerminal(a_conf, "mem2", CommandGene.IntegerClass),
         new Increment(a_conf, CommandGene.IntegerClass, 1),
         new Push(a_conf, CommandGene.IntegerClass),
         new NOP(a_conf),
@@ -107,7 +106,7 @@ public class Fibonacci {
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
-                                            maxDepths, new boolean[] {true, true, false});
+                                            minDepths, maxDepths, new boolean[] {true, true, false});
   }
 
   //(Sort of) This is what we would like to (but cannot) find via GP:

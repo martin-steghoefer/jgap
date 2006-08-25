@@ -25,7 +25,7 @@ import org.jgap.gp.function.*;
 public class MathProblem
     extends GPGenotype {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   static Variable vx;
 
@@ -67,7 +67,7 @@ public class MathProblem
     }
     // Create genotype with initial population
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
-                                            new int[999], new boolean[] {true});
+                                            new int[1], new int[999], new boolean[] {true});
   }
 
   /**

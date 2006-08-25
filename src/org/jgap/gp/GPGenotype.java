@@ -23,7 +23,7 @@ import org.jgap.event.*;
 public class GPGenotype
     extends Genotype implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Fitness value of the best solution.
@@ -122,17 +122,15 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                                 Class[] a_types,
-                                                 Class[][] a_argTypes,
-                                                 CommandGene[][] a_nodeSets,
-                                                 int[] a_maxDepths)
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+      int[] a_minDepths, int[] a_maxDepths)
       throws InvalidConfigurationException {
     boolean[] fullModeAllowed = new boolean[a_types.length];
     for (int i = 0; i < a_types.length; i++) {
       fullModeAllowed[i] = true;
     }
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
-                                 a_maxDepths, fullModeAllowed);
+                                 a_minDepths, a_maxDepths, fullModeAllowed);
   }
 
   /**
@@ -164,7 +162,7 @@ public class GPGenotype
                                                  Class[] a_types,
                                                  Class[][] a_argTypes,
                                                  CommandGene[][] a_nodeSets,
-                                                 int[] a_maxDepths,
+                                                 int[] a_minDepths, int[] a_maxDepths,
                                                  boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     System.gc();
@@ -172,7 +170,7 @@ public class GPGenotype
                        + getTotalMemoryMB() + "MB");
     System.out.println("Creating initial population");
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
-    pop.create(a_types, a_argTypes, a_nodeSets, a_maxDepths, a_fullModeAllowed);
+    pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths, a_fullModeAllowed);
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");

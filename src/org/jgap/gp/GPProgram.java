@@ -23,7 +23,7 @@ import org.jgap.gp.function.*;
 public class GPProgram
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -46,13 +46,20 @@ public class GPProgram
 
   public void growOrFull(int a_depth, Class[] a_types,
                          Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-                         int[] a_maxDepths,
-                         boolean a_grow,
-                         boolean[] a_fullModeAllowed) {
+                         int[] a_minDepths, int[] a_maxDepths,
+                         boolean a_grow, boolean[] a_fullModeAllowed) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
     for (int i = 0; i < m_chromosomes.length; i++) {
       try {
-        m_chromosomes[i] = new ProgramChromosome(m_conf);
+        // Construct a chromosome with place for "size" nodes
+        int size = a_maxDepths[i];
+        if (size < 200) {
+          size *= a_nodeSets.length;
+        }
+        if (size < 200) {
+          size = 200;
+        }
+        m_chromosomes[i] = new ProgramChromosome(m_conf, size);
       }
       catch (InvalidConfigurationException iex) {
         throw new RuntimeException(iex);
@@ -74,7 +81,12 @@ public class GPProgram
         depth = a_maxDepths[i];
       }
       else {
-        depth = a_depth;
+        if (a_depth < a_minDepths[i]) {
+         depth = a_minDepths[i];
+        }
+        else {
+          depth = a_depth;
+        }
       }
       // Decide whether to use grow mode or full mode.
       // ---------------------------------------------
