@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -47,8 +47,7 @@ public class GPGenotypeTest
     try {
       new GPGenotype(m_gpconf, pop);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -72,32 +71,30 @@ public class GPGenotypeTest
     assertSame(pop, gen.getGPPopulation());
   }
 
+
   public void testRandomInitialize_0()
       throws Exception {
     Variable vx;
     Class[] types = {
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
-    Class[][] argTypes = {
-        {}, {}, {}
+    Class[][] argTypes = { {}, {}, {}
     };
     int[] minDepths = new int[] {3, 4, 1};
     int[] maxDepths = new int[] {3, 4, 1};
-    CommandGene[][] nodeSets = {
-        {
-          CMD_SUB_V_V,
-              CMD_CONST1,
-              CMD_CONST0,
-        new StoreTerminal(m_gpconf, "mem0", CommandGene.IntegerClass),//3
-        new StoreTerminal(m_gpconf, "mem1", CommandGene.IntegerClass),//4
+    CommandGene[][] nodeSets = { {
+        CMD_SUB_V_V, //0
+        CMD_CONST1, //1
+        new StoreTerminal(m_gpconf, "mem0", CommandGene.IntegerClass), //2
+        new StoreTerminal(m_gpconf, "mem1", CommandGene.IntegerClass), //3
     }, {
-        vx = Variable.create(m_gpconf, "X", CommandGene.IntegerClass),//0
-        new AddAndStore(m_gpconf, CommandGene.IntegerClass, "mem2"),//1
-        CMD_FOR,//2
-        new TransferMemory(m_gpconf, "mem2", "mem1"),//3
-        new TransferMemory(m_gpconf, "mem1", "mem0"),//4
-        new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"),//5
-        new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"),//6
-        CMD_SUB_V_V_V,//7
+        vx = Variable.create(m_gpconf, "X", CommandGene.IntegerClass), //0
+        new AddAndStore(m_gpconf, CommandGene.IntegerClass, "mem2"), //1
+        CMD_FOR, //2
+        new TransferMemory(m_gpconf, "mem2", "mem1"), //3
+        new TransferMemory(m_gpconf, "mem1", "mem0"), //4
+        new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //5
+        new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //6
+        CMD_SUB_V_V_V, //7
     }, {
     }
     };
@@ -107,7 +104,7 @@ public class GPGenotypeTest
         CommandGene.IntegerClass, "mem", 1, 2, !true);
     // Execute the functionality to test.
     // ----------------------------------
-    rn.setNextIntSequence(new int[] {3, 1, 4, 2,
+    rn.setNextIntSequence(new int[] {2, 1, 3, 1,
                           0, 7, 1, 5, 6, 4, 3});
     m_gpconf.setPopulationSize(1);
     GPGenotype gen = GPGenotype.randomInitialGenotype(m_gpconf, types, argTypes,
@@ -122,7 +119,7 @@ public class GPGenotypeTest
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(1).getClass());
     assertSame(CMD_CONST1, p.getChromosome(0).getNode(2));
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(3).getClass());
-    assertSame(CMD_CONST0, p.getChromosome(0).getNode(4));
+    assertSame(CMD_CONST1, p.getChromosome(0).getNode(4));
     // Evaluate program 2
     // ------------------
     assertEquals(8, p.getChromosome(1).size());
@@ -138,6 +135,65 @@ public class GPGenotypeTest
     // ------------------
     assertEquals(1, p.getChromosome(2).size());
     assertEquals(ReadTerminal.class, p.getChromosome(2).getNode(0).getClass());
+    assertEquals(0.0, computeFitness(p, vx), DELTA);
+  }
+
+  private double computeFitness(GPProgram a_program, Variable vx) {
+    double error = 0.0f;
+    Object[] noargs = new Object[0];
+    // Initialize local stores.
+    // ------------------------
+    GPGenotype.getGPConfiguration().clearStack();
+    GPGenotype.getGPConfiguration().clearMemory();
+    // Compute fitness for each program.
+    // ---------------------------------
+      /**@todo check if program valid, i.e. worth evaluating*/
+      for (int i = 2; i < 15; i++) {
+        for (int j = 0; j < a_program.size(); j++) {
+        vx.set(new Integer(i));
+        try {
+          try {
+//            double result = a_program.getChromosome(j).execute_int(noargs);
+            // Only evaluate after whole GP program was run.
+            // ---------------------------------------------
+            if (j == a_program.size() - 1) {
+              double result = a_program.execute_int(j, noargs);
+              error += Math.abs(result - fib_iter(i));
+            }
+            else {
+              /**@todo use init. params to distinguish program flow*/
+              a_program.execute_void(j, noargs);
+            }
+          } catch (IllegalStateException iex) {
+            error = Double.MAX_VALUE / 2; /**@todo use constant*/
+            break;
+          }
+        } catch (ArithmeticException ex) {
+          System.out.println("x = " + i);
+          System.out.println(a_program.getChromosome(j));
+          throw ex;
+        }
+      }
+    }
+    return error;
+  }
+
+  private int fib_iter(int a_index) {
+    // 1
+    if (a_index == 0 || a_index == 1) {
+      return 1;
+    }
+    // 2
+    int a = 1; //Store("mem0", Constant(1))
+    int b = 1; //Store("mem1", Constant(1))
+    int x = 0; //Store("mem2", Constant(0))
+    // 3
+    for (int i = 2; i <= a_index; i++) { //FORX (Subprogram(A;B;C))
+      x = a + b; // A: AddAndStore(Read("mem0"),Read("mem1"),"mem2")
+      a = b; //B: TransferMemory("mem1","mem0")
+      b = x; //C: TransferMemory("mem2","mem1")
+    }
+    return x; //Read("mem2")
   }
 
   /**
