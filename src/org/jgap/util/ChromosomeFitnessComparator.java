@@ -17,8 +17,7 @@ import org.jgap.*;
  * fitness value in first place of the list.
  * Usage example:
  *   Collections.sort(
- *     population.getPopulation().getChromosomes(),
- *     new ChromosomeFitnessComparator() );
+ *     population.getChromosomes(), new ChromosomeFitnessComparator() );
  *
  * @author Charles Kevin Hill, Klaus Meffert
  * @since 2.4
@@ -26,7 +25,7 @@ import org.jgap.*;
 public class ChromosomeFitnessComparator
     implements Comparator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private FitnessEvaluator m_fitnessEvaluator;
 
@@ -58,8 +57,8 @@ public class ChromosomeFitnessComparator
    *
    * @param a_chromosome1 the first chromosome to compare
    * @param a_chromosome2 the second chromosome to compare
-   * @return -1 if a_chromosome1 is fitter than chromosome2, 1 if it is the other
-   * way round and 0 if both are equal
+   * @return -1 if a_chromosome1 is fitter than a_chromosome2, 1 if it is the
+   * other way round and 0 if both are equal
    * @author Charles Kevin Hill, Klaus Meffert
    * @since 2.6
    */
