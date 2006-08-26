@@ -9,6 +9,7 @@
  */
 package org.jgap.gp;
 
+import java.io.*;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
@@ -21,25 +22,34 @@ import org.jgap.event.*;
  * @since 3.0
  */
 public class GPGenotype
-    extends Genotype implements Runnable {
+    implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
+
+  /**
+   * The array of GPProgram's that makeup the GPGenotype's population.
+   */
+  private GPPopulation m_population;
+
+  /**
+   * The current configuration instance.
+   */
+  private transient static GPConfiguration m_configuration;
 
   /**
    * Fitness value of the best solution.
    */
-  private double m_bestFitness;
+  private transient double m_bestFitness;
 
   /**
    * Sum of fitness values over all chromosomes.
    */
-  private double m_totalFitness;
+  private transient double m_totalFitness;
 
   /**
    * Best solution found.
    */
-//  private static ProgramChromosome m_allTimeBest;
-  private static GPProgram m_allTimeBest;
+  private transient GPProgram m_allTimeBest;
 
   /**
    * Is full mode with program construction allowed?
@@ -72,7 +82,6 @@ public class GPGenotype
   public GPGenotype(GPConfiguration a_configuration,
                     GPPopulation a_population)
       throws InvalidConfigurationException {
-    super(a_configuration);
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
     // ---------------------------------------------------------------
@@ -91,12 +100,12 @@ public class GPGenotype
             " is null, which is forbidden in general.");
       }
     }
-    setPopulation(a_population);
-    setConfiguration(a_configuration);
+    setGPPopulation(a_population);
+    setGPConfiguration(a_configuration);
     // Lock the settings of the configuration object so that it cannot
     // be altered.
     // ---------------------------------------------------------------
-    getConfiguration().lockSettings();
+    getGPConfiguration().lockSettings();
   }
 
   /**
@@ -243,7 +252,7 @@ public class GPGenotype
   }
 
   public static GPConfiguration getGPConfiguration() {
-    return (GPConfiguration) getConfiguration();
+    return m_configuration;
   }
 
   static class GPFitnessComparator
@@ -275,7 +284,7 @@ public class GPGenotype
    * @since 3.0
    */
   public void evolve(int a_evolutions) {
-    ( (GPPopulation) getPopulation()).sort(new GPFitnessComparator());
+    getGPPopulation().sort(new GPFitnessComparator());
     // Here, we could do threading.
     for (int i = 0; i < a_evolutions; i++) {
       calcFitness();
@@ -378,7 +387,7 @@ public class GPGenotype
       GPPopulation oldPop = getGPPopulation();
       GPPopulation newPopulation = new GPPopulation(oldPop);
       float val;
-      RandomGenerator random = getConfiguration().getRandomGenerator();
+      RandomGenerator random = getGPConfiguration().getRandomGenerator();
       /**@todo make configurable*/
       int popSize1 = (int) Math.round(popSize * 0.7d);
       for (int i = 0; i < popSize1; i++) {
@@ -424,13 +433,13 @@ public class GPGenotype
       }
       // Now set the new population as the active one.
       // ---------------------------------------------
-      setPopulation(newPopulation);
+      setGPPopulation(newPopulation);
       // Increase number of generation.
       // ------------------------------
-      getConfiguration().incrementGenerationNr();
+      getGPConfiguration().incrementGenerationNr();
       // Fire an event to indicate we've performed an evolution.
       // -------------------------------------------------------
-      getConfiguration().getEventManager().fireGeneticEvent(
+      getGPConfiguration().getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_EVOLVED_EVENT, this));
     } catch (InvalidConfigurationException iex) {
       // This should never happen.
@@ -440,7 +449,7 @@ public class GPGenotype
   }
 
   public GPPopulation getGPPopulation() {
-    return (GPPopulation)super.getPopulation();
+    return m_population;
   }
 
   /**
@@ -481,11 +490,134 @@ public class GPGenotype
    * @return the GPProgram with the highest fitness value, or null if there
    * are no programs in this Genotype
    *
-   * @author Neil Rotstan
    * @author Klaus Meffert
-   * @since 1.0
+   * @since 3.0
    */
   public synchronized GPProgram getFittestProgram() {
     return getGPPopulation().determineFittestProgram();
+  }
+
+  protected void setGPPopulation(GPPopulation a_pop) {
+    m_population = a_pop;
+  }
+
+  /**
+   * Sets the configuration to use with the Genetic Algorithm.
+   * @param a_configuration the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public static void setGPConfiguration(GPConfiguration a_configuration) {
+    m_configuration = a_configuration;
+  }
+
+  /**
+   * Compares this entity against the specified object.
+   *
+   * @param other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  /**
+   * Compares this Genotype against the specified object. The result is true
+   * if the argument is an instance of the Genotype class, has exactly the
+   * same number of programs as the given Genotype, and, for each
+   * GPProgram in this Genotype, there is an equal program in the
+   * given Genotype. The programs do not need to appear in the same order
+   * within the populations.
+   *
+   * @param a_other the object to compare against
+   * @return a negative number if this genotype is "less than" the given
+   * genotype, zero if they are equal to each other, and a positive number if
+   * this genotype is "greater than" the given genotype
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    try {
+      // First, if the other Genotype is null, then they're not equal.
+      // -------------------------------------------------------------
+      if (a_other == null) {
+        return 1;
+      }
+      GPGenotype otherGenotype = (GPGenotype) a_other;
+      // First, make sure the other Genotype has the same number of
+      // chromosomes as this one.
+      // ----------------------------------------------------------
+      int size1 = getGPPopulation().size();
+      int size2 = otherGenotype.getGPPopulation().size();
+      if (size1 != size2) {
+        if (size1 > size2) {
+          return 1;
+        }else {
+          return -1;
+        }
+      }
+      // Next, prepare to compare the programs of the other Genotype
+      // against the programs of this Genotype. To make this a lot
+      // simpler, we first sort the programs in both this Genotype
+      // and the one we're comparing against. This won't affect the
+      // genetic algorithm (it doesn't care about the order), but makes
+      // it much easier to perform the comparison here.
+      // --------------------------------------------------------------
+      Arrays.sort(getGPPopulation().getGPPrograms());
+      Arrays.sort(otherGenotype.getGPPopulation().getGPPrograms());
+      for (int i = 0; i < getGPPopulation().size(); i++) {
+        int result =(getGPPopulation().getGPProgram(i).compareTo(
+            otherGenotype.getGPPopulation().getGPProgram(i)));
+        if (result != 0 ) {
+          return result;
+        }
+      }
+      return 0;
+    } catch (ClassCastException e) {
+      return -1;
+    }
+  }
+
+  /***
+   * Hashcode function for the genotype, tries to create a unique hashcode for
+   * the chromosomes within the population. The logic for the hashcode is
+   *
+   * Step  Result
+   * ----  ------
+   *    1  31*0      + hashcode_0 = y(1)
+   *    2  31*y(1)   + hashcode_1 = y(2)
+   *    3  31*y(2)   + hashcode_2 = y(3)
+   *    n  31*y(n-1) + hashcode_n-1 = y(n)
+   *
+   * Each hashcode is a number and the binary equivalent is computed and
+   * returned.
+   * @return the computed hashcode
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int hashCode() {
+    int i, size = getGPPopulation().size();
+    GPProgram prog;
+    int twopower = 1;
+    // For empty genotype we want a special value different from other hashcode
+    // implementations.
+    // ------------------------------------------------------------------------
+    int localHashCode = -573;
+    for (i = 0; i < size; i++, twopower = 2 * twopower) {
+      prog = getGPPopulation().getGPProgram(i);
+      localHashCode = 31 * localHashCode + prog.hashCode();
+    }
+    return localHashCode;
   }
 }

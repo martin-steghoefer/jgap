@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /*wodka:
    void add(Command cmd);
@@ -419,6 +419,7 @@ public class ProgramChromosome
    * @param a_functionSet the set of function valid to pick from
    * @param a_rootNode null, or root node to use
    * @param a_recurseLevel 0 for first call
+   * @param a_grow true: use grow method; false: use full method
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -774,7 +775,7 @@ public class ProgramChromosome
   /**
    * Helper: Find GP command with given class and return index of it
    * @param a_n return the n'th found command
-   * @param a_terminalClass the class to find a command for
+   * @param a_class the class to find a command for
    * @return index of first found matching GP command, or -1 if none found
    */
   public int getCommandOfClass(int a_n, Class a_class) {
@@ -1126,5 +1127,108 @@ public class ProgramChromosome
 
   public GPConfiguration getGPConfiguration() {
     return (GPConfiguration)getConfiguration();
+  }
+
+  /**
+   * Compares the given chromosome to this chromosome. This chromosome is
+   * considered to be "less than" the given chromosome if it has a fewer
+   * number of genes or if any of its gene values (alleles) are less than
+   * their corresponding gene values in the other chromosome.
+   *
+   * @param a_other the chromosome against which to compare this chromosome
+   * @return a negative number if this chromosome is "less than" the given
+   * chromosome, zero if they are equal to each other, and a positive number if
+   * this chromosome is "greater than" the given chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    // First, if the other Chromosome is null, then this chromosome is
+    // automatically the "greater" Chromosome.
+    // ---------------------------------------------------------------
+    if (a_other == null) {
+      return 1;
+    }
+    int size = size();
+    ProgramChromosome otherChromosome = (ProgramChromosome) a_other;
+    CommandGene[] otherGenes = (CommandGene[])otherChromosome.getGenes();
+    // If the other Chromosome doesn't have the same number of genes,
+    // then whichever has more is the "greater" Chromosome.
+    // --------------------------------------------------------------
+    if (otherChromosome.size() != size) {
+      return size() - otherChromosome.size();
+    }
+    // Next, compare the gene values (alleles) for differences. If
+    // one of the genes is not equal, then we return the result of its
+    // comparison.
+    // ---------------------------------------------------------------
+    for (int i = 0; i < size; i++) {
+      int comparison = getGene(i).compareTo(otherGenes[i]);
+      if (comparison != 0) {
+        return comparison;
+      }
+    }
+    /**@todo compare m_functionSet*/
+    if (isCompareApplicationData()) {
+      // Compare application data.
+      // -------------------------
+      if (getApplicationData() == null) {
+        if (otherChromosome.getApplicationData() != null) {
+          return -1;
+        }
+      }
+      else if (otherChromosome.getApplicationData() == null) {
+        return 1;
+      }
+      else {
+        if (getApplicationData() instanceof Comparable) {
+          try {
+            return ( (Comparable) getApplicationData()).compareTo(
+                otherChromosome.getApplicationData());
+          }
+          catch (ClassCastException cex) {
+            /**@todo improve*/
+            return -1;
+          }
+        }
+        else {
+          return getApplicationData().getClass().getName().compareTo(
+              otherChromosome.getApplicationData().getClass().getName());
+        }
+      }
+    }
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
+  }
+
+  /**
+   * Compares this chromosome against the specified object.
+   *
+   * @param a_other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    // If class is not equal, return false. Therefor catch
+    // ClasscastException's. The cleaner way (commented out below) would
+    // be too slow, indeed.
+    // -----------------------------------------------------------------
+    /*
+       if (other != null &&
+        !this.getClass ().getName ().equals (other.getClass ().getName ()))
+        {
+            return false;
+        }
+     */
+    try {
+      return compareTo(a_other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
   }
 }

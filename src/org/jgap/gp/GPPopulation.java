@@ -9,8 +9,10 @@
  */
 package org.jgap.gp;
 
-import org.jgap.*;
+import java.io.*;
 import java.util.*;
+
+import org.jgap.*;
 
 /**
  * Population for GP programs.
@@ -19,20 +21,34 @@ import java.util.*;
  * @since 3.0
  */
 public class GPPopulation
-    extends Population {
+    implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
-   * The array of Chromosomes that makeup the Genotype's population.
+   * The array of GPProgram's that makeup the Genotype's population.
    */
   private GPProgram[] m_programs;
 
-  public transient float[] fitnessRank;/**@todo make private*/
+  private transient float[] m_fitnessRank;
 
   private int m_popSize;
 
-  private GPProgram m_fittestProgram;
+  private transient GPProgram m_fittestProgram;
+
+  private /*transient*/ GPConfiguration m_config;
+
+  /**
+   * Indicates whether at least one of the programs has been changed
+   * (deleted, added, modified).
+   */
+  private boolean m_changed;
+
+  /**
+   * Indicates that the list of GPPrograms has been sorted.
+   */
+  private boolean m_sorted;
+
 
   /**
    * Needed for cloning.
@@ -49,22 +65,40 @@ public class GPPopulation
    */
   private CommandGene[][] m_avail_nodeSets;
 
+  /**
+   * Needed for cloning.
+   */
   private int[] m_minDepths;
+
+  /**
+   * Needed for cloning.
+   */
   private int[] m_maxDepths;
+
+  /**
+   * Needed for cloning.
+   */
   private int m_maxNodes;
 
   /*
+   * @param a_config the configuration to use.
+   * @param a_size the maximum size of the population in GPProgram unit
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPPopulation(GPConfiguration a_conf, int a_size)
+  public GPPopulation(GPConfiguration a_config, int a_size)
       throws InvalidConfigurationException {
-    super(a_conf, a_size);
+//    super(a_conf, a_size);
+    if (a_config == null) {
+      throw new InvalidConfigurationException("Configuration must not be null!");
+    }
+    m_config = a_config;
+
     m_programs = new GPProgram[a_size];
     m_popSize = a_size;
-    fitnessRank = new float[a_size];
+    m_fitnessRank = new float[a_size];
     for (int i = 0; i < a_size; i++) {
-      fitnessRank[i] = 0.5f;
+      m_fitnessRank[i] = 0.5f;
     }
   }
 
@@ -74,8 +108,8 @@ public class GPPopulation
    */
   public GPPopulation(GPPopulation a_pop)
       throws InvalidConfigurationException {
-    super(a_pop.getConfiguration(), a_pop.getPopSize());
-
+//    super(a_pop.getConfiguration(), a_pop.getPopSize());
+    m_config = a_pop.getGPConfiguration();
     // Clone important state variables.
     // --------------------------------
     m_avail_argTypes = (Class[][])a_pop.m_avail_argTypes.clone();
@@ -92,11 +126,11 @@ public class GPPopulation
 
     m_maxNodes = a_pop.m_maxNodes;
 
-    m_programs = new GPProgram[m_popSize];/**@todo is m_popSize correct?*/
+    m_programs = new GPProgram[m_popSize];
 
-    fitnessRank = new float[m_popSize];
+    m_fitnessRank = new float[m_popSize];
     for (int i = 0; i < m_popSize; i++) {
-      fitnessRank[i] = 0.5f;
+      m_fitnessRank[i] = 0.5f;
     }
   }
 
@@ -115,7 +149,7 @@ public class GPPopulation
     Arrays.sort(m_programs, c);
     float f = 0;
     for (int i = 0; i < m_programs.length; i++) {
-      fitnessRank[i] = f;
+      m_fitnessRank[i] = f;
       f += m_programs[i].getFitnessValue();
     }
   }
@@ -133,6 +167,7 @@ public class GPPopulation
    * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
    * must be an array of arrays, the first dimension of which is the number of
    * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
    * @param a_maxDepths contains the maximum depth allowed for each chromosome
    * @throws InvalidConfigurationException
    *
@@ -182,6 +217,7 @@ public class GPPopulation
    * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
    * must be an array of arrays, the first dimension of which is the number of
    * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
    * @param a_maxDepths contains the maximum depth allowed for each chromosome
    * @param a_depth the maximum depth of the program to create
    * @param a_grow true: grow mode, false: full mode
@@ -225,7 +261,7 @@ public class GPPopulation
    * @since 3.0
    */
   public GPConfiguration getGPConfiguration() {
-    return (GPConfiguration)getConfiguration();
+    return m_config;
   }
 
   /**
@@ -250,6 +286,10 @@ public class GPPopulation
     return m_programs[a_index];
   }
 
+  public GPProgram[] getGPPrograms() {
+    return m_programs;
+  }
+
   public int size() {
     return m_programs.length;
   }
@@ -261,14 +301,14 @@ public class GPPopulation
    * @return the fittest GPProgram of the population
    *
    * @author Klaus Meffert
-   * @since 2.0
+   * @since 3.0
    */
   public GPProgram determineFittestProgram() {
-//    if (!m_changed && m_fittestChromosome != null) {
-//      return m_fittestChromosome;
-//    }
+    if (!m_changed && m_fittestProgram != null) {
+      return m_fittestProgram;
+    }
     double bestFitness = -1.0d;
-    FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
+    FitnessEvaluator evaluator = getGPConfiguration().getFitnessEvaluator();
     double fitness;
     for (int i=0;i<m_programs.length && m_programs[i] != null;i++) {
       GPProgram program = m_programs[i];
@@ -282,4 +322,171 @@ public class GPPopulation
     setChanged(false);
     return m_fittestProgram;
   }
+
+  /**
+   * Sorts the GPPrograms list and returns the fittest n GPPrograms in
+   * the population.
+   * @param a_numberOfPrograms number of top performer GPPrograms to be
+   * returned
+   * @return list of the fittest n GPPrograms of the population, or the fittest
+   * x GPPrograms with x = number of GPPrograms in case n > x.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public List determineFittestChromosomes(final int a_numberOfPrograms) {
+    int numberOfChromosomes = Math.min(a_numberOfPrograms, m_programs.length);
+    if (numberOfChromosomes <= 0) {
+      return null;
+    }
+    if (!m_changed && m_sorted) {
+      return Arrays.asList(m_programs).subList(0, numberOfChromosomes);
+    }
+    // Sort the list of chromosomes using the fitness comparator
+    sortByFitness();
+    // Return the top n chromosomes
+    return Arrays.asList(m_programs).subList(0, numberOfChromosomes);
+  }
+
+  /**
+  * Sorts the programs within the population according to their fitness
+  * value using GPProgramFitnessComparator.
+  *
+  * @author Klaus Meffert
+  * @since 3.0
+  */
+ public void sortByFitness() {
+   // The following construction could be cached but wrt that the
+   // evaluator registered with the configuration could change
+   // --> Don't cache it!
+   sort(new GPProgramFitnessComparator(getGPConfiguration().
+                                        getGPFitnessEvaluator()));
+   setChanged(false);
+   setSorted(true);
+   m_fittestProgram = m_programs[0];
+ }
+
+
+  public float[] getFitnessRanks() {
+    return m_fitnessRank;
+  }
+
+  public float getFitnessRank(int a_index) {
+    return m_fitnessRank[a_index];
+  }
+
+  /**
+   * Mark that for the population the fittest program may have changed.
+   *
+   * @param a_changed true: population's fittest program may have changed,
+   * false: fittest program evaluated earlier is still valid
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  protected void setChanged(final boolean a_changed) {
+    m_changed = a_changed;
+    setSorted(false);
+  }
+
+  /**
+   * @return true: population's programs (maybe) were changed,
+   * false: not changed for sure
+   *
+   * @since 3.0
+   */
+  public boolean isChanged() {
+    return m_changed;
+  }
+
+  /**
+   * Mark the population as sorted.
+   * @param a_sorted true: mark population as sorted
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  protected void setSorted(final boolean a_sorted) {
+    m_sorted = a_sorted;
+  }
+
+  /**
+   * This method is not producing symmetric results as -1 is more often returned
+   * than 1 (see description of return value).
+   *
+   * @param a_pop the other population to compare
+   * @return 1: a_pop is null or having fewer programs or equal number
+   * of programs but at least one not contained. 0: both populations
+   * containing exactly the same programs. -1: this population contains fewer
+   * programs than a_pop
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public int compareTo(Object a_pop) {
+    GPPopulation other = (GPPopulation) a_pop;
+    if (a_pop == null) {
+      return 1;
+    }
+    int size1 = size();
+    int size2 = other.size();
+    if (size1 != size2) {
+      if (size1 < size2) {
+        return -1;
+      }
+      else {
+        return 1;
+      }
+    }
+    GPProgram[] progs2 = other.getGPPrograms();
+    for (int i = 0; i < size1; i++) {
+      if (!containedInArray(progs2, m_programs[i])) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * Checks if a program is contained within an array of programs. Assumes that
+   * in the array no element will follow after the first null element.
+   * @param a_progs the array to search thru
+   * @param a_prog the program to find
+   * @return true: program found in array via equals-method
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  protected boolean containedInArray(GPProgram[] a_progs, GPProgram a_prog) {
+    for(int i=0;i<a_progs.length;i++) {
+      if (a_progs[i] == null) {
+        return false;
+      }
+      if (a_progs[i].equals(a_prog)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * The equals-method.
+   * @param a_pop the population instance to compare with
+   * @return true: given object equal to comparing one
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_pop) {
+    try {
+      return compareTo(a_pop) == 0;
+    }
+    catch (ClassCastException e) {
+      // If the other object isn't an Population instance
+      // then we're not equal.
+      // ------------------------------------------------
+      return false;
+    }
+  }
+
 }

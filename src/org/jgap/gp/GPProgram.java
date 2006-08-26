@@ -10,6 +10,7 @@
 package org.jgap.gp;
 
 import java.io.*;
+import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.function.*;
 
@@ -20,9 +21,9 @@ import org.jgap.gp.function.*;
  * @since 3.0
  */
 public class GPProgram
-    implements Serializable {
+    implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -224,5 +225,67 @@ public class GPProgram
       }
     }
     return -1;
+  }
+
+  /**
+   * Compares the given program to this program.
+   *
+   * @param a_other the program against which to compare this program
+   * @return a negative number if this program is "less than" the given
+   * program, zero if they are equal to each other, and a positive number if
+   * this program is "greater than" the given program
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    // First, if the other Chromosome is null, then this chromosome is
+    // automatically the "greater" Chromosome.
+    // ---------------------------------------------------------------
+    if (a_other == null) {
+      return 1;
+    }
+    int size = size();
+    GPProgram other = (GPProgram) a_other;
+    ProgramChromosome[] otherChroms = other.m_chromosomes;
+    // If the other Chromosome doesn't have the same number of genes,
+    // then whichever has more is the "greater" Chromosome.
+    // --------------------------------------------------------------
+    if (other.size() != size) {
+      return size() - other.size();
+    }
+    // Next, compare the gene values (alleles) for differences. If
+    // one of the genes is not equal, then we return the result of its
+    // comparison.
+    // ---------------------------------------------------------------
+    Arrays.sort(m_chromosomes);
+    Arrays.sort(otherChroms);
+    for (int i = 0; i < size; i++) {
+      int comparison = m_chromosomes[i].compareTo(otherChroms[i]);
+      if (comparison != 0) {
+        return comparison;
+      }
+    }
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
+  }
+
+  /**
+   * Compares this entity against the specified object.
+   *
+   * @param a_other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
   }
 }
