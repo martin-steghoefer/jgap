@@ -20,9 +20,11 @@ import org.jgap.gp.function.*;
  * @since 3.0
  */
 public class ProgramChromosome
-    extends Chromosome {
+    //    extends BaseGPChromosome
+    // implements IGPChromosome
+{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /*wodka:
    void add(Command cmd);
@@ -55,10 +57,47 @@ public class ProgramChromosome
 
   private GPProgram m_ind;
 
+  /**
+   * The array of genes contained in this chromosome.
+   */
+  private CommandGene[] m_genes;
+
+  /**
+   * The configuration object to use
+   */
+  private /*transient*/ GPConfiguration m_configuration;
+
+  /**
+   * Application-specific data that is attached to this Chromosome.
+   * This data may assist the application in evaluating this Chromosome
+   * in the fitness function. JGAP does not operate on the data, aside
+   * from allowing it to be set and retrieved, and considering it with
+   * comparations (if user opted in to do so).
+   */
+  private Object m_applicationData;
+
+  /**
+   * Method compareTo(): Should we also consider the application data when
+   * comparing? Default is "false" as "true" means a Chromosome's losing its
+   * identity when application data is set differently!
+   *
+   * @since 3.0
+   */
+  private boolean m_compareAppData;
+
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
                            GPProgram a_ind)
       throws InvalidConfigurationException {
-    super(a_configuration, a_size);
+//    super(a_configuration, a_size);
+    if (a_size <= 0) {
+      throw new IllegalArgumentException(
+          "Chromosome size must be greater than zero");
+    }
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
     m_ind = a_ind;
     init(a_size);
   }
@@ -68,7 +107,16 @@ public class ProgramChromosome
                            Class[] a_argTypes,
                            GPProgram a_ind)
       throws InvalidConfigurationException {
-    super(a_configuration, a_size);
+//    super(a_configuration, a_size);
+    if (a_size <= 0) {
+      throw new IllegalArgumentException(
+          "Chromosome size must be greater than zero");
+    }
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
     m_ind = a_ind;
     m_functionSet = a_functionSet;
     argTypes = a_argTypes;
@@ -76,14 +124,19 @@ public class ProgramChromosome
   }
 
   public ProgramChromosome(GPConfiguration a_configuration,
-                           Gene[] a_initialGenes)
+                           CommandGene[] a_initialGenes)
       throws InvalidConfigurationException {
-    super(a_configuration);
+//    super(a_configuration);
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
     int i = 0;
     while (i < a_initialGenes.length && a_initialGenes[i] != null) {
       i++;
     }
-    Gene[] genes = new Gene[i];
+    CommandGene[] genes = new CommandGene[i];
     for (int k = 0; k < i; k++) {
       genes[k] = a_initialGenes[k];
     }
@@ -108,13 +161,18 @@ public class ProgramChromosome
 
   public ProgramChromosome(final Configuration a_conf)
       throws InvalidConfigurationException {
-    super(a_conf);
+//    super(a_conf);
+    if (a_conf == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
     init();
   }
 
   private void init()
       throws InvalidConfigurationException {
-    init(getConfiguration().getPopulationSize());
+    init(getGPConfiguration().getPopulationSize());
   }
 
   private void init(final int a_size)
@@ -126,8 +184,7 @@ public class ProgramChromosome
   public synchronized Object clone() {
     try {
       ProgramChromosome chrom = new ProgramChromosome( (GPConfiguration)
-          getConfiguration(),
-          (Gene[]) getGenes().clone());
+          getGPConfiguration(), (CommandGene[]) m_genes.clone());
       chrom.argTypes = (Class[]) argTypes.clone();
       chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
       chrom.setFunctions( (CommandGene[]) getFunctions().clone());
@@ -159,11 +216,10 @@ public class ProgramChromosome
     if (a_command == null) {
       throw new IllegalArgumentException("Command may not be null!");
     }
-    final int len = getGenes().length;
-    Gene[] genes = new Gene[len + 1];
-    System.arraycopy(getGenes(), 0, genes, 0, len);
-    genes[len] = a_command;
-    setGenes(genes);
+    final int len = m_genes.length;
+    CommandGene[] genes = new CommandGene[len + 1];
+    System.arraycopy(m_genes, 0, genes, 0, len);
+    m_genes[len] = a_command;
   }
 
   /**
@@ -189,7 +245,7 @@ public class ProgramChromosome
                        a_functionSet.length);
       for (int i = 0; i < a_argTypes.length; i++) {
         m_functionSet[a_functionSet.length + i]
-            = new Argument(getConfiguration(), i, a_argTypes[i]);
+            = new Argument(getGPConfiguration(), i, a_argTypes[i]);
       }
       /**@todo init is experimental, make dynamic*/
       // Initialization of genotype according to specific problem requirements.
@@ -230,10 +286,10 @@ public class ProgramChromosome
           // Clean up genes for next try.
           // ----------------------------
           for (int j = 0; j < size(); j++) {
-            if (getGene(j) == null) {
+            if (m_genes[j] == null) {
               break;
             }
-            getGenes()[j] = null;
+            m_genes[j] = null;
           }
           localDepth++;
         }
@@ -826,12 +882,12 @@ public class ProgramChromosome
   }
 
   public CommandGene[] getFunctions() {
-    return (CommandGene[])super.getGenes();
+    return m_genes;
   }
 
   public void setFunctions(CommandGene[] a_functions)
       throws InvalidConfigurationException {
-    setGenes(a_functions);
+    m_genes = a_functions;
   }
 
   /**
@@ -1111,11 +1167,11 @@ public class ProgramChromosome
     return execute_object(n, child, args);
   }
 
-  public void setGene(int index, Gene a_gene) {
+  public void setGene(int index, CommandGene a_gene) {
     if (a_gene == null) {
       throw new IllegalArgumentException("Gene may not be null!");
     }
-    getGenes()[index] = a_gene;
+    m_genes[index] = a_gene;
   }
 
   public Class[] getArgTypes() {
@@ -1126,6 +1182,12 @@ public class ProgramChromosome
     return argTypes.length;
   }
 
+  /**
+   * @return number of functions and terminals present
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public int size() {
     int i = 0;
     while (i < getFunctions().length && getFunctions()[i] != null) {
@@ -1135,7 +1197,7 @@ public class ProgramChromosome
   }
 
   public GPConfiguration getGPConfiguration() {
-    return (GPConfiguration)getConfiguration();
+    return m_configuration;
   }
 
   /**
@@ -1161,7 +1223,7 @@ public class ProgramChromosome
     }
     int size = size();
     ProgramChromosome otherChromosome = (ProgramChromosome) a_other;
-    CommandGene[] otherGenes = (CommandGene[])otherChromosome.getGenes();
+    CommandGene[] otherGenes = otherChromosome.m_genes;
     // If the other Chromosome doesn't have the same number of genes,
     // then whichever has more is the "greater" Chromosome.
     // --------------------------------------------------------------
@@ -1173,7 +1235,7 @@ public class ProgramChromosome
     // comparison.
     // ---------------------------------------------------------------
     for (int i = 0; i < size; i++) {
-      int comparison = getGene(i).compareTo(otherGenes[i]);
+      int comparison = m_genes[i].compareTo(otherGenes[i]);
       if (comparison != 0) {
         return comparison;
       }
@@ -1221,17 +1283,6 @@ public class ProgramChromosome
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    // If class is not equal, return false. Therefor catch
-    // ClasscastException's. The cleaner way (commented out below) would
-    // be too slow, indeed.
-    // -----------------------------------------------------------------
-    /*
-       if (other != null &&
-        !this.getClass ().getName ().equals (other.getClass ().getName ()))
-        {
-            return false;
-        }
-     */
     try {
       return compareTo(a_other) == 0;
     }
@@ -1253,4 +1304,60 @@ public class ProgramChromosome
   public void setIndividual(GPProgram a_ind) {
     m_ind = a_ind;
   }
+
+  /**
+   * Should we also consider the application data when comparing? Default is
+   * "false" as "true" means a Chromosome is losing its identity when
+   * application data is set differently!
+   *
+   * @param a_doCompare true: consider application data in method compareTo
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void setCompareApplicationData(boolean a_doCompare) {
+    m_compareAppData = a_doCompare;
+  }
+
+  /*
+   * @return should we also consider the application data when comparing?
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean isCompareApplicationData() {
+    return m_compareAppData;
+  }
+
+  /**
+   * Retrieves the application-specific data that is attached to this
+   * Chromosome. Attaching application-specific data may be useful for
+   * some applications when it comes time to evaluate this Chromosome
+   * in the fitness function. JGAP ignores this data functionally.
+   *
+   * @return the application-specific data previously attached to this
+   * Chromosome, or null if there is no data attached
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object getApplicationData() {
+    return m_applicationData;
+  }
+
+  /**
+   * Returns the Gene at the given index (locus) within the Chromosome. The
+   * first gene is at index zero and the last gene is at the index equal to
+   * the size of this Chromosome - 1.
+   *
+   * @param a_locus index of the gene value to be returned
+   * @return Gene at the given index
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public synchronized CommandGene getGene(int a_locus) {
+    return m_genes[a_locus];
+  }
+
 }

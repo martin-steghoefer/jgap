@@ -9,6 +9,8 @@
  */
 package org.jgap.gp;
 
+import java.io.*;
+import java.util.*;
 import org.jgap.*;
 
 /**
@@ -20,9 +22,15 @@ import org.jgap.*;
  * @since 3.0
  */
 public abstract class CommandGene
-    extends BaseGene implements Gene {
+//    extends BaseGene
+    implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
+
+  /**
+   * Delta, useful for comparing doubles and floats.
+   */
+  public static final double DELTA = 0.0000001;
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -35,6 +43,8 @@ public abstract class CommandGene
   public final static Class DoubleClass = Double.class;
 
   public final static Class VoidClass = Void.class;
+
+  private GPConfiguration m_configuration;
 
   /**
    * Should isValid() be called? True = no!
@@ -52,16 +62,42 @@ public abstract class CommandGene
 
   private boolean m_floatType;
 
+  /** Energy of a gene, see RFE 1102206*/
+  private double m_energy;
+
+  /**
+   * Application-specific data that is attached to the Gene. This data may
+   * assist the application in labelling this Gene.
+   * JGAP ignores the data, aside from allowing it to be set and
+   * retrieved and considering it in clone() and compareTo().
+   *
+   * @since 3.0
+   */
+  private Object m_applicationData;
+
+  /**
+   * Method compareTo(): Should we also consider the application data when
+   * comparing? Default is "false" as "true" means a Gene's losing its
+   * identity when application data is set differently!
+   *
+   * @since 3.0
+   */
+  private boolean m_compareAppData;
+
   /**
    * Initializations, called from each Constructor.
    */
   protected void init() {
   }
 
-  public CommandGene(final Configuration a_conf, int a_arity,
-                     Class a_returnType)
+  public CommandGene(final GPConfiguration a_conf, final int a_arity,
+                     final Class a_returnType)
       throws InvalidConfigurationException {
-    super(a_conf);
+//    super(a_conf);
+    if (a_conf == null) {
+      throw new InvalidConfigurationException("Configuration must not be null!");
+    }
+    m_configuration = a_conf;
     init();
     m_arity = a_arity;
     m_returnType = a_returnType;
@@ -99,32 +135,31 @@ public abstract class CommandGene
   }
 
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
-    // do nothing for GP here!
+    // Do nothing here by default.
+    // ---------------------------
   }
 
   public void cleanup() {
-    // do nothing for GP here!
+    // Do nothing here by default.
+    // ---------------------------
   }
 
   public int size() {
     return m_arity;
   }
 
-  private int getArity() {
-    return size();
-  }
-
   /**
-   * Override if arity of GP command depends on individual.
+   * Arity of the command. Override if necessary.
    *
-   * @param a_indvividual the invididual the command's arity depends on
+   * @param a_indvividual the invididual the command's arity may depend on (in
+   * most cases the arity will not depend on the individual)
    * @return arity of the command
    *
    * @author Klaus Meffert
    * @since 3.0
    */
   public int getArity(GPProgram a_indvividual) {
-    return getArity();
+    return m_arity;
   }
 
   public int compareTo(Object a_other) {
@@ -464,5 +499,92 @@ public abstract class CommandGene
 
   public void setNoValidation(boolean a_noValidation) {
     m_noValidation = a_noValidation;
+  }
+
+  /**
+   * @return the configuration set
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPConfiguration getGPConfiguration() {
+    return m_configuration;
+  }
+
+  /**
+   * This sets the application-specific data that is attached to this Gene.
+   * Attaching application-specific data may be useful for
+   * some applications when it comes time to distinguish a Gene from another.
+   * JGAP ignores this data functionally.
+   *
+   * @param a_newData the new application-specific data to attach to this
+   * Gene
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void setApplicationData(final Object a_newData) {
+    m_applicationData = a_newData;
+  }
+
+  /**
+   * Retrieves the application-specific data that is attached to this Gene.
+   * Attaching application-specific data may be useful for
+   * some applications when it comes time to distinguish a Gene from another.
+   * JGAP ignores this data functionally.
+   *
+   * @return the application-specific data previously attached to this Gene,
+   * or null if there is no data attached
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object getApplicationData() {
+    return m_applicationData;
+  }
+
+  /**
+   * Should we also consider the application data when comparing? Default is
+   * "false" as "true" means a Gene is losing its identity when
+   * application data is set differently!
+   *
+   * @param a_doCompare true: consider application data in method compareTo
+   *
+   * @author Klaus Meffert
+   * @since 2.4
+   */
+  public void setCompareApplicationData(final boolean a_doCompare) {
+    m_compareAppData = a_doCompare;
+  }
+
+  /*
+   * @return should we also consider the application data when comparing?
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean isCompareApplicationData() {
+    return m_compareAppData;
+  }
+
+  /**
+   * @return energy of the gene
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public double getEnergy() {
+    return m_energy;
+  }
+
+  /**
+   * Sets the energy of the gene
+   * @param a_energy the energy to set
+   *
+   * @author Klaus Meffert
+   * @since 2.3
+   */
+  public void setEnergy(final double a_energy) {
+    m_energy = a_energy;
   }
 }

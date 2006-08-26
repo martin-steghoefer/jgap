@@ -21,10 +21,10 @@ import org.jgap.gp.function.*;
  */
 public class CommandFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static CommandGene[] createStoreCommands(CommandGene[] a_target,
-                                                  Configuration a_conf,
+                                                  GPConfiguration a_conf,
                                                   Class a_type, String a_prefix,
                                                   int a_count)
       throws InvalidConfigurationException {
@@ -43,7 +43,7 @@ public class CommandFactory {
   }
 
   public static CommandGene[] createWriteOnlyCommands(CommandGene[] a_target,
-                                                  Configuration a_conf,
+                                                  GPConfiguration a_conf,
                                                   Class a_type, String a_prefix,
                                                   int a_count,
                                                   boolean a_noValidation)
@@ -62,7 +62,7 @@ public class CommandFactory {
   }
 
   public static CommandGene[] createReadOnlyCommands(CommandGene[] a_target,
-                                                  Configuration a_conf,
+                                                  GPConfiguration a_conf,
                                                   Class a_type, String a_prefix,
                                                   int a_count,
                                                   int a_startIndex,
@@ -82,7 +82,7 @@ public class CommandFactory {
   }
 
   public static CommandGene[] createStackCommands(CommandGene[] a_target,
-                                                  Configuration a_conf,
+                                                  GPConfiguration a_conf,
                                                   Class a_type)
       throws InvalidConfigurationException {
     CommandGene[] result = new CommandGene[a_target.length + 2];
