@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /*wodka:
    void add(Command cmd);
@@ -53,17 +53,23 @@ public class ProgramChromosome
 
   private transient int m_maxDepth;
 
-  public ProgramChromosome(GPConfiguration a_configuration, int a_size)
+  private GPProgram m_ind;
+
+  public ProgramChromosome(GPConfiguration a_configuration, int a_size,
+                           GPProgram a_ind)
       throws InvalidConfigurationException {
     super(a_configuration, a_size);
+    m_ind = a_ind;
     init(a_size);
   }
 
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
                            CommandGene[] a_functionSet,
-                           Class[] a_argTypes)
+                           Class[] a_argTypes,
+                           GPProgram a_ind)
       throws InvalidConfigurationException {
     super(a_configuration, a_size);
+    m_ind = a_ind;
     m_functionSet = a_functionSet;
     argTypes = a_argTypes;
     init();
@@ -1188,7 +1194,6 @@ public class ProgramChromosome
                 otherChromosome.getApplicationData());
           }
           catch (ClassCastException cex) {
-            /**@todo improve*/
             return -1;
           }
         }
@@ -1230,5 +1235,19 @@ public class ProgramChromosome
     catch (ClassCastException cex) {
       return false;
     }
+  }
+
+  /**
+   * @return the GPProgram containing this chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPProgram getIndividual() {
+    return m_ind;
+  }
+
+  public void setIndividual(GPProgram a_ind) {
+    m_ind = a_ind;
   }
 }

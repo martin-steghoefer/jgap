@@ -23,7 +23,7 @@ import org.jgap.gp.function.*;
 public class GPProgram
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private ProgramChromosome[] m_chromosomes;
 
@@ -53,7 +53,7 @@ public class GPProgram
       try {
         // Construct a chromosome with place for a_maxNodes nodes.
         // -------------------------------------------------------
-        m_chromosomes[i] = new ProgramChromosome(m_conf, a_maxNodes);
+        m_chromosomes[i] = new ProgramChromosome(m_conf, a_maxNodes, this);
       } catch (InvalidConfigurationException iex) {
         throw new RuntimeException(iex);
       }
@@ -156,6 +156,7 @@ public class GPProgram
    */
   public int execute_int(int a_chromosomeNum, Object[] a_args) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
+    m_chromosomes[a_chromosomeNum].setIndividual(this);
     return m_chromosomes[a_chromosomeNum].execute_int(a_args);
   }
 
@@ -171,6 +172,7 @@ public class GPProgram
    */
   public float execute_float(int a_chromosomeNum, Object[] a_args) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
+    m_chromosomes[a_chromosomeNum].setIndividual(this);
     return m_chromosomes[a_chromosomeNum].execute_float(a_args);
   }
 
@@ -186,6 +188,7 @@ public class GPProgram
    */
   public double execute_double(int a_chromosomeNum, Object[] a_args) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
+    m_chromosomes[a_chromosomeNum].setIndividual(this);
     return m_chromosomes[a_chromosomeNum].execute_double(a_args);
   }
 
@@ -201,6 +204,7 @@ public class GPProgram
    */
   public Object execute_object(int a_chromosomeNum, Object[] a_args) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
+    m_chromosomes[a_chromosomeNum].setIndividual(this);
     return m_chromosomes[a_chromosomeNum].execute_object(a_args);
   }
 
@@ -214,6 +218,7 @@ public class GPProgram
    */
   public void execute_void(int a_chromosomeNum, Object[] a_args) {
     CommandGene.setIndividual(this); /**@todo uaaaaaaaaaa*/
+    m_chromosomes[a_chromosomeNum].setIndividual(this);
     m_chromosomes[a_chromosomeNum].execute_void(a_args);
   }
 

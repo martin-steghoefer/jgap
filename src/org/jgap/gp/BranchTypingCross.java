@@ -23,7 +23,7 @@ public class BranchTypingCross
     extends CrossMethod
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -185,7 +185,8 @@ public class BranchTypingCross
     else {
       c[0] = new ProgramChromosome(getConfiguration(), c0s - s0 + s1,
                                    c[0].getFunctionSet(),
-                                   c[0].getArgTypes());
+                                   c[0].getArgTypes(),
+                                   c0.getIndividual());
       System.arraycopy(c0.getFunctions(), 0, c[0].getFunctions(), 0, p0);
       System.arraycopy(c1.getFunctions(), p1, c[0].getFunctions(), p0, s1);
       System.arraycopy(c0.getFunctions(), p0 + s0, c[0].getFunctions(),
@@ -200,7 +201,8 @@ public class BranchTypingCross
     else {
       c[1] = new ProgramChromosome(getConfiguration(), c1s - s1 + s0,
                                    c[1].getFunctionSet(),
-                                   c[1].getArgTypes());
+                                   c[1].getArgTypes(),
+                                   c1.getIndividual());
       System.arraycopy(c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
       System.arraycopy(c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
       System.arraycopy(c1.getFunctions(), p1 + s1, c[1].getFunctions(),
