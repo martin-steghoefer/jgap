@@ -20,9 +20,11 @@ import org.jgap.*;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
+
+  public final static double MAX_FITNESS_VALUE = Double.MAX_VALUE / 2;
 
   /**
    * The fitness value computed during the previous run
