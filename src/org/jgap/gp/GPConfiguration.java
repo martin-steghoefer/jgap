@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -79,6 +79,11 @@ public class GPConfiguration
   private boolean m_strictProgramCreation = true;
 
   private int m_programCreationMaxTries = 3;
+
+  /**
+   * The fitness evaluator. See interface IGPFitnessEvaluator for details
+   */
+  private IGPFitnessEvaluator m_fitnessEvaluator;
 
   /**
    * @throws InvalidConfigurationException
@@ -278,4 +283,15 @@ public class GPConfiguration
   public void setProgramCreationMaxTries(int a_maxtries) {
     m_programCreationMaxTries = a_maxtries;
   }
+
+  /**
+   * @return the assigned FitnessEvaluator
+   *
+   * @author Klaus Meffert
+   * @since 2.0
+   */
+  public IGPFitnessEvaluator getGPFitnessEvaluator() {
+    return m_fitnessEvaluator;
+  }
+
 }
