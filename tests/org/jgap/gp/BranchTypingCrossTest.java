@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
@@ -248,7 +248,6 @@ public class BranchTypingCrossTest
       throws Exception {
     BranchTypingCross btc = new BranchTypingCross(m_gpconf);
     BranchTypingCross btc2 = (BranchTypingCross) doSerialize(btc);
-    assertSame(btc, btc2);
-    /**@todo implement equals and compareTo to make this test pass*/
+    assertEquals(btc, btc2);
   }
 }
