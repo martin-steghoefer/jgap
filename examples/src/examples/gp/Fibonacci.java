@@ -31,7 +31,7 @@ import org.jgap.gp.function.*;
  */
 public class Fibonacci {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   static Variable vx;
 
@@ -71,9 +71,6 @@ public class Fibonacci {
         new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem1"),
         new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
-        //        new Terminal(a_conf, CommandGene.IntegerClass, 0, 100),
-        //        new ModCommand(a_conf, CommandGene.IntegerClass),
-        //        new MultiplyCommand(a_conf, CommandGene.IntegerClass),
     }, {
         // Commands will be added programmatically, see below.
         // ---------------------------------------------------
@@ -88,7 +85,7 @@ public class Fibonacci {
     for (int i = 0; i < NUMFIB; i++) {
       int index = i;
       x[i] = new Integer(index);
-      y[i] = fib_iter(index); //fib_array(index);
+      y[i] = fib_iter(index);
       System.out.println(i + ") " + x[i] + "   " + y[i]);
     }
     // Create genotype with initial population.
@@ -154,16 +151,17 @@ public class Fibonacci {
       System.out.println("Program to discover: Fibonacci(x)");
       GPConfiguration config = new GPConfiguration();
       int popSize;
-      if(args.length == 1) {
+      if (args.length == 1) {
         popSize = Integer.parseInt(args[0]);
       }
       else {
         popSize = 1200;
       }
+      System.out.println("Using population size of "+popSize);
       config.setMaxInitDepth(6);
       config.setPopulationSize(popSize);
       config.setFitnessFunction(new Fibonacci.FormulaFitnessFunction());
-      config.setStrictProgramCreation(!false);
+      config.setStrictProgramCreation(false);
       config.setProgramCreationMaxTries(5);
       GPGenotype gp = create(config);
       final Thread t = new Thread(gp);
@@ -174,7 +172,7 @@ public class Fibonacci {
           new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
-          int evno = genotype.getConfiguration().getGenerationNr();
+          int evno = genotype.getGPConfiguration().getGenerationNr();
           double freeMem = GPGenotype.getFreeMemoryMB();
           if (evno % 50 == 0) {
             double bestFitness = genotype.getFittestProgram().
@@ -209,8 +207,6 @@ public class Fibonacci {
         }
       });
       t.start();
-//      gp.evolve(1200);
-//      gp.outputSolution(gp.getAllTimeBest());
     } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
@@ -238,7 +234,7 @@ public class Fibonacci {
           vx.set(x[i]);
           try {
             try {
-//            double result = a_program.getChromosome(j).execute_int(noargs);
+              /**@todo use init. params to distinguish program flow*/
               // Only evaluate after whole GP program was run.
               // ---------------------------------------------
               if (j == a_program.size() - 1) {
@@ -246,11 +242,12 @@ public class Fibonacci {
                 error += Math.abs(result - y[i]);
               }
               else {
-                /**@todo use init. params to distinguish program flow*/
+                // Execute memory manipulating subprograms.
+                // ----------------------------------------
                 a_program.execute_void(j, noargs);
               }
             } catch (IllegalStateException iex) {
-              error = Double.MAX_VALUE / 2; /**@todo use constant*/
+              error = GPFitnessFunction.MAX_FITNESS_VALUE;
               break;
             }
           } catch (ArithmeticException ex) {
@@ -261,17 +258,15 @@ public class Fibonacci {
         }
       }
       if (GPGenotype.getGPConfiguration().stackSize() > 0) {
-        error = Double.MAX_VALUE / 2; /**@todo use constant*/
+        error = GPFitnessFunction.MAX_FITNESS_VALUE;
       }
       if (error < 0.000001) {
         error = 0.0d;
       }
-      else if (error < Double.MAX_VALUE / 2) { /**@todo use constant*/
+      else if (error < GPFitnessFunction.MAX_FITNESS_VALUE) {
         /**@todo add penalty for longer solutions*/
       }
       return error;
     }
   }
 }
-// Best solution fitness: 43.0
-// Best solution: sub[(store_in(mem0, const(1) )) --> (store_in(mem0, const(0) )) --> (store_in(mem2, const(1) ))] ==> store_in(mem2, (read_from(mem2)  + X ))
