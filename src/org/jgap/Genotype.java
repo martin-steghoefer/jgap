@@ -30,13 +30,13 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.84 $";
+  private final static String CVS_REVISION = "$Revision: 1.85 $";
 
   /**
-   * The current active Configuration instance.
+   * The current Configuration instance.
    * @since 1.0
    */
-  transient private static Configuration m_activeConfiguration;
+  private transient static Configuration m_activeConfiguration;
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -124,45 +124,6 @@ public class Genotype
   public Genotype(Configuration a_configuration)
       throws InvalidConfigurationException {
 
-  }
-
-  /**
-   * Sets the active configuration object on this Genotype and its
-   * member Chromosomes. This method should be invoked immediately following
-   * deserialization of this Genotype. If an active Configuration has already
-   * been set on this Genotype, then this method will do nothing.
-   *
-   * @param a_activeConfiguration the current active Configuration object that
-   * is to be referenced internally by this Genotype and its member Chromosome
-   * instances
-   *
-   * @throws InvalidConfigurationException if the Configuration object is null
-   * or cannot be locked because it is in an invalid or incomplete state
-   *
-   * @author Neil Rotstan
-   * @author Klaus Meffert
-   * @since 1.0
-   * @deprecated don't use any more, see
-   * GenotypeTest.testSetActiveConfiguration_0 for an example of the problem
-   */
-  public void setActiveConfiguration(Configuration a_activeConfiguration)
-      throws InvalidConfigurationException {
-    // Only assign the given Configuration object if we don't already
-    // have one.
-    // --------------------------------------------------------------
-    if (m_activeConfiguration == null) {
-      if (a_activeConfiguration == null) {
-        throw new InvalidConfigurationException(
-            "The given Configuration object may not be null.");
-      }
-      else {
-        // Make sure the Configuration object is locked and cannot be
-        // changed.
-        // ----------------------------------------------------------
-        a_activeConfiguration.lockSettings();
-        m_activeConfiguration = a_activeConfiguration;
-      }
-    }
   }
 
   /**
@@ -623,6 +584,7 @@ public class Genotype
     int twopower = 1;
     // For empty genotype we want a special value different from other hashcode
     // implementations.
+    // ------------------------------------------------------------------------
     int localHashCode = -573;
     for (i = 0; i < size; i++, twopower = 2 * twopower) {
       s = getPopulation().getChromosome(i);
