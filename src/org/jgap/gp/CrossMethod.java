@@ -9,6 +9,8 @@
  */
 package org.jgap.gp;
 
+import java.io.*;
+
 /**
  * Abstract base class for GP-crossing over implementations.
  *
@@ -16,9 +18,9 @@ package org.jgap.gp;
  * @since 3.0
  */
 public abstract class CrossMethod
-    implements java.io.Serializable {
+    implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient GPConfiguration m_configuration;
 
