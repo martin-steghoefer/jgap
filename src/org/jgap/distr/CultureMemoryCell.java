@@ -9,7 +9,9 @@
  */
 package org.jgap.distr;
 
+import java.io.*;
 import java.util.*;
+import org.apache.commons.lang.builder.*;
 
 /**
  * Represents a memory cell used within {@link org.jgap.distr.Culture}, a
@@ -21,9 +23,10 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 2.3
  */
-public class CultureMemoryCell implements java.io.Serializable {
+public class CultureMemoryCell
+    implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Informative name of the memory cell (optional)
@@ -143,7 +146,7 @@ public class CultureMemoryCell implements java.io.Serializable {
     }
     else {
       m_previousVersion = getNewInstance(m_value, getVersion(),
-                                         getName());
+          getName());
     }
     m_value = a_value;
     incrementVersion();
@@ -250,8 +253,8 @@ public class CultureMemoryCell implements java.io.Serializable {
    * @since 2.3
    */
   protected CultureMemoryCell getNewInstance(final Object a_value,
-                                             final int a_version,
-                                             final String a_name) {
+      final int a_version,
+      final String a_name) {
     // DON'T USE SETTERS IN HERE BECAUSE OF ENDLESS LOOPS!
     CultureMemoryCell cell = new CultureMemoryCell(a_name, 0);
     cell.m_value = a_value;
@@ -279,11 +282,13 @@ public class CultureMemoryCell implements java.io.Serializable {
    */
   public int getReadAccessedCurrentVersion() {
     if (m_historySize < 1) {
-      // use internal (simple/atomic) history
+      // Use internal (simple/atomic) history.
+      // -------------------------------------
       return getReadAccessed() - m_previousVersion.getReadAccessed();
     }
     else {
-      // uses sophisticated history (list)
+      // Use sophisticated history (list).
+      // ---------------------------------
       CultureMemoryCell cell = (CultureMemoryCell) m_history.get(
           m_history.size() - 1);
       return getReadAccessed() - cell.getReadAccessed();
@@ -386,5 +391,41 @@ public class CultureMemoryCell implements java.io.Serializable {
    */
   public long getVersionTimeMilliseconds() {
     return m_dateTimeVersion;
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are regarded as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    } catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    CultureMemoryCell other = (CultureMemoryCell) a_other;
+    if (other == null) {
+      return 1;
+    }
+    return new CompareToBuilder()
+        .append(m_value, other.m_value)
+        .append(m_version, other.m_version)
+        .append(m_historySize, other.m_historySize)
+        .toComparison();
   }
 }

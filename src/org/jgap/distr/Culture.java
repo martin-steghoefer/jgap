@@ -9,7 +9,9 @@
  */
 package org.jgap.distr;
 
+import java.io.*;
 import java.util.*;
+import org.apache.commons.lang.builder.*;
 
 /**
  * Culture is a memory not being bound to a generation, but possibly persistent
@@ -19,9 +21,10 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 2.3
  */
-public class Culture implements java.io.Serializable {
+public class Culture
+    implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The storage to use.
@@ -67,7 +70,7 @@ public class Culture implements java.io.Serializable {
    * @since 2.3
    */
   public CultureMemoryCell set(final int a_index, final double a_value,
-                  final int a_historySize, final String a_name) {
+                               final int a_historySize, final String a_name) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }
@@ -91,7 +94,7 @@ public class Culture implements java.io.Serializable {
    * @since 3.0
    */
   public CultureMemoryCell set(final int a_index, final Object a_value,
-                  final int a_historySize, final String a_name) {
+                               final int a_historySize, final String a_name) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }
@@ -114,7 +117,7 @@ public class Culture implements java.io.Serializable {
    * @since 3.0
    */
   public CultureMemoryCell set(final String a_name, final Object a_value,
-                  final int a_historySize) {
+                               final int a_historySize) {
     if (a_name == null || a_name.length() < 1) {
       throw new IllegalArgumentException("Illegal memory name!");
     }
@@ -123,7 +126,7 @@ public class Culture implements java.io.Serializable {
       // Create new named index.
       // -----------------------
       m_memoryNames.add(a_name);
-      index = m_memoryNames.size() -1;
+      index = m_memoryNames.size() - 1;
     }
     CultureMemoryCell cell = new CultureMemoryCell(a_name, a_historySize);
     cell.setValue(a_value);
@@ -160,7 +163,7 @@ public class Culture implements java.io.Serializable {
     }
     int index = m_memoryNames.indexOf(a_name);
     if (index < 0) {
-      throw new IllegalArgumentException("Memory name unknown: "+a_name);
+      throw new IllegalArgumentException("Memory name unknown: " + a_name);
     }
     return m_memory[index];
   }
@@ -221,5 +224,44 @@ public class Culture implements java.io.Serializable {
    */
   public List getMemoryNames() {
     return new Vector(m_memoryNames);
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are regarded as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    } catch (ClassCastException cex) {
+      cex.printStackTrace();
+      return false;
+    }
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    Culture other = (Culture) a_other;
+    if (other == null) {
+      return 1;
+    }
+    // Problem: Vector does not implement Comparable. Thus we call toArray().
+    // ----------------------------------------------------------------------
+    return new CompareToBuilder()
+        .append(m_size, other.m_size)
+        .append(m_memory, other.m_memory)
+        .append(m_memoryNames.toArray(), other.m_memoryNames.toArray())
+        .toComparison();
   }
 }
