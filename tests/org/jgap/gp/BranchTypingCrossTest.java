@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
@@ -51,7 +51,7 @@ public class BranchTypingCrossTest
     // First program.
     // --------------
     GPProgram prog1 = new GPProgram(m_gpconf, 1);
-    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50, prog1);
     pc1.setGene(0, CMD_SUB_V_I);
     pc1.setGene(1, CMD_FOR);
     pc1.setGene(2, CMD_CONST2);
@@ -62,7 +62,7 @@ public class BranchTypingCrossTest
     // Second program.
     // ---------------
     GPProgram prog2 = new GPProgram(m_gpconf, 1);
-    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50, prog2);
     pc2.setGene(0, CMD_SUB_V_I);
     pc2.setGene(1, CMD_FOR);
     pc2.setGene(2, CMD_ADD);
@@ -120,7 +120,7 @@ public class BranchTypingCrossTest
     // First program.
     // --------------
     GPProgram prog1 = new GPProgram(m_gpconf, 1);
-    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50, prog1);
     pc1.setGene(0, CMD_SUB_V_I);
     pc1.setGene(1, CMD_FOR);
     pc1.setGene(2, CMD_CONST2);
@@ -131,7 +131,7 @@ public class BranchTypingCrossTest
     // Second program.
     // ---------------
     GPProgram prog2 = new GPProgram(m_gpconf, 1);
-    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50, prog2);
     pc2.setGene(0, CMD_SUB_V_I);
     pc2.setGene(1, CMD_FOR);
     pc2.setGene(2, CMD_ADD);
@@ -189,7 +189,7 @@ public class BranchTypingCrossTest
     // First program.
     // --------------
     GPProgram prog1 = new GPProgram(m_gpconf, 1);
-    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50, prog1);
     pc1.setGene(0, CMD_FOR);
     pc1.setGene(1, CMD_CONST2);
     pc1.setGene(2, CMD_NOP);
@@ -198,7 +198,7 @@ public class BranchTypingCrossTest
     // Second program.
     // ---------------
     GPProgram prog2 = new GPProgram(m_gpconf, 1);
-    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50, prog2);
     pc2.setGene(0, CMD_SUB_V_I);
     pc2.setGene(1, CMD_FOR);
     pc2.setGene(2, CMD_ADD);

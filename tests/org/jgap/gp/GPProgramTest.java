@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPProgramTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPProgramTest.class);
@@ -44,7 +44,7 @@ public class GPProgramTest
   public void testExecute_0()
       throws Exception {
     GPProgram prog = new GPProgram(m_gpconf,3);
-    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50, prog);
     pc1.getFunctions()[0] = CMD_SUB_V_V;
     pc1.getFunctions()[1] = new StoreTerminal(m_gpconf, "mem0",//a
                                               CommandGene.IntegerClass);
@@ -59,7 +59,7 @@ public class GPProgramTest
     assertEquals(2, pc1.getDepth(0));
     prog.setChromosome(0, pc1);
 
-    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50, prog);
     Variable vx;
     CommandGene[] funcSet2 = new CommandGene[] {
         CMD_SUB_V_V_V, //0
@@ -78,7 +78,7 @@ public class GPProgramTest
     pc2.redepth();
     prog.setChromosome(1, pc2);
 
-    ProgramChromosome pc3 = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc3 = new ProgramChromosome(m_gpconf, 50, prog);
     pc3.getFunctions()[0] = new ReadTerminal(m_gpconf, CommandGene.IntegerClass,"mem2");
     pc3.redepth();
     prog.setChromosome(2, pc3);

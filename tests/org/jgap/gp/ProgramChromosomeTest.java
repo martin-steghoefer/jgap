@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -46,7 +46,7 @@ public class ProgramChromosomeTest
    */
   public void testGrowNode_0()
       throws Exception {
-    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, null);
     CommandGene[] funcSet = new CommandGene[] {
         CMD_SUB_V_I, //0
         CMD_FOR, //1
@@ -77,7 +77,7 @@ public class ProgramChromosomeTest
    */
   public void testGrowNode_1()
       throws Exception {
-    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, null);
     CommandGene[] funcSet = new CommandGene[] {
         CMD_SUB_V_I, //0
         CMD_FOR, //1
@@ -107,7 +107,7 @@ public class ProgramChromosomeTest
    */
   public void testGrowNode_2()
       throws Exception {
-    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, null);
     CommandGene[] funcSet = new CommandGene[] {
         CMD_SUB_V_V_V, //0
         CMD_FORX, //1
@@ -142,7 +142,7 @@ public class ProgramChromosomeTest
    */
   public void testGrowNode_3()
       throws Exception {
-    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, null);
     CommandGene[] funcSet = new CommandGene[] {
         CMD_SUB_V_V_V, //0
         CMD_FOR, //1

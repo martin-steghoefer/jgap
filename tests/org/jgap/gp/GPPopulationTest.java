@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -173,7 +173,7 @@ public class GPPopulationTest
       throws Exception {
     GPPopulation pop = new GPPopulation(m_gpconf, 2);
     GPProgram prog = new GPProgram(m_gpconf, 2);
-    ProgramChromosome chrom = new ProgramChromosome(m_gpconf, 2);
+    ProgramChromosome chrom = new ProgramChromosome(m_gpconf, 2, prog);
     prog.setChromosome(0, chrom);
     prog.setChromosome(1, chrom);
     pop.setGPProgram(0, prog);
