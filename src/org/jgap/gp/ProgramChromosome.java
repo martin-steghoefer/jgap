@@ -24,7 +24,7 @@ public class ProgramChromosome
     // implements IGPChromosome
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /*wodka:
    void add(Command cmd);
@@ -88,7 +88,6 @@ public class ProgramChromosome
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
                            GPProgram a_ind)
       throws InvalidConfigurationException {
-//    super(a_configuration, a_size);
     if (a_size <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -98,6 +97,7 @@ public class ProgramChromosome
           "Configuration to be set must not"
           + " be null!");
     }
+    m_configuration = a_configuration;
     m_ind = a_ind;
     init(a_size);
   }
@@ -107,7 +107,6 @@ public class ProgramChromosome
                            Class[] a_argTypes,
                            GPProgram a_ind)
       throws InvalidConfigurationException {
-//    super(a_configuration, a_size);
     if (a_size <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -117,6 +116,7 @@ public class ProgramChromosome
           "Configuration to be set must not"
           + " be null!");
     }
+    m_configuration = a_configuration;
     m_ind = a_ind;
     m_functionSet = a_functionSet;
     argTypes = a_argTypes;
@@ -126,12 +126,12 @@ public class ProgramChromosome
   public ProgramChromosome(GPConfiguration a_configuration,
                            CommandGene[] a_initialGenes)
       throws InvalidConfigurationException {
-//    super(a_configuration);
     if (a_configuration == null) {
       throw new InvalidConfigurationException(
           "Configuration to be set must not"
           + " be null!");
     }
+    m_configuration = a_configuration;
     int i = 0;
     while (i < a_initialGenes.length && a_initialGenes[i] != null) {
       i++;

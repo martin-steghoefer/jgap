@@ -19,9 +19,9 @@ import org.jgap.*;
  * @since 3.0
  */
 public class CommandGeneTest
-    extends JGAPTestCase {
+    extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);
@@ -37,7 +37,7 @@ public class CommandGeneTest
    */
   public void testConstruct_0()
       throws Exception {
-    assertNotNull(new CommandGeneImpl(conf));
+    assertNotNull(new CommandGeneImpl(m_gpconf));
   }
 
   /**
@@ -48,7 +48,7 @@ public class CommandGeneTest
    */
   public void testToString_0()
       throws Exception {
-    Gene gene = new CommandGeneImpl(conf);
+    CommandGene gene = new CommandGeneImpl(m_gpconf);
     assertEquals("test", gene.toString());
   }
 
@@ -60,7 +60,7 @@ public class CommandGeneTest
    */
   public void testSetAllele_0()
       throws Exception {
-    Gene gene = new CommandGeneImpl(conf);
+    CommandGene gene = new CommandGeneImpl(m_gpconf);
     try {
       gene.setAllele(new Double(75));
       fail();
@@ -77,7 +77,7 @@ public class CommandGeneTest
    */
   public void testSize_0()
       throws Exception {
-    Gene gene = new CommandGeneImpl(conf);
+    CommandGene gene = new CommandGeneImpl(m_gpconf);
     assertEquals(1, gene.size());
   }
 
@@ -89,7 +89,7 @@ public class CommandGeneTest
    */
   public void testEquals_0()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertFalse(gene.equals(null));
     assertTrue(gene.equals(gene));
     assertFalse(gene.equals(new Integer(2)));
@@ -103,7 +103,7 @@ public class CommandGeneTest
    */
   public void testEquals_1()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertFalse(gene.equals(null));
     assertTrue(gene.equals(gene));
     assertFalse(gene.equals(new Integer(2)));
@@ -117,7 +117,7 @@ public class CommandGeneTest
    */
   public void testEquals_2()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertFalse(gene.equals(null));
     assertTrue(gene.equals(gene));
     assertFalse(gene.equals(new Integer(2)));
@@ -133,9 +133,9 @@ public class CommandGeneTest
   public void testEquals_3()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     gene.setApplicationData(new AppDataForTest());
-    CommandGeneImpl gene2 = new CommandGeneImpl(conf);
+    CommandGeneImpl gene2 = new CommandGeneImpl(m_gpconf);
     gene2.setApplicationData(new AppDataForTest());
     gene.setCompareApplicationData(true);
     assertTrue(gene.equals(gene2));
@@ -154,7 +154,7 @@ public class CommandGeneTest
    */
   public void testCleanup_0()
       throws Exception {
-    Gene gene = new CommandGeneImpl(conf);
+    CommandGene gene = new CommandGeneImpl(m_gpconf);
     gene.cleanup();
   }
 
@@ -166,7 +166,7 @@ public class CommandGeneTest
    */
   public void testHashCode_0()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertEquals( -81, gene.hashCode());
   }
 
@@ -178,7 +178,7 @@ public class CommandGeneTest
    */
   public void testHashCode_1()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     //TODO implement
 //    gene.setAllele(new Double(1.5d));
 //    assertEquals(new Double(1.5d).hashCode(), gene.hashCode());
@@ -192,7 +192,7 @@ public class CommandGeneTest
    */
   public void testSetEnergy_0()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertEquals(0.0, gene.getEnergy(), DELTA);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
@@ -206,7 +206,7 @@ public class CommandGeneTest
    */
   public void testSetEnergy_1()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
     gene.setEnergy( -55.8);
@@ -224,7 +224,7 @@ public class CommandGeneTest
    */
   public void testSetApplicationData_0()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertNull(gene.getApplicationData());
     Integer i = new Integer(23);
     gene.setApplicationData(i);
@@ -242,7 +242,7 @@ public class CommandGeneTest
    */
   public void testIsCompareApplicationData_0()
       throws Exception {
-    CommandGeneImpl gene = new CommandGeneImpl(conf);
+    CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
     assertFalse(gene.isCompareApplicationData());
     gene.setCompareApplicationData(false);
     assertFalse(gene.isCompareApplicationData());
@@ -259,7 +259,7 @@ public class CommandGeneTest
   class CommandGeneImpl
       extends CommandGene {
 
-    public CommandGeneImpl(final Configuration a_config)
+    public CommandGeneImpl(final GPConfiguration a_config)
         throws InvalidConfigurationException {
       super(a_config,1,CommandGene.FloatClass);
     }

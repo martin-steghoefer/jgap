@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -178,7 +178,7 @@ public class ProgramChromosomeTest
   public void testToString2_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(0, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
     assertEquals("X", pc.toString2(0));
   }
@@ -192,8 +192,8 @@ public class ProgramChromosomeTest
   public void testToString2_1()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Increment(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(0, new Increment(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("INC(X)", s);
@@ -208,9 +208,9 @@ public class ProgramChromosomeTest
   public void testToString2_2()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Add(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("X + Y", s);
@@ -225,9 +225,9 @@ public class ProgramChromosomeTest
   public void testToString2_3()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Modulo(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(0, new Modulo(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("X % Y", s);
@@ -242,9 +242,9 @@ public class ProgramChromosomeTest
   public void testToString2_4()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Modulo(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(0, new Modulo(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(1);
     assertEquals("X", s);
@@ -261,11 +261,11 @@ public class ProgramChromosomeTest
   public void testToString2_5()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Modulo(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Subtract(conf, CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
-    pc.setGene(4, new Variable(conf, "Z", CommandGene.IntegerClass));
+    pc.setGene(0, new Modulo(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Subtract(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.setGene(4, new Variable(m_gpconf, "Z", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("(X - Y) % Z", s);
@@ -282,10 +282,10 @@ public class ProgramChromosomeTest
   public void testToString2_6()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Multiply(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Push(conf, CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(3, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(0, new Multiply(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Push(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString2(1);
     assertEquals("(push X)", s);
@@ -303,16 +303,16 @@ public class ProgramChromosomeTest
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0,
-               new SubProgram(conf,
+               new SubProgram(m_gpconf,
                                      new Class[] {CommandGene.IntegerClass,
                                      CommandGene.IntegerClass,
                                      CommandGene.IntegerClass}));
-    pc.setGene(1, new Multiply(conf, CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
-    pc.setGene(4, new Push(conf, CommandGene.IntegerClass));
-    pc.setGene(5, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(6, new Constant(conf, CommandGene.IntegerClass, new Integer(7)));
+    pc.setGene(1, new Multiply(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.setGene(4, new Push(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(5, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(6, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(7)));
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("sub[(X * Y) --> (push X) --> 7]", s);
@@ -328,14 +328,14 @@ public class ProgramChromosomeTest
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0,
-               new SubProgram(conf,
+               new SubProgram(m_gpconf,
                                      new Class[] {CommandGene.IntegerClass,
                                      CommandGene.IntegerClass}));
-    pc.setGene(1, new Multiply(conf, CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(3, new Variable(conf, "Y", CommandGene.IntegerClass));
-    pc.setGene(4, new Push(conf, CommandGene.IntegerClass));
-    pc.setGene(5, new Constant(conf, CommandGene.IntegerClass, new Integer(9)));
+    pc.setGene(1, new Multiply(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.setGene(4, new Push(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(5, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(9)));
     pc.redepth();
     String s = pc.toString2(0);
     assertEquals("sub[(X * Y) --> (push 9)]", s);
@@ -350,9 +350,9 @@ public class ProgramChromosomeTest
   public void testToString_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Add(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString(0);
     assertEquals("+ ( X Y )", s);
@@ -367,9 +367,9 @@ public class ProgramChromosomeTest
   public void testToString_1()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Subtract(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(0, new Subtract(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     String s = pc.toString(1);
     assertEquals("X ", s);
@@ -386,8 +386,8 @@ public class ProgramChromosomeTest
   public void testRedepth_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Add(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     try {
       pc.redepth();
       fail();
@@ -406,9 +406,9 @@ public class ProgramChromosomeTest
   public void testGetDepth_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Add(conf, CommandGene.IntegerClass)); //Node 0
-    pc.setGene(1, new Variable(conf, "Y", CommandGene.IntegerClass)); //Node 1
-    pc.setGene(2, new Variable(conf, "Z", CommandGene.IntegerClass)); // Node 2
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass)); //Node 0
+    pc.setGene(1, new Variable(m_gpconf, "Y", CommandGene.IntegerClass)); //Node 1
+    pc.setGene(2, new Variable(m_gpconf, "Z", CommandGene.IntegerClass)); // Node 2
     pc.redepth();
     assertEquals(1, pc.getDepth(0)); //1 = one level below node 0
     assertEquals(0, pc.getDepth(1));
@@ -424,10 +424,10 @@ public class ProgramChromosomeTest
   public void testGetDepth_1()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new IfElse(conf, CommandGene.IntegerClass)); //Node 0
-    pc.setGene(1, new Variable(conf, "Y", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Z", CommandGene.IntegerClass));
-    pc.setGene(3, new Variable(conf, "X", CommandGene.IntegerClass));
+    pc.setGene(0, new IfElse(m_gpconf, CommandGene.IntegerClass)); //Node 0
+    pc.setGene(1, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Z", CommandGene.IntegerClass));
+    pc.setGene(3, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
     assertEquals(1, pc.getDepth(0)); //1 = one level below node 0
     assertEquals(0, pc.getDepth(1));
@@ -444,12 +444,12 @@ public class ProgramChromosomeTest
   public void testGetDepth_2()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new IfElse(conf, CommandGene.IntegerClass)); //Node 0
-    pc.setGene(1, new Variable(conf, "Y", CommandGene.IntegerClass));
-    pc.setGene(2, new Add(conf, CommandGene.IntegerClass)); // Node 2
-    pc.setGene(3, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(4, new Constant(conf, CommandGene.IntegerClass, new Integer(3)));
-    pc.setGene(5, new Variable(conf, "Z", CommandGene.IntegerClass));
+    pc.setGene(0, new IfElse(m_gpconf, CommandGene.IntegerClass)); //Node 0
+    pc.setGene(1, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.setGene(2, new Add(m_gpconf, CommandGene.IntegerClass)); // Node 2
+    pc.setGene(3, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(4, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(3)));
+    pc.setGene(5, new Variable(m_gpconf, "Z", CommandGene.IntegerClass));
     pc.redepth();
     assertEquals(2, pc.getDepth(0)); //2 = one level below node 0
     assertEquals(0, pc.getDepth(1));
@@ -468,9 +468,9 @@ public class ProgramChromosomeTest
   public void testSerialize_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
-    pc.setGene(0, new Add(conf, CommandGene.IntegerClass));
-    pc.setGene(1, new Variable(conf, "X", CommandGene.IntegerClass));
-    pc.setGene(2, new Variable(conf, "Y", CommandGene.IntegerClass));
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
     ProgramChromosome pc2 = (ProgramChromosome) doSerialize(pc);
     assertEquals(pc, pc2);
