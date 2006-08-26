@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -47,7 +47,8 @@ public abstract class BaseGene
    */
   private boolean m_compareAppData;
 
-  private /*transient*/ Configuration m_configuration;
+  private
+  /*transient*/ Configuration m_configuration;
 
   /**
    * Constants for toString()
@@ -183,8 +184,7 @@ public abstract class BaseGene
       else {
         return false;
       }
-    }
-    catch (ClassCastException e) {
+    } catch (ClassCastException e) {
       // If the other object isn't an Gene of current type
       // (like IntegerGene for IntegerGene's), then we're not equal.
       // -----------------------------------------------------------
@@ -305,8 +305,7 @@ public abstract class BaseGene
         try {
           return ( (Integer) handler.perform(a_appdata1, null, a_appdata2)).
               intValue();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           throw new Error(ex);
         }
       }
@@ -377,7 +376,7 @@ public abstract class BaseGene
   protected abstract Gene newGeneInternal();
 
   /**
-   * @return the configuration used
+   * @return the configuration set
    *
    * @author Klaus Meffert
    * @since 3.0
