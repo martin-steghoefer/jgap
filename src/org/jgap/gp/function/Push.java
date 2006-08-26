@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class Push
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Class m_type;
 
@@ -113,7 +113,7 @@ public class Push
     ((GPConfiguration)getConfiguration()).pushToStack(a_value);
   }
 
-  public Class getChildType(int i) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return m_type;
   }
 }

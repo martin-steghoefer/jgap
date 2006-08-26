@@ -23,7 +23,7 @@ public abstract class CommandGene
     extends BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -36,8 +36,6 @@ public abstract class CommandGene
   public final static Class DoubleClass = Double.class;
 
   public final static Class VoidClass = Void.class;
-
-  private static GPProgram individual;/**@todo make nonstatic*/
 
   /**
    * Should isValid() be called?
@@ -114,8 +112,21 @@ public abstract class CommandGene
     return m_arity;
   }
 
-  public int getArity() {
+  private int getArity() {
     return size();
+  }
+
+  /**
+   * Override if arity of GP command depends on individual.
+   *
+   * @param a_indvividual the invididual the command's arity depends on
+   * @return arity of the command
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getArity(GPProgram a_indvividual) {
+    return getArity();
   }
 
   public int compareTo(Object o) {
@@ -335,13 +346,14 @@ public abstract class CommandGene
    * Gets the type of node allowed form the given child number. Must be
    * overridden in subclasses.
    *
-   * @param i the child number
+   * @param a_ind the individual the child belongs to
+   * @param a_chromNum the chromosome number
    * @return the type of node allowed for that child
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public abstract Class getChildType(int i);
+  public abstract Class getChildType(GPProgram a_ind, int a_chromNum);
 
   protected Object getInternalValue() {
     /**@todo is this correct?*/
@@ -421,14 +433,6 @@ public abstract class CommandGene
     if (!isValid(a_program, a_index)) {
       throw new IllegalStateException("State for GP-command not valid");
     }
-  }
-
-  protected GPProgram getIndividual() {
-    return individual;
-  }
-
-  protected static void setIndividual(GPProgram a_ind) {
-    individual = a_ind;
   }
 
   public void applyMutation(int index, double a_percentage){

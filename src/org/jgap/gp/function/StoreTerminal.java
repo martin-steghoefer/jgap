@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class StoreTerminal
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -63,7 +63,15 @@ public class StoreTerminal
     if (m_type == CommandGene.IntegerClass) {
       value = new Integer(c.execute_int(n, 0, args));
     }
-    /**@todo add additional types*/
+    else if (m_type == CommandGene.LongClass) {
+      value = new Long(c.execute_long(n, 0, args));
+    }
+    else if (m_type == CommandGene.DoubleClass) {
+      value = new Double(c.execute_double(n, 0, args));
+    }
+    else if (m_type == CommandGene.FloatClass) {
+      value = new Float(c.execute_float(n, 0, args));
+    }
     else {
       value = c.execute(n, 0, args);
     }
@@ -119,10 +127,10 @@ public class StoreTerminal
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    return getIndividual().getCommandOfClass(0, ReadTerminal.class) > 0;
+    return a_program.getIndividual().getCommandOfClass(0, ReadTerminal.class) >
+        0;
   }
-
-  public Class getChildType(int i) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return m_type;
   }
 }

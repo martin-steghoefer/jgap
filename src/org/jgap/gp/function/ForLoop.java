@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ForLoop
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_typeVar;
 
@@ -73,6 +73,8 @@ public class ForLoop
     if (x > m_maxLoop) {
       x = m_maxLoop;
     }
+    // Repeatedly execute the second child (index = 1).
+    // ------------------------------------------------
     for (int i = 0; i < x; i++) {
       c.execute_void(n, 1, args);
     }
@@ -82,8 +84,8 @@ public class ForLoop
     return true;
   }
 
-  public Class getChildType(int i) {
-    if (i == 0) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+    if (a_chromNum == 0) {
       // Loop counter variable
       return m_typeVar;
     }

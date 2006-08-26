@@ -22,7 +22,7 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /*wodka:
    void add(Command cmd);
@@ -148,7 +148,7 @@ public class ProgramChromosome
     if (n < 0) {
       return;
     }
-    for (int i = 0; i < getFunctions()[n].getArity(); i++) {
+    for (int i = 0; i < getFunctions()[n].getArity(m_ind); i++) {
       cleanup(getChild(n, i));
     }
     getFunctions()[n].cleanup();
@@ -276,12 +276,12 @@ public class ProgramChromosome
     if (j > 0) {
       funcName = funcName.trim();
     }
-    if (getFunctions()[a_n].getArity() == 0) {
+    if (getFunctions()[a_n].getArity(m_ind) == 0) {
       return funcName + " ";
     }
     String str = "";
     str += funcName + " ( ";
-    for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
+    for (int i = 0; i < getFunctions()[a_n].getArity(m_ind); i++) {
       str += toString(getChild(a_n, i));
     }
     if (a_n == 0) {
@@ -305,23 +305,23 @@ public class ProgramChromosome
     if (a_n < 0) {
       return "";
     }
-    if (getFunctions()[a_n].getArity() == 0) {
+    if (getFunctions()[a_n].getArity(m_ind) == 0) {
       return getFunctions()[a_n].getName();
     }
     String str = "";
     boolean paramOutput = false;
-    if (getFunctions()[a_n].getArity() > 0) {
+    if (getFunctions()[a_n].getArity(m_ind) > 0) {
       if (getFunctions()[a_n].getName().indexOf("&1") >= 0) {
         paramOutput = true;
       }
     }
-    if (getFunctions()[a_n].getArity() == 1 || paramOutput) {
+    if (getFunctions()[a_n].getArity(m_ind) == 1 || paramOutput) {
       str += getFunctions()[a_n].getName();
     }
     if (a_n > 0) {
       str = "(" + str;
     }
-    for (int i = 0; i < getFunctions()[a_n].getArity(); i++) {
+    for (int i = 0; i < getFunctions()[a_n].getArity(m_ind); i++) {
       String childString = toString2(getChild(a_n, i));
       String placeHolder = "&" + (i + 1);
       int placeholderIndex = str.indexOf(placeHolder);
@@ -331,7 +331,7 @@ public class ProgramChromosome
       else {
         str += childString;
       }
-      if (i == 0 && getFunctions()[a_n].getArity() != 1 && !paramOutput) {
+      if (i == 0 && getFunctions()[a_n].getArity(m_ind) != 1 && !paramOutput) {
         str += " " + getFunctions()[a_n].getName() + " ";
       }
     }
@@ -355,14 +355,14 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
+  public boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
                             boolean a_function, boolean a_growing) {
     for (int i = 0; i < a_nodeSet.length; i++) {
       if (a_nodeSet[i].getReturnType() == a_type) {
-        if (a_nodeSet[i].getArity() == 0 && (!a_function || a_growing)) {
+        if (a_nodeSet[i].getArity(m_ind) == 0 && (!a_function || a_growing)) {
           return true;
         }
-        if (a_nodeSet[i].getArity() != 0 && a_function) {
+        if (a_nodeSet[i].getArity(m_ind) != 0 && a_function) {
           return true;
         }
       }
@@ -405,10 +405,11 @@ public class ProgramChromosome
       lindex = getGPConfiguration().getRandomGenerator().nextInt(
           a_functionSet.length);
       if (a_functionSet[lindex].getReturnType() == a_type) {
-        if (a_functionSet[lindex].getArity() == 0 && (!a_function || a_growing)) {
+        if (a_functionSet[lindex].getArity(m_ind) == 0 &&
+            (!a_function || a_growing)) {
           n = a_functionSet[lindex];
         }
-        if (a_functionSet[lindex].getArity() != 0 && a_function) {
+        if (a_functionSet[lindex].getArity(m_ind) != 0 && a_function) {
           n = a_functionSet[lindex];
         }
       }
@@ -494,9 +495,10 @@ public class ProgramChromosome
     m_depth[m_index] = m_maxDepth - a_depth;
     getFunctions()[m_index++] = a_rootNode;
     if (a_depth > 1) {
-      for (int i = 0; i < a_rootNode.getArity(); i++) {
-        growOrFullNode(a_num, a_depth - 1, a_rootNode.getChildType(i), a_functionSet,
-                 null, a_recurseLevel + 1, a_grow);
+      for (int i = 0; i < a_rootNode.getArity(m_ind); i++) {
+        growOrFullNode(a_num, a_depth - 1,
+                       a_rootNode.getChildType(getIndividual(), i),
+                       a_functionSet, null, a_recurseLevel + 1, a_grow);
       }
     }
   }
@@ -533,7 +535,7 @@ public class ProgramChromosome
     if (command == null) {
       throw new IllegalStateException("ProgramChromosome invalid");
     }
-    int arity = command.getArity();
+    int arity = command.getArity(m_ind);
     for (int i = 0; i < arity; i++) {
       m_depth[num] = m_depth[a_index] + 1;
       // children[i][n] = num;
@@ -554,7 +556,7 @@ public class ProgramChromosome
   public int numTerminals() {
     int count = 0;
     for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity() == 0) {
+      if (getFunctions()[i].getArity(m_ind) == 0) {
         count++;
       }
     }
@@ -570,7 +572,7 @@ public class ProgramChromosome
   public int numFunctions() {
     int count = 0;
     for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity() != 0) {
+      if (getFunctions()[i].getArity(m_ind) != 0) {
         count++;
       }
     }
@@ -589,7 +591,7 @@ public class ProgramChromosome
   public int numTerminals(Class a_type) {
     int count = 0;
     for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity() == 0
+      if (getFunctions()[i].getArity(m_ind) == 0
           && getFunctions()[i].getReturnType() == a_type) {
         count++;
       }
@@ -609,7 +611,7 @@ public class ProgramChromosome
   public int numFunctions(Class a_type) {
     int count = 0;
     for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity() != 0
+      if (getFunctions()[i].getArity(m_ind) != 0
           && getFunctions()[i].getReturnType() == a_type) {
         count++;
       }
@@ -698,7 +700,7 @@ public class ProgramChromosome
    */
   public int getTerminal(int a_index) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getArity() == 0) {
+      if (getFunctions()[j].getArity(m_ind) == 0) {
         if (--a_index < 0) {
           return j;
         }
@@ -708,11 +710,11 @@ public class ProgramChromosome
   }
 
   /**
-   * Gets the i'th function in this chromosome. The nodes are counted in a
+   * Gets the a_index'th function in this chromosome. The nodes are counted in a
    * depth-first manner, with node 0 being the first function in this
    * chromosome.
    *
-   * @param a_index the i'th function to get
+   * @param a_index the a_index'th function to get
    * @return the function
    *
    * @author Klaus Meffert
@@ -720,7 +722,7 @@ public class ProgramChromosome
    */
   public int getFunction(int a_index) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getArity() != 0) {
+      if (getFunctions()[j].getArity(m_ind) != 0) {
         if (--a_index < 0) {
           return j;
         }
@@ -730,11 +732,11 @@ public class ProgramChromosome
   }
 
   /**
-   * Gets the i'th terminal of the given type in this chromosome. The nodes are
-   * counted in a depth-first manner, with node 0 being the first terminal of
+   * Gets the a_index'th terminal of the given type in this chromosome. The nodes
+   * are counted in a depth-first manner, with node 0 being the first terminal of
    * the given type in this chromosome.
    *
-   * @param a_index the i'th terminal to get
+   * @param a_index the a_index'th terminal to get
    * @param a_type the type of terminal to get
    * @return the index of the terminal found, or -1 if no appropriate terminal
    * was found
@@ -745,7 +747,7 @@ public class ProgramChromosome
   public int getTerminal(int a_index, Class a_type) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
       if (getFunctions()[j].getReturnType() == a_type
-          && getFunctions()[j].getArity() == 0) {
+          && getFunctions()[j].getArity(m_ind) == 0) {
         if (--a_index < 0) {
           return j;
         }
@@ -769,7 +771,7 @@ public class ProgramChromosome
   public int getFunction(int a_index, Class a_type) {
     for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
       if (getFunctions()[j].getReturnType() == a_type
-          && getFunctions()[j].getArity() != 0) {
+          && getFunctions()[j].getArity(m_ind) != 0) {
         if (--a_index < 0) {
           return j;
         }
@@ -982,6 +984,7 @@ public class ProgramChromosome
     if (child == 0) {
       return getFunctions()[n + 1].execute_int(this, n + 1, args);
     }
+    /**@todo same as execute_void?*/
     int other = getChild(n, child);
     return getFunctions()[other].execute_int(this, other, args);
   }

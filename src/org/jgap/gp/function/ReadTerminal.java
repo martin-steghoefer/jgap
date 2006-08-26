@@ -21,11 +21,11 @@ import org.jgap.gp.*;
 public class ReadTerminal
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
-   * StoreTerminalCommand.
+   * an other command working with memory (otherwise it would make no sense).
    */
   private String m_storageName;
 
@@ -121,7 +121,7 @@ public class ReadTerminal
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    return getIndividual().getCommandOfClass(0, StoreTerminal.class) > 0;
+    return a_program.getIndividual().getCommandOfClass(0, StoreTerminal.class) > 0;
     /**@todo do it right*/
 //    return m_storageName.startsWith("thruput") ||
 //        a_program.getCommandOfClass(0, StoreTerminal.class) >= 0;

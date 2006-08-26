@@ -22,7 +22,7 @@ import org.jgap.gp.terminal.*;
 public class ForXLoop
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Class m_type;
 
@@ -78,7 +78,7 @@ public class ForXLoop
     return a_program.getVariableWithReturnType(0, m_type) >= 0;
   }
 
-  public Class getChildType(int i) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return CommandGene.VoidClass;
   }
 

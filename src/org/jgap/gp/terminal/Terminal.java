@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene implements Mutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_value;
 
@@ -127,7 +127,7 @@ public class Terminal
     return Double.parseDouble(m_value);
   }
 
-  public Class getChildType(int i) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return null;
   }
 }

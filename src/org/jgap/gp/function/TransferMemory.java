@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class TransferMemory
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -52,15 +52,14 @@ public class TransferMemory
       Gene gene = new TransferMemory(getConfiguration(), m_sourceStorageName,
                                      m_targetStorageName);
       return gene;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
 
   public String toString() {
-    return "transfer(" + m_sourceStorageName + " -> " + m_targetStorageName +
-        ")";
+    return "transfer(" + m_sourceStorageName + " -> " + m_targetStorageName
+        + ")";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
@@ -74,14 +73,14 @@ public class TransferMemory
       // ----------------
       ( (GPConfiguration) getConfiguration()).storeInMemory(m_targetStorageName,
           value);
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "TransferMemory without preceeding StoreTerminal");
     }
   }
 
   public boolean isAffectGlobalState() {
+    /**@todo subclass from new abstract class MemoryCommand?*/
     return true;
   }
 
@@ -89,7 +88,7 @@ public class TransferMemory
     return true;
   }
 
-  public Class getChildType(int i) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return null;
   }
 }

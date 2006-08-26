@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class SubProgram
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Number of subprograms.
@@ -64,10 +64,10 @@ public class SubProgram
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    if (n > 0) {
-      /**@todo make following dynamic resp. add a parameter to the constructor*/
-      throw new IllegalStateException("Subprogram must be the root");
-    }
+//    if (n > 0) {
+//      /**@todo make following dynamic resp. add a parameter to the constructor*/
+//      throw new IllegalStateException("Subprogram must be the root");
+//    }
     int value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       if (i < m_subtrees - 1) {
@@ -128,10 +128,13 @@ public class SubProgram
   }
 
   public boolean isValid(ProgramChromosome a_program) {
+    if (a_program.getIndividual() != a_program.getIndividual()) {
+      int x = 2;
+    }
     return true;
   }
 
-  public Class getChildType(int i) {
-    return m_types[i];
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+    return m_types[a_chromNum];
   }
 }

@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public abstract class MathCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public MathCommand(final Configuration a_conf, int a_arity,
                      Class a_returnType)
@@ -44,7 +44,7 @@ public abstract class MathCommand
     return compareTo(o1) == 0;
   }
 
-  public Class getChildType(int i) {
+  public Class getChildType(GPProgram a_ind, int i) {
     return getReturnType();
   }
 }

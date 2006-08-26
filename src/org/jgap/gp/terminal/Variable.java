@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -61,7 +61,7 @@ public class Variable
     return m_name;
   }
 
-  public Class getChildType(int num) {
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return null;
   }
 

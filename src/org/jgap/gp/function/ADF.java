@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 
 /**
- * Automatically Defined Function (ADF).
+ * Automatically Defined Function (ADF). Works with output of other chromosomes.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class ADF
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_chromosomeNum;
 
@@ -49,59 +49,59 @@ public class ADF
     return "ADF(" + m_chromosomeNum + ")";
   }
 
-  public int getArity() {
-    return getIndividual().getChromosome(m_chromosomeNum).getArity();
+  public int getArity(GPProgram a_individual) {
+    return a_individual.getChromosome(m_chromosomeNum).getArity();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int numargs = getIndividual().getChromosome(m_chromosomeNum).getArity();
+    int numargs = c.getIndividual().getChromosome(m_chromosomeNum).getArity();
     Object[] vals = new Object[numargs];
     for (int i = 0; i < numargs; i++) {
       vals[i] = new Integer(c.execute_int(n, i, args));
     }
-    // Call the chromosome
-    return getIndividual().execute_int(m_chromosomeNum, vals);
+    // Call the chromosome.
+    // --------------------
+    return c.getIndividual().execute_int(m_chromosomeNum, vals);
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int numargs = getIndividual().getChromosome(m_chromosomeNum).getArity();
+    int numargs = c.getIndividual().getChromosome(m_chromosomeNum).getArity();
     Object[] vals = new Object[numargs];
     for (int i = 0; i < numargs; i++) {
       vals[i] = new Float(c.execute_float(n, i, args));
     }
-    return getIndividual().execute_float(m_chromosomeNum, vals);
+    return c.getIndividual().execute_float(m_chromosomeNum, vals);
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     check(c);
-    int numargs = getIndividual().getChromosome(m_chromosomeNum).getArity();
+    int numargs = c.getIndividual().getChromosome(m_chromosomeNum).getArity();
     Object[] vals = new Object[numargs];
     for (int i = 0; i < numargs; i++) {
       vals[i] = new Double(c.execute_double(n, i, args));
     }
-    return getIndividual().execute_double(m_chromosomeNum, vals);
+    return c.getIndividual().execute_double(m_chromosomeNum, vals);
   }
 
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
-    int numargs = getIndividual().getChromosome(m_chromosomeNum).getArity();
-    StackTraceElement[] stack = new Exception().getStackTrace();
-    if (stack.length > 60) {
-      throw new IllegalStateException("ADF recursion detected");
-    }
+    check(c);
+    int numargs = c.getIndividual().getChromosome(m_chromosomeNum).getArity();
     Object[] vals = new Object[numargs];
     for (int i = 0; i < numargs; i++) {
       vals[i] = c.execute(n, i, args);
     }
-    return getIndividual().execute_object(m_chromosomeNum, vals);
+    return c.getIndividual().execute_object(m_chromosomeNum, vals);
   }
 
-  public Class getChildType(int i) {
-    return getIndividual().getChromosome(m_chromosomeNum).getArgTypes()[i];
+  public Class getChildType(GPProgram a_ind, int i) {
+    return a_ind.getChromosome(m_chromosomeNum).getArgTypes()[i];
   }
 
   public boolean isValid(ProgramChromosome a_chrom) {
+    // Avoid endless recursion.
+    // ------------------------
     StackTraceElement[] stack = new Exception().getStackTrace();
     if (stack.length > 60) {/**@todo enhance*/
       return false;
