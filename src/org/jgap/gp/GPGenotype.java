@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -515,7 +515,7 @@ public class GPGenotype
   /**
    * Compares this entity against the specified object.
    *
-   * @param other the object to compare against
+   * @param a_other the object to compare against
    * @return true: if the objects are the same, false otherwise
    *
    * @author Klaus Meffert

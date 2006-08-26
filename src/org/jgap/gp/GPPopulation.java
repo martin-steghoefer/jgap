@@ -23,7 +23,7 @@ import org.jgap.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -169,6 +169,10 @@ public class GPPopulation
    * chromosomes and the second dimension of which is the number of nodes
    * @param a_minDepths contains the minimum depth allowed for each chromosome
    * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -221,6 +225,10 @@ public class GPPopulation
    * @param a_maxDepths contains the maximum depth allowed for each chromosome
    * @param a_depth the maximum depth of the program to create
    * @param a_grow true: grow mode, false: full mode
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
    * @return ProgramChromosome
    * @throws InvalidConfigurationException
    *
