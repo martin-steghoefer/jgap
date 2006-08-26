@@ -18,7 +18,12 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
+
+  /**
+   * Delta, useful for comparing doubles and floats.
+   */
+  public static final double DELTA = 0.0000001;
 
   /** Energy of a gene, see RFE 1102206*/
   private double m_energy;
