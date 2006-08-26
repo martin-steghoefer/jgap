@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -211,9 +211,8 @@ public class GPGenotypeTest
     pop.setGPProgram(0, prog);
     pop.setGPProgram(1, prog);
     GPGenotype gen = new GPGenotype(m_gpconf, pop);
-    GPGenotype gen2 = (GPGenotype) doSerialize(gen);
-    assertSame(gen, gen2);
-    /**@todo implement equals and compareTo and divide GPGenotype from Genotype
-     * to make this test pass*/
+    // Serialize genotype to a file.
+    // -----------------------------
+    assertEquals(gen, doSerialize(gen));
   }
 }

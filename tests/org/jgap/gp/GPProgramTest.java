@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPProgramTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPProgramTest.class);
@@ -125,7 +125,6 @@ public class GPProgramTest
     pc.redepth();
     prog.setChromosome(0, pc);
     GPProgram prog2 = (GPProgram) doSerialize(prog);
-    assertSame(prog, prog2);
-    /**@todo implement equals and compareTo to make this test pass*/
+    assertEquals(prog, prog2);
   }
 }

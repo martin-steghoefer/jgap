@@ -24,7 +24,7 @@ import org.jgap.gp.function.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -161,5 +161,26 @@ public class GPPopulationTest
     } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSerialize_0()
+      throws Exception {
+    GPPopulation pop = new GPPopulation(m_gpconf, 2);
+    GPProgram prog = new GPProgram(m_gpconf, 2);
+    ProgramChromosome chrom = new ProgramChromosome(m_gpconf, 2);
+    prog.setChromosome(0, chrom);
+    prog.setChromosome(1, chrom);
+    pop.setGPProgram(0, prog);
+    pop.setGPProgram(1, prog);
+    // Serialize population to a file.
+    // -------------------------------
+    GPPopulation pop2 = (GPPopulation)doSerialize(pop);
+    assertEquals(pop, pop2);
   }
 }
