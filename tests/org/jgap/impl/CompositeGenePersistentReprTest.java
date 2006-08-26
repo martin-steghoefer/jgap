@@ -19,12 +19,13 @@ import junit.framework.*;
  * Test persistent representation of the CompositeGene.
  *
  * @author Audrius Meskauskas
+ * @author Klaus Meffert
  * @since 2.1
  */
 public class CompositeGenePersistentReprTest extends JGAPTestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CompositeGenePersistentReprTest.class);
@@ -33,24 +34,17 @@ public class CompositeGenePersistentReprTest extends JGAPTestCase {
 
   public void testRepresentation() throws Exception {
       CompositeGene gene = createSampleNestedGene(5);
-      String representation =
-          gene.getPersistentRepresentation();
-      System.out.println("Old representation: " + representation);
+      String representation = gene.getPersistentRepresentation();
+//      System.out.println("Old representation: " + representation);
       CompositeGene restored = new CompositeGene(conf);
       restored.setValueFromPersistentRepresentation(representation);
-      System.out.println("New representation: "
-                         + restored.getPersistentRepresentation());
-      System.out.println("Old gene " + gene);
-      System.out.println("New gene " + restored);
-      System.out.println("TEST GET/SET ALLELE");
+//      System.out.println("New representation: "
+//                         + restored.getPersistentRepresentation());
       Object allele = gene.getAllele();
-      System.out.println("Allele size " + ( (List) allele).size());
       Gene other = createSampleNestedGene(55);
-      System.out.println("Other gene " + other);
       Gene nGene = other.newGene();
       nGene.setAllele(allele);
-      System.out.println("After transferring allele: " + nGene);
-      assertEquals(true, gene.equals(restored));
+      assertEquals(restored, gene);
   }
 
   private CompositeGene createSampleNestedGene(int a_seed) throws Exception {
