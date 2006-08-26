@@ -9,6 +9,8 @@
  */
 package org.jgap.gp;
 
+import java.io.*;
+import java.util.*;
 import org.jgap.*;
 
 /**
@@ -18,9 +20,10 @@ import org.jgap.*;
  * @since 3.0
  */
 public class BranchTypingCross
-    extends CrossMethod {
+    extends CrossMethod
+    implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -205,5 +208,44 @@ public class BranchTypingCross
       c[1].redepth();
     }
     return c;
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return 0 or 1 in this case, as BranchTypingCross objects keep no state
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    BranchTypingCross other = (BranchTypingCross)a_other;
+    if (other == null) {
+      return 1;
+    }
+    return 0;
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return always true for non-null BranchTypingCross objects because they
+   * keep no state
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    try {
+      BranchTypingCross other = (BranchTypingCross)a_other;
+      if (other == null) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }catch (ClassCastException cex) {
+      return false;
+    }
   }
 }
