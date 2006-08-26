@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1054,54 +1054,54 @@ public class GenotypeTest
    *
    * @author Klaus Meffert
    */
-  public void testSetActiveConfiguration_0()
-      throws Exception {
-    Configuration conf = new ConfigurationForTest();
-    Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(conf, new Gene[] {
-                               new IntegerGene(conf, 1, 5)});
-    Genotype genotype = new Genotype(conf, chroms);
-    genotype.setActiveConfiguration(conf);
-    genotype.setActiveConfiguration(null);
-    // If working properly, the next call should return null!
-    assertNotNull(genotype.getConfiguration());
-  }
-
-  public void testSetActiveConfiguration_1()
-      throws Exception {
-    Configuration conf = new ConfigurationForTest();
-    Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(conf, new Gene[] {
-                               new IntegerGene(conf, 1, 5)});
-    Genotype genotype = new Genotype(conf, chroms);
-    Genotype.setConfiguration(null);
-    try {
-      genotype.setActiveConfiguration(null);
-      fail();
-    }
-    catch (InvalidConfigurationException iex) {
-      ; //this is OK
-    }
-  }
-
-  /**
-   * @throws Exception
-   * @author Klaus Meffert
-   * @since 2.6
-   */
-  public void testSetActiveConfiguration_2()
-      throws Exception {
-    Configuration conf = new ConfigurationForTest();
-    Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(conf, new Gene[] {
-                               new IntegerGene(conf, 1, 5)});
-    Genotype genotype = new Genotype(conf, chroms);
-    /**@todo following will be obsolete*/
-    genotype.setConfiguration(null);
-    Configuration conf2 = new ConfigurationForTest();
-    genotype.setActiveConfiguration(conf2);
-    assertTrue(genotype.getConfiguration().isLocked());
-  }
+//  public void testSetActiveConfiguration_0()
+//      throws Exception {
+//    Configuration conf = new ConfigurationForTest();
+//    Chromosome[] chroms = new Chromosome[1];
+//    chroms[0] = new Chromosome(conf, new Gene[] {
+//                               new IntegerGene(conf, 1, 5)});
+//    Genotype genotype = new Genotype(conf, chroms);
+//    genotype.setActiveConfiguration(conf);
+//    genotype.setActiveConfiguration(null);
+//    // If working properly, the next call should return null!
+//    assertNotNull(genotype.getConfiguration());
+//  }
+//
+//  public void testSetActiveConfiguration_1()
+//      throws Exception {
+//    Configuration conf = new ConfigurationForTest();
+//    Chromosome[] chroms = new Chromosome[1];
+//    chroms[0] = new Chromosome(conf, new Gene[] {
+//                               new IntegerGene(conf, 1, 5)});
+//    Genotype genotype = new Genotype(conf, chroms);
+//    Genotype.setConfiguration(null);
+//    try {
+//      genotype.setActiveConfiguration(null);
+//      fail();
+//    }
+//    catch (InvalidConfigurationException iex) {
+//      ; //this is OK
+//    }
+//  }
+//
+//  /**
+//   * @throws Exception
+//   * @author Klaus Meffert
+//   * @since 2.6
+//   */
+//  public void testSetActiveConfiguration_2()
+//      throws Exception {
+//    Configuration conf = new ConfigurationForTest();
+//    Chromosome[] chroms = new Chromosome[1];
+//    chroms[0] = new Chromosome(conf, new Gene[] {
+//                               new IntegerGene(conf, 1, 5)});
+//    Genotype genotype = new Genotype(conf, chroms);
+//    /**@todo following will be obsolete*/
+//    genotype.setConfiguration(null);
+//    Configuration conf2 = new ConfigurationForTest();
+//    genotype.setActiveConfiguration(conf2);
+//    assertTrue(genotype.getConfiguration().isLocked());
+//  }
 
   /**
    * Ensures Genotype is implementing Serializable.
@@ -1134,7 +1134,8 @@ public class GenotypeTest
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
     Genotype genotype = new Genotype(conf, chroms);
-    // serialize genotype to a file
+    // Serialize genotype to a file.
+    // -----------------------------
     assertEquals(genotype, super.doSerialize(genotype));
   }
 
