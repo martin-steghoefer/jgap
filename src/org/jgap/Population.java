@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.47 $";
+  private static final String CVS_REVISION = "$Revision: 1.48 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -499,7 +499,7 @@ public class Population
   }
 
   /**
-   *
+   * The equals-method.
    * @param a_pop the population instance to compare with
    * @return true: given object equal to comparing one
    *
