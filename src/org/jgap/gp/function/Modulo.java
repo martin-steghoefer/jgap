@@ -22,9 +22,7 @@ import org.jgap.gp.*;
 public class Modulo
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
-
-  public static final double DELTA = 0.0000001;
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public Modulo(final Configuration a_conf, Class a_type)
       throws InvalidConfigurationException {

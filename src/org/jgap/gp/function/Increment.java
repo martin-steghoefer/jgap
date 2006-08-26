@@ -11,6 +11,8 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * The increment operation.
@@ -22,7 +24,7 @@ import org.jgap.gp.*;
 public class Increment
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_increment;
 
@@ -98,4 +100,47 @@ public class Increment
   public static interface Compatible {
     public Object execute_increment();
   }
-}
+
+  /**
+    * The compareTo-method.
+    * @param a_other the other object to compare
+    * @return -1, 0, 1
+    *
+    * @author Klaus Meffert
+    * @since 3.0
+    */
+   public int compareTo(Object a_other) {
+     if (a_other == null) {
+       return 1;
+     }
+     else {
+       Increment other = (Increment) a_other;
+       return new CompareToBuilder()
+           .append(m_increment, other.m_increment)
+           .toComparison();
+     }
+   }
+
+   /**
+    * The equals-method.
+    * @param a_other the other object to compare
+    * @return true if the objects are seen as equal
+    *
+    * @author Klaus Meffert
+    * @since 3.0
+    */
+   public boolean equals(Object a_other) {
+     if (a_other == null) {
+       return false;
+     }
+     else {
+       try {
+         Increment other = (Increment) a_other;
+         return new EqualsBuilder()
+             .append(m_increment, other.m_increment)
+             .isEquals();
+       } catch (ClassCastException cex) {
+         return false;
+       }
+     }
+  }}

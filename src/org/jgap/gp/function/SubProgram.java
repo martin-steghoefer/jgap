@@ -11,6 +11,8 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * A connector for indipendent subprograms (subtrees). Each subtree except the
@@ -22,15 +24,18 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class SubProgram
-    extends MathCommand {
+    extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
-   * Number of subprograms.
+   * Number of subprograms. Redundant, because equal to m_types.length.
    */
   private int m_subtrees;
 
+  /**
+   * Return types of the subprograms to excecute.
+   */
   private Class[] m_types;
 
   public SubProgram(final Configuration a_conf, Class[] a_types)
@@ -136,5 +141,49 @@ public class SubProgram
 
   public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return m_types[a_chromNum];
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      SubProgram other = (SubProgram) a_other;
+      return new CompareToBuilder()
+          .append(m_types, other.m_types)
+          .toComparison();
+    }
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null) {
+      return false;
+    }
+    else {
+      try {
+        SubProgram other = (SubProgram) a_other;
+        return new EqualsBuilder()
+            .append(m_types, other.m_types)
+            .isEquals();
+      } catch (ClassCastException cex) {
+        return false;
+      }
+    }
   }
 }

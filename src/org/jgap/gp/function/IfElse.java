@@ -19,9 +19,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class IfElse
-    extends MathCommand {
+    extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public IfElse(final Configuration a_conf, Class type)
       throws InvalidConfigurationException {

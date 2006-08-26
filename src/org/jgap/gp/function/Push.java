@@ -11,6 +11,8 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * Pushes a value onto the stack.
@@ -19,9 +21,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class Push
-    extends MathCommand {
+    extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_type;
 
@@ -35,8 +37,7 @@ public class Push
     try {
       Gene gene = new Push(getConfiguration(), getReturnType());
       return gene;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -95,7 +96,6 @@ public class Push
   public static interface Compatible {
     public Object execute_push(Object o);
   }
-
   public boolean isAffectGlobalState() {
     return true;
   }
@@ -110,10 +110,54 @@ public class Push
    * @param a_value the value to push onto the stack
    */
   protected void pushIt(Object a_value) {
-    ((GPConfiguration)getConfiguration()).pushToStack(a_value);
+    ( (GPConfiguration) getConfiguration()).pushToStack(a_value);
   }
 
   public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return m_type;
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      Push other = (Push) a_other;
+      return new CompareToBuilder()
+          .append(m_type, other.m_type)
+          .toComparison();
+    }
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null) {
+      return false;
+    }
+    else {
+      try {
+        Push other = (Push) a_other;
+        return new EqualsBuilder()
+            .append(m_type, other.m_type)
+            .isEquals();
+      } catch (ClassCastException cex) {
+        return false;
+      }
+    }
   }
 }

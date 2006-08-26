@@ -11,6 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.commons.lang.builder.*;
 
 /**
  * Transfers a memory value to another memory cell.
@@ -19,9 +20,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class TransferMemory
-    extends MathCommand {
+    extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -90,5 +91,51 @@ public class TransferMemory
 
   public Class getChildType(GPProgram a_ind, int a_chromNum) {
     return null;
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      TransferMemory other = (TransferMemory) a_other;
+      return new CompareToBuilder()
+          .append(m_sourceStorageName, other.m_sourceStorageName)
+          .append(m_targetStorageName, other.m_targetStorageName)
+          .toComparison();
+    }
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null) {
+      return false;
+    }
+    else {
+      try {
+        TransferMemory other = (TransferMemory) a_other;
+        return new EqualsBuilder()
+            .append(m_sourceStorageName, other.m_sourceStorageName)
+            .append(m_targetStorageName, other.m_targetStorageName)
+            .isEquals();
+      } catch (ClassCastException cex) {
+        return false;
+      }
+    }
   }
 }

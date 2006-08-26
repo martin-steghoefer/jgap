@@ -11,6 +11,8 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * The for-loop.
@@ -19,9 +21,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class ForLoop
-    extends MathCommand {
+    extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_typeVar;
 
@@ -92,6 +94,52 @@ public class ForLoop
     else {
       // Subprogram
       return CommandGene.VoidClass;
+    }
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      ForLoop other = (ForLoop) a_other;
+      return new CompareToBuilder()
+          .append(m_typeVar, other.m_typeVar)
+          .append(m_maxLoop, other.m_maxLoop)
+          .toComparison();
+    }
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null) {
+      return false;
+    }
+    else {
+      try {
+        ForLoop other = (ForLoop) a_other;
+        return new EqualsBuilder()
+            .append(m_typeVar, other.m_typeVar)
+            .append(m_maxLoop, other.m_maxLoop)
+            .isEquals();
+      } catch (ClassCastException cex) {
+        return false;
+      }
     }
   }
 }

@@ -11,6 +11,8 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * Reads a value from the internal memory.
@@ -19,9 +21,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class ReadTerminal
-    extends MathCommand {
+    extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -30,7 +32,7 @@ public class ReadTerminal
   private String m_storageName;
 
   public ReadTerminal(final Configuration a_conf, Class type,
-                             String a_storageName)
+                      String a_storageName)
       throws InvalidConfigurationException {
     super(a_conf, 0, type);
     if (a_storageName == null || a_storageName.length() < 1) {
@@ -42,10 +44,9 @@ public class ReadTerminal
   protected Gene newGeneInternal() {
     try {
       Gene gene = new ReadTerminal(getConfiguration(), getReturnType(),
-                                          m_storageName);
+                                   m_storageName);
       return gene;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -61,8 +62,7 @@ public class ReadTerminal
     try {
       return ( (Integer) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).intValue();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");
     }
@@ -73,8 +73,7 @@ public class ReadTerminal
     try {
       return ( (Long) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).longValue();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");
     }
@@ -85,8 +84,7 @@ public class ReadTerminal
     try {
       return ( (Double) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).doubleValue();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");
     }
@@ -97,8 +95,7 @@ public class ReadTerminal
     try {
       return ( (Float) ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName)).floatValue();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");
     }
@@ -109,8 +106,7 @@ public class ReadTerminal
     try {
       return ( (GPConfiguration) getConfiguration()).readFromMemory(
           m_storageName);
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");
     }
@@ -119,11 +115,55 @@ public class ReadTerminal
   public static interface Compatible {
     public Object execute_read(Object o);
   }
-
   public boolean isValid(ProgramChromosome a_program) {
-    return a_program.getIndividual().getCommandOfClass(0, StoreTerminal.class) > 0;
+    return a_program.getIndividual().getCommandOfClass(0, StoreTerminal.class) >
+        0;
     /**@todo do it right*/
 //    return m_storageName.startsWith("thruput") ||
 //        a_program.getCommandOfClass(0, StoreTerminal.class) >= 0;
+  }
+
+  /**
+   * The compareTo-method.
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      ReadTerminal other = (ReadTerminal) a_other;
+      return new CompareToBuilder()
+          .append(m_storageName, other.m_storageName)
+          .toComparison();
+    }
+  }
+
+  /**
+   * The equals-method.
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    if (a_other == null) {
+      return false;
+    }
+    else {
+      try {
+        ReadTerminal other = (ReadTerminal) a_other;
+        return new EqualsBuilder()
+            .append(m_storageName, other.m_storageName)
+            .isEquals();
+      } catch (ClassCastException cex) {
+        return false;
+      }
+    }
   }
 }
