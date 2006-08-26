@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CultureMemoryCellTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureMemoryCellTest.class);
@@ -131,4 +131,19 @@ public class CultureMemoryCellTest
     c1 = (CultureMemoryCell) history.get(2);
     assertEquals(33, ( (Integer) c1.getCurrentValue()).intValue());
   }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testSerialize_0()
+      throws Exception {
+    CultureMemoryCell cell = new CultureMemoryCell("ANAME", 55);
+    cell.setDouble(17.3d);
+    CultureMemoryCell cell2 = (CultureMemoryCell) doSerialize(cell);
+    assertEquals(cell, cell2);
+  }
+
 }
