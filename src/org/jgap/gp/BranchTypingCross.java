@@ -10,7 +10,6 @@
 package org.jgap.gp;
 
 import java.io.*;
-import java.util.*;
 import org.jgap.*;
 
 /**
@@ -23,7 +22,7 @@ public class BranchTypingCross
     extends CrossMethod
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -163,7 +162,8 @@ public class BranchTypingCross
       }
       p1 = c1.getTerminal(getConfiguration().getRandomGenerator().
                           nextInt(c1.numTerminals(t)), t);
-      // Mutate the terminal's value
+      // Mutate the terminal's value.
+      // ----------------------------
       /**@todo make this random and configurable*/
       CommandGene command = c1.getNode(p1);
       if (Mutateable.class.isInstance(command)) {
