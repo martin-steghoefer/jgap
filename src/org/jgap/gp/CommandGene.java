@@ -20,10 +20,9 @@ import org.jgap.*;
  * @since 3.0
  */
 public abstract class CommandGene
-    extends BaseGene
-    implements Gene {
+    extends BaseGene implements Gene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public final static Class BooleanClass = Boolean.class;
 
@@ -38,7 +37,7 @@ public abstract class CommandGene
   public final static Class VoidClass = Void.class;
 
   /**
-   * Should isValid() be called?
+   * Should isValid() be called? True = no!
    */
   private boolean m_noValidation;
 
@@ -67,11 +66,11 @@ public abstract class CommandGene
     m_arity = a_arity;
     m_returnType = a_returnType;
     if (a_returnType == Integer.class
-    || a_returnType == Long.class) {
+        || a_returnType == Long.class) {
       m_integerType = true;
     }
     else if (a_returnType == Double.class
-    || a_returnType == Float.class) {
+             || a_returnType == Float.class) {
       m_floatType = true;
     }
   }
@@ -82,8 +81,7 @@ public abstract class CommandGene
   }
 
   public Object getAllele() {
-    throw new java.lang.UnsupportedOperationException(
-        "Method getAllele() not used.");
+    return null;
   }
 
   public String getPersistentRepresentation()
@@ -129,8 +127,8 @@ public abstract class CommandGene
     return getArity();
   }
 
-  public int compareTo(Object o) {
-    CommandGene o2 = (CommandGene) o;
+  public int compareTo(Object a_other) {
+    CommandGene o2 = (CommandGene) a_other;
     if (size() != o2.size()) {
       if (size() > o2.size()) {
         return 1;
@@ -148,13 +146,37 @@ public abstract class CommandGene
     }
   }
 
-  public boolean equals(Object other) {
-    if (other == null) {
+  public boolean equals(Object a_other) {
+    if (a_other == null) {
       return false;
     }
     else {
-      /**@todo rework*/
-      return hashCode() == other.hashCode();
+      try {
+        CommandGene other = (CommandGene) a_other;
+        if (getClass() == a_other.getClass()) {
+          if (getInternalValue() == null) {
+            if (other.getInternalValue() == null) {
+              return true;
+            }
+            else {
+              return false;
+            }
+          }
+          else {
+            if (other.getInternalValue() == null) {
+              return false;
+            }
+            else {
+              return true;
+            }
+          }
+        }
+        else {
+          return false;
+        }
+      } catch (ClassCastException cex) {
+        return false;
+      }
     }
   }
 
@@ -234,7 +256,7 @@ public abstract class CommandGene
    */
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return boolean");
+        " cannot return boolean");
   }
 
   /**
@@ -250,7 +272,7 @@ public abstract class CommandGene
    */
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return void");
+        " cannot return void");
   }
 
   /**
@@ -267,7 +289,7 @@ public abstract class CommandGene
    */
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return int");
+        " cannot return int");
   }
 
   /**
@@ -284,7 +306,7 @@ public abstract class CommandGene
    */
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return long");
+        " cannot return long");
   }
 
   /**
@@ -301,7 +323,7 @@ public abstract class CommandGene
    */
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return float");
+        " cannot return float");
   }
 
   /**
@@ -318,7 +340,7 @@ public abstract class CommandGene
    */
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return double");
+        " cannot return double");
   }
 
   /**
@@ -335,7 +357,7 @@ public abstract class CommandGene
    */
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return Object");
+        " cannot return Object");
   }
 
   public String getName() {
@@ -353,15 +375,16 @@ public abstract class CommandGene
    * @author Klaus Meffert
    * @since 3.0
    */
-  public abstract Class getChildType(GPProgram a_ind, int a_chromNum);
+  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+    return getReturnType();
+  }
 
   protected Object getInternalValue() {
-    /**@todo is this correct?*/
     return null;
   }
 
   /**
-   * Retrieves the hash code value for a Gene.
+   * Retrieves the hash code value for a CommandGene.
    * Override if another hashCode() implementation is necessary or more
    * appropriate than this default implementation.
    *
@@ -375,7 +398,7 @@ public abstract class CommandGene
     // just return the hash code of the allele Object.
     // -----------------------------------------------------------
     if (getInternalValue() == null) {
-      return -81;
+      return getClass().getName().hashCode();
     }
     else {
       return getInternalValue().hashCode();
@@ -435,7 +458,7 @@ public abstract class CommandGene
     }
   }
 
-  public void applyMutation(int index, double a_percentage){
+  public void applyMutation(int index, double a_percentage) {
     //do nothing here
   }
 

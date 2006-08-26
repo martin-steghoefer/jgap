@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public abstract class MathCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public MathCommand(final Configuration a_conf, int a_arity,
                      Class a_returnType)
@@ -29,22 +29,4 @@ public abstract class MathCommand
     super(a_conf, a_arity, a_returnType);
   }
 
-  public void setAllele(Object a_newValue) {
-  }
-
-  public Object getAllele() {
-    return null;
-  }
-
-  public int compareTo(Object o) {
-    return 0;/**@todo fix*/
-  }
-
-  public boolean equals(Object o1) {
-    return compareTo(o1) == 0;
-  }
-
-  public Class getChildType(GPProgram a_ind, int i) {
-    return getReturnType();
-  }
 }
