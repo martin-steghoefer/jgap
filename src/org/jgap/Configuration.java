@@ -9,6 +9,7 @@
  */
 package org.jgap;
 
+import java.io.*;
 import java.util.*;
 import org.jgap.data.config.*;
 import org.jgap.event.*;
@@ -37,9 +38,9 @@ import org.jgap.impl.*;
  * @since 1.0
  */
 public class Configuration
-    implements Configurable, java.io.Serializable {
+    implements Configurable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.64 $";
+  private final static String CVS_REVISION = "$Revision: 1.65 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
