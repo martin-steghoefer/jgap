@@ -20,19 +20,13 @@ import java.util.*;
  * */
 public class ConfigData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
-
-  // name of the object being configured
-  private String m_name;
-
-  // value in the text field for this object
-  private String m_value;
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private List m_listData;
 
   private List m_textData;
 
-  // The namespace for the properties file
+  // The namespace for the properties file.
   private String m_ns;
 
   public ConfigData() {
@@ -152,12 +146,12 @@ public class ConfigData {
    * */
 
   class ListData {
-
     // name of the object being configured
     private String m_name;
 
     // values selected for this object, to be written in the config file
     private List m_data;
+
     /**
      * Constructor.
      * @param a_name Name of the object being configured, to be used as the
@@ -176,7 +170,6 @@ public class ConfigData {
     public String getName() {
       return m_name;
     }
-
   }
   /**
    * Data associated with the TextFields, on the GUI.
@@ -185,6 +178,12 @@ public class ConfigData {
    * @since 2.3
    * */
   class TextData {
+    // name of the object being configured
+    private String m_textname;
+
+    // value in the text field for this object
+    private String m_textvalue;
+
     /**
      * Constructor.
      * @param a_name name of the object being configured. Will be used as the
@@ -192,17 +191,16 @@ public class ConfigData {
      * @param a_value the value in the JTextField (value in the properties file)
      * */
     public TextData(final String a_name, final String a_value) {
-      m_name = a_name;
-      m_value = a_value;
+      m_textname = a_name;
+      m_textvalue = a_value;
     }
 
     public String getName() {
-      return m_name;
+      return m_textname;
     }
 
     public String getValue() {
-      return m_value;
+      return m_textvalue;
     }
-
   }
 }
