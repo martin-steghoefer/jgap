@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -290,27 +290,10 @@ public class WeightedRouletteSelector
         return a_chromosomes[i];
       }
     }
-    if (true) return a_chromosomes[a_counterValues.length-1];
-    // If we have reached here, it means we have not found any chromosomes
-    // to select and something is wrong with our logic. For some reason
-    // the selected slot has exceeded the slots on our wheel. To help
-    // with debugging, we tally up the total number of slots left on
-    // the wheel and report it along with the chosen slot number that we
-    // couldn't find.
-    // -------------------------------------------------------------------
-    long totalSlotsLeft = 0;
-    for (int i = 0; i < a_counterValues.length; i++) {
-      totalSlotsLeft += a_counterValues[i];
-    }
-    throw new RuntimeException("Logic Error. This code should never "
-                               + "be reached. Please report this as a bug to"
-                               + " the JGAP team: selected slot "
-                               + selectedSlot + " "
-                               + "exceeded " + totalSlotsLeft
-                               + " number of slots left. "
-                               + "We thought there were "
-                               + m_totalNumberOfUsedSlots
-                               + " slots left.");
+    // We have reached here because there were rounding errors when
+    // computing with doubles.
+    // ------------------------------------------------------------
+    return a_chromosomes[a_counterValues.length-1];
   }
 
   /**
