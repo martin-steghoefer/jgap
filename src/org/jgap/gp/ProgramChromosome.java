@@ -9,6 +9,7 @@
  */
 package org.jgap.gp;
 
+import java.io.*;
 import org.jgap.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
@@ -22,9 +23,10 @@ import org.jgap.gp.function.*;
 public class ProgramChromosome
     //    extends BaseGPChromosome
     // implements IGPChromosome
+    implements Serializable
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /*wodka:
    void add(Command cmd);
@@ -159,7 +161,7 @@ public class ProgramChromosome
     this(GPGenotype.getGPConfiguration());
   }
 
-  public ProgramChromosome(final Configuration a_conf)
+  public ProgramChromosome(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
 //    super(a_conf);
     if (a_conf == null) {
@@ -167,6 +169,7 @@ public class ProgramChromosome
           "Configuration to be set must not"
           + " be null!");
     }
+    m_configuration = a_conf;
     init();
   }
 
@@ -676,7 +679,7 @@ public class ProgramChromosome
   }
 
   /**
-   * Gets the i'th node in this chromosome. The nodes are counted in a
+   * Gets the a_index'th node in this chromosome. The nodes are counted in a
    * depth-first manner, with node 0 being the root of this chromosome.
    *
    * @param a_index the node number to get
@@ -1040,7 +1043,6 @@ public class ProgramChromosome
     if (child == 0) {
       return getFunctions()[n + 1].execute_int(this, n + 1, args);
     }
-    /**@todo same as execute_void?*/
     int other = getChild(n, child);
     return getFunctions()[other].execute_int(this, other, args);
   }
@@ -1087,15 +1089,9 @@ public class ProgramChromosome
 
   public float execute_float(int n, int child, Object[] args) {
     if (child == 0) {
-      if (getFunctions()[n + 1] == null) {
-        return 0;
-      }
       return getFunctions()[n + 1].execute_float(this, n + 1, args);
     }
     int other = getChild(n, child);
-    if (other < 0) {
-      return 0;
-    }
     return getFunctions()[other].execute_float(this, other, args);
   }
 
@@ -1160,7 +1156,6 @@ public class ProgramChromosome
    */
   public Object execute(Object[] args) {
     return getFunctions()[0].execute_object(this, 0, args);
-//    return execute_object(args);
   }
 
   public Object execute(int n, int child, Object[] args) {
