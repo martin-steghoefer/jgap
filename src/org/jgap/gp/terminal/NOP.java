@@ -22,16 +22,16 @@ import org.jgap.gp.*;
 public class NOP
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public NOP(final Configuration a_conf)
+  public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf, 0, CommandGene.VoidClass);
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new NOP(getConfiguration());
+      CommandGene gene = new NOP(getGPConfiguration());
       return gene;
     }
     catch (InvalidConfigurationException iex) {

@@ -21,19 +21,19 @@ import org.jgap.gp.*;
 public class Constant
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Object m_value;
 
-  public Constant(final Configuration a_conf, Class a_type, Object a_value)
+  public Constant(final GPConfiguration a_conf, Class a_type, Object a_value)
       throws InvalidConfigurationException {
     super(a_conf, 0, a_type);
     m_value = a_value;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Constant(getConfiguration(), getReturnType(), m_value);
+      CommandGene gene = new Constant(getGPConfiguration(), getReturnType(), m_value);
       return gene;
     }
     catch (InvalidConfigurationException iex) {

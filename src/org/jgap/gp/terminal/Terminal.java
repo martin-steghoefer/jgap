@@ -21,7 +21,7 @@ import org.jgap.*;
 public class Terminal
     extends CommandGene implements Mutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   private String m_value;
 
@@ -31,15 +31,15 @@ public class Terminal
 
   public Terminal()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration(), CommandGene.IntegerClass);
+    this(GPGenotype.getGPConfiguration(), CommandGene.IntegerClass);
   }
 
-  public Terminal(final Configuration a_conf, Class a_returnType)
+  public Terminal(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
     this(a_conf, a_returnType, 0d, 99d);
   }
 
-  public Terminal(final Configuration a_conf, Class a_returnType,
+  public Terminal(final GPConfiguration a_conf, Class a_returnType,
                   double a_minValue, double a_maxValue)
       throws InvalidConfigurationException {
     super(a_conf, 0, a_returnType);
@@ -49,15 +49,15 @@ public class Terminal
   }
 
   protected void setRandomValue() {
-    RandomGenerator randomGen = getConfiguration().getRandomGenerator();
+    RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
     m_value = new Long(Math.round(randomGen.nextDouble() *
                                   (m_upperBounds - m_lowerBounds) +
                                   m_lowerBounds)).toString();
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      return new Terminal(getConfiguration(), getReturnType());
+      return new Terminal(getGPConfiguration(), getReturnType());
     } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
@@ -90,11 +90,11 @@ public class Terminal
       double value = Double.parseDouble(m_value);
       if (value >= (m_upperBounds - m_lowerBounds) / 2) {
         newValue = value -
-            (getConfiguration().getRandomGenerator().nextDouble() * range);
+            getGPConfiguration().getRandomGenerator().nextDouble() * range;
       }
       else {
         newValue = value +
-            (getConfiguration().getRandomGenerator().nextDouble() * range);
+            getGPConfiguration().getRandomGenerator().nextDouble() * range;
       }
       // Ensure value is within bounds.
       // ------------------------------

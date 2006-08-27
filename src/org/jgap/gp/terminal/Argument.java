@@ -21,19 +21,19 @@ import org.jgap.*;
 public class Argument
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_index;
 
-  public Argument(final Configuration a_conf, int a_index, Class type)
+  public Argument(final GPConfiguration a_conf, int a_index, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 0, type);
     m_index = a_index;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      return new Argument(getConfiguration(), m_index, getReturnType());
+      return new Argument(getGPConfiguration(), m_index, getReturnType());
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());

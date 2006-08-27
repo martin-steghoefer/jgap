@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Hashtable vars = new Hashtable();
 
@@ -36,7 +36,7 @@ public class Variable
   /**@todo map varName to argNum and skip argNum in constructor*/
   private int m_argnum;
 
-  public Variable(final Configuration a_conf, String a_varName, Class type)
+  public Variable(final GPConfiguration a_conf, String a_varName, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 0, type);
 //    m_argnum = a_argnum;
@@ -48,9 +48,9 @@ public class Variable
     return m_name + "/" + m_argnum;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      return new Variable(getConfiguration(), m_name, getReturnType());
+      return new Variable(getGPConfiguration(), m_name, getReturnType());
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -118,7 +118,7 @@ public class Variable
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static Variable create(Configuration a_conf, String a_name, Class a_type)
+  public static Variable create(GPConfiguration a_conf, String a_name, Class a_type)
       throws InvalidConfigurationException {
     Variable var;
     if ( (var = getVariable(a_name)) != null) {
