@@ -21,16 +21,16 @@ import org.jgap.gp.*;
 public class Multiply3
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
-  public Multiply3(final Configuration a_conf, Class a_type)
+  public Multiply3(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 3, a_type);
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Multiply3(getConfiguration(), getReturnType());
+      CommandGene gene = new Multiply3(getGPConfiguration(), getReturnType());
       return gene;
     } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());

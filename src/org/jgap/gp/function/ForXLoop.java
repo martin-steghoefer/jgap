@@ -24,17 +24,17 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class ForXLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_type;
 
-  public ForXLoop(final Configuration a_conf, Class a_type)
+  public ForXLoop(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass);
     m_type = a_type;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     return null; /**@todo implement if necessary*/
   }
 

@@ -23,7 +23,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class ReadTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -31,7 +31,7 @@ public class ReadTerminal
    */
   private String m_storageName;
 
-  public ReadTerminal(final Configuration a_conf, Class type,
+  public ReadTerminal(final GPConfiguration a_conf, Class type,
                       String a_storageName)
       throws InvalidConfigurationException {
     super(a_conf, 0, type);
@@ -41,9 +41,9 @@ public class ReadTerminal
     m_storageName = a_storageName;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new ReadTerminal(getConfiguration(), getReturnType(),
+      CommandGene gene = new ReadTerminal(getGPConfiguration(), getReturnType(),
                                    m_storageName);
       return gene;
     } catch (InvalidConfigurationException iex) {
@@ -60,7 +60,7 @@ public class ReadTerminal
     // Read from memory.
     // -----------------
     try {
-      return ( (Integer) ( (GPConfiguration) getConfiguration()).readFromMemory(
+      return ( (Integer) getGPConfiguration().readFromMemory(
           m_storageName)).intValue();
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
@@ -71,7 +71,7 @@ public class ReadTerminal
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     check(c);
     try {
-      return ( (Long) ( (GPConfiguration) getConfiguration()).readFromMemory(
+      return ( (Long) getGPConfiguration().readFromMemory(
           m_storageName)).longValue();
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
@@ -82,7 +82,7 @@ public class ReadTerminal
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     check(c);
     try {
-      return ( (Double) ( (GPConfiguration) getConfiguration()).readFromMemory(
+      return ( (Double) getGPConfiguration().readFromMemory(
           m_storageName)).doubleValue();
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
@@ -93,7 +93,7 @@ public class ReadTerminal
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     check(c);
     try {
-      return ( (Float) ( (GPConfiguration) getConfiguration()).readFromMemory(
+      return ( (Float) getGPConfiguration().readFromMemory(
           m_storageName)).floatValue();
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
@@ -104,8 +104,7 @@ public class ReadTerminal
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     check(c);
     try {
-      return ( (GPConfiguration) getConfiguration()).readFromMemory(
-          m_storageName);
+      return getGPConfiguration().readFromMemory(m_storageName);
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "ReadTerminal without preceeding StoreTerminal");

@@ -21,9 +21,9 @@ import org.jgap.gp.*;
 public class IfElse
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  public IfElse(final Configuration a_conf, Class type)
+  public IfElse(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 3, type);
   }
@@ -82,9 +82,5 @@ public class IfElse
       value = c.execute_double(n, 2, args);
     }
     return value;
-  }
-
-  public static interface Compatible {
-    public Object execute_add(Object o);
   }
 }

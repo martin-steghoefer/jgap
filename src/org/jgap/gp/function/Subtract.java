@@ -21,16 +21,16 @@ import org.jgap.gp.*;
 public class Subtract
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public Subtract(final Configuration a_conf, Class a_type)
+  public Subtract(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_type);
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Subtract(getConfiguration(), getReturnType());
+      CommandGene gene = new Subtract(getGPConfiguration(), getReturnType());
       return gene;
     }
     catch (InvalidConfigurationException iex) {

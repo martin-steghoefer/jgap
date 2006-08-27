@@ -23,7 +23,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Class m_typeVar;
 
@@ -39,14 +39,14 @@ public class ForLoop
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ForLoop(final Configuration a_conf, Class a_typeVar, int a_maxLoop)
+  public ForLoop(final GPConfiguration a_conf, Class a_typeVar, int a_maxLoop)
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.VoidClass);
     m_typeVar = a_typeVar;
     m_maxLoop = a_maxLoop;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     return null; /**@todo implement if necessary*/
   }
 

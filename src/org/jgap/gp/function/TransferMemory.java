@@ -22,7 +22,7 @@ import org.apache.commons.lang.builder.*;
 public class TransferMemory
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -32,7 +32,7 @@ public class TransferMemory
 
   private String m_targetStorageName;
 
-  public TransferMemory(final Configuration a_conf, String a_sourceStorageName,
+  public TransferMemory(final GPConfiguration a_conf, String a_sourceStorageName,
                         String a_targetStorageName)
       throws InvalidConfigurationException {
     super(a_conf, 0, CommandGene.VoidClass);
@@ -48,9 +48,9 @@ public class TransferMemory
     m_targetStorageName = a_targetStorageName;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new TransferMemory(getConfiguration(), m_sourceStorageName,
+      CommandGene gene = new TransferMemory(getGPConfiguration(), m_sourceStorageName,
                                      m_targetStorageName);
       return gene;
     } catch (InvalidConfigurationException iex) {
@@ -68,12 +68,10 @@ public class TransferMemory
     // Read from memory.
     // -----------------
     try {
-      Object value = ( (GPConfiguration) getConfiguration()).readFromMemory(
-          m_sourceStorageName);
+      Object value = getGPConfiguration().readFromMemory(m_sourceStorageName);
       // Store in memory.
       // ----------------
-      ( (GPConfiguration) getConfiguration()).storeInMemory(m_targetStorageName,
-          value);
+      getGPConfiguration().storeInMemory(m_targetStorageName, value);
     } catch (IllegalArgumentException iex) {
       throw new IllegalStateException(
           "TransferMemory without preceeding StoreTerminal");

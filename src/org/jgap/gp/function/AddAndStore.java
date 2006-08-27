@@ -23,7 +23,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class AddAndStore
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -33,7 +33,7 @@ public class AddAndStore
 
   private Class m_type;
 
-  public AddAndStore(final Configuration a_conf, Class a_type,
+  public AddAndStore(final GPConfiguration a_conf, Class a_type,
                      String a_storageName)
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.VoidClass);
@@ -41,9 +41,9 @@ public class AddAndStore
     m_storageName = a_storageName;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new AddAndStore(getConfiguration(), m_type, m_storageName);
+      CommandGene gene = new AddAndStore(getGPConfiguration(), m_type, m_storageName);
       return gene;
     } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -74,7 +74,7 @@ public class AddAndStore
       throw new RuntimeException("Type " + m_type +
                                  " not supported by AddAndStore");
     }
-    ( (GPConfiguration) getConfiguration()).storeInMemory(m_storageName, value);
+    getGPConfiguration().storeInMemory(m_storageName, value);
   }
 
   public Class getChildType(GPProgram a_ind, int a_chromNum) {

@@ -26,7 +26,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -38,7 +38,7 @@ public class SubProgram
    */
   private Class[] m_types;
 
-  public SubProgram(final Configuration a_conf, Class[] a_types)
+  public SubProgram(final GPConfiguration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
     super(a_conf, a_types.length, a_types[a_types.length-1]);
     if (a_types.length < 1) {
@@ -48,9 +48,9 @@ public class SubProgram
     m_subtrees = a_types.length;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new SubProgram(getConfiguration(), m_types);
+      CommandGene gene = new SubProgram(getGPConfiguration(), m_types);
       return gene;
     }
     catch (InvalidConfigurationException iex) {

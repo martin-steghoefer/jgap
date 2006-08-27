@@ -23,19 +23,19 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private int m_chromosomeNum;
 
-  public ADF(final Configuration a_conf, int a_chromosomeNum)
+  public ADF(final GPConfiguration a_conf, int a_chromosomeNum)
       throws InvalidConfigurationException {
     super(a_conf, 0, null);
     m_chromosomeNum = a_chromosomeNum;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new ADF(getConfiguration(), m_chromosomeNum);
+      CommandGene gene = new ADF(getGPConfiguration(), m_chromosomeNum);
       return gene;
     } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());

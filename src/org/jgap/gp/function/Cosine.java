@@ -21,16 +21,16 @@ import org.jgap.gp.*;
 public class Cosine
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public Cosine(final Configuration a_conf, Class type)
+  public Cosine(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 1, type);
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Cosine(getConfiguration(), getReturnType());
+      CommandGene gene = new Cosine(getGPConfiguration(), getReturnType());
       return gene;
     }
     catch (InvalidConfigurationException iex) {

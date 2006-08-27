@@ -21,16 +21,16 @@ import org.jgap.gp.*;
 public class Exp
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  public Exp(final Configuration a_conf, Class a_type)
+  public Exp(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 1, a_type);
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Exp(getConfiguration(), getReturnType());
+      CommandGene gene = new Exp(getGPConfiguration(), getReturnType());
       return gene;
     }
     catch (InvalidConfigurationException iex) {

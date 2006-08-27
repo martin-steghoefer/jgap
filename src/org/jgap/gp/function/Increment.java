@@ -24,7 +24,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class Increment
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   private int m_increment;
 
@@ -37,7 +37,7 @@ public class Increment
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Increment(final Configuration a_conf, Class a_type)
+  public Increment(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     this(a_conf, a_type, 1);
   }
@@ -52,15 +52,15 @@ public class Increment
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Increment(final Configuration a_conf, Class a_type, int a_increment)
+  public Increment(final GPConfiguration a_conf, Class a_type, int a_increment)
       throws InvalidConfigurationException {
     super(a_conf, 1, a_type);
     m_increment = a_increment;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Increment(getConfiguration(), getReturnType(),
+      CommandGene gene = new Increment(getGPConfiguration(), getReturnType(),
                                 m_increment);
       return gene;
     } catch (InvalidConfigurationException iex) {

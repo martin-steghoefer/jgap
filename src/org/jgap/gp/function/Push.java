@@ -23,19 +23,19 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class Push
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_type;
 
-  public Push(final Configuration a_conf, Class a_type)
+  public Push(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass);
     m_type = a_type;
   }
 
-  protected Gene newGeneInternal() {
+  protected CommandGene newGeneInternal() {
     try {
-      Gene gene = new Push(getConfiguration(), getReturnType());
+      CommandGene gene = new Push(getGPConfiguration(), getReturnType());
       return gene;
     } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -110,7 +110,7 @@ public class Push
    * @param a_value the value to push onto the stack
    */
   protected void pushIt(Object a_value) {
-    ( (GPConfiguration) getConfiguration()).pushToStack(a_value);
+    getGPConfiguration().pushToStack(a_value);
   }
 
   public Class getChildType(GPProgram a_ind, int a_chromNum) {
