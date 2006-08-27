@@ -30,7 +30,7 @@ import org.jgap.*;
 public class WeightedRouletteSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -81,7 +81,7 @@ public class WeightedRouletteSelector
    */
   public WeightedRouletteSelector(Configuration a_config) {
     super(a_config);
-    m_config.m_doublettesAllowed = true;
+    m_config.m_doublettesAllowed = false;
   }
 
   /**
@@ -252,13 +252,14 @@ public class WeightedRouletteSelector
     // --------------------------------------------------------------------
     double currentSlot = 0.0d;
     FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
+    boolean isFitter2_1 = evaluator.isFitter(2, 1);
     for (int i = 0; i < a_counterValues.length; i++) {
       // Increment our ongoing total and see if we've landed on the
       // selected slot.
       // ----------------------------------------------------------
       currentSlot += a_counterValues[i];
       boolean found;
-      if (evaluator.isFitter(2, 1)) {
+      if (isFitter2_1) {
         // Introduced DELTA to fix bug 1449651
         found = selectedSlot - currentSlot <= DELTA;
       }
@@ -289,7 +290,6 @@ public class WeightedRouletteSelector
         return a_chromosomes[i];
       }
     }
-    /**@todo remove the following code after we are sure that this class works*/
     // If we have reached here, it means we have not found any chromosomes
     // to select and something is wrong with our logic. For some reason
     // the selected slot has exceeded the slots on our wheel. To help
@@ -301,6 +301,7 @@ public class WeightedRouletteSelector
     for (int i = 0; i < a_counterValues.length; i++) {
       totalSlotsLeft += a_counterValues[i];
     }
+//    if (true) return a_chromosomes[a_counterValues.length-1];
     throw new RuntimeException("Logic Error. This code should never "
                                + "be reached. Please report this as a bug to"
                                + " the JGAP team: selected slot "
@@ -355,7 +356,7 @@ public class WeightedRouletteSelector
                               BigDecimal.ROUND_HALF_UP).doubleValue();
       // Divide each of the fitness values by the scaling factor to
       // scale them down.
-      // --------------------------------------------------------------
+      // ----------------------------------------------------------
       counterIterator = m_wheel.values().iterator();
       while (counterIterator.hasNext()) {
         SlotCounter counter = (SlotCounter) counterIterator.next();
@@ -396,8 +397,6 @@ public class WeightedRouletteSelector
   public boolean getDoubletteChromosomesAllowed() {
     return m_config.m_doublettesAllowed;
   }
-  // methods derived from the Configurable interface
-
 
   class WeightedRouletteSelConfig {
     /**
