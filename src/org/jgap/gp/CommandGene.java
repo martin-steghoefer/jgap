@@ -10,7 +10,6 @@
 package org.jgap.gp;
 
 import java.io.*;
-import java.util.*;
 import org.jgap.*;
 
 /**
@@ -22,10 +21,9 @@ import org.jgap.*;
  * @since 3.0
  */
 public abstract class CommandGene
-//    extends BaseGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
