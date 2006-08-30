@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -331,7 +331,12 @@ public class GPGenotype
     if (m_allTimeBest == null
         || m_bestFitness < m_allTimeBest.getFitnessValue()) {
       m_allTimeBest = best;
-      /**@todo inform listeners*/
+      // Fire an event to indicate a new best solution.
+      // ----------------------------------------------
+      getGPConfiguration().getEventManager().fireGeneticEvent(
+          new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
+      // Output the new best solution found.
+      // -----------------------------------
       outputSolution(best);
     }
   }
