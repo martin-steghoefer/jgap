@@ -9,11 +9,15 @@
  */
 package examples.gp;
 
+import java.io.*;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
+import java.awt.Color;
+import javax.swing.tree.TreeNode;
+import org.jgap.util.tree.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -24,7 +28,7 @@ import org.jgap.gp.function.*;
  */
 public class MathProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   static Variable vx;
 
@@ -36,11 +40,9 @@ public class MathProblem {
       throws InvalidConfigurationException {
     Class[] types = {
         CommandGene.FloatClass};
-    Class[][] argTypes = {
-        {}
+    Class[][] argTypes = { {}
     };
-    CommandGene[][] nodeSets = {
-        {
+    CommandGene[][] nodeSets = { {
         vx = Variable.create(a_conf, "X", CommandGene.FloatClass),
         new Add(a_conf, CommandGene.FloatClass),
         new Add3(a_conf, CommandGene.FloatClass),
@@ -51,7 +53,7 @@ public class MathProblem {
         new Sine(a_conf, CommandGene.FloatClass),
         new Exp(a_conf, CommandGene.FloatClass),
         new Pow(a_conf, CommandGene.FloatClass),
-        new Terminal(a_conf, CommandGene.FloatClass,3.0d, 4.0d),
+        new Terminal(a_conf, CommandGene.FloatClass, 3.0d, 4.0d),
     }
     };
     Random random = new Random();
@@ -67,6 +69,7 @@ public class MathProblem {
     return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
         400);
   }
+
   /**
    * Starts the example.
    *
@@ -86,6 +89,23 @@ public class MathProblem {
     GPGenotype gp = create(config);
     gp.evolve(800);
     gp.outputSolution(gp.getAllTimeBest());
+    showTree(gp);
+  }
+
+  private static void showTree(GPGenotype gp) {
+    TreeNode myTree = makeTree(gp.getAllTimeBest());
+    TreeVisualizer tv = new TreeVisualizer();
+    tv.setTreeBranchRenderer(new JGAPTreeBranchRenderer());
+    tv.setTreeNodeRenderer(new JGAPTreeNodeRenderer());
+    tv.setBranchStartWidth(16.0);
+    tv.setArenaColor(Color.white);
+    tv.setSide(1024);
+    tv.setCircleDiminishFactor(0.75);
+    tv.writeImageFile(tv.renderTree(myTree), new File("mathproblem_best.png"));
+  }
+  private static TreeNode makeTree(GPProgram a_prog) {
+    TreeNode tree = new JGAPTreeNode(a_prog.getChromosome(0), 0);
+    return tree;
   }
 
   public static class FormulaFitnessFunction
@@ -102,8 +122,7 @@ public class MathProblem {
         try {
           double result = ind.execute_float(0, noargs);
           error += Math.abs(result - y[i]);
-        }
-        catch (ArithmeticException ex) {
+        } catch (ArithmeticException ex) {
           System.out.println("x = " + x[i].floatValue());
           System.out.println(ind);
           throw ex;
