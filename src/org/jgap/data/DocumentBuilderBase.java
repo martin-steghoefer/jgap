@@ -14,7 +14,7 @@ import java.util.*;
 /*
  * Abstract base class for generating a document holding its elements in a
  * tree. Inherit from this class and create your own DocumentBuilder.
- * For example, have a look at XMLDocumentBuilder
+ * For example, have a look at XMLDocumentBuilder.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -24,7 +24,7 @@ public abstract class DocumentBuilderBase {
    * DocumentBuilderBase */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Builds a document from the given input (input data + existing document).
@@ -40,7 +40,8 @@ public abstract class DocumentBuilderBase {
   public Object buildDocument(final IDataCreators a_dataholder,
                               final Object a_document)
       throws Exception {
-    // traverse over input structure
+    // Traverse over input structure.
+    // ------------------------------
     IDataElementList tree = a_dataholder.getTree();
     int len = tree.getLength();
     IDataElement elem;
@@ -112,7 +113,7 @@ public abstract class DocumentBuilderBase {
   }
 
   /**
-   * Append a child to a given document
+   * Append a child to a given document.
    * @param a_document to append element on (e.g. org.w3c.dom.Document)
    * @param a_element to append to document (e.g. org.w3c.com.Element)
    * @return a_document with appended element (e.g. org.w3c.dom.Document)
@@ -124,7 +125,7 @@ public abstract class DocumentBuilderBase {
                                                 Object a_element);
 
   /**
-   * Append a child to a given element
+   * Append a child to a given element.
    * @param a_rootElement to append childElement on (e.g. org.w3c.com.Element)
    * @param a_childElement to append to rootElement (e.g. org.w3c.com.Element)
    * @return rootElement with appended childElement (e.g. org.w3c.com.Element)
@@ -136,7 +137,7 @@ public abstract class DocumentBuilderBase {
                                                Object a_childElement);
 
   /**
-   * Creates an element with help for a given document
+   * Creates an element with help for a given document.
    * @param a_document could be used as factory to create the element with
    * @param a_element null or existing element as template
    * @param a_tagName name of tag to create for the element
@@ -149,7 +150,7 @@ public abstract class DocumentBuilderBase {
                                           String a_tagName);
 
   /**
-   * Sets an attribute for a given Element
+   * Sets an attribute for a given Element.
    * @param a_element the Element to set an attribute for
    * (e.g. org.w3c.com.Element)
    * @param a_key the key of the attribute
