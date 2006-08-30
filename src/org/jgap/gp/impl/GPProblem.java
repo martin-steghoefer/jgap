@@ -22,11 +22,11 @@ import java.awt.Color;
  * implementations.
  *
  * @author Klaus Meffert
- * @version 1.0
+ * @since 3.0
  */
 public abstract class GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GPConfiguration m_conf;
 
@@ -38,12 +38,29 @@ public abstract class GPProblem {
     m_conf = a_conf;
   }
 
+  /**
+   * @return newly created GPGenotype
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public abstract GPGenotype create()
       throws InvalidConfigurationException;
 
-  public void showTree(GPGenotype gp, String a_filename)
+  /**
+   * Creates a tree out of a given GP program and saves it to a file.
+   *
+   * @param a_prog the GP program to visualize a tree for
+   * @param a_filename the name of the file to save the tree in
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void showTree(GPProgram a_prog, String a_filename)
       throws InvalidConfigurationException {
-    TreeNode myTree = createTree(gp.getAllTimeBest());
+    TreeNode myTree = createTree(a_prog);
     if (myTree == null) {
       return;
     }
@@ -56,10 +73,19 @@ public abstract class GPProblem {
     tv.setRenderNodes(true);
     tv.setSide(1024);
     tv.setCircleDiminishFactor(0.5);
-    tv.writeImageFile(tv.renderTree(myTree),
-                      new File(a_filename));
+    tv.writeImageFile(tv.renderTree(myTree), new File(a_filename));
   }
 
+  /**
+   * Creates a tree out of a given GP program.
+   *
+   * @param a_prog the GPGenotype to visualize a tree for
+   * @return the TreeNode object corresponding to the GP program
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public TreeNode createTree(GPProgram a_prog)
       throws InvalidConfigurationException {
     if (a_prog == null) {
@@ -89,6 +115,12 @@ public abstract class GPProblem {
     return tree;
   }
 
+  /**
+   * @return the GPConfiguration set
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public GPConfiguration getGPConfiguration() {
     return m_conf;
   }
