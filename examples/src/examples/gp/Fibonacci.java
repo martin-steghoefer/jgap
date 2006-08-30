@@ -9,12 +9,13 @@
  */
 package examples.gp;
 
-import java.util.*;
+import java.io.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
-import org.jgap.gp.terminal.*;
+import org.jgap.gp.impl.*;
 import org.jgap.gp.function.*;
+import org.jgap.gp.terminal.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -24,14 +25,13 @@ import org.jgap.gp.function.*;
  * below). Of course this is an oversimplification to show the principle of GP
  * only.<p>
  *
- * @todo advance this example to full-blown functionality
- *
  * @author Klaus Meffert
  * @since 3.0
  */
-public class Fibonacci {
+public class Fibonacci
+    extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   static Variable vx;
 
@@ -43,33 +43,39 @@ public class Fibonacci {
 
   static int[] y = new int[NUMFIB];
 
-  public static GPGenotype create(GPConfiguration a_conf)
+  public Fibonacci(GPConfiguration a_conf)
+      throws InvalidConfigurationException {
+    super(a_conf);
+  }
+
+  public GPGenotype create()
       throws InvalidConfigurationException {
     Class[] types = {
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = { {}, {}, {}
     };
-    int[] minDepths = new int[] {2, 4, 1};
-    int[] maxDepths = new int[] {3, 5, 1};
+    int[] minDepths = new int[] {2, 4 /*4*/, 1};
+    int[] maxDepths = new int[] {3, 9 /*5*/, 1};
+    GPConfiguration conf = getGPConfiguration();
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = { {
-        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
-        new Constant(a_conf, CommandGene.IntegerClass, new Integer(1)),
-        new StoreTerminal(a_conf, "mem0", CommandGene.IntegerClass),
-        new StoreTerminal(a_conf, "mem1", CommandGene.IntegerClass),
-        new Increment(a_conf, CommandGene.IntegerClass),
-        new NOP(a_conf),
+        new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
+        new StoreTerminal(conf, "mem0", CommandGene.IntegerClass),
+        new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
+        new Increment(conf, CommandGene.IntegerClass),
+        new NOP(conf),
     }, {
-        vx = Variable.create(a_conf, "X", CommandGene.IntegerClass),
-        new AddAndStore(a_conf, CommandGene.IntegerClass, "mem2"),
-        new ForLoop(a_conf, CommandGene.IntegerClass, NUMFIB),
-        new Increment(a_conf, CommandGene.IntegerClass, -1),
-        new TransferMemory(a_conf, "mem2", "mem1"),
-        new TransferMemory(a_conf, "mem1", "mem0"),
-        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem0"),
-        new ReadTerminal(a_conf, CommandGene.IntegerClass, "mem1"),
-        new SubProgram(a_conf, new Class[] {CommandGene.VoidClass,
+        vx = Variable.create(conf, "X", CommandGene.IntegerClass),
+        new AddAndStore(conf, CommandGene.IntegerClass, "mem2"),
+        new ForLoop(conf, CommandGene.IntegerClass, NUMFIB),
+        new Increment(conf, CommandGene.IntegerClass, -1),
+        new TransferMemory(conf, "mem2", "mem1"),
+        new TransferMemory(conf, "mem1", "mem0"),
+        new ReadTerminal(conf, CommandGene.IntegerClass, "mem0"),
+        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
+        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
     }, {
         // Commands will be added programmatically, see below.
@@ -78,7 +84,7 @@ public class Fibonacci {
     };
     // Add commands working with internal memory.
     // ------------------------------------------
-    nodeSets[2] = CommandFactory.createReadOnlyCommands(nodeSets[2], a_conf,
+    nodeSets[2] = CommandFactory.createReadOnlyCommands(nodeSets[2], conf,
         CommandGene.IntegerClass, "mem", 1, 2, !true);
     // Randomly initialize function data (X-Y table) for Fib(x).
     // ---------------------------------------------------------
@@ -90,7 +96,7 @@ public class Fibonacci {
     }
     // Create genotype with initial population.
     // ----------------------------------------
-    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
+    return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
         minDepths, maxDepths, 400, new boolean[] {!true, !true, false});
   }
 
@@ -157,19 +163,19 @@ public class Fibonacci {
       else {
         popSize = 1200;
       }
-      System.out.println("Using population size of "+popSize);
+      System.out.println("Using population size of " + popSize);
       config.setMaxInitDepth(6);
       config.setPopulationSize(popSize);
       config.setFitnessFunction(new Fibonacci.FormulaFitnessFunction());
       config.setStrictProgramCreation(false);
       config.setProgramCreationMaxTries(5);
-      GPGenotype gp = create(config);
+      final GPProblem problem = new Fibonacci(config);
+      GPGenotype gp = problem.create();
       final Thread t = new Thread(gp);
       // Simple implementation of running evolution in a thread.
       // -------------------------------------------------------
       config.getEventManager().addEventListener(GeneticEvent.
-          GPGENOTYPE_EVOLVED_EVENT,
-          new GeneticEventListener() {
+          GPGENOTYPE_EVOLVED_EVENT, new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getGPConfiguration().getGenerationNr();
@@ -180,9 +186,6 @@ public class Fibonacci {
             System.out.println("Evolving generation " + evno
                                + ", best fitness: " + bestFitness
                                + ", memory free: " + freeMem + " MB");
-            if (bestFitness < 10) {
-              t.stop();
-            }
           }
           if (evno > 3000) {
             t.stop();
@@ -203,6 +206,33 @@ public class Fibonacci {
               iex.printStackTrace();
               System.exit(1);
             }
+          }
+        }
+      });
+      config.getEventManager().addEventListener(GeneticEvent.
+          GPGENOTYPE_NEW_BEST_SOLUTION, new GeneticEventListener() {
+        /**
+         * New best solution found
+         * @param a_firedEvent GeneticEvent
+         */
+        public void geneticEventFired(GeneticEvent a_firedEvent) {
+          GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
+          int evno = genotype.getGPConfiguration().getGenerationNr();
+          String indexString = "" + evno;
+          while (indexString.length() < 5) {
+            indexString = "0" + indexString;
+          }
+          String filename = "fibonacci_best" + indexString + ".png";
+          try {
+            problem.showTree(genotype.getAllTimeBest(), filename);
+          } catch (InvalidConfigurationException iex) {
+            iex.printStackTrace();
+          }
+          double bestFitness = genotype.getFittestProgram().
+              getFitnessValue();
+          if (bestFitness < 0.001) {
+            t.stop();
+            System.exit(0);
           }
         }
       });

@@ -9,15 +9,13 @@
  */
 package examples.gp;
 
-import java.io.*;
 import java.util.*;
+
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
-import java.awt.Color;
-import javax.swing.tree.TreeNode;
-import org.jgap.util.tree.*;
+import org.jgap.gp.impl.*;
+import org.jgap.gp.terminal.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -26,9 +24,10 @@ import org.jgap.util.tree.*;
  * @author Klaus Meffert
  * @since 3.0
  */
-public class MathProblem {
+public class MathProblem
+    extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   static Variable vx;
 
@@ -36,24 +35,30 @@ public class MathProblem {
 
   static float[] y = new float[20];
 
-  public static GPGenotype create(GPConfiguration a_conf)
+  public MathProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
+    super(a_conf);
+  }
+
+  public GPGenotype create()
+      throws InvalidConfigurationException {
+    GPConfiguration conf = getGPConfiguration();
     Class[] types = {
         CommandGene.FloatClass};
     Class[][] argTypes = { {}
     };
     CommandGene[][] nodeSets = { {
-        vx = Variable.create(a_conf, "X", CommandGene.FloatClass),
-        new Add(a_conf, CommandGene.FloatClass),
-        new Add3(a_conf, CommandGene.FloatClass),
-        new Subtract(a_conf, CommandGene.FloatClass),
-        new Multiply(a_conf, CommandGene.FloatClass),
-        new Multiply3(a_conf, CommandGene.FloatClass),
-        new Divide(a_conf, CommandGene.FloatClass),
-        new Sine(a_conf, CommandGene.FloatClass),
-        new Exp(a_conf, CommandGene.FloatClass),
-        new Pow(a_conf, CommandGene.FloatClass),
-        new Terminal(a_conf, CommandGene.FloatClass, 3.0d, 4.0d),
+        vx = Variable.create(conf, "X", CommandGene.FloatClass),
+        new Add(conf, CommandGene.FloatClass),
+        new Add3(conf, CommandGene.FloatClass),
+        new Subtract(conf, CommandGene.FloatClass),
+        new Multiply(conf, CommandGene.FloatClass),
+        new Multiply3(conf, CommandGene.FloatClass),
+        new Divide(conf, CommandGene.FloatClass),
+        new Sine(conf, CommandGene.FloatClass),
+        new Exp(conf, CommandGene.FloatClass),
+        new Pow(conf, CommandGene.FloatClass),
+        new Terminal(conf, CommandGene.FloatClass, 3.0d, 4.0d),
     }
     };
     Random random = new Random();
@@ -66,7 +71,7 @@ public class MathProblem {
     }
     // Create genotype with initial population.
     // ----------------------------------------
-    return GPGenotype.randomInitialGenotype(a_conf, types, argTypes, nodeSets,
+    return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
         400);
   }
 
@@ -86,27 +91,17 @@ public class MathProblem {
     config.setMaxInitDepth(5);
     config.setPopulationSize(1000);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
-    GPGenotype gp = create(config);
+    GPProblem problem = new MathProblem(config);
+    GPGenotype gp = problem.create();
     gp.evolve(800);
     gp.outputSolution(gp.getAllTimeBest());
-    showTree(gp);
+    problem.showTree(gp.getAllTimeBest(), "mathproblem_best.png");
   }
 
-  private static void showTree(GPGenotype gp) {
-    TreeNode myTree = makeTree(gp.getAllTimeBest());
-    TreeVisualizer tv = new TreeVisualizer();
-    tv.setTreeBranchRenderer(new JGAPTreeBranchRenderer());
-    tv.setTreeNodeRenderer(new JGAPTreeNodeRenderer());
-    tv.setBranchStartWidth(16.0);
-    tv.setArenaColor(Color.white);
-    tv.setSide(1024);
-    tv.setCircleDiminishFactor(0.75);
-    tv.writeImageFile(tv.renderTree(myTree), new File("mathproblem_best.png"));
-  }
-  private static TreeNode makeTree(GPProgram a_prog) {
-    TreeNode tree = new JGAPTreeNode(a_prog.getChromosome(0), 0);
-    return tree;
-  }
+//  private static TreeNode makeTree(GPProgram a_prog) {
+//    TreeNode tree = new JGAPTreeNode(a_prog.getChromosome(0), 0);
+//    return tree;
+//  }
 
   public static class FormulaFitnessFunction
       extends GPFitnessFunction {
