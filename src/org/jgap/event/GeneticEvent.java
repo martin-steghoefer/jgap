@@ -23,7 +23,7 @@ import java.util.EventObject;
 public class GeneticEvent
     extends EventObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Multi-purpose value object
@@ -39,6 +39,9 @@ public class GeneticEvent
 
   public static final String GPGENOTYPE_EVOLVED_EVENT =
       "gpgenotype_evolved_event";
+
+  public static final String GPGENOTYPE_NEW_BEST_SOLUTION =
+      "gpgenotype_best_solution";
 
   /**
    * References the name of this event instance.
