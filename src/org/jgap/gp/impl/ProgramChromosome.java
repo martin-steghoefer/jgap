@@ -1,0 +1,1359 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
+package org.jgap.gp.impl;
+
+import java.io.*;
+import org.jgap.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.gp.function.*;
+
+import org.jgap.gp.*;
+
+/**
+ * Chromosome representing a single GP Program.
+ *
+ * @author Klaus Meffert
+ * @since 3.0
+ */
+public class ProgramChromosome
+    //    extends BaseGPChromosome
+    // implements IGPChromosome
+    implements Serializable
+{
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
+
+  /*wodka:
+   void add(Command cmd);
+   java.util.Iterator commands();
+   Interpreter interpreter();
+   Program createEmptyChildProgram();
+   SodaGlobals getGlobals();
+   void setGlobals(SodaGlobals globals);
+   Language getLanguage();
+   */
+
+  /**
+   * The allowable function/terminal list.
+   */
+  private transient CommandGene[] m_functionSet;
+
+  /**
+   * Array to hold the depths of each node.
+   */
+  private int[] m_depth;
+
+  /**
+   * Array to hold the types of the arguments to this Chromosome.
+   */
+  private Class[] argTypes;
+
+  private transient int m_index;
+
+  private transient int m_maxDepth;
+
+  private GPProgram m_ind;
+
+  /**
+   * The array of genes contained in this chromosome.
+   */
+  private CommandGene[] m_genes;
+
+  /**
+   * The configuration object to use
+   */
+  private /*transient*/ GPConfiguration m_configuration;
+
+  /**
+   * Application-specific data that is attached to this Chromosome.
+   * This data may assist the application in evaluating this Chromosome
+   * in the fitness function. JGAP does not operate on the data, aside
+   * from allowing it to be set and retrieved, and considering it with
+   * comparations (if user opted in to do so).
+   */
+  private Object m_applicationData;
+
+  /**
+   * Method compareTo(): Should we also consider the application data when
+   * comparing? Default is "false" as "true" means a Chromosome's losing its
+   * identity when application data is set differently!
+   *
+   * @since 3.0
+   */
+  private boolean m_compareAppData;
+
+  public ProgramChromosome(GPConfiguration a_configuration, int a_size,
+                           GPProgram a_ind)
+      throws InvalidConfigurationException {
+    if (a_size <= 0) {
+      throw new IllegalArgumentException(
+          "Chromosome size must be greater than zero");
+    }
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
+    m_configuration = a_configuration;
+    m_ind = a_ind;
+    init(a_size);
+  }
+
+  public ProgramChromosome(GPConfiguration a_configuration, int a_size,
+                           CommandGene[] a_functionSet,
+                           Class[] a_argTypes,
+                           GPProgram a_ind)
+      throws InvalidConfigurationException {
+    if (a_size <= 0) {
+      throw new IllegalArgumentException(
+          "Chromosome size must be greater than zero");
+    }
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
+    m_configuration = a_configuration;
+    m_ind = a_ind;
+    m_functionSet = a_functionSet;
+    argTypes = a_argTypes;
+    init();
+  }
+
+  public ProgramChromosome(GPConfiguration a_configuration,
+                           CommandGene[] a_initialGenes)
+      throws InvalidConfigurationException {
+    if (a_configuration == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
+    m_configuration = a_configuration;
+    int i = 0;
+    while (i < a_initialGenes.length && a_initialGenes[i] != null) {
+      i++;
+    }
+    CommandGene[] genes = new CommandGene[i];
+    for (int k = 0; k < i; k++) {
+      genes[k] = a_initialGenes[k];
+    }
+    init(a_initialGenes.length);
+  }
+
+  public void setArgTypes(Class[] a_argTypes) {
+    argTypes = a_argTypes;
+  }
+
+  /**
+   * Default constructor.
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public ProgramChromosome()
+      throws InvalidConfigurationException {
+    this(GPGenotype.getGPConfiguration());
+  }
+
+  public ProgramChromosome(final GPConfiguration a_conf)
+      throws InvalidConfigurationException {
+    if (a_conf == null) {
+      throw new InvalidConfigurationException(
+          "Configuration to be set must not"
+          + " be null!");
+    }
+    m_configuration = a_conf;
+    init();
+  }
+
+  private void init()
+      throws InvalidConfigurationException {
+    init(getGPConfiguration().getPopulationSize());
+  }
+
+  private void init(final int a_size)
+      throws InvalidConfigurationException {
+    m_depth = new int[a_size];
+    setFunctions(new CommandGene[a_size]);
+  }
+
+  public synchronized Object clone() {
+    try {
+      ProgramChromosome chrom = new ProgramChromosome( (GPConfiguration)
+          getGPConfiguration(), (CommandGene[]) m_genes.clone());
+      chrom.argTypes = (Class[]) argTypes.clone();
+      chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
+      chrom.setFunctions( (CommandGene[]) getFunctions().clone());
+      chrom.m_depth = (int[]) m_depth.clone();
+      return chrom;
+    }
+    catch (Exception cex) {
+      // rethrow to have a more convenient handling
+      throw new IllegalStateException(cex.getMessage());
+    }
+  }
+
+  public void cleanup() {
+    cleanup(0);
+  }
+
+  protected void cleanup(final int n) {
+    if (n < 0) {
+      return;
+    }
+    for (int i = 0; i < getFunctions()[n].getArity(m_ind); i++) {
+      cleanup(getChild(n, i));
+    }
+    getFunctions()[n].cleanup();
+  }
+
+  public void addCommand(final CommandGene a_command)
+      throws InvalidConfigurationException {
+    if (a_command == null) {
+      throw new IllegalArgumentException("Command may not be null!");
+    }
+    final int len = m_genes.length;
+    CommandGene[] genes = new CommandGene[len + 1];
+    System.arraycopy(m_genes, 0, genes, 0, len);
+    m_genes[len] = a_command;
+  }
+
+  /**
+   * Initialize this chromosome using the grow or the full method.
+   *
+   * @param a_num the chromosome's index in the individual of this chromosome
+   * @param depth the maximum depth of the chromosome to create
+   * @param type the type of the chromosome to create
+   * @param a_argTypes the array of types of arguments for this chromosome
+   * @param a_functionSet the set of nodes valid to pick from
+   * @param a_grow true: use grow method; false: use full method
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void growOrFull(final int a_num, final int depth, final Class type,
+                   final Class[] a_argTypes, final CommandGene[] a_functionSet,
+                   boolean a_grow) {
+    try {
+      argTypes = a_argTypes;
+      setFunctionSet(new CommandGene[a_functionSet.length + a_argTypes.length]);
+      System.arraycopy(a_functionSet, 0, getFunctionSet(), 0,
+                       a_functionSet.length);
+      for (int i = 0; i < a_argTypes.length; i++) {
+        m_functionSet[a_functionSet.length + i]
+            = new Argument(getGPConfiguration(), i, a_argTypes[i]);
+      }
+      /**@todo init is experimental, make dynamic*/
+      // Initialization of genotype according to specific problem requirements.
+      // ----------------------------------------------------------------------
+      CommandGene n = null;
+      if (a_num == 0 && false) {
+        for (int i = 0; i < m_functionSet.length; i++) {
+          CommandGene m = m_functionSet[i];
+          if (m.getClass() == SubProgram.class) {
+            n = m;
+            break;
+          }
+        }
+      }
+      else if (a_num == 1 && false) {
+        for (int i = 0; i < m_functionSet.length; i++) {
+          CommandGene m = m_functionSet[i];
+          if (m.getClass() == ForLoop.class) {
+            n = m;
+            break;
+          }
+        }
+      }
+      int tries = 0;
+      int localDepth = depth;
+      do {
+        m_index = 0;
+        m_maxDepth = localDepth;
+        try {
+          growOrFullNode(a_num, localDepth, type, m_functionSet, n, 0, a_grow);
+          redepth();
+          break;
+        } catch (IllegalStateException iex) {
+          tries++;
+          if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
+            throw new IllegalArgumentException(iex.getMessage());
+          }
+          // Clean up genes for next try.
+          // ----------------------------
+          for (int j = 0; j < size(); j++) {
+            if (m_genes[j] == null) {
+              break;
+            }
+            m_genes[j] = null;
+          }
+          localDepth++;
+        }
+      } while (true);
+    }
+    catch (InvalidConfigurationException iex) {
+      throw new IllegalStateException(iex.getMessage());
+    }
+  }
+
+  /**
+   * Output program in left-hand notion (e.g.: "+ X Y" for "X + Y")
+   * @param a_n node to start with
+   * @return output in left-hand notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public String toString(final int a_n) {
+    if (a_n < 0) {
+      return "";
+    }
+    // Replace any occurance of placeholders (e.g. &1, &2...) in the function's
+    // name.
+    // ------------------------------------------------------------------------
+    String funcName = getFunctions()[a_n].getName();
+    int j = 1;
+    do {
+      String placeHolder = "&" + j;
+      int foundIndex = funcName.indexOf(placeHolder);
+      if (foundIndex < 0) {
+        break;
+      }
+      funcName = funcName.replaceFirst(placeHolder, "");
+      j++;
+    }
+    while (true);
+    // Now remove any leading and trailing spaces.
+    // -------------------------------------------
+    if (j > 0) {
+      funcName = funcName.trim();
+    }
+    if (getFunctions()[a_n].getArity(m_ind) == 0) {
+      return funcName + " ";
+    }
+    String str = "";
+    str += funcName + " ( ";
+    for (int i = 0; i < getFunctions()[a_n].getArity(m_ind); i++) {
+      str += toString(getChild(a_n, i));
+    }
+    if (a_n == 0) {
+      str += ")";
+    }
+    else {
+      str += ") ";
+    }
+    return str;
+  }
+
+  /**
+   * Output program in "natural" notion (e.g.: "X + Y" for "X + Y")
+   * @param a_n node to start with
+   * @return output in natural notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public String toString2(final int a_n) {
+    if (a_n < 0) {
+      return "";
+    }
+    if (getFunctions()[a_n].getArity(m_ind) == 0) {
+      return getFunctions()[a_n].getName();
+    }
+    String str = "";
+    boolean paramOutput = false;
+    if (getFunctions()[a_n].getArity(m_ind) > 0) {
+      if (getFunctions()[a_n].getName().indexOf("&1") >= 0) {
+        paramOutput = true;
+      }
+    }
+    if (getFunctions()[a_n].getArity(m_ind) == 1 || paramOutput) {
+      str += getFunctions()[a_n].getName();
+    }
+    if (a_n > 0) {
+      str = "(" + str;
+    }
+    for (int i = 0; i < getFunctions()[a_n].getArity(m_ind); i++) {
+      String childString = toString2(getChild(a_n, i));
+      String placeHolder = "&" + (i + 1);
+      int placeholderIndex = str.indexOf(placeHolder);
+      if (placeholderIndex >= 0) {
+        str = str.replaceFirst(placeHolder, childString);
+      }
+      else {
+        str += childString;
+      }
+      if (i == 0 && getFunctions()[a_n].getArity(m_ind) != 1 && !paramOutput) {
+        str += " " + getFunctions()[a_n].getName() + " ";
+      }
+    }
+    if (a_n > 0) {
+      str += ")";
+    }
+    return str;
+  }
+
+  /**
+   * Determines whether there exists a function or terminal in the given node
+   * set with the given type.
+   *
+   * @param a_type the type to look for
+   * @param a_nodeSet the array of nodes to look through
+   * @param a_function true to look for a function, false to look for a terminal
+   * @param a_growing true: grow mode, false: full mode
+   *
+   * @return true if such a node exists, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
+                            boolean a_function, boolean a_growing) {
+    for (int i = 0; i < a_nodeSet.length; i++) {
+      if (a_nodeSet[i].getReturnType() == a_type) {
+        if (a_nodeSet[i].getArity(m_ind) == 0 && (!a_function || a_growing)) {
+          return true;
+        }
+        if (a_nodeSet[i].getArity(m_ind) != 0 && a_function) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Randomly chooses a valid node from the functions set.
+   *
+   * @param a_type the type of node to choose
+   * @param a_functionSet the functions to use
+   * @param a_function true to choose a function, false to choose a terminal
+   * @param a_growing true to ignore the function parameter, false otherwise
+   * @return the node chosen
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  protected CommandGene selectNode(Class a_type, CommandGene[] a_functionSet,
+                                   boolean a_function, boolean a_growing) {
+    if (!isPossible(a_type, a_functionSet, a_function, a_growing)) {
+      final String errormsg = "Chromosome requires a " +
+          (a_function ?
+           ("function" + (a_growing ? " or terminal" : ""))
+           : "terminal") + " of type " +
+          a_type + " but there is no such node available";
+      if (!getGPConfiguration().isStrictProgramCreation()) {
+        throw new IllegalStateException(errormsg);
+      }
+      else {
+        throw new IllegalArgumentException(errormsg);
+      }
+    }
+    CommandGene n = null;
+    int lindex;
+    // Following is analog to isPossible except with the random generator.
+    // -------------------------------------------------------------------
+    while (n == null) {
+      lindex = getGPConfiguration().getRandomGenerator().nextInt(
+          a_functionSet.length);
+      if (a_functionSet[lindex].getReturnType() == a_type) {
+        if (a_functionSet[lindex].getArity(m_ind) == 0 &&
+            (!a_function || a_growing)) {
+          n = a_functionSet[lindex];
+        }
+        if (a_functionSet[lindex].getArity(m_ind) != 0 && a_function) {
+          n = a_functionSet[lindex];
+        }
+      }
+    }
+    return n;
+  }
+
+  /**
+   * Create a tree of nodes using the grow method.
+   *
+   * @param a_num the chromosome's index in the individual of this chromosome
+   * @param a_depth the maximum depth of the tree to create
+   * @param a_type the type of node to start with
+   * @param a_functionSet the set of function valid to pick from
+   * @param a_rootNode null, or root node to use
+   * @param a_recurseLevel 0 for first call
+   * @param a_grow true: use grow method; false: use full method
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  protected void growOrFullNode(int a_num, int a_depth, Class a_type,
+                          CommandGene[] a_functionSet, CommandGene a_rootNode,
+                          int a_recurseLevel, boolean a_grow) {
+    if (a_rootNode == null) {
+      do {
+        a_rootNode = selectNode(a_type, a_functionSet, a_depth > 1, a_grow);
+        /**@todo following is experimental for constraints*/
+        if (a_num == 0 && false) {
+          // SubProgram forbidden other than as root
+          if (a_recurseLevel > 0 && a_rootNode.getClass() == SubProgram.class) {
+            continue;
+          }
+        }
+        //
+        if (a_num == 1 && false) {
+          // ForLoop forbidden under root node
+          if (a_recurseLevel > 0 && a_rootNode.getClass() == ForLoop.class) {
+            continue;
+          }
+          // ForLoop needed as root
+          if (a_recurseLevel == 0 && a_rootNode.getClass() != ForLoop.class) {
+            continue;
+          }
+          // Variable forbidden other than directly under root
+          if (a_recurseLevel > 1 && a_rootNode.getClass() == Variable.class) {
+            continue;
+          }
+          // Variable needed directly under root
+          if (a_recurseLevel == 1 && a_depth == 1
+                   && a_rootNode.getClass() != Variable.class) {
+            continue;
+          }
+          // SubProgram forbidden other than directly under root
+          if (a_recurseLevel > 1 && a_depth > 1
+                   && a_rootNode.getClass() == SubProgram.class) {
+            continue;
+          }
+          // SubProgram needed directly under root
+          if (a_recurseLevel == 1 && a_depth > 1 && a_type == CommandGene.VoidClass
+                   && a_rootNode.getClass() != SubProgram.class) {
+            continue;
+          }
+          // AddAndStore or TransferMemory needed 2 root
+          if (a_recurseLevel == 2 && a_depth > 1 && a_type == CommandGene.VoidClass
+                   && a_rootNode.getClass() != AddAndStore.class
+                   && a_rootNode.getClass() != TransferMemory.class) {
+            continue;
+          }
+          // AddAndStore or TransferMemory forbidden other than 2 root
+          if (a_recurseLevel != 2 && a_depth > 1 && a_type == CommandGene.VoidClass
+                   && (a_rootNode.getClass() == AddAndStore.class
+                   || a_rootNode.getClass() == TransferMemory.class)) {
+            continue;
+          }
+        }
+        break;
+      }
+      while (true);
+    }
+    // Generate the node.
+    // ------------------
+    m_depth[m_index] = m_maxDepth - a_depth;
+    getFunctions()[m_index++] = a_rootNode;
+    if (a_depth > 1) {
+      for (int i = 0; i < a_rootNode.getArity(m_ind); i++) {
+        growOrFullNode(a_num, a_depth - 1,
+                       a_rootNode.getChildType(getIndividual(), i),
+                       a_functionSet, null, a_recurseLevel + 1, a_grow);
+      }
+    }
+  }
+
+  /**
+   * Recalculate the depths of each node.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void redepth() {
+    m_depth[0] = 0;
+    redepth(0);
+  }
+
+  /**
+   * Calculate the depth of the next node and the indices of the children
+   * of the current node.
+   * The depth of the next node is just one plus the depth of the current node.
+   * The index of the first child is always the next node. The index of the
+   * second child is found by recursively calling this method on the tree
+   * starting with the first child.
+   *
+   * @param a_index the index of the reference depth
+   * @return the index of the next node of the same depth as the
+   * current node (i.e. the next sibling node)
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  protected int redepth(int a_index) {
+    int num = a_index + 1;
+    CommandGene command = getNode(a_index);
+    if (command == null) {
+      throw new IllegalStateException("ProgramChromosome invalid");
+    }
+    int arity = command.getArity(m_ind);
+    for (int i = 0; i < arity; i++) {
+      m_depth[num] = m_depth[a_index] + 1;
+      // children[i][n] = num;
+      num = redepth(num);
+      if (num < 0) {
+        break;
+      }
+    }
+    return num;
+  }
+
+  /**
+   * @return the number of terminals in this chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int numTerminals() {
+    int count = 0;
+    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
+      if (getFunctions()[i].getArity(m_ind) == 0) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * @return the number of functions in this chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int numFunctions() {
+    int count = 0;
+    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
+      if (getFunctions()[i].getArity(m_ind) != 0) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Counts the number of terminals of the given type in this chromosome.
+   *
+   * @param a_type the type of terminal to count
+   * @return the number of terminals in this chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int numTerminals(Class a_type) {
+    int count = 0;
+    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
+      if (getFunctions()[i].getArity(m_ind) == 0
+          && getFunctions()[i].getReturnType() == a_type) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Counts the number of functions of the given type in this chromosome.
+   *
+   * @param a_type the type of function to count
+   * @return the number of functions in this chromosome.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int numFunctions(Class a_type) {
+    int count = 0;
+    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
+      if (getFunctions()[i].getArity(m_ind) != 0
+          && getFunctions()[i].getReturnType() == a_type) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Gets the a_index'th node in this chromosome. The nodes are counted in a
+   * depth-first manner, with node 0 being the root of this chromosome.
+   *
+   * @param a_index the node number to get
+   * @return the node
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public CommandGene getNode(int a_index) {
+    if (a_index >= getFunctions().length || getFunctions()[a_index] == null) {
+      return null;
+    }
+    return getFunctions()[a_index];
+  }
+
+  /**
+   * Gets the a_child'th child of the a_index'th node in this chromosome. This
+   * is the same as the a_child'th node whose depth is one more than the depth
+   * of the a_index'th node.
+   *
+   * @param a_index the node number of the parent
+   * @param a_child the child number (starting from 0) of the parent
+   * @return the node number of the child, or -1 if not found
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getChild(int a_index, int a_child) {
+    for (int i = a_index + 1; i < getFunctions().length; i++) {
+      if (m_depth[i] <= m_depth[a_index]) {
+        return -1;
+      }
+      if (m_depth[i] == m_depth[a_index] + 1) {
+        if (--a_child < 0) {
+          return i;
+        }
+      }
+    }
+    throw new RuntimeException("Bad child " + a_child +
+                               " of node with index = "
+                               + a_index);
+  }
+
+  /**
+   * Gets the i'th node of the given type in this chromosome. The nodes are
+   * counted in a depth-first manner, with node 0 being the first node of the
+   * given type in this chromosome.
+   *
+   * @param a_index the i'th node to get
+   * @param a_type the type of node to get
+   * @return the node
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getNode(int a_index, Class a_type) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getReturnType() == a_type) {
+        if (--a_index < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Gets the i'th terminal in this chromosome. The nodes are counted in a
+   * depth-first manner, with node 0 being the first terminal in this
+   * chromosome.
+   *
+   * @param a_index the i'th terminal to get
+   * @return the terminal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getTerminal(int a_index) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getArity(m_ind) == 0) {
+        if (--a_index < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Gets the a_index'th function in this chromosome. The nodes are counted in a
+   * depth-first manner, with node 0 being the first function in this
+   * chromosome.
+   *
+   * @param a_index the a_index'th function to get
+   * @return the function
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getFunction(int a_index) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getArity(m_ind) != 0) {
+        if (--a_index < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Gets the a_index'th terminal of the given type in this chromosome. The nodes
+   * are counted in a depth-first manner, with node 0 being the first terminal of
+   * the given type in this chromosome.
+   *
+   * @param a_index the a_index'th terminal to get
+   * @param a_type the type of terminal to get
+   * @return the index of the terminal found, or -1 if no appropriate terminal
+   * was found
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getTerminal(int a_index, Class a_type) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getReturnType() == a_type
+          && getFunctions()[j].getArity(m_ind) == 0) {
+        if (--a_index < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Gets the i'th function of the given type in this chromosome. The nodes are
+   * counted in a depth-first manner, with node 0 being the first function of
+   * the given type in this chromosome.
+   *
+   * @param a_index the i'th function to get
+   * @param a_type the type of function to get
+   * @return the index of the function found, or -1 if no appropriate function
+   * was found
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getFunction(int a_index, Class a_type) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getReturnType() == a_type
+          && getFunctions()[j].getArity(m_ind) != 0) {
+        if (--a_index < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Helper: Find GP command with given class and return index of it
+   * @param a_n return the n'th found command
+   * @param a_class the class to find a command for
+   * @return index of first found matching GP command, or -1 if none found
+   */
+  public int getCommandOfClass(int a_n, Class a_class) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getClass() == a_class) {
+        if (--a_n < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Helper: Find GP Variable with given return type and return index of it
+   * @param a_n return the n'th found command
+   * @param a_returnType the return type to find a Variable for
+   * @return index of first found matching GP command, or -1 if none found
+   */
+  public int getVariableWithReturnType(int a_n, Class a_returnType) {
+    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
+      if (getFunctions()[j].getClass() == Variable.class) {
+        Variable v = (Variable) getFunctions()[j];
+        if (v.getReturnType() == a_returnType) {
+          if (--a_n < 0) {
+            return j;
+          }
+        }
+      }
+    }
+    return -1;
+  }
+
+  public CommandGene[] getFunctionSet() {
+    return m_functionSet;
+  }
+
+  public void setFunctionSet(CommandGene[] a_functionSet) {
+    m_functionSet = a_functionSet;
+  }
+
+  public CommandGene[] getFunctions() {
+    return m_genes;
+  }
+
+  public void setFunctions(CommandGene[] a_functions)
+      throws InvalidConfigurationException {
+    m_genes = a_functions;
+  }
+
+  /**
+   * Gets the number of nodes in the branch starting at the a_index'th node.
+   *
+   * @param a_index the index of the node at which to start counting
+   * @return the number of nodes in the branch starting at the a_index'th node
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getSize(int a_index) {
+    int i;
+    // Get the node at which the depth is <= depth[n].
+    for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
+         i++) {
+      if (m_depth[i] <= m_depth[a_index]) {
+        break;
+      }
+    }
+    return i - a_index;
+  }
+
+  /**
+   * Gets the depth of the branch starting at the a_index'th node.
+   *
+   * @param a_index the index of the node at which to check the depth
+   * @return the depth of the branch starting at the a_index'th node
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getDepth(int a_index) {
+    int i, maxdepth = m_depth[a_index];
+    for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
+         i++) {
+      if (m_depth[i] <= m_depth[a_index]) {
+        break;
+      }
+      if (m_depth[i] > maxdepth) {
+        maxdepth = m_depth[i];
+      }
+    }
+    return maxdepth - m_depth[a_index];
+  }
+
+  /**
+   * Gets the node which is the parent of the given node in this chromosome. If
+   * the child is at depth d then the parent is the first function at depth d-1
+   * when iterating backwards through the function list starting from the child.
+   *
+   * @param a_child the child node
+   * @return the parent node, or null if the child is the root node
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getParentNode(int a_child) {
+    if (a_child >= getFunctions().length || getFunctions()[a_child] == null) {
+      return -1;
+    }
+    for (int i = a_child - 1; i >= 0; i--) {
+      if (m_depth[i] == m_depth[a_child] - 1) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Executes this node as a boolean.
+   *
+   * @param args the arguments for execution
+   * @return the boolean return value of this node
+   * @throws UnsupportedOperationException if the type of this node is not
+   * boolean
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean execute_boolean(Object[] args) {
+    boolean rtn = getFunctions()[0].execute_boolean(this, 0, args);
+    cleanup();
+    return rtn;
+  }
+
+  /**
+   * Executes this node as a boolean.
+   *
+   * @param n the index of the parent node
+   * @param child the child number of the node to execute
+   * @param args the arguments for execution
+   * @return the boolean return value of this node
+   * @throws UnsupportedOperationException if the type of this node is not
+   * boolean
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean execute_boolean(int n, int child, Object[] args) {
+    if (child == 0) {
+      return getFunctions()[n + 1].execute_boolean(this, n + 1, args);
+    }
+    int other = getChild(n, child);
+    return getFunctions()[other].execute_boolean(this, other, args);
+  }
+
+  /**
+   * Executes this node, returning nothing.
+   *
+   * @param args the arguments for execution
+   * @throws UnsupportedOperationException if the type of this node is not void
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void execute_void(Object[] args) {
+    getFunctions()[0].execute_void(this, 0, args);
+    cleanup();
+  }
+
+  public void execute_void(int n, int child, Object[] args) {
+    if (child == 0) {
+      getFunctions()[n + 1].execute_void(this, n + 1, args);
+    }
+    else {
+      int other = getChild(n, child);
+      getFunctions()[other].execute_void(this, other, args);
+    }
+  }
+
+  /**
+   * Executes this node as an integer.
+   *
+   * @param args the arguments for execution
+   * @return the integer return value of this node
+   * @throws UnsupportedOperationException if the type of this node is not
+   * integer
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int execute_int(Object[] args) {
+    int rtn = getFunctions()[0].execute_int(this, 0, args);
+    cleanup();
+    return rtn;
+  }
+
+  public int execute_int(int n, int child, Object[] args) {
+    if (child == 0) {
+      return getFunctions()[n + 1].execute_int(this, n + 1, args);
+    }
+    int other = getChild(n, child);
+    return getFunctions()[other].execute_int(this, other, args);
+  }
+
+  /**
+   * Executes this node as a long.
+   *
+   * @param args the arguments for execution
+   * @return the long return value of this node
+   * @throws UnsupportedOperationException if the type of this node is not long
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public long execute_long(Object[] args) {
+    long rtn = getFunctions()[0].execute_long(this, 0, args);
+    cleanup();
+    return rtn;
+  }
+
+  public long execute_long(int n, int child, Object[] args) {
+    if (child == 0) {
+      return getFunctions()[n + 1].execute_long(this, n + 1, args);
+    }
+    int other = getChild(n, child);
+    return getFunctions()[other].execute_long(this, other, args);
+  }
+
+  /**
+   * Executes this node as a float.
+   *
+   * @param args the arguments for execution
+   * @return the float return value of this node
+   * @throws UnsupportedOperationException if the type of this node is not float
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public float execute_float(Object[] args) {
+    float rtn = getFunctions()[0].execute_float(this, 0, args);
+    cleanup();
+    return rtn;
+  }
+
+  public float execute_float(int n, int child, Object[] args) {
+    if (child == 0) {
+      return getFunctions()[n + 1].execute_float(this, n + 1, args);
+    }
+    int other = getChild(n, child);
+    return getFunctions()[other].execute_float(this, other, args);
+  }
+
+  /**
+   * Executes this node as a double.
+   *
+   * @param args the arguments for execution
+   * @return the double return value of this node
+   * @throws UnsupportedOperationException if this node's type is not double
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public double execute_double(Object[] args) {
+    double rtn = getFunctions()[0].execute_double(this, 0, args);
+    cleanup();
+    return rtn;
+  }
+
+  public double execute_double(int n, int child, Object[] args) {
+    if (child == 0) {
+      return getFunctions()[n + 1].execute_double(this, n + 1, args);
+    }
+    int other = getChild(n, child);
+    return getFunctions()[other].execute_double(this, other, args);
+  }
+
+  /**
+   * Executes this node as an object.
+   *
+   * @param args the arguments for execution
+   * @return the object return value of this node
+   * @throws UnsupportedOperationException if the type of this node is not
+   * of type Object
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object execute_object(Object[] args) {
+    Object rtn = getFunctions()[0].execute_object(this, 0, args);
+    cleanup();
+    return rtn;
+  }
+
+  public Object execute_object(int n, int child, Object[] args) {
+    if (child == 0) {
+      return getFunctions()[n + 1].execute_object(this, n + 1, args);
+    }
+    int other = getChild(n, child);
+    return getFunctions()[other].execute_object(this, other, args);
+  }
+
+  /**
+   * Executes this node without knowing its return type.
+   *
+   * @param args the arguments for execution
+   * @return the Object which wraps the return value of this node, or null
+   * if the return type is null or unknown
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object execute(Object[] args) {
+    return getFunctions()[0].execute_object(this, 0, args);
+  }
+
+  public Object execute(int n, int child, Object[] args) {
+    return execute_object(n, child, args);
+  }
+
+  public void setGene(int index, CommandGene a_gene) {
+    if (a_gene == null) {
+      throw new IllegalArgumentException("Gene may not be null!");
+    }
+    m_genes[index] = a_gene;
+  }
+
+  public Class[] getArgTypes() {
+    return argTypes;
+  }
+
+  public int getArity() {
+    return argTypes.length;
+  }
+
+  /**
+   * @return number of functions and terminals present
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int size() {
+    int i = 0;
+    while (i < getFunctions().length && getFunctions()[i] != null) {
+      i++;
+    }
+    return i;
+  }
+
+  public GPConfiguration getGPConfiguration() {
+    return m_configuration;
+  }
+
+  /**
+   * Compares the given chromosome to this chromosome. This chromosome is
+   * considered to be "less than" the given chromosome if it has a fewer
+   * number of genes or if any of its gene values (alleles) are less than
+   * their corresponding gene values in the other chromosome.
+   *
+   * @param a_other the chromosome against which to compare this chromosome
+   * @return a negative number if this chromosome is "less than" the given
+   * chromosome, zero if they are equal to each other, and a positive number if
+   * this chromosome is "greater than" the given chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int compareTo(Object a_other) {
+    // First, if the other Chromosome is null, then this chromosome is
+    // automatically the "greater" Chromosome.
+    // ---------------------------------------------------------------
+    if (a_other == null) {
+      return 1;
+    }
+    int size = size();
+    ProgramChromosome otherChromosome = (ProgramChromosome) a_other;
+    CommandGene[] otherGenes = otherChromosome.m_genes;
+    // If the other Chromosome doesn't have the same number of genes,
+    // then whichever has more is the "greater" Chromosome.
+    // --------------------------------------------------------------
+    if (otherChromosome.size() != size) {
+      return size() - otherChromosome.size();
+    }
+    // Next, compare the gene values (alleles) for differences. If
+    // one of the genes is not equal, then we return the result of its
+    // comparison.
+    // ---------------------------------------------------------------
+    for (int i = 0; i < size; i++) {
+      int comparison = m_genes[i].compareTo(otherGenes[i]);
+      if (comparison != 0) {
+        return comparison;
+      }
+    }
+    /**@todo compare m_functionSet*/
+    if (isCompareApplicationData()) {
+      // Compare application data.
+      // -------------------------
+      if (getApplicationData() == null) {
+        if (otherChromosome.getApplicationData() != null) {
+          return -1;
+        }
+      }
+      else if (otherChromosome.getApplicationData() == null) {
+        return 1;
+      }
+      else {
+        if (getApplicationData() instanceof Comparable) {
+          try {
+            return ( (Comparable) getApplicationData()).compareTo(
+                otherChromosome.getApplicationData());
+          }
+          catch (ClassCastException cex) {
+            return -1;
+          }
+        }
+        else {
+          return getApplicationData().getClass().getName().compareTo(
+              otherChromosome.getApplicationData().getClass().getName());
+        }
+      }
+    }
+    // Everything is equal. Return zero.
+    // ---------------------------------
+    return 0;
+  }
+
+  /**
+   * Compares this chromosome against the specified object.
+   *
+   * @param a_other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    }
+    catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  /**
+   * @return the GPProgram containing this chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPProgram getIndividual() {
+    return m_ind;
+  }
+
+  public void setIndividual(GPProgram a_ind) {
+    m_ind = a_ind;
+  }
+
+  /**
+   * Should we also consider the application data when comparing? Default is
+   * "false" as "true" means a Chromosome is losing its identity when
+   * application data is set differently!
+   *
+   * @param a_doCompare true: consider application data in method compareTo
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void setCompareApplicationData(boolean a_doCompare) {
+    m_compareAppData = a_doCompare;
+  }
+
+  /*
+   * @return should we also consider the application data when comparing?
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean isCompareApplicationData() {
+    return m_compareAppData;
+  }
+
+  /**
+   * Retrieves the application-specific data that is attached to this
+   * Chromosome. Attaching application-specific data may be useful for
+   * some applications when it comes time to evaluate this Chromosome
+   * in the fitness function. JGAP ignores this data functionally.
+   *
+   * @return the application-specific data previously attached to this
+   * Chromosome, or null if there is no data attached
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public Object getApplicationData() {
+    return m_applicationData;
+  }
+
+  /**
+   * Returns the Gene at the given index (locus) within the Chromosome. The
+   * first gene is at index zero and the last gene is at the index equal to
+   * the size of this Chromosome - 1.
+   *
+   * @param a_locus index of the gene value to be returned
+   * @return Gene at the given index
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public synchronized CommandGene getGene(int a_locus) {
+    return m_genes[a_locus];
+  }
+
+}
