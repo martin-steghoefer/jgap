@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -43,7 +43,7 @@ public abstract class GPFitnessFunction
    * @author Klaus Meffert
    * @since 3.0
    */
-  public final double getFitnessValue(final GPProgram a_program) {
+  public final double getFitnessValue(final IGPProgram a_program) {
     // Delegate to the evaluate() method to actually compute the
     // fitness value. If the returned value is less than one,
     // then we throw a runtime exception.
@@ -84,5 +84,5 @@ public abstract class GPFitnessFunction
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected abstract double evaluate(GPProgram a_subject);
+  protected abstract double evaluate(IGPProgram a_subject);
 }
