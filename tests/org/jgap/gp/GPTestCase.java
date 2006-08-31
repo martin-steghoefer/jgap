@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.terminal.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Abstract test case class for GP-related tests
@@ -80,5 +81,5 @@ public abstract class GPTestCase
 
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 }

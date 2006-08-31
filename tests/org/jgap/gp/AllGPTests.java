@@ -10,6 +10,7 @@
 package org.jgap.gp;
 
 import junit.framework.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Test suite for all tests of package org.jgap.gp
@@ -21,17 +22,14 @@ public class AllGPTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite();
-    suite.addTest(BranchTypingCrossTest.suite());
+    //
+    suite.addTestSuite(AllGPImplTests.class);
+    //
     suite.addTest(CommandGeneTest.suite());
-    suite.addTest(GPConfigurationTest.suite());
-    suite.addTest(GPGenotypeTest.suite());
-    suite.addTest(GPPopulationTest.suite());
-    suite.addTest(GPProgramTest.suite());
-    suite.addTest(ProgramChromosomeTest.suite());
     return suite;
   }
 }

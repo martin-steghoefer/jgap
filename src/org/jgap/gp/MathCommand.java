@@ -10,7 +10,7 @@
 package org.jgap.gp;
 
 import org.jgap.*;
-import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Abstract base class for GP-commands related to mathematical calculation.
@@ -21,12 +21,11 @@ import org.jgap.gp.*;
 public abstract class MathCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public MathCommand(final GPConfiguration a_conf, int a_arity,
                      Class a_returnType)
       throws InvalidConfigurationException {
     super(a_conf, a_arity, a_returnType);
   }
-
 }

@@ -11,6 +11,7 @@ package org.jgap.gp;
 
 import junit.framework.*;
 import org.jgap.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Tests the CommandGene class.
@@ -21,7 +22,7 @@ import org.jgap.*;
 public class CommandGeneTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);

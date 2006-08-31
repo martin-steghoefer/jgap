@@ -11,6 +11,7 @@ package org.jgap.gp;
 
 import java.io.*;
 import org.jgap.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Abstract base class for all GP commands. A CommandGene can hold additional
@@ -23,7 +24,7 @@ import org.jgap.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
