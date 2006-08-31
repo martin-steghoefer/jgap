@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Equals
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_type;
 
@@ -70,7 +70,7 @@ public class Equals
         " for Equals-command!");
   }
 
-  public Class getChildType(GPProgram a_ind, int a_index) {
+  public Class getChildType(IGPProgram a_ind, int a_index) {
     return m_type;
   }
 }

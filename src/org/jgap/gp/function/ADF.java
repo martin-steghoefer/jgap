@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_chromosomeNum;
 
@@ -51,7 +51,7 @@ public class ADF
     return "ADF(" + m_chromosomeNum + ")";
   }
 
-  public int getArity(GPProgram a_individual) {
+  public int getArity(IGPProgram a_individual) {
     return a_individual.getChromosome(m_chromosomeNum).getArity();
   }
 
@@ -97,7 +97,7 @@ public class ADF
     return c.getIndividual().execute_object(m_chromosomeNum, vals);
   }
 
-  public Class getChildType(GPProgram a_ind, int i) {
+  public Class getChildType(IGPProgram a_ind, int i) {
     return a_ind.getChromosome(m_chromosomeNum).getArgTypes()[i];
   }
 

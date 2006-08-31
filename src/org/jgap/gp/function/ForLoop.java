@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Class m_typeVar;
 
@@ -87,7 +87,7 @@ public class ForLoop
     return true;
   }
 
-  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     if (a_chromNum == 0) {
       // Loop counter variable
       return m_typeVar;

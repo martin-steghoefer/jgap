@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class AddAndStore
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -78,7 +78,7 @@ public class AddAndStore
     getGPConfiguration().storeInMemory(m_storageName, value);
   }
 
-  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return m_type;
   }
 
