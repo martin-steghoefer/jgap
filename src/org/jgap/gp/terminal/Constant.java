@@ -11,6 +11,7 @@ package org.jgap.gp.terminal;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * A constant remaining the same value all time.
@@ -21,7 +22,7 @@ import org.jgap.gp.*;
 public class Constant
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Object m_value;
 

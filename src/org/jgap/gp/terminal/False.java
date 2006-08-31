@@ -11,6 +11,7 @@ package org.jgap.gp.terminal;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * The boolean value false.
@@ -21,7 +22,7 @@ import org.jgap.gp.*;
 public class False
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public False(final GPConfiguration a_conf)
       throws InvalidConfigurationException {

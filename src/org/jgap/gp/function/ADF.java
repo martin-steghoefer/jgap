@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.jgap.gp.impl.*;
 
 /**
  * Automatically Defined Function (ADF). Works with output of other chromosomes.
@@ -23,7 +24,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_chromosomeNum;
 

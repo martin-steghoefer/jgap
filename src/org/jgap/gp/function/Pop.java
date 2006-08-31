@@ -11,6 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Pops a value from the stack after it has been pushed onto it (PushCommand)
@@ -21,7 +22,7 @@ import org.jgap.gp.*;
 public class Pop
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public Pop(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {

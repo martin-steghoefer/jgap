@@ -12,6 +12,7 @@ package org.jgap.gp.terminal;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * A terminal represented by a variable (x,y,z...).
@@ -22,7 +23,7 @@ import org.jgap.gp.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Hashtable vars = new Hashtable();
 

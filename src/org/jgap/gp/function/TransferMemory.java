@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Transfers a memory value to another memory cell.
@@ -22,7 +23,7 @@ import org.apache.commons.lang.builder.*;
 public class TransferMemory
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for

@@ -11,6 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * The modulo operation.
@@ -22,7 +23,7 @@ import org.jgap.gp.*;
 public class Modulo
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public Modulo(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {

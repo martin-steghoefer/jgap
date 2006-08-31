@@ -11,6 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * The if-then construct.
@@ -21,7 +22,7 @@ import org.jgap.gp.*;
 public class If
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public If(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {

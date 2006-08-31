@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.jgap.gp.impl.*;
 
 /**
  * The increment operation.
@@ -24,7 +25,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class Increment
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_increment;
 

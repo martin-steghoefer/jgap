@@ -11,6 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * The add operation with three parameters (X + Y + Z).
@@ -21,7 +22,7 @@ import org.jgap.gp.*;
 public class Add3
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public Add3(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {

@@ -11,6 +11,7 @@ package org.jgap.gp.terminal;
 
 import org.jgap.gp.*;
 import org.jgap.*;
+import org.jgap.gp.impl.*;
 
 /**
  * A terminal is a static number that can be mutated.
@@ -19,9 +20,9 @@ import org.jgap.*;
  * @since 3.0
  */
 public class Terminal
-    extends CommandGene implements Mutateable {
+    extends CommandGene implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private String m_value;
 

@@ -14,6 +14,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.jgap.gp.impl.*;
 
 /**
  * The for-loop loop from 0 to X-1.
@@ -24,7 +25,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class ForXLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Class m_type;
 

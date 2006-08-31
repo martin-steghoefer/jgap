@@ -11,6 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * The divide operation.
@@ -21,7 +22,7 @@ import org.jgap.gp.*;
 public class Divide
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public Divide(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {

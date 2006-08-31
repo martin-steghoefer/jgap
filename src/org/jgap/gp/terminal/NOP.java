@@ -11,6 +11,7 @@ package org.jgap.gp.terminal;
 
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * NO Operation. Does exactly nothing. Useful when a terminal with return type
@@ -22,7 +23,7 @@ import org.jgap.gp.*;
 public class NOP
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {

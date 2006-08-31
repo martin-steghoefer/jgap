@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.jgap.gp.impl.*;
 
 /**
  * A connector for indipendent subprograms (subtrees). Each subtree except the
@@ -26,7 +27,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
