@@ -30,7 +30,7 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract int execute_int(int a_chromosomeNum, Object[] a_args);
+  int execute_int(int a_chromosomeNum, Object[] a_args);
 
   /**
    * Executes the given chromosome as a float function.
@@ -42,7 +42,7 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract float execute_float(int a_chromosomeNum, Object[] a_args);
+  float execute_float(int a_chromosomeNum, Object[] a_args);
 
   /**
    * Executes the given chromosome as a double function.
@@ -54,7 +54,7 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract double execute_double(int a_chromosomeNum, Object[] a_args);
+  double execute_double(int a_chromosomeNum, Object[] a_args);
 
   /**
    * Executes the given chromosome as an object function.
@@ -66,7 +66,7 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract Object execute_object(int a_chromosomeNum, Object[] a_args);
+  Object execute_object(int a_chromosomeNum, Object[] a_args);
 
   /**
    * Executes the given chromosome as an object function.
@@ -77,7 +77,7 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract void execute_void(int a_chromosomeNum, Object[] a_args);
+  void execute_void(int a_chromosomeNum, Object[] a_args);
 
   /**
    * @return the number of chromosomes in the program
@@ -85,7 +85,7 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract int size();
+  int size();
 
   /**
    * @param a_index the chromosome to get
@@ -94,5 +94,36 @@ public interface IGPProgram
    * @author Klaus Meffert
    * @since 3.0
    */
-  abstract ProgramChromosome getChromosome(int a_index);
+  ProgramChromosome getChromosome(int a_index);
+
+  /**
+   * @return fitness value of this program
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  double getFitnessValue();
+
+  /**
+   * Builds a String that represents the normalized output of the GPProgram.
+   * @param a_startNode the node to start with
+   * @return output in normalized notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  String toStringNorm(int a_startNode);
+
+  /**
+   * Sets the given chromosome at the given index.
+   *
+   * @param a_index sic
+   * @param a_chrom sic
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  void setChromosome(int a_index, ProgramChromosome a_chrom);
+
+  int getCommandOfClass(int a_n, Class a_class);
 }

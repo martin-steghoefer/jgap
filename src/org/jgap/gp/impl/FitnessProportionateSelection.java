@@ -23,9 +23,9 @@ import org.jgap.gp.*;
 public class FitnessProportionateSelection
     implements INaturalGPSelector, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public GPProgram select(GPGenotype a_genotype) {
+  public IGPProgram select(GPGenotype a_genotype) {
     double chosen = a_genotype.getGPConfiguration().getRandomGenerator().
         nextFloat() * a_genotype.getTotalFitness();
     int num = 0;

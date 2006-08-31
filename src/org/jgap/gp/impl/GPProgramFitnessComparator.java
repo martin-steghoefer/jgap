@@ -28,7 +28,7 @@ import org.jgap.gp.*;
 public class GPProgramFitnessComparator
     implements Comparator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private IGPFitnessEvaluator m_fitnessEvaluator;
 
@@ -66,8 +66,8 @@ public class GPProgramFitnessComparator
    * @since 3.0
    */
   public int compare(final Object a_program1, final Object a_program2) {
-    GPProgram progOne = (GPProgram) a_program1;
-    GPProgram progTwo = (GPProgram) a_program2;
+    IGPProgram progOne = (IGPProgram) a_program1;
+    IGPProgram progTwo = (IGPProgram) a_program2;
     if (m_fitnessEvaluator.isFitter(progOne, progTwo)) {
       return -1;
     }

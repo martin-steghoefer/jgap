@@ -25,18 +25,18 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
    */
-  private GPProgram[] m_programs;
+  private IGPProgram[] m_programs;
 
   private transient float[] m_fitnessRank;
 
   private int m_popSize;
 
-  private transient GPProgram m_fittestProgram;
+  private transient IGPProgram m_fittestProgram;
 
   private /*transient*/ GPConfiguration m_config;
 
@@ -203,7 +203,7 @@ public class GPPopulation
       // ----------------------------------
       int depth = 2 +
           (getGPConfiguration().getMaxInitDepth() - 1) * i / divisor;
-      GPProgram program = create(a_types, a_argTypes, a_nodeSets, a_minDepths,
+      IGPProgram program = create(a_types, a_argTypes, a_nodeSets, a_minDepths,
                                  a_maxDepths, depth, (i % 2) == 0, a_maxNodes,
                                  a_fullModeAllowed);
       setGPProgram(i, program);
@@ -237,7 +237,7 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPProgram create(Class[] a_types, Class[][] a_argTypes,
+  public IGPProgram create(Class[] a_types, Class[][] a_argTypes,
                      CommandGene[][] a_nodeSets, int[] a_minDepths, int[] a_maxDepths,
                      int a_depth, boolean a_grow, int a_maxNodes,
                      boolean[] a_fullModeAllowed)
@@ -248,7 +248,7 @@ public class GPPopulation
     return program;
   }
 
-  public GPProgram create(int a_depth, boolean a_grow, boolean[] a_fullModeAllowed)
+  public IGPProgram create(int a_depth, boolean a_grow, boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, m_minDepths,
                   m_maxDepths, a_depth, a_grow, m_maxNodes, a_fullModeAllowed);
@@ -285,18 +285,18 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void setGPProgram(final int a_index, final GPProgram a_program) {
+  public void setGPProgram(final int a_index, final IGPProgram a_program) {
     synchronized(m_programs) {
       m_programs[a_index] = a_program;
     }
     setChanged(true);
   }
 
-  public GPProgram getGPProgram(int a_index) {
+  public IGPProgram getGPProgram(int a_index) {
     return m_programs[a_index];
   }
 
-  public GPProgram[] getGPPrograms() {
+  public IGPProgram[] getGPPrograms() {
     return m_programs;
   }
 
@@ -313,7 +313,7 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPProgram determineFittestProgram() {
+  public IGPProgram determineFittestProgram() {
     if (!m_changed && m_fittestProgram != null) {
       return m_fittestProgram;
     }
@@ -321,7 +321,7 @@ public class GPPopulation
     FitnessEvaluator evaluator = getGPConfiguration().getFitnessEvaluator();
     double fitness;
     for (int i=0;i<m_programs.length && m_programs[i] != null;i++) {
-      GPProgram program = m_programs[i];
+      IGPProgram program = m_programs[i];
       fitness = program.getFitnessValue();
       if (evaluator.isFitter(fitness, bestFitness)
           || m_fittestProgram == null) {
@@ -448,7 +448,7 @@ public class GPPopulation
         return 1;
       }
     }
-    GPProgram[] progs2 = other.getGPPrograms();
+    IGPProgram[] progs2 = other.getGPPrograms();
     for (int i = 0; i < size1; i++) {
       if (!containedInArray(progs2, m_programs[i])) {
         return 1;
@@ -467,7 +467,7 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected boolean containedInArray(GPProgram[] a_progs, GPProgram a_prog) {
+  protected boolean containedInArray(IGPProgram[] a_progs, IGPProgram a_prog) {
     for(int i=0;i<a_progs.length;i++) {
       if (a_progs[i] == null) {
         return false;

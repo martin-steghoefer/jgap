@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Argument
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_index;
 
@@ -65,7 +65,7 @@ public class Argument
     return args[m_index];
   }
 
-  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return null;
   }
 }

@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class DefaultGPFitnessEvaluator
     implements IGPFitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -39,7 +39,7 @@ public class DefaultGPFitnessEvaluator
     return a_fitness_value1 > a_fitness_value2;
   }
 
-  public boolean isFitter(GPProgram a_prog1, GPProgram a_prog2) {
+  public boolean isFitter(IGPProgram a_prog1, IGPProgram a_prog2) {
     return isFitter(a_prog1.getFitnessValue(), a_prog2.getFitnessValue());
   }
 }

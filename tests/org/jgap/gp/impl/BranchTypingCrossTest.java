@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
@@ -85,11 +85,11 @@ public class BranchTypingCrossTest
                             0.5f, // Choose a function when crossing over
                             0.5f // Choose a function when crossing over
     });
-    GPProgram[] result = btc.operate(prog1, prog2);
+    IGPProgram[] result = btc.operate(prog1, prog2);
     assertEquals(2, result.length);
-    GPProgram p1 = result[0];
+    IGPProgram p1 = result[0];
     ProgramChromosome chrom1 = p1.getChromosome(0);
-    GPProgram p2 = result[1];
+    IGPProgram p2 = result[1];
     ProgramChromosome chrom2 = p2.getChromosome(0);
     assertSame(CMD_SUB_V_I, chrom1.getGene(0));
     // Next, FOR is assumed because it's the only function with return type void
@@ -154,11 +154,11 @@ public class BranchTypingCrossTest
                             0.50f, // Choose a function when crossing over
                             0.95f // Choose a terminal when crossing over
     });
-    GPProgram[] result = btc.operate(prog1, prog2);
+    IGPProgram[] result = btc.operate(prog1, prog2);
     assertEquals(2, result.length);
-    GPProgram p1 = result[0];
+    IGPProgram p1 = result[0];
     ProgramChromosome chrom1 = p1.getChromosome(0);
-    GPProgram p2 = result[1];
+    IGPProgram p2 = result[1];
     ProgramChromosome chrom2 = p2.getChromosome(0);
     assertSame(CMD_SUB_V_I, chrom1.getGene(0));
     // NOP from other chromosome instead of FOR, CONST2, NOP (the for-loop).
@@ -221,11 +221,11 @@ public class BranchTypingCrossTest
                             0.95f, // Choose a terminal when crossing over
                             0.95f // Choose a terminal when crossing over
     });
-    GPProgram[] result = btc.operate(prog1, prog2);
+    IGPProgram[] result = btc.operate(prog1, prog2);
     assertEquals(2, result.length);
-    GPProgram p1 = result[0];
+    IGPProgram p1 = result[0];
     ProgramChromosome chrom1 = p1.getChromosome(0);
-    GPProgram p2 = result[1];
+    IGPProgram p2 = result[1];
     ProgramChromosome chrom2 = p2.getChromosome(0);
     assertSame(CMD_FOR, chrom1.getGene(0));
     assertSame(CMD_CONST3, chrom1.getGene(1));

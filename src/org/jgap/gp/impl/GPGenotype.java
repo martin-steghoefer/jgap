@@ -25,7 +25,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -50,7 +50,7 @@ public class GPGenotype
   /**
    * Best solution found.
    */
-  private transient GPProgram m_allTimeBest;
+  private transient IGPProgram m_allTimeBest;
 
   /**
    * Is full mode with program construction allowed?
@@ -259,12 +259,12 @@ public class GPGenotype
   static class GPFitnessComparator
       implements Comparator {
     public int compare(Object o1, Object o2) {
-      if (! (o1 instanceof GPProgram) ||
-          ! (o2 instanceof GPProgram))
+      if (! (o1 instanceof IGPProgram) ||
+          ! (o2 instanceof IGPProgram))
         throw new ClassCastException(
-            "FitnessComparator must operate on GPProgram's");
-      double f1 = ( (GPProgram) o1).getFitnessValue();
-      double f2 = ( (GPProgram) o2).getFitnessValue();
+            "FitnessComparator must operate on IGPProgram instances");
+      double f1 = ( (IGPProgram) o1).getFitnessValue();
+      double f2 = ( (IGPProgram) o2).getFitnessValue();
       if (f1 > f2) {
         return 1;
       }
@@ -315,16 +315,16 @@ public class GPGenotype
     for (int i = 0;
          i < getGPPopulation().size() && getGPPopulation().getGPProgram(i) != null;
          i++) {
-      GPProgram program = getGPPopulation().getGPProgram(i);
-      if (program.getFitnessValue() < 0.0d) {
-        // Program wasn't reproduced from the previous generation.
-        // -------------------------------------------------------
-        program.calcFitnessValue();
-      }
+      IGPProgram program = getGPPopulation().getGPProgram(i);
+//      if (program.getFitnessValue() < 0.0d) {
+//        // Program wasn't reproduced from the previous generation.
+//        // -------------------------------------------------------
+//        program.calcFitnessValue();
+//      }
       totalFitness += program.getFitnessValue();
     }
     m_totalFitness = totalFitness;
-    GPProgram best = getGPPopulation().determineFittestProgram();
+    IGPProgram best = getGPPopulation().determineFittestProgram();
     /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     m_bestFitness = best.getFitnessValue();
     if (m_allTimeBest == null
@@ -346,7 +346,7 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPProgram getAllTimeBest() {
+  public IGPProgram getAllTimeBest() {
     return m_allTimeBest;
   }
 
@@ -357,9 +357,9 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void outputSolution(GPProgram a_best) {
+  public void outputSolution(IGPProgram a_best) {
     System.out.println(" Best solution fitness: " + a_best.getFitnessValue());
-    System.out.println(" Best solution: " + a_best.toString2(0));
+    System.out.println(" Best solution: " + a_best.toStringNorm(0));
     String depths = "";
     int size = a_best.size();
     for (int i = 0; i < size; i++) {
@@ -405,11 +405,11 @@ public class GPGenotype
         if (i < popSize - 1 && val < getGPConfiguration().getCrossoverProb()) {
           // Do crossover.
           // -------------
-          GPProgram i1 = getGPConfiguration().getSelectionMethod().
+          IGPProgram i1 = getGPConfiguration().getSelectionMethod().
               select(this);
-          GPProgram i2 = getGPConfiguration().getSelectionMethod().
+          IGPProgram i2 = getGPConfiguration().getSelectionMethod().
               select(this);
-          GPProgram[] newIndividuals = getGPConfiguration().
+          IGPProgram[] newIndividuals = getGPConfiguration().
               getCrossMethod().operate(i1, i2);
           newPopulation.setGPProgram(i++, newIndividuals[0]);
           newPopulation.setGPProgram(i, newIndividuals[1]);
@@ -431,7 +431,7 @@ public class GPGenotype
         // ---------------------------------------------------------------------
         int depth = getGPConfiguration().getMaxInitDepth() - 2
             + random.nextInt(2);
-        GPProgram program = newPopulation.create(depth, (i % 2) == 0,
+        IGPProgram program = newPopulation.create(depth, (i % 2) == 0,
             m_fullModeAllowed);
         newPopulation.setGPProgram(i, program);
       }
@@ -497,7 +497,7 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public synchronized GPProgram getFittestProgram() {
+  public synchronized IGPProgram getFittestProgram() {
     return getGPPopulation().determineFittestProgram();
   }
 
@@ -612,7 +612,7 @@ public class GPGenotype
    */
   public int hashCode() {
     int i, size = getGPPopulation().size();
-    GPProgram prog;
+    IGPProgram prog;
     int twopower = 1;
     // For empty genotype we want a special value different from other hashcode
     // implementations.

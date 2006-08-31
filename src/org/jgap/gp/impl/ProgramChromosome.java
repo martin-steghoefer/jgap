@@ -28,7 +28,7 @@ public class ProgramChromosome
     implements Serializable
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /*wodka:
    void add(Command cmd);
@@ -59,7 +59,7 @@ public class ProgramChromosome
 
   private transient int m_maxDepth;
 
-  private GPProgram m_ind;
+  private IGPProgram m_ind;
 
   /**
    * The array of genes contained in this chromosome.
@@ -90,7 +90,7 @@ public class ProgramChromosome
   private boolean m_compareAppData;
 
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
-                           GPProgram a_ind)
+                           IGPProgram a_ind)
       throws InvalidConfigurationException {
     if (a_size <= 0) {
       throw new IllegalArgumentException(
@@ -109,7 +109,7 @@ public class ProgramChromosome
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
                            CommandGene[] a_functionSet,
                            Class[] a_argTypes,
-                           GPProgram a_ind)
+                           IGPProgram a_ind)
       throws InvalidConfigurationException {
     if (a_size <= 0) {
       throw new IllegalArgumentException(
@@ -306,20 +306,20 @@ public class ProgramChromosome
 
   /**
    * Output program in left-hand notion (e.g.: "+ X Y" for "X + Y")
-   * @param a_n node to start with
+   * @param a_startNode node to start with
    * @return output in left-hand notion
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public String toString(final int a_n) {
-    if (a_n < 0) {
+  public String toString(final int a_startNode) {
+    if (a_startNode < 0) {
       return "";
     }
     // Replace any occurance of placeholders (e.g. &1, &2...) in the function's
     // name.
     // ------------------------------------------------------------------------
-    String funcName = getFunctions()[a_n].getName();
+    String funcName = getFunctions()[a_startNode].getName();
     int j = 1;
     do {
       String placeHolder = "&" + j;
@@ -336,15 +336,15 @@ public class ProgramChromosome
     if (j > 0) {
       funcName = funcName.trim();
     }
-    if (getFunctions()[a_n].getArity(m_ind) == 0) {
+    if (getFunctions()[a_startNode].getArity(m_ind) == 0) {
       return funcName + " ";
     }
     String str = "";
     str += funcName + " ( ";
-    for (int i = 0; i < getFunctions()[a_n].getArity(m_ind); i++) {
-      str += toString(getChild(a_n, i));
+    for (int i = 0; i < getFunctions()[a_startNode].getArity(m_ind); i++) {
+      str += toString(getChild(a_startNode, i));
     }
-    if (a_n == 0) {
+    if (a_startNode == 0) {
       str += ")";
     }
     else {
@@ -355,34 +355,34 @@ public class ProgramChromosome
 
   /**
    * Output program in "natural" notion (e.g.: "X + Y" for "X + Y")
-   * @param a_n node to start with
-   * @return output in natural notion
+   * @param a_startNode the node to start with
+   * @return output in normalized notion
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public String toString2(final int a_n) {
-    if (a_n < 0) {
+  public String toStringNorm(final int a_startNode) {
+    if (a_startNode < 0) {
       return "";
     }
-    if (getFunctions()[a_n].getArity(m_ind) == 0) {
-      return getFunctions()[a_n].getName();
+    if (getFunctions()[a_startNode].getArity(m_ind) == 0) {
+      return getFunctions()[a_startNode].getName();
     }
     String str = "";
     boolean paramOutput = false;
-    if (getFunctions()[a_n].getArity(m_ind) > 0) {
-      if (getFunctions()[a_n].getName().indexOf("&1") >= 0) {
+    if (getFunctions()[a_startNode].getArity(m_ind) > 0) {
+      if (getFunctions()[a_startNode].getName().indexOf("&1") >= 0) {
         paramOutput = true;
       }
     }
-    if (getFunctions()[a_n].getArity(m_ind) == 1 || paramOutput) {
-      str += getFunctions()[a_n].getName();
+    if (getFunctions()[a_startNode].getArity(m_ind) == 1 || paramOutput) {
+      str += getFunctions()[a_startNode].getName();
     }
-    if (a_n > 0) {
+    if (a_startNode > 0) {
       str = "(" + str;
     }
-    for (int i = 0; i < getFunctions()[a_n].getArity(m_ind); i++) {
-      String childString = toString2(getChild(a_n, i));
+    for (int i = 0; i < getFunctions()[a_startNode].getArity(m_ind); i++) {
+      String childString = toStringNorm(getChild(a_startNode, i));
       String placeHolder = "&" + (i + 1);
       int placeholderIndex = str.indexOf(placeHolder);
       if (placeholderIndex >= 0) {
@@ -391,11 +391,11 @@ public class ProgramChromosome
       else {
         str += childString;
       }
-      if (i == 0 && getFunctions()[a_n].getArity(m_ind) != 1 && !paramOutput) {
-        str += " " + getFunctions()[a_n].getName() + " ";
+      if (i == 0 && getFunctions()[a_startNode].getArity(m_ind) != 1 && !paramOutput) {
+        str += " " + getFunctions()[a_startNode].getName() + " ";
       }
     }
-    if (a_n > 0) {
+    if (a_startNode > 0) {
       str += ")";
     }
     return str;
@@ -1293,11 +1293,11 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPProgram getIndividual() {
+  public IGPProgram getIndividual() {
     return m_ind;
   }
 
-  public void setIndividual(GPProgram a_ind) {
+  public void setIndividual(IGPProgram a_ind) {
     m_ind = a_ind;
   }
 

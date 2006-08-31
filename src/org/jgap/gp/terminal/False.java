@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class False
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public False(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -46,7 +46,7 @@ public class False
     return true;
   }
 
-  public Class getChildType(GPProgram a_ind, int a_index) {
+  public Class getChildType(IGPProgram a_ind, int a_index) {
     return null;
   }
 }

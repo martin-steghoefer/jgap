@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public abstract class CrossMethod
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private transient GPConfiguration m_configuration;
 
@@ -33,6 +33,6 @@ public abstract class CrossMethod
     return m_configuration;
   }
 
-  public abstract GPProgram[] operate(final GPProgram i1,
-                                      final GPProgram i2);
+  public abstract IGPProgram[] operate(final IGPProgram i1,
+                                       final IGPProgram i2);
 }

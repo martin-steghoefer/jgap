@@ -22,25 +22,52 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class GPProgram
+    extends GPProgramBase
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
+  /**
+   * Holds the chromosomes contained in this program.
+   */
   private ProgramChromosome[] m_chromosomes;
 
-  private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
-
-  private GPConfiguration m_conf;
-
-  public GPProgram(GPConfiguration a_conf, int a_numChromosomes) {
-    m_conf = a_conf;
+  /**
+   * Constructor.
+   *
+   * @param a_conf the configuration to use
+   * @param a_numChromosomes the number of chromosomes to use with this program.
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPProgram(GPConfiguration a_conf, int a_numChromosomes)
+      throws InvalidConfigurationException {
+    super(a_conf);
     m_chromosomes = new ProgramChromosome[a_numChromosomes];
   }
 
+  /**
+   * @param a_index the chromosome to get
+   * @return the ProgramChromosome with the given index
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public ProgramChromosome getChromosome(int a_index) {
     return m_chromosomes[a_index];
   }
 
+  /**
+   * Sets the given chromosome at the given index.
+   *
+   * @param a_index sic
+   * @param a_chrom sic
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void setChromosome(int a_index, ProgramChromosome a_chrom) {
     m_chromosomes[a_index] = a_chrom;
   }
@@ -49,11 +76,13 @@ public class GPProgram
                          CommandGene[][] a_nodeSets, int[] a_minDepths,
                          int[] a_maxDepths, boolean a_grow, int a_maxNodes,
                          boolean[] a_fullModeAllowed) {
-    for (int i = 0; i < m_chromosomes.length; i++) {
+    GPConfiguration conf = getGPConfiguration();
+    int size = m_chromosomes.length;
+    for (int i = 0; i < size; i++) {
       try {
         // Construct a chromosome with place for a_maxNodes nodes.
         // -------------------------------------------------------
-        m_chromosomes[i] = new ProgramChromosome(m_conf, a_maxNodes, this);
+        m_chromosomes[i] = new ProgramChromosome(conf, a_maxNodes, this);
       } catch (InvalidConfigurationException iex) {
         throw new RuntimeException(iex);
       }
@@ -67,7 +96,7 @@ public class GPProgram
               a_types[ ( (ADF) a_nodeSets[i][j]).getChromosomeNum()]);
     }
     int depth;
-    for (int i = 0; i < m_chromosomes.length; i++) {
+    for (int i = 0; i < size; i++) {
       // Restrict depth to input params.
       // -------------------------------
       if (a_maxDepths != null && a_depth > a_maxDepths[i]) {
@@ -94,52 +123,59 @@ public class GPProgram
     }
   }
 
-  public double getFitnessValue() {
-    if (m_fitnessValue >= 0.000d) {
-      return m_fitnessValue;
-    }
-    else {
-      return calcFitnessValue();
-    }
-  }
-
   /**
-   * @return fitness value of this chromosome determined via the registered
-   * fitness function
+   * @return the number of chromosomes in the program
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public double calcFitnessValue() {
-    if (m_conf != null) {
-      GPFitnessFunction normalFitnessFunction = m_conf.getGPFitnessFunction();
-      if (normalFitnessFunction != null) {
-        // Grab the "normal" fitness function and ask it to calculate our
-        // fitness value.
-        // --------------------------------------------------------------
-        m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
-      }
-    }
-    return m_fitnessValue;
-  }
-
-  public void setFitnessValue(double a_fitness) {
-    m_fitnessValue = a_fitness;
-  }
-
   public int size() {
     return m_chromosomes.length;
   }
 
-  public String toString2(int a_n) {
-    String s = ""; /**@todo user StringBuffer*/
+  /**
+   * Builds a String that represents the output of the GPProgram in
+   * left-hand-notion.
+   * @param a_startNode the node to start with
+   * @return output in left-hand notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public String toString(int a_startNode) {
+    if (a_startNode < 0) {
+      return "";
+    }
+    StringBuffer sb = new StringBuffer();
     for (int i = 0; i < m_chromosomes.length; i++) {
       if (i > 0) {
-        s += " ==> ";
+        sb.append(" ==> ");
       }
-      s += m_chromosomes[i].toString2(a_n);
+      sb.append(m_chromosomes[i].toString(a_startNode));
     }
-    return s;
+    return sb.toString();
+  }
+
+  /**
+   * Builds a String that represents the normalized output of the GPProgram.
+   * @param a_startNode the node to start with
+   * @return output in normalized notion
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public String toStringNorm(int a_startNode) {
+    if (a_startNode < 0) {
+      return "";
+    }
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < m_chromosomes.length; i++) {
+      if (i > 0) {
+        sb.append(" ==> ");
+      }
+      sb.append(m_chromosomes[i].toStringNorm(a_startNode));
+    }
+    return sb.toString();
   }
 
   /**
@@ -208,7 +244,8 @@ public class GPProgram
    * @param a_chromosomeNum the index of the chromosome to execute
    * @param a_args the arguments to use
    *
-   * @since 1.0
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public void execute_void(int a_chromosomeNum, Object[] a_args) {
     m_chromosomes[a_chromosomeNum].setIndividual(this);
@@ -267,23 +304,5 @@ public class GPProgram
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
-  }
-
-  /**
-   * Compares this entity against the specified object.
-   *
-   * @param a_other the object to compare against
-   * @return true: if the objects are the same, false otherwise
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public boolean equals(Object a_other) {
-    try {
-      return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
-      return false;
-    }
   }
 }

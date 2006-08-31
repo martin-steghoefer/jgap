@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -115,7 +115,7 @@ public class GPGenotypeTest
     assertEquals(m_gpconf.getPopulationSize(), pop.size());
     // Evaluate program 1
     // ------------------
-    GPProgram p = pop.getGPProgram(0);
+    IGPProgram p = pop.getGPProgram(0);
     assertEquals(5, p.getChromosome(0).size());
     assertSame(CMD_SUB_V_V, p.getChromosome(0).getNode(0));
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(1).getClass());
@@ -142,7 +142,7 @@ public class GPGenotypeTest
     assertEquals(0.0, computeFitness(p, vx), DELTA);
   }
 
-  private double computeFitness(GPProgram a_program, Variable vx) {
+  private double computeFitness(IGPProgram a_program, Variable vx) {
     double error = 0.0f;
     Object[] noargs = new Object[0];
     // Initialize local stores.

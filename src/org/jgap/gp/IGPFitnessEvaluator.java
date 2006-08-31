@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public interface IGPFitnessEvaluator
     extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -37,5 +37,5 @@ public interface IGPFitnessEvaluator
    */
   boolean isFitter(double a_fitness_value1, double a_fitness_value2);
 
-  boolean isFitter(GPProgram a_prog1, GPProgram a_prog2);
+  boolean isFitter(IGPProgram a_prog1, IGPProgram a_prog2);
 }

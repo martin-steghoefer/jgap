@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -60,7 +60,7 @@ public abstract class GPProgramBase
   }
 
   /**
-   * @return fitness value of this chromosome determined via the registered
+   * @return fitness value of this program determined via the registered
    * fitness function
    *
    * @author Klaus Meffert
@@ -78,6 +78,12 @@ public abstract class GPProgramBase
     return m_fitnessValue;
   }
 
+  /**
+   * @return fitness value of this program, cached access
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public double getFitnessValue() {
     if (m_fitnessValue >= 0.000d) {
       return m_fitnessValue;

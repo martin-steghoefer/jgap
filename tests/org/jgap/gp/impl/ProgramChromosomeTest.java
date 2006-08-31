@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -176,12 +176,12 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_0()
+  public void testToStringNorm_0()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
-    assertEquals("X", pc.toString2(0));
+    assertEquals("X", pc.toStringNorm(0));
   }
 
   /**
@@ -190,13 +190,13 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_1()
+  public void testToStringNorm_1()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Increment(m_gpconf, CommandGene.IntegerClass));
     pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
-    String s = pc.toString2(0);
+    String s = pc.toStringNorm(0);
     assertEquals("INC(X)", s);
   }
 
@@ -206,14 +206,14 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_2()
+  public void testToStringNorm_2()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
     pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
-    String s = pc.toString2(0);
+    String s = pc.toStringNorm(0);
     assertEquals("X + Y", s);
   }
 
@@ -223,14 +223,14 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_3()
+  public void testToStringNorm_3()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Modulo(m_gpconf, CommandGene.IntegerClass));
     pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
-    String s = pc.toString2(0);
+    String s = pc.toStringNorm(0);
     assertEquals("X % Y", s);
   }
 
@@ -240,16 +240,16 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_4()
+  public void testToStringNorm_4()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Modulo(m_gpconf, CommandGene.IntegerClass));
     pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.redepth();
-    String s = pc.toString2(1);
+    String s = pc.toStringNorm(1);
     assertEquals("X", s);
-    s = pc.toString2(2);
+    s = pc.toStringNorm(2);
     assertEquals("Y", s);
   }
 
@@ -259,7 +259,7 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_5()
+  public void testToStringNorm_5()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Modulo(m_gpconf, CommandGene.IntegerClass));
@@ -268,9 +268,9 @@ public class ProgramChromosomeTest
     pc.setGene(3, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
     pc.setGene(4, new Variable(m_gpconf, "Z", CommandGene.IntegerClass));
     pc.redepth();
-    String s = pc.toString2(0);
+    String s = pc.toStringNorm(0);
     assertEquals("(X - Y) % Z", s);
-    s = pc.toString2(1);
+    s = pc.toStringNorm(1);
     assertEquals("(X - Y)", s);
   }
 
@@ -280,7 +280,7 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_6()
+  public void testToStringNorm_6()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Multiply(m_gpconf, CommandGene.IntegerClass));
@@ -288,9 +288,9 @@ public class ProgramChromosomeTest
     pc.setGene(2, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.setGene(3, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.redepth();
-    String s = pc.toString2(1);
+    String s = pc.toStringNorm(1);
     assertEquals("(push X)", s);
-    s = pc.toString2(0);
+    s = pc.toStringNorm(0);
     assertEquals("(push X) * X", s);
   }
 
@@ -300,7 +300,7 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_7()
+  public void testToStringNorm_7()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0,
@@ -315,7 +315,7 @@ public class ProgramChromosomeTest
     pc.setGene(5, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
     pc.setGene(6, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(7)));
     pc.redepth();
-    String s = pc.toString2(0);
+    String s = pc.toStringNorm(0);
     assertEquals("sub[(X * Y) --> (push X) --> 7]", s);
   }
 
@@ -325,7 +325,7 @@ public class ProgramChromosomeTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testToString2_8()
+  public void testToStringNorm_8()
       throws Exception {
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0,
@@ -338,7 +338,7 @@ public class ProgramChromosomeTest
     pc.setGene(4, new Push(m_gpconf, CommandGene.IntegerClass));
     pc.setGene(5, new Constant(m_gpconf, CommandGene.IntegerClass, new Integer(9)));
     pc.redepth();
-    String s = pc.toString2(0);
+    String s = pc.toStringNorm(0);
     assertEquals("sub[(X * Y) --> (push 9)]", s);
   }
 

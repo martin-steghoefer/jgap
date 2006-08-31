@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public interface INaturalGPSelector
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  static final String CVS_REVISION = "$Revision: 1.3 $";
+  static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Select an individual based on some algorithm.
@@ -32,5 +32,5 @@ public interface INaturalGPSelector
    * @author Klaus Meffert
    * @since 3.0
    */
-  GPProgram select(GPGenotype a_genotype);
+  IGPProgram select(GPGenotype a_genotype);
 }

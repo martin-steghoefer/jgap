@@ -24,7 +24,7 @@ public class BranchTypingCross
     extends CrossMethod
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -42,8 +42,8 @@ public class BranchTypingCross
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPProgram[] operate(final GPProgram i1,
-                             final GPProgram i2) {
+  public IGPProgram[] operate(final IGPProgram i1,
+                              final IGPProgram i2) {
     try {
       // Determine which chromosome we'll cross, probabilistically determined
       // by the sizes of the chromosomes of the first individual --
@@ -79,7 +79,7 @@ public class BranchTypingCross
       // the only change in a chromosome is crossing, which generates
       // deep-copied chromosomes anyway.
 
-      GPProgram[] newIndividuals = {
+      IGPProgram[] newIndividuals = {
           new GPProgram(getConfiguration(), i1.size()),
           new GPProgram(getConfiguration(), i1.size())};
       for (int i = 0; i < i1.size(); i++)

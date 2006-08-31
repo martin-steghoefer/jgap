@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
  */
 public abstract class GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GPConfiguration m_conf;
 
@@ -60,7 +60,7 @@ public abstract class GPProblem {
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void showTree(GPProgram a_prog, String a_filename)
+  public void showTree(IGPProgram a_prog, String a_filename)
       throws InvalidConfigurationException {
     TreeNode myTree = createTree(a_prog);
     if (myTree == null) {
@@ -88,7 +88,7 @@ public abstract class GPProblem {
    * @author Klaus Meffert
    * @since 3.0
    */
-  public TreeNode createTree(GPProgram a_prog)
+  public TreeNode createTree(IGPProgram a_prog)
       throws InvalidConfigurationException {
     if (a_prog == null) {
       return null;

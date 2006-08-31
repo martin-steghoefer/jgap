@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -157,7 +157,7 @@ public abstract class CommandGene
    * @author Klaus Meffert
    * @since 3.0
    */
-  public int getArity(GPProgram a_indvividual) {
+  public int getArity(IGPProgram a_indvividual) {
     return m_arity;
   }
 
@@ -409,7 +409,7 @@ public abstract class CommandGene
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return getReturnType();
   }
 

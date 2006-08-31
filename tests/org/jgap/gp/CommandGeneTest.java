@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class CommandGeneTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);
@@ -269,7 +269,7 @@ public class CommandGeneTest
       return null;
     }
 
-    public Class getChildType(GPProgram a_ind, int a_chromNum) {
+    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
       return null;
     }
 
