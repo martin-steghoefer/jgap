@@ -10,7 +10,6 @@
 package org.jgap.gp;
 
 import java.io.*;
-import java.util.*;
 import org.jgap.gp.impl.*;
 
 /**
@@ -88,5 +87,12 @@ public interface IGPProgram
    */
   abstract int size();
 
+  /**
+   * @param a_index the chromosome to get
+   * @return the ProgramChromosome with the given index
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   abstract ProgramChromosome getChromosome(int a_index);
 }
