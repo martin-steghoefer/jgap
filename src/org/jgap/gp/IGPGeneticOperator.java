@@ -9,17 +9,16 @@
  */
 package org.jgap.gp;
 
+import org.jgap.*;
+
 /**
- * Interface for GP commands that are mutateable.
+ * Interface for genetic operators suitable for GP.
  *
  * @author Klaus Meffert
  * @since 3.0
  */
-public interface Mutateable {
-
+public interface IGPGeneticOperator
+    extends GeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
-
-  void applyMutation(int index, double a_percentage);
-
+  static final String CVS_REVISION = "$Revision: 1.1 $";
 }
