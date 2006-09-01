@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -69,7 +69,8 @@ public abstract class GPProgramBase
     m_conf = a_conf;
   }
 
-  public GPProgramBase(IGPProgram a_prog) {
+  public GPProgramBase(IGPProgram a_prog) throws InvalidConfigurationException {
+    this(a_prog.getGPConfiguration());
     m_types = a_prog.getTypes();
     m_argTypes = a_prog.getArgTypes();
     m_nodeSets = a_prog.getNodeSets();
