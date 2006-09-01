@@ -31,7 +31,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   static Variable vx;
 
@@ -54,7 +54,7 @@ public class Fibonacci
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = { {}, {}, {}
     };
-    int[] minDepths = new int[] {2, 4 /*4*/, 1};
+    int[] minDepths = new int[] {2, 4, 1};
     int[] maxDepths = new int[] {3, 9 /*5*/, 1};
     GPConfiguration conf = getGPConfiguration();
     /**@todo allow to optionally preset a static program in each chromosome*/
@@ -264,10 +264,13 @@ public class Fibonacci
           vx.set(x[i]);
           try {
             try {
-              /**@todo use init. params to distinguish program flow*/
-              // Only evaluate after whole GP program was run.
-              // ---------------------------------------------
+              // Init. params (a_program.getTypes()) distinguish program flow.
+              // This could be coded dynamically but that would slow down
+              // things a lot.
+              // -------------------------------------------------------------
               if (j == a_program.size() - 1) {
+                // Only evaluate after whole GP program was run.
+                // ---------------------------------------------
                 double result = a_program.execute_int(j, noargs);
                 error += Math.abs(result - y[i]);
               }
