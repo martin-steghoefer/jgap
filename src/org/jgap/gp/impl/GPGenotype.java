@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -86,6 +86,11 @@ public class GPGenotype
    * aborts)
    */
   private int m_maxNodes;
+
+  /**
+   * True: Output status information to console
+   */
+  private boolean m_verbose;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -175,7 +180,10 @@ public class GPGenotype
    * chromosome as terminals in the chromosome's node set. This is done
    * automatically
    * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_verboseOutput true: output status information to console
+   *
    * @return created population
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -183,12 +191,13 @@ public class GPGenotype
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
       Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-      int a_maxNodes)
+      int a_maxNodes, boolean a_verboseOutput)
       throws InvalidConfigurationException {
     int[] minDepths = null;
     int[] maxDepths = null;
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
-                                 minDepths, maxDepths, a_maxNodes);
+                                 minDepths, maxDepths, a_maxNodes,
+                                 a_verboseOutput);
   }
 
   /**
@@ -212,7 +221,10 @@ public class GPGenotype
    * @param a_maxDepths array of maximum depths to use: for each chromosome
    * one entry
    * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_verboseOutput true: output status information to console
+   *
    * @return created population
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -220,7 +232,8 @@ public class GPGenotype
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
       Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-      int[] a_minDepths, int[] a_maxDepths, int a_maxNodes)
+      int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
+      boolean a_verboseOutput)
       throws InvalidConfigurationException {
     boolean[] fullModeAllowed = new boolean[a_types.length];
     for (int i = 0; i < a_types.length; i++) {
@@ -228,7 +241,7 @@ public class GPGenotype
     }
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
                                  a_minDepths, a_maxDepths, a_maxNodes,
-                                 fullModeAllowed);
+                                 fullModeAllowed, a_verboseOutput);
   }
 
   /**
@@ -255,7 +268,10 @@ public class GPGenotype
    * @param a_fullModeAllowed array of boolean values. For each chromosome there
    * is one value indicating whether the full mode for creating chromosome
    * generations during evolution is allowed (true) or not (false)
+   * @param a_verboseOutput true: output status information to console
+   *
    * @return created population
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -264,18 +280,22 @@ public class GPGenotype
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
       Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
       int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
-      boolean[] a_fullModeAllowed)
+      boolean[] a_fullModeAllowed, boolean a_verboseOutput)
       throws InvalidConfigurationException {
     System.gc();
-    System.out.println("Memory consumed before creating population: "
-                       + getTotalMemoryMB() + "MB");
-    System.out.println("Creating initial population");
+    if(a_verboseOutput) {
+      System.out.println("Memory consumed before creating population: "
+                         + getTotalMemoryMB() + "MB");
+      System.out.println("Creating initial population");
+    }
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
     pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                a_maxNodes, a_fullModeAllowed);
     System.gc();
-    System.out.println("Memory used after creating population: "
-                       + getTotalMemoryMB() + "MB");
+    if(a_verboseOutput) {
+      System.out.println("Memory used after creating population: "
+                         + getTotalMemoryMB() + "MB");
+    }
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
                                    a_minDepths, a_maxDepths, a_maxNodes);
     gp.m_fullModeAllowed = a_fullModeAllowed;
@@ -344,9 +364,11 @@ public class GPGenotype
         // -----------------------------
         return;
       }
-      if (i % 25 == 0) { /**@todo make configurable --> use listener*/
-        System.out.println("Evolving generation " + i
-                           + ", memory free: " + getFreeMemoryMB() + " MB");
+      if(m_verbose) {
+        if (i % 25 == 0) { /**@todo make configurable --> use listener*/
+          System.out.println("Evolving generation " + i
+                             + ", memory free: " + getFreeMemoryMB() + " MB");
+        }
       }
       evolve();
     }
@@ -378,9 +400,11 @@ public class GPGenotype
       // ----------------------------------------------
       getGPConfiguration().getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
-      // Output the new best solution found.
-      // -----------------------------------
-      outputSolution(best);
+      if(m_verbose) {
+        // Output the new best solution found.
+        // -----------------------------------
+        outputSolution(best);
+      }
     }
   }
 
@@ -662,5 +686,15 @@ public class GPGenotype
       localHashCode = 31 * localHashCode + prog.hashCode();
     }
     return localHashCode;
+  }
+
+  /**
+   * @param a_verbose true: output status information to console
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void setVerboseOutput(boolean a_verbose) {
+    m_verbose = a_verbose;
   }
 }
