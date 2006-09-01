@@ -13,7 +13,9 @@ Installation:
 
 Please note that the latest public release of JGAP can always be found
 by following the "Download" link on the JGAP home page. The home page 
-is located at http://jgap.sourceforge.net
+is located at http://jgap.sourceforge.net.
+
+Step 0 is optional (proceed it in case you download the 3rd-party-zip):
 
 0. Obtain the third party libraries used with JGAP. You get them in
 the download section. These files need to be bundles separatedly due
@@ -34,7 +36,8 @@ Ant home page at http://ant.apache.org
 distribution). Other documentation, including basic documents to help
 you getting started, are put together on the JGAP homepage at
      http://jgap.sourceforge.net
-Quite simple examples are included under the examples directory.
+Simple examples which help to get started with JGAP are included under
+the examples directory.
 
 --------------------------------------------------------------------------
 
@@ -45,7 +48,10 @@ Programming capabilities (see package org.jgap.gp, we promised it).
 As always, the javadocs have been improved, of curse new unit tests have
 been added, and two new example demonstrate JGAP's GP capabilities.
 One of these two examples - Fibonacci calculation - is quite complex and
-demonstrates what is possible with JGAP.
+demonstrates what is possible with JGAP. Output of generated GP programs
+as a graphical tree in PNG file format is integrated with JGAP.
+The quality of this release is ensured by considering three Release
+Candidates.
 
 For a general list of changes, fixes, and enhancements that have been
 included in this version, please see the changelog.txt file.
@@ -71,8 +77,9 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP was compiled and tested with Java 1.4 on Windows 2000 and XP
-Prior versions of JGAP have been testes with Linux, MacOS as well.
+JGAP was compiled and tested with Java 1.4 and Java 1.5 on
+Windows 2000 and XP. Prior versions of JGAP have been testes with Linux,
+MacOS as well.
 
 This release contains code that is based on external libraries. You could
 find it in the src-3rdparty library. Due to licensing issues the needed
