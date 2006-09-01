@@ -24,11 +24,42 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
   private GPConfiguration m_conf;
+
+  /**
+   * Return type per chromosome.
+   */
+  private Class[] m_types;
+
+  /**
+   * Argument types for ADF's
+   */
+  private Class[][] m_argTypes;
+
+  /**
+   * Available GP-functions.
+   */
+  private CommandGene[][] m_nodeSets;
+
+  /**
+   * Minimum depth per each chromosome
+   */
+  private int[] m_minDepths;
+
+  /**
+   * Maximum depth per each chromosome
+   */
+  private int[] m_maxDepths;
+
+  /**
+   * Maximum number of nodes allowed per chromosome (when exceeded program
+   * aborts)
+   */
+  private int m_maxNodes;
 
   public GPProgramBase(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -36,6 +67,15 @@ public abstract class GPProgramBase
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
     m_conf = a_conf;
+  }
+
+  public GPProgramBase(IGPProgram a_prog) {
+    m_types = a_prog.getTypes();
+    m_argTypes = a_prog.getArgTypes();
+    m_nodeSets = a_prog.getNodeSets();
+    m_maxDepths = a_prog.getMaxDepths();
+    m_minDepths = a_prog.getMinDepths();
+    m_maxNodes = a_prog.getMaxNodes();
   }
 
   public GPConfiguration getGPConfiguration() {
@@ -95,6 +135,66 @@ public abstract class GPProgramBase
 
   public void setFitnessValue(double a_fitness) {
     m_fitnessValue = a_fitness;
+  }
+
+  public void setTypes(Class[] a_types) {
+    m_types = a_types;
+  }
+
+  public Class[] getTypes() {
+    return m_types;
+  }
+
+  public Class getType(int a_index) {
+    return m_types[a_index];
+  }
+
+  public void setArgTypes(Class[][] a_argTypes) {
+    m_argTypes = a_argTypes;
+  }
+
+  public Class[][] getArgTypes() {
+    return m_argTypes;
+  }
+
+  public Class[] getArgType(int a_index) {
+    return m_argTypes[a_index];
+  }
+
+  public void setNodeSets(CommandGene[][] a_nodeSets) {
+    m_nodeSets = a_nodeSets;
+  }
+
+  public CommandGene[][] getNodeSets() {
+    return m_nodeSets;
+  }
+
+  public CommandGene[] getNodeSet(int a_index) {
+    return m_nodeSets[a_index];
+  }
+
+  public void setMaxDepths(int[] a_maxDepths) {
+    m_maxDepths = a_maxDepths;
+  }
+
+  public int[] getMaxDepths() {
+    return m_maxDepths;
+  }
+
+  public void setMinDepths(int[] a_minDepths) {
+    m_minDepths = a_minDepths;
+  }
+
+  public int[] getMinDepths() {
+    return m_minDepths;
+  }
+
+  public void setMaxNodes(int a_maxNodes) {
+    m_maxNodes = a_maxNodes;
+  }
+
+  public int getMaxNodes() {
+    return m_maxNodes;
   }
 
 }
