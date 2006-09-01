@@ -14,7 +14,6 @@ import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
-
 import org.jgap.gp.*;
 
 /**
@@ -26,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -47,7 +46,7 @@ public class GPGenotypeTest
       throws Exception {
     GPPopulation pop = new GPPopulation(m_gpconf, 5);
     try {
-      new GPGenotype(m_gpconf, pop);
+      new GPGenotype(m_gpconf, pop, null, null, null, null, null, 1);
       fail();
     } catch (IllegalArgumentException iex) {
       ; //this is OK
@@ -69,7 +68,8 @@ public class GPGenotypeTest
     prog.setChromosome(1, chrom);
     pop.setGPProgram(0, prog);
     pop.setGPProgram(1, prog);
-    GPGenotype gen = new GPGenotype(m_gpconf, pop);
+    GPGenotype gen = new GPGenotype(m_gpconf, pop, null, null, null, null, null,
+                                    1);
     assertSame(pop, gen.getGPPopulation());
   }
 
@@ -131,10 +131,14 @@ public class GPGenotypeTest
     assertEquals(Variable.class, p.getChromosome(1).getNode(node++).getClass());
     assertSame(CMD_SUB_V_V_V, p.getChromosome(1).getNode(node++));
     assertEquals(AddAndStore.class, p.getChromosome(1).getNode(node++).getClass());
-    assertEquals(ReadTerminal.class, p.getChromosome(1).getNode(node++).getClass());
-    assertEquals(ReadTerminal.class, p.getChromosome(1).getNode(node++).getClass());
-    assertEquals(TransferMemory.class, p.getChromosome(1).getNode(node++).getClass());
-    assertEquals(TransferMemory.class, p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(ReadTerminal.class,
+                 p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(ReadTerminal.class,
+                 p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(TransferMemory.class,
+                 p.getChromosome(1).getNode(node++).getClass());
+    assertEquals(TransferMemory.class,
+                 p.getChromosome(1).getNode(node++).getClass());
     // Evaluate program 3
     // ------------------
     assertEquals(1, p.getChromosome(2).size());
@@ -212,7 +216,8 @@ public class GPGenotypeTest
     prog.setChromosome(1, chrom);
     pop.setGPProgram(0, prog);
     pop.setGPProgram(1, prog);
-    GPGenotype gen = new GPGenotype(m_gpconf, pop);
+    GPGenotype gen = new GPGenotype(m_gpconf, pop, null, null, null, null, null,
+                                    1);
     // Serialize genotype to a file.
     // -----------------------------
     assertEquals(gen, doSerialize(gen));

@@ -25,7 +25,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -58,6 +58,37 @@ public class GPGenotype
   private boolean m_fullModeAllowed[];
 
   /**
+   * Return type per chromosome.
+   */
+  private Class[] m_types;
+
+  /**
+   * Argument types for ADF's
+   */
+  private Class[][] m_argTypes;
+
+  /**
+   * Available GP-functions.
+   */
+  private CommandGene[][] m_nodeSets;
+
+  /**
+   * Minimum depth per each chromosome
+   */
+  private int[] m_minDepths;
+
+  /**
+   * Maximum depth per each chromosome
+   */
+  private int[] m_maxDepths;
+
+  /**
+   * Maximum number of nodes allowed per chromosome (when exceeded program
+   * aborts)
+   */
+  private int m_maxNodes;
+
+  /**
    * Default constructor. Ony use with dynamic instantiation.
    * @throws InvalidConfigurationException
    *
@@ -66,13 +97,11 @@ public class GPGenotype
    */
   public GPGenotype()
       throws InvalidConfigurationException {
-    this(GPGenotype.getGPConfiguration(),
-         new GPPopulation(GPGenotype.getGPConfiguration(),
-                          GPGenotype.getGPConfiguration().getPopulationSize()));
   }
 
   /**
    * Preferred constructor to use, if not randomInitialGenotype.
+   *
    * @param a_configuration the configuration to use
    * @param a_population the initialized population to use
    * @throws InvalidConfigurationException
@@ -80,19 +109,21 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public GPGenotype(GPConfiguration a_configuration,
-                    GPPopulation a_population)
+  public GPGenotype(GPConfiguration a_configuration, GPPopulation a_population,
+                    Class[] a_types, Class[][] a_argTypes,
+                    CommandGene[][] a_nodeSets, int[] a_minDepths,
+                    int[] a_maxDepths, int a_maxNodes)
       throws InvalidConfigurationException {
     // Sanity checks: Make sure neither the Configuration, the array
     // of Chromosomes, nor any of the Genes inside the array are null.
     // ---------------------------------------------------------------
     if (a_configuration == null) {
       throw new IllegalArgumentException(
-          "The Configuration instance may not be null.");
+          "The configuration instance may not be null.");
     }
     if (a_population == null) {
       throw new IllegalArgumentException(
-          "The Population may not be null.");
+          "The population may not be null.");
     }
     for (int i = 0; i < a_population.size(); i++) {
       if (a_population.getGPProgram(i) == null) {
@@ -101,6 +132,12 @@ public class GPGenotype
             " is null, which is forbidden in general.");
       }
     }
+    m_types = a_types;
+    m_argTypes = a_argTypes;
+    m_nodeSets = a_nodeSets;
+    m_maxDepths = a_maxDepths;
+    m_minDepths = a_minDepths;
+    m_maxNodes = a_maxNodes;
     setGPPopulation(a_population);
     setGPConfiguration(a_configuration);
     // Lock the settings of the configuration object so that it cannot
@@ -227,7 +264,8 @@ public class GPGenotype
     System.gc();
     System.out.println("Memory used after creating population: "
                        + getTotalMemoryMB() + "MB");
-    GPGenotype gp = new GPGenotype(a_conf, pop);
+    GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
+                                   a_minDepths, a_maxDepths, a_maxNodes);
     gp.m_fullModeAllowed = a_fullModeAllowed;
     return gp;
   }
@@ -431,8 +469,9 @@ public class GPGenotype
         // ---------------------------------------------------------------------
         int depth = getGPConfiguration().getMaxInitDepth() - 2
             + random.nextInt(2);
-        IGPProgram program = newPopulation.create(depth, (i % 2) == 0,
-            m_fullModeAllowed);
+        IGPProgram program = newPopulation.create(m_types, m_argTypes,
+            m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
+            m_maxNodes, m_fullModeAllowed);
         newPopulation.setGPProgram(i, program);
       }
       // Now set the new population as the active one.

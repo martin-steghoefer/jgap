@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
@@ -39,8 +39,8 @@ public class BranchTypingCrossTest
 
   /**
    * See if crossover chooses a correct function for a function selected
-   * priorly. Simple case: De facto replace subtrees (from "FOR" on).
-   * Cross over at functions.
+   * priorly. Simple case: De facto replace subtrees (from "FOR" on, see above
+   * code). Cross over at functions in this test case.
    *
    * @throws Exception
    *
