@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  */
 public class ChromosomeInit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public static void main(String[] args) {
     int numEvolutions = 500;
@@ -34,14 +34,20 @@ public class ChromosomeInit {
     gaConf.setPreservFittestIndividual(true);
     gaConf.setKeepPopulationSizeConstant(false);
     try {
-      int chromeSize = 7;
+      int chromeSize;
+      if (args.length == 0) {
+        chromeSize = 7;
+      }
+      else {
+        chromeSize = Integer.parseInt(args[0]);
+      }
       if (chromeSize > 15) {
         System.err.println("This example does not handle " +
                            "Chromosomes greater than 15 bits in length.");
         System.exit( -1);
       }
-      IChromosome sampleChromosome = new Chromosome(gaConf, new BooleanGene(gaConf),
-          chromeSize);
+      IChromosome sampleChromosome = new Chromosome(gaConf,
+          new BooleanGene(gaConf), chromeSize);
       gaConf.setSampleChromosome(sampleChromosome);
       gaConf.setPopulationSize(20);
       gaConf.setFitnessFunction(new MaxFunction());
