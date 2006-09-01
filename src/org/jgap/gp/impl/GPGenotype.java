@@ -15,7 +15,6 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.event.*;
 
-
 /**
  * Genotype for GP Programs.
  *
@@ -25,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -104,6 +103,19 @@ public class GPGenotype
    *
    * @param a_configuration the configuration to use
    * @param a_population the initialized population to use
+   * @param a_types the type for each chromosome, the length of the array
+   * represents the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -430,8 +442,10 @@ public class GPGenotype
       GPPopulation newPopulation = new GPPopulation(oldPop);
       float val;
       RandomGenerator random = getGPConfiguration().getRandomGenerator();
-      /**@todo make configurable*/
-      int popSize1 = (int) Math.round(popSize * 0.7d);
+      GPConfiguration conf = getGPConfiguration();
+      // Determine how many new individuals will be added to the new generation.
+      // -----------------------------------------------------------------------
+      int popSize1 = (int) Math.round(popSize * (1 - conf.getNewChromsPercent()));
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
@@ -440,26 +454,19 @@ public class GPGenotype
         // Note that if we only have one slot left to fill, we don't do
         // crossover, but fall through to reproduction.
         // ------------------------------------------------------------
-        if (i < popSize - 1 && val < getGPConfiguration().getCrossoverProb()) {
+        if (i < popSize - 1 && val < conf.getCrossoverProb()) {
           // Do crossover.
           // -------------
-          IGPProgram i1 = getGPConfiguration().getSelectionMethod().
-              select(this);
-          IGPProgram i2 = getGPConfiguration().getSelectionMethod().
-              select(this);
-          IGPProgram[] newIndividuals = getGPConfiguration().
-              getCrossMethod().operate(i1, i2);
+          IGPProgram i1 = conf.getSelectionMethod().select(this);
+          IGPProgram i2 = conf.getSelectionMethod().select(this);
+          IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1, i2);
           newPopulation.setGPProgram(i++, newIndividuals[0]);
           newPopulation.setGPProgram(i, newIndividuals[1]);
         }
-        else if (val <
-                 getGPConfiguration().getCrossoverProb() +
-                 getGPConfiguration().getReproductionProb()) {
+        else if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
           // ------------------
-          newPopulation.setGPProgram(i,
-                                     getGPConfiguration().getSelectionMethod().
-                                     select(this));
+          newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
         }
       }
       // Add new chromosomes randomly.
@@ -467,8 +474,7 @@ public class GPGenotype
       for (int i = popSize1; i < popSize; i++) {
         // Determine depth randomly and between maxInitDepth and 2*maxInitDepth.
         // ---------------------------------------------------------------------
-        int depth = getGPConfiguration().getMaxInitDepth() - 2
-            + random.nextInt(2);
+        int depth = conf.getMaxInitDepth() - 2 + random.nextInt(2);
         IGPProgram program = newPopulation.create(m_types, m_argTypes,
             m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
             m_maxNodes, m_fullModeAllowed);
@@ -479,10 +485,10 @@ public class GPGenotype
       setGPPopulation(newPopulation);
       // Increase number of generation.
       // ------------------------------
-      getGPConfiguration().incrementGenerationNr();
+      conf.incrementGenerationNr();
       // Fire an event to indicate we've performed an evolution.
       // -------------------------------------------------------
-      getGPConfiguration().getEventManager().fireGeneticEvent(
+      conf.getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_EVOLVED_EVENT, this));
     } catch (InvalidConfigurationException iex) {
       // This should never happen.
@@ -567,8 +573,7 @@ public class GPGenotype
   public boolean equals(Object a_other) {
     try {
       return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
@@ -605,7 +610,8 @@ public class GPGenotype
       if (size1 != size2) {
         if (size1 > size2) {
           return 1;
-        }else {
+        }
+        else {
           return -1;
         }
       }
@@ -619,9 +625,9 @@ public class GPGenotype
       Arrays.sort(getGPPopulation().getGPPrograms());
       Arrays.sort(otherGenotype.getGPPopulation().getGPPrograms());
       for (int i = 0; i < getGPPopulation().size(); i++) {
-        int result =(getGPPopulation().getGPProgram(i).compareTo(
+        int result = (getGPPopulation().getGPProgram(i).compareTo(
             otherGenotype.getGPPopulation().getGPProgram(i)));
-        if (result != 0 ) {
+        if (result != 0) {
           return result;
         }
       }
