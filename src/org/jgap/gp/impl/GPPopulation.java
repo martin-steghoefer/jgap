@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -52,36 +52,6 @@ public class GPPopulation
   private boolean m_sorted;
 
 
-  /**
-   * Needed for cloning.
-   */
-  private Class[] m_avail_types;
-
-  /**
-   * Needed for cloning.
-   */
-  private Class[][] m_avail_argTypes;
-
-  /**
-   * Needed for cloning.
-   */
-  private CommandGene[][] m_avail_nodeSets;
-
-  /**
-   * Needed for cloning.
-   */
-  private int[] m_minDepths;
-
-  /**
-   * Needed for cloning.
-   */
-  private int[] m_maxDepths;
-
-  /**
-   * Needed for cloning.
-   */
-  private int m_maxNodes;
-
   /*
    * @param a_config the configuration to use.
    * @param a_size the maximum size of the population in GPProgram unit
@@ -90,7 +60,6 @@ public class GPPopulation
    */
   public GPPopulation(GPConfiguration a_config, int a_size)
       throws InvalidConfigurationException {
-//    super(a_conf, a_size);
     if (a_config == null) {
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
@@ -110,23 +79,9 @@ public class GPPopulation
    */
   public GPPopulation(GPPopulation a_pop)
       throws InvalidConfigurationException {
-//    super(a_pop.getConfiguration(), a_pop.getPopSize());
     m_config = a_pop.getGPConfiguration();
-    // Clone important state variables.
-    // --------------------------------
-    m_avail_argTypes = (Class[][])a_pop.m_avail_argTypes.clone();
-    m_avail_types = (Class[])a_pop.m_avail_types.clone();
-    m_avail_nodeSets = (CommandGene[][])a_pop.m_avail_nodeSets.clone();
 
-    if (a_pop.m_maxDepths != null) {
-      m_maxDepths = (int[]) a_pop.m_maxDepths.clone();
-    }
-    if (a_pop.m_minDepths != null) {
-      m_minDepths = (int[]) a_pop.m_minDepths.clone();
-    }
     m_popSize = a_pop.getPopSize();
-
-    m_maxNodes = a_pop.m_maxNodes;
 
     m_programs = new GPProgram[m_popSize];
 
@@ -160,8 +115,8 @@ public class GPPopulation
    * Creates a population using the ramped half-and-half method. Adapted from
    * JGProg.
    *
-   * @param a_types the type of each chromosome, the length
-   * is the number of chromosomes
+   * @param a_types the type for each chromosome, the length of the array
+   * represents the number of chromosomes
    * @param a_argTypes the types of the arguments to each chromosome, must be an
    * array of arrays, the first dimension of which is the number of chromosomes
    * and the second dimension of which is the number of arguments to the
@@ -185,12 +140,6 @@ public class GPPopulation
                      int[] a_maxDepths, int a_maxNodes,
                      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
-    m_avail_types = a_types;
-    m_avail_argTypes = a_argTypes;
-    m_avail_nodeSets = a_nodeSets;
-    m_maxDepths = a_maxDepths;
-    m_minDepths = a_minDepths;
-    m_maxNodes = a_maxNodes;
     int divisor;
     if (m_popSize < 2) {
       divisor = 1;
@@ -242,16 +191,12 @@ public class GPPopulation
                      int a_depth, boolean a_grow, int a_maxNodes,
                      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
-    GPProgram program = new GPProgram(getGPConfiguration(), a_types.length);
-    program.growOrFull(a_depth, a_types, a_argTypes, a_nodeSets, a_minDepths,
-                       a_maxDepths, a_grow, a_maxNodes, a_fullModeAllowed);
+    GPProgram program = new GPProgram(getGPConfiguration(), //a_types.length,
+                                      a_types, a_argTypes, a_nodeSets, a_minDepths,
+                       a_maxDepths, a_maxNodes);
+    program.growOrFull(a_depth, /*a_types, a_argTypes, a_nodeSets, a_minDepths,
+                       a_maxDepths, */a_grow, a_maxNodes, a_fullModeAllowed);
     return program;
-  }
-
-  public IGPProgram create(int a_depth, boolean a_grow, boolean[] a_fullModeAllowed)
-      throws InvalidConfigurationException {
-    return create(m_avail_types, m_avail_argTypes, m_avail_nodeSets, m_minDepths,
-                  m_maxDepths, a_depth, a_grow, m_maxNodes, a_fullModeAllowed);
   }
 
   /**

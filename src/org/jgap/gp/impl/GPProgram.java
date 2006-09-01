@@ -25,7 +25,7 @@ public class GPProgram
     extends GPProgramBase
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -34,6 +34,56 @@ public class GPProgram
 
   /**
    * Constructor.
+   *
+   * @param a_conf the configuration to use
+   * @param a_types the type of each chromosome, the length
+   * is the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPProgram(GPConfiguration a_conf, Class[] a_types,
+                   Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+                   int[] a_minDepths, int[] a_maxDepths, int a_maxNodes)
+      throws InvalidConfigurationException {
+    super(a_conf);
+    m_chromosomes = new ProgramChromosome[a_types.length];
+    setTypes(a_types);
+    setArgTypes(a_argTypes);
+    setNodeSets(a_nodeSets);
+    setMaxDepths(a_maxDepths);
+    setMinDepths(a_minDepths);
+    setMaxNodes(a_maxNodes);
+  }
+
+  /**
+   * Constructor to initialize a GPProgram with values of another GPProgram.
+   *
+   * @param a_prog the GPProgram to read the initialization values from
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public GPProgram(IGPProgram a_prog)
+      throws InvalidConfigurationException {
+    super(a_prog);
+    m_chromosomes = new ProgramChromosome[getTypes().length];
+  }
+
+  /**
+   * Sort of minimalistic constructor. Use only if you are aware of what you do.
    *
    * @param a_conf the configuration to use
    * @param a_numChromosomes the number of chromosomes to use with this program.
@@ -47,7 +97,6 @@ public class GPProgram
     super(a_conf);
     m_chromosomes = new ProgramChromosome[a_numChromosomes];
   }
-
   /**
    * @param a_index the chromosome to get
    * @return the ProgramChromosome with the given index
@@ -72,9 +121,7 @@ public class GPProgram
     m_chromosomes[a_index] = a_chrom;
   }
 
-  public void growOrFull(int a_depth, Class[] a_types, Class[][] a_argTypes,
-                         CommandGene[][] a_nodeSets, int[] a_minDepths,
-                         int[] a_maxDepths, boolean a_grow, int a_maxNodes,
+  public void growOrFull(int a_depth, boolean a_grow, int a_maxNodes,
                          boolean[] a_fullModeAllowed) {
     GPConfiguration conf = getGPConfiguration();
     int size = m_chromosomes.length;
@@ -86,25 +133,28 @@ public class GPProgram
       } catch (InvalidConfigurationException iex) {
         throw new RuntimeException(iex);
       }
-      m_chromosomes[i].setArgTypes(a_argTypes[i]);
+      m_chromosomes[i].setArgTypes(getArgTypes()[i]);
       // If there are ADF's in the nodeSet, then set their type according to
       // the chromosome it references.
       // -------------------------------------------------------------------
-      for (int j = 0; j < a_nodeSets[i].length; j++)
-        if (a_nodeSets[i][j] instanceof ADF)
-          ( (ADF) a_nodeSets[i][j]).setReturnType(
-              a_types[ ( (ADF) a_nodeSets[i][j]).getChromosomeNum()]);
+      int len = getNodeSets()[i].length;
+      for (int j = 0; j < len; j++) {
+        if (getNodeSets()[i][j] instanceof ADF) {
+          ( (ADF) getNodeSets()[i][j]).setReturnType(
+              getTypes()[ ( (ADF) getNodeSets()[i][j]).getChromosomeNum()]);
+        }
+      }
     }
     int depth;
     for (int i = 0; i < size; i++) {
       // Restrict depth to input params.
       // -------------------------------
-      if (a_maxDepths != null && a_depth > a_maxDepths[i]) {
-        depth = a_maxDepths[i];
+      if (getMaxDepths() != null && a_depth > getMaxDepths()[i]) {
+        depth = getMaxDepths()[i];
       }
       else {
-        if (a_minDepths != null && a_depth < a_minDepths[i]) {
-          depth = a_minDepths[i];
+        if (getMinDepths() != null && a_depth < getMinDepths()[i]) {
+          depth = getMinDepths()[i];
         }
         else {
           depth = a_depth;
@@ -113,12 +163,12 @@ public class GPProgram
       // Decide whether to use grow mode or full mode.
       // ---------------------------------------------
       if (a_grow || !a_fullModeAllowed[i]) {
-        m_chromosomes[i].growOrFull(i, depth, a_types[i], a_argTypes[i],
-                                    a_nodeSets[i], true);
+        m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
+                                    getNodeSet(i), true);
       }
       else {
-        m_chromosomes[i].growOrFull(i, depth, a_types[i], a_argTypes[i],
-                                    a_nodeSets[i], false);
+        m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
+                                    getNodeSet(i), false);
       }
     }
   }
