@@ -14,7 +14,7 @@ import examples.functionFinder.*;
 public class GeneExtractorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int numberOfFunctions;
 
@@ -111,7 +111,7 @@ public class GeneExtractorTest
       throws Exception {
     CompositeGene comp = new CompositeGene(conf);
     Gene[] genes = new Gene[2];
-    comp.addGene(new TestGene(null, 3));
+    comp.addGene(new TestGene(conf, 3));
     genes[0] = comp;
     try {
       constructTerms(genes);
