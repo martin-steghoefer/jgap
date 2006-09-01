@@ -31,7 +31,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   static Variable vx;
 
@@ -97,7 +97,7 @@ public class Fibonacci
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 400, new boolean[] {!true, !true, false});
+        minDepths, maxDepths, 400, new boolean[] {!true, !true, false}, true);
   }
 
   //(Sort of) This is what we would like to (and can) find via GP:
@@ -171,6 +171,7 @@ public class Fibonacci
       config.setProgramCreationMaxTries(5);
       final GPProblem problem = new Fibonacci(config);
       GPGenotype gp = problem.create();
+      gp.setVerboseOutput(true);
       final Thread t = new Thread(gp);
       // Simple implementation of running evolution in a thread.
       // -------------------------------------------------------

@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -110,7 +110,7 @@ public class GPGenotypeTest
                           2, 8, 0, 7, 1, 5, 6, 4, 3});
     m_gpconf.setPopulationSize(1);
     GPGenotype gen = GPGenotype.randomInitialGenotype(m_gpconf, types, argTypes,
-        nodeSets, minDepths, maxDepths, 200, new boolean[] {true, true, false});
+        nodeSets, minDepths, maxDepths, 200, new boolean[] {true, true, false}, false);
     GPPopulation pop = gen.getGPPopulation();
     assertEquals(m_gpconf.getPopulationSize(), pop.size());
     // Evaluate program 1
