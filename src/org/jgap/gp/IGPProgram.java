@@ -136,4 +136,32 @@ public interface IGPProgram
    * @since 3.0
    */
   int getCommandOfClass(int a_n, Class a_class);
+
+  void setFitnessValue(double a_fitness);
+
+  void setTypes(Class[] a_types);
+
+  Class[] getTypes();
+
+  void setArgTypes(Class[][] a_argTypes);
+
+  Class[][] getArgTypes();
+
+  void setNodeSets(CommandGene[][] a_nodeSets);
+
+  CommandGene[][] getNodeSets();
+
+  void setMaxDepths(int[] a_maxDepths);
+
+  int[] getMaxDepths();
+
+  void setMinDepths(int[] a_minDepths);
+
+  int[] getMinDepths();
+
+  void setMaxNodes(int a_maxNodes);
+
+  int getMaxNodes();
+
+  GPConfiguration getGPConfiguration();
 }
