@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -57,6 +57,12 @@ public class GPConfiguration
   private double m_reproductionProb = 0.1d;
 
   /**
+   * Percentage of the population that will be filled with new individuals
+   * during evolution. Mut be between 0.0d and 1.0d.
+   */
+  private double m_newChromsPercent = 0.3d;
+
+  /**
    * The maximum depth of an individual resulting from crossover.
    */
   private int m_maxCrossoverDepth = 17;
@@ -76,7 +82,7 @@ public class GPConfiguration
    */
   private CrossMethod m_crossMethod;
 
-  private boolean m_strictProgramCreation = true;
+  private boolean m_strictProgramCreation;
 
   private int m_programCreationMaxTries = 3;
 
@@ -114,7 +120,7 @@ public class GPConfiguration
         "Use addGeneticOperator(GPGeneticOperator) instead!");
   }
 
-//  /**@todo impl*/
+//  /**@todo implement something like that*/
 //  public synchronized void addGeneticOperator(IGPGeneticOperator a_operatorToAdd)
 //      throws InvalidConfigurationException {
 //  }
@@ -133,6 +139,14 @@ public class GPConfiguration
 
   public void setReproductionProb(float a_reproductionProb) {
     m_reproductionProb = a_reproductionProb;
+  }
+
+  public void setNewChromsPercent(double a_newChromsPercent) {
+    m_newChromsPercent = a_newChromsPercent;
+  }
+
+  public double getNewChromsPercent() {
+    return m_newChromsPercent;
   }
 
   public int getMaxCrossoverDepth() {
