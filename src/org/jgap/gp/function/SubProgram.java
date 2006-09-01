@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -133,7 +133,7 @@ public class SubProgram
     return true;
   }
 
-  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return m_types[a_chromNum];
   }
 

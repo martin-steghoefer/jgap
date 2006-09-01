@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private String m_value;
 
@@ -128,7 +128,7 @@ public class Terminal
     return Double.parseDouble(m_value);
   }
 
-  public Class getChildType(GPProgram a_ind, int a_chromNum) {
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return null;
   }
 }
