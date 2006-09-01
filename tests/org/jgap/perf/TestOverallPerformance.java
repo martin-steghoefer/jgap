@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class TestOverallPerformance {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -40,18 +40,20 @@ public class TestOverallPerformance {
    * coins necessary to make up the given target amount of change. The
    * solution will then be written to System.out.
    *
-   * @param a_targetChangeAmount The target amount of change for which this
-   *                             method is attempting to produce the minimum
-   *                             number of coins.
+   * @param a_targetChangeAmount the target amount of change for which this
+   * method is attempting to produce the minimum number of coins
    *
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public void makeChangeForAmount(int a_targetChangeAmount)
-      throws
-      Exception {
+      throws Exception {
     // Start with a DefaultConfiguration, which comes setup with the
     // most common settings.
     // -------------------------------------------------------------
+    Configuration.reset();
     Configuration conf = new DefaultConfiguration();
     RandomGeneratorForTest gen = new RandomGeneratorForTest();
     gen.setNextDouble(0.5d);
@@ -91,7 +93,7 @@ public class TestOverallPerformance {
     sampleGenes[7] = new IntegerGene(conf, 0, 2); // D
     sampleGenes[8] = new IntegerGene(conf, 0, 3); // E
     sampleGenes[9] = new IntegerGene(conf, 0, 1); // F
-    Chromosome sampleChromosome = new Chromosome(null, sampleGenes);
+    Chromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
@@ -117,7 +119,8 @@ public class TestOverallPerformance {
   }
 
   /**
-   * Execute the performance test
+   * Execute the performance test.
+   *
    * @param args ignored
    * @throws Exception
    *
