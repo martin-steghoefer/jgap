@@ -77,6 +77,7 @@
        <include name="org/jgap/perf/*.class"/>
        <include name="org/jgap/supergenes/*.class"/>
        <include name="org/jgap/util/*.class"/>
+       <include name="org/jgap/util/tree/*.class"/>
        <include name="org/jgap/xml/*.class"/>
     </jar>
 
@@ -119,6 +120,7 @@
         <include name="org/jgap/supergenes/*.class"/>
         <include name="org/jgap/xml/*.class"/>
         <include name="org/jgap/util/*.class"/>
+        <include name="org/jgap/util/tree/*.class"/>
         <include name="examples/*.class"/>
         <include name="examples/test/*.class"/>
       </fileset>
@@ -129,7 +131,7 @@
     <javadoc sourcepath="${src}"
              destdir="javadocs/"
              Public="true"
-             packagenames="org.jgap, org.jgap.audit, org.jgap.data, org.gap.data.config, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.gp.impl, org.jgap.gp.function, org.jgap.gp.terminal, org.jgap.gui, org.jgap.impl, org.jgap.supergenes, org.jgap.util, org.jgap.xml, org.jgap.impl.fitness, org.jgap.impl.salesman">
+             packagenames="org.jgap, org.jgap.audit, org.jgap.data, org.gap.data.config, org.jgap.distr, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.gp.impl, org.jgap.gp.function, org.jgap.gp.terminal, org.jgap.gui, org.jgap.impl, org.jgap.supergenes, org.jgap.util, org.jgap.util.tree, org.jgap.xml, org.jgap.impl.fitness, org.jgap.impl.salesman">
     </javadoc>
   </target>
 
