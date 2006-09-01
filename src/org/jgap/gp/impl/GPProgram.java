@@ -25,7 +25,7 @@ public class GPProgram
     extends GPProgramBase
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -252,8 +252,18 @@ public class GPProgram
     m_chromosomes[a_chromosomeNum].execute_void(a_args);
   }
 
-  public int getCommandOfClass(int a_n, Class a_class) {
-    for (int i = a_n; i < m_chromosomes.length; i++) {
+  /**
+   * Searches for a chromosome that has the given class and returns its index.
+   *
+   * @param a_chromosomeNum the index of the chromosome to execute
+   * @param a_class the class to find
+   * @return the index of the first chromosome found that is of a_class, or -1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public int getCommandOfClass(int a_chromosomeNum, Class a_class) {
+    for (int i = a_chromosomeNum; i < m_chromosomes.length; i++) {
       int j = m_chromosomes[i].getCommandOfClass(0, a_class);
       if (j >= 0) {
         return j;
