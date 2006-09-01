@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
@@ -50,6 +50,7 @@ public class BranchTypingCrossTest
   public void testOperate_0()
       throws Exception {
     BranchTypingCross btc = new BranchTypingCross(m_gpconf);
+    Class[] types = new Class[]{Add.class};//needed for init. only
     // First program.
     // --------------
     GPProgram prog1 = new GPProgram(m_gpconf, 1);
@@ -61,10 +62,12 @@ public class BranchTypingCrossTest
     pc1.setGene(4, CMD_CONST3);
     pc1.redepth();
     prog1.setChromosome(0, pc1);
+    prog1.setTypes(types);
     // Second program.
     // ---------------
     GPProgram prog2 = new GPProgram(m_gpconf, 1);
     ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50, prog2);
+    prog2.setTypes(types);
     pc2.setGene(0, CMD_SUB_V_I);
     pc2.setGene(1, CMD_FOR);
     pc2.setGene(2, CMD_ADD);
@@ -119,6 +122,7 @@ public class BranchTypingCrossTest
   public void testOperate_1()
       throws Exception {
     BranchTypingCross btc = new BranchTypingCross(m_gpconf);
+    Class[] types = new Class[]{Add.class};//needed for init. only
     // First program.
     // --------------
     GPProgram prog1 = new GPProgram(m_gpconf, 1);
@@ -130,6 +134,7 @@ public class BranchTypingCrossTest
     pc1.setGene(4, CMD_CONST3);
     pc1.redepth();
     prog1.setChromosome(0, pc1);
+    prog1.setTypes(types);
     // Second program.
     // ---------------
     GPProgram prog2 = new GPProgram(m_gpconf, 1);
@@ -143,6 +148,7 @@ public class BranchTypingCrossTest
     pc2.setGene(6, CMD_CONST3);
     pc2.redepth();
     prog2.setChromosome(0, pc2);
+    prog2.setTypes(types);
     // Do crossing over.
     // -----------------
     rn.setNextIntSequence(new int[] {
@@ -188,6 +194,7 @@ public class BranchTypingCrossTest
   public void testOperate_2()
       throws Exception {
     BranchTypingCross btc = new BranchTypingCross(m_gpconf);
+    Class[] types = new Class[]{Add.class};//needed for init. only
     // First program.
     // --------------
     GPProgram prog1 = new GPProgram(m_gpconf, 1);
@@ -197,6 +204,7 @@ public class BranchTypingCrossTest
     pc1.setGene(2, CMD_NOP);
     pc1.redepth();
     prog1.setChromosome(0, pc1);
+    prog1.setTypes(types);
     // Second program.
     // ---------------
     GPProgram prog2 = new GPProgram(m_gpconf, 1);
@@ -210,6 +218,7 @@ public class BranchTypingCrossTest
     pc2.setGene(6, CMD_CONST3);
     pc2.redepth();
     prog2.setChromosome(0, pc2);
+    prog2.setTypes(types);
     // Do crossing over.
     // -----------------
     rn.setNextIntSequence(new int[] {
