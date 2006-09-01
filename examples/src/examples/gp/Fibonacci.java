@@ -31,7 +31,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   static Variable vx;
 
@@ -245,11 +245,11 @@ public class Fibonacci
 
   public static class FormulaFitnessFunction
       extends GPFitnessFunction {
-    protected double evaluate(GPProgram a_subject) {
+    protected double evaluate(final IGPProgram a_subject) {
       return computeRawFitness(a_subject);
     }
 
-    public double computeRawFitness(GPProgram a_program) {
+    public double computeRawFitness(final IGPProgram a_program) {
       double error = 0.0f;
       Object[] noargs = new Object[0];
       // Initialize local stores.
