@@ -2,11 +2,11 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<meta name="description" content="Tutorial on how to create custom genetic operators with JGAP to make up a genetic algorithm.">
-<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, ga, gp,
-                   optimization, evolutionary, open source, genetic operators, genes, alleles, chromosomes">
+<meta name="description" content="Tutorial on how to utilize Genetic Programming with JGAP.">
+<meta name="keywords" content="java, genetic algorithms, framework, genetic programming, gp, population
+                   optimization, evolutionary, open source, genes, alleles, chromosomes">
 <link rel="stylesheet" href="../jgap.css" type="text/css">
-<title>Creating Custom Genetic Operators</title>
+<title>Genetic Programming with JGAP</title>
 </head>
 
 <body class="documentText">
@@ -38,10 +38,11 @@ x being the added parts.
 <h3 class="subheader">A first start</h3>
 
 <p class="text">To get a feeling of how to implement your GP-Program with JGAP,
-please have a look at the example located in class&nbsp; <i>examples.gp.MathProblem</i>.
+please have a look at the example located in class&nbsp;<i>examples.gp.MathProblem</i>.
 This example tries to find a formula for a given truth table (X/Y value pairs)
 and a given set of operators (such as +, -, * etc). The mentioned example class
-also contains a fitness function named <i>FormulaFitnessFunction</i>.
+also contains a fitness function named <i>FormulaFitnessFunction</i>. A more
+complex example can be found in class <i>examples.gp.Fibonacci</i>.
  </p>
 
 <p class="text">The example at a glance:
@@ -59,7 +60,7 @@ also contains a fitness function named <i>FormulaFitnessFunction</i>.
   &nbsp;*/<br>
   public static void main(String[] args) throws Exception {<br>
 &nbsp; GPConfiguration config = new GPConfiguration();<br>
-&nbsp; config.setMaxInitDepth(8);<br>
+&nbsp; config.setMaxInitDepth(6);<br>
 &nbsp; config.setPopulationSize(800);<br>
 &nbsp; config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());<br>
 &nbsp; ... // continued below<br>
@@ -102,7 +103,8 @@ also contains a fitness function named <i>FormulaFitnessFunction</i>.
   &nbsp;&nbsp;&nbsp; System.out.println(i + ") " + x[i] + "   " + y[i]);<br>
   &nbsp; }<br>
   &nbsp; // Create genotype with initial population<br>
-  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets);<br>
+  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets, 400,
+  true);<br>
   }
 </tt> </p>
 
