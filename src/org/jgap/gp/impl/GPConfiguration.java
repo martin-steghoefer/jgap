@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -82,8 +82,18 @@ public class GPConfiguration
    */
   private CrossMethod m_crossMethod;
 
+  /**
+   * True: Set of available functions must contain any "type of function" that
+   * may be needed during construction of a new program. A "type of function"
+   * is, for instance, a terminal with return type
+   * <code>CommandGene.IntegerClass</code>.
+   */
   private boolean m_strictProgramCreation;
 
+  /**
+   * If m_strictProgramCreation is false: Maximum number of tries to construct
+   * a valid program
+   */
   private int m_programCreationMaxTries = 3;
 
   /**
