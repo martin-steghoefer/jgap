@@ -25,12 +25,11 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * References the current fitness function that will be used to evaluate
-   * chromosomes during the natural selection process. Note that only this
-   * or the bulk fitness function may be set - the two are mutually exclusive.
+   * chromosomes during the natural selection process.
    */
   private GPFitnessFunction m_objectiveFunction;
 
@@ -88,6 +87,9 @@ public class GPConfiguration
 
   /**
    * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
    */
   public GPConfiguration()
       throws InvalidConfigurationException {
@@ -112,10 +114,10 @@ public class GPConfiguration
         "Use addGeneticOperator(GPGeneticOperator) instead!");
   }
 
-  public synchronized void addGeneticOperator(IGPGeneticOperator a_operatorToAdd)
-      throws InvalidConfigurationException {
-    /**@todo impl*/
-  }
+//  /**@todo impl*/
+//  public synchronized void addGeneticOperator(IGPGeneticOperator a_operatorToAdd)
+//      throws InvalidConfigurationException {
+//  }
 
   public double getCrossoverProb() {
     return m_crossoverProb;
@@ -211,14 +213,6 @@ public class GPConfiguration
     m_memory.clear();
   }
 
-  public void storeThruput(int a_index, Object a_value) {
-    m_memory.set("thruput" + a_index, a_value, -1); /**@todo do it cleaner*/
-  }
-
-  public Object readThruput(int a_index) {
-    return m_memory.get("thruput" + a_index); /**@todo do it cleaner*/
-  }
-
   public GPFitnessFunction getGPFitnessFunction() {
     return m_objectiveFunction;
   }
@@ -231,15 +225,11 @@ public class GPConfiguration
    * natural to determine which Chromosome instances will be allowed to move
    * on to the next round of evolution, and which will instead be eliminated.
    * <p>
-   * Note that it is illegal to set both this fitness function and a bulk
-   * fitness function. Although one or the other must be set, the two are
-   * mutually exclusive.
    *
    * @param a_functionToSet fitness function to be used
    *
-   * @throws InvalidConfigurationException if the fitness function is null, a
-   * bulk fitness function has already been set, or if this Configuration
-   * object is locked.
+   * @throws InvalidConfigurationException if the fitness function is null, or
+   * if this Configuration object is locked.
    *
    * @author Neil Rotstan
    * @since 1.1
@@ -253,14 +243,6 @@ public class GPConfiguration
       throw new InvalidConfigurationException(
           "The FitnessFunction instance may not be null.");
     }
-    // Make sure the bulk fitness function hasn't already been set.
-    // ------------------------------------------------------------
-    /**@todo re-add*/
-//    if (m_bulkObjectiveFunction != null) {
-//      throw new InvalidConfigurationException(
-//          "The bulk fitness function and normal fitness function " +
-//          "may not both be set.");
-//    }
     // Ensure that no other fitness function has been set in a different
     // configuration object within the same thread!
     // -----------------------------------------------------------------
