@@ -57,6 +57,8 @@
 * Adapted PermutingConfiguration to new config.paradigm
 * Adapted formula example to new config.paradigm
 * Fixed example examples.chromInit.ChromosomeInit
+* Moved FormulaFinder-example to src-3rdparty bundle/dir
+  (because it relies on jeks-parser library)
 
 2.6
 -----------------------------------------------------------
