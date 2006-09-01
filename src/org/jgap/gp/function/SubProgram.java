@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -70,10 +70,6 @@ public class SubProgram
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     check(c);
-//    if (n > 0) {
-//      /**@todo make following dynamic resp. add a parameter to the constructor*/
-//      throw new IllegalStateException("Subprogram must be the root");
-//    }
     int value = -1;
     for (int i = 0; i < m_subtrees; i++) {
       if (i < m_subtrees - 1) {
@@ -93,7 +89,7 @@ public class SubProgram
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     check(c);
     for (int i = 0; i < m_subtrees; i++) {
-      c.execute_void(n, i, args);
+      c.execute_void(n, i, args);/**@todo evaluate m_types*/
     }
   }
 
@@ -134,9 +130,6 @@ public class SubProgram
   }
 
   public boolean isValid(ProgramChromosome a_program) {
-    if (a_program.getIndividual() != a_program.getIndividual()) {
-      int x = 2;
-    }
     return true;
   }
 
