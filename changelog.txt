@@ -1,3 +1,8 @@
+3.01
+-----------------------------------------------------------
+* Added org.jgap.gp.INodeValidator to allow constraining
+  creation of individuals during evolution
+
 3.0
 -----------------------------------------------------------
 * Added genetic programming capabilities to JGAP.
