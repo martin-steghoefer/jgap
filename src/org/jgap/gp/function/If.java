@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class If
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public If(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -31,6 +31,15 @@ public class If
 
   public String toString() {
     return "if(&1) then (&2)";
+  }
+
+  public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
+    boolean x = c.execute_boolean(n, 0, args);
+    boolean value = false;
+    if (x) {
+      value = c.execute_boolean(n, 1, args);
+    }
+    return value;
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -67,5 +76,12 @@ public class If
       value = c.execute_double(n, 1, args);
     }
     return value;
+  }
+
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    int x = c.execute_int(n, 0, args);/**@todo add option for type of first child to constructor*/
+    if (x >= 0) {
+      c.execute_void(n, 1, args);
+    }
   }
 }
