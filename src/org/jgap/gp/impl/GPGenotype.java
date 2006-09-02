@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -365,7 +365,7 @@ public class GPGenotype
         return;
       }
       if(m_verbose) {
-        if (i % 25 == 0) { /**@todo make configurable --> use listener*/
+        if (i % 25 == 0) {
           System.out.println("Evolving generation " + i
                              + ", memory free: " + getFreeMemoryMB() + " MB");
         }
