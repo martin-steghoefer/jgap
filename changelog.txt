@@ -11,6 +11,10 @@
 * Made inner interfaces (Compatible) in GP functions and
   terminals protected and nonstatic
 * Added verbose output to MathProblem (GP)
+* Added Ant Trail example (GP)
+* Addes new showTree-method to GPProblem which allows to
+  use custom tree renderers
+* Added new GP-function: Loop
 
 3.0
 -----------------------------------------------------------
