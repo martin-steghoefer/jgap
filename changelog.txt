@@ -6,6 +6,10 @@
   index of loop
 * Enhanced Fibonacci example with a INodeValidator;
   output of best solution when optimum found
+* Removed obsolete method newGeneInternal from GP functions
+  and terminals
+* Made inner interfaces (Compatible) in GP functions and
+  terminals protected and nonstatic
 
 3.0
 -----------------------------------------------------------
