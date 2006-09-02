@@ -31,7 +31,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   static Variable vx;
 
@@ -69,7 +69,7 @@ public class Fibonacci
     }, {
         vx = Variable.create(conf, "X", CommandGene.IntegerClass),
         new AddAndStore(conf, CommandGene.IntegerClass, "mem2"),
-        new ForLoop(conf, CommandGene.IntegerClass, NUMFIB),
+        new ForLoop(conf, CommandGene.IntegerClass, 1, NUMFIB),
         new Increment(conf, CommandGene.IntegerClass, -1),
         new TransferMemory(conf, "mem2", "mem1"),
         new TransferMemory(conf, "mem1", "mem0"),
@@ -229,14 +229,16 @@ public class Fibonacci
             indexString = "0" + indexString;
           }
           String filename = "fibonacci_best" + indexString + ".png";
+          IGPProgram best = genotype.getAllTimeBest();
           try {
-            problem.showTree(genotype.getAllTimeBest(), filename);
+            problem.showTree(best, filename);
           } catch (InvalidConfigurationException iex) {
             iex.printStackTrace();
           }
           double bestFitness = genotype.getFittestProgram().
               getFitnessValue();
           if (bestFitness < 0.001) {
+            genotype.outputSolution(best);
             t.stop();
             System.exit(0);
           }
