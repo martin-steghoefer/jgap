@@ -28,7 +28,7 @@ public class ProgramChromosome
     implements Serializable
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /*wodka:
    void add(Command cmd);
@@ -495,56 +495,12 @@ public class ProgramChromosome
                           CommandGene[] a_functionSet, CommandGene a_rootNode,
                           int a_recurseLevel, boolean a_grow) {
     if (a_rootNode == null) {
+      int a_tries = 0;
       do {
         a_rootNode = selectNode(a_type, a_functionSet, a_depth > 1, a_grow);
-        /**@todo following is experimental for constraints*/
-        if (a_num == 0 && false) {
-          // SubProgram forbidden other than as root
-          if (a_recurseLevel > 0 && a_rootNode.getClass() == SubProgram.class) {
-            continue;
-          }
-        }
-        //
-        if (a_num == 1 && false) {
-          // ForLoop forbidden under root node
-          if (a_recurseLevel > 0 && a_rootNode.getClass() == ForLoop.class) {
-            continue;
-          }
-          // ForLoop needed as root
-          if (a_recurseLevel == 0 && a_rootNode.getClass() != ForLoop.class) {
-            continue;
-          }
-          // Variable forbidden other than directly under root
-          if (a_recurseLevel > 1 && a_rootNode.getClass() == Variable.class) {
-            continue;
-          }
-          // Variable needed directly under root
-          if (a_recurseLevel == 1 && a_depth == 1
-                   && a_rootNode.getClass() != Variable.class) {
-            continue;
-          }
-          // SubProgram forbidden other than directly under root
-          if (a_recurseLevel > 1 && a_depth > 1
-                   && a_rootNode.getClass() == SubProgram.class) {
-            continue;
-          }
-          // SubProgram needed directly under root
-          if (a_recurseLevel == 1 && a_depth > 1 && a_type == CommandGene.VoidClass
-                   && a_rootNode.getClass() != SubProgram.class) {
-            continue;
-          }
-          // AddAndStore or TransferMemory needed 2 root
-          if (a_recurseLevel == 2 && a_depth > 1 && a_type == CommandGene.VoidClass
-                   && a_rootNode.getClass() != AddAndStore.class
-                   && a_rootNode.getClass() != TransferMemory.class) {
-            continue;
-          }
-          // AddAndStore or TransferMemory forbidden other than 2 root
-          if (a_recurseLevel != 2 && a_depth > 1 && a_type == CommandGene.VoidClass
-                   && (a_rootNode.getClass() == AddAndStore.class
-                   || a_rootNode.getClass() == TransferMemory.class)) {
-            continue;
-          }
+        if (!getGPConfiguration().validateNode(this, a_rootNode, a_tries++,
+            a_num, a_recurseLevel, a_type, a_functionSet, a_depth, a_grow)) {
+          continue;
         }
         break;
       }

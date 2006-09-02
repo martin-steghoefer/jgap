@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -92,16 +92,20 @@ public class GPConfiguration
 
   /**
    * If m_strictProgramCreation is false: Maximum number of tries to construct
-   * a valid program
+   * a valid program.
    */
   private int m_programCreationMaxTries = 3;
 
   /**
-   * The fitness evaluator. See interface IGPFitnessEvaluator for details
+   * The fitness evaluator. See interface IGPFitnessEvaluator for details.
    */
   private IGPFitnessEvaluator m_fitnessEvaluator;
 
+  private INodeValidator m_nodeValidator;
+
   /**
+   * Constructor.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -114,7 +118,6 @@ public class GPConfiguration
     m_selectionMethod = new FitnessProportionateSelection();
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
-//    setFitnessEvaluator(new DefaultFitnessEvaluator());
     setFitnessEvaluator(new DeltaFitnessEvaluator());
   }
 
@@ -204,7 +207,8 @@ public class GPConfiguration
   }
 
   /**
-   * Stores a value in the internal memory
+   * Stores a value in the internal memory.
+   *
    * @param a_name named index of the memory cell
    * @param a_value the value to store
    *
@@ -217,6 +221,7 @@ public class GPConfiguration
 
   /**
    * Reads a value from the internal memory.
+   *
    * @param a_name named index of the memory cell to read out
    * @return read value
    *
@@ -248,7 +253,6 @@ public class GPConfiguration
    * worth as a candidate solution. These values are used as a guide by the
    * natural to determine which Chromosome instances will be allowed to move
    * on to the next round of evolution, and which will instead be eliminated.
-   * <p>
    *
    * @param a_functionToSet fitness function to be used
    *
@@ -301,4 +305,58 @@ public class GPConfiguration
     return m_fitnessEvaluator;
   }
 
+  /**
+   * Validates a_node in the context of a_chrom. Considers the recursion level
+   * (a_recursLevel), the type needed (a_type) for the node, the functions
+   * available (a_functionSet) and the depth of the whole chromosome needed
+   * (a_depth), and whether grow mode is used (a_grow is true) or not.
+   *
+   * @param a_chrom the chromosome that will contain the node, if valid
+   * @param a_node the node selected and to be validated
+   * @param a_tries number of times the validator has been called, useful for
+   * stopping by returning true if the number exceeds a limit
+   * @param a_num the chromosome's index in the individual of this chromosome
+   * @param a_recursLevel level of recursion
+   * @param a_type the return type of the node needed
+   * @param a_functionSet the array of available functions
+   * @param a_depth the needed depth of the program chromosome
+   * @param a_grow true: use grow mode, false: use full mode
+   * @return true: node is valid; false: node is invalid
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public boolean validateNode(ProgramChromosome a_chrom, CommandGene a_node,
+                              int a_tries, int a_num, int a_recursLevel, Class a_type,
+                              CommandGene[] a_functionSet, int a_depth,
+                              boolean a_grow) {
+    if (m_nodeValidator == null) {
+      return true;
+    }
+    return m_nodeValidator.validate(a_chrom, a_node, a_tries, a_num,
+                                    a_recursLevel, a_type, a_functionSet,
+                                    a_depth, a_grow);
+  }
+
+  /**
+   * Sets the node validator. Also see method validateNode.
+   *
+   * @param a_nodeValidator sic
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void setNodeValidator(INodeValidator a_nodeValidator) {
+    m_nodeValidator = a_nodeValidator;
+  }
+
+  /**
+   * @return the node validator set
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public INodeValidator getNodeValidator() {
+    return m_nodeValidator;
+  }
 }
