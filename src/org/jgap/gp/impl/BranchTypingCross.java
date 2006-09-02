@@ -11,7 +11,6 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import org.jgap.*;
-
 import org.jgap.gp.*;
 
 /**
@@ -21,10 +20,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class BranchTypingCross
-    extends CrossMethod
-    implements Serializable, Comparable {
+    extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -92,8 +90,7 @@ public class BranchTypingCross
           newIndividuals[1].setChromosome(i, newChromosomes[1]);
         }
       return newIndividuals;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       return null;
     }
   }
@@ -149,17 +146,20 @@ public class BranchTypingCross
       // choose a function
       int nf = c1.numFunctions(t);
       if (nf == 0) {
-        // no functions of that type
+        // No functions of that type.
+        // --------------------------
         return c;
       }
       p1 = c1.getFunction(getConfiguration().getRandomGenerator().nextInt(nf),
                           t);
     }
     else {
-      // choose a terminal
+      // Choose a terminal.
+      // ------------------
       int nt = c1.numTerminals(t);
       if (nt == 0) {
-        // no terminals of that type
+        // No terminals of that type.
+        // --------------------------
         return c;
       }
       p1 = c1.getTerminal(getConfiguration().getRandomGenerator().
@@ -173,19 +173,21 @@ public class BranchTypingCross
         term.applyMutation(0, 0.5d);
       }
     }
-    int s0 = c0.getSize(p0);//Number of nodes from index p0
-    int s1 = c1.getSize(p1);//Number of nodes from index p1
-    int d0 = c0.getDepth(p0);//Depth from index p0
-    int d1 = c1.getDepth(p1);//Depth from index p1
-    int c0s = c0.getSize(0);//Number of nodes in c0
-    int c1s = c1.getSize(0);//Number of nodes in c1
-    // Check for depth constraint for p1 inserted into c0
+    int s0 = c0.getSize(p0); //Number of nodes in c0 from index p0
+    int s1 = c1.getSize(p1); //Number of nodes in c1 from index p1
+    int d0 = c0.getDepth(p0); //Depth of c0 from index p0
+    int d1 = c1.getDepth(p1); //Depth of c1 from index p1
+    int c0s = c0.getSize(0); //Number of nodes in c0
+    int c1s = c1.getSize(0); //Number of nodes in c1
+    // Check for depth constraint for p1 inserted into c0.
+    // ---------------------------------------------------
     if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()) {
-      // choose the other parent
+      // Choose the other parent.
+      // ------------------------
       c[0] = c1;
     }
     else {
-      c[0] = new ProgramChromosome(getConfiguration(), c0s - s0 + s1,
+      c[0] = new ProgramChromosome(getConfiguration(), c0.getFunctions().length, // c0s - s0 + s1,
                                    c[0].getFunctionSet(),
                                    c[0].getArgTypes(),
                                    c0.getIndividual());
@@ -195,13 +197,15 @@ public class BranchTypingCross
                        p0 + s1, c0s - p0 - s0);
       c[0].redepth();
     }
-    // Check for depth constraint for p0 inserted into c1
+    // Check for depth constraint for p0 inserted into c1.
+    // ---------------------------------------------------
     if (d1 - 1 + s0 > getConfiguration().getMaxCrossoverDepth()) {
-      // choose the other parent
+      // Choose the other parent.
+      // ------------------------
       c[1] = c0;
     }
     else {
-      c[1] = new ProgramChromosome(getConfiguration(), c1s - s1 + s0,
+      c[1] = new ProgramChromosome(getConfiguration(), c1.getFunctions().length, // c1s - s1 + s0,
                                    c[1].getFunctionSet(),
                                    c[1].getArgTypes(),
                                    c1.getIndividual());
@@ -216,6 +220,7 @@ public class BranchTypingCross
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return 0 or 1 in this case, as BranchTypingCross objects keep no state
    *
@@ -223,7 +228,7 @@ public class BranchTypingCross
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    BranchTypingCross other = (BranchTypingCross)a_other;
+    BranchTypingCross other = (BranchTypingCross) a_other;
     if (other == null) {
       return 1;
     }
@@ -232,6 +237,7 @@ public class BranchTypingCross
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return always true for non-null BranchTypingCross objects because they
    * keep no state
@@ -241,14 +247,14 @@ public class BranchTypingCross
    */
   public boolean equals(Object a_other) {
     try {
-      BranchTypingCross other = (BranchTypingCross)a_other;
+      BranchTypingCross other = (BranchTypingCross) a_other;
       if (other == null) {
         return false;
       }
       else {
         return true;
       }
-    }catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
