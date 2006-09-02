@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class IfFoodAheadElse
     extends AntCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_lookAheadFields;
 
@@ -48,28 +48,32 @@ public class IfFoodAheadElse
         if (y >= map.getHeight() - m_lookAheadFields) {
           cell = AntMap.EMPTY;
         }
-        cell = map.getFromMap(x, y + m_lookAheadFields);
+        else {
+          cell = map.getFromMap(x, y + m_lookAheadFields);
+        }
         break;
       case AntMap.O_LEFT:
         if (x < m_lookAheadFields) {
           cell = AntMap.EMPTY;
         }
         else {
-          cell = map.getFromMap(x - 1, y);
+          cell = map.getFromMap(x - m_lookAheadFields, y);
         }
         break;
       case AntMap.O_RIGHT:
         if (x >= map.getWidth() - m_lookAheadFields) {
           cell = AntMap.EMPTY;
         }
-        cell = map.getFromMap(x + 1, y);
+        else {
+          cell = map.getFromMap(x + m_lookAheadFields, y);
+        }
         break;
       case AntMap.O_UP:
         if (y < m_lookAheadFields) {
           cell = AntMap.EMPTY;
         }
         else {
-          cell = map.getFromMap(x, y - 1);
+          cell = map.getFromMap(x, y - m_lookAheadFields);
         }
         break;
     }
