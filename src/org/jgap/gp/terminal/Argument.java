@@ -14,7 +14,7 @@ import org.jgap.*;
 import org.jgap.gp.impl.*;
 
 /**
- * An argument that will be used internally only.
+ * An argument that will be used internally only by ADF's.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Argument
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_index;
 
@@ -30,15 +30,6 @@ public class Argument
       throws InvalidConfigurationException {
     super(a_conf, 0, type);
     m_index = a_index;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      return new Argument(getGPConfiguration(), m_index, getReturnType());
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {

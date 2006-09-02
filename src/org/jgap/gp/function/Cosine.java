@@ -22,26 +22,11 @@ import org.jgap.gp.impl.*;
 public class Cosine
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public Cosine(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 1, type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Cosine(getGPConfiguration(), getReturnType());
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
   }
 
   public String toString() {
@@ -64,7 +49,7 @@ public class Cosine
     return ( (Compatible) c.execute_object(n, 0, args)).execute_cosine();
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_cosine();
   }
 }

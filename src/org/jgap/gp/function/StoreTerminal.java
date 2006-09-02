@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class StoreTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -35,7 +35,7 @@ public class StoreTerminal
   private Class m_type;
 
   public StoreTerminal(final GPConfiguration a_conf, String a_storageName,
-                              Class a_type)
+                       Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass);
     m_type = a_type;
@@ -43,17 +43,6 @@ public class StoreTerminal
       throw new IllegalArgumentException("Memory name must not be empty!");
     }
     m_storageName = a_storageName;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new StoreTerminal(getGPConfiguration(), m_storageName,
-                                           m_type);
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -128,12 +117,14 @@ public class StoreTerminal
     return a_program.getIndividual().getCommandOfClass(0, ReadTerminal.class) >
         0;
   }
+
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return m_type;
   }
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -155,6 +146,7 @@ public class StoreTerminal
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *
@@ -176,4 +168,5 @@ public class StoreTerminal
         return false;
       }
     }
-  }}
+  }
+}

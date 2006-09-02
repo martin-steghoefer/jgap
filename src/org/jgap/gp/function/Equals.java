@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Equals
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_type;
 
@@ -30,15 +30,6 @@ public class Equals
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.BooleanClass);
     m_type = a_type;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Equals(getGPConfiguration(), m_type);
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {

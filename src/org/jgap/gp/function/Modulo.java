@@ -23,21 +23,11 @@ import org.jgap.gp.impl.*;
 public class Modulo
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public Modulo(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Modulo(getGPConfiguration(), getReturnType());
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public void applyMutation(int index, double a_percentage) {
@@ -89,13 +79,12 @@ public class Modulo
     try {
       return ( (Compatible) c.execute_object(n, 0, args)).execute_mod(c.
           execute_object(n, 1, args));
-    }
-    catch (ArithmeticException aex) {
+    } catch (ArithmeticException aex) {
       throw new IllegalStateException("mod with illegal arguments");
     }
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_mod(Object o);
   }
 }

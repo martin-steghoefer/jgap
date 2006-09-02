@@ -14,7 +14,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 /**
- * The multiply operation with three argument (X * Y * Z)
+ * The multiply operation with three argument (X * Y * Z).
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -22,20 +22,11 @@ import org.jgap.gp.impl.*;
 public class Multiply3
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public Multiply3(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 3, a_type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Multiply3(getGPConfiguration(), getReturnType());
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -68,7 +59,7 @@ public class Multiply3
                 c.execute_object(n, 2, args));
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_multiply3(Object o);
   }
 }

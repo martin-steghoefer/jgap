@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   private String m_value;
 
@@ -54,14 +54,6 @@ public class Terminal
     m_value = new Long(Math.round(randomGen.nextDouble() *
                                   (m_upperBounds - m_lowerBounds) +
                                   m_lowerBounds)).toString();
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      return new Terminal(getGPConfiguration(), getReturnType());
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public void setValue(double a_value) {

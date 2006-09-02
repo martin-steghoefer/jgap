@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class ForXLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Class m_type;
 
@@ -33,10 +33,6 @@ public class ForXLoop
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass);
     m_type = a_type;
-  }
-
-  protected CommandGene newGeneInternal() {
-    return null; /**@todo implement if necessary*/
   }
 
   public String toString() {

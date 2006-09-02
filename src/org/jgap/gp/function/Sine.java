@@ -22,21 +22,11 @@ import org.jgap.gp.impl.*;
 public class Sine
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public Sine(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 1, type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Sine(getGPConfiguration(), getReturnType());
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -59,7 +49,7 @@ public class Sine
     return ( (Compatible) c.execute_object(n, 0, args)).execute_sine();
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_sine();
   }
 }

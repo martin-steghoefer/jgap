@@ -22,15 +22,11 @@ import org.jgap.gp.impl.*;
 public class If
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public If(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
     super(a_conf, 2, type);
-  }
-
-  protected Gene newGeneInternal() {
-    return null;
   }
 
   public String toString() {

@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private Class m_typeVar;
 
@@ -69,12 +69,8 @@ public class ForLoop
     m_startIndex = a_startIndex;
   }
 
-  protected CommandGene newGeneInternal() {
-    return null; /**@todo implement if necessary*/
-  }
-
   public String toString() {
-    return "for(int i="+m_startIndex+";i<&1;i++) { &2 }";
+    return "for(int i=" + m_startIndex + ";i<&1;i++) { &2 }";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {

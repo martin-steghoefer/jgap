@@ -22,21 +22,11 @@ import org.jgap.gp.impl.*;
 public class Divide
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public Divide(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Divide(getGPConfiguration(), getReturnType());
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public void applyMutation(int index, double a_percentage) {
@@ -69,7 +59,7 @@ public class Divide
         execute_object(n, 1, args));
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_divide(Object o);
   }
 }

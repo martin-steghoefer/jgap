@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class Push
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Class m_type;
 
@@ -32,15 +32,6 @@ public class Push
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass);
     m_type = a_type;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Push(getGPConfiguration(), getReturnType());
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -94,11 +85,8 @@ public class Push
     return value;
   }
 
-  public static interface Compatible {
-    public Object execute_push(Object o);
-  }
   public boolean isAffectGlobalState() {
-    return true;
+    return true; /**@todo use this information*/
   }
 
   public boolean isValid(ProgramChromosome a_program) {
@@ -107,7 +95,7 @@ public class Push
   }
 
   /**
-   * Helper method
+   * Helper method.
    * @param a_value the value to push onto the stack
    */
   protected void pushIt(Object a_value) {
@@ -120,6 +108,7 @@ public class Push
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -140,6 +129,7 @@ public class Push
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *

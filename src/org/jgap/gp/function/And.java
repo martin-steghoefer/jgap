@@ -14,7 +14,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 /**
- * The and operation.
+ * The boolean and operation.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -22,20 +22,11 @@ import org.jgap.gp.impl.*;
 public class And
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public And(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.BooleanClass);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new And(getGPConfiguration());
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -45,5 +36,4 @@ public class And
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     return c.execute_boolean(n, 0, args) && c.execute_boolean(n, 1, args);
   }
-
 }

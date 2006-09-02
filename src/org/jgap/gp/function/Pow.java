@@ -22,20 +22,11 @@ import org.jgap.gp.impl.*;
 public class Pow
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public Pow(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Pow(getGPConfiguration(), getReturnType());
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -71,7 +62,7 @@ public class Pow
         c.execute_object(n, 1, args));
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_pow(Object o);
   }
 }

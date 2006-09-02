@@ -22,21 +22,11 @@ import org.jgap.gp.impl.*;
 public class Exp
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public Exp(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 1, a_type);
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new Exp(getGPConfiguration(), getReturnType());
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -65,7 +55,7 @@ public class Exp
     return ( (Compatible) c.execute_object(n, 0, args)).execute_exp();
   }
 
-  public static interface Compatible {
+  protected interface Compatible {
     public Object execute_exp();
   }
 }

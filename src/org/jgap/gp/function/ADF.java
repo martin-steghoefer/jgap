@@ -24,25 +24,32 @@ import org.jgap.gp.impl.*;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private int m_chromosomeNum;
 
+  /**
+   * Constructor.
+   *
+   * @param a_conf te configuration to use
+   * @param a_chromosomeNum the index of the chromosome to execute
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public ADF(final GPConfiguration a_conf, int a_chromosomeNum)
       throws InvalidConfigurationException {
     super(a_conf, 0, null);
     m_chromosomeNum = a_chromosomeNum;
   }
 
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new ADF(getGPConfiguration(), m_chromosomeNum);
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
-  }
-
+  /**
+   * @return the index of the chromosome to execute
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public int getChromosomeNum() {
     return m_chromosomeNum;
   }
@@ -113,6 +120,7 @@ public class ADF
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -133,6 +141,7 @@ public class ADF
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *

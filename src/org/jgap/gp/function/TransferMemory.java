@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class TransferMemory
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -33,7 +33,8 @@ public class TransferMemory
 
   private String m_targetStorageName;
 
-  public TransferMemory(final GPConfiguration a_conf, String a_sourceStorageName,
+  public TransferMemory(final GPConfiguration a_conf,
+                        String a_sourceStorageName,
                         String a_targetStorageName)
       throws InvalidConfigurationException {
     super(a_conf, 0, CommandGene.VoidClass);
@@ -49,18 +50,11 @@ public class TransferMemory
     m_targetStorageName = a_targetStorageName;
   }
 
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new TransferMemory(getGPConfiguration(), m_sourceStorageName,
-                                     m_targetStorageName);
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
-  }
-
   public String toString() {
-    return "transfer(" + m_sourceStorageName + " -> " + m_targetStorageName
+    return "transfer("
+        + m_sourceStorageName
+        + " -> "
+        + m_targetStorageName
         + ")";
   }
 
@@ -94,6 +88,7 @@ public class TransferMemory
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -115,6 +110,7 @@ public class TransferMemory
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *

@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ReadTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -40,16 +40,6 @@ public class ReadTerminal
       throw new IllegalArgumentException("Memory name must not be empty!");
     }
     m_storageName = a_storageName;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new ReadTerminal(getGPConfiguration(), getReturnType(),
-                                   m_storageName);
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -112,19 +102,14 @@ public class ReadTerminal
     }
   }
 
-  public static interface Compatible {
-    public Object execute_read(Object o);
-  }
   public boolean isValid(ProgramChromosome a_program) {
     return a_program.getIndividual().getCommandOfClass(0, StoreTerminal.class) >
         0;
-    /**@todo do it right*/
-//    return m_storageName.startsWith("thruput") ||
-//        a_program.getCommandOfClass(0, StoreTerminal.class) >= 0;
   }
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -145,6 +130,7 @@ public class ReadTerminal
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *

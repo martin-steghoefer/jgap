@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class AddAndStore
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -40,15 +40,6 @@ public class AddAndStore
     super(a_conf, 2, CommandGene.VoidClass);
     m_type = a_type;
     m_storageName = a_storageName;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new AddAndStore(getGPConfiguration(), m_type, m_storageName);
-      return gene;
-    } catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {

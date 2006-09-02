@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -41,22 +41,12 @@ public class SubProgram
 
   public SubProgram(final GPConfiguration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
-    super(a_conf, a_types.length, a_types[a_types.length-1]);
+    super(a_conf, a_types.length, a_types[a_types.length - 1]);
     if (a_types.length < 1) {
       throw new IllegalArgumentException("Number of subtrees must be >= 1");
     }
     m_types = a_types;
     m_subtrees = a_types.length;
-  }
-
-  protected CommandGene newGeneInternal() {
-    try {
-      CommandGene gene = new SubProgram(getGPConfiguration(), m_types);
-      return gene;
-    }
-    catch (InvalidConfigurationException iex) {
-      throw new IllegalStateException(iex.getMessage());
-    }
   }
 
   public String toString() {
@@ -76,7 +66,7 @@ public class SubProgram
         c.execute_void(n, i, args);
       }
       else {
-        value = c.execute_int(n, i, args);/**@todo evaluate m_types*/
+        value = c.execute_int(n, i, args); /**@todo evaluate m_types*/
       }
 //      if (i < m_subtrees - 1) {
 //        ( (GPConfiguration) getConfiguration()).storeThruput(i,
@@ -89,7 +79,7 @@ public class SubProgram
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     check(c);
     for (int i = 0; i < m_subtrees; i++) {
-      c.execute_void(n, i, args);/**@todo evaluate m_types*/
+      c.execute_void(n, i, args); /**@todo evaluate m_types*/
     }
   }
 
@@ -139,6 +129,7 @@ public class SubProgram
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -159,6 +150,7 @@ public class SubProgram
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *
