@@ -24,6 +24,9 @@ import org.jgap.gp.terminal.*;
  * computes Fibonacci iteratively or recursively (as in method Fib(int), see
  * below). Of course this is an oversimplification to show the principle of GP
  * only.<p>
+ * This example utilizes a INodeValidator (see FibonacciNodeValidator).<p>
+ * Each new best solution found will we shown as a tree representing the GP.
+ * The tree is written to a PNG-imagefile onto harddisk.<p>
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -31,7 +34,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   static Variable vx;
 
@@ -54,8 +57,8 @@ public class Fibonacci
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
     Class[][] argTypes = { {}, {}, {}
     };
-    int[] minDepths = new int[] {2, 4, 1};
-    int[] maxDepths = new int[] {3, 9 /*5*/, 1};
+    int[] minDepths = new int[] {2, 3, 1};
+    int[] maxDepths = new int[] {3, 9, 1};
     GPConfiguration conf = getGPConfiguration();
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = { {
@@ -218,7 +221,8 @@ public class Fibonacci
       config.getEventManager().addEventListener(GeneticEvent.
           GPGENOTYPE_NEW_BEST_SOLUTION, new GeneticEventListener() {
         /**
-         * New best solution found
+         * New best solution found.
+         *
          * @param a_firedEvent GeneticEvent
          */
         public void geneticEventFired(GeneticEvent a_firedEvent) {
