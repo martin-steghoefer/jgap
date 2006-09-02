@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int[][] map;
 
@@ -59,7 +59,7 @@ public class AntTrailProblem
     Class[][] argTypes = { {}
     };
     int[] minDepths = new int[] {6};
-    int[] maxDepths = new int[] {12};
+    int[] maxDepths = new int[] {11};
     GPConfiguration conf = getGPConfiguration();
     CommandGene[][] nodeSets = { {
         new SubProgram(conf, new Class[] {CommandGene.VoidClass}),
@@ -71,12 +71,13 @@ public class AntTrailProblem
         new Right(conf),
         new Move(conf),
         new IfFoodAheadElse(conf),
+        new Loop(conf, CommandGene.IntegerClass, 5),
     }
     };
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 400, new boolean[] {true}, true);
+        minDepths, maxDepths, 1000, new boolean[] {true}, true);
   }
 
   private static int[][] readTrail(String a_filename)
@@ -155,14 +156,14 @@ public class AntTrailProblem
         popSize = Integer.parseInt(args[0]);
       }
       else {
-        popSize = 1200;
+        popSize = 1000;
       }
       System.out.println("Using population size of " + popSize);
       config.setMaxInitDepth(6);
       config.setPopulationSize(popSize);
       config.setFitnessFunction(new AntTrailProblem.AntFitnessFunction());
-      config.setStrictProgramCreation(false);
-      config.setProgramCreationMaxTries(5);
+      config.setStrictProgramCreation(true);
+//      config.setProgramCreationMaxTries(5);
       final GPProblem problem = new AntTrailProblem(config);
       GPGenotype gp = problem.create();
       gp.setVerboseOutput(true);
@@ -180,14 +181,14 @@ public class AntTrailProblem
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getGPConfiguration().getGenerationNr();
           double freeMem = GPGenotype.getFreeMemoryMB();
-          if (evno % 50 == 0) {
+          if (evno % 100 == 0) {
             double bestFitness = genotype.getFittestProgram().
                 getFitnessValue();
             System.out.println("Evolving generation " + evno
                                + ", best fitness: " + bestFitness
                                + ", memory free: " + freeMem + " MB");
           }
-          if (evno > 3000) {
+          if (evno > 10000) {
             t.stop();
           }
           else {
@@ -230,6 +231,8 @@ public class AntTrailProblem
             TreeBranchRenderer antBranchRenderer = new AntTreeBranchRenderer();
             TreeNodeRenderer antNodeRenderer = new AntTreeNodeRenderer();
             problem.showTree(best, filename, antBranchRenderer, antNodeRenderer);
+            AntMap antmap = (AntMap) best.getGPConfiguration().readFromMemory("map");
+            displaySolution(antmap.getMovements());
           } catch (InvalidConfigurationException iex) {
             iex.printStackTrace();
           }
@@ -246,6 +249,23 @@ public class AntTrailProblem
     } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
+    }
+  }
+
+  private static void displaySolution(int[][] antmap)  {
+    for(int x=0;x<antmap.length;x++) {
+      for (int y=0;y<antmap[x].length;y++) {
+        char toPrint;
+        int c = antmap[x][y];
+        if (c<32) {
+          toPrint = ' ';
+        }
+        else {
+          toPrint =(char)c;
+        }
+        System.out.print(toPrint);
+      }
+      System.out.println();
     }
   }
 
