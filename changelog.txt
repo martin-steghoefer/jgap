@@ -10,6 +10,7 @@
   and terminals
 * Made inner interfaces (Compatible) in GP functions and
   terminals protected and nonstatic
+* Added verbose output to MathProblem (GP)
 
 3.0
 -----------------------------------------------------------
