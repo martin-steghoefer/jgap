@@ -47,13 +47,16 @@ public class FibonacciNodeValidator
     if (a_tries > 10) {
       return true;
     }
+    // Chromosome 0.
+    // -------------
     if (a_num == 0) {
       // SubProgram forbidden other than as root
       if (a_recurseLevel > 0 && a_node.getClass() == SubProgram.class) {
         return false;
       }
     }
-    //
+    // Chromosome 1.
+    // -------------
     if (a_num == 1) {
       // ForLoop forbidden under root node
       if (a_recurseLevel > 0 && a_node.getClass() == ForLoop.class) {
