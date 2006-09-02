@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
  */
 public abstract class GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private GPConfiguration m_conf;
 
@@ -69,6 +69,39 @@ public abstract class GPProblem {
     TreeVisualizer tv = new TreeVisualizer();
     tv.setTreeBranchRenderer(new JGAPTreeBranchRenderer());
     tv.setTreeNodeRenderer(new JGAPTreeNodeRenderer());
+    tv.setBranchStartWidth(18.0);
+    tv.setArenaColor(Color.black);
+    tv.setBkgndColor(Color.black); //new Color(10, 10, 10));
+    tv.setRenderNodes(true);
+    tv.setSide(1024);
+    tv.setCircleDiminishFactor(0.5);
+    tv.writeImageFile(tv.renderTree(myTree), new File(a_filename));
+  }
+
+  /**
+   * Creates a tree out of a given GP program and saves it to a file. Allows to
+   * preset the tree renderers.
+   *
+   * @param a_prog the GP program to visualize a tree for
+   * @param a_filename the name of the file to save the tree in
+   * @param a_treeBranchRenderer renderer for the tree's branches
+   * @param a_treeNodeRenderer renderer for the tree's nodes
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void showTree(IGPProgram a_prog, String a_filename,
+                       TreeBranchRenderer a_treeBranchRenderer,
+                       TreeNodeRenderer a_treeNodeRenderer)
+      throws InvalidConfigurationException {
+    TreeNode myTree = createTree(a_prog);
+    if (myTree == null) {
+      return;
+    }
+    TreeVisualizer tv = new TreeVisualizer();
+    tv.setTreeBranchRenderer(a_treeBranchRenderer);
+    tv.setTreeNodeRenderer(a_treeNodeRenderer);
     tv.setBranchStartWidth(18.0);
     tv.setArenaColor(Color.black);
     tv.setBkgndColor(Color.black); //new Color(10, 10, 10));
