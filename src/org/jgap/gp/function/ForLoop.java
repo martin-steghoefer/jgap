@@ -24,13 +24,16 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private Class m_typeVar;
+
+  private int m_startIndex;
 
   private int m_maxLoop;
 
   /**
+   * Constructor.
    *
    * @param a_conf the configuration to use
    * @param a_typeVar Class of the loop counter terminakl (e.g. IntegerClass)
@@ -42,9 +45,28 @@ public class ForLoop
    */
   public ForLoop(final GPConfiguration a_conf, Class a_typeVar, int a_maxLoop)
       throws InvalidConfigurationException {
+    this(a_conf, a_typeVar, 0, a_maxLoop);
+  }
+
+  /**
+   * Constructor allowing to preset the starting index of the loop.
+   *
+   * @param a_conf the configuration to use
+   * @param a_typeVar Class of the loop counter terminakl (e.g. IntegerClass)
+   * @param a_startIndex index to start the loop with (normally 0)
+   * @param a_maxLoop the maximum number of loops to perform
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public ForLoop(final GPConfiguration a_conf, Class a_typeVar,
+                 int a_startIndex, int a_maxLoop)
+      throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.VoidClass);
     m_typeVar = a_typeVar;
     m_maxLoop = a_maxLoop;
+    m_startIndex = a_startIndex;
   }
 
   protected CommandGene newGeneInternal() {
@@ -52,10 +74,12 @@ public class ForLoop
   }
 
   public String toString() {
-    return "for(int i=0;i<&1;i++) { &2 }";
+    return "for(int i="+m_startIndex+";i<&1;i++) { &2 }";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    // Determine the end index of the loop (child at index 0).
+    // -------------------------------------------------------
     int x;
     if (m_typeVar == CommandGene.IntegerClass) {
       x = c.execute_int(n, 0, args);
@@ -78,7 +102,7 @@ public class ForLoop
     }
     // Repeatedly execute the second child (index = 1).
     // ------------------------------------------------
-    for (int i = 0; i < x; i++) {
+    for (int i = m_startIndex; i < x; i++) {
       c.execute_void(n, 1, args);
     }
   }
