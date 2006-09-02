@@ -2,6 +2,10 @@
 -----------------------------------------------------------
 * Added org.jgap.gp.INodeValidator to allow constraining
   creation of individuals during evolution
+* org.jgap.gp.function.ForLoop: added option to preset start
+  index of loop
+* Enhanced Fibonacci example with a INodeValidator;
+  output of best solution when optimum found
 
 3.0
 -----------------------------------------------------------
