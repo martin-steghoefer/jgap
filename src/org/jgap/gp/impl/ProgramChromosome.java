@@ -23,12 +23,10 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class ProgramChromosome
-    //    extends BaseGPChromosome
-    // implements IGPChromosome
-    implements Serializable
-{
+    extends BaseGPChromosome
+    implements IGPChromosome, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /*wodka:
    void add(Command cmd);
@@ -59,17 +57,10 @@ public class ProgramChromosome
 
   private transient int m_maxDepth;
 
-  private IGPProgram m_ind;
-
   /**
    * The array of genes contained in this chromosome.
    */
   private CommandGene[] m_genes;
-
-  /**
-   * The configuration object to use
-   */
-  private /*transient*/ GPConfiguration m_configuration;
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -92,17 +83,11 @@ public class ProgramChromosome
   public ProgramChromosome(GPConfiguration a_configuration, int a_size,
                            IGPProgram a_ind)
       throws InvalidConfigurationException {
+    super(a_configuration, a_ind);
     if (a_size <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
     }
-    if (a_configuration == null) {
-      throw new InvalidConfigurationException(
-          "Configuration to be set must not"
-          + " be null!");
-    }
-    m_configuration = a_configuration;
-    m_ind = a_ind;
     init(a_size);
   }
 
@@ -111,17 +96,11 @@ public class ProgramChromosome
                            Class[] a_argTypes,
                            IGPProgram a_ind)
       throws InvalidConfigurationException {
+    super(a_configuration, a_ind);
     if (a_size <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
     }
-    if (a_configuration == null) {
-      throw new InvalidConfigurationException(
-          "Configuration to be set must not"
-          + " be null!");
-    }
-    m_configuration = a_configuration;
-    m_ind = a_ind;
     m_functionSet = a_functionSet;
     argTypes = a_argTypes;
     init();
@@ -130,12 +109,7 @@ public class ProgramChromosome
   public ProgramChromosome(GPConfiguration a_configuration,
                            CommandGene[] a_initialGenes)
       throws InvalidConfigurationException {
-    if (a_configuration == null) {
-      throw new InvalidConfigurationException(
-          "Configuration to be set must not"
-          + " be null!");
-    }
-    m_configuration = a_configuration;
+    super(a_configuration);
     int i = 0;
     while (i < a_initialGenes.length && a_initialGenes[i] != null) {
       i++;
@@ -147,12 +121,15 @@ public class ProgramChromosome
     init(a_initialGenes.length);
   }
 
-  public void setArgTypes(Class[] a_argTypes) {
-    argTypes = a_argTypes;
+  public ProgramChromosome(final GPConfiguration a_conf)
+      throws InvalidConfigurationException {
+    super(a_conf);
+    init();
   }
 
   /**
-   * Default constructor.
+   * Default constructor. Only use with dynamic instantiation.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -161,17 +138,6 @@ public class ProgramChromosome
   public ProgramChromosome()
       throws InvalidConfigurationException {
     this(GPGenotype.getGPConfiguration());
-  }
-
-  public ProgramChromosome(final GPConfiguration a_conf)
-      throws InvalidConfigurationException {
-    if (a_conf == null) {
-      throw new InvalidConfigurationException(
-          "Configuration to be set must not"
-          + " be null!");
-    }
-    m_configuration = a_conf;
-    init();
   }
 
   private void init()
@@ -183,6 +149,10 @@ public class ProgramChromosome
       throws InvalidConfigurationException {
     m_depth = new int[a_size];
     setFunctions(new CommandGene[a_size]);
+  }
+
+  public void setArgTypes(Class[] a_argTypes) {
+    argTypes = a_argTypes;
   }
 
   public synchronized Object clone() {
@@ -201,6 +171,12 @@ public class ProgramChromosome
     }
   }
 
+  /**
+   * Clean up the chromosome.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void cleanup() {
     cleanup(0);
   }
@@ -209,21 +185,11 @@ public class ProgramChromosome
     if (n < 0) {
       return;
     }
-    for (int i = 0; i < getFunctions()[n].getArity(m_ind); i++) {
+    IGPProgram ind = getIndividual();
+    for (int i = 0; i < getFunctions()[n].getArity(ind); i++) {
       cleanup(getChild(n, i));
     }
     getFunctions()[n].cleanup();
-  }
-
-  public void addCommand(final CommandGene a_command)
-      throws InvalidConfigurationException {
-    if (a_command == null) {
-      throw new IllegalArgumentException("Command may not be null!");
-    }
-    final int len = m_genes.length;
-    CommandGene[] genes = new CommandGene[len + 1];
-    System.arraycopy(m_genes, 0, genes, 0, len);
-    m_genes[len] = a_command;
   }
 
   /**
@@ -336,12 +302,13 @@ public class ProgramChromosome
     if (j > 0) {
       funcName = funcName.trim();
     }
-    if (getFunctions()[a_startNode].getArity(m_ind) == 0) {
+    IGPProgram ind = getIndividual();
+    if (getFunctions()[a_startNode].getArity(ind) == 0) {
       return funcName + " ";
     }
     String str = "";
     str += funcName + " ( ";
-    for (int i = 0; i < getFunctions()[a_startNode].getArity(m_ind); i++) {
+    for (int i = 0; i < getFunctions()[a_startNode].getArity(ind); i++) {
       str += toString(getChild(a_startNode, i));
     }
     if (a_startNode == 0) {
@@ -365,23 +332,24 @@ public class ProgramChromosome
     if (a_startNode < 0) {
       return "";
     }
-    if (getFunctions()[a_startNode].getArity(m_ind) == 0) {
+    IGPProgram ind = getIndividual();
+    if (getFunctions()[a_startNode].getArity(ind) == 0) {
       return getFunctions()[a_startNode].getName();
     }
     String str = "";
     boolean paramOutput = false;
-    if (getFunctions()[a_startNode].getArity(m_ind) > 0) {
+    if (getFunctions()[a_startNode].getArity(ind) > 0) {
       if (getFunctions()[a_startNode].getName().indexOf("&1") >= 0) {
         paramOutput = true;
       }
     }
-    if (getFunctions()[a_startNode].getArity(m_ind) == 1 || paramOutput) {
+    if (getFunctions()[a_startNode].getArity(ind) == 1 || paramOutput) {
       str += getFunctions()[a_startNode].getName();
     }
     if (a_startNode > 0) {
       str = "(" + str;
     }
-    for (int i = 0; i < getFunctions()[a_startNode].getArity(m_ind); i++) {
+    for (int i = 0; i < getFunctions()[a_startNode].getArity(ind); i++) {
       String childString = toStringNorm(getChild(a_startNode, i));
       String placeHolder = "&" + (i + 1);
       int placeholderIndex = str.indexOf(placeHolder);
@@ -391,7 +359,8 @@ public class ProgramChromosome
       else {
         str += childString;
       }
-      if (i == 0 && getFunctions()[a_startNode].getArity(m_ind) != 1 && !paramOutput) {
+      if (i == 0 && getFunctions()[a_startNode].getArity(ind) != 1
+          && !paramOutput) {
         str += " " + getFunctions()[a_startNode].getName() + " ";
       }
     }
@@ -417,12 +386,13 @@ public class ProgramChromosome
    */
   public boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
                             boolean a_function, boolean a_growing) {
+    IGPProgram ind = getIndividual();
     for (int i = 0; i < a_nodeSet.length; i++) {
       if (a_nodeSet[i].getReturnType() == a_type) {
-        if (a_nodeSet[i].getArity(m_ind) == 0 && (!a_function || a_growing)) {
+        if (a_nodeSet[i].getArity(ind) == 0 && (!a_function || a_growing)) {
           return true;
         }
-        if (a_nodeSet[i].getArity(m_ind) != 0 && a_function) {
+        if (a_nodeSet[i].getArity(ind) != 0 && a_function) {
           return true;
         }
       }
@@ -461,15 +431,16 @@ public class ProgramChromosome
     int lindex;
     // Following is analog to isPossible except with the random generator.
     // -------------------------------------------------------------------
+    IGPProgram ind = getIndividual();
     while (n == null) {
       lindex = getGPConfiguration().getRandomGenerator().nextInt(
           a_functionSet.length);
       if (a_functionSet[lindex].getReturnType() == a_type) {
-        if (a_functionSet[lindex].getArity(m_ind) == 0 &&
+        if (a_functionSet[lindex].getArity(ind) == 0 &&
             (!a_function || a_growing)) {
           n = a_functionSet[lindex];
         }
-        if (a_functionSet[lindex].getArity(m_ind) != 0 && a_function) {
+        if (a_functionSet[lindex].getArity(ind) != 0 && a_function) {
           n = a_functionSet[lindex];
         }
       }
@@ -511,7 +482,8 @@ public class ProgramChromosome
     m_depth[m_index] = m_maxDepth - a_depth;
     getFunctions()[m_index++] = a_rootNode;
     if (a_depth > 1) {
-      for (int i = 0; i < a_rootNode.getArity(m_ind); i++) {
+      IGPProgram ind = getIndividual();
+      for (int i = 0; i < a_rootNode.getArity(ind); i++) {
         growOrFullNode(a_num, a_depth - 1,
                        a_rootNode.getChildType(getIndividual(), i),
                        a_functionSet, null, a_recurseLevel + 1, a_grow);
@@ -551,7 +523,8 @@ public class ProgramChromosome
     if (command == null) {
       throw new IllegalStateException("ProgramChromosome invalid");
     }
-    int arity = command.getArity(m_ind);
+    IGPProgram ind = getIndividual();
+    int arity = command.getArity(ind);
     for (int i = 0; i < arity; i++) {
       m_depth[num] = m_depth[a_index] + 1;
       // children[i][n] = num;
@@ -564,95 +537,6 @@ public class ProgramChromosome
   }
 
   /**
-   * @return the number of terminals in this chromosome
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int numTerminals() {
-    int count = 0;
-    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity(m_ind) == 0) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  /**
-   * @return the number of functions in this chromosome
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int numFunctions() {
-    int count = 0;
-    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity(m_ind) != 0) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  /**
-   * Counts the number of terminals of the given type in this chromosome.
-   *
-   * @param a_type the type of terminal to count
-   * @return the number of terminals in this chromosome
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int numTerminals(Class a_type) {
-    int count = 0;
-    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity(m_ind) == 0
-          && getFunctions()[i].getReturnType() == a_type) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  /**
-   * Counts the number of functions of the given type in this chromosome.
-   *
-   * @param a_type the type of function to count
-   * @return the number of functions in this chromosome.
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int numFunctions(Class a_type) {
-    int count = 0;
-    for (int i = 0; i < getFunctions().length && getFunctions()[i] != null; i++) {
-      if (getFunctions()[i].getArity(m_ind) != 0
-          && getFunctions()[i].getReturnType() == a_type) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  /**
-   * Gets the a_index'th node in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the root of this chromosome.
-   *
-   * @param a_index the node number to get
-   * @return the node
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public CommandGene getNode(int a_index) {
-    if (a_index >= getFunctions().length || getFunctions()[a_index] == null) {
-      return null;
-    }
-    return getFunctions()[a_index];
-  }
-
-  /**
    * Gets the a_child'th child of the a_index'th node in this chromosome. This
    * is the same as the a_child'th node whose depth is one more than the depth
    * of the a_index'th node.
@@ -662,10 +546,11 @@ public class ProgramChromosome
    * @return the node number of the child, or -1 if not found
    *
    * @author Klaus Meffert
-   * @since 3.0
+   * @since 3.01 (since 3.0 in ProgramChromosome)
    */
   public int getChild(int a_index, int a_child) {
-    for (int i = a_index + 1; i < getFunctions().length; i++) {
+    int len = getFunctions().length;
+    for (int i = a_index + 1; i < len; i++) {
       if (m_depth[i] <= m_depth[a_index]) {
         return -1;
       }
@@ -678,159 +563,6 @@ public class ProgramChromosome
     throw new RuntimeException("Bad child " + a_child +
                                " of node with index = "
                                + a_index);
-  }
-
-  /**
-   * Gets the i'th node of the given type in this chromosome. The nodes are
-   * counted in a depth-first manner, with node 0 being the first node of the
-   * given type in this chromosome.
-   *
-   * @param a_index the i'th node to get
-   * @param a_type the type of node to get
-   * @return the node
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int getNode(int a_index, Class a_type) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getReturnType() == a_type) {
-        if (--a_index < 0) {
-          return j;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Gets the i'th terminal in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the first terminal in this
-   * chromosome.
-   *
-   * @param a_index the i'th terminal to get
-   * @return the terminal
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int getTerminal(int a_index) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getArity(m_ind) == 0) {
-        if (--a_index < 0) {
-          return j;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Gets the a_index'th function in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the first function in this
-   * chromosome.
-   *
-   * @param a_index the a_index'th function to get
-   * @return the function
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int getFunction(int a_index) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getArity(m_ind) != 0) {
-        if (--a_index < 0) {
-          return j;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Gets the a_index'th terminal of the given type in this chromosome. The nodes
-   * are counted in a depth-first manner, with node 0 being the first terminal of
-   * the given type in this chromosome.
-   *
-   * @param a_index the a_index'th terminal to get
-   * @param a_type the type of terminal to get
-   * @return the index of the terminal found, or -1 if no appropriate terminal
-   * was found
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int getTerminal(int a_index, Class a_type) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getReturnType() == a_type
-          && getFunctions()[j].getArity(m_ind) == 0) {
-        if (--a_index < 0) {
-          return j;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Gets the i'th function of the given type in this chromosome. The nodes are
-   * counted in a depth-first manner, with node 0 being the first function of
-   * the given type in this chromosome.
-   *
-   * @param a_index the i'th function to get
-   * @param a_type the type of function to get
-   * @return the index of the function found, or -1 if no appropriate function
-   * was found
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public int getFunction(int a_index, Class a_type) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getReturnType() == a_type
-          && getFunctions()[j].getArity(m_ind) != 0) {
-        if (--a_index < 0) {
-          return j;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Helper: Find GP command with given class and return index of it
-   * @param a_n return the n'th found command
-   * @param a_class the class to find a command for
-   * @return index of first found matching GP command, or -1 if none found
-   */
-  public int getCommandOfClass(int a_n, Class a_class) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getClass() == a_class) {
-        if (--a_n < 0) {
-          return j;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * Helper: Find GP Variable with given return type and return index of it
-   * @param a_n return the n'th found command
-   * @param a_returnType the return type to find a Variable for
-   * @return index of first found matching GP command, or -1 if none found
-   */
-  public int getVariableWithReturnType(int a_n, Class a_returnType) {
-    for (int j = 0; j < getFunctions().length && getFunctions()[j] != null; j++) {
-      if (getFunctions()[j].getClass() == Variable.class) {
-        Variable v = (Variable) getFunctions()[j];
-        if (v.getReturnType() == a_returnType) {
-          if (--a_n < 0) {
-            return j;
-          }
-        }
-      }
-    }
-    return -1;
   }
 
   public CommandGene[] getFunctionSet() {
@@ -1148,10 +880,6 @@ public class ProgramChromosome
     return i;
   }
 
-  public GPConfiguration getGPConfiguration() {
-    return m_configuration;
-  }
-
   /**
    * Compares the given chromosome to this chromosome. This chromosome is
    * considered to be "less than" the given chromosome if it has a fewer
@@ -1241,20 +969,6 @@ public class ProgramChromosome
     catch (ClassCastException cex) {
       return false;
     }
-  }
-
-  /**
-   * @return the GPProgram containing this chromosome
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public IGPProgram getIndividual() {
-    return m_ind;
-  }
-
-  public void setIndividual(IGPProgram a_ind) {
-    m_ind = a_ind;
   }
 
   /**
