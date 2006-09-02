@@ -15,6 +15,7 @@
 * Addes new showTree-method to GPProblem which allows to
   use custom tree renderers
 * Added new GP-function: Loop
+* Fixed bug with BranchTypingCross (creation of chrom's)
 
 3.0
 -----------------------------------------------------------
