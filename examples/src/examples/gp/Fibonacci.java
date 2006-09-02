@@ -34,7 +34,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   static Variable vx;
 
@@ -51,6 +51,16 @@ public class Fibonacci
     super(a_conf);
   }
 
+  /**
+   * Sets up the functions to use and other parameters. Then creates the
+   * initial genotype.
+   *
+   * @return the genotype created
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public GPGenotype create()
       throws InvalidConfigurationException {
     Class[] types = {
