@@ -26,7 +26,7 @@ public class ProgramChromosome
     extends BaseGPChromosome
     implements IGPChromosome, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /*wodka:
    void add(Command cmd);
@@ -103,7 +103,7 @@ public class ProgramChromosome
     }
     m_functionSet = a_functionSet;
     argTypes = a_argTypes;
-    init();
+    init(a_size);
   }
 
   public ProgramChromosome(GPConfiguration a_configuration,
