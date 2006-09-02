@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   static Variable vx;
 
@@ -93,6 +93,7 @@ public class MathProblem
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
     GPProblem problem = new MathProblem(config);
     GPGenotype gp = problem.create();
+    gp.setVerboseOutput(true);
     gp.evolve(800);
     gp.outputSolution(gp.getAllTimeBest());
     problem.showTree(gp.getAllTimeBest(), "mathproblem_best.png");
