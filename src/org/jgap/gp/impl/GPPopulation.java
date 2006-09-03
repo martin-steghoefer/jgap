@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -191,11 +191,10 @@ public class GPPopulation
                      int a_depth, boolean a_grow, int a_maxNodes,
                      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
-    GPProgram program = new GPProgram(getGPConfiguration(), //a_types.length,
-                                      a_types, a_argTypes, a_nodeSets, a_minDepths,
-                       a_maxDepths, a_maxNodes);
-    program.growOrFull(a_depth, /*a_types, a_argTypes, a_nodeSets, a_minDepths,
-                       a_maxDepths, */a_grow, a_maxNodes, a_fullModeAllowed);
+    GPProgram program = new GPProgram(getGPConfiguration(), a_types, a_argTypes,
+                                      a_nodeSets, a_minDepths, a_maxDepths,
+                                      a_maxNodes);
+    program.growOrFull(a_depth, a_grow, a_maxNodes, a_fullModeAllowed);
     return program;
   }
 
