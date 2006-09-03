@@ -25,7 +25,7 @@ public class GPProgram
     extends GPProgramBase
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -305,7 +305,7 @@ public class GPProgram
   /**
    * Searches for a chromosome that has the given class and returns its index.
    *
-   * @param a_chromosomeNum the index of the chromosome to execute
+   * @param a_chromosomeNum the index of the chromosome to start the search with
    * @param a_class the class to find
    * @return the index of the first chromosome found that is of a_class, or -1
    *
