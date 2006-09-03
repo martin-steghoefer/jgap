@@ -23,16 +23,11 @@ import org.jgap.gp.impl.*;
 public class Modulo
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public Modulo(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_type);
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
   }
 
   public String toString() {
