@@ -14,7 +14,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 /**
- * If food-ahead then execute <child 0> else execute <child 1>
+ * If food-ahead then execute <child 0> else execute <child 1>.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -22,15 +22,35 @@ import org.jgap.gp.impl.*;
 public class IfFoodAheadElse
     extends AntCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private int m_lookAheadFields;
 
+  /**
+   * Standard constructor for the classic ant problem. Looks ahead 1 field.
+   *
+   * @param a_conf the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
   public IfFoodAheadElse(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     this(a_conf, 1);
   }
 
+  /**
+   * Allows to specify how many fields to look ahead.
+   *
+   * @param a_conf the configuration to use
+   * @param a_lookAheadFields look ahead n fields
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
   public IfFoodAheadElse(final GPConfiguration a_conf, int a_lookAheadFields)
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.VoidClass);
@@ -90,6 +110,11 @@ public class IfFoodAheadElse
   }
 
   public String toString() {
-    return "if-food (&1) else (&2)";
+    if (m_lookAheadFields == 1) {
+      return "if-food (&1) else (&2)";
+    }
+    else {
+      return "if-food(" + m_lookAheadFields + ") (&1) else (&2)";
+    }
   }
 }
