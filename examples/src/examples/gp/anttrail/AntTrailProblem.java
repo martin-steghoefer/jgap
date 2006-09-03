@@ -11,12 +11,11 @@ package examples.gp.anttrail;
 
 import java.io.*;
 import java.util.*;
+import org.jgap.*;
+import org.jgap.event.*;
 import org.jgap.gp.*;
 import org.jgap.gp.function.*;
-import org.jgap.gp.terminal.*;
 import org.jgap.gp.impl.*;
-import org.jgap.event.*;
-import org.jgap.*;
 import org.jgap.util.tree.*;
 
 /**
@@ -28,7 +27,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private int[][] m_map;
 
@@ -38,6 +37,9 @@ public class AntTrailProblem
 
   private static int m_maxy;
 
+  /**
+   * Maximum number of moves allowed.
+   */
   private static int m_maxMoves = 400;
 
   public AntTrailProblem(GPConfiguration a_conf)
@@ -60,29 +62,30 @@ public class AntTrailProblem
     Class[] types = {CommandGene.VoidClass};
     Class[][] argTypes = { {}
     };
-    int[] minDepths = new int[] {5};
-    int[] maxDepths = new int[] {12};
+    int[] minDepths = new int[] {6};
+    int[] maxDepths = new int[] {9};
     GPConfiguration conf = getGPConfiguration();
     CommandGene[][] nodeSets = { {
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass}),
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
+        new SubProgram(conf, new Class[] {CommandGene.VoidClass, //nonclassic
+                       CommandGene.VoidClass, CommandGene.VoidClass,
+                       CommandGene.VoidClass}),
         new Left(conf),
         new Right(conf),
         new Move(conf),
-//        new Move(conf, 3), //nonclassic
+        new Move(conf, 3), //nonclassic
         new IfFoodAheadElse(conf),
-//        new IfFoodAheadElse(conf, 3),//nonclassic
-        new IfFoodAheadLeft(conf),//nonclassic
+        new IfFoodAheadLeft(conf), //nonclassic
         new IfFoodAheadRight(conf), //nonclassic
-//        new Loop(conf, CommandGene.IntegerClass, 3),//nonclassic
+        new Loop(conf, CommandGene.IntegerClass, 3), //nonclassic
+        new TurnToFood(conf), //nonclassic
     }
     };
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 2000, new boolean[] {true}, true);
+        minDepths, maxDepths, 5000, new boolean[] {true}, true);
   }
 
   private int[][] readTrail(String a_filename)
@@ -170,7 +173,7 @@ public class AntTrailProblem
         filename = "santafe.trail";
       }
       System.out.println("Using population size of " + popSize);
-      config.setMaxInitDepth(6);
+      config.setMaxInitDepth(7);
       config.setPopulationSize(popSize);
       final AntTrailProblem problem = new AntTrailProblem(config);
       GPFitnessFunction func = problem.createFitFunc();
@@ -179,7 +182,6 @@ public class AntTrailProblem
       config.setReproductionProb(0.1f);
       config.setNewChromsPercent(0.3f);
       config.setStrictProgramCreation(true);
-//      config.setProgramCreationMaxTries(5);
       GPGenotype gp = problem.create();
       gp.setVerboseOutput(true);
       // Read the trail from file.
@@ -203,7 +205,7 @@ public class AntTrailProblem
                                + ", best fitness: " + bestFitness
                                + ", memory free: " + freeMem + " MB");
           }
-          if (evno > 10000) {
+          if (evno > 50000) {
             t.stop();
           }
           else {
@@ -303,7 +305,7 @@ public class AntTrailProblem
     }
   }
 
-  public GPFitnessFunction createFitFunc() {
+  private GPFitnessFunction createFitFunc() {
     return new AntFitnessFunction();
   }
 
@@ -339,8 +341,8 @@ public class AntTrailProblem
           error = 0.0d;
         }
         else if (error < GPFitnessFunction.MAX_FITNESS_VALUE) {
-          int moves = antmap.getMoveCount();
-          /**@todo add penalty for longer trails*/
+          //          int moves = antmap.getMoveCount();
+          // here we could add penalty for longer trails
         }
       } catch (IllegalStateException iex) {
         error = GPFitnessFunction.MAX_FITNESS_VALUE;
@@ -360,3 +362,41 @@ public class AntTrailProblem
     return result;
   }
 }
+/*
+ abcd
+   e
+   f                    abcde
+   g                    Z
+   h                    Y
+   ijklmnopqr       TUVWX
+            s       S
+            t       R
+            u       Q
+            v       P
+            w       O
+            x       N
+            y       M
+            z       L
+            A       K
+            B   FGHIJ
+            C   E
+            D   D
+            E   C
+            F   B
+            G   A
+            H   z
+            I   y
+            J   x
+ VUTSRQPONMLK   w
+ W              v
+ X              u
+ Y     klmnopqrst
+ Z     j
+ a     i
+ bcdefgh
+
+ Number of moves: 162
+ Best solution fitness: 13.0
+ Best solution: loop(3, (loop(3, (if-food-ahead-right ((loop(3, (if-food ((if-food (move) else (right))) else ((loop(3, turn-to-food }))) })) else ((sub[(if-food-ahead-right ((if-food (right) else (turn-to-food))) else ((if-food (move) else (turn-to-food)))) --> (loop(3, (sub[turn-to-food --> right --> left]) }) --> (loop(3, (sub[turn-to-food --> move --> turn-to-food --> move]) }) --> (if-food-ahead-left ((if-food-ahead-right (move3) else (left))) else ((if-food-ahead-left (right) else (turn-to-food))))]))) }) }
+ Depth of chromosome: 6
+*/
