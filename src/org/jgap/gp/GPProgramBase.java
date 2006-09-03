@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -60,6 +60,11 @@ public abstract class GPProgramBase
    * aborts)
    */
   private int m_maxNodes;
+
+  /**
+   * Free to use data object.
+   */
+  private Object m_applicationData;
 
   public GPProgramBase(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -198,4 +203,25 @@ public abstract class GPProgramBase
     return m_maxNodes;
   }
 
+  /**
+   * Sets the application data object.
+   *
+   * @param a_data the object to set
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public void setApplicationData(Object a_data) {
+    m_applicationData = a_data;
+  }
+
+  /**
+   * @return the application data object set
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public Object getApplicationData() {
+    return m_applicationData;
+  }
 }
