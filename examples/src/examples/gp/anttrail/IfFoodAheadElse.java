@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class IfFoodAheadElse
     extends AntCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private int m_lookAheadFields;
 
@@ -106,7 +106,6 @@ public class IfFoodAheadElse
     else {
       a_chrom.execute_void(a_n, 1, a_args);
     }
-//    map.IncrementMoveCounter();
   }
 
   public String toString() {

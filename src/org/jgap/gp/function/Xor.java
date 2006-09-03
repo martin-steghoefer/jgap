@@ -22,11 +22,23 @@ import org.jgap.gp.impl.*;
 public class Xor
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public Xor(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.BooleanClass);
+  }
+
+  public CommandGene applyMutation(int index, double a_percentage)
+      throws InvalidConfigurationException {
+    CommandGene mutant;
+    if (a_percentage < 0.5d) {
+      mutant = new And(getGPConfiguration());
+    }
+    else {
+      mutant = new Or(getGPConfiguration());
+    }
+    return mutant;
   }
 
   public String toString() {

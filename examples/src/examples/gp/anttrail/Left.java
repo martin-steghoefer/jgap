@@ -9,8 +9,9 @@
  */
 package examples.gp.anttrail;
 
-import org.jgap.gp.impl.*;
 import org.jgap.*;
+import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Turn the ant left.
@@ -19,13 +20,19 @@ import org.jgap.*;
  * @since 3.01
  */
 public class Left
-    extends AntCommand {
+    extends AntCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public Left(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf);
+  }
+
+  public CommandGene applyMutation(int index, double a_percentage)
+      throws InvalidConfigurationException {
+    Right mutant = new Right(getGPConfiguration());
+    return mutant;
   }
 
   public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {

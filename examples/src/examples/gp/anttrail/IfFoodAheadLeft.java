@@ -20,9 +20,9 @@ import org.jgap.gp.impl.*;
  * @since 3.01
  */
 public class IfFoodAheadLeft
-    extends AntCommand {
+    extends AntCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_lookAheadFields;
 
@@ -55,6 +55,13 @@ public class IfFoodAheadLeft
       throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.VoidClass);
     m_lookAheadFields = a_lookAheadFields;
+  }
+
+  public CommandGene applyMutation(int index, double a_percentage)
+      throws InvalidConfigurationException {
+    IfFoodAheadRight mutant = new IfFoodAheadRight(getGPConfiguration(),
+        m_lookAheadFields);
+    return mutant;
   }
 
   public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {
