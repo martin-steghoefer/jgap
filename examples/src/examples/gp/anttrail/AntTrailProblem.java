@@ -28,15 +28,17 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private static int[][] map;
+  private int[][] m_map;
 
   private static int foodAvail;
 
   private static int m_maxx;
 
   private static int m_maxy;
+
+  private static int m_maxMoves = 400;
 
   public AntTrailProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -86,7 +88,8 @@ public class AntTrailProblem
     try {
       lnr = new LineNumberReader(new FileReader(a_filename));
     } catch (FileNotFoundException fex) {
-      throw new FileNotFoundException("File not found: " + new File(".").getAbsolutePath() +
+      throw new FileNotFoundException("File not found: " +
+                                      new File(".").getAbsolutePath() +
                                       a_filename);
     }
     // Read dimensions of trail.
@@ -105,22 +108,26 @@ public class AntTrailProblem
         }
         int x;
         for (x = 0; x < s.length(); x++) {
-          if (s.charAt(x) == ' ')
+          if (s.charAt(x) == ' ') {
             result[x][y] = AntMap.EMPTY;
+          }
           else if (s.charAt(x) == '#') {
             result[x][y] = AntMap.FOOD;
             foodAvail++;
           }
-          else if (s.charAt(x) == '.')
+          else if (s.charAt(x) == '.') {
             result[x][y] = AntMap.TRAIL;
-          else
+          }
+          else {
             throw new RuntimeException("Bad character '" + s.charAt(x) +
                                        "' on line number " + lnr.getLineNumber() +
                                        " of the Ant trail file.");
+          }
         }
         // fill out rest of X's
-        for (int z = x; z < m_maxx; z++)
+        for (int z = x; z < m_maxx; z++) {
           result[z][y] = AntMap.EMPTY;
+        }
       }
       // fill out rest of Y's
       for (int z = y; z < m_maxy; z++) {
@@ -161,16 +168,17 @@ public class AntTrailProblem
       System.out.println("Using population size of " + popSize);
       config.setMaxInitDepth(6);
       config.setPopulationSize(popSize);
-      config.setFitnessFunction(new AntTrailProblem.AntFitnessFunction());
+      final AntTrailProblem problem = new AntTrailProblem(config);
+      GPFitnessFunction func = problem.createFitFunc();
+      config.setFitnessFunction(func);
       config.setStrictProgramCreation(true);
 //      config.setProgramCreationMaxTries(5);
-      final GPProblem problem = new AntTrailProblem(config);
       GPGenotype gp = problem.create();
       gp.setVerboseOutput(true);
       // Read the trail from file.
       // -------------------------
-      map = readTrail("santafe.trail");
-      AntMap antmap = new AntMap(map);
+      problem.m_map = readTrail("santafe.trail");
+      AntMap antmap = new AntMap(problem.m_map, m_maxMoves);
       System.out.println("Food to consume by ant: " + countFood(antmap));
       // Simple implementation of running evolution in a thread.
       // -------------------------------------------------------
@@ -228,11 +236,16 @@ public class AntTrailProblem
           String filename = "anttrail_best" + indexString + ".png";
           IGPProgram best = genotype.getAllTimeBest();
           try {
+            // Create graphical tree of GPProgram.
+            // -----------------------------------
             TreeBranchRenderer antBranchRenderer = new AntTreeBranchRenderer();
             TreeNodeRenderer antNodeRenderer = new AntTreeNodeRenderer();
             problem.showTree(best, filename, antBranchRenderer, antNodeRenderer);
-            AntMap antmap = (AntMap) best.getGPConfiguration().readFromMemory("map");
+            // Display solution's trail.
+            // -------------------------
+            AntMap antmap = (AntMap) best.getApplicationData();
             displaySolution(antmap.getMovements());
+            System.out.println(" Number of moves: " + antmap.getMoveCount());
           } catch (InvalidConfigurationException iex) {
             iex.printStackTrace();
           }
@@ -252,16 +265,21 @@ public class AntTrailProblem
     }
   }
 
-  private static void displaySolution(int[][] antmap)  {
-    for(int x=0;x<antmap.length;x++) {
-      for (int y=0;y<antmap[x].length;y++) {
+  /**
+   * Display ant trail as found by GP.
+   *
+   * @param a_antmap the map containing the trail
+   */
+  private static void displaySolution(int[][] a_antmap) {
+    for (int x = 0; x < a_antmap.length; x++) {
+      for (int y = 0; y < a_antmap[x].length; y++) {
         char toPrint;
-        int c = antmap[x][y];
-        if (c<32) {
+        int c = a_antmap[x][y];
+        if (c < 32) {
           toPrint = ' ';
         }
         else {
-          toPrint =(char)c;
+          toPrint = (char) c;
         }
         System.out.print(toPrint);
       }
@@ -269,7 +287,11 @@ public class AntTrailProblem
     }
   }
 
-  public static class AntFitnessFunction
+  public GPFitnessFunction createFitFunc() {
+    return new AntFitnessFunction();
+  }
+
+  class AntFitnessFunction
       extends GPFitnessFunction {
     protected double evaluate(final IGPProgram a_subject) {
       return computeRawFitness(a_subject);
@@ -282,44 +304,36 @@ public class AntTrailProblem
       // ------------------------
       GPGenotype.getGPConfiguration().clearStack();
       GPGenotype.getGPConfiguration().clearMemory();
-      AntMap antmap = new AntMap(map);
-      a_program.getGPConfiguration().storeInMemory("map", antmap);
-      // number of moves proceeded
-      int maxMoves;
-      // how much food is consumed?
-      int food;
-      // Compute fitness for each program.
-      // ---------------------------------
-      for (int j = 0; j < a_program.size(); j++) {
-        try {
-          try {
-            // Execute memory manipulating subprograms.
-            // ----------------------------------------
-            a_program.execute_void(j, noargs);
-          } catch (IllegalStateException iex) {
-            error = GPFitnessFunction.MAX_FITNESS_VALUE;
-            break;
-          }
-        } catch (ArithmeticException ex) {
-          System.out.println(a_program.getChromosome(j));
-          throw ex;
+      AntMap antmap = new AntMap(m_map, m_maxMoves);
+      int f = countFood(antmap);
+      a_program.setApplicationData(antmap);
+      try {
+        // Compute fitness for each program.
+        // ---------------------------------
+        for (int j = 0; j < a_program.size(); j++) {
+          // Execute memory manipulating subprograms.
+          // ----------------------------------------
+          a_program.execute_void(j, noargs);
         }
-      }
-      // Determine success of individual.
-      // --------------------------------
-      antmap = (AntMap) a_program.getGPConfiguration().readFromMemory("map");
-      food = countFood(antmap);
-      // The remaining food is the defect rate here.
-      // -------------------------------------------
-      error = food;
-      if (GPGenotype.getGPConfiguration().stackSize() > 0) {
+        // Determine success of individual.
+        // --------------------------------
+        antmap = (AntMap) a_program.getApplicationData();
+        int food = countFood(antmap);
+        // The remaining food is the defect rate here.
+        // -------------------------------------------
+        error = food;
+        if (GPGenotype.getGPConfiguration().stackSize() > 0) {
+          error = GPFitnessFunction.MAX_FITNESS_VALUE;
+        }
+        if (error < 0.000001) {
+          error = 0.0d;
+        }
+        else if (error < GPFitnessFunction.MAX_FITNESS_VALUE) {
+          int moves = antmap.getMoveCount();
+          /**@todo add penalty for longer trails*/
+        }
+      } catch (IllegalStateException iex) {
         error = GPFitnessFunction.MAX_FITNESS_VALUE;
-      }
-      if (error < 0.000001) {
-        error = 0.0d;
-      }
-      else if (error < GPFitnessFunction.MAX_FITNESS_VALUE) {
-        /**@todo add penalty for longer trails*/
       }
       return error;
     }
