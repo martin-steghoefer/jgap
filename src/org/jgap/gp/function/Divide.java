@@ -20,18 +20,19 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Divide
-    extends MathCommand {
+    extends MathCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public Divide(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, 2, a_type);
   }
 
-  public void applyMutation(int index, double a_percentage) {
-    // Here, we could mutate the parameter of the command.
-    // This is not applicable for this command, just do nothing
+  public CommandGene applyMutation(int index, double a_percentage)
+      throws InvalidConfigurationException {
+    Multiply mutant = new Multiply(getGPConfiguration(), getReturnType());
+    return mutant;
   }
 
   public String toString() {
