@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -137,6 +137,21 @@ public class BranchTypingCross
       // choose a terminal
       p0 = c0.getTerminal(getConfiguration().getRandomGenerator().
                           nextInt(c0.numTerminals()));
+      // Mutate the terminal's value.
+      // ----------------------------
+      /**@todo make this random and configurable*/
+      CommandGene command = c0.getNode(p0);
+      if (IMutateable.class.isInstance(command)) {
+        IMutateable term = (IMutateable) command;
+        command = term.applyMutation(0, 0.5d);
+        if (command != null) {
+          // Check if mutant's function is allowed.
+          // --------------------------------------
+          if (c0.getCommandOfClass(0, command.getClass()) >=0) {
+            c0.setGene(p0, command);
+          }
+        }
+      }
     }
     // Choose a point in c2 matching the type
     int p1;
@@ -170,7 +185,14 @@ public class BranchTypingCross
       CommandGene command = c1.getNode(p1);
       if (IMutateable.class.isInstance(command)) {
         IMutateable term = (IMutateable) command;
-        term.applyMutation(0, 0.5d);
+        command = term.applyMutation(0, 0.5d);
+        if (command != null) {
+          // Check if mutant's function is allowed.
+          // --------------------------------------
+          if (c0.getCommandOfClass(0, command.getClass()) >=0) {
+            c1.setGene(p1, command);
+          }
+        }
       }
     }
     int s0 = c0.getSize(p0); //Number of nodes in c0 from index p0
