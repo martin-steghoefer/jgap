@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   private String m_value;
 
@@ -70,7 +70,8 @@ public class Terminal
     }
   }
 
-  public void applyMutation(int index, double a_percentage) {
+  public CommandGene applyMutation(int index, double a_percentage)
+      throws InvalidConfigurationException {
     // If very high then do mutation not relying on current value
     // random value.
     // ----------------------------------------------------------
@@ -98,6 +99,7 @@ public class Terminal
         setValue(newValue);
       }
     }
+    return this;
   }
 
   public String toString() {
