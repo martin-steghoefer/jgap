@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -490,10 +490,6 @@ public abstract class CommandGene
     if (!isValid(a_program, a_index)) {
       throw new IllegalStateException("State for GP-command not valid");
     }
-  }
-
-  public void applyMutation(int index, double a_percentage) {
-    //do nothing here
   }
 
   public void setNoValidation(boolean a_noValidation) {
