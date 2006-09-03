@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private int[][] m_map;
 
@@ -60,11 +60,10 @@ public class AntTrailProblem
     Class[] types = {CommandGene.VoidClass};
     Class[][] argTypes = { {}
     };
-    int[] minDepths = new int[] {6};
-    int[] maxDepths = new int[] {11};
+    int[] minDepths = new int[] {5};
+    int[] maxDepths = new int[] {12};
     GPConfiguration conf = getGPConfiguration();
     CommandGene[][] nodeSets = { {
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass}),
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
@@ -72,17 +71,21 @@ public class AntTrailProblem
         new Left(conf),
         new Right(conf),
         new Move(conf),
+//        new Move(conf, 3), //nonclassic
         new IfFoodAheadElse(conf),
-        new Loop(conf, CommandGene.IntegerClass, 5),
+//        new IfFoodAheadElse(conf, 3),//nonclassic
+        new IfFoodAheadLeft(conf),//nonclassic
+        new IfFoodAheadRight(conf), //nonclassic
+//        new Loop(conf, CommandGene.IntegerClass, 3),//nonclassic
     }
     };
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 1000, new boolean[] {true}, true);
+        minDepths, maxDepths, 2000, new boolean[] {true}, true);
   }
 
-  private static int[][] readTrail(String a_filename)
+  private int[][] readTrail(String a_filename)
       throws Exception {
     LineNumberReader lnr;
     try {
@@ -158,12 +161,13 @@ public class AntTrailProblem
     try {
       System.out.println("Ant trail problem");
       GPConfiguration config = new GPConfiguration();
-      int popSize;
+      int popSize = 500;
+      String filename;
       if (args.length == 1) {
-        popSize = Integer.parseInt(args[0]);
+        filename = args[0];
       }
       else {
-        popSize = 1000;
+        filename = "santafe.trail";
       }
       System.out.println("Using population size of " + popSize);
       config.setMaxInitDepth(6);
@@ -171,13 +175,16 @@ public class AntTrailProblem
       final AntTrailProblem problem = new AntTrailProblem(config);
       GPFitnessFunction func = problem.createFitFunc();
       config.setFitnessFunction(func);
+      config.setCrossoverProb(0.9f);
+      config.setReproductionProb(0.1f);
+      config.setNewChromsPercent(0.3f);
       config.setStrictProgramCreation(true);
 //      config.setProgramCreationMaxTries(5);
       GPGenotype gp = problem.create();
       gp.setVerboseOutput(true);
       // Read the trail from file.
       // -------------------------
-      problem.m_map = readTrail("santafe.trail");
+      problem.m_map = problem.readTrail(filename);
       AntMap antmap = new AntMap(problem.m_map, m_maxMoves);
       System.out.println("Food to consume by ant: " + countFood(antmap));
       // Simple implementation of running evolution in a thread.
@@ -244,7 +251,7 @@ public class AntTrailProblem
             // Display solution's trail.
             // -------------------------
             AntMap antmap = (AntMap) best.getApplicationData();
-            displaySolution(antmap.getMovements());
+            problem.displaySolution(antmap.getMovements());
             System.out.println(" Number of moves: " + antmap.getMoveCount());
           } catch (InvalidConfigurationException iex) {
             iex.printStackTrace();
@@ -270,13 +277,22 @@ public class AntTrailProblem
    *
    * @param a_antmap the map containing the trail
    */
-  private static void displaySolution(int[][] a_antmap) {
-    for (int x = 0; x < a_antmap.length; x++) {
-      for (int y = 0; y < a_antmap[x].length; y++) {
+  private void displaySolution(int[][] a_antmap) {
+    for (int y = 0; y < m_maxy; y++) {
+      for (int x = 0; x < m_maxx; x++) {
         char toPrint;
         int c = a_antmap[x][y];
         if (c < 32) {
-          toPrint = ' ';
+          switch (c) {
+            case AntMap.FOOD:
+              toPrint = '#';
+              break;
+            case AntMap.TRAIL:
+              toPrint = '.';
+              break;
+            default:
+              toPrint = ' ';
+          }
         }
         else {
           toPrint = (char) c;
@@ -305,23 +321,17 @@ public class AntTrailProblem
       GPGenotype.getGPConfiguration().clearStack();
       GPGenotype.getGPConfiguration().clearMemory();
       AntMap antmap = new AntMap(m_map, m_maxMoves);
-      int f = countFood(antmap);
       a_program.setApplicationData(antmap);
       try {
-        // Compute fitness for each program.
-        // ---------------------------------
-        for (int j = 0; j < a_program.size(); j++) {
-          // Execute memory manipulating subprograms.
-          // ----------------------------------------
-          a_program.execute_void(j, noargs);
-        }
+        // Execute the program.
+        // --------------------
+        a_program.execute_void(0, noargs);
         // Determine success of individual.
         // --------------------------------
         antmap = (AntMap) a_program.getApplicationData();
-        int food = countFood(antmap);
         // The remaining food is the defect rate here.
         // -------------------------------------------
-        error = food;
+        error = countFood(antmap);
         if (GPGenotype.getGPConfiguration().stackSize() > 0) {
           error = GPFitnessFunction.MAX_FITNESS_VALUE;
         }
