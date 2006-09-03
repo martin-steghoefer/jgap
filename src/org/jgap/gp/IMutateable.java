@@ -9,6 +9,8 @@
  */
 package org.jgap.gp;
 
+import org.jgap.*;
+
 /**
  * Interface for GP commands that are mutateable.
  *
@@ -16,10 +18,20 @@ package org.jgap.gp;
  * @since 3.0
  */
 public interface IMutateable {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  void applyMutation(int index, double a_percentage);
-
+  /**
+   * Mutates a CommandGene
+   * @param a_index references the part of a multipart object, normally not
+   * relevant
+   * @param a_percentage the mutation rate (0.0 to 1.0)
+   * @return the mutant
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  CommandGene applyMutation(int a_index, double a_percentage)
+      throws InvalidConfigurationException;
 }
