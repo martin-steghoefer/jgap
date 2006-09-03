@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -492,7 +492,7 @@ public class GPGenotype
       for (int i = popSize1; i < popSize; i++) {
         // Determine depth randomly and between maxInitDepth and 2*maxInitDepth.
         // ---------------------------------------------------------------------
-        int depth = conf.getMaxInitDepth() - 2 + random.nextInt(2);
+        int depth = conf.getMaxInitDepth() - 2 + random.nextInt(2);/**@todo make configurable*/
         IGPProgram program = newPopulation.create(m_types, m_argTypes,
             m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
             m_maxNodes, m_fullModeAllowed);
