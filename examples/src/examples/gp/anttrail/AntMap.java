@@ -20,7 +20,7 @@ import org.jgap.gp.impl.*;
  */
 public class AntMap {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // map point descriptions
   public static final int ERROR = 0;
@@ -129,21 +129,15 @@ public class AntMap {
   }
 
   public void setPosX(int a_value) {
-    if (Math.abs(m_posx - a_value) > 1) {
-      int x = 2;
-    }
     storeMove();
     m_posx = a_value;
-    checkFoodTaken();
+//    checkFoodTaken();
   }
 
   public void setPosY(int a_value) {
-    if (Math.abs(m_posy - a_value) > 1) {
-      int x = 2;
-    }
     storeMove();
     m_posy = a_value;
-    checkFoodTaken();
+//    checkFoodTaken();
   }
 
   private void storeMove() {
@@ -169,7 +163,7 @@ public class AntMap {
     return m_movementMap;
   }
 
-  public void checkFoodTaken() {
+  private void checkFoodTaken() {
     if (m_map[m_posx][m_posy] == AntMap.FOOD) {
       m_foodTaken++;
       m_map[m_posx][m_posy] = AntMap.ATE;
@@ -188,9 +182,9 @@ public class AntMap {
     m_orientation = a_orientation;
   }
 
-  public int getFoodTaken() {
-    return m_foodTaken;
-  }
+//  public int getFoodTaken() {
+//    return m_foodTaken;
+//  }
 
   public int getMoveCount() {
     return m_moves;
