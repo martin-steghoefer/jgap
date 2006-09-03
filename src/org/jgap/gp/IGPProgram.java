@@ -128,14 +128,14 @@ public interface IGPProgram
   /**
    * Searches for a chromosome that has the given class and returns its index.
    *
-   * @param a_chromosomeNum the index of the chromosome to execute
+   * @param a_chromosomeNum the index of the chromosome to start the search with
    * @param a_class the class to find
    * @return the index of the first chromosome found that is of a_class, or -1
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  int getCommandOfClass(int a_n, Class a_class);
+  int getCommandOfClass(int a_chromosomeNum, Class a_class);
 
   void setFitnessValue(double a_fitness);
 
@@ -164,4 +164,22 @@ public interface IGPProgram
   int getMaxNodes();
 
   GPConfiguration getGPConfiguration();
+
+  /**
+   * Sets the application data object.
+   *
+   * @param a_data the object to set
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  void setApplicationData(Object a_data);
+
+  /**
+   * @return the application data object set
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  Object getApplicationData();
 }
