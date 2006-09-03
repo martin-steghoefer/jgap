@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class IfFoodAheadElse
     extends AntCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_lookAheadFields;
 
@@ -37,8 +37,8 @@ public class IfFoodAheadElse
     m_lookAheadFields = a_lookAheadFields;
   }
 
-  public void execute_void(ProgramChromosome a_ind, int a_n, Object[] a_args) {
-    AntMap map = getMap();
+  public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {
+    AntMap map = getMap(a_chrom);
     int x = map.getPosX();
     int y = map.getPosX();
     int orient = map.getOrientation();
@@ -81,12 +81,12 @@ public class IfFoodAheadElse
       throw new IllegalStateException("IfFoodAheadElse: illegal cell content");
     }
     if (cell == AntMap.FOOD) {
-      a_ind.execute_void(a_n, 0, a_args);
+      a_chrom.execute_void(a_n, 0, a_args);
     }
     else {
-      a_ind.execute_void(a_n, 1, a_args);
+      a_chrom.execute_void(a_n, 1, a_args);
     }
-    map.IncrementMoveCounter();
+//    map.IncrementMoveCounter();
   }
 
   public String toString() {

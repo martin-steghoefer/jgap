@@ -21,17 +21,17 @@ import org.jgap.*;
 public class Move
     extends AntCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Move(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
     super(a_conf);
   }
 
-  public void execute_void(ProgramChromosome a_ind, int a_n, Object[] a_args) {
-    AntMap map = getMap();
+  public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {
+    AntMap map = getMap(a_chrom);
     int x = map.getPosX();
-    int y = map.getPosX();
+    int y = map.getPosY();
     int orient = map.getOrientation();
     switch (orient) {
       case AntMap.O_DOWN:
@@ -62,6 +62,8 @@ public class Move
         }
         map.setPosY(y);
         break;
+      default:
+        throw new IllegalStateException("Illegal orientation");
     }
     map.IncrementMoveCounter();
   }

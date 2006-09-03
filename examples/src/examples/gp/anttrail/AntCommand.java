@@ -10,8 +10,8 @@
 package examples.gp.anttrail;
 
 import org.jgap.*;
-import org.jgap.gp.impl.*;
 import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Abstract base class for GP-commands related to the ant trail problem.
@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public abstract class AntCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public AntCommand(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -34,7 +34,7 @@ public abstract class AntCommand
     super(a_conf, a_arity, a_type);
   }
 
-  public AntMap getMap() {
-    return (AntMap)getGPConfiguration().readFromMemory("map");
+  public AntMap getMap(ProgramChromosome a_chrom) {
+    return (AntMap)a_chrom.getIndividual().getApplicationData();
   }
 }
