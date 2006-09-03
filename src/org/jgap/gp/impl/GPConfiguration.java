@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -58,7 +58,7 @@ public class GPConfiguration
 
   /**
    * Percentage of the population that will be filled with new individuals
-   * during evolution. Mut be between 0.0d and 1.0d.
+   * during evolution. Must be between 0.0d and 1.0d.
    */
   private double m_newChromsPercent = 0.3d;
 
