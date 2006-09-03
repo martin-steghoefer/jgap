@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class TurnToFood
     extends AntCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Constructor.
@@ -59,7 +59,7 @@ public class TurnToFood
   public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {
     AntMap map = getMap(a_chrom);
     int x = map.getPosX();
-    int y = map.getPosX();
+    int y = map.getPosY();
     int orient = map.getOrientation();
     // Look ahead for food.
     // --------------------
@@ -67,26 +67,34 @@ public class TurnToFood
     switch (orient) {
       case AntMap.O_DOWN:
         if (y < map.getHeight() - 1) {
-          found = true;
-          map.setPosY(y + 1);
+          if (map.getFromMap(x, y + 1) == AntMap.FOOD) {
+            found = true;
+            map.setPosY(y + 1);
+          }
         }
         break;
       case AntMap.O_LEFT:
         if (x >= 1) {
-          found = true;
-          map.setPosY(x - 1);
+          if (map.getFromMap(x-1, y ) == AntMap.FOOD) {
+            found = true;
+            map.setPosX(x - 1);
+          }
         }
         break;
       case AntMap.O_RIGHT:
         if (x < map.getWidth() - 1) {
-          found = true;
-          map.setPosY(x + 1);
+          if (map.getFromMap(x+1, y ) == AntMap.FOOD) {
+            found = true;
+            map.setPosX(x + 1);
+          }
         }
         break;
       case AntMap.O_UP:
         if (y >= 1) {
-          found = true;
-          map.setPosY(y - 1);
+          if (map.getFromMap(x, y - 1) == AntMap.FOOD) {
+            found = true;
+            map.setPosY(y - 1);
+          }
         }
         break;
     }
@@ -96,26 +104,38 @@ public class TurnToFood
       switch (orient) {
         case AntMap.O_RIGHT:
           if (y < map.getHeight() - 1) {
-            found = true;
-            map.setPosY(y + 1);
+            if (map.getFromMap(x, y + 1) == AntMap.FOOD) {
+              found = true;
+              map.setPosY(y + 1);
+              map.setOrientation(AntMap.O_DOWN);
+            }
           }
           break;
         case AntMap.O_DOWN:
           if (x >= 1) {
-            found = true;
-            map.setPosY(x - 1);
+            if (map.getFromMap(x-1, y ) == AntMap.FOOD) {
+              found = true;
+              map.setPosX(x - 1);
+              map.setOrientation(AntMap.O_LEFT);
+            }
           }
           break;
         case AntMap.O_UP:
           if (x < map.getWidth() - 1) {
-            found = true;
-            map.setPosY(x + 1);
+            if (map.getFromMap(x+1, y ) == AntMap.FOOD) {
+              found = true;
+              map.setPosX(x + 1);
+              map.setOrientation(AntMap.O_RIGHT);
+            }
           }
           break;
         case AntMap.O_LEFT:
           if (y >= 1) {
-            found = true;
-            map.setPosY(y - 1);
+            if (map.getFromMap(x, y - 1) == AntMap.FOOD) {
+              found = true;
+              map.setPosY(y - 1);
+              map.setOrientation(AntMap.O_UP);
+            }
           }
           break;
       }
@@ -125,30 +145,45 @@ public class TurnToFood
         switch (orient) {
           case AntMap.O_LEFT:
             if (y < map.getHeight() - 1) {
-              found = true;
-              map.setPosY(y + 1);
+              if (map.getFromMap(x, y + 1) == AntMap.FOOD) {
+                found = true;
+                map.setPosY(y + 1);
+                map.setOrientation(AntMap.O_DOWN);
+              }
             }
             break;
           case AntMap.O_UP:
             if (x >= 1) {
-              found = true;
-              map.setPosY(x - 1);
+              if (map.getFromMap(x-1, y ) == AntMap.FOOD) {
+                found = true;
+                map.setPosX(x - 1);
+                map.setOrientation(AntMap.O_LEFT);
+              }
             }
             break;
           case AntMap.O_DOWN:
             if (x < map.getWidth() - 1) {
-              found = true;
-              map.setPosY(x + 1);
+              if (map.getFromMap(x+1, y ) == AntMap.FOOD) {
+                found = true;
+                map.setPosX(x + 1);
+                map.setOrientation(AntMap.O_RIGHT);
+              }
             }
             break;
           case AntMap.O_RIGHT:
             if (y >= 1) {
-              found = true;
-              map.setPosY(y - 1);
+              if (map.getFromMap(x, y - 1) == AntMap.FOOD) {
+                found = true;
+                map.setPosY(y - 1);
+                map.setOrientation(AntMap.O_UP);
+              }
             }
             break;
         }
       }
+    }
+    if (found) {
+      map.IncrementMoveCounter();
     }
   }
 

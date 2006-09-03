@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class IfFoodAheadElse
     extends AntCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private int m_lookAheadFields;
 
@@ -60,7 +60,7 @@ public class IfFoodAheadElse
   public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {
     AntMap map = getMap(a_chrom);
     int x = map.getPosX();
-    int y = map.getPosX();
+    int y = map.getPosY();
     int orient = map.getOrientation();
     int cell = AntMap.ERROR;
     switch (orient) {
