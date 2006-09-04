@@ -27,7 +27,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private int[][] m_map;
 
@@ -205,7 +205,7 @@ public class AntTrailProblem
                                + ", best fitness: " + bestFitness
                                + ", memory free: " + freeMem + " MB");
           }
-          if (evno > 50000) {
+          if (evno > 500000) {
             t.stop();
           }
           else {
@@ -364,39 +364,40 @@ public class AntTrailProblem
 }
 /*
  abcd
-   e
-   f                    abcde
-   g                    Z
-   h                    Y
-   ijklmnopqr       TUVWX
-            s       S
-            t       R
-            u       Q
-            v       P
-            w       O
-            x       N
-            y       M
-            z       L
-            A       K
-            B   FGHIJ
-            C   E
-            D   D
-            E   C
-            F   B
-            G   A
-            H   z
-            I   y
-            J   x
- VUTSRQPONMLK   w
- W              v
- X              u
- Y     klmnopqrst
- Z     j
- a     i
- bcdefgh
+    e
+    f                    abcdef
+    g                    Z    g
+    h                    Y    h
+    ijklmnopqr       TUVWX    i
+             s       S        j
+             t       R        k
+             u       Q        l
+             v       P        m
+             w       O        n
+             x       N        o
+             y       M        p
+             z       L        q
+             A       K  xwvutsr
+             B   FGHIJ  y
+             C   E      z
+             D   D
+             E   C
+             F   B
+             G   A
+             H   z
+             I   y
+             J   x
+  VUTSRQPONMLK   w
+  W              v
+  X              u
+  Y     klmnopqrst
+  Z     j
+  a     i
+  bcdefgh
 
- Number of moves: 162
- Best solution fitness: 13.0
- Best solution: loop(3, (loop(3, (if-food-ahead-right ((loop(3, (if-food ((if-food (move) else (right))) else ((loop(3, turn-to-food }))) })) else ((sub[(if-food-ahead-right ((if-food (right) else (turn-to-food))) else ((if-food (move) else (turn-to-food)))) --> (loop(3, (sub[turn-to-food --> right --> left]) }) --> (loop(3, (sub[turn-to-food --> move --> turn-to-food --> move]) }) --> (if-food-ahead-left ((if-food-ahead-right (move3) else (left))) else ((if-food-ahead-left (right) else (turn-to-food))))]))) }) }
- Depth of chromosome: 6
+  Number of moves: 183
+  Best solution fitness: 4.0
+  Best solution: loop(3, (loop(3, (loop(3, (sub[(sub[right --> left --> move --> turn-to-food]) --> (if-food-ahead-right (move) else (move)) --> (loop(3, turn-to-food }) --> (loop(3, turn-to-food })]) }) }) }
+  Depth of chromosome: 5
+
 */
