@@ -1,5 +1,6 @@
 3.01
 -----------------------------------------------------------
+* Increased performance of GP logic
 * Added org.jgap.gp.INodeValidator to allow constraining
   creation of individuals during evolution
 * org.jgap.gp.function.ForLoop: added option to preset start
