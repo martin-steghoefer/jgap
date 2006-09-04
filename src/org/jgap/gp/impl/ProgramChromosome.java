@@ -26,7 +26,7 @@ public class ProgramChromosome
     extends BaseGPChromosome
     implements IGPChromosome, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /*wodka:
    void add(Command cmd);
@@ -148,7 +148,7 @@ public class ProgramChromosome
   private void init(final int a_size)
       throws InvalidConfigurationException {
     m_depth = new int[a_size];
-    setFunctions(new CommandGene[a_size]);
+    m_genes = new CommandGene[a_size];
   }
 
   public void setArgTypes(Class[] a_argTypes) {
@@ -178,18 +178,13 @@ public class ProgramChromosome
    * @since 3.0
    */
   public void cleanup() {
-    cleanup(0);
-  }
-
-  protected void cleanup(final int n) {
-    if (n < 0) {
-      return;
+    int len = getFunctions().length;
+    for (int i = 0; i < len; i++) {
+      if (m_genes[i] == null) {
+        break;
+      }
+      m_genes[i].cleanup();
     }
-    IGPProgram ind = getIndividual();
-    for (int i = 0; i < getFunctions()[n].getArity(ind); i++) {
-      cleanup(getChild(n, i));
-    }
-    getFunctions()[n].cleanup();
   }
 
   /**
@@ -433,6 +428,9 @@ public class ProgramChromosome
     // -------------------------------------------------------------------
     IGPProgram ind = getIndividual();
     while (n == null) {
+      /**@todo speedup, relying on getting a fitting random number sometimes
+       * is not satisfying
+       */
       lindex = getGPConfiguration().getRandomGenerator().nextInt(
           a_functionSet.length);
       if (a_functionSet[lindex].getReturnType() == a_type) {
@@ -549,6 +547,7 @@ public class ProgramChromosome
    * @since 3.01 (since 3.0 in ProgramChromosome)
    */
   public int getChild(int a_index, int a_child) {
+    /**@todo speedup*/
     int len = getFunctions().length;
     for (int i = a_index + 1; i < len; i++) {
       if (m_depth[i] <= m_depth[a_index]) {
