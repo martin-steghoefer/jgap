@@ -27,7 +27,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private int[][] m_map;
 
@@ -36,6 +36,8 @@ public class AntTrailProblem
   private static int m_maxx;
 
   private static int m_maxy;
+
+  private static int totalFood;
 
   /**
    * Maximum number of moves allowed.
@@ -188,7 +190,8 @@ public class AntTrailProblem
       // -------------------------
       problem.m_map = problem.readTrail(filename);
       AntMap antmap = new AntMap(problem.m_map, m_maxMoves);
-      System.out.println("Food to consume by ant: " + countFood(antmap));
+      totalFood = countFood(antmap);
+      System.out.println("Food to consume by ant: " + totalFood);
       // Simple implementation of running evolution in a thread.
       // -------------------------------------------------------
       final Thread t = new Thread(gp);
@@ -333,7 +336,7 @@ public class AntTrailProblem
         antmap = (AntMap) a_program.getApplicationData();
         // The remaining food is the defect rate here.
         // -------------------------------------------
-        error = countFood(antmap);
+        error = totalFood - antmap.getFoodTaken();// countFood(antmap);
         if (GPGenotype.getGPConfiguration().stackSize() > 0) {
           error = GPFitnessFunction.MAX_FITNESS_VALUE;
         }
@@ -380,8 +383,8 @@ public class AntTrailProblem
              A       K  xwvutsr
              B   FGHIJ  y
              C   E      z
-             D   D
-             E   C
+             D   D      A
+             E   C      BC
              F   B
              G   A
              H   z
@@ -395,9 +398,9 @@ public class AntTrailProblem
   a     i
   bcdefgh
 
-  Number of moves: 183
-  Best solution fitness: 4.0
-  Best solution: loop(3, (loop(3, (loop(3, (sub[(sub[right --> left --> move --> turn-to-food]) --> (if-food-ahead-right (move) else (move)) --> (loop(3, turn-to-food }) --> (loop(3, turn-to-food })]) }) }) }
-  Depth of chromosome: 5
+  Number of moves: 193
+  Best solution fitness: 3.0
+  Best solution: loop(3, (loop(3, (loop(3, (sub[(sub[right --> left --> move --> turn-to-food]) --> (if-food (left) else (move)) --> (loop(3, turn-to-food }) --> (loop(3, (loop(3, turn-to-food }) })]) }) }) }
+  Depth of chromosome: 6
 
 */
