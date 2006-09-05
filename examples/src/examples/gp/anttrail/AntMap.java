@@ -20,7 +20,7 @@ import org.jgap.gp.impl.*;
  */
 public class AntMap {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   // map point descriptions
   public static final int ERROR = 0;
@@ -98,7 +98,7 @@ public class AntMap {
     for (int x = 0; x < m_sizex; x++) {
       m_map[x] = (int[]) (a_map[x].clone());
     }
-    m_movementMap = new int[m_sizex][m_sizey];
+    m_movementMap = new int[m_sizex][m_sizey];/**@todo speedup possible by using string?*/
     m_orientation = O_RIGHT;
     m_posx = 0;
     m_posy = 0;
