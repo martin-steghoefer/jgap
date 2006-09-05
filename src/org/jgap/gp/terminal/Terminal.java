@@ -22,9 +22,15 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
-  private String m_value;
+  private float m_value_float;
+
+  private double m_value_double;
+
+  private int m_value_int;
+
+  private long m_value_long;
 
   private double m_lowerBounds;
 
@@ -49,25 +55,66 @@ public class Terminal
     setRandomValue();
   }
 
-  protected void setRandomValue() {
+  protected void setRandomValue(int a_value) {
     RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
-    m_value = new Long(Math.round(randomGen.nextDouble() *
-                                  (m_upperBounds - m_lowerBounds) +
-                                  m_lowerBounds)).toString();
+    m_value_int = (int) Math.round(randomGen.nextInt() *
+                                   (m_upperBounds - m_lowerBounds) +
+                                   m_lowerBounds);
+  }
+
+  protected void setRandomValue(long a_value) {
+    RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
+    m_value_long = Math.round(randomGen.nextLong() *
+                              (m_upperBounds - m_lowerBounds) +
+                              m_lowerBounds);
+  }
+
+  protected void setRandomValue(double a_value) {
+    RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
+    m_value_double = randomGen.nextDouble() * (m_upperBounds - m_lowerBounds) +
+        m_lowerBounds;
+  }
+
+  protected void setRandomValue(float a_value) {
+    RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
+    m_value_float = (float) (randomGen.nextFloat() *
+                             (m_upperBounds - m_lowerBounds) +
+                             m_lowerBounds);
+  }
+
+  protected void setRandomValue() {
+    Class retType = getReturnType();
+    if (retType == CommandGene.FloatClass) {
+      setRandomValue(m_value_float);
+    }
+    else if (retType == CommandGene.IntegerClass) {
+      setRandomValue(m_value_int);
+    }
+    else if (retType == CommandGene.LongClass) {
+      setRandomValue(m_value_long);
+    }
+    else if (retType == CommandGene.DoubleClass) {
+      setRandomValue(m_value_double);
+    }
+    else {
+      throw new RuntimeException("unknown terminal type: " + retType);
+    }
   }
 
   public void setValue(double a_value) {
-    if (isIntegerType()) {
-      m_value = new Long(Math.round(a_value)).toString();
-    }
-    else if (isFloatType()) {
-      m_value = Double.toString(a_value);
-    }
-    else {
-      throw new UnsupportedOperationException("Setting a value for type "
-          + getReturnType()
-          + " is not supported with Terminal!");
-    }
+    m_value_double = a_value;
+  }
+
+  public void setValue(float a_value) {
+    m_value_float = a_value;
+  }
+
+  public void setValue(int a_value) {
+    m_value_int = a_value;
+  }
+
+  public void setValue(long a_value) {
+    m_value_long = a_value;
   }
 
   public CommandGene applyMutation(int index, double a_percentage)
@@ -79,47 +126,131 @@ public class Terminal
       setRandomValue();
     }
     else {
-      double range = (m_upperBounds - m_lowerBounds) * a_percentage;
-      double newValue;
-      double value = Double.parseDouble(m_value);
-      if (value >= (m_upperBounds - m_lowerBounds) / 2) {
-        newValue = value -
-            getGPConfiguration().getRandomGenerator().nextDouble() * range;
+      Class retType = getReturnType();
+      if (retType == CommandGene.FloatClass) {
+        float newValuef;
+        float rangef = ( (float) m_upperBounds - (float) m_lowerBounds) *
+            (float) a_percentage;
+        if (m_value_float >= (m_upperBounds - m_lowerBounds) / 2) {
+          newValuef = m_value_float -
+              getGPConfiguration().getRandomGenerator().nextFloat() * rangef;
+        }
+        else {
+          newValuef = m_value_float +
+              getGPConfiguration().getRandomGenerator().nextFloat() * rangef;
+        }
+        // Ensure value is within bounds.
+        // ------------------------------
+        if (Math.abs(newValuef - m_lowerBounds) < DELTA ||
+            Math.abs(m_upperBounds - newValuef) < DELTA) {
+          setRandomValue(m_value_float);
+        }
+        else {
+          setValue(newValuef);
+        }
       }
-      else {
-        newValue = value +
-            getGPConfiguration().getRandomGenerator().nextDouble() * range;
+      else if (retType == CommandGene.DoubleClass) {
+        double newValueD;
+        double rangeD = (m_upperBounds - m_lowerBounds) * a_percentage;
+        if (m_value_double >= (m_upperBounds - m_lowerBounds) / 2) {
+          newValueD = m_value_double -
+              getGPConfiguration().getRandomGenerator().nextFloat() * rangeD;
+        }
+        else {
+          newValueD = m_value_double +
+              getGPConfiguration().getRandomGenerator().nextFloat() * rangeD;
+        }
+        // Ensure value is within bounds.
+        // ------------------------------
+        if (Math.abs(newValueD - m_lowerBounds) < DELTA ||
+            Math.abs(m_upperBounds - newValueD) < DELTA) {
+          setRandomValue(m_value_double);
+        }
+        else {
+          setValue(newValueD);
+        }
       }
-      // Ensure value is within bounds.
-      // ------------------------------
-      if (newValue < m_lowerBounds || newValue > m_upperBounds) {
-        setRandomValue();
+      else if (retType == CommandGene.IntegerClass) {
+        int newValueI;
+        double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+        if (m_value_int >= (m_upperBounds - m_lowerBounds) / 2) {
+          newValueI = m_value_int -
+              (int) Math.round(getGPConfiguration().getRandomGenerator().
+                               nextInt() * range);
+        }
+        else {
+          newValueI = m_value_int +
+              (int) Math.round(getGPConfiguration().getRandomGenerator().
+                               nextFloat() * range);
+        }
+        // Ensure value is within bounds.
+        // ------------------------------
+        if (newValueI < m_lowerBounds || newValueI > m_upperBounds) {
+          setRandomValue(m_value_int);
+        }
+        else {
+          setValue(newValueI);
+        }
       }
-      else {
-        setValue(newValue);
+      else if (retType == CommandGene.LongClass) {
+        long newValueL;
+        double range = (m_upperBounds - m_lowerBounds) * a_percentage;
+        if (m_value_long >= (m_upperBounds - m_lowerBounds) / 2) {
+          newValueL = m_value_long -
+              Math.round(getGPConfiguration().getRandomGenerator().nextInt() *
+                         range);
+        }
+        else {
+          newValueL = m_value_long +
+              Math.round(getGPConfiguration().getRandomGenerator().nextFloat() *
+                         range);
+        }
+        // Ensure value is within bounds.
+        // ------------------------------
+        if (newValueL < m_lowerBounds || newValueL > m_upperBounds) {
+          setRandomValue(m_value_long);
+        }
+        else {
+          setValue(newValueL);
+        }
       }
     }
     return this;
   }
 
   public String toString() {
-    return m_value;
+    Class retType = getReturnType();
+    if (retType == CommandGene.FloatClass) {
+      return "" + m_value_float;
+    }
+    else if (retType == CommandGene.IntegerClass) {
+      return "" + m_value_int;
+    }
+    else if (retType == CommandGene.LongClass) {
+      return "" + m_value_long;
+    }
+    else if (retType == CommandGene.DoubleClass) {
+      return "" + m_value_double;
+    }
+    else {
+      return "unknown terminal type: " + retType;
+    }
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
-    return Integer.parseInt( (String) m_value);
+    return m_value_int;
   }
 
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
-    return Long.parseLong( (String) m_value);
+    return m_value_long;
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return Float.parseFloat( (String) m_value);
+    return m_value_float;
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
-    return Double.parseDouble(m_value);
+    return m_value_double;
   }
 
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
