@@ -26,7 +26,7 @@ public class ProgramChromosome
     extends BaseGPChromosome
     implements IGPChromosome, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /*wodka:
    void add(Command cmd);
@@ -148,7 +148,7 @@ public class ProgramChromosome
   private void init(final int a_size)
       throws InvalidConfigurationException {
     m_depth = new int[a_size];
-    m_genes = new CommandGene[a_size];
+    m_genes = new CommandGene[a_size];/**@todo speedup possible by using dynamic list?*/
   }
 
   public void setArgTypes(Class[] a_argTypes) {
@@ -178,7 +178,7 @@ public class ProgramChromosome
    * @since 3.0
    */
   public void cleanup() {
-    int len = getFunctions().length;
+    int len = m_genes.length;
     for (int i = 0; i < len; i++) {
       if (m_genes[i] == null) {
         break;
@@ -280,7 +280,7 @@ public class ProgramChromosome
     // Replace any occurance of placeholders (e.g. &1, &2...) in the function's
     // name.
     // ------------------------------------------------------------------------
-    String funcName = getFunctions()[a_startNode].getName();
+    String funcName = m_genes[a_startNode].getName();
     int j = 1;
     do {
       String placeHolder = "&" + j;
@@ -303,7 +303,8 @@ public class ProgramChromosome
     }
     String str = "";
     str += funcName + " ( ";
-    for (int i = 0; i < getFunctions()[a_startNode].getArity(ind); i++) {
+    int arity = m_genes[a_startNode].getArity(ind);
+    for (int i = 0; i < arity; i++) {
       str += toString(getChild(a_startNode, i));
     }
     if (a_startNode == 0) {
@@ -328,23 +329,23 @@ public class ProgramChromosome
       return "";
     }
     IGPProgram ind = getIndividual();
-    if (getFunctions()[a_startNode].getArity(ind) == 0) {
+    if (m_genes[a_startNode].getArity(ind) == 0) {
       return getFunctions()[a_startNode].getName();
     }
     String str = "";
     boolean paramOutput = false;
-    if (getFunctions()[a_startNode].getArity(ind) > 0) {
-      if (getFunctions()[a_startNode].getName().indexOf("&1") >= 0) {
+    if (m_genes[a_startNode].getArity(ind) > 0) {
+      if (m_genes[a_startNode].getName().indexOf("&1") >= 0) {
         paramOutput = true;
       }
     }
-    if (getFunctions()[a_startNode].getArity(ind) == 1 || paramOutput) {
+    if (m_genes[a_startNode].getArity(ind) == 1 || paramOutput) {
       str += getFunctions()[a_startNode].getName();
     }
     if (a_startNode > 0) {
       str = "(" + str;
     }
-    for (int i = 0; i < getFunctions()[a_startNode].getArity(ind); i++) {
+    for (int i = 0; i < m_genes[a_startNode].getArity(ind); i++) {
       String childString = toStringNorm(getChild(a_startNode, i));
       String placeHolder = "&" + (i + 1);
       int placeholderIndex = str.indexOf(placeHolder);
@@ -354,9 +355,9 @@ public class ProgramChromosome
       else {
         str += childString;
       }
-      if (i == 0 && getFunctions()[a_startNode].getArity(ind) != 1
+      if (i == 0 && m_genes[a_startNode].getArity(ind) != 1
           && !paramOutput) {
-        str += " " + getFunctions()[a_startNode].getName() + " ";
+        str += " " + m_genes[a_startNode].getName() + " ";
       }
     }
     if (a_startNode > 0) {
@@ -427,12 +428,12 @@ public class ProgramChromosome
     // Following is analog to isPossible except with the random generator.
     // -------------------------------------------------------------------
     IGPProgram ind = getIndividual();
+    RandomGenerator randGen = getGPConfiguration().getRandomGenerator();
     while (n == null) {
-      /**@todo speedup, relying on getting a fitting random number sometimes
+      /**@todo speedup, relying on getting a fitting random number some time
        * is not satisfying
        */
-      lindex = getGPConfiguration().getRandomGenerator().nextInt(
-          a_functionSet.length);
+      lindex = randGen.nextInt(a_functionSet.length);
       if (a_functionSet[lindex].getReturnType() == a_type) {
         if (a_functionSet[lindex].getArity(ind) == 0 &&
             (!a_function || a_growing)) {
@@ -478,7 +479,7 @@ public class ProgramChromosome
     // Generate the node.
     // ------------------
     m_depth[m_index] = m_maxDepth - a_depth;
-    getFunctions()[m_index++] = a_rootNode;
+    m_genes[m_index++] = a_rootNode;
     if (a_depth > 1) {
       IGPProgram ind = getIndividual();
       for (int i = 0; i < a_rootNode.getArity(ind); i++) {
@@ -593,7 +594,7 @@ public class ProgramChromosome
   public int getSize(int a_index) {
     int i;
     // Get the node at which the depth is <= depth[n].
-    for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
+    for (i = a_index + 1; i < m_genes.length && m_genes[i] != null;
          i++) {
       if (m_depth[i] <= m_depth[a_index]) {
         break;
@@ -613,7 +614,7 @@ public class ProgramChromosome
    */
   public int getDepth(int a_index) {
     int i, maxdepth = m_depth[a_index];
-    for (i = a_index + 1; i < getFunctions().length && getFunctions()[i] != null;
+    for (i = a_index + 1; i < m_genes.length && m_genes[i] != null;
          i++) {
       if (m_depth[i] <= m_depth[a_index]) {
         break;
@@ -637,7 +638,7 @@ public class ProgramChromosome
    * @since 3.0
    */
   public int getParentNode(int a_child) {
-    if (a_child >= getFunctions().length || getFunctions()[a_child] == null) {
+    if (a_child >= m_genes.length || m_genes[a_child] == null) {
       return -1;
     }
     for (int i = a_child - 1; i >= 0; i--) {
@@ -660,7 +661,7 @@ public class ProgramChromosome
    * @since 3.0
    */
   public boolean execute_boolean(Object[] args) {
-    boolean rtn = getFunctions()[0].execute_boolean(this, 0, args);
+    boolean rtn = m_genes[0].execute_boolean(this, 0, args);
     cleanup();
     return rtn;
   }
@@ -680,10 +681,10 @@ public class ProgramChromosome
    */
   public boolean execute_boolean(int n, int child, Object[] args) {
     if (child == 0) {
-      return getFunctions()[n + 1].execute_boolean(this, n + 1, args);
+      return m_genes[n + 1].execute_boolean(this, n + 1, args);
     }
     int other = getChild(n, child);
-    return getFunctions()[other].execute_boolean(this, other, args);
+    return m_genes[other].execute_boolean(this, other, args);
   }
 
   /**
@@ -696,17 +697,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public void execute_void(Object[] args) {
-    getFunctions()[0].execute_void(this, 0, args);
+    m_genes[0].execute_void(this, 0, args);
     cleanup();
   }
 
   public void execute_void(int n, int child, Object[] args) {
     if (child == 0) {
-      getFunctions()[n + 1].execute_void(this, n + 1, args);
+      m_genes[n + 1].execute_void(this, n + 1, args);
     }
     else {
       int other = getChild(n, child);
-      getFunctions()[other].execute_void(this, other, args);
+      m_genes[other].execute_void(this, other, args);
     }
   }
 
@@ -722,17 +723,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public int execute_int(Object[] args) {
-    int rtn = getFunctions()[0].execute_int(this, 0, args);
+    int rtn = m_genes[0].execute_int(this, 0, args);
     cleanup();
     return rtn;
   }
 
   public int execute_int(int n, int child, Object[] args) {
     if (child == 0) {
-      return getFunctions()[n + 1].execute_int(this, n + 1, args);
+      return m_genes[n + 1].execute_int(this, n + 1, args);
     }
     int other = getChild(n, child);
-    return getFunctions()[other].execute_int(this, other, args);
+    return m_genes[other].execute_int(this, other, args);
   }
 
   /**
@@ -746,17 +747,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public long execute_long(Object[] args) {
-    long rtn = getFunctions()[0].execute_long(this, 0, args);
+    long rtn = m_genes[0].execute_long(this, 0, args);
     cleanup();
     return rtn;
   }
 
   public long execute_long(int n, int child, Object[] args) {
     if (child == 0) {
-      return getFunctions()[n + 1].execute_long(this, n + 1, args);
+      return m_genes[n + 1].execute_long(this, n + 1, args);
     }
     int other = getChild(n, child);
-    return getFunctions()[other].execute_long(this, other, args);
+    return m_genes[other].execute_long(this, other, args);
   }
 
   /**
@@ -770,17 +771,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public float execute_float(Object[] args) {
-    float rtn = getFunctions()[0].execute_float(this, 0, args);
+    float rtn = m_genes[0].execute_float(this, 0, args);
     cleanup();
     return rtn;
   }
 
   public float execute_float(int n, int child, Object[] args) {
     if (child == 0) {
-      return getFunctions()[n + 1].execute_float(this, n + 1, args);
+      return m_genes[n + 1].execute_float(this, n + 1, args);
     }
     int other = getChild(n, child);
-    return getFunctions()[other].execute_float(this, other, args);
+    return m_genes[other].execute_float(this, other, args);
   }
 
   /**
@@ -794,17 +795,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public double execute_double(Object[] args) {
-    double rtn = getFunctions()[0].execute_double(this, 0, args);
+    double rtn = m_genes[0].execute_double(this, 0, args);
     cleanup();
     return rtn;
   }
 
   public double execute_double(int n, int child, Object[] args) {
     if (child == 0) {
-      return getFunctions()[n + 1].execute_double(this, n + 1, args);
+      return m_genes[n + 1].execute_double(this, n + 1, args);
     }
     int other = getChild(n, child);
-    return getFunctions()[other].execute_double(this, other, args);
+    return m_genes[other].execute_double(this, other, args);
   }
 
   /**
@@ -819,17 +820,17 @@ public class ProgramChromosome
    * @since 3.0
    */
   public Object execute_object(Object[] args) {
-    Object rtn = getFunctions()[0].execute_object(this, 0, args);
+    Object rtn = m_genes[0].execute_object(this, 0, args);
     cleanup();
     return rtn;
   }
 
   public Object execute_object(int n, int child, Object[] args) {
     if (child == 0) {
-      return getFunctions()[n + 1].execute_object(this, n + 1, args);
+      return m_genes[n + 1].execute_object(this, n + 1, args);
     }
     int other = getChild(n, child);
-    return getFunctions()[other].execute_object(this, other, args);
+    return m_genes[other].execute_object(this, other, args);
   }
 
   /**
@@ -843,7 +844,7 @@ public class ProgramChromosome
    * @since 3.0
    */
   public Object execute(Object[] args) {
-    return getFunctions()[0].execute_object(this, 0, args);
+    return m_genes[0].execute_object(this, 0, args);
   }
 
   public Object execute(int n, int child, Object[] args) {
@@ -873,7 +874,7 @@ public class ProgramChromosome
    */
   public int size() {
     int i = 0;
-    while (i < getFunctions().length && getFunctions()[i] != null) {
+    while (i < m_genes.length && m_genes[i] != null) {
       i++;
     }
     return i;
