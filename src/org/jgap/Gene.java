@@ -20,8 +20,7 @@ import java.io.Serializable;
  * Without a proper implementation of equals(), some genetic operations will
  * fail to work properly.
  * <p>
- * When implementing a new Gene type, extend it from
- * {@link org.jgap.BaseGene}!
+ * When implementing a new Gene type, extend it from {@link org.jgap.BaseGene}!
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -30,7 +29,7 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.21 $";
+  final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
