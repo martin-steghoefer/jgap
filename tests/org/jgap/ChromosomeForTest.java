@@ -22,7 +22,7 @@ public class ChromosomeForTest
   // Default constructor needed for construction via newInstance()
   public ChromosomeForTest()
       throws InvalidConfigurationException {
-    super(Genotype.getConfiguration());
+    super(Genotype.getStaticConfiguration());
   }
 
   public ChromosomeForTest(Configuration a_config, final Gene[] a_initialGenes)

@@ -24,7 +24,7 @@ import org.jgap.impl.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -41,7 +41,7 @@ public abstract class JGAPTestCase
   }
 
   public void setUp() {
-    Genotype.setConfiguration(null);
+    Genotype.setStaticConfiguration(null);
     // reset property --> use JGAPFactory
     System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS, "");
     conf.resetProperty(conf.PROPERTY_FITEVAL_INST);

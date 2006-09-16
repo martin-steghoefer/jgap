@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -197,7 +197,7 @@ public class GenotypeTest
     Genotype genotype = new Genotype(conf, chroms);
     assertTrue(genotype.getConfiguration().getFitnessEvaluator()
                instanceof DefaultFitnessEvaluator);
-    assertSame(conf, Genotype.getConfiguration());
+    assertSame(conf, genotype.getConfiguration());
   }
 
   /**
@@ -375,7 +375,8 @@ public class GenotypeTest
   }
 
   /**
-   * Test evolve with BulkFitnessFunction
+   * Test evolve with BulkFitnessFunction.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -400,7 +401,8 @@ public class GenotypeTest
 
   /**
    * Test that population size remains constant when the configuration contains
-   * a BCS as postselector
+   * a BCS as postselector.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -446,7 +448,8 @@ public class GenotypeTest
   }
 
   /**
-   * Test that population size remains constant with default settings
+   * Test that population size remains constant with default settings.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -466,7 +469,8 @@ public class GenotypeTest
   }
 
   /**
-   * Test that population size grows with default settings overwritten
+   * Test that population size grows with default settings overwritten.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -489,6 +493,7 @@ public class GenotypeTest
   /**
    * Test that for new chromosomes (e.g. mutated ones) their fitness value
    * will be recomputed. Reveals bug 1368072.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -516,6 +521,7 @@ public class GenotypeTest
   /**
    * Test that for new chromosomes (e.g. mutated ones) their fitness value
    * will be recomputed. Reveals bug 1368072.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -542,6 +548,7 @@ public class GenotypeTest
    * Test that for new chromosomes (e.g. mutated ones) their fitness value
    * will only be recomputed if necessary. Special case in which bug 1368072
    * does not apply.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -600,6 +607,8 @@ public class GenotypeTest
   }
 
   /**
+   * Population is null.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -608,19 +617,13 @@ public class GenotypeTest
   public void testEvolve_6()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Add another NaturalSelector (others already exist within
-    // ConfigurationForTest)
-    BestChromosomesSelector bcs = new BestChromosomesSelector(conf);
-    bcs.setOriginalRate(1);
-    bcs.setDoubletteChromosomesAllowed(true);
-    config.addNaturalSelector(bcs, false);
     Genotype genotype = Genotype.randomInitialGenotype(config);
-    genotype.setConfiguration(null);
+    genotype.setPopulation(null);
     try {
       genotype.evolve();
       fail();
     }
-    catch (IllegalStateException iex) {
+    catch (NullPointerException iex) {
       ; // this is OK
     }
   }
@@ -879,7 +882,7 @@ public class GenotypeTest
     assertTrue(genotype.equals(genotype2));
     assertEquals(genotype.toString(), genotype2.toString());
     assertEquals(genotype.toString(), genotype2.toString());
-    assertFalse(genotype.equals(new Chromosome()));
+    assertFalse(genotype.equals(new Chromosome(conf)));
   }
 
   /**
@@ -1029,7 +1032,7 @@ public class GenotypeTest
     //Build identical Chromosomes
     for (Count = 0; Count < 3; Count++) {
       genes = new Gene[1];
-      genes[0] = new IntegerGene();
+      genes[0] = new IntegerGene(conf);
       Configuration.reset();
       Configuration conf = new DefaultConfiguration();
       chrom = new Chromosome(conf, genes);
