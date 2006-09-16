@@ -40,11 +40,11 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.65 $";
+  private final static String CVS_REVISION = "$Revision: 1.66 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
-   * System.setProperty(PROPERTY_JGAPFACTORY_CLASS,"myJGAPFactory");
+   * System.setProperty(PROPERTY_JGAPFACTORY_CLASS, "myJGAPFactory");
    * If none such property set, class JGAPFactory will be used.
    */
   public static final String PROPERTY_JGAPFACTORY_CLASS = "JGAPFACTORYCLASS";
@@ -271,15 +271,33 @@ public class Configuration
   private transient String threadKey;
 
   /**
+   * Unique ID for a configuration to distinguish it from other configurations
+   * instantiated within the same thread.
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  private String m_id;
+
+  public Configuration() {
+    this("", null);
+  }
+
+  /**
    * Initialize with default values.
+   *
+   * @param a_id unique id for the configuration within the current thread
+   * @param a_name informative name of the configuration, may be null
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public Configuration() {
+  public Configuration(String a_id, String a_name) {
+    m_id = a_id;
+    setName(a_name);
     Thread current = Thread.currentThread();
-    threadKey = current.toString() + "|";
+    threadKey = getThreadKey(current, m_id);
     m_preSelectors = new ChainOfSelectors();
     m_postSelectors = new ChainOfSelectors();
     m_sizeNaturalSelectorsPre = 0;
@@ -296,8 +314,7 @@ public class Configuration
     if (clazz != null && clazz.length() > 0) {
       try {
         m_factory = (IJGAPFactory) Class.forName(clazz).newInstance();
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         throw new RuntimeException("Class " + clazz
                                    + " could not be instantiated"
                                    + " as type IJGAPFactory");
@@ -308,6 +325,15 @@ public class Configuration
     }
   }
 
+  /**
+   * Constructs a configuration with an informative name but without a unique
+   * ID. This practically prevents more than one configurations to be
+   * instantiated within the same thread.
+   *
+   * @param a_name informative name of the configuration, may be null
+   *
+   * @author Klaus Meffert
+   */
   public Configuration(final String a_name) {
     this();
     setName(a_name);
@@ -332,7 +358,7 @@ public class Configuration
     // Set the configuration statically for constructing classes by the
     // default constructor.
     // ----------------------------------------------------------------
-    Genotype.setConfiguration(this);
+    Genotype.setStaticConfiguration(this);
     // Read in the config, thus creating instances of configurable classes
     // by invoking their default constructor.
     // -------------------------------------------------------------------
@@ -350,8 +376,11 @@ public class Configuration
    * @since 3.0
    */
   public static void reset() {
-    Thread current = Thread.currentThread();
-    String threadKey = current.toString() + "|";
+    reset("");
+  }
+
+  public static void reset(String a_id) {
+    String threadKey = getThreadKey(Thread.currentThread(), a_id);
     System.setProperty(threadKey + Configuration.PROPERTY_FITFUNC_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_BFITFNC_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_FITEVAL_INST, "");
@@ -367,8 +396,11 @@ public class Configuration
    * @since 3.0
    */
   public static void resetProperty(String a_propName) {
-    Thread current = Thread.currentThread();
-    String threadKey = current.toString() + "|";
+    resetProperty(a_propName, "");
+  }
+
+  public static void resetProperty(String a_propName, String a_id) {
+    String threadKey = getThreadKey(Thread.currentThread(), a_id);
     System.setProperty(threadKey + a_propName, "");
   }
 
@@ -456,10 +488,10 @@ public class Configuration
       System.setProperty(threadKey + a_propname, key);
     }
     else if (!instanceHash.equals(key)) {
-      throw new RuntimeException(a_errmsg+"\nMaybe "
-                                 +a_obj.getClass().getName()
-                                 +".hashCode() is not "
-                                 +"implemented accordingly.");
+      throw new RuntimeException(a_errmsg + "\nMaybe "
+                                 + a_obj.getClass().getName()
+                                 + ".hashCode() is not "
+                                 + "implemented accordingly.");
     }
   }
 
@@ -696,7 +728,7 @@ public class Configuration
    * @since 1.1
    */
   public ChainOfSelectors getNaturalSelectors(boolean
-                                              a_processBeforeGeneticOperators) {
+      a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
       return m_preSelectors;
     }
@@ -1261,7 +1293,7 @@ public class Configuration
     // -----------------
     result += "\n " + S_FITNESS_FUNCTION + ": ";
     if (getFitnessFunction() == null) {
-     result += "null";
+      result += "null";
     }
     else {
       result += getFitnessFunction().getClass().getName();
@@ -1270,7 +1302,7 @@ public class Configuration
     // ------------------
     result += "\n " + S_FITNESS_EVALUATOR + ": ";
     if (getFitnessEvaluator() == null) {
-     result += "null";
+      result += "null";
     }
     else {
       result += getFitnessEvaluator().getClass().getName();
@@ -1367,5 +1399,19 @@ public class Configuration
      * The number of chromosomes that will be stored in the Genotype.
      */
     int m_populationSize;
+  }
+
+  /**
+   * Builds a string considering the current thread and the given id
+   * @param current the current Thread
+   * @param a_id a hopefully unique id of the configuration
+   *
+   * @return string built up
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  protected static String getThreadKey(Thread current, String a_id) {
+    return current.toString() + "|" + a_id + "|";
   }
 }
