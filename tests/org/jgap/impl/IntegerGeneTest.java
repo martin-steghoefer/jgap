@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -36,66 +36,77 @@ public class IntegerGeneTest
     gene.setAllele(new Integer(101));
   }
 
-  public void testToString_0() throws Exception{
+  public void testToString_0()
+      throws Exception {
     Gene gene = new IntegerGene(conf, 1, 100);
     gene.setAllele(new Integer(47));
     assertEquals("IntegerGene(1,100)=47", gene.toString());
   }
 
-  public void testToString_1() throws Exception{
-    Gene gene = new IntegerGene(conf,  -2, 100);
+  public void testToString_1()
+      throws Exception {
+    Gene gene = new IntegerGene(conf, -2, 100);
     gene.setAllele(new Integer(99));
     assertEquals("IntegerGene(-2,100)=99", gene.toString());
   }
 
-  public void testGetAllele_0() throws Exception{
+  public void testGetAllele_0()
+      throws Exception {
     Gene gene = new IntegerGene(conf, 1, 100);
     gene.setAllele(new Integer(33));
     assertEquals(new Integer(33), gene.getAllele());
   }
 
-  public void testGetAllele_1() throws Exception{
+  public void testGetAllele_1()
+      throws Exception {
     Gene gene = new IntegerGene(conf, 1, 100);
     gene.setAllele(new Integer(1));
     assertEquals(new Integer(1), gene.getAllele());
   }
 
-  public void testGetAllele_2() throws Exception{
+  public void testGetAllele_2()
+      throws Exception {
     Gene gene = new IntegerGene(conf, 1, 100);
     gene.setAllele(new Integer(100));
     assertEquals(new Integer(100), gene.getAllele());
   }
 
-  public void testEquals_0() throws Exception{
+  public void testEquals_0()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     Gene gene2 = new IntegerGene(conf, 1, 100);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
   }
 
-  public void testEquals_1() throws Exception{
+  public void testEquals_1()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     assertFalse(gene1.equals(null));
   }
 
-  public void testEquals_2() throws Exception{
+  public void testEquals_2()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     assertFalse(gene1.equals(new BooleanGene(conf)));
   }
 
-  public void testEquals_3() throws Exception{
+  public void testEquals_3()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     assertFalse(gene1.equals(new Vector()));
   }
 
-  public void testEquals_4() throws Exception{
+  public void testEquals_4()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     Gene gene2 = new IntegerGene(conf, 1, 99);
     assertTrue(gene1.equals(gene2));
     assertTrue(gene2.equals(gene1));
   }
 
-  public void testEquals_5() throws Exception{
+  public void testEquals_5()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     Gene gene2 = new DoubleGene(conf, 1, 99);
     assertFalse(gene1.equals(gene2));
@@ -109,7 +120,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_6()throws Exception {
+  public void testEquals_6()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     Gene gene2 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(45));
@@ -125,7 +137,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_7() throws Exception{
+  public void testEquals_7()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(7));
     Gene gene2 = new IntegerGene2(conf, 1, 100);
@@ -141,7 +154,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_8() throws Exception{
+  public void testEquals_8()
+      throws Exception {
     BaseGene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(7));
     gene1.setApplicationData(new Integer(7));
@@ -161,7 +175,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_9() throws Exception{
+  public void testEquals_9()
+      throws Exception {
     BaseGene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(7));
     gene1.setApplicationData(new Integer(7));
@@ -181,7 +196,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_9_2() throws Exception{
+  public void testEquals_9_2()
+      throws Exception {
     BaseGene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(8));
     gene1.setApplicationData(new Integer(5));
@@ -219,7 +235,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testEquals_9_3()throws Exception {
+  public void testEquals_9_3()
+      throws Exception {
     BaseGene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(8));
     gene1.setApplicationData(new Integer(5));
@@ -232,20 +249,21 @@ public class IntegerGeneTest
     assertTrue(gene2.equals(gene1));
   }
 
-  public void testIntValue_0() throws Exception{
+  public void testIntValue_0()
+      throws Exception {
     IntegerGene gene1 = new IntegerGene(conf, 1, 10000);
     gene1.setAllele(new Integer(4711));
     assertEquals(4711, gene1.intValue());
   }
 
-  public void testIntValue_1() throws Exception{
+  public void testIntValue_1()
+      throws Exception {
     IntegerGene gene1 = new IntegerGene(conf, 1, 10000);
     gene1.setAllele(null);
     try {
       assertEquals(0, gene1.intValue());
       fail();
-    }
-    catch (NullPointerException nullex) {
+    } catch (NullPointerException nullex) {
       ; //this is OK
     }
   }
@@ -254,18 +272,19 @@ public class IntegerGeneTest
    * Set Allele to null, no exception should occur.
    * @throws Exception
    */
-  public void testSetAllele_0() throws Exception{
+  public void testSetAllele_0()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 10000);
     gene1.setAllele(null);
   }
 
-  public void testSetAllele_1()throws Exception {
+  public void testSetAllele_1()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 1, 10000);
     try {
       gene1.setAllele("22");
       fail();
-    }
-    catch (ClassCastException classex) {
+    } catch (ClassCastException classex) {
       ; //this is OK
     }
   }
@@ -286,7 +305,8 @@ public class IntegerGeneTest
     assertEquals(checker, gene2.getConstraintChecker());
   }
 
-  public void testCleanup() throws Exception{
+  public void testCleanup()
+      throws Exception {
     //cleanup should do nothing!
     Gene gene = new IntegerGene(conf, 1, 6);
     Gene copy = gene.newGene();
@@ -330,12 +350,12 @@ public class IntegerGeneTest
     IntegerGene gene1 = new IntegerGene(conf, 2, 753);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("2"
-                                               + IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER
-                                               + "3"
-                                               + IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER
-                                               + "4");
+        + IntegerGene.
+        PERSISTENT_FIELD_DELIMITER
+        + "3"
+        + IntegerGene.
+        PERSISTENT_FIELD_DELIMITER
+        + "4");
     assertEquals(2, ( (Integer) gene1.getAllele()).intValue());
     assertEquals(3, gene1.getLowerBounds());
     assertEquals(4, gene1.getUpperBounds());
@@ -352,14 +372,14 @@ public class IntegerGeneTest
     IntegerGene gene1 = new IntegerGene(conf, 2, 753);
     gene1.setAllele(new Integer(45));
     gene1.setValueFromPersistentRepresentation("null"
-                                               + IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER
-                                               + "-3"
-                                               + IntegerGene.
-                                               PERSISTENT_FIELD_DELIMITER
-                                               + "4");
+        + IntegerGene.
+        PERSISTENT_FIELD_DELIMITER
+        + "-3"
+        + IntegerGene.
+        PERSISTENT_FIELD_DELIMITER
+        + "4");
     assertNull(gene1.getAllele());
-    assertEquals(-3, gene1.getLowerBounds());
+    assertEquals( -3, gene1.getLowerBounds());
     assertEquals(4, gene1.getUpperBounds());
   }
 
@@ -369,20 +389,20 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentRepresentation_4() throws Exception{
+  public void testPersistentRepresentation_4()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 2, 753);
     gene1.setAllele(new Integer(45));
     try {
       gene1.setValueFromPersistentRepresentation("null"
-                                                 + IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER
-                                                 + "3.5"
-                                                 + IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER
-                                                 + "4");
+          + IntegerGene.
+          PERSISTENT_FIELD_DELIMITER
+          + "3.5"
+          + IntegerGene.
+          PERSISTENT_FIELD_DELIMITER
+          + "4");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -393,20 +413,20 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testPersistentRepresentation_5() throws Exception{
+  public void testPersistentRepresentation_5()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 2, 753);
     gene1.setAllele(new Integer(45));
     try {
       gene1.setValueFromPersistentRepresentation("null"
-                                                 + IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER
-                                                 + "3"
-                                                 + IntegerGene.
-                                                 PERSISTENT_FIELD_DELIMITER
-                                                 + "a");
+          + IntegerGene.
+          PERSISTENT_FIELD_DELIMITER
+          + "3"
+          + IntegerGene.
+          PERSISTENT_FIELD_DELIMITER
+          + "a");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -433,12 +453,13 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareToNative_0() throws Exception{
+  public void testCompareToNative_0()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(58));
     Gene gene2 = new IntegerGene(conf, 53, 67);
     gene2.setAllele(new Integer(59));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo( (Integer) gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -448,12 +469,13 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareToNative_1() throws Exception{
+  public void testCompareToNative_1()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(58));
     Gene gene2 = new IntegerGene(conf, 53, 67);
     gene2.setAllele(new Integer(58));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo( (Integer) gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -463,12 +485,13 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareToNative_2() throws Exception{
+  public void testCompareToNative_2()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(conf, 53, 67);
     gene2.setAllele(new Integer(58));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo( (Integer) gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -485,7 +508,7 @@ public class IntegerGeneTest
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(conf, 53, 67);
     gene2.setAllele(new Integer( -59));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo( (Integer) gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -502,7 +525,7 @@ public class IntegerGeneTest
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene(conf, 53, 67);
     gene2.setAllele(new Integer( -0));
-    assertEquals( ( (Integer) gene1.getAllele()).compareTo((Integer)gene2.
+    assertEquals( ( (Integer) gene1.getAllele()).compareTo( (Integer) gene2.
         getAllele()), gene1.compareTo(gene2));
   }
 
@@ -522,8 +545,7 @@ public class IntegerGeneTest
     try {
       gene1.compareTo(gene2);
       fail();
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       ; //this is OK
     }
   }
@@ -534,7 +556,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareTo_1() throws Exception{
+  public void testCompareTo_1()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(58));
     Gene gene2 = new IntegerGene(conf, 53, 67);
@@ -548,7 +571,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareTo_2() throws Exception{
+  public void testCompareTo_2()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(58));
     Gene gene2 = new IntegerGene(conf, 53, 67);
@@ -562,7 +586,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareTo_3() throws Exception{
+  public void testCompareTo_3()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(conf, 53, 67);
@@ -577,7 +602,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testCompareTo_4() throws Exception{
+  public void testCompareTo_4()
+      throws Exception {
     Gene gene1 = new IntegerGene(conf, 13, 65);
     Gene gene2 = new IntegerGene(conf, 53, 67);
     assertEquals(0, gene1.compareTo(gene2));
@@ -590,7 +616,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testApplyMutation_0() throws Exception{
+  public void testApplyMutation_0()
+      throws Exception {
     IntegerGene gene = new IntegerGene(conf, 0, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.0d);
@@ -678,7 +705,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testApplyMutation_6() throws Exception{
+  public void testApplyMutation_6()
+      throws Exception {
     IntegerGene gene = new IntegerGene(conf, 0, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -0.4d);
@@ -691,11 +719,12 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testApplyMutation_7() throws Exception{
+  public void testApplyMutation_7()
+      throws Exception {
     IntegerGene gene = new IntegerGene(conf, 0, 100);
     gene.setAllele(null);
     gene.applyMutation(0, 0.4d);
-    assertEquals(Math.round((100 * ( 0.4d))), gene.intValue());
+    assertEquals(Math.round( (100 * (0.4d))), gene.intValue());
   }
 
   /**
@@ -719,7 +748,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testSetToRandomValue_0() throws Exception{
+  public void testSetToRandomValue_0()
+      throws Exception {
     Gene gene = new IntegerGene(conf, 1, 6);
     gene.setAllele(new Integer(5));
     gene.setToRandomValue(new RandomGeneratorForTest(0.2d));
@@ -734,7 +764,7 @@ public class IntegerGeneTest
    */
   public void testSetToRandomValue_1()
       throws Exception {
-    Gene gene = new IntegerGene(conf,  -1, 7);
+    Gene gene = new IntegerGene(conf, -1, 7);
     gene.setAllele(new Integer(4));
     gene.setToRandomValue(new RandomGeneratorForTest(0.3d));
     assertEquals(new Integer( (int) (0.3d * (7 + 1) - 1)), gene.getAllele());
@@ -749,7 +779,7 @@ public class IntegerGeneTest
   public void testSetToRandomValue_2()
       throws Exception {
     Configuration conf = new ConfigurationForTest();
-    Gene gene = new IntegerGene(conf,  -2, -1);
+    Gene gene = new IntegerGene(conf, -2, -1);
     gene.setAllele(new Integer(4));
     gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
     assertEquals(new Integer( (int) (0.8d * ( -1 + 2) - 2)), gene.getAllele());
@@ -761,7 +791,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testSetToRandomValue_3() throws Exception{
+  public void testSetToRandomValue_3()
+      throws Exception {
     IntegerGene gene = new IntegerGene(conf, 0, 8);
     gene.setAllele(new Integer(5));
     gene.setToRandomValue(new RandomGeneratorForTest(4));
@@ -777,7 +808,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testSetToRandomValue_4() throws Exception{
+  public void testSetToRandomValue_4()
+      throws Exception {
     IntegerGene gene = new IntegerGene(conf, 1, 6);
     gene.setAllele(new Integer(2));
     gene.setToRandomValue(new RandomGeneratorForTest(3));
@@ -811,7 +843,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_0() throws Exception{
+  public void testSetEnergy_0()
+      throws Exception {
     BaseGene gene = new IntegerGene(conf);
     assertEquals(0.0, gene.getEnergy(), DELTA);
   }
@@ -822,7 +855,8 @@ public class IntegerGeneTest
    * @author Klaus Meffert
    * @since 2.4
    */
-  public void testSetEnergy_1() throws Exception{
+  public void testSetEnergy_1()
+      throws Exception {
     BaseGene gene = new IntegerGene(conf);
     gene.setEnergy(2.3);
     assertEquals(2.3, gene.getEnergy(), DELTA);
@@ -842,11 +876,14 @@ public class IntegerGeneTest
    */
   class IntegerGene2
       extends IntegerGene {
-    public IntegerGene2() throws InvalidConfigurationException {
-      super(Genotype.getConfiguration());
+    public IntegerGene2()
+        throws InvalidConfigurationException {
+      super(Genotype.getStaticConfiguration());
     }
 
-    public IntegerGene2(final Configuration a_conf, int a_lowerBounds, int a_upperBounds) throws InvalidConfigurationException{
+    public IntegerGene2(final Configuration a_conf, int a_lowerBounds,
+                        int a_upperBounds)
+        throws InvalidConfigurationException {
       super(a_conf, a_lowerBounds, a_upperBounds);
     }
   }
@@ -857,15 +894,15 @@ public class IntegerGeneTest
       return true;
     }
   }
-
   /**
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testGetBounds_0() throws Exception{
-    IntegerGene gene = new IntegerGene(conf, 2,5);
+  public void testGetBounds_0()
+      throws Exception {
+    IntegerGene gene = new IntegerGene(conf, 2, 5);
     assertEquals(2, gene.getLowerBounds());
     assertEquals(5, gene.getUpperBounds());
   }
