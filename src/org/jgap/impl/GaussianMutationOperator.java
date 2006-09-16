@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.19 $";
+  private static final String CVS_REVISION = "$Revision: 1.20 $";
 
   private double m_deviation;
 
@@ -40,7 +40,7 @@ public class GaussianMutationOperator
    */
   public GaussianMutationOperator()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**

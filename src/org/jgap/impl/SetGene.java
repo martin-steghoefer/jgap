@@ -28,7 +28,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -42,7 +42,7 @@ public class SetGene
    */
   public SetGene()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**

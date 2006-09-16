@@ -33,7 +33,7 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Container for valid alleles
@@ -62,7 +62,7 @@ public class MapGene
    */
   public MapGene()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**
@@ -219,7 +219,7 @@ public class MapGene
    */
   public void applyMutation(final int a_index, final double a_percentage) {
     RandomGenerator rn;
-    rn = Genotype.getConfiguration().getRandomGenerator();
+    rn = getConfiguration().getRandomGenerator();
     setToRandomValue(rn);
   }
 

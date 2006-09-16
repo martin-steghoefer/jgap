@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -51,7 +51,7 @@ public class ThresholdSelector
    * @since 2.6
    */
   public ThresholdSelector() {
-    this(Genotype.getConfiguration(), 0.3d);
+    this(Genotype.getStaticConfiguration(), 0.3d);
   }
 
   /**

@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private TournamentSelectorConfigurable m_config
       = new TournamentSelectorConfigurable();
@@ -46,7 +46,7 @@ public class TournamentSelector
    * @author Klaus Meffert
    */
   public TournamentSelector() {
-    super(Genotype.getConfiguration());
+    super(Genotype.getStaticConfiguration());
     init();
   }
 

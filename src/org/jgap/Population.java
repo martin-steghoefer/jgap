@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.48 $";
+  private static final String CVS_REVISION = "$Revision: 1.49 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -105,7 +105,7 @@ public class Population
    */
   public Population()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   public Configuration getConfiguration() {

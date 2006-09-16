@@ -41,7 +41,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   /**
    * This field separates gene class name from
@@ -83,7 +83,7 @@ public class CompositeGene
    */
   public CompositeGene()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**

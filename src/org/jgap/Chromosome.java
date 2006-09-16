@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.82 $";
+  private final static String CVS_REVISION = "$Revision: 1.83 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -133,7 +133,7 @@ public class Chromosome
    */
   public Chromosome()
       throws InvalidConfigurationException {
-    super(Genotype.getConfiguration());
+    super(Genotype.getStaticConfiguration());
   }
 
   /**

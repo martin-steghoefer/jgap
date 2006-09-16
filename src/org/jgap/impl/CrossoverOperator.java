@@ -34,7 +34,7 @@ public class CrossoverOperator
     extends BaseGeneticOperator
     implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -60,7 +60,7 @@ public class CrossoverOperator
    */
   public CrossoverOperator()
       throws InvalidConfigurationException {
-    super(Genotype.getConfiguration());
+    super(Genotype.getStaticConfiguration());
     //set the default crossoverRate to be populationsize/2
     m_crossoverRate = 2;
     setCrossoverRateCalc(null);

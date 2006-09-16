@@ -33,7 +33,7 @@ public class MutationOperator
     extends BaseGeneticOperator
     implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -60,7 +60,7 @@ public class MutationOperator
    */
   public MutationOperator()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**

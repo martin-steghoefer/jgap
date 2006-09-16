@@ -28,7 +28,7 @@ import org.jgap.*;
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -59,8 +59,8 @@ public class TwoWayMutationOperator
    */
   public TwoWayMutationOperator()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration(),
-         new DefaultMutationRateCalculator(Genotype.getConfiguration()));
+    this(Genotype.getStaticConfiguration(),
+         new DefaultMutationRateCalculator(Genotype.getStaticConfiguration()));
   }
 
   /**

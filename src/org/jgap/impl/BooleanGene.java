@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -61,7 +61,7 @@ public class BooleanGene
    */
   public BooleanGene()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**

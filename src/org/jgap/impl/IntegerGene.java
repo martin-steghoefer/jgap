@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.38 $";
+  private static final String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -57,7 +57,7 @@ public class IntegerGene
    * @since 1.0
    */
   public IntegerGene() throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**

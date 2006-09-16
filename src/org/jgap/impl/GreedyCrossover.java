@@ -57,7 +57,7 @@ import org.jgap.*;
 public class GreedyCrossover
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.25 $";
+  private static final String CVS_REVISION = "$Revision: 1.26 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -76,7 +76,7 @@ public class GreedyCrossover
    */
   public GreedyCrossover()
       throws InvalidConfigurationException {
-    super(Genotype.getConfiguration());
+    super(Genotype.getStaticConfiguration());
   }
 
   /**
