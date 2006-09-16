@@ -22,7 +22,7 @@ import org.jgap.event.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Starts the example.
@@ -65,7 +65,7 @@ public class SimpleExample {
           GENOTYPE_EVOLVED_EVENT, new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           Genotype genotype = (Genotype) a_firedEvent.getSource();
-          int evno = genotype.getActiveConfiguration().getGenerationNr();
+          int evno = genotype.getConfiguration().getGenerationNr();
           if (evno % 10 == 0) {
             double bestFitness = genotype.getFittestChromosome().
                 getFitnessValue();
