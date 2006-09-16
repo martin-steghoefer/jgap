@@ -6,6 +6,8 @@
   get/setConfiguration in class Genotype. They have been
   replaced by nonstatic ones and been reintroduced under
   different names get/setStaticConfiguration
+* Introduced unique ID to Configuration class to practically
+  allow multiple instanced within the same thread
 * Made FormulaFitnessFunction and TruthTable FitnessFunction
   cleaner
 * Removed synchronization blocks in BestChromosomesSelector
