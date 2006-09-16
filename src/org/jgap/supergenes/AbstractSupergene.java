@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * This field separates gene class name from
@@ -104,7 +104,7 @@ public abstract class AbstractSupergene
    */
   public AbstractSupergene()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration(), new Gene[]{});
+    this(Genotype.getStaticConfiguration(), new Gene[]{});
   }
 
   /**
