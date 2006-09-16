@@ -21,11 +21,16 @@ import org.jgap.impl.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
-   * Starts the example
-   * @param args ignored here
+   * Starts the example.
+   * @param args if optional first argument provided, it represents the number
+   * of bits to use, but no more than 32
+   *
+   * @author Neil Rotstan
+   * @author Klaus Meffert
+   * @since 2.0
    */
   public static void main(String[] args) {
     int numEvolutions = 500;
