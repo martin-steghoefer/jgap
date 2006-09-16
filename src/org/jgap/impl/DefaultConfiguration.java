@@ -27,8 +27,11 @@ import org.jgap.event.*;
 public class DefaultConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
+  public DefaultConfiguration() {
+    this("","");
+  }
   /**
    * Constructs a new DefaultConfiguration instance with a number of
    * configuration settings set to default values. It is still necessary
@@ -39,8 +42,8 @@ public class DefaultConfiguration
    * @author Klaus Meffert
    * @since 1.0
    */
-  public DefaultConfiguration() {
-    super();
+  public DefaultConfiguration(String a_id, String a_name) {
+    super(a_id, a_name);
     try {
       setRandomGenerator(new StockRandomGenerator());
       setEventManager(new EventManager());
