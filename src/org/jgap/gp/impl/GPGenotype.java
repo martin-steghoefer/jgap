@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -538,14 +538,14 @@ public class GPGenotype
   }
 
   /**
-   * Sample implementation of method to run GPGenotype as a thread.
+   * Default implementation of method to run GPGenotype as a thread.
    *
    * @author Klaus Meffert
    * @since 3.0
    */
   public void run() {
     try {
-      while (true) {
+      while (!Thread.currentThread().interrupted()) {
         evolve();
         calcFitness();
         // Pause between evolutions to avoid 100% CPU load.
