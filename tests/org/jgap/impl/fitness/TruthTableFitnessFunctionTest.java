@@ -22,7 +22,7 @@ import org.jgap.*;
 public class TruthTableFitnessFunctionTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TruthTableFitnessFunctionTest.class);
@@ -40,7 +40,7 @@ public class TruthTableFitnessFunctionTest
     Map inout = new HashMap();
     inout.put(new Double(2), new Double(3));
     inout.put(new Double(9), new Double(11));
-    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(7);
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(conf, 7);
     Map truthTable = new HashMap();
     truthTable.put(new Double(2), new Double(4));
     truthTable.put(new Double(8), new Double(1));
@@ -64,7 +64,7 @@ public class TruthTableFitnessFunctionTest
     truthTable.put(new Double(2), new Double(4));
     truthTable.put(new Double(8), new Double(1));
     truthTable.put(new Double(9), new Double(11));
-    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(7, truthTable);
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(conf, 7, truthTable);
     assertEquals(2.0d, fitfunc.calcFitness(inout), DELTA);
   }
 
@@ -81,12 +81,14 @@ public class TruthTableFitnessFunctionTest
      */
     private double m_evaluationValue;
 
-    public TruthTableFitnessFunctionImpl(double a_evaluationValue, Map a_values) {
-      super(a_values);
+    public TruthTableFitnessFunctionImpl(Configuration a_config,
+                                         double a_evaluationValue, Map a_values) {
+      super(a_config, a_values);
       m_evaluationValue = a_evaluationValue;
     }
 
-    public TruthTableFitnessFunctionImpl(double a_evaluationValue) {
+    public TruthTableFitnessFunctionImpl(Configuration a_config,double a_evaluationValue) {
+      super(a_config);
       m_evaluationValue = a_evaluationValue;
     }
 

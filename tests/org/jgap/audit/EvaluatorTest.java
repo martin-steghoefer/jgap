@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public void setUp() {
     super.setUp();
@@ -123,7 +123,7 @@ public class EvaluatorTest
     // run 1
     pop = new Population(conf);
     genes = new Gene[1];
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     genes[0] = gene;
     chrom = new Chromosome(conf, genes);
     chrom.setFitnessValue(7);
@@ -204,7 +204,7 @@ public class EvaluatorTest
     // run 1, permutation 0
     Population pop10 = new Population(conf);
     genes = new Gene[1];
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     genes[0] = gene;
     chrom = new Chromosome(conf, genes);
     chrom.setFitnessValue(7);
@@ -220,7 +220,7 @@ public class EvaluatorTest
     // run 0, permutation 1
     Population pop01 = new Population(conf);
     genes = new Gene[1];
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     genes[0] = gene;
     chrom = new Chromosome(conf, genes);
     chrom.setFitnessValue(4);
@@ -236,7 +236,7 @@ public class EvaluatorTest
     // run 1, permutation 1
     Population pop11 = new Population(conf);
     genes = new Gene[1];
-    gene = new BooleanGene();
+    gene = new BooleanGene(conf);
     genes[0] = gene;
     chrom = new Chromosome(conf, genes);
     chrom.setFitnessValue(14);
