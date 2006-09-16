@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -59,7 +59,7 @@ public class BestChromosomesSelector
    */
   public BestChromosomesSelector()
       throws InvalidConfigurationException {
-    this(Genotype.getConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**
@@ -93,7 +93,7 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  protected synchronized void add(final IChromosome a_chromosomeToAdd) {
+  protected void add(final IChromosome a_chromosomeToAdd) {
     // If opted-in: Check if chromosome already added
     // This speeds up the process by orders of magnitude but could lower the
     // quality of evolved results because of fewer Chromosome's used!!!
@@ -121,7 +121,7 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  public synchronized void select(final int a_howManyToSelect,
+  public void select(final int a_howManyToSelect,
                                   final Population a_from_pop,
                                   final Population a_to_pop) {
     if (a_from_pop != null) {
@@ -139,9 +139,11 @@ public class BestChromosomesSelector
       canBeSelected = a_howManyToSelect;
     }
     int neededSize = a_howManyToSelect;
-    if (m_config.m_originalRate < 1.0d) {
+    double origRate;
+    origRate = m_config.m_originalRate;
+    if (origRate < 1.0d) {
       canBeSelected = (int) Math.round( (double) canBeSelected *
-                                       m_config.m_originalRate);
+                                       origRate);
       if (canBeSelected < 1) {
         canBeSelected = 1;
       }
@@ -183,7 +185,7 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  public synchronized void empty() {
+  public void empty() {
     // clear the list of chromosomes
     // -----------------------------
     m_chromosomes.getChromosomes().clear();
