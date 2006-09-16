@@ -27,7 +27,7 @@ import org.jgap.*;
 public abstract class TruthTableFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Map m_truthTable;
 
@@ -39,29 +39,47 @@ public abstract class TruthTableFitnessFunction
 
   public static final int WORST = MAX_FITNESS / RELATION_FITNESS;
 
+  private Configuration m_conf;
+
   /**
-   * Constructor without registering a truth table. Use this constructor if the
-   * truth table is not fix over generations and needs to be set in method
-   * evaluate
+   * Only use for dynamic instantiation as configuration retrieved from static
+   * setting.
    *
    * @author Klaus Meffert
    * @since 2.4
    */
   public TruthTableFitnessFunction() {
+    this(Genotype.getStaticConfiguration());
   }
+
+  /**
+   * Constructor without registering a truth table. Use this constructor if the
+   * truth table is not fix over generations and needs to be set in method
+   * evaluate.
+   *
+   * @param a_conf the configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public TruthTableFitnessFunction(Configuration a_conf) {
+    m_conf = a_conf;
+  }
+
 
   /**
    * Constructor for registering a truth table. Use this constructor if the
    * truth table is fix over generations.
    *
+   * @param a_conf the configuration to use
    * @param a_truthTable table of input/output pairs for feeding the formula
    * and determining the fitness value thru delta computation
    *
    * @author Klaus Meffert
-   * @since 2.4
+   * @since 3.1
    */
-  public TruthTableFitnessFunction(final Map a_truthTable) {
-    this();
+  public TruthTableFitnessFunction(Configuration a_conf, final Map a_truthTable) {
+    this(a_conf);
     setTruthTable(a_truthTable);
   }
 
@@ -128,4 +146,13 @@ public abstract class TruthTableFitnessFunction
     return diffAbs;
   }
 
+  /**
+   * @return the Configuration object set
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public Configuration getConfiguration() {
+    return m_conf;
+  }
 }
