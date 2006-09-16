@@ -28,15 +28,17 @@ import org.jgap.event.*;
  * @since 1.0
  */
 public class Genotype
-    implements Serializable {
+    implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.85 $";
+  private final static String CVS_REVISION = "$Revision: 1.86 $";
 
   /**
    * The current Configuration instance.
    * @since 1.0
    */
-  private transient static Configuration m_activeConfiguration;
+  private transient Configuration m_activeConfiguration;
+
+  private transient static Configuration m_staticConfiguration;
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -105,11 +107,11 @@ public class Genotype
       }
     }
     m_population = a_population;
-    setConfiguration(a_configuration);
     // Lock the settings of the configuration object so that it cannot
     // be altered.
     // ---------------------------------------------------------------
-    getConfiguration().lockSettings();
+    a_configuration.lockSettings();
+    m_activeConfiguration = a_configuration;
   }
 
   /**
@@ -218,9 +220,9 @@ public class Genotype
    * @since 1.0
    */
   public synchronized void evolve() {
-    if (getConfiguration() == null) {
+    if (m_activeConfiguration == null) {
       throw new IllegalStateException(
-          "The active Configuration object must be set on this"
+          "The Configuration object must be set on this"
           + " Genotype prior to evolution.");
     }
     // Adjust population size to configured size (if wanted).
@@ -234,7 +236,7 @@ public class Genotype
     // ------------------------------------------------------------------
     if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
       keepPopSizeConstant(getPopulation(),
-                          getConfiguration().getPopulationSize());
+                          m_activeConfiguration.getPopulationSize());
     }
     // Apply certain NaturalSelectors before GeneticOperators will be applied.
     // -----------------------------------------------------------------------
@@ -248,7 +250,7 @@ public class Genotype
     // FitnessFunction.NO_FITNESS_VALUE. But who knows which
     // Chromosome implementation is used...
     // --------------------------------------------------------
-    int originalPopSize = getConfiguration().getPopulationSize();
+    int originalPopSize = m_activeConfiguration.getPopulationSize();
     int currentPopSize = getPopulation().size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
       IChromosome chrom = getPopulation().getChromosome(i);
@@ -260,7 +262,7 @@ public class Genotype
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction =
-        getConfiguration().getBulkFitnessFunction();
+        m_activeConfiguration.getBulkFitnessFunction();
     if (bulkFunction != null) {
       bulkFunction.evaluate(getPopulation());
     }
@@ -268,7 +270,7 @@ public class Genotype
     // of original size.
     // ----------------------------------------------------------------------
     if (m_activeConfiguration.getMinimumPopSizePercent() > 0) {
-      int sizeWanted = getConfiguration().getPopulationSize();
+      int sizeWanted = m_activeConfiguration.getPopulationSize();
       int popSize;
       int minSize = (int) Math.round(sizeWanted *
                                      (double) getConfiguration().
@@ -279,7 +281,7 @@ public class Genotype
         IChromosome newChrom;
         try {
           while (getPopulation().size() < minSize) {
-            newChrom = Chromosome.randomInitialChromosome(getConfiguration());
+            newChrom = Chromosome.randomInitialChromosome(m_activeConfiguration);
             getPopulation().addChromosome(newChrom);
           }
         }
@@ -288,13 +290,13 @@ public class Genotype
         }
       }
     }
-    if (getConfiguration().isPreserveFittestIndividual()) {
+    if (m_activeConfiguration.isPreserveFittestIndividual()) {
       IChromosome fittest = getFittestChromosome(0,
-                                                 getConfiguration().
+                                                 m_activeConfiguration.
                                                  getPopulationSize() - 1);
       if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
         keepPopSizeConstant(getPopulation(),
-                            getConfiguration().getPopulationSize());
+                            m_activeConfiguration.getPopulationSize());
       }
       // Determine the fittest chromosome in the population.
       // ---------------------------------------------------
@@ -306,10 +308,10 @@ public class Genotype
     }
     // Increase number of generation.
     // ------------------------------
-    getConfiguration().incrementGenerationNr();
+    m_activeConfiguration.incrementGenerationNr();
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
-    getConfiguration().getEventManager().fireGeneticEvent(
+    m_activeConfiguration.getEventManager().fireGeneticEvent(
         new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
   }
 
@@ -362,7 +364,7 @@ public class Genotype
    * the sample Chromosome in the Configuration object, but the gene values
    * (alleles) will be set to random legal values.
    *
-   * @param a_activeConfiguration the current active Configuration object
+   * @param a_configuration the current active Configuration object
    * @return a newly constructed Genotype instance
    *
    * @throws IllegalArgumentException if the given Configuration object is null
@@ -374,13 +376,13 @@ public class Genotype
    * @since 2.3
    */
   public static Genotype randomInitialGenotype(Configuration
-                                               a_activeConfiguration)
+                                               a_configuration)
       throws InvalidConfigurationException {
-    if (a_activeConfiguration == null) {
+    if (a_configuration == null) {
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
     }
-    a_activeConfiguration.lockSettings();
+    a_configuration.lockSettings();
     // Create an array of chromosomes equal to the desired size in the
     // active Configuration and then populate that array with Chromosome
     // instances constructed according to the setup in the sample
@@ -388,15 +390,15 @@ public class Genotype
     // class randomInitialChromosome() method will take care of that for
     // us.
     // ------------------------------------------------------------------
-    int populationSize = a_activeConfiguration.getPopulationSize();
-    IChromosome sampleChrom = a_activeConfiguration.getSampleChromosome();
-    IInitializer chromIniter = a_activeConfiguration.getJGAPFactory().
+    int populationSize = a_configuration.getPopulationSize();
+    IChromosome sampleChrom = a_configuration.getSampleChromosome();
+    IInitializer chromIniter = a_configuration.getJGAPFactory().
         getInitializerFor(sampleChrom, sampleChrom.getClass());
     if (chromIniter == null) {
       throw new InvalidConfigurationException("No initializer found for class "
                                               + sampleChrom.getClass());
     }
-    Population pop = new Population(a_activeConfiguration, populationSize);
+    Population pop = new Population(a_configuration, populationSize);
     // Do randomized initialization.
     // -----------------------------
     try {
@@ -408,7 +410,7 @@ public class Genotype
     catch (Exception ex) {
       throw new IllegalStateException(ex.getMessage());
     }
-    return new Genotype(a_activeConfiguration, pop);
+    return new Genotype(a_configuration, pop);
   }
 
   /**
@@ -509,7 +511,7 @@ public class Genotype
           // ------------------------------
           selector.empty();
         }
-        setPopulation(new Population(getConfiguration()));
+        setPopulation(new Population(m_activeConfiguration));
         getPopulation().addChromosomes(m_new_population);
       }
     }
@@ -526,7 +528,7 @@ public class Genotype
    * @since 3.0
    */
   public void applyGeneticOperators() {
-    List geneticOperators = getConfiguration().getGeneticOperators();
+    List geneticOperators = m_activeConfiguration.getGeneticOperators();
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
@@ -545,8 +547,8 @@ public class Genotype
    * @author Klaus Meffert
    * @since 2.0 (?)
    */
-  public static Configuration getConfiguration() {
-    return m_activeConfiguration;
+  public static Configuration getStaticConfiguration() {
+    return m_staticConfiguration;
   }
 
   /**
@@ -556,8 +558,12 @@ public class Genotype
    * @author Klaus Meffert
    * @since 2.0 (?)
    */
-  public static void setConfiguration(Configuration a_configuration) {
-    m_activeConfiguration = a_configuration;
+  public static void setStaticConfiguration(Configuration a_configuration) {
+    m_staticConfiguration = a_configuration;
+  }
+
+  public Configuration getConfiguration() {
+    return m_activeConfiguration;
   }
 
   /***
@@ -635,4 +641,18 @@ public class Genotype
       popSize--;
     }
   }
-}
+  /**
+   * If used with a Thread: runs the evolution forever.
+   * You have to implement a listener to stop computation sometime. See
+   * examples.simpleBooleanThreaded for a possible implementation of such a
+   * listener.
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public void run() {
+    while (!Thread.currentThread().interrupted()) {
+      evolve();
+    }
+  }
+  }
