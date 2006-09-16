@@ -21,7 +21,7 @@ import org.jgap.*;
 public class MinimizingMakeChangeFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private final int m_targetAmount;
 
@@ -52,7 +52,7 @@ public class MinimizingMakeChangeFitnessFunction
     // fitness values higher (e.g.DefaultFitnessEvaluator). Or it could weight
     // lower fitness values higher, because the fitness value is seen as a
     // defect rate (e.g. DeltaFitnessEvaluator)
-    boolean defaultComparation = Genotype.getConfiguration().
+    boolean defaultComparation = a_subject.getConfiguration().
         getFitnessEvaluator().isFitter(2, 1);
 
     // The fitness value measures both how close the value is to the

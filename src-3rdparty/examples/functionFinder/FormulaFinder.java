@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -141,7 +141,7 @@ public class FormulaFinder {
     Repository.apply(truthTable);
     // Fitness function.
     // -----------------
-    FormulaFitnessFunction myFunc = new FormulaFitnessFunction(truthTable);
+    FormulaFitnessFunction myFunc = new FormulaFitnessFunction(conf, truthTable);
     conf.setFitnessFunction(myFunc);
     int maxTerms = MAX_ALLOWED_TERMS;
     // Maximum number of alleles needed for a "term gene" is the maximum

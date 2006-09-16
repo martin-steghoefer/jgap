@@ -23,7 +23,7 @@ import org.jgap.impl.*;
  */
 public class DynamicMutationExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -194,7 +194,7 @@ public class DynamicMutationExample {
 
     public int calculateCurrentRate() {
       int size;
-      size = 15; //Genotype.getConfiguration().getChromosomeSize();
+      size = 15;
       if (size < 1) {
         size = 1;
       }
@@ -203,7 +203,7 @@ public class DynamicMutationExample {
 
     public boolean toBePermutated(IChromosome a_chrom, int a_geneIndex) {
       RandomGenerator generator
-          = Genotype.getConfiguration().getRandomGenerator();
+          = a_chrom.getConfiguration().getRandomGenerator();
       double mult = 0.0d;
       switch (a_geneIndex) {
         case 0:

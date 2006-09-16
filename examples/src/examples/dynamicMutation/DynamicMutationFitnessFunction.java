@@ -20,7 +20,7 @@ import org.jgap.*;
 public class DynamicMutationFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final int m_targetAmount;
 
@@ -51,7 +51,7 @@ public class DynamicMutationFitnessFunction
     // fitness values higher (e.g.DefaultFitnessEvaluator). Or it could weight
     // lower fitness values higher, because the fitness value is seen as a
     // defect rate (e.g. DeltaFitnessEvaluator)
-    boolean defaultComparation = Genotype.getConfiguration().
+    boolean defaultComparation = a_subject.getConfiguration().
         getFitnessEvaluator().isFitter(2, 1);
 
     // The fitness value measures both how close the value is to the

@@ -21,7 +21,7 @@ import org.jgap.*;
 public class CoinsEnergyFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final int m_targetAmount;
 
@@ -82,7 +82,7 @@ public class CoinsEnergyFitnessFunction
     // value.
     double totalWeight = getTotalWeight(a_subject);
     if (totalWeight > m_maxWeight) {
-      if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+      if (a_subject.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
         return 1.0d;
       }
       else {
@@ -90,7 +90,7 @@ public class CoinsEnergyFitnessFunction
       }
     }
 
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+    if (a_subject.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
       fitness = MAX_BOUND;
     }
     else {
@@ -100,7 +100,7 @@ public class CoinsEnergyFitnessFunction
     // Step 2: Determine distance of amount represented by solution from
     // the target amount.
     // -----------------------------------------------------------------
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+    if (a_subject.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
       fitness -= changeDifferenceBonus(MAX_BOUND/3, changeDifference);
     }
     else {
@@ -113,7 +113,7 @@ public class CoinsEnergyFitnessFunction
     // And inversely the smaller number of coins in the solution the higher
     // the resulting fitness value.
     // -----------------------------------------------------------------------
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+    if (a_subject.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
       fitness -= computeCoinNumberPenalty(MAX_BOUND/3, totalCoins);
     }
     else {
@@ -122,7 +122,7 @@ public class CoinsEnergyFitnessFunction
 
     // Step 4: Penalize higher weight (= engery) values.
     // -------------------------------------------------
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+    if (a_subject.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
       fitness -= computeWeightPenalty(MAX_BOUND/3, totalWeight);
     }
     else {

@@ -25,7 +25,7 @@ import java.io.*;
 public class FormulaFitnessFunction
     extends TruthTableFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 /**@todo swap out general parts into JGAP core*/
   private static Syntax m_syntax;
 
@@ -51,8 +51,8 @@ public class FormulaFitnessFunction
    * @author Klaus Meffert
    * @since 2.4
    */
-  public FormulaFitnessFunction(Map a_truthTable) {
-    super(a_truthTable);
+  public FormulaFitnessFunction(Configuration a_config, Map a_truthTable) {
+    super(a_config, a_truthTable);
     m_syntax = new JavaSyntax();
     m_parser = new ExpressionParser(m_syntax, null);
     Repository.init();
@@ -127,11 +127,11 @@ public class FormulaFitnessFunction
     else {
       result = bestFitness() - a_input * RELATION_FITNESS;
     }
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(result,
+    if (getConfiguration().getFitnessEvaluator().isFitter(result,
         bestFitness())) {
       result = bestFitness();
     }
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(
+    if (getConfiguration().getFitnessEvaluator().isFitter(
       worstFitness(), result)) {
       // Input too bad --> ignore
       result = worstFitness();
@@ -142,8 +142,6 @@ public class FormulaFitnessFunction
   public static void main(String[] args)
       throws Exception {
     Configuration conf = new DefaultConfiguration();
-//    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
-    Genotype.setConfiguration(conf);
     File f;
     if (args.length == 0) {
       f = new File("simpleFormula.properties");
@@ -171,12 +169,12 @@ public class FormulaFitnessFunction
       float outputValue = Float.parseFloat(outS);
       truthTable.put(new Double(inputValue), new Double(outputValue));
     }
-    FormulaFitnessFunction ff = new FormulaFitnessFunction(truthTable);
+    FormulaFitnessFunction ff = new FormulaFitnessFunction(conf, truthTable);
     System.err.println(ff.calcFitness("F(X)=X*Math.PI*2"));
   }
 
   public double worstFitness() {
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(1, 2)) {
+    if (getConfiguration().getFitnessEvaluator().isFitter(1, 2)) {
       return MAX_FITNESS;
     }
     else {
@@ -185,7 +183,7 @@ public class FormulaFitnessFunction
   }
 
   public double bestFitness() {
-    if (Genotype.getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
+    if (getConfiguration().getFitnessEvaluator().isFitter(2, 1)) {
       return MAX_FITNESS;
     }
     else {
