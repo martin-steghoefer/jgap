@@ -10,11 +10,12 @@
 package org.jgap.impl;
 
 import java.util.*;
+import java.io.*;
 
 import org.jgap.*;
 
 /**
- * Cauchy probability density function (cumulative distribution function)
+ * Cauchy probability density function (cumulative distribution function).
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +23,7 @@ import org.jgap.*;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private double m_scale;
 
@@ -31,6 +32,8 @@ public class CauchyRandomGenerator
   private Random m_rn;
 
   /**
+   * Defaults to location = 0.0 and scale = 1.0.
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
@@ -39,8 +42,8 @@ public class CauchyRandomGenerator
   }
 
   /**
-   * @param a_location double
-   * @param a_scale double
+   * @param a_location cauchy parameter
+   * @param a_scale cauchy parameter
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -99,5 +102,24 @@ public class CauchyRandomGenerator
    */
   public double getCauchyStandardDeviation() {
     return m_scale;
+  }
+
+  /**
+   * When deserializing, initialize the seed because otherwise we could get
+   * duplicate evolution results when doing distributed computing!
+   *
+   * @param a_inputStream the ObjectInputStream provided for deserialzation
+   *
+   * @throws IOException
+   * @throws ClassNotFoundException
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  private void readObject(ObjectInputStream a_inputStream)
+      throws IOException, ClassNotFoundException {
+    //always perform the default de-serialization first
+    a_inputStream.defaultReadObject();
+    m_rn.setSeed(System.currentTimeMillis());
   }
 }

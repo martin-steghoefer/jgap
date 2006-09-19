@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.io.*;
 import java.util.*;
 
 import org.jgap.*;
@@ -19,11 +20,31 @@ import org.jgap.*;
  * No actual code is provided here.
  *
  * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 1.0
  */
 public class StockRandomGenerator
     extends Random
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  /**
+   * When deserializing, initialize the seed because otherwise we could get
+   * duplicate evolution results when doing distributed computing!
+   *
+   * @param a_inputStream the ObjectInputStream provided for deserialzation
+   *
+   * @throws IOException
+   * @throws ClassNotFoundException
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  private void readObject(ObjectInputStream a_inputStream)
+      throws IOException, ClassNotFoundException {
+    //always perform the default de-serialization first
+    a_inputStream.defaultReadObject();
+    setSeed(System.currentTimeMillis());
+  }
 }
