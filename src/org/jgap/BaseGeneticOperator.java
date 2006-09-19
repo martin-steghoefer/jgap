@@ -20,9 +20,9 @@ import java.util.*;
 public abstract class BaseGeneticOperator
     implements GeneticOperator, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private transient Configuration m_configuration;
+  private /*transient*/ Configuration m_configuration;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
