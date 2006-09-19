@@ -1,7 +1,8 @@
 3.01
 -----------------------------------------------------------
+* Made RandomGenerator serializable
 * Enhanced deserialization of Configuration and 
-  StockRandomGenerator
+  StockRandomGenerator (and other random generators)
 * Added example for grid computing
 * Added example for multithreaded evolution
 * Improved architecture regarding the configuration object,
