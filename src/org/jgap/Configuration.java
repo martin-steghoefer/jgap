@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.66 $";
+  private final static String CVS_REVISION = "$Revision: 1.67 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -296,8 +296,7 @@ public class Configuration
   public Configuration(String a_id, String a_name) {
     m_id = a_id;
     setName(a_name);
-    Thread current = Thread.currentThread();
-    threadKey = getThreadKey(current, m_id);
+    makeThreadKey();
     m_preSelectors = new ChainOfSelectors();
     m_postSelectors = new ChainOfSelectors();
     m_sizeNaturalSelectorsPre = 0;
@@ -470,7 +469,7 @@ public class Configuration
   }
 
   /**
-   * Verifies that a property is not set. If not, set it, otherwise throw
+   * Verifies that a property is not set. If not set, set it, otherwise throw
    * a RuntimeException with a_errmsg as text.
    * @param a_propname the property to check (the current thread will be
    * considered as a part of the property's name, too)
@@ -1414,4 +1413,38 @@ public class Configuration
   protected static String getThreadKey(Thread current, String a_id) {
     return current.toString() + "|" + a_id + "|";
   }
+
+  /**
+   * @param a_factory the IJGAPFactory to use
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public void setJGAPFactory(IJGAPFactory a_factory) {
+    m_factory = a_factory;
+  }
+
+  private void makeThreadKey() {
+    Thread current = Thread.currentThread();
+    threadKey = getThreadKey(current, m_id);
+  }
+
+ /**
+  * Deserialize the object.
+  *
+  * @param a_inputStream the ObjectInputStream provided for deserialzation
+  * @throws ClassNotFoundException
+  * @throws IOException
+  *
+  * @author Klaus Meffert
+  * @since 3.01
+  */
+ private void readObject(ObjectInputStream a_inputStream)
+      throws ClassNotFoundException, IOException {
+    //always perform the default de-serialization first
+    a_inputStream.defaultReadObject();
+
+    makeThreadKey();
+  }
+
 }
