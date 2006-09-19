@@ -1,5 +1,8 @@
 3.01
 -----------------------------------------------------------
+* Enhanced deserialization of Configuration and 
+  StockRandomGenerator
+* Added example for grid computing
 * Added example for multithreaded evolution
 * Improved architecture regarding the configuration object,
   especially the previously static methods
