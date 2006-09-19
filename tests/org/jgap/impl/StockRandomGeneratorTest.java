@@ -11,9 +11,10 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import junit.framework.*;
+import sun.misc.*;
 
 /**
- * Tests for StockRandomGenerator class
+ * Tests the StockRandomGenerator class.
  *
  * @author Klaus Meffert
  * @since 2.2
@@ -21,7 +22,7 @@ import junit.framework.*;
 public class StockRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StockRandomGeneratorTest.class);
@@ -30,6 +31,9 @@ public class StockRandomGeneratorTest
 
   /**
    * Check if construction and calculation in general possible
+   *
+   * @author Klaus Meffert
+   * @since 2.2
    */
   public void testGeneral() {
     StockRandomGenerator calc = new StockRandomGenerator();
@@ -43,6 +47,7 @@ public class StockRandomGeneratorTest
 
   /**
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testConstruct_0() {
     StockRandomGenerator calc = new StockRandomGenerator();
@@ -63,6 +68,7 @@ public class StockRandomGeneratorTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testNextInt_0()
       throws Exception {
@@ -80,6 +86,7 @@ public class StockRandomGeneratorTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testNextInt_1()
       throws Exception {
@@ -104,6 +111,7 @@ public class StockRandomGeneratorTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testNextInt_2()
       throws Exception {
@@ -129,6 +137,7 @@ public class StockRandomGeneratorTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testNextLong_0()
       throws Exception {
@@ -153,6 +162,7 @@ public class StockRandomGeneratorTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testNextDouble_0()
       throws Exception {
@@ -178,6 +188,7 @@ public class StockRandomGeneratorTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 2.2
    */
   public void testNextFloat_0()
       throws Exception {
@@ -224,5 +235,23 @@ public class StockRandomGeneratorTest
     }
     assertTrue(trueCounter > total * 0.1);
     assertTrue(falseCounter > total * 0.1);
+  }
+
+  /**
+   * Tests serializability capabilities.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public void testSerialize_0() throws Exception {
+    StockRandomGenerator srg = new StockRandomGenerator();
+    AtomicLong seed1 = (AtomicLong)privateAccessor.getField(srg,"seed");
+    long curr = System.currentTimeMillis();
+    while (curr == System.currentTimeMillis());
+    StockRandomGenerator srg2 = (StockRandomGenerator)doSerialize(srg);
+    AtomicLong seed2 = (AtomicLong)privateAccessor.getField(srg2,"seed");
+    assertFalse(seed1.get() == seed2.get());
   }
 }

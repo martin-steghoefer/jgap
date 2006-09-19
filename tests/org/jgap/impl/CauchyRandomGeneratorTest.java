@@ -9,11 +9,13 @@
  */
 package org.jgap.impl;
 
+import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
+import sun.misc.*;
 
 /**
- * Tests for CauchyRandomGenerator class
+ * Tests the CauchyRandomGenerator class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -21,7 +23,7 @@ import junit.framework.*;
 public class CauchyRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);
@@ -29,7 +31,8 @@ public class CauchyRandomGeneratorTest
   }
 
   /**
-   * Check if construction and calculation in general possible
+   * Check if construction and calculation possible in general.
+   *
    * @author Klaus Meffert
    */
   public void testGeneral() {
@@ -44,6 +47,7 @@ public class CauchyRandomGeneratorTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testNextCauchy_0()
@@ -74,5 +78,25 @@ public class CauchyRandomGeneratorTest
     assertTrue(i < 2 && i >= 0);
     i = calc.nextInt(1);
     assertEquals(0, i);
+  }
+
+  /**
+   * Tests serializability capabilities.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public void testSerialize_0() throws Exception {
+    CauchyRandomGenerator srg = new CauchyRandomGenerator();
+    Random r1 = (Random)privateAccessor.getField(srg,"m_rn");
+    AtomicLong seed1 = (AtomicLong)privateAccessor.getField(r1,"seed");
+    long curr = System.currentTimeMillis();
+    while (curr == System.currentTimeMillis());
+    CauchyRandomGenerator srg2 = (CauchyRandomGenerator)doSerialize(srg);
+    Random r2 = (Random)privateAccessor.getField(srg2,"m_rn");
+    AtomicLong seed2 = (AtomicLong)privateAccessor.getField(r2,"seed");
+    assertFalse(seed1.get() == seed2.get());
   }
 }
