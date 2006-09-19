@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.83 $";
+  private final static String CVS_REVISION = "$Revision: 1.84 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -334,9 +334,6 @@ public class Chromosome
         int size = size();
         if (size > 0) {
           Gene[] copyOfGenes = new Gene[size];
-//    if (m_genes.length == 0 || copyOfGenes.length == 0) {
-//      throw new IllegalArgumentException("Genes length = 0!");
-//    }
           for (int i = 0; i < copyOfGenes.length; i++) {
             copyOfGenes[i] = m_genes[i].newGene();
             copyOfGenes[i].setAllele(m_genes[i].getAllele());
@@ -344,6 +341,7 @@ public class Chromosome
           // Now construct a new Chromosome with the copies of the genes and
           // return it. Also clone the IApplicationData object.
           // ---------------------------------------------------------------
+          /**@todo clone Config!*/
           copy = new Chromosome(getConfiguration(), copyOfGenes);
         }
         else {
