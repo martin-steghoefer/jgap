@@ -9,6 +9,8 @@
  */
 package org.jgap;
 
+import java.io.*;
+
 /**
  * The RandomGenerator interface provides an abstraction for the random
  * number implementation so that more rigorous or alternative implementations
@@ -21,9 +23,10 @@ package org.jgap;
  * @author Klaus Meffert
  * @since 1.0
  */
-public interface RandomGenerator {
+public interface RandomGenerator
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Returns the next pseudorandom, uniformly distributed int value
