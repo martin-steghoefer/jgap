@@ -30,10 +30,9 @@ import org.jgap.data.config.*;
  * @since 1.0
  */
 public class MutationOperator
-    extends BaseGeneticOperator
-    implements Configurable {
+    extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -209,8 +208,8 @@ public class MutationOperator
             genes = copyOfChromosome.getGenes();
           }
           // Process all atomic elements in the gene. For a StringGene this
-          // would be the length of the string, for an IntegerGene, it is
-          // always one element.
+          // would be as many elements as the string is long , for an
+          // IntegerGene, it is always one element.
           // --------------------------------------------------------------
           if (genes[j] instanceof ICompositeGene) {
             ICompositeGene compositeGene = (ICompositeGene) genes[j];
@@ -286,8 +285,7 @@ public class MutationOperator
   public boolean equals(final Object a_other) {
     try {
       return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
