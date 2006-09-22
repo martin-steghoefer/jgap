@@ -1,13 +1,13 @@
 The first example provided included with JGAP consists of two classes.
-They are both located in package "examples".
+These classes are both located in package "examples".
 
-Main class is MinimizingMakeChange.class
+Main class is MinimizingMakeChange.
 
 Just start this class with a parameter between 1 and 99
-which indicates a sum to be reached by summing together
-a given number of coins with different values.
+which indicates a sum to be reached by adding
+a the different values of a given number of coins.
 
-Example for starting the example:
+You could start the example with this command:
 
 java -classpath ".;jgap-examples.jar;jgap.jar" examples.MinimizingMakeChange 89
 
@@ -15,9 +15,7 @@ or use (for Windows) the batch file start_example.bat
 
 Also see the JGAP homepage at
 http://jgap.sourceforge.net
-for details about the example.
-
-Especially read the documentation on the page!
+for details about the mentioned example.
 
 Another, more easy eaxmple is located in class example.simpleBoolean.SimpleExample.
 You can start it without parameters:
@@ -25,7 +23,7 @@ You can start it without parameters:
 java -classpath ".;jgap-examples.jar;jgap.jar" examples.simpleBoolean.SimpleExample
 
 
-For further examples, examine all classes under package "examples".
+For further demo implementations, examine all classes under package "examples".
 
 Klaus Meffert, 2006-01-01
 klausikm@users.sourceforge.net
