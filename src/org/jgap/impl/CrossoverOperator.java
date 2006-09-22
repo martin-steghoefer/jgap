@@ -31,10 +31,9 @@ import org.jgap.*;
  * @since 1.0
  */
 public class CrossoverOperator
-    extends BaseGeneticOperator
-    implements Comparable {
+    extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -177,47 +176,54 @@ public class CrossoverOperator
       // ----------------------
       IChromosome firstMate = (IChromosome) chrom1.clone();
       IChromosome secondMate = (IChromosome) chrom2.clone();
-      Gene[] firstGenes = firstMate.getGenes();
-      Gene[] secondGenes = secondMate.getGenes();
-      int locus = generator.nextInt(firstGenes.length);
-      // Swap the genes.
-      // ---------------
-      Gene gene1;
-      Gene gene2;
-      Object firstAllele;
-      for (int j = locus; j < firstGenes.length; j++) {
-        // Make a distinction for ICompositeGene for the first gene.
-        // -------------------------------------------------------
-        if (firstGenes[j] instanceof ICompositeGene) {
-          // Randomly determine gene to be considered.
-          // -----------------------------------------
-          index1 = generator.nextInt(firstGenes[j].size());
-          gene1 = ( (ICompositeGene) firstGenes[j]).geneAt(index1);
-        }
-        else {
-          gene1 = firstGenes[j];
-        }
-        // Make a distinction for CompositeGene for the second gene.
-        // --------------------------------------------------------
-        if (secondGenes[j] instanceof ICompositeGene) {
-          //randomly determine gene to be considered
-          index2 = generator.nextInt(secondGenes[j].size());
-          gene2 = ( (ICompositeGene) secondGenes[j]).geneAt(index2);
-        }
-        else {
-          gene2 = secondGenes[j];
-        }
-        firstAllele = gene1.getAllele();
-        gene1.setAllele(gene2.getAllele());
-        gene2.setAllele(firstAllele);
-      }
-      // Add the modified chromosomes to the candidate pool so that
-      // they'll be considered for natural selection during the next
-      // phase of evolution.
-      // -----------------------------------------------------------
-      a_candidateChromosomes.add(firstMate);
-      a_candidateChromosomes.add(secondMate);
+      doCrossover(firstMate, secondMate, a_candidateChromosomes, generator);
     }
+  }
+
+  private void doCrossover(IChromosome firstMate, IChromosome secondMate,
+                           List a_candidateChromosomes,
+                           RandomGenerator generator) {
+    Gene[] firstGenes = firstMate.getGenes();
+    Gene[] secondGenes = secondMate.getGenes();
+    int locus = generator.nextInt(firstGenes.length);
+    // Swap the genes.
+    // ---------------
+    Gene gene1;
+    Gene gene2;
+    Object firstAllele;
+    for (int j = locus; j < firstGenes.length; j++) {
+      // Make a distinction for ICompositeGene for the first gene.
+      // ---------------------------------------------------------
+      if (firstGenes[j] instanceof ICompositeGene) {
+        // Randomly determine gene to be considered.
+        // -----------------------------------------
+        int index1 = generator.nextInt(firstGenes[j].size());
+        gene1 = ( (ICompositeGene) firstGenes[j]).geneAt(index1);
+      }
+      else {
+        gene1 = firstGenes[j];
+      }
+      // Make a distinction for CompositeGene for the second gene.
+      // ---------------------------------------------------------
+      if (secondGenes[j] instanceof ICompositeGene) {
+        // Randomly determine gene to be considered.
+        // -----------------------------------------
+        int index2 = generator.nextInt(secondGenes[j].size());
+        gene2 = ( (ICompositeGene) secondGenes[j]).geneAt(index2);
+      }
+      else {
+        gene2 = secondGenes[j];
+      }
+      firstAllele = gene1.getAllele();
+      gene1.setAllele(gene2.getAllele());
+      gene2.setAllele(firstAllele);
+    }
+    // Add the modified chromosomes to the candidate pool so that
+    // they'll be considered for natural selection during the next
+    // phase of evolution.
+    // -----------------------------------------------------------
+    a_candidateChromosomes.add(firstMate);
+    a_candidateChromosomes.add(secondMate);
   }
 
   /**
