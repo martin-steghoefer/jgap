@@ -23,6 +23,8 @@ After that the server splits the work into tasks and asks the started workers to
 After a worker has computed a task, the result is sent back to the server.
 The server in turn returns each solution to the client.
 
+Also see http://jgap.sourceforge.net/doc/grid/localgrid.html for information about a LAN grid with JGAP.
+
 If you have questions, please use the forum at
 http://sourceforge.net/forum/forum.php?forum_id=36521
 
