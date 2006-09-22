@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.67 $";
+  private final static String CVS_REVISION = "$Revision: 1.68 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -487,10 +487,10 @@ public class Configuration
       System.setProperty(threadKey + a_propname, key);
     }
     else if (!instanceHash.equals(key)) {
-      throw new RuntimeException(a_errmsg + "\nMaybe "
-                                 + a_obj.getClass().getName()
-                                 + ".hashCode() is not "
-                                 + "implemented accordingly.");
+      throw new RuntimeException(a_errmsg + "\nIf you want to set or construct"
+                                 +" a configuration multiple times, please call"
+                                 + " static method Configuration.reset() before"
+                                 +" each setting!");
     }
   }
 
