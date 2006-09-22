@@ -9,13 +9,19 @@
  */
 package examples.grid;
 
-import org.homedns.dade.jcgrid.worker.*;
 import org.homedns.dade.jcgrid.*;
+import org.homedns.dade.jcgrid.worker.*;
 
+/**
+ * Listener called on worker events.
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public class MyWorkerFeedback
     implements GridWorkerFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void start() {
   }

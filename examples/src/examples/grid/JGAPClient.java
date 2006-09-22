@@ -9,18 +9,23 @@
  */
 package examples.grid;
 
-import org.homedns.dade.jcgrid.*;
+import org.apache.commons.cli.*;
+import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
+import org.homedns.dade.jcgrid.cmd.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
-import org.apache.commons.cli.*;
-import org.apache.log4j.*;
-import org.homedns.dade.jcgrid.cmd.*;
 
+/**
+ * Client defining work for the grid and sending it to the JGAPServer.
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public class JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = JGAPClient.class.getName();
 
