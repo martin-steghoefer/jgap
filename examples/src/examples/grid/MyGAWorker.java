@@ -9,16 +9,19 @@
  */
 package examples.grid;
 
+import org.apache.commons.cli.*;
 import org.homedns.dade.jcgrid.*;
+import org.homedns.dade.jcgrid.cmd.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.*;
-import org.jgap.impl.*;
+import org.jgap.distr.grid.JGAPWorker;
 import org.jgap.event.*;
+import org.jgap.impl.*;
 
 public class MyGAWorker
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
@@ -31,5 +34,16 @@ public class MyGAWorker
     IChromosome fittest = gen.getFittestChromosome();
     MyResult res = new MyResult(req.getSessionName(), req.getRID(), fittest, 1);
     return res;
+  }
+
+  public static void main(String[] args)
+      throws Exception {
+    MainCmd.setUpLog4J("worker", true);
+    GridNodeWorkerConfig config = new GridNodeWorkerConfig();
+    Options options=new Options();
+    CommandLine cmd=MainCmd.parseCommonOptions(options,config,args);
+    // Start worker.
+    // -------------
+    new JGAPWorker(config, MyGAWorker.class, MyWorkerFeedback.class);
   }
 }
