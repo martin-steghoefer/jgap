@@ -1,0 +1,93 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="description" content="The Evolutionary Algorithms Grid with JGAP and Genetic Algorithms as well as with Genetic Programming.">
+<meta name="keywords" content="grid computiong, distributed computing, java, genetic algorithms, framework, genetic programming,
+                   master worker, best practices, evolutionary, open source, genes, chromosomes">
+<link rel="stylesheet" href="../../jgap.css" type="text/css">
+<title>Build your own grid with JGAP</title>
+</head>
+
+<body class="documentText">
+
+<h1 class="docTitle">Build a JGAP Grid using your LAN</h1>
+<a class="homeLink" href="../../index.html">
+
+<p align="center">[JGAP Home]</a> </p>
+
+<hr>
+
+<h3 class="subheader">What is a Grid?</h3>
+
+<p class="text">A grid in our case is a distributed computing environment where
+as many independent computers as possible work on a set of problems. These
+computers are called workers. Each worker receives tasks from a server, the
+master. The master gets fed in problems by a client. After that,
+the master splits those problems into handy units where each single unit will be
+processed on a single worker. After a worker has done its work for one unit, the
+result can be sent back to the master. The master in turn uses the result to
+advance the solution, or in the best case stop because a satisfactory solution
+has been found. In the end, the client receives the solution(s). computed by the
+workers.
+<h3 class="subheader">Getting started with your Grid</h3>
+<p class="subheader">JGAP provides an example for a grid consisting of the
+components Server, Worker, and Client. Please see package <i>examples.grid</i>.
+This package also hosts a file <i>readme.txt</i> that provides instructions for
+setting up the grid.</p>
+<p class="subheader">To use the grid, do the following in the given order:<br>
+<br>
+<b>
+1. Start the server on a machine of your choice (called SERVER):</b></p>
+<pre class="Listing">java -cp &quot;.;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar&quot; examples.grid.JGAPServer</pre>
+<p class="text">
+Ensure that the given jar-Files reside in the directories you specify! Each required jar-File is shipped with JGAP!<br>
+<br>
+<b>
+2. Start as many workers as you like on machines of your choice:</b>
+<pre class="Listing">java -cp &quot;.;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar&quot; examples.grid.JGAPWorker -s SERVER -n myworker1</pre>
+<p class="text"><br>
+Ensure that the given jar-Files reside in the directories you specify! Each required jar-File is shipped with JGAP!<br>
+Each worker must have a unique name --> specify it after the "-n" option<br>
+Each worker must point to the SERVER's ip address --> specify it after the "-s" option<br>
+<br>
+<b>
+3. Start a client on a machine of your choice:</b>
+<pre class="Listing">java -cp &quot;.;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar&quot; examples.grid.JGAPClient -s SERVER</pre>
+<p class="text">
+The client must point to the SERVER's ip address --> specify it after the "-s" option<br>
+<br>
+After starting the client the server receives a task from the client.<br>
+After that the server splits the work into tasks and asks the started workers to compute them.<br>
+After a worker has computed a task, the result is sent back to the server.<br>
+The server in turn returns each solution to the client.<br>
+<p class="subheader">To make your GA work with a JGAP grid, please have a look
+at the classes <i>JGAPServer</i>, <i>JGAPWorker</i>, and <i>JGAPClient</i>,
+provided in the example package <i>examples.grid</i>.&nbsp;&nbsp;&nbsp;</p>
+
+<p class="copyright">Copyright © 2006 Klaus Meffert. All rights
+reserved. </p>
+
+<hr>
+<a class="homeLink" href="../index.html">
+
+<p align="center">[JGAP Home]</a>
+    
+
+
+    
+<br>
+&nbsp; <br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+
+
+    
+      <a href="http://sourceforge.net/projects/jgap"> <img
+src="http://sourceforge.net/sflogo.php?group_id=11618&amp;type=5" width="210" height="62"
+border="0" alt="SourceForge Logo"></a>
+    
+  </p>
+</body>
+</html>
