@@ -1,3 +1,11 @@
+3.02
+-----------------------------------------------------------
+* Moved common grid classes to org.jgap.distr.grid
+  (previously they resided in the examples.grid package)
+  and emphasized framework character of the relevant
+  classes
+* Added javadocumentation
+
 3.01
 -----------------------------------------------------------
 * Made RandomGenerator serializable
