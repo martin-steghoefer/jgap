@@ -12,7 +12,6 @@ package org.jgap.gp.impl;
 import java.util.*;
 import junit.framework.*;
 import org.jgap.*;
-
 import org.jgap.gp.*;
 
 /**
@@ -24,7 +23,7 @@ import org.jgap.gp.*;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -77,8 +76,7 @@ public class GPConfigurationTest
     try {
       conf.readFromMemory("name1");
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -121,8 +119,7 @@ public class GPConfigurationTest
     try {
       conf.readFromMemory("name1");
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -141,8 +138,7 @@ public class GPConfigurationTest
     try {
       assertNull(conf.peekStack());
       fail();
-    }
-    catch (EmptyStackException eex) {
+    } catch (EmptyStackException eex) {
       ; //this is OK
     }
   }
@@ -196,8 +192,7 @@ public class GPConfigurationTest
     try {
       conf.popFromStack();
       fail();
-    }
-    catch (EmptyStackException eex) {
+    } catch (EmptyStackException eex) {
       ; //this is OK
     }
   }
@@ -216,4 +211,65 @@ public class GPConfigurationTest
     conf.clearStack();
     assertEquals(0, conf.stackSize());
   }
-}
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void setSelectionMethod_0()
+      throws Exception {
+    GPConfiguration conf = new GPConfiguration();
+    try {
+      conf.setSelectionMethod(null);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void setSelectionMethod_1()
+      throws Exception {
+    GPConfiguration conf = new GPConfiguration();
+    INaturalGPSelector sel = new FitnessProportionateSelection();
+    conf.setSelectionMethod(sel);
+    assertSame(sel, conf.getSelectionMethod());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void setCrossoverMethod_0()
+      throws Exception {
+    GPConfiguration conf = new GPConfiguration();
+    try {
+      conf.setCrossoverMethod(null);
+      fail();
+    } catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void setCrossoverMethod_1()
+      throws Exception {
+    GPConfiguration conf = new GPConfiguration();
+    CrossMethod cross = new BranchTypingCross(conf);
+    conf.setCrossoverMethod(cross);
+    assertSame(cross, conf.getSelectionMethod());
+  }}
