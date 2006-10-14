@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -104,7 +104,7 @@ public class GPConfiguration
   private INodeValidator m_nodeValidator;
 
   /**
-   * Constructor.
+   * Constructor utilizing th FitnessProportionateSelection.
    *
    * @throws InvalidConfigurationException
    *
@@ -119,6 +119,34 @@ public class GPConfiguration
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
     setFitnessEvaluator(new DeltaFitnessEvaluator());
+  }
+
+  /**
+   * Sets the selection method to use.
+   * @param a_method the selection method to use
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void setSelectionMethod(INaturalGPSelector a_method) {
+    if (a_method == null) {
+      throw new IllegalArgumentException("Selection method must not be null");
+    }
+    m_selectionMethod = a_method;
+  }
+
+  /**
+   * Sets the crossover method to use.
+   * @param a_method the crossover method to use
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void setCrossoverMethod(CrossMethod a_method) {
+    if (a_method == null) {
+      throw new IllegalArgumentException("Crossover method must not be null");
+    }
+    m_crossMethod = a_method;
   }
 
   public synchronized void verifyStateIsValid()
