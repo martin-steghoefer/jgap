@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -218,8 +218,9 @@ public class GPConfigurationTest
    * @author Klaus Meffert
    * @since 3.1
    */
-  public void setSelectionMethod_0()
+  public void testSetSelectionMethod_0()
       throws Exception {
+    GPConfiguration.reset();
     GPConfiguration conf = new GPConfiguration();
     try {
       conf.setSelectionMethod(null);
@@ -235,8 +236,9 @@ public class GPConfigurationTest
    * @author Klaus Meffert
    * @since 3.1
    */
-  public void setSelectionMethod_1()
+  public void testSetSelectionMethod_1()
       throws Exception {
+    GPConfiguration.reset();
     GPConfiguration conf = new GPConfiguration();
     INaturalGPSelector sel = new FitnessProportionateSelection();
     conf.setSelectionMethod(sel);
@@ -249,8 +251,9 @@ public class GPConfigurationTest
    * @author Klaus Meffert
    * @since 3.1
    */
-  public void setCrossoverMethod_0()
+  public void testSetCrossoverMethod_0()
       throws Exception {
+    GPConfiguration.reset();
     GPConfiguration conf = new GPConfiguration();
     try {
       conf.setCrossoverMethod(null);
@@ -266,10 +269,40 @@ public class GPConfigurationTest
    * @author Klaus Meffert
    * @since 3.1
    */
-  public void setCrossoverMethod_1()
+  public void testSetCrossoverMethod_1()
       throws Exception {
+    GPConfiguration.reset();
     GPConfiguration conf = new GPConfiguration();
     CrossMethod cross = new BranchTypingCross(conf);
     conf.setCrossoverMethod(cross);
-    assertSame(cross, conf.getSelectionMethod());
-  }}
+    assertSame(cross, conf.getCrossMethod());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstructor_0()
+      throws Exception {
+    GPConfiguration.reset();
+    GPConfiguration conf = new GPConfiguration();
+    assertEquals(BranchTypingCross.class, conf.getCrossMethod().getClass());
+    assertEquals(FitnessProportionateSelection.class, conf.getSelectionMethod().getClass());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstructor_1()
+      throws Exception {
+    GPConfiguration.reset();
+    FitnessProportionateSelection sel = new FitnessProportionateSelection();
+    GPConfiguration conf = new GPConfiguration(sel);
+    assertSame(sel, conf.getSelectionMethod());
+  }
+}
