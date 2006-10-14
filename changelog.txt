@@ -1,9 +1,11 @@
-3.02
+3.1
 -----------------------------------------------------------
 * Moved common grid classes to org.jgap.distr.grid
   (previously they resided in the examples.grid package)
   and emphasized framework character of the relevant
   classes
+* Added setters for crossover and selection method in
+  GPConfiguration
 * Added javadocumentation
 
 3.01
