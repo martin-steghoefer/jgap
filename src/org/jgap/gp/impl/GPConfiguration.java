@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -113,31 +113,40 @@ public class GPConfiguration
    */
   public GPConfiguration()
       throws InvalidConfigurationException {
-    this(null, null);
-    /**@todo make more elegant*/
+    super();
     m_crossMethod = new BranchTypingCross(this);
     m_selectionMethod = new FitnessProportionateSelection();
+    init();
+  }
+
+  /**
+   * Helper for construction.
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  protected void init() throws InvalidConfigurationException {
+    setEventManager(new EventManager());
+    setRandomGenerator(new StockRandomGenerator());
+    setFitnessEvaluator(new DeltaFitnessEvaluator());
   }
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
    *
-   * @param a_crossMethod the crossover method to use
    * @param a_selectionMethod the selection method to use
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.1
    */
-  public GPConfiguration(CrossMethod a_crossMethod,
-                         INaturalGPSelector a_selectionMethod)
+  public GPConfiguration(INaturalGPSelector a_selectionMethod)
       throws InvalidConfigurationException {
     super();
-    m_crossMethod = a_crossMethod;
     m_selectionMethod = a_selectionMethod;
-    setEventManager(new EventManager());
-    setRandomGenerator(new StockRandomGenerator());
-    setFitnessEvaluator(new DeltaFitnessEvaluator());
+    init();
   }
 
   /**
