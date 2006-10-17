@@ -4,6 +4,7 @@
   (previously they resided in the examples.grid package)
   and emphasized framework character of the relevant
   classes
+* Added setter for fitness evaluator to GPConfiguration
 * Added setters for crossover and selection method in
   GPConfiguration
 * Added javadocumentation
