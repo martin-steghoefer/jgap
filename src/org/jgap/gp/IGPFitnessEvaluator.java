@@ -9,8 +9,6 @@
  */
 package org.jgap.gp;
 
-import org.jgap.gp.impl.*;
-
 /**
  * Interface for a fitness evaluator used in a Genotype to determine how to
  * interpret the fitness value. The fitness value can either be interpreted
@@ -23,7 +21,7 @@ import org.jgap.gp.impl.*;
 public interface IGPFitnessEvaluator
     extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
