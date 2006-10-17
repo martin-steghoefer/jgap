@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -131,16 +131,6 @@ public class GPConfiguration
    */
   public void setGPFitnessEvaluator(IGPFitnessEvaluator a_evaluator) {
     m_fitnessEvaluator = a_evaluator;
-  }
-
-  /**
-   * @return the fitness evaluator set
-   *
-   * @author Klaus Meffert
-   * @since 3.1
-   */
-  public IGPFitnessEvaluator getGPFitnessEvaluator() {
-    return m_fitnessEvaluator;
   }
 
   /**
@@ -376,10 +366,10 @@ public class GPConfiguration
   }
 
   /**
-   * @return the assigned FitnessEvaluator
+   * @return the fitness evaluator set
    *
    * @author Klaus Meffert
-   * @since 2.0
+   * @since 3.0
    */
   public IGPFitnessEvaluator getGPFitnessEvaluator() {
     return m_fitnessEvaluator;
