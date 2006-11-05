@@ -8,6 +8,7 @@
 * Added setters for crossover and selection method in
   GPConfiguration
 * Added javadocumentation
+* Fixed bug in GPProgramFitnessComparator.compare
 
 3.01
 -----------------------------------------------------------
