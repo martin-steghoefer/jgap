@@ -9,7 +9,6 @@
  */
 package org.jgap.gp.impl;
 
-
 import org.jgap.gp.*;
 
 /**
@@ -22,7 +21,7 @@ import org.jgap.gp.*;
 public class DefaultGPFitnessEvaluator
     implements IGPFitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -36,10 +35,39 @@ public class DefaultGPFitnessEvaluator
    */
   public boolean isFitter(final double a_fitness_value1,
                           final double a_fitness_value2) {
-    return a_fitness_value1 > a_fitness_value2;
+    if (!Double.isNaN(a_fitness_value1) &&
+        !Double.isNaN(a_fitness_value2)) {
+      return a_fitness_value1 > a_fitness_value2;
+    }
+    else if (Double.isNaN(a_fitness_value1)) {
+      return false;
+    }
+    return true;
   }
 
+  /*
+   * @author Klaus Meffert
+   * @since 3.1
+   */
   public boolean isFitter(IGPProgram a_prog1, IGPProgram a_prog2) {
     return isFitter(a_prog1.getFitnessValue(), a_prog2.getFitnessValue());
+  }
+
+  /*
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public boolean equals(Object a_object) {
+    DefaultGPFitnessEvaluator eval = (DefaultGPFitnessEvaluator) a_object;
+    return true;
+  }
+
+  /*
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public int compareTo(Object a_object) {
+    DefaultGPFitnessEvaluator eval = (DefaultGPFitnessEvaluator) a_object;
+    return 0;
   }
 }
