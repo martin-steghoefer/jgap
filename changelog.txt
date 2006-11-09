@@ -9,6 +9,9 @@
   GPConfiguration
 * Added javadocumentation
 * Fixed bug in GPProgramFitnessComparator.compare
+* Fixed bug with Double.NaN in DefaultGPFitnessEvaluator
+* Added compareTo and equals methods to
+  DefaultGPFitnessEvaluator
 
 3.01
 -----------------------------------------------------------
