@@ -19,7 +19,7 @@ package org.jgap;
 public class DeltaFitnessEvaluator
     implements FitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -32,13 +32,20 @@ public class DeltaFitnessEvaluator
    */
   public boolean isFitter(final double a_fitness_value1,
                           final double a_fitness_value2) {
-    if (a_fitness_value1 < 0) {
-     return false;
+    if (Double.isNaN(a_fitness_value1)) {
+      return false;
     }
-   if (a_fitness_value2 < 0) {
-     return true;
-   }
-    return a_fitness_value1 < a_fitness_value2;
+    else if (!Double.isNaN(a_fitness_value1) &&
+             !Double.isNaN(a_fitness_value2)) {
+      if (a_fitness_value1 < 0) {
+        return false;
+      }
+      if (a_fitness_value2 < 0) {
+        return true;
+      }
+      return a_fitness_value1 < a_fitness_value2;
+    }
+    return true;
   }
 
   public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
