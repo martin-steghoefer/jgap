@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   static Variable vx;
 
@@ -88,6 +88,7 @@ public class MathProblem
       throws Exception {
     System.out.println("Formula to discover: X^4 + X^3 + X^2 - X");
     GPConfiguration config = new GPConfiguration();
+    config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
     config.setMaxInitDepth(5);
     config.setPopulationSize(1000);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());

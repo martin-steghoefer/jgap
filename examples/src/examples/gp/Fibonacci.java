@@ -34,7 +34,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   static Variable vx;
 
@@ -169,6 +169,7 @@ public class Fibonacci
     try {
       System.out.println("Program to discover: Fibonacci(x)");
       GPConfiguration config = new GPConfiguration();
+      config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
       int popSize;
       if (args.length == 1) {
         popSize = Integer.parseInt(args[0]);
