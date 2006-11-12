@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -262,7 +262,7 @@ public class GPPopulation
       return m_fittestProgram;
     }
     double bestFitness = -1.0d;
-    FitnessEvaluator evaluator = getGPConfiguration().getFitnessEvaluator();
+    IGPFitnessEvaluator evaluator = getGPConfiguration().getGPFitnessEvaluator();
     double fitness;
     for (int i=0;i<m_programs.length && m_programs[i] != null;i++) {
       IGPProgram program = m_programs[i];
