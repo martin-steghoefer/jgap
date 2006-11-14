@@ -21,15 +21,16 @@ import org.jgap.impl.*;
  */
 public class Main {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
-   * Starts the example
+   * Starts the example.
    * @param args ignored here
    */
   public static void main(String[] args) {
     int numEvolutions = 500;
     Configuration gaConf = new DefaultConfiguration();
+    gaConf.reset();
     gaConf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     gaConf.setPreservFittestIndividual(true);
     gaConf.setKeepPopulationSizeConstant(false);
