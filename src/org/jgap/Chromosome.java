@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.84 $";
+  private final static String CVS_REVISION = "$Revision: 1.85 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -593,8 +593,8 @@ public class Chromosome
    * @author Neil Rotstan
    * @since 1.0
    */
-  public static IChromosome randomInitialChromosome(Configuration
-      a_configuration)
+  public static IChromosome randomInitialChromosome(
+      Configuration a_configuration)
       throws InvalidConfigurationException {
     // Sanity check: make sure the given configuration isn't null.
     // -----------------------------------------------------------
