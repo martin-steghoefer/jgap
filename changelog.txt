@@ -13,6 +13,9 @@
 * Fixed bug with Double.NaN in DefaultGPFitnessEvaluator
 * Added compareTo and equals methods to
   DefaultGPFitnessEvaluator
+* Fixed missing usage of IInitializer in Genotype.evolve
+  that made it difficult subclassing Chromosome (see bug
+  1596231)
 
 3.01
 -----------------------------------------------------------
