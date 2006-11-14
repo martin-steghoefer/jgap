@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.86 $";
+  private final static String CVS_REVISION = "$Revision: 1.87 $";
 
   /**
    * The current Configuration instance.
@@ -279,15 +279,25 @@ public class Genotype
       popSize = getPopulation().size();
       if (popSize < minSize) {
         IChromosome newChrom;
-        try {
+//        try {
+          IChromosome sampleChrom = m_activeConfiguration.getSampleChromosome();
+          Class sampleChromClass = sampleChrom.getClass();
+          IInitializer chromIniter = m_activeConfiguration.getJGAPFactory().
+              getInitializerFor(sampleChrom, sampleChromClass);
           while (getPopulation().size() < minSize) {
-            newChrom = Chromosome.randomInitialChromosome(m_activeConfiguration);
-            getPopulation().addChromosome(newChrom);
+            try {
+              newChrom = (IChromosome) chromIniter.perform(sampleChrom,
+                  sampleChromClass, null);
+//            Chromosome.randomInitialChromosome(m_activeConfiguration);
+              getPopulation().addChromosome(newChrom);
+            }catch (Exception ex) {
+              throw new RuntimeException(ex);
+            }
           }
-        }
-        catch (InvalidConfigurationException invex) {
-          throw new IllegalStateException(invex.getMessage());
-        }
+//        }
+//        catch (InvalidConfigurationException invex) {
+//          throw new IllegalStateException(invex.getMessage());
+//        }
       }
     }
     if (m_activeConfiguration.isPreserveFittestIndividual()) {
