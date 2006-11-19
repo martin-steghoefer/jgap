@@ -16,6 +16,7 @@ import org.homedns.dade.jcgrid.cmd.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
+import org.jgap.distr.grid.*;
 
 /**
  * Client defining work for the grid and sending it to the JGAPServer.
@@ -23,36 +24,64 @@ import org.jgap.impl.*;
  * @author Klaus Meffert
  * @since 3.01
  */
-public class JGAPClient {
+public class ExampleClient
+    extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
-  private final static String className = JGAPClient.class.getName();
+  private final static String className = ExampleClient.class.getName();
 
   private static Logger log = Logger.getLogger(className);
 
-  private GridNodeClientConfig m_config;
-
-  public JGAPClient(GridNodeClientConfig a_config) {
-    m_config = a_config;
+  /**
+   * Create work requests to be computed by workers. Starts a completely setup
+   * client to distribute work and receive solutions.
+   *
+   * @param a_gridconfig GridNodeClientConfig
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public ExampleClient(GridNodeClientConfig a_gridconfig)
+      throws Exception {
+    super(a_gridconfig);
+    m_gridconfig.setSessionName("JGAP_sample_problem");
+    Configuration jgapconfig = new DefaultConfiguration();
+    jgapconfig.setEventManager(new EventManager());
+    jgapconfig.setPopulationSize(100);
+    jgapconfig.setFitnessFunction(new SampleFitnessFunction());
+    IChromosome sample = new Chromosome(jgapconfig,
+                                        new BooleanGene(jgapconfig), 16);
+    jgapconfig.setSampleChromosome(sample);
+    // Creating work requests.
+    // -----------------------
+    MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0, jgapconfig);
+    WorkerFeedback rfback = new WorkerFeedback();
+    setClientFeedback(rfback);
+    setWorkRequest(req);
+    // Start the threaded process.
+    // ---------------------------
+    start();
+    join();
   }
 
   //--------------------------------------------------------------------------
 
-  public class RenderingFeedback
-      implements MyClientFeedback {
-    public RenderingFeedback() {
+  public class WorkerFeedback
+      implements IClientFeedback {
+    public WorkerFeedback() {
     }
 
     public void error(String msg, Exception ex) {
       System.err.println(msg);
     }
 
-    public void sendingFragmentRequest(MyRequest req) {
+    public void sendingFragmentRequest(JGAPRequest req) {
       System.err.println("Sending work");
     }
 
-    public void receivedFragmentResult(MyRequest req, MyResult res,
+    public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
                                        int idx) {
       System.err.println("Receiving work. Solution " + res.getFittest());
     }
@@ -78,7 +107,6 @@ public class JGAPClient {
     public void completeFrame(int idx) {
     }
   }
-
   //--------------------------------------------------------------------------
 
   public static void main(String[] args) {
@@ -92,54 +120,10 @@ public class JGAPClient {
           options, config, args);
       // Setup and start client.
       // -----------------------
-      JGAPClient client = new JGAPClient(config);
-      client.doWork();
+      new ExampleClient(config);
     } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
     }
   }
-
-  /**
-   * Create work requests to be computed by workers.
-   * @throws Exception
-   *
-   * @author Klaus Meffert
-   * @since 3.01
-   */
-  public void doWork()
-      throws Exception {
-    m_config.setSessionName("JGAP_sample_problem");
-    Configuration jgapconfig = new DefaultConfiguration();
-    jgapconfig.setEventManager(new EventManager());
-    jgapconfig.setPopulationSize(100);
-    jgapconfig.setFitnessFunction(new SampleFitnessFunction());
-    IChromosome sample = new Chromosome(jgapconfig,
-                                        new BooleanGene(jgapconfig), 16);
-    jgapconfig.setSampleChromosome(sample);
-    // Creating work requests.
-    // -----------------------
-    MyRequest req = new MyRequest(m_config.getSessionName(), 0, jgapconfig);
-    doWork(m_config, req);
-  }
-
-  /**
-   * Starts a completely setup client to distribute work and receive solutions.
-   *
-   * @param config GridNodeClientConfig
-   * @param req MyRequest
-   * @throws Exception
-   *
-   * @author Klaus Meffert
-   * @since 3.01
-   */
-  public void doWork(GridNodeClientConfig config,
-                     MyRequest req)
-      throws Exception {
-    RenderingFeedback rfback = new RenderingFeedback();
-    MyGAClient rc = new MyGAClient(m_config, rfback, req);
-    rc.start();
-    rc.join();
-  }
-
 }

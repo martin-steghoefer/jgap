@@ -9,7 +9,7 @@
  */
 package examples.grid;
 
-import org.homedns.dade.jcgrid.*;
+import org.jgap.distr.grid.*;
 import org.jgap.*;
 
 /**
@@ -19,28 +19,15 @@ import org.jgap.*;
  * @since 3.01
  */
 public class MyResult
-    extends WorkResult {
+    extends JGAPResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static final long serialVersionUID = 2L;
 
-  private IChromosome fittest;
-
-  private long unitDone;
-
   public MyResult(String name, int id, IChromosome a_fittestChrom,
                   long a_unitdone) {
-    super(name, id);
-    fittest = a_fittestChrom;
-    unitDone = a_unitdone;
+    super(name, id, a_fittestChrom, a_unitdone);
   }
 
-  public IChromosome getFittest() {
-    return fittest;
-  }
-
-  public long getUnitDone() {
-    return unitDone;
-  }
 }

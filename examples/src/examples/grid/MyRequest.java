@@ -9,7 +9,7 @@
  */
 package examples.grid;
 
-import org.homedns.dade.jcgrid.*;
+import org.jgap.distr.grid.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.event.*;
@@ -21,15 +21,12 @@ import org.jgap.event.*;
  * @since 3.01
  */
 public class MyRequest
-    extends WorkRequest {
+    extends JGAPRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
-
-  private Configuration m_config;
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public MyRequest(String name, int id, Configuration a_config) {
-    super(name, id);
-    m_config = a_config;
+    super(name, id, a_config);
   }
 
   /**
@@ -41,7 +38,7 @@ public class MyRequest
    * @author Klaus Meffert
    * @since 3.01
    */
-  public MyRequest[] split()
+  public JGAPRequest[] split()
       throws Exception {
     final int runs = 20;
     MyRequest[] result = new MyRequest[runs];
@@ -49,8 +46,8 @@ public class MyRequest
       /**@todo support cloning of m_config*/
       Configuration config = new DefaultConfiguration("config " + i, i + "");
       config.setEventManager(new EventManager());
-      config.setPopulationSize(m_config.getPopulationSize());
-      config.setFitnessFunction(m_config.getFitnessFunction());
+      config.setPopulationSize(getConfiguration().getPopulationSize());
+      config.setFitnessFunction(getConfiguration().getFitnessFunction());
       IChromosome sample = new Chromosome(config, new BooleanGene(config), 16);
       config.setSampleChromosome(sample);
 //      config.setSampleChromosome((IChromosome)m_config.getSampleChromosome().clone());
@@ -59,7 +56,4 @@ public class MyRequest
     return result;
   }
 
-  public Configuration getConfiguration() {
-    return m_config;
-  }
 }
