@@ -24,7 +24,7 @@ import org.jgap.distr.grid.*;
  */
 public class ServerAndWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Convenience (demo) start of both the server and a worker.
@@ -42,6 +42,8 @@ public class ServerAndWorker {
     // Start server.
     // ------------
     new JGAPServer(args);
+    // Setup configuration.
+    // --------------------
     Options options = new Options();
     GridNodeWorkerConfig config = new GridNodeWorkerConfig();
     CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);

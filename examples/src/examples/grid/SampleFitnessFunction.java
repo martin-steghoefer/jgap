@@ -21,15 +21,16 @@ import org.jgap.impl.*;
 public class SampleFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
+   * The fitness evaluation routine.
+   *
    * @param a_subject the Chromosome to be evaluated
    * @return defect rate of our problem
    *
-   * @author Neil Rotstan
    * @author Klaus Meffert
-   * @since 2.0
+   * @since 3.01
    */
   public double evaluate(IChromosome a_subject) {
     int total = 0;

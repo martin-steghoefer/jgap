@@ -14,10 +14,16 @@ import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.event.*;
 
+/**
+ * An instance creating single requests to be sent to a worker.
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public class MyRequest
     extends WorkRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Configuration m_config;
 
@@ -26,6 +32,15 @@ public class MyRequest
     m_config = a_config;
   }
 
+  /**
+   * Creates single requests to be sent to workers.
+   *
+   * @return single requests to be computed by workers
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
   public MyRequest[] split()
       throws Exception {
     final int runs = 20;

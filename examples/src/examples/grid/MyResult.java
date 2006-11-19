@@ -12,10 +12,16 @@ package examples.grid;
 import org.homedns.dade.jcgrid.*;
 import org.jgap.*;
 
+/**
+ * Stores the result of a computation.
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public class MyResult
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static final long serialVersionUID = 2L;
 

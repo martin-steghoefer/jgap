@@ -12,10 +12,15 @@ package examples.grid;
 import org.homedns.dade.jcgrid.message.*;
 import org.homedns.dade.jcgrid.client.*;
 
+/**
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public class MyGAClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GridNodeClientConfig clientCfg;
 
@@ -37,13 +42,15 @@ public class MyGAClient
       gc.setNodeConfig(clientCfg);
       gc.start();
       try {
-        // Splitting the work
+        // Splitting the work.
+        // -------------------
         MyRequest[] workList;
         workList = workReq.split();
         clientFeedback.setProgressMaximum(0);
         clientFeedback.setProgressMaximum(workList.length - 1);
         clientFeedback.beginWork();
-        // Sending work requests
+        // Sending work requests.
+        // ----------------------
         for (int i = 0; i < workList.length; i++) {
           MyRequest req = workList[i];
           clientFeedback.sendingFragmentRequest(req);
@@ -51,7 +58,8 @@ public class MyGAClient
           if (this.isInterrupted())
             break;
         }
-        // Receiving work results
+        // Receiving work results.
+        // -----------------------
         for (int i = 0; i < workList.length; i++) {
           clientFeedback.setProgressValue(i + workList.length);
           GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();

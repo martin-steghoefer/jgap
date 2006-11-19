@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -78,14 +78,6 @@ public class JGAPClient {
     public void completeFrame(int idx) {
     }
   }
-  public void doWork(GridNodeClientConfig config,
-                     MyRequest req)
-      throws Exception {
-    RenderingFeedback rfback = new RenderingFeedback();
-    MyGAClient rc = new MyGAClient(m_config, rfback, req);
-    rc.start();
-    rc.join();
-  }
 
   //--------------------------------------------------------------------------
 
@@ -93,11 +85,13 @@ public class JGAPClient {
     try {
       MainCmd.setUpLog4J("client", true);
       GridNodeClientConfig config = new GridNodeClientConfig();
-      // Command line options
+      // Command line options.
+      // ---------------------
       Options options = new Options();
       CommandLine cmd = MainCmd.parseCommonOptions(
           options, config, args);
-      // Setup and start client
+      // Setup and start client.
+      // -----------------------
       JGAPClient client = new JGAPClient(config);
       client.doWork();
     } catch (Exception ex) {
@@ -106,6 +100,13 @@ public class JGAPClient {
     }
   }
 
+  /**
+   * Create work requests to be computed by workers.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
   public void doWork()
       throws Exception {
     m_config.setSessionName("JGAP_sample_problem");
@@ -116,8 +117,29 @@ public class JGAPClient {
     IChromosome sample = new Chromosome(jgapconfig,
                                         new BooleanGene(jgapconfig), 16);
     jgapconfig.setSampleChromosome(sample);
-    // Creating work requests
+    // Creating work requests.
+    // -----------------------
     MyRequest req = new MyRequest(m_config.getSessionName(), 0, jgapconfig);
     doWork(m_config, req);
   }
+
+  /**
+   * Starts a completely setup client to distribute work and receive solutions.
+   *
+   * @param config GridNodeClientConfig
+   * @param req MyRequest
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public void doWork(GridNodeClientConfig config,
+                     MyRequest req)
+      throws Exception {
+    RenderingFeedback rfback = new RenderingFeedback();
+    MyGAClient rc = new MyGAClient(m_config, rfback, req);
+    rc.start();
+    rc.join();
+  }
+
 }

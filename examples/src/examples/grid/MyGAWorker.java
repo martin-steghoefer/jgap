@@ -18,10 +18,16 @@ import org.jgap.distr.grid.JGAPWorker;
 import org.jgap.event.*;
 import org.jgap.impl.*;
 
+/**
+ * Receives work, computes a solution and returns the solution to the requester.
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public class MyGAWorker
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
@@ -40,8 +46,8 @@ public class MyGAWorker
       throws Exception {
     MainCmd.setUpLog4J("worker", true);
     GridNodeWorkerConfig config = new GridNodeWorkerConfig();
-    Options options=new Options();
-    CommandLine cmd=MainCmd.parseCommonOptions(options,config,args);
+    Options options = new Options();
+    CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
     // Start worker.
     // -------------
     new JGAPWorker(config, MyGAWorker.class, MyWorkerFeedback.class);
