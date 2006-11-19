@@ -19,7 +19,8 @@ import org.jgap.impl.*;
 import org.jgap.distr.grid.*;
 
 /**
- * Client defining work for the grid and sending it to the JGAPServer.
+ * Client defining a problem for the grid and sending it as work request to
+ * the JGAPServer.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -27,7 +28,7 @@ import org.jgap.distr.grid.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -46,6 +47,8 @@ public class ExampleClient
   public ExampleClient(GridNodeClientConfig a_gridconfig)
       throws Exception {
     super(a_gridconfig);
+    // Creating problem to be solved.
+    // ------------------------------
     m_gridconfig.setSessionName("JGAP_sample_problem");
     Configuration jgapconfig = new DefaultConfiguration();
     jgapconfig.setEventManager(new EventManager());
@@ -116,8 +119,7 @@ public class ExampleClient
       // Command line options.
       // ---------------------
       Options options = new Options();
-      CommandLine cmd = MainCmd.parseCommonOptions(
-          options, config, args);
+      CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
       // Setup and start client.
       // -----------------------
       new ExampleClient(config);
