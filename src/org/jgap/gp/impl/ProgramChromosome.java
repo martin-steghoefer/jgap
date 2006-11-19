@@ -24,9 +24,9 @@ import org.jgap.gp.*;
  */
 public class ProgramChromosome
     extends BaseGPChromosome
-    implements IGPChromosome, Serializable {
+    implements IGPChromosome, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /*wodka:
    void add(Command cmd);
