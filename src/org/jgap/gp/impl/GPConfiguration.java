@@ -10,6 +10,7 @@
 package org.jgap.gp.impl;
 
 import java.util.*;
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.distr.*;
@@ -25,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -119,7 +120,6 @@ public class GPConfiguration
     init();
   }
 
-
   /**
    * Sets a GP fitness evaluator, such as
    * org.jgap.gp.impl.DefaultGPFitnessEvaluator.
@@ -141,7 +141,8 @@ public class GPConfiguration
    * @author Klaus Meffert
    * @since 3.1
    */
-  protected void init() throws InvalidConfigurationException {
+  protected void init()
+      throws InvalidConfigurationException {
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
     setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
@@ -350,7 +351,7 @@ public class GPConfiguration
   }
 
   public boolean isStrictProgramCreation() {
-      return m_strictProgramCreation;
+    return m_strictProgramCreation;
   }
 
   public void setStrictProgramCreation(boolean a_strict) {
@@ -397,7 +398,8 @@ public class GPConfiguration
    * @since 3.0
    */
   public boolean validateNode(ProgramChromosome a_chrom, CommandGene a_node,
-                              int a_tries, int a_num, int a_recursLevel, Class a_type,
+                              int a_tries, int a_num, int a_recursLevel,
+                              Class a_type,
                               CommandGene[] a_functionSet, int a_depth,
                               boolean a_grow) {
     if (m_nodeValidator == null) {
@@ -428,5 +430,44 @@ public class GPConfiguration
    */
   public INodeValidator getNodeValidator() {
     return m_nodeValidator;
+  }
+
+  /**
+   * Compares this entity against the specified object.
+   *
+   * @param a_other the object to compare against
+   * @return true: if the objects are the same, false otherwise
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    } catch (ClassCastException cex) {
+      return false;
+    }
+  }
+
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      GPConfiguration other = (GPConfiguration) a_other;
+      return new CompareToBuilder()
+          .append(m_objectiveFunction, other.m_objectiveFunction)
+          .append(m_crossoverProb, other.m_crossoverProb)
+          .append(m_reproductionProb, other.m_reproductionProb)
+          .append(m_newChromsPercent, other.m_newChromsPercent)
+          .append(m_maxCrossoverDepth, other.m_maxCrossoverDepth)
+          .append(m_maxInitDepth, other.m_maxInitDepth)
+          .append(m_selectionMethod.getClass(), other.m_selectionMethod.getClass())
+          .append(m_crossMethod.getClass(), other.m_crossMethod.getClass())
+          .append(m_programCreationMaxTries, other.m_programCreationMaxTries)
+          .append(m_strictProgramCreation, other.m_strictProgramCreation)
+          .append(m_fitnessEvaluator.getClass(), other.m_fitnessEvaluator.getClass())
+          .toComparison();
+    }
   }
 }
