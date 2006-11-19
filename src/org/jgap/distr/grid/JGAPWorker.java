@@ -22,7 +22,7 @@ import org.homedns.dade.jcgrid.worker.*;
  */
 public class JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = JGAPWorker.class.getName();
 
@@ -35,19 +35,23 @@ public class JGAPWorker {
     // ---------------------------
     GridWorker[] gw = new GridWorker[a_config.getWorkerCount()];
     for (int i = 0; i < a_config.getWorkerCount(); i++) {
+      // Instantiate worker.
+      // -------------------
       gw[i] = new GridWorker();
       gw[i].setNodeConfig( (GridNodeGenericConfig) a_config.clone());
       ( (GridNodeGenericConfig) gw[i].getNodeConfig()).
           setSessionName(a_config.getSessionName() + "_" + i);
       ( (GridNodeGenericConfig) gw[i].getNodeConfig()).
           setWorkingDir(a_config.getWorkingDir() + "_" + i);
-      // Instantiate worker and workerfeedback.
-      // --------------------------------------
       Worker myWorker = (Worker) a_workerClass.newInstance();
+      // Instantiate worker feedback.
+      // ----------------------------
       GridWorkerFeedback myWorkerFeedback = (GridWorkerFeedback)
           a_workerFeedbackClaas.newInstance();
       gw[i].setWorker(myWorker);
       gw[i].setWorkerFeedback(myWorkerFeedback);
+      // Start worker.
+      // -------------
       gw[i].start();
     }
     // Wait for shutdown of workers.

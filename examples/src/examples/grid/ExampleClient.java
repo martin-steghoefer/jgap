@@ -28,7 +28,7 @@ import org.jgap.distr.grid.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -112,12 +112,19 @@ public class ExampleClient
   }
   //--------------------------------------------------------------------------
 
+  /**
+   * Starts the client. Additional stuff: Sets up logger and parses command line
+   * options.
+   * @param args String[]
+   */
   public static void main(String[] args) {
     try {
+      // Setup logging.
+      // --------------
       MainCmd.setUpLog4J("client", true);
-      GridNodeClientConfig config = new GridNodeClientConfig();
       // Command line options.
       // ---------------------
+      GridNodeClientConfig config = new GridNodeClientConfig();
       Options options = new Options();
       CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
       // Setup and start client.
