@@ -15,14 +15,14 @@ import org.homedns.dade.jcgrid.worker.*;
 
 /**
  * A worker receives work units from a JGAPServer and sends back computed
- * solutions to the JGAPServer.
+ * solutions to a JGAPServer.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
 public class JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = JGAPWorker.class.getName();
 

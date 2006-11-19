@@ -15,8 +15,8 @@ import org.homedns.dade.jcgrid.cmd.*;
 import org.homedns.dade.jcgrid.server.*;
 
 /**
- * A grid server able receiving work requests from JGAPClient's, sending
- * work units to JGAPWorker's, receiving solutions from JGAPWorker's, and
+ * A grid server able receiving work requests from JGAPClients, sending
+ * work units to JGAPWorkers, receiving solutions from JGAPWorkers, and
  * sending back these solutions to the requesting JGAPClient.
  *
  * @author Klaus Meffert
@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.server.*;
  */
 public class JGAPServer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = JGAPServer.class.getName();
 
