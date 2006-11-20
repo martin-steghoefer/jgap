@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -46,7 +46,6 @@ public class GPConfigurationTest
     GPConfiguration conf = new GPConfiguration();
     GPConfiguration conf2 = (GPConfiguration) doSerialize(conf);
     assertEquals(conf, conf2);
-    /**@todo implement equals and compareTo to make this test pass*/
   }
 
   /**
