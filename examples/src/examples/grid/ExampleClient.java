@@ -28,7 +28,7 @@ import org.jgap.distr.grid.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -60,57 +60,15 @@ public class ExampleClient
     // Creating work requests.
     // -----------------------
     MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0, jgapconfig);
-    WorkerFeedback rfback = new WorkerFeedback();
-    setClientFeedback(rfback);
     setWorkRequest(req);
+    // Register client feedback listener
+    IClientFeedback rfback = new MyClientFeedback();
+    setClientFeedback(rfback);
     // Start the threaded process.
     // ---------------------------
     start();
     join();
   }
-
-  //--------------------------------------------------------------------------
-
-  public class WorkerFeedback
-      implements IClientFeedback {
-    public WorkerFeedback() {
-    }
-
-    public void error(String msg, Exception ex) {
-      System.err.println(msg);
-    }
-
-    public void sendingFragmentRequest(JGAPRequest req) {
-      System.err.println("Sending work");
-    }
-
-    public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
-                                       int idx) {
-      System.err.println("Receiving work. Solution " + res.getFittest());
-    }
-
-    public void beginWork() {
-    }
-
-    public void endWork() {
-    }
-
-    public void setProgressMaximum(int max) {
-    }
-
-    public void setProgressMinimum(int min) {
-    }
-
-    public void setProgressValue(int val) {
-    }
-
-    public void setRenderingTime(MyRequest req, long dt) {
-    }
-
-    public void completeFrame(int idx) {
-    }
-  }
-  //--------------------------------------------------------------------------
 
   /**
    * Starts the client. Additional stuff: Sets up logger and parses command line
