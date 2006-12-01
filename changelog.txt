@@ -17,6 +17,11 @@
 * Fixed missing usage of IInitializer in Genotype.evolve
   that made it difficult subclassing Chromosome (see bug
   1596231)
+* Fixed bug in Population.determineFittesChromosome
+  (thanx to Knut)
+* Added description to each test suite, it appears when
+  running JUnit and makes debugging more fun
+* Enhanced Chromosome.compareTo
 
 3.01
 -----------------------------------------------------------
