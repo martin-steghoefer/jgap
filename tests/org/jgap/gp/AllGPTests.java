@@ -22,14 +22,12 @@ public class AllGPTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
-    //
-    suite.addTest(AllGPImplTests.suite());
-    //
+    TestSuite suite = new TestSuite("AllGPTests");
     suite.addTest(CommandGeneTest.suite());
+    suite.addTest(AllGPImplTests.suite());
     return suite;
   }
 }

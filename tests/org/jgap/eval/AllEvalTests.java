@@ -21,10 +21,10 @@ public class AllEvalTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllEvalTests");
     suite.addTest(PopulationHistoryTest.suite());
     return suite;
   }

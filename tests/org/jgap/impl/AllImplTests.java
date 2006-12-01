@@ -24,10 +24,10 @@ public class AllImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllImplTests");
     suite.addTest(AveragingCrossoverOperatorTest.suite());
     suite.addTest(BestChromosomesSelectorTest.suite());
     suite.addTest(BooleanGeneTest.suite());

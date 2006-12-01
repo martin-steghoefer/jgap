@@ -21,14 +21,14 @@ import junit.framework.*;
 public class AllSupergenesTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public AllSupergenesTests(String a_name) {
     super(a_name);
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllSupergenesTests");
 
     suite.addTest(SupergeneInternalParserTest.suite());
     suite.addTest(SupergenePersistentRepresentationTest.suite());

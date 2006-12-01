@@ -21,10 +21,10 @@ public class AllBaseTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllBaseTests");
     suite.addTest(BaseGeneTest.suite());
     suite.addTest(BaseRateCalculatorTest.suite());
     suite.addTest(ChromosomeTest.suite());

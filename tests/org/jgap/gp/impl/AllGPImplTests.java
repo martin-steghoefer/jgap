@@ -21,10 +21,10 @@ public class AllGPImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllGPImplTests");
     suite.addTest(BranchTypingCrossTest.suite());
     suite.addTest(DefaultGPFitnessEvaluatorTest.suite());
     suite.addTest(DeltaGPFitnessEvaluatorTest.suite());

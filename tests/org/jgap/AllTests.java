@@ -37,10 +37,10 @@ import junit.framework.*;
 public class AllTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllTests");
     suite.addTest(AllAuditTests.suite());
     suite.addTest(AllBaseTests.suite());
     suite.addTest(AllDataTests.suite());

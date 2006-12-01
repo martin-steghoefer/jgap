@@ -20,10 +20,10 @@ import junit.framework.*;
 public class AllAuditTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite();
+    TestSuite suite = new TestSuite("AllAuditTests");
     suite.addTest(EvaluatorTest.suite());
     suite.addTest(KeyedValueTest.suite());
     suite.addTest(KeyedValuesTest.suite());
