@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.85 $";
+  private final static String CVS_REVISION = "$Revision: 1.86 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -748,6 +748,25 @@ public class Chromosome
       int comparison = m_genes[i].compareTo(otherGenes[i]);
       if (comparison != 0) {
         return comparison;
+      }
+    }
+    // Compare current fitness value.
+    // ------------------------------
+    if (m_fitnessValue != otherChromosome.getFitnessValueDirectly()) {
+      FitnessEvaluator eval = getConfiguration().getFitnessEvaluator();
+      if (eval != null) {
+        if (eval.isFitter(m_fitnessValue,
+                          otherChromosome.getFitnessValueDirectly())) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
+      }
+      else {
+        // undetermined order, but unequal!
+        // --------------------------------
+        return -1;
       }
     }
     if (m_compareAppData) {
