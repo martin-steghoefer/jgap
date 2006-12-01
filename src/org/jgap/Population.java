@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.49 $";
+  private static final String CVS_REVISION = "$Revision: 1.50 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -262,8 +262,14 @@ public class Population
       return m_fittestChromosome;
     }
     Iterator it = m_chromosomes.iterator();
-    double bestFitness = -1.0d;
     FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
+    double bestFitness;
+    if (evaluator.isFitter(2.0d, 1.0d)) {
+      bestFitness = -1.0d;
+    }
+    else {
+      bestFitness = Double.MAX_VALUE;
+    }
     double fitness;
     while (it.hasNext()) {
       IChromosome chrom = (IChromosome) it.next();
