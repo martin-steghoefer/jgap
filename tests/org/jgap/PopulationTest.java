@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -328,6 +328,38 @@ public class PopulationTest
     p.addChromosome(c);
     assertEquals(null, p.determineFittestChromosomes(0));
     assertEquals(c, p.determineFittestChromosomes(1).get(0));
+  }
+
+  /**
+   * Special case exposing a previous bug in method under test.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testDetermineFittestChromosome_5()
+      throws Exception {
+    List chromosomes = new ArrayList();
+    Gene g = null;
+    Chromosome c = null;
+    Population p = new Population(conf);
+    conf.reset();
+    conf.setFitnessEvaluator(new MyFitnessEvaluator());
+    g = new DoubleGene(conf);
+    c = new Chromosome(conf, g, 10);
+    c.setFitnessValue(5);
+    chromosomes.add(c);
+    g = new DoubleGene(conf);
+    c = new Chromosome(conf, g, 10);
+    c.setFitnessValue(3);
+    chromosomes.add(c);
+    p.setChromosomes(chromosomes);
+    assertEquals(c, p.determineFittestChromosome());
+    // next is important to come into a dangerous situation.
+    c = new Chromosome(conf, g, 10);
+    c.setFitnessValue(1);//the fittest!
+    p.addChromosome(c);
+    assertEquals(c, p.determineFittestChromosome());
   }
 
   /**
@@ -762,5 +794,16 @@ public class PopulationTest
     pop2.addChromosome(new Chromosome(conf));
     assertEquals( -1, pop.compareTo(pop2));
     assertEquals(1, pop2.compareTo(pop));
+  }
+
+  class MyFitnessEvaluator implements FitnessEvaluator {
+    public boolean isFitter(final double a_fitness_value1,
+                            final double a_fitness_value2) {
+      return a_fitness_value1 < a_fitness_value2;
+    }
+
+    public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
+      return isFitter(a_chrom1.getFitnessValue(), a_chrom2.getFitnessValue());
+    }
   }
 }
