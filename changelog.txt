@@ -20,6 +20,7 @@
   1596231)
 * Fixed bug in Population.determineFittesChromosome
   (thanx to Knut)
+* Fixed bug in JGAPfactory.findHandlerFor
 * Added description to each test suite, it appears when
   running JUnit and makes debugging more fun
 * Enhanced Chromosome.compareTo
