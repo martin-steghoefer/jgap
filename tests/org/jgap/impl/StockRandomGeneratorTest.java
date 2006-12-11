@@ -22,7 +22,7 @@ import sun.misc.*;
 public class StockRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StockRandomGeneratorTest.class);
@@ -246,12 +246,16 @@ public class StockRandomGeneratorTest
    * @since 3.01
    */
   public void testSerialize_0() throws Exception {
+    /**@todo fix test as Java 5 uses java.util.concurrent.AtomicLong instead
+     * of sun.misc.AtomicLong
+     */
     StockRandomGenerator srg = new StockRandomGenerator();
-    AtomicLong seed1 = (AtomicLong)privateAccessor.getField(srg,"seed");
+    Object o = privateAccessor.getField(srg, "seed");
+    AtomicLong seed1 = (AtomicLong) privateAccessor.getField(srg, "seed");
     long curr = System.currentTimeMillis();
     while (curr == System.currentTimeMillis());
-    StockRandomGenerator srg2 = (StockRandomGenerator)doSerialize(srg);
-    AtomicLong seed2 = (AtomicLong)privateAccessor.getField(srg2,"seed");
+    StockRandomGenerator srg2 = (StockRandomGenerator) doSerialize(srg);
+    AtomicLong seed2 = (AtomicLong) privateAccessor.getField(srg2, "seed");
     assertFalse(seed1.get() == seed2.get());
   }
 }

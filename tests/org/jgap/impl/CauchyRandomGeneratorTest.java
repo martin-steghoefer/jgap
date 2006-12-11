@@ -23,7 +23,7 @@ import sun.misc.*;
 public class CauchyRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);
@@ -89,6 +89,9 @@ public class CauchyRandomGeneratorTest
    * @since 3.01
    */
   public void testSerialize_0() throws Exception {
+    /**@todo fix test as Java 5 uses java.util.concurrent.AtomicLong instead
+     * of sun.misc.AtomicLong
+     */
     CauchyRandomGenerator srg = new CauchyRandomGenerator();
     Random r1 = (Random)privateAccessor.getField(srg,"m_rn");
     AtomicLong seed1 = (AtomicLong)privateAccessor.getField(r1,"seed");

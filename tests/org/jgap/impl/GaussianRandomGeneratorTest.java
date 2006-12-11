@@ -23,7 +23,7 @@ import sun.misc.*;
 public class GaussianRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianRandomGeneratorTest.class);
@@ -251,18 +251,21 @@ public class GaussianRandomGeneratorTest
    * @author Klaus Meffert
    * @since 3.01
    */
-  public void testSerialize_0() throws Exception {
+  public void testSerialize_0()
+      throws Exception {
+    /**@todo fix test as Java 5 uses java.util.concurrent.AtomicLong instead
+     * of sun.misc.AtomicLong
+     */
     GaussianRandomGenerator srg = new GaussianRandomGenerator();
-    Random r1 = (Random)privateAccessor.getField(srg,"m_rn");
-    AtomicLong seed1 = (AtomicLong)privateAccessor.getField(r1,"seed");
+    Random r1 = (Random) privateAccessor.getField(srg, "m_rn");
+    AtomicLong seed1 = (AtomicLong) privateAccessor.getField(r1, "seed");
     long curr = System.currentTimeMillis();
     while (curr == System.currentTimeMillis());
-    GaussianRandomGenerator srg2 = (GaussianRandomGenerator)doSerialize(srg);
-    Random r2 = (Random)privateAccessor.getField(srg2,"m_rn");
-    AtomicLong seed2 = (AtomicLong)privateAccessor.getField(r2,"seed");
+    GaussianRandomGenerator srg2 = (GaussianRandomGenerator) doSerialize(srg);
+    Random r2 = (Random) privateAccessor.getField(srg2, "m_rn");
+    AtomicLong seed2 = (AtomicLong) privateAccessor.getField(r2, "seed");
     assertFalse(seed1.get() == seed2.get());
   }
-
   /**
    * Tests serializability capabilities with non-default constructor.
    *
@@ -272,14 +275,17 @@ public class GaussianRandomGeneratorTest
    * @since 3.01
    */
   public void testSerialize_1() throws Exception {
+    /**@todo fix test as Java 5 uses java.util.concurrent.AtomicLong instead
+     * of sun.misc.AtomicLong
+     */
     GaussianRandomGenerator srg = new GaussianRandomGenerator(0.5d);
-    Random r1 = (Random)privateAccessor.getField(srg,"m_rn");
-    AtomicLong seed1 = (AtomicLong)privateAccessor.getField(r1,"seed");
+    Random r1 = (Random) privateAccessor.getField(srg, "m_rn");
+    AtomicLong seed1 = (AtomicLong) privateAccessor.getField(r1, "seed");
     long curr = System.currentTimeMillis();
     while (curr == System.currentTimeMillis());
-    GaussianRandomGenerator srg2 = (GaussianRandomGenerator)doSerialize(srg);
-    Random r2 = (Random)privateAccessor.getField(srg2,"m_rn");
-    AtomicLong seed2 = (AtomicLong)privateAccessor.getField(r2,"seed");
+    GaussianRandomGenerator srg2 = (GaussianRandomGenerator) doSerialize(srg);
+    Random r2 = (Random) privateAccessor.getField(srg2, "m_rn");
+    AtomicLong seed2 = (AtomicLong) privateAccessor.getField(r2, "seed");
     assertFalse(seed1.get() == seed2.get());
   }
 }
