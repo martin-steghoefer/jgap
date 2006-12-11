@@ -23,6 +23,7 @@
 * Added description to each test suite, it appears when
   running JUnit and makes debugging more fun
 * Enhanced Chromosome.compareTo
+* Added tests
 
 3.01
 -----------------------------------------------------------
