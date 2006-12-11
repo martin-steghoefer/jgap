@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -269,12 +269,23 @@ public class BooleanGene
       return 1;
     }
     else if (otherBooleanGene.m_value == null) {
-      // If our value is also null, then we're the same. Otherwise,
+      // If our value is also null, then we're possibly the same. Otherwise,
       // we're the greater gene.
-      // ----------------------------------------------------------
-      return m_value == null ? 0 : 1;
+      // -------------------------------------------------------------------
+      if (m_value != null) {
+        return 1;
+      }
+      else {
+        if (isCompareApplicationData()) {
+          return compareApplicationData(getApplicationData(),
+                                        otherBooleanGene.getApplicationData());
+        }
+        else {
+          return 0;
+        }
+      }
     }
-    else if (m_value == null) {
+    if (m_value == null) {
       if (otherBooleanGene.m_value == null) {
         if (isCompareApplicationData()) {
           return compareApplicationData(getApplicationData(),
