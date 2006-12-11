@@ -24,8 +24,11 @@
 * Added description to each test suite, it appears when
   running JUnit and makes debugging more fun
 * Enhanced Chromosome.compareTo
-* Added tests
+* Added a lot of tests
 * Simplified ConfigWriter
+* Enhanced logic in DefaultCloneHandler and
+  DefaultCompareToHandler
+* Fixed bug in BooleanGene.compareTo
 
 3.01
 -----------------------------------------------------------
