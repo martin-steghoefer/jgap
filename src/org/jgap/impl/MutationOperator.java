@@ -32,7 +32,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -124,7 +124,7 @@ public class MutationOperator
    * Genotype.evolve() to the implementations of GeneticOperator overgoes this
    * due to performance issues
    * @param a_candidateChromosomes the pool of chromosomes that have been
-   * selected for the next evolved population
+   * mutated
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
