@@ -1,5 +1,6 @@
 3.1
 -----------------------------------------------------------
+* Improved architecture of grid architecture
 * Made ProgramChromosome implement Comparable
 * Added DeltaGPFitnessEvaluator
 * Moved common grid classes to org.jgap.distr.grid
