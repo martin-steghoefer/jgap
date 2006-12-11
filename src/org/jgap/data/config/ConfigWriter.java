@@ -22,7 +22,7 @@ import javax.swing.*;
  * */
 public final class ConfigWriter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Singleton instance of ConfigWriter
@@ -64,54 +64,37 @@ public final class ConfigWriter {
    * @since 2.3
    * */
   public void write(final IConfigInfo a_cInfo) {
-    try {
-      ConfigData cd = a_cInfo.getConfigData();
-      String nsPrefix = cd.getNS() + ".";
-      String name;
-      List values;
-      // construct name-value pairs from the information in the lists
-      for (int i = 0; i < cd.getNumLists(); i++) {
-        name = cd.getListNameAt(i);
-        values = cd.getListValuesAt(i);
-        int idx = 0;
-        for (Iterator iter = values.iterator(); iter.hasNext(); idx++) {
-          // append an index for same key elements
-          String tmpName = name + "[" + idx + "]";
-          tmpName = nsPrefix + tmpName;
-          m_config.setProperty(tmpName, (String) iter.next());
-        }
-      }
-      String value = "", tmpName = "";
-      for (int i = 0; i < cd.getNumTexts(); i++) {
-        name = cd.getTextNameAt(i);
-        value = cd.getTextValueAt(i);
-        tmpName = nsPrefix + name;
-        m_config.setProperty(tmpName, value);
+    ConfigData cd = a_cInfo.getConfigData();
+    String nsPrefix = cd.getNS() + ".";
+    String name;
+    List values;
+    // construct name-value pairs from the information in the lists
+    for (int i = 0; i < cd.getNumLists(); i++) {
+      name = cd.getListNameAt(i);
+      values = cd.getListValuesAt(i);
+      int idx = 0;
+      for (Iterator iter = values.iterator(); iter.hasNext(); idx++) {
+        // append an index for same key elements
+        String tmpName = name + "[" + idx + "]";
+        tmpName = nsPrefix + tmpName;
+        m_config.setProperty(tmpName, (String) iter.next());
       }
     }
-    catch (Exception ex) {
-      JOptionPane.showMessageDialog(null,
-                                    "Exception " + ex.getMessage(),
-                                    "Configuration Information",
-                                    JOptionPane.INFORMATION_MESSAGE);
+    String value = "", tmpName = "";
+    for (int i = 0; i < cd.getNumTexts(); i++) {
+      name = cd.getTextNameAt(i);
+      value = cd.getTextValueAt(i);
+      tmpName = nsPrefix + name;
+      m_config.setProperty(tmpName, value);
     }
     try {
       FileOutputStream out = new FileOutputStream(a_cInfo.getFileName());
       try {
         m_config.store(out, "---JGAP Configuration File---");
-      }
-      finally {
+      } finally {
         out.close();
       }
-    }
-    catch (FileNotFoundException fileEx) {
-      JOptionPane.showMessageDialog(null,
-                                    "Exception " + fileEx.getMessage(),
-                                    "Configuration Exception",
-                                    JOptionPane.INFORMATION_MESSAGE);
-      fileEx.printStackTrace();
-    }
-    catch (IOException ioEx) {
+    } catch (IOException ioEx) {
       JOptionPane.showMessageDialog(null,
                                     "Exception " + ioEx.getMessage(),
                                     "Configuration Exception",
@@ -119,5 +102,4 @@ public final class ConfigWriter {
       ioEx.printStackTrace();
     }
   }
-
 }
