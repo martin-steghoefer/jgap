@@ -24,6 +24,7 @@
   running JUnit and makes debugging more fun
 * Enhanced Chromosome.compareTo
 * Added tests
+* Simplified ConfigWriter
 
 3.01
 -----------------------------------------------------------
