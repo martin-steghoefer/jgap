@@ -34,7 +34,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -175,7 +175,7 @@ public class XMLManager {
     // --------------------------------
     Element genesElement = a_xmlDocument.createElement(GENES_TAG);
     // Now add gene sub-elements for each gene in the given array.
-    // ---------------------------------------------------------------
+    // -----------------------------------------------------------
     Element geneElement;
     for (int i = 0; i < a_geneValues.length; i++) {
       // Create the allele element for this gene.
@@ -193,7 +193,7 @@ public class XMLManager {
           a_xmlDocument);
       // And now add the text node to the gene element, and then
       // add the gene element to the genes element.
-      // ---------------------------------------------------------
+      // -------------------------------------------------------
       geneElement.appendChild(alleleRepresentation);
       genesElement.appendChild(geneElement);
     }
@@ -310,7 +310,7 @@ public class XMLManager {
    * Gene implementation does not support the string representation of the
    * alleles used in the given XML document
    * @throws GeneCreationException if there is a problem creating or populating
-   * an Gene instance
+   * a Gene instance
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -330,7 +330,7 @@ public class XMLManager {
     }
     List genes = Collections.synchronizedList(new ArrayList());
     // Extract the nested gene elements.
-    // ---------------------------------------------------------
+    // ---------------------------------
     NodeList geneElements = a_xmlElement.getElementsByTagName(GENE_TAG);
     if (geneElements == null) {
       throw new ImproperXMLException(
@@ -342,7 +342,7 @@ public class XMLManager {
     // to instantiate to represent the gene instance, and then find
     // the child text node, which is where the string representation
     // of the allele is located, and extract the representation.
-    // --------------------------------------------------------------
+    // -------------------------------------------------------------
     int numberOfGeneNodes = geneElements.getLength();
     for (int i = 0; i < numberOfGeneNodes; i++) {
       Element thisGeneElement = (Element) geneElements.item(i);
@@ -387,7 +387,7 @@ public class XMLManager {
         }
         if (children.item(j).getNodeType() == Node.TEXT_NODE) {
           // We found the text node. Extract the representation.
-          // ------------------------------------------------------
+          // ---------------------------------------------------
           alleleRepresentation = children.item(j).getNodeValue();
           break;
         }
@@ -401,7 +401,7 @@ public class XMLManager {
       }
       // Now set the value of the gene to that reflect the
       // string representation.
-      // ---------------------------------------------------
+      // -------------------------------------------------
       try {
         thisGeneObject.setValueFromPersistentRepresentation(
             alleleRepresentation);
@@ -412,7 +412,7 @@ public class XMLManager {
             "setValueFromPersistentRepresentation() method.");
       }
       // Finally, add the current gene object to the list of genes.
-      // ------------------------------------------------------------
+      // ----------------------------------------------------------
       genes.add(thisGeneObject);
     }
     return (Gene[]) genes.toArray(new Gene[genes.size()]);
@@ -422,24 +422,21 @@ public class XMLManager {
    * Unmarshall a Chromosome instance from a given XML Element
    * representation.
    *
-   * @param a_activeConfiguration The current active Configuration object
-   *                              that is to be used during construction of
-   *                              the Chromosome.
-   *
-   * @param a_xmlElement The XML Element representation of the Chromosome.
-   *
-   * @return A new Chromosome instance setup with the data from the XML
-   *         Element representation.
+   * @param a_activeConfiguration the current active Configuration object
+   * that is to be used during construction of the Chromosome
+   * @param a_xmlElement the XML Element representation of the Chromosome
+   * @return a new Chromosome instance setup with the data from the XML
+   * Element representation
    *
    * @throws ImproperXMLException if the given Element is improperly
-   *         structured or missing data.
+   * structured or missing data
    * @throws InvalidConfigurationException if the given Configuration is in
-   *         an inconsistent state.
+   * an inconsistent state
    * @throws UnsupportedRepresentationException if the actively configured
-   *         Gene implementation does not support the string representation
-   *         of the alleles used in the given XML document.
-   * @throws GeneCreationException if there is a problem creating or
-   *                                 populating an Gene instance.
+   * Gene implementation does not support the string representation of the
+   * alleles used in the given XML document
+   * @throws GeneCreationException if there is a problem creating or populating
+   * a Gene instance
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -480,25 +477,22 @@ public class XMLManager {
    * Its population of Chromosomes will be unmarshalled from the Chromosome
    * sub-elements.
    *
-   * @param a_activeConfiguration The current active Configuration object
-   *                              that is to be used during construction of
-   *                              the Genotype and Chromosome instances.
+   * @param a_activeConfiguration the current active Configuration object
+   * that is to be used during construction of the Genotype and Chromosome
+   * instances
+   * @param a_xmlElement the XML Element representation of the Genotype
+   * @return a new Genotype instance, complete with a population of Chromosomes,
+   * setup with the data from the XML Element representation
    *
-   * @param a_xmlElement The XML Element representation of the Genotype
-   *
-   * @return A new Genotype instance, complete with a population
-   *         of Chromosomes, setup with the data from the XML
-   *         Element representation.
-   *
-   * @throws ImproperXMLException if the given Element is improperly
-   *         structured or missing data.
-   * @throws InvalidConfigurationException if the given Configuration is in
-   *         an inconsistent state.
+   * @throws ImproperXMLException if the given Element is improperly structured
+   * or missing data
+   * @throws InvalidConfigurationException if the given Configuration is in an
+   * inconsistent state
    * @throws UnsupportedRepresentationException if the actively configured
-   *         Gene implementation does not support the string representation
-   *         of the alleles used in the given XML document.
-   * @throws GeneCreationException if there is a problem creating or
-   *         populating an Gene instance.
+   * Gene implementation does not support the string representation of the
+   * alleles used in the given XML document
+   * @throws GeneCreationException if there is a problem creating or populating
+   * a Gene instance
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -538,25 +532,22 @@ public class XMLManager {
    * Its population of Chromosomes will be unmarshalled from the Chromosome
    * sub-elements.
    *
-   * @param a_activeConfiguration The current active Configuration object
-   *                              that is to be used during construction of
-   *                              the Genotype and Chromosome instances.
+   * @param a_activeConfiguration the current active Configuration object that
+   * is to be used during construction of the Genotype and Chromosome instances
+   * @param a_xmlDocument the XML Document representation of the Genotype
    *
-   * @param a_xmlDocument The XML Document representation of the Genotype.
+   * @return A new Genotype instance, complete with a population of Chromosomes,
+   * setup with the data from the XML Document representation
    *
-   * @return A new Genotype instance, complete with a population of
-   *         Chromosomes, setup with the data from the XML Document
-   *         representation.
-   *
-   * @throws ImproperXMLException if the given Document is improperly
-   *         structured or missing data.
-   * @throws InvalidConfigurationException if the given Configuration is in
-   *         an inconsistent state.
-   * @throws UnsupportedRepresentationException if the actively configured
-   *         Gene implementation does not support the string representation
-   *         of the alleles used in the given XML document.
-   * @throws GeneCreationException if there is a problem creating or
-   *         populating an Gene instance.
+   * @throws ImproperXMLException if the given Document is improperly structured
+   * or missing data
+   * @throws InvalidConfigurationException if the given Configuration is in an
+   * inconsistent state
+   * @throws UnsupportedRepresentationException if the actively configured Gene
+   * implementation does not support the string representation of the alleles
+   * used in the given XML document
+   * @throws GeneCreationException if there is a problem creating or populating
+   * a Gene instance
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -585,24 +576,22 @@ public class XMLManager {
    * representation. Its genes will be unmarshalled from the gene
    * sub-elements.
    *
-   * @param a_activeConfiguration The current active Configuration object
-   *                              that is to be used during construction of
-   *                              the Chromosome instances.
+   * @param a_activeConfiguration the current active Configuration object that
+   * is to be used during construction of the Chromosome instances
+   * @param a_xmlDocument the XML Document representation of the Chromosome
    *
-   * @param a_xmlDocument The XML Document representation of the Chromosome.
+   * @return a new Chromosome instance setup with the data from the XML Document
+   * representation
    *
-   * @return A new Chromosome instance setup with the data from the XML
-   *         Document representation.
-   *
-   * @throws ImproperXMLException if the given Document is improperly
-   *         structured or missing data.
-   * @throws InvalidConfigurationException if the given Configuration is in
-   *         an inconsistent state.
-   * @throws UnsupportedRepresentationException if the actively configured
-   *         Gene implementation does not support the string representation
-   *         of the alleles used in the given XML document.
-   * @throws GeneCreationException if there is a problem creating or
-   *         populating an Gene instance.
+   * @throws ImproperXMLException if the given Document is improperly structured
+   * or missing data
+   * @throws InvalidConfigurationException if the given Configuration is in an
+   * inconsistent state
+   * @throws UnsupportedRepresentationException if the actively configured Gene
+   * implementation does not support the string representation of the alleles
+   * used in the given XML document
+   * @throws GeneCreationException if there is a problem creating or populating
+   * a Gene instance
    *
    * @author Neil Rotstan
    * @since 1.0
