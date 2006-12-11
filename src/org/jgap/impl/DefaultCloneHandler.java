@@ -35,26 +35,41 @@ public class DefaultCloneHandler
    * @since 2.6
    */
   public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
+    Class clazz;
     if (a_clazz == null) {
-      return false;
+      if (a_obj == null) {
+        return false;
+      }
+      clazz = a_obj.getClass();
     }
-    if (IApplicationData.class.isAssignableFrom(a_clazz)) {
+    else {
+      clazz = a_clazz;
+    }
+    if (IApplicationData.class.isAssignableFrom(clazz)) {
       return true;
     }
-    if (Cloneable.class.isAssignableFrom(a_clazz)) {
-      // Ensure access via reflection is possible
+    if (Cloneable.class.isAssignableFrom(clazz)) {
+      // Ensure access via reflection is possible.
       // Thank you Java for providing only a marker interface and not
       // something convenient :-(
+      // ------------------------------------------------------------
+      boolean result;
       try {
-        Method m = a_clazz.getMethod("clone", new Class[] {});
+        Method m = clazz.getMethod("clone", new Class[] {});
+        boolean modified = false;
         if (!m.isAccessible()) {
-          return false;
+          m.setAccessible(true);
+          modified = true;
+        }
+        result = m.isAccessible();
+        if (modified) {
+          m.setAccessible(false);
         }
       }
       catch (Exception ex) {
         return false;
       }
-      return true;
+      return result;
     }
     else {
       return false;

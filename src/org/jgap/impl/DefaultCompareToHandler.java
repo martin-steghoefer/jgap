@@ -21,14 +21,24 @@ import org.jgap.*;
 public class DefaultCompareToHandler
     implements ICompareToHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
-  public boolean isHandlerFor(final Object a_obj, final Class a_class) {
-    if (Comparable.class.isAssignableFrom(a_class)) {
+  public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
+    Class clazz;
+    if (a_clazz == null) {
+      if (a_obj == null) {
+        return false;
+      }
+      clazz = a_obj.getClass();
+    }
+    else {
+      clazz = a_clazz;
+    }
+    if (Comparable.class.isAssignableFrom(clazz)) {
       return true;
     }
     else {
-      if (a_class != null && Boolean.class == a_class) {
+      if (clazz != null && Boolean.class == clazz) {
         return true;
       }
       else {
