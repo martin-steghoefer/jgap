@@ -28,7 +28,7 @@ import org.jgap.*;
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -61,6 +61,22 @@ public class TwoWayMutationOperator
       throws InvalidConfigurationException {
     this(Genotype.getStaticConfiguration(),
          new DefaultMutationRateCalculator(Genotype.getStaticConfiguration()));
+  }
+
+  /**
+   * Constructs a new instance of this MutationOperator without a specified
+   * mutation rate, which results in dynamic mutation being turned on. This
+   * means that the mutation rate will be automatically determined by this
+   * operator based upon the number of genes present in the chromosomes.<p>
+   * @param a_config the configuration to use
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public TwoWayMutationOperator(final Configuration a_config)
+      throws InvalidConfigurationException {
+    this(a_config, new DefaultMutationRateCalculator(a_config));
   }
 
   /**
@@ -159,6 +175,10 @@ public class TwoWayMutationOperator
       else {
         geneIndex = 0;
       }
+      if (geneIndex >= genes.length) {
+        geneIndex = genes.length - 1;
+      }
+
       if (m_mutationRateCalc != null) {
         // If it's a dynamic mutation rate then let the calculator decide
         // whether the current gene should be mutated.
