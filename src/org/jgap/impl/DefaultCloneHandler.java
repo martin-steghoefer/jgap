@@ -35,6 +35,9 @@ public class DefaultCloneHandler
    * @since 2.6
    */
   public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
+    if (a_clazz == null) {
+      return false;
+    }
     if (IApplicationData.class.isAssignableFrom(a_clazz)) {
       return true;
     }
