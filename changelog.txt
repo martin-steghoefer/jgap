@@ -1,3 +1,9 @@
+3.2
+* Fixed bug in GPGenotype.calcFitness (see bug 1617125)
+* Set DefaultGPFitnessEvaluator in GPConfiguration per
+  default instead of DeltaGPFitnessEvaluator
+* Fixed javadoc in IGPFitnessEvaluator
+
 3.1
 -----------------------------------------------------------
 * Improved architecture of grid architecture
