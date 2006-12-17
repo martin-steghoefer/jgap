@@ -21,14 +21,14 @@ package org.jgap.gp;
 public interface IGPFitnessEvaluator
     extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
-   * if the first one is greater than the second one. Otherwise returns false
+   * if the first one is fitter than the second one. Otherwise returns false
    * @param a_fitness_value1 first fitness value
    * @param a_fitness_value2 second fitness value
-   * @return true: first fitness value greater than second
+   * @return true: first fitness value fitter than second
    *
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: input types int)
