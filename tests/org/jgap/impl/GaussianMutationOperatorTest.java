@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianMutationOperatorTest.class);
@@ -239,5 +239,73 @@ public class GaussianMutationOperatorTest
     op.operate(pop, chroms);
     assertEquals(2, pop.size());
     assertEquals(3 + 2 + 2, chroms.size());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_0()
+      throws Exception {
+    GaussianMutationOperator mutOp = new GaussianMutationOperator(conf, 234);
+    assertEquals(234, mutOp.getDeviation(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_1()
+      throws Exception {
+    GaussianMutationOperator mutOp = new GaussianMutationOperator(conf);
+    assertEquals(0.05d, mutOp.getDeviation(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_2()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    GaussianMutationOperator mutOp = new GaussianMutationOperator();
+    assertSame(conf, mutOp.getConfiguration());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_3()
+      throws Exception {
+    GaussianMutationOperator mutOp = new GaussianMutationOperator(conf, 1.0d);
+    assertEquals(1.0d, mutOp.getDeviation(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCompareTo_0()
+      throws Exception {
+    GaussianMutationOperator op = new GaussianMutationOperator(conf);
+    assertEquals(1, op.compareTo(null));
+    GaussianMutationOperator op2 = new GaussianMutationOperator(conf);
+    assertEquals(0, op.compareTo(op2));
+    op = new GaussianMutationOperator(conf, 0.03d);
+    assertEquals( -1, op.compareTo(op2));
+    assertEquals(1, op2.compareTo(op));
+    op = new GaussianMutationOperator(conf, 0.05d);
+    assertEquals(0, op.compareTo(op2));
   }
 }

@@ -23,7 +23,7 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
@@ -43,6 +43,19 @@ public class InversionOperatorTest
   public void testConstruct_0()
       throws Exception {
     new InversionOperator(conf);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_1()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    InversionOperator op = new InversionOperator();
+    assertSame(conf, op.getConfiguration());
   }
 
   /**
@@ -272,10 +285,24 @@ public class InversionOperatorTest
     try {
       op.operate(new Population(conf, population), chroms);
       fail();
-    }
-    catch (Error iex) {
+    } catch (Error iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCompareTo_0()
+      throws Exception {
+    InversionOperator op = new InversionOperator(conf);
+    assertEquals(1, op.compareTo(null));
+    InversionOperator op2 = new InversionOperator(conf);
+    assertEquals(0, op.compareTo(op2));
+    assertEquals(0, op2.compareTo(op));
   }
 
   public class TestConstraintChecker

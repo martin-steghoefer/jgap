@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -83,9 +83,22 @@ public class SwappingMutationOperatorTest
   public void testConstruct_3()
       throws Exception {
     IUniversalRateCalculator calc = new DefaultMutationRateCalculator(conf);
-    MutationOperator mutOp = new MutationOperator(conf, calc);
+    SwappingMutationOperator mutOp = new SwappingMutationOperator(conf, calc);
     assertEquals(0, mutOp.getMutationRate());
     assertEquals(calc, mutOp.getMutationRateCalc());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_4()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    SwappingMutationOperator op = new SwappingMutationOperator();
+    assertSame(conf, op.getConfiguration());
   }
 
   /**

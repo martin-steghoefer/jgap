@@ -14,7 +14,7 @@ import junit.framework.*;
 import org.jgap.*;
 
 /**
- * Tests for the TruthTableFitnessFunction class.
+ * Tests the TruthTableFitnessFunction class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import org.jgap.*;
 public class TruthTableFitnessFunctionTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TruthTableFitnessFunctionTest.class);
@@ -40,7 +40,8 @@ public class TruthTableFitnessFunctionTest
     Map inout = new HashMap();
     inout.put(new Double(2), new Double(3));
     inout.put(new Double(9), new Double(11));
-    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(conf, 7);
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(
+        conf, 7);
     Map truthTable = new HashMap();
     truthTable.put(new Double(2), new Double(4));
     truthTable.put(new Double(8), new Double(1));
@@ -64,8 +65,57 @@ public class TruthTableFitnessFunctionTest
     truthTable.put(new Double(2), new Double(4));
     truthTable.put(new Double(8), new Double(1));
     truthTable.put(new Double(9), new Double(11));
-    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(conf, 7, truthTable);
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(
+        conf, 7, truthTable);
     assertEquals(2.0d, fitfunc.calcFitness(inout), DELTA);
+  }
+
+  /**
+   * Calc fitness with one value being a NaN.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  public void testCalcFitness_2()
+      throws Exception {
+    Map inout = new HashMap();
+    inout.put(new Double(2), new Double(Double.NaN));
+    inout.put(new Double(9), new Double(11));
+    Map truthTable = new HashMap();
+    truthTable.put(new Double(2), new Double(4));
+    truthTable.put(new Double(8), new Double(1));
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(
+        conf, 7, truthTable);
+    assertTrue(Double.isNaN(fitfunc.calcFitness(inout)));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testgetConfiguration_0()
+      throws Exception {
+    Map truthTable = new HashMap();
+    truthTable.put(new Double(9), new Double(11));
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl(
+        conf, 7, truthTable);
+    assertSame(conf, fitfunc.getConfiguration());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_0()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    TruthTableFitnessFunctionImpl fitfunc = new TruthTableFitnessFunctionImpl();
+    assertSame(conf, fitfunc.getConfiguration());
   }
 
   /**
@@ -81,13 +131,18 @@ public class TruthTableFitnessFunctionTest
      */
     private double m_evaluationValue;
 
+    public TruthTableFitnessFunctionImpl() {
+      super();
+    }
+
     public TruthTableFitnessFunctionImpl(Configuration a_config,
-                                         double a_evaluationValue, Map a_values) {
+        double a_evaluationValue, Map a_values) {
       super(a_config, a_values);
       m_evaluationValue = a_evaluationValue;
     }
 
-    public TruthTableFitnessFunctionImpl(Configuration a_config,double a_evaluationValue) {
+    public TruthTableFitnessFunctionImpl(Configuration a_config,
+        double a_evaluationValue) {
       super(a_config);
       m_evaluationValue = a_evaluationValue;
     }

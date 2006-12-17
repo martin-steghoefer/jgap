@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -55,6 +55,19 @@ public class MapGeneTest
     catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_3()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    Gene gene = new MapGene();
+    assertSame(conf, gene.getConfiguration());
   }
 
   public void testToString_0()

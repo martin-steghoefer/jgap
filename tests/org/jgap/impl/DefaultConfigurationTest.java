@@ -14,7 +14,7 @@ import org.jgap.event.*;
 import junit.framework.*;
 
 /**
- * Tests for DefaultConfiguration class
+ * Tests the DefaultConfiguration class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DefaultConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -75,6 +75,34 @@ public class DefaultConfigurationTest
     catch (RuntimeException rex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_2()
+      throws Exception {
+    DefaultConfiguration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    assertEquals("", conf.getId());
+    assertEquals("", conf.getName());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_3()
+      throws Exception {
+    DefaultConfiguration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration("xxX1","3a");
+    assertEquals("xxX1", conf.getId());
+    assertEquals("3a", conf.getName());
   }
 
   class DefaultConfigForTest

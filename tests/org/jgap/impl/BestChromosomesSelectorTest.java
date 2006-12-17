@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -46,6 +46,19 @@ public class BestChromosomesSelectorTest
     Object fitnessValueComparator = privateAccessor.getField(selector,
         "m_fitnessValueComparator");
     assertTrue(fitnessValueComparator != null);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_3()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    BestChromosomesSelector op = new BestChromosomesSelector();
+    assertSame(conf, op.getConfiguration());
   }
 
   /**

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.36 $";
+  private static final String CVS_REVISION = "$Revision: 1.37 $";
 
   public void setUp() {
     super.setUp();
@@ -66,6 +66,19 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene = new DoubleGene(conf);
     gene.setAllele(new Double( - (Double.MAX_VALUE / 2)));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_3()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    Gene gene = new DoubleGene();
+    assertSame(conf, gene.getConfiguration());
   }
 
   /**

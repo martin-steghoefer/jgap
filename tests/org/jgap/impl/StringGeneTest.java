@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -109,7 +109,19 @@ public class StringGeneTest
   }
 
   /**
+   * @throws Exception
    *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_5()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    StringGene gene = new StringGene();
+    assertSame(conf, gene.getConfiguration());
+  }
+
+  /**
    * @throws Exception
    *
    * @author Klaus Meffert

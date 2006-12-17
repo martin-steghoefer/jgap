@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
 
@@ -21,7 +22,7 @@ import junit.framework.*;
 public class BooleanGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BooleanGeneTest.class);
@@ -75,10 +76,22 @@ public class BooleanGeneTest
     try {
       new BooleanGene(conf, null);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_4()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    Gene gene = new BooleanGene();
+    assertSame(conf, gene.getConfiguration());
   }
 
   public void testToString_0()
@@ -127,8 +140,7 @@ public class BooleanGeneTest
     try {
       gene.setAllele(new Integer(100));
       fail();
-    }
-    catch (ClassCastException classex) {
+    } catch (ClassCastException classex) {
       ; //this is OK
     }
   }
@@ -199,8 +211,7 @@ public class BooleanGeneTest
     try {
       assertEquals(true, gene1.booleanValue());
       fail();
-    }
-    catch (NullPointerException nullex) {
+    } catch (NullPointerException nullex) {
       ; //this is OK
     }
   }
@@ -222,8 +233,7 @@ public class BooleanGeneTest
     try {
       gene1.setAllele("22");
       fail();
-    }
-    catch (ClassCastException classex) {
+    } catch (ClassCastException classex) {
       ; //this is OK
     }
   }
@@ -289,10 +299,10 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testCompareTo_4()
       throws Exception {
@@ -304,17 +314,90 @@ public class BooleanGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testCompareTo_5()
       throws Exception {
     Gene gene1 = new BooleanGene(conf);
     Gene gene2 = new BooleanGene(conf);
     assertEquals(0, gene1.compareTo(gene2));
-    assertEquals(0, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCompareTo_6()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new BooleanGene(conf);
+    gene1.setCompareApplicationData(true);
+    gene2.setCompareApplicationData(false);
+    List app1 = new Vector();
+    gene1.setApplicationData(app1);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(0, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCompareTo_6_2()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    gene1.setAllele(Boolean.TRUE);
+    Gene gene2 = new BooleanGene(conf);
+    gene2.setAllele(Boolean.FALSE);
+    gene1.setCompareApplicationData(true);
+    gene2.setCompareApplicationData(true);
+    List app1 = new Vector();
+    gene1.setApplicationData(app1);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(-1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCompareTo_6_3()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    gene1.setAllele(Boolean.FALSE);
+    Gene gene2 = new BooleanGene(conf);
+    gene2.setAllele(Boolean.FALSE);
+    gene1.setCompareApplicationData(true);
+    gene2.setCompareApplicationData(true);
+    List app1 = new Vector();
+    gene1.setApplicationData(app1);
+    assertEquals(1, gene1.compareTo(gene2));
+    assertEquals(-1, gene2.compareTo(gene1));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCompareTo_7()
+      throws Exception {
+    Gene gene1 = new BooleanGene(conf);
+    Gene gene2 = new BooleanGene(conf);
+    gene2.setAllele(Boolean.TRUE);
+    assertEquals(-1, gene1.compareTo(gene2));
+    assertEquals(1, gene2.compareTo(gene1));
   }
 
   /**
@@ -472,8 +555,7 @@ public class BooleanGeneTest
     try {
       gene.setValueFromPersistentRepresentation(null);
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -529,8 +611,7 @@ public class BooleanGeneTest
     try {
       gene.setValueFromPersistentRepresentation("True");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -547,8 +628,7 @@ public class BooleanGeneTest
     try {
       gene.setValueFromPersistentRepresentation("False");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -565,8 +645,7 @@ public class BooleanGeneTest
     try {
       gene.setValueFromPersistentRepresentation("X");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }

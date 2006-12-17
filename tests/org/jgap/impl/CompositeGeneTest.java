@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   private static int cleanedUp = 0;
 
@@ -65,6 +65,19 @@ public class CompositeGeneTest
     //following should be possible without exception
     CompositeGene gene = new CompositeGene(conf);
     assertEquals(null, gene.getGeneTypeAllowed());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_1()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    CompositeGene gene = new CompositeGene();
+    assertSame(conf, gene.getConfiguration());
   }
 
   /**

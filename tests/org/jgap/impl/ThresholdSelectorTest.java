@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -62,6 +62,19 @@ public class ThresholdSelectorTest
     Object m_fitnessValueComparator = privateAccessor.getField(selector,
         "m_fitnessValueComparator");
     assertTrue(m_fitnessValueComparator != null);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testConstruct_3()
+      throws Exception {
+    Genotype.setStaticConfiguration(conf);
+    ThresholdSelector op = new ThresholdSelector();
+    assertSame(conf, op.getConfiguration());
   }
 
   /**
