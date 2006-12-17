@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -402,7 +402,7 @@ public class GPGenotype
 //    m_bestFitness = best.getFitnessValue();
     /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     if (m_allTimeBest == null
-        || m_bestFitness < m_allTimeBest.getFitnessValue()) {
+        || evaluator.isFitter(m_bestFitness,  m_allTimeBest.getFitnessValue())) {
       m_allTimeBest = best;
       // Fire an event to indicate a new best solution.
       // ----------------------------------------------
