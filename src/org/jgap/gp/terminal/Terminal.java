@@ -11,6 +11,7 @@ package org.jgap.gp.terminal;
 
 import org.jgap.gp.*;
 import org.jgap.*;
+import org.jgap.util.*;
 import org.jgap.gp.impl.*;
 
 /**
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Terminal
-    extends CommandGene implements IMutateable {
+    extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   private float m_value_float;
 
@@ -255,5 +256,27 @@ public class Terminal
 
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return null;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    try {
+      Terminal result = new Terminal(getGPConfiguration(), getReturnType(),
+                                     m_lowerBounds, m_upperBounds);
+      result.m_value_double = m_value_double;
+      result.m_value_float = m_value_float;
+      result.m_value_int = m_value_int;
+      result.m_value_long = m_value_long;
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }
