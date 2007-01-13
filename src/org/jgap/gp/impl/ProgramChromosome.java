@@ -11,9 +11,9 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import org.jgap.*;
+import org.jgap.util.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
-
 import org.jgap.gp.*;
 
 /**
@@ -26,20 +26,10 @@ public class ProgramChromosome
     extends BaseGPChromosome
     implements IGPChromosome, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
-
-  /*wodka:
-   void add(Command cmd);
-   java.util.Iterator commands();
-   Interpreter interpreter();
-   Program createEmptyChildProgram();
-   SodaGlobals getGlobals();
-   void setGlobals(SodaGlobals globals);
-   Language getLanguage();
-   */
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
-   * The allowable function/terminal list.
+   * The list of allowed functions/terminals.
    */
   private transient CommandGene[] m_functionSet;
 
@@ -479,13 +469,20 @@ public class ProgramChromosome
     // Generate the node.
     // ------------------
     m_depth[m_index] = m_maxDepth - a_depth;
-    m_genes[m_index++] = a_rootNode;
+    if (a_rootNode instanceof ICloneable) {
+        m_genes[m_index++] = (CommandGene) ( (ICloneable) a_rootNode).clone();
+    }
+    else {
+      m_genes[m_index++] = a_rootNode;
+    }
     if (a_depth > 1) {
       IGPProgram ind = getIndividual();
       for (int i = 0; i < a_rootNode.getArity(ind); i++) {
-        growOrFullNode(a_num, a_depth - 1,
-                       a_rootNode.getChildType(getIndividual(), i),
-                       a_functionSet, null, a_recurseLevel + 1, a_grow);
+        if (m_index < m_depth.length) { //xx
+          growOrFullNode(a_num, a_depth - 1,
+                         a_rootNode.getChildType(getIndividual(), i),
+                         a_functionSet, null, a_recurseLevel + 1, a_grow);
+        }
       }
     }
   }
@@ -525,11 +522,16 @@ public class ProgramChromosome
     IGPProgram ind = getIndividual();
     int arity = command.getArity(ind);
     for (int i = 0; i < arity; i++) {
-      m_depth[num] = m_depth[a_index] + 1;
-      // children[i][n] = num;
-      num = redepth(num);
-      if (num < 0) {
-        break;
+      if (num < m_depth.length) {//xx
+        m_depth[num] = m_depth[a_index] + 1;
+        // children[i][n] = num;
+        num = redepth(num);
+        if (num < 0) {
+          break;
+        }
+      }
+      else {
+        return -1;//xx
       }
     }
     return num;
