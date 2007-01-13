@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   private float m_value_float;
 
@@ -57,14 +57,14 @@ public class Terminal
 
   protected void setRandomValue(int a_value) {
     RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
-    m_value_int = (int) Math.round(randomGen.nextInt() *
+    m_value_int = (int) Math.round(randomGen.nextDouble() *
                                    (m_upperBounds - m_lowerBounds) +
                                    m_lowerBounds);
   }
 
   protected void setRandomValue(long a_value) {
     RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
-    m_value_long = Math.round(randomGen.nextLong() *
+    m_value_long = Math.round(randomGen.nextDouble() *
                               (m_upperBounds - m_lowerBounds) +
                               m_lowerBounds);
   }
