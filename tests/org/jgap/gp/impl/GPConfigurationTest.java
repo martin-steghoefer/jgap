@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -288,7 +288,10 @@ public class GPConfigurationTest
     GPConfiguration.reset();
     GPConfiguration conf = new GPConfiguration();
     assertEquals(BranchTypingCross.class, conf.getCrossMethod().getClass());
-    assertEquals(FitnessProportionateSelection.class, conf.getSelectionMethod().getClass());
+    assertEquals(FitnessProportionateSelection.class,
+                 conf.getSelectionMethod().getClass());
+    assertEquals(DefaultGPFitnessEvaluator.class,
+                 conf.getGPFitnessEvaluator().getClass());
   }
 
   /**
