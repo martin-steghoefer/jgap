@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class RootConfigurationHandler
     implements ConfigurationHandler {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   // Namespace
   private final static String CONFIG_NAMESPACE = "org.jgap.Configuration";
@@ -90,7 +90,7 @@ public class RootConfigurationHandler
       if (value != null) {
         setConfigProperty(m_configurable, "m_populationSize", value);
       }
-    } catch (Exception ex) {
+    } catch (IllegalAccessException ex) {
       ex.printStackTrace();
       throw new InvalidConfigurationException(ex.getMessage());
     }
@@ -120,13 +120,14 @@ public class RootConfigurationHandler
    * @param a_configurable the configurable to use
    * @param a_propertyName the property to set
    * @param a_value the value to assign to the property
-   * @throws Exception
+   * @throws IllegalAccessException
    *
    * @author Klaus Meffert
    * @since 2.6
    */
   public void setConfigProperty(Object a_configurable, String a_propertyName,
-                                String a_value) throws Exception {
+                                String a_value)
+      throws IllegalAccessException {
 //    Use following in case variable name "m_config" should be determined
 //    dynamically.
 //    Method m = null;
@@ -172,7 +173,7 @@ public class RootConfigurationHandler
       propertyVar.set(configObj, a_value);
     }
     else {
-      throw new RuntimeException("Unknown field type: "+type.getName());
+      throw new RuntimeException("Unknown field type: " + type.getName());
     }
   }
 
@@ -219,8 +220,7 @@ public class RootConfigurationHandler
           Configurable conObj = (Configurable) genClass.newInstance();
 //TODO          ConfigurationHandler cHandler = conObj.getConfigurationHandler();
 //TODO          cHandler.readConfig();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           throw new ConfigException("Error while configuring " + className +
                                     "." + cName);
         }
