@@ -15,7 +15,7 @@ import org.jgap.util.*;
 
 /**
  * Central factory for creating default objects to use, e.g. random generators.
- * Could be made configurable. An instance of JGAPFactory can be acces via<p>
+ * Could be made configurable. An instance of JGAPFactory can be accessed via<p>
  * <code>Genotype.getConfiguration().getJGAPFactory();</code><p>
  * To use your own factory class instead, use:<p>
  * <code>
@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class JGAPFactory
     implements IJGAPFactory {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private List m_parameters;
 
@@ -295,7 +295,7 @@ public class JGAPFactory
     IHandler result = null;
     Iterator it = a_list.iterator();
     while (it.hasNext()) {
-      IInitializer initer = (IInitializer) it.next();
+      IHandler initer = (IHandler) it.next();
       if (initer.isHandlerFor(a_obj, a_class)) {
         result = initer;
         break;
