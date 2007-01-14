@@ -26,7 +26,7 @@ public class ProgramChromosome
     extends BaseGPChromosome
     implements IGPChromosome, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -488,7 +488,7 @@ public class ProgramChromosome
   }
 
   /**
-   * Recalculate the depths of each node.
+   * Recalculate the depth of each node.
    *
    * @author Klaus Meffert
    * @since 3.0

@@ -18,7 +18,7 @@ package org.jgap;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The configuration object to use
@@ -27,6 +27,7 @@ public abstract class BaseChromosome
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
+   *
    * @param a_configuration the configuration to set
    * @throws InvalidConfigurationException if configuration is null
    *
@@ -55,6 +56,7 @@ public abstract class BaseChromosome
 
   /**
    * Creates and returns a copy of this object.
+   *
    * @return a clone of this instance
    * @throws IllegalStateException instead of CloneNotSupportedException
    *

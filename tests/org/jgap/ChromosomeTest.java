@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -36,6 +36,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -54,6 +55,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -72,6 +74,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding third parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -89,6 +92,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding third parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -107,6 +111,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -125,6 +130,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second and third parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -142,6 +148,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second and third parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -160,6 +167,7 @@ public class ChromosomeTest
 
   /**
    * Legal construction.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -179,6 +187,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding an element of the second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -199,6 +208,7 @@ public class ChromosomeTest
   /**
    * Illegal constructions regarding a gene type forbidden by the constraint
    * checker used.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -224,6 +234,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -241,6 +252,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -259,6 +271,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding second parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -292,6 +305,7 @@ public class ChromosomeTest
 
   /**
    * Illegal constructions regarding first parameter.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -385,6 +399,7 @@ public class ChromosomeTest
 
   /**
    * Tests cloning and cleanup of a chromosome.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -406,6 +421,7 @@ public class ChromosomeTest
 
   /**
    * Tests cloning of a chromosome with genes using the chromosome pool.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -428,7 +444,8 @@ public class ChromosomeTest
   }
 
   /**
-   * Test clone with configuration set
+   * Test clone with configuration set.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -463,8 +480,10 @@ public class ChromosomeTest
   /**
    * Test clone with set application data implementing interface Cloneable,
    * but restricting access because MyAppData is a package protected class (and
-   * the Chromosome class resides in differwent package) and also not
-   * implementing IApplicationData
+   * the Chromosome class resides in different package) and also not
+   * implementing IApplicationData. But by using setAccessible in framework
+   * code, now it works. Some months ago it didn't *uuumm*.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -490,6 +509,7 @@ public class ChromosomeTest
    * Test clone with set application data, where cloning supported. Access is
    * not granted via Cloneable (because of inner class) but via explicit and
    * specially considered interface IApplicationData (see MyAppObject2)!
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -515,6 +535,7 @@ public class ChromosomeTest
 
   /**
    * Test clone with Gene's energy set (value should be considered, too).
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -547,9 +568,9 @@ public class ChromosomeTest
 
   /**
    * Test hashcode for intensity of diversity.<p>
-   *
    * <b>Warning:</b> when a new Gene type is added the constant MAX_GENES_TYPES
    * must be adjusted as well as adding the new type in the switch case below.
+   *
    * @throws InvalidConfigurationException
    *
    * @author John Serri
@@ -1106,7 +1127,8 @@ public class ChromosomeTest
   }
 
   /**
-   * Use Chromosome Pool
+   * Use Chromosome Pool.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1200,6 +1222,7 @@ public class ChromosomeTest
 
   /**
    * No genes.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1219,6 +1242,7 @@ public class ChromosomeTest
 
   /**
    * Two genes.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1246,6 +1270,7 @@ public class ChromosomeTest
 
   /**
    * Considering application data.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1266,6 +1291,7 @@ public class ChromosomeTest
 
   /**
    * Test setter/getter of constraint checker.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1284,6 +1310,7 @@ public class ChromosomeTest
 
   /**
    * Test setter/getter of constraint checker.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1307,6 +1334,7 @@ public class ChromosomeTest
 
   /**
    * Test setter/getter of constraint checker.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1326,6 +1354,7 @@ public class ChromosomeTest
 
   /**
    * Test setter/getter of constraint checker which forbids the used gene type.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1347,6 +1376,7 @@ public class ChromosomeTest
 
   /**
    * Test setter/getter of constraint checker which allows ther used gene type.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1373,7 +1403,7 @@ public class ChromosomeTest
 
     public Object clone()
         throws CloneNotSupportedException {
-      return null;
+      return this;
     }
   }
   class MyAppObject2
@@ -1394,8 +1424,9 @@ public class ChromosomeTest
   }
   /**
    * Class needs to be static, otherwise the serialization of the Chromosome
-   * does not work properly (in JBuilder it does but running the test wit ant
+   * does not work properly (in JBuilder it does but running the test with ant
    * fails).
+   *
    * @author Klaus Meffert
    */
   static class MyConstraintChecker
@@ -1420,6 +1451,7 @@ public class ChromosomeTest
   }
   /**
    * Ensures Chromosome is implementing Serializable.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1436,6 +1468,7 @@ public class ChromosomeTest
   /**
    * Ensures that Chromosome and all objects contained implement Serializable
    * correctly.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert

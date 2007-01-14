@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.0000001;
@@ -39,7 +39,8 @@ public class GaussianRandomGenerator
   }
 
   /**
-   * Constructor speicifying the (obliagtory) standard deviation
+   * Constructor speicifying the (obliagtory) standard deviation.
+   *
    * @param a_standardDeviation the standard deviation to use
    */
   public GaussianRandomGenerator(final double a_standardDeviation) {
@@ -49,7 +50,7 @@ public class GaussianRandomGenerator
   }
 
   /**
-   * Initializations on construction
+   * Initializations on construction.
    */
   private void init() {
     m_rn = new Random();

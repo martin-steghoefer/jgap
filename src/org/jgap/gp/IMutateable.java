@@ -19,10 +19,11 @@ import org.jgap.*;
  */
 public interface IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
-   * Mutates a CommandGene
+   * Mutates a CommandGene.
+   *
    * @param a_index references the part of a multipart object, normally not
    * relevant
    * @param a_percentage the mutation rate (0.0 to 1.0)
@@ -34,4 +35,5 @@ public interface IMutateable {
    */
   CommandGene applyMutation(int a_index, double a_percentage)
       throws InvalidConfigurationException;
+
 }

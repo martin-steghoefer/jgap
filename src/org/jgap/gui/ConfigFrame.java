@@ -30,7 +30,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   // data members of class ConfigFrame
   private Object m_conHandler;
@@ -81,9 +81,10 @@ public class ConfigFrame
    * @param a_parent
    * @param a_title the title of the frame
    * @param a_isRoot
+   *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   ConfigFrame(final ConfigFrame a_parent, final String a_title,
               final boolean a_isRoot) {
     super(a_title);
@@ -100,8 +101,9 @@ public class ConfigFrame
   /**
    * Does the initial setup of the JFrame and shows it.
    * @param a_conHandler the configuration handler from which this ConfigFrame
-   * would get information.
-   * @author Siddhartha Azad.
+   * would get information
+   *
+   * @author Siddhartha Azad
    * @since 2.3
    */
   public void createAndShowGUI(final Object a_conHandler) {
@@ -144,10 +146,11 @@ public class ConfigFrame
   /**
    * Getter for the Configuration Information on this frame.
    * @return The ConfigData object containing the configuration
-   * information on this frame.
+   * information on this frame
+   *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   public ConfigData getConfigData() {
     ConfigData cd = new ConfigData();
     cd.setNS(m_conHandler.getClass().getName());
@@ -184,8 +187,9 @@ public class ConfigFrame
 
   /**
    * Get the config file to write to.
-   * @return The config file name to write to.
-   * @author Siddhartha Azad.
+   * @return the config file name to write to
+   *
+   * @author Siddhartha Azad
    * @since 2.3
    */
   public String getFileName() {
@@ -209,7 +213,8 @@ public class ConfigFrame
    * there are configurable values that can be choosen from a list of items.
    * The second panel contains all values configurable via a JTextField. The
    * third panel contains the filename and configure button.
-   * @author Siddhartha Azad.
+   *
+   * @author Siddhartha Azad
    * @since 2.3
    */
   private void setup() {
@@ -283,11 +288,14 @@ public class ConfigFrame
 
   /**
    * Add the widgets to the frame.
-   * @param a_numPanels Number of panels to add.
-   * @param a_numLists Number of lists to add.
-   * @param a_numTexts Number of text boxes to add.
+   *
+   * @param a_numPanels Number of panels to add
+   * @param a_numLists Number of lists to add
+   * @param a_numTexts Number of text boxes to add
+   *
+   * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   private void addWidgets(int a_numPanels, final int a_numLists,
                           final int a_numTexts) {
     try {
@@ -466,9 +474,10 @@ public class ConfigFrame
   /**
    * This class groups the property data structure along with the JLists
    * associated with it.
+   *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   public class ListGroup {
     // list that will display the available items
     private JList m_list;
@@ -503,6 +512,7 @@ public class ConfigFrame
     /**
      * Constructor responsible for creating all items that go on the list
      * panel.
+     *
      * @author Siddhartha Azad
      * @since 2.3
      */
@@ -536,10 +546,11 @@ public class ConfigFrame
 
     /**
      * Getter for the ConfigProperty object associated with this ListGroup.
-     * @return The ConfigProperty object associated with this ListGroup.
-     * @author Siddhartha Azad.
+     * @return the ConfigProperty object associated with this ListGroup
+     *
+     * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public ConfigProperty getProp() {
       return m_prop;
     }
@@ -549,45 +560,50 @@ public class ConfigFrame
      * This object is used to retrieve the values that the list is initialized
      * with.
      * @param a_prop the ConfigProperty object associated with this ListGroup
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public void setProp(final ConfigProperty a_prop) {
       m_prop = a_prop;
     }
 
     /**
      * @return the JList containing the items to select from
-     * @author Siddhartha Azad.
+     *
+     * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public JList getList() {
       return m_list;
     }
 
     /**
      * @return DefaultListModel for the list
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public DefaultListModel getListModel() {
       return m_listModel;
     }
 
     /**
-     * @return scroller for the list.
-     * @author Siddhartha Azad.
+     * @return scroller for the list
+     *
+     * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public JScrollPane getListScroller() {
       return m_listScroller;
     }
 
     /**
      * @return Output JList
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public JList getOutList() {
       return m_outList;
     }
@@ -595,46 +611,50 @@ public class ConfigFrame
     /**
      * Getter for the output list's associated model.
      * @return DefaultListModel for the output list
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public DefaultListModel getOutListModel() {
       return m_outListModel;
     }
 
     /**
-     * @return scroller for the output list.
+     * @return scroller for the output list
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public JScrollPane getOutListScroller() {
       return m_outListScroller;
     }
 
     /**
      * @return the button to move items from outlist to list
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public JButton getLButton() {
       return m_lButton;
     }
 
     /**
-     * Return right button for this ListGroup
-     * @return The button to move items from list to outlist.
-     * @author Siddhartha Azad.
+     * @return the button to move items from list to outlist
+     *
+     * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public JButton getRButton() {
       return m_rButton;
     }
 
     /**
      * Move selected items from the output list back to the list.
+     *
      * @author Siddhartha Azad
      * @since 2.3
-     * */
+     */
     public void leftButtonPressed() {
       int[] indices = m_outList.getSelectedIndices();
       for (int i = 0; i < indices.length; i++) {
@@ -645,6 +665,7 @@ public class ConfigFrame
 
     /**
      * Move selected items from list to the output list.
+     *
      * @author Siddhartha Azad
      * @since 2.3
      */
@@ -659,9 +680,10 @@ public class ConfigFrame
   /**
    * This class groups the property data structure along with the JLists
    * associated with it.
+   *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   class TextGroup {
     private JTextField m_textField;
 
@@ -692,9 +714,10 @@ public class ConfigFrame
   }
   /**
    * Listener for the Configure button.
+   *
    * @author Siddhartha Azad
    * @since 2.3
-   * */
+   */
   class ConfigButtonListener
       implements ActionListener {
     private ConfigFrame m_frame;
@@ -779,6 +802,7 @@ public class ConfigFrame
   }
   /**
    * Listener for list buttons to move items around.
+   *
    * @author Siddhartha Azad
    * @since 2.3
    */
@@ -804,6 +828,7 @@ public class ConfigFrame
   }
   /**
    * Listener for changes in the list of items.
+   *
    * @author Siddhartha Azad
    * @since 2.3
    */
@@ -830,6 +855,7 @@ public class ConfigFrame
   /**
    * Notify the frame that a value has been selected in the output list for
    * further configuration.
+   *
    * @author Siddhartha Azad
    * @since 2.3
    */

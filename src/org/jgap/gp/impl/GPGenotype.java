@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -284,11 +284,13 @@ public class GPGenotype
       throws InvalidConfigurationException {
     System.gc();
     if(a_verboseOutput) {
+      System.out.println("Creating initial population");
       System.out.println("Memory consumed before creating population: "
                          + getTotalMemoryMB() + "MB");
-      System.out.println("Creating initial population");
     }
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
+    // Create initial population.
+    // --------------------------
     pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                a_maxNodes, a_fullModeAllowed);
     System.gc();
