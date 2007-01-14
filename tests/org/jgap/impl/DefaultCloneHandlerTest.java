@@ -10,6 +10,7 @@
 package org.jgap.impl;
 
 import org.jgap.*;
+import org.jgap.util.*;
 import junit.framework.*;
 
 /**
@@ -21,7 +22,7 @@ import junit.framework.*;
 public class DefaultCloneHandlerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCloneHandlerTest.class);
@@ -60,13 +61,23 @@ public class DefaultCloneHandlerTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testPerform_1()
+  public void testIsHandlerFor_2()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    FixedBinaryGene orig = new FixedBinaryGene(conf, 3);
-    FixedBinaryGene clone = (FixedBinaryGene) handler.perform(orig,
-        FixedBinaryGene.class, null);
-    assertEquals(orig, clone);
+    Object app = new MyAppDataForTest();
+    assertTrue(handler.isHandlerFor(app, app.getClass()));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testIsHandlerFor_3()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    assertTrue(handler.isHandlerFor(null, ICloneable.class));
   }
 
   /**
@@ -75,11 +86,13 @@ public class DefaultCloneHandlerTest
    * @author Klaus Meffert
    * @since 2.6
    */
-  public void testIsHandlerFor_2()
+  public void testPerform_1()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    Object app = new MyAppDataForTest();
-    assertTrue(handler.isHandlerFor(app, app.getClass()));
+    FixedBinaryGene orig = new FixedBinaryGene(conf, 3);
+    FixedBinaryGene clone = (FixedBinaryGene) handler.perform(orig,
+        FixedBinaryGene.class, null);
+    assertEquals(orig, clone);
   }
 
   class MyAppDataForTest implements Cloneable {
