@@ -12,11 +12,9 @@ package org.jgap.gui;
 import java.io.*;
 import org.jgap.data.config.*;
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
-
 import junit.framework.*;
 
 /**
@@ -28,7 +26,7 @@ import junit.framework.*;
 public class ConfigWriterTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigWriterTest.class);
@@ -48,12 +46,13 @@ public class ConfigWriterTest
   public void testConfigData_0()
       throws Exception {
     IConfigInfo ici = new MockConfigInfoForTest();
-    ConfigWriter.getInstance().write(ici);/**@todo write to stream*/
+    ConfigWriter.getInstance().write(ici); /**@todo write to stream*/
     // read the file and check the values
     int totalProps = 0;
     Properties props = new Properties();
     try {
-      props.load(new FileInputStream("jgapTmp.con"));/**@todo read from stream*/
+      props.load(new FileInputStream("jgapTmp.con"));
+          /**@todo read from stream*/
       ConfigData cd = ici.getConfigData();
       String nsPrefix = cd.getNS() + ".";
       String name;
@@ -67,8 +66,7 @@ public class ConfigWriterTest
           String tmpName = nsPrefix + name + "[" + idx + "]";
           try {
             assertEquals(props.getProperty(tmpName), (String) iter.next());
-          }
-          catch (Exception ex) {
+          } catch (Exception ex) {
             ex.printStackTrace();
             fail();
           }
@@ -83,16 +81,14 @@ public class ConfigWriterTest
         tmpName = nsPrefix + name;
         try {
           assertEquals(props.getProperty(tmpName), value);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
           fail();
         }
         totalProps++;
       }
       assertEquals(totalProps, props.size());
-    }
-    catch (IOException ioEx) {
+    } catch (IOException ioEx) {
       ioEx.printStackTrace();
       fail();
     }
@@ -135,5 +131,18 @@ public class ConfigWriterTest
     conf.addGeneticOperator(new CrossoverOperator(conf));
     conf.addGeneticOperator(new MutationOperator(conf, 15));
     Genotype.randomInitialGenotype(conf);
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testGetInstance_0()
+      throws Exception {
+    ConfigWriter inst = ConfigWriter.getInstance();
+    assertSame(inst, ConfigWriter.getInstance());
   }
 }
