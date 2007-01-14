@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -221,5 +221,98 @@ public class GPGenotypeTest
     // Serialize genotype to a file.
     // -----------------------------
     assertEquals(gen, doSerialize(gen));
+  }
+
+  /**
+   * Verifies that terminals are passed as clones during evolution and not
+   * as references. Thanx a lot Javier for pointing this out nicely!
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testReferenceProblem_0()
+      throws Exception {
+    m_gpconf.setPopulationSize(30);
+    m_gpconf.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
+    m_gpconf.setFitnessFunction(new TerminalsOnly());
+    m_gpconf.setRandomGenerator(new StockRandomGenerator());
+    //
+    Class[] types = {
+        CommandGene.IntegerClass};
+    Class[][] argTypes = { {}
+    };
+    CommandGene[][] nodeSets = { {
+        new Increment(m_gpconf, CommandGene.IntegerClass, 1),
+        new Terminal(m_gpconf, CommandGene.IntegerClass, 1.0d, 10000.0d),
+    }
+    };
+    GPGenotype gen = GPGenotype.randomInitialGenotype(m_gpconf, types, argTypes,
+        nodeSets, 1, false);
+    gen.getGPPopulation().sort(new TerminalsFirstComparator());
+    IGPProgram prog1 = gen.getGPPopulation().getGPProgram(0);
+    ProgramChromosome chrom1 = prog1.getChromosome(0);
+    Terminal gene1 = (Terminal) chrom1.getGene(0);
+    IGPProgram prog2 = gen.getGPPopulation().getGPProgram(1);
+    ProgramChromosome chrom2 = prog2.getChromosome(0);
+    Terminal gene2 = (Terminal) chrom2.getGene(0);
+    assertNotSame(gene1, gene2);
+  }
+
+  class TerminalsOnly
+      extends GPFitnessFunction {
+    protected double evaluate(IGPProgram a_subject) {
+      ProgramChromosome chrom1 = a_subject.getChromosome(0);
+      CommandGene gene1 = chrom1.getGene(0);
+      if (gene1 instanceof Terminal) {
+        return gene1.execute_double(null, 0, new Object[] {});
+      }
+      else {
+        return 999999.0d;
+      }
+    }
+  }
+  class TerminalsFirstComparator
+      implements java.util.Comparator {
+    public int compare(Object o1, Object o2) {
+      IGPProgram prog1 = (IGPProgram)o1;
+      IGPProgram prog2 = (IGPProgram)o2;
+      CommandGene gene1 = prog1.getChromosome(0).getGene(0);
+      CommandGene gene2 = prog2.getChromosome(0).getGene(0);
+      boolean o1is, o2is;
+      if (gene1 instanceof Terminal) {
+        o1is = true;
+      }
+      else {
+        o1is = false;
+      }
+      if (gene2 instanceof Terminal) {
+        o2is = true;
+      }
+      else {
+        o2is = false;
+      }
+      if (o1is) {
+        if (o2is) {
+          return 0;
+        }
+        else {
+          return -1;
+        }
+      }
+      else {
+        if (o2is) {
+          return 1;
+        }
+        else {
+          return 0;
+        }
+      }
+    }
+
+    public boolean equals(Object obj) {
+      return compare(this, obj) == 0;
+    }
   }
 }
