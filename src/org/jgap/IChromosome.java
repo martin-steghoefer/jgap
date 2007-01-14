@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.io.*;
+import org.jgap.util.*;
 
 /**
  * Interface for chromosomes.
@@ -18,9 +19,9 @@ import java.io.*;
  * @since 2.6
  */
 public interface IChromosome
-    extends Comparable, Cloneable, Serializable {
+    extends Comparable, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.9 $";
+  final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Constants for toString()
@@ -163,17 +164,6 @@ public interface IChromosome
    * @since 2.6
    */
   boolean isSelectedForNextGeneration();
-
-  /**
-   * Creates and returns a copy of this object. Added to this interface to
-   * ensure that each chromosome implementation supports cloning.
-   * @return a clone of this instance
-   * @throws IllegalStateException instead of CloneNotSupportedException
-   *
-   * @author Klaus Meffert
-   * @since 2.6
-   */
-  Object clone();
 
   /**
    * Sets the constraint checker to be used for this gene whenever method
