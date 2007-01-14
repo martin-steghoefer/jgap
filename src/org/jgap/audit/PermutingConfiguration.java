@@ -22,7 +22,7 @@ import java.util.*;
 public class PermutingConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private List m_randomGeneratorSlots;
 
@@ -142,7 +142,7 @@ public class PermutingConfiguration
     }
     List list;
     Iterator it;
-    /**@todo make permutation below computed dynamically and not statically*/
+    /**@todo make permutation below computed dynamic and not static*/
     /**@todo introduce new parameters: populationSize,
      * setPreservFittestIndividual, MAX_ALLOWED_EVOLUTIONS
      */
@@ -159,7 +159,6 @@ public class PermutingConfiguration
 //      m_randomGeneratorIndex = 0;
 //      m_fitnessFunctionIndex = 0;
     }
-//    System.err.print(m_geneticOperatorIndex+" ");
     list = nextList(m_geneticOperatorIndex++, m_geneticOperatorSlots);
     it = list.iterator();
     GeneticOperator op;
@@ -178,7 +177,6 @@ public class PermutingConfiguration
       m_randomGeneratorIndex++;
 //      m_fitnessFunctionIndex = 0;
     }
-//    System.err.print(m_naturalSelectorIndex+" ");
     list = nextList(m_naturalSelectorIndex, m_naturalSelectorSlots);
     it = list.iterator();
     NaturalSelector ns;
@@ -189,25 +187,24 @@ public class PermutingConfiguration
     }
     // Permute RandomGenerator's.
     // --------------------------
-    if (true || bitSet(m_componentIndex, 2)) {
-      m_randomGeneratorIndex++;
-      if (m_randomGeneratorIndex >= m_randomGeneratorSlots.size()) {
-        m_randomGeneratorIndex = 0;
-        m_fitnessFunctionIndex++;
-      }
+//    if (true || bitSet(m_componentIndex, 2)) {
+    m_randomGeneratorIndex++;
+    if (m_randomGeneratorIndex >= m_randomGeneratorSlots.size()) {
+      m_randomGeneratorIndex = 0;
+      m_fitnessFunctionIndex++;
     }
-//    System.err.print(m_randomGeneratorIndex+" ");
+//    }
     RandomGenerator rg = (RandomGenerator) m_randomGeneratorSlots.get(
         m_randomGeneratorIndex);
     m_configuration.setRandomGenerator(rg);
     // Permute FitnessFunction's.
     // --------------------------
-    if (true || bitSet(m_componentIndex, 3)) {
-      m_fitnessFunctionIndex++;
-      if (m_fitnessFunctionIndex >= m_fitnessFunctionSlots.size()) {
-        m_fitnessFunctionIndex = 0;
-      }
+//    if (true || bitSet(m_componentIndex, 3)) {
+    m_fitnessFunctionIndex++;
+    if (m_fitnessFunctionIndex >= m_fitnessFunctionSlots.size()) {
+      m_fitnessFunctionIndex = 0;
     }
+//    }
     /**@todo BulkFitnessOffsetRemover vs. FitnessFunction*/
 
 //    System.err.println(m_fitnessFunctionIndex+" / "+index++);
@@ -243,9 +240,9 @@ public class PermutingConfiguration
     return newList;
   }
 
-  private boolean bitSet(int number, int bitIndex) {
-    return ( (number & (int) Math.pow(2, (bitIndex))) > 0);
-  }
+//  private boolean bitSet(int number, int bitIndex) {
+//    return ( (number & (int) Math.pow(2, (bitIndex))) > 0);
+//  }
 
   public boolean hasNext() {
     double r = (m_randomGeneratorSlots.size())
