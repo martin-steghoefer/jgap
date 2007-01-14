@@ -10,6 +10,7 @@
 package org.jgap.audit;
 
 import java.io.Serializable;
+import org.jgap.util.*;
 
 /**
  * A (key, value) tupel.
@@ -18,9 +19,9 @@ import java.io.Serializable;
  * @since 2.3
  */
 public class KeyedValue
-    implements Cloneable, Serializable {
+    implements ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private Comparable m_key;
 
@@ -128,14 +129,15 @@ public class KeyedValue
   /**
    * @return clone of the current instance
    *
-   * @throws CloneNotSupportedException  not thrown here
-   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public Object clone()
-      throws CloneNotSupportedException {
-    KeyedValue clone = (KeyedValue)super.clone();
-    return clone;
+  public Object clone() {
+    try {
+      KeyedValue clone = (KeyedValue)super.clone();
+      return clone;
+    } catch (CloneNotSupportedException cex) {
+      throw new CloneException(cex);
+    }
   }
 }

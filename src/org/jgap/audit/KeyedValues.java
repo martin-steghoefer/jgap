@@ -11,6 +11,7 @@ package org.jgap.audit;
 
 import java.io.*;
 import java.util.*;
+import org.jgap.util.*;
 
 /**
  * A collection of (key, value) tupels
@@ -19,9 +20,9 @@ import java.util.*;
  * @since 2.3
  */
 public class KeyedValues
-    implements Cloneable, Serializable {
+    implements ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   /** Data storage */
   private List m_data;
@@ -240,20 +241,21 @@ public class KeyedValues
   /**
    * @return clone of the current instance
    *
-   * @throws CloneNotSupportedException  not thrown here
-   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public Object clone()
-      throws CloneNotSupportedException {
-    final KeyedValues clone = (KeyedValues)super.clone();
-    clone.m_data = Collections.synchronizedList(new ArrayList());
-    final Iterator iterator = m_data.iterator();
-    while (iterator.hasNext()) {
-      final KeyedValue kv = (KeyedValue) iterator.next();
-      clone.m_data.add(kv.clone());
+  public Object clone() {
+    try {
+      final KeyedValues clone = (KeyedValues)super.clone();
+      clone.m_data = Collections.synchronizedList(new ArrayList());
+      final Iterator iterator = m_data.iterator();
+      while (iterator.hasNext()) {
+        final KeyedValue kv = (KeyedValue) iterator.next();
+        clone.m_data.add(kv.clone());
+      }
+      return clone;
+    } catch (CloneNotSupportedException cex) {
+      throw new CloneException(cex);
     }
-    return clone;
   }
 }

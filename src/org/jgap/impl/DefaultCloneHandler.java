@@ -10,6 +10,7 @@
 package org.jgap.impl;
 
 import java.lang.reflect.*;
+import org.jgap.util.*;
 import org.jgap.*;
 
 /**
@@ -46,6 +47,9 @@ public class DefaultCloneHandler
       clazz = a_clazz;
     }
     if (IApplicationData.class.isAssignableFrom(clazz)) {
+      return true;
+    }
+    if (ICloneable.class.isAssignableFrom(clazz)) {
       return true;
     }
     if (Cloneable.class.isAssignableFrom(clazz)) {
@@ -88,6 +92,14 @@ public class DefaultCloneHandler
    */
   public Object perform(final Object a_objToClone, final Class a_class,
                         final Object a_params) {
+    if (ICloneable.class.isAssignableFrom(a_objToClone.getClass())) {
+      try {
+        return ( (ICloneable) a_objToClone).clone();
+      }
+      catch (CloneException cex) {
+        throw new IllegalStateException(cex.getMessage());
+      }
+    }
     if (IApplicationData.class.isAssignableFrom(a_objToClone.getClass())) {
       try {
         return ( (IApplicationData) a_objToClone).clone();
