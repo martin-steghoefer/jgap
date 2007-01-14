@@ -11,6 +11,7 @@ package org.jgap.audit;
 
 import java.io.*;
 import java.util.*;
+import org.jgap.util.*;
 
 /**
  * A collection of (row, column) tupels
@@ -19,9 +20,9 @@ import java.util.*;
  * @since 2.3
  */
 public class KeyedValues2D
-    implements Cloneable, Serializable {
+    implements ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   /** The row keys */
   private List m_rowKeys;
@@ -286,13 +287,14 @@ public class KeyedValues2D
   /**
    * @return clone of the current instance
    *
-   * @throws CloneNotSupportedException  not thrown here
-   *
    * @author Klaus Meffert
    * @since 2.3
    */
-  public Object clone()
-      throws CloneNotSupportedException {
-    return super.clone();
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException cex) {
+      throw new CloneException(cex);
+    }
   }
 }
