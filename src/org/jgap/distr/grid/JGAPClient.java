@@ -13,7 +13,6 @@ import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.jgap.*;
 import org.homedns.dade.jcgrid.message.GridMessageWorkResult;
-import examples.grid.MyResult;
 import org.homedns.dade.jcgrid.message.GridMessageWorkRequest;
 
 /**
@@ -24,7 +23,7 @@ import org.homedns.dade.jcgrid.message.GridMessageWorkRequest;
  */
 public abstract class JGAPClient extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -90,7 +89,7 @@ public abstract class JGAPClient extends Thread {
         for (int i = 0; i < workList.length; i++) {
           m_clientFeedback.setProgressValue(i + workList.length);
           GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();
-          MyResult workResult = (MyResult) gmwr.getWorkResult();
+          JGAPResult workResult = (JGAPResult) gmwr.getWorkResult();
           int idx = workResult.getRID();
           m_clientFeedback.receivedFragmentResult(workList[idx], workResult,
               idx);
