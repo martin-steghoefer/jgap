@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.68 $";
+  private final static String CVS_REVISION = "$Revision: 1.69 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -53,7 +53,7 @@ public class Configuration
 
   public static final String PROPERTY_BFITFNC_INST = "JGAPBFITFNCINST";
 
-  public static final String PROPERTY_FITEVAL_INST = "JGAPBFITEVALINST";
+  public static final String PROPERTY_FITEVAL_INST = "JGAPFITEVALINST";
 
   public static final String PROPERTY_SAMPLE_CHROM_INST = "JGAPSAMPLECHRMINST";
 
@@ -1447,4 +1447,13 @@ public class Configuration
     makeThreadKey();
   }
 
+  /**
+   * @return the id of the configuration set
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public String getId() {
+    return m_id;
+  }
 }
