@@ -24,7 +24,7 @@ public class Evaluator {
    */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Each data has its own data container
@@ -84,6 +84,17 @@ public class Evaluator {
     return m_data.getValue(rowKey, columnKey);
   }
 
+  /**
+   * Sets a specific value.
+   * @param a_permutation int
+   * @param a_run int
+   * @param a_value double
+   * @param a_rowKey Comparable
+   * @param a_columnKey Comparable
+   *
+   * @author Klaus Meffert
+   * @since 2.2
+   */
   public void setValue(int a_permutation, int a_run, double a_value,
                        Comparable a_rowKey, Comparable a_columnKey) {
     Object key = createKey(a_permutation, a_run);
@@ -118,11 +129,6 @@ public class Evaluator {
     return a_data.getValue(rowKey, columnKey);
   }
 
-  public Number getAvgValue(int a_permutation, Comparable rowKey,
-                            Comparable columnKey) {
-    return null; /**@todo implement*/
-  }
-
   public KeyedValues2D getData() {
     return m_data;
   }
@@ -136,7 +142,8 @@ public class Evaluator {
    * If permutation -1 is given, a composition of all permutations available
    * is created.
    * @param a_permutation -1 to use all permutations
-   * @return DefaultKeyedValues2D
+   * @return DefaultKeyedValues2D list of fitness values, one for each
+   * individual in the generation
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -163,7 +170,8 @@ public class Evaluator {
 
   protected void calcAvgFitnessHelper(int a_permutation,
                                       final KeyedValues2D result) {
-    // determine run-numbers of given permutation
+    // Determine run-numbers of given permutation.
+    // -------------------------------------------
     Map runNumbers = (Map) m_permutationRuns.get(new Integer(a_permutation));
     if (runNumbers == null) {
       return;
@@ -179,7 +187,7 @@ public class Evaluator {
       // ---------------------------------------
       KeyedValues2D a_data = (KeyedValues2D) m_permutationData.
           get(createKey(a_permutation, runI.intValue()));
-      // determine values for current run-number and "add" them to gathered
+      // Determine values for current run-number and "add" them to gathered
       // data.
       // ------------------------------------------------------------------
       for (int col = 0; col < a_data.getColumnCount(); col++) {
@@ -222,8 +230,12 @@ public class Evaluator {
 
   /**
    * Calculates average fitness value improvement per generation.
+   *
    * @param a_permutation int
    * @return DefaultKeyedValues2D
+   *
+   * @author Klaus Meffert
+   * @since 2.2
    */
   public KeyedValues2D calcAvgFitnessImpr(int a_permutation) {
     /**@todo implement*/
