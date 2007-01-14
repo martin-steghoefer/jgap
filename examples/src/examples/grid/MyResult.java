@@ -13,7 +13,8 @@ import org.jgap.distr.grid.*;
 import org.jgap.*;
 
 /**
- * Stores the result of a computation.
+ * Stores the result of a computation. Actually adds no functionality to
+ * superclass JGAPResult. Extend this class for your application if necessary.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -21,7 +22,7 @@ import org.jgap.*;
 public class MyResult
     extends JGAPResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static final long serialVersionUID = 2L;
 

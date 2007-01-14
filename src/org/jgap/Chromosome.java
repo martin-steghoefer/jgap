@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.86 $";
+  private final static String CVS_REVISION = "$Revision: 1.87 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -138,6 +138,7 @@ public class Chromosome
 
   /**
    * Default constructor, provided for dynamic instantiation.
+   *
    * @param a_configuration the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -151,6 +152,7 @@ public class Chromosome
 
   /**
    * Constructor for specifying the number of genes.
+   *
    * @param a_configuration the configuration to use
    * @param a_desiredSize number of genes the chromosome contains of
    * @throws InvalidConfigurationException
@@ -265,6 +267,7 @@ public class Chromosome
 
   /**
    * Helper: called by constructors only to verify the initial genes.
+   *
    * @param a_initialGenes the initial genes of this Chromosome to verify
    *
    * @author Klaus Meffert
@@ -369,6 +372,7 @@ public class Chromosome
   /**
    * Clones an object by using clone handlers. If no deep cloning possible, then
    * return the reference.
+   *
    * @param a_object the object to clone
    * @return the cloned object, or the object itself if no coning supported
    * @throws Exception
@@ -535,8 +539,8 @@ public class Chromosome
   }
 
   /**
-   * @return a string representation of this Chromosome, useful
-   * for display purposes.
+   * @return a string representation of this Chromosome, useful for display
+   * purposes
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
