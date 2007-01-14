@@ -27,7 +27,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private int[][] m_map;
 
@@ -166,6 +166,7 @@ public class AntTrailProblem
     try {
       System.out.println("Ant trail problem");
       GPConfiguration config = new GPConfiguration();
+      config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
       int popSize = 500;
       String filename;
       if (args.length == 1) {
