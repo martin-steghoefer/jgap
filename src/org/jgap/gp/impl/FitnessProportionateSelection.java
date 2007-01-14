@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class FitnessProportionateSelection
     implements INaturalGPSelector, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public IGPProgram select(GPGenotype a_genotype) {
     /**@todo speedup*/
@@ -31,20 +31,26 @@ public class FitnessProportionateSelection
         nextFloat() * a_genotype.getTotalFitness();
     int num = 0;
     GPPopulation pop = a_genotype.getGPPopulation();
+    int popSize = pop.size();
     num = Arrays.binarySearch(pop.getFitnessRanks(), (float) chosen);
     if (num >= 0) {
       return pop.getGPProgram(num);
     }
     else {
-      for (num = 1; num < pop.size(); num++) {
+      for (num = 1; num < popSize; num++) {
         if (chosen < pop.getFitnessRank(num)) {
           break;
         }
       }
       num--;
-      if (num >= pop.size() - 1) {
-        num = a_genotype.getGPConfiguration().getRandomGenerator().
-            nextInt(pop.size() - 1);
+      if (num >= popSize - 1) {
+        if (popSize - 1 < 1) {
+          num = 1;
+        }
+        else {
+          num = a_genotype.getGPConfiguration().getRandomGenerator().
+              nextInt(popSize - 1);
+        }
       }
       return pop.getGPProgram(num);
     }
