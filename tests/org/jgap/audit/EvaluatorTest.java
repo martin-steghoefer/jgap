@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public void setUp() {
     super.setUp();
@@ -288,8 +288,7 @@ public class EvaluatorTest
     try {
       Evaluator eval = new Evaluator(null);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -377,8 +376,9 @@ public class EvaluatorTest
     Comparable colKey = new Integer(6);
     double value = 2.3d;
     eval.setValue(1, 2, value, rowKey, colKey);
-    assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
-    assertNull(eval.getValue(1,1, rowKey, colKey));
+    assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(),
+                 DELTA);
+    assertNull(eval.getValue(1, 1, rowKey, colKey));
   }
 
   /**
@@ -398,11 +398,14 @@ public class EvaluatorTest
     eval.setValue(1, 2, value, rowKey, colKey);
     double value2 = 4.8d;
     eval.setValue(2, 2, value2, rowKey, colKey);
-    assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
-    assertEquals(value2, eval.getValue(2, 2, rowKey, colKey).doubleValue(), DELTA);
+    assertEquals(value, eval.getValue(1, 2, rowKey, colKey).doubleValue(),
+                 DELTA);
+    assertEquals(value2, eval.getValue(2, 2, rowKey, colKey).doubleValue(),
+                 DELTA);
   }
 
   /**
+   * Test for overwriting an already set value.
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -419,6 +422,73 @@ public class EvaluatorTest
     eval.setValue(1, 2, value, rowKey, colKey);
     double value2 = 4.8d;
     eval.setValue(1, 2, value2, rowKey, colKey);
-    assertEquals(value2, eval.getValue(1, 2, rowKey, colKey).doubleValue(), DELTA);
+    assertEquals(value2, eval.getValue(1, 2, rowKey, colKey).doubleValue(),
+                 DELTA);
+  }
+
+  /**
+   * Consider one permutation.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCalcAvgFitness_0()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    Comparable rowKey1 = new Integer(3);
+    Comparable rowKey2 = new Integer(4);
+    Comparable colKey = new Integer(6);
+    // Run 1
+    double value1 = 2.3d;
+    eval.setValue(1, 1, value1, rowKey1, colKey);
+    // Run 2
+    double value2 = 4.8d;
+    eval.setValue(1, 2, value2, rowKey2, colKey);
+    KeyedValues2D fitnessvals = eval.calcAvgFitness(1);
+    assertEquals(2, fitnessvals.getRowCount());
+    assertEquals(1, fitnessvals.getColumnCount());
+    Number val = fitnessvals.getValue(rowKey1, colKey);
+    assertEquals(value1 / 2, val.doubleValue(), DELTA);
+    val = fitnessvals.getValue(rowKey2, colKey);
+    assertEquals(value2 / 2, val.doubleValue(), DELTA);
+  }
+
+  /**
+   * Consider all permutations.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testCalcAvgFitness_1()
+      throws Exception {
+    Configuration conf = new ConfigurationForTest();
+    PermutingConfiguration pconf = new PermutingConfiguration(conf);
+    Evaluator eval = new Evaluator(pconf);
+    Comparable rowKey1 = new Integer(3);
+    Comparable rowKey2 = new Integer(4);
+    Comparable colKey = new Integer(6);
+    // Perm. 1, Run 1
+    double value1 = 2.3d;
+    eval.setValue(1, 1, value1, rowKey1, colKey);
+    // Perm. 1, Run 2
+    double value2 = 4.8d;
+    eval.setValue(1, 2, value2, rowKey2, colKey);
+    // Perm. 2, Run 1
+    double value3 = 11.5d;
+    eval.setValue(2, 1, value3, rowKey1, colKey);
+    // Perm. 2, Run 2
+    double value4 = 8.0d;
+    eval.setValue(2, 2, value4, rowKey2, colKey);
+    KeyedValues2D fitnessvals = eval.calcAvgFitness( -1);
+    assertEquals(2, fitnessvals.getRowCount());
+    assertEquals(1, fitnessvals.getColumnCount());
+    Number val = fitnessvals.getValue(rowKey1, colKey);
+    assertEquals(value3 / 2 + value1 / 2, val.doubleValue(), DELTA);
+    val = fitnessvals.getValue(rowKey2, colKey);
+    assertEquals(value2 / 2 + value4 / 2, val.doubleValue(), DELTA);
   }
 }

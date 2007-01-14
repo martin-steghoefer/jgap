@@ -22,7 +22,7 @@ import junit.framework.*;
 public class KeyedValuesTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public void setUp() {
     super.setUp();
@@ -140,8 +140,7 @@ public class KeyedValuesTest
     try {
       kv.getKey(0);
       fail();
-    }
-    catch (IndexOutOfBoundsException iex) {
+    } catch (IndexOutOfBoundsException iex) {
       ; //this is OK
     }
   }
@@ -157,7 +156,20 @@ public class KeyedValuesTest
     KeyedValues kv = new KeyedValues();
     Number value = new Double(2.3d);
     kv.setValue(null, value);
-    assertSame(null, kv.getKey(0));
+    assertNull(kv.getKey(0));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testGetKey_2()
+      throws Exception {
+    KeyedValues kv = new KeyedValues();
+    kv.setValue(null, null);
+    assertNull(kv.getKey(0));
   }
 
   /**
@@ -172,8 +184,7 @@ public class KeyedValuesTest
     try {
       kv.getValue(0);
       fail();
-    }
-    catch (IndexOutOfBoundsException iex) {
+    } catch (IndexOutOfBoundsException iex) {
       ; //this is OK
     }
   }
@@ -189,7 +200,20 @@ public class KeyedValuesTest
     KeyedValues kv = new KeyedValues();
     Comparable key = new Double(2.3d);
     kv.setValue(key, null);
-    assertSame(null, kv.getValue(key));
+    assertNull(kv.getValue(key));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.1
+   */
+  public void testGetValue_3()
+      throws Exception {
+    KeyedValues kv = new KeyedValues();
+    Comparable key = new Double(2.3d);
+    assertNull(kv.getValue(key));
   }
 
   /**
@@ -292,7 +316,7 @@ public class KeyedValuesTest
     Comparable key = new Double(23.11d);
     Number value = new Double(4.5d);
     kv.setValue(key, value);
-    assertEquals(-1, kv.getIndex(null));
+    assertEquals( -1, kv.getIndex(null));
   }
 
   /**
@@ -306,7 +330,6 @@ public class KeyedValuesTest
     KeyedValues kv = new KeyedValues();
     Number value = new Double(4.5d);
     kv.setValue(null, value);
-    assertEquals(-1, kv.getIndex(new Double(23.11d)));
+    assertEquals( -1, kv.getIndex(new Double(23.11d)));
   }
-
 }
