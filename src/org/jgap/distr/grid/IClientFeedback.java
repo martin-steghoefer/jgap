@@ -9,26 +9,31 @@
  */
 package org.jgap.distr.grid;
 
+/**
+ * Interface for the feedback a client receives as a listener.
+ *
+ * @author Klaus Meffert
+ * @since 3.01
+ */
 public interface IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  public void setProgressMinimum(int min);
+  void setProgressMinimum(int min);
 
-  public void setProgressMaximum(int max);
+  void setProgressMaximum(int max);
 
-  public void setProgressValue(int val);
+  void setProgressValue(int val);
 
-  public void beginWork();
+  void beginWork();
 
-  public void sendingFragmentRequest(JGAPRequest req);
+  void sendingFragmentRequest(JGAPRequest req);
 
-  public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
-                                     int idx);
+  void receivedFragmentResult(JGAPRequest req, JGAPResult res, int idx);
 
-  public void endWork();
+  void endWork();
 
-  public void completeFrame(int idx);
+  void completeFrame(int idx);
 
-  public void error(String msg, Exception ex);
+  void error(String msg, Exception ex);
 }
