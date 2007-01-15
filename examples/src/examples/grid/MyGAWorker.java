@@ -27,10 +27,10 @@ import org.jgap.impl.*;
 public class MyGAWorker
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
-   * Does the evolution and returns the result.
+   * Executes the evolution and returns the result.
    *
    * @param work WorkRequest
    * @param workDir String
@@ -46,8 +46,24 @@ public class MyGAWorker
     Configuration conf = req.getConfiguration();
     conf.setEventManager(new EventManager()); //because it is not serialized!
     conf.setJGAPFactory(new JGAPFactory(false)); //because it is not serialized!
-    Genotype gen = Genotype.randomInitialGenotype(conf);
-    gen.evolve(40);
+    Genotype gen;
+    Population initialPop = req.getPopulation();
+    if (initialPop == null || initialPop.size() < 1) {
+      gen = Genotype.randomInitialGenotype(conf);
+    }
+    else {
+      // Initialize genotype with given population.
+      // ------------------------------------------
+      gen = new Genotype(conf, initialPop);
+      // Fill up population to get the desired size.
+      // -------------------------------------------
+      int size = conf.getPopulationSize() - initialPop.size();
+      gen.fillPopulation(conf, gen.getPopulation(), conf.getSampleChromosome(),
+                         size);
+    }
+    // Execute evolution via evolve strategy.
+    // --------------------------------------
+    req.getEvolveStrategy().evolve(gen);/**@todo integrate this call into framework*/
     IChromosome fittest = gen.getFittestChromosome();
     MyResult res = new MyResult(req.getSessionName(), req.getRID(), fittest, 1);
     return res;
