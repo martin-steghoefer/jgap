@@ -16,14 +16,15 @@ import org.homedns.dade.jcgrid.message.GridMessageWorkResult;
 import org.homedns.dade.jcgrid.message.GridMessageWorkRequest;
 
 /**
- * Client defining work for the grid and sending it to the JGAPServer.
+ * A client defines work for the grid and sends it to the JGAPServer.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
-public abstract class JGAPClient extends Thread {
+public abstract class JGAPClient
+    extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -56,7 +57,7 @@ public abstract class JGAPClient extends Thread {
   }
 
   /**
-   * Threaded: Splits work, sends it to workers and receivs computed solutions.
+   * Threaded: Splits work, sends it to workers and receives computed solutions.
    *
    * @author Klaus Meffert
    * @since 3.01
@@ -68,15 +69,15 @@ public abstract class JGAPClient extends Thread {
       gc.setNodeConfig(m_gridconfig);
       gc.start();
       try {
-        // Splitting the work.
-        // -------------------
+        // Split the work.
+        // ---------------
         JGAPRequest[] workList;
         workList = m_workReq.split();
         m_clientFeedback.setProgressMaximum(0);
         m_clientFeedback.setProgressMaximum(workList.length - 1);
         m_clientFeedback.beginWork();
-        // Sending work requests.
-        // ----------------------
+        // Send work requests.
+        // -------------------
         for (int i = 0; i < workList.length; i++) {
           JGAPRequest req = workList[i];
           m_clientFeedback.sendingFragmentRequest(req);
@@ -84,8 +85,8 @@ public abstract class JGAPClient extends Thread {
           if (this.isInterrupted())
             break;
         }
-        // Receiving work results.
-        // -----------------------
+        // Receive work results.
+        // ---------------------
         for (int i = 0; i < workList.length; i++) {
           m_clientFeedback.setProgressValue(i + workList.length);
           GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();
@@ -108,4 +109,5 @@ public abstract class JGAPClient extends Thread {
       m_clientFeedback.error("Error while doing the work", ex);
     }
     m_clientFeedback.endWork();
-  }}
+  }
+}

@@ -27,8 +27,19 @@ import org.jgap.impl.*;
 public class MyGAWorker
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
+  /**
+   * Does the evolution and returns the result.
+   *
+   * @param work WorkRequest
+   * @param workDir String
+   * @return WorkResult
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
   public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
     MyRequest req = ( (MyRequest) work);
@@ -42,6 +53,15 @@ public class MyGAWorker
     return res;
   }
 
+  /**
+   * Convenience method to start the worker.
+   *
+   * @param args String[]
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
   public static void main(String[] args)
       throws Exception {
     MainCmd.setUpLog4J("worker", true);

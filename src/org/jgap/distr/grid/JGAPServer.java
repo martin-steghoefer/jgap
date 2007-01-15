@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.server.*;
  */
 public class JGAPServer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = JGAPServer.class.getName();
 
@@ -36,14 +36,16 @@ public class JGAPServer {
     Options options = new Options();
     CommandLine cmd = MainCmd.parseCommonOptions(options, gs.getNodeConfig(),
         args);
-    // Start Server
+    // Start Server.
+    // -------------
     gs.start();
   }
 
   public static void main(String[] args)
       throws Exception {
     MainCmd.setUpLog4J("server", true);
-    //start server
+    // Create the server.
+    // ------------------
     new JGAPServer(args);
   }
 }

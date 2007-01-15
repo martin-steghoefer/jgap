@@ -19,7 +19,7 @@ import org.jgap.impl.*;
 import org.jgap.distr.grid.*;
 
 /**
- * Client defining a problem for the grid and sending it as work request to
+ * A Client defines a problem for the grid and sends it as a work request to
  * the JGAPServer.
  *
  * @author Klaus Meffert
@@ -28,14 +28,14 @@ import org.jgap.distr.grid.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private final static String className = ExampleClient.class.getName();
 
   private static Logger log = Logger.getLogger(className);
 
   /**
-   * Create work requests to be computed by workers. Starts a completely setup
+   * Creates work requests to be computed by workers. Starts a completely setup
    * client to distribute work and receive solutions.
    *
    * @param a_gridconfig GridNodeClientConfig
@@ -47,8 +47,8 @@ public class ExampleClient
   public ExampleClient(GridNodeClientConfig a_gridconfig)
       throws Exception {
     super(a_gridconfig);
-    // Creating problem to be solved.
-    // ------------------------------
+    // Create the problem to be solved.
+    // --------------------------------
     m_gridconfig.setSessionName("JGAP_sample_problem");
     Configuration jgapconfig = new DefaultConfiguration();
     jgapconfig.setEventManager(new EventManager());
@@ -57,11 +57,12 @@ public class ExampleClient
     IChromosome sample = new Chromosome(jgapconfig,
                                         new BooleanGene(jgapconfig), 16);
     jgapconfig.setSampleChromosome(sample);
-    // Creating work requests.
-    // -----------------------
+    // Create work requests.
+    // ---------------------
     MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0, jgapconfig);
     setWorkRequest(req);
-    // Register client feedback listener
+    // Register client feedback listener.
+    // ----------------------------------
     IClientFeedback rfback = new MyClientFeedback();
     setClientFeedback(rfback);
     // Start the threaded process.
@@ -73,7 +74,11 @@ public class ExampleClient
   /**
    * Starts the client. Additional stuff: Sets up logger and parses command line
    * options.
+   *
    * @param args String[]
+   *
+   * @author Klaus Meffert
+   * @since 3.01
    */
   public static void main(String[] args) {
     try {

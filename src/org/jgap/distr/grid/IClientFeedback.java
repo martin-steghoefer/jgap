@@ -9,11 +9,9 @@
  */
 package org.jgap.distr.grid;
 
-import org.homedns.dade.jcgrid.*;
-
 public interface IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void setProgressMinimum(int min);
 

@@ -15,14 +15,14 @@ import org.homedns.dade.jcgrid.*;
 import org.homedns.dade.jcgrid.admin.*;
 
 /**
- * Able displaying status information about a running grid.
+ * The admin instance can display status information about a running grid.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
 public class JGAPAdmin {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public JGAPAdmin()
       throws Exception {
@@ -43,7 +43,8 @@ public class JGAPAdmin {
 
   public static void main(String[] args)
       throws Exception {
-    //start admin
+    // Start admin instance.
+    // ---------------------
     new JGAPAdmin();
 //    new guiJCGridAdminStatus(..);
   }
