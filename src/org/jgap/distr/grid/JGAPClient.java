@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.message.GridMessageWorkRequest;
 public abstract class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -64,13 +64,14 @@ public abstract class JGAPClient
    */
   public void run() {
     try {
-      // Start Client
+      // Start Client.
+      // -------------
       GridClient gc = new GridClient();
       gc.setNodeConfig(m_gridconfig);
       gc.start();
       try {
-        // Split the work.
-        // ---------------
+        // Split the work. This is done by the work request.
+        // -------------------------------------------------
         JGAPRequest[] workList;
         workList = m_workReq.split();
         m_clientFeedback.setProgressMaximum(0);

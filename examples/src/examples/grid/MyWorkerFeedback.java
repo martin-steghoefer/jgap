@@ -21,8 +21,11 @@ import org.homedns.dade.jcgrid.worker.*;
 public class MyWorkerFeedback
     implements GridWorkerFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
+  /**
+   * Called when listener is started.
+   */
   public void start() {
   }
 
@@ -34,6 +37,9 @@ public class MyWorkerFeedback
     System.out.println("Result computed: " + ( (MyResult) res).getFittest());
   }
 
+  /**
+   * Called when listener is stopped.
+   */
   public void stop() {
   }
 }
