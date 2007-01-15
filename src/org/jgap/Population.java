@@ -21,9 +21,9 @@ import org.jgap.util.*;
  * @since 2.0
  */
 public class Population
-    implements Serializable {
+    implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.50 $";
+  private static final String CVS_REVISION = "$Revision: 1.51 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -59,7 +59,7 @@ public class Population
   }
 
   /*
-   * Constructs the Population from a list of Chromosomes.
+   * Constructs the Population from a list of Chromosomes. Does not use cloning!
    * @param a_chromosomes the Chromosome's to be used for building the
    * Population
    *
@@ -559,5 +559,29 @@ public class Population
       }
     }
     return 0;
+  }
+
+  /**
+   * @return deeply cloned instance of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    try {
+      Population result = new Population(m_config);
+      // Precautiously set changed to true in case cloning is not 1:1
+      // ------------------------------------------------------------
+      result.m_changed = true;
+      result.m_sorted = false;
+      result.m_fittestChromosome = m_fittestChromosome;
+      for (int i = 0; i < m_chromosomes.size(); i++) {
+        IChromosome chrom = (IChromosome) m_chromosomes.get(i);
+        result.addChromosome( (IChromosome) chrom.clone());
+      }
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }
