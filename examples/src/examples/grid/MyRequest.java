@@ -23,10 +23,14 @@ import org.jgap.event.*;
 public class MyRequest
     extends JGAPRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public MyRequest(String name, int id, Configuration a_config) {
     super(name, id, a_config);
+  }
+
+  public MyRequest(String name, int id, Configuration a_config, Population a_pop) {
+    super(name, id, a_config, a_pop);
   }
 
   /**
