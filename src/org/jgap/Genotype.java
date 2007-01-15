@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.88 $";
+  private final static String CVS_REVISION = "$Revision: 1.89 $";
 
   /**
    * The current Configuration instance.
@@ -401,25 +401,35 @@ public class Genotype
     // ------------------------------------------------------------------
     int populationSize = a_configuration.getPopulationSize();
     IChromosome sampleChrom = a_configuration.getSampleChromosome();
-    IInitializer chromIniter = a_configuration.getJGAPFactory().
-        getInitializerFor(sampleChrom, sampleChrom.getClass());
-    if (chromIniter == null) {
-      throw new InvalidConfigurationException("No initializer found for class "
-                                              + sampleChrom.getClass());
-    }
     Population pop = new Population(a_configuration, populationSize);
     // Do randomized initialization.
     // -----------------------------
+    Genotype result = new Genotype(a_configuration, pop);
+    result.fillPopulation(a_configuration, result.getPopulation(), sampleChrom, populationSize);
+    return result;
+  }
+
+  public void fillPopulation(final Configuration a_configuration,
+                             Population a_pop, final IChromosome a_sampleChrom,
+                             final int a_num)
+      throws InvalidConfigurationException {
+    Class sampleClass = a_sampleChrom.getClass();
+    IInitializer chromIniter = a_configuration.getJGAPFactory().
+        getInitializerFor(a_sampleChrom, sampleClass);
+    if (chromIniter == null) {
+      throw new InvalidConfigurationException("No initializer found for class "
+                                              + sampleClass);
+    }
     try {
-      for (int i = 0; i < populationSize; i++) {
-        pop.addChromosome( (IChromosome) chromIniter.perform(sampleChrom,
-            sampleChrom.getClass(), null));
+      for (int i = 0; i < a_num; i++) {
+        a_pop.addChromosome( (IChromosome) chromIniter.perform(a_sampleChrom,
+            sampleClass, null));
       }
     }
     catch (Exception ex) {
       throw new IllegalStateException(ex.getMessage());
     }
-    return new Genotype(a_configuration, pop);
+
   }
 
   /**
