@@ -1,8 +1,18 @@
 3.2
+-----------------------------------------------------------
 * Fixed bug in GPGenotype.calcFitness (see bug 1617125)
 * Set DefaultGPFitnessEvaluator in GPConfiguration per
   default instead of DeltaGPFitnessEvaluator
 * Fixed javadoc in IGPFitnessEvaluator
+* Fixed bug in Terminal.setRandom
+* Introduced interface ICloneable that extends Cloneable
+* Introduced exception class CloneException
+* Enhanced grid logic
+* Introduced grid classes IEvolveStrategy and
+  DefaultEvolveStrategy
+* Added support for ICloneable's in DefaultCloneHandler
+* Implemented clone for Terminal class
+* Added tests
 
 3.1
 -----------------------------------------------------------
