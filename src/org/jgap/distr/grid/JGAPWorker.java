@@ -22,7 +22,7 @@ import org.homedns.dade.jcgrid.worker.*;
  */
 public class JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static String className = JGAPWorker.class.getName();
 
@@ -31,12 +31,12 @@ public class JGAPWorker {
   public JGAPWorker(GridNodeWorkerConfig a_config, Class a_workerClass,
                     Class a_workerFeedbackClaas)
       throws Exception {
-    // Start all required Workers.
+    // Start all required workers.
     // ---------------------------
     GridWorker[] gw = new GridWorker[a_config.getWorkerCount()];
     for (int i = 0; i < a_config.getWorkerCount(); i++) {
-      // Instantiate worker.
-      // -------------------
+      // Instantiate worker via reflection.
+      // ----------------------------------
       gw[i] = new GridWorker();
       gw[i].setNodeConfig( (GridNodeGenericConfig) a_config.clone());
       ( (GridNodeGenericConfig) gw[i].getNodeConfig()).
@@ -50,13 +50,14 @@ public class JGAPWorker {
           a_workerFeedbackClaas.newInstance();
       gw[i].setWorker(myWorker);
       gw[i].setWorkerFeedback(myWorkerFeedback);
-      // Start worker.
-      // -------------
+      // Start single worker.
+      // --------------------
       gw[i].start();
     }
     // Wait for shutdown of workers.
     // -----------------------------
-    for (int i = 0; i < a_config.getWorkerCount(); i++)
+    for (int i = 0; i < a_config.getWorkerCount(); i++) {
       gw[i].waitShutdown();
+    }
   }
 }
