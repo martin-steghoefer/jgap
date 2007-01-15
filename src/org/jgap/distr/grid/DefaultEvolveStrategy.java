@@ -10,6 +10,7 @@
 package org.jgap.distr.grid;
 
 import org.jgap.Genotype;
+import java.io.*;
 
 /**
  * Default and simple implementation of IEvolveStrategy.
@@ -17,9 +18,9 @@ import org.jgap.Genotype;
  * @author Klaus Meffert
  * @since 3.2
  */
-public class DefaultEvolveStrategy implements IEvolveStrategy {
+public class DefaultEvolveStrategy implements IEvolveStrategy, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void evolve(Genotype a_genotype) {
     a_genotype.evolve();
