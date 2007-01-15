@@ -22,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class MyClientFeedback
     implements IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public MyClientFeedback() {
   }
@@ -32,12 +32,13 @@ public class MyClientFeedback
   }
 
   public void sendingFragmentRequest(JGAPRequest req) {
-    System.err.println("Sending work");
+    System.out.println("Sending work");
   }
 
   public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
                                      int idx) {
-    System.err.println("Receiving work. Solution " + res.getFittest());
+    System.out.println("Receiving work (index " + idx + "). Solution: " +
+                       res.getFittest());
   }
 
   public void beginWork() {
