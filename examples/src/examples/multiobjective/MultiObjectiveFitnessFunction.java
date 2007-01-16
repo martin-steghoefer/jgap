@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MultiObjectiveFitnessFunction
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static final int MAX_BOUND = 4000;
 
@@ -77,5 +77,15 @@ public class MultiObjectiveFitnessFunction
     else {
       return (a_x - 2) * (a_x - 2);
     }
+  }
+
+  /**
+   * @return deep clone of the current instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new MultiObjectiveFitnessFunction();
   }
 }
