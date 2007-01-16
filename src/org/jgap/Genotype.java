@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.89 $";
+  private final static String CVS_REVISION = "$Revision: 1.90 $";
 
   /**
    * The current Configuration instance.
@@ -76,7 +76,7 @@ public class Genotype
    * when this method is invoked, or a InvalidconfigurationException
    * will be thrown.
    *
-   * @param a_configuration the Configuration object t use
+   * @param a_configuration the Configuration object to use
    * @param a_population the Chromosome population to be managed by this
    * Genotype instance
    * @throws InvalidConfigurationException
@@ -87,9 +87,9 @@ public class Genotype
    */
   public Genotype(Configuration a_configuration, Population a_population)
       throws InvalidConfigurationException {
-    // Sanity checks: Make sure neither the Configuration, the array
-    // of Chromosomes, nor any of the Genes inside the array are null.
-    // ---------------------------------------------------------------
+    // Sanity checks: Make sure neither the Configuration, nor the array
+    // of Chromosomes, nor any of the Genes inside the array is null.
+    // -----------------------------------------------------------------
     if (a_configuration == null) {
       throw new IllegalArgumentException(
           "The Configuration instance may not be null.");
@@ -132,7 +132,7 @@ public class Genotype
    * Retrieves the array of Chromosomes that make up the population of this
    * Genotype instance.
    *
-   * @return the population of Chromosomes
+   * @return the Population of Chromosomes
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -160,7 +160,7 @@ public class Genotype
   }
 
   /**
-   * Retrieves the Chromosome in the population with the highest fitness
+   * Retrieves the Chromosome in the Population with the highest fitness
    * value.
    *
    * @return the Chromosome with the highest fitness value, or null if there
@@ -175,7 +175,7 @@ public class Genotype
   }
 
   /**
-   * Retrieves the Chromosome in the population with the highest fitness
+   * Retrieves the Chromosome in the Population with the highest fitness
    * value within the given indices.
    *
    * @param a_startIndex the index to start the determination with
@@ -347,10 +347,8 @@ public class Genotype
   }
 
   /**
-   * Return a string representation of this Genotype instance,
-   * useful for display purposes.
-   *
-   * @return string representation of this Genotype instance
+   * @return string representation of this Genotype instance, useful for display
+   * purposes
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -438,7 +436,7 @@ public class Genotype
    * same number of chromosomes as the given Genotype, and, for each
    * Chromosome in this Genotype, there is an equal chromosome in the
    * given Genotype. The chromosomes do not need to appear in the same order
-   * within the populations.
+   * within the population.
    *
    * @param a_other the object to compare against
    * @return true if the objects are the same, false otherwise
@@ -485,6 +483,7 @@ public class Genotype
 
   /**
    * Applies all NaturalSelectors registered with the Configuration.
+   *
    * @param a_processBeforeGeneticOperators true apply NaturalSelectors
    * applicable before GeneticOperators, false: apply the ones applicable
    * after GeneticOperators
@@ -598,6 +597,7 @@ public class Genotype
    *
    * Each hashcode is a number and the binary equivalent is computed and
    * returned.
+   *
    * @return the computed hashcode
    *
    * @author vamsi
@@ -643,6 +643,7 @@ public class Genotype
 
   /**
    * Cares that the population size does not exceed the given maximum size.
+   *
    * @param a_pop the population to keep constant in size
    * @param a_maxSize the maximum size allowed for the population
    *
