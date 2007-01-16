@@ -22,13 +22,17 @@ import org.jgap.*;
 public class MyResult
     extends JGAPResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static final long serialVersionUID = 2L;
 
-  public MyResult(String name, int id, IChromosome a_fittestChrom,
+  public MyResult(String a_name, int a_id, IChromosome a_fittestChrom,
                   long a_unitdone) {
-    super(name, id, a_fittestChrom, a_unitdone);
+    super(a_name, a_id, a_fittestChrom, a_unitdone);
   }
 
+  public MyResult(String a_name, int a_id, Population a_pop,
+                  long a_unitdone) {
+    super(a_name, a_id, a_pop, a_unitdone);
+  }
 }

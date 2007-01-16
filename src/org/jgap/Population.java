@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.51 $";
+  private static final String CVS_REVISION = "$Revision: 1.52 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -60,6 +60,7 @@ public class Population
 
   /*
    * Constructs the Population from a list of Chromosomes. Does not use cloning!
+
    * @param a_chromosomes the Chromosome's to be used for building the
    * Population
    *
@@ -79,7 +80,26 @@ public class Population
   }
 
   /*
+   * Constructs the Population from a single Chromosome. Does not use cloning!
+
+   * @param a_chromosome the Chromosome to be used for building the Population
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Population(final Configuration a_config,
+                    final IChromosome a_chromosome)
+      throws InvalidConfigurationException {
+    this(a_config, 1);
+    synchronized(m_chromosomes) {
+      m_chromosomes.add(a_chromosome);
+    }
+    setChanged(true);
+  }
+
+  /*
    * Constructs an empty Population with the given initial size.
+
    * @param a_size the initial size of the empty Population. The initial size
    * is not fix, it is just for optimized list creation.
    *
@@ -130,8 +150,8 @@ public class Population
   }
 
   /**
-   * Adds all the Chromosomes in the given Population.
-   * Does nothing on null or an empty Population.
+   * Adds all the Chromosomes in the given Population. Does nothing on null or
+   * an empty Population.
    *
    * @param a_population the Population to add
    *
@@ -158,6 +178,7 @@ public class Population
   /**
    * Replaces all chromosomes in the population with the give list of
    * chromosomes.
+   *
    * @param a_chromosomes the chromosomes to make the population up from
    *
    * @author Klaus Meffert
@@ -205,7 +226,6 @@ public class Population
   }
 
   /**
-   * Returns a Chromosome at given index in the Population.
    * @param a_index the index of the Chromosome to be returned
    * @return Chromosome at given index in the Population
    *
@@ -249,10 +269,11 @@ public class Population
   }
 
   /**
-   * Determines the fittest Chromosome in the population (the one with the
+   * Determines the fittest Chromosome in the Population (the one with the
    * highest fitness value) and memorizes it. This is an optimized version
    * compared to calling determineFittesChromosomes(1).
-   * @return the fittest Chromosome of the population
+   *
+   * @return the fittest Chromosome of the Population
    *
    * @author Klaus Meffert
    * @since 2.0
@@ -288,6 +309,7 @@ public class Population
    * Determines the fittest Chromosome in the population (the one with the
    * highest fitness value) within the given indices and memorizes it. This is
    * an optimized version compared to calling determineFittesChromosomes(1).
+   *
    * @param a_startIndex index to begin the evaluation with
    * @param a_endIndex index to end the evaluation with
    * @return the fittest Chromosome of the population within the given indices
@@ -339,6 +361,7 @@ public class Population
 
   /**
    * Mark the population as sorted.
+   *
    * @param a_sorted true: mark population as sorted
    *
    * @author Klaus Meffert
@@ -382,6 +405,7 @@ public class Population
   /**
    * Sorts the Chromosome list and returns the fittest n Chromosomes in
    * the population.
+   *
    * @param a_numberOfChromosomes number of top performer chromosomes to be
    * returned
    * @return list of the fittest n Chromosomes of the population, or the fittest
@@ -437,7 +461,8 @@ public class Population
 
   /**
    * Returns the genotype of the population, i.e. the list of genes in the
-   * population.
+   * Population.
+   *
    * @param a_resolveCompositeGenes true: split encountered CompositeGenes
    * into their single (atomic) genes
    * @return genotype of the population
@@ -467,8 +492,8 @@ public class Population
   }
 
   /**
-   * Adds all the genes of a CompositeGene to a result list.
-   * Method calls itself recursively.
+   * Adds all the genes of a CompositeGene to a result list.<p>
+   * Note: Method calls itself recursively.
    *
    * @param a_result the list to add to
    * @param a_gene the gene to start with
@@ -489,7 +514,8 @@ public class Population
   }
 
   /**
-   * Helper method for addCompositeGene
+   * Helper method for addCompositeGene.
+   *
    * @param a_result List
    * @param a_gene Gene
    *
@@ -506,6 +532,7 @@ public class Population
 
   /**
    * The equals-method.
+   *
    * @param a_pop the population instance to compare with
    * @return true: given object equal to comparing one
    *
