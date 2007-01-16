@@ -28,7 +28,7 @@ import org.jgap.distr.grid.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -57,9 +57,10 @@ public class ExampleClient
     IChromosome sample = new Chromosome(jgapconfig,
                                         new BooleanGene(jgapconfig), 16);
     jgapconfig.setSampleChromosome(sample);
-    // Create work requests.
-    // ---------------------
+    // Setup work request.
+    // -------------------
     MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0, jgapconfig);
+    req.setWorkerReturnStrategy(new DefaultWorkerReturnStrategy());
     setWorkRequest(req);
     // Register client feedback listener.
     // ----------------------------------
