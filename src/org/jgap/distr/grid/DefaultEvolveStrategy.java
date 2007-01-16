@@ -9,7 +9,8 @@
  */
 package org.jgap.distr.grid;
 
-import org.jgap.Genotype;
+import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * Default and simple implementation of IEvolveStrategy.
@@ -17,11 +18,22 @@ import org.jgap.Genotype;
  * @author Klaus Meffert
  * @since 3.2
  */
-public class DefaultEvolveStrategy implements IEvolveStrategy {
+public class DefaultEvolveStrategy
+    implements IEvolveStrategy, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public void evolve(Genotype a_genotype) {
     a_genotype.evolve();
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new DefaultEvolveStrategy();
   }
 }
