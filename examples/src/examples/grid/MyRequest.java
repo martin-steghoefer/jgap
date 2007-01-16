@@ -15,7 +15,8 @@ import org.jgap.impl.*;
 import org.jgap.event.*;
 
 /**
- * An instance creating single requests to be sent to a worker.
+ * An instance splitting a single request into multiple requests that will be
+ * sent to multiple workers for computation.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -23,7 +24,7 @@ import org.jgap.event.*;
 public class MyRequest
     extends JGAPRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public MyRequest(String name, int id, Configuration a_config) {
     super(name, id, a_config);
@@ -34,30 +35,12 @@ public class MyRequest
   }
 
   /**
-   * Creates single requests to be sent to workers.
-   *
-   * @return single requests to be computed by workers
-   * @throws Exception
+   * @return deep clone of current instance
    *
    * @author Klaus Meffert
-   * @since 3.01
+   * @since 3.2
    */
-  public JGAPRequest[] split()
-      throws Exception {
-    final int runs = 20;
-    MyRequest[] result = new MyRequest[runs];
-    for (int i = 0; i < runs; i++) {
-      /**@todo support cloning of m_config*/
-      Configuration config = new DefaultConfiguration("config " + i, i + "");
-      config.setEventManager(new EventManager());
-      config.setPopulationSize(getConfiguration().getPopulationSize());
-      config.setFitnessFunction(getConfiguration().getFitnessFunction());
-      IChromosome sample = new Chromosome(config, new BooleanGene(config), 16);
-      config.setSampleChromosome(sample);
-//      config.setSampleChromosome((IChromosome)m_config.getSampleChromosome().clone());
-      result[i] = new MyRequest("JGAP-Grid Request " + i, i, config);
-    }
-    return result;
+  public Object clone() {
+    return super.clone();
   }
-
 }
