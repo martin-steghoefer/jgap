@@ -21,13 +21,15 @@ import org.jgap.*;
 public abstract class JGAPRequest
     extends WorkRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Configuration m_config;
 
   private Population m_pop;
 
   private IEvolveStrategy m_evolveStrategy;
+
+  private IWorkerReturnStrategy m_returnStrategy;
 
   /**
    * Constructor.
@@ -119,6 +121,21 @@ public abstract class JGAPRequest
   public IEvolveStrategy getEvolveStrategy() {
     return m_evolveStrategy;
   }
+
+  public void setWorkerReturnStrategy(IWorkerReturnStrategy a_strategy) {
+    m_returnStrategy = a_strategy;
+  }
+
+  /**
+   * @return the strategy which part of a result is returned by a worker
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IWorkerReturnStrategy getWorkerReturnStrategy() {
+    return m_returnStrategy;
+  }
+
 
   /**
    * @return the configuration set
