@@ -21,7 +21,7 @@ import org.jgap.*;
 public abstract class JGAPRequest
     extends WorkRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Configuration m_config;
 
@@ -30,6 +30,8 @@ public abstract class JGAPRequest
   private IEvolveStrategy m_evolveStrategy;
 
   private IWorkerReturnStrategy m_returnStrategy;
+
+  private IGenotypeInitializer m_genotypeInitializer;
 
   /**
    * Constructor.
@@ -65,7 +67,7 @@ public abstract class JGAPRequest
 
   /**
    * Constructor. Allows to specify a preset population with which the genotype
-   * is initialized.
+   * will be initialized.
    *
    * @param name String
    * @param id int
@@ -84,7 +86,7 @@ public abstract class JGAPRequest
 
   /**
    * Constructor. Allows to specify a preset population with which the genotype
-   * is initialized.
+   * will be initialized.
    *
    * @param name String
    * @param id int
@@ -136,6 +138,26 @@ public abstract class JGAPRequest
     return m_returnStrategy;
   }
 
+  /**
+   * @param a_initializer the IGenotypeInitializer to use
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setGenotypeInitializer(IGenotypeInitializer a_initializer) {
+    m_genotypeInitializer = a_initializer;
+  }
+
+
+  /**
+   * @return the IGenotypeInitializer set
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IGenotypeInitializer getGenotypeInitializer() {
+    return m_genotypeInitializer;
+  }
 
   /**
    * @return the configuration set
@@ -145,6 +167,18 @@ public abstract class JGAPRequest
    */
   public Configuration getConfiguration() {
     return m_config;
+  }
+
+  /**
+   * Set a modified configuration. Should only be used to re-set a configuration
+   * because some parts have not been serialized.
+   * @param a_conf the Configuration to set
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setConfiguration(Configuration a_conf) {
+    m_config = a_conf;
   }
 
   /**
