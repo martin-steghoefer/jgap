@@ -14,9 +14,7 @@ import org.homedns.dade.jcgrid.*;
 import org.homedns.dade.jcgrid.cmd.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.*;
-import org.jgap.distr.grid.JGAPWorker;
-import org.jgap.event.*;
-import org.jgap.impl.*;
+import org.jgap.distr.grid.*;
 
 /**
  * Receives work, computes a solution and returns the solution to the requester.
@@ -25,9 +23,9 @@ import org.jgap.impl.*;
  * @since 3.01
  */
 public class MyGAWorker
-    implements Worker {
+    extends JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -42,33 +40,13 @@ public class MyGAWorker
    */
   public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
-    MyRequest req = ( (MyRequest) work);
-    Configuration conf = req.getConfiguration();
-    conf.setEventManager(new EventManager()); //because it is not serialized!
-    conf.setJGAPFactory(new JGAPFactory(false)); //because it is not serialized!
-    Genotype gen;
-    Population initialPop = req.getPopulation();
-    if (initialPop == null || initialPop.size() < 1) {
-      gen = Genotype.randomInitialGenotype(conf);
-    }
-    else {
-      // Initialize genotype with given population.
-      // ------------------------------------------
-      gen = new Genotype(conf, initialPop);
-      // Fill up population to get the desired size.
-      // -------------------------------------------
-      int size = conf.getPopulationSize() - initialPop.size();
-      gen.fillPopulation(conf, gen.getPopulation(), conf.getSampleChromosome(),
-                         size);
-    }
-    // Execute evolution via registered strategy.
-    // ------------------------------------------
-    req.getEvolveStrategy().evolve(gen);/**@todo integrate this call into framework*/
-    // Assemble result according to registered strategy.
-    // --------..---------------------------------------
-    MyResult res = (MyResult) req.getWorkerReturnStrategy().assembleResult(req,
-        gen);
-    return res;
+    // Here we could use our own class descended from JGAPRequest
+    //    MyRequest req = ( (MyRequest) work);
+    // For the result we could also use an individual class such as MyResult
+    // It would be also possible to do different computations than in
+    // super.doWork(...)
+    //    MyResult res = (MyResult)super.doWork(work, workDir);
+    return super.doWork(work, workDir);
   }
 
   /**
@@ -88,6 +66,6 @@ public class MyGAWorker
     CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
     // Start worker.
     // -------------
-    new JGAPWorker(config, MyGAWorker.class, MyWorkerFeedback.class);
+    new JGAPWorkers(config, MyGAWorker.class, MyWorkerFeedback.class);
   }
 }
