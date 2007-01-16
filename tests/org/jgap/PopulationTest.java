@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -33,7 +33,7 @@ public class PopulationTest
   public void testConstruct_0()
       throws Exception {
     try {
-      new Population(new ConfigurationForTest(), null);
+      new Population(new ConfigurationForTest(), (IChromosome[])null);
       fail();
     }
     catch (NullPointerException e) {
@@ -48,6 +48,17 @@ public class PopulationTest
     }
     catch (IllegalArgumentException iae) {
       ; //this is ok
+    }
+  }
+
+  public void testConstruct_2()
+      throws Exception {
+    try {
+      new Population(new ConfigurationForTest(), (IChromosome)null);
+      fail();
+    }
+    catch (IllegalArgumentException e) {
+      ; //this is OK
     }
   }
 
