@@ -10,6 +10,7 @@
 package org.jgap.distr.grid;
 
 import org.jgap.*;
+import java.io.*;
 
 /**
  * Interface specifying how to initialize a Genotype on behalf of the worker.
@@ -17,9 +18,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-public interface IGenotypeInitializer {
+public interface IGenotypeInitializer
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop);
 }
