@@ -9,55 +9,55 @@
  */
 package org.jgap.distr.grid;
 
-import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.*;
 import org.homedns.dade.jcgrid.worker.*;
+import org.jgap.*;
+import org.jgap.distr.grid.*;
+import org.jgap.event.*;
+import org.jgap.impl.*;
 
 /**
  * A worker receives work units from a JGAPServer and sends back computed
  * solutions to a JGAPServer.
  *
  * @author Klaus Meffert
- * @since 3.01
+ * @since 3.2 (since 3.01 this class contained something different that is now
+ * in class org.jgap.distr.grid.JGAPWorkers)
  */
-public class JGAPWorker {
+public class JGAPWorker implements Worker{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  private final static String className = JGAPWorker.class.getName();
-
-  private static Logger log = Logger.getLogger(className);
-
-  public JGAPWorker(GridNodeWorkerConfig a_config, Class a_workerClass,
-                    Class a_workerFeedbackClaas)
+  /**
+   * Executes the evolution and returns the result.
+   *
+   * @param work WorkRequest
+   * @param workDir String
+   * @return WorkResult
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
-    // Start all required workers.
-    // ---------------------------
-    GridWorker[] gw = new GridWorker[a_config.getWorkerCount()];
-    for (int i = 0; i < a_config.getWorkerCount(); i++) {
-      // Instantiate worker via reflection.
-      // ----------------------------------
-      gw[i] = new GridWorker();
-      gw[i].setNodeConfig( (GridNodeGenericConfig) a_config.clone());
-      ( (GridNodeGenericConfig) gw[i].getNodeConfig()).
-          setSessionName(a_config.getSessionName() + "_" + i);
-      ( (GridNodeGenericConfig) gw[i].getNodeConfig()).
-          setWorkingDir(a_config.getWorkingDir() + "_" + i);
-      Worker myWorker = (Worker) a_workerClass.newInstance();
-      // Instantiate worker feedback.
-      // ----------------------------
-      GridWorkerFeedback myWorkerFeedback = (GridWorkerFeedback)
-          a_workerFeedbackClaas.newInstance();
-      gw[i].setWorker(myWorker);
-      gw[i].setWorkerFeedback(myWorkerFeedback);
-      // Start single worker.
-      // --------------------
-      gw[i].start();
-    }
-    // Wait for shutdown of workers.
+    JGAPRequest req = ( (JGAPRequest) work);
+    // Setup configuration.
+    // --------------------
+    Configuration conf = req.getConfiguration();
+    req.setConfiguration(conf);
+    conf.setEventManager(new EventManager()); //because it is not serialized!
+    conf.setJGAPFactory(new JGAPFactory(false)); //because it is not serialized!
+    // Setup the genotype to evolve.
     // -----------------------------
-    for (int i = 0; i < a_config.getWorkerCount(); i++) {
-      gw[i].waitShutdown();
-    }
+    Population initialPop = req.getPopulation();
+    Genotype gen = req.getGenotypeInitializer().setupGenotype(req, initialPop);
+    // Execute evolution via registered strategy.
+    // ------------------------------------------
+    req.getEvolveStrategy().evolve(gen);
+    // Assemble result according to registered strategy.
+    // -------------------------------------------------
+    WorkResult res = req.getWorkerReturnStrategy().assembleResult(req, gen);
+    return res;
   }
 }
