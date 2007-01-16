@@ -40,7 +40,7 @@ import org.jgap.impl.*;
 public class Configuration
     implements Configurable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.69 $";
+  private final static String CVS_REVISION = "$Revision: 1.70 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -111,13 +111,16 @@ public class Configuration
   private FitnessFunction m_objectiveFunction;
 
   /**
-   * The fitness evaluator. See interface class FitnessEvaluator for details
-   * @since 2.0 (since 1.1 in class Genotype).
+   * The fitness evaluator. See interface class FitnessEvaluator for details.
+   *
+   * @since 2.0 (since 1.1 in class Genotype)
    */
   private FitnessEvaluator m_fitnessEvaluator;
 
   /**
    * Minimum size guaranteed for population. If zero or below then no ensurance.
+   *
+   * @author Klaus Meffert
    */
   private int m_minPercentageSizePopulation;
 
@@ -340,6 +343,7 @@ public class Configuration
 
   /**
    * Reads in the configuration from the given file.
+   *
    * @param a_configFileName the config file from which to load the
    * configuration
    * @param a_ignore just there to create distinct signatures :-(
@@ -350,7 +354,7 @@ public class Configuration
    * @author Siddhartha Azad
    * @since 2.3
    */
-  public Configuration(String a_configFileName, boolean a_ignore)
+  public Configuration(final String a_configFileName, boolean a_ignore)
       throws ConfigException, InvalidConfigurationException {
     this();
     ConfigFileReader.instance().setFileName(a_configFileName);
@@ -378,7 +382,7 @@ public class Configuration
     reset("");
   }
 
-  public static void reset(String a_id) {
+  public static void reset(final String a_id) {
     String threadKey = getThreadKey(Thread.currentThread(), a_id);
     System.setProperty(threadKey + Configuration.PROPERTY_FITFUNC_INST, "");
     System.setProperty(threadKey + Configuration.PROPERTY_BFITFNC_INST, "");
@@ -394,11 +398,11 @@ public class Configuration
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static void resetProperty(String a_propName) {
+  public static void resetProperty(final String a_propName) {
     resetProperty(a_propName, "");
   }
 
-  public static void resetProperty(String a_propName, String a_id) {
+  public static void resetProperty(final String a_propName, final String a_id) {
     String threadKey = getThreadKey(Thread.currentThread(), a_id);
     System.setProperty(threadKey + a_propName, "");
   }
@@ -444,7 +448,8 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.1
    */
-  public synchronized void setFitnessFunction(FitnessFunction a_functionToSet)
+  public synchronized void setFitnessFunction(final FitnessFunction
+      a_functionToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given fitness function isn't null.
@@ -480,7 +485,8 @@ public class Configuration
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void checkProperty(String a_propname, Object a_obj, String a_errmsg) {
+  protected void checkProperty(final String a_propname, final Object a_obj,
+                               final String a_errmsg) {
     String instanceHash = System.getProperty(threadKey + a_propname, null);
     String key = makeKey(a_obj);
     if (instanceHash == null || instanceHash.length() < 1) {
@@ -502,7 +508,7 @@ public class Configuration
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected String makeKey(Object a_obj) {
+  protected String makeKey(final Object a_obj) {
     String key = String.valueOf(a_obj.hashCode())
         + a_obj.getClass().getName();
     return key;
@@ -540,10 +546,11 @@ public class Configuration
    * Configuration object is locked
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public synchronized void setBulkFitnessFunction(
-      BulkFitnessFunction a_functionToSet)
+      final BulkFitnessFunction a_functionToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given bulk fitness function
@@ -572,7 +579,7 @@ public class Configuration
    * Retrieves the bulk fitness function previously setup in this
    * Configuration object.
    *
-   * @return The bulk fitness function
+   * @return the bulk fitness function
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -596,7 +603,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setSampleChromosome(IChromosome a_sampleChromosomeToSet)
+  public void setSampleChromosome(final IChromosome a_sampleChromosomeToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given chromosome isn't null.
@@ -662,7 +669,8 @@ public class Configuration
    * @since 1.0
    * @deprecated use addNaturalSelector(false) instead
    */
-  public synchronized void setNaturalSelector(NaturalSelector a_selectorToSet)
+  public synchronized void setNaturalSelector(final NaturalSelector
+      a_selectorToSet)
       throws InvalidConfigurationException {
     addNaturalSelector(a_selectorToSet, false);
   }
@@ -694,9 +702,8 @@ public class Configuration
    * @author Klaus Meffert
    * @since 1.1
    */
-  public synchronized NaturalSelector getNaturalSelector(boolean
-      a_processBeforeGeneticOperators,
-      int a_index) {
+  public synchronized NaturalSelector getNaturalSelector(final boolean
+      a_processBeforeGeneticOperators, final int a_index) {
     if (a_processBeforeGeneticOperators) {
       if (m_sizeNaturalSelectorsPre <= a_index) {
         throw new IllegalArgumentException(
@@ -726,7 +733,7 @@ public class Configuration
    * @author Klaus Meffert
    * @since 1.1
    */
-  public ChainOfSelectors getNaturalSelectors(boolean
+  public ChainOfSelectors getNaturalSelectors(final boolean
       a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
       return m_preSelectors;
@@ -744,7 +751,8 @@ public class Configuration
    * @author Klaus Meffert
    * @since 1.1
    */
-  public int getNaturalSelectorsSize(boolean a_processBeforeGeneticOperators) {
+  public int getNaturalSelectorsSize(final boolean
+                                     a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
       return m_sizeNaturalSelectorsPre;
     }
@@ -754,7 +762,8 @@ public class Configuration
   }
 
   /**
-   * Removes all natural selectors (either pre or post ones)
+   * Removes all natural selectors (either pre or post ones).
+   *
    * @param a_processBeforeGeneticOperators true: remove all selectors
    * processed before genetic operators, false: remove the ones processed
    * afterwards
@@ -762,7 +771,8 @@ public class Configuration
    * @author Klaus Meffert
    * @since 2.3
    */
-  public void removeNaturalSelectors(boolean a_processBeforeGeneticOperators) {
+  public void removeNaturalSelectors(final boolean
+                                     a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
       getNaturalSelectors(true);
       m_sizeNaturalSelectorsPre = 0;
@@ -787,7 +797,8 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void setRandomGenerator(RandomGenerator a_generatorToSet)
+  public synchronized void setRandomGenerator(final RandomGenerator
+      a_generatorToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given random generator isn't null.
@@ -819,7 +830,7 @@ public class Configuration
    * genetic operators added via this method are invoked in the order
    * they were added. At least one genetic operator must be provided.
    *
-   * @param a_operatorToAdd The genetic operator to add.
+   * @param a_operatorToAdd the genetic operator to add.
    *
    * @throws InvalidConfigurationException if the genetic operator is null or
    * if this Configuration object is locked
@@ -827,7 +838,8 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void addGeneticOperator(GeneticOperator a_operatorToAdd)
+  public synchronized void addGeneticOperator(final GeneticOperator
+      a_operatorToAdd)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given genetic operator isn't null.
@@ -846,7 +858,7 @@ public class Configuration
    * retrieved with this method will no longer reflect the actual
    * list in use.
    *
-   * @return The list of genetic operators
+   * @return the list of genetic operators
    *
    * @author Neil Rotstan
    * @since 1.0
@@ -869,7 +881,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public synchronized void setPopulationSize(int a_sizeOfPopulation)
+  public synchronized void setPopulationSize(final int a_sizeOfPopulation)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure the population size is positive.
@@ -904,7 +916,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setEventManager(IEventManager a_eventManagerToSet)
+  public void setEventManager(final IEventManager a_eventManagerToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     // Sanity check: Make sure that the given event manager isn't null.
@@ -922,11 +934,13 @@ public class Configuration
   }
 
   /**
-   * Retrieves the event manager associated with this configuration.
-   * The event manager is responsible for the management of event subscribers
+   * Retrieves the event manager associated with this configuration. The event
+   * manager is responsible for the management of event subscribers
    * and event notifications.
    *
    * @return the actively configured event manager instance
+   *
+   * @since 1.0
    */
   public IEventManager getEventManager() {
     return m_eventManager;
@@ -946,7 +960,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  public void setChromosomePool(IChromosomePool a_chromosomePoolToSet)
+  public void setChromosomePool(final IChromosomePool a_chromosomePoolToSet)
       throws InvalidConfigurationException {
     verifyChangesAllowed();
     m_chromosomePool = a_chromosomePoolToSet;
@@ -960,7 +974,7 @@ public class Configuration
    * of a ChromosomePool instance is optional. If none exists, then new
    * Chromosomes should be constructed each time one is needed.
    *
-   * @return The ChromosomePool instance associated this configuration, or
+   * @return the ChromosomePool instance associated this configuration, or
    * null if none has been provided
    *
    * @author Neil Rotstan
@@ -1401,7 +1415,8 @@ public class Configuration
   }
 
   /**
-   * Builds a string considering the current thread and the given id
+   * Builds a string considering the current thread and the given id.
+   *
    * @param current the current Thread
    * @param a_id a hopefully unique id of the configuration
    *
@@ -1430,7 +1445,8 @@ public class Configuration
   }
 
  /**
-  * Deserialize the object.
+  * Deserialize the object. Needed to provide a unique ID for each thread the
+  * object is used in.
   *
   * @param a_inputStream the ObjectInputStream provided for deserialzation
   * @throws ClassNotFoundException
