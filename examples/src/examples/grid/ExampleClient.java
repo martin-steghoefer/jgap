@@ -28,7 +28,7 @@ import org.jgap.distr.grid.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -61,7 +61,11 @@ public class ExampleClient
     // -------------------
     MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0, jgapconfig);
     req.setWorkerReturnStrategy(new DefaultWorkerReturnStrategy());
+    req.setGenotypeInitializer(new DefaultGenotypeInitializer());
     setWorkRequest(req);
+    // Setup the client.
+    // -----------------
+    setRequestSplitStrategy(new RequestSplitStrategy(jgapconfig));
     // Register client feedback listener.
     // ----------------------------------
     IClientFeedback rfback = new MyClientFeedback();
