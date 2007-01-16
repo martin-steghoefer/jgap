@@ -11,6 +11,7 @@ package examples.grid;
 
 import org.homedns.dade.jcgrid.*;
 import org.homedns.dade.jcgrid.worker.*;
+import org.jgap.distr.grid.*;
 
 /**
  * Listener called on worker events.
@@ -21,7 +22,7 @@ import org.homedns.dade.jcgrid.worker.*;
 public class MyWorkerFeedback
     implements GridWorkerFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Called when listener is started.
@@ -34,7 +35,7 @@ public class MyWorkerFeedback
   }
 
   public void endWorkingFor(WorkResult res) {
-    System.out.println("Result computed: " + ( (MyResult) res).getFittest());
+    System.out.println("Result computed: " + ( (JGAPResult) res).getPopulation().getChromosome(0));
   }
 
   /**
