@@ -11,6 +11,7 @@ package org.jgap.distr.grid;
 
 import org.homedns.dade.jcgrid.*;
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * An instance that creates single requests to be sent to a worker.
@@ -18,10 +19,11 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.1
  */
-public abstract class JGAPRequest
-    extends WorkRequest {
+public class JGAPRequest
+    extends WorkRequest
+    implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Configuration m_config;
 
@@ -182,18 +184,6 @@ public abstract class JGAPRequest
   }
 
   /**
-   * Creates single requests to be sent to workers.
-   *
-   * @return single requests to be computed by workers
-   * @throws Exception
-   *
-   * @author Klaus Meffert
-   * @since 3.1
-   */
-  public abstract JGAPRequest[] split()
-      throws Exception;
-
-  /**
    * @return the population used to initialize new requests. May be null or
    * empty
    *
@@ -202,5 +192,36 @@ public abstract class JGAPRequest
    */
   public Population getPopulation() {
     return m_pop;
+  }
+
+  /**
+   * @return deep clone of current instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    JGAPRequest result = newInstance(getSessionName(), getRID());
+    return result;
+  }
+
+  /**
+   * Creates a new instance using the given name and ID. Reason for this method:
+   * ID cannot be set other than with construction!
+   *
+   * @param a_name the name to set
+   * @param a_ID unique ID to set
+   * @return newly created JGAPRequest object
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public JGAPRequest newInstance(String a_name, int a_ID) {
+    JGAPRequest result = new JGAPRequest(a_name, a_ID,
+                                       getConfiguration(), getPopulation());
+    result.setEvolveStrategy(getEvolveStrategy());
+    result.setGenotypeInitializer(getGenotypeInitializer());
+    result.setWorkerReturnStrategy(getWorkerReturnStrategy());
+    return result;
   }
 }
