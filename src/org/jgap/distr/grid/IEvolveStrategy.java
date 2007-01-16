@@ -19,9 +19,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-public interface IEvolveStrategy extends Serializable {
+public interface IEvolveStrategy
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   void evolve(Genotype a_genotype);
 }

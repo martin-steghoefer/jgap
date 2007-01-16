@@ -24,9 +24,10 @@ import org.jgap.impl.*;
  * @since 3.2 (since 3.01 this class contained something different that is now
  * in class org.jgap.distr.grid.JGAPWorkers)
  */
-public class JGAPWorker implements Worker{
+public class JGAPWorker
+    implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Executes the evolution and returns the result.
