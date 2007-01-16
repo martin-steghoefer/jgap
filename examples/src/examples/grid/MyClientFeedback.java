@@ -22,29 +22,31 @@ import org.jgap.distr.grid.*;
 public class MyClientFeedback
     implements IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public MyClientFeedback() {
   }
 
   public void error(String msg, Exception ex) {
-    System.err.println(msg);
+    System.err.println("Error catched on client side: "+msg);
   }
 
   public void sendingFragmentRequest(JGAPRequest req) {
-    System.out.println("Sending work");
+    System.out.println("Sending work request "+req.getRID());
   }
 
   public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
                                      int idx) {
-    System.out.println("Receiving work (index " + idx + "). Solution: " +
-                       res.getFittest());
+    System.out.println("Receiving work (index " + idx + "). First solution: " +
+                       res.getPopulation().getChromosome(0) );
   }
 
   public void beginWork() {
+    System.out.println("Client can now start sending work requests");
   }
 
   public void endWork() {
+    System.out.println("Client notified that request processed completely");
   }
 
   public void setProgressMaximum(int max) {
@@ -60,5 +62,6 @@ public class MyClientFeedback
   }
 
   public void completeFrame(int idx) {
+    System.out.println("Client notified that unit "+idx+" is finished.");
   }
 }
