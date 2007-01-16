@@ -24,13 +24,13 @@ import org.jgap.distr.grid.*;
  */
 public class ServerAndWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Convenience (demo) start of both the server and a worker.
    *
-   * @param args might not work as distinct options between server and worker
-   * could lead to parsing errors.
+   * @param args might not work here in this simple example as distinct options
+   * between server and worker could lead to parsing errors.
    *
    * @throws Exception
    *
@@ -42,13 +42,13 @@ public class ServerAndWorker {
     // Start server.
     // ------------
     new JGAPServer(args);
-    // Setup configuration.
-    // --------------------
+    // Setup worker configuration.
+    // ---------------------------
     Options options = new Options();
     GridNodeWorkerConfig config = new GridNodeWorkerConfig();
     CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
     // Start worker.
     // -------------
-    new JGAPWorker(config, MyGAWorker.class, MyWorkerFeedback.class);
+    new JGAPWorkers(config, MyGAWorker.class, MyWorkerFeedback.class);
   }
 }
