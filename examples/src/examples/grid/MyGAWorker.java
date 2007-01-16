@@ -27,7 +27,7 @@ import org.jgap.impl.*;
 public class MyGAWorker
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -61,11 +61,13 @@ public class MyGAWorker
       gen.fillPopulation(conf, gen.getPopulation(), conf.getSampleChromosome(),
                          size);
     }
-    // Execute evolution via evolve strategy.
-    // --------------------------------------
+    // Execute evolution via registered strategy.
+    // ------------------------------------------
     req.getEvolveStrategy().evolve(gen);/**@todo integrate this call into framework*/
-    IChromosome fittest = gen.getFittestChromosome();
-    MyResult res = new MyResult(req.getSessionName(), req.getRID(), fittest, 1);
+    // Assemble result according to registered strategy.
+    // --------..---------------------------------------
+    MyResult res = (MyResult) req.getWorkerReturnStrategy().assembleResult(req,
+        gen);
     return res;
   }
 
