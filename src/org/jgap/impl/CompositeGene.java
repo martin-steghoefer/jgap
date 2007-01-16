@@ -41,7 +41,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   /**
    * This field separates gene class name from
@@ -141,6 +141,7 @@ public class CompositeGene
   /**
    * Adds a gene to the CompositeGene's container. See comments in class
    * header for additional details about equality (concerning "strict" param.)
+   *
    * @param a_gene the gene to be added
    * @param a_strict false: add the given gene except the gene itself already is
    * contained within the CompositeGene's container. true: add the gene if
@@ -571,6 +572,7 @@ public class CompositeGene
   /**
    * Checks whether a specific gene is already contained. The determination
    * will be done by checking for identity and not using the equal method!
+   *
    * @param gene the gene under test
    * @return true: the given gene object is contained
    *
