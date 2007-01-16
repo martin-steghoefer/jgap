@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.52 $";
+  private static final String CVS_REVISION = "$Revision: 1.53 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -73,6 +73,8 @@ public class Population
     this(a_config, a_chromosomes.length);
     synchronized(m_chromosomes) {
       for (int i = 0; i < a_chromosomes.length; i++) {
+        // In here we could test for null chromosomes, but this is skipped
+        // because of performance issues (although this may seem idiotic...)
         m_chromosomes.add(a_chromosomes[i]);
       }
     }
@@ -91,6 +93,9 @@ public class Population
                     final IChromosome a_chromosome)
       throws InvalidConfigurationException {
     this(a_config, 1);
+    if (a_chromosome == null) {
+      throw new IllegalArgumentException("Chromosome passed must not be null!");
+    }
     synchronized(m_chromosomes) {
       m_chromosomes.add(a_chromosome);
     }
