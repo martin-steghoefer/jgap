@@ -9,6 +9,7 @@
  */
 package org.jgap.distr.grid;
 
+import java.io.*;
 import org.jgap.*;
 
 /**
@@ -18,9 +19,9 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-public interface IEvolveStrategy {
+public interface IEvolveStrategy extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   void evolve(Genotype a_genotype);
 }

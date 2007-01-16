@@ -9,15 +9,17 @@
  */
 package org.jgap.distr.grid;
 
+import java.io.*;
+
 /**
  * Interface for the feedback a client receives as a listener.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
-public interface IClientFeedback {
+public interface IClientFeedback extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   void setProgressMinimum(int min);
 
