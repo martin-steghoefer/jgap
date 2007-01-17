@@ -11,8 +11,6 @@ package examples.grid;
 
 import org.jgap.distr.grid.*;
 import org.jgap.*;
-import org.jgap.impl.*;
-import org.jgap.event.*;
 
 /**
  * An instance splitting a single request into multiple requests that will be
@@ -24,7 +22,7 @@ import org.jgap.event.*;
 public class MyRequest
     extends JGAPRequest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public MyRequest(String name, int id, Configuration a_config) {
     super(name, id, a_config);
