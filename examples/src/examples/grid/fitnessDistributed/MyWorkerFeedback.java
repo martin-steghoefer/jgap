@@ -22,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class MyWorkerFeedback
     implements GridWorkerFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_sessionName;
 
@@ -32,19 +32,23 @@ public class MyWorkerFeedback
   public void start() {
   }
 
-  public void beginWorkingFor(String sessionName, WorkRequest req) {
-    m_sessionName = sessionName;
-    System.out.println("Begin work for session " + m_sessionName);
+  public void beginWorkingFor(String a_sessionName, WorkRequest req) {
+    m_sessionName = a_sessionName;
+    System.out.println("Begin work for request " + req.getRID()
+                       + ", session " + m_sessionName);
   }
 
   public void endWorkingFor(WorkResult res) {
-    System.out.println("Result computed (session " + m_sessionName + "): " +
-                       ( (JGAPResult) res).getPopulation().getChromosome(0));
+    System.out.println("Result computed (req " + res.getRID() + ", session "
+                       + m_sessionName + "): "
+                       + ( (JGAPResult) res).getPopulation().getChromosome(0));
   }
+
   /**
    * Called when listener is stopped.
    */
   public void stop() {
-    System.out.println("MyWorkerFeedback: listener stopped (session "+m_sessionName);
+    System.out.println("MyWorkerFeedback: listener stopped (session "
+                       + m_sessionName + ")");
   }
 }
