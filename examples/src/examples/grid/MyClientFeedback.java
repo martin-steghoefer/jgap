@@ -22,31 +22,35 @@ import org.jgap.distr.grid.*;
 public class MyClientFeedback
     implements IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public MyClientFeedback() {
   }
 
   public void error(String msg, Exception ex) {
-    System.err.println("Error catched on client side: "+msg);
+    System.err.println("Error catched on client side: " + msg);
   }
 
   public void sendingFragmentRequest(JGAPRequest req) {
-    System.out.println("Sending work request "+req.getRID());
+    System.out.println("Sending work request " + req.getRID());
   }
 
   public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
                                      int idx) {
     System.out.println("Receiving work (index " + idx + "). First solution: " +
-                       res.getPopulation().getChromosome(0) );
+                       res.getPopulation().getChromosome(0));
   }
 
   public void beginWork() {
-    System.out.println("Client can now start sending work requests");
+    System.out.println("Client starts sending work requests");
   }
 
   public void endWork() {
-    System.out.println("Client notified that request processed completely");
+    System.out.println("Client processed your request completely");
+  }
+
+  public void info(String a_msg) {
+    System.out.println(a_msg);
   }
 
   public void setProgressMaximum(int max) {
@@ -62,6 +66,6 @@ public class MyClientFeedback
   }
 
   public void completeFrame(int idx) {
-    System.out.println("Client notified that unit "+idx+" is finished.");
+    System.out.println("Client notified that unit " + idx + " is finished.");
   }
 }
