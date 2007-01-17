@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -132,6 +132,10 @@ public class ExampleClient
       // ----------------------------------------------------------------
       /**@todo does not work as server does not seem to keep requests
        * in case the client shuts down --> have to examine that in more detail.
+       * --> see ClientHandlerThread.removePendingWorkRequests
+       *     --> keep work to be done (optionally)
+       * --> see GridServer.pushWorkResult
+       *     --> store results in case client reconnects later on
        */
       try {
         int millis = 300;
