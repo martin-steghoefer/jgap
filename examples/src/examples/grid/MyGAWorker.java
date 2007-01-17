@@ -25,7 +25,7 @@ import org.jgap.distr.grid.*;
 public class MyGAWorker
     extends JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -46,7 +46,19 @@ public class MyGAWorker
     // It would be also possible to do different computations than in
     // super.doWork(...)
     //    MyResult res = (MyResult)super.doWork(work, workDir);
-    return super.doWork(work, workDir);
+
+    // Doing the evolution as always just means:
+//    return super.doWork(work, workDir);
+
+    // But we want to only calculate the fitness value of the chromosomes
+    // passed. In our case this is only one chromosome.
+    // ------------------------------------------------------------------
+    JGAPRequest req = ( (JGAPRequest) work);
+    IChromosome chrom = req.getPopulation().getChromosome(0);
+    chrom.getFitnessValue();
+    Population pop = new Population(req.getConfiguration(), chrom);
+    MyResult result = new MyResult(req.getSessionName(), req.getRID(), pop, 1);
+    return result;
   }
 
   /**
