@@ -23,7 +23,7 @@ public class JGAPRequest
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private Configuration m_config;
 
@@ -160,6 +160,20 @@ public class JGAPRequest
   public IGenotypeInitializer getGenotypeInitializer() {
     return m_genotypeInitializer;
   }
+
+  /**
+   * Sets the Population to store in this request so that it can be passed to
+   * workers.
+   *
+   * @param a_pop the Population to store
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setPopulation(Population a_pop) {
+    m_pop = a_pop;
+  }
+
 
   /**
    * @return the configuration set
