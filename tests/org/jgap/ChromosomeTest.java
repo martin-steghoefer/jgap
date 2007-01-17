@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -1401,8 +1401,7 @@ public class ChromosomeTest
       return 0;
     }
 
-    public Object clone()
-        throws CloneNotSupportedException {
+    public Object clone() {
       return this;
     }
   }
@@ -1417,8 +1416,7 @@ public class ChromosomeTest
       return 0;
     }
 
-    public Object clone()
-        throws CloneNotSupportedException {
+    public Object clone() {
       return new MyAppObject2();
     }
   }
