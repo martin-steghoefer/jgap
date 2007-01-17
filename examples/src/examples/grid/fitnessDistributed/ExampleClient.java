@@ -21,7 +21,7 @@ import org.jgap.event.*;
 import org.jgap.impl.*;
 
 /**
- * A Client defines a problem for the grid and sends it as a work request to
+ * A Client defines a problem for the grid and sends it as work requests to
  * the JGAPServer.
  *
  * @author Klaus Meffert
@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -55,6 +55,7 @@ public class ExampleClient
     Configuration jgapconfig = new DefaultConfiguration();
     jgapconfig.setEventManager(new EventManager());
     jgapconfig.setPopulationSize(10);
+    jgapconfig.setKeepPopulationSizeConstant(true);
     jgapconfig.setFitnessFunction(new SampleFitnessFunction());
     IChromosome sample = new Chromosome(jgapconfig,
                                         new BooleanGene(jgapconfig), 16);
