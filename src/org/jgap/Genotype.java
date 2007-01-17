@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.90 $";
+  private final static String CVS_REVISION = "$Revision: 1.91 $";
 
   /**
    * The current Configuration instance.
@@ -403,10 +403,23 @@ public class Genotype
     // Do randomized initialization.
     // -----------------------------
     Genotype result = new Genotype(a_configuration, pop);
-    result.fillPopulation(a_configuration, result.getPopulation(), sampleChrom, populationSize);
+    result.fillPopulation(a_configuration, result.getPopulation(), sampleChrom,
+                          populationSize);
     return result;
   }
 
+  /**
+   * Fills up the population with random chromosomes if necessary.
+   *
+   * @param a_configuration Configuration
+   * @param a_pop Population
+   * @param a_sampleChrom IChromosome
+   * @param a_num int
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
   public void fillPopulation(final Configuration a_configuration,
                              Population a_pop, final IChromosome a_sampleChrom,
                              final int a_num)

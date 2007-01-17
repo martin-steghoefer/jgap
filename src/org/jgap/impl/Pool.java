@@ -32,10 +32,10 @@ import java.util.*;
 public class Pool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
-   * The List of Objects currently in the pool.
+   * The Objects currently in the pool.
    */
   private List m_pooledObjects;
 
@@ -90,7 +90,7 @@ public class Pool {
 
   /**
    * Releases a Collection of objects to the pool. It's not required that
-   * the objects in the Collection originated from the pool--any objects
+   * the objects in the Collection originated from the pool - -any objects
    * can be released to it.
    *
    * @param a_objectsToPool the Collection of objects to release into the pool
