@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -31,7 +31,8 @@ public class ConfigurationTest
 
   public void setUp() {
     super.setUp();
-    // reset the configurational parameters set
+    // Important: Reset the configurational parameters set.
+    // ----------------------------------------------------
     Configuration.reset();
   }
 
@@ -208,6 +209,7 @@ public class ConfigurationTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_6()
@@ -228,6 +230,7 @@ public class ConfigurationTest
 
   /**
    * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testVerifyStateIsValid_7()
@@ -253,6 +256,7 @@ public class ConfigurationTest
 
   /**
    * Configuration with sample chromosome that contains no genes.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -277,6 +281,7 @@ public class ConfigurationTest
   /**
    * Configuration with sample chromosome that has a gene with allele value
    * null.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1207,6 +1212,50 @@ public class ConfigurationTest
     assertEquals(JGAPFactory.class, conf.getJGAPFactory().getClass());
   }
 
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testClone_0()
+      throws Exception {
+    Configuration conf = new Configuration();
+    conf.setFitnessFunction(new StaticFitnessFunction(2));
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+    conf.setRandomGenerator(new StockRandomGenerator());
+    conf.setEventManager(new EventManager());
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
+    conf.addGeneticOperator(new MutationOperator(conf));
+    conf.setPopulationSize(1);
+    assertEquals(conf, conf.clone());
+  }
+
+  /**
+   * Cloning multiple times in a row must be possible.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testClone_1()
+      throws Exception {
+    Configuration conf = new Configuration();
+    conf.setFitnessFunction(new StaticFitnessFunction(2));
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+    conf.setRandomGenerator(new StockRandomGenerator());
+    conf.setEventManager(new EventManager());
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
+    conf.addGeneticOperator(new MutationOperator(conf));
+    conf.setPopulationSize(1);
+    conf.clone();
+    conf.clone();
+  }
 }
 class MyFactoryTest
     extends JGAPFactory {

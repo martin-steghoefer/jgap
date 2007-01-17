@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.util.*;
 import org.jgap.*;
 import org.jgap.util.*;
 import junit.framework.*;
@@ -22,7 +23,7 @@ import junit.framework.*;
 public class DefaultCloneHandlerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCloneHandlerTest.class);
@@ -95,17 +96,92 @@ public class DefaultCloneHandlerTest
     assertEquals(orig, clone);
   }
 
-  class MyAppDataForTest implements Cloneable {
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPerform_2()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    FixedBinaryGene orig = new FixedBinaryGene(conf, 3);
+    FixedBinaryGene clone = (FixedBinaryGene) handler.perform(orig,
+        null, null);
+    assertEquals(orig, clone);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPerform_3()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    Chromosome orig = new Chromosome(conf);
+    Chromosome clone = (Chromosome) handler.perform(orig, Chromosome.class, null);
+    assertEquals(orig, clone);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPerform_4()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    Chromosome orig = new Chromosome(conf);
+    Chromosome clone = (Chromosome) handler.perform(orig, null, null);
+    assertEquals(orig, clone);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPerform_5()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    Chromosome orig = new Chromosome(conf);
+    Chromosome clone = (Chromosome) handler.perform(orig, null, new Vector());
+    assertEquals(orig, clone);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPerform_6()
+      throws Exception {
+    IHandler handler = new DefaultCloneHandler();
+    Chromosome orig = new Chromosome(conf);
+    try {
+      Chromosome clone = (Chromosome) handler.perform(null, Chromosome.class, null);
+      fail();
+    } catch (NullPointerException nex) {
+      ; //this is OK
+    }
+  }
+
+  class MyAppDataForTest
+      implements Cloneable {
     public int compareTo(Object o) {
       return 0;
     }
 
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone()
+        throws CloneNotSupportedException {
       throw new CloneNotSupportedException();
     }
-
   }
-
   class MyCloneHandlerForTest
       implements Cloneable {
   }
