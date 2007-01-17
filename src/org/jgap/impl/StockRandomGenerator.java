@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * The stock random generator uses the java.util.Random class to
@@ -25,9 +26,9 @@ import org.jgap.*;
  */
 public class StockRandomGenerator
     extends Random
-    implements RandomGenerator {
+    implements RandomGenerator, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * When deserializing, initialize the seed because otherwise we could get
@@ -46,5 +47,17 @@ public class StockRandomGenerator
     //always perform the default de-serialization first
     a_inputStream.defaultReadObject();
     setSeed(System.currentTimeMillis());
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    StockRandomGenerator result = new StockRandomGenerator();
+    result.setSeed(System.currentTimeMillis());
+    return result;
   }
 }

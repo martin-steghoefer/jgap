@@ -10,7 +10,7 @@
 package org.jgap.impl;
 
 import org.jgap.*;
-
+import org.jgap.util.*;
 /**
  * Default implementation for initializing Chromosomes.
  *
@@ -18,9 +18,9 @@ import org.jgap.*;
  * @since 2.6
  */
 public class DefaultInitializer
-    implements IInitializer {
+    implements IInitializer, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_class) {
     if (IChromosome.class.isAssignableFrom(a_class)) {
@@ -49,5 +49,15 @@ public class DefaultInitializer
                                          + a_class.getName()
                                          + " !");
     }
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new DefaultInitializer();
   }
 }

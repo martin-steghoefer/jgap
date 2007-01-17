@@ -9,6 +9,9 @@
  */
 package org.jgap;
 
+import java.io.*;
+import org.jgap.util.*;
+
 /**
  * Fitness functions are used to determine how optimal a particular solution
  * is relative to other solutions. This abstract class should be extended and
@@ -30,9 +33,9 @@ package org.jgap;
  * @since 1.0
  */
 public abstract class FitnessFunction
-    implements java.io.Serializable {
+    implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -97,4 +100,19 @@ public abstract class FitnessFunction
    */
   protected abstract double evaluate(IChromosome a_subject);
 
+  /**
+   * Please override in your implementations!
+   *
+   * @return deep clone of the current instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException cex) {
+      throw new CloneException(cex);
+    }
+  }
 }

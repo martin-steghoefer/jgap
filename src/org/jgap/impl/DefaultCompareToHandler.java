@@ -10,6 +10,7 @@
 package org.jgap.impl;
 
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * Default implementation for comparing Comparables. Boolean values are also
@@ -19,9 +20,9 @@ import org.jgap.*;
  * @since 2.6
  */
 public class DefaultCompareToHandler
-    implements ICompareToHandler {
+    implements ICompareToHandler, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
     Class clazz;
@@ -80,5 +81,15 @@ public class DefaultCompareToHandler
       }
     }
     return new Integer(i);
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new DefaultCompareToHandler();
   }
 }

@@ -223,12 +223,11 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /*
-   * Replace this member by the Configuration as
-   * soon as Configuration allows bulk fitness function and
-   * fitness function to be stored both in it.
+   * Replace this member by the Configuration as soon as Configuration allows
+   * bulk fitness function and fitness function to be stored both in it.
    */
   private FitnessFunction m_ff;
 
@@ -451,5 +450,17 @@ public class BulkFitnessOffsetRemover
       fitness += m_previousOffset;
     }
     return fitness;
+  }
+
+  /**
+   * @return deep clone of current instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    FitnessFunction ff = (FitnessFunction)m_ff.clone();
+    BulkFitnessOffsetRemover result = new BulkFitnessOffsetRemover(ff);
+    return result;
   }
 }

@@ -9,7 +9,8 @@
  */
 package org.jgap;
 
-import java.util.*;
+import java.io.*;
+import org.jgap.util.*;
 
 /**
  * Bulk fitness functions are used to determine how optimal a group of
@@ -27,10 +28,9 @@ import java.util.*;
  * @since 1.0
  */
 public abstract class BulkFitnessFunction
-    implements java.io.Serializable {
-
+    implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Calculates and sets the fitness values on each of the given
@@ -44,4 +44,20 @@ public abstract class BulkFitnessFunction
    * @since 2.2 (prior versions used other input type)
    */
   public abstract void evaluate(Population a_chromosomes);
+
+  /**
+   * Override in your implementation if necessary.
+   *
+   * @return deep clone of the current instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException cex) {
+      throw new CloneException(cex);
+    }
+  }
 }

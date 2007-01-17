@@ -10,6 +10,7 @@
 package org.jgap.event;
 
 import java.util.*;
+import org.jgap.util.*;
 
 /**
  * Manages event notification in the system. Observers that desire to be
@@ -23,15 +24,15 @@ import java.util.*;
  * @since 1.0
  */
 public class EventManager
-    implements IEventManager {
+    implements IEventManager, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * References a Map of subscribed event listeners. Each key is an event
    * name, and each value is a List of listeners subscribed to that event.
    */
-  private Map m_listeners = new HashMap();
+  private HashMap m_listeners = new HashMap();
 
   /**
    * Adds a new listener that will be notified when the event represented
@@ -109,6 +110,20 @@ public class EventManager
    */
   public int hashCode() {
     int result = m_listeners.hashCode();
+    return result;
+  }
+
+  /**
+   * @return cloned instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    EventManager result = new EventManager();
+    if (!m_listeners .isEmpty()) {
+      result.m_listeners = (HashMap)m_listeners.clone();
+    }
     return result;
   }
 }

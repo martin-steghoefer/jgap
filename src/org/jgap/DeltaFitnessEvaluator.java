@@ -9,6 +9,8 @@
  */
 package org.jgap;
 
+import org.jgap.util.*;
+
 /**
  * An implementation of a fitness evaluator interpreting the fitness as delta
  * value.
@@ -17,9 +19,9 @@ package org.jgap;
  * @since 2.0
  */
 public class DeltaFitnessEvaluator
-    implements FitnessEvaluator {
+    implements FitnessEvaluator, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -50,5 +52,15 @@ public class DeltaFitnessEvaluator
 
   public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
     return isFitter(a_chrom1.getFitnessValue(), a_chrom2.getFitnessValue());
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new DeltaFitnessEvaluator();
   }
 }

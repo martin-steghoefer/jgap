@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import org.jgap.event.*;
+import org.jgap.util.*;
 
 /**
  * The DefaultConfiguration class simplifies the JGAP configuration
@@ -25,9 +26,9 @@ import org.jgap.event.*;
  * @since 1.0
  */
 public class DefaultConfiguration
-    extends Configuration {
+    extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public DefaultConfiguration() {
     this("","");
@@ -64,5 +65,15 @@ public class DefaultConfiguration
           + "own stock configuration values. This should never happen. "
           + "Please report this as a bug to the JGAP team.");
     }
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return super.clone();
   }
 }

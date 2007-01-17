@@ -9,6 +9,8 @@
  */
 package org.jgap;
 
+import org.jgap.util.*;
+
 /**
  * A default implementation of a fitness evaluator. This implementation is
  * straight forward: a higher fitness value is seen as fitter.
@@ -17,9 +19,9 @@ package org.jgap;
  * @since 1.1
  */
 public class DefaultFitnessEvaluator
-    implements FitnessEvaluator {
+    implements FitnessEvaluator, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -38,5 +40,15 @@ public class DefaultFitnessEvaluator
 
   public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
     return isFitter(a_chrom1.getFitnessValue(), a_chrom2.getFitnessValue());
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new DefaultFitnessEvaluator();
   }
 }

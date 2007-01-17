@@ -12,6 +12,7 @@ package org.jgap.impl;
 import java.math.*;
 import java.util.*;
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * A basic implementation of NaturalSelector that models a roulette wheel.
@@ -28,9 +29,9 @@ import org.jgap.*;
  * @since 1.0
  */
 public class WeightedRouletteSelector
-    extends NaturalSelector {
+    extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -42,7 +43,7 @@ public class WeightedRouletteSelector
    * and each value is an instance of the SlotCounter inner class, which
    * keeps track of how many slots on the wheel each Chromosome is occupying.
    */
-  private Map m_wheel = new HashMap();
+  private HashMap m_wheel = new HashMap();
 
   /**
    * Keeps track of the total number of slots that are in use on the
@@ -379,6 +380,20 @@ public class WeightedRouletteSelector
    */
   public boolean getDoubletteChromosomesAllowed() {
     return m_config.m_doublettesAllowed;
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    WeightedRouletteSelector result = new WeightedRouletteSelector(getConfiguration());
+    result.m_wheel = (HashMap)m_wheel.clone();
+    result.m_config = new WeightedRouletteSelConfig();
+    result.m_config.m_doublettesAllowed = m_config.m_doublettesAllowed;
+    return result;
   }
 
   class WeightedRouletteSelConfig {
