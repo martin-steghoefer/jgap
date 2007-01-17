@@ -23,7 +23,7 @@ public class JGAPRequest
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Configuration m_config;
 
@@ -38,17 +38,17 @@ public class JGAPRequest
   /**
    * Constructor.
    *
-   * @param name String
-   * @param id int
+   * @param a_name String
+   * @param a_id int
    * @param a_config Configuration
    * @param a_strategy the strategy to choose for evolution
    *
    * @author Klaus Meffert
    * @since 3.1
    */
-  public JGAPRequest(String name, int id, Configuration a_config,
+  public JGAPRequest(String a_name, int a_id, Configuration a_config,
                      IEvolveStrategy a_strategy) {
-    super(name, id);
+    super(a_name, a_id);
     m_config = a_config;
     m_evolveStrategy = a_strategy;
   }
@@ -71,8 +71,8 @@ public class JGAPRequest
    * Constructor. Allows to specify a preset population with which the genotype
    * will be initialized.
    *
-   * @param name String
-   * @param id int
+   * @param a_name String
+   * @param a_id int
    * @param a_config Configuration
    * @param a_pop Population
    * @param a_strategy the strategy to choose for evolution
@@ -80,9 +80,9 @@ public class JGAPRequest
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequest(String name, int id, Configuration a_config,
+  public JGAPRequest(String a_name, int a_id, Configuration a_config,
                      Population a_pop, IEvolveStrategy a_strategy) {
-    this(name, id, a_config, a_strategy);
+    this(a_name, a_id, a_config, a_strategy);
     m_pop = a_pop;
   }
 
@@ -90,17 +90,17 @@ public class JGAPRequest
    * Constructor. Allows to specify a preset population with which the genotype
    * will be initialized.
    *
-   * @param name String
-   * @param id int
+   * @param a_name String
+   * @param a_id int
    * @param a_config Configuration
    * @param a_pop Population
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequest(String name, int id, Configuration a_config,
+  public JGAPRequest(String a_name, int a_id, Configuration a_config,
                      Population a_pop) {
-    this(name, id, a_config, a_pop, new DefaultEvolveStrategy());
+    this(a_name, a_id, a_config, a_pop, new DefaultEvolveStrategy());
   }
 
   /**
