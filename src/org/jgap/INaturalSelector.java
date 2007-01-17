@@ -9,6 +9,8 @@
  */
 package org.jgap;
 
+import java.io.*;
+
 /**
  * Natural selectors are responsible for actually selecting a specified number
  * of Chromosome specimens from a population, using the fitness values as a
@@ -22,9 +24,9 @@ package org.jgap;
  * @since 2.0 (previously named "NaturalSelector")
  */
 public interface INaturalSelector
-    extends java.io.Serializable {
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.10 $";
+  final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Select a given number of Chromosomes from the pool that will move on

@@ -9,6 +9,8 @@
  */
 package org.jgap;
 
+import java.io.*;
+
 /**
  * Interface for a fitness evaluator used in a Genotype to determine how to
  * interpret the fitness value. The fitness value can either be interpreted
@@ -19,9 +21,9 @@ package org.jgap;
  * @since 1.1
  */
 public interface FitnessEvaluator
-    extends java.io.Serializable {
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.7 $";
+  final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
