@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class AddAndStore
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -75,6 +75,7 @@ public class AddAndStore
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
