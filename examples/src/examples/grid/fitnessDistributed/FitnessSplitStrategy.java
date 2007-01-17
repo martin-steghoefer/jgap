@@ -9,9 +9,7 @@
  */
 package examples.grid.fitnessDistributed;
 
-import org.jgap.event.*;
 import org.jgap.*;
-import org.jgap.impl.*;
 import org.jgap.distr.grid.*;
 
 /**
@@ -23,7 +21,7 @@ import org.jgap.distr.grid.*;
 public class FitnessSplitStrategy
     implements IRequestSplitStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Configuration m_config;
 
@@ -49,7 +47,12 @@ public class FitnessSplitStrategy
   public JGAPRequest[] split(JGAPRequest a_request)
       throws Exception {
     Population pop = a_request.getPopulation();
-    int count = pop.size();
+    // Sort Population to only work with the most fittest individuals.
+    // This is necessary as a Population can grow further than given
+    // with the Configuration (it has to do with performance, sorry).
+    // ---------------------------------------------------------------
+    pop.sortByFitness();
+    int count = getConfiguration().getPopulationSize();
     JGAPRequest[] result = new JGAPRequest[count];
     for (int i = 0; i < count; i++) {
       // Setup JGAP configuration for worker.
