@@ -14,6 +14,8 @@ import java.util.*;
 import org.jgap.data.config.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
+import org.jgap.util.*;
+import org.apache.commons.lang.builder.*;
 
 /**
  * The Configuration class represents the current configuration of
@@ -38,9 +40,9 @@ import org.jgap.impl.*;
  * @since 1.0
  */
 public class Configuration
-    implements Configurable, Serializable {
+    implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.70 $";
+  private final static String CVS_REVISION = "$Revision: 1.71 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -369,8 +371,8 @@ public class Configuration
   }
 
   /**
-   * SHOULD NOT BE NECESSARY TO CALL UNDER NORMAL CIRCUMSTANCES (may be useful
-   * for unit tests).<p>
+   * SHOULD NOT BE NECESSARY TO CALL UNDER NORMAL CIRCUMSTANCES. May be useful
+   * for unit tests.<p>
    * Reset the configuration so that re-setting parameters such as fitness
    * function is possible (without calling this method, an overwriting of a
    * previously set fitness function results in a RuntimeException).
@@ -494,9 +496,11 @@ public class Configuration
     }
     else if (!instanceHash.equals(key)) {
       throw new RuntimeException(a_errmsg + "\nIf you want to set or construct"
-                                 +" a configuration multiple times, please call"
-                                 + " static method Configuration.reset() before"
-                                 +" each setting!");
+                                 +
+                                 " a configuration multiple times, please call"
+                                 +
+                                 " static method Configuration.reset() before"
+                                 + " each setting!");
     }
   }
 
@@ -1282,8 +1286,13 @@ public class Configuration
     }
     // Random generator.
     // -----------------
-    result += "\n  " + S_RANDOM_GENERATOR + ": " +
-        getRandomGenerator().getClass().getName();
+    result += "\n  " + S_RANDOM_GENERATOR + ": ";
+    if (getRandomGenerator() != null) {
+      result += getRandomGenerator().getClass().getName();
+    }
+    else {
+      result += S_NONE;
+    }
     result += "\n  " + S_EVENT_MANAGER + ": ";
     // Event manager.
     // --------------
@@ -1407,13 +1416,12 @@ public class Configuration
   }
 
   class ConfigurationConfigurable
-      implements java.io.Serializable {
+      implements Serializable {
     /**
      * The number of chromosomes that will be stored in the Genotype.
      */
     int m_populationSize;
   }
-
   /**
    * Builds a string considering the current thread and the given id.
    *
@@ -1444,22 +1452,22 @@ public class Configuration
     threadKey = getThreadKey(current, m_id);
   }
 
- /**
-  * Deserialize the object. Needed to provide a unique ID for each thread the
-  * object is used in.
-  *
-  * @param a_inputStream the ObjectInputStream provided for deserialzation
-  * @throws ClassNotFoundException
-  * @throws IOException
-  *
-  * @author Klaus Meffert
-  * @since 3.01
-  */
- private void readObject(ObjectInputStream a_inputStream)
+  /**
+   * Deserialize the object. Needed to provide a unique ID for each thread the
+   * object is used in.
+   *
+   * @param a_inputStream the ObjectInputStream provided for deserialzation
+   * @throws ClassNotFoundException
+   * @throws IOException
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  private void readObject(ObjectInputStream a_inputStream)
       throws ClassNotFoundException, IOException {
-    //always perform the default de-serialization first
+    // Always perform the default de-serialization first.
+    // --------------------------------------------------
     a_inputStream.defaultReadObject();
-
     makeThreadKey();
   }
 
@@ -1472,4 +1480,146 @@ public class Configuration
   public String getId() {
     return m_id;
   }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return newInstance(m_id, m_name);
+  }
+
+  /**
+   * Creates a new Configuration instance by cloning. Allows to preset the
+   * ID and the name.
+   *
+   * @param a_id new ID for clone
+   * @param a_name new name for clone
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Configuration newInstance(String a_id, String a_name) {
+    try {
+      Configuration result = new Configuration(m_name);
+      if (m_bulkObjectiveFunction != null) {
+        result.m_bulkObjectiveFunction = m_bulkObjectiveFunction;
+      }
+      result.m_chromosomeSize = m_chromosomeSize;
+//    result.m_chromosomePool = m_chromosomePool.clone();
+//    result.m_conHandler = m_conHandler.clone();
+      result.m_eventManager = (IEventManager)doClone(m_eventManager);
+      /**@todo what about m_factory?*/
+      result.m_fitnessEvaluator = (FitnessEvaluator)doClone(m_fitnessEvaluator);
+      result.m_generationNr = 0;
+      result.m_geneticOperators = (List)doClone(m_geneticOperators);
+      result.m_keepPopulationSizeConstant = m_keepPopulationSizeConstant;
+      result.m_minPercentageSizePopulation = m_minPercentageSizePopulation;
+      result.m_objectiveFunction = (FitnessFunction)doClone(m_objectiveFunction);
+      result.m_postSelectors = (ChainOfSelectors)doClone(m_postSelectors);
+      result.m_preSelectors = (ChainOfSelectors)doClone(m_preSelectors);
+      result.m_preserveFittestIndividual = m_preserveFittestIndividual;
+      result.m_randomGenerator = (RandomGenerator)doClone(m_randomGenerator);
+      result.m_sampleChromosome = (IChromosome)m_sampleChromosome.clone();
+      result.m_settingsLocked = m_settingsLocked;
+      result.m_sizeNaturalSelectorsPost = m_sizeNaturalSelectorsPost;
+      result.m_sizeNaturalSelectorsPre = m_sizeNaturalSelectorsPre;
+      // Configurable data.
+      // ------------------
+      result.m_config = new ConfigurationConfigurable();
+      result.m_config.m_populationSize = m_config.m_populationSize;
+      // Identificative data.
+      // --------------------
+      result.m_name = a_name;
+      result.m_id = a_id;
+      result.makeThreadKey();// Must be called after m_id is set
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
+  }
+
+  /**
+   * Helper called from clone.
+   *
+   * @param a_objToClone the object to clone
+   * @return cloned object or null, if cloning not possible
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected Object doClone(Object a_objToClone) throws Exception {
+    if (a_objToClone != null) {
+      ICloneHandler handler = getJGAPFactory().getCloneHandlerFor(
+          a_objToClone, null);
+      if (handler != null) {
+        return handler.perform(a_objToClone, null, null);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * The equals-method.
+   *
+   * @param a_other the other object to compare
+   * @return true if seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public boolean equals(Object a_other) {
+    System.out.println("Configuration: equals");
+    return compareTo(a_other) == 0;
+  }
+
+  /**
+   * The compareTo-method.
+   *
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    System.out.println("Configuration: compareTo");
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      /**@todo make all objects comparable*/
+      Configuration other = (Configuration) a_other;
+      return new CompareToBuilder()
+          .append(m_config.m_populationSize, other.m_config.m_populationSize)
+          .append(m_factory, other.m_factory)
+          .append(m_objectiveFunction, other.m_objectiveFunction)
+          .append(m_fitnessEvaluator, other.m_fitnessEvaluator)
+          .append(m_bulkObjectiveFunction, other.m_bulkObjectiveFunction)
+          .append(m_sampleChromosome, other.m_sampleChromosome)
+          .append(m_randomGenerator, other.m_randomGenerator)
+          .append(m_eventManager, other.m_eventManager)
+          .append(m_chromosomePool, other.m_chromosomePool)
+          .append(m_geneticOperators, other.m_geneticOperators)
+          .append(m_chromosomeSize, other.m_chromosomeSize)
+          .append(m_preSelectors, other.m_preSelectors)
+          .append(m_postSelectors, other.m_postSelectors)
+          .append(m_sizeNaturalSelectorsPre, other.m_sizeNaturalSelectorsPre)
+          .append(m_sizeNaturalSelectorsPost, other.m_sizeNaturalSelectorsPost)
+          .append(m_preserveFittestIndividual, other.m_preserveFittestIndividual)
+          .append(m_conHandler, other.m_conHandler)
+          .append(threadKey, other.threadKey)
+          .append(m_keepPopulationSizeConstant, other.m_keepPopulationSizeConstant)
+          .append(m_minPercentageSizePopulation, other.m_minPercentageSizePopulation)
+          .append(m_generationNr, other.m_generationNr)
+          .append(m_name, other.m_name)
+          .append(m_settingsLocked, other.m_settingsLocked)
+          .toComparison();
+    }
+  }
+
 }
