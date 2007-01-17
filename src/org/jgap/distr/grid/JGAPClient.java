@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.message.GridMessageWorkRequest;
 public abstract class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -36,12 +36,13 @@ public abstract class JGAPClient
 
   protected JGAPRequest m_workReq;
 
-  protected RequestSplitStrategy m_splitStrategy;
+  protected IRequestSplitStrategy m_splitStrategy;
 
-  public JGAPClient(GridNodeClientConfig a_gridconfig, //Configuration cfg,
+  private Configuration m_clientConfig;
+
+  public JGAPClient(GridNodeClientConfig a_gridconfig,
                     IClientFeedback feedback, JGAPRequest req) {
     m_gridconfig = a_gridconfig;
-//    clientCfg = cfg;
     m_clientFeedback = feedback;
     m_workReq = req;
   }
@@ -72,39 +73,50 @@ public abstract class JGAPClient
       gc.setNodeConfig(m_gridconfig);
       gc.start();
       try {
-        /**@todo here we can care about distributed fitness computation
-         * For that let compute the fitness of each individual by the workers.
-         * Afterwards do the evolution and continue with previous step until
-         * target reached*/
-        // Split the work. This is done by the work request.
-        // -------------------------------------------------
-        JGAPRequest[] workList;
-        workList = m_splitStrategy.split(m_workReq);
-        m_clientFeedback.setProgressMaximum(0);
-        m_clientFeedback.setProgressMaximum(workList.length - 1);
-        m_clientFeedback.beginWork();
-        // Send work requests.
-        // -------------------
-        for (int i = 0; i < workList.length; i++) {
-          JGAPRequest req = workList[i];
-          m_clientFeedback.sendingFragmentRequest(req);
-          gc.send(new GridMessageWorkRequest(req));
-          if (this.isInterrupted())
-            break;
-        }
-        // Receive work results.
-        // ---------------------
-        for (int i = 0; i < workList.length; i++) {
-          m_clientFeedback.setProgressValue(i + workList.length);
-          GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();
-          JGAPResult workResult = (JGAPResult) gmwr.getWorkResult();
-          int idx = workResult.getRID();
-          m_clientFeedback.receivedFragmentResult(workList[idx], workResult,
-              idx);
-          m_clientFeedback.completeFrame(idx);
-          if (this.isInterrupted()) {
-            break;
+        // Do the complete evolution cycle n times.
+        // ----------------------------------------
+        final int maxEvolutions = 20;
+        for (int a = 0; a < maxEvolutions; a++) {
+          if (a == 0) {
+            // First run
           }
+          else {
+            // Consecutive runs.
+            // -----------------
+          }
+          // Split the work. This is done by the work request.
+          // -------------------------------------------------
+          JGAPRequest[] workList;
+          workList = m_splitStrategy.split(m_workReq);
+          m_clientFeedback.setProgressMaximum(0);
+          m_clientFeedback.setProgressMaximum(workList.length - 1);
+          m_clientFeedback.beginWork();
+          // Send work requests.
+          // -------------------
+          for (int i = 0; i < workList.length; i++) {
+            JGAPRequest req = workList[i];
+            m_clientFeedback.sendingFragmentRequest(req);
+            gc.send(new GridMessageWorkRequest(req));
+            if (this.isInterrupted())
+              break;
+          }
+          // Receive work results.
+          // ---------------------
+          for (int i = 0; i < workList.length; i++) {
+            m_clientFeedback.setProgressValue(i + workList.length);
+            GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();
+            JGAPResult workResult = (JGAPResult) gmwr.getWorkResult();
+            int idx = workResult.getRID();
+            m_clientFeedback.receivedFragmentResult(workList[idx], workResult,
+                idx);
+            m_clientFeedback.completeFrame(idx);
+            if (this.isInterrupted()) {
+              break;
+            }
+          }
+          // Merge results.
+          // --------------
+          /**@todo*/
         }
       } finally {
         try {
@@ -118,7 +130,7 @@ public abstract class JGAPClient
     m_clientFeedback.endWork();
   }
 
-  public void setRequestSplitStrategy(RequestSplitStrategy a_splitStrategy) {
+  public void setRequestSplitStrategy(IRequestSplitStrategy a_splitStrategy) {
     m_splitStrategy = a_splitStrategy;
   }
 
@@ -127,6 +139,18 @@ public abstract class JGAPClient
       throw new RuntimeException("Please set the request split strategy first"
                                  +" with JGAPClient before starting it!");
     }
+    if (m_clientConfig == null) {
+      throw new RuntimeException("Please set the configuration first"
+                                 +" with JGAPClient before starting it!");
+    }
     super.start();
+  }
+
+  public void setConfiguration(Configuration a_config) {
+    m_clientConfig = a_config;
+  }
+
+  public Configuration getConfiguration() {
+    return m_clientConfig;
   }
 }
