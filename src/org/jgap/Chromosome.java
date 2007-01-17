@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.87 $";
+  private final static String CVS_REVISION = "$Revision: 1.88 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -549,8 +549,9 @@ public class Chromosome
   public String toString() {
     StringBuffer representation = new StringBuffer();
     representation.append(S_SIZE + ":" + size());
-    // Don't use getFitnessValue() here as it would then be initialized anyway!
-    // ------------------------------------------------------------------------
+    // Don't use getFitnessValue() here as it would then be initialized if
+    // it was not. We want to capture the current state here!
+    // -------------------------------------------------------------------
     representation.append(", " + S_FITNESS_VALUE + ":" + m_fitnessValue);
     representation.append(", " + S_ALLELES + ":");
     representation.append("[");
@@ -595,6 +596,7 @@ public class Chromosome
    * is null
    *
    * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.0
    */
   public static IChromosome randomInitialChromosome(
