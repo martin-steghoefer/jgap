@@ -9,36 +9,40 @@
  */
 package org.jgap.impl;
 
+import java.io.*;
 import java.util.*;
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * Ordered chain of NaturalSelectors. With this container you can plugin
  * NaturalSelector implementations which will be performed either before (pre-)
  * or after (post-selectors) registered genetic operations have been applied.
- * @see Genotype
+ *
  * @see Configuration
+ * @see Genotype
  *
  * @author Klaus Meffert
  * @since 1.1
  */
 public class ChainOfSelectors
-    implements java.io.Serializable {
+    implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
    * Intentionally used as a decorator and not via inheritance!
    */
-  private List m_selectors;
+  private Vector m_selectors;
 
   public ChainOfSelectors() {
     m_selectors = new Vector();
   }
 
   /**
-   * Adds a natural selector to the chain
+   * Adds a natural selector to the chain.
+   *
    * @param a_selector the selector to be added
    * @throws InvalidConfigurationException
    *
@@ -118,7 +122,8 @@ public class ChainOfSelectors
   }
 
   /**
-   * Returns a Selector with specific index in the list
+   * Returns a Selector with specific index in the list.
+   *
    * @param a_index the index of the Selector to read from the list
    * @return NaturalSelector
    *
@@ -148,4 +153,17 @@ public class ChainOfSelectors
   public Iterator iterator() {
     return m_selectors.iterator();
   }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    ChainOfSelectors result = new ChainOfSelectors();
+    result.m_selectors = (Vector)m_selectors.clone();
+    return result;
+  }
+
 }
