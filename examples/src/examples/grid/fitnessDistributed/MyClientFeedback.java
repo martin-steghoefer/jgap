@@ -22,13 +22,14 @@ import org.jgap.distr.grid.*;
 public class MyClientFeedback
     implements IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public MyClientFeedback() {
   }
 
   public void error(String msg, Exception ex) {
     System.err.println("Error catched on client side: " + msg);
+    ex.printStackTrace();
   }
 
   public void sendingFragmentRequest(JGAPRequest req) {
