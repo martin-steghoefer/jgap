@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.cmd.MainCmd;
  */
 public class JGAPWorkers {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = JGAPWorkers.class.getName();
 
@@ -64,12 +64,14 @@ public class JGAPWorkers {
   }
 
   /**
-   * Convenience method to start your workers. For possible parameters besides
-   * the two mentioned below see method parseCommonOptions in class
-   * org.homedns.dade.jcgrid.cmd.MainCmd. The most important parameters are:
-   * -n <session Name without spaces>
+   * Convenience method to start a workers or multiple instances of it.
+   * For possible parameters besides the two mentioned below see method
+   * parseCommonOptions in class org.homedns.dade.jcgrid.cmd.MainCmd. The most
+   * important parameters are:
+   * -n <session name without spaces>
    * -s <server IP address>
    * -d <working directory>
+   * -c <number of workers to run>
    *
    * @param args first parameter: name of your worker class (instance of
    * interface org.homedns.dade.jcgrid.worker.Worker), second parameter:
