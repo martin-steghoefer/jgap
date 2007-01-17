@@ -25,7 +25,7 @@ import org.jgap.distr.grid.*;
 public class MyGAWorker
     extends JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -76,6 +76,9 @@ public class MyGAWorker
     GridNodeWorkerConfig config = new GridNodeWorkerConfig();
     Options options = new Options();
     CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
+    if (config.getSessionName().equals("none")) {
+      config.setSessionName("MyGAWorker_session");
+    }
     // Start worker.
     // -------------
     new JGAPWorkers(config, MyGAWorker.class, MyWorkerFeedback.class);
