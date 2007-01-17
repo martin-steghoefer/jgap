@@ -17,9 +17,10 @@ import java.io.*;
  * @author Klaus Meffert
  * @since 3.01
  */
-public interface IClientFeedback extends Serializable {
+public interface IClientFeedback
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   void setProgressMinimum(int min);
 
@@ -38,4 +39,6 @@ public interface IClientFeedback extends Serializable {
   void completeFrame(int idx);
 
   void error(String msg, Exception ex);
+
+  void info(String msg);
 }
