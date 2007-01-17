@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.cmd.MainCmd;
  */
 public class JGAPWorkers {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = JGAPWorkers.class.getName();
 
@@ -64,12 +64,17 @@ public class JGAPWorkers {
   }
 
   /**
-   * Convenience method to start your workers.
+   * Convenience method to start your workers. For possible parameters besides
+   * the two mentioned below see method parseCommonOptions in class
+   * org.homedns.dade.jcgrid.cmd.MainCmd. The most important parameters are:
+   * -n <session Name without spaces>
+   * -s <server IP address>
+   * -d <working directory>
    *
    * @param args first parameter: name of your worker class (instance of
    * interface org.homedns.dade.jcgrid.worker.Worker), second parameter:
    * name of your worker feedback class (instance of interface
-   * org.homedns.dade.jcgrid.worker.GridWorkerFeedback)
+   * org.homedns.dade.jcgrid.worker.GridWorkerFeedback).
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -77,8 +82,8 @@ public class JGAPWorkers {
    */
   public static void main(String[] args)
       throws Exception {
-    if (args.length != 2) {
-      System.out.println("Provide exactly two parameters:");
+    if (args.length < 2) {
+      System.out.println("Provide at least two parameters with the first two:");
       System.out.println(
           "  1. Full name of your worker class (including package)");
       System.out.println(
@@ -89,8 +94,8 @@ public class JGAPWorkers {
     GridNodeWorkerConfig config = new GridNodeWorkerConfig();
     Options options = new Options();
     CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
-    Class workerClass = Class.forName(args[1]);
-    Class workerFeedbackClass = Class.forName(args[2]);;
+    Class workerClass = Class.forName(args[0]);
+    Class workerFeedbackClass = Class.forName(args[1]);
     // Start worker(s).
     // ----------------
     new JGAPWorkers(config, workerClass, workerFeedbackClass);
