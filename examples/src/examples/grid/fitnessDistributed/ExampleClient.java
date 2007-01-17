@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -128,6 +128,19 @@ public class ExampleClient
       GridClient gc = new GridClient();
       gc.setNodeConfig(m_gridconfig);
       gc.start();
+      // Check if client aborted previously befroe receiving all results.
+      // ----------------------------------------------------------------
+      /**@todo does not work as server does not seem to keep requests
+       * in case the client shuts down --> have to examine that in more detail.
+       */
+      try {
+        int millis = 300;
+        GridMessageWorkResult gmwr1 = (GridMessageWorkResult) gc.
+            getGridMessageChannel().recv(millis);
+        JGAPResult workResult = (JGAPResult) gmwr1.getWorkResult();
+      } catch (SocketTimeoutException ste) {
+        ; //this is OK as there seem to be no previous results
+      }
       // Initialize population randomly.
       // -------------------------------
       Genotype gen = Genotype.randomInitialGenotype(getConfiguration());
