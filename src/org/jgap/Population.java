@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.53 $";
+  private static final String CVS_REVISION = "$Revision: 1.54 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -436,7 +436,8 @@ public class Population
 
   /**
    * Sorts the chromosomes within the population according to their fitness
-   * value using ChromosomFitnessComparator.
+   * value using ChromosomFitnessComparator. The fittest chromosome is then
+   * at index 0.
    *
    * @author Klaus Meffert
    * @since 2.6

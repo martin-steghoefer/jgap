@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.91 $";
+  private final static String CVS_REVISION = "$Revision: 1.92 $";
 
   /**
    * The current Configuration instance.
@@ -674,8 +674,9 @@ public class Genotype
       popSize--;
     }
   }
+
   /**
-   * If used with a Thread: runs the evolution forever.
+   * If used in a Thread: runs the evolution forever.
    * You have to implement a listener to stop computation sometime. See
    * examples.simpleBooleanThreaded for a possible implementation of such a
    * listener.
@@ -688,4 +689,4 @@ public class Genotype
       evolve();
     }
   }
-  }
+}
