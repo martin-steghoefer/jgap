@@ -9,6 +9,7 @@
  */
 package examples.grid.fitnessDistributed;
 
+import java.net.*;
 import org.apache.commons.cli.*;
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
@@ -29,7 +30,7 @@ import org.jgap.impl.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -109,8 +110,12 @@ public class ExampleClient
 
   /**
    * Threaded: Do distributed computation as follows:
-   * 1) Randomly initialize population
-   * 2)
+   * 1) Randomly initialize population.
+   * 2) Calculate fitness of each chromosome distributedly: one worker
+   *    does one chromosome.
+   * 3) Receive results from workers and assemble them.
+   * 4) Evolve the assembled population.
+   * 5) Goto step two until stop criterion is reached.
    *
    * @author Klaus Meffert
    * @since 3.2
@@ -161,9 +166,6 @@ public class ExampleClient
             idx = workResult.getRID();
             // Assemble results into a single population.
             // ------------------------------------------
-            /**@todo consider request id to be able to receive individuals of
-             * different populations
-             */
             pop.addChromosomes(workResult.getPopulation());
             // Fire listener.
             // --------------
@@ -199,8 +201,15 @@ public class ExampleClient
           gc.stop();
         } catch (Exception ex) {}
       }
+    } catch (ConnectException cex) {
+      // connection refused
+      m_clientFeedback.error("Error while connecting to server", cex);
+      /**@todo implement retry and auto-reconnect*/
+    } catch (SocketException sex) {
+      // connection reset
+      m_clientFeedback.error("Error while connected to server", sex);
+      /**@todo implement retry and auto-reconnect*/
     } catch (Exception ex) {
-      ex.printStackTrace();
       m_clientFeedback.error("Error while doing the work", ex);
     }
     m_clientFeedback.endWork();
