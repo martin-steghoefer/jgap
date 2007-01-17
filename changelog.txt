@@ -1,18 +1,22 @@
 3.2
 -----------------------------------------------------------
 * Enhanced grid logic a lot
+* Added example with distributed fitness computation
 * Introduced grid classes IEvolveStrategy and
   DefaultEvolveStrategy
 * Introduced grid classes IWorkerReturnStrategy and
   DefaultWorkerReturnStrategy
 * Introduced grid classes IGenotypeInitializer and
   DefaultGenotypeInitializer
+* Introduced grid classes IRequestSplitStrategy and
+  SampleSplitStrategy
 * Fixed bug in GPGenotype.calcFitness (see bug 1617125)
 * Set DefaultGPFitnessEvaluator in GPConfiguration per
   default instead of DeltaGPFitnessEvaluator
+* Introduced interface ICloneable that extends Cloneable
+* Made several classes cloneable
 * Fixed javadoc in IGPFitnessEvaluator
 * Fixed bug in Terminal.setRandom
-* Introduced interface ICloneable that extends Cloneable
 * Introduced exception class CloneException
 * Added support for ICloneable's in DefaultCloneHandler
 * Implemented clone for Terminal class
