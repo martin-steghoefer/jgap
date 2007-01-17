@@ -7,17 +7,17 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package examples.grid;
+package examples.grid.fitnessDistributed;
 
 import org.apache.commons.cli.*;
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.homedns.dade.jcgrid.cmd.*;
+import org.homedns.dade.jcgrid.message.*;
 import org.jgap.*;
+import org.jgap.distr.grid.*;
 import org.jgap.event.*;
 import org.jgap.impl.*;
-import org.jgap.distr.grid.*;
-import org.homedns.dade.jcgrid.message.*;
 
 /**
  * A Client defines a problem for the grid and sends it as a work request to
@@ -29,7 +29,7 @@ import org.homedns.dade.jcgrid.message.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = ExampleClient.class.getName();
 

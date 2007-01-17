@@ -7,7 +7,7 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package examples.grid;
+package examples.grid.fitnessDistributed;
 
 import org.jgap.distr.grid.*;
 import org.jgap.*;
@@ -22,7 +22,7 @@ import org.jgap.*;
 public class MyResult
     extends JGAPResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static final long serialVersionUID = 2L;
 

@@ -7,7 +7,7 @@
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
-package examples.grid;
+package examples.grid.fitnessDistributed;
 
 import org.jgap.distr.grid.*;
 import org.jgap.*;
@@ -20,7 +20,7 @@ import org.jgap.*;
  */
 public class MyEvolveStrategy implements IEvolveStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public void evolve(Genotype a_genotype) {
     a_genotype.evolve(40);
