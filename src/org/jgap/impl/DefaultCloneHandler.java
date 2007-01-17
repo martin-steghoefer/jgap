@@ -22,7 +22,7 @@ import org.jgap.*;
  * @since 2.6
  */
 public class DefaultCloneHandler
-    implements ICloneHandler {
+    implements ICloneHandler, ICloneable {
   /**
    * Handles all implementations of IApplicationData as well as all of
    * java.lang.Cloneable (for which the clone-method is accessible via
@@ -81,6 +81,7 @@ public class DefaultCloneHandler
   }
 
   /**
+   * Performs the clone operation.
    *
    * @param a_objToClone the object to clone
    * @param a_class not considered here
@@ -92,7 +93,17 @@ public class DefaultCloneHandler
    */
   public Object perform(final Object a_objToClone, final Class a_class,
                         final Object a_params) {
-    if (ICloneable.class.isAssignableFrom(a_objToClone.getClass())) {
+    Class clazz;
+    if (a_class == null) {
+      if (a_objToClone == null) {
+        return null;
+      }
+      clazz = a_objToClone.getClass();
+    }
+    else {
+      clazz = a_class;
+    }
+    if (ICloneable.class.isAssignableFrom(clazz)) {
       try {
         return ( (ICloneable) a_objToClone).clone();
       }
@@ -123,5 +134,15 @@ public class DefaultCloneHandler
     catch (Throwable ex) {
       throw new IllegalStateException(ex.getMessage());
     }
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return new DefaultCloneHandler();
   }
 }
