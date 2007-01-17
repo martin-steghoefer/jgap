@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class ExampleClient
     extends JGAPClient {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static String className = ExampleClient.class.getName();
 
@@ -179,7 +179,8 @@ public class ExampleClient
           int idx = -1;
           for (int i = 0; i < workList.length; i++) {
             m_clientFeedback.setProgressValue(i + workList.length);
-            GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();
+            gc.getGridMessageChannel();
+            GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv(0);
             JGAPResult workResult = (JGAPResult) gmwr.getWorkResult();
             idx = workResult.getRID();
             // Assemble results into a single population.
