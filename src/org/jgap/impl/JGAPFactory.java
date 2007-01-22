@@ -12,6 +12,7 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.util.*;
+import java.io.*;
 
 /**
  * Central factory for creating default objects to use, e.g. random generators.
@@ -27,9 +28,9 @@ import org.jgap.util.*;
  * @since 2.6
  */
 public class JGAPFactory
-    implements IJGAPFactory {
+    implements IJGAPFactory, Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private List m_parameters;
 
@@ -132,11 +133,11 @@ public class JGAPFactory
    * @since 2.6
    */
   public ICloneHandler getCloneHandlerFor(final Object a_obj,
-                                          final Class a_classToClone) {
+      final Class a_classToClone) {
     return (ICloneHandler) findHandlerFor(a_obj, a_classToClone,
-                                          m_cloneHandlers,
-                                          m_defaultCloneHandler,
-                                          "clone");
+        m_cloneHandlers,
+        m_defaultCloneHandler,
+        "clone");
   }
 
   /**
@@ -183,13 +184,13 @@ public class JGAPFactory
   public IInitializer getInitializerFor(final Object a_obj,
                                         final Class a_class) {
     return (IInitializer) findHandlerFor(a_obj, a_class,
-                                         m_initer,
-                                         m_defaultIniter,
-                                         "init");
+        m_initer,
+        m_defaultIniter,
+        "init");
   }
 
   public void setGeneticOperatorConstraint(final IGeneticOperatorConstraint
-                                           a_constraint) {
+      a_constraint) {
     m_geneticOpConstraint = a_constraint;
   }
 
@@ -209,11 +210,11 @@ public class JGAPFactory
    * @since 2.6
    */
   public ICompareToHandler getCompareToHandlerFor(Object a_obj,
-                                                  Class a_classToCompareTo) {
+      Class a_classToCompareTo) {
     return (ICompareToHandler) findHandlerFor(a_obj, a_classToCompareTo,
-                                              m_compareHandlers,
-                                              m_defaultComparer,
-                                              "compare");
+        m_compareHandlers,
+        m_defaultComparer,
+        "compare");
   }
 
   /**
@@ -320,7 +321,7 @@ public class JGAPFactory
   }
 
   /**
-   * @return true: caching sued, false: no caching used
+   * @return true: caching used, false: no caching used
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -328,4 +329,14 @@ public class JGAPFactory
   public boolean isUseCaching() {
     return m_useCaching;
   }
+
+  public Object clone() {
+    try {
+      /**@todo check if it works this way*/
+      return super.clone();
+    } catch (CloneNotSupportedException cex) {
+      throw new CloneException(cex);
+    }
+  }
+  /**@todo implement equals and compareTo*/
 }
