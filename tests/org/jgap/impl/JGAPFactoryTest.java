@@ -22,7 +22,7 @@ import junit.framework.*;
 public class JGAPFactoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(JGAPFactoryTest.class);
@@ -240,4 +240,35 @@ public class JGAPFactoryTest
     Object inst = new Chromosome(conf);
     assertSame(cloneHandler, factory.getCloneHandlerFor(inst, null));
   }
+
+  /**
+   * Ensures JGAPFactory is implementing Serializable.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    JGAPFactory inst = new JGAPFactory(false);
+    assertTrue(isSerializable(inst));
+  }
+
+  /**
+   * Ensures that JGAPFactory and all objects contained implement Serializable
+   * correctly.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    JGAPFactory inst = new JGAPFactory(false);
+    Object o = doSerialize(inst);
+    assertEquals(o, inst);/**@todo implement equals and compareTo*/
+  }
+
 }
