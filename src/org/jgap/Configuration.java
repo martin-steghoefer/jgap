@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.71 $";
+  private final static String CVS_REVISION = "$Revision: 1.72 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -164,7 +164,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  private transient IEventManager m_eventManager;
+  private /*transient*/ IEventManager m_eventManager;
 
   /**
    * References the chromosome pool, if any, that is to be used to pool
@@ -1505,6 +1505,17 @@ public class Configuration
   public Configuration newInstance(String a_id, String a_name) {
     try {
       Configuration result = new Configuration(m_name);
+      // Clone JGAPFactory first because it helps in cloning other objects.
+      // ------------------------------------------------------------------
+      if (m_factory instanceof ICloneable) {
+        result.m_factory = (IJGAPFactory)((ICloneable)m_factory).clone();
+      }
+      else {
+        // We must fallback to a standardized solution.
+        // --------------------------------------------
+        m_factory = new JGAPFactory(false);
+        result.m_factory = (IJGAPFactory)((JGAPFactory)m_factory).clone();
+      }
       if (m_bulkObjectiveFunction != null) {
         result.m_bulkObjectiveFunction = m_bulkObjectiveFunction;
       }
@@ -1512,7 +1523,6 @@ public class Configuration
 //    result.m_chromosomePool = m_chromosomePool.clone();
 //    result.m_conHandler = m_conHandler.clone();
       result.m_eventManager = (IEventManager)doClone(m_eventManager);
-      /**@todo what about m_factory?*/
       result.m_fitnessEvaluator = (FitnessEvaluator)doClone(m_fitnessEvaluator);
       result.m_generationNr = 0;
       result.m_geneticOperators = (List)doClone(m_geneticOperators);
