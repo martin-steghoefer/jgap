@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.54 $";
+  private static final String CVS_REVISION = "$Revision: 1.55 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -608,7 +608,8 @@ public class Population
       result.m_changed = true;
       result.m_sorted = false;
       result.m_fittestChromosome = m_fittestChromosome;
-      for (int i = 0; i < m_chromosomes.size(); i++) {
+      int size = m_chromosomes.size();
+      for (int i = 0; i < size; i++) {
         IChromosome chrom = (IChromosome) m_chromosomes.get(i);
         result.addChromosome( (IChromosome) chrom.clone());
       }
@@ -616,5 +617,20 @@ public class Population
     } catch (Exception ex) {
       throw new CloneException(ex);
     }
+  }
+
+  /**
+   * Clears the list of chromosomes. Normally, this should not be necessary.
+   * But especially in distributed computing, a fresh population has to be
+   * provided sometimes.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void clear() {
+    m_chromosomes.clear();
+    m_changed = true;
+    m_sorted = true;
+    m_fittestChromosome = null;
   }
 }
