@@ -9,13 +9,17 @@
  */
 package org.jgap.event;
 
+import java.io.*;
+
 /**
  * Interface for event managers (e.g., see class EventManager).
  *
  * @author Klaus Meffert
+ * @author Neil Rotstan
  * @since 2.6
  */
-public interface IEventManager {
+public interface IEventManager
+    extends Serializable {
   /**
    * Adds a new listener that will be notified when the event represented
    * by the given name is fired.

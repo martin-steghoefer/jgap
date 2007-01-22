@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import org.jgap.util.*;
+import java.io.*;
 
 /**
  * Default implementation for comparing Comparables. Boolean values are also
@@ -20,9 +21,9 @@ import org.jgap.util.*;
  * @since 2.6
  */
 public class DefaultCompareToHandler
-    implements ICompareToHandler, ICloneable {
+    implements ICompareToHandler, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
     Class clazz;
@@ -65,8 +66,8 @@ public class DefaultCompareToHandler
     }
     else {
       if (a_obj.getClass() == Boolean.class) {
-        boolean b1 = ((Boolean)a_obj).booleanValue();
-        boolean b2 = ((Boolean)a_params).booleanValue();
+        boolean b1 = ( (Boolean) a_obj).booleanValue();
+        boolean b2 = ( (Boolean) a_params).booleanValue();
         if (b1 == b2) {
           i = 0;
         }

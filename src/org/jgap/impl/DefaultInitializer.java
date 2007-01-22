@@ -11,6 +11,8 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import org.jgap.util.*;
+import java.io.*;
+
 /**
  * Default implementation for initializing Chromosomes.
  *
@@ -18,9 +20,9 @@ import org.jgap.util.*;
  * @since 2.6
  */
 public class DefaultInitializer
-    implements IInitializer, ICloneable {
+    implements IInitializer, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_class) {
     if (IChromosome.class.isAssignableFrom(a_class)) {
@@ -28,7 +30,7 @@ public class DefaultInitializer
     }
     else {
       if (a_obj != null && IInitializer.class.isAssignableFrom(a_class)) {
-        IInitializer initer = (IInitializer)a_obj;
+        IInitializer initer = (IInitializer) a_obj;
         return initer.isHandlerFor(null, a_class);
       }
       else {
@@ -41,13 +43,13 @@ public class DefaultInitializer
                         final Object a_params)
       throws Exception {
     if (IInitializer.class.isAssignableFrom(a_class)) {
-      return ((IInitializer)a_obj).perform(null, a_class, a_params);
+      return ( (IInitializer) a_obj).perform(null, a_class, a_params);
     }
     else {
       throw new IllegalArgumentException("DefaultInitializer not suited for"
-                                         + " class"
-                                         + a_class.getName()
-                                         + " !");
+          + " class"
+          + a_class.getName()
+          + " !");
     }
   }
 

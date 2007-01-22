@@ -9,6 +9,7 @@
  */
 package org.jgap;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -17,9 +18,9 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 2.6
  */
-public interface IJGAPFactory {
+public interface IJGAPFactory extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   void setParameters(Collection a_parameters);
 

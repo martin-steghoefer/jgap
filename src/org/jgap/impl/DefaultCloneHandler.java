@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.io.*;
 import java.lang.reflect.*;
 import org.jgap.util.*;
 import org.jgap.*;
@@ -22,7 +23,7 @@ import org.jgap.*;
  * @since 2.6
  */
 public class DefaultCloneHandler
-    implements ICloneHandler, ICloneable {
+    implements ICloneHandler, ICloneable, Serializable {
   /**
    * Handles all implementations of IApplicationData as well as all of
    * java.lang.Cloneable (for which the clone-method is accessible via
