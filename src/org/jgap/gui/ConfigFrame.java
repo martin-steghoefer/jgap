@@ -30,7 +30,7 @@ public class ConfigFrame
     extends JFrame
     implements IConfigInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   // data members of class ConfigFrame
   private Object m_conHandler;
@@ -314,7 +314,6 @@ public class ConfigFrame
       getContentPane().setLayout(new TableLayout(tableArray));
       // add the panels to the frame now
       int panelsAdded = 0;
-      JPanel panel;
       // if we have lists to add
       if (a_numLists > 0) {
         double[][] panelSize;
