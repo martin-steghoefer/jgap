@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -64,6 +64,12 @@ public class GPConfiguration
   private double m_newChromsPercent = 0.3d;
 
   /**
+   * In crossover: If random number (0..1) < this value, then choose a function
+   * otherwise a terminal
+   */
+  private double m_functionProb = 0.9d;
+
+  /**
    * The maximum depth of an individual resulting from crossover.
    */
   private int m_maxCrossoverDepth = 17;
@@ -95,7 +101,7 @@ public class GPConfiguration
    * If m_strictProgramCreation is false: Maximum number of tries to construct
    * a valid program.
    */
-  private int m_programCreationMaxTries = 3;
+  private int m_programCreationMaxTries = 5;
 
   /**
    * The fitness evaluator. See interface IGPFitnessEvaluator for details.
@@ -223,6 +229,27 @@ public class GPConfiguration
 
   public void setReproductionProb(float a_reproductionProb) {
     m_reproductionProb = a_reproductionProb;
+  }
+
+  /**
+   * @param a_functionProb probability that a function is choosen in crossing
+   * over (between 0 and 1)
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setFunctionProb(double a_functionProb) {
+    m_functionProb = a_functionProb;
+  }
+
+  /**
+   * @return probability that a function is choosen in crossing over
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public double getFunctionProb() {
+    return m_functionProb;
   }
 
   public void setNewChromsPercent(double a_newChromsPercent) {
