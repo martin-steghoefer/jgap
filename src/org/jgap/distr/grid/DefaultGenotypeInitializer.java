@@ -20,7 +20,7 @@ import org.jgap.*;
 public class DefaultGenotypeInitializer
     implements IGenotypeInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Sets up a Genotype by adding the content of the given Population to it
@@ -29,11 +29,13 @@ public class DefaultGenotypeInitializer
    * @param a_req a JGAPRequest object containing useful information
    * @param a_initialPop the Population to consider
    * @return the initialized Genotype
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop) {
+  public Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop)
+      throws Exception {
     try {
       Genotype gen;
       Configuration conf = a_req.getConfiguration();
@@ -47,8 +49,7 @@ public class DefaultGenotypeInitializer
         // Fill up population to get the desired size.
         // -------------------------------------------
         int size = conf.getPopulationSize() - a_initialPop.size();
-        gen.fillPopulation(conf, gen.getPopulation(), conf.getSampleChromosome(),
-                           size);
+        gen.fillPopulation(size);
       }
       return gen;
     } catch (Throwable t) {
