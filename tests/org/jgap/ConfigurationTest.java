@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -44,8 +44,7 @@ public class ConfigurationTest
     try {
       conf.addGeneticOperator(null);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -59,8 +58,7 @@ public class ConfigurationTest
       conf.lockSettings();
       conf.addGeneticOperator(new MutationOperator());
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -91,8 +89,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -111,8 +108,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -132,8 +128,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -154,8 +149,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -177,8 +171,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -201,8 +194,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -248,8 +240,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -272,8 +263,7 @@ public class ConfigurationTest
     try {
       conf.verifyStateIsValid();
       fail();
-    }
-    catch (InvalidConfigurationException illex) {
+    } catch (InvalidConfigurationException illex) {
       ; //this is OK
     }
   }
@@ -403,8 +393,7 @@ public class ConfigurationTest
     try {
       conf.getNaturalSelector(true, 0);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -419,8 +408,7 @@ public class ConfigurationTest
     try {
       conf.getNaturalSelector(false, 0);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -480,8 +468,7 @@ public class ConfigurationTest
     try {
       assertEquals(null, conf.getNaturalSelectors(false).get(1));
       fail();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ; //this is OK
     }
   }
@@ -526,8 +513,7 @@ public class ConfigurationTest
     try {
       conf.setFitnessFunction(null);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -538,14 +524,14 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetFitnessFunction_1() throws Exception {
+  public void testSetFitnessFunction_1()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new TestFitnessFunction());
     try {
       conf.setFitnessFunction(new StaticFitnessFunction(2.3d));
       fail();
-    }
-    catch (RuntimeException invex) {
+    } catch (RuntimeException invex) {
       ; //this is OK
     }
   }
@@ -556,15 +542,15 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetFitnessFunction_2() throws Exception {
+  public void testSetFitnessFunction_2()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new TestFitnessFunction());
     Configuration conf2 = new Configuration();
     try {
       conf2.setFitnessFunction(new StaticFitnessFunction(2.3d));
       fail();
-    }
-    catch (RuntimeException invex) {
+    } catch (RuntimeException invex) {
       ; //this is OK
     }
   }
@@ -575,15 +561,15 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetFitnessFunction_3() throws Exception {
+  public void testSetFitnessFunction_3()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setFitnessFunction(new StaticFitnessFunction(2.3d));
     Configuration conf2 = new Configuration();
     try {
       conf2.setFitnessFunction(new StaticFitnessFunction(4.5d));
       fail();
-    }
-    catch (RuntimeException invex) {
+    } catch (RuntimeException invex) {
       ; //this is OK
     }
   }
@@ -594,7 +580,8 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetFitnessFunction_4() throws Exception {
+  public void testSetFitnessFunction_4()
+      throws Exception {
     new Thread(new MyThread()).start();
     new Thread(new MyThread()).start();
   }
@@ -607,8 +594,7 @@ public class ConfigurationTest
     try {
       conf.setFitnessEvaluator(null);
       fail();
-    }
-    catch (IllegalStateException istex) {
+    } catch (IllegalStateException istex) {
       ; //this is OK
     }
   }
@@ -647,8 +633,7 @@ public class ConfigurationTest
     try {
       conf.setBulkFitnessFunction(null);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -664,8 +649,7 @@ public class ConfigurationTest
     try {
       conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -681,8 +665,7 @@ public class ConfigurationTest
     try {
       conf.setFitnessFunction(new TestFitnessFunction());
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -710,8 +693,7 @@ public class ConfigurationTest
     try {
       conf.setBulkFitnessFunction(new TestBulkFitnessFunction2());
       fail();
-    }
-    catch (RuntimeException rex) {
+    } catch (RuntimeException rex) {
       ; //this is OK
     }
   }
@@ -736,7 +718,8 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetBulkFitnessFunction_6() throws Exception {
+  public void testSetBulkFitnessFunction_6()
+      throws Exception {
     new Thread(new MyThreadBulk()).start();
     new Thread(new MyThreadBulk()).start();
   }
@@ -764,8 +747,7 @@ public class ConfigurationTest
     try {
       conf.setPopulationSize(0);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -778,8 +760,7 @@ public class ConfigurationTest
     try {
       conf.setRandomGenerator(null);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -792,8 +773,7 @@ public class ConfigurationTest
     try {
       conf.setEventManager(null);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -804,7 +784,8 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetEventManager_1() throws Exception {
+  public void testSetEventManager_1()
+      throws Exception {
     Configuration conf = new Configuration();
     conf.setEventManager(new EventManager());
     conf.setEventManager(new EventManager());
@@ -823,8 +804,7 @@ public class ConfigurationTest
     try {
       conf.setEventManager(new TestEventManager());
       fail();
-    }
-    catch (RuntimeException rex) {
+    } catch (RuntimeException rex) {
       ; //this is OK
     }
   }
@@ -835,7 +815,8 @@ public class ConfigurationTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetEventManager_3() throws Exception {
+  public void testSetEventManager_3()
+      throws Exception {
     new Thread(new MyThreadEvent()).start();
     new Thread(new MyThreadEvent()).start();
   }
@@ -850,8 +831,7 @@ public class ConfigurationTest
     try {
       conf.lockSettings();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -878,8 +858,7 @@ public class ConfigurationTest
     try {
       conf.verifyChangesAllowed();
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -896,8 +875,7 @@ public class ConfigurationTest
     try {
       conf.setSampleChromosome(null);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -1010,7 +988,7 @@ public class ConfigurationTest
                             + conf.S_NATURAL_SELECTORS + "(" + conf.S_POST +
                             ")" + ":"
                             + natselsPost + " "
-                            ), s);
+                 ), s);
   }
 
   /**
@@ -1068,7 +1046,7 @@ public class ConfigurationTest
                             + conf.S_NATURAL_SELECTORS + "(" + conf.S_POST +
                             ")" + ":"
                             + natselsPost + " "
-                            ), s);
+                 ), s);
   }
 
   /**
@@ -1194,8 +1172,7 @@ public class ConfigurationTest
     try {
       new Configuration();
       fail();
-    }
-    catch (RuntimeException rex) {
+    } catch (RuntimeException rex) {
       ; //this is OK
     }
   }
@@ -1256,6 +1233,79 @@ public class ConfigurationTest
     conf.clone();
     conf.clone();
   }
+
+  /**
+   * Exposes bug 1642378.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testRemoveNaturalSelector_0()
+      throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new BestChromosomesSelector(conf);
+    conf.addNaturalSelector(selector, false);
+    conf.removeNaturalSelectors(false);
+    assertEquals(0, conf.getNaturalSelectors(false).size());
+    assertEquals(0, conf.getNaturalSelectorsSize(false));
+  }
+
+  /**
+   * Exposes bug 1642378.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testRemoveNaturalSelector_1()
+      throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new BestChromosomesSelector(conf);
+    conf.addNaturalSelector(selector, !false);
+    conf.removeNaturalSelectors(!false);
+    assertEquals(0, conf.getNaturalSelectors(!false).size());
+    assertEquals(0, conf.getNaturalSelectorsSize(!false));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testRemoveNaturalSelector_2()
+      throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new BestChromosomesSelector(conf);
+    conf.addNaturalSelector(selector, true);
+    conf.removeNaturalSelectors(false);
+    assertEquals(0, conf.getNaturalSelectors(false).size());
+    assertEquals(0, conf.getNaturalSelectorsSize(false));
+    assertEquals(1, conf.getNaturalSelectors(true).size());
+    assertEquals(1, conf.getNaturalSelectorsSize(true));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testRemoveNaturalSelector_3()
+      throws Exception {
+    Configuration conf = new Configuration();
+    NaturalSelector selector = new BestChromosomesSelector(conf);
+    conf.addNaturalSelector(selector, false);
+    conf.removeNaturalSelectors(true);
+    assertEquals(0, conf.getNaturalSelectors(true).size());
+    assertEquals(0, conf.getNaturalSelectorsSize(true));
+    assertEquals(1, conf.getNaturalSelectors(false).size());
+    assertEquals(1, conf.getNaturalSelectorsSize(false));
+  }
+
 }
 class MyFactoryTest
     extends JGAPFactory {
@@ -1272,58 +1322,51 @@ class TestBulkFitnessFunction
     return -199;
   }
 }
-
 class TestBulkFitnessFunction2
     extends BulkFitnessFunction {
   public void evaluate(Population a_subjects) {
   }
+
   public int hashCode() {
     return -297;
   }
 }
-
 class MyThread
     implements Runnable {
-  public void run(){
+  public void run() {
     Configuration conf = new Configuration();
     try {
       conf.setFitnessFunction(new StaticFitnessFunction(2.3));
       Thread.sleep(100);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 }
-
 class MyThreadBulk
     implements Runnable {
-  public void run(){
+  public void run() {
     Configuration conf = new Configuration();
     try {
       conf.setBulkFitnessFunction(new TestBulkFitnessFunction());
       Thread.sleep(100);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 }
-
 class MyThreadEvent
     implements Runnable {
-  public void run(){
+  public void run() {
     Configuration conf = new Configuration();
     try {
       conf.setEventManager(new EventManager());
       Thread.sleep(100);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 }
-
-class TestEventManager extends EventManager {
-
+class TestEventManager
+    extends EventManager {
 }
