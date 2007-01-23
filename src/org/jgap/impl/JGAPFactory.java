@@ -30,7 +30,7 @@ import java.io.*;
 public class JGAPFactory
     implements IJGAPFactory, Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private List m_parameters;
 
@@ -271,6 +271,7 @@ public class JGAPFactory
     if (m_useCaching) {
       // Construct key for cache lookup:
       // Class name of list + a_class-Name + a_obj.hashCode()
+      // ----------------------------------------------------
       if (a_class == null) {
         key1 = "null";
       }
@@ -312,7 +313,8 @@ public class JGAPFactory
       }
     }
     if (m_useCaching) {
-      // Add to cache
+      // Add to cache.
+      // -------------
       if (result != null) {
         m_cache.put(key, result);
       }
