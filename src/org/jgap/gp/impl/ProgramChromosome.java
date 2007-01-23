@@ -26,7 +26,7 @@ public class ProgramChromosome
     extends BaseGPChromosome
     implements IGPChromosome, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -438,7 +438,7 @@ public class ProgramChromosome
   }
 
   /**
-   * Create a tree of nodes using the grow method.
+   * Create a tree of nodes using the grow or the full method.
    *
    * @param a_num the chromosome's index in the individual of this chromosome
    * @param a_depth the maximum depth of the tree to create
@@ -483,6 +483,21 @@ public class ProgramChromosome
                          a_rootNode.getChildType(getIndividual(), i),
                          a_functionSet, null, a_recurseLevel + 1, a_grow);
         }
+        else {
+          // No valid program could be generated. Abort.
+          // -------------------------------------------
+          throw new IllegalStateException("Randomly created program violates"
+              + " configuration constraints (symptom 1). It may be that you"
+              + " specified a tool small number of maxNodes to use!");
+        }
+      }
+    }
+    else {
+      if (a_rootNode.getArity(getIndividual()) > 0) {
+        // No valid program could be generated. Abort.
+        // -------------------------------------------
+        throw new IllegalStateException("Randomly created program violates"
+            + " configuration constraints (symptom 2)");
       }
     }
   }
@@ -517,7 +532,8 @@ public class ProgramChromosome
     int num = a_index + 1;
     CommandGene command = getNode(a_index);
     if (command == null) {
-      throw new IllegalStateException("ProgramChromosome invalid");
+      throw new IllegalStateException("ProgramChromosome invalid at index "
+                                      + a_index);
     }
     IGPProgram ind = getIndividual();
     int arity = command.getArity(ind);
@@ -562,8 +578,9 @@ public class ProgramChromosome
         }
       }
     }
-    throw new RuntimeException("Bad child " + a_child +
-                               " of node with index = "
+    throw new RuntimeException("Bad child "
+                               + a_child
+                               + " of node with index = "
                                + a_index);
   }
 
@@ -732,6 +749,9 @@ public class ProgramChromosome
 
   public int execute_int(int n, int child, Object[] args) {
     if (child == 0) {
+      if (m_genes.length < n) {
+        System.err.println("Invalid length: "+(n+1));
+      }
       return m_genes[n + 1].execute_int(this, n + 1, args);
     }
     int other = getChild(n, child);
