@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.72 $";
+  private final static String CVS_REVISION = "$Revision: 1.73 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -778,11 +778,11 @@ public class Configuration
   public void removeNaturalSelectors(final boolean
                                      a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
-      getNaturalSelectors(true);
+      getNaturalSelectors(true).clear();
       m_sizeNaturalSelectorsPre = 0;
     }
     else {
-      getNaturalSelectors(false);
+      getNaturalSelectors(false).clear();
       m_sizeNaturalSelectorsPost = 0;
     }
   }
