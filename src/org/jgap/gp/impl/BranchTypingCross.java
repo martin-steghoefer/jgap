@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -107,6 +107,7 @@ public class BranchTypingCross
    * If a resulting chromosome's depth is larger than the World's maximum
    * crossover depth then that chromosome is simply copied from the original
    * rather than crossed.
+   *
    * @param c0 the first chromosome to cross
    * @param c1 the second chromosome to cross
    * @return an array of the two resulting chromosomes
@@ -122,21 +123,19 @@ public class BranchTypingCross
         c0, c1};
     // Choose a point in c1
     int p0;
-    if (getConfiguration().getRandomGenerator().nextFloat() < 0.9f) {
-      /**@todo make configurable*/
+    RandomGenerator random = getConfiguration().getRandomGenerator();
+    if (random.nextDouble() < getConfiguration().getFunctionProb()) {
       // choose a function
       int nf = c0.numFunctions();
       if (nf == 0) {
         // no functions
         return c;
       }
-      p0 = c0.getFunction(getConfiguration().getRandomGenerator().
-                          nextInt(nf));
+      p0 = c0.getFunction(random.nextInt(nf));
     }
     else {
       // choose a terminal
-      p0 = c0.getTerminal(getConfiguration().getRandomGenerator().
-                          nextInt(c0.numTerminals()));
+      p0 = c0.getTerminal(random.nextInt(c0.numTerminals()));
       // Mutate the terminal's value.
       // ----------------------------
       /**@todo make this random and configurable*/
@@ -155,30 +154,27 @@ public class BranchTypingCross
     }
     // Choose a point in c2 matching the type
     int p1;
-    Class t = c0.getNode(p0).getReturnType();
-    if (getConfiguration().getRandomGenerator().nextFloat() < 0.9f) {
-      /**@todo make configurable*/
+    Class type_ = c0.getNode(p0).getReturnType();
+    if (random.nextFloat() < getConfiguration().getFunctionProb()) {
       // choose a function
-      int nf = c1.numFunctions(t);
+      int nf = c1.numFunctions(type_);
       if (nf == 0) {
         // No functions of that type.
         // --------------------------
         return c;
       }
-      p1 = c1.getFunction(getConfiguration().getRandomGenerator().nextInt(nf),
-                          t);
+      p1 = c1.getFunction(random.nextInt(nf), type_);
     }
     else {
       // Choose a terminal.
       // ------------------
-      int nt = c1.numTerminals(t);
+      int nt = c1.numTerminals(type_);
       if (nt == 0) {
         // No terminals of that type.
         // --------------------------
         return c;
       }
-      p1 = c1.getTerminal(getConfiguration().getRandomGenerator().
-                          nextInt(c1.numTerminals(t)), t);
+      p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_)), type_);
       // Mutate the terminal's value.
       // ----------------------------
       /**@todo make this random and configurable*/
@@ -201,9 +197,12 @@ public class BranchTypingCross
     int d1 = c1.getDepth(p1); //Depth of c1 from index p1
     int c0s = c0.getSize(0); //Number of nodes in c0
     int c1s = c1.getSize(0); //Number of nodes in c1
+
     // Check for depth constraint for p1 inserted into c0.
     // ---------------------------------------------------
-    if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()) {
+    if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()
+        || c0s - p0 - s0 < 1
+        || p0 + s1 + c0s - p0 - s0>= c0.getFunctions().length) {
       // Choose the other parent.
       // ------------------------
       c[0] = c1;
@@ -221,7 +220,9 @@ public class BranchTypingCross
     }
     // Check for depth constraint for p0 inserted into c1.
     // ---------------------------------------------------
-    if (d1 - 1 + s0 > getConfiguration().getMaxCrossoverDepth()) {
+    if (d1 - 1 + s0 > getConfiguration().getMaxCrossoverDepth()
+        || c1s - p1 - s1 < 1
+        || p1 + s0 + c1s - p1 - s1 >= c1.getFunctions().length) {
       // Choose the other parent.
       // ------------------------
       c[1] = c0;
