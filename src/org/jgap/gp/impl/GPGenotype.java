@@ -24,7 +24,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -487,9 +487,21 @@ public class GPGenotype
           // -------------
           IGPProgram i1 = conf.getSelectionMethod().select(this);
           IGPProgram i2 = conf.getSelectionMethod().select(this);
-          IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1, i2);
-          newPopulation.setGPProgram(i++, newIndividuals[0]);
-          newPopulation.setGPProgram(i, newIndividuals[1]);
+          int tries = 0;
+          do {
+            try {
+              IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1,
+                  i2);
+              newPopulation.setGPProgram(i++, newIndividuals[0]);
+              newPopulation.setGPProgram(i, newIndividuals[1]);
+              break;
+            } catch (IllegalStateException iex) {
+              tries++;
+              if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
+                throw new IllegalArgumentException(iex.getMessage());
+              }
+            }
+          } while (true);
         }
         else if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
