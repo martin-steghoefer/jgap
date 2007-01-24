@@ -24,30 +24,31 @@ import java.util.jar.*;
 class JarClassLoader
     extends URLClassLoader {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  private URL url;
+  private URL m_url;
 
   /**
    * Creates a new JarClassLoader for the specified url.
    *
-   * @param url the url of the jar file
+   * @param a_url the url of the jar file
    */
-  public JarClassLoader(URL url) {
-    super(new URL[] {url});
-    this.url = url;
+  public JarClassLoader(URL a_url) {
+    super(new URL[] {a_url});
+    m_url = a_url;
   }
 
   /**
    * @returns the name of the jar file main class, or null if no "Main-Class"
-   * manifest attributes was defined.
+   * manifest attributes was defined
+   *
    * @throws IOException
    *
    * @since 3.2
    */
   public String getMainClassName()
       throws IOException {
-    URL u = new URL("jar", "", url + "!/");
+    URL u = new URL("jar", "", m_url + "!/");
     JarURLConnection uc = (JarURLConnection) u.openConnection();
     Attributes attr = uc.getMainAttributes();
     if (attr != null) {
@@ -66,6 +67,7 @@ class JarClassLoader
    *
    * @param name the name of the main class
    * @param args the arguments for the application
+   *
    * @throws ClassNotFoundException
    * @throws NoSuchMethodException
    * @throws InvocationTargetException
