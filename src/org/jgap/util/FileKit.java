@@ -13,9 +13,26 @@ import java.io.*;
 
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static String fileseparator = System.getProperty("file.separator");
+
+  /**
+   * Copies a complete file.
+   *
+   * @param source source file name
+   * @param dest destination file name or destination path (filename then taken
+   * from source)
+   * @throws FileNotFoundException
+   * @throws IOException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static void copyFile(String source, String dest)
+      throws FileNotFoundException, IOException {
+    copyFile(source, dest, 0);
+  }
 
   /**
    * Copies a file.
@@ -144,7 +161,8 @@ public class FileKit {
   }
 
   /**
-   * Removes duplicate separators from an URL.
+   * Makes an URL nice by bringing it into a normalized (i.e. convenient) form.
+   *
    * @param url any URL
    * @param separator the separator to remove duplicates of
    * @return prettified URL
@@ -169,10 +187,13 @@ public class FileKit {
   }
 
   /**
-   * Entfernt doppelte Separatoren (Slash oder Backslash)
-   * @param dir Verzeichnisname (evtl. inklusive Dateiname)
-   * @param separator Separator (Slash oder Backslash)
-   * @return um doppelte Separatoren bereinigter Verzeichnisname
+   * Removes duplicate separators from an URL.
+   *
+   * @param dir name of directory including file name
+   * @return prettified URL
+   *
+   * @author Klaus Meffert
+   * @since 3.2
    */
   public static String removeDoubleSeparators(String dir) {
     int p;
@@ -200,4 +221,21 @@ public class FileKit {
     File f = new File(a_dir);
     return f.exists();
   }
+
+  /**
+   * Deletes a file from disk.
+   *
+   * @param a_filename name of file to delete
+   * @return true if deletion successful
+   */
+  public static boolean deleteFile(String a_filename) {
+    File file = new File(getConformPath(a_filename));
+    if (file.exists()) {
+      return file.delete();
+    }
+    else {
+      return false;
+    }
+  }
+
 }
