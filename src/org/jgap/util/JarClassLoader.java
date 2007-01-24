@@ -21,12 +21,26 @@ import java.util.jar.*;
  * http://java.sun.com/docs/books/tutorial/deployment/jar/apiindex.html)
  * @since 3.2
  */
-class JarClassLoader
+public class JarClassLoader
     extends URLClassLoader {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private URL m_url;
+
+  /**
+   * Construction with an ordinary filename.
+   *
+   * @param a_filename ordinary filename
+   * @throws MalformedURLException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public JarClassLoader(String a_filename)
+      throws MalformedURLException {
+    this(new URL("jar:file:" + a_filename + "!/"));
+  }
 
   /**
    * Creates a new JarClassLoader for the specified url.
@@ -65,8 +79,8 @@ class JarClassLoader
    * static method "main" which takes an array of String arguments
    * and is of return type "void".
    *
-   * @param name the name of the main class
-   * @param args the arguments for the application
+   * @param a_className the name of the main class
+   * @param a_args the arguments for the application
    *
    * @throws ClassNotFoundException
    * @throws NoSuchMethodException
@@ -74,11 +88,11 @@ class JarClassLoader
    *
    * @since 3.2
    */
-  public void invokeClass(String name, String[] args)
+  public void invokeClass(String a_className, String[] a_args)
       throws ClassNotFoundException, NoSuchMethodException,
       InvocationTargetException {
-    Class c = loadClass(name);
-    Method m = c.getMethod("main", new Class[] {args.getClass()});
+    Class c = loadClass(a_className);
+    Method m = c.getMethod("main", new Class[] {a_args.getClass()});
     m.setAccessible(true);
     int mods = m.getModifiers();
     if (m.getReturnType() != void.class || !Modifier.isStatic(mods) ||
@@ -86,7 +100,7 @@ class JarClassLoader
       throw new NoSuchMethodException("main");
     }
     try {
-      m.invoke(null, new Object[] {args});
+      m.invoke(null, new Object[] {a_args});
     } catch (IllegalAccessException e) {
       // This should not happen, as we have disabled access checks
     }
