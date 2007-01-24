@@ -15,7 +15,7 @@ import java.net.*;
 
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -344,7 +344,7 @@ public class FileKit {
   public static String getVersionOfJGAP(String a_filename)
       throws Exception {
     Manifest mf = getManifestOfJar(a_filename);
-    String version = getModuleVersion(mf);
+    String version = getJGAPVersion(mf);
     if (version == null) {
       version = "no version info found!";
     }
