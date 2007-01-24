@@ -10,10 +10,12 @@
 package org.jgap.util;
 
 import java.io.*;
+import java.util.jar.*;
+import java.net.*;
 
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -61,7 +63,7 @@ public class FileKit {
     int c;
     int currentOffset = 0;
     while ( (c = in.read()) != -1) {
-      if (currentOffset <= a_offset) {
+      if (currentOffset >= a_offset) {
         out.write(c);
       }
       currentOffset++;
@@ -199,27 +201,31 @@ public class FileKit {
     int p;
     do {
       String sep;
-      if (fileseparator.length()>1) {
+      if (fileseparator.length() > 1) {
         sep = fileseparator;
       }
       else {
-        sep = fileseparator+fileseparator;
+        sep = fileseparator + fileseparator;
       }
       p = dir.lastIndexOf(sep);
       if (p >= 0) {
-          dir = dir.substring(0,p)+dir.substring(p+1);
+        dir = dir.substring(0, p) + dir.substring(p + 1);
       }
       else {
         break;
       }
-    }
-    while (true);
+    } while (true);
     return dir;
   }
 
   public static boolean directoryExists(String a_dir) {
     File f = new File(a_dir);
     return f.exists();
+  }
+
+  public static boolean existsFile(String a_filename) {
+    File file = new File(getConformPath(a_filename));
+    return file.exists();
   }
 
   /**
@@ -238,4 +244,111 @@ public class FileKit {
     }
   }
 
+  /**
+   * Loads a jar file and returns a class loader to access the jar's classes.
+   *
+   * @param a_filename the full jar file name, e.g.:
+   *      C:/jgap/lib/ext/ashcroft.jar!/
+   * @return ClassLoader the class loader with which to access the loaded
+   * classes, e.g. by <classloader>.loadClass(<classname including package>),
+   * e.g.: cl.loadClass("com.thoughtworks.ashcroft.runtime.JohnAshcroft");
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static ClassLoader loadJar(String a_filename)
+      throws Exception {
+    URL url = new URL("jar:file:" + a_filename);
+    JarClassLoader cl = new JarClassLoader(url);
+    return cl;
+  }
+
+  /**
+   * Retrieve the manifest included in the given jar.
+   *
+   * @param a_filename jar file name
+   * @return Manifest included in the given jar
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static Manifest getManifestOfJar(String a_filename)
+      throws Exception {
+    URL url = new URL("jar:file:" + a_filename + "!/");
+    JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
+    Manifest manifest = jarConnection.getManifest();
+    // Very important: Close the jar file!
+    // -----------------------------------
+    jarConnection.getJarFile().close();
+    return manifest;
+  }
+
+  /**
+   * @param a_JGAPManifest Manifest with JGAP-specific information
+   * @return version the jar file is working wit (or version of the JGAP library
+   * in case the file *is* the JGAP library)
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static String getJGAPVersion(Manifest a_JGAPManifest) {
+    Attributes attr = a_JGAPManifest.getMainAttributes();
+    return attr.getValue("JGAP-Version");
+  }
+
+  /**
+   * @param a_JGAPManifest Manifest with JGAP-specific information
+   * @return version of the module represented by the jar
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static String getModuleVersion(Manifest a_JGAPManifest) {
+    Attributes attr = a_JGAPManifest.getMainAttributes();
+    return attr.getValue("Module-Version");
+  }
+
+  /**
+   * See getModuleVersion.
+   *
+   * @param a_filename name of a JGAP jar
+   * @return version of the module represented by the jar
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static String getVersionOfModule(String a_filename)
+      throws Exception {
+    Manifest mf = getManifestOfJar(a_filename);
+    String version = getModuleVersion(mf);
+    if (version == null) {
+      version = "no version info found!";
+    }
+    return version;
+  }
+
+  /**
+   * See getJGAPVersion.
+   *
+   * @param a_filename name of a JGAP jar
+   * @return version the jar file is working wit (or version of the JGAP library
+   * in case the file *is* the JGAP library)
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static String getVersionOfJGAP(String a_filename)
+      throws Exception {
+    Manifest mf = getManifestOfJar(a_filename);
+    String version = getModuleVersion(mf);
+    if (version == null) {
+      version = "no version info found!";
+    }
+    return version;
+  }
 }
+
