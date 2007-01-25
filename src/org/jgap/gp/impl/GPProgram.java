@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -375,12 +375,28 @@ public class GPProgram
    */
   public Object clone() {
     try {
+      // Min and max depths can be null.
+      // -------------------------------
+      int[] minDepthsClone;
+      if (getMinDepths() != null) {
+        minDepthsClone = (int[]) getMinDepths().clone();
+      }
+      else {
+        minDepthsClone = null;
+      }
+      int[] maxDepthsClone;
+      if (getMaxDepths() != null) {
+        maxDepthsClone = (int[]) getMaxDepths().clone();
+      }
+      else {
+        maxDepthsClone = null;
+      }
       GPProgram result = new GPProgram(getGPConfiguration(),
                                        (Class[]) getTypes().clone(),
                                        (Class[][]) getArgTypes().clone(),
                                        (CommandGene[][]) getNodeSets().clone(),
-                                       (int[]) getMinDepths().clone(),
-                                       (int[]) getMaxDepths().clone(),
+                                       minDepthsClone,
+                                       maxDepthsClone,
                                        getMaxNodes());
       for (int i = 0; i < m_chromosomes.length; i++) {
         if (m_chromosomes[i] == null) {
