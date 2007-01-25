@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
+  private final static String CVS_REVISION = "$Revision: 1.61 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -1634,7 +1634,7 @@ public class ChromosomeTest
           + Chromosome.CHROM_DELIMITER
           + "1"
           + Chromosome.CHROM_DELIMITER
-          + "<IntegerGene"
+          + "<" + IntegerGene.class.getName()
           + Chromosome.GENE_DELIMITER
           + "2<");
       fail();
@@ -1665,7 +1665,6 @@ public class ChromosomeTest
                  chrom2.getPersistentRepresentation());
   }
 
-
   /**
    * Empty representation.
    *
@@ -1682,7 +1681,7 @@ public class ChromosomeTest
           + Chromosome.CHROM_DELIMITER
           + "1"
           + Chromosome.CHROM_DELIMITER
-          + "<org.jgap.impl.IntegerGene"
+          + "<" + IntegerGene.class.getName()
           + Chromosome.GENE_DELIMITER
           + "2:4:4"
           + Chromosome.GENE_DELIMITER
