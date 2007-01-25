@@ -21,6 +21,7 @@
 * Fixed javadoc in IGPFitnessEvaluator
 * Fixed bug in Terminal.setRandom
 * Introduced exception class CloneException
+* Introduced interface IPersistentRepresentation
 * Added support for ICloneable's in DefaultCloneHandler
 * Implemented clone for Terminal class
 * Added unit tests
