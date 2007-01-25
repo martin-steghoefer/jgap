@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   static Variable vx;
 
@@ -62,7 +62,8 @@ public class MathProblem
     }
     };
     Random random = new Random();
-    // randomly initialize function data (X-Y table) for x^4+x^3+x^2-x
+    // Randomly initialize function data (X-Y table) for x^4+x^3+x^2-x
+    // ---------------------------------------------------------------
     for (int i = 0; i < 20; i++) {
       float f = 8.0f * (random.nextFloat() - 0.3f);
       x[i] = new Float(f);
