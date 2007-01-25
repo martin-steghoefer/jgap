@@ -11,9 +11,7 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.*;
-
 import org.jgap.gp.*;
 
 /**
@@ -25,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -38,7 +36,8 @@ public class GPPopulation
 
   private transient IGPProgram m_fittestProgram;
 
-  private /*transient*/ GPConfiguration m_config;
+  private
+      /*transient*/GPConfiguration m_config;
 
   /**
    * Indicates whether at least one of the programs has been changed
@@ -50,7 +49,6 @@ public class GPPopulation
    * Indicates that the list of GPPrograms has been sorted.
    */
   private boolean m_sorted;
-
 
   /*
    * @param a_config the configuration to use.
@@ -64,7 +62,6 @@ public class GPPopulation
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
     m_config = a_config;
-
     m_programs = new GPProgram[a_size];
     m_popSize = a_size;
     m_fitnessRank = new float[a_size];
@@ -80,11 +77,8 @@ public class GPPopulation
   public GPPopulation(GPPopulation a_pop)
       throws InvalidConfigurationException {
     m_config = a_pop.getGPConfiguration();
-
     m_popSize = a_pop.getPopSize();
-
     m_programs = new GPProgram[m_popSize];
-
     m_fitnessRank = new float[m_popSize];
     for (int i = 0; i < m_popSize; i++) {
       m_fitnessRank[i] = 0.5f;
@@ -150,13 +144,51 @@ public class GPPopulation
     for (int i = 0; i < m_popSize; i++) {
       // Vary depth dependent on run index.
       // ----------------------------------
-      int depth = 2 +
-          (getGPConfiguration().getMaxInitDepth() - 1) * i / divisor;
+      int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i
+          / divisor;
       // Create new GP program.
       // ----------------------
-      IGPProgram program = create(a_types, a_argTypes, a_nodeSets, a_minDepths,
-                                 a_maxDepths, depth, (i % 2) == 0, a_maxNodes,
-                                 a_fullModeAllowed);
+      IGPProgram program = null;
+      int tries = 0;
+      do {
+        try {
+          program = create(a_types, a_argTypes, a_nodeSets,
+                           a_minDepths,
+                           a_maxDepths, depth, (i % 2) == 0,
+                           a_maxNodes,
+                           a_fullModeAllowed);
+          if (i == 0) {
+            // Remember a prototyp of a valid program in case generation
+            // cannot find a valid program within some few tries
+            // --> then clone the prototyp.
+            // Necessary if the maxNodes parameter is chosen too small.
+            // ----------------------------------------------------------
+            getGPConfiguration().setPrototypeProgram(program);
+          }
+          break;
+        } catch (IllegalArgumentException iex) {
+          tries++;
+          if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
+            if (i > 0) {
+              ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+                  getCloneHandlerFor(
+                      getGPConfiguration().getPrototypeProgram(), null);
+              if (cloner != null) {
+                try {
+                  program = (IGPProgram) cloner.perform(
+                      getGPConfiguration().getPrototypeProgram(), null, null);
+                  break;
+                } catch (Exception ex) {
+                  // Rethrow original error.
+                  // -----------------------
+                  throw new IllegalArgumentException(iex.getMessage());
+                }
+              }
+            }
+            throw new IllegalArgumentException(iex.getMessage());
+          }
+        }
+      } while (true);
       setGPProgram(i, program);
     }
     setChanged(true);
@@ -189,9 +221,10 @@ public class GPPopulation
    * @since 3.0
    */
   public IGPProgram create(Class[] a_types, Class[][] a_argTypes,
-                     CommandGene[][] a_nodeSets, int[] a_minDepths, int[] a_maxDepths,
-                     int a_depth, boolean a_grow, int a_maxNodes,
-                     boolean[] a_fullModeAllowed)
+                           CommandGene[][] a_nodeSets, int[] a_minDepths,
+                           int[] a_maxDepths,
+                           int a_depth, boolean a_grow, int a_maxNodes,
+                           boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     // Create new GP program.
     // ----------------------
@@ -234,7 +267,7 @@ public class GPPopulation
    * @since 3.0
    */
   public void setGPProgram(final int a_index, final IGPProgram a_program) {
-    synchronized(m_programs) {
+    synchronized (m_programs) {
       m_programs[a_index] = a_program;
     }
     setChanged(true);
@@ -268,7 +301,7 @@ public class GPPopulation
     double bestFitness = -1.0d;
     IGPFitnessEvaluator evaluator = getGPConfiguration().getGPFitnessEvaluator();
     double fitness;
-    for (int i=0;i<m_programs.length && m_programs[i] != null;i++) {
+    for (int i = 0; i < m_programs.length && m_programs[i] != null; i++) {
       IGPProgram program = m_programs[i];
       fitness = program.getFitnessValue();
       if (m_fittestProgram == null || evaluator.isFitter(fitness, bestFitness)) {
@@ -306,23 +339,22 @@ public class GPPopulation
   }
 
   /**
-  * Sorts the programs within the population according to their fitness
-  * value using GPProgramFitnessComparator.
-  *
-  * @author Klaus Meffert
-  * @since 3.0
-  */
- public void sortByFitness() {
-   // The following construction could be cached but wrt that the
-   // evaluator registered with the configuration could change
-   // --> Don't cache it!
-   sort(new GPProgramFitnessComparator(getGPConfiguration().
+   * Sorts the programs within the population according to their fitness
+   * value using GPProgramFitnessComparator.
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void sortByFitness() {
+    // The following construction could be cached but wrt that the
+    // evaluator registered with the configuration could change
+    // --> Don't cache it!
+    sort(new GPProgramFitnessComparator(getGPConfiguration().
                                         getGPFitnessEvaluator()));
-   setChanged(false);
-   setSorted(true);
-   m_fittestProgram = m_programs[0];
- }
-
+    setChanged(false);
+    setSorted(true);
+    m_fittestProgram = m_programs[0];
+  }
 
   public float[] getFitnessRanks() {
     return m_fitnessRank;
@@ -415,7 +447,7 @@ public class GPPopulation
    * @since 3.0
    */
   protected boolean containedInArray(IGPProgram[] a_progs, IGPProgram a_prog) {
-    for(int i=0;i<a_progs.length;i++) {
+    for (int i = 0; i < a_progs.length; i++) {
       if (a_progs[i] == null) {
         return false;
       }
@@ -437,13 +469,11 @@ public class GPPopulation
   public boolean equals(Object a_pop) {
     try {
       return compareTo(a_pop) == 0;
-    }
-    catch (ClassCastException e) {
+    } catch (ClassCastException e) {
       // If the other object isn't an Population instance
       // then we're not equal.
       // ------------------------------------------------
       return false;
     }
   }
-
 }
