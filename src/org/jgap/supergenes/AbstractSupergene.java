@@ -29,9 +29,9 @@ import org.jgap.*;
  */
 public abstract class AbstractSupergene
     extends BaseGene
-    implements Supergene, SupergeneValidator {
+    implements Supergene, SupergeneValidator, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * This field separates gene class name from
@@ -110,6 +110,7 @@ public abstract class AbstractSupergene
   /**
    * Constructor for dynamic instantiation.
    *
+   * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
