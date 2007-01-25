@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -232,7 +232,7 @@ public class ChromosomeTest
   public void testConstruct_6()
       throws Exception {
     try {
-      new Chromosome(conf, null);
+      new Chromosome(conf, (Gene[])null);
       fail();
     } catch (IllegalArgumentException illex) {
       ; //this is OK
@@ -308,6 +308,27 @@ public class ChromosomeTest
     } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testConstruct_9()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Gene[] genes1 = new Gene[2];
+    genes1[0] = new IntegerGene(conf);
+    genes1[1] = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, genes1);
+    String repr = chrom.getPersistentRepresentation();
+    Chromosome chrom2 = new Chromosome(conf, repr);
+    assertEquals(chrom, chrom2);
+    assertEquals(chrom.getPersistentRepresentation(),
+                 chrom2.getPersistentRepresentation());
   }
 
   /**
