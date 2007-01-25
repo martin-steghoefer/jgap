@@ -9,13 +9,13 @@
  */
 package examples.gp;
 
-import java.io.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.terminal.*;
+import org.jgap.util.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -25,8 +25,8 @@ import org.jgap.gp.terminal.*;
  * below). Of course this is an oversimplification to show the principle of GP
  * only.<p>
  * This example utilizes a INodeValidator (see FibonacciNodeValidator).<p>
- * Each new best solution found will we shown as a tree representing the GP.
- * The tree is written to a PNG-imagefile onto harddisk.<p>
+ * Each new best solution found will be displayed as a graphical tree
+ * representing the GP. The tree is written to a PNG-imagefile onto harddisk.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -34,7 +34,7 @@ import org.jgap.gp.terminal.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   static Variable vx;
 
@@ -110,7 +110,7 @@ public class Fibonacci
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 400, new boolean[] {!true, !true, false}, true);
+        minDepths, maxDepths, 10, new boolean[] {!true, !true, false}, true);
   }
 
   //(Sort of) This is what we would like to (and can) find via GP:
@@ -182,7 +182,8 @@ public class Fibonacci
       config.setPopulationSize(popSize);
       config.setFitnessFunction(new Fibonacci.FormulaFitnessFunction());
       config.setStrictProgramCreation(false);
-      config.setProgramCreationMaxTries(5);
+      config.setProgramCreationMaxTries(3);
+      config.setMaxCrossoverDepth(5);
       // Set a node validator to demonstrate speedup when something is known
       // about the solution (see FibonacciNodeValidator).
       // -------------------------------------------------------------------
@@ -198,12 +199,11 @@ public class Fibonacci
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getGPConfiguration().getGenerationNr();
-          double freeMem = GPGenotype.getFreeMemoryMB();
+          double freeMem = SystemKit.getFreeMemoryMB();
           if (evno % 50 == 0) {
-            double bestFitness = genotype.getFittestProgram().
-                getFitnessValue();
+            double allBestFitness = genotype.getAllTimeBest().getFitnessValue();
             System.out.println("Evolving generation " + evno
-                               + ", best fitness: " + bestFitness
+                               + ", all-time-best fitness: " + allBestFitness
                                + ", memory free: " + freeMem + " MB");
           }
           if (evno > 3000) {
