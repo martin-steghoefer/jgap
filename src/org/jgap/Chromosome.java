@@ -65,10 +65,9 @@ import java.net.*;
  * @since 1.0
  */
 public class Chromosome
-    extends BaseChromosome {
+    extends BaseChromosome implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.89 $";
-
+  private final static String CVS_REVISION = "$Revision: 1.90 $";
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -165,7 +164,7 @@ public class Chromosome
   }
 
   /**
-   * Default constructor, provided for dynamic instantiation.
+   * Constructor, provided for dynamic or minimal instantiation.
    *
    * @param a_configuration the configuration to use
    * @throws InvalidConfigurationException
@@ -176,6 +175,25 @@ public class Chromosome
   public Chromosome(final Configuration a_configuration)
       throws InvalidConfigurationException {
     super(a_configuration);
+  }
+
+  /**
+   * Constructor, provided for instantiation via persistent representation.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_persistentRepresentatuion valid persistent representation that
+   * was most likely obtained via getPersistentRepresentation()
+   * @throws InvalidConfigurationException
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Chromosome(final Configuration a_configuration,
+                    String a_persistentRepresentatuion)
+      throws InvalidConfigurationException, UnsupportedRepresentationException {
+    super(a_configuration);
+    setValueFromPersistentRepresentation(a_persistentRepresentatuion);
   }
 
   /**
@@ -648,7 +666,7 @@ public class Chromosome
   }
 
   /**
-   * Counterpart for getPersistentRepresentation.
+   * Counterpart of getPersistentRepresentation.
    *
    * @param a_representation the string representation retrieved from a prior
    * call to the getPersistentRepresentation() method
