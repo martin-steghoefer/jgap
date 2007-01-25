@@ -14,6 +14,7 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.event.*;
+import org.jgap.util.*;
 
 /**
  * Genotype for GP Programs.
@@ -24,7 +25,7 @@ import org.jgap.event.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -286,7 +287,7 @@ public class GPGenotype
     if(a_verboseOutput) {
       System.out.println("Creating initial population");
       System.out.println("Memory consumed before creating population: "
-                         + getTotalMemoryMB() + "MB");
+                         + SystemKit.getTotalMemoryMB() + "MB");
     }
     GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
     // Create initial population.
@@ -296,32 +297,12 @@ public class GPGenotype
     System.gc();
     if(a_verboseOutput) {
       System.out.println("Memory used after creating population: "
-                         + getTotalMemoryMB() + "MB");
+                         + SystemKit.getTotalMemoryMB() + "MB");
     }
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
                                    a_minDepths, a_maxDepths, a_maxNodes);
     gp.m_fullModeAllowed = a_fullModeAllowed;
     return gp;
-  }
-
-  /**
-   * @return total memory available by the VM in megabytes.
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public static double getTotalMemoryMB() {
-    return (Runtime.getRuntime().totalMemory() / 1024 / 1024);
-  }
-
-  /**
-   * @return free memory available in the VM in megabytes.
-   *
-   * @author Klaus Meffert
-   * @since 3.0
-   */
-  public static double getFreeMemoryMB() {
-    return (Runtime.getRuntime().freeMemory() / 1024 / 1024);
   }
 
   public static GPConfiguration getGPConfiguration() {
@@ -368,8 +349,11 @@ public class GPGenotype
       }
       if(m_verbose) {
         if (i % 25 == 0) {
-          System.out.println("Evolving generation " + i
-                             + ", memory free: " + getFreeMemoryMB() + " MB");
+          System.out.println("Evolving generation "
+                             + i
+                             + ", memory free: "
+                             + SystemKit.getFreeMemoryMB()
+                             + " MB");
         }
       }
       evolve();
@@ -492,13 +476,32 @@ public class GPGenotype
             try {
               IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1,
                   i2);
-              newPopulation.setGPProgram(i++, newIndividuals[0]);
-              newPopulation.setGPProgram(i, newIndividuals[1]);
+              newPopulation.setGPProgram(i, newIndividuals[0]);
+              newPopulation.setGPProgram(i+1, newIndividuals[1]);
+              i++;
               break;
             } catch (IllegalStateException iex) {
               tries++;
               if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
-                throw new IllegalArgumentException(iex.getMessage());
+                if (!getGPConfiguration().isMaxNodeWarningPrinted()) {
+                  System.err.println(
+                      "Warning: Maximum number of nodes allowed may be too small");
+                  getGPConfiguration().flagMaxNodeWarningPrinted();
+                  // Try cloning a previously generated valid program.
+                  // -------------------------------------------------
+                  IGPProgram program = cloneProgram(getGPConfiguration().
+                      getPrototypeProgram());
+                  if (program != null) {
+                    newPopulation.setGPProgram(i++, program);
+                    program = cloneProgram(getGPConfiguration().
+                        getPrototypeProgram());
+                    newPopulation.setGPProgram(i, program);
+                    break;
+                  }
+                  else {
+                    throw new IllegalStateException(iex.getMessage());
+                  }
+                }
               }
             }
           } while (true);
@@ -514,11 +517,33 @@ public class GPGenotype
       for (int i = popSize1; i < popSize; i++) {
         // Determine depth randomly and between maxInitDepth and 2*maxInitDepth.
         // ---------------------------------------------------------------------
-        int depth = conf.getMaxInitDepth() - 2 + random.nextInt(2);/**@todo make configurable*/
-        IGPProgram program = newPopulation.create(m_types, m_argTypes,
-            m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
-            m_maxNodes, m_fullModeAllowed);
-        newPopulation.setGPProgram(i, program);
+        int depth = conf.getMaxInitDepth() - 2 +
+            random.nextInt(2); /**@todo make configurable*/
+        int tries = 0;
+        do {
+          try {
+            IGPProgram program = newPopulation.create(m_types, m_argTypes,
+                m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
+                m_maxNodes, m_fullModeAllowed);
+            newPopulation.setGPProgram(i, program);
+            break;
+          } catch (IllegalStateException iex) {
+            tries++;
+            if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
+              // Try cloning a previously generated valid program.
+              // -------------------------------------------------
+              IGPProgram program = cloneProgram(getGPConfiguration().
+                  getPrototypeProgram());
+              if (program != null) {
+                newPopulation.setGPProgram(i, program);
+                break;
+              }
+              else {
+                throw new IllegalStateException(iex.getMessage());
+              }
+            }
+          }
+        } while (true);
       }
       // Now set the new population as the active one.
       // ---------------------------------------------
@@ -718,5 +743,22 @@ public class GPGenotype
    */
   public void setVerboseOutput(boolean a_verbose) {
     m_verbose = a_verbose;
+  }
+
+  private IGPProgram cloneProgram(IGPProgram a_original) {
+    IGPProgram validProgram = getGPConfiguration().
+        getPrototypeProgram();
+    ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+        getCloneHandlerFor(validProgram, null);
+    if (cloner != null) {
+      try {
+        IGPProgram program = (IGPProgram) cloner.perform(
+            validProgram, null, null);
+        return program;
+      } catch (Exception ex) {
+        return null;
+      }
+    }
+    return null;
   }
 }
