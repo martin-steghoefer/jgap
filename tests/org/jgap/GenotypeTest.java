@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -458,9 +458,6 @@ public class GenotypeTest
   public void testEvolve_3_1()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Remove all natural selectors
-    config.removeNaturalSelectors(false);
-    config.removeNaturalSelectors(true);
     config.setKeepPopulationSizeConstant(true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
@@ -479,15 +476,34 @@ public class GenotypeTest
   public void testEvolve_3_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Remove all natural selectors
-    config.removeNaturalSelectors(false);
-    config.removeNaturalSelectors(true);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
     genotype.evolve();
     assertTrue(popSize < genotype.getPopulation().size());
+  }
+
+  /**
+   * Expect exception when no natural selectors are provided.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public void testEvolve_3_3()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    // Remove all natural selectors
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    try {
+      Genotype.randomInitialGenotype(config);
+      fail();
+    } catch (InvalidConfigurationException iex) {
+      ; //this is OK
+    }
   }
 
   /**
@@ -630,6 +646,7 @@ public class GenotypeTest
 
   /**
    * minimumPopSizePercent > 0.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -638,8 +655,6 @@ public class GenotypeTest
   public void testEvolve_7()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Remove all natural selectors
-    config.removeNaturalSelectors(false);
     config.setMinimumPopSizePercent(290);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
@@ -652,6 +667,7 @@ public class GenotypeTest
 
   /**
    * Preserve fittest Chromosome.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -660,8 +676,6 @@ public class GenotypeTest
   public void testEvolve_8()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Remove all natural selectors
-    config.removeNaturalSelectors(false);
     config.setMinimumPopSizePercent(290);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
@@ -676,6 +690,7 @@ public class GenotypeTest
 
   /**
    * Preserve fittest Chromosome.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -684,9 +699,6 @@ public class GenotypeTest
   public void testEvolve_9()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Remove all natural selectors
-    config.removeNaturalSelectors(false);
-    config.removeNaturalSelectors(true);
     config.setMinimumPopSizePercent(290);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
