@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Fitness function for our example. See evolve() method for details
+ * Fitness function for our example. See evaluate(...) method for details.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MaxFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * This example implementation calculates the fitness value of Chromosomes
@@ -35,9 +35,10 @@ public class MaxFunction
    * difference between the higher values. For example, the difference
    * between 254 and 255 is only about .04%, which isn't much incentive for
    * the selector to choose 255 over 254. However, if you square the values,
-   * you then get 64516 and 65025, which is a difference of 0.8%--twice
+   * you then get 64516 and 65025, which is a difference of 0.8% -- twice
    * as much and, therefore, twice the incentive to select the higher
    * value.
+   *
    * @param a_subject the Chromosome to be evaluated
    * @return defect rate of our problem
    *
