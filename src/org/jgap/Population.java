@@ -10,8 +10,10 @@
 package org.jgap;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import org.jgap.util.*;
+import java.net.*;
 
 /**
  * List of chromosomes held in the Genotype (or possibly later in the
@@ -21,9 +23,9 @@ import org.jgap.util.*;
  * @since 2.0
  */
 public class Population
-    implements Serializable, ICloneable {
+    implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.55 $";
+  private static final String CVS_REVISION = "$Revision: 1.56 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -46,7 +48,22 @@ public class Population
    */
   private boolean m_sorted;
 
-  private /*transient*/ Configuration m_config;
+  private
+  /*transient*/ Configuration m_config;
+
+  public final static String CHROM_DELIMITER = "~";
+
+  /**
+   * Represents the heading delimiter that is used to separate chromosomes in
+   * the persistent representation.
+   */
+  public final static String CHROM_DELIMITER_HEADING = "[";
+
+  /**
+   * Represents the closing delimiter that is used to separate chromosomes in
+   * the persistent representation.
+   */
+  public final static String CHROM_DELIMITER_CLOSING = "]";
 
   /*
    *
@@ -60,7 +77,7 @@ public class Population
 
   /*
    * Constructs the Population from a list of Chromosomes. Does not use cloning!
-
+   *
    * @param a_chromosomes the Chromosome's to be used for building the
    * Population
    *
@@ -71,7 +88,7 @@ public class Population
                     final IChromosome[] a_chromosomes)
       throws InvalidConfigurationException {
     this(a_config, a_chromosomes.length);
-    synchronized(m_chromosomes) {
+    synchronized (m_chromosomes) {
       for (int i = 0; i < a_chromosomes.length; i++) {
         // In here we could test for null chromosomes, but this is skipped
         // because of performance issues (although this may seem idiotic...)
@@ -96,7 +113,7 @@ public class Population
     if (a_chromosome == null) {
       throw new IllegalArgumentException("Chromosome passed must not be null!");
     }
-    synchronized(m_chromosomes) {
+    synchronized (m_chromosomes) {
       m_chromosomes.add(a_chromosome);
     }
     setChanged(true);
@@ -147,7 +164,7 @@ public class Population
    */
   public void addChromosome(final IChromosome a_toAdd) {
     if (a_toAdd != null) {
-      synchronized(m_chromosomes) {
+      synchronized (m_chromosomes) {
         m_chromosomes.add(a_toAdd);
       }
       setChanged(true);
@@ -165,7 +182,7 @@ public class Population
    */
   public void addChromosomes(final Population a_population) {
     if (a_population != null) {
-      synchronized(m_chromosomes) {
+      synchronized (m_chromosomes) {
         m_chromosomes.addAll(a_population.getChromosomes());
       }
       // The following would do the same:
@@ -189,7 +206,7 @@ public class Population
    * @author Klaus Meffert
    */
   public void setChromosomes(final List a_chromosomes) {
-    synchronized(m_chromosomes) {
+    synchronized (m_chromosomes) {
       m_chromosomes = a_chromosomes;
     }
     setChanged(true);
@@ -211,7 +228,7 @@ public class Population
       addChromosome(a_chromosome);
     }
     else {
-      synchronized(m_chromosomes) {
+      synchronized (m_chromosomes) {
         m_chromosomes.set(a_index, a_chromosome);
       }
       setChanged(true);
@@ -322,7 +339,8 @@ public class Population
    * @author Klaus Meffert
    * @since 3.0
    */
-  public IChromosome determineFittestChromosome(int a_startIndex, int a_endIndex) {
+  public IChromosome determineFittestChromosome(int a_startIndex,
+      int a_endIndex) {
     double bestFitness = -1.0d;
     FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
     double fitness;
@@ -447,7 +465,7 @@ public class Population
     // evaluator registered with the configuration could change
     // --> Don't cache it!
     sort(new ChromosomeFitnessComparator(getConfiguration().
-                                         getFitnessEvaluator()));
+        getFitnessEvaluator()));
     setChanged(false);
     setSorted(true);
     m_fittestChromosome = (IChromosome) m_chromosomes.get(0);
@@ -548,8 +566,7 @@ public class Population
   public boolean equals(Object a_pop) {
     try {
       return compareTo(a_pop) == 0;
-    }
-    catch (ClassCastException e) {
+    } catch (ClassCastException e) {
       // If the other object isn't an Population instance
       // then we're not equal.
       // ------------------------------------------------
@@ -633,4 +650,155 @@ public class Population
     m_sorted = true;
     m_fittestChromosome = null;
   }
+
+  /**
+   * Returns a persistent representation of this chromosome, see interface Gene
+   * for description. Similar to CompositeGene's routine. But does not include
+   * all information of the chromosome (yet).
+   *
+   * @return string representation of this Chromosome's relevant parts of its
+   * current state
+   * @throws UnsupportedOperationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getPersistentRepresentation() {
+    StringBuffer b = new StringBuffer();
+    // Persist the chromosomes.
+    // ------------------------
+    IChromosome chrom;
+    for (int i = 0; i < m_chromosomes.size(); i++) {
+      chrom = (IChromosome) m_chromosomes.get(i);
+      if (! (chrom instanceof IPersistentRepresentation)) {
+        throw new RuntimeException("Population contains a chromosome of type "
+                                   + chrom.getClass().getName()
+                                   + " which does not implement"
+                                   + " IPersistentRepresentation!");
+      }
+      b.append(CHROM_DELIMITER_HEADING);
+      try {
+        b.append(URLEncoder.encode(chrom.getClass().getName()
+                                   + CHROM_DELIMITER
+                                   + ( (IPersistentRepresentation) chrom).
+                                   getPersistentRepresentation()
+                                   , "UTF-8"));
+      } catch (UnsupportedEncodingException uex) {
+        throw new RuntimeException("UTF-8 should always be supported!", uex);
+      }
+      b.append(CHROM_DELIMITER_CLOSING);
+    }
+    return b.toString();
+  }
+
+  /**
+   * Counterpart of getPersistentRepresentation.
+   *
+   * @param a_representation the string representation retrieved from a prior
+   * call to the getPersistentRepresentation() method
+   *
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setValueFromPersistentRepresentation(String a_representation)
+      throws UnsupportedRepresentationException {
+    if (a_representation != null) {
+      try {
+        List r = split(a_representation);
+        String g;
+        m_chromosomes = new Vector();
+        // Obtain the chromosomes.
+        // -----------------------
+        Iterator iter = r.iterator();
+        StringTokenizer st;
+        String clas;
+        String representation;
+        IChromosome chrom;
+        while (iter.hasNext()) {
+          g = URLDecoder.decode( (String) iter.next(), "UTF-8");
+          st = new StringTokenizer(g, CHROM_DELIMITER);
+          if (st.countTokens() != 2)
+            throw new UnsupportedRepresentationException("In " + g + ", " +
+                "expecting two tokens, separated by " + CHROM_DELIMITER);
+          clas = st.nextToken();
+          representation = st.nextToken();
+          chrom = createChromosome(clas, representation);
+          m_chromosomes.add(chrom);
+        }
+        setChanged(true);
+      } catch (Exception ex) {
+        throw new UnsupportedRepresentationException(ex.toString());
+      }
+    }
+  }
+
+  /**
+   * Creates a new Chromosome instance.<p>
+   * Taken and adapted from CompositeGene.
+   *
+   * @param a_chromClassName name of the Chromosome class
+   * @param a_persistentRepresentation persistent representation of the
+   * Chromosome to create (could be obtained via getPersistentRepresentation)
+   *
+   * @return newly created Chromosome
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected IChromosome createChromosome(String a_chromClassName,
+                            String a_persistentRepresentation)
+      throws Exception {
+    Class chromClass = Class.forName(a_chromClassName);
+    Constructor constr = chromClass.getConstructor(new Class[] {Configuration.class});
+    IChromosome chrom = (IChromosome) constr.newInstance(new Object[] {
+        getConfiguration()});
+    ( (IPersistentRepresentation) chrom).setValueFromPersistentRepresentation(
+        a_persistentRepresentation);
+    return chrom;
+  }
+
+  /**
+   * Splits the input a_string into individual chromosome representations.<p>
+   * Taken and adapted from CompositeGene.
+   *
+   * @param a_string the string to split
+   * @return the elements of the returned array are the persistent
+   * representation strings of the population's components
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected static final List split(String a_string)
+      throws UnsupportedRepresentationException {
+    List a = Collections.synchronizedList(new ArrayList());
+    // No Header data.
+    // ---------------
+
+    // Chromosome data.
+    // ----------------
+    StringTokenizer st = new StringTokenizer
+        (a_string, CHROM_DELIMITER_HEADING + CHROM_DELIMITER_CLOSING, true);
+    while (st.hasMoreTokens()) {
+      if (!st.nextToken().equals(CHROM_DELIMITER_HEADING)) {
+        throw new UnsupportedRepresentationException(a_string + " no open tag");
+      }
+      String n = st.nextToken();
+      if (n.equals(CHROM_DELIMITER_CLOSING)) {
+        a.add(""); /* Empty token */
+      }
+      else {
+        a.add(n);
+        if (!st.nextToken().equals(CHROM_DELIMITER_CLOSING)) {
+          throw new UnsupportedRepresentationException
+              (a_string + " no close tag");
+        }
+      }
+    }
+    return a;
+  }
+
 }
