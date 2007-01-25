@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+JGAP-Version: 3.2.1
+Module-Version: 1.01
+Created-By: Klaus Meffert
+Specification-Title: JGAP - Java Genetic Algorithms Package
+Module-Title: Distributed evolution computation
