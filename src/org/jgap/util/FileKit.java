@@ -15,7 +15,7 @@ import java.net.*;
 
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -349,6 +349,24 @@ public class FileKit {
       version = "no version info found!";
     }
     return version;
+  }
+
+  /**
+   * Converts an ordinary file name into a jar filename that can be used with
+   * JarClassLoader.
+   *
+   * @param a_filename the name to convert
+   * @return converted name
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static String toJarFileName(String a_filename) {
+    String result = a_filename.replace('\\','/');
+//    if (!result.endsWith("!/")) {
+//      result += "!/";
+//    }
+    return result;
   }
 }
 
