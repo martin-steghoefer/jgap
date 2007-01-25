@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -47,8 +47,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, null, 1);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -66,8 +65,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, null, 1, new MyConstraintChecker());
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -84,8 +82,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, new IntegerGene(conf), 0);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -103,8 +100,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, new IntegerGene(conf), -1);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -122,8 +118,7 @@ public class ChromosomeTest
     try {
       new Chromosome(new ConfigurationForTest(), new IntegerGene(conf), -500);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -140,8 +135,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, null, 0);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -159,8 +153,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, null, 0, null);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -199,8 +192,7 @@ public class ChromosomeTest
       genes[0] = null;
       new Chromosome(conf, genes);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -223,11 +215,9 @@ public class ChromosomeTest
       IGeneConstraintChecker cc = new MyConstraintChecker(DoubleGene.class);
       new Chromosome(conf, genes, cc);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       fail();
-    }
-    catch (InvalidConfigurationException cex) {
+    } catch (InvalidConfigurationException cex) {
       ; //this is OK
     }
   }
@@ -244,8 +234,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, null);
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -263,8 +252,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, 0);
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -282,8 +270,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, -5);
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -318,8 +305,7 @@ public class ChromosomeTest
       genes[1] = null;
       new Chromosome(conf, genes);
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -832,8 +818,7 @@ public class ChromosomeTest
     try {
       new Chromosome(conf, genes);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -1088,8 +1073,7 @@ public class ChromosomeTest
     try {
       Chromosome.randomInitialChromosome(null);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -1170,8 +1154,7 @@ public class ChromosomeTest
     try {
       conf.setRandomGenerator(new RandomGeneratorForTest(true));
       fail();
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       ; //this is OK
     }
   }
@@ -1325,8 +1308,7 @@ public class ChromosomeTest
     try {
       c.setConstraintChecker(cc);
       fail();
-    }
-    catch (InvalidConfigurationException cex) {
+    } catch (InvalidConfigurationException cex) {
       ; //this is OK
     }
     assertNull(c.getConstraintChecker());
@@ -1368,8 +1350,7 @@ public class ChromosomeTest
     try {
       c.setConstraintChecker(cc);
       fail();
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       ; //this is OK
     }
   }
@@ -1395,8 +1376,7 @@ public class ChromosomeTest
   }
 
   class MyAppObject
-      extends TestFitnessFunction
-      implements Cloneable {
+      extends TestFitnessFunction implements Cloneable {
     public int compareTo(Object o) {
       return 0;
     }
@@ -1406,8 +1386,7 @@ public class ChromosomeTest
     }
   }
   class MyAppObject2
-      extends TestFitnessFunction
-      implements IApplicationData {
+      extends TestFitnessFunction implements IApplicationData {
     public boolean equals(Object o2) {
       return compareTo(o2) == 0;
     }
@@ -1520,5 +1499,177 @@ public class ChromosomeTest
     chrom.setMultiObjectives(l2);
     assertEquals(l2, chrom.getMultiObjectives());
     assertEquals(2, chrom.getMultiObjectives().size());
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_0()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Gene[] genes1 = new Gene[2];
+    genes1[0] = new IntegerGene(conf);
+    genes1[1] = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, genes1);
+    String repr = chrom.getPersistentRepresentation();
+    Chromosome chrom2 = new Chromosome(conf);
+    chrom2.setValueFromPersistentRepresentation(repr);
+    assertEquals(chrom, chrom2);
+    assertEquals(chrom.getPersistentRepresentation(),
+                 chrom2.getPersistentRepresentation());
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_1()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Gene[] genes1 = new Gene[2];
+    genes1[0] = new StringGene(conf);
+    genes1[1] = new DoubleGene(conf);
+    Chromosome chrom = new Chromosome(conf, genes1);
+    String repr = chrom.getPersistentRepresentation();
+    Chromosome chrom2 = new Chromosome(conf);
+    chrom2.setValueFromPersistentRepresentation(repr);
+    assertEquals(chrom, chrom2);
+    assertEquals(chrom.getPersistentRepresentation(),
+                 chrom2.getPersistentRepresentation());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_2()
+      throws Exception {
+    Chromosome chrom = new Chromosome(conf);
+    chrom.setValueFromPersistentRepresentation(null);
+    assertEquals(0, chrom.size());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_3()
+      throws Exception {
+    Chromosome chrom = new Chromosome(conf);
+    try {
+      chrom.setValueFromPersistentRepresentation("1"
+          + Chromosome.CHROM_DELIMITER
+          + "2");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_4()
+      throws Exception {
+    Chromosome chrom = new Chromosome(conf);
+    try {
+      chrom.setValueFromPersistentRepresentation("1"
+          + Chromosome.CHROM_DELIMITER
+          + "0"
+          + Chromosome.CHROM_DELIMITER);
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Invalid closing tag.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_6()
+      throws Exception {
+    Chromosome chrom = new Chromosome(conf);
+    try {
+      chrom.setValueFromPersistentRepresentation("47.11"
+          + Chromosome.CHROM_DELIMITER
+          + "1"
+          + Chromosome.CHROM_DELIMITER
+          + "<IntegerGene"
+          + Chromosome.GENE_DELIMITER
+          + "2<");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_7()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    Gene[] genes1 = new Gene[2];
+    genes1[0] = new BooleanGene(conf);
+    genes1[1] = new DoubleGene(conf);
+    Chromosome chrom = new Chromosome(conf, genes1);
+    String repr = chrom.getPersistentRepresentation();
+    Chromosome chrom2 = new Chromosome(conf);
+    chrom2.setValueFromPersistentRepresentation(repr);
+    assertEquals(chrom, chrom2);
+    assertEquals(chrom.getPersistentRepresentation(),
+                 chrom2.getPersistentRepresentation());
+  }
+
+
+  /**
+   * Empty representation.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_5()
+      throws Exception {
+    Chromosome chrom = new Chromosome(conf);
+    try {
+      chrom.setValueFromPersistentRepresentation("47.11"
+          + Chromosome.CHROM_DELIMITER
+          + "1"
+          + Chromosome.CHROM_DELIMITER
+          + "<org.jgap.impl.IntegerGene"
+          + Chromosome.GENE_DELIMITER
+          + "2:4:4"
+          + Chromosome.GENE_DELIMITER
+          + "><>");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+      assertEquals(1, chrom.size());
+    }
   }
 }
