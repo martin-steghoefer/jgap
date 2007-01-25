@@ -27,9 +27,9 @@ import org.jgap.*;
  * @since 1.0
  */
 public class BooleanGene
-    extends BaseGene {
+    extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants

@@ -31,9 +31,9 @@ import org.jgap.*;
  * @since 2.4
  */
 public class MapGene
-    extends BaseGene {
+    extends BaseGene implements IPersistentRepresentation{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Container for valid alleles

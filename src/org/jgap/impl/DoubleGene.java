@@ -15,16 +15,16 @@ import org.jgap.*;
 /**
  * A Gene implementation that supports a double values for its allele.
  * Upper and lower bounds may optionally be provided to restrict the range
- * of legal values allowed by this Gene instance.
+ * of legal values allowed by this Gene instance.<p>
  * Partly copied from IntegerGene.
  *
  * @author Klaus Meffert
  * @since 1.1
  */
 public class DoubleGene
-    extends NumberGene {
+    extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly

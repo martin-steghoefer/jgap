@@ -9,7 +9,6 @@
  */
 package org.jgap.impl;
 
-import java.lang.reflect.*;
 import java.util.*;
 import org.jgap.*;
 
@@ -26,9 +25,9 @@ import org.jgap.*;
  * @since 2.4
  */
 public class SetGene
-    extends BaseGene {
+    extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private HashSet m_geneSet = new HashSet();
 
