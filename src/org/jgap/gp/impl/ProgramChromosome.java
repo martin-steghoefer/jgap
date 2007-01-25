@@ -13,7 +13,6 @@ import java.io.*;
 import org.jgap.*;
 import org.jgap.util.*;
 import org.jgap.gp.terminal.*;
-import org.jgap.gp.function.*;
 import org.jgap.gp.*;
 
 /**
@@ -24,9 +23,9 @@ import org.jgap.gp.*;
  */
 public class ProgramChromosome
     extends BaseGPChromosome
-    implements IGPChromosome, Serializable, Comparable {
+    implements IGPChromosome, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -156,7 +155,8 @@ public class ProgramChromosome
       return chrom;
     }
     catch (Exception cex) {
-      // rethrow to have a more convenient handling
+      // Rethrow to have a more convenient handling.
+      // -------------------------------------------
       throw new IllegalStateException(cex.getMessage());
     }
   }
@@ -202,53 +202,33 @@ public class ProgramChromosome
         m_functionSet[a_functionSet.length + i]
             = new Argument(getGPConfiguration(), i, a_argTypes[i]);
       }
-      /**@todo init is experimental, make dynamic*/
+      /**@todo make init as below dynamic/configurable*/
       // Initialization of genotype according to specific problem requirements.
       // ----------------------------------------------------------------------
       CommandGene n = null;
-      if (a_num == 0 && false) {
-        for (int i = 0; i < m_functionSet.length; i++) {
-          CommandGene m = m_functionSet[i];
-          if (m.getClass() == SubProgram.class) {
-            n = m;
-            break;
-          }
-        }
-      }
-      else if (a_num == 1 && false) {
-        for (int i = 0; i < m_functionSet.length; i++) {
-          CommandGene m = m_functionSet[i];
-          if (m.getClass() == ForLoop.class) {
-            n = m;
-            break;
-          }
-        }
-      }
-      int tries = 0;
+//      if (a_num == 0 && false) {
+//        for (int i = 0; i < m_functionSet.length; i++) {
+//          CommandGene m = m_functionSet[i];
+//          if (m.getClass() == SubProgram.class) {
+//            n = m;
+//            break;
+//          }
+//        }
+//      }
+//      else if (a_num == 1 && false) {
+//        for (int i = 0; i < m_functionSet.length; i++) {
+//          CommandGene m = m_functionSet[i];
+//          if (m.getClass() == ForLoop.class) {
+//            n = m;
+//            break;
+//          }
+//        }
+//      }
       int localDepth = depth;
-      do {
-        m_index = 0;
-        m_maxDepth = localDepth;
-        try {
-          growOrFullNode(a_num, localDepth, type, m_functionSet, n, 0, a_grow);
-          redepth();
-          break;
-        } catch (IllegalStateException iex) {
-          tries++;
-          if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
-            throw new IllegalArgumentException(iex.getMessage());
-          }
-          // Clean up genes for next try.
-          // ----------------------------
-          for (int j = 0; j < size(); j++) {
-            if (m_genes[j] == null) {
-              break;
-            }
-            m_genes[j] = null;
-          }
-          localDepth++;
-        }
-      } while (true);
+      m_index = 0;
+      m_maxDepth = localDepth;
+      growOrFullNode(a_num, localDepth, type, m_functionSet, n, 0, a_grow);
+      redepth();
     }
     catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -410,7 +390,7 @@ public class ProgramChromosome
         throw new IllegalStateException(errormsg);
       }
       else {
-        throw new IllegalArgumentException(errormsg);
+        throw new RuntimeException(errormsg);
       }
     }
     CommandGene n = null;
@@ -488,7 +468,7 @@ public class ProgramChromosome
           // -------------------------------------------
           throw new IllegalStateException("Randomly created program violates"
               + " configuration constraints (symptom 1). It may be that you"
-              + " specified a tool small number of maxNodes to use!");
+              + " specified a too small number of maxNodes to use!");
         }
       }
     }
