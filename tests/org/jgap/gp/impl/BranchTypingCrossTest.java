@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
@@ -223,8 +223,8 @@ public class BranchTypingCrossTest
     // -----------------
     rn.setNextIntSequence(new int[] {
                           1, // a node in pc1
-                          0, // index of terminal to choose (p0 = CMD_CONST2)
-                          2 // index of terminal to choose (p1 = CMD_CONST3)
+                          0, // index of terminal to choose (p0 => CMD_CONST2)
+                          2 // index of terminal to choose (p1 => CMD_CONST3)
     });
     rn.setNextFloatSequence(new float[] {
                             0.95f, // Choose a terminal when crossing over
