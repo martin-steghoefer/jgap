@@ -41,12 +41,11 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   /**
-   * This field separates gene class name from
-   * the gene persistent representation string.
-   * '*' does not work properly with URLEncoder, so I have changed it to '#'
+   * This field separates gene class name from the gene persistent representation
+   * string. '*' does not work properly with URLEncoder!
    */
   public final static String GENE_DELIMITER = "#";
 
@@ -259,6 +258,7 @@ public class CompositeGene
 
   /**
    * See interface Gene for description.
+   *
    * @param a_representation the string representation retrieved from a prior
    * call to the getPersistentRepresentation() method
    *
@@ -302,6 +302,7 @@ public class CompositeGene
 
   /**
    * Creates a new instance of gene.
+   *
    * @param a_geneClassName name of the gene class
    * @param a_persistentRepresentation persistent representation of the gene to
    * create (could be obtained via getPersistentRepresentation)
@@ -322,7 +323,8 @@ public class CompositeGene
   }
 
   /**
-   * See interface Gene for description
+   * See interface Gene for description.
+   *
    * @return string representation of this Gene's current state
    * @throws UnsupportedOperationException
    *
@@ -347,7 +349,7 @@ public class CompositeGene
             ));
       }
       catch (UnsupportedEncodingException uex) {
-        throw new RuntimeException("UTF-8 should always be supported!");
+        throw new RuntimeException("UTF-8 should always be supported!", uex);
       }
       b.append(GENE_DELIMITER_CLOSING);
     }
@@ -622,6 +624,7 @@ public class CompositeGene
 
   /**
    * Splits the input a_string into individual gene representations.
+   *
    * @param a_string the string to split
    * @return the elements of the returned array are the persistent
    * representation strings of the gene's components
