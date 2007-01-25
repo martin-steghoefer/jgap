@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.12 $";
+  private static final String CVS_REVISION = "$Revision: 1.13 $";
 
   private float m_value_float;
 
@@ -144,11 +144,21 @@ public class Terminal
   }
 
   public void setValue(double a_value) {
-    m_value_double = a_value;
+    if (m_wholeNumbers) {
+      m_value_double = Math.round(a_value);
+    }
+    else {
+      m_value_double = a_value;
+    }
   }
 
   public void setValue(float a_value) {
-    m_value_float = a_value;
+    if (m_wholeNumbers) {
+      m_value_float = Math.round(a_value);
+    }
+    else {
+      m_value_float = a_value;
+    }
   }
 
   public void setValue(int a_value) {
@@ -161,9 +171,9 @@ public class Terminal
 
   public CommandGene applyMutation(int index, double a_percentage)
       throws InvalidConfigurationException {
-    // If very high then do mutation not relying on current value
-    // random value.
-    // ----------------------------------------------------------
+    // If percentag very high then do mutation not relying on
+    // current value random value.
+    // ------------------------------------------------------
     if (a_percentage > 0.85d) {
       setRandomValue();
     }
@@ -315,6 +325,7 @@ public class Terminal
       result.m_value_float = m_value_float;
       result.m_value_int = m_value_int;
       result.m_value_long = m_value_long;
+      result.m_wholeNumbers = m_wholeNumbers;
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
