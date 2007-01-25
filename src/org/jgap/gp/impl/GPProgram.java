@@ -14,6 +14,7 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.*;
+import org.jgap.util.*;
 
 /**
  * A GP program contains 1..n ProgramChromosome's.
@@ -22,10 +23,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class GPProgram
-    extends GPProgramBase
-    implements Serializable, Comparable {
+    extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -97,6 +97,7 @@ public class GPProgram
     super(a_conf);
     m_chromosomes = new ProgramChromosome[a_numChromosomes];
   }
+
   /**
    * @param a_index the chromosome to get
    * @return the ProgramChromosome with the given index
@@ -364,5 +365,32 @@ public class GPProgram
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
+  }
+
+  /**
+   * @return deep clone of the object instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    try {
+      GPProgram result = new GPProgram(getGPConfiguration(),
+                                       (Class[]) getTypes().clone(),
+                                       (Class[][]) getArgTypes().clone(),
+                                       (CommandGene[][]) getNodeSets().clone(),
+                                       (int[]) getMinDepths().clone(),
+                                       (int[]) getMaxDepths().clone(),
+                                       getMaxNodes());
+      for (int i = 0; i < m_chromosomes.length; i++) {
+        if (m_chromosomes[i] == null) {
+          break;
+        }
+        result.m_chromosomes[i] = (ProgramChromosome) m_chromosomes[i].clone();
+      }
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }
