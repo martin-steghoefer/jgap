@@ -23,7 +23,7 @@ import org.jgap.*;
  * @since 2.6
  */
 public class DefaultCloneHandler
-    implements ICloneHandler, ICloneable, Serializable {
+    implements ICloneHandler, ICloneable, Serializable, Comparable {
   /**
    * Handles all implementations of IApplicationData as well as all of
    * java.lang.Cloneable (for which the clone-method is accessible via
@@ -145,5 +145,21 @@ public class DefaultCloneHandler
    */
   public Object clone() {
     return new DefaultCloneHandler();
+  }
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other.getClass().equals(getClass())) {
+      return 0;
+    }
+    else {
+      return getClass().getName().compareTo(a_other.getClass().getName());
+    }
   }
 }

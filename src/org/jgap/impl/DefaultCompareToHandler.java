@@ -21,9 +21,9 @@ import java.io.*;
  * @since 2.6
  */
 public class DefaultCompareToHandler
-    implements ICompareToHandler, ICloneable, Serializable {
+    implements ICompareToHandler, ICloneable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public boolean isHandlerFor(final Object a_obj, final Class a_clazz) {
     Class clazz;
@@ -92,5 +92,21 @@ public class DefaultCompareToHandler
    */
   public Object clone() {
     return new DefaultCompareToHandler();
+  }
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other.getClass().equals(getClass())) {
+      return 0;
+    }
+    else {
+      return getClass().getName().compareTo(a_other.getClass().getName());
+    }
   }
 }
