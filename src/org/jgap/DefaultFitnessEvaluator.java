@@ -19,9 +19,9 @@ import org.jgap.util.*;
  * @since 1.1
  */
 public class DefaultFitnessEvaluator
-    implements FitnessEvaluator, ICloneable {
+    implements FitnessEvaluator, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -50,5 +50,21 @@ public class DefaultFitnessEvaluator
    */
   public Object clone() {
     return new DefaultFitnessEvaluator();
+  }
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other.getClass().equals(getClass())) {
+      return 0;
+    }
+    else {
+      return getClass().getName().compareTo(a_other.getClass().getName());
+    }
   }
 }

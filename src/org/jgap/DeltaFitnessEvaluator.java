@@ -19,9 +19,9 @@ import org.jgap.util.*;
  * @since 2.0
  */
 public class DeltaFitnessEvaluator
-    implements FitnessEvaluator, ICloneable {
+    implements FitnessEvaluator, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -62,5 +62,21 @@ public class DeltaFitnessEvaluator
    */
   public Object clone() {
     return new DeltaFitnessEvaluator();
+  }
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other.getClass().equals(getClass())) {
+      return 0;
+    }
+    else {
+      return getClass().getName().compareTo(a_other.getClass().getName());
+    }
   }
 }

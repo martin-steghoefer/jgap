@@ -19,10 +19,10 @@ import org.jgap.*;
  * @since 1.1
  */
 public class StaticFitnessFunction
-    extends FitnessFunction {
+    extends FitnessFunction implements Comparable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * @since 2.0 (until 1.1: type int)
@@ -75,5 +75,25 @@ public class StaticFitnessFunction
   public int hashCode() {
     int result = new Double(m_staticFitnessValue).hashCode();
     return result;
+  }
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    StaticFitnessFunction other = (StaticFitnessFunction)a_other;
+    if (m_staticFitnessValue > other.m_staticFitnessValue) {
+      return 1;
+    }
+    else if (m_staticFitnessValue < other.m_staticFitnessValue) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
   }
 }

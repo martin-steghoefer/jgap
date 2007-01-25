@@ -26,9 +26,9 @@ import org.jgap.util.*;
  */
 public class StockRandomGenerator
     extends Random
-    implements RandomGenerator, ICloneable {
+    implements RandomGenerator, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * When deserializing, initialize the seed because otherwise we could get
@@ -59,5 +59,21 @@ public class StockRandomGenerator
     StockRandomGenerator result = new StockRandomGenerator();
     result.setSeed(System.currentTimeMillis());
     return result;
+  }
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other.getClass().equals(getClass())) {
+      return 0;
+    }
+    else {
+      return getClass().getName().compareTo(a_other.getClass().getName());
+    }
   }
 }
