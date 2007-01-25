@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -51,7 +51,8 @@ public class GPPopulationTest
   }
 
   /**
-   * Create with no nodes available.
+   * Create population with no nodes available.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -71,7 +72,7 @@ public class GPPopulationTest
       gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 1,
                    true, 10, new boolean[] {true});
       fail();
-    } catch (IllegalArgumentException iex) {
+    } catch (IllegalStateException iex) {
       ; //this is OK
     }
   }
@@ -137,6 +138,7 @@ public class GPPopulationTest
 
   /**
    * Given nodeset doesn't allow to build a valid program.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -160,7 +162,7 @@ public class GPPopulationTest
       gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 3,
                    true, 10, new boolean[] {true});
       fail();
-    } catch (IllegalArgumentException iex) {
+    } catch (IllegalStateException iex) {
       ; //this is OK
     }
   }
