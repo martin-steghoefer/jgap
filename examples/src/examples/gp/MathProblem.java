@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   static Variable vx;
 
@@ -73,7 +73,7 @@ public class MathProblem
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        400, true);
+        30, true);
   }
 
   /**
@@ -93,6 +93,7 @@ public class MathProblem
     config.setMaxInitDepth(5);
     config.setPopulationSize(1000);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
+    config.setStrictProgramCreation(true);
     GPProblem problem = new MathProblem(config);
     GPGenotype gp = problem.create();
     gp.setVerboseOutput(true);
