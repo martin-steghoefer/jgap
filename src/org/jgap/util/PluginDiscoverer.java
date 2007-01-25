@@ -9,9 +9,11 @@
  */
 package org.jgap.util;
 
+import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.util.jar.*;
+import org.jgap.distr.grid.*;
 
 /**
  * This class will (slightly inefficiently) look for all classes that implement
@@ -27,7 +29,7 @@ import java.util.jar.*;
  */
 public class PluginDiscoverer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private static final boolean DEBUG = false;
 
@@ -88,7 +90,7 @@ public class PluginDiscoverer {
     }
     try {
       Class testClassObj = Class.forName(a_testClass, false,
-                                         this.getClass().getClassLoader());
+          this.getClass().getClassLoader());
       if (a_interfaceClass.isAssignableFrom(testClassObj)) {
         if (testClassObj.isInterface()) {
           // no interfaces wanted as result
@@ -101,23 +103,19 @@ public class PluginDiscoverer {
         }
         return a_testClass;
       }
-    }
-    catch (UnsatisfiedLinkError ule) {
+    } catch (UnsatisfiedLinkError ule) {
       if (DEBUG) {
         System.out.println("Unsatisfied link error for class: " + a_testClass);
       }
-    }
-    catch (IllegalAccessError e) {
+    } catch (IllegalAccessError e) {
       if (DEBUG) {
         System.out.println("Unable to load class: " + a_testClass);
       }
-    }
-    catch (ClassNotFoundException cnfe) {
+    } catch (ClassNotFoundException cnfe) {
       if (DEBUG) {
         System.out.println("Class not found" + a_testClass);
       }
-    }
-    catch (NoClassDefFoundError nex) {
+    } catch (NoClassDefFoundError nex) {
       if (DEBUG) {
         System.out.println("No class definition found: " + a_testClass);
       }
@@ -158,8 +156,7 @@ public class PluginDiscoverer {
       // determine current directory
       File f = new File(".");
       s = f.getCanonicalPath();
-    }
-    catch (IOException iex) {
+    } catch (IOException iex) {
       throw new RuntimeException("Unable to determine current directory");
     }
     Iterator i = m_classpathJars.iterator();
@@ -183,8 +180,7 @@ public class PluginDiscoverer {
               }
             }
           }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
           System.out.println("Unable to open jar " + filename);
         }
       }
@@ -214,23 +210,50 @@ public class PluginDiscoverer {
                                         final List a_result,
                                         final String a_base,
                                         final String a_path) {
+    a_result.addAll(findImplementingClasses(a_intrface, a_base, a_path));
     File f = new File(a_base + File.separator + a_path);
     if (!f.isDirectory()) {
       return;
+    }
+//    File[] matches = f.listFiles(new ClassFilter());
+//    for (int i = 0; i < matches.length; i++) {
+//      String classname = a_path + File.separator + matches[i].getName();
+//      classname = checkIfClassMatches(a_intrface, classname);
+//      if (classname != null) {
+//        a_result.add(classname);
+//      }
+//    }
+    File[] matches = f.listFiles(new DirectoryFilter());
+    for (int i = 0; i < matches.length; i++) {
+      String folder = a_path + File.separator + matches[i].getName();
+      findImplementingClasses0(a_intrface, a_result, a_base, folder);
+    }
+  }
+
+  /**
+   * Finds all classes implementing the given interface within a given directory
+   * @param a_intrface Class
+   * @param a_base String
+   * @param a_path String
+   * @return List
+   */
+  public List findImplementingClasses(final Class a_intrface,
+                                      final String a_base,
+                                      final String a_path) {
+    List result = new Vector();
+    File f = new File(a_base + File.separator + a_path);
+    if (!f.isDirectory()) {
+      return result;
     }
     File[] matches = f.listFiles(new ClassFilter());
     for (int i = 0; i < matches.length; i++) {
       String classname = a_path + File.separator + matches[i].getName();
       classname = checkIfClassMatches(a_intrface, classname);
       if (classname != null) {
-        a_result.add(classname);
+        result.add(classname);
       }
     }
-    matches = f.listFiles(new DirectoryFilter());
-    for (int i = 0; i < matches.length; i++) {
-      String folder = a_path + File.separator + matches[i].getName();
-      findImplementingClasses0(a_intrface, a_result, a_base, folder);
-    }
+    return result;
   }
 
   /**
@@ -264,10 +287,24 @@ public class PluginDiscoverer {
   public static void main(String[] args)
       throws Exception {
     PluginDiscoverer discoverer = new PluginDiscoverer();
+//    Manifest mf = discoverer.getManifestOfJar("C:/temp/jgap/jgap.jar!/");
+//    String version = discoverer.getJGAPVersion(mf);
+    //
     List plugins = discoverer.findImplementingClasses(
         "org.jgap.INaturalSelector");
     System.out.println();
     int size = plugins.size();
+    System.out.println("" + size + " plugin"
+                       + (size == 1 ? "" : "s") + " discovered"
+                       + (size == 0 ? "" : ":"));
+    for (int i = 0; i < size; i++) {
+      System.out.println(plugins.get(i));
+    }
+    System.out.println("\n\n");
+    plugins = discoverer.findImplementingClasses(IGridConfiguration.class,
+        "c:/JavaProjekte/JGAP_CVS/classes", "examples/grid/fitnessDistributed");
+    System.out.println();
+    size = plugins.size();
     System.out.println("" + size + " plugin"
                        + (size == 1 ? "" : "s") + " discovered"
                        + (size == 0 ? "" : ":"));
