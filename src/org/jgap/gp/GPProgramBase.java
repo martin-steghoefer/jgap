@@ -9,7 +9,6 @@
  */
 package org.jgap.gp;
 
-import java.io.*;
 import org.jgap.*;
 import org.jgap.gp.impl.*;
 
@@ -21,9 +20,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public abstract class GPProgramBase
-    implements IGPProgram, Serializable, Comparable {
+    implements IGPProgram {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -223,4 +222,5 @@ public abstract class GPProgramBase
   public Object getApplicationData() {
     return m_applicationData;
   }
+
 }
