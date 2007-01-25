@@ -45,7 +45,10 @@
  */
 package org.jgap;
 
+import java.lang.reflect.*;
 import java.util.*;
+import java.io.*;
+import java.net.*;
 
 /**
  * Chromosomes represent potential solutions and consist of a fixed-length
@@ -64,7 +67,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.88 $";
+  private final static String CVS_REVISION = "$Revision: 1.89 $";
 
   /**
    * Application-specific data that is attached to this Chromosome.
@@ -76,7 +79,8 @@ public class Chromosome
   private Object m_applicationData;
 
   /**
-   * Holding multiobjective values
+   * Holds multiobjective values.
+   *
    * @since 2.6
    * @todo move to new subclass of Chromosome (and introduce new interface
    * IMultiObjective with that)
@@ -106,7 +110,7 @@ public class Chromosome
 
   /**
    * Method compareTo(): Should we also consider the application data when
-   * comparing? Default is "false" as "true" means a Chromosome's losing its
+   * comparing? Default is "false", as "true" means a Chromosome's losing its
    * identity when application data is set differently!
    *
    * @since 2.2
@@ -123,9 +127,33 @@ public class Chromosome
   private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
-   * Default constructor, provided for dynamic instantiation.<p>
+   * This field separates gene class name from the gene persistent representation
+   * string. '*' does not work properly with URLEncoder!
+   */
+  public final static String GENE_DELIMITER = "#";
+
+  /**
+   * Represents the heading delimiter that is used to separate genes in the
+   * persistent representation of Chromosome instances.
+   */
+  public final static String GENE_DELIMITER_HEADING = "<";
+
+  /**
+   * Represents the closing delimiter that is used to separate genes in the
+   * persistent representation of Chromosome instances.
+   */
+  public final static String GENE_DELIMITER_CLOSING = ">";
+
+  /**
+   * Separates chromosome-related information.
+   */
+  public final static String CHROM_DELIMITER = "#";
+
+  /**
+   * Default constructor, only provided for dynamic instantiation.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -578,6 +606,190 @@ public class Chromosome
     }
     representation.append(", " + S_APPLICATION_DATA + ":" + appData);
     return representation.toString();
+  }
+
+  /**
+   * Returns a persistent representation of this chromosome, see interface Gene
+   * for description. Similar to CompositeGene's routine. But does not include
+   * all information of the chromosome (yet).
+   *
+   * @return string representation of this Chromosome's relevant parts of its
+   * current state
+   * @throws UnsupportedOperationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getPersistentRepresentation() {
+    StringBuffer b = new StringBuffer();
+    // Persist the chromosome's fitness value.
+    // ---------------------------------------
+    b.append(m_fitnessValue);
+    b.append(CHROM_DELIMITER);
+    // Persist the genes.
+    b.append(m_genes.length);
+    b.append(CHROM_DELIMITER);
+    Gene gene;
+    for (int i = 0; i < m_genes.length; i++) {
+      gene = m_genes[i];
+      b.append(GENE_DELIMITER_HEADING);
+      try {
+        b.append(URLEncoder.encode(gene.getClass().getName()
+                                   + GENE_DELIMITER
+                                   + gene.getPersistentRepresentation()
+                                   , "UTF-8"));
+      }
+      catch (UnsupportedEncodingException uex) {
+        throw new RuntimeException("UTF-8 should always be supported!", uex);
+      }
+      b.append(GENE_DELIMITER_CLOSING);
+    }
+    return b.toString();
+  }
+
+  /**
+   * Counterpart for getPersistentRepresentation.
+   *
+   * @param a_representation the string representation retrieved from a prior
+   * call to the getPersistentRepresentation() method
+   *
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setValueFromPersistentRepresentation(String a_representation)
+      throws UnsupportedRepresentationException {
+    if (a_representation != null) {
+      try {
+        List r = split(a_representation);
+        String g;
+        // Obtain fitness value.
+        // ---------------------
+        g = URLDecoder.decode( (String) r.get(0), "UTF-8");
+        setFitnessValue(Double.parseDouble(g));
+        r.remove(0);/**@todo we can do this faster!*/
+        // Obtain number of genes.
+        // -----------------------
+        g = URLDecoder.decode( (String) r.get(0), "UTF-8");
+        int count = Integer.parseInt(g);
+        m_genes = new Gene[count];
+        r.remove(0);/**@todo we can do this faster!*/
+        // Obtain the genes.
+        // -----------------
+        Iterator iter = r.iterator();
+        StringTokenizer st;
+        String clas;
+        String representation;
+        Gene gene;
+        int index = 0;
+        while (iter.hasNext()) {
+          g = URLDecoder.decode( (String) iter.next(), "UTF-8");
+          st = new StringTokenizer(g, GENE_DELIMITER);
+          if (st.countTokens() != 2)
+            throw new UnsupportedRepresentationException("In " + g + ", " +
+                "expecting two tokens, separated by " + GENE_DELIMITER);
+          clas = st.nextToken();
+          representation = st.nextToken();
+          gene = createGene(clas, representation);
+          m_genes[index++] = gene;
+        }
+      }
+      catch (Exception ex) {
+        throw new UnsupportedRepresentationException(ex.toString());
+      }
+    }
+  }
+
+  /**
+   * Creates a new instance of gene.<p>
+   * Taken from CompositeGene.
+   *
+   * @param a_geneClassName name of the gene class
+   * @param a_persistentRepresentation persistent representation of the gene to
+   * create (could be obtained via getPersistentRepresentation)
+   *
+   * @return newly created gene
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected Gene createGene(String a_geneClassName,
+                            String a_persistentRepresentation)
+      throws Exception {
+    Class geneClass = Class.forName(a_geneClassName);
+    Constructor constr = geneClass.getConstructor(new Class[] {Configuration.class});
+    Gene gene = (Gene) constr.newInstance(new Object[] {getConfiguration()});
+    gene.setValueFromPersistentRepresentation(a_persistentRepresentation);
+    return gene;
+  }
+
+
+  /**
+   * Splits the input a_string into individual gene representations.<p>
+   * Taken and adapted from CompositeGene.
+   *
+   * @param a_string the string to split
+   * @return the elements of the returned array are the persistent
+   * representation strings of the gene's components
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected static final List split(String a_string)
+      throws UnsupportedRepresentationException {
+    List a = Collections.synchronizedList(new ArrayList());
+    // Header data.
+    // ------------
+    int index = 0;
+    StringTokenizer st0 = new StringTokenizer
+        (a_string, CHROM_DELIMITER, false);
+    if (!st0.hasMoreTokens()) {
+      throw new UnsupportedRepresentationException("Fitness value expected!");
+    }
+    String fitnessS = st0.nextToken();
+    a.add(fitnessS);
+    index += fitnessS.length();
+    if (!st0.hasMoreTokens()) {
+      throw new UnsupportedRepresentationException("Number of genes expected!");
+    }
+    String numGenes = st0.nextToken();
+    a.add(numGenes);
+    index += numGenes.length();
+
+    index += 2; //2 one-character delimiters
+
+    if (!st0.hasMoreTokens()) {
+      throw new UnsupportedRepresentationException("Gene data missing!");
+    }
+
+    // Remove previously parsed content.
+    // ---------------------------------
+    a_string = a_string.substring(index);
+
+    // Gene data.
+    // ----------
+    StringTokenizer st = new StringTokenizer
+        (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
+    while (st.hasMoreTokens()) {
+      if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
+        throw new UnsupportedRepresentationException(a_string + " no open tag");
+      }
+      String n = st.nextToken();
+      if (n.equals(GENE_DELIMITER_CLOSING)) {
+        a.add(""); /* Empty token */
+      }
+      else {
+        a.add(n);
+        if (!st.nextToken().equals(GENE_DELIMITER_CLOSING)) {
+          throw new UnsupportedRepresentationException
+              (a_string + " no close tag");
+        }
+      }
+    }
+    return a;
   }
 
   /**
