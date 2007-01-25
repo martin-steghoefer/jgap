@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -109,6 +109,22 @@ public class GPConfiguration
   private IGPFitnessEvaluator m_fitnessEvaluator;
 
   private INodeValidator m_nodeValidator;
+
+  /**
+   * Internal flag to display a warning only once, in case a program could not
+   * be evolved with the allowed maximum number of nodes.
+   *
+   * @since 3.2
+   */
+  private boolean m_warningPrinted;
+
+  /**
+   * Prototype of a valid program. May be cloned if needed (do not reference
+   * it!)
+   *
+   * @since 3.2
+   */
+  private IGPProgram m_prototypeProgram;
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -496,5 +512,46 @@ public class GPConfiguration
           .append(m_fitnessEvaluator.getClass(), other.m_fitnessEvaluator.getClass())
           .toComparison();
     }
+  }
+
+  /**
+   *
+   * @return see ProgramChromosome.growOrFull(...) and GPGenotype.evolve()
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public boolean isMaxNodeWarningPrinted() {
+    return m_warningPrinted;
+  }
+  /**
+   * See ProgramChromosome.growOrFull(...) and GPGenotype.evolve().
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void flagMaxNodeWarningPrinted() {
+    m_warningPrinted = true;
+  }
+
+  /**
+   *
+   * @param a_program IGPProgram
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setPrototypeProgram(IGPProgram a_program) {
+    m_prototypeProgram = a_program;
+  }
+
+  /**
+   * @return prototype program set (maybe null if not setted previously)
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IGPProgram getPrototypeProgram() {
+    return m_prototypeProgram;
   }
 }
