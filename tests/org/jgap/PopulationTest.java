@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -35,8 +35,7 @@ public class PopulationTest
     try {
       new Population(new ConfigurationForTest(), (IChromosome[])null);
       fail();
-    }
-    catch (NullPointerException e) {
+    } catch (NullPointerException e) {
       ; //this is OK
     }
   }
@@ -45,8 +44,7 @@ public class PopulationTest
       throws Exception {
     try {
       new Population(conf, -1);
-    }
-    catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException iae) {
       ; //this is ok
     }
   }
@@ -56,8 +54,7 @@ public class PopulationTest
     try {
       new Population(new ConfigurationForTest(), (IChromosome)null);
       fail();
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       ; //this is OK
     }
   }
@@ -119,8 +116,7 @@ public class PopulationTest
     try {
       p.setChromosome(2, c);
       fail();
-    }
-    catch (IndexOutOfBoundsException oex) {
+    } catch (IndexOutOfBoundsException oex) {
       ; //this is OK
     }
   }
@@ -368,7 +364,7 @@ public class PopulationTest
     assertEquals(c, p.determineFittestChromosome());
     // next is important to come into a dangerous situation.
     c = new Chromosome(conf, g, 10);
-    c.setFitnessValue(1);//the fittest!
+    c.setFitnessValue(1); //the fittest!
     p.addChromosome(c);
     assertEquals(c, p.determineFittestChromosome());
   }
@@ -657,8 +653,7 @@ public class PopulationTest
     try {
       pop.removeChromosome(0);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -679,8 +674,7 @@ public class PopulationTest
     try {
       pop.removeChromosome(1);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -701,8 +695,7 @@ public class PopulationTest
     try {
       pop.removeChromosome( -1);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -807,7 +800,158 @@ public class PopulationTest
     assertEquals(1, pop2.compareTo(pop));
   }
 
-  class MyFitnessEvaluator implements FitnessEvaluator {
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_0()
+      throws Exception {
+    Gene g = new IntegerGene(conf);
+    Chromosome c = new Chromosome(conf, g, 29);
+    c.setFitnessValue(45);
+    Population p = new Population(conf);
+    p.addChromosome(c);
+    String repr = p.getPersistentRepresentation();
+    Population q = new Population(conf);
+    q.setValueFromPersistentRepresentation(repr);
+    assertEquals(p, q);
+    assertEquals(p.getPersistentRepresentation(), q.getPersistentRepresentation());
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_1()
+      throws Exception {
+    Gene[] genes1 = new Gene[2];
+    genes1[0] = new StringGene(conf);
+    genes1[1] = new DoubleGene(conf);
+    Chromosome chrom = new Chromosome(conf, genes1);
+    Population pop = new Population(conf, chrom);
+    String repr = pop.getPersistentRepresentation();
+    Population q = new Population(conf);
+    q.setValueFromPersistentRepresentation(repr);
+    assertEquals(pop, q);
+    assertEquals(pop.getPersistentRepresentation(),
+                 q.getPersistentRepresentation());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_2()
+      throws Exception {
+    Population pop = new Population(conf);
+    pop.setValueFromPersistentRepresentation(null);
+    assertEquals(0, pop.size());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_3()
+      throws Exception {
+    Population pop = new Population(conf);
+    try {
+      pop.setValueFromPersistentRepresentation("1"
+          + Population.CHROM_DELIMITER
+          + "2");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_4()
+      throws Exception {
+    Population pop = new Population(conf);
+    try {
+      pop.setValueFromPersistentRepresentation("1"
+          + Population.CHROM_DELIMITER
+          + "0"
+          + Population.CHROM_DELIMITER);
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * Invalid closing tag.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_5()
+      throws Exception {
+    Population pop = new Population(conf);
+    pop.setValueFromPersistentRepresentation(Population.CHROM_DELIMITER_HEADING
+        + Chromosome.class.getName()
+        + Population.CHROM_DELIMITER
+        + "47.11"
+        + Chromosome.CHROM_DELIMITER
+        + "1"
+        + Chromosome.CHROM_DELIMITER
+        + "<" + IntegerGene.class.getName()
+        + Chromosome.GENE_DELIMITER
+        + "2:4:4>"
+        + Population.CHROM_DELIMITER_CLOSING);
+    assertEquals(1, pop.size());
+    IChromosome chrom = pop.getChromosome(0);
+    assertEquals(1, chrom.size());
+  }
+
+  /**
+   * Invalid closing tag.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_6()
+      throws Exception {
+    Population pop = new Population(conf);
+    try {
+      pop.setValueFromPersistentRepresentation(Population.
+          CHROM_DELIMITER_HEADING
+          + Chromosome.class.getName()
+          + Population.CHROM_DELIMITER
+          + "47.11"
+          + Chromosome.CHROM_DELIMITER
+          + "1"
+          + Chromosome.CHROM_DELIMITER
+          + "<" + IntegerGene.class.getName()
+          + Chromosome.GENE_DELIMITER
+          + "2:4:4>/");
+      fail();
+    } catch (UnsupportedRepresentationException uex) {
+      ; //this is OK
+    }
+  }
+
+  class MyFitnessEvaluator
+      implements FitnessEvaluator {
     public boolean isFitter(final double a_fitness_value1,
                             final double a_fitness_value2) {
       return a_fitness_value1 < a_fitness_value2;
