@@ -11,7 +11,6 @@ package org.jgap.impl;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.util.*;
 import org.apache.commons.lang.builder.*;
@@ -32,7 +31,7 @@ import org.apache.commons.lang.builder.*;
 public class JGAPFactory
     implements IJGAPFactory, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private List m_parameters;
 
@@ -342,7 +341,22 @@ public class JGAPFactory
       throw new CloneException(cex);
     }
   }
-  /**@todo implement equals*/
+
+  /**
+   * The equals-method
+   * @param a_other sic
+   * @return sic
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public boolean equals(Object a_other) {
+    try {
+      return compareTo(a_other) == 0;
+    } catch (ClassCastException cex) {
+      return false;
+    }
+  }
 
   /**
    * @param a_other other object to compare
@@ -360,9 +374,9 @@ public class JGAPFactory
       // -------------------------------------------------------
       JGAPFactory other = (JGAPFactory) a_other;
       return new CompareToBuilder()
-          .append(m_cloneHandlers, other.m_cloneHandlers)
-          .append(m_initer, other.m_initer)
-          .append(m_compareHandlers, other.m_compareHandlers)
+          .append(m_cloneHandlers.toArray(), other.m_cloneHandlers.toArray())
+          .append(m_initer.toArray(), other.m_initer.toArray())
+          .append(m_compareHandlers.toArray(), other.m_compareHandlers.toArray())
           .append(m_defaultCloneHandler, other.m_defaultCloneHandler)
           .append(m_defaultComparer, other.m_defaultComparer)
           .append(m_geneticOpConstraint, other.m_geneticOpConstraint)
