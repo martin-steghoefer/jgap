@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   private static int cleanedUp = 0;
 
@@ -624,9 +624,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testPersistentPresentation_3()
       throws Exception {
@@ -645,9 +646,10 @@ public class CompositeGeneTest
   /**
    * Invalid Gene class.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testPersistentPresentation_4()
       throws Exception {
@@ -665,9 +667,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testPersistentPresentation_5()
       throws Exception {
@@ -684,9 +687,10 @@ public class CompositeGeneTest
   /**
    * No closing tag.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
-   * @throws Exception
    */
   public void testPersistentPresentation_6()
       throws Exception {
@@ -705,9 +709,10 @@ public class CompositeGeneTest
   /**
    * Empty representation.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
-   * @throws Exception
    */
   public void testPersistentPresentation_7()
       throws Exception {
@@ -729,9 +734,10 @@ public class CompositeGeneTest
   /**
    * Tests if removal from empty list returns false no matter what to remove.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testRemoveGeneByIdentity_0()
       throws Exception {
@@ -742,9 +748,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testRemoveGeneByIdentity_1()
       throws Exception {
@@ -759,9 +766,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testCleanup_0()
       throws Exception {
@@ -785,9 +793,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testCleanup_1()
       throws Exception {
@@ -798,9 +807,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetConstraintChecker_0()
       throws Exception {
@@ -817,9 +827,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetToRandomValue_0()
       throws Exception {
@@ -835,9 +846,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetToRandomValue_1()
       throws Exception {
@@ -850,9 +862,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetToRandomValue_2()
       throws Exception {
@@ -865,9 +878,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testSetEnergy_0()
       throws Exception {
@@ -877,9 +891,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testSetEnergy_1()
       throws Exception {
@@ -895,9 +910,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testCompareTo_0()
       throws Exception {
@@ -914,9 +930,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testCompareTo_1()
       throws Exception {
@@ -931,9 +948,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testCompareTo_2()
       throws Exception {
@@ -949,9 +967,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testCompareTo_3()
       throws Exception {
@@ -981,9 +1000,10 @@ public class CompositeGeneTest
   /**
    * Using application data.
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testCompareTo_5()
       throws Exception {
@@ -1031,7 +1051,9 @@ public class CompositeGeneTest
   }
 
   /**
+   *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
@@ -1049,9 +1071,10 @@ public class CompositeGeneTest
 
   /**
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.6
-   * @throws Exception
    */
   public void testGetAllele_3()
       throws Exception {
