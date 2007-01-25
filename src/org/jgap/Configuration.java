@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.74 $";
+  private final static String CVS_REVISION = "$Revision: 1.75 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1602,31 +1602,42 @@ public class Configuration
     else {
       /**@todo make all objects comparable*/
       Configuration other = (Configuration) a_other;
-      return new CompareToBuilder()
-          .append(m_config.m_populationSize, other.m_config.m_populationSize)
-          .append(m_factory, other.m_factory)
-          .append(m_objectiveFunction, other.m_objectiveFunction)
-          .append(m_fitnessEvaluator, other.m_fitnessEvaluator)
-          .append(m_bulkObjectiveFunction, other.m_bulkObjectiveFunction)
-          .append(m_sampleChromosome, other.m_sampleChromosome)
-          .append(m_randomGenerator, other.m_randomGenerator)
-          .append(m_eventManager, other.m_eventManager)
-          .append(m_chromosomePool, other.m_chromosomePool)
-          .append(m_geneticOperators, other.m_geneticOperators)
-          .append(m_chromosomeSize, other.m_chromosomeSize)
-          .append(m_preSelectors, other.m_preSelectors)
-          .append(m_postSelectors, other.m_postSelectors)
-          .append(m_sizeNaturalSelectorsPre, other.m_sizeNaturalSelectorsPre)
-          .append(m_sizeNaturalSelectorsPost, other.m_sizeNaturalSelectorsPost)
-          .append(m_preserveFittestIndividual, other.m_preserveFittestIndividual)
-          .append(m_conHandler, other.m_conHandler)
-          .append(threadKey, other.threadKey)
-          .append(m_keepPopulationSizeConstant, other.m_keepPopulationSizeConstant)
-          .append(m_minPercentageSizePopulation, other.m_minPercentageSizePopulation)
-          .append(m_generationNr, other.m_generationNr)
-          .append(m_name, other.m_name)
-          .append(m_settingsLocked, other.m_settingsLocked)
-          .toComparison();
+      try {
+        return new CompareToBuilder()
+            .append(m_config.m_populationSize, other.m_config.m_populationSize)
+            .append(m_factory, other.m_factory)
+            .append(m_objectiveFunction, other.m_objectiveFunction)
+            .append(m_fitnessEvaluator, other.m_fitnessEvaluator)
+            .append(m_bulkObjectiveFunction, other.m_bulkObjectiveFunction)
+            .append(m_sampleChromosome, other.m_sampleChromosome)
+            .append(m_randomGenerator, other.m_randomGenerator)
+//            .append(m_eventManager, other.m_eventManager)
+//            .append(m_chromosomePool, other.m_chromosomePool)
+            .append(m_geneticOperators.toArray(), other.m_geneticOperators.toArray())
+            .append(m_chromosomeSize, other.m_chromosomeSize)
+            .append(m_preSelectors, other.m_preSelectors)
+            .append(m_postSelectors, other.m_postSelectors)
+            .append(m_sizeNaturalSelectorsPre, other.m_sizeNaturalSelectorsPre)
+            .append(m_sizeNaturalSelectorsPost,
+                    other.m_sizeNaturalSelectorsPost)
+            .append(m_preserveFittestIndividual,
+                    other.m_preserveFittestIndividual)
+//            .append(m_conHandler, other.m_conHandler)
+            .append(threadKey, other.threadKey)
+            .append(m_keepPopulationSizeConstant,
+                    other.m_keepPopulationSizeConstant)
+            .append(m_minPercentageSizePopulation,
+                    other.m_minPercentageSizePopulation)
+            .append(m_generationNr, other.m_generationNr)
+            .append(m_name, other.m_name)
+            .append(m_settingsLocked, other.m_settingsLocked)
+            .toComparison();
+      } catch (ClassCastException cex) {
+        throw new RuntimeException("Cannot compare all objects within"
+                                   + " org.jgap.Configuration, because at"
+                                   + " least one does not implement interface"
+                                   + " java.lang.Comparable!");
+      }
     }
   }
 
