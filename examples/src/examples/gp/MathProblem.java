@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   static Variable vx;
 
@@ -58,7 +58,7 @@ public class MathProblem
         new Sine(conf, CommandGene.FloatClass),
         new Exp(conf, CommandGene.FloatClass),
         new Pow(conf, CommandGene.FloatClass),
-        new Terminal(conf, CommandGene.FloatClass, 3.0d, 4.0d),
+        new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, true),
     }
     };
     Random random = new Random();
@@ -73,7 +73,7 @@ public class MathProblem
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        30, true);
+        20, true);
   }
 
   /**
@@ -90,8 +90,9 @@ public class MathProblem
     System.out.println("Formula to discover: X^4 + X^3 + X^2 - X");
     GPConfiguration config = new GPConfiguration();
     config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
-    config.setMaxInitDepth(5);
+    config.setMaxInitDepth(4);
     config.setPopulationSize(1000);
+    config.setMaxCrossoverDepth(8);
     config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());
     config.setStrictProgramCreation(true);
     GPProblem problem = new MathProblem(config);
