@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.73 $";
+  private final static String CVS_REVISION = "$Revision: 1.74 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1583,7 +1583,6 @@ public class Configuration
    * @since 3.2
    */
   public boolean equals(Object a_other) {
-    System.out.println("Configuration: equals");
     return compareTo(a_other) == 0;
   }
 
@@ -1597,7 +1596,6 @@ public class Configuration
    * @since 3.2
    */
   public int compareTo(Object a_other) {
-    System.out.println("Configuration: compareTo");
     if (a_other == null) {
       return 1;
     }
