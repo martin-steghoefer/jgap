@@ -11,12 +11,11 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
 
 /**
- * A connector for indipendent subprograms (subtrees). Each subtree except the
+ * A connector for independent subprograms (subtrees). Each subtree except the
  * last one must have a memory- or stack-modifying command (such as push or
  * store), otherwise there is no connection between the subtrees (which would
  * be useless bloating).
@@ -27,7 +26,7 @@ import org.jgap.gp.impl.*;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
