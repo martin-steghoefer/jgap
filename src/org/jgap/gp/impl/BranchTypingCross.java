@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -201,7 +201,7 @@ public class BranchTypingCross
     // Check for depth constraint for p1 inserted into c0.
     // ---------------------------------------------------
     if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()
-//        || c0s - p0 - s0 < 1
+        || c0s - p0 - s0 < 0
         || p0 + s1 + c0s - p0 - s0>= c0.getFunctions().length) {
       // Choose the other parent.
       // ------------------------
@@ -221,7 +221,7 @@ public class BranchTypingCross
     // Check for depth constraint for p0 inserted into c1.
     // ---------------------------------------------------
     if (d1 - 1 + s0 > getConfiguration().getMaxCrossoverDepth()
-//        || c1s - p1 - s1 < 1
+        || c1s - p1 - s1 < 0
         || p1 + s0 + c1s - p1 - s1 >= c1.getFunctions().length) {
       // Choose the other parent.
       // ------------------------
