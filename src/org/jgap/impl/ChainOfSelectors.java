@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.util.*;
+import org.apache.commons.lang.builder.*;
 
 /**
  * Ordered chain of NaturalSelectors. With this container you can plugin
@@ -26,9 +27,9 @@ import org.jgap.util.*;
  * @since 1.1
  */
 public class ChainOfSelectors
-    implements Serializable, ICloneable {
+    implements Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
@@ -115,8 +116,7 @@ public class ChainOfSelectors
         return false;
       }
       return m_selectors.equals(c2.m_selectors);
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
@@ -162,8 +162,28 @@ public class ChainOfSelectors
    */
   public Object clone() {
     ChainOfSelectors result = new ChainOfSelectors();
-    result.m_selectors = (Vector)m_selectors.clone();
+    result.m_selectors = (Vector) m_selectors.clone();
     return result;
   }
 
+  /**
+   * The compareTo-method.
+   *
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    else {
+      ChainOfSelectors other = (ChainOfSelectors) a_other;
+      return new CompareToBuilder()
+          .append(m_selectors.toArray(), other.m_selectors.toArray())
+          .toComparison();
+    }
+  }
 }
