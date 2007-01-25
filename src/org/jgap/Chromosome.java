@@ -67,7 +67,7 @@ import java.net.*;
 public class Chromosome
     extends BaseChromosome implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.90 $";
+  private final static String CVS_REVISION = "$Revision: 1.91 $";
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -720,7 +720,7 @@ public class Chromosome
   }
 
   /**
-   * Creates a new instance of gene.<p>
+   * Creates a new Gene instance.<p>
    * Taken from CompositeGene.
    *
    * @param a_geneClassName name of the gene class
@@ -743,14 +743,13 @@ public class Chromosome
     return gene;
   }
 
-
   /**
    * Splits the input a_string into individual gene representations.<p>
    * Taken and adapted from CompositeGene.
    *
    * @param a_string the string to split
    * @return the elements of the returned array are the persistent
-   * representation strings of the gene's components
+   * representation strings of the chromosome's components
    * @throws UnsupportedRepresentationException
    *
    * @author Klaus Meffert

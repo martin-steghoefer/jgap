@@ -29,11 +29,11 @@ import java.io.Serializable;
 public interface Gene
     extends Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.22 $";
+  final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
-   * persistent representation of DoubleGene instances.
+   * persistent representation.
    */
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 

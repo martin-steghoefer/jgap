@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.41 $";
+  private static final String CVS_REVISION = "$Revision: 1.42 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -56,14 +56,16 @@ public class IntegerGene
    * @author Klaus Meffert
    * @since 1.0
    */
-  public IntegerGene() throws InvalidConfigurationException {
+  public IntegerGene()
+      throws InvalidConfigurationException {
     this(Genotype.getStaticConfiguration());
   }
 
   /**
    * Constructs a new IntegerGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
-   * than the standard range of integer values.<p>
+   * than the standard range of integer values.
+   *
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -74,6 +76,7 @@ public class IntegerGene
       throws InvalidConfigurationException {
     this(a_config, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
+
   /**
    * Constructs a new IntegerGene with the specified lower and upper
    * bounds for values (alleles) of this Gene instance.
@@ -109,10 +112,9 @@ public class IntegerGene
   protected Gene newGeneInternal() {
     try {
       IntegerGene result = new IntegerGene(getConfiguration(), m_lowerBounds,
-                                           m_upperBounds);
+          m_upperBounds);
       return result;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -191,8 +193,7 @@ public class IntegerGene
       else {
         try {
           setAllele(new Integer(Integer.parseInt(valueRepresentation)));
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
           throw new UnsupportedRepresentationException(
               "The format of the given persistent representation " +
               "is not recognized: field 1 does not appear to be " +
@@ -204,8 +205,7 @@ public class IntegerGene
       try {
         m_lowerBounds =
             Integer.parseInt(lowerBoundRepresentation);
-      }
-      catch (NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new UnsupportedRepresentationException(
             "The format of the given persistent representation " +
             "is not recognized: field 2 does not appear to be " +
@@ -216,8 +216,7 @@ public class IntegerGene
       try {
         m_upperBounds =
             Integer.parseInt(upperBoundRepresentation);
-      }
-      catch (NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new UnsupportedRepresentationException(
             "The format of the given persistent representation " +
             "is not recognized: field 3 does not appear to be " +
