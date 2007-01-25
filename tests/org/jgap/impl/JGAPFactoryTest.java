@@ -22,7 +22,7 @@ import junit.framework.*;
 public class JGAPFactoryTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(JGAPFactoryTest.class);
@@ -268,7 +268,7 @@ public class JGAPFactoryTest
       throws Exception {
     JGAPFactory inst = new JGAPFactory(false);
     Object o = doSerialize(inst);
-    assertEquals(o, inst);/**@todo implement equals and compareTo*/
+    assertEquals(o, inst);
   }
 
 }
