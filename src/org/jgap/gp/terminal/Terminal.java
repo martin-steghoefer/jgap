@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   private float m_value_float;
 
@@ -37,6 +37,8 @@ public class Terminal
 
   private double m_upperBounds;
 
+  private boolean m_wholeNumbers;
+
   public Terminal()
       throws InvalidConfigurationException {
     this(GPGenotype.getGPConfiguration(), CommandGene.IntegerClass);
@@ -44,15 +46,48 @@ public class Terminal
 
   public Terminal(final GPConfiguration a_conf, Class a_returnType)
       throws InvalidConfigurationException {
-    this(a_conf, a_returnType, 0d, 99d);
+    this(a_conf, a_returnType, 0d, 99d, false);
   }
 
+  /**
+   * Constructor.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_returnType Class
+   * @param a_minValue double
+   * @param a_maxValue double
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public Terminal(final GPConfiguration a_conf, Class a_returnType,
                   double a_minValue, double a_maxValue)
+      throws InvalidConfigurationException {
+    this(a_conf, a_returnType, 0d, 99d, false);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_returnType Class
+   * @param a_minValue double
+   * @param a_maxValue double
+   * @param a_wholeNumbers true: only return whole numbers (only relevant when
+   * using type double or float)
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Terminal(final GPConfiguration a_conf, Class a_returnType,
+                  double a_minValue, double a_maxValue, boolean a_wholeNumbers)
       throws InvalidConfigurationException {
     super(a_conf, 0, a_returnType);
     m_lowerBounds = a_minValue;
     m_upperBounds = a_maxValue;
+    m_wholeNumbers = a_wholeNumbers;
     setRandomValue();
   }
 
@@ -74,6 +109,9 @@ public class Terminal
     RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
     m_value_double = randomGen.nextDouble() * (m_upperBounds - m_lowerBounds) +
         m_lowerBounds;
+    if (m_wholeNumbers) {
+      m_value_double = Math.round(m_value_double);
+    }
   }
 
   protected void setRandomValue(float a_value) {
@@ -81,6 +119,9 @@ public class Terminal
     m_value_float = (float) (randomGen.nextFloat() *
                              (m_upperBounds - m_lowerBounds) +
                              m_lowerBounds);
+    if (m_wholeNumbers) {
+      m_value_float = Math.round(m_value_float);
+    }
   }
 
   protected void setRandomValue() {
