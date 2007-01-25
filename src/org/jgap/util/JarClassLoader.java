@@ -24,7 +24,7 @@ import java.util.jar.*;
 public class JarClassLoader
     extends URLClassLoader {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private URL m_url;
 
@@ -58,12 +58,12 @@ public class JarClassLoader
    *
    * @throws IOException
    *
+   * @author Klaus Meffert
    * @since 3.2
    */
   public String getMainClassName()
       throws IOException {
-    URL u = new URL("jar", "", m_url + "!/");
-    JarURLConnection uc = (JarURLConnection) u.openConnection();
+    JarURLConnection uc = (JarURLConnection) m_url.openConnection();
     Attributes attr = uc.getMainAttributes();
     if (attr != null) {
       return attr.getValue(Attributes.Name.MAIN_CLASS);
