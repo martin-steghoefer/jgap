@@ -9,11 +9,9 @@
  */
 package org.jgap.util;
 
-import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.util.jar.*;
-import org.jgap.distr.grid.*;
 
 /**
  * This class will (slightly inefficiently) look for all classes that implement
@@ -29,7 +27,7 @@ import org.jgap.distr.grid.*;
  */
 public class PluginDiscoverer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static final boolean DEBUG = false;
 
@@ -47,10 +45,9 @@ public class PluginDiscoverer {
    * @since 2.3
    */
   public PluginDiscoverer() {
+    init();
     String classpath = System.getProperty("java.class.path");
     StringTokenizer st = new StringTokenizer(classpath, File.pathSeparator);
-    m_classpathFolders = new Vector();
-    m_classpathJars = new Vector();
     while (st.hasMoreTokens()) {
       String item = st.nextToken();
       File f = new File(item);
@@ -61,6 +58,23 @@ public class PluginDiscoverer {
         m_classpathFolders.add(item);
       }
     }
+  }
+
+  /**
+   * Prepares the discoverer for a single jar file
+   * @param a_jarFile String
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public PluginDiscoverer(String a_jarFile) {
+    init();
+    m_classpathJars.add(a_jarFile);
+  }
+
+  private void init() {
+    m_classpathFolders = new Vector();
+    m_classpathJars = new Vector();
   }
 
   /**
@@ -162,11 +176,11 @@ public class PluginDiscoverer {
     Iterator i = m_classpathJars.iterator();
     while (i.hasNext()) {
       String filename = (String) i.next();
+      filename = FileKit.getConformPath(filename, true);
       // only search for jars in current dir or subdir (otherwise we would scan
       // the whole bunch of system and external library jars, too, and that
       // would be really inperformant)
       if (filename.startsWith(s)) {
-        System.err.println(filename);
         try {
           JarFile jar = new JarFile(filename);
           Enumeration item = jar.entries();
@@ -300,17 +314,17 @@ public class PluginDiscoverer {
     for (int i = 0; i < size; i++) {
       System.out.println(plugins.get(i));
     }
-    System.out.println("\n\n");
-    plugins = discoverer.findImplementingClasses(IGridConfiguration.class,
-        "c:/JavaProjekte/JGAP_CVS/classes", "examples/grid/fitnessDistributed");
-    System.out.println();
-    size = plugins.size();
-    System.out.println("" + size + " plugin"
-                       + (size == 1 ? "" : "s") + " discovered"
-                       + (size == 0 ? "" : ":"));
-    for (int i = 0; i < size; i++) {
-      System.out.println(plugins.get(i));
-    }
+//    System.out.println("\n\n");
+//    plugins = discoverer.findImplementingClasses(IGridConfiguration.class,
+//        "c:/JavaProjekte/JGAP_CVS/classes", "examples/grid/fitnessDistributed");
+//    System.out.println();
+//    size = plugins.size();
+//    System.out.println("" + size + " plugin"
+//                       + (size == 1 ? "" : "s") + " discovered"
+//                       + (size == 0 ? "" : ":"));
+//    for (int i = 0; i < size; i++) {
+//      System.out.println(plugins.get(i));
+//    }
     System.exit(0);
   }
 }

@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.40 $";
+  private static final String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -70,10 +70,10 @@ public class IntegerGene
    * @author Klaus Meffert
    * @since 3.0
    */
-  public IntegerGene(final Configuration a_config) throws InvalidConfigurationException{
+  public IntegerGene(final Configuration a_config)
+      throws InvalidConfigurationException {
     this(a_config, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
-
   /**
    * Constructs a new IntegerGene with the specified lower and upper
    * bounds for values (alleles) of this Gene instance.
