@@ -16,6 +16,7 @@ import org.jgap.event.*;
 import org.jgap.gp.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 import org.jgap.util.tree.*;
 
 /**
@@ -27,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private int[][] m_map;
 
@@ -201,7 +202,7 @@ public class AntTrailProblem
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           int evno = genotype.getGPConfiguration().getGenerationNr();
-          double freeMem = GPGenotype.getFreeMemoryMB();
+          double freeMem = SystemKit.getFreeMemoryMB();
           if (evno % 100 == 0) {
             double bestFitness = genotype.getFittestProgram().
                 getFitnessValue();
