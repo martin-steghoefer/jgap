@@ -20,10 +20,7 @@ import org.jgap.util.*;
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
  * Here, the Fibonacci sequence is calculated (only integers are used).<p>
- * Please note: We try to find an approximation formula, not a program that
- * computes Fibonacci iteratively or recursively (as in method Fib(int), see
- * below). Of course this is an oversimplification to show the principle of GP
- * only.<p>
+ * Please note: We try to find a program that computes Fibonacci iteratively.<p>
  * This example utilizes a INodeValidator (see FibonacciNodeValidator).<p>
  * Each new best solution found will be displayed as a graphical tree
  * representing the GP. The tree is written to a PNG-imagefile onto harddisk.
@@ -34,7 +31,7 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   static Variable vx;
 
@@ -277,8 +274,8 @@ public class Fibonacci
       Object[] noargs = new Object[0];
       // Initialize local stores.
       // ------------------------
-      GPGenotype.getGPConfiguration().clearStack();
-      GPGenotype.getGPConfiguration().clearMemory();
+      a_program.getGPConfiguration().clearStack();
+      a_program.getGPConfiguration().clearMemory();
       // Compute fitness for each program.
       // ---------------------------------
       /**@todo check if program valid, i.e. worth evaluating*/
@@ -313,7 +310,7 @@ public class Fibonacci
           }
         }
       }
-      if (GPGenotype.getGPConfiguration().stackSize() > 0) {
+      if (a_program.getGPConfiguration().stackSize() > 0) {
         error = GPFitnessFunction.MAX_FITNESS_VALUE;
       }
       if (error < 0.000001) {
