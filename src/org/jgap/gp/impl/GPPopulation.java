@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -288,6 +288,7 @@ public class GPPopulation
    * Determines the fittest GPProgram in the population (the one with the
    * highest fitness value) and memorizes it. This is an optimized version
    * compared to calling determineFittesPrograms(1).
+   *
    * @return the fittest GPProgram of the population
    *
    * @author Klaus Meffert
@@ -310,6 +311,40 @@ public class GPPopulation
     }
     setChanged(false);
     return m_fittestProgram;
+  }
+
+  /**
+   * Determines the fittest GPProgram in the population, but only considers
+   * programs with already computed fitness value.
+   *
+   * @return the fittest GPProgram of the population
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IGPProgram determineFittestProgramComputed() {
+    double bestFitness = -1.0d;
+    IGPFitnessEvaluator evaluator = getGPConfiguration().getGPFitnessEvaluator();
+    double fitness;
+    IGPProgram fittest = null;
+    for (int i = 0; i < m_programs.length && m_programs[i] != null; i++) {
+      IGPProgram program = m_programs[i];
+      if (program instanceof GPProgramBase) {
+        GPProgramBase program1 = (GPProgramBase)program;
+        fitness = program1.getFitnessValueDirectly();
+      }
+      else {
+        fitness = program.getFitnessValue();
+      }
+      if (Math.abs(fitness - FitnessFunction.NO_FITNESS_VALUE) >
+                   FitnessFunction.DELTA) {
+        if (fittest == null || evaluator.isFitter(fitness, bestFitness)) {
+          fittest = program;
+          bestFitness = fitness;
+        }
+      }
+    }
+    return fittest;
   }
 
   /**
