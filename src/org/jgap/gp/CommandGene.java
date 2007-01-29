@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -92,7 +92,6 @@ public abstract class CommandGene
   public CommandGene(final GPConfiguration a_conf, final int a_arity,
                      final Class a_returnType)
       throws InvalidConfigurationException {
-//    super(a_conf);
     if (a_conf == null) {
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
