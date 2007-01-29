@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -135,6 +135,16 @@ public abstract class GPProgramBase
     else {
       return calcFitnessValue();
     }
+  }
+
+  /**
+   * @return computed fitness value of this program, may be unitialized
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public double getFitnessValueDirectly() {
+    return m_fitnessValue;
   }
 
   public void setFitnessValue(double a_fitness) {
