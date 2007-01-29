@@ -26,7 +26,7 @@ import org.jgap.gp.impl.*;
 public class SubProgram
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -55,6 +55,16 @@ public class SubProgram
     }
     ret += "&" + m_subtrees + "]";
     return ret;
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Sub program";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

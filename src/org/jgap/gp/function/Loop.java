@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class Loop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_typeVar;
 
@@ -50,6 +50,16 @@ public class Loop
 
   public String toString() {
     return "loop(" + m_count + ", &1 }";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Loop";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {

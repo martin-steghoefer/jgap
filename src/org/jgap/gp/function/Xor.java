@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Xor
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public Xor(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -43,6 +43,16 @@ public class Xor
 
   public String toString() {
     return "&1 ^ &2";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Xor";
   }
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {

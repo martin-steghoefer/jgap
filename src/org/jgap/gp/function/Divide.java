@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Divide
     extends MathCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public Divide(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -37,6 +37,16 @@ public class Divide
 
   public String toString() {
     return "/";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Divide";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

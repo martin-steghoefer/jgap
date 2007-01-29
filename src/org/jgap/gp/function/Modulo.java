@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class Modulo
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public Modulo(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -32,6 +32,16 @@ public class Modulo
 
   public String toString() {
     return "&1 % &2";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Modulo";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

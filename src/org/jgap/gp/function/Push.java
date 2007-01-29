@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class Push
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private Class m_type;
 
@@ -36,6 +36,16 @@ public class Push
 
   public String toString() {
     return "push &1";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Push";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {

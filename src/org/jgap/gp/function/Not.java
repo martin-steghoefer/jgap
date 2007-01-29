@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Not
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public Not(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -31,6 +31,16 @@ public class Not
 
   public String toString() {
     return "!&1";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Not";
   }
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {

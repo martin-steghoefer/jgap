@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class TransferMemory
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -60,6 +60,16 @@ public class TransferMemory
         + " -> "
         + m_targetStorageName
         + ")";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Transfer Memory";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {

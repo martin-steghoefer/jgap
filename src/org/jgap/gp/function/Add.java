@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Add
     extends MathCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public Add(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -37,6 +37,16 @@ public class Add
 
   public String toString() {
     return "&1 + &2";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Add";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

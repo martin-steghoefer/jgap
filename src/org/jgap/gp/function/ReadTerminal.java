@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ReadTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -44,6 +44,16 @@ public class ReadTerminal
 
   public String toString() {
     return "read_from(" + m_storageName + ")";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Read Terminal";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

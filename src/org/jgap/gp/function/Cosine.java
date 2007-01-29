@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Cosine
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public Cosine(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -31,6 +31,16 @@ public class Cosine
 
   public String toString() {
     return "cosine &1";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Cosine";
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {

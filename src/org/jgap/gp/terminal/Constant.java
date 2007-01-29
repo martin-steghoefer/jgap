@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Constant
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Object m_value;
 
@@ -34,6 +34,16 @@ public class Constant
 
   public String toString() {
     return m_value.toString();
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Constant";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class NOP
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -32,6 +32,16 @@ public class NOP
 
   public String toString() {
     return "NOP";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "NOP (NO Operation)";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {

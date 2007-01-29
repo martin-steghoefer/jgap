@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Multiply
     extends MathCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 
   public Multiply(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -37,6 +37,16 @@ public class Multiply
 
   public String toString() {
     return "&1 * &2";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Multiply";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

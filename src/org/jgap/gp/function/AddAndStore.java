@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class AddAndStore
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -44,6 +44,16 @@ public class AddAndStore
 
   public String toString() {
     return "Store(" + m_storageName + ", &1 + &2)";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "AddAndStore";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {

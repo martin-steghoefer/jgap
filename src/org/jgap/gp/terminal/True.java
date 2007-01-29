@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class True
     extends MathCommand implements IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public True(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -37,6 +37,16 @@ public class True
 
   public String toString() {
     return "true";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Boolean Value True";
   }
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {

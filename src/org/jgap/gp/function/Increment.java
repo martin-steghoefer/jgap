@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class Increment
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   private int m_increment;
 
@@ -68,6 +68,16 @@ public class Increment
     else {
       return "INC(" + m_increment + ", &1)";
     }
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "INC";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

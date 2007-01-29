@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Multiply3
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 
   public Multiply3(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -31,6 +31,16 @@ public class Multiply3
 
   public String toString() {
     return "&1 * &2 * &3";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Multiply3";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {

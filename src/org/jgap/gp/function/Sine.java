@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Sine
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public Sine(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -31,6 +31,16 @@ public class Sine
 
   public String toString() {
     return "sine &1";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Sine";
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {

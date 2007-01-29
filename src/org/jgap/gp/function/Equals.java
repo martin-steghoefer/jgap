@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class Equals
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private Class m_type;
 
@@ -34,6 +34,16 @@ public class Equals
 
   public String toString() {
     return "Equals(&1, &2)";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "Equals";
   }
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
