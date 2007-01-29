@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private Class m_typeVar;
 
@@ -112,7 +112,7 @@ public class ForLoop
     // Determine the end index of the loop (child at index 0).
     // -------------------------------------------------------
     int x;
-    if (m_endIndex != -1) {
+    if (m_endIndex == -1) {
       if (m_typeVar == CommandGene.IntegerClass) {
         x = c.execute_int(n, 0, args);
       }
@@ -126,20 +126,25 @@ public class ForLoop
         x = (int) Math.round(c.execute_float(n, 0, args));
       }
       else {
-        throw new RuntimeException("Type " + m_typeVar +
-                                   " not supported by ForLoop");
+        throw new RuntimeException("Type "
+                                   + m_typeVar
+                                   + " not supported by ForLoop");
       }
       if (x > m_maxLoop) {
         x = m_maxLoop;
       }
+      // Repeatedly execute the second child (index = 1).
+      // ------------------------------------------------
+      for (int i = m_startIndex; i < x; i++) {
+        c.execute_void(n, 1, args);
+      }
     }
     else {
-      x = m_endIndex;
-    }
-    // Repeatedly execute the second child (index = 1).
-    // ------------------------------------------------
-    for (int i = m_startIndex; i < x; i = i + m_increment) {
-      c.execute_void(n, 1, args);
+      // Repeatedly execute the first child (index = 0).
+      // -----------------------------------------------
+      for (int i = m_startIndex; i < m_endIndex; i = i + m_increment) {
+        c.execute_void(n, 0, args);
+      }
     }
   }
 
@@ -149,17 +154,20 @@ public class ForLoop
 
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     if (a_chromNum == 0) {
-      // Loop counter variable
+      // Loop counter variable.
+      // ----------------------
       return m_typeVar;
     }
     else {
-      // Subprogram
+      // Subprogram.
+      // -----------
       return CommandGene.VoidClass;
     }
   }
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -181,6 +189,7 @@ public class ForLoop
 
   /**
    * The equals-method.
+   *
    * @param a_other the other object to compare
    * @return true if the objects are seen as equal
    *
