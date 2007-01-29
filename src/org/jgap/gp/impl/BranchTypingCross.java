@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -121,7 +121,8 @@ public class BranchTypingCross
       throws InvalidConfigurationException {
     ProgramChromosome[] c = {
         c0, c1};
-    // Choose a point in c1
+    // Choose a point in c1.
+    // ---------------------
     int p0;
     RandomGenerator random = getConfiguration().getRandomGenerator();
     if (random.nextFloat() < getConfiguration().getFunctionProb()) {
@@ -134,7 +135,8 @@ public class BranchTypingCross
       p0 = c0.getFunction(random.nextInt(nf));
     }
     else {
-      // choose a terminal
+      // Choose a terminal.
+      // ------------------
       p0 = c0.getTerminal(random.nextInt(c0.numTerminals()));
       // Mutate the terminal's value.
       // ----------------------------
@@ -152,7 +154,8 @@ public class BranchTypingCross
         }
       }
     }
-    // Choose a point in c2 matching the type
+    // Choose a point in c2 matching the type.
+    // ---------------------------------------
     int p1;
     Class type_ = c0.getNode(p0).getReturnType();
     if (random.nextFloat() < getConfiguration().getFunctionProb()) {

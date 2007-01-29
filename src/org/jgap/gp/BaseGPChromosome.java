@@ -22,7 +22,7 @@ import org.jgap.*;
 public abstract class BaseGPChromosome
     implements IGPChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * The configuration object to use
@@ -149,9 +149,9 @@ public abstract class BaseGPChromosome
   }
 
   /**
-   * Gets the i'th function of the given type in this chromosome. The nodes are
-   * counted in a depth-first manner, with node 0 being the first function of
-   * the given type in this chromosome.
+   * Gets the i'th function of the given return type in this chromosome. The
+   * nodes are counted in a depth-first manner, with node 0 being the first
+   * function of the given type in this chromosome.
    *
    * @param a_index the i'th function to get
    * @param a_type the type of function to get
