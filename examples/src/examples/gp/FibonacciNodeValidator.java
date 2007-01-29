@@ -2,37 +2,37 @@ package examples.gp;
 
 import org.jgap.gp.impl.*;
 import org.jgap.gp.*;
-import org.jgap.gp.function.AddAndStore;
-import org.jgap.gp.function.TransferMemory;
-import org.jgap.gp.function.SubProgram;
-import org.jgap.gp.terminal.Variable;
-import org.jgap.gp.function.ForLoop;
+import org.jgap.gp.function.*;
+import org.jgap.gp.terminal.*;
 
 /**
- * Validates evolved nodes for the Fibonacci problem. This is just for
+ * Validates evolved nodes for the Fibonacci problem. This is for
  * demonstrating how the node validator works.
  *
  * @author Klaus Meffert
- * @version 1.0
+ * @since 3.0
  */
 public class FibonacciNodeValidator
     implements INodeValidator {
   /**
-   * Validates a_node in the context of a_chrom. Considers the recursion level
-   * (a_recursLevel), the type needed (a_type) for the node, the functions
-   * available (a_functionSet) and the depth of the whole chromosome needed
-   * (a_depth), and whether grow mode is used (a_grow is true) or not.
+   * Validates a_node in the context of a_chrom during evolution. Considers the
+   * recursion level (a_recursLevel), the type needed (a_type) for the node, the
+   * functions available (a_functionSet) and the depth of the whole chromosome
+   * needed (a_depth), and whether grow mode is used (a_grow is true) or not.
    *
-   * @param a_chrom the chromosome that will contain the node, if valid
+   * @param a_chrom the chromosome that will contain the node, if valid (ignored
+   * in this implementation)
    * @param a_node the node selected and to be validated
    * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
    * @param a_num the chromosome's index in the individual of this chromosome
    * @param a_recurseLevel level of recursion
    * @param a_type the return type of the node needed
-   * @param a_functionSet the array of available functions
+   * @param a_functionSet the array of available functions (ignored in this
+   * implementation)
    * @param a_depth the needed depth of the program chromosome
-   * @param a_grow true: use grow mode, false: use full mode
+   * @param a_grow true: use grow mode, false: use full mode (ignored in this
+   * implementation)
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
