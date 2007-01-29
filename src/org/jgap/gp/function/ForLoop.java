@@ -11,8 +11,7 @@ package org.jgap.gp.function;
 
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
 
 /**
@@ -24,11 +23,15 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private Class m_typeVar;
 
   private int m_startIndex;
+
+  private int m_endIndex;
+
+  private int m_increment;
 
   private int m_maxLoop;
 
@@ -67,38 +70,75 @@ public class ForLoop
     m_typeVar = a_typeVar;
     m_maxLoop = a_maxLoop;
     m_startIndex = a_startIndex;
+    m_endIndex = -1;
+    m_increment = 1;
+  }
+
+  /**
+   * Constructor allowing to preset the starting and the ending index of the
+   * loop.
+   *
+   * @param a_conf the configuration to use
+   * @param a_typeVar Class of the loop counter terminakl (e.g. IntegerClass)
+   * @param a_startIndex index to start the loop with
+   * @param a_endIndex index to end the loop with
+   * @param a_increment the maximum number of loops to perform
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public ForLoop(final GPConfiguration a_conf, Class a_typeVar,
+                 int a_startIndex, int a_endIndex, int a_increment)
+      throws InvalidConfigurationException {
+    super(a_conf, 1, CommandGene.VoidClass);
+    m_typeVar = a_typeVar;
+    m_increment = a_increment;
+    m_startIndex = a_startIndex;
+    m_endIndex = a_endIndex;
   }
 
   public String toString() {
-    return "for(int i=" + m_startIndex + ";i<&1;i++) { &2 }";
+    if (m_endIndex != -1) {
+      return "for(int i=" + m_startIndex + ";i<&1;i++) { &2 }";
+    }
+    else {
+      return "for(int i=" + m_startIndex + ";i<" + m_endIndex + ";i=i+" +
+          m_increment + ") { &1 }";
+    }
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     // Determine the end index of the loop (child at index 0).
     // -------------------------------------------------------
     int x;
-    if (m_typeVar == CommandGene.IntegerClass) {
-      x = c.execute_int(n, 0, args);
-    }
-    else if (m_typeVar == CommandGene.LongClass) {
-      x = (int) c.execute_long(n, 0, args);
-    }
-    else if (m_typeVar == CommandGene.DoubleClass) {
-      x = (int) Math.round(c.execute_double(n, 0, args));
-    }
-    else if (m_typeVar == CommandGene.FloatClass) {
-      x = (int) Math.round(c.execute_float(n, 0, args));
+    if (m_endIndex != -1) {
+      if (m_typeVar == CommandGene.IntegerClass) {
+        x = c.execute_int(n, 0, args);
+      }
+      else if (m_typeVar == CommandGene.LongClass) {
+        x = (int) c.execute_long(n, 0, args);
+      }
+      else if (m_typeVar == CommandGene.DoubleClass) {
+        x = (int) Math.round(c.execute_double(n, 0, args));
+      }
+      else if (m_typeVar == CommandGene.FloatClass) {
+        x = (int) Math.round(c.execute_float(n, 0, args));
+      }
+      else {
+        throw new RuntimeException("Type " + m_typeVar +
+                                   " not supported by ForLoop");
+      }
+      if (x > m_maxLoop) {
+        x = m_maxLoop;
+      }
     }
     else {
-      throw new RuntimeException("Type " + m_typeVar +
-                                 " not supported by ForLoop");
-    }
-    if (x > m_maxLoop) {
-      x = m_maxLoop;
+      x = m_endIndex;
     }
     // Repeatedly execute the second child (index = 1).
     // ------------------------------------------------
-    for (int i = m_startIndex; i < x; i++) {
+    for (int i = m_startIndex; i < x; i = i + m_increment) {
       c.execute_void(n, 1, args);
     }
   }
