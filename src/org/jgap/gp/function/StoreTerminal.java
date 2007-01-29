@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class StoreTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -128,6 +128,16 @@ public class StoreTerminal
         0;
   }
 
+  /**
+   * Determines which type a specific child of this command has.
+   *
+   * @param a_ind ignored here
+   * @param a_chromNum index of child
+   * @return type of the a_chromNum'th child
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return m_type;
   }
