@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class TransferMemory
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -44,7 +44,11 @@ public class TransferMemory
     }
     if (a_targetStorageName == null || a_targetStorageName.length() < 1) {
       throw new IllegalArgumentException(
-          "Source memory name must not be empty!");
+          "Target memory name must not be empty!");
+    }
+    if (a_sourceStorageName.equals(a_targetStorageName)) {
+      throw new IllegalArgumentException(
+          "Source and target memory name must be different!");
     }
     m_sourceStorageName = a_sourceStorageName;
     m_targetStorageName = a_targetStorageName;
