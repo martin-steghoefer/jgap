@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -78,6 +78,11 @@ public class GPConfiguration
    * The maximum depth of an individual when the world is created.
    */
   private int m_maxInitDepth = 7;
+
+  /**
+   * The minimum depth of an individual when the world is created.
+   */
+  private int m_minInitDepth = 3;
 
   /**
    * The method of choosing an individual to perform an evolution operation on.
@@ -137,9 +142,15 @@ public class GPConfiguration
   public GPConfiguration()
       throws InvalidConfigurationException {
     super();
-    m_crossMethod = new BranchTypingCross(this);
-    m_selectionMethod = new FitnessProportionateSelection();
     init();
+    m_selectionMethod = new FitnessProportionateSelection();
+  }
+
+  public GPConfiguration(String a_id, String a_name)
+      throws InvalidConfigurationException {
+    super(a_id, a_name);
+    init();
+    m_selectionMethod = new FitnessProportionateSelection();
   }
 
   /**
@@ -165,6 +176,7 @@ public class GPConfiguration
    */
   protected void init()
       throws InvalidConfigurationException {
+    m_crossMethod = new BranchTypingCross(this);
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
     setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
@@ -182,8 +194,8 @@ public class GPConfiguration
   public GPConfiguration(INaturalGPSelector a_selectionMethod)
       throws InvalidConfigurationException {
     super();
-    m_selectionMethod = a_selectionMethod;
     init();
+    m_selectionMethod = a_selectionMethod;
   }
 
   /**
@@ -300,6 +312,14 @@ public class GPConfiguration
     m_maxInitDepth = a_maxDepth;
   }
 
+  public int getMinInitDepth() {
+    return m_minInitDepth;
+  }
+
+  public void setMinInitDepth(int a_minDepth) {
+    m_minInitDepth = a_minDepth;
+  }
+
   public void pushToStack(Object a_value) {
     m_stack.push(a_value);
   }
@@ -331,6 +351,35 @@ public class GPConfiguration
    */
   public void storeInMemory(String a_name, Object a_value) {
     m_memory.set(a_name, a_value, -1);
+  }
+
+  /**
+   * Stores a value in the internal matrix memory.
+   *
+   * @param a_x the first coordinate of the matrix (width)
+   * @param a_y the second coordinate of the matrix (height)
+   * @param a_value the value to store
+   * @return created or used memory cell
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CultureMemoryCell storeMatrixMemory(int a_x, int a_y, Object a_value) {
+    return m_memory.setMatrix(a_x, a_y, a_value);
+  }
+
+  /**
+   * Reads a value from the internal matrix memory.
+   *
+   * @param a_x the first coordinate of the matrix (width)
+   * @param a_y the second coordinate of the matrix (height)
+   * @return read value
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object readMatrixMemory(int a_x, int a_y) {
+    return m_memory.getMatrix(a_x, a_y).getCurrentValue();
   }
 
   /**
@@ -430,7 +479,7 @@ public class GPConfiguration
    * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
    * @param a_num the chromosome's index in the individual of this chromosome
-   * @param a_recursLevel level of recursion
+   * @param a_recurseLevel level of recursion
    * @param a_type the return type of the node needed
    * @param a_functionSet the array of available functions
    * @param a_depth the needed depth of the program chromosome
@@ -441,15 +490,14 @@ public class GPConfiguration
    * @since 3.0
    */
   public boolean validateNode(ProgramChromosome a_chrom, CommandGene a_node,
-                              int a_tries, int a_num, int a_recursLevel,
-                              Class a_type,
-                              CommandGene[] a_functionSet, int a_depth,
-                              boolean a_grow) {
+                              int a_tries, int a_num, int a_recurseLevel,
+                              Class a_type, CommandGene[] a_functionSet,
+                              int a_depth, boolean a_grow) {
     if (m_nodeValidator == null) {
       return true;
     }
     return m_nodeValidator.validate(a_chrom, a_node, a_tries, a_num,
-                                    a_recursLevel, a_type, a_functionSet,
+                                    a_recurseLevel, a_type, a_functionSet,
                                     a_depth, a_grow);
   }
 
@@ -555,3 +603,4 @@ public class GPConfiguration
     return m_prototypeProgram;
   }
 }
+/**@todo introduce lock*/
