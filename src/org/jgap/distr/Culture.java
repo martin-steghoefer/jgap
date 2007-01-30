@@ -24,7 +24,7 @@ import org.apache.commons.lang.builder.*;
 public class Culture
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The storage to use.
@@ -42,7 +42,15 @@ public class Culture
   private int m_size;
 
   /**
+   * Width of a matrixed memory (optional, but necessary to set if you want
+   * to treat the memory as a matrix).
+   */
+  private int m_width;
+
+
+  /**
    * Constructor.
+   *
    * @param a_size the size of the memory in cells (CultureMemoryCell instances)
    *
    * @author Klaus Meffert
@@ -54,11 +62,13 @@ public class Culture
     }
     m_size = a_size;
     m_memory = new CultureMemoryCell[m_size];
+    m_width = 1;
   }
 
   /**
    * Sets a memory cell with a given value. The memory cell will be newly
    * created for that.
+   *
    * @param a_index index of the memory cell
    * @param a_value value to set in the memory
    * @param a_historySize size of history to use, or less than 1 for turning
@@ -83,6 +93,7 @@ public class Culture
   /**
    * Sets a memory cell with a given value. The memory cell will be newly
    * created for that.
+   *
    * @param a_index index of the memory cell
    * @param a_value value to set in the memory
    * @param a_historySize size of history to use, or less than 1 for turning
@@ -107,6 +118,7 @@ public class Culture
   /**
    * Sets a memory cell with a given value. The memory cell will be newly
    * created for that.
+   *
    * @param a_name named index of the memory cell
    * @param a_value value to set in the memory
    * @param a_historySize size of history to use, or less than 1 for turning
@@ -136,6 +148,7 @@ public class Culture
 
   /**
    * Retrieves the memory cell at the given index.
+   *
    * @param a_index index of the memory cell to read out
    * @return stored memory cell at given index
    *
@@ -151,6 +164,7 @@ public class Culture
 
   /**
    * Retrieves the memory cell at the given index.
+   *
    * @param a_name name of the memory cell to read out
    * @return stored memory cell for given name, or null if name unknown
    *
@@ -245,6 +259,7 @@ public class Culture
 
   /**
    * The compareTo-method.
+   *
    * @param a_other the other object to compare
    * @return -1, 0, 1
    *
@@ -263,5 +278,63 @@ public class Culture
         .append(m_memory, other.m_memory)
         .append(m_memoryNames.toArray(), other.m_memoryNames.toArray())
         .toComparison();
+  }
+
+  /**
+   * Sets the width of the matrix memory. Important to call before using
+   * setMatrix/getMatrix!
+   *
+   * @param a_width the width the matrix should have
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setMatrixWidth(int a_width) {
+    int size = size();
+    if (a_width > size) {
+      throw new IllegalArgumentException("Width must not be greater than the"
+          + " size of the memory ("
+          + size
+          + ") !");
+    }
+    m_width = a_width;
+  }
+
+  /**
+   * Stores a value in the matrix memory. Use setMatrixWidth(int) beforehand!
+   *
+   * @param a_x the first coordinate of the matrix (width)
+   * @param a_y the second coordinate of the matrix (height)
+   * @param a_value the value to store
+   * @return created or used memory cell
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CultureMemoryCell setMatrix(int a_x, int a_y, Object  a_value) {
+    int index = a_x * m_width + a_y;
+    CultureMemoryCell cell = m_memory[index];
+    if (cell == null) {
+      cell = new CultureMemoryCell(a_x+"_"+a_y, -1);
+    }
+    cell.setValue(a_value);
+    m_memory[index] = cell;
+    return cell;
+  }
+
+  /**
+   * Reads a value from the matrix memory that was previously stored with
+   * setMatrix(...).
+   *
+   * @param a_x the first coordinate of the matrix (width)
+   * @param a_y the second coordinate of the matrix (height)
+   * @return read value
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CultureMemoryCell getMatrix(int a_x, int a_y) {
+    int index = a_x * m_width + a_y;
+    return get(index);
   }
 }
