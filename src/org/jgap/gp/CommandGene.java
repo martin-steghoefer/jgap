@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -185,6 +185,7 @@ public abstract class CommandGene
     }
     else {
       try {
+        /**@todo return type, input type*/
         CommandGene other = (CommandGene) a_other;
         if (getClass() == a_other.getClass()) {
           if (getInternalValue() == null) {
@@ -235,18 +236,24 @@ public abstract class CommandGene
    * @since 3.0
    */
   public Object execute(ProgramChromosome c, int n, Object[] args) {
-    if (m_returnType == BooleanClass)
+    if (m_returnType == BooleanClass) {
       return new Boolean(execute_boolean(c, n, args));
-    if (m_returnType == IntegerClass)
+    }
+    if (m_returnType == IntegerClass) {
       return new Integer(execute_int(c, n, args));
-    if (m_returnType == LongClass)
+    }
+    if (m_returnType == LongClass) {
       return new Long(execute_long(c, n, args));
-    if (m_returnType == FloatClass)
+    }
+    if (m_returnType == FloatClass) {
       return new Float(execute_float(c, n, args));
-    if (m_returnType == DoubleClass)
+    }
+    if (m_returnType == DoubleClass) {
       return new Double(execute_double(c, n, args));
-    if (m_returnType == VoidClass)
+    }
+    if (m_returnType == VoidClass) {
       execute_void(c, n, args);
+    }
     else {
       return execute_object(c, n, args);
     }
@@ -398,7 +405,7 @@ public abstract class CommandGene
   }
 
   /**
-   * Gets the type of node allowed form the given child number. Must be
+   * Gets the type of node allowed from the given child number. Must be
    * overridden in subclasses.
    *
    * @param a_ind the individual the child belongs to
