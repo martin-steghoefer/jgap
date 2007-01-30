@@ -23,7 +23,9 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
+
+  private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
   private Class m_typeVar;
 
@@ -34,6 +36,10 @@ public class ForLoop
   private int m_increment;
 
   private int m_maxLoop;
+
+  private String m_memory_name_int;
+
+  private String m_varName;
 
   /**
    * Constructor.
@@ -66,12 +72,20 @@ public class ForLoop
   public ForLoop(final GPConfiguration a_conf, Class a_typeVar,
                  int a_startIndex, int a_maxLoop)
       throws InvalidConfigurationException {
+    this(a_conf, a_typeVar, a_startIndex, a_maxLoop, "i");
+  }
+
+  public ForLoop(final GPConfiguration a_conf, Class a_typeVar,
+                 int a_startIndex, int a_maxLoop, String a_varName)
+      throws InvalidConfigurationException {
     super(a_conf, 2, CommandGene.VoidClass);
     m_typeVar = a_typeVar;
     m_maxLoop = a_maxLoop;
     m_startIndex = a_startIndex;
     m_endIndex = -1;
     m_increment = 1;
+    m_varName = a_varName;
+    init();
   }
 
   /**
@@ -83,29 +97,60 @@ public class ForLoop
    * @param a_startIndex index to start the loop with
    * @param a_endIndex index to end the loop with
    * @param a_increment the maximum number of loops to perform
+   * @param a_varName informal textual name of the loop counter variable
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.2
    */
   public ForLoop(final GPConfiguration a_conf, Class a_typeVar,
-                 int a_startIndex, int a_endIndex, int a_increment)
+                 int a_startIndex, int a_endIndex, int a_increment,
+                 String a_varName)
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass);
     m_typeVar = a_typeVar;
     m_increment = a_increment;
     m_startIndex = a_startIndex;
     m_endIndex = a_endIndex;
+    m_varName = a_varName;
+    init();
+  }
+
+  protected void init() {
+    super.init();
+    // Generate unique name.
+    // ---------------------
+    m_memory_name_int = INTERNAL_COUNTER_STORAGE;
+    m_memory_name_int += m_varName;
+    m_memory_name_int += getGPConfiguration().getRandomGenerator().nextDouble();
   }
 
   public String toString() {
-    if (m_endIndex != -1) {
+    if (m_endIndex == -1) {
       return "for(int i=" + m_startIndex + ";i<&1;i++) { &2 }";
     }
     else {
-      return "for(int i=" + m_startIndex + ";i<" + m_endIndex + ";i=i+" +
-          m_increment + ") { &1 }";
+      String incrString;
+      if (m_increment == 1) {
+        incrString = m_varName + "++";
+      }
+      else {
+        incrString = m_varName + "=" + m_varName + "+1";
+      }
+      return "for(int " + m_varName + "=" + m_startIndex + ";" + m_varName +
+          "<" + m_endIndex + ";" +
+          incrString + ") { &1 }";
     }
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "ForLoop";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
@@ -143,6 +188,10 @@ public class ForLoop
       // Repeatedly execute the first child (index = 0).
       // -----------------------------------------------
       for (int i = m_startIndex; i < m_endIndex; i = i + m_increment) {
+        // Store counter in memory.
+        // ------------------------
+        getGPConfiguration().storeInMemory(ForLoop.INTERNAL_COUNTER_STORAGE,
+            new Integer(i));
         c.execute_void(n, 0, args);
       }
     }
@@ -153,14 +202,21 @@ public class ForLoop
   }
 
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
-    if (a_chromNum == 0) {
-      // Loop counter variable.
-      // ----------------------
-      return m_typeVar;
+    if (m_endIndex == -1) {
+      // Variant A: dynamic end index
+      if (a_chromNum == 0) {
+        // Loop counter variable.
+        // ----------------------
+        return m_typeVar;
+      }
+      else {
+        // Subprogram.
+        // -----------
+        return CommandGene.VoidClass;
+      }
     }
     else {
-      // Subprogram.
-      // -----------
+      // Variant B: fixed end index
       return CommandGene.VoidClass;
     }
   }
@@ -211,5 +267,16 @@ public class ForLoop
         return false;
       }
     }
+  }
+
+  /**
+   * @return Name of the memory cell where the current value of the loop
+   * variable is stored
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getCounterMemoryName() {
+    return m_memory_name_int;
   }
 }
