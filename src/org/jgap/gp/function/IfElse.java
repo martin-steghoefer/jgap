@@ -22,15 +22,28 @@ import org.jgap.gp.impl.*;
 public class IfElse
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public IfElse(final GPConfiguration a_conf, Class type)
+  private Class m_type;
+
+  public IfElse(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 3, type);
+    super(a_conf, 3, CommandGene.VoidClass);
+    m_type = a_type;
   }
 
   public String toString() {
     return "if(&1) then (&2) else(&3)";
+  }
+
+  /**
+   * @return textual name of this command
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public String getName() {
+    return "IfElse";
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -79,5 +92,48 @@ public class IfElse
       value = c.execute_double(n, 2, args);
     }
     return value;
+  }
+
+  public void execute_void(ProgramChromosome c, int n, Object[] args) {
+    check(c);
+    boolean condition;
+    if (m_type == CommandGene.IntegerClass) {
+      condition = c.execute_int(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.LongClass) {
+      condition = c.execute_long(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.DoubleClass) {
+      condition = c.execute_double(n, 0, args) > 0;
+    }
+    else if (m_type == CommandGene.FloatClass) {
+      condition = c.execute_float(n, 0, args) > 0;
+    }
+    else {
+      throw new IllegalStateException("IfElse: cannot process Object");
+    }
+    if (condition) {
+      c.execute_void(n, 1, args);
+    }
+    else {
+      c.execute_void(n, 2, args);
+    }
+  }
+
+  /**
+   * Determines which type a specific child of this command has.
+   *
+   * @param a_ind ignored here
+   * @param a_chromNum index of child
+   * @return type of the a_chromNum'th child
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    if (a_chromNum == 0) {
+      return m_type;
+    }
+    return CommandGene.VoidClass;
   }
 }
