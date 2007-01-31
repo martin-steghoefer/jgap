@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -55,6 +55,7 @@ public class BranchTypingCross
         sizes[i] = i1.getChromosome(i).getSize(0);
         totalSize += sizes[i];
       }
+      /**@todo we could also select a chromosome directly!*/
       int nodeNum = getConfiguration().getRandomGenerator().nextInt(
           totalSize);
       // Select the chromosome in which node "nodeNum" resides.
