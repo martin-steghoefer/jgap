@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -59,7 +59,7 @@ public class ProgramChromosomeTest
     };
     rn.setNextIntSequence(new int[] {1, 4, 2, 5});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_V_I,
-                      0, true);
+                      0, true, -1, false);
     pc.redepth();
     assertSame(CMD_SUB_V_I, pc.getNode(0));
     assertSame(CMD_FOR, pc.getNode(1));
@@ -91,7 +91,7 @@ public class ProgramChromosomeTest
     };
     rn.setNextIntSequence(new int[] {1, 2, 6, 2, 2, 5});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_V_I,
-                      0, true);
+                      0, true, -1, false);
     pc.redepth();
     assertSame(CMD_SUB_V_I, pc.getNode(0));
     assertSame(CMD_FOR, pc.getNode(1));
@@ -124,7 +124,8 @@ public class ProgramChromosomeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
     rn.setNextIntSequence(new int[] {0, 5, 8, 9, 6, 7});
-    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FORX, 0, true);
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FORX, 0, true,
+                      -1, false);
     pc.redepth();
     assertSame(CMD_FORX, pc.getNode(0));
     assertSame(CMD_SUB_V_V_V, pc.getNode(1));
@@ -159,7 +160,8 @@ public class ProgramChromosomeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
     rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 6, 7});
-    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FOR, 0, true);
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FOR, 0, true,
+                      -1, false);
     pc.redepth();
     assertEquals(3, pc.getDepth(0));
     assertSame(CMD_FOR, pc.getNode(0));

@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPProgramTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPProgramTest.class);
@@ -75,7 +75,8 @@ public class GPProgramTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
     rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 7, 6});
-    pc2.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet2, CMD_FOR, 0, true);
+    pc2.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet2, CMD_FOR, 0, true,
+                       -1, false);
     pc2.redepth();
     prog.setChromosome(1, pc2);
     ProgramChromosome pc3 = new ProgramChromosome(m_gpconf, 50, prog);
