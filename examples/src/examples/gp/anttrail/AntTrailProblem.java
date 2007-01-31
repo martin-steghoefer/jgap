@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private int[][] m_map;
 
@@ -334,8 +334,6 @@ public class AntTrailProblem
       extends GPFitnessFunction {
     private static final int VALUE1 = 100;
 
-    private boolean messagePrinted;
-
     protected double evaluate(final IGPProgram a_subject) {
       return computeRawFitness(a_subject);
     }
@@ -369,16 +367,8 @@ public class AntTrailProblem
         else if (error < GPFitnessFunction.MAX_FITNESS_VALUE) {
           // Add penalty for longer trails.
           // ------------------------------
-          if (foodTaken > totalFood * 0.4) {
-            if (!messagePrinted) {
-              System.out.println("\nNow penalting longer trails\n");
-              messagePrinted = true;
-            }
-            // Only add penalty in case a significant amount of food is taken.
-            // ---------------------------------------------------------------
-            int moves = antmap.getMoveCount();
-            error = error + moves * 2;
-          }
+          int moves = antmap.getMoveCount();
+          error = error + moves * 1.5;
         }
       } catch (IllegalStateException iex) {
         error = GPFitnessFunction.MAX_FITNESS_VALUE;
