@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class StoreTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -77,7 +77,7 @@ public class StoreTerminal
    * @since 3.2
    */
   public String getName() {
-    return "Store Terminal";
+    return "Store Terminal("+m_storageName+")";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
