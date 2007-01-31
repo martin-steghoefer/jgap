@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
  */
 public interface INodeValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Validates a_node in the context of a_chrom. Considers the recursion level
@@ -37,6 +37,7 @@ public interface INodeValidator {
    *
    * @param a_chrom the chromosome that will contain the node, if valid
    * @param a_node the node selected and to be validated
+   * @param a_rootNode the root node of a_node, may be null for top nodes
    * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
    * @param a_num the chromosome's index in the individual of this chromosome
@@ -50,7 +51,8 @@ public interface INodeValidator {
    * @author Klaus Meffert
    * @since 3.0
    */
-  boolean validate(ProgramChromosome a_chrom, CommandGene a_node, int a_tries,
+  boolean validate(ProgramChromosome a_chrom, CommandGene a_node,
+                   CommandGene a_rootNode, int a_tries,
                    int a_num, int a_recursLevel, Class a_type,
                    CommandGene[] a_functionSet, int a_depth,
                    boolean a_grow);
