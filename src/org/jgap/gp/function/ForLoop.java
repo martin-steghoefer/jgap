@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -107,7 +107,15 @@ public class ForLoop
                  int a_startIndex, int a_endIndex, int a_increment,
                  String a_varName)
       throws InvalidConfigurationException {
-    super(a_conf, 1, CommandGene.VoidClass);
+    this(a_conf, a_typeVar, a_startIndex, a_endIndex, a_increment, a_varName, 0,
+         0);
+  }
+
+  public ForLoop(final GPConfiguration a_conf, Class a_typeVar,
+                 int a_startIndex, int a_endIndex, int a_increment,
+                 String a_varName, int a_subReturnType, int a_subChildType)
+      throws InvalidConfigurationException {
+    super(a_conf, 1, CommandGene.VoidClass, a_subReturnType, a_subChildType);
     m_typeVar = a_typeVar;
     m_increment = a_increment;
     m_startIndex = a_startIndex;

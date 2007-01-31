@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class Loop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_typeVar;
 
@@ -43,7 +43,13 @@ public class Loop
    */
   public Loop(final GPConfiguration a_conf, Class a_typeVar, int a_count)
       throws InvalidConfigurationException {
-    super(a_conf, 1, CommandGene.VoidClass);
+    this(a_conf, a_typeVar, a_count, 0, 0);
+  }
+
+  public Loop(final GPConfiguration a_conf, Class a_typeVar, int a_count,
+              int a_subReturnType, int a_subChildType)
+      throws InvalidConfigurationException {
+    super(a_conf, 1, CommandGene.VoidClass, a_subReturnType, a_subChildType);
     m_typeVar = a_typeVar;
     m_count = a_count;
   }

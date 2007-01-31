@@ -22,13 +22,19 @@ import org.jgap.gp.impl.*;
 public class IfElse
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Class m_type;
 
   public IfElse(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 3, CommandGene.VoidClass);
+    this(a_conf, a_type, 0, null);
+  }
+
+  public IfElse(final GPConfiguration a_conf, Class a_type, int a_subReturnType,
+                int[] a_subChildTypes)
+      throws InvalidConfigurationException {
+    super(a_conf, 3, CommandGene.VoidClass, a_subReturnType, a_subChildTypes);
     m_type = a_type;
   }
 

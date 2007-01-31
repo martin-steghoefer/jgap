@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class StoreTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -35,10 +35,31 @@ public class StoreTerminal
   private Class m_type;
 
   public StoreTerminal(final GPConfiguration a_conf, String a_storageName,
-                       Class a_type)
+                       Class a_childType)
       throws InvalidConfigurationException {
-    super(a_conf, 1, CommandGene.VoidClass);
-    m_type = a_type;
+    this(a_conf, a_storageName, a_childType, 0, 0);
+  }
+
+  /**
+   * Allows setting a sub type and sub return type.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_storageName String
+   * @param a_childType Class
+   * @param a_subChildType int
+   * @param a_subReturnType int
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public StoreTerminal(final GPConfiguration a_conf, String a_storageName,
+                       Class a_childType, int a_subReturnType, int a_subChildType
+                       )
+      throws InvalidConfigurationException {
+    super(a_conf, 1, CommandGene.VoidClass, a_subReturnType,
+          new int[] {a_subChildType});
+    m_type = a_childType;
     if (a_storageName == null || a_storageName.length() < 1) {
       throw new IllegalArgumentException("Memory name must not be empty!");
     }
@@ -46,7 +67,7 @@ public class StoreTerminal
   }
 
   public String toString() {
-    return "store_in(" + m_storageName + ", &1)";
+    return "store(" + m_storageName + ", &1)";
   }
 
   /**

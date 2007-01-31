@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ReadTerminal
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -32,10 +32,16 @@ public class ReadTerminal
    */
   private String m_storageName;
 
-  public ReadTerminal(final GPConfiguration a_conf, Class type,
+  public ReadTerminal(final GPConfiguration a_conf, Class a_type,
                       String a_storageName)
       throws InvalidConfigurationException {
-    super(a_conf, 0, type);
+    this(a_conf, a_type, a_storageName, 0);
+  }
+
+  public ReadTerminal(final GPConfiguration a_conf, Class a_type,
+                      String a_storageName, int a_subReturnType)
+      throws InvalidConfigurationException {
+    super(a_conf, 0, a_type, a_subReturnType, null);
     if (a_storageName == null || a_storageName.length() < 1) {
       throw new IllegalArgumentException("Memory name must not be empty!");
     }

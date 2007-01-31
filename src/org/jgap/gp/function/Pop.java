@@ -22,11 +22,16 @@ import org.jgap.gp.impl.*;
 public class Pop
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public Pop(final GPConfiguration a_conf, Class type)
+  public Pop(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 0, type);
+    this(a_conf, a_type, 0);
+  }
+
+  public Pop(final GPConfiguration a_conf, Class a_type, int a_subReturnType)
+      throws InvalidConfigurationException {
+    super(a_conf, 0, a_type, a_subReturnType, null);
   }
 
   public String toString() {

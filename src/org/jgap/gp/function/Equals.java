@@ -22,13 +22,19 @@ import org.jgap.gp.impl.*;
 public class Equals
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private Class m_type;
 
   public Equals(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 2, CommandGene.BooleanClass);
+    this(a_conf, a_type, 0, null);
+  }
+
+  public Equals(final GPConfiguration a_conf, Class a_type, int a_subReturnType,
+                int[] a_subChildTypes)
+      throws InvalidConfigurationException {
+    super(a_conf, 2, CommandGene.BooleanClass, a_subReturnType, a_subChildTypes);
     m_type = a_type;
   }
 

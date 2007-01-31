@@ -24,13 +24,19 @@ import org.jgap.gp.impl.*;
 public class Push
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private Class m_type;
 
   public Push(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, CommandGene.VoidClass);
+    this(a_conf, a_type, 0, 0);
+  }
+
+  public Push(final GPConfiguration a_conf, Class a_type, int a_subReturnType,
+              int a_subChildType)
+      throws InvalidConfigurationException {
+    super(a_conf, 1, CommandGene.VoidClass, a_subReturnType, a_subChildType);
     m_type = a_type;
   }
 

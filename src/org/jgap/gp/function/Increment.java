@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class Increment
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   private int m_increment;
 
@@ -57,7 +57,13 @@ public class Increment
    */
   public Increment(final GPConfiguration a_conf, Class a_type, int a_increment)
       throws InvalidConfigurationException {
-    super(a_conf, 1, a_type);
+    this(a_conf, a_type, a_increment, 0, 0);
+  }
+
+  public Increment(final GPConfiguration a_conf, Class a_type, int a_increment,
+                   int a_subReturnType, int a_subChildType)
+      throws InvalidConfigurationException {
+    super(a_conf, 1, a_type, a_subReturnType, a_subChildType);
     m_increment = a_increment;
   }
 
