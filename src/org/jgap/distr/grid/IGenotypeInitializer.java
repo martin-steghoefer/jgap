@@ -21,7 +21,8 @@ import java.io.*;
 public interface IGenotypeInitializer
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop);
+  Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop)
+      throws Exception;
 }
