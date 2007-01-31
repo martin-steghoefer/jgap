@@ -9,10 +9,7 @@
  */
 package examples.grid.fitnessDistributed;
 
-import org.apache.commons.cli.*;
 import org.homedns.dade.jcgrid.*;
-import org.homedns.dade.jcgrid.cmd.*;
-import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.*;
 import org.jgap.distr.grid.*;
 
@@ -25,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class MyGAWorker
     extends JGAPWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -55,32 +52,12 @@ public class MyGAWorker
     // ------------------------------------------------------------------
     JGAPRequest req = ( (JGAPRequest) work);
     IChromosome chrom = req.getPopulation().getChromosome(0);
+    // Do the actual fitness computation here.
+    // ---------------------------------------
     chrom.getFitnessValue();
     Population pop = new Population(req.getConfiguration(), chrom);
     MyResult result = new MyResult(req.getSessionName(), req.getRID(), pop, 1);
     return result;
   }
 
-  /**
-   * Convenience method to start the worker.
-   *
-   * @param args String[]
-   * @throws Exception
-   *
-   * @author Klaus Meffert
-   * @since 3.01
-   */
-  public static void main(String[] args)
-      throws Exception {
-    MainCmd.setUpLog4J("worker", true);
-    GridNodeWorkerConfig config = new GridNodeWorkerConfig();
-    Options options = new Options();
-    CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
-    if (config.getSessionName().equals("none")) {
-      config.setSessionName("MyGAWorker_session");
-    }
-    // Start worker.
-    // -------------
-    new JGAPWorkers(config, MyGAWorker.class, MyWorkerFeedback.class);
-  }
 }
