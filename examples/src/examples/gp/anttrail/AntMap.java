@@ -9,18 +9,16 @@
  */
 package examples.gp.anttrail;
 
-import org.jgap.gp.*;
-import org.jgap.gp.impl.*;
-
 /**
- * Holds the map of the ant trail.
+ * Holds the map of the ant trail. Important: Clone intentionally not supported
+ * here!
  *
  * @author Klaus Meffert
  * @since 3.01
  */
 public class AntMap {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   // map point descriptions
   public static final int ERROR = 0;
@@ -205,4 +203,5 @@ public class AntMap {
   public int getHeight() {
     return m_sizey;
   }
+
 }
