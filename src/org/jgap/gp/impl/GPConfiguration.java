@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -531,6 +531,9 @@ public class GPConfiguration
    * @param a_functionSet the array of available functions
    * @param a_depth the needed depth of the program chromosome
    * @param a_grow true: use grow mode, false: use full mode
+   * @param a_childIndex index of the child in the parent node to which it
+   * belongs (-1 if node is root node)
+   *
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
@@ -540,13 +543,13 @@ public class GPConfiguration
                               CommandGene a_rootNode, int a_tries, int a_num,
                               int a_recurseLevel, Class a_type,
                               CommandGene[] a_functionSet, int a_depth,
-                              boolean a_grow) {
+                              boolean a_grow, int a_childIndex) {
     if (m_nodeValidator == null) {
       return true;
     }
     return m_nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
                                     a_recurseLevel, a_type, a_functionSet,
-                                    a_depth, a_grow);
+                                    a_depth, a_grow, a_childIndex);
   }
 
   /**
