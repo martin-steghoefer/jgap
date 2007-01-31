@@ -1,3 +1,10 @@
+Notice from JGAP:
+
+The JCGrid library has been modified and is not in its original state
+(i.e. downloadable state).
+
+------------
+
 		  GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999
 
