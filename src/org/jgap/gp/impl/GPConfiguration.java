@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -141,16 +141,14 @@ public class GPConfiguration
    */
   public GPConfiguration()
       throws InvalidConfigurationException {
-    super();
-    init();
-    m_selectionMethod = new FitnessProportionateSelection();
+    this("", null);
   }
 
   public GPConfiguration(String a_id, String a_name)
       throws InvalidConfigurationException {
     super(a_id, a_name);
     init();
-    m_selectionMethod = new FitnessProportionateSelection();
+    m_selectionMethod = new TournamentSelector(5);// FitnessProportionateSelection();
   }
 
   /**
@@ -396,6 +394,21 @@ public class GPConfiguration
   }
 
   /**
+   * @param a_name the cell to evaluate
+   * @return the value of a memory cell, if it exsists. Otherwise returns null.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object readFromMemoryIfExists(String a_name) {
+    CultureMemoryCell cell = m_memory.get(a_name);
+    if (cell == null) {
+      return null;
+    }
+    return cell.getCurrentValue();
+  }
+
+  /**
    * Clears the memory.
    *
    * @author Klaus Meffert
@@ -490,13 +503,14 @@ public class GPConfiguration
    * @since 3.0
    */
   public boolean validateNode(ProgramChromosome a_chrom, CommandGene a_node,
+                              CommandGene a_rootNode,
                               int a_tries, int a_num, int a_recurseLevel,
                               Class a_type, CommandGene[] a_functionSet,
                               int a_depth, boolean a_grow) {
     if (m_nodeValidator == null) {
       return true;
     }
-    return m_nodeValidator.validate(a_chrom, a_node, a_tries, a_num,
+    return m_nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
                                     a_recurseLevel, a_type, a_functionSet,
                                     a_depth, a_grow);
   }
