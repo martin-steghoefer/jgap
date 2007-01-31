@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
  */
 public interface INodeValidator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Validates a_node in the context of a_chrom. Considers the recursion level
@@ -46,6 +46,8 @@ public interface INodeValidator {
    * @param a_functionSet the array of available functions
    * @param a_depth the needed depth of the program chromosome
    * @param a_grow true: use grow mode, false: use full mode
+   * @param a_childIndex index of the child in the parent node to which it
+   * belongs (-1 if node is root node)
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
@@ -55,5 +57,5 @@ public interface INodeValidator {
                    CommandGene a_rootNode, int a_tries,
                    int a_num, int a_recursLevel, Class a_type,
                    CommandGene[] a_functionSet, int a_depth,
-                   boolean a_grow);
+                   boolean a_grow, int a_childIndex);
 }
