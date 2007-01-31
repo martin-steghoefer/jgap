@@ -12,10 +12,11 @@ package org.jgap.util;
 import java.io.*;
 import java.util.jar.*;
 import java.net.*;
+import java.util.*;
 
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -154,12 +155,21 @@ public class FileKit {
   }
 
   public static String getConformPath(String path) {
-    if (fileseparator.equals("/")) {
-      return removeDoubleSeparators(path.replace('\\', '/'));
+    return getConformPath(path,fileseparator);
+  }
+
+  public static String getConformPath(String path, String a_fileseparator) {
+    String result = path;
+    if (a_fileseparator.equals("/")) {
+      result = removeDoubleSeparators(path.replace('\\', '/'));
     }
     else {
-      return removeDoubleSeparators(path.replace('/', '\\'));
+      result = removeDoubleSeparators(path.replace('/', '\\'));
     }
+    if (!result.endsWith(a_fileseparator)) {
+       result += a_fileseparator;
+    }
+    return result;
   }
 
   /**
@@ -248,7 +258,7 @@ public class FileKit {
    * Loads a jar file and returns a class loader to access the jar's classes.
    *
    * @param a_filename the full jar file name, e.g.:
-   *      C:/jgap/lib/ext/ashcroft.jar!/
+   *      C:/jgap/lib/ext/ashcroft.jar
    * @return ClassLoader the class loader with which to access the loaded
    * classes, e.g. by <classloader>.loadClass(<classname including package>),
    * e.g.: cl.loadClass("com.thoughtworks.ashcroft.runtime.JohnAshcroft");
@@ -259,8 +269,8 @@ public class FileKit {
    */
   public static ClassLoader loadJar(String a_filename)
       throws Exception {
-    URL url = new URL("jar:file:" + a_filename);
-    JarClassLoader cl = new JarClassLoader(url);
+//    URL url = new URL("jar:file:" + a_filename);
+    JarClassLoader cl = new JarClassLoader(a_filename);
     return cl;
   }
 
@@ -362,11 +372,56 @@ public class FileKit {
    * @since 3.2
    */
   public static String toJarFileName(String a_filename) {
-    String result = a_filename.replace('\\','/');
+    String result = a_filename.replace('\\', '/');
 //    if (!result.endsWith("!/")) {
 //      result += "!/";
 //    }
     return result;
   }
-}
 
+  /**
+   * Creates a directory, and if necessary, any of its parent directories.
+   *
+   * @param a_dirname name of the dir to create
+   * @throws IOException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static void createDirectory(String a_dirname)
+      throws IOException {
+    File file = new File(a_dirname);
+    if (file.exists()) {
+      return;
+    }
+    if (!file.mkdirs()) {
+      throw new IOException("Directory " + a_dirname +
+                            " could not be created!");
+    }
+  }
+
+  /**
+   * Reads a text file.
+   *
+   * @param a_filename name of text file
+   * @return list of read text lines
+   * @throws IOException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static Vector readFile(String a_filename)
+      throws IOException {
+
+      Vector v = new Vector();
+      String thisLine;
+      FileInputStream fin = new FileInputStream(a_filename);
+      BufferedReader myInput = new BufferedReader
+          (new InputStreamReader(fin));
+      while ( (thisLine = myInput.readLine()) != null) {
+        v.add(thisLine);
+      }
+      return (v);
+  }
+
+}
