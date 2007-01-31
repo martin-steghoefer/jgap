@@ -13,15 +13,15 @@ import org.jgap.*;
 import org.jgap.util.*;
 
 /**
- * Default and simple implementation of IEvolveStrategy.
+ * Default and simple implementation of IWorkerEvolveStrategy.
  *
  * @author Klaus Meffert
  * @since 3.2
  */
 public class DefaultEvolveStrategy
-    implements IEvolveStrategy, ICloneable {
+    implements IWorkerEvolveStrategy, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public void evolve(Genotype a_genotype) {
     a_genotype.evolve();

@@ -12,6 +12,7 @@ package org.jgap.distr.grid;
 import org.homedns.dade.jcgrid.*;
 import org.jgap.*;
 import org.jgap.util.*;
+import org.homedns.dade.jcgrid.worker.*;
 
 /**
  * An instance that creates single requests to be sent to a worker.
@@ -23,17 +24,19 @@ public class JGAPRequest
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private Configuration m_config;
 
   private Population m_pop;
 
-  private IEvolveStrategy m_evolveStrategy;
+  private IWorkerEvolveStrategy m_evolveStrategy;
 
   private IWorkerReturnStrategy m_returnStrategy;
 
   private IGenotypeInitializer m_genotypeInitializer;
+
+  private GridWorkerFeedback m_workerFeedback;
 
   /**
    * Constructor.
@@ -47,7 +50,7 @@ public class JGAPRequest
    * @since 3.1
    */
   public JGAPRequest(String a_name, int a_id, Configuration a_config,
-                     IEvolveStrategy a_strategy) {
+                     IWorkerEvolveStrategy a_strategy) {
     super(a_name, a_id);
     m_config = a_config;
     m_evolveStrategy = a_strategy;
@@ -81,7 +84,7 @@ public class JGAPRequest
    * @since 3.2
    */
   public JGAPRequest(String a_name, int a_id, Configuration a_config,
-                     Population a_pop, IEvolveStrategy a_strategy) {
+                     Population a_pop, IWorkerEvolveStrategy a_strategy) {
     this(a_name, a_id, a_config, a_strategy);
     m_pop = a_pop;
   }
@@ -112,7 +115,7 @@ public class JGAPRequest
    * @author Klaus Meffert
    * @since 3.2
    */
-  public void setEvolveStrategy(IEvolveStrategy a_evolveStrategy) {
+  public void setEvolveStrategy(IWorkerEvolveStrategy a_evolveStrategy) {
     m_evolveStrategy = a_evolveStrategy;
   }
 
@@ -122,7 +125,7 @@ public class JGAPRequest
    * @author Klaus Meffert
    * @since 3.2
    */
-  public IEvolveStrategy getEvolveStrategy() {
+  public IWorkerEvolveStrategy getWorkerEvolveStrategy() {
     return m_evolveStrategy;
   }
 
@@ -138,6 +141,14 @@ public class JGAPRequest
    */
   public IWorkerReturnStrategy getWorkerReturnStrategy() {
     return m_returnStrategy;
+  }
+
+  public GridWorkerFeedback getWorkerFeedback() {
+   return m_workerFeedback;
+  }
+
+  public void setWorkerFeedback(GridWorkerFeedback a_feedback) {
+   m_workerFeedback = a_feedback;
   }
 
   /**
@@ -233,7 +244,7 @@ public class JGAPRequest
   public JGAPRequest newInstance(String a_name, int a_ID) {
     JGAPRequest result = new JGAPRequest(a_name, a_ID,
                                        getConfiguration(), getPopulation());
-    result.setEvolveStrategy(getEvolveStrategy());
+    result.setEvolveStrategy(getWorkerEvolveStrategy());
     result.setGenotypeInitializer(getGenotypeInitializer());
     result.setWorkerReturnStrategy(getWorkerReturnStrategy());
     return result;
