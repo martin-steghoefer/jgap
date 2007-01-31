@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static Variable vb;
 
@@ -59,11 +59,13 @@ public class TicTacToeMain
   public GPGenotype create(GPConfiguration conf, int a_color,
                            GPGenotype a_other, int a_otherColor)
       throws InvalidConfigurationException {
-    Class[] types = {CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass};
-    Class[][] argTypes = { {}, {}, {}
+    Class[] types = {CommandGene.VoidClass, CommandGene.VoidClass,
+        CommandGene.VoidClass,
+        CommandGene.VoidClass};
+    Class[][] argTypes = { {}, {}, {}, {}
     };
-    int[] minDepths = new int[] {2, 3, 1};
-    int[] maxDepths = new int[] {4, 8, 6};
+    int[] minDepths = new int[] {0, 2, 3, 1};
+    int[] maxDepths = new int[] {0, 2, 8, 6};
 //    GPConfiguration conf = getGPConfiguration();
     int color = a_color;
     ForLoop forLoop1 = new ForLoop(conf, SubProgram.VoidClass, 1, Board.WIDTH,
@@ -72,53 +74,53 @@ public class TicTacToeMain
                                    1, "y", 0, 0);
     Variable vx = new Variable(conf, "move", CommandGene.IntegerClass);
     Variable vb = new Variable(conf, "firstmove", CommandGene.BooleanClass);
-    CommandGene[][] nodeSets = {
+    CommandGene[][] nodeSets = { {
+        // Transfer board to evolution memory.
+        // -----------------------------------
+        new TransferBoardToMemory(conf, m_board, 0, 0),
+    }, {
         // Create strategy data.
         // ---------------------
-        {
-          forLoop1,
-          forLoop2,
-          new Loop(conf, SubProgram.class, Board.WIDTH),
-          new Loop(conf, SubProgram.class, Board.HEIGHT),
-          new Loop(conf, SubProgram.class, Board.WIDTH*Board.HEIGHT),
-          new ReadTerminal(conf, CommandGene.IntegerClass,
-                           forLoop1.getCounterMemoryName(), 10),
-          new ReadTerminal(conf, CommandGene.IntegerClass,
-                           forLoop2.getCounterMemoryName(), 11),
-          new ReadBoard(conf, m_board),
-          new SubProgram(conf, new Class[] {CommandGene.VoidClass,
-                         CommandGene.VoidClass,CommandGene.VoidClass}),
-          new StoreTerminal(conf, "mem0", CommandGene.IntegerClass),
-          new AddAndStoreTerminal(conf, "memA", CommandGene.IntegerClass),
-//          new NOP(conf),
-        },
-        {
-        // Evaluate the board.
-        // -------------------
+        new Loop(conf, CommandGene.IntegerClass,
+                 Board.WIDTH * Board.HEIGHT),
+        new EvaluateBoard(conf, m_board, CommandGene.IntegerClass),
+        new IncrementMemory(conf, CommandGene.IntegerClass, "counter", 10),
+    }, {
+        // Evaluate.
+        // ---------
         vx,
         vb,
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass}),
-//        new SubProgram(conf, new Class[] {CountStones.VoidClass,
-//                       CommandGene.VoidClass, CommandGene.VoidClass,
-//                       CommandGene.VoidClass}, 0, new int[] {2, 1, 1, 8}),
+        new SubProgram(conf, new Class[] {TransferBoardToMemory.VoidClass,
+                       CommandGene.VoidClass}),
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass, CommandGene.VoidClass,
                        CommandGene.VoidClass}),
-        forLoop1,
-        forLoop2,
+//        forLoop1,
+//        forLoop2,
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 0),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 1),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 2),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 3),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 10, 22),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 11, 22),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 12, 22),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 13, 22),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 14, 23),
+        new EvaluateBoard(conf, m_board, 14),
         new Loop(conf, SubProgram.class, Board.WIDTH),
         new Loop(conf, SubProgram.class, Board.HEIGHT),
-        new Loop(conf, SubProgram.class, Board.WIDTH*Board.HEIGHT),
+        new Loop(conf, SubProgram.class, Board.WIDTH * Board.HEIGHT),
         new Constant(conf, CommandGene.IntegerClass, new Integer(0)),
         new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(conf, CommandGene.IntegerClass, new Integer(2)),
         new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true, 4),
         new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true,
                      4),
-        new Equals(conf, CommandGene.IntegerClass),
+        new Equals(conf, CommandGene.IntegerClass, 0, new int[] {22, 23}),
         new Equals(conf, CommandGene.IntegerClass, 0, new int[] {0, 8}),
         new IfElse(conf, CommandGene.BooleanClass),
         new ReadBoard(conf, m_board, 0, new int[] {4, 4}),
@@ -126,7 +128,6 @@ public class TicTacToeMain
         new Not(conf),
         new Push(conf, CommandGene.IntegerClass),
         new Pop(conf, CommandGene.IntegerClass),
-//        new NOP(conf),
         new IfIsOccupied(conf, m_board, CommandGene.IntegerClass, 0,
                          new int[] {4, 4, 0}),
         new IfIsFree(conf, m_board, CommandGene.IntegerClass, 0, new int[] {4,
@@ -150,10 +151,10 @@ public class TicTacToeMain
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countc1", 8),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countd0"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countd1"),
-        new ReadTerminal(conf, CommandGene.IntegerClass,
-                         forLoop1.getCounterMemoryName(), 5),
-        new ReadTerminal(conf, CommandGene.IntegerClass,
-                         forLoop2.getCounterMemoryName(), 6),
+//        new ReadTerminal(conf, CommandGene.IntegerClass,
+//                         forLoop1.getCounterMemoryName(), 5),
+//        new ReadTerminal(conf, CommandGene.IntegerClass,
+//                         forLoop2.getCounterMemoryName(), 6),
     }, {
         // Make a move.
         // ------------
@@ -167,7 +168,6 @@ public class TicTacToeMain
                      3),
         new PutStone(conf, m_board, color, 0, new int[] {3, 3}),
         new Not(conf),
-//        new NOP(conf),
         new IfIsOccupied(conf, m_board, CommandGene.IntegerClass),
         new IfIsFree(conf, m_board, CommandGene.IntegerClass),
         new IfElse(conf, CommandGene.BooleanClass),
@@ -194,7 +194,7 @@ public class TicTacToeMain
     // Create genotype with initial population.
     // ----------------------------------------
     GPGenotype result = GPGenotype.randomInitialGenotype(conf, types, argTypes,
-        nodeSets, minDepths, maxDepths, 400, new boolean[] {true, true, true}, true);
+        nodeSets, minDepths, maxDepths, 600, new boolean[] {!true, !true, !true, !true}, true);
     // Register variables to later have access to them.
     // ------------------------------------------------
     result.putVariable(vb);
@@ -356,7 +356,7 @@ public class TicTacToeMain
         opponent = m_other.getFittestProgramComputed();
         if (opponent == null) {
           nullfound++;
-          if (nullfound == 50) {
+          if (nullfound % 50 == 0) {
             System.err.println(
                 "---------- Consecutive calls: opponent is null!");
           }
@@ -372,7 +372,7 @@ public class TicTacToeMain
       try {
         while (moves < Board.WIDTH * Board.HEIGHT) {
           m_board.startNewRound();
-          Object var = new Integer(moves);
+          Boolean var;
           if (moves == 0) {
             var = new Boolean(true);
           }
@@ -400,7 +400,6 @@ public class TicTacToeMain
                 a_program.execute_void(j, noargs);
               }
             }
-            m_board.endTurn();
             // Value the number of distinct read outs of the board by the
             // player.
             // -----------------------------------------------------------
@@ -413,6 +412,7 @@ public class TicTacToeMain
               }
             }
             error -= readCount * READ_VALUE;
+            m_board.endTurn();
             moves++;
             error -= ONE_MOVE2;
             // Second player.
@@ -426,7 +426,6 @@ public class TicTacToeMain
                 opponent.execute_void(j, noargs);
               }
             }
-            m_board.endTurn();
             // Value the number of distincts read outs of the board by the
             // player.
             // -----------------------------------------------------------
@@ -439,6 +438,7 @@ public class TicTacToeMain
               }
             }
             errorOpponent -= readCount * READ_VALUE;
+            m_board.endTurn();
             moves++;
             errorOpponent -= ONE_MOVE2;
           } catch (GameWonException gex) {
@@ -464,7 +464,6 @@ public class TicTacToeMain
         // Already cared about by not reducing error rate.
         // -----------------------------------------------
         ;
-
       } catch (IllegalStateException iex) {
         // Already cared about by not reducing error rate.
         // -----------------------------------------------
@@ -476,13 +475,13 @@ public class TicTacToeMain
       if (error < 0.000001) {
         error = 0.0d;
       }
-      else if (error < MY_WORST_FITNESS_VALUE*0.8d) {
+      else if (error < MY_WORST_FITNESS_VALUE * 0.8d) {
         /**@todo add penalty for longer solutions*/
       }
       if (errorOpponent < 0.000001) {
         errorOpponent = 0.0d;
       }
-      else if (errorOpponent < MY_WORST_FITNESS_VALUE*0.8d) {
+      else if (errorOpponent < MY_WORST_FITNESS_VALUE * 0.8d) {
         /**@todo add penalty for longer solutions*/
 
       }
@@ -528,7 +527,7 @@ class MyGeneticEventListener
     GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
     int evno = genotype.getGPConfiguration().getGenerationNr();
     double freeMem = SystemKit.getFreeMemoryMB();
-    if (evno % 1000 == 0) {
+    if (evno % 100 == 0) {
       IGPProgram best = genotype.getAllTimeBest();
       double allBestFitness = FitnessFunction.NO_FITNESS_VALUE;
       if (best != null) {
