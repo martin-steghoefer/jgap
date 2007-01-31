@@ -22,11 +22,12 @@ import org.homedns.dade.jcgrid.admin.*;
  */
 public class JGAPAdmin {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public JGAPAdmin()
       throws Exception {
-    GridAdmin admin = new GridAdmin();
+    org.homedns.dade.jcgrid.admin.GridAdmin admin = new org.homedns.dade.jcgrid.
+        admin.GridAdmin();
     admin.start();
     while (true) {
       List v = admin.getWorkerStats();
