@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -42,7 +42,7 @@ public class GPConfiguration
   /**
    * Internal memory, see StoreTerminalCommand for example.
    */
-  private Culture m_memory = new Culture(20);
+  private Culture m_memory = new Culture(50);/**@todo make 50 configurable*/
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -394,7 +394,7 @@ public class GPConfiguration
   }
 
   /**
-   * @param a_name the cell to evaluate
+   * @param a_name the name of the cell to evaluate
    * @return the value of a memory cell, if it exsists. Otherwise returns null.
    *
    * @author Klaus Meffert
@@ -406,6 +406,39 @@ public class GPConfiguration
       return null;
     }
     return cell.getCurrentValue();
+  }
+
+  /**
+   * Stores a value in the internal indexed memory.
+   *
+   * @param a_index index of the cell
+   * @param a_value the value to store
+   * @return created or used memory cell
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CultureMemoryCell storeIndexedMemory(int a_index, Object a_value) {
+    return m_memory.set(a_index, a_value, -1,"noname");
+  }
+
+  /**
+   * Reads a value from the internal indexed memory.
+   *
+   * @param a_index index of the cell
+   * @return read value (maybe null )
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object readIndexedMemory(int a_index) {
+    CultureMemoryCell cell = m_memory.get(a_index);
+    if (cell == null) {
+      return null;
+    }
+    else {
+      return cell.getCurrentValue();
+    }
   }
 
   /**
@@ -616,6 +649,16 @@ public class GPConfiguration
    */
   public IGPProgram getPrototypeProgram() {
     return m_prototypeProgram;
+  }
+
+  /**
+   * @return capacity of the memory in cells
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int getMemorySize() {
+    return m_memory.size();
   }
 }
 /**@todo introduce lock*/
