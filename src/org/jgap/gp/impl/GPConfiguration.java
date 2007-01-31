@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -489,6 +489,7 @@ public class GPConfiguration
    *
    * @param a_chrom the chromosome that will contain the node, if valid
    * @param a_node the node selected and to be validated
+   * @param a_rootNode root node of the node to be validated (may be null)
    * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
    * @param a_num the chromosome's index in the individual of this chromosome
@@ -503,10 +504,10 @@ public class GPConfiguration
    * @since 3.0
    */
   public boolean validateNode(ProgramChromosome a_chrom, CommandGene a_node,
-                              CommandGene a_rootNode,
-                              int a_tries, int a_num, int a_recurseLevel,
-                              Class a_type, CommandGene[] a_functionSet,
-                              int a_depth, boolean a_grow) {
+                              CommandGene a_rootNode, int a_tries, int a_num,
+                              int a_recurseLevel, Class a_type,
+                              CommandGene[] a_functionSet, int a_depth,
+                              boolean a_grow) {
     if (m_nodeValidator == null) {
       return true;
     }
