@@ -13,6 +13,7 @@ import org.apache.commons.cli.*;
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.cmd.*;
 import org.homedns.dade.jcgrid.server.*;
+import java.io.*;
 
 /**
  * A grid server able receiving work requests from JGAPClients, sending
@@ -24,22 +25,66 @@ import org.homedns.dade.jcgrid.server.*;
  */
 public class JGAPServer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private final static String className = JGAPServer.class.getName();
 
   private static Logger log = Logger.getLogger(className);
 
+  private GridServer m_gs;
+
   public JGAPServer(String[] args)
       throws Exception {
-    GridServer gs = new GridServer();
+    m_gs = new GridServer(JGAPClientHandlerThread.class);
     Options options = new Options();
-    CommandLine cmd = MainCmd.parseCommonOptions(options, gs.getNodeConfig(),
+    CommandLine cmd = MainCmd.parseCommonOptions(options, m_gs.getNodeConfig(),
         args);
     // Start Server.
     // -------------
-    gs.start();
+    m_gs.start();
+//    addFile("c:/temp/jgap/jgap.jar");
   }
+
+  // Just for testing purposes
+  public void addFile(String a_filename) throws Exception {
+    String path = m_gs.getVFSSessionPool().getPath();
+    if (path == null) {
+      return;
+    }
+    if (path.charAt(path.length()-1) != '\\') {
+      path += "\\";
+    }
+    copyFile(a_filename, path);
+  }
+
+
+  public static void copyFile(String source, String dest) throws Exception {
+    File destFile = new File(dest);
+    if (!destFile.isFile()) {
+      String origFilename = new File(source).getName();
+      dest = dest + origFilename;
+    }
+
+    File inputFile = new File(source);
+    File outputFile = new File(dest);
+
+//     FileReader in = new FileReader(inputFile);
+//     FileWriter out = new FileWriter(outputFile);
+
+    FileInputStream in;
+    FileOutputStream out;
+    in = new FileInputStream(inputFile);
+    out = new FileOutputStream(outputFile);
+
+    int c;
+
+      while ( (c = in.read()) != -1)
+        out.write(c);
+
+      in.close();
+      out.close();
+  }
+
 
   public static void main(String[] args)
       throws Exception {
