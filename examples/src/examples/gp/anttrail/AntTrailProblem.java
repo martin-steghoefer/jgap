@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private int[][] m_map;
 
@@ -177,6 +177,7 @@ public class AntTrailProblem
         filename = "santafe.trail";
       }
       System.out.println("Using population size of " + popSize);
+      System.out.println("Using map " + filename);
       config.setMaxInitDepth(7);
       config.setPopulationSize(popSize);
       final AntTrailProblem problem = new AntTrailProblem(config);
@@ -233,8 +234,9 @@ public class AntTrailProblem
           }
         }
       });
-      config.getEventManager().addEventListener(GeneticEvent.
-          GPGENOTYPE_NEW_BEST_SOLUTION, new GeneticEventListener() {
+
+      GeneticEventListener myGeneticEventListener =
+      new GeneticEventListener() {
         /**
          * New best solution found.
          *
@@ -260,6 +262,7 @@ public class AntTrailProblem
             AntMap antmap = (AntMap) best.getApplicationData();
             problem.displaySolution(antmap.getMovements());
             System.out.println(" Number of moves: " + antmap.getMoveCount());
+            System.out.println(" Food taken: " + antmap.getFoodTaken());
           } catch (InvalidConfigurationException iex) {
             iex.printStackTrace();
           }
@@ -271,7 +274,10 @@ public class AntTrailProblem
             System.exit(0);
           }
         }
-      });
+      };
+
+      config.getEventManager().addEventListener(GeneticEvent.
+          GPGENOTYPE_NEW_BEST_SOLUTION, myGeneticEventListener);
       t.start();
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -314,8 +320,22 @@ public class AntTrailProblem
     return new AntFitnessFunction();
   }
 
+//  static class MyGeneticEventListener implements GeneticEventListener {
+//
+//    private Thread m_t;
+//    private AntTrailProblem m_problem;
+//
+//    public MyGeneticEventListener(Thread a_t, AntTrailProblem a_problem) {
+//      m_t = a_t;
+//      m_problem =a_problem;
+//    }
+
   class AntFitnessFunction
       extends GPFitnessFunction {
+    private static final int VALUE1 = 100;
+
+    private boolean messagePrinted;
+
     protected double evaluate(final IGPProgram a_subject) {
       return computeRawFitness(a_subject);
     }
@@ -338,7 +358,8 @@ public class AntTrailProblem
         antmap = (AntMap) a_program.getApplicationData();
         // The remaining food is the defect rate here.
         // -------------------------------------------
-        error = totalFood - antmap.getFoodTaken();// countFood(antmap);
+        int foodTaken = antmap.getFoodTaken(); // countFood(antmap);
+        error = (VALUE1 + totalFood - foodTaken) * 4;
         if (a_program.getGPConfiguration().stackSize() > 0) {
           error = GPFitnessFunction.MAX_FITNESS_VALUE;
         }
@@ -346,8 +367,18 @@ public class AntTrailProblem
           error = 0.0d;
         }
         else if (error < GPFitnessFunction.MAX_FITNESS_VALUE) {
-          //          int moves = antmap.getMoveCount();
-          // here we could add penalty for longer trails
+          // Add penalty for longer trails.
+          // ------------------------------
+          if (foodTaken > totalFood * 0.4) {
+            if (!messagePrinted) {
+              System.out.println("\nNow penalting longer trails\n");
+              messagePrinted = true;
+            }
+            // Only add penalty in case a significant amount of food is taken.
+            // ---------------------------------------------------------------
+            int moves = antmap.getMoveCount();
+            error = error + moves * 2;
+          }
         }
       } catch (IllegalStateException iex) {
         error = GPFitnessFunction.MAX_FITNESS_VALUE;
@@ -405,4 +436,4 @@ public class AntTrailProblem
   Best solution: loop(3, (loop(3, (loop(3, (sub[(sub[right --> left --> move --> turn-to-food]) --> (if-food (left) else (move)) --> (loop(3, turn-to-food }) --> (loop(3, (loop(3, turn-to-food }) })]) }) }) }
   Depth of chromosome: 6
 
-*/
+ */
