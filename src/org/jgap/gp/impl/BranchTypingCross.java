@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -154,30 +154,32 @@ public class BranchTypingCross
         }
       }
     }
-    // Choose a point in c2 matching the type.
-    // ---------------------------------------
+    // Choose a point in c2 matching the type and subtype of p0.
+    // ---------------------------------------------------------
     int p1;
-    Class type_ = c0.getNode(p0).getReturnType();
+    CommandGene nodeP0 = c0.getNode(p0);
+    Class type_ = nodeP0.getReturnType();
+    int subType = nodeP0.getSubReturnType();
     if (random.nextFloat() < getConfiguration().getFunctionProb()) {
       // choose a function
-      int nf = c1.numFunctions(type_);
+      int nf = c1.numFunctions(type_, subType);
       if (nf == 0) {
         // No functions of that type.
         // --------------------------
         return c;
       }
-      p1 = c1.getFunction(random.nextInt(nf), type_);
+      p1 = c1.getFunction(random.nextInt(nf), type_, subType);
     }
     else {
       // Choose a terminal.
       // ------------------
-      int nt = c1.numTerminals(type_);
+      int nt = c1.numTerminals(type_, subType);
       if (nt == 0) {
         // No terminals of that type.
         // --------------------------
         return c;
       }
-      p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_)), type_);
+      p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_, subType)), type_, subType);
       // Mutate the terminal's value.
       // ----------------------------
       /**@todo make this random and configurable*/
