@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPProgramTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPProgramTest.class);
@@ -45,14 +45,14 @@ public class GPProgramTest
    */
   public void testExecute_0()
       throws Exception {
-    GPProgram prog = new GPProgram(m_gpconf,3);
+    GPProgram prog = new GPProgram(m_gpconf, 3);
     ProgramChromosome pc1 = new ProgramChromosome(m_gpconf, 50, prog);
     pc1.getFunctions()[0] = CMD_SUB_V_V;
-    pc1.getFunctions()[1] = new StoreTerminal(m_gpconf, "mem0",//a
-                                              CommandGene.IntegerClass);
+    pc1.getFunctions()[1] = new StoreTerminal(m_gpconf, "mem0", //a
+        CommandGene.IntegerClass);
     pc1.getFunctions()[2] = CMD_CONST1;
-    pc1.getFunctions()[3] = new StoreTerminal(m_gpconf, "mem1",//b
-                                              CommandGene.IntegerClass);
+    pc1.getFunctions()[3] = new StoreTerminal(m_gpconf, "mem1", //b
+        CommandGene.IntegerClass);
     pc1.getFunctions()[4] = CMD_CONST1;
 //    pc1.getFunctions()[5] = new StoreTerminal(m_gpconf, "mem2",//x
 //                                              CommandGene.IntegerClass);
@@ -60,32 +60,30 @@ public class GPProgramTest
     pc1.redepth();
     assertEquals(2, pc1.getDepth(0));
     prog.setChromosome(0, pc1);
-
     ProgramChromosome pc2 = new ProgramChromosome(m_gpconf, 50, prog);
     Variable vx;
     CommandGene[] funcSet2 = new CommandGene[] {
         CMD_SUB_V_V_V, //0
         CMD_FOR, //1
         CMD_NOP, //2
-        vx = Variable.create(m_gpconf, "X", CommandGene.IntegerClass),//3
+        vx = Variable.create(m_gpconf, "X", CommandGene.IntegerClass), //3
         new Increment(m_gpconf, CommandGene.IntegerClass), //4
-        new AddAndStore(m_gpconf, CommandGene.IntegerClass, "mem2"),//5
-        new TransferMemory(m_gpconf, "mem2", "mem1"),//6
-        new TransferMemory(m_gpconf, "mem1", "mem0"),//7
-        new ReadTerminal(m_gpconf, CommandGene.IntegerClass,"mem0"),//8
-        new ReadTerminal(m_gpconf, CommandGene.IntegerClass,"mem1"),//9
+        new AddAndStore(m_gpconf, CommandGene.IntegerClass, "mem2"), //5
+        new TransferMemory(m_gpconf, "mem2", "mem1"), //6
+        new TransferMemory(m_gpconf, "mem1", "mem0"), //7
+        new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //8
+        new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
     rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 7, 6});
-    pc2.growOrFullNode(0, 5, CommandGene.IntegerClass, funcSet2, CMD_FOR, 0, true);
+    pc2.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet2, CMD_FOR, 0, true);
     pc2.redepth();
     prog.setChromosome(1, pc2);
-
     ProgramChromosome pc3 = new ProgramChromosome(m_gpconf, 50, prog);
-    pc3.getFunctions()[0] = new ReadTerminal(m_gpconf, CommandGene.IntegerClass,"mem2");
+    pc3.getFunctions()[0] = new ReadTerminal(m_gpconf, CommandGene.IntegerClass,
+        "mem2");
     pc3.redepth();
     prog.setChromosome(2, pc3);
     Object[] noargs = new Object[0];
-
     prog.execute_void(0, noargs);
     vx.set(new Integer(2));
     prog.execute_void(1, noargs);
@@ -119,7 +117,7 @@ public class GPProgramTest
    */
   public void testSerialize_0()
       throws Exception {
-    GPProgram prog = new GPProgram(m_gpconf,1);
+    GPProgram prog = new GPProgram(m_gpconf, 1);
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
     pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
