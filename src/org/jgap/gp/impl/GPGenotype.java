@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.terminal.*;
 import org.jgap.event.*;
 import org.jgap.util.*;
 
@@ -25,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -35,7 +36,9 @@ public class GPGenotype
   /**
    * The current configuration instance.
    */
-  private transient static GPConfiguration m_configuration;
+  private transient GPConfiguration m_configuration;
+
+  private transient static GPConfiguration m_staticConfiguration;
 
   /**
    * Fitness value of the best solution.
@@ -51,6 +54,8 @@ public class GPGenotype
    * Best solution found.
    */
   private transient IGPProgram m_allTimeBest;
+
+  private transient double m_allTimeBestFitness;
 
   /**
    * Is full mode with program construction allowed?
@@ -92,6 +97,8 @@ public class GPGenotype
    * True: Output status information to console
    */
   private boolean m_verbose;
+
+  private Map m_variables;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -158,6 +165,8 @@ public class GPGenotype
     m_maxNodes = a_maxNodes;
     setGPPopulation(a_population);
     setGPConfiguration(a_configuration);
+    m_variables = new Hashtable();
+    m_allTimeBestFitness = FitnessFunction.NO_FITNESS_VALUE;
     // Lock the settings of the configuration object so that it cannot
     // be altered.
     // ---------------------------------------------------------------
@@ -283,6 +292,12 @@ public class GPGenotype
       int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
       boolean[] a_fullModeAllowed, boolean a_verboseOutput)
       throws InvalidConfigurationException {
+    if (a_argTypes.length != a_fullModeAllowed.length
+        || a_argTypes.length != a_minDepths.length
+        || a_argTypes.length != a_maxDepths.length) {
+      throw new IllegalArgumentException("a_argTypes must have same length"
+          +" as a_minDepths, a_maxDepths and a_fullModeAllowed");
+    }
     System.gc();
     if(a_verboseOutput) {
       System.out.println("Creating initial population");
@@ -305,8 +320,30 @@ public class GPGenotype
     return gp;
   }
 
-  public static GPConfiguration getGPConfiguration() {
+  public GPConfiguration getGPConfiguration() {
     return m_configuration;
+  }
+
+  /**
+   * @return the static configuration to use with the Genetic Programming
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static GPConfiguration getStaticGPConfiguration() {
+    return m_staticConfiguration;
+  }
+
+  /**
+   * Sets the static configuration to use with the Genetic Programming.
+   *
+   * @param a_configuration the static configuration to use
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public static void setStaticGPConfiguration(GPConfiguration a_configuration) {
+    m_staticConfiguration = a_configuration;
   }
 
   static class GPFitnessComparator
@@ -376,7 +413,7 @@ public class GPGenotype
     m_bestFitness = FitnessFunction.NO_FITNESS_VALUE;
     for (int i = 0; i < pop.size() && pop.getGPProgram(i) != null; i++) {
       IGPProgram program = pop.getGPProgram(i);
-      double fitness =program.getFitnessValue();
+      double fitness = program.getFitnessValue();
       if (best == null || evaluator.isFitter(fitness, m_bestFitness)){
         best = program;
         m_bestFitness = fitness;
@@ -388,8 +425,20 @@ public class GPGenotype
 //    m_bestFitness = best.getFitnessValue();
     /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     if (m_allTimeBest == null
-        || evaluator.isFitter(m_bestFitness,  m_allTimeBest.getFitnessValue())) {
-      m_allTimeBest = best;
+        || evaluator.isFitter(m_bestFitness,  m_allTimeBestFitness)) {
+      try {
+        ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+            getCloneHandlerFor(best, null);
+        if (cloner == null) {
+          m_allTimeBest = best;
+        }
+        else {
+          m_allTimeBest = (IGPProgram) cloner.perform(best, null, null);
+        }
+      } catch (Exception ex) {
+        m_allTimeBest = best;
+      }
+      m_allTimeBestFitness = m_bestFitness;
       // Fire an event to indicate a new best solution.
       // ----------------------------------------------
       getGPConfiguration().getEventManager().fireGeneticEvent(
@@ -397,7 +446,7 @@ public class GPGenotype
       if(m_verbose) {
         // Output the new best solution found.
         // -----------------------------------
-        outputSolution(best);
+        outputSolution(m_allTimeBest);
       }
     }
   }
@@ -470,7 +519,9 @@ public class GPGenotype
           // Do crossover.
           // -------------
           IGPProgram i1 = conf.getSelectionMethod().select(this);
+//          newPopulation.checkIfFittest(i1);
           IGPProgram i2 = conf.getSelectionMethod().select(this);
+//          newPopulation.checkIfFittest(i2);
           int tries = 0;
           do {
             try {
@@ -517,8 +568,9 @@ public class GPGenotype
       for (int i = popSize1; i < popSize; i++) {
         // Determine depth randomly and between maxInitDepth and 2*maxInitDepth.
         // ---------------------------------------------------------------------
-        int depth = conf.getMaxInitDepth() - 2 +
-            random.nextInt(2); /**@todo make configurable*/
+        int depth = conf.getMinInitDepth()
+            + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
+                             + 1);
         int tries = 0;
         do {
           try {
@@ -611,6 +663,21 @@ public class GPGenotype
     return getGPPopulation().determineFittestProgram();
   }
 
+  /**
+   * Retrieves the GPProgram in the population with the highest fitness
+   * value. Only considers programs for which the fitness value has already
+   * been computed.
+   *
+   * @return the GPProgram with the highest fitness value, or null if there
+   * are no programs with known fitness value in this Genotype
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public synchronized IGPProgram getFittestProgramComputed() {
+    return getGPPopulation().determineFittestProgramComputed();
+  }
+
   protected void setGPPopulation(GPPopulation a_pop) {
     m_population = a_pop;
   }
@@ -622,7 +689,7 @@ public class GPGenotype
    * @author Klaus Meffert
    * @since 3.0
    */
-  public static void setGPConfiguration(GPConfiguration a_configuration) {
+  public void setGPConfiguration(GPConfiguration a_configuration) {
     m_configuration = a_configuration;
   }
 
@@ -760,5 +827,27 @@ public class GPGenotype
       }
     }
     return null;
+  }
+
+  /**
+   * Stores a Variable
+   * @param a_var the Variable to store
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void putVariable(Variable a_var) {
+    m_variables.put(a_var.getName(), a_var);
+  }
+
+  /**
+   * @param a_varName name of variable to retriebe
+   * @return Variable instance or null, if not found
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Variable getVariable(String a_varName) {
+    return (Variable)m_variables.get(a_varName);
   }
 }
