@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   private float m_value_float;
 
@@ -41,7 +41,7 @@ public class Terminal
 
   public Terminal()
       throws InvalidConfigurationException {
-    this(GPGenotype.getGPConfiguration(), CommandGene.IntegerClass);
+    this(GPGenotype.getStaticGPConfiguration(), CommandGene.IntegerClass);
   }
 
   public Terminal(final GPConfiguration a_conf, Class a_returnType)
@@ -64,7 +64,7 @@ public class Terminal
   public Terminal(final GPConfiguration a_conf, Class a_returnType,
                   double a_minValue, double a_maxValue)
       throws InvalidConfigurationException {
-    this(a_conf, a_returnType, 0d, 99d, false);
+    this(a_conf, a_returnType, a_minValue, a_maxValue, false);
   }
 
   /**
@@ -84,7 +84,14 @@ public class Terminal
   public Terminal(final GPConfiguration a_conf, Class a_returnType,
                   double a_minValue, double a_maxValue, boolean a_wholeNumbers)
       throws InvalidConfigurationException {
-    super(a_conf, 0, a_returnType);
+    this(a_conf, a_returnType, a_minValue, a_maxValue, a_wholeNumbers, 0);
+  }
+
+  public Terminal(final GPConfiguration a_conf, Class a_returnType,
+                  double a_minValue, double a_maxValue, boolean a_wholeNumbers,
+                  int a_subReturnType)
+      throws InvalidConfigurationException {
+    super(a_conf, 0, a_returnType, a_subReturnType, null);
     m_lowerBounds = a_minValue;
     m_upperBounds = a_maxValue;
     m_wholeNumbers = a_wholeNumbers;
@@ -303,6 +310,36 @@ public class Terminal
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     return m_value_double;
+  }
+
+  /**
+   * Returns a string representation of the terminal.
+   *
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return StringBuffer with textual representation of terminal's value
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    StringBuffer value = new StringBuffer("(");
+    Class retType = getReturnType();
+    if (retType == CommandGene.FloatClass) {
+      value.append(m_value_float).append("f");
+    }
+    else if (retType == CommandGene.DoubleClass) {
+      value.append(m_value_double).append("d");
+    }
+    else if (retType == CommandGene.IntegerClass) {
+      value.append(m_value_int);
+    }
+    else if (retType == CommandGene.LongClass) {
+      value.append(m_value_long).append("l");
+    }
+    value.append(")");
+    return value;
   }
 
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
