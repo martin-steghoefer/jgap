@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -148,7 +148,7 @@ public class GPConfiguration
       throws InvalidConfigurationException {
     super(a_id, a_name);
     init();
-    m_selectionMethod = new TournamentSelector(5);// FitnessProportionateSelection();
+    m_selectionMethod = new FitnessProportionateSelection();
   }
 
   /**
