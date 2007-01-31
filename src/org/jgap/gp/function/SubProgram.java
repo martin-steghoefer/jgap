@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * A connector for independent subprograms (subtrees). Each subtree except the
@@ -24,9 +25,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class SubProgram
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -40,7 +41,14 @@ public class SubProgram
 
   public SubProgram(final GPConfiguration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
-    super(a_conf, a_types.length, a_types[a_types.length - 1]);
+    this(a_conf, a_types, 0, null);
+  }
+
+  public SubProgram(final GPConfiguration a_conf, Class[] a_types,
+                    int a_subReturnType, int[] a_subChildTypes)
+      throws InvalidConfigurationException {
+    super(a_conf, a_types.length, a_types[a_types.length - 1], a_subReturnType,
+          a_subChildTypes);
     if (a_types.length < 1) {
       throw new IllegalArgumentException("Number of subtrees must be >= 1");
     }
@@ -179,6 +187,28 @@ public class SubProgram
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    try {
+      int[] subChildTypes = getSubChildTypes();
+      if (subChildTypes != null) {
+        subChildTypes = subChildTypes.clone();
+      }
+      SubProgram result = new SubProgram(getGPConfiguration(), m_types,
+          getSubReturnType(), subChildTypes);
+      result.m_subtrees = m_subtrees;
+      result.m_types = m_types.clone();
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
     }
   }
 }
