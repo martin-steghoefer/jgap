@@ -17,14 +17,17 @@ import org.jgap.distr.grid.*;
 /**
  * Convenience call to start both the server and a worker at once. Only for
  * demonstration purposes. Normally, you would start the server and the
- * worker(s) separately!
+ * worker(s) separately and possibly on different hosts!<p>
+ * This class can be used to start-up any JGAP grid, because the individual
+ * data is only kept with the JGAPClient! The JGAPClient distributes any data
+ * (including classes) necessary to the workers via the server.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
 public class ServerAndWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Convenience (demo) start of both the server and a worker.
@@ -49,6 +52,6 @@ public class ServerAndWorker {
     CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
     // Start worker.
     // -------------
-    new JGAPWorkers(config, MyGAWorker.class, MyWorkerFeedback.class);
+    new JGAPWorkers(config);
   }
 }
