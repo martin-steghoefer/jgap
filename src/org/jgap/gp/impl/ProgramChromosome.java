@@ -9,7 +9,6 @@
  */
 package org.jgap.gp.impl;
 
-import java.io.*;
 import org.jgap.*;
 import org.jgap.util.*;
 import org.jgap.gp.terminal.*;
@@ -22,10 +21,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class ProgramChromosome
-    extends BaseGPChromosome
-    implements IGPChromosome, Comparable, Cloneable {
+    extends BaseGPChromosome implements IGPChromosome, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -126,7 +124,7 @@ public class ProgramChromosome
    */
   public ProgramChromosome()
       throws InvalidConfigurationException {
-    this(GPGenotype.getGPConfiguration());
+    this(GPGenotype.getStaticGPConfiguration());
   }
 
   private void init()
@@ -137,7 +135,8 @@ public class ProgramChromosome
   private void init(final int a_size)
       throws InvalidConfigurationException {
     m_depth = new int[a_size];
-    m_genes = new CommandGene[a_size];/**@todo speedup possible by using dynamic list?*/
+    m_genes = new CommandGene[a_size];
+        /**@todo speedup possible by using dynamic list?*/
   }
 
   public void setArgTypes(Class[] a_argTypes) {
@@ -153,8 +152,7 @@ public class ProgramChromosome
       chrom.setFunctions( (CommandGene[]) getFunctions().clone());
       chrom.m_depth = (int[]) m_depth.clone();
       return chrom;
-    }
-    catch (Exception cex) {
+    } catch (Exception cex) {
       // Rethrow to have a more convenient handling.
       // -------------------------------------------
       throw new IllegalStateException(cex.getMessage());
@@ -181,8 +179,8 @@ public class ProgramChromosome
    * Initialize this chromosome using the grow or the full method.
    *
    * @param a_num the chromosome's index in the individual of this chromosome
-   * @param depth the maximum depth of the chromosome to create
-   * @param type the type of the chromosome to create
+   * @param a_depth the maximum depth of the chromosome to create
+   * @param a_type the type of the chromosome to create
    * @param a_argTypes the array of types of arguments for this chromosome
    * @param a_functionSet the set of nodes valid to pick from
    * @param a_grow true: use grow method; false: use full method
@@ -190,9 +188,10 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void growOrFull(final int a_num, final int depth, final Class type,
-                   final Class[] a_argTypes, final CommandGene[] a_functionSet,
-                   boolean a_grow) {
+  public void growOrFull(final int a_num, final int a_depth, final Class a_type,
+                         final Class[] a_argTypes,
+                         final CommandGene[] a_functionSet,
+                         boolean a_grow) {
     try {
       argTypes = a_argTypes;
       setFunctionSet(new CommandGene[a_functionSet.length + a_argTypes.length]);
@@ -224,13 +223,12 @@ public class ProgramChromosome
 //          }
 //        }
 //      }
-      int localDepth = depth;
+      int localDepth = a_depth;
       m_index = 0;
       m_maxDepth = localDepth;
-      growOrFullNode(a_num, localDepth, type, m_functionSet, n, 0, a_grow);
+      growOrFullNode(a_num, localDepth, a_type, 0, m_functionSet, n, 0, a_grow);
       redepth();
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }
@@ -250,7 +248,7 @@ public class ProgramChromosome
     // Replace any occurance of placeholders (e.g. &1, &2...) in the function's
     // name.
     // ------------------------------------------------------------------------
-    String funcName = m_genes[a_startNode].getName();
+    String funcName = m_genes[a_startNode].toString();
     int j = 1;
     do {
       String placeHolder = "&" + j;
@@ -260,8 +258,7 @@ public class ProgramChromosome
       }
       funcName = funcName.replaceFirst(placeHolder, "");
       j++;
-    }
-    while (true);
+    } while (true);
     // Now remove any leading and trailing spaces.
     // -------------------------------------------
     if (j > 0) {
@@ -300,17 +297,17 @@ public class ProgramChromosome
     }
     IGPProgram ind = getIndividual();
     if (m_genes[a_startNode].getArity(ind) == 0) {
-      return getFunctions()[a_startNode].getName();
+      return getFunctions()[a_startNode].toString();
     }
     String str = "";
     boolean paramOutput = false;
     if (m_genes[a_startNode].getArity(ind) > 0) {
-      if (m_genes[a_startNode].getName().indexOf("&1") >= 0) {
+      if (m_genes[a_startNode].toString().indexOf("&1") >= 0) {
         paramOutput = true;
       }
     }
     if (m_genes[a_startNode].getArity(ind) == 1 || paramOutput) {
-      str += getFunctions()[a_startNode].getName();
+      str += getFunctions()[a_startNode].toString();
     }
     if (a_startNode > 0) {
       str = "(" + str;
@@ -327,7 +324,7 @@ public class ProgramChromosome
       }
       if (i == 0 && m_genes[a_startNode].getArity(ind) != 1
           && !paramOutput) {
-        str += " " + m_genes[a_startNode].getName() + " ";
+        str += " " + m_genes[a_startNode].toString() + " ";
       }
     }
     if (a_startNode > 0) {
@@ -338,9 +335,9 @@ public class ProgramChromosome
 
   /**
    * Determines whether there exists a function or terminal in the given node
-   * set with the given type.
+   * set with the given return type.
    *
-   * @param a_type the type to look for
+   * @param a_returnType the return type to look for
    * @param a_nodeSet the array of nodes to look through
    * @param a_function true to look for a function, false to look for a terminal
    * @param a_growing true: grow mode, false: full mode
@@ -350,11 +347,13 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  public boolean isPossible(Class a_type, CommandGene[] a_nodeSet,
+  public boolean isPossible(Class a_returnType, int a_subType,
+                            CommandGene[] a_nodeSet,
                             boolean a_function, boolean a_growing) {
     IGPProgram ind = getIndividual();
     for (int i = 0; i < a_nodeSet.length; i++) {
-      if (a_nodeSet[i].getReturnType() == a_type) {
+      if (a_nodeSet[i].getReturnType() == a_returnType
+          && (a_subType == 0 || a_subType == a_nodeSet[i].getSubReturnType())) {
         if (a_nodeSet[i].getArity(ind) == 0 && (!a_function || a_growing)) {
           return true;
         }
@@ -369,7 +368,7 @@ public class ProgramChromosome
   /**
    * Randomly chooses a valid node from the functions set.
    *
-   * @param a_type the type of node to choose
+   * @param a_returnType the return type of node to choose
    * @param a_functionSet the functions to use
    * @param a_function true to choose a function, false to choose a terminal
    * @param a_growing true to ignore the function parameter, false otherwise
@@ -378,14 +377,31 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected CommandGene selectNode(Class a_type, CommandGene[] a_functionSet,
+  protected CommandGene selectNode(int a_chromIndex, Class a_returnType,
+                                   int a_subReturnType,
+                                   CommandGene[] a_functionSet,
                                    boolean a_function, boolean a_growing) {
-    if (!isPossible(a_type, a_functionSet, a_function, a_growing)) {
-      final String errormsg = "Chromosome requires a " +
+    if (!isPossible(a_returnType, a_subReturnType, a_functionSet, a_function,
+                    a_growing)) {
+      if (a_growing && a_returnType == CommandGene.VoidClass) {
+        // We simply return a NOP, it does nothing :-)
+        // -------------------------------------------
+        try {
+          return new NOP(getGPConfiguration(), a_subReturnType);
+        } catch (InvalidConfigurationException iex) {
+          // Should never happen.
+          // --------------------
+          iex.printStackTrace();
+        }
+      }
+      final String errormsg = "Chromosome (index " + a_chromIndex
+          + ") requires a " +
           (a_function ?
            ("function" + (a_growing ? " or terminal" : ""))
-           : "terminal") + " of type " +
-          a_type + " but there is no such node available";
+           : "terminal") + " of return type " +
+          a_returnType
+          + " (sub return type " + a_subReturnType + ")"
+          + " but there is no such node available";
       if (!getGPConfiguration().isStrictProgramCreation()) {
         throw new IllegalStateException(errormsg);
       }
@@ -398,13 +414,15 @@ public class ProgramChromosome
     // Following is analog to isPossible except with the random generator.
     // -------------------------------------------------------------------
     IGPProgram ind = getIndividual();
-    RandomGenerator randGen = getGPConfiguration().getRandomGenerator();
-    while (n == null) {
-      /**@todo speedup, relying on getting a fitting random number some time
-       * is not satisfying
-       */
-      lindex = randGen.nextInt(a_functionSet.length);
-      if (a_functionSet[lindex].getReturnType() == a_type) {
+    UniqueRandomGenerator randGen = new UniqueRandomGenerator(a_functionSet.
+        length, getGPConfiguration().getRandomGenerator());
+    do {
+      lindex = randGen.nextInt();
+      // Consider return type AND sub return type (latter only if != 0).
+      // ---------------------------------------------------------------
+      if (a_functionSet[lindex].getReturnType() == a_returnType
+          && (a_subReturnType == 0
+              || a_functionSet[lindex].getSubReturnType() == a_subReturnType)) {
         if (a_functionSet[lindex].getArity(ind) == 0 &&
             (!a_function || a_growing)) {
           n = a_functionSet[lindex];
@@ -413,7 +431,7 @@ public class ProgramChromosome
           n = a_functionSet[lindex];
         }
       }
-    }
+    } while (n == null);
     return n;
   }
 
@@ -422,35 +440,43 @@ public class ProgramChromosome
    *
    * @param a_num the chromosome's index in the individual of this chromosome
    * @param a_depth the maximum depth of the tree to create
-   * @param a_type the type of node to start with
+   * @param a_returnType the return type the lastly evaluated node must have
    * @param a_functionSet the set of function valid to pick from
-   * @param a_rootNode null, or root node to use
+   * @param a_rootNode null, or parent node of the node to develop
    * @param a_recurseLevel 0 for first call
    * @param a_grow true: use grow method; false: use full method
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void growOrFullNode(int a_num, int a_depth, Class a_type,
-                          CommandGene[] a_functionSet, CommandGene a_rootNode,
-                          int a_recurseLevel, boolean a_grow) {
+  protected void growOrFullNode(int a_num, int a_depth,
+                                Class a_returnType,
+                                int a_subReturnType,
+                                CommandGene[] a_functionSet,
+                                CommandGene a_rootNode, int a_recurseLevel,
+                                boolean a_grow) {
+    // Only do validate for a program once, namely when the root
+    // node is passed in.
+    // ---------------------------------------------------------
     if (a_rootNode == null) {
-      int a_tries = 0;
+      int tries = 0;
       do {
-        a_rootNode = selectNode(a_type, a_functionSet, a_depth > 1, a_grow);
-        if (!getGPConfiguration().validateNode(this, a_rootNode, a_tries++,
-            a_num, a_recurseLevel, a_type, a_functionSet, a_depth, a_grow)) {
+        CommandGene a_node = selectNode(a_num, a_returnType, a_subReturnType,
+                                        a_functionSet, a_depth > 1, a_grow);
+        if (!getGPConfiguration().validateNode(this, a_node, a_rootNode, tries++,
+            a_num, a_recurseLevel, a_returnType, a_functionSet, a_depth,
+            a_grow)) {
           continue;
         }
+        a_rootNode = a_node;
         break;
-      }
-      while (true);
+      } while (true);
     }
     // Generate the node.
     // ------------------
     m_depth[m_index] = m_maxDepth - a_depth;
     if (a_rootNode instanceof ICloneable) {
-        m_genes[m_index++] = (CommandGene) ( (ICloneable) a_rootNode).clone();
+      m_genes[m_index++] = (CommandGene) ( (ICloneable) a_rootNode).clone();
     }
     else {
       m_genes[m_index++] = a_rootNode;
@@ -461,6 +487,7 @@ public class ProgramChromosome
         if (m_index < m_depth.length) { //xx
           growOrFullNode(a_num, a_depth - 1,
                          a_rootNode.getChildType(getIndividual(), i),
+                         a_rootNode.getSubChildType(i),
                          a_functionSet, null, a_recurseLevel + 1, a_grow);
         }
         else {
@@ -477,7 +504,8 @@ public class ProgramChromosome
         // No valid program could be generated. Abort.
         // -------------------------------------------
         throw new IllegalStateException("Randomly created program violates"
-            + " configuration constraints (symptom 2)");
+                                        +
+            " configuration constraints (symptom 2)");
       }
     }
   }
@@ -518,7 +546,7 @@ public class ProgramChromosome
     IGPProgram ind = getIndividual();
     int arity = command.getArity(ind);
     for (int i = 0; i < arity; i++) {
-      if (num < m_depth.length) {//xx
+      if (num < m_depth.length) { //xx
         m_depth[num] = m_depth[a_index] + 1;
         // children[i][n] = num;
         num = redepth(num);
@@ -527,7 +555,7 @@ public class ProgramChromosome
         }
       }
       else {
-        return -1;//xx
+        return -1; //xx
       }
     }
     return num;
@@ -729,13 +757,12 @@ public class ProgramChromosome
 
   public int execute_int(int n, int child, Object[] args) {
     if (child == 0) {
-      if (m_genes.length < n) {
-        System.err.println("Invalid length: "+(n+1));
-      }
       return m_genes[n + 1].execute_int(this, n + 1, args);
     }
-    int other = getChild(n, child);
-    return m_genes[other].execute_int(this, other, args);
+    else {
+      int other = getChild(n, child);
+      return m_genes[other].execute_int(this, other, args);
+    }
   }
 
   /**
@@ -939,8 +966,7 @@ public class ProgramChromosome
           try {
             return ( (Comparable) getApplicationData()).compareTo(
                 otherChromosome.getApplicationData());
-          }
-          catch (ClassCastException cex) {
+          } catch (ClassCastException cex) {
             return -1;
           }
         }
@@ -967,8 +993,7 @@ public class ProgramChromosome
   public boolean equals(Object a_other) {
     try {
       return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
@@ -1027,5 +1052,4 @@ public class ProgramChromosome
   public synchronized CommandGene getGene(int a_locus) {
     return m_genes[a_locus];
   }
-
 }
