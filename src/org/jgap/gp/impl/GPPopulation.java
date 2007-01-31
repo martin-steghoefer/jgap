@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -305,11 +305,22 @@ public class GPPopulation
       IGPProgram program = m_programs[i];
       fitness = program.getFitnessValue();
       if (m_fittestProgram == null || evaluator.isFitter(fitness, bestFitness)) {
-        m_fittestProgram = program;
         bestFitness = fitness;
+        m_fittestProgram = program;
       }
     }
     setChanged(false);
+    if (m_fittestProgram != null) {
+      ICloneHandler cloner = getGPConfiguration().getJGAPFactory().getCloneHandlerFor(
+          m_fittestProgram, null);
+      if (cloner != null) {
+        try {
+          m_fittestProgram = (IGPProgram) cloner.perform(m_fittestProgram, null, null);
+        } catch (Exception ex) {
+          ;// ignore
+        }
+      }
+    }
     return m_fittestProgram;
   }
 
@@ -350,6 +361,7 @@ public class GPPopulation
   /**
    * Sorts the GPPrograms list and returns the fittest n GPPrograms in
    * the population.
+   *
    * @param a_numberOfPrograms number of top performer GPPrograms to be
    * returned
    * @return list of the fittest n GPPrograms of the population, or the fittest
@@ -473,6 +485,7 @@ public class GPPopulation
   /**
    * Checks if a program is contained within an array of programs. Assumes that
    * in the array no element will follow after the first null element.
+   *
    * @param a_progs the array to search thru
    * @param a_prog the program to find
    * @return true: program found in array via equals-method
@@ -494,6 +507,7 @@ public class GPPopulation
 
   /**
    * The equals-method.
+   *
    * @param a_pop the population instance to compare with
    * @return true: given object equal to comparing one
    *
