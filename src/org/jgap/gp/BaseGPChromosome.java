@@ -22,7 +22,7 @@ import org.jgap.*;
 public abstract class BaseGPChromosome
     implements IGPChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The configuration object to use
@@ -128,17 +128,19 @@ public abstract class BaseGPChromosome
    *
    * @param a_index the a_index'th terminal to get
    * @param a_type the type of terminal to get
+   * @param a_subType the subtype to consider
    * @return the index of the terminal found, or -1 if no appropriate terminal
    * was found
    *
    * @author Klaus Meffert
    * @since 3.01 (since 3.0 in ProgramChromosome)
    */
-  public int getTerminal(int a_index, Class a_type) {
+  public int getTerminal(int a_index, Class a_type, int a_subType) {
     CommandGene[] functions = getFunctions();
     int len = functions.length;
     for (int j = 0; j < len && functions[j] != null; j++) {
-      if (functions[j].getReturnType() == a_type
+      if ( (a_subType == 0 || functions[j].getSubReturnType() == a_subType)
+          && functions[j].getReturnType() == a_type
           && functions[j].getArity(m_ind) == 0) {
         if (--a_index < 0) {
           return j;
@@ -155,17 +157,19 @@ public abstract class BaseGPChromosome
    *
    * @param a_index the i'th function to get
    * @param a_type the type of function to get
+   * @param a_subType the subtype to consider
    * @return the index of the function found, or -1 if no appropriate function
    * was found
    *
    * @author Klaus Meffert
    * @since 3.01 (since 3.0 in ProgramChromosome)
    */
-  public int getFunction(int a_index, Class a_type) {
+  public int getFunction(int a_index, Class a_type, int a_subType) {
     CommandGene[] functions = getFunctions();
     int len = functions.length;
     for (int j = 0; j < len && functions[j] != null; j++) {
       if (functions[j].getReturnType() == a_type
+          && (a_subType == 0 || a_subType == functions[j].getSubReturnType())
           && functions[j].getArity(m_ind) != 0) {
         if (--a_index < 0) {
           return j;
@@ -215,18 +219,20 @@ public abstract class BaseGPChromosome
    * Counts the number of terminals of the given type in this chromosome.
    *
    * @param a_type the type of terminal to count
+   * @param a_subType the subtype to consider
    * @return the number of terminals in this chromosome
    *
    * @author Klaus Meffert
    * @since 3.01 (since 3.0 in ProgramChromosome)
    */
-  public int numTerminals(Class a_type) {
+  public int numTerminals(Class a_type, int a_subType) {
     int count = 0;
     CommandGene[] functions = getFunctions();
     int len = functions.length;
     for (int i = 0; i < len && functions[i] != null; i++) {
       if (functions[i].getArity(m_ind) == 0
-          && functions[i].getReturnType() == a_type) {
+          && functions[i].getReturnType() == a_type
+          && (a_subType == 0 || functions[i].getSubReturnType() == a_subType)) {
         count++;
       }
     }
@@ -237,18 +243,20 @@ public abstract class BaseGPChromosome
    * Counts the number of functions of the given type in this chromosome.
    *
    * @param a_type the type of function to count
+   * @param a_subType the subtype to consider
    * @return the number of functions in this chromosome.
    *
    * @author Klaus Meffert
    * @since 3.01 (since 3.0 in ProgramChromosome)
    */
-  public int numFunctions(Class a_type) {
+  public int numFunctions(Class a_type, int a_subType) {
     int count = 0;
     CommandGene[] functions = getFunctions();
     int len = functions.length;
     for (int i = 0; i < len && functions[i] != null; i++) {
       if (functions[i].getArity(m_ind) != 0
-          && functions[i].getReturnType() == a_type) {
+          && functions[i].getReturnType() == a_type
+          && (a_subType == 0 || functions[i].getSubReturnType() == a_subType)) {
         count++;
       }
     }

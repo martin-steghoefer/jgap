@@ -20,7 +20,7 @@ import org.jgap.gp.impl.*;
 public interface IGPChromosome
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * @return the individual containing this chromosome
@@ -86,23 +86,25 @@ public interface IGPChromosome
    * Counts the number of terminals of the given type in this chromosome.
    *
    * @param a_type the type of terminal to count
+   * @param a_subType the subtype to consider
    * @return the number of terminals in this chromosome
    *
    * @author Klaus Meffert
    * @since 3.01
    */
-  int numTerminals(Class a_type);
+  int numTerminals(Class a_type, int a_subType);
 
   /**
    * Counts the number of functions of the given type in this chromosome.
    *
    * @param a_type the type of function to count
+   * @param a_subType the subtype to consider
    * @return the number of functions in this chromosome.
    *
    * @author Klaus Meffert
    * @since 3.01
    */
-  int numFunctions(Class a_type);
+  int numFunctions(Class a_type, int a_subType);
 
   /**
    * Gets the a_index'th node in this chromosome. The nodes are counted in a
@@ -163,13 +165,14 @@ public interface IGPChromosome
    *
    * @param a_index the a_index'th terminal to get
    * @param a_type the type of terminal to get
+   * @param a_subType the subtype to consider
    * @return the index of the terminal found, or -1 if no appropriate terminal
    * was found
    *
    * @author Klaus Meffert
    * @since 3.01
    */
-  int getTerminal(int a_index, Class a_type);
+  int getTerminal(int a_index, Class a_type, int a_subType);
 
   /**
    * Gets the i'th function of the given type in this chromosome. The nodes are
@@ -178,13 +181,14 @@ public interface IGPChromosome
    *
    * @param a_index the i'th function to get
    * @param a_type the type of function to get
+   * @param a_subType the subtype to consider
    * @return the index of the function found, or -1 if no appropriate function
    * was found
    *
    * @author Klaus Meffert
    * @since 3.01
    */
-  int getFunction(int a_index, Class a_type);
+  int getFunction(int a_index, Class a_type, int a_subType);
 
   CommandGene[] getFunctions();
 

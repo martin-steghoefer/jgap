@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -83,6 +83,10 @@ public abstract class CommandGene
    */
   private boolean m_compareAppData;
 
+  private int m_subReturnType;
+
+  private int[] m_subChildTypes;
+
   /**
    * Initializations, called from each Constructor.
    */
@@ -107,6 +111,73 @@ public abstract class CommandGene
              || a_returnType == Float.class) {
       m_floatType = true;
     }
+  }
+
+  /**
+   * Allows specifying a sub return type and sub child types.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_arity int
+   * @param a_returnType Class
+   * @param a_subReturnType int
+   * @param a_childSubTypes int[]
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CommandGene(final GPConfiguration a_conf, final int a_arity,
+                     final Class a_returnType, final int a_subReturnType,
+                     final int[] a_childSubTypes)
+      throws InvalidConfigurationException {
+    this(a_conf, a_arity, a_returnType);
+    if (a_childSubTypes != null) {
+      boolean specialCase = false;
+      // Special case from convenient construction.
+      // ------------------------------------------
+      if (a_childSubTypes.length == 1) {
+        if (a_childSubTypes[0] == 0) {
+          m_subChildTypes = null;
+          specialCase = true;
+        }
+      }
+      if (!specialCase) {
+        if (a_childSubTypes.length != a_arity) {
+          throw new IllegalArgumentException(
+              "Length of child sub types must equal"
+              + " the given arity (or set the former to null)");
+        }
+      }
+      else {
+        m_subChildTypes = a_childSubTypes;
+      }
+    }
+    else {
+      m_subChildTypes = a_childSubTypes;
+    }
+    m_subReturnType = a_subReturnType;
+  }
+
+  /**
+   * Command with one child: Allows specifying a sub return type and a sub child
+   * type. Convenience version of the called constructor.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_arity int
+   * @param a_returnType Class
+   * @param a_subReturnType int
+   * @param a_childSubType int
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CommandGene(final GPConfiguration a_conf, final int a_arity,
+                     final Class a_returnType, final int a_subReturnType,
+                     final int a_childSubType)
+      throws InvalidConfigurationException {
+    this(a_conf, a_arity, a_returnType, a_subReturnType,
+         new int[] {a_childSubType});
   }
 
   public void setAllele(Object a_newValue) {
@@ -466,6 +537,7 @@ public abstract class CommandGene
   /**
    * Subclasses capable of validating programs should overwrite this method.
    * See PushCommand as a sample.
+   *
    * @param a_program the ProgramChromosome to validate
    * @return true: a_program is (superficially) valid with the current Command
    *
@@ -514,9 +586,9 @@ public abstract class CommandGene
 
   /**
    * This sets the application-specific data that is attached to this Gene.
-   * Attaching application-specific data may be useful for
-   * some applications when it comes time to distinguish a Gene from another.
-   * JGAP ignores this data functionally.
+   * Attaching application-specific data may be useful for some applications
+   * when it comes time to distinguish a Gene from another. JGAP ignores this
+   * data functionally.
    *
    * @param a_newData the new application-specific data to attach to this
    * Gene
@@ -579,7 +651,8 @@ public abstract class CommandGene
   }
 
   /**
-   * Sets the energy of the gene
+   * Sets the energy of the gene.
+   *
    * @param a_energy the energy to set
    *
    * @author Klaus Meffert
@@ -587,5 +660,31 @@ public abstract class CommandGene
    */
   public void setEnergy(final double a_energy) {
     m_energy = a_energy;
+  }
+
+  /**
+   * @return sub return type
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int getSubReturnType() {
+    return m_subReturnType;
+  }
+
+  public int getSubChildType(int a_childNum) {
+    if (m_subChildTypes == null) {
+      return 0;
+    }
+    else {
+      if (a_childNum >= m_subChildTypes.length) {
+        int x = 2;
+      }
+      return m_subChildTypes[a_childNum];
+    }
+  }
+
+  protected int[] getSubChildTypes() {
+    return m_subChildTypes;
   }
 }
