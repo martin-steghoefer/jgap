@@ -39,6 +39,7 @@ public class FibonacciNodeValidator
    * @since 3.0
    */
   public boolean validate(ProgramChromosome a_chrom, CommandGene a_node,
+                          CommandGene a_rootNode,
                           int a_tries, int a_num, int a_recurseLevel,
                           Class a_type, CommandGene[] a_functionSet,
                           int a_depth, boolean a_grow) {

@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private int[][] m_map;
 
@@ -325,8 +325,8 @@ public class AntTrailProblem
       Object[] noargs = new Object[0];
       // Initialize local stores.
       // ------------------------
-      GPGenotype.getGPConfiguration().clearStack();
-      GPGenotype.getGPConfiguration().clearMemory();
+      a_program.getGPConfiguration().clearStack();
+      a_program.getGPConfiguration().clearMemory();
       AntMap antmap = new AntMap(m_map, m_maxMoves);
       a_program.setApplicationData(antmap);
       try {
@@ -339,7 +339,7 @@ public class AntTrailProblem
         // The remaining food is the defect rate here.
         // -------------------------------------------
         error = totalFood - antmap.getFoodTaken();// countFood(antmap);
-        if (GPGenotype.getGPConfiguration().stackSize() > 0) {
+        if (a_program.getGPConfiguration().stackSize() > 0) {
           error = GPFitnessFunction.MAX_FITNESS_VALUE;
         }
         if (error < 0.000001) {
