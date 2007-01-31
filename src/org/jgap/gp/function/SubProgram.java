@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class SubProgram
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -200,12 +200,12 @@ public class SubProgram
     try {
       int[] subChildTypes = getSubChildTypes();
       if (subChildTypes != null) {
-        subChildTypes = subChildTypes.clone();
+        subChildTypes = (int[])subChildTypes.clone();
       }
       SubProgram result = new SubProgram(getGPConfiguration(), m_types,
           getSubReturnType(), subChildTypes);
       result.m_subtrees = m_subtrees;
-      result.m_types = m_types.clone();
+      result.m_types = (Class[])m_types.clone();
       return result;
     } catch (Throwable t) {
       throw new CloneException(t);
