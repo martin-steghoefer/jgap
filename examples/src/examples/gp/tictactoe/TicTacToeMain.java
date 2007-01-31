@@ -16,6 +16,7 @@ import org.jgap.gp.impl.*;
 import org.jgap.gp.function.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.util.*;
+import org.jgap.impl.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
@@ -29,7 +30,7 @@ import org.jgap.util.*;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static Variable vb;
 
@@ -64,8 +65,8 @@ public class TicTacToeMain
         CommandGene.VoidClass};
     Class[][] argTypes = { {}, {}, {}, {}
     };
-    int[] minDepths = new int[] {0, 2, 3, 1};
-    int[] maxDepths = new int[] {0, 2, 8, 6};
+    int[] minDepths = new int[] {0, 2, 2, 1};
+    int[] maxDepths = new int[] {0, 2, 6, 2};
 //    GPConfiguration conf = getGPConfiguration();
     int color = a_color;
     ForLoop forLoop1 = new ForLoop(conf, SubProgram.VoidClass, 1, Board.WIDTH,
@@ -117,6 +118,7 @@ public class TicTacToeMain
         new Constant(conf, CommandGene.IntegerClass, new Integer(0)),
         new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(conf, CommandGene.IntegerClass, new Integer(2)),
+        new Constant(conf, CommandGene.IntegerClass, new Integer(3)),
         new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true, 4),
         new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true,
                      4),
@@ -137,14 +139,15 @@ public class TicTacToeMain
         new IsOwnColor(conf, color),
         new Increment(conf, CommandGene.IntegerClass, 1),
         new Increment(conf, CommandGene.IntegerClass, -1),
+        new StoreTerminalIndexed(conf, 15, CommandGene.IntegerClass),
         new StoreTerminal(conf, "mem0", CommandGene.IntegerClass),
-        new AddAndStoreTerminal(conf, "memA", CommandGene.IntegerClass),
-        new AddAndStoreTerminal(conf, "memB", CommandGene.IntegerClass),
 //        new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
+        new AddAndStoreTerminal(conf, "memA", CommandGene.IntegerClass),
+//        new AddAndStoreTerminal(conf, "memB", CommandGene.IntegerClass),
         new ReadTerminal(conf, CommandGene.IntegerClass, "mem0"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "memA"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "memB"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
+        new ReadTerminal(conf, CommandGene.IntegerClass, "memA"),
+//        new ReadTerminal(conf, CommandGene.IntegerClass, "memB"),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countr0", 1),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countr1", 1),
 //        new ReadTerminal(conf, CommandGene.IntegerClass, "countc0", 8),
@@ -159,32 +162,26 @@ public class TicTacToeMain
         // Make a move.
         // ------------
         vb,
-        vx,
+//        vx,
         new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
         new Constant(conf, CommandGene.IntegerClass, new Integer(2)),
         new Equals(conf, CommandGene.IntegerClass),
-        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true, 3),
-        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true,
-                     3),
-        new PutStone(conf, m_board, color, 0, new int[] {3, 3}),
-        new Not(conf),
-        new IfIsOccupied(conf, m_board, CommandGene.IntegerClass),
+        new PutStone(conf, m_board, color),
+        new PutStone1(conf, m_board, color, 0, 33),
         new IfIsFree(conf, m_board, CommandGene.IntegerClass),
         new IfElse(conf, CommandGene.BooleanClass),
         new Increment(conf, CommandGene.IntegerClass, 1),
         new Increment(conf, CommandGene.IntegerClass, -1),
-        new StoreTerminal(conf, "mem2", CommandGene.IntegerClass),
-//        new StoreTerminal(conf, "mem3", CommandGene.IntegerClass),
+        new ReadTerminalIndexed(conf, CommandGene.IntegerClass, 15, 33),
         new ReadTerminal(conf, CommandGene.IntegerClass, "mem0"),
+        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
         new ReadTerminal(conf, CommandGene.IntegerClass, "memA"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "memB"),
-//        new ReadTerminal(conf, CommandGene.IntegerClass, "mem1"),
-        new ReadTerminal(conf, CommandGene.IntegerClass, "mem2"),
-//        new ReadTerminal(conf, CommandGene.IntegerClass, "mem3"),
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass}),
-        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass, CommandGene.VoidClass}),
+//        new SubProgram(conf, new Class[] {CommandGene.VoidClass,
+//                       CommandGene.VoidClass}),
+
+        //        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.WIDTH, true),
+//        new Terminal(conf, CommandGene.IntegerClass, 1.0d, Board.HEIGHT, true),
+//        new IfIsOccupied(conf, m_board, CommandGene.IntegerClass),
     }
     };
     conf.setFitnessFunction(new TicTacToeMain.
@@ -221,14 +218,15 @@ public class TicTacToeMain
     try {
       System.out.println("Problem: Find a strategy for playing Tic Tac Toe");
       GPConfiguration config = new GPConfiguration();
+      config.setRandomGenerator(new GaussianRandomGenerator());
       config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
       int popSize;
       popSize = 50;
       System.out.println("Using population size of " + popSize);
       // Setup for player 1.
       // -------------------
-      config.setMaxInitDepth(10);
-      config.setMinInitDepth(5);
+      config.setMaxInitDepth(6);
+      config.setMinInitDepth(2);
       config.setNewChromsPercent(0.1d);
       config.setPopulationSize(popSize);
       config.setStrictProgramCreation(false);
@@ -239,14 +237,12 @@ public class TicTacToeMain
       final TicTacToeMain problem = new TicTacToeMain(config);
       config.getEventManager().addEventListener(GeneticEvent.
           GPGENOTYPE_EVOLVED_EVENT, new MyGeneticEventListener());
-      config.getEventManager().addEventListener(GeneticEvent.
-          GPGENOTYPE_NEW_BEST_SOLUTION, new BestGeneticEventListener());
       // Setup for player 2.
       // -------------------
       GPConfiguration config2 = new GPConfiguration(config.getId() + "_2",
           config.getName() + "_2");
       config2.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
-      config2.setMaxInitDepth(7);
+      config2.setMaxInitDepth(6);
       config.setMinInitDepth(2);
       config.setNewChromsPercent(0.1d);
       config2.setPopulationSize(popSize);
@@ -257,15 +253,18 @@ public class TicTacToeMain
       final TicTacToeMain problem2 = new TicTacToeMain(config);
       GPGenotype gp2 = problem2.create(config2, 2, null, 1);
       gp2.setVerboseOutput(true);
+      config.getEventManager().addEventListener(GeneticEvent.
+          GPGENOTYPE_NEW_BEST_SOLUTION, new BestGeneticEventListener(gp2));
 //      config2.getEventManager().addEventListener(GeneticEvent.
 //          GPGENOTYPE_EVOLVED_EVENT, new MyGeneticEventListener());
-//      config2.getEventManager().addEventListener(GeneticEvent.
-//          GPGENOTYPE_NEW_BEST_SOLUTION, new BestGeneticEventListener());
       //
       GPGenotype gp1 = problem.create(config, 1, gp2, 2);
       ( (GameFitnessFunction) gp1.getGPConfiguration().getGPFitnessFunction()).
           setPlayer(gp1);
       gp1.setVerboseOutput(true);
+      //
+      config2.getEventManager().addEventListener(GeneticEvent.
+          GPGENOTYPE_NEW_BEST_SOLUTION, new BestGeneticEventListener(gp1));
       //
       ( (GameFitnessFunction) gp2.getGPConfiguration().getGPFitnessFunction()).
           setOpponent(gp1);
@@ -336,10 +335,6 @@ public class TicTacToeMain
       double error = MY_WORST_FITNESS_VALUE;
       double errorOpponent = MY_WORST_FITNESS_VALUE;
       Object[] noargs = new Object[0];
-      // Initialize local stores.
-      // ------------------------
-      a_program.getGPConfiguration().clearStack();
-      a_program.getGPConfiguration().clearMemory();
       // Determine opponent's program.
       // -----------------------------
       IGPProgram opponent;
@@ -356,7 +351,7 @@ public class TicTacToeMain
         opponent = m_other.getFittestProgramComputed();
         if (opponent == null) {
           nullfound++;
-          if (nullfound % 50 == 0) {
+          if (nullfound == 100) {
             System.err.println(
                 "---------- Consecutive calls: opponent is null!");
           }
@@ -388,6 +383,10 @@ public class TicTacToeMain
           vx1.set(var2);
           Variable vx2 = m_other.getVariable("move");
           vx2.set(var2);
+          // Initialize local stores.
+          // ------------------------
+          a_program.getGPConfiguration().clearStack();
+          a_program.getGPConfiguration().clearMemory();
           try {
             // First player.
             // -------------
@@ -415,6 +414,10 @@ public class TicTacToeMain
             m_board.endTurn();
             moves++;
             error -= ONE_MOVE2;
+            // Initialize local stores.
+            // ------------------------
+            a_program.getGPConfiguration().clearStack();
+            a_program.getGPConfiguration().clearMemory();
             // Second player.
             // --------------
             m_board.beginTurn();
@@ -492,7 +495,9 @@ public class TicTacToeMain
 }
 class BestGeneticEventListener
     implements GeneticEventListener {
-  public BestGeneticEventListener() {
+  private GPGenotype m_other;
+  public BestGeneticEventListener(GPGenotype a_other) {
+    m_other = a_other;
   }
 
   /**
@@ -510,6 +515,9 @@ class BestGeneticEventListener
     IGPProgram best = genotype.getAllTimeBest();
     IGPProgram fittest = genotype.getFittestProgram();
     if (fittest != null) {
+      // Inject fittest program into opponent's population.
+      // --------------------------------------------------
+      m_other.addFittestProgram(fittest);
       double bestFitness = fittest.getFitnessValue();
       if (bestFitness < 0.5) {
         genotype.outputSolution(best);
