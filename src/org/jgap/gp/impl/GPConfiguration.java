@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -401,7 +401,14 @@ public class GPConfiguration
    * @since 3.2
    */
   public Object readFromMemoryIfExists(String a_name) {
-    CultureMemoryCell cell = m_memory.get(a_name);
+    CultureMemoryCell cell = null;
+    try {
+      cell  = m_memory.get(a_name);
+    }catch(IllegalArgumentException iex) {
+      // Memory name not found: OK.
+      // --------------------------
+      ;
+    }
     if (cell == null) {
       return null;
     }
