@@ -12,19 +12,22 @@ package org.jgap.distr.grid;
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.jgap.*;
-import org.homedns.dade.jcgrid.message.GridMessageWorkResult;
-import org.homedns.dade.jcgrid.message.GridMessageWorkRequest;
+import org.homedns.dade.jcgrid.message.*;
+import org.homedns.dade.jcgrid.cmd.*;
+import org.apache.commons.cli.*;
+import examples.grid.fitnessDistributed.MyRequest;
 
 /**
  * A client defines work for the grid and sends it to the JGAPServer.
+ * Use this class as base class for your grid client implementations.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
-public abstract class JGAPClient
+public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -32,31 +35,46 @@ public abstract class JGAPClient
 
   protected GridNodeClientConfig m_gridconfig;
 
-  protected IClientFeedback m_clientFeedback;
-
   protected JGAPRequest m_workReq;
 
-  protected IRequestSplitStrategy m_splitStrategy;
+  private GridClient m_gc;
 
-  private Configuration m_clientConfig;
+  private IGridConfiguration m_gridConfig;
 
-  public JGAPClient(GridNodeClientConfig a_gridconfig,
-                    IClientFeedback feedback, JGAPRequest req) {
+  public JGAPClient(GridNodeClientConfig a_gridconfig, String a_clientClassName)
+      throws Exception {
     m_gridconfig = a_gridconfig;
-    m_clientFeedback = feedback;
-    m_workReq = req;
-  }
-
-  public JGAPClient(GridNodeClientConfig a_gridconfig) {
-    m_gridconfig = a_gridconfig;
-  }
-
-  public void setClientFeedback(IClientFeedback a_feedbackObject) {
-    m_clientFeedback = a_feedbackObject;
+    Class client = Class.forName(a_clientClassName);
+    m_gridConfig = (IGridConfiguration) client.getConstructor(new
+        Class[] {}).newInstance(new Object[] {});
+    m_gridConfig.initialize(m_gridconfig);
+    // Setup work request.
+    // -------------------
+    MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0,
+                                  m_gridConfig.getConfiguration());
+    req.setWorkerReturnStrategy(m_gridConfig.getWorkerReturnStrategy());
+    req.setGenotypeInitializer(m_gridConfig.getGenotypeInitializer());
+    req.setEvolveStrategy(m_gridConfig.getWorkerEvolveStrategy());
+    // Evolution takes place on client only!
+    // -------------------------------------
+    req.setEvolveStrategy(null);
+    setWorkRequest(req);
+    // Start the threaded process.
+    // ---------------------------
+    start();
+    join();
   }
 
   public void setWorkRequest(JGAPRequest a_request) {
     m_workReq = a_request;
+  }
+
+  protected GridClient startClient()
+      throws Exception {
+    GridClient gc = new GridClient();
+    gc.setNodeConfig(m_gridconfig);
+    gc.start();
+    return gc;
   }
 
   /**
@@ -67,90 +85,152 @@ public abstract class JGAPClient
    */
   public void run() {
     try {
-      // Start Client.
+      // Start client.
       // -------------
-      GridClient gc = new GridClient();
-      gc.setNodeConfig(m_gridconfig);
-      gc.start();
+      m_gc = startClient();
       try {
-        // Do the complete evolution cycle n times.
-        // ----------------------------------------
-        final int maxEvolutions = 20;
-        for (int a = 0; a < maxEvolutions; a++) {
-          if (a == 0) {
-            // First run
-          }
-          else {
-            // Consecutive runs.
-            // -----------------
-          }
-          // Split the work. This is done by the work request.
-          // -------------------------------------------------
-          JGAPRequest[] workList;
-          workList = m_splitStrategy.split(m_workReq);
-          m_clientFeedback.setProgressMaximum(0);
-          m_clientFeedback.setProgressMaximum(workList.length - 1);
-          m_clientFeedback.beginWork();
-          // Send work requests.
-          // -------------------
-          for (int i = 0; i < workList.length; i++) {
-            JGAPRequest req = workList[i];
-            m_clientFeedback.sendingFragmentRequest(req);
-            gc.send(new GridMessageWorkRequest(req));
-            if (this.isInterrupted())
-              break;
-          }
-          // Receive work results.
-          // ---------------------
-          for (int i = 0; i < workList.length; i++) {
-            m_clientFeedback.setProgressValue(i + workList.length);
-            GridMessageWorkResult gmwr = (GridMessageWorkResult) gc.recv();
-            JGAPResult workResult = (JGAPResult) gmwr.getWorkResult();
-            int idx = workResult.getRID();
-            m_clientFeedback.receivedFragmentResult(workList[idx], workResult,
-                idx);
-            m_clientFeedback.completeFrame(idx);
-            if (this.isInterrupted()) {
-              break;
-            }
-          }
-          // Merge results.
-          // --------------
-          /**@todo*/
-        }
+        // Initialize evolution.
+        // ---------------------
+        m_gridConfig.getClientEvolveStrategy().initialize(m_gc,
+            getConfiguration(),
+            m_gridConfig.getClientFeedback());
+        // Do the evolution.
+        // -----------------
+        evolve(m_gc);
       } finally {
         try {
-          gc.stop();
+          m_gc.stop();
         } catch (Exception ex) {}
       }
     } catch (Exception ex) {
       ex.printStackTrace();
-      m_clientFeedback.error("Error while doing the work", ex);
+      m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
     }
-    m_clientFeedback.endWork();
+    m_gridConfig.getClientFeedback().endWork();
   }
 
-  public void setRequestSplitStrategy(IRequestSplitStrategy a_splitStrategy) {
-    m_splitStrategy = a_splitStrategy;
+  protected void sendWorkRequests(JGAPRequest[] a_workList)
+      throws Exception {
+    // Send work requests.
+    // -------------------
+    for (int i = 0; i < a_workList.length; i++) {
+      JGAPRequest req = a_workList[i];
+      m_gridConfig.getClientFeedback().sendingFragmentRequest(req);
+      m_gc.send(new GridMessageWorkRequest(req));
+      if (this.isInterrupted()) {
+        break;
+      }
+    }
+  }
+
+  protected void receiveWorkResults(JGAPRequest[] workList)
+      throws Exception {
+    IClientFeedback feedback = m_gridConfig.getClientFeedback();
+    // Receive work results.
+    // ---------------------
+    int idx = -1;
+    for (int i = 0; i < workList.length; i++) {
+      feedback.setProgressValue(i + workList.length);
+      m_gc.getGridMessageChannel();
+      GridMessageWorkResult gmwr = (GridMessageWorkResult) m_gc.recv(i);
+      JGAPResult workResult = (JGAPResult) gmwr.getWorkResult();
+      m_gridConfig.getClientEvolveStrategy().resultReceived(workResult);
+      idx = workResult.getRID();
+      // Fire listener.
+      // --------------
+      feedback.receivedFragmentResult(workList[idx], workResult,
+                                      idx);
+      if (this.isInterrupted()) {
+        break;
+      }
+    }
+  }
+
+  /**
+   * If necessary: override to implement your evolution cycle individually.
+   *
+   * @param gc GridClient
+   * @throws Exception
+   */
+  protected void evolve(GridClient gc)
+      throws Exception {
+    // Do the complete evolution cycle until end.
+    // ------------------------------------------
+    IClientFeedback feedback = m_gridConfig.getClientFeedback();
+    feedback.beginWork();
+    IClientEvolveStrategy evolver = m_gridConfig.getClientEvolveStrategy();
+    IRequestSplitStrategy splitter = m_gridConfig.getRequestSplitStrategy();
+    int evolutionIndex = 0;
+    do {
+//      m_clientEvolveStrategy.beforeGenerateWorkResults();
+      JGAPRequest[] workRequests = evolver.generateWorkRequests(
+          m_workReq, splitter, null);
+      feedback.setProgressMaximum(0);
+      feedback.setProgressMaximum(workRequests.length - 1);
+      sendWorkRequests(workRequests);
+      if (this.isInterrupted()) {
+        break;
+      }
+      evolver.afterWorkRequestsSent();
+      receiveWorkResults(workRequests);
+      evolver.evolve();
+      // Fire listener that one evolution cycle is complete.
+      // ---------------------------------------------------
+      feedback.completeFrame(evolutionIndex);
+      evolutionIndex++;
+      // Check if evolution is finished.
+      // -------------------------------
+      if (evolver.isEvolutionFinished(evolutionIndex)) {
+        evolver.onFinished();
+        break;
+      }
+    } while (true);
   }
 
   public void start() {
-    if (m_splitStrategy == null) {
-      throw new RuntimeException("Please set the request split strategy first"
-                                 +" with JGAPClient before starting it!");
-    }
-    if (m_clientConfig == null) {
-      throw new RuntimeException("Please set the configuration first"
-                                 +" with JGAPClient before starting it!");
+    try {
+      m_gridConfig.validate();
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
     }
     super.start();
   }
 
-  public void setConfiguration(Configuration a_config) {
-    m_clientConfig = a_config;
+  public Configuration getConfiguration() {
+    return m_gridConfig.getConfiguration();
   }
 
-  public Configuration getConfiguration() {
-    return m_clientConfig;
+  /**
+   * Starts a client (first parameter: name of specific setup class).
+   *
+   * @param args String[]
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public static void main(String[] args) {
+    if (args.length < 1) {
+      System.out.println(
+          "Please provide a name of the grid configuration class to use");
+      System.out.println("An example class would be "
+                         + "examples.grid.fitnessDistributed.GridConfiguration");
+      System.exit(1);
+    }
+    try {
+      // Setup logging.
+      // --------------
+      MainCmd.setUpLog4J("client", true);
+      // Command line options.
+      // ---------------------
+      GridNodeClientConfig config = new GridNodeClientConfig();
+      Options options = new Options();
+      CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
+      // Setup and start client.
+      // -----------------------
+      new JGAPClient(config, args[0]);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.exit(1);
+    }
   }
 }
