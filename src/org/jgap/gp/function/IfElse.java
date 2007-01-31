@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class IfElse
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private Class m_type;
 
@@ -106,6 +106,9 @@ public class IfElse
     if (m_type == CommandGene.IntegerClass) {
       condition = c.execute_int(n, 0, args) > 0;
     }
+    else if (m_type == CommandGene.BooleanClass) {
+      condition = c.execute_boolean(n, 0, args);
+    }
     else if (m_type == CommandGene.LongClass) {
       condition = c.execute_long(n, 0, args) > 0;
     }
@@ -116,7 +119,7 @@ public class IfElse
       condition = c.execute_float(n, 0, args) > 0;
     }
     else {
-      throw new IllegalStateException("IfElse: cannot process Object");
+      throw new IllegalStateException("IfElse: cannot process type "+m_type);
     }
     if (condition) {
       c.execute_void(n, 1, args);
