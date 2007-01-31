@@ -11,6 +11,7 @@ package examples.grid.fitnessDistributed;
 
 import org.jgap.*;
 import org.jgap.distr.grid.*;
+import org.apache.log4j.*;
 
 /**
  * Listener for feedback sent to the client. This is a simple sample
@@ -22,36 +23,39 @@ import org.jgap.distr.grid.*;
 public class MyClientFeedback
     implements IClientFeedback {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
+
+  private final static String className = MyClientFeedback.class.getName();
+
+  private static Logger log = Logger.getLogger(className);
 
   public MyClientFeedback() {
   }
 
   public void error(String msg, Exception ex) {
-    System.err.println("Error catched on client side: " + msg);
-    ex.printStackTrace();
+    log.error("Error catched on client side: " + msg, ex);
   }
 
   public void sendingFragmentRequest(JGAPRequest req) {
-    System.out.println("Sending work request " + req.getRID());
+    log.warn("Sending work request " + req.getRID());
   }
 
   public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
                                      int idx) {
-    System.out.println("Receiving work (index " + idx + "). First solution: " +
-                       res.getPopulation().getChromosome(0));
+    log.warn("Receiving work (index " + idx + "). First solution: " +
+             res.getPopulation().getChromosome(0));
   }
 
   public void beginWork() {
-    System.out.println("Client starts sending work requests");
+    log.warn("Client starts sending work requests");
   }
 
   public void endWork() {
-    System.out.println("Client processed your request completely");
+    log.warn("Your request was processed completely");
   }
 
   public void info(String a_msg) {
-    System.out.println(a_msg);
+    log.warn(a_msg);
   }
 
   public void setProgressMaximum(int max) {
@@ -67,6 +71,6 @@ public class MyClientFeedback
   }
 
   public void completeFrame(int idx) {
-    System.out.println("Client notified that unit " + idx + " is finished.");
+    log.warn("Client notified that unit " + idx + " is finished.");
   }
 }
