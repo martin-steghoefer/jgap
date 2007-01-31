@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -295,8 +295,8 @@ public class GPGenotype
       boolean[] a_fullModeAllowed, boolean a_verboseOutput)
       throws InvalidConfigurationException {
     if (a_argTypes.length != a_fullModeAllowed.length
-        || a_argTypes.length != a_minDepths.length
-        || a_argTypes.length != a_maxDepths.length
+        || (a_minDepths != null && a_argTypes.length != a_minDepths.length)
+        || (a_maxDepths != null && a_argTypes.length != a_maxDepths.length)
         || a_argTypes.length != a_types.length) {
       throw new IllegalArgumentException("a_argTypes must have same length"
           + " as a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
