@@ -15,6 +15,8 @@ import org.jgap.*;
 /**
  * Stores the result of a computation. Actually adds no functionality to
  * superclass JGAPResult. Extend this class for your application if necessary.
+ * It is not necessary to use a class like this, you could simply use
+ * JGAPResult!
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -22,8 +24,11 @@ import org.jgap.*;
 public class MyResult
     extends JGAPResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
+  /**
+   * Control the class' serializability via this attribute
+   */
   private static final long serialVersionUID = 2L;
 
   public MyResult(String a_name, int a_id, IChromosome a_fittestChrom,
