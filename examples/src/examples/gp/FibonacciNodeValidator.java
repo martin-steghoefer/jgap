@@ -23,6 +23,7 @@ public class FibonacciNodeValidator
    * @param a_chrom the chromosome that will contain the node, if valid (ignored
    * in this implementation)
    * @param a_node the node selected and to be validated
+   * @param a_rootNode the root node of a_node, may be null for top nodes
    * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
    * @param a_num the chromosome's index in the individual of this chromosome
@@ -33,6 +34,8 @@ public class FibonacciNodeValidator
    * @param a_depth the needed depth of the program chromosome
    * @param a_grow true: use grow mode, false: use full mode (ignored in this
    * implementation)
+   * @param a_childIndex index of the child in the parent node to which it
+   * belongs (-1 if node is root node)
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
@@ -42,7 +45,7 @@ public class FibonacciNodeValidator
                           CommandGene a_rootNode,
                           int a_tries, int a_num, int a_recurseLevel,
                           Class a_type, CommandGene[] a_functionSet,
-                          int a_depth, boolean a_grow) {
+                          int a_depth, boolean a_grow, int a_childIndex) {
     // Guard to avoid endless validation.
     // ----------------------------------
     if (a_tries > 10) {
