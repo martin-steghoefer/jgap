@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -99,6 +99,8 @@ public class GPGenotype
   private boolean m_verbose;
 
   private Map m_variables;
+
+  private IGPProgram m_fittestToAdd;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -502,6 +504,10 @@ public class GPGenotype
       int popSize = getGPConfiguration().getPopulationSize();
       GPPopulation oldPop = getGPPopulation();
       GPPopulation newPopulation = new GPPopulation(oldPop);
+      if (m_fittestToAdd != null) {
+        newPopulation.addFittestProgram(m_fittestToAdd);
+        m_fittestToAdd = null;
+      }
       float val;
       RandomGenerator random = getGPConfiguration().getRandomGenerator();
       GPConfiguration conf = getGPConfiguration();
@@ -850,5 +856,20 @@ public class GPGenotype
    */
   public Variable getVariable(String a_varName) {
     return (Variable) m_variables.get(a_varName);
+  }
+
+  /**
+   * Adds a GP program to this Genotype. Does nothing when given null.
+   * The injection is actually executed in method create(..) of GPPopulation.
+   *
+   * @param a_toAdd the program to add
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void addFittestProgram(final IGPProgram a_toAdd) {
+    if (a_toAdd != null) {
+      m_fittestToAdd = a_toAdd;
+    }
   }
 }

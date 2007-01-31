@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -36,8 +36,7 @@ public class GPPopulation
 
   private transient IGPProgram m_fittestProgram;
 
-  private
-      /*transient*/GPConfiguration m_config;
+  private GPConfiguration m_config;
 
   /**
    * Indicates whether at least one of the programs has been changed
@@ -49,6 +48,8 @@ public class GPPopulation
    * Indicates that the list of GPPrograms has been sorted.
    */
   private boolean m_sorted;
+
+  private IGPProgram m_fittestToAdd;
 
   /*
    * @param a_config the configuration to use.
@@ -142,34 +143,34 @@ public class GPPopulation
       divisor = m_popSize - 1;
     }
     for (int i = 0; i < m_popSize; i++) {
-      // Vary depth dependent on run index.
-      // ----------------------------------
-      int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i
-          / divisor;
-      // Create new GP program.
-      // ----------------------
       IGPProgram program = null;
-      int tries = 0;
-      do {
-        try {
-          program = create(a_types, a_argTypes, a_nodeSets,
-                           a_minDepths,
-                           a_maxDepths, depth, (i % 2) == 0,
-                           a_maxNodes,
-                           a_fullModeAllowed);
-          if (i == 0) {
-            // Remember a prototyp of a valid program in case generation
-            // cannot find a valid program within some few tries
-            // --> then clone the prototyp.
-            // Necessary if the maxNodes parameter is chosen too small.
-            // ----------------------------------------------------------
-            getGPConfiguration().setPrototypeProgram(program);
-            /**@todo set prototype to new value after each some evolutions*/
-          }
-          break;
-        } catch (IllegalStateException iex) {
-          tries++;
-          if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
+        // Vary depth dependent on run index.
+        // ----------------------------------
+        int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i
+            / divisor;
+        // Create new GP program.
+        // ----------------------
+        int tries = 0;
+        do {
+          try {
+            program = create(a_types, a_argTypes, a_nodeSets,
+                             a_minDepths,
+                             a_maxDepths, depth, (i % 2) == 0,
+                             a_maxNodes,
+                             a_fullModeAllowed);
+            if (i == 0) {
+              // Remember a prototyp of a valid program in case generation
+              // cannot find a valid program within some few tries
+              // --> then clone the prototyp.
+              // Necessary if the maxNodes parameter is chosen too small.
+              // ----------------------------------------------------------
+              getGPConfiguration().setPrototypeProgram(program);
+              /**@todo set prototype to new value after each some evolutions*/
+            }
+            break;
+          } catch (IllegalStateException iex) {
+            tries++;
+            if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
               ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
                   getCloneHandlerFor(
                       getGPConfiguration().getPrototypeProgram(), null);
@@ -185,10 +186,10 @@ public class GPPopulation
                   throw new IllegalStateException(iex.getMessage());
                 }
               }
-            throw new IllegalStateException(iex.getMessage());
+              throw new IllegalStateException(iex.getMessage());
+            }
           }
-        }
-      } while (true);
+        } while (true);
       setGPProgram(i, program);
     }
     setChanged(true);
@@ -226,12 +227,34 @@ public class GPPopulation
                            int a_depth, boolean a_grow, int a_maxNodes,
                            boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
-    // Create new GP program.
-    // ----------------------
-    GPProgram program = new GPProgram(getGPConfiguration(), a_types, a_argTypes,
-                                      a_nodeSets, a_minDepths, a_maxDepths,
-                                      a_maxNodes);
-    program.growOrFull(a_depth, a_grow, a_maxNodes, a_fullModeAllowed);
+    GPProgram program;
+    // Is there a fit program to be injected?
+    // --------------------------------------
+    if (m_fittestToAdd != null) {
+      ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+          getCloneHandlerFor(m_fittestToAdd, null);
+      if (cloner == null) {
+        program = (GPProgram)m_fittestToAdd;
+      }
+      else {
+        try {
+          program = (GPProgram) cloner.perform(m_fittestToAdd, null, null);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          program = (GPProgram)m_fittestToAdd;
+        }
+      }
+      m_fittestToAdd = null;
+    }
+    else {
+      // Create new GP program.
+      // ----------------------
+      program = new GPProgram(getGPConfiguration(), a_types,
+                                        a_argTypes,
+                                        a_nodeSets, a_minDepths, a_maxDepths,
+                                        a_maxNodes);
+      program.growOrFull(a_depth, a_grow, a_maxNodes, a_fullModeAllowed);
+    }
     return program;
   }
 
@@ -312,13 +335,14 @@ public class GPPopulation
     }
     setChanged(false);
     if (m_fittestProgram != null) {
-      ICloneHandler cloner = getGPConfiguration().getJGAPFactory().getCloneHandlerFor(
-          m_fittestProgram, null);
+      ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+          getCloneHandlerFor(
+              m_fittestProgram, null);
       if (cloner != null) {
         try {
           m_fittestProgram = (IGPProgram) cloner.perform(m_fittestProgram, null, null);
         } catch (Exception ex) {
-          ;// ignore
+          ; // ignore
         }
       }
     }
@@ -342,14 +366,14 @@ public class GPPopulation
     for (int i = 0; i < m_programs.length && m_programs[i] != null; i++) {
       IGPProgram program = m_programs[i];
       if (program instanceof GPProgramBase) {
-        GPProgramBase program1 = (GPProgramBase)program;
+        GPProgramBase program1 = (GPProgramBase) program;
         fitness = program1.getFitnessValueDirectly();
       }
       else {
         fitness = program.getFitnessValue();
       }
       if (Math.abs(fitness - FitnessFunction.NO_FITNESS_VALUE) >
-                   FitnessFunction.DELTA) {
+          FitnessFunction.DELTA) {
         if (fittest == null || evaluator.isFitter(fitness, bestFitness)) {
           fittest = program;
           bestFitness = fitness;
@@ -523,6 +547,21 @@ public class GPPopulation
       // then we're not equal.
       // ------------------------------------------------
       return false;
+    }
+  }
+
+  /**
+   * Adds a GP program to this Population. Does nothing when given null.
+   * The injection is actually executed in method create(..)
+   *
+   * @param a_toAdd the program to add
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void addFittestProgram(final IGPProgram a_toAdd) {
+    if (a_toAdd != null) {
+      m_fittestToAdd = a_toAdd;
     }
   }
 }
