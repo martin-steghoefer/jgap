@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -164,6 +164,7 @@ public class GPPopulation
             // Necessary if the maxNodes parameter is chosen too small.
             // ----------------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
+            /**@todo set prototype to new value after each some evolutions*/
           }
           break;
         } catch (IllegalStateException iex) {
