@@ -48,13 +48,13 @@ public class Board {
   public void startNewRound() {
     m_lastColor = 0;
     movesInRound = 0;
-    m_readPositionCount = 0;
-    m_readPositions.clear();
     resetBoard();
   }
 
   public void beginTurn() {
     movesInTurn = 0;
+    m_readPositionCount = 0;
+    m_readPositions.clear();
   }
 
   public void endTurn() {
