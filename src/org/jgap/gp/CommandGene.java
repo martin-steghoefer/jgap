@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -476,18 +476,24 @@ public abstract class CommandGene
   }
 
   /**
-   * Gets the type of node allowed from the given child number. Must be
+   * Gets the type of node allowed from the given child number. Should be
    * overridden in subclasses.
    *
    * @param a_ind the individual the child belongs to
    * @param a_chromNum the chromosome number
-   * @return the type of node allowed for that child
+   * @return the type of node allowed for that child, or null of no child
+   * exists
    *
    * @author Klaus Meffert
    * @since 3.0
    */
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
-    return getReturnType();
+    if (m_arity == 0) {
+      return null;
+    }
+    else {
+      return getReturnType();
+    }
   }
 
   protected Object getInternalValue() {
