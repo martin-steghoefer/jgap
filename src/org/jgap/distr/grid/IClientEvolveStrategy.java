@@ -12,7 +12,6 @@ package org.jgap.distr.grid;
 import java.io.*;
 import org.jgap.*;
 import org.homedns.dade.jcgrid.client.*;
-import org.homedns.dade.jcgrid.message.*;
 
 /**
  * Interface for defining a strategy that controls how a client evolves
@@ -24,7 +23,7 @@ import org.homedns.dade.jcgrid.message.*;
 public interface IClientEvolveStrategy
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   void initialize(GridClient a_gc, Configuration a_config,
                   IClientFeedback a_clientFeedback)
