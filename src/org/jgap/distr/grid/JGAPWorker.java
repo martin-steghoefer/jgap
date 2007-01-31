@@ -13,12 +13,10 @@ import org.homedns.dade.jcgrid.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.*;
 import org.jgap.distr.grid.*;
-import org.jgap.event.*;
-import org.jgap.impl.*;
 
 /**
  * A worker receives work units from a JGAPServer and sends back computed
- * solutions to a JGAPServer.
+ * solutions to the same JGAPServer.
  *
  * @author Klaus Meffert
  * @since 3.2 (since 3.01 this class contained something different that is now
@@ -27,7 +25,7 @@ import org.jgap.impl.*;
 public class JGAPWorker
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -43,22 +41,48 @@ public class JGAPWorker
   public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
     JGAPRequest req = ( (JGAPRequest) work);
+    /**@todo set gridworkerfeedback in class GridWorker*/
+
     // Setup configuration.
     // --------------------
     Configuration conf = req.getConfiguration();
+    conf = conf.newInstance(conf.getId() + "_1", conf.getName() + "_1");
+    // Important: Re-set the cloned configuration!
+    // -------------------------------------------
     req.setConfiguration(conf);
-    conf.setEventManager(new EventManager()); //because it is not serialized!
-    conf.setJGAPFactory(new JGAPFactory(false)); //because it is not serialized!
-    // Setup the genotype to evolve.
-    // -----------------------------
-    Population initialPop = req.getPopulation();
-    Genotype gen = req.getGenotypeInitializer().setupGenotype(req, initialPop);
-    // Execute evolution via registered strategy.
-    // ------------------------------------------
-    req.getEvolveStrategy().evolve(gen);
+    Genotype gen = null;
+    // It is possible that no evolution happens at the worker.
+    // -------------------------------------------------------
+    if (req.getGenotypeInitializer() != null) {
+      // Setup the genotype to evolve.
+      // -----------------------------
+      Population initialPop = req.getPopulation();
+      gen = req.getGenotypeInitializer().setupGenotype(req, initialPop);
+      if (req.getWorkerEvolveStrategy() != null) {
+        // Execute evolution via registered strategy.
+        // ------------------------------------------
+        req.getWorkerEvolveStrategy().evolve(gen);
+      }
+    }
     // Assemble result according to registered strategy.
     // -------------------------------------------------
     WorkResult res = req.getWorkerReturnStrategy().assembleResult(req, gen);
     return res;
+  }
+
+  /**
+   * Convenience method to start the worker.
+   *
+   * @param args command-line arguments, such as server address. See
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.01
+   */
+  public static void main(String[] args)
+      throws Exception {
+    // Start worker.
+    // -------------
+    new JGAPWorkers(args);
   }
 }
