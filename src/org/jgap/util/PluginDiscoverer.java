@@ -27,7 +27,7 @@ import java.util.jar.*;
  */
 public class PluginDiscoverer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private static final boolean DEBUG = false;
 
@@ -36,6 +36,8 @@ public class PluginDiscoverer {
 
   //list of jars in the classpath
   private List m_classpathJars;
+
+  private String m_jarFile;
 
   /**
    * Reads the list of jars and classpath folders into instance variables
@@ -69,7 +71,8 @@ public class PluginDiscoverer {
    */
   public PluginDiscoverer(String a_jarFile) {
     init();
-    m_classpathJars.add(a_jarFile);
+    m_jarFile = a_jarFile;
+    m_classpathJars.add(m_jarFile);
   }
 
   private void init() {
@@ -86,7 +89,7 @@ public class PluginDiscoverer {
    * @author Klaus Meffert
    * @since 2.3
    */
-  private String checkIfClassMatches(final Class a_interfaceClass,
+  private String checkIfClassMatches(String a_jarFilename, final Class a_interfaceClass,
                                      String a_testClass) {
     // remove trailing dots
     if (a_testClass.toLowerCase().endsWith(".class")) {
@@ -103,8 +106,15 @@ public class PluginDiscoverer {
       return null;
     }
     try {
+      ClassLoader cl;
+      if (a_jarFilename == null) {
+        cl = getClass().getClassLoader();
+      }
+      else {
+        cl = new JarClassLoader(a_jarFilename);
+      }
       Class testClassObj = Class.forName(a_testClass, false,
-          this.getClass().getClassLoader());
+          cl);
       if (a_interfaceClass.isAssignableFrom(testClassObj)) {
         if (testClassObj.isInterface()) {
           // no interfaces wanted as result
@@ -127,7 +137,7 @@ public class PluginDiscoverer {
       }
     } catch (ClassNotFoundException cnfe) {
       if (DEBUG) {
-        System.out.println("Class not found" + a_testClass);
+        System.out.println("Class not found: " + a_testClass);
       }
     } catch (NoClassDefFoundError nex) {
       if (DEBUG) {
@@ -170,8 +180,9 @@ public class PluginDiscoverer {
       // determine current directory
       File f = new File(".");
       s = f.getCanonicalPath();
+      s = FileKit.getConformPath(s, true);
     } catch (IOException iex) {
-      throw new RuntimeException("Unable to determine current directory");
+      throw new RuntimeException("Unable to determine current directory",iex);
     }
     Iterator i = m_classpathJars.iterator();
     while (i.hasNext()) {
@@ -188,7 +199,7 @@ public class PluginDiscoverer {
             JarEntry entry = (JarEntry) item.nextElement();
             String name = entry.getName();
             if (name.toLowerCase().endsWith(".class")) {
-              String classname = checkIfClassMatches(a_intrface, name);
+              String classname = checkIfClassMatches(filename, a_intrface, name);
               if (classname != null) {
                 result.add(classname);
               }
@@ -245,7 +256,9 @@ public class PluginDiscoverer {
   }
 
   /**
-   * Finds all classes implementing the given interface within a given directory
+   * Finds all classes implementing the given interface within a given
+   * directory.
+   *
    * @param a_intrface Class
    * @param a_base String
    * @param a_path String
@@ -262,7 +275,7 @@ public class PluginDiscoverer {
     File[] matches = f.listFiles(new ClassFilter());
     for (int i = 0; i < matches.length; i++) {
       String classname = a_path + File.separator + matches[i].getName();
-      classname = checkIfClassMatches(a_intrface, classname);
+      classname = checkIfClassMatches(null, a_intrface, classname);
       if (classname != null) {
         result.add(classname);
       }
