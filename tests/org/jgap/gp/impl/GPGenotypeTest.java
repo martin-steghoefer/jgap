@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -151,8 +151,8 @@ public class GPGenotypeTest
     Object[] noargs = new Object[0];
     // Initialize local stores.
     // ------------------------
-    GPGenotype.getGPConfiguration().clearStack();
-    GPGenotype.getGPConfiguration().clearMemory();
+    a_program.getGPConfiguration().clearStack();
+    a_program.getGPConfiguration().clearMemory();
     // Compute fitness for each program.
     // ---------------------------------
     for (int i = 2; i < 15; i++) {
@@ -258,6 +258,43 @@ public class GPGenotypeTest
     ProgramChromosome chrom2 = prog2.getChromosome(0);
     Terminal gene2 = (Terminal) chrom2.getGene(0);
     assertNotSame(gene1, gene2);
+  }
+
+  /**
+   * Verifies that for different genotypes different configurations are
+   * possible.
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testConfigurationInstance_0() throws Exception {
+    Class[] types = {
+        CommandGene.IntegerClass};
+    Class[][] argTypes = { {}
+    };
+    CommandGene[][] nodeSets = { {
+        new Increment(m_gpconf, CommandGene.IntegerClass, 1),
+        new Terminal(m_gpconf, CommandGene.IntegerClass, 1.0d, 2.0d),
+    }
+    };
+    m_gpconf.setPopulationSize(30);
+    m_gpconf.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
+    m_gpconf.setFitnessFunction(new TerminalsOnly());
+    m_gpconf.setRandomGenerator(new StockRandomGenerator());
+    GPGenotype gen1 = GPGenotype.randomInitialGenotype(m_gpconf, types, argTypes,
+        nodeSets, 10, false);
+    GPConfiguration conf2 = new GPConfiguration(m_gpconf.getId()+"_2","noname");
+    conf2.setPopulationSize(1);
+    conf2.setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
+    conf2.setFitnessFunction(new TerminalsOnly());
+    conf2.setRandomGenerator(new StockRandomGenerator());
+    GPGenotype gen2 = GPGenotype.randomInitialGenotype(conf2, types, argTypes,
+        nodeSets, 4, false);
+    assertNotSame(gen1, gen2);
+    assertNotSame(gen1.getGPConfiguration(), gen2.getGPConfiguration());
+    assertEquals(30, gen1.getGPConfiguration().getPopulationSize());
+    assertEquals(1, gen2.getGPConfiguration().getPopulationSize());
   }
 
   class TerminalsOnly
