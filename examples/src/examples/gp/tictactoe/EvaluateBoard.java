@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class EvaluateBoard
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Board m_board;
 
@@ -47,14 +47,13 @@ public class EvaluateBoard
   public EvaluateBoard(final GPConfiguration a_conf, Board a_board,
                        Class a_type)
       throws InvalidConfigurationException {
-    this(a_conf, a_board, a_type, 0);
+    this(a_conf, a_board, a_type, 0, 0);
   }
 
   public EvaluateBoard(final GPConfiguration a_conf, Board a_board,
-                       Class a_type,
-                       int a_subReturnType)
+                       Class a_type, int a_subReturnType, int a_subChildType)
       throws InvalidConfigurationException {
-    super(a_conf, 1, CommandGene.VoidClass, a_subReturnType, null);
+    super(a_conf, 1, CommandGene.VoidClass, a_subReturnType, a_subChildType);
     m_board = a_board;
     m_index = -1;
     m_type = a_type;
@@ -89,7 +88,7 @@ public class EvaluateBoard
       return "Evaluate Board(" + m_index + ")";
     }
     else {
-      return "Evaluate Board("+m_index+")";
+      return "Evaluate Board(" + m_index + ")";
     }
   }
 
