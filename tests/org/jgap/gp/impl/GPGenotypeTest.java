@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -117,7 +117,7 @@ public class GPGenotypeTest
     // ------------------
     IGPProgram p = pop.getGPProgram(0);
     assertEquals(5, p.getChromosome(0).size());
-    assertSame(CMD_SUB_V_V, p.getChromosome(0).getNode(0));
+    assertEquals(CMD_SUB_V_V, p.getChromosome(0).getNode(0));
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(1).getClass());
     assertSame(CMD_CONST1, p.getChromosome(0).getNode(2));
     assertEquals(StoreTerminal.class, p.getChromosome(0).getNode(3).getClass());
@@ -129,7 +129,7 @@ public class GPGenotypeTest
     assertSame(CMD_FOR, p.getChromosome(1).getNode(node++));
     assertEquals(Increment.class, p.getChromosome(1).getNode(node++).getClass());
     assertEquals(Variable.class, p.getChromosome(1).getNode(node++).getClass());
-    assertSame(CMD_SUB_V_V_V, p.getChromosome(1).getNode(node++));
+    assertEquals(CMD_SUB_V_V_V, p.getChromosome(1).getNode(node++));
     assertEquals(AddAndStore.class, p.getChromosome(1).getNode(node++).getClass());
     assertEquals(ReadTerminal.class,
                  p.getChromosome(1).getNode(node++).getClass());
