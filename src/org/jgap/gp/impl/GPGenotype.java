@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -294,12 +294,13 @@ public class GPGenotype
       throws InvalidConfigurationException {
     if (a_argTypes.length != a_fullModeAllowed.length
         || a_argTypes.length != a_minDepths.length
-        || a_argTypes.length != a_maxDepths.length) {
+        || a_argTypes.length != a_maxDepths.length
+        || a_argTypes.length != a_types.length) {
       throw new IllegalArgumentException("a_argTypes must have same length"
-          +" as a_minDepths, a_maxDepths and a_fullModeAllowed");
+          + " as a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
     }
     System.gc();
-    if(a_verboseOutput) {
+    if (a_verboseOutput) {
       System.out.println("Creating initial population");
       System.out.println("Memory consumed before creating population: "
                          + SystemKit.getTotalMemoryMB() + "MB");
@@ -310,7 +311,7 @@ public class GPGenotype
     pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                a_maxNodes, a_fullModeAllowed);
     System.gc();
-    if(a_verboseOutput) {
+    if (a_verboseOutput) {
       System.out.println("Memory used after creating population: "
                          + SystemKit.getTotalMemoryMB() + "MB");
     }
@@ -384,7 +385,7 @@ public class GPGenotype
         // -----------------------------
         return;
       }
-      if(m_verbose) {
+      if (m_verbose) {
         if (i % 25 == 0) {
           System.out.println("Evolving generation "
                              + i
@@ -414,7 +415,7 @@ public class GPGenotype
     for (int i = 0; i < pop.size() && pop.getGPProgram(i) != null; i++) {
       IGPProgram program = pop.getGPProgram(i);
       double fitness = program.getFitnessValue();
-      if (best == null || evaluator.isFitter(fitness, m_bestFitness)){
+      if (best == null || evaluator.isFitter(fitness, m_bestFitness)) {
         best = program;
         m_bestFitness = fitness;
       }
@@ -425,7 +426,7 @@ public class GPGenotype
 //    m_bestFitness = best.getFitnessValue();
     /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     if (m_allTimeBest == null
-        || evaluator.isFitter(m_bestFitness,  m_allTimeBestFitness)) {
+        || evaluator.isFitter(m_bestFitness, m_allTimeBestFitness)) {
       try {
         ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
             getCloneHandlerFor(best, null);
@@ -443,7 +444,7 @@ public class GPGenotype
       // ----------------------------------------------
       getGPConfiguration().getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
-      if(m_verbose) {
+      if (m_verbose) {
         // Output the new best solution found.
         // -----------------------------------
         outputSolution(m_allTimeBest);
@@ -528,7 +529,7 @@ public class GPGenotype
               IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1,
                   i2);
               newPopulation.setGPProgram(i, newIndividuals[0]);
-              newPopulation.setGPProgram(i+1, newIndividuals[1]);
+              newPopulation.setGPProgram(i + 1, newIndividuals[1]);
               i++;
               break;
             } catch (IllegalStateException iex) {
@@ -848,6 +849,6 @@ public class GPGenotype
    * @since 3.2
    */
   public Variable getVariable(String a_varName) {
-    return (Variable)m_variables.get(a_varName);
+    return (Variable) m_variables.get(a_varName);
   }
 }
