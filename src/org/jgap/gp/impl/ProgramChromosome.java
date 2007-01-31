@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements IGPChromosome, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -228,7 +228,7 @@ public class ProgramChromosome
       m_index = 0;
       m_maxDepth = localDepth;
       growOrFullNode(a_num, localDepth, a_type, 0, m_functionSet, n, 0, a_grow,
-                     -1);
+                     -1, true);
       redepth();
     } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
@@ -464,11 +464,11 @@ public class ProgramChromosome
                                 CommandGene[] a_functionSet,
                                 CommandGene a_rootNode, int a_recurseLevel,
                                 boolean a_grow,
-                                int a_childNum) {
+                                int a_childNum, boolean a_validateNode) {
     // Only do validate for a program once, namely when the root
     // node is passed in.
     // ---------------------------------------------------------
-    if (a_rootNode == null) {
+    if (a_rootNode == null || a_validateNode) {
       int tries = 0;
       CommandGene[] localFunctionSet = (CommandGene[])a_functionSet.clone();
       do {
@@ -502,12 +502,12 @@ public class ProgramChromosome
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
       for (int i = 0; i < a_rootNode.getArity(ind); i++) {
-        /**@todo ensure required depth is generated*/
+        /**@todo ensure required depth is cared about*/
         if (m_index < m_depth.length) {
           growOrFullNode(a_num, a_depth - 1,
                          a_rootNode.getChildType(getIndividual(), i),
                          a_rootNode.getSubChildType(i),
-                         a_functionSet, null, a_recurseLevel + 1, a_grow,i);
+                         a_functionSet, a_rootNode, a_recurseLevel + 1, a_grow,i, true);
         }
         else {
           // No valid program could be generated. Abort.
