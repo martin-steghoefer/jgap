@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -504,7 +504,7 @@ public class GPGenotype
     try {
       int popSize = getGPConfiguration().getPopulationSize();
       GPPopulation oldPop = getGPPopulation();
-      GPPopulation newPopulation = new GPPopulation(oldPop);
+      GPPopulation newPopulation = new GPPopulation(oldPop, false);
       if (m_fittestToAdd != null) {
         newPopulation.addFittestProgram(m_fittestToAdd);
         m_fittestToAdd = null;
