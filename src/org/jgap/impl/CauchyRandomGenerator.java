@@ -23,7 +23,7 @@ import org.jgap.*;
 public class CauchyRandomGenerator
     implements RandomGenerator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private double m_scale;
 
@@ -42,8 +42,8 @@ public class CauchyRandomGenerator
   }
 
   /**
-   * @param a_location cauchy parameter
-   * @param a_scale cauchy parameter
+   * @param a_location cauchy parameter, 0 is standard
+   * @param a_scale cauchy parameter, 1 is standard
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -84,6 +84,7 @@ public class CauchyRandomGenerator
 
   /**
    * Calculate Cumulative Cauchy distribution function.
+   *
    * @return the probability that a stochastic variable x is less than X
    *
    * @author Klaus Meffert
