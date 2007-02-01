@@ -12,9 +12,9 @@
 <body class="documentText">
 
 <h1 class="docTitle">Creating Custom Genetic Operators</h1>
-<a class="homeLink" href="index.html">
+<a class="homeLink" href="../index.html">
 
-<p align="center">[Documentation Index]</a> </p>
+<p align="center">[JGAP Home]</a> </p>
 
 <hr>
 
@@ -134,11 +134,8 @@ color="#808080">     * population.</font></i>
 color="#808080">     * <u> @param a_population </u>the population of chromosomes from the current</font></i>
 <br>
 <i><font
-color="#808080">     *                     evolution prior to exposure to any genetic operators.</font></i>
-<br>
-<i><font
-color="#808080">     *                     Chromosomes in this array should never be
-modified</font></i>
+color="#808080">     *                     evolution prior to exposure to any genetic
+operators</font></i>
 <br>
 <i><font
 color="#808080">     * <u> @param a_candidateChromosomes </u>the pool of chromosomes that are candidates</font></i>
@@ -160,8 +157,8 @@ color="#808080">     */</font></i>
 <br>
 &nbsp;&nbsp;&nbsp;
     <b><font color="#000080">public</font></b> <b><font
-color="#000080">void</font></b> <font color="#000000">operate(<b><font
-color="#000080"> final</font></b> <font color="#000000">Chromosome[]</font> <font
+color="#000080">void</font></b>  <font color="#000000">operate(<b><font
+color="#000080"> final</font></b> Population <font
 color="#000000">a_population,</font>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -191,7 +188,7 @@ color="#808080">// next phase of evolution.</font></i>
         <i><font color="#808080">// -----------------------------------------------------------------</font></i>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><font color="#000080">int</font></b>
-len = a_population.length;
+len = a_population.size();
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b><font
@@ -206,8 +203,7 @@ color="#000000">)</font>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <font
-color="#000000">a_candidateChromosomes.add(</font> <font color="#000000">a_population[</font> <font
-color="#000000">i</font> <font color="#000000">].clone()</font> <font color="#000000">);</font>
+color="#000000">a_candidateChromosomes.add(</font> <font color="#000000">a_population.getChromosome(i)</font>.clone() <font color="#000000">);</font>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <font
@@ -263,7 +259,7 @@ class. </p>
 <p class="text"><em>Important Note!</em> When using your own set of genetic operators, please be aware
 that if you do not include a reproduction operator, then the chromosomes in your
 population will not automatically become candidates for natural selection. It is the
-reproduction operator that guarantees that each of the chromosones in the current
+reproduction operator that guarantees that each of the chromosomes in the current
 population become candidates for the next generation. </p>
 
 <h3 class="subheader">Other Customizations</h3>
@@ -292,10 +288,10 @@ class if desired. </p>
     <p class="text">To create your own Gene implementations, subclass <font face="Courier New">org.jgap.BaseGene</font>. </li>
 </ul>
 
-<p class="text">Please see the javadocs for each of the above for further information on what is
+<p class="text">Please see the Javadocs for each of the above for further information on what is
 required for each implementation. </p>
 
-<p class="copyright">Copyright © 2002- 2006 Neil Rotstan / Klaus Meffert. All rights
+<p class="copyright">Copyright © 2002- 2007 Neil Rotstan / Klaus Meffert. All rights
 reserved. </p>
 
 <hr>
