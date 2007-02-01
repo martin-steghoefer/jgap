@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -429,6 +429,7 @@ public class GPGenotype
     /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     if (m_allTimeBest == null
         || evaluator.isFitter(m_bestFitness, m_allTimeBestFitness)) {
+      pop.setChanged(true);
       try {
         ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
             getCloneHandlerFor(best, null);
@@ -667,9 +668,25 @@ public class GPGenotype
    * @since 3.0
    */
   public synchronized IGPProgram getFittestProgram() {
-    return getGPPopulation().determineFittestProgram();
+    double fittest;
+    if (m_allTimeBest != null) {
+      fittest = m_allTimeBest.getFitnessValue();
+    }
+    else {
+      fittest = FitnessFunction.NO_FITNESS_VALUE;
+    }
+    IGPProgram fittestPop = getGPPopulation().determineFittestProgram();
+    if (fittestPop == null) {
+      return m_allTimeBest;
+    }
+    if (getGPConfiguration().getGPFitnessEvaluator().isFitter(fittest,
+        fittestPop.getFitnessValue())) {
+      return m_allTimeBest;
+    }
+    else {
+      return fittestPop;
+    }
   }
-
   /**
    * Retrieves the GPProgram in the population with the highest fitness
    * value. Only considers programs for which the fitness value has already
