@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The array of GPProgram's that makeup the Genotype's population.
@@ -77,12 +77,34 @@ public class GPPopulation
    */
   public GPPopulation(GPPopulation a_pop)
       throws InvalidConfigurationException {
+    this(a_pop, false);
+  }
+  public GPPopulation(GPPopulation a_pop, boolean a_keepPrograms)
+      throws InvalidConfigurationException {
     m_config = a_pop.getGPConfiguration();
     m_popSize = a_pop.getPopSize();
     m_programs = new GPProgram[m_popSize];
     m_fitnessRank = new float[m_popSize];
-    for (int i = 0; i < m_popSize; i++) {
-      m_fitnessRank[i] = 0.5f;
+    if (a_keepPrograms) {
+      synchronized (m_programs) {
+        for (int i = 0; i < m_popSize; i++) {
+          m_programs[i] = a_pop.getGPProgram(i);
+          m_fitnessRank[i] = a_pop.getFitnessRank(i);
+        }
+      }
+      m_fittestProgram = a_pop.determineFittestProgramComputed();
+      if (m_fittestProgram != null) {
+        m_fittestProgram = (IGPProgram) m_fittestProgram.clone();
+      }
+      setChanged(a_pop.isChanged());
+      if (!m_changed) {
+        m_sorted = true;
+      }
+    }
+    else {
+      for (int i = 0; i < m_popSize; i++) {
+        m_fitnessRank[i] = 0.5f;
+      }
     }
   }
 
