@@ -15,7 +15,6 @@ import org.jgap.*;
 import org.homedns.dade.jcgrid.message.*;
 import org.homedns.dade.jcgrid.cmd.*;
 import org.apache.commons.cli.*;
-import examples.grid.fitnessDistributed.MyRequest;
 
 /**
  * A client defines work for the grid and sends it to the JGAPServer.
@@ -27,7 +26,7 @@ import examples.grid.fitnessDistributed.MyRequest;
 public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -50,7 +49,7 @@ public class JGAPClient
     m_gridConfig.initialize(m_gridconfig);
     // Setup work request.
     // -------------------
-    MyRequest req = new MyRequest(m_gridconfig.getSessionName(), 0,
+    JGAPRequest req = new JGAPRequest(m_gridconfig.getSessionName(), 0,
                                   m_gridConfig.getConfiguration());
     req.setWorkerReturnStrategy(m_gridConfig.getWorkerReturnStrategy());
     req.setGenotypeInitializer(m_gridConfig.getGenotypeInitializer());
