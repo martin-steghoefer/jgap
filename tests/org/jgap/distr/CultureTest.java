@@ -21,7 +21,7 @@ import junit.framework.*;
 public class CultureTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CultureTest.class);
@@ -226,6 +226,60 @@ public class CultureTest
     // Check memory cells themselves.
     for (int i = 0; i < c.size(); i++) {
       assertNull(c.get(i));
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testContains_0() {
+    Culture c = new Culture(11);
+    c.set("uniquename","value",-1);
+    assertTrue(c.contains("uniquename"));
+    assertFalse(c.contains("uniqueName"));
+    assertFalse(c.contains("UNIQUENAME"));
+    assertTrue(c.contains("uniquename"));
+    c.clear();
+    assertFalse(c.contains("uniquename"));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testContains_1() {
+    Culture c = new Culture(7);
+    assertFalse(c.contains("uniquename"));
+    assertFalse(c.contains("*"));
+    assertFalse(c.contains("%"));
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testContains_2() {
+    Culture c = new Culture(7);
+    try {
+      assertFalse(c.contains(""));
+      fail();
+    }catch (IllegalArgumentException iex) {
+      ; // this is OK
+    }
+  }
+
+  /**
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testContains_3() {
+    Culture c = new Culture(7);
+    try {
+      assertFalse(c.contains(null));
+      fail();
+    }catch (IllegalArgumentException iex) {
+      ; // this is OK
     }
   }
 }
