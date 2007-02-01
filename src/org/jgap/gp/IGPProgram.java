@@ -11,6 +11,7 @@ package org.jgap.gp;
 
 import java.io.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Interface for GP programs.
@@ -19,7 +20,7 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public interface IGPProgram
-    extends Serializable, Comparable {
+    extends Serializable, Comparable, ICloneable {
   /**
    * Executes the given chromosome as an integer function.
    *
