@@ -24,7 +24,7 @@ import org.apache.commons.lang.builder.*;
 public class Culture
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The storage to use.
@@ -98,18 +98,18 @@ public class Culture
    * @param a_value value to set in the memory
    * @param a_historySize size of history to use, or less than 1 for turning
    * history off
-   * @param a_name informative name of the memory cell
+   * @param a_infotext informative name of the memory cell
    * @return newly created memory cell set with the given value
    *
    * @author Klaus Meffert
    * @since 3.0
    */
   public CultureMemoryCell set(final int a_index, final Object a_value,
-                               final int a_historySize, final String a_name) {
+                               final int a_historySize, final String a_infotext) {
     if (a_index < 0 || a_index >= size()) {
       throw new IllegalArgumentException("Illegal memory index!");
     }
-    CultureMemoryCell cell = new CultureMemoryCell(a_name, a_historySize);
+    CultureMemoryCell cell = new CultureMemoryCell(a_infotext, a_historySize);
     cell.setValue(a_value);
     m_memory[a_index] = cell;
     return cell;
@@ -180,6 +180,23 @@ public class Culture
       throw new IllegalArgumentException("Memory name unknown: " + a_name);
     }
     return m_memory[index];
+  }
+
+  /**
+   * Checks if a memory cell with the given name exists.
+   *
+   * @param a_name the name of the cell to check
+   * @return true: cell excists
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public boolean contains(final String a_name) {
+    if (a_name == null || a_name.length() < 1) {
+      throw new IllegalArgumentException("Illegal memory name!");
+    }
+    int index = m_memoryNames.indexOf(a_name);
+    return index >=0;
   }
 
   /**
