@@ -27,7 +27,7 @@ import examples.grid.fitnessDistributed.MyRequest;
 public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -91,9 +91,11 @@ public class JGAPClient
       try {
         // Initialize evolution.
         // ---------------------
-        m_gridConfig.getClientEvolveStrategy().initialize(m_gc,
-            getConfiguration(),
-            m_gridConfig.getClientFeedback());
+        IClientEvolveStrategy clientEvolver = m_gridConfig.getClientEvolveStrategy();
+        if (clientEvolver != null) {
+          clientEvolver.initialize(m_gc, getConfiguration(),
+                                    m_gridConfig.getClientFeedback());
+        }
         // Do the evolution.
         // -----------------
         evolve(m_gc);
@@ -106,7 +108,6 @@ public class JGAPClient
       ex.printStackTrace();
       m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
     }
-    m_gridConfig.getClientFeedback().endWork();
   }
 
   protected void sendWorkRequests(JGAPRequest[] a_workList)
@@ -185,6 +186,7 @@ public class JGAPClient
         break;
       }
     } while (true);
+    m_gridConfig.getClientFeedback().endWork();
   }
 
   public void start() {
