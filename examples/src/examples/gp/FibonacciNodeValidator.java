@@ -58,6 +58,12 @@ public class FibonacciNodeValidator
       if (a_recurseLevel > 0 && a_node.getClass() == SubProgram.class) {
         return false;
       }
+      if (a_recurseLevel == 0 && a_node.getClass() != SubProgram.class) {
+        return false;
+      }
+      if (a_recurseLevel == 1 && a_node.getClass() != StoreTerminal.class) {
+        return false;
+      }
     }
     // Chromosome 1.
     // -------------

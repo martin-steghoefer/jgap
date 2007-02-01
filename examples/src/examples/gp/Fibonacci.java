@@ -31,7 +31,7 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   static Variable vx;
 
@@ -65,7 +65,7 @@ public class Fibonacci
     Class[][] argTypes = { {}, {}, {}
     };
     int[] minDepths = new int[] {2, 3, 1};
-    int[] maxDepths = new int[] {3, 9, 1};
+    int[] maxDepths = new int[] {2, 9, 1};
     GPConfiguration conf = getGPConfiguration();
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = { {
@@ -167,12 +167,13 @@ public class Fibonacci
       System.out.println("Program to discover: Fibonacci(x)");
       GPConfiguration config = new GPConfiguration();
       config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
+      config.setSelectionMethod(new TournamentSelector(4));
       int popSize;
       if (args.length == 1) {
         popSize = Integer.parseInt(args[0]);
       }
       else {
-        popSize = 1200;
+        popSize = 600;
       }
       System.out.println("Using population size of " + popSize);
       config.setMaxInitDepth(6);
