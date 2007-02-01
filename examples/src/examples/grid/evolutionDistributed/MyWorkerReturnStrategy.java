@@ -22,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class MyWorkerReturnStrategy
     implements IWorkerReturnStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Determines the top 10 chromosomes and returns them.
@@ -37,7 +37,7 @@ public class MyWorkerReturnStrategy
    */
   public JGAPResult assembleResult(JGAPRequest a_req, Genotype a_genotype)
       throws Exception {
-    List top = a_req.getPopulation().determineFittestChromosomes(10);
+    List top = a_genotype.getPopulation().determineFittestChromosomes(10);
     Population pop = new Population(a_req.getConfiguration());
     for (int i = 0; i < top.size(); i++) {
       pop.addChromosome( (IChromosome) top.get(i));
