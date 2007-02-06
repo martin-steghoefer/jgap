@@ -2,10 +2,21 @@
 -----------------------------------------------------------
 * Enhanced grid logic a lot
 * Enhanced GP program generation a lot (a low "max nodes"
-  parameter does not lead to program abortion any more)
+  parameter does not lead to program abortion any more;
+  auto-consider NOP if necessary for creating valid
+  programs...)
+* Added GP function ExchangeMemory
+* Add GP TournamentSelector (by Javier and Enrique)
+* Removed static attribute from get/setGPConfiguration
+  in class GPGenotype
+* Added matrixed memory to class Culture
+* Added contains method to class Culture
+* Added concrete getName() to functions and terminals
 * Added example with distributed fitness computation
 * Introduced grid classes IEvolveStrategy and
   DefaultEvolveStrategy
+* Made IGPProgram cloneable --> please consider when
+  upgrading your code
 * Introduced grid classes IWorkerReturnStrategy and
   DefaultWorkerReturnStrategy
 * Introduced grid classes IGenotypeInitializer and
@@ -20,6 +31,7 @@
 * Made several classes cloneable
 * Fixed javadoc in IGPFitnessEvaluator
 * Fixed bug in Terminal.setRandom
+* Fixed bug in CommandGene.getChildType
 * Introduced exception class CloneException
 * Introduced interface IPersistentRepresentation
 * Added support for ICloneable's in DefaultCloneHandler
