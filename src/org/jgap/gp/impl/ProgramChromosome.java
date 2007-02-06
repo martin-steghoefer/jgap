@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements IGPChromosome, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -337,7 +337,7 @@ public class ProgramChromosome
 
   /**
    * Determines whether there exists a function or terminal in the given node
-   * set with the given return type.
+   * set with the given return and sub return type.
    *
    * @param a_returnType the return type to look for
    * @param a_subReturnType the sub return type to look for
@@ -454,6 +454,7 @@ public class ProgramChromosome
    * @param a_grow true: use grow method; false: use full method
    * @param a_childNum index of the child in the parent node to which it belongs
    * (-1 if node is root node)
+   * @param a_validateNode true: check if node selected is valid
    *
    * @author Klaus Meffert
    * @since 3.0
