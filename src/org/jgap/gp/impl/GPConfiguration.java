@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -132,6 +132,8 @@ public class GPConfiguration
   private IGPProgram m_prototypeProgram;
 
   private transient Map m_programCache;
+
+  private boolean m_useProgramCache = false;
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -686,6 +688,14 @@ public class GPConfiguration
   public GPProgramInfo putToProgramCache(GPProgram a_prog) {
     GPProgramInfo pci = new GPProgramInfo(a_prog, true);
     return (GPProgramInfo)m_programCache.put(pci.getToStringNorm(), pci);
+  }
+
+  public boolean isUseProgramCache() {
+    return m_useProgramCache;
+  }
+
+  public void setUseProgramCache(boolean a_useCache) {
+    m_useProgramCache = a_useCache;
   }
 }
 /**@todo introduce lock for configuration*/
