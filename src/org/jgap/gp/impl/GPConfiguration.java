@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -42,7 +42,7 @@ public class GPConfiguration
   /**
    * Internal memory, see StoreTerminalCommand for example.
    */
-  private Culture m_memory = new Culture(50);/**@todo make 50 configurable*/
+  private Culture m_memory = new Culture(50); /**@todo make 50 configurable*/
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -131,6 +131,8 @@ public class GPConfiguration
    */
   private IGPProgram m_prototypeProgram;
 
+  private transient Map m_programCache;
+
   /**
    * Constructor utilizing the FitnessProportionateSelection.
    *
@@ -178,6 +180,7 @@ public class GPConfiguration
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
     setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
+    m_programCache = new HashMap(50);
   }
 
   /**
@@ -403,8 +406,8 @@ public class GPConfiguration
   public Object readFromMemoryIfExists(String a_name) {
     CultureMemoryCell cell = null;
     try {
-      cell  = m_memory.get(a_name);
-    }catch(IllegalArgumentException iex) {
+      cell = m_memory.get(a_name);
+    } catch (IllegalArgumentException iex) {
       // Memory name not found: OK.
       // --------------------------
       ;
@@ -426,7 +429,7 @@ public class GPConfiguration
    * @since 3.2
    */
   public CultureMemoryCell storeIndexedMemory(int a_index, Object a_value) {
-    return m_memory.set(a_index, a_value, -1,"noname");
+    return m_memory.set(a_index, a_value, -1, "noname");
   }
 
   /**
@@ -611,11 +614,13 @@ public class GPConfiguration
           .append(m_newChromsPercent, other.m_newChromsPercent)
           .append(m_maxCrossoverDepth, other.m_maxCrossoverDepth)
           .append(m_maxInitDepth, other.m_maxInitDepth)
-          .append(m_selectionMethod.getClass(), other.m_selectionMethod.getClass())
+          .append(m_selectionMethod.getClass(),
+                  other.m_selectionMethod.getClass())
           .append(m_crossMethod.getClass(), other.m_crossMethod.getClass())
           .append(m_programCreationMaxTries, other.m_programCreationMaxTries)
           .append(m_strictProgramCreation, other.m_strictProgramCreation)
-          .append(m_fitnessEvaluator.getClass(), other.m_fitnessEvaluator.getClass())
+          .append(m_fitnessEvaluator.getClass(),
+                  other.m_fitnessEvaluator.getClass())
           .toComparison();
     }
   }
@@ -630,6 +635,7 @@ public class GPConfiguration
   public boolean isMaxNodeWarningPrinted() {
     return m_warningPrinted;
   }
+
   /**
    * See ProgramChromosome.growOrFull(...) and GPGenotype.evolve().
    *
@@ -670,5 +676,16 @@ public class GPConfiguration
   public int getMemorySize() {
     return m_memory.size();
   }
+
+  public GPProgramInfo readProgramCache(GPProgram a_prog) {
+    GPProgramInfo pci = new GPProgramInfo(a_prog, true);
+    pci.setFound(false);
+    return (GPProgramInfo)m_programCache.get(pci.getToStringNorm());
+  }
+
+  public GPProgramInfo putToProgramCache(GPProgram a_prog) {
+    GPProgramInfo pci = new GPProgramInfo(a_prog, true);
+    return (GPProgramInfo)m_programCache.put(pci.getToStringNorm(), pci);
+  }
 }
-/**@todo introduce lock*/
+/**@todo introduce lock for configuration*/
