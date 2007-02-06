@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -101,6 +101,8 @@ public class GPGenotype
   private Map m_variables;
 
   private IGPProgram m_fittestToAdd;
+
+  private boolean m_cloneWarningGPProgramShown;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -435,12 +437,18 @@ public class GPGenotype
             getCloneHandlerFor(best, null);
         if (cloner == null) {
           m_allTimeBest = best;
+          if (!m_cloneWarningGPProgramShown) {
+            System.out.println("Warning: cannot clone instance of " +
+                               best.getClass());
+            m_cloneWarningGPProgramShown = true;
+          }
         }
         else {
           m_allTimeBest = (IGPProgram) cloner.perform(best, null, null);
         }
       } catch (Exception ex) {
         m_allTimeBest = best;
+        ex.printStackTrace();
       }
       m_allTimeBestFitness = m_bestFitness;
       // Fire an event to indicate a new best solution.
@@ -574,8 +582,8 @@ public class GPGenotype
       // Add new chromosomes randomly.
       // -----------------------------
       for (int i = popSize1; i < popSize; i++) {
-        // Determine depth randomly and between maxInitDepth and 2*maxInitDepth.
-        // ---------------------------------------------------------------------
+        // Determine depth randomly and between minInitDepth and maxInitDepth.
+        // -------------------------------------------------------------------
         int depth = conf.getMinInitDepth()
             + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
                              + 1);
@@ -684,6 +692,7 @@ public class GPGenotype
       return m_allTimeBest;
     }
     else {
+//      m_allTimeBest = fittestPop;/**@todo*/
       return fittestPop;
     }
   }
