@@ -31,7 +31,7 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   static Variable vx;
 
@@ -186,6 +186,10 @@ public class Fibonacci
       // about the solution (see FibonacciNodeValidator).
       // -------------------------------------------------------------------
       config.setNodeValidator(new FibonacciNodeValidator());
+      // Activate caching og GP programs --> Fitness values will be cached
+      // for programs equal to previously evolved ones.
+      // -----------------------------------------------------------------
+      config.setUseProgramCache(true);
       final GPProblem problem = new Fibonacci(config);
       GPGenotype gp = problem.create();
       gp.setVerboseOutput(true);
