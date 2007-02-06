@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -170,6 +170,18 @@ public class GPProgram
       else {
         m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
                                     getNodeSet(i), false);
+      }
+    }
+    if (getGPConfiguration().isUseProgramCache()) {
+      // Cache fitness value by checking if a program with same
+      // representation was computed before.
+      GPProgramInfo pcInfo = getGPConfiguration().readProgramCache(this);
+      if (pcInfo == null) {
+        /**@todo add listener for event "same program evolved again"*/
+        pcInfo = getGPConfiguration().putToProgramCache(this);
+      }
+      else {
+        setFitnessValue(pcInfo.getFitnessValue());
       }
     }
   }
