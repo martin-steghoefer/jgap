@@ -5,7 +5,8 @@
   parameter does not lead to program abortion any more;
   auto-consider NOP if necessary for creating valid
   programs...)
-* Added GP function ExchangeMemory
+* Added GP function ExchangeMemory and others
+* Added GP program caching to speedup evolution
 * Add GP TournamentSelector (by Javier and Enrique)
 * Removed static attribute from get/setGPConfiguration
   in class GPGenotype
