@@ -18,7 +18,7 @@ package org.jgap.gp.impl;
  */
 public class GPProgramInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private double m_fitnessValue;
 
@@ -27,7 +27,7 @@ public class GPProgramInfo {
   private boolean m_found;
 
   public GPProgramInfo(GPProgram a_prog, boolean a_found) {
-    m_fitnessValue = a_prog.getFitnessValue();
+    m_fitnessValue = a_prog.getFitnessValueDirectly();
     m_toStringNorm = a_prog.toStringNorm(0);
     m_found = a_found;
   }
