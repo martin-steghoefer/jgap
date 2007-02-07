@@ -1,3 +1,6 @@
+JGAP is a Genetic Algorithms and Genetic Programming framework written
+in Java.
+
 Thank you for trying JGAP! We are very interested in any feedback
 you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
@@ -62,7 +65,7 @@ ATTENTION: TO BE ABLE TO COMPILE THE PROVIDED SOURCES (only applicable if
            INTO YOUR CLASS PATH (in case they are not already contained
            with the distribution you downloaded)
 
-The Directory "doc" included with this release contains the documentation
+The directory "doc" included with this release contains the documentation
 you could find at the JGAP homepage http://jgap.sourceforge.net
 
 This software is OSI Certified Open Source Software. OSI Certified is
@@ -78,8 +81,8 @@ both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
 JGAP was compiled and tested with Java 1.4 and Java 1.5 on
-Windows 2000 and XP. Prior versions of JGAP have been testes with Linux,
-MacOS as well.
+Windows 2000 and XP. Prior versions of JGAP have been tested with Linux
+and MacOS as well.
 
 This release contains code that is based on external libraries. You could
 find it in the src-3rdparty library. Due to licensing issues the needed
@@ -110,3 +113,5 @@ Thanks again for trying out JGAP!
 
 This product includes software developed by the
 Apache Software Foundation (http://www.apache.org/).
+For further licensing information about all packages included with JGAP
+please see the directory "licenses".
