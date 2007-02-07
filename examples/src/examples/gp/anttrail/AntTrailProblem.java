@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private int[][] m_map;
 
@@ -187,6 +187,7 @@ public class AntTrailProblem
       config.setReproductionProb(0.1f);
       config.setNewChromsPercent(0.3f);
       config.setStrictProgramCreation(true);
+      config.setUseProgramCache(true);
       GPGenotype gp = problem.create();
       gp.setVerboseOutput(true);
       // Read the trail from file.
