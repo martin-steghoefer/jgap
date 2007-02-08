@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  */
 public class Utility {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static int numberOfFunctions;
 
@@ -70,6 +70,7 @@ public class Utility {
 
   /**
    * Constructs a term that is represented by a gene tuple (containing a tuple).
+   *
    * @param a_genes Gene[]
    * @return Term
    *
@@ -110,23 +111,24 @@ public class Utility {
 
   /**
    * Constructs a formula string out of terms (each containing operators,
-   * if applicable)
-   * @param elements ordered list of terms
+   * if applicable).
+   *
+   * @param a_elements ordered list of terms
    * @return constructed formula
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static String getFormula(List elements) {
-    if (elements == null || elements.isEmpty()) {
+  public static String getFormula(List a_elements) {
+    if (a_elements == null || a_elements.isEmpty()) {
       return "";
     }
     else {
       String result = "";
       do {
-        result += getFormula_int(elements, result);
+        result += getFormula_int(a_elements, result);
       }
-      while (elements.size() > 0);
+      while (a_elements.size() > 0);
       if (result.length() < 1) {
         return "";
       }
@@ -139,34 +141,34 @@ public class Utility {
   /**
    * Recursive part of getFormula.
    *
-   * @param elements ordered list of terms
-   * @param previous needed for recursion
+   * @param a_elements ordered list of terms
+   * @param a_previous needed for recursion
    * @return constructed part of formula
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  protected static String getFormula_int(List elements, String previous) {
-    if (elements.size() < 1) {
+  protected static String getFormula_int(List a_elements, String a_previous) {
+    if (a_elements.size() < 1) {
       return "";
     }
-    Term element = (Term) elements.get(0);
+    Term element = (Term) a_elements.get(0);
     element = replaceSubstitute(element);
     String result = "";
     // Ignore illegal operator specification
-    if (element.m_operator != ' ' && previous.length() > 0 &&
-        !previous.endsWith("(")) {
+    if (element.m_operator != ' ' && a_previous.length() > 0 &&
+        !a_previous.endsWith("(")) {
       result += element.m_operator;
     }
     int type = element.m_termType;
     result += element.m_termName;
-    elements.remove(0);
+    a_elements.remove(0);
     if (type == 2) {
       result += "(";
       boolean compensationPossible = true;
       do {
         element.m_depth--;
-        String tempRes = getFormula_int(elements, result);
+        String tempRes = getFormula_int(a_elements, result);
         if (tempRes.length() > 0) {
           compensationPossible = false;
         }
