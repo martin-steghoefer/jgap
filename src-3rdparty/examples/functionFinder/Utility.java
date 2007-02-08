@@ -15,14 +15,14 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Utility functions
+ * Utility functions.
  *
  * @author Klaus Meffert
  * @since 2.2
  */
 public class Utility {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static int numberOfFunctions;
 
@@ -40,7 +40,8 @@ public class Utility {
   }
 
   /**
-   * Constructs terms that are represented by a list of genes
+   * Constructs terms that are represented by a list of genes.
+   *
    * @param genes Gene[] list of genes representing terms
    * @return Vector list list of terms
    *
@@ -68,16 +69,16 @@ public class Utility {
   }
 
   /**
-   * Constructs a term that is represented by a gene tupel (containing a tupel)
-   * @param genes Gene[]
+   * Constructs a term that is represented by a gene tuple (containing a tuple).
+   * @param a_genes Gene[]
    * @return Term
    *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public static Term constructTerm(Gene[] genes) {
-    Gene op = genes[1];
-    Integer allele = (Integer) genes[0].getAllele();
+  public static Term constructTerm(Gene[] a_genes) {
+    Gene op = a_genes[1];
+    Integer allele = (Integer) a_genes[0].getAllele();
     int fktNr = allele.intValue();
     fktNr = fktNr % (numberOfFunctions + numberOfConstants);
     String fktName;
@@ -136,7 +137,8 @@ public class Utility {
   }
 
   /**
-   * Recursive part of getFormula
+   * Recursive part of getFormula.
+   *
    * @param elements ordered list of terms
    * @param previous needed for recursion
    * @return constructed part of formula
@@ -152,32 +154,32 @@ public class Utility {
     element = replaceSubstitute(element);
     String result = "";
     // Ignore illegal operator specification
-    if (element.operator != ' ' && previous.length() > 0 &&
+    if (element.m_operator != ' ' && previous.length() > 0 &&
         !previous.endsWith("(")) {
-      result += element.operator;
+      result += element.m_operator;
     }
-    int type = element.termType;
-    result += element.termName;
+    int type = element.m_termType;
+    result += element.m_termName;
     elements.remove(0);
     if (type == 2) {
       result += "(";
       boolean compensationPossible = true;
       do {
-        element.depth--;
+        element.m_depth--;
         String tempRes = getFormula_int(elements, result);
         if (tempRes.length() > 0) {
           compensationPossible = false;
         }
         result += tempRes;
       }
-      while (element.depth > 0);
+      while (element.m_depth > 0);
       if (compensationPossible) {
         result += "X";
       }
       result += ")";
     }
     else if (type == 1) {
-      element.depth--;
+      element.m_depth--;
     }
     else {
       throw new RuntimeException("Invalid operator type: " + type);
@@ -186,18 +188,18 @@ public class Utility {
   }
 
   private static Term replaceSubstitute(Term element) {
-    if (element.termName.equals("+I")) {
-      element.termName = String.valueOf(new Random().nextInt(3) + 1);
+    if (element.m_termName.equals("+I")) {
+      element.m_termName = String.valueOf(new Random().nextInt(3) + 1);
     }
-    else if (element.termName.equals("-I")) {
-      element.termName = String.valueOf( - (new Random().nextInt(10) + 1));
+    else if (element.m_termName.equals("-I")) {
+      element.m_termName = String.valueOf( - (new Random().nextInt(10) + 1));
     }
-    else if (element.termName.equals("+D")) {
-      element.termName = String.valueOf(new Random().nextDouble() * 10);
+    else if (element.m_termName.equals("+D")) {
+      element.m_termName = String.valueOf(new Random().nextDouble() * 10);
       /**@todo recalculate fitnessValue of all Chromosomes using "+D"*/
     }
-    else if (element.termName.equals("-D")) {
-      element.termName = String.valueOf( - (new Random().nextDouble() * 10));
+    else if (element.m_termName.equals("-D")) {
+      element.m_termName = String.valueOf( - (new Random().nextDouble() * 10));
       /**@todo recalculate fitnessValue of all Chromosomes using "-D"*/
     }
     return element;

@@ -10,32 +10,32 @@
 package examples.functionFinder;
 
 /**
- * Term as part of a formula
+ * Term as part of a formula.
  *
  * @author Klaus Meffert
  * @since 2.2
  */
 public class Term {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  public String termName;
+  public String m_termName;
 
-  public int depth; //Max. number of sub terms
+  public int m_depth; // Max. number of sub terms
 
-  public int termType; //Constant(1), Form(2)
+  public int m_termType; // Constant(1), Form(2)
 
-  public char operator; //Operator (+,-,*,/,%) left to the term!
+  public char m_operator; // Operator (+,-,*,/,%) left to the term!
 
-  public Term(int termType, String termName, int depth) {
-    this(termType, termName, depth, ' ');
+  public Term(int a_termType, String a_termName, int a_depth) {
+    this(a_termType, a_termName, a_depth, ' ');
   }
 
-  public Term(int termType, String termName, int depth, char operator) {
-    this.termType = termType;
-    this.termName = termName;
-    this.depth = depth;
-    this.operator = operator;
+  public Term(int a_termType, String a_termName, int a_depth, char a_operator) {
+    m_termType = a_termType;
+    m_termName = a_termName;
+    m_depth = a_depth;
+    m_operator = a_operator;
   }
 
   public Term() {

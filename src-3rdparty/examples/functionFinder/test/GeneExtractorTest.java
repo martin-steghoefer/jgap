@@ -6,7 +6,7 @@ import org.jgap.impl.*;
 import examples.functionFinder.*;
 
 /**
- * Tests for GeneExtractor class
+ * Tests for GeneExtractor class.
  *
  * @author Klaus Meffert
  * @since 2.2
@@ -14,7 +14,7 @@ import examples.functionFinder.*;
 public class GeneExtractorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private static int numberOfFunctions;
 
@@ -42,7 +42,10 @@ public class GeneExtractorTest
   }
 
   /**
-   * Use a function
+   * Use a function.
+   *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGene_0() throws Exception {
@@ -51,13 +54,16 @@ public class GeneExtractorTest
     final int opNr = 2;
     genes[1] = new TestGene(conf, opNr);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getFunctions().get(3), elem.termName);
+    assertEquals(Repository.getFunctions().get(3), elem.m_termName);
     assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0)
-                 , elem.operator);
+                 , elem.m_operator);
   }
 
   /**
-   * Use a constant
+   * Use a constant.
+   *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGene_1() throws Exception {
@@ -65,13 +71,15 @@ public class GeneExtractorTest
     genes[0] = new TestGene(conf, numberOfFunctions + 0);
     genes[1] = new TestGene(conf, 2);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getConstants().get(0), elem.termName);
+    assertEquals(Repository.getConstants().get(0), elem.m_termName);
     assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),
-                 elem.operator);
+                 elem.m_operator);
   }
 
   /**
    * Use a constant (forcing modulo for functions).
+   *
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
@@ -82,13 +90,15 @@ public class GeneExtractorTest
         + numberOfFunctions));
     genes[1] = new TestGene(conf, 2);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getConstants().get(0), elem.termName);
+    assertEquals(Repository.getConstants().get(0), elem.m_termName);
     assertEquals( ( (String) Repository.getOperators().get(2)).charAt(0),
-                 elem.operator);
+                 elem.m_operator);
   }
 
   /**
    * Use a function (forcing modulo for operator).
+   *
+   * @throws Exception
    *
    * @author Klaus Meffert
    */
@@ -98,13 +108,16 @@ public class GeneExtractorTest
     final int opNr = 1;
     genes[1] = new TestGene(conf, numberOfOperators * 24 + opNr);
     Term elem = constructTerm(genes);
-    assertEquals(Repository.getFunctions().get(3), elem.termName);
+    assertEquals(Repository.getFunctions().get(3), elem.m_termName);
     assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0)
-                 , elem.operator);
+                 , elem.m_operator);
   }
 
   /**
-   * Use a function
+   * Use a function.
+   *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGene_4()
@@ -123,6 +136,8 @@ public class GeneExtractorTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    */
   public void testGene_5()
@@ -136,9 +151,9 @@ public class GeneExtractorTest
     genes[0] = comp;
     Vector elems = constructTerms(genes);
     Term elem = (Term) elems.elementAt(0);
-    assertEquals(Repository.getFunctions().get(fktNr), elem.termName);
+    assertEquals(Repository.getFunctions().get(fktNr), elem.m_termName);
     assertEquals( ( (String) Repository.getOperators().get(opNr)).charAt(0),
-                 elem.operator);
+                 elem.m_operator);
   }
 
   /**
@@ -164,8 +179,8 @@ public class GeneExtractorTest
           gene1, gene2};
       term = constructTerm(geneTupel);
       //Alle Tiefen von Funktionen addieren (nicht die von Konstanten)
-      if (term.termType == 2) {
-        totalTiefe += term.depth;
+      if (term.m_termType == 2) {
+        totalTiefe += term.m_depth;
       }
       result.add(term);
     }
@@ -205,24 +220,24 @@ public class GeneExtractorTest
       //tiefenpunkt verteilen auf Formelterme
       for (int i = 0; i < termAnz; i++) {
         term = (Term) result.elementAt(i);
-        if (term.termType == 2) {
+        if (term.m_termType == 2) {
           if (!negativ) {
-            term.depth += 1 + pauschalDazu;
+            term.m_depth += 1 + pauschalDazu;
             restTiefe--;
           }
           else {
-            if (term.depth > 1) {
+            if (term.m_depth > 1) {
               if (restTiefe > 0) {
-                term.depth -= 1;
+                term.m_depth -= 1;
                 restTiefe--;
               }
-              if (term.depth > 1 + pauschalDazu) {
-                term.depth -= pauschalDazu;
+              if (term.m_depth > 1 + pauschalDazu) {
+                term.m_depth -= pauschalDazu;
               }
               else {
-                if (term.depth > 1) {
-                  int reduzier = term.depth - 1;
-                  term.depth = 1;
+                if (term.m_depth > 1) {
+                  int reduzier = term.m_depth - 1;
+                  term.m_depth = 1;
                   restTiefe -= reduzier;
                 }
               }
