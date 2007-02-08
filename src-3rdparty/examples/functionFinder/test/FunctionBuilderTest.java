@@ -16,7 +16,7 @@ import examples.functionFinder.*;
 public class FunctionBuilderTest extends TestCase {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public FunctionBuilderTest() {
     Repository.init();
@@ -88,7 +88,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * The placeholder is expected to be replaced by a positive integer
+   * The placeholder is expected to be replaced by a positive integer.
    */
   public void testConstant_3() {
     Vector elements = new Vector();
@@ -100,7 +100,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * The placeholder is expected to be replaced by a negative integer
+   * The placeholder is expected to be replaced by a negative integer.
    */
   public void testConstant_4() {
     Vector elements = new Vector();
@@ -112,7 +112,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * The placeholder is expected to be replaced by a positive double
+   * The placeholder is expected to be replaced by a positive double.
    */
   public void testConstant_5() {
     Vector elements = new Vector();
@@ -124,7 +124,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * The placeholder is expected to be replaced by a negative double
+   * The placeholder is expected to be replaced by a negative double.
    */
   public void testConstant_6() {
     Vector elements = new Vector();
@@ -149,7 +149,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Two Formulas, each depth 1
+   * Two Formulas, each depth 1.
    */
   public void testFormula_1() {
     Vector elements = new Vector();
@@ -164,8 +164,8 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Two formulas, depth 1, one operator
-   * Two illegal operators are expected to be ignored
+   * Two formulas, depth 1, one operator.
+   * Two illegal operators are expected to be ignored.
    */
   public void testFormula_2() {
     Vector elements = new Vector();
@@ -182,7 +182,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Three formulas, first depth 2, one operator
+   * Three formulas, first depth 2, one operator.
    */
   public void testFormula_3() {
     Vector elements = new Vector();
@@ -201,7 +201,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Four terms, first depth 3, two operators
+   * Four terms, first depth 3, two operators.
    */
   public void testFormula_4() {
     Vector elements = new Vector();
@@ -222,7 +222,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Five terms, first depth 3, three operators (two block)
+   * Five terms, first depth 3, three operators (two block).
    */
   public void testFormula_5() {
     Vector elements = new Vector();
@@ -247,7 +247,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * three simple terms, two operators
+   * three simple terms, two operators.
    */
   public void testFormula_6() {
     Vector elements = new Vector();
@@ -262,7 +262,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * three terms, two operators
+   * three terms, two operators.
    */
   public void testFormula_7() {
     Vector elements = new Vector();
@@ -279,7 +279,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Three complex terms, first and second depth 2, two operators (one block)
+   * Three complex terms, first and second depth 2, two operators (one block).
    */
   public void testFormula_8() {
     Vector elements = new Vector();
@@ -300,7 +300,8 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Three complex terms and one simple term, first and second depth 2, three operators (two block)
+   * Three complex terms and one simple term, first and second depth 2, three
+   * operators (two block).
    */
   public void testFormula_9() {
     Vector elements = new Vector();
@@ -323,7 +324,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Four complex terms, first and second depth 2, three operators (two block)
+   * Four complex terms, first and second depth 2, three operators (two block).
    */
   public void testFormula_10() {
     Vector elements = new Vector();
@@ -348,8 +349,9 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Two formulas, depth 1, one operator, one term too less
-   * Two illegal operators and two depth point to much are expected to be ignored
+   * Two formulas, depth 1, one operator, one term too less.
+   * Two illegal operators and two depth point to much are expected to be
+   * ignored.
    */
   public void testFormula_11() {
     Vector elements = new Vector();
@@ -367,7 +369,8 @@ public class FunctionBuilderTest extends TestCase {
 
   /**
    * Two formulas, depth 1, one operator, two terms too less
-   * Two illegal operators and two depth points too much are expected to be ignored
+   * Two illegal operators and two depth points too much are expected to be
+   * ignored.
    */
   public void testFormula_12() {
     Vector elements = new Vector();
@@ -385,7 +388,8 @@ public class FunctionBuilderTest extends TestCase {
 
   /**
    * Two formulas, depth 1, one operator, several terms too less
-   * Two illegal operators and several depth points too much are expected to be ignored
+   * Two illegal operators and several depth points too much are expected to be
+   * ignored.
    */
   public void testFormula_13() {
     Vector elements = new Vector();
@@ -402,7 +406,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * One formula, one operator, one constant too less
+   * One formula, one operator, one constant too less.
    */
   public void testFormula_14() {
     Vector elements = new Vector();
@@ -413,7 +417,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Two formulas, depth 1, one operator, one constant too less
+   * Two formulas, depth 1, one operator, one constant too less.
    */
   public void testFormula_15() {
     Vector elements = new Vector();
@@ -428,7 +432,7 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Two formulas, depth 1, one operator, one constant too less
+   * Two formulas, depth 1, one operator, one constant too less.
    */
   public void testFormula_16() {
     Vector elements = new Vector();
@@ -443,7 +447,8 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Helper to output extended debug information on failing assertion
+   * Helper to output extended debug information on failing assertion.
+   *
    * @param soll wanted value
    * @param ist real value
    */
@@ -460,7 +465,9 @@ public class FunctionBuilderTest extends TestCase {
   }
 
   /**
-   * Constructs a formula string out of terms (each holding operators, if relevant)
+   * Constructs a formula string out of terms (each holding operators, if
+   * relevant).
+   *
    * @param elements vector with ordered list of terms
    * @return constructed formula
    */

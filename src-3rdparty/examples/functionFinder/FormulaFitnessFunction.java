@@ -25,7 +25,7 @@ import java.io.*;
 public class FormulaFitnessFunction
     extends TruthTableFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 /**@todo swap out general parts into JGAP core*/
   private static Syntax m_syntax;
 
@@ -44,7 +44,8 @@ public class FormulaFitnessFunction
   public static final int LEAST_FITNESS_VALUE = 0;
 
   /**
-   * Constructor
+   * Constructor.
+   *
    * @param a_truthTable table of input/output pairs for feeding the formula
    * and determining the fitness value thru delta computation
    *
@@ -61,6 +62,7 @@ public class FormulaFitnessFunction
   /**
    * Implementation of the evaluate method from class FitnessFunction.
    * Calculates the fitness of a given Chromosome in a determined way.
+   *
    * @param a_chromosome the Chromosome to be evaluated
    * @return positive integer value representing the fitness of the Chromosome
    *
@@ -70,7 +72,7 @@ public class FormulaFitnessFunction
   public double evaluate(IChromosome a_chromosome) {
     String formula = null;
     try {
-      //Calculcate result of formula
+      // Calculcate result of formula.
       formula = Utility.getFormulaFromChromosome(a_chromosome);
       return calcFitness(formula);
     }
