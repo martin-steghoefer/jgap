@@ -21,7 +21,7 @@ import org.jgap.impl.*;
  * of input/output-value pairs (X,Y values). Meaning: Minimize the error for all
  * given inputs X over the corresponding output Y.
  * <P>
- * Refactored solution of ther example provided with JGAP 2.2. Now uses the
+ * Refactored solution of the example provided with JGAP 2.2. Now uses the
  * newly introduced TruthTableFitnessFunction.
  *
  * @author Klaus Meffert
@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -58,8 +58,9 @@ public class FormulaFinder {
 
   /**
    * Main method
-   * @param args Eingabeparameter
-   * @throws Exception whatever
+   * @param args first parameter: if provided = configuration file, if not
+   * the default "simpleFormula.properties" is taken
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
@@ -84,14 +85,16 @@ public class FormulaFinder {
   }
 
   /**
+   * Does the evolution.
    *
-   * @param werteTabelleFile String
+   * @param a_filename name of file that contains configuration for the problem
+   * to solve via evolution
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
    */
-  private static void evolveFunction(String werteTabelleFile)
+  private static void evolveFunction(String a_filename)
       throws Exception {
     // Create JGAP configuration.
     // --------------------------
@@ -107,7 +110,7 @@ public class FormulaFinder {
     conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     // Read in related data.
     // ----------------------
-    File f = new File(werteTabelleFile);
+    File f = new File(a_filename);
     FileInputStream fin = new FileInputStream(f);
     Properties props = new Properties();
     props.load(fin);
@@ -127,7 +130,8 @@ public class FormulaFinder {
         "loopsMax"));
     MAX_ALLOWED_TERMS = Integer.parseInt( (String) props.remove("maxTerms"));
     POPULATION_SIZE = Integer.parseInt( (String) props.remove("populationSize"));
-    //Read in input-/output-value pairs
+    // Read in input-/output-value pairs.
+    // ---------------------------------
     Map truthTable = new HashMap();
     while (anEnum.hasMoreElements()) {
       String s = (String) anEnum.nextElement();
@@ -146,6 +150,7 @@ public class FormulaFinder {
     int maxTerms = MAX_ALLOWED_TERMS;
     // Maximum number of alleles needed for a "term gene" is the maximum
     // number of possible different terms.
+    // -----------------------------------------------------------------
     Gene[] termGenes = new Gene[maxTerms];
     int numberOfFunctions = Repository.getFunctions().size();
     int numberOfConstants = Repository.getConstants().size();
@@ -155,10 +160,12 @@ public class FormulaFinder {
     IntegerGene gene;
     for (int i = 0; i < maxTerms; i++) {
       comp = new CompositeGene(conf);
-      // Funtions, constants
+      // Funtions, constants.
+      // -------------------
       gene = new IntegerGene(conf, 0, max);
       comp.addGene(gene);
-      // Operators
+      // Operators.
+      // ----------
       gene = new IntegerGene(conf, 0, Repository.getOperators().size() - 1);
       comp.addGene(gene);
       termGenes[i] = comp;
