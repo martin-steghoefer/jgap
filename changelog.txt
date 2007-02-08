@@ -7,7 +7,9 @@
   programs...)
 * Added GP function ExchangeMemory and others
 * Added GP program caching to speedup evolution
-* Add GP TournamentSelector (by Javier and Enrique)
+* Added GP TournamentSelector (by Javier and Enrique)
+* Added complex Robocode example (thanx to Javier and
+  Enrique)
 * Removed static attribute from get/setGPConfiguration
   in class GPGenotype
 * Added matrixed memory to class Culture
@@ -30,7 +32,6 @@
   default instead of DeltaGPFitnessEvaluator
 * Introduced interface ICloneable that extends Cloneable
 * Made several classes cloneable
-* Fixed javadoc in IGPFitnessEvaluator
 * Fixed bug in Terminal.setRandom
 * Fixed bug in CommandGene.getChildType
 * Introduced exception class CloneException
