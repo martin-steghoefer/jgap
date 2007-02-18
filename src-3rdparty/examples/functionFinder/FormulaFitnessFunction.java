@@ -25,7 +25,7 @@ import java.io.*;
 public class FormulaFitnessFunction
     extends TruthTableFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 /**@todo swap out general parts into JGAP core*/
   private static Syntax m_syntax;
 
@@ -46,6 +46,7 @@ public class FormulaFitnessFunction
   /**
    * Constructor.
    *
+   * @param a_config the configuration to use
    * @param a_truthTable table of input/output pairs for feeding the formula
    * and determining the fitness value thru delta computation
    *
@@ -135,7 +136,8 @@ public class FormulaFitnessFunction
     }
     if (getConfiguration().getFitnessEvaluator().isFitter(
       worstFitness(), result)) {
-      // Input too bad --> ignore
+      // Input too bad --> ignore.
+      // -------------------------
       result = worstFitness();
     }
     return result;
