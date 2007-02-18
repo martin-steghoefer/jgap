@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -191,10 +191,7 @@ public class FormulaFinder {
         // Found a new best solution
         localBestFitness = localCurrentFitness;
         String formula = Utility.getFormulaFromChromosome(chrom);
-//        double realFitness = myFunc.evaluate(chrom);
-//        if (Math.abs(realFitness-localBestFitness)>2.0001d) {
-//          System.err.println("MIST!");
-//        }
+
         bestSolutionSoFar = formula;
         if (Math.abs(localBestFitness - myFunc.LEAST_FITNESS_VALUE) < 0.0001d) {
           break;
