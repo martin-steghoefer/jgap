@@ -22,7 +22,7 @@ import org.jgap.impl.*;
  */
 public class Utility {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static int numberOfFunctions;
 
@@ -86,6 +86,9 @@ public class Utility {
     int type;
     if (fktNr >= numberOfFunctions) {
       // Read out constant
+      /**@todo store constant in chromosome's application data in order
+       * to make it immutable and immune regarind replaceSubstitute(..)
+       */
       fktName = (String) Repository.getConstants().get(fktNr -
           numberOfFunctions);
       type = 1;
