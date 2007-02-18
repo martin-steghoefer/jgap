@@ -18,15 +18,18 @@
 
 <hr>
 
-<p class="text">Genetic Programming (GP) was supposed to be introduced by John
+<p class="text">Genetic Programming (GP) is supposed to be introduced by John
 Koza. GP is sort of different to Genetic Algorithms (GA) as GP is more complex
 than GA. GP is about evolving programs with a given set of commands. Each
 command is assigned a number of parameters. That way, programs can be
-constructed. They are represented internally as a tree. </p>
+constructed. They are represented internally as a tree. But you do not have to
+cope with the internal representation. For you it is only important to know that
+you can write sort of programs. Each program contains only those commands and
+terminals (such as numbers or Boolean values) that you define to be used! It is
+even possible evolving full-blown Java programs (see the <a href="http://jgap.sourceforge.net/doc/robocode/robocode.html">Robocode
+example</a>). </p>
 
-<p class="text">GP was introduced with JGAP 3.0. It is in its early stages,
-especially what concerns the documentation. This text is a first approach
-presenting some useful information about how to utilize JGAP for GP. </p>
+<p class="text">GP was introduced with JGAP 3.0. This document presents some useful information about how to utilize JGAP for GP. </p>
 
 <h3 class="subheader">JGAP's Philosophy</h3>
 
@@ -42,10 +45,10 @@ please have a look at the example located in class&nbsp;<i>examples.gp.MathProbl
 This example tries to find a formula for a given truth table (X/Y value pairs)
 and a given set of operators (such as +, -, * etc). The mentioned example class
 also contains a fitness function named <i>FormulaFitnessFunction</i>. A more
-complex example can be found in class <i>examples.gp.Fibonacci</i>.
+complex example can be found in class <i>examples.gp.Fibonacci </i>and in class <i>examples.gp.anttrail.AntTrailProblem</i>.
  </p>
 
-<p class="text">The example at a glance:
+<p class="text">The math example at a glance:
  </p>
 
 <p class="text">1. Create configuration
@@ -60,21 +63,24 @@ complex example can be found in class <i>examples.gp.Fibonacci</i>.
   &nbsp;*/<br>
   public static void main(String[] args) throws Exception {<br>
 &nbsp; GPConfiguration config = new GPConfiguration();<br>
+  &nbsp; config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());<br>
 &nbsp; config.setMaxInitDepth(6);<br>
-&nbsp; config.setPopulationSize(800);<br>
+&nbsp; config.setPopulationSize(100);<br>
 &nbsp; config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());<br>
 &nbsp; ... // continued below<br>
 
 </tt>
  </p>
 
-<p class="text">2. Create initial Genotype (continued in above method <i>main</i>): </p>
+<p class="text">&nbsp; </p>
+
+<p class="text">2. Create initial Genotype (continued from above method <i>main</i>): </p>
 
 <p class="Listing">    
-<tt>
-  GPGenotype gp = create(config);<br>
+<tt>&nbsp; GPGenotype gp = create(config);<br>
+}
 <br>
---&gt;<br>
+<br>
 <br>
   public static GPGenotype create(GPConfiguration a_conf) throws InvalidConfigurationException {<br>
 &nbsp; Class[] types = {<br>
@@ -82,6 +88,8 @@ complex example can be found in class <i>examples.gp.Fibonacci</i>.
 &nbsp; Class[][] argTypes = {<br>
 &nbsp;&nbsp;&nbsp; {}<br>
 &nbsp; };<br>
+&nbsp; // Define the commands and terminals the GP is allowed to use.<br>
+&nbsp; // -----------------------------------------------------------<br>
 &nbsp; CommandGene[][] nodeSets = {<br>
   &nbsp;&nbsp;&nbsp; {<br>
   &nbsp;&nbsp;&nbsp; vx = Variable.create(a_conf, "X", CommandGene.FloatClass),<br>
@@ -92,36 +100,52 @@ complex example can be found in class <i>examples.gp.Fibonacci</i>.
   &nbsp;&nbsp;&nbsp; new SinCommand(a_conf, CommandGene.FloatClass),<br>
   &nbsp;&nbsp;&nbsp; new CosCommand(a_conf, CommandGene.FloatClass),<br>
   &nbsp;&nbsp;&nbsp; new ExpCommand(a_conf, CommandGene.FloatClass),<br>
-  &nbsp; }<br>
+&nbsp;&nbsp;&nbsp; // Use terminal with possible value from 2.0 to 10.0 decimal<br>
+&nbsp;&nbsp;&nbsp; new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, false),<br>
+&nbsp; &nbsp; }<br>
   &nbsp; };<br>
   &nbsp; Random random = new Random();<br>
-  &nbsp; // randomly initialize function data (X-Y table) for x^4+x^3+x^2+x<br>
+  &nbsp; // Randomly initialize function data (X-Y table) for x^4+x^3+x^2+x.<br>
+&nbsp; // This is problem-specific and not necessary in other cases.<br>
+&nbsp; // ----------------------------------------------------------------<br>
   &nbsp; for (int i = 0; i &lt; 20; i++) {<br>
   &nbsp;&nbsp;&nbsp; float f = 2.0f * (random.nextFloat() - 0.5f);<br>
   &nbsp;&nbsp;&nbsp; x[i] = new Float(f);<br>
   &nbsp;&nbsp;&nbsp; y[i] = f * f * f * f + f * f * f + f * f - f;<br>
   &nbsp;&nbsp;&nbsp; System.out.println(i + ") " + x[i] + "   " + y[i]);<br>
   &nbsp; }<br>
-  &nbsp; // Create genotype with initial population<br>
-  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets, 400,
+  &nbsp; // Create genotype with initial population.<br>
+&nbsp; // Allow max. 100 nodes within one program.<br>
+&nbsp; // ----------------------------------------<br>
+  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets, 100,
   true);<br>
   }
 </tt> </p>
 
 <p class="text">3. Start the evolution and output the result: (continued in above method <i>main</i>):&nbsp; </p>
 
-<p class="Listing">    <tt>
-    gp.evolve(800);<br>
-    gp.outputSolution(gp.getAllTimeBest());<br>
+<p class="Listing">    <tt>// Do 100 evolutions in a row.<br>
+// ---------------------------<br>
+&nbsp; gp.evolve(100);<br>
+// Output best solution found.<br>
+// ---------------------------<br>
+gp.outputSolution(gp.getAllTimeBest());<br>
 <br>
     } // end of method &quot;main&quot;
 <br>
 </tt> </p>
 
-<p class="text">A more detailed description will follow as available. If you
-like to provide one, please contact us!&nbsp; </p>
+<p class="text">4. Optional: Implement your own functions and terminals </p>
 
-<p class="copyright">Copyright © 2006 Klaus Meffert. All rights reserved. </p>
+<p class="text">Please have a look at packages <i>org.jgap.gp.function</i>, <i>org.jgap.gp.terminal</i>
+and examples.gp.anttrail for available GP functions and terminals. There you can
+see how to implement your own classes and use them in the above step 2 during
+setup. </p>
+
+<p class="text">You can benefit from looking at the examples mentioned above. Go
+for the code and you'll get a better feeling. It's very easy using JGAP for GP! </p>
+
+<p class="copyright">Copyright © 2006-2007 Klaus Meffert. All rights reserved. </p>
 
 <hr>
 <a class="homeLink" href="index.html">
