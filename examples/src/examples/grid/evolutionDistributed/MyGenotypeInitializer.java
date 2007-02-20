@@ -12,10 +12,16 @@ package examples.grid.evolutionDistributed;
 import org.jgap.distr.grid.*;
 import org.jgap.*;
 
+/**
+ * Initializes the genotype on behalf of the workers in a grid.
+ *
+ * @author Klaus Meffert
+ * @since 3.2
+ */
 public class MyGenotypeInitializer
     implements IGenotypeInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Genotype setupGenotype(JGAPRequest a_req, Population a_initialPop)
       throws Exception {
