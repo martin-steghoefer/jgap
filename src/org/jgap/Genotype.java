@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.93 $";
+  private final static String CVS_REVISION = "$Revision: 1.94 $";
 
   /**
    * The current Configuration instance.
@@ -433,7 +433,14 @@ public class Genotype
       }
     }
     catch (Exception ex) {
-      throw new IllegalStateException(ex.getMessage());
+      // Try to propagate exception, see "bug" 1661635.
+      // ----------------------------------------------
+      if (ex.getCause() != null) {
+        throw new IllegalStateException(ex.getCause().toString());
+      }
+      else {
+        throw new IllegalStateException(ex.getMessage());
+      }
     }
 
   }
