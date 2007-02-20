@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -808,7 +808,8 @@ public class GenotypeTest
   }
 
   /**
-   * Test for a Chromosome class not equal to org.jgap.Chromosome
+   * Test for a Chromosome class not equal to org.jgap.Chromosome.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -1252,4 +1253,5 @@ public class GenotypeTest
       return m_conf;
     }
   }
+
 }
