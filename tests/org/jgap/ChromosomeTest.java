@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.61 $";
+  private final static String CVS_REVISION = "$Revision: 1.62 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -154,6 +154,22 @@ public class ChromosomeTest
       new Chromosome(conf, null, 0, null);
       fail();
     } catch (IllegalArgumentException iex) {
+      ; //this is OK
+    }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testConstruct_2_3()
+      throws Exception {
+    try {
+      new Chromosome(null);
+      fail();
+    } catch (InvalidConfigurationException iex) {
       ; //this is OK
     }
   }
