@@ -58,6 +58,18 @@ public interface IGPProgram
   double execute_double(int a_chromosomeNum, Object[] a_args);
 
   /**
+   * Executes the given chromosome as a boolean function.
+   *
+   * @param a_chromosomeNum the index of the chromosome to execute
+   * @param a_args the arguments to use
+   * @return the boolean return value
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  boolean execute_boolean(int a_chromosomeNum, Object[] a_args);
+
+  /**
    * Executes the given chromosome as an object function.
    *
    * @param a_chromosomeNum the index of the chromosome to execute

@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -284,6 +284,21 @@ public class GPProgram
   public double execute_double(int a_chromosomeNum, Object[] a_args) {
     m_chromosomes[a_chromosomeNum].setIndividual(this);
     return m_chromosomes[a_chromosomeNum].execute_double(a_args);
+  }
+
+  /**
+   * Executes the given chromosome as a boolean function.
+   *
+   * @param a_chromosomeNum the index of the chromosome to execute
+   * @param a_args the arguments to use
+   * @return the boolean return value
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public boolean execute_boolean(int a_chromosomeNum, Object[] a_args) {
+    m_chromosomes[a_chromosomeNum].setIndividual(this);
+    return m_chromosomes[a_chromosomeNum].execute_boolean(a_args);
   }
 
   /**
