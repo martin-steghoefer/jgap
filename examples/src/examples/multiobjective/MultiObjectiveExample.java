@@ -24,7 +24,7 @@ import org.jgap.impl.*;
  */
 public class MultiObjectiveExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -47,7 +47,7 @@ public class MultiObjectiveExample {
     Configuration conf = new DefaultConfiguration();
     // Add BestChromosomesSelector with doublettes allowed.
     // ----------------------------------------------------
-    conf.getNaturalSelectors(true).clear();
+    conf.removeNaturalSelectors(true);
     BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
         conf, 0.95d);
     bestChromsSelector.setDoubletteChromosomesAllowed(true);
@@ -82,9 +82,6 @@ public class MultiObjectiveExample {
     // Create random initial population of Chromosomes.
     // ------------------------------------------------
     Genotype population = Genotype.randomInitialGenotype(conf);
-    // Now we initialize the population randomly, anyway!
-    // If you want to load previous results from file, remove the next line!
-    population = Genotype.randomInitialGenotype(conf);
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
     // ---------------------------------------------------------------
