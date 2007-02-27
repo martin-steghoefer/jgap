@@ -29,7 +29,7 @@ import org.apache.commons.lang.builder.*;
 public class ChainOfSelectors
     implements Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
@@ -135,6 +135,7 @@ public class ChainOfSelectors
   }
 
   /**
+   * Clears all registered selectors.
    *
    * @author Klaus Meffert
    * @since 1.1
