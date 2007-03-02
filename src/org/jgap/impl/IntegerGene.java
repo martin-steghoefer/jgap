@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.42 $";
+  private static final String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -305,8 +305,13 @@ public class IntegerGene
         else {
           rn = new StockRandomGenerator();
         }
-        setAllele(new Integer(rn.nextInt(m_upperBounds - m_lowerBounds) +
-                              m_lowerBounds));
+        if (m_upperBounds - m_lowerBounds == 0) {
+          setAllele(new Integer(m_lowerBounds));
+        }
+        else {
+          setAllele(new Integer(rn.nextInt(m_upperBounds - m_lowerBounds) +
+                                m_lowerBounds));
+        }
       }
     }
   }
