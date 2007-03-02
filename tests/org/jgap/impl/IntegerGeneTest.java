@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -283,6 +283,7 @@ public class IntegerGeneTest
 
   /**
    * Set Allele to null, no exception should occur.
+   *
    * @throws Exception
    */
   public void testSetAllele_0()
@@ -300,6 +301,36 @@ public class IntegerGeneTest
     } catch (ClassCastException classex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * Set Allele to value out of bounds with bounds' dimension of 1.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testSetAllele_2()
+      throws Exception {
+    IntegerGene gene1 = new IntegerGene(conf, 0,0);
+    gene1.setAllele(new Integer(1));
+    assertEquals(0, gene1.intValue());
+  }
+
+  /**
+   * Set Allele to value out of bounds with bounds' dimension of 1.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testSetAllele_3()
+      throws Exception {
+    IntegerGene gene1 = new IntegerGene(conf, 1,1);
+    gene1.setAllele(new Integer(2));
+    assertEquals(1, gene1.intValue());
   }
 
   public void testNewGene_0()

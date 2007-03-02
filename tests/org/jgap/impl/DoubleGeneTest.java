@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.37 $";
+  private static final String CVS_REVISION = "$Revision: 1.38 $";
 
   public void setUp() {
     super.setUp();
@@ -346,6 +346,7 @@ public class DoubleGeneTest
 
   /**
    * Call setAllele with need of mapping to bounds.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -355,6 +356,51 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene1 = new DoubleGene(conf, 1.0d, 1000.0d);
     gene1.setAllele(new Double(2000.0d));
+  }
+
+  /**
+   * Call setAllele with need of mapping to bounds.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testSetAllele_4()
+      throws Exception {
+    DoubleGene gene1 = new DoubleGene(conf, 1.0d, 1.0d);
+    gene1.setAllele(new Double(5.7d));
+    assertEquals(1.0d, gene1.doubleValue(), DELTA);
+  }
+
+  /**
+   * Call setAllele with need of mapping to bounds.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testSetAllele_5()
+      throws Exception {
+    DoubleGene gene1 = new DoubleGene(conf, 0.0d, 0.0d);
+    gene1.setAllele(new Double(5.7d));
+    assertEquals(0.0d, gene1.doubleValue(), DELTA);
+  }
+
+  /**
+   * Call setAllele with need of mapping to bounds.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testSetAllele_6()
+      throws Exception {
+    DoubleGene gene1 = new DoubleGene(conf, -12.5d, -12.5d);
+    gene1.setAllele(new Double(5.7d));
+    assertEquals(-12.5d, gene1.doubleValue(), DELTA);
   }
 
   /**
