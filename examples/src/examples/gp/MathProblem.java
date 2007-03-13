@@ -27,13 +27,13 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
-  static Variable vx;
+  private static Variable vx;
 
-  static Float[] x = new Float[20];
+  private static Float[] x = new Float[20];
 
-  static float[] y = new float[20];
+  private static float[] y = new float[20];
 
   public MathProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
