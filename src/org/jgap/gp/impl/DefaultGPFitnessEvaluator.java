@@ -19,9 +19,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class DefaultGPFitnessEvaluator
-    implements IGPFitnessEvaluator {
+    implements IGPFitnessEvaluator, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -69,5 +69,16 @@ public class DefaultGPFitnessEvaluator
   public int compareTo(Object a_object) {
     DefaultGPFitnessEvaluator eval = (DefaultGPFitnessEvaluator) a_object;
     return 0;
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    DefaultGPFitnessEvaluator result = new DefaultGPFitnessEvaluator();
+    return result;
   }
 }

@@ -21,11 +21,11 @@ import org.jgap.gp.*;
  * @since 3.2
  */
 public class TournamentSelector
-    implements INaturalGPSelector, Serializable {
+    implements INaturalGPSelector, Serializable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  private int tournament_size;
+  private int m_tournament_size;
 
   /**
    * Constructor with default tournament size.
@@ -44,7 +44,7 @@ public class TournamentSelector
    * @since 3.2
    */
   public TournamentSelector(int a_tournament_size) {
-    tournament_size = a_tournament_size;
+    m_tournament_size = a_tournament_size;
   }
 
   /**
@@ -64,7 +64,7 @@ public class TournamentSelector
     RandomGenerator random = a_genotype.getGPConfiguration().getRandomGenerator();
     IGPFitnessEvaluator evaluator = a_genotype.getGPConfiguration().
         getGPFitnessEvaluator();
-    for (int i = 0; i < tournament_size; i++) {
+    for (int i = 0; i < m_tournament_size; i++) {
       index = (int) (random.nextDouble() * pop.getPopSize());
       if (bestProgram == null) {
         bestProgram = pop.getGPProgram(index);
@@ -76,5 +76,16 @@ public class TournamentSelector
       }
     }
     return bestProgram;
+  }
+
+  /**
+   * @return deep clone of this instande
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    TournamentSelector sel = new TournamentSelector(m_tournament_size);
+    return sel;
   }
 }

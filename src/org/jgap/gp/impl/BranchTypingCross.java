@@ -20,9 +20,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class BranchTypingCross
-    extends CrossMethod implements Serializable, Comparable {
+    extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -286,5 +286,16 @@ public class BranchTypingCross
     } catch (ClassCastException cex) {
       return false;
     }
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    BranchTypingCross result = new BranchTypingCross(getConfiguration());
+    return result;
   }
 }
