@@ -26,7 +26,7 @@ import org.apache.commons.cli.*;
 public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -90,7 +90,8 @@ public class JGAPClient
       try {
         // Initialize evolution.
         // ---------------------
-        IClientEvolveStrategy clientEvolver = m_gridConfig.getClientEvolveStrategy();
+        IClientEvolveStrategy clientEvolver = m_gridConfig.
+            getClientEvolveStrategy();
         if (clientEvolver != null) {
           clientEvolver.initialize(m_gc, getConfiguration(),
                                     m_gridConfig.getClientFeedback());
