@@ -13,6 +13,8 @@ import java.util.*;
 import junit.framework.*;
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.jgap.gp.terminal.Variable;
+import org.jgap.gp.function.Add;
 
 /**
  * Tests the GPConfiguration class.
@@ -23,7 +25,7 @@ import org.jgap.gp.*;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -288,7 +290,7 @@ public class GPConfigurationTest
     GPConfiguration.reset();
     GPConfiguration conf = new GPConfiguration();
     assertEquals(BranchTypingCross.class, conf.getCrossMethod().getClass());
-    assertEquals(FitnessProportionateSelection.class,
+    assertEquals(TournamentSelector.class,
                  conf.getSelectionMethod().getClass());
     assertEquals(DefaultGPFitnessEvaluator.class,
                  conf.getGPFitnessEvaluator().getClass());
@@ -303,8 +305,35 @@ public class GPConfigurationTest
   public void testConstructor_1()
       throws Exception {
     GPConfiguration.reset();
-    FitnessProportionateSelection sel = new FitnessProportionateSelection();
+    TournamentSelector sel = new TournamentSelector();
     GPConfiguration conf = new GPConfiguration(sel);
     assertSame(sel, conf.getSelectionMethod());
   }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testClone_0()
+      throws Exception {
+    GPConfiguration conf = new GPConfiguration("testname");
+    conf.setFitnessFunction(new StaticGPFitnessFunction(2));
+    conf.setCrossoverMethod(new BranchTypingCross(conf));
+    conf.setMaxInitDepth(17);
+    conf.setCrossoverProb(0.3f);
+    conf.setNodeValidator(new NodeValidatorForTest());
+    GPProgram prog = new GPProgram(m_gpconf, 1);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf);
+    pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));
+    pc.setGene(1, new Variable(m_gpconf, "X", CommandGene.IntegerClass));
+    pc.setGene(2, new Variable(m_gpconf, "Y", CommandGene.IntegerClass));
+    pc.redepth();
+    prog.setChromosome(0, pc);
+    conf.setPrototypeProgram(prog);
+    conf.setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
+    assertEquals(conf, conf.clone());
+  }
+
 }
