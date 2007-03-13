@@ -16,6 +16,9 @@ import org.jgap.impl.*;
 import org.jgap.distr.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
+import org.jgap.gp.terminal.Variable;
+import org.jgap.util.ICloneable;
+import org.jgap.util.CloneException;
 
 /**
  * Configuration for a GP.
@@ -26,7 +29,7 @@ import org.jgap.gp.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -37,12 +40,12 @@ public class GPConfiguration
   /**
    * Internal stack, see PushCommand for example.
    */
-  private Stack m_stack = new Stack();
+  private transient Stack m_stack = new Stack();
 
   /**
    * Internal memory, see StoreTerminalCommand for example.
    */
-  private Culture m_memory = new Culture(50); /**@todo make 50 configurable*/
+  private transient Culture m_memory = new Culture(50); /**@todo make 50 configurable*/
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -121,7 +124,7 @@ public class GPConfiguration
    *
    * @since 3.2
    */
-  private boolean m_warningPrinted;
+  private transient boolean m_warningPrinted;
 
   /**
    * Prototype of a valid program. May be cloned if needed (do not reference
@@ -134,6 +137,17 @@ public class GPConfiguration
   private transient Map m_programCache;
 
   private boolean m_useProgramCache = false;
+
+  private Map m_variables;
+
+  /**
+   * Holds the central configurable factory for creating default objects.
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   */
+  private transient IJGAPFactory m_factory;
+
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -152,8 +166,25 @@ public class GPConfiguration
       throws InvalidConfigurationException {
     super(a_id, a_name);
     init();
-    m_selectionMethod = new FitnessProportionateSelection();
+    m_selectionMethod = new TournamentSelector(3);
   }
+
+  /**
+   * Constructs a configuration with an informative name but without a unique
+   * ID. This practically prevents more than one configurations to be
+   * instantiated within the same thread.
+   *
+   * @param a_name informative name of the configuration, may be null
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   */
+  public GPConfiguration(final String a_name)
+      throws InvalidConfigurationException {
+    this();
+    setName(a_name);
+  }
+
 
   /**
    * Sets a GP fitness evaluator, such as
@@ -178,6 +209,24 @@ public class GPConfiguration
    */
   protected void init()
       throws InvalidConfigurationException {
+    /**@todo make reusable in class Configuration and reuse from Configuration*/
+    // Create factory for being able to configure the used default objects,
+    // like random generators or fitness evaluators.
+    // --------------------------------------------------------------------
+    String clazz = System.getProperty(PROPERTY_JGAPFACTORY_CLASS);
+    if (clazz != null && clazz.length() > 0) {
+      try {
+        m_factory = (IJGAPFactory) Class.forName(clazz).newInstance();
+      } catch (Throwable ex) {
+        throw new RuntimeException("Class " + clazz
+                                   + " could not be instantiated"
+                                   + " as type IJGAPFactory");
+      }
+    }
+    else {
+      m_factory = new JGAPFactory(false);
+    }
+    m_variables = new Hashtable();
     m_crossMethod = new BranchTypingCross(this);
     setEventManager(new EventManager());
     setRandomGenerator(new StockRandomGenerator());
@@ -696,6 +745,95 @@ public class GPConfiguration
 
   public void setUseProgramCache(boolean a_useCache) {
     m_useProgramCache = a_useCache;
+  }
+
+  /**
+   * Stores a Variable.
+   *
+   * @param a_var the Variable to store
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void putVariable(Variable a_var) {
+    m_variables.put(a_var.getName(), a_var);
+  }
+
+  /**
+   * @param a_varName name of variable to retriebe
+   * @return Variable instance or null, if not found
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Variable getVariable(String a_varName) {
+    return (Variable) m_variables.get(a_varName);
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public Object clone() {
+    return newInstanceGP(getId(), getName());
+  }
+
+  /**
+   * Creates a new GPConfiguration instance by cloning. Allows to preset the
+   * ID and the name.
+   *
+   * @param a_id new ID for clone
+   * @param a_name new name for clone
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public GPConfiguration newInstanceGP(String a_id, String a_name) {
+    try {
+      GPConfiguration result = new GPConfiguration(getName());
+      // Clone JGAPFactory first because it helps in cloning other objects.
+      // ------------------------------------------------------------------
+      if (m_factory instanceof ICloneable) {
+        result.m_factory = (IJGAPFactory)((ICloneable)m_factory).clone();
+      }
+      else {
+        // We must fallback to a standardized solution.
+        // --------------------------------------------
+        m_factory = new JGAPFactory(false);
+        result.m_factory = (IJGAPFactory)((JGAPFactory)m_factory).clone();
+      }
+      if (m_objectiveFunction != null) {
+        result.m_objectiveFunction = m_objectiveFunction;
+      }
+      result.m_crossoverProb = m_crossoverProb;
+      result.m_reproductionProb = m_reproductionProb;
+      result.m_newChromsPercent = m_newChromsPercent;
+      result.m_functionProb = m_functionProb;
+      result.m_maxCrossoverDepth = m_maxCrossoverDepth;
+      result.m_maxInitDepth = m_maxInitDepth;
+      result.m_minInitDepth = m_minInitDepth;
+      result.m_strictProgramCreation = m_strictProgramCreation;
+      result.m_programCreationMaxTries = m_programCreationMaxTries;
+      result.m_selectionMethod = (INaturalGPSelector)doClone(m_selectionMethod);
+      result.m_crossMethod = (CrossMethod)doClone(m_crossMethod);
+      result.m_fitnessEvaluator = (IGPFitnessEvaluator)doClone(m_fitnessEvaluator);
+      result.m_nodeValidator = (INodeValidator)doClone(m_nodeValidator);
+      result.m_useProgramCache = m_useProgramCache;
+      // Configurable data.
+      // ------------------
+//      result.m_config = new ConfigurationConfigurable();
+      // Identificative data.
+      // --------------------
+      result.setName(a_name);
+      result.setId(a_id);
+      result.makeThreadKey();// Must be called after m_id is set
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }
 /**@todo introduce lock for configuration*/
