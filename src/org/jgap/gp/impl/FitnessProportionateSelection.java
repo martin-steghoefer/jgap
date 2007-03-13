@@ -19,24 +19,50 @@ import org.jgap.gp.*;
  *
  * @author Klaus Meffert
  * @since 3.0
+ * @deprecated use TournamentSelector or WeightedGPRouletteSelector instead
  */
 public class FitnessProportionateSelection
     implements INaturalGPSelector, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
+  /**
+   * Constructor.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public FitnessProportionateSelection() {
+  }
+
+  /**
+   *
+   * @param a_genotype GPGenotype
+   * @return IGPProgram
+   * @deprecated use TournamentSelector or WeightedGPRouletteSelector instead
+   */
   public IGPProgram select(GPGenotype a_genotype) {
-    /**@todo speedup*/
     double chosen = a_genotype.getGPConfiguration().getRandomGenerator().
         nextFloat() * a_genotype.getTotalFitness();
     int num = 0;
     GPPopulation pop = a_genotype.getGPPopulation();
     int popSize = pop.size();
+    // Consider the fitness comparator used.
+    // -------------------------------------
+    IGPFitnessEvaluator evaluator = a_genotype.getGPConfiguration().getGPFitnessEvaluator();
     num = Arrays.binarySearch(pop.getFitnessRanks(), (float) chosen);
     if (num >= 0) {
       return pop.getGPProgram(num);
     }
     else {
+      /**@todo implement for deltaMode*/
+      boolean deltaMode;
+      if (evaluator.isFitter(2.0d, 1.0d)) {
+        deltaMode = false;
+      }
+      else {
+        deltaMode = true;
+      }
       for (num = 1; num < popSize; num++) {
         if (chosen < pop.getFitnessRank(num)) {
           break;
@@ -48,6 +74,8 @@ public class FitnessProportionateSelection
           num = 1;
         }
         else {
+          // fall back to complete randomization.
+          // ------------------------------------
           num = a_genotype.getGPConfiguration().getRandomGenerator().
               nextInt(popSize - 1);
         }
