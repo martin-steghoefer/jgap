@@ -23,10 +23,10 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
-   * The array of GPProgram's that makeup the Genotype's population.
+   * The array of GPProgram's that make-up the Genotype's population.
    */
   private IGPProgram[] m_programs;
 
