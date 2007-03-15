@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -909,4 +909,47 @@ public class GPGenotype
       m_fittestToAdd = a_toAdd;
     }
   }
+
+  /**
+   * Fills up the population with random programs if necessary.
+   *
+   * @param a_num the number of programs to add
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void fillPopulation(final int a_num)
+      throws InvalidConfigurationException {
+    IGPProgram sampleProg = getGPConfiguration().getPrototypeProgram();
+    if (sampleProg == null) {
+      /**@todo care about*/
+    }
+    Class sampleClass = sampleProg.getClass();
+    IInitializer chromIniter = getGPConfiguration().getJGAPFactory().
+        getInitializerFor(sampleProg, sampleClass);
+    if (chromIniter == null) {
+      throw new InvalidConfigurationException("No initializer found for class "
+                                              + sampleClass);
+    }
+    try {
+      for (int i = 0; i < a_num; i++) {
+        /**@todo implement*/
+//        getGPPopulation().addChromosome( (IChromosome) chromIniter.perform(sampleProg,
+//            sampleClass, null));
+      }
+    }
+    catch (Exception ex) {
+      // Try to propagate exception, see "bug" 1661635.
+      // ----------------------------------------------
+      if (ex.getCause() != null) {
+        throw new IllegalStateException(ex.getCause().toString());
+      }
+      else {
+        throw new IllegalStateException(ex.getMessage());
+      }
+    }
+
+  }
+
 }
