@@ -26,7 +26,7 @@ public class JGAPRequestGP
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GPConfiguration m_config;
 
@@ -49,7 +49,7 @@ public class JGAPRequestGP
    * @param a_strategy the strategy to choose for evolution
    *
    * @author Klaus Meffert
-   * @since 3.1
+   * @since 3.2
    */
   public JGAPRequestGP(String a_name, int a_id, GPConfiguration a_config,
                      IWorkerEvolveStrategyGP a_strategy) {
@@ -66,7 +66,7 @@ public class JGAPRequestGP
    * @param a_config Configuration
    *
    * @author Klaus Meffert
-   * @since 3.1
+   * @since 3.2
    */
   public JGAPRequestGP(String name, int id, GPConfiguration a_config) {
     this(name, id, a_config, new DefaultEvolveStrategyGP());
@@ -192,7 +192,7 @@ public class JGAPRequestGP
    * @return the configuration set
    *
    * @author Klaus Meffert
-   * @since 3.1
+   * @since 3.2
    */
   public GPConfiguration getConfiguration() {
     return m_config;
