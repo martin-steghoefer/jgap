@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.77 $";
+  private final static String CVS_REVISION = "$Revision: 1.78 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1448,9 +1448,10 @@ public class Configuration
     m_factory = a_factory;
   }
 
-  private void makeThreadKey() {
+  protected String makeThreadKey() {
     Thread current = Thread.currentThread();
     threadKey = getThreadKey(current, m_id);
+    return threadKey;
   }
 
   /**
@@ -1480,6 +1481,18 @@ public class Configuration
    */
   public String getId() {
     return m_id;
+  }
+
+  /**
+   * Only to be called by sub classes, such as GPConfiguration.
+   *
+   * @param a_id the id to set
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected void setId(String a_id) {
+    m_id = a_id;
   }
 
   /**
