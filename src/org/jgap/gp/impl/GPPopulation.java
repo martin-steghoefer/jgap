@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The array of GPProgram's that make-up the Genotype's population.
@@ -585,5 +585,22 @@ public class GPPopulation
     if (a_toAdd != null) {
       m_fittestToAdd = a_toAdd;
     }
+  }
+
+  /**
+   * Clears the list of programs. Normally, this should not be necessary.
+   * But especially in distributed computing, a fresh population has to be
+   * provided sometimes.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void clear() {
+    for (int i = 0; i < m_programs.length; i++) {
+      m_programs[i] = null;
+    }
+    m_changed = true;
+    m_sorted = true;
+    m_fittestProgram = null;
   }
 }
