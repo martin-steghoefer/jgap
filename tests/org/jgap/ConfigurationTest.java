@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -1230,8 +1230,11 @@ public class ConfigurationTest
     conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
     conf.addGeneticOperator(new MutationOperator(conf));
     conf.setPopulationSize(1);
-    conf.clone();
-    conf.clone();
+    Configuration theClone1 = (Configuration)conf.clone();
+    Configuration theClone2 = (Configuration)conf.clone();
+    assertEquals(conf, theClone1);
+    assertEquals(conf, theClone2);
+    assertEquals(theClone1, theClone2);
   }
 
   /**
