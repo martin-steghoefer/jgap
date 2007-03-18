@@ -40,7 +40,7 @@ public class ClientEvolveStrategy
     extends GPProblem
     implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.1 $";
+  public final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GPConfiguration m_config;
 
@@ -59,6 +59,9 @@ public class ClientEvolveStrategy
     super(a_conf);
   }
 
+  public ClientEvolveStrategy() {
+    /**@todo*/
+  }
 
   /**
    * Called at the very beginning and only once before distributed evolution
