@@ -30,7 +30,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.94 $";
+  private final static String CVS_REVISION = "$Revision: 1.95 $";
 
   /**
    * The current Configuration instance.
@@ -125,7 +125,6 @@ public class Genotype
    */
   public Genotype(Configuration a_configuration)
       throws InvalidConfigurationException {
-
   }
 
   /**
@@ -280,20 +279,20 @@ public class Genotype
       if (popSize < minSize) {
         IChromosome newChrom;
 //        try {
-          IChromosome sampleChrom = m_activeConfiguration.getSampleChromosome();
-          Class sampleChromClass = sampleChrom.getClass();
-          IInitializer chromIniter = m_activeConfiguration.getJGAPFactory().
-              getInitializerFor(sampleChrom, sampleChromClass);
-          while (getPopulation().size() < minSize) {
-            try {
-              newChrom = (IChromosome) chromIniter.perform(sampleChrom,
-                  sampleChromClass, null);
+        IChromosome sampleChrom = m_activeConfiguration.getSampleChromosome();
+        Class sampleChromClass = sampleChrom.getClass();
+        IInitializer chromIniter = m_activeConfiguration.getJGAPFactory().
+            getInitializerFor(sampleChrom, sampleChromClass);
+        while (getPopulation().size() < minSize) {
+          try {
+            newChrom = (IChromosome) chromIniter.perform(sampleChrom,
+                sampleChromClass, null);
 //            Chromosome.randomInitialChromosome(m_activeConfiguration);
-              getPopulation().addChromosome(newChrom);
-            }catch (Exception ex) {
-              throw new RuntimeException(ex);
-            }
+            getPopulation().addChromosome(newChrom);
+          } catch (Exception ex) {
+            throw new RuntimeException(ex);
           }
+        }
 //        }
 //        catch (InvalidConfigurationException invex) {
 //          throw new IllegalStateException(invex.getMessage());
@@ -302,8 +301,8 @@ public class Genotype
     }
     if (m_activeConfiguration.isPreserveFittestIndividual()) {
       IChromosome fittest = getFittestChromosome(0,
-                                                 m_activeConfiguration.
-                                                 getPopulationSize() - 1);
+          m_activeConfiguration.
+          getPopulationSize() - 1);
       if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
         keepPopSizeConstant(getPopulation(),
                             m_activeConfiguration.getPopulationSize());
@@ -383,7 +382,7 @@ public class Genotype
    * @since 2.3
    */
   public static Genotype randomInitialGenotype(Configuration
-                                               a_configuration)
+      a_configuration)
       throws InvalidConfigurationException {
     if (a_configuration == null) {
       throw new IllegalArgumentException(
@@ -424,15 +423,15 @@ public class Genotype
         getInitializerFor(sampleChrom, sampleClass);
     if (chromIniter == null) {
       throw new InvalidConfigurationException("No initializer found for class "
-                                              + sampleClass);
+          + sampleClass);
     }
     try {
       for (int i = 0; i < a_num; i++) {
-        getPopulation().addChromosome( (IChromosome) chromIniter.perform(sampleChrom,
+        getPopulation().addChromosome( (IChromosome) chromIniter.perform(
+            sampleChrom,
             sampleClass, null));
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       // Try to propagate exception, see "bug" 1661635.
       // ----------------------------------------------
       if (ex.getCause() != null) {
@@ -442,7 +441,6 @@ public class Genotype
         throw new IllegalStateException(ex.getMessage());
       }
     }
-
   }
 
   /**
@@ -490,8 +488,7 @@ public class Genotype
         }
       }
       return true;
-    }
-    catch (ClassCastException e) {
+    } catch (ClassCastException e) {
       return false;
     }
   }
@@ -508,7 +505,7 @@ public class Genotype
    */
   protected void applyNaturalSelectors(
       boolean a_processBeforeGeneticOperators) {
-      /**@todo optionally use working pool*/
+    /**@todo optionally use working pool*/
     try {
       // Process all natural selectors applicable before executing the
       // genetic operators (reproduction, crossing over, mutation...).
@@ -520,7 +517,7 @@ public class Genotype
         int m_single_selection_size;
         Population m_new_population;
         m_new_population = new Population(m_activeConfiguration,
-                                          m_population_size);
+            m_population_size);
         NaturalSelector selector;
         // Repopulate the population of chromosomes with those selected
         // by the natural selector. Iterate over all natural selectors.
@@ -547,8 +544,7 @@ public class Genotype
         setPopulation(new Population(m_activeConfiguration));
         getPopulation().addChromosomes(m_new_population);
       }
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       // This exception should never be reached
       throw new IllegalStateException(iex.getMessage());
     }
@@ -567,7 +563,6 @@ public class Genotype
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
       applyGeneticOperator(operator, getPopulation(),
                            getPopulation().getChromosomes());
-
 //      List workingPool = new Vector();
 //      applyGeneticOperator(operator, getPopulation(),
 //                           workingPool);
