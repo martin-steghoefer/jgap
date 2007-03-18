@@ -15,9 +15,11 @@ import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.distr.grid.*;
+import org.jgap.gp.CommandGene;
 
 /**
- * An instance that creates single requests to be sent to a worker.
+ * An instance that defines a request from which work packages are generated
+ * that are sent to workers in the grid.
  *
  * @author Klaus Meffert
  * @since 3.2
@@ -26,9 +28,9 @@ public class JGAPRequestGP
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private GPConfiguration m_config;
+  private IGridConfigurationGP m_config;
 
   private GPPopulation m_pop;
 
@@ -51,7 +53,7 @@ public class JGAPRequestGP
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String a_name, int a_id, GPConfiguration a_config,
+  public JGAPRequestGP(String a_name, int a_id, IGridConfigurationGP a_config,
                      IWorkerEvolveStrategyGP a_strategy) {
     super(a_name, a_id);
     m_config = a_config;
@@ -68,7 +70,7 @@ public class JGAPRequestGP
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String name, int id, GPConfiguration a_config) {
+  public JGAPRequestGP(String name, int id, IGridConfigurationGP a_config) {
     this(name, id, a_config, new DefaultEvolveStrategyGP());
   }
 
@@ -85,7 +87,7 @@ public class JGAPRequestGP
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String a_name, int a_id, GPConfiguration a_config,
+  public JGAPRequestGP(String a_name, int a_id, IGridConfigurationGP a_config,
                      GPPopulation a_pop, IWorkerEvolveStrategyGP a_strategy) {
     this(a_name, a_id, a_config, a_strategy);
     m_pop = a_pop;
@@ -103,7 +105,7 @@ public class JGAPRequestGP
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String a_name, int a_id, GPConfiguration a_config,
+  public JGAPRequestGP(String a_name, int a_id, IGridConfigurationGP a_config,
                      GPPopulation a_pop) {
     this(a_name, a_id, a_config, a_pop, new DefaultEvolveStrategyGP());
   }
@@ -189,26 +191,36 @@ public class JGAPRequestGP
 
 
   /**
-   * @return the configuration set
+   * @return the JGAP configuration set
    *
    * @author Klaus Meffert
    * @since 3.2
    */
   public GPConfiguration getConfiguration() {
+    return m_config.getConfiguration();
+  }
+
+  /**
+   * @return the grid configuration set
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IGridConfigurationGP getGridConfiguration() {
     return m_config;
   }
 
   /**
-   * Set a modified configuration. Should only be used to re-set a configuration
-   * because some parts have not been serialized.
+   * Set a modified JGAP configuration. Should only be used to re-set a
+   * configuration because some parts have not been serialized.
    *
-   * @param a_conf the Configuration to set
+   * @param a_conf the JGAP Configuration to set
    *
    * @author Klaus Meffert
    * @since 3.2
    */
   public void setConfiguration(GPConfiguration a_conf) {
-    m_config = a_conf;
+    m_config.setConfiguration(a_conf);
   }
 
   /**
@@ -246,7 +258,7 @@ public class JGAPRequestGP
    */
   public JGAPRequestGP newInstance(String a_name, int a_ID) {
     JGAPRequestGP result = new JGAPRequestGP(a_name, a_ID,
-                                       getConfiguration(), getPopulation());
+                                       m_config, getPopulation());
     result.setEvolveStrategy(getWorkerEvolveStrategy());
     result.setGenotypeInitializer(getGenotypeInitializer());
     result.setWorkerReturnStrategy(getWorkerReturnStrategy());
