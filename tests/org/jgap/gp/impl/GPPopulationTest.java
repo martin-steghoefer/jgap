@@ -26,7 +26,7 @@ import org.jgap.gp.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -186,5 +186,25 @@ public class GPPopulationTest
     // -------------------------------
     GPPopulation pop2 = (GPPopulation)doSerialize(pop);
     assertEquals(pop, pop2);
+  }
+
+  /**
+   * Sorting with population having null programs, which is allowed.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testSort_0()
+      throws Exception {
+    GPPopulation pop = new GPPopulation(m_gpconf, 4);
+    GPProgram prog = new GPProgram(m_gpconf, 2);
+    ProgramChromosome chrom = new ProgramChromosome(m_gpconf, 2, prog);
+    prog.setChromosome(0, chrom);
+    prog.setChromosome(1, chrom);
+    pop.setGPProgram(0, prog);
+    pop.setGPProgram(1, prog);
+    pop.sort(new GPProgramFitnessComparator());
   }
 }
