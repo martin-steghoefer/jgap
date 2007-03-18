@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.78 $";
+  private final static String CVS_REVISION = "$Revision: 1.79 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1412,10 +1412,14 @@ public class Configuration
     m_keepPopulationSizeConstant = a_keepPopSizeConstant;
   }
 
+  /**
+   * @return the JGAP factory registered
+   *
+   * @author Klaus Meffert
+   */
   public IJGAPFactory getJGAPFactory() {
     return m_factory;
   }
-
   class ConfigurationConfigurable
       implements Serializable {
     /**
