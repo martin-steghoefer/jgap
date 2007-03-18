@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
 public class GridConfiguration
     extends GridConfigurationGPBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public GridConfiguration() {
     super();
@@ -67,7 +67,7 @@ public class GridConfiguration
     setClientEvolveStrategy(new ClientEvolveStrategy(jgapconfig));
     // Optional: Register client feedback listener.
     // --------------------------------------------
-//    setClientFeedback(new MyClientFeedback());
+    setClientFeedback(new MyClientFeedback());
   }
 
   public void validate()
