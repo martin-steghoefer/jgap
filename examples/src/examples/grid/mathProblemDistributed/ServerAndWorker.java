@@ -13,6 +13,7 @@ import org.apache.commons.cli.*;
 import org.homedns.dade.jcgrid.cmd.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.distr.grid.*;
+import org.jgap.distr.grid.gp.*;
 
 /**
  * Convenience call to start both the server and a worker at once. Only for
@@ -27,7 +28,7 @@ import org.jgap.distr.grid.*;
  */
 public class ServerAndWorker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Convenience (demo) start of both the server and a worker.
