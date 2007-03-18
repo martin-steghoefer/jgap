@@ -13,6 +13,7 @@ import java.io.*;
 
 import org.homedns.dade.jcgrid.client.*;
 import org.jgap.*;
+import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 /**
@@ -25,7 +26,7 @@ import org.jgap.gp.impl.*;
 public interface IGridConfigurationGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   IClientFeedbackGP getClientFeedback();
 
@@ -34,6 +35,8 @@ public interface IGridConfigurationGP
   IRequestSplitStrategyGP getRequestSplitStrategy();
 
   GPConfiguration getConfiguration();
+
+  void setConfiguration(GPConfiguration a_config);
 
   IWorkerEvolveStrategyGP getWorkerEvolveStrategy();
 
@@ -55,7 +58,33 @@ public interface IGridConfigurationGP
 
   void initialize(GridNodeClientConfig gridconfig)
       throws Exception;
-
   void validate()
       throws Exception;
+
+  /**@todo move the following to GPConfigtation, eleganty*/
+  void setTypes(Class[] a_types);
+
+  void setArgTypes(Class[][] a_argTypes);
+
+  void setNodeSets(CommandGene[][] a_nodeSets);
+
+  void setMinDepths(int[] a_minDepths);
+
+  void setMaxDepths(int[] a_maxDepths);
+
+  void setMaxNodes(int a_maxNodes);
+
+  Class[] getTypes();
+
+  Class[][] getArgTypes();
+
+  CommandGene[][] getNodeSets();
+
+  int[] getMinDepths();
+
+  int[] getMaxDepths();
+
+  int getMaxNodes();
+  // End of todo
+
 }

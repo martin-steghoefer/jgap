@@ -28,7 +28,7 @@ import org.apache.commons.cli.*;
 public class JGAPClientGP
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final static String className = JGAPClientGP.class.getName();
 
@@ -55,7 +55,7 @@ public class JGAPClientGP
     // Setup work request.
     // -------------------
     JGAPRequestGP req = new JGAPRequestGP(m_gridconfig.getSessionName(), 0,
-                                  m_gridConfig.getConfiguration());
+                                  m_gridConfig);
     req.setWorkerReturnStrategy(m_gridConfig.getWorkerReturnStrategy());
     req.setGenotypeInitializer(m_gridConfig.getGenotypeInitializer());
     req.setEvolveStrategy(m_gridConfig.getWorkerEvolveStrategy());

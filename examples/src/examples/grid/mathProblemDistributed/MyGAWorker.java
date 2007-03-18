@@ -11,7 +11,7 @@ package examples.grid.mathProblemDistributed;
 
 import org.homedns.dade.jcgrid.*;
 import org.jgap.*;
-import org.jgap.distr.grid.*;
+import org.jgap.distr.grid.gp.*;
 
 /**
  * Receives work, computes a solution and returns the solution to the requester.
@@ -22,9 +22,9 @@ import org.jgap.distr.grid.*;
  * @since 3.2
  */
 public class MyGAWorker
-    extends JGAPWorker {
+    extends JGAPWorkerGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Executes the evolution and returns the result.
