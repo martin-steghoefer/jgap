@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class DefaultGPFitnessEvaluator
     implements IGPFitnessEvaluator, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -50,7 +50,15 @@ public class DefaultGPFitnessEvaluator
    * @since 3.1
    */
   public boolean isFitter(IGPProgram a_prog1, IGPProgram a_prog2) {
-    return isFitter(a_prog1.getFitnessValue(), a_prog2.getFitnessValue());
+    if (a_prog1 == null) {
+        return false;
+    }
+    else if (a_prog2 == null) {
+      return true;
+    }
+    else {
+      return isFitter(a_prog1.getFitnessValue(), a_prog2.getFitnessValue());
+    }
   }
 
   /*
