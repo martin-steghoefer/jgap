@@ -26,7 +26,7 @@ import org.apache.commons.cli.*;
 public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -106,7 +106,9 @@ public class JGAPClient
       }
     } catch (Exception ex) {
       ex.printStackTrace();
-      m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
+      if (m_gridConfig.getClientFeedback() != null) {
+        m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
+      }
     }
   }
 
