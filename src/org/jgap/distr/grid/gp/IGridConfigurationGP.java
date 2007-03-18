@@ -13,6 +13,7 @@ import java.io.*;
 
 import org.homedns.dade.jcgrid.client.*;
 import org.jgap.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Interface for a GP-related grid configuration. It provides all information
@@ -24,7 +25,7 @@ import org.jgap.*;
 public interface IGridConfigurationGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   IClientFeedbackGP getClientFeedback();
 
@@ -32,7 +33,7 @@ public interface IGridConfigurationGP
 
   IRequestSplitStrategyGP getRequestSplitStrategy();
 
-  Configuration getConfiguration();
+  GPConfiguration getConfiguration();
 
   IWorkerEvolveStrategyGP getWorkerEvolveStrategy();
 

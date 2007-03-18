@@ -9,8 +9,8 @@
  */
 package org.jgap.distr.grid.gp;
 
-import org.jgap.*;
 import org.homedns.dade.jcgrid.client.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Abstract base class for the important GP grid configuration. It holds any
@@ -23,13 +23,13 @@ import org.homedns.dade.jcgrid.client.*;
 public abstract class GridConfigurationGPBase
     implements IGridConfigurationGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private IClientFeedbackGP m_clientFeedback;
 
   private IRequestSplitStrategyGP m_splitStrategy;
 
-  private Configuration m_config;
+  private GPConfiguration m_config;
 
   private IClientEvolveStrategyGP m_clientEvolveStrategy;
 
@@ -60,11 +60,11 @@ public abstract class GridConfigurationGPBase
     return m_splitStrategy;
   }
 
-  public Configuration getConfiguration() {
+  public GPConfiguration getConfiguration() {
     return m_config;
   }
 
-  public void setConfiguration(Configuration a_config) {
+  public void setConfiguration(GPConfiguration a_config) {
     m_config = a_config;
   }
 
