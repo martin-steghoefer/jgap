@@ -11,6 +11,7 @@ package org.jgap.distr.grid.gp;
 
 import org.homedns.dade.jcgrid.client.*;
 import org.jgap.gp.impl.*;
+import org.jgap.gp.*;
 
 /**
  * Abstract base class for the important GP grid configuration. It holds any
@@ -23,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class GridConfigurationGPBase
     implements IGridConfigurationGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private IClientFeedbackGP m_clientFeedback;
 
@@ -38,7 +39,20 @@ public abstract class GridConfigurationGPBase
   private IWorkerReturnStrategyGP m_workerReturnStrategy;
 
   private IGenotypeInitializerGP m_genotypeInitializer;
+
   private String m_packageName;
+
+  private Class[] m_types;
+
+  private Class[][] m_argTypes;
+
+  private CommandGene[][] m_nodeSets;
+
+  private int[] m_minDepths;
+
+  private int[] m_maxDepths;
+
+  private int m_maxNodes;
 
   public GridConfigurationGPBase() {
 //    m_packageName = getClass().getPackage().getName();
@@ -123,5 +137,53 @@ public abstract class GridConfigurationGPBase
 
   public void setRequestSplitStrategy(IRequestSplitStrategyGP a_splitStrategy) {
     m_splitStrategy = a_splitStrategy;
+  }
+
+  public void setTypes(Class[] a_types) {
+    m_types = a_types;
+  }
+
+  public void setArgTypes(Class[][] a_argTypes) {
+    m_argTypes = a_argTypes;
+  }
+
+  public void setNodeSets(CommandGene[][] a_nodeSets) {
+    m_nodeSets = a_nodeSets;
+  }
+
+  public void setMinDepths(int[] a_minDepths) {
+    m_minDepths = a_minDepths;
+  }
+
+  public void setMaxDepths(int[] a_maxDepths) {
+    m_maxDepths = a_maxDepths;
+  }
+
+  public void setMaxNodes(int a_maxNodes) {
+    m_maxNodes = a_maxNodes;
+  }
+
+  public Class[] getTypes() {
+    return m_types;
+  }
+
+  public Class[][] getArgTypes() {
+    return m_argTypes;
+  }
+
+  public CommandGene[][] getNodeSets() {
+    return m_nodeSets;
+  }
+
+  public int[] getMinDepths() {
+    return m_minDepths;
+  }
+
+  public int[] getMaxDepths() {
+    return m_maxDepths;
+  }
+
+  public int getMaxNodes() {
+    return m_maxNodes;
   }
 }
