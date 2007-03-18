@@ -29,7 +29,7 @@ import org.jgap.util.CloneException;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -835,5 +835,16 @@ public class GPConfiguration
       throw new CloneException(t);
     }
   }
+
+  /**
+   * @return the JGAP factory registered
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IJGAPFactory getJGAPFactory() {
+    return m_factory;
+  }
+
 }
 /**@todo introduce lock for configuration*/
