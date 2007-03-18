@@ -10,20 +10,21 @@
 package examples.grid.mathProblemDistributed;
 
 import org.jgap.*;
+import org.jgap.distr.grid.gp.*;
 import org.jgap.distr.grid.*;
 import org.apache.log4j.*;
 
 /**
- * Listener for feedback sent to the client. This is a simple sample
+ * Listener for feedback sent to the GP client. This is a simple sample
  * implementation.
  *
  * @author Klaus Meffert
  * @since 3.2
  */
 public class MyClientFeedback
-    implements IClientFeedback {
+    implements IClientFeedbackGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = MyClientFeedback.class.getName();
 
@@ -36,14 +37,14 @@ public class MyClientFeedback
     log.error("Error catched on client side: " + msg, ex);
   }
 
-  public void sendingFragmentRequest(JGAPRequest req) {
+  public void sendingFragmentRequest(JGAPRequestGP req) {
     log.info("Sending work request " + req.getRID());
   }
 
-  public void receivedFragmentResult(JGAPRequest req, JGAPResult res,
+  public void receivedFragmentResult(JGAPRequestGP req, JGAPResultGP res,
                                      int idx) {
     log.warn("Receiving work (index " + idx + "). First solution: " +
-             res.getPopulation().getChromosome(0));
+             res.getPopulation().getGPProgram(0));
   }
 
   public void beginWork() {
