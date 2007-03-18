@@ -28,7 +28,7 @@ import org.apache.commons.cli.*;
 public class JGAPClientGP
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final static String className = JGAPClientGP.class.getName();
 
@@ -49,6 +49,9 @@ public class JGAPClientGP
     m_gridConfig = (IGridConfigurationGP) client.getConstructor(new
         Class[] {}).newInstance(new Object[] {});
     m_gridConfig.initialize(m_gridconfig);
+    if (m_gridConfig.getClientFeedback() == null) {
+        m_gridConfig.setClientFeedback(new NullClientFeedbackGP());
+    }
     // Setup work request.
     // -------------------
     JGAPRequestGP req = new JGAPRequestGP(m_gridconfig.getSessionName(), 0,
@@ -108,7 +111,7 @@ public class JGAPClientGP
       }
     } catch (Exception ex) {
       ex.printStackTrace();
-      m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
+        m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
     }
   }
 
