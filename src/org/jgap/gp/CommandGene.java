@@ -16,7 +16,7 @@ import org.jgap.gp.impl.*;
 /**
  * Abstract base class for all GP commands. A CommandGene can hold additional
  * CommandGene's, it acts sort of like a Composite (also see CompositeGene for
- * a smiliar characteristics, although for a GA).
+ * a similar characteristics, although for a GA).
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
