@@ -19,6 +19,7 @@ import org.jgap.gp.terminal.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.<p>
+ * Also demonstrates usage of ADFs.<p>
  * The problem is to find a formula for a given truth table (X/Y-pairs).
  *
  * @author Klaus Meffert
@@ -27,7 +28,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private static Variable vx;
 
@@ -44,14 +45,21 @@ public class MathProblem
       throws InvalidConfigurationException {
     GPConfiguration conf = getGPConfiguration();
     Class[] types = {
+        // Return type of result-producing chromosome
+        CommandGene.FloatClass,
+        // Return type of ADF 1
         CommandGene.FloatClass};
-    Class[][] argTypes = { {}
+    Class[][] argTypes = {
+        // Arguments of result-producing chromosome: none
+        {},
+        // Arguments of ADF1: all 3 are float
+        {CommandGene.FloatClass,CommandGene.FloatClass,CommandGene.FloatClass}
     };
     CommandGene[][] nodeSets = { {
         vx = Variable.create(conf, "X", CommandGene.FloatClass),
-        new Add(conf, CommandGene.FloatClass),
-        new Add3(conf, CommandGene.FloatClass),
-        new Subtract(conf, CommandGene.FloatClass),
+//        new Add(conf, CommandGene.FloatClass),
+//        new Add3(conf, CommandGene.FloatClass),
+//        new Subtract(conf, CommandGene.FloatClass),
         new Multiply(conf, CommandGene.FloatClass),
         new Multiply3(conf, CommandGene.FloatClass),
         new Divide(conf, CommandGene.FloatClass),
@@ -59,6 +67,11 @@ public class MathProblem
         new Exp(conf, CommandGene.FloatClass),
         new Pow(conf, CommandGene.FloatClass),
         new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, true),
+        new ADF(conf, 1 /*, argTypes[1] */),
+    },
+        // and now the definition of ADF(1)
+    {
+       new Add3(conf, CommandGene.FloatClass),
     }
     };
     Random random = new Random();
@@ -123,7 +136,7 @@ public class MathProblem
           throw ex;
         }
       }
-      if (error < 0.000001) {
+      if (error < 0.001) {
         error = 0.0d;
       }
       return error;
