@@ -24,23 +24,23 @@ import org.jgap.gp.impl.*;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private int m_chromosomeNum;
 
   /**
    * Constructor.
    *
-   * @param a_conf te configuration to use
+   * @param a_conf the configuration to use
    * @param a_chromosomeNum the index of the chromosome to execute
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public ADF(final GPConfiguration a_conf, int a_chromosomeNum)
+  public ADF(final GPConfiguration a_conf, int a_chromosomeNum, int a_arity)
       throws InvalidConfigurationException {
-    super(a_conf, 0, null);
+    super(a_conf, a_arity, null);
     m_chromosomeNum = a_chromosomeNum;
   }
 
