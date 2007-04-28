@@ -9,14 +9,14 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
 
 /**
  * Automatically Defined Function (ADF). Works with output of other chromosomes.
+ * Automatically created by ProgramChromosome.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private int m_chromosomeNum;
 
@@ -59,7 +59,10 @@ public class ADF
   }
 
   public int getArity(IGPProgram a_individual) {
-    return a_individual.getChromosome(m_chromosomeNum).getArity();
+      if (a_individual.size() <= m_chromosomeNum) {
+        return 0;
+      }
+      return a_individual.getChromosome(m_chromosomeNum).getArity();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
