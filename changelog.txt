@@ -5,6 +5,7 @@
   parameter does not lead to program abortion any more;
   auto-consider NOP if necessary for creating valid
   programs...)
+* Enabled GPConfiguration for grid computing
 * Added GP function ExchangeMemory and others
 * Added GP program caching to speedup evolution
 * Added GP TournamentSelector (by Javier and Enrique)
@@ -57,7 +58,7 @@
 * Added javadocumentation
 * Fixed bug in GPProgramFitnessComparator.compare
 * Fixed bug with Double.NaN in DefaultGPFitnessEvaluator
-* Added compareTo and equals methods to
+* Added compareTo and equals methods to grid
   DefaultGPFitnessEvaluator
 * Fixed missing usage of IInitializer in Genotype.evolve
   that made it difficult subclassing Chromosome (see bug
