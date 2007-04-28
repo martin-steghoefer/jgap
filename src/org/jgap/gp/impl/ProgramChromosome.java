@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements IGPChromosome, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -151,6 +151,7 @@ public class ProgramChromosome
       chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
       chrom.setFunctions( (CommandGene[]) getFunctions().clone());
       chrom.m_depth = (int[]) m_depth.clone();
+      chrom.setIndividual(getIndividual());
       return chrom;
     } catch (Exception cex) {
       // Rethrow to have a more convenient handling.
