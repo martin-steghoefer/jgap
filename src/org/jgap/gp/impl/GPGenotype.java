@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -322,8 +322,8 @@ public class GPGenotype
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
                                    a_minDepths, a_maxDepths, a_maxNodes);
     gp.m_fullModeAllowed = a_fullModeAllowed;
-    // Publish variables to configuration to make them accessible globally.
-    // --------------------------------------------------------------------
+    // Publish GP variables to configuration to make them accessible globally.
+    // -----------------------------------------------------------------------
     Iterator it = gp.m_variables.keySet().iterator();
     while (it.hasNext()) {
       /**@todo optimize access to map*/
