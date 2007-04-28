@@ -24,7 +24,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements IGPChromosome, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -68,10 +68,10 @@ public class ProgramChromosome
    */
   private boolean m_compareAppData;
 
-  public ProgramChromosome(GPConfiguration a_configuration, int a_size,
+  public ProgramChromosome(GPConfiguration a_conf, int a_size,
                            IGPProgram a_ind)
       throws InvalidConfigurationException {
-    super(a_configuration, a_ind);
+    super(a_conf, a_ind);
     if (a_size <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -79,12 +79,12 @@ public class ProgramChromosome
     init(a_size);
   }
 
-  public ProgramChromosome(GPConfiguration a_configuration, int a_size,
+  public ProgramChromosome(GPConfiguration a_conf, int a_size,
                            CommandGene[] a_functionSet,
                            Class[] a_argTypes,
                            IGPProgram a_ind)
       throws InvalidConfigurationException {
-    super(a_configuration, a_ind);
+    super(a_conf, a_ind);
     if (a_size <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -94,10 +94,9 @@ public class ProgramChromosome
     init(a_size);
   }
 
-  public ProgramChromosome(GPConfiguration a_configuration,
-                           CommandGene[] a_initialGenes)
+  public ProgramChromosome(GPConfiguration a_conf, CommandGene[] a_initialGenes)
       throws InvalidConfigurationException {
-    super(a_configuration);
+    super(a_conf);
     int i = 0;
     while (i < a_initialGenes.length && a_initialGenes[i] != null) {
       i++;
