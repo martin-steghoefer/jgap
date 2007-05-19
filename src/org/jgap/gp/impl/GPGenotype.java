@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -196,7 +196,7 @@ public class GPGenotype
    * @param a_maxNodes reserve space for a_maxNodes number of nodes
    * @param a_verboseOutput true: output status information to console
    *
-   * @return created population
+   * @return created genotype with initialized population
    *
    * @throws InvalidConfigurationException
    *
@@ -237,7 +237,7 @@ public class GPGenotype
    * @param a_maxNodes reserve space for a_maxNodes number of nodes
    * @param a_verboseOutput true: output status information to console
    *
-   * @return created population
+   * @return created genotype with initialized population
    *
    * @throws InvalidConfigurationException
    *
@@ -284,7 +284,7 @@ public class GPGenotype
    * generations during evolution is allowed (true) or not (false)
    * @param a_verboseOutput true: output status information to console
    *
-   * @return created population
+   * @return created genotype with initialized population
    *
    * @throws InvalidConfigurationException
    *
