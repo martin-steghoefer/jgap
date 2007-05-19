@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -1187,6 +1187,21 @@ public class ConfigurationTest
     System.setProperty(Configuration.PROPERTY_JGAPFACTORY_CLASS, "");
     Configuration conf = new Configuration();
     assertEquals(JGAPFactory.class, conf.getJGAPFactory().getClass());
+  }
+
+  /**
+   * Construct with explicit ID given.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testConstruct_3() {
+    Configuration conf1 = new Configuration("id1","doesnotmatter");
+    conf1.setFitnessEvaluator(new DefaultFitnessEvaluator());
+    Configuration conf2 = new Configuration("id2","doesnotmatter");
+    conf2.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    assertEquals("id1", conf1.getId());
+    assertEquals("id2", conf2.getId());
   }
 
   /**
