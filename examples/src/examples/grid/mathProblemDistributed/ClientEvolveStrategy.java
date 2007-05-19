@@ -40,9 +40,9 @@ public class ClientEvolveStrategy
     extends GPProblem
     implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.2 $";
+  public final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private GPConfiguration m_config;
+//  private GPConfiguration m_config;
 
   private IClientFeedbackGP m_clientFeedback;
 
@@ -54,14 +54,20 @@ public class ClientEvolveStrategy
 
   private static float[] y = new float[20];
 
-  public ClientEvolveStrategy(GPConfiguration a_conf)
-      throws InvalidConfigurationException {
-    super(a_conf);
+/**@todo pass config*/
+//  public ClientEvolveStrategy(GPConfiguration a_conf)
+//      throws InvalidConfigurationException {
+//    super(a_conf);
+//  }
+
+  /**
+   * Default constructor is necessary here as it will be called dynamically!
+   * Don't declare any other constructor as it will not be called!
+   */
+  public ClientEvolveStrategy() {
+    super();
   }
 
-  public ClientEvolveStrategy() {
-    /**@todo*/
-  }
 
   /**
    * Called at the very beginning and only once before distributed evolution
@@ -78,11 +84,14 @@ public class ClientEvolveStrategy
   public void initialize(GridClient a_gc, GPConfiguration a_config,
                          IClientFeedbackGP a_clientFeedback)
       throws Exception {
+    super.setGPConfiguration(a_config);
     m_clientFeedback = a_clientFeedback;
-    m_config = a_config;
+//    m_config = a_config;
     // Start with an empty population.
     // ------------------------------
-    m_pop = new GPPopulation(m_config, m_config.getPopulationSize());
+    m_pop = new GPPopulation(getGPConfiguration(), getGPConfiguration().getPopulationSize());
+    GPGenotype gen = create();
+    m_pop = gen.getGPPopulation();
   }
 
   public void afterWorkRequestsSent()
@@ -130,7 +139,7 @@ public class ClientEvolveStrategy
       throws Exception {
     JGAPRequestGP[] workList;
     m_workReq.setPopulation(m_pop);
-    m_workReq.setConfiguration(m_config);
+    m_workReq.setConfiguration(getGPConfiguration());
     workList = m_splitStrategy.split(m_workReq);
     return workList;
   }
@@ -140,11 +149,13 @@ public class ClientEvolveStrategy
    *
    * @param a_result JGAPResult
    * @throws Exception
+   * @since 3.2
    */
   public void resultReceived(JGAPResultGP a_result)
       throws Exception {
-/**@todo*/
-//    m_pop.addChromosomes(a_result.getPopulation());
+    // This is a very simplistic implementation!
+    // -----------------------------------------
+    m_pop = a_result.getPopulation();
   }
 
   public GPGenotype create()
