@@ -22,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class ClientEvolveStrategy
     implements IClientEvolveStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.1 $";
+  public final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Configuration m_config;
 
@@ -31,6 +31,14 @@ public class ClientEvolveStrategy
   private final int m_maxEvolutions = 3;
 
   private Population m_pop;
+
+  /**
+   * Default constructor is necessary here as it will be called dynamically!
+   * Don't declare any other constructor as it will not be called!
+   */
+  public ClientEvolveStrategy() {
+  }
+
 
   /**
    * Called at the very beginning and only once before distributed evolution
