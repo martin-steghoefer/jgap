@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
  */
 public abstract class GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private GPConfiguration m_conf;
 
@@ -38,6 +38,14 @@ public abstract class GPProblem {
       throw new InvalidConfigurationException("Configuration must not be null!");
     }
     m_conf = a_conf;
+  }
+
+  /**
+   * Default constructor for dynamic instantiation.
+   * @since 3.2
+   */
+  public GPProblem() {
+
   }
 
   /**
@@ -158,5 +166,18 @@ public abstract class GPProblem {
    */
   public GPConfiguration getGPConfiguration() {
     return m_conf;
+  }
+
+  /**
+   * Sets the configuration. Only use in case of dynamic instantiation (in case
+   * constructor with parameter GPConfiguration is not used).
+   *
+   * @param a_conf the configuration to set
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  protected void setGPConfiguration(GPConfiguration a_conf) {
+    m_conf = a_conf;
   }
 }
