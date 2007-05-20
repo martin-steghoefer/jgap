@@ -26,7 +26,7 @@ import org.apache.log4j.*;
 public class MyClientFeedback
     implements IClientFeedbackGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static Logger log = Logger.getLogger(MyClientFeedback.class);
 
@@ -50,7 +50,7 @@ public class MyClientFeedback
     if (pop == null || pop.isFirstEmpty()) {
       IGPProgram best = res.getFittest();
       log.warn("Receiving work (index " + idx + "). Best solution: " +
-               best);
+               best.getFitnessValue());
       return;
     }
     if (pop == null) {
