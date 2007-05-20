@@ -37,10 +37,9 @@ import org.jgap.gp.terminal.Terminal;
  * @since 3.2
  */
 public class ClientEvolveStrategy
-    extends GPProblem
-    implements IClientEvolveStrategyGP {
+    extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.4 $";
+  public final static String CVS_REVISION = "$Revision: 1.5 $";
 
 //  private GPConfiguration m_config;
 
@@ -54,7 +53,7 @@ public class ClientEvolveStrategy
 
   private static float[] y = new float[20];
 
-/**@todo pass config*/
+  /**@todo pass config*/
 //  public ClientEvolveStrategy(GPConfiguration a_conf)
 //      throws InvalidConfigurationException {
 //    super(a_conf);
@@ -67,7 +66,6 @@ public class ClientEvolveStrategy
   public ClientEvolveStrategy() {
     super();
   }
-
 
   /**
    * Called at the very beginning and only once before distributed evolution
@@ -104,11 +102,13 @@ public class ClientEvolveStrategy
   }
 
   public boolean isEvolutionFinished(int a_evolutionsDone) {
-    // Check if best solution is satisfying.
-    // -------------------------------------
-    IGPProgram fittest = m_pop.determineFittestProgram();
-    if (fittest.getFitnessValue() > 50000) {
-      return true;
+    if (m_pop != null) {
+      // Check if best solution is satisfying.
+      // -------------------------------------
+      IGPProgram fittest = m_pop.determineFittestProgram();
+      if (fittest.getFitnessValue() > 50000) {
+        return true;
+      }
     }
     // Do the complete evolution cycle 3 times.
     // ----------------------------------------
@@ -186,11 +186,11 @@ public class ClientEvolveStrategy
     };
     // Create genotype with initial population.
     // ----------------------------------------
-    GPGenotype result = GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
+    GPGenotype result = GPGenotype.randomInitialGenotype(conf, types, argTypes,
+        nodeSets,
         20, true);
     result.putVariable(vx);
     conf.putVariable(vx);
     return result;
   }
-
 }
