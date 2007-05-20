@@ -10,6 +10,7 @@
 package examples.grid.mathProblemDistributed;
 
 import org.jgap.*;
+import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.distr.grid.gp.*;
 import org.jgap.distr.grid.*;
@@ -25,7 +26,7 @@ import org.apache.log4j.*;
 public class MyClientFeedback
     implements IClientFeedbackGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static Logger log = Logger.getLogger(MyClientFeedback.class);
 
@@ -42,7 +43,16 @@ public class MyClientFeedback
 
   public void receivedFragmentResult(JGAPRequestGP req, JGAPResultGP res,
                                      int idx) {
+    // This is just a quick and dirty solution.
+    // Can you do it better?
+    // ----------------------------------------
     GPPopulation pop = res.getPopulation();
+    if (pop == null || pop.isFirstEmpty()) {
+      IGPProgram best = res.getFittest();
+      log.warn("Receiving work (index " + idx + "). Best solution: " +
+               best);
+      return;
+    }
     if (pop == null) {
       log.error("Received empty result/population!");
     }
