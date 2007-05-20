@@ -15,7 +15,6 @@ import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.distr.grid.*;
-import org.jgap.gp.CommandGene;
 
 /**
  * An instance that defines a request from which work packages are generated
@@ -28,7 +27,7 @@ public class JGAPRequestGP
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private IGridConfigurationGP m_config;
 
