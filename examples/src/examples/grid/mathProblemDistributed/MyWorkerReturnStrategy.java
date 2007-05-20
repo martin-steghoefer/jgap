@@ -25,9 +25,9 @@ import org.apache.log4j.*;
 public class MyWorkerReturnStrategy
     implements IWorkerReturnStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private transient Logger log = Logger.getLogger(getClass());
+  private static Logger log = Logger.getLogger(MyWorkerReturnStrategy.class);
 
   /**
    * Determines the top 10 chromosomes and returns them.
@@ -42,17 +42,21 @@ public class MyWorkerReturnStrategy
    */
   public JGAPResultGP assembleResult(JGAPRequestGP a_req, GPGenotype a_genotype)
       throws Exception {
+    IGPProgram best;
     GPPopulation pop = a_genotype.getGPPopulation();
     if (pop == null) {
       log.fatal("Population was null!");
+      best = null;
     }
-    log.debug("Assembling result from population with size "+pop.size());
-    IGPProgram best = pop.determineFittestProgram();
-    if (best == null) {
-      log.warn("Could not determine a best program!");
+    else {
+      log.debug("Assembling result from population with size " + pop.size());
+      best = pop.determineFittestProgram();
+      if (best == null) {
+        log.warn("Could not determine the best program!");
+      }
     }
     JGAPResultGP result = new JGAPResultGP(a_req.getSessionName(), a_req.getRID(),
-                                       best, 1);
+        best, 1);
     return result;
   }
 }
