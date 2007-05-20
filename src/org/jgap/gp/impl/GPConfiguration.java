@@ -19,6 +19,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.terminal.Variable;
 import org.jgap.util.ICloneable;
 import org.jgap.util.CloneException;
+import java.io.*;
 
 /**
  * Configuration for a GP.
@@ -29,7 +30,7 @@ import org.jgap.util.CloneException;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -134,11 +135,12 @@ public class GPConfiguration
    */
   private IGPProgram m_prototypeProgram;
 
-  private transient Map m_programCache;
 
   private boolean m_useProgramCache = false;
 
   private Map m_variables;
+
+  private transient Map m_programCache;
 
   /**
    * Holds the central configurable factory for creating default objects.
@@ -147,7 +149,6 @@ public class GPConfiguration
    * @since 2.6
    */
   private transient IJGAPFactory m_factory;
-
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -165,7 +166,7 @@ public class GPConfiguration
   public GPConfiguration(String a_id, String a_name)
       throws InvalidConfigurationException {
     super(a_id, a_name);
-    init();
+    init(true);
     m_selectionMethod = new TournamentSelector(3);
   }
 
@@ -207,7 +208,7 @@ public class GPConfiguration
    * @author Klaus Meffert
    * @since 3.1
    */
-  protected void init()
+  protected void init(boolean a_fullInit)
       throws InvalidConfigurationException {
     /**@todo make reusable in class Configuration and reuse from Configuration*/
     // Create factory for being able to configure the used default objects,
@@ -226,12 +227,17 @@ public class GPConfiguration
     else {
       m_factory = new JGAPFactory(false);
     }
-    m_variables = new Hashtable();
-    m_crossMethod = new BranchTypingCross(this);
-    setEventManager(new EventManager());
-    setRandomGenerator(new StockRandomGenerator());
-    setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
+    if (m_factory == null) {
+      throw new IllegalStateException("JGAPFactory not registered!");
+    }
     m_programCache = new HashMap(50);
+    if (a_fullInit) {
+      m_variables = new Hashtable();
+      m_crossMethod = new BranchTypingCross(this);
+      setEventManager(new EventManager());
+      setRandomGenerator(new StockRandomGenerator());
+      setGPFitnessEvaluator(new DefaultGPFitnessEvaluator());
+    }
   }
 
   /**
@@ -246,7 +252,7 @@ public class GPConfiguration
   public GPConfiguration(INaturalGPSelector a_selectionMethod)
       throws InvalidConfigurationException {
     super();
-    init();
+    init(true);
     m_selectionMethod = a_selectionMethod;
   }
 
@@ -805,6 +811,9 @@ public class GPConfiguration
         m_factory = new JGAPFactory(false);
         result.m_factory = (IJGAPFactory)((JGAPFactory)m_factory).clone();
       }
+      if (result.m_factory == null) {
+        throw new IllegalStateException("JGAPFactory must not be null!");
+      }
       if (m_objectiveFunction != null) {
         result.m_objectiveFunction = m_objectiveFunction;
       }
@@ -844,6 +853,29 @@ public class GPConfiguration
    */
   public IJGAPFactory getJGAPFactory() {
     return m_factory;
+  }
+
+  /**
+   * When deserializing, do specific initializations.
+   *
+   * @param a_inputStream the ObjectInputStream provided for deserialzation
+   *
+   * @throws IOException
+   * @throws ClassNotFoundException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  private void readObject(ObjectInputStream a_inputStream)
+      throws IOException, ClassNotFoundException {
+    //always perform the default de-serialization first
+    a_inputStream.defaultReadObject();
+    try {
+      init(false);
+    } catch (InvalidConfigurationException iex) {
+      iex.printStackTrace();
+      throw new IOException(iex.toString());
+    }
   }
 
 }
