@@ -28,7 +28,7 @@ import org.apache.commons.cli.*;
 public class JGAPClientGP
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -40,7 +40,8 @@ public class JGAPClientGP
 
   private IGridConfigurationGP m_gridConfig;
 
-  public JGAPClientGP(GridNodeClientConfig a_gridconfig, String a_clientClassName)
+  public JGAPClientGP(GridNodeClientConfig a_gridconfig,
+                      String a_clientClassName)
       throws Exception {
     m_gridconfig = a_gridconfig;
     Class client = Class.forName(a_clientClassName);
@@ -48,12 +49,12 @@ public class JGAPClientGP
         Class[] {}).newInstance(new Object[] {});
     m_gridConfig.initialize(m_gridconfig);
     if (m_gridConfig.getClientFeedback() == null) {
-        m_gridConfig.setClientFeedback(new NullClientFeedbackGP());
+      m_gridConfig.setClientFeedback(new NullClientFeedbackGP());
     }
     // Setup work request.
     // -------------------
     JGAPRequestGP req = new JGAPRequestGP(m_gridconfig.getSessionName(), 0,
-                                  m_gridConfig);
+        m_gridConfig);
     req.setWorkerReturnStrategy(m_gridConfig.getWorkerReturnStrategy());
     req.setGenotypeInitializer(m_gridConfig.getGenotypeInitializer());
     req.setEvolveStrategy(m_gridConfig.getWorkerEvolveStrategy());
@@ -97,7 +98,7 @@ public class JGAPClientGP
             getClientEvolveStrategy();
         if (clientEvolver != null) {
           clientEvolver.initialize(m_gc, getConfiguration(),
-                                    m_gridConfig.getClientFeedback());
+                                   m_gridConfig.getClientFeedback());
         }
         // Do the evolution.
         // -----------------
@@ -109,7 +110,7 @@ public class JGAPClientGP
       }
     } catch (Exception ex) {
       ex.printStackTrace();
-        m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
+      m_gridConfig.getClientFeedback().error("Error while doing the work", ex);
     }
   }
 
@@ -119,6 +120,10 @@ public class JGAPClientGP
     // -------------------
     for (int i = 0; i < a_workList.length; i++) {
       JGAPRequestGP req = a_workList[i];
+      GPPopulation pop = req.getPopulation();
+      if (pop == null || pop.isFirstEmpty()) {
+        log.error("Initial population to send to worker is empty!");
+      }
       m_gridConfig.getClientFeedback().sendingFragmentRequest(req);
       m_gc.send(new GridMessageWorkRequest(req));
       if (this.isInterrupted()) {
@@ -166,6 +171,7 @@ public class JGAPClientGP
     IRequestSplitStrategyGP splitter = m_gridConfig.getRequestSplitStrategy();
     int evolutionIndex = 0;
     do {
+      log.warn("Beginning evolution cycle "+evolutionIndex);
 //      m_clientEvolveStrategy.beforeGenerateWorkResults();
       JGAPRequestGP[] workRequests = evolver.generateWorkRequests(
           m_workReq, splitter, null);

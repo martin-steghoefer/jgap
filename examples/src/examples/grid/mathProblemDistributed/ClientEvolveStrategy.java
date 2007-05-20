@@ -26,9 +26,9 @@ import org.jgap.gp.terminal.Variable;
 import org.jgap.gp.function.Sine;
 import org.jgap.gp.function.Multiply;
 import org.jgap.gp.function.Add;
-import org.jgap.gp.impl.GPGenotype;
-import java.util.Random;
-import org.jgap.gp.terminal.Terminal;
+import org.jgap.gp.impl.*;
+import org.jgap.gp.terminal.*;
+import org.apache.log4j.*;
 
 /**
  * Sample implementation of a strategy for evolving a generation on the client.
@@ -39,7 +39,9 @@ import org.jgap.gp.terminal.Terminal;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.6 $";
+  public final static String CVS_REVISION = "$Revision: 1.7 $";
+
+  private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
 //  private GPConfiguration m_config;
 
@@ -82,24 +84,26 @@ public class ClientEvolveStrategy
   public void initialize(GridClient a_gc, GPConfiguration a_config,
                          IClientFeedbackGP a_clientFeedback)
       throws Exception {
+    log.info("Initializing...");
     super.setGPConfiguration(a_config);
     m_clientFeedback = a_clientFeedback;
-//    m_config = a_config;
-    // Start with an empty population.
-    // ------------------------------
-    m_pop = new GPPopulation(getGPConfiguration(),
-                             getGPConfiguration().getPopulationSize());
+    // Start with a randomly initialized population.
+    // ---------------------------------------------
     GPGenotype gen = create();
     m_pop = gen.getGPPopulation();
   }
 
   public void afterWorkRequestsSent()
       throws Exception {
-    // Important: clear population, otherwise it would grow
-    // endlessly.
-    // ----------------------------------------------------
-    if (m_pop != null) {
-      m_pop.clear();
+    // Don't clear population here!
+    if (false) {
+      // Important: clear population, otherwise it would grow
+      // endlessly.
+      // ----------------------------------------------------
+      if (m_pop != null) {
+        m_pop.clear();
+        log.warn("Population cleared");
+      }
     }
   }
 
@@ -141,6 +145,9 @@ public class ClientEvolveStrategy
       IRequestSplitStrategyGP m_splitStrategy, Object data)
       throws Exception {
     JGAPRequestGP[] workList;
+    if (m_pop == null || m_pop.isFirstEmpty()) {
+      log.warn("Initial population is empty!");
+    }
     m_workReq.setPopulation(m_pop);
     m_workReq.setConfiguration(getGPConfiguration());
     if (getGPConfiguration().getJGAPFactory() == null) {
