@@ -25,7 +25,7 @@ import org.jgap.distr.grid.*;
 public class JGAPWorkerGP
     implements Worker {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -46,6 +46,9 @@ public class JGAPWorkerGP
     // Setup configuration.
     // --------------------
     GPConfiguration conf = req.getConfiguration();
+    if (conf.getJGAPFactory() == null) {
+      throw new IllegalStateException("JGAPFactory must not be null!");
+    }
     conf = conf.newInstanceGP(conf.getId() + "_1", conf.getName() + "_1");
     // Important: Re-set the cloned configuration!
     // -------------------------------------------
@@ -83,6 +86,6 @@ public class JGAPWorkerGP
       throws Exception {
     // Start worker.
     // -------------
-    new JGAPWorkers(args);
+    new JGAPWorkersGP(args);
   }
 }
