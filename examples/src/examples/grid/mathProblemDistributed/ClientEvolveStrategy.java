@@ -39,7 +39,7 @@ import org.jgap.gp.terminal.Terminal;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.5 $";
+  public final static String CVS_REVISION = "$Revision: 1.6 $";
 
 //  private GPConfiguration m_config;
 
@@ -98,7 +98,9 @@ public class ClientEvolveStrategy
     // Important: clear population, otherwise it would grow
     // endlessly.
     // ----------------------------------------------------
-    m_pop.clear();
+    if (m_pop != null) {
+      m_pop.clear();
+    }
   }
 
   public boolean isEvolutionFinished(int a_evolutionsDone) {
