@@ -24,7 +24,7 @@ import org.jgap.distr.grid.gp.*;
 public class MyRequestSplitStrategy
     implements IRequestSplitStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private GPConfiguration m_config;
 
@@ -61,8 +61,8 @@ public class MyRequestSplitStrategy
       firstTime = false;
     }
     if (!firstTime) {
-      // Sort Population to have the fittest ones at the beginning.
-      // ----------------------------------------------------------
+      // Sort population to have the fittest individuals at the beginning.
+      // -----------------------------------------------------------------
       pop.sortByFitness();
     }
     // Generate 20 work requests.
