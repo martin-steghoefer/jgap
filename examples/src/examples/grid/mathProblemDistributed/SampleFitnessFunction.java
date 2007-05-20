@@ -13,6 +13,7 @@ import java.util.*;
 
 import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
+import org.apache.log4j.*;
 
 /**
  * Fitness function for our example.
@@ -23,7 +24,9 @@ import org.jgap.gp.terminal.*;
 public class SampleFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
+
+  private static Logger log = Logger.getLogger(SampleFitnessFunction.class);
 
   static Variable vx;
 
@@ -51,6 +54,9 @@ public class SampleFitnessFunction
     double error = 0.0f;
     Object[] noargs = new Object[0];
     Variable vx = ind.getGPConfiguration().getVariable("X");
+    if (vx == null) {
+      log.error("Variable X not initialized correctly!");
+    }
     for (int i = 0; i < 20; i++) {
       vx.set(x[i]);
       try {
