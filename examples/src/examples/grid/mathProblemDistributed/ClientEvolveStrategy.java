@@ -40,7 +40,7 @@ public class ClientEvolveStrategy
     extends GPProblem
     implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.3 $";
+  public final static String CVS_REVISION = "$Revision: 1.4 $";
 
 //  private GPConfiguration m_config;
 
@@ -89,7 +89,8 @@ public class ClientEvolveStrategy
 //    m_config = a_config;
     // Start with an empty population.
     // ------------------------------
-    m_pop = new GPPopulation(getGPConfiguration(), getGPConfiguration().getPopulationSize());
+    m_pop = new GPPopulation(getGPConfiguration(),
+                             getGPConfiguration().getPopulationSize());
     GPGenotype gen = create();
     m_pop = gen.getGPPopulation();
   }
@@ -140,6 +141,9 @@ public class ClientEvolveStrategy
     JGAPRequestGP[] workList;
     m_workReq.setPopulation(m_pop);
     m_workReq.setConfiguration(getGPConfiguration());
+    if (getGPConfiguration().getJGAPFactory() == null) {
+      throw new IllegalStateException("JGAPFactory must not be null!");
+    }
     workList = m_splitStrategy.split(m_workReq);
     return workList;
   }
@@ -165,8 +169,9 @@ public class ClientEvolveStrategy
         CommandGene.FloatClass};
     Class[][] argTypes = { {}
     };
+    Variable vx;
     CommandGene[][] nodeSets = { {
-        Variable.create(conf, "X", CommandGene.FloatClass),
+        vx = Variable.create(conf, "X", CommandGene.FloatClass),
         new Add(conf, CommandGene.FloatClass),
         new Add3(conf, CommandGene.FloatClass),
         new Subtract(conf, CommandGene.FloatClass),
@@ -179,19 +184,13 @@ public class ClientEvolveStrategy
         new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, true),
     }
     };
-    Random random = new Random();
-    // Randomly initialize function data (X-Y table) for x^4+x^3+x^2-x
-    // ---------------------------------------------------------------
-    for (int i = 0; i < 20; i++) {
-      float f = 8.0f * (random.nextFloat() - 0.3f);
-      x[i] = new Float(f);
-      y[i] = f * f * f * f + f * f * f + f * f - f;
-      System.out.println(i + ") " + x[i] + "   " + y[i]);
-    }
     // Create genotype with initial population.
     // ----------------------------------------
-    return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
+    GPGenotype result = GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
         20, true);
+    result.putVariable(vx);
+    conf.putVariable(vx);
+    return result;
   }
 
 }
