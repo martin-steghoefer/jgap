@@ -39,7 +39,7 @@ import org.apache.log4j.*;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.7 $";
+  public final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
@@ -112,7 +112,7 @@ public class ClientEvolveStrategy
       // Check if best solution is satisfying.
       // -------------------------------------
       IGPProgram fittest = m_pop.determineFittestProgram();
-      if (fittest.getFitnessValue() > 50000) {
+      if (fittest.getFitnessValue() < 20) {
         return true;
       }
     }
@@ -131,7 +131,7 @@ public class ClientEvolveStrategy
    */
   public void onFinished() {
     IGPProgram best = m_pop.determineFittestProgram();
-    m_clientFeedback.info("Best solution evolved: " + best);
+    m_clientFeedback.info("Best solution evolved: " + best.getFitnessValue());
   }
 
   public void evolve()
@@ -168,7 +168,19 @@ public class ClientEvolveStrategy
       throws Exception {
     // This is a very simplistic implementation!
     // -----------------------------------------
-    m_pop = a_result.getPopulation();
+    GPPopulation pop = a_result.getPopulation();
+    if (pop == null || pop.isFirstEmpty()) {
+      IGPProgram best = a_result.getFittest();
+      if (best == null) {
+        log.error("Empty result received");
+      }
+      else {
+        m_pop.addFittestProgram(best);
+      }
+    }
+    else {
+      m_pop = pop;
+    }
   }
 
   public GPGenotype create()
