@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * The array of GPProgram's that make-up the Genotype's population.
@@ -359,9 +359,11 @@ public class GPPopulation
     }
     setChanged(false);
     if (m_fittestProgram != null) {
-      ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
-          getCloneHandlerFor(
-              m_fittestProgram, null);
+      IJGAPFactory factory = getGPConfiguration().getJGAPFactory();
+      if (factory == null) {
+        throw new IllegalStateException("JGAPFactory must not be null!");
+      }
+      ICloneHandler cloner = factory.getCloneHandlerFor(m_fittestProgram, null);
       if (cloner != null) {
         try {
           m_fittestProgram = (IGPProgram) cloner.perform(m_fittestProgram, null, null);
