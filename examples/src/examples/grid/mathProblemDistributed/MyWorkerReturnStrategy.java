@@ -14,6 +14,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.distr.grid.*;
 import org.jgap.distr.grid.gp.*;
+import org.apache.log4j.*;
 
 /**
  * Return the top 10 results to the client.
@@ -24,7 +25,9 @@ import org.jgap.distr.grid.gp.*;
 public class MyWorkerReturnStrategy
     implements IWorkerReturnStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  private transient Logger log = Logger.getLogger(getClass());
 
   /**
    * Determines the top 10 chromosomes and returns them.
@@ -39,7 +42,15 @@ public class MyWorkerReturnStrategy
    */
   public JGAPResultGP assembleResult(JGAPRequestGP a_req, GPGenotype a_genotype)
       throws Exception {
-    IGPProgram best = a_genotype.getGPPopulation().determineFittestProgram();
+    GPPopulation pop = a_genotype.getGPPopulation();
+    if (pop == null) {
+      log.fatal("Population was null!");
+    }
+    log.debug("Assembling result from population with size "+pop.size());
+    IGPProgram best = pop.determineFittestProgram();
+    if (best == null) {
+      log.warn("Could not determine a best program!");
+    }
     JGAPResultGP result = new JGAPResultGP(a_req.getSessionName(), a_req.getRID(),
                                        best, 1);
     return result;
