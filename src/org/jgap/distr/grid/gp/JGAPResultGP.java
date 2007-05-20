@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private IGPProgram m_fittest;
   private GPPopulation m_pop;
@@ -31,41 +31,43 @@ public class JGAPResultGP
   private long m_unitDone;
 
   /**
+   * Constructor: Takes the fittest program determined as result of a worker's
+   * computation.
    *
-   * @param name String
-   * @param id int
-   * @param a_fittestProg
-   * @param a_unitdone long
+   * @param a_sessionName arbitrary session name to distinct from other results
+   * @param id ID of the result, should be unique
+   * @param a_fittestProg the fittest program determined
+   * @param a_unitdone number of units done
    * @deprecated use other constructor with GPPopulation parameter instead
    */
-  public JGAPResultGP(String name, int id, IGPProgram a_fittestProg,
+  public JGAPResultGP(String a_sessionName, int a_id, IGPProgram a_fittestProg,
                     long a_unitdone) {
-    super(name, id);
+    super(a_sessionName, a_id);
     m_fittest = a_fittestProg;
     m_unitDone = a_unitdone;
   }
 
   /**
-   * Constructor: Takes a Population as result of a worker's computation.
+   * Constructor: Takes a population as result of a worker's computation.
    *
-   * @param name arbritrary session name to distinct from other results
-   * @param id ID of the result, should be unique must need not
+   * @param a_sessionName arbitrary session name to distinct from other results
+   * @param id ID of the result, should be unique
    * @param a_programs the result of a worker's computation
    * @param a_unitdone number of units done
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPResultGP(String name, int id, GPPopulation a_programs,
+  public JGAPResultGP(String a_sessionName, int id, GPPopulation a_programs,
                     long a_unitdone) {
-    super(name, id);
+    super(a_sessionName, id);
     m_fittest = null;
     m_pop = a_programs;
     m_unitDone = a_unitdone;
   }
 
   /**
-   * @return IGPProgram
+   * @return IGPProgram the fittest program known
    * @deprecated use getPopulation instead
    */
   public IGPProgram getFittest() {
