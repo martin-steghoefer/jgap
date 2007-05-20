@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class MyGenotypeInitializer
     implements IGenotypeInitializerGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public GPGenotype setupGenotype(JGAPRequestGP a_req, GPPopulation a_initialPop)
       throws Exception {
@@ -43,7 +43,8 @@ public class MyGenotypeInitializer
                                        gridConfig.getMinDepths(),
                                        gridConfig.getMaxDepths(),
                                        gridConfig.getMaxNodes());
-    result.fillPopulation(size);
+//    result.fillPopulation(size);/**@todo needed?*/
+    pop.setGPProgram(0, new GPProgram(conf, 1));/**@todo just for quick walkthrough*/
     return result;
   }
 }

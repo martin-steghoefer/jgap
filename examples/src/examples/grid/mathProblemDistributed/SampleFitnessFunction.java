@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class SampleFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private static Logger log = Logger.getLogger(SampleFitnessFunction.class);
 
@@ -56,6 +56,7 @@ public class SampleFitnessFunction
     Variable vx = ind.getGPConfiguration().getVariable("X");
     if (vx == null) {
       log.error("Variable X not initialized correctly!");
+      return GPFitnessFunction.MAX_FITNESS_VALUE;
     }
     for (int i = 0; i < 20; i++) {
       vx.set(x[i]);
