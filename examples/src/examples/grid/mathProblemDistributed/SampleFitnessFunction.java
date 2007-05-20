@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class SampleFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static Logger log = Logger.getLogger(SampleFitnessFunction.class);
 
@@ -42,7 +42,7 @@ public class SampleFitnessFunction
       float f = 8.0f * (random.nextFloat() - 0.3f);
       x[i] = new Float(f);
       y[i] = f * f * f * f + f * f * f + f * f - f;
-      System.out.println(i + ") " + x[i] + "   " + y[i]);
+      log.debug(i + ") " + x[i] + "   " + y[i]);
     }
   }
 
