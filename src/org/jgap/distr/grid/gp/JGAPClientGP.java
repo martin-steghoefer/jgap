@@ -28,11 +28,9 @@ import org.apache.commons.cli.*;
 public class JGAPClientGP
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
-  private final static String className = JGAPClientGP.class.getName();
-
-  private static Logger log = Logger.getLogger(className);
+  private transient Logger log = Logger.getLogger(getClass());
 
   protected GridNodeClientConfig m_gridconfig;
 
