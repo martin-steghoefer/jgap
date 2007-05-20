@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
 public class GridConfiguration
     extends GridConfigurationGPBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public GridConfiguration() {
     super();
@@ -44,7 +44,6 @@ public class GridConfiguration
     jgapconfig.setEventManager(new EventManager());
     jgapconfig.setPopulationSize(500);
     jgapconfig.setKeepPopulationSizeConstant(true);
-    jgapconfig.setFitnessFunction(new SampleFitnessFunction());
     IChromosome sample = new Chromosome(jgapconfig,
                                         new BooleanGene(jgapconfig), 16);
     jgapconfig.setSampleChromosome(sample);
@@ -64,7 +63,8 @@ public class GridConfiguration
     setConfiguration(jgapconfig);
     // Set the evolution process (but evolve on workers).
     // --------------------------------------------------
-    setClientEvolveStrategy(new ClientEvolveStrategy());//jgapconfig));
+    setClientEvolveStrategy(new ClientEvolveStrategy());
+    jgapconfig.setFitnessFunction(new SampleFitnessFunction());
     // Optional: Register client feedback listener.
     // --------------------------------------------
     setClientFeedback(new MyClientFeedback());
