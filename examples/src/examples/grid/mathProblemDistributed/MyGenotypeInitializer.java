@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class MyGenotypeInitializer
     implements IGenotypeInitializerGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public GPGenotype setupGenotype(JGAPRequestGP a_req, GPPopulation a_initialPop)
       throws Exception {
@@ -31,8 +31,15 @@ public class MyGenotypeInitializer
     GPPopulation pop;
     if (a_initialPop == null) {
       pop = new GPPopulation(conf, conf.getPopulationSize());
+      /**@todo add a mechanism to allow workers to initialize the population
+       * they work with.
+       */
     }
     else {
+      if (a_initialPop.isFirstEmpty()) {
+        throw new RuntimeException("Initial population must either be null"
+                                   +" or be completely filled with gp programs!");
+      }
       pop = a_initialPop;
     }
     int size = conf.getPopulationSize() - pop.size();
@@ -43,8 +50,6 @@ public class MyGenotypeInitializer
                                        gridConfig.getMinDepths(),
                                        gridConfig.getMaxDepths(),
                                        gridConfig.getMaxNodes());
-//    result.fillPopulation(size);/**@todo needed?*/
-    pop.setGPProgram(0, new GPProgram(conf, 1));/**@todo just for quick walkthrough*/
     return result;
   }
 }
