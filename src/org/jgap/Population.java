@@ -25,7 +25,7 @@ import java.net.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.56 $";
+  private static final String CVS_REVISION = "$Revision: 1.57 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -423,6 +423,26 @@ public class Population
     }
     setChanged(true);
     return (IChromosome) m_chromosomes.remove(a_index);
+  }
+
+  /**
+   * Cares that the population size does not exceed the maximum size given in
+   * the configuration.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void keepPopSizeConstant() {
+    int popSize = size();
+    // See request  1213752.
+    // ---------------------
+    int maxSize = getConfiguration().getPopulationSize();
+    while (popSize > maxSize) {
+      // Remove a chromosome.
+      // --------------------
+      removeChromosome(0);
+      popSize--;
+    }
   }
 
   /**
