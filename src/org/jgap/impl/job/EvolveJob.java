@@ -26,14 +26,13 @@ public class EvolveJob
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Execute the evolution via JGAP.
    *
    * @param a_data input parameter of type EvolveData
    * @throws Exception in case of any error
-   * @todo Implement this org.jgap.impl.job.IJob method
    */
   public void execute(Object a_data)
       throws Exception {
