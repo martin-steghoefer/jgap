@@ -17,6 +17,9 @@ import java.util.*;
 /**
  * A job that evolves a population. The evolution takes place as given by the
  * configuration. It operates on a population also provided.
+ * This class utilizes sub jobs to perform its sub-tasks. Each sub job may
+ * either be a local implementation satisfying the IJob interface. Or it may be
+ * a job that eventually is put onto the grid and returns with a result!
  *
  * @author Klaus Meffert
  * @since 3.2
@@ -26,7 +29,7 @@ public class EvolveJob
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Execute the evolution via JGAP.
@@ -84,7 +87,8 @@ public class EvolveJob
     // ------------------------------------------------------
     BulkFitnessFunction bulkFunction = config.getBulkFitnessFunction();
     if (bulkFunction != null) {
-      /**@todo utilize jobs*/
+      /**@todo utilize jobs: bulk fitness function is not so important for a
+       * prototype! */
       bulkFunction.evaluate(pop);
     }
     // Fill up population randomly if size dropped below specified percentage
@@ -105,7 +109,8 @@ public class EvolveJob
             getInitializerFor(sampleChrom, sampleChromClass);
         while (pop.size() < minSize) {
           try {
-            /**@todo utilize jobs*/
+            /**@todo utilize jobs: initialization may be time-consuming as
+             * invalid combinations may have to be filtered out*/
             newChrom = (IChromosome) chromIniter.perform(sampleChrom,
                 sampleChromClass, null);
             pop.addChromosome(newChrom);
@@ -116,7 +121,8 @@ public class EvolveJob
       }
     }
     if (config.isPreserveFittestIndividual()) {
-      /**@todo utilize jobs*/
+      /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
+       * computation*/
       IChromosome fittest = pop.determineFittestChromosome(0,
           config.getPopulationSize() - 1);
       if (config.isKeepPopulationSizeConstant()) {
@@ -180,7 +186,7 @@ public class EvolveJob
           }
           // Do selection of Chromosomes.
           // ----------------------------
-          /**@todo utilize jobs*/
+          /**@todo utilize jobs: integrate job into NaturalSelector!*/
           selector.select(m_single_selection_size, a_pop, new_population);
           // Clean up the natural selector.
           // ------------------------------
@@ -208,7 +214,7 @@ public class EvolveJob
     Iterator operatorIterator = geneticOperators.iterator();
     while (operatorIterator.hasNext()) {
       GeneticOperator operator = (GeneticOperator) operatorIterator.next();
-      /**@todo utilize jobs*/
+      /**@todo utilize jobs: integrate job into GeneticOperator*/
       operator.operate(a_pop, a_pop.getChromosomes());
     }
   }
