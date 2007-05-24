@@ -24,7 +24,7 @@ public class JGAPRequest
     extends WorkRequest
     implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private Configuration m_config;
 
@@ -59,23 +59,23 @@ public class JGAPRequest
   /**
    * Constructor.
    *
-   * @param name String
-   * @param id int
+   * @param a_name session name
+   * @param a_id request id
    * @param a_config Configuration
    *
    * @author Klaus Meffert
    * @since 3.1
    */
-  public JGAPRequest(String name, int id, Configuration a_config) {
-    this(name, id, a_config, new DefaultEvolveStrategy());
+  public JGAPRequest(String a_name, int a_id, Configuration a_config) {
+    this(a_name, a_id, a_config, new DefaultEvolveStrategy());
   }
 
   /**
    * Constructor. Allows to specify a preset population with which the genotype
    * will be initialized.
    *
-   * @param a_name String
-   * @param a_id int
+   * @param a_name session name
+   * @param a_id request id
    * @param a_config Configuration
    * @param a_pop Population
    * @param a_strategy the strategy to choose for evolution
@@ -93,8 +93,8 @@ public class JGAPRequest
    * Constructor. Allows to specify a preset population with which the genotype
    * will be initialized.
    *
-   * @param a_name String
-   * @param a_id int
+   * @param a_name session name
+   * @param a_id request id
    * @param a_config Configuration
    * @param a_pop Population
    *
