@@ -10,6 +10,7 @@
 package org.jgap.impl.job;
 
 import org.jgap.*;
+
 /**
  * Data needed by a IEvolveJob implementation to evolve.
  *
@@ -17,28 +18,19 @@ import org.jgap.*;
  * @since 3.2
  */
 
-public class EvolveData {
-
+public class EvolveData
+    extends JobData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Population m_pop;
-  private Configuration m_config;
 
-  public EvolveData() {
-
-  }
-
-  public Configuration getConfiguration() {
-    return m_config;
+  public EvolveData(Configuration a_config) {
+    super(a_config);
   }
 
   public Population getPopulation() {
     return m_pop;
-  }
-
-  public void setConfiguration(Configuration m_config) {
-    this.m_config = m_config;
   }
 
   public void setPopulation(Population m_pop) {

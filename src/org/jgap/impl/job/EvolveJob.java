@@ -29,9 +29,9 @@ public class EvolveJob extends JobBase
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public EvolveJob(Object a_data) {
+  public EvolveJob(JobData a_data) {
     super(a_data);
   }
 
@@ -41,7 +41,7 @@ public class EvolveJob extends JobBase
    * @param a_data input parameter of type EvolveData
    * @throws Exception in case of any error
    */
-  public void execute(Object a_data)
+  public void execute(JobData a_data)
       throws Exception {
     EvolveData data = (EvolveData)a_data;
     evolve(data);

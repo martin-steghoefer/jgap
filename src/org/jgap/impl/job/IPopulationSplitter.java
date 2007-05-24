@@ -17,6 +17,8 @@ package org.jgap.impl.job;
  * @since 3.2
  */
 public interface IPopulationSplitter {
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Splits a single population into smaller sub-populations.
