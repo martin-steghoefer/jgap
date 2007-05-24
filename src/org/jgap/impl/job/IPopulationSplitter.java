@@ -9,6 +9,8 @@
  */
 package org.jgap.impl.job;
 
+import org.jgap.*;
+
 /**
  * For splitting a single population into smaller chunks. Each chunk being meant
  * to be operated on a single node in a distributed calculation (e.g. a grid).
@@ -18,7 +20,7 @@ package org.jgap.impl.job;
  */
 public interface IPopulationSplitter {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Splits a single population into smaller sub-populations.
@@ -29,5 +31,5 @@ public interface IPopulationSplitter {
    * @author Klaus Meffert
    * @since 3.2
    */
-  Population[] split(Population a_pop;
+  Population[] split(Population a_pop);
 }
