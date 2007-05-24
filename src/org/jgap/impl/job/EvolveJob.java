@@ -25,11 +25,15 @@ import java.util.*;
  * @since 3.2
  */
 
-public class EvolveJob
+public class EvolveJob extends JobBase
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
+
+  public EvolveJob(Object a_data) {
+    super(a_data);
+  }
 
   /**
    * Execute the evolution via JGAP.
