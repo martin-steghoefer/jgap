@@ -20,16 +20,17 @@ import org.jgap.*;
  */
 public interface IPopulationSplitter {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Splits a single population into smaller sub-populations.
    *
    * @param a_pop input population
    * @return resulting chunks
+   * @throws Exception in case of any error
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  Population[] split(Population a_pop);
+  Population[] split(Population a_pop) throws Exception ;
 }
