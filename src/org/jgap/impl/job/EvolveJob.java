@@ -29,7 +29,7 @@ public class EvolveJob extends JobBase
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public EvolveJob(JobData a_data) {
     super(a_data);
@@ -41,14 +41,16 @@ public class EvolveJob extends JobBase
    * @param a_data input parameter of type EvolveData
    * @throws Exception in case of any error
    */
-  public void execute(JobData a_data)
+  public JobResult execute(JobData a_data)
       throws Exception {
     EvolveData data = (EvolveData)a_data;
-    evolve(data);
+    return evolve(data);
   }
 
-  public void evolve(EvolveData a_evolveData) {
+  public EvolveResult evolve(EvolveData a_evolveData) {
+    EvolveResult result = new EvolveResult();
     Configuration config = a_evolveData.getConfiguration();
+    result.setConfiguration(config);
     Population pop = a_evolveData.getPopulation();
     if (config == null) {
       throw new IllegalStateException(
@@ -147,6 +149,8 @@ public class EvolveJob extends JobBase
     // -------------------------------------------------------
     config.getEventManager().fireGeneticEvent(
         new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
+    result.setPopulation(pop);
+    return result;
   }
 
   /**
