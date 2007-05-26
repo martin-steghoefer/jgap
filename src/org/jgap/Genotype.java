@@ -12,6 +12,8 @@ package org.jgap;
 import java.io.*;
 import java.util.*;
 import org.jgap.event.*;
+import org.jgap.distr.*;
+import org.jgap.impl.job.*;
 
 /**
  * Genotypes are fixed-length populations of chromosomes. As an instance of
@@ -30,7 +32,7 @@ import org.jgap.event.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.95 $";
+  private final static String CVS_REVISION = "$Revision: 1.96 $";
 
   /**
    * The current Configuration instance.
@@ -117,7 +119,7 @@ public class Genotype
   /**
    * Don't use this constructor, it's only for internal use.
    *
-   * @param a_configuration the configuration to use
+   * @param a_configuration not used here!
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -278,7 +280,6 @@ public class Genotype
       popSize = getPopulation().size();
       if (popSize < minSize) {
         IChromosome newChrom;
-//        try {
         IChromosome sampleChrom = m_activeConfiguration.getSampleChromosome();
         Class sampleChromClass = sampleChrom.getClass();
         IInitializer chromIniter = m_activeConfiguration.getJGAPFactory().
@@ -287,16 +288,11 @@ public class Genotype
           try {
             newChrom = (IChromosome) chromIniter.perform(sampleChrom,
                 sampleChromClass, null);
-//            Chromosome.randomInitialChromosome(m_activeConfiguration);
             getPopulation().addChromosome(newChrom);
           } catch (Exception ex) {
             throw new RuntimeException(ex);
           }
         }
-//        }
-//        catch (InvalidConfigurationException invex) {
-//          throw new IllegalStateException(invex.getMessage());
-//        }
       }
     }
     if (m_activeConfiguration.isPreserveFittestIndividual()) {
@@ -397,7 +393,6 @@ public class Genotype
     // us.
     // ------------------------------------------------------------------
     int populationSize = a_configuration.getPopulationSize();
-    IChromosome sampleChrom = a_configuration.getSampleChromosome();
     Population pop = new Population(a_configuration, populationSize);
     // Do randomized initialization.
     // -----------------------------
@@ -685,5 +680,40 @@ public class Genotype
     while (!Thread.currentThread().interrupted()) {
       evolve();
     }
+  }
+
+  public List getEvolves(IPopulationSplitter a_splitter)
+      throws Exception {
+    // We return a list of IEvolveJob instances.
+    // -----------------------------------------
+    List result = new Vector();
+    Population[] pops = a_splitter.split(getPopulation());
+    // Feed the population chunks into different evolve jobs.
+    // ------------------------------------------------------
+    for (int i = 0; i < pops.length; i++) {
+      EvolveData data = new EvolveData(getConfiguration());
+      data.setPopulation(pops[i]);
+      IEvolveJob evolver = new EvolveJob(data);
+      result.add(evolver);
+    }
+    return result;
+  }
+
+  public void mergeResults(IPopulationMerger a_merger, EvolveResult[] a_results)
+      throws Exception {
+    int size = a_results.length;
+    Population target = new Population(getConfiguration());
+    for (int i = 0; i < size; i++) {
+      EvolveResult singleResult = a_results[i];
+      Population pop = singleResult.getPopulation();
+      /**@todo use/enhance IPopulationMerger*/
+//      a_merger.mergePopulations()
+      List goodOnes = pop.determineFittestChromosomes(3);
+      for (int j = 0; j < goodOnes.size(); j++) {
+        IChromosome goodOne = (IChromosome)goodOnes.get(i);
+        target.addChromosome(goodOne);
+      }
+    }
+    setPopulation(target);
   }
 }
