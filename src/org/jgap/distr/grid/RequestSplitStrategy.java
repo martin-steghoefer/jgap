@@ -1,10 +1,29 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licencing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
 package org.jgap.distr.grid;
 
 import org.jgap.event.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 
+/**
+ * Implementation of IRequestSplitStrategy to split a single request
+ * into multiple requests for workers.
+ *
+ * @author Klaus Meffert
+ * @since 3.2
+ */
 public class RequestSplitStrategy {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Configuration m_config;
 
