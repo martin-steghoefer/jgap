@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -363,6 +363,37 @@ public class WeightedRouletteSelectorTest
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     assertFalse(selector.returnsUniqueChromosomes());
   }
+
+  /**
+   * Ensures WRS is implementing Serializable.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    WeightedRouletteSelector selector = new WeightedRouletteSelector();
+    assertTrue(isSerializable(selector));
+  }
+
+  /**
+   * Ensures that WRS implements Serializable
+   * correctly.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
+    Object o = doSerialize(selector);
+    assertEquals(o, selector);
+  }
+
   /**@todo add test*/
 //  public void test_WeightedSelection_0() {
 //    WeightedRouletteSelector ws = new WeightedRouletteSelector();
