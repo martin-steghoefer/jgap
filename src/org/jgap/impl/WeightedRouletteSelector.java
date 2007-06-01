@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.io.*;
 import java.math.*;
 import java.util.*;
 import org.jgap.*;
@@ -31,7 +32,7 @@ import org.jgap.util.*;
 public class WeightedRouletteSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -57,7 +58,7 @@ public class WeightedRouletteSelector
    * so that they can be reused over and over again, thus saving memory
    * and the overhead of constructing new ones each time.
    */
-  private Pool m_counterPool = new Pool();
+  private transient Pool m_counterPool;
 
   private WeightedRouletteSelConfig m_config
       = new WeightedRouletteSelConfig();
@@ -82,6 +83,7 @@ public class WeightedRouletteSelector
    */
   public WeightedRouletteSelector(Configuration a_config) {
     super(a_config);
+    m_counterPool = new Pool();
     m_config.m_doublettesAllowed = false;
   }
 
@@ -156,7 +158,6 @@ public class WeightedRouletteSelector
         add(a_from_pop.getChromosome(i));
       }
     }
-
     RandomGenerator generator = getConfiguration().getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
@@ -225,9 +226,9 @@ public class WeightedRouletteSelector
    * @since 1.0
    */
   private IChromosome spinWheel(final RandomGenerator a_generator,
-                               final double[] a_fitnessValues,
-                               double[] a_counterValues,
-                               final IChromosome[] a_chromosomes) {
+                                final double[] a_fitnessValues,
+                                double[] a_counterValues,
+                                final IChromosome[] a_chromosomes) {
     // Randomly choose a slot on the wheel.
     // ------------------------------------
     double selectedSlot =
@@ -274,18 +275,18 @@ public class WeightedRouletteSelector
         // resetting the counter if doublette chromosomes are not
         // allowed.
         // -------------------------------------------------------
-         if ( !getDoubletteChromosomesAllowed() ) {
-           m_totalNumberOfUsedSlots -= a_counterValues[i];
-           a_counterValues[i] = 0;
-         }
-         else {
-           a_counterValues[i] -= a_fitnessValues[i];
-           m_totalNumberOfUsedSlots -= a_fitnessValues[i];
-         }
+        if (!getDoubletteChromosomesAllowed()) {
+          m_totalNumberOfUsedSlots -= a_counterValues[i];
+          a_counterValues[i] = 0;
+        }
+        else {
+          a_counterValues[i] -= a_fitnessValues[i];
+          m_totalNumberOfUsedSlots -= a_fitnessValues[i];
+        }
         // Introduced DELTA to fix bug 1449651
-         if (Math.abs(m_totalNumberOfUsedSlots) < DELTA) {
-           m_totalNumberOfUsedSlots = 0.0d;
-         }
+        if (Math.abs(m_totalNumberOfUsedSlots) < DELTA) {
+          m_totalNumberOfUsedSlots = 0.0d;
+        }
         // Now return our selected Chromosome.
         // -----------------------------------
         return a_chromosomes[i];
@@ -294,7 +295,7 @@ public class WeightedRouletteSelector
     // We have reached here because there were rounding errors when
     // computing with doubles.
     // ------------------------------------------------------------
-    return a_chromosomes[a_counterValues.length-1];
+    return a_chromosomes[a_counterValues.length - 1];
   }
 
   /**
@@ -389,22 +390,46 @@ public class WeightedRouletteSelector
    * @since 3.2
    */
   public Object clone() {
-    WeightedRouletteSelector result = new WeightedRouletteSelector(getConfiguration());
-    result.m_wheel = (HashMap)m_wheel.clone();
+    WeightedRouletteSelector result = new WeightedRouletteSelector(
+        getConfiguration());
+    result.m_wheel = (HashMap) m_wheel.clone();
     result.m_config = new WeightedRouletteSelConfig();
     result.m_config.m_doublettesAllowed = m_config.m_doublettesAllowed;
     return result;
   }
 
-  class WeightedRouletteSelConfig {
+  public boolean equals(Object o) {
+    WeightedRouletteSelector other = (WeightedRouletteSelector)o;
+    if (other == null) {
+      return false;
+    }
+    if (m_totalNumberOfUsedSlots != other.m_totalNumberOfUsedSlots) {
+      return false;
+    }
+    if (other.m_config == null) {
+      return false;
+    }
+    if (m_config.m_doublettesAllowed != other.m_config.m_doublettesAllowed) {
+      return false;
+    }
+    if (other.m_counterPool == null) {
+      return false;
+    }
+    if (!m_wheel.equals(other.m_wheel)) {
+      return false;
+    }
+    return true;
+  }
+
+  class WeightedRouletteSelConfig
+      implements Serializable {
     /**
      * Allows or disallows doublette chromosomes to be added to the selector
      */
     public boolean m_doublettesAllowed;
-
   }
-}
 
+}
 /**
  * Implements a counter that is used to keep track of the total number of
  * slots that a single Chromosome is occupying in the roulette wheel. Since
@@ -495,5 +520,4 @@ class SlotCounter {
   public void scaleFitnessValue(final double a_scalingFactor) {
     m_fitnessValue /= a_scalingFactor;
   }
-
 }
