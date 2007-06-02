@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.79 $";
+  private final static String CVS_REVISION = "$Revision: 1.80 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -302,8 +302,8 @@ public class Configuration
     m_id = a_id;
     setName(a_name);
     makeThreadKey();
-    m_preSelectors = new ChainOfSelectors();
-    m_postSelectors = new ChainOfSelectors();
+    m_preSelectors = new ChainOfSelectors(this);
+    m_postSelectors = new ChainOfSelectors(this);
     m_sizeNaturalSelectorsPre = 0;
     m_sizeNaturalSelectorsPost = 0;
     // use synchronized list for distributed computing
@@ -1015,9 +1015,9 @@ public class Configuration
       throws InvalidConfigurationException {
     if (!m_settingsLocked) {
       verifyStateIsValid();
-      // Make genetic operators list immutable.
-      // --------------------------------------
-      m_geneticOperators = Collections.unmodifiableList(m_geneticOperators);
+//      // Make genetic operators list immutable.
+//      // --------------------------------------
+//      m_geneticOperators = Collections.unmodifiableList(m_geneticOperators);
       m_settingsLocked = true;
     }
   }
