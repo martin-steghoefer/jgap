@@ -36,6 +36,7 @@
   SampleSplitStrategy
 * Added new routines to class Population
 * Fixed bug in GPGenotype.calcFitness (see bug 1617125)
+* Introduced configuration to ChainOfSelector's constructor
 * Set DefaultGPFitnessEvaluator in GPConfiguration per
   default instead of DeltaGPFitnessEvaluator
 * Introduced interface ICloneable that extends Cloneable
