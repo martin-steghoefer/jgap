@@ -18,9 +18,13 @@ package org.jgap.impl.job;
 public abstract class JobBase
     implements IJob {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private JobData m_data;
+
+  private boolean m_finished;
+
+  private JobResult m_result;
 
   public JobBase(JobData a_data) {
     m_data = a_data;
@@ -28,15 +32,38 @@ public abstract class JobBase
 
   public void run() {
     try {
-      execute(m_data);
+      m_result = execute(m_data);
+      if (m_result == null) {
+        throw new IllegalStateException("Result must not be null!");
+      }
     } catch (Exception ex) {
       /**@todo what to do here?*/
       ex.printStackTrace();
+      throw new RuntimeException("Job failed");
     }
+    setFinished();
   }
 
   public JobData getJobData() {
     /**@todo maybe we should make the returned m_data immutable (via cloning, e.g.)*/
     return m_data;
+  }
+
+  public boolean isFinished() {
+    return m_finished;
+  }
+
+  protected void setFinished() {
+    m_finished = true;
+  }
+
+  public JobResult getResult() {
+    if (!m_finished) {
+      return null;
+    }
+    if (m_result == null) {
+      throw new IllegalStateException("Result must not be null!");
+    }
+    return m_result;
   }
 }

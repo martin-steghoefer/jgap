@@ -20,7 +20,7 @@ import java.io.*;
 public interface IJob
     extends Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Executes a job.
@@ -30,4 +30,10 @@ public interface IJob
    */
   JobResult execute(JobData a_data)
       throws Exception;
+
+  void run();
+
+  boolean isFinished();
+
+  JobResult getResult();
 }
