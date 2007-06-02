@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -457,4 +457,33 @@ public class BestChromosomesSelectorTest
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
     assertTrue(selector.returnsUniqueChromosomes());
   }
-}
+
+  /**
+   * Ensures BCS is implementing Serializable.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testIsSerializable_0()
+      throws Exception {
+    BestChromosomesSelector selector = new BestChromosomesSelector(conf);
+    assertTrue(isSerializable(selector));
+  }
+
+  /**
+   * Ensures that BCS implements Serializable
+   * correctly.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testDoSerialize_0()
+      throws Exception {
+    BestChromosomesSelector selector = new BestChromosomesSelector(conf);
+    Object o = doSerialize(selector);
+    assertEquals(o, selector);
+  }}
