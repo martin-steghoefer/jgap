@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.util.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import junit.framework.*;
@@ -22,7 +23,7 @@ import junit.framework.*;
 public class DefaultConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -103,6 +104,30 @@ public class DefaultConfigurationTest
     DefaultConfiguration conf = new DefaultConfiguration("xxX1","3a");
     assertEquals("xxX1", conf.getId());
     assertEquals("3a", conf.getName());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testClone_0()
+      throws Exception {
+    DefaultConfiguration.reset();
+    DefaultConfiguration conf = new DefaultConfiguration();
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+    conf.setPopulationSize(1);
+    Configuration theClone = (Configuration)conf.clone();
+    assertEquals(conf, theClone);
+    List genOps = theClone.getGeneticOperators();
+    assertEquals(2, genOps.size());
+    assertEquals(CrossoverOperator.class,
+                 theClone.getGeneticOperators().get(0).getClass());
+    assertEquals(MutationOperator.class,
+                 theClone.getGeneticOperators().get(1).getClass());
   }
 
   class DefaultConfigForTest
