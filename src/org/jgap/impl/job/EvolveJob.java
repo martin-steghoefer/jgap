@@ -29,7 +29,7 @@ public class EvolveJob extends JobBase
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public EvolveJob(JobData a_data) {
     super(a_data);
@@ -54,7 +54,7 @@ public class EvolveJob extends JobBase
     Population pop = a_evolveData.getPopulation();
     if (config == null) {
       throw new IllegalStateException(
-          "The Configuration object must be set prior to evolution.");
+          "The configuration object must be set prior to evolution.");
     }
     // Adjust population size to configured size (if wanted).
     // Theoretically, this should be done at the end of this method.
@@ -204,7 +204,9 @@ public class EvolveJob extends JobBase
 //        result.addChromosomes(new_population);
         return new_population;
       }
-      return a_pop;
+      else {
+        return a_pop;
+      }
     } catch (InvalidConfigurationException iex) {
       // This exception should never be reached
       throw new IllegalStateException(iex.getMessage());
