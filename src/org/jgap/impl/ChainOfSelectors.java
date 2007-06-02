@@ -29,16 +29,18 @@ import org.apache.commons.lang.builder.*;
 public class ChainOfSelectors
     implements Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
    * Intentionally used as a decorator and not via inheritance!
    */
-  private Vector m_selectors;
+  private List m_selectors;
+  private Configuration m_conf;
 
-  public ChainOfSelectors() {
+  public ChainOfSelectors(Configuration a_conf) {
     m_selectors = new Vector();
+    m_conf = a_conf;
   }
 
   /**
@@ -162,9 +164,28 @@ public class ChainOfSelectors
    * @since 3.2
    */
   public Object clone() {
-    ChainOfSelectors result = new ChainOfSelectors();
-    result.m_selectors = (Vector) m_selectors.clone();
-    return result;
+    try {
+      ChainOfSelectors result = new ChainOfSelectors(m_conf);
+      List v = new Vector();
+      for (int i = 0; i < m_selectors.size(); i++) {
+        INaturalSelector o = (INaturalSelector) m_selectors.get(i);
+        Object clone;
+        ICloneHandler handler = m_conf.getJGAPFactory().getCloneHandlerFor(
+            o, null);
+        if (handler != null) {
+          clone = handler.perform(o, null, null);
+        }
+        else {
+          throw new IllegalStateException("No clone handler found for class "
+              + o.getClass().getName());
+        }
+        v.add(o);
+      }
+      result.m_selectors = v;
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 
   /**
