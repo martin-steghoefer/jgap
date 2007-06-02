@@ -23,6 +23,9 @@
 * Made IGPProgram cloneable --> please consider when
   upgrading your code
 * Made WeightedRouletteSelector serializable
+* Made BestChromosomesSelector cloneable
+* Changed configuration to avoid using unmodifyable
+  collection for genetic operators (as it is not cloneable)
 * Added job-oriented approach (package org.jgap.impl.job)
   for grid computing
 * Introduced grid classes IWorkerReturnStrategy and
