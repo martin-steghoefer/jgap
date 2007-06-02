@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import java.util.*;
 import org.jgap.*;
+import org.jgap.util.*;
 
 /**
  * Implementation of a NaturalSelector that takes the top n chromosomes into
@@ -21,9 +22,9 @@ import org.jgap.*;
  * @since 1.1
  */
 public class BestChromosomesSelector
-    extends NaturalSelector {
+    extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -126,12 +127,18 @@ public class BestChromosomesSelector
                      final Population a_to_pop) {
     if (a_from_pop != null) {
       int popSize = a_from_pop.size();
+      if (popSize < 1) {
+        throw new IllegalStateException("Population size must be greater 0");
+      }
       for (int i = 0; i < popSize; i++) {
         add(a_from_pop.getChromosome(i));
       }
     }
     int canBeSelected;
     int chromsSize = m_chromosomes.size();
+    if (chromsSize < 1) {
+      throw new IllegalStateException("Number of chromosomes must be greater 0");
+    }
     if (a_howManyToSelect > chromsSize) {
       canBeSelected = chromsSize;
     }
@@ -279,13 +286,27 @@ public class BestChromosomesSelector
         other.m_fitnessValueComparator.getClass().getName())) {
       return false;
     }
-      if (Math.abs(m_config.m_originalRate - other.m_config.m_originalRate) >
-          0.001d) {
-        return false;
-      }
+    if (Math.abs(m_config.m_originalRate - other.m_config.m_originalRate) >
+        0.001d) {
+      return false;
+    }
     if (!m_chromosomes.equals(other.m_chromosomes)) {
       return false;
     }
     return true;
+  }
+
+  public Object clone() {
+    try {
+      BestChromosomesSelector sel = new BestChromosomesSelector(
+          getConfiguration(),
+          m_config.m_originalRate);
+      sel.m_needsSorting = m_needsSorting;
+      sel.m_chromosomes = (Population) m_chromosomes.clone();
+      sel.m_doublettesAllowed = m_doublettesAllowed;
+      return sel;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }
