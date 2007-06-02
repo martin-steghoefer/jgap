@@ -28,11 +28,12 @@ import org.jgap.util.*;
 public class DefaultConfiguration
     extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public DefaultConfiguration() {
     this("","");
   }
+
   /**
    * Constructs a new DefaultConfiguration instance with a number of
    * configuration settings set to default values. It is still necessary
