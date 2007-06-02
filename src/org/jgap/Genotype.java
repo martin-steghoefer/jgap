@@ -32,7 +32,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.96 $";
+  private final static String CVS_REVISION = "$Revision: 1.97 $";
 
   /**
    * The current Configuration instance.
@@ -691,11 +691,19 @@ public class Genotype
     // Feed the population chunks into different evolve jobs.
     // ------------------------------------------------------
     for (int i = 0; i < pops.length; i++) {
-      EvolveData data = new EvolveData(getConfiguration());
+      if (getConfiguration().getGeneticOperators().get(0) == null) {
+        throw new IllegalStateException("GA!");
+      }
+      Configuration newConf = (Configuration)getConfiguration().clone();
+      if (newConf.getGeneticOperators().get(0) == null) {
+        throw new IllegalStateException("GA!");
+      }
+      EvolveData data = new EvolveData(newConf);
       data.setPopulation(pops[i]);
       IEvolveJob evolver = new EvolveJob(data);
       result.add(evolver);
     }
+    getPopulation().clear();
     return result;
   }
 
@@ -705,12 +713,15 @@ public class Genotype
     Population target = new Population(getConfiguration());
     for (int i = 0; i < size; i++) {
       EvolveResult singleResult = a_results[i];
+      if (singleResult == null) {
+        throw new IllegalStateException("Single result is null!");
+      }
       Population pop = singleResult.getPopulation();
       /**@todo use/enhance IPopulationMerger*/
 //      a_merger.mergePopulations()
       List goodOnes = pop.determineFittestChromosomes(3);
       for (int j = 0; j < goodOnes.size(); j++) {
-        IChromosome goodOne = (IChromosome)goodOnes.get(i);
+        IChromosome goodOne = (IChromosome)goodOnes.get(j);
         target.addChromosome(goodOne);
       }
     }
