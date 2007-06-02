@@ -6,6 +6,7 @@
   auto-consider NOP if necessary for creating valid
   programs...)
 * Enabled GPConfiguration for grid computing
+* Better ADF support in Genetic Programming
 * Added GP function ExchangeMemory and others
 * Added GP program caching to speedup evolution
 * Added GP TournamentSelector (by Javier and Enrique)
