@@ -24,6 +24,10 @@ import org.jgap.*;
  */
 public class DefaultCloneHandler
     implements ICloneHandler, ICloneable, Serializable, Comparable {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
+
   /**
    * Handles all implementations of IApplicationData as well as all of
    * java.lang.Cloneable (for which the clone-method is accessible via
