@@ -11,7 +11,7 @@ import org.jgap.*;
 public class SimplePopulationSplitter
     implements IPopulationSplitter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private int m_count;
 
@@ -40,8 +40,15 @@ public class SimplePopulationSplitter
     if (chunkSize < 1) {
       chunkSize = 1;
     }
+    int index = 0;
     for (int i = 0; i < m_count; i++) {
       Population chunk = new Population(a_pop.getConfiguration(), chunkSize);
+      // Fill chunk with chromosomes.
+      // ----------------------------
+      for (int j = 0; j < chunkSize; j++) {
+        chunk.addChromosome(a_pop.getChromosome(index));
+        index++;
+      }
       result[i] = chunk;
       popSize -= chunkSize;
       if (popSize < 1) {
