@@ -80,6 +80,7 @@
        <include name="org/jgap/gui/*.class"/>
        <include name="org/jgap/impl/*.class"/>
        <include name="org/jgap/impl/fitness/*.class"/>
+       <include name="org/jgap/impl/job/*.class"/>
        <include name="org/jgap/impl/salesman/*.class"/>
        <include name="org/jgap/perf/*.class"/>
        <include name="org/jgap/supergenes/*.class"/>
@@ -126,6 +127,7 @@
         <include name="org/jgap/gui/*.class"/>
         <include name="org/jgap/impl/*.class"/>
         <include name="org/jgap/impl/fitness/*.class"/>
+        <include name="org/jgap/impl/job/*.class"/>
         <include name="org/jgap/impl/salesman/*.class"/>
         <include name="org/jgap/perf/*.class"/>
         <include name="org/jgap/supergenes/*.class"/>
@@ -142,7 +144,7 @@
     <javadoc sourcepath="${src}"
              destdir="javadocs/"
              Public="true"
-             packagenames="org.jgap, org.jgap.audit, org.jgap.data, org.gap.data.config, org.jgap.distr, org.jgap.distr.grid, org.jgap.distr.grid.common, org.jgap.distr.grid.request, org.jgap.distr.grid.util, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.gp.impl, org.jgap.gp.function, org.jgap.gp.terminal, org.jgap.gui, org.jgap.impl, org.jgap.supergenes, org.jgap.util, org.jgap.util.tree, org.jgap.xml, org.jgap.impl.fitness, org.jgap.impl.salesman">
+             packagenames="org.jgap, org.jgap.audit, org.jgap.data, org.gap.data.config, org.jgap.distr, org.jgap.distr.grid, org.jgap.distr.grid.common, org.jgap.distr.grid.request, org.jgap.distr.grid.util, org.jgap.eval, org.jgap.event, org.jgap.ext, org.jgap.gp, org.jgap.gp.impl, org.jgap.gp.function, org.jgap.gp.terminal, org.jgap.gui, org.jgap.impl, org.jgap.impl.job, org.jgap.supergenes, org.jgap.util, org.jgap.util.tree, org.jgap.xml, org.jgap.impl.fitness, org.jgap.impl.salesman">
     </javadoc>
   </target>
 
