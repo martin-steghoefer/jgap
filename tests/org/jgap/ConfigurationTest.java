@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -1259,6 +1259,36 @@ public class ConfigurationTest
     assertEquals(theClone1, theClone2);
   }
 
+  /**
+   * Clone after settings locked.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testClone_2()
+      throws Exception {
+    Configuration conf = new Configuration();
+    conf.setFitnessFunction(new StaticFitnessFunction(2));
+    Gene gene = new BooleanGene(conf);
+    conf.setSampleChromosome(new Chromosome(conf, gene, 5));
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+    conf.setRandomGenerator(new StockRandomGenerator());
+    conf.setEventManager(new EventManager());
+    conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
+    conf.addGeneticOperator(new MutationOperator(conf));
+    conf.addGeneticOperator(new CrossoverOperator(conf,2));
+    conf.setPopulationSize(1);
+    conf.lockSettings();
+    Configuration theClone = (Configuration)conf.clone();
+    assertEquals(conf, theClone);
+    assertEquals(2, theClone.getGeneticOperators().size());
+    assertEquals(MutationOperator.class,
+                 theClone.getGeneticOperators().get(0).getClass());
+    assertEquals(CrossoverOperator.class,
+                 theClone.getGeneticOperators().get(1).getClass());
+  }
   /**
    * Exposes bug 1642378.
    *
