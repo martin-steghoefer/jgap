@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ChainOfSelectorsTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ChainOfSelectorsTest.class);
@@ -34,7 +34,7 @@ public class ChainOfSelectorsTest
    * @since 2.2
    */
   public void testConstruct_0() {
-    new ChainOfSelectors();
+    new ChainOfSelectors(conf);
   }
 
   /**
@@ -42,7 +42,7 @@ public class ChainOfSelectorsTest
    * @since 2.2
    */
   public void testClear_0() {
-    ChainOfSelectors c = new ChainOfSelectors();
+    ChainOfSelectors c = new ChainOfSelectors(conf);
     assertTrue(c.isEmpty());
     c.clear();
     assertTrue(c.isEmpty());
@@ -56,7 +56,7 @@ public class ChainOfSelectorsTest
    */
   public void testClear_1()
       throws Exception {
-    ChainOfSelectors c = new ChainOfSelectors();
+    ChainOfSelectors c = new ChainOfSelectors(conf);
     assertEquals(0, c.size());
     c.addNaturalSelector(new BestChromosomesSelector(conf));
     assertEquals(1, c.size());
@@ -73,7 +73,7 @@ public class ChainOfSelectorsTest
    */
   public void testClear_2()
       throws Exception {
-    ChainOfSelectors c = new ChainOfSelectors();
+    ChainOfSelectors c = new ChainOfSelectors(conf);
     Collection l = new Vector();
     l.add(new BestChromosomesSelector(conf));
     l.add(new WeightedRouletteSelector(conf));
@@ -92,7 +92,7 @@ public class ChainOfSelectorsTest
    */
   public void testIterator_0()
       throws Exception {
-    ChainOfSelectors c = new ChainOfSelectors();
+    ChainOfSelectors c = new ChainOfSelectors(conf);
     Collection l = new Vector();
     l.add(new BestChromosomesSelector(conf));
     l.add(new WeightedRouletteSelector(conf));
@@ -113,7 +113,7 @@ public class ChainOfSelectorsTest
    */
   public void testAddNaturalSelector_0()
       throws Exception {
-    ChainOfSelectors c = new ChainOfSelectors();
+    ChainOfSelectors c = new ChainOfSelectors(conf);
     try {
       c.addNaturalSelector(null);
       fail();
@@ -125,8 +125,8 @@ public class ChainOfSelectorsTest
 
   public void testEquals_0()
       throws Exception {
-    ChainOfSelectors c1 = new ChainOfSelectors();
-    ChainOfSelectors c2 = new ChainOfSelectors();
+    ChainOfSelectors c1 = new ChainOfSelectors(conf);
+    ChainOfSelectors c2 = new ChainOfSelectors(conf);
     assertFalse(c1.equals(null));
     assertTrue(c1.equals(c2));
     TournamentSelector t1 = new TournamentSelector();
@@ -150,7 +150,7 @@ public class ChainOfSelectorsTest
    */
   public void testEquals_1()
       throws Exception {
-    ChainOfSelectors c1 = new ChainOfSelectors();
+    ChainOfSelectors c1 = new ChainOfSelectors(conf);
     assertFalse(c1.equals(new BooleanGene(conf)));
   }
 
@@ -162,8 +162,8 @@ public class ChainOfSelectorsTest
    */
   public void testHashCode_0()
       throws Exception {
-    ChainOfSelectors c1 = new ChainOfSelectors();
-    ChainOfSelectors c2 = new ChainOfSelectors();
+    ChainOfSelectors c1 = new ChainOfSelectors(conf);
+    ChainOfSelectors c2 = new ChainOfSelectors(conf);
     assertEquals(c1.hashCode(), c2.hashCode());
     c1.addNaturalSelector(new BestChromosomesSelector(conf));
     assertFalse(c1.hashCode() == c2.hashCode());
