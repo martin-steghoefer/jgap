@@ -23,7 +23,7 @@ import org.jgap.*;
 public class BestChromosomesSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -122,8 +122,8 @@ public class BestChromosomesSelector
    * @since 1.1
    */
   public void select(final int a_howManyToSelect,
-                                  final Population a_from_pop,
-                                  final Population a_to_pop) {
+                     final Population a_from_pop,
+                     final Population a_to_pop) {
     if (a_from_pop != null) {
       int popSize = a_from_pop.size();
       for (int i = 0; i < popSize; i++) {
@@ -243,7 +243,7 @@ public class BestChromosomesSelector
   public void setOriginalRate(final double a_originalRate) {
     if (a_originalRate < 0.0d || a_originalRate > 1.0d) {
       throw new IllegalArgumentException("Original rate must be greater than"
-                                         + " zero and not greater than one!");
+          + " zero and not greater than one!");
     }
     m_config.m_originalRate = a_originalRate;
   }
@@ -266,5 +266,26 @@ public class BestChromosomesSelector
      * would always return the original input as output
      */
     public double m_originalRate;
+  }
+  public boolean equals(Object a_o) {
+    if (a_o == null) {
+      return false;
+    }
+    BestChromosomesSelector other = (BestChromosomesSelector) a_o;
+    if (m_doublettesAllowed != other.m_doublettesAllowed) {
+      return false;
+    }
+    if (!m_fitnessValueComparator.getClass().getName().equals(
+        other.m_fitnessValueComparator.getClass().getName())) {
+      return false;
+    }
+      if (Math.abs(m_config.m_originalRate - other.m_config.m_originalRate) >
+          0.001d) {
+        return false;
+      }
+    if (!m_chromosomes.equals(other.m_chromosomes)) {
+      return false;
+    }
+    return true;
   }
 }
