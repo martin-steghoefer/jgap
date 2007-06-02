@@ -21,6 +21,9 @@
   DefaultEvolveStrategy
 * Made IGPProgram cloneable --> please consider when
   upgrading your code
+* Made WeightedRouletteSelector serializable
+* Added job-oriented approach (package org.jgap.impl.job)
+  for grid computing
 * Introduced grid classes IWorkerReturnStrategy and
   DefaultWorkerReturnStrategy
 * Introduced grid classes IGenotypeInitializer and
