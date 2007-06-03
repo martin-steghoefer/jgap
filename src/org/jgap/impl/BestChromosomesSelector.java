@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -299,10 +299,9 @@ public class BestChromosomesSelector
   public Object clone() {
     try {
       BestChromosomesSelector sel = new BestChromosomesSelector(
-          getConfiguration(),
-          m_config.m_originalRate);
+          getConfiguration(), m_config.m_originalRate);
       sel.m_needsSorting = m_needsSorting;
-      sel.m_chromosomes = (Population) m_chromosomes.clone();
+//      sel.m_chromosomes = (Population) m_chromosomes.clone();
       sel.m_doublettesAllowed = m_doublettesAllowed;
       return sel;
     } catch (Throwable t) {
