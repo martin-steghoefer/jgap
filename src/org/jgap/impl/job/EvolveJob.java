@@ -24,12 +24,11 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-
 public class EvolveJob extends JobBase
     implements IEvolveJob {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public EvolveJob(JobData a_data) {
     super(a_data);
@@ -40,6 +39,9 @@ public class EvolveJob extends JobBase
    *
    * @param a_data input parameter of type EvolveData
    * @throws Exception in case of any error
+   *
+   * @author Klaus Meffert
+   * @since 3.2
    */
   public JobResult execute(JobData a_data)
       throws Exception {
@@ -161,7 +163,7 @@ public class EvolveJob extends JobBase
    * after GeneticOperators
    *
    * @author Klaus Meffert
-   * @since 2.0
+   * @since 3.2
    */
   protected Population applyNaturalSelectors(Configuration a_config,
       Population a_pop, boolean a_processBeforeGeneticOperators) {
@@ -192,7 +194,7 @@ public class EvolveJob extends JobBase
           else {
             m_single_selection_size = m_population_size / selectorSize;
           }
-          // Do selection of Chromosomes.
+          // Do selection of chromosomes.
           // ----------------------------
           /**@todo utilize jobs: integrate job into NaturalSelector!*/
           selector.select(m_single_selection_size, a_pop, new_population);
@@ -217,7 +219,7 @@ public class EvolveJob extends JobBase
    * Applies all GeneticOperators registered with the Configuration.
    *
    * @author Klaus Meffert
-   * @since 3.0
+   * @since 3.2
    */
   protected void applyGeneticOperators(Configuration a_config, Population a_pop) {
     List geneticOperators = a_config.getGeneticOperators();

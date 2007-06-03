@@ -25,7 +25,7 @@ import java.net.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.57 $";
+  private static final String CVS_REVISION = "$Revision: 1.58 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -48,8 +48,7 @@ public class Population
    */
   private boolean m_sorted;
 
-  private
-  /*transient*/ Configuration m_config;
+  private Configuration m_config;
 
   public final static String CHROM_DELIMITER = "~";
 
@@ -632,7 +631,7 @@ public class Population
   }
 
   /**
-   * @return deeply cloned instance of this instance
+   * @return deeply cloned population instance
    *
    * @author Klaus Meffert
    * @since 3.2
