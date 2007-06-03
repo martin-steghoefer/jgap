@@ -32,7 +32,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.97 $";
+  private final static String CVS_REVISION = "$Revision: 1.98 $";
 
   /**
    * The current Configuration instance.
@@ -691,13 +691,7 @@ public class Genotype
     // Feed the population chunks into different evolve jobs.
     // ------------------------------------------------------
     for (int i = 0; i < pops.length; i++) {
-      if (getConfiguration().getGeneticOperators().get(0) == null) {
-        throw new IllegalStateException("GA!");
-      }
       Configuration newConf = (Configuration)getConfiguration().clone();
-      if (newConf.getGeneticOperators().get(0) == null) {
-        throw new IllegalStateException("GA!");
-      }
       EvolveData data = new EvolveData(newConf);
       data.setPopulation(pops[i]);
       IEvolveJob evolver = new EvolveJob(data);
