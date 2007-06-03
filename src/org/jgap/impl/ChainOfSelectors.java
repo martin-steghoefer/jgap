@@ -29,7 +29,7 @@ import org.apache.commons.lang.builder.*;
 public class ChainOfSelectors
     implements Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
@@ -179,7 +179,7 @@ public class ChainOfSelectors
           throw new IllegalStateException("No clone handler found for class "
               + o.getClass().getName());
         }
-        v.add(o);
+        v.add(clone);
       }
       result.m_selectors = v;
       return result;
