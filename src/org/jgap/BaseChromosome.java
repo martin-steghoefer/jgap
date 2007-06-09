@@ -18,12 +18,14 @@ package org.jgap;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The configuration object to use
    */
-  private /*transient*/ Configuration m_configuration;
+  private Configuration m_configuration;
+
+  private boolean m_newlyCreated;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
@@ -64,4 +66,25 @@ public abstract class BaseChromosome
    * @since 3.0
    */
   public abstract Object clone();
+
+  /**
+   * @param a_newlyCreated true: Chromosome newly created in this generation
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setNewlyCreated(boolean a_newlyCreated) {
+    m_newlyCreated = a_newlyCreated;
+  }
+
+  /**
+   * @return true: Chromosome newly created in this generation. This means it
+   * does not need being cross over with another newly created one.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public boolean isNewlyCreated() {
+    return m_newlyCreated;
+  }
 }

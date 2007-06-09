@@ -21,7 +21,7 @@ import org.jgap.util.*;
 public interface IChromosome
     extends Comparable, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.10 $";
+  final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Constants for toString()
@@ -225,5 +225,22 @@ public interface IChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  public Configuration getConfiguration();
+  Configuration getConfiguration();
+
+  /**
+   * @param a_newlyCreated true: Chromosome newly created in this generation
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  void setNewlyCreated(boolean a_newlyCreated);
+
+  /**
+   * @return true: Chromosome newly created in this generation. This means it
+   * does not need being cross over with another newly created one.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  boolean isNewlyCreated();
 }
