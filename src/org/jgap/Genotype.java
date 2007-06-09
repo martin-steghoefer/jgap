@@ -32,7 +32,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.98 $";
+  private final static String CVS_REVISION = "$Revision: 1.99 $";
 
   /**
    * The current Configuration instance.
@@ -239,6 +239,14 @@ public class Genotype
       keepPopSizeConstant(getPopulation(),
                           m_activeConfiguration.getPopulationSize());
     }
+    int currentPopSize = getPopulation().size();
+    // Ensure all chromosomes all updated.
+    // -----------------------------------
+    for (int i = 0; i < currentPopSize; i++) {
+      IChromosome chrom = getPopulation().getChromosome(i);
+      chrom.setNewlyCreated(false);
+    }
+
     // Apply certain NaturalSelectors before GeneticOperators will be applied.
     // -----------------------------------------------------------------------
     applyNaturalSelectors(true);
@@ -252,7 +260,7 @@ public class Genotype
     // Chromosome implementation is used...
     // --------------------------------------------------------
     int originalPopSize = m_activeConfiguration.getPopulationSize();
-    int currentPopSize = getPopulation().size();
+    currentPopSize = getPopulation().size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
       IChromosome chrom = getPopulation().getChromosome(i);
       chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
