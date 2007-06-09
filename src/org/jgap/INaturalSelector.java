@@ -21,12 +21,12 @@ import java.io.*;
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
- * @since 2.0 (previously named "NaturalSelector")
+ * @since 2.0
  */
 public interface INaturalSelector
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Select a given number of Chromosomes from the pool that will move on
