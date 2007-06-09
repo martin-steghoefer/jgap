@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -46,8 +46,7 @@ public class GenotypeTest
     try {
       new Genotype(null, new Population(conf, 0));
       fail();
-    }
-    catch (IllegalArgumentException invex) {
+    } catch (IllegalArgumentException invex) {
       ; //this is OK
     }
   }
@@ -65,8 +64,7 @@ public class GenotypeTest
     try {
       new Genotype(conf, new Population(conf, 0));
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -83,8 +81,7 @@ public class GenotypeTest
       Population pop = null;
       new Genotype(new DefaultConfiguration(), pop);
       fail();
-    }
-    catch (IllegalArgumentException invex) {
+    } catch (IllegalArgumentException invex) {
       ; //this is OK
     }
   }
@@ -104,11 +101,9 @@ public class GenotypeTest
     try {
       new Genotype(null, chroms);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
-    }
-    catch (IllegalArgumentException invex) {
+    } catch (IllegalArgumentException invex) {
       ; //this is OK
     }
   }
@@ -123,13 +118,12 @@ public class GenotypeTest
       throws Exception {
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
-      new IntegerGene(conf, 1, 5)
+                               new IntegerGene(conf, 1, 5)
     });
     try {
       new Genotype(new DefaultConfiguration(), chroms);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -150,8 +144,7 @@ public class GenotypeTest
     try {
       new Genotype(conf, chroms);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -173,8 +166,7 @@ public class GenotypeTest
     try {
       new Genotype(conf, chroms);
       fail();
-    }
-    catch (InvalidConfigurationException invex) {
+    } catch (InvalidConfigurationException invex) {
       ; //this is OK
     }
   }
@@ -215,8 +207,7 @@ public class GenotypeTest
     try {
       new Genotype(conf, new Chromosome[] {null});
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -259,8 +250,7 @@ public class GenotypeTest
     try {
       new Genotype(conf, chroms);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -388,7 +378,7 @@ public class GenotypeTest
     // ConfigurationForTest set an ordinary FF beforehand
     Configuration config = new ConfigurationForTest() {
       public synchronized void setFitnessFunction(FitnessFunction
-                                                  a_functionToSet)
+          a_functionToSet)
           throws InvalidConfigurationException {
         setBulkFitnessFunction(new BulkFitnessOffsetRemover(a_functionToSet));
       }
@@ -638,8 +628,7 @@ public class GenotypeTest
     try {
       genotype.evolve();
       fail();
-    }
-    catch (NullPointerException iex) {
+    } catch (NullPointerException iex) {
       ; // this is OK
     }
   }
@@ -783,8 +772,7 @@ public class GenotypeTest
     try {
       Genotype.randomInitialGenotype(null);
       fail();
-    }
-    catch (IllegalArgumentException illex) {
+    } catch (IllegalArgumentException illex) {
       ; //this is OK
     }
   }
@@ -832,6 +820,9 @@ public class GenotypeTest
   }
 
   /**
+   * Use a chromosome implementation for which the DefaultInitializer is not
+   * suited.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -847,14 +838,14 @@ public class GenotypeTest
     try {
       Genotype.randomInitialGenotype(conf);
       fail();
-    }
-    catch (IllegalStateException iex) {
+    } catch (IllegalStateException iex) {
       ; //this is OK
     }
   }
 
   /**
-   * GeneticOperators missing
+   * GeneticOperators missing.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -869,8 +860,7 @@ public class GenotypeTest
     try {
       Genotype.randomInitialGenotype(config);
       fail();
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       ; //this is OK
     }
   }
@@ -1181,15 +1171,15 @@ public class GenotypeTest
       implements IChromosome {
     private transient Configuration m_conf;
 
-    public MyChromosome(Configuration a_conf) {
+    public MyChromosome(Configuration a_conf)
+        throws InvalidConfigurationException {
       m_conf = a_conf;
     }
 
     public Gene getGene(int a_desiredLocus) {
       try {
         return new IntegerGene(m_conf);
-      }
-      catch (InvalidConfigurationException iex) {
+      } catch (InvalidConfigurationException iex) {
         throw new IllegalStateException(iex.getMessage());
       }
     }
@@ -1252,6 +1242,13 @@ public class GenotypeTest
     public Configuration getConfiguration() {
       return m_conf;
     }
-  }
 
+    public void setNewlyCreated(boolean a_newlyCreated) {
+
+    }
+
+    public boolean isNewlyCreated() {
+      return false;
+    }
+  }
 }
