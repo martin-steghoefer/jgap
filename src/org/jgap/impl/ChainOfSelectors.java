@@ -29,13 +29,14 @@ import org.apache.commons.lang.builder.*;
 public class ChainOfSelectors
     implements Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Ordered list holding the NaturalSelector's.
    * Intentionally used as a decorator and not via inheritance!
    */
   private List m_selectors;
+
   private Configuration m_conf;
 
   public ChainOfSelectors(Configuration a_conf) {
@@ -189,7 +190,9 @@ public class ChainOfSelectors
   }
 
   /**
-   * The compareTo-method.
+   * The compareTo-method. Here we simply compare the class names of the
+   * contained selectors as INaturalSelector does not contain interface
+   * Comparable.
    *
    * @param a_other the other object to compare
    * @return -1, 0, 1
@@ -203,9 +206,28 @@ public class ChainOfSelectors
     }
     else {
       ChainOfSelectors other = (ChainOfSelectors) a_other;
-      return new CompareToBuilder()
-          .append(m_selectors.toArray(), other.m_selectors.toArray())
-          .toComparison();
+      int size = m_selectors.size();
+      if (other.m_selectors.size() < size) {
+        return 1;
+      }
+      if (other.m_selectors.size() > m_selectors.size()) {
+        return -1;
+      }
+      for (int i = 0; i < size; i++) {
+        // Normally we would do the following:
+//        INaturalSelector selector = (INaturalSelector)m_selectors.get(i);
+//        INaturalSelector selectorOther = (INaturalSelector)other.m_selectors.get(i);
+//        int result = selector.compareTo(selectorOther);
+
+        // But INaturalSelector does not support Cmparable, so:
+        String name = m_selectors.get(i).getClass().getName();
+        String nameOther = other.m_selectors.get(i).getClass().getName();
+        int result = name.compareTo(nameOther);
+        if (result != 0) {
+          return result;
+        }
+      }
     }
+    return 0;
   }
 }
