@@ -33,7 +33,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -131,9 +131,16 @@ public class CrossoverOperator
   }
 
   /**
+   * Does the crossing over.
+   *
+   * @param a_population the population of chromosomes from the current
+   * evolution prior to exposure to crossing over
+   * @param a_candidateChromosomes the pool of chromosomes that have been
+   * selected for the next evolved population
+   *
    * @author Neil Rotstan
    * @author Klaus Meffert
-   * @since 2.0 (earlier versions referenced the Configuration object)
+   * @since 2.0
    */
   public void operate(final Population a_population,
                       final List a_candidateChromosomes) {
@@ -164,11 +171,19 @@ public class CrossoverOperator
       IChromosome chrom2 = a_population.getChromosome(index2);
       // Verify that crossover allowed.
       // ------------------------------
+      if (chrom1.isNewlyCreated() && chrom2.isNewlyCreated()) {
+        // Crossing over two newly created chromosomes is not seen as helpful
+        // here.
+        // ------------------------------------------------------------------
+        continue;
+      }
       if (constraint != null) {
         List v = new Vector();
         v.add(chrom1);
         v.add(chrom2);
         if (!constraint.isValid(a_population, v, this)) {
+          // Constraint forbids crossing over.
+          // ---------------------------------
           continue;
         }
       }
@@ -176,6 +191,8 @@ public class CrossoverOperator
       // ----------------------
       IChromosome firstMate = (IChromosome) chrom1.clone();
       IChromosome secondMate = (IChromosome) chrom2.clone();
+      // Cross over the chromosomes.
+      // ---------------------------
       doCrossover(firstMate, secondMate, a_candidateChromosomes, generator);
     }
   }
