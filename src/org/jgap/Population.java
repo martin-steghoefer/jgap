@@ -11,9 +11,10 @@ package org.jgap;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.util.*;
-import org.jgap.util.*;
 import java.net.*;
+import java.util.*;
+
+import org.jgap.util.*;
 
 /**
  * List of chromosomes held in the Genotype (or possibly later in the
@@ -25,7 +26,7 @@ import java.net.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.58 $";
+  private static final String CVS_REVISION = "$Revision: 1.59 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
