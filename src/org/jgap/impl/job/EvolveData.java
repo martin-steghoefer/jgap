@@ -21,9 +21,10 @@ import org.jgap.*;
 public class EvolveData
     extends JobData {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Population m_pop;
+  private IBreeder m_breeder;
 
   public EvolveData(Configuration a_config) {
     super(a_config);
@@ -35,5 +36,13 @@ public class EvolveData
 
   public void setPopulation(Population a_pop) {
     m_pop = a_pop;
+  }
+
+  public void setBreeder(IBreeder a_breeder) {
+    m_breeder = a_breeder;
+  }
+
+  public IBreeder getBreeder() {
+    return m_breeder;
   }
 }
