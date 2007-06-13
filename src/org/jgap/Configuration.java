@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.82 $";
+  private final static String CVS_REVISION = "$Revision: 1.83 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1477,7 +1477,7 @@ public class Configuration
    */
   public IBreeder getBreeder() {
     if (m_breeder == null) {
-      m_breeder = new GABreeder(this);
+      m_breeder = new GABreeder();
     }
     return m_breeder;
   }
