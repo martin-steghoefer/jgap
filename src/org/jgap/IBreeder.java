@@ -20,9 +20,9 @@ import org.jgap.util.ICloneable;
  * @since 3.2
  */
 public interface IBreeder
-    extends ICloneable, Serializable {
+    extends ICloneable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   Population evolve(Population a_pop, Configuration a_conf);
 }
