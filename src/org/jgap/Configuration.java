@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.81 $";
+  private final static String CVS_REVISION = "$Revision: 1.82 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1565,7 +1565,7 @@ public class Configuration
         result.m_factory = (IJGAPFactory)((JGAPFactory)m_factory).clone();
       }
       if (m_breeder != null) {
-        result.m_breeder = m_breeder;
+        result.m_breeder = (IBreeder)doClone(m_breeder);
       }
       if (m_bulkObjectiveFunction != null) {
         result.m_bulkObjectiveFunction = m_bulkObjectiveFunction;
