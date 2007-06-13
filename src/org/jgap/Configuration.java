@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.80 $";
+  private final static String CVS_REVISION = "$Revision: 1.81 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -120,6 +120,11 @@ public class Configuration
   private FitnessEvaluator m_fitnessEvaluator;
 
   /**
+   * Performs the evolution.
+   */
+  private IBreeder m_breeder;
+
+  /**
    * Minimum size guaranteed for population. If zero or below then no ensurance.
    *
    * @author Klaus Meffert
@@ -164,7 +169,7 @@ public class Configuration
    * @author Neil Rotstan
    * @since 1.0
    */
-  private /*transient*/ IEventManager m_eventManager;
+  private IEventManager m_eventManager;
 
   /**
    * References the chromosome pool, if any, that is to be used to pool
@@ -1452,6 +1457,31 @@ public class Configuration
     m_factory = a_factory;
   }
 
+  /**
+   * @param a_breeder the breeder to use
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void setBreeder(IBreeder a_breeder) {
+    assert(a_breeder != null);
+    m_breeder = a_breeder;
+  }
+
+  /**
+   * @return the breeder set or new standard breeder instance in case no breeder
+   * was set before.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public IBreeder getBreeder() {
+    if (m_breeder == null) {
+      m_breeder = new GABreeder(this);
+    }
+    return m_breeder;
+  }
+
   protected String makeThreadKey() {
     Thread current = Thread.currentThread();
     threadKey = getThreadKey(current, m_id);
@@ -1533,6 +1563,9 @@ public class Configuration
         // --------------------------------------------
         m_factory = new JGAPFactory(false);
         result.m_factory = (IJGAPFactory)((JGAPFactory)m_factory).clone();
+      }
+      if (m_breeder != null) {
+        result.m_breeder = m_breeder;
       }
       if (m_bulkObjectiveFunction != null) {
         result.m_bulkObjectiveFunction = m_bulkObjectiveFunction;
@@ -1623,6 +1656,7 @@ public class Configuration
         return new CompareToBuilder()
             .append(m_config.m_populationSize, other.m_config.m_populationSize)
             .append(m_factory, other.m_factory)
+            .append(m_breeder, other.m_breeder)
             .append(m_objectiveFunction, other.m_objectiveFunction)
             .append(m_fitnessEvaluator, other.m_fitnessEvaluator)
             .append(m_bulkObjectiveFunction, other.m_bulkObjectiveFunction)
