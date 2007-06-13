@@ -23,7 +23,7 @@ import org.jgap.impl.job.*;
  * randomized Chromosome population.
  * <p>
  * Please note that among all created Genotype instances there may only be one
- * configuration (singleton!), used by all Genotype instances
+ * configuration, used by all Genotype instances.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -32,7 +32,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.99 $";
+  private final static String CVS_REVISION = "$Revision: 1.100 $";
 
   /**
    * The current Configuration instance.
@@ -696,12 +696,14 @@ public class Genotype
     // -----------------------------------------
     List result = new Vector();
     Population[] pops = a_splitter.split(getPopulation());
+    IBreeder breeder = getConfiguration().getBreeder();
     // Feed the population chunks into different evolve jobs.
     // ------------------------------------------------------
     for (int i = 0; i < pops.length; i++) {
       Configuration newConf = (Configuration)getConfiguration().clone();
       EvolveData data = new EvolveData(newConf);
       data.setPopulation(pops[i]);
+      data.setBreeder(newConf.getBreeder());
       IEvolveJob evolver = new EvolveJob(data);
       result.add(evolver);
     }
