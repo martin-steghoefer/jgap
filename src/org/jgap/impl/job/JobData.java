@@ -9,6 +9,7 @@
  */
 package org.jgap.impl.job;
 
+import java.io.Serializable;
 import org.jgap.*;
 
 /**
@@ -17,10 +18,10 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-public abstract class JobData {
+public abstract class JobData implements Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private Configuration m_config;
 
