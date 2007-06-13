@@ -20,7 +20,7 @@ import java.util.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public BreederBase() {
   }
@@ -108,4 +108,18 @@ public abstract class BreederBase
    * @since 3.2
    */
   public abstract Object clone();
+
+  /**
+   * @param a_other sic
+   * @return as always
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public int compareTo(Object a_other) {
+    if (a_other == null) {
+      return 1;
+    }
+    return getClass().getName().compareTo(a_other.getClass().getName());
+  }
 }
