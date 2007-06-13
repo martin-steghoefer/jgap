@@ -22,7 +22,7 @@ import org.jgap.*;
 public class ThresholdSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -118,7 +118,8 @@ public class ThresholdSelector
     for (int i = 0; i < bestToBeSelected; i++) {
       a_to_pop.addChromosome( (IChromosome) m_chromosomes.get(i));
     }
-    // Fill up the rest by randomly selecting chromosomes
+    // Fill up the rest by randomly selecting chromosomes.
+    // ---------------------------------------------------
     int missing = a_howManyToSelect - bestToBeSelected;
     RandomGenerator rn = getConfiguration().getRandomGenerator();
     int index;

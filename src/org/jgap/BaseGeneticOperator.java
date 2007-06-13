@@ -9,8 +9,6 @@
  */
 package org.jgap;
 
-import java.util.*;
-
 /**
  * Base class for any implementation of interface GeneticOperator.
  *
@@ -20,9 +18,9 @@ import java.util.*;
 public abstract class BaseGeneticOperator
     implements GeneticOperator, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
-  private /*transient*/ Configuration m_configuration;
+  private Configuration m_configuration;
 
   /**
    * The only constructor in this class. Sets the immutable configuration.
@@ -34,8 +32,7 @@ public abstract class BaseGeneticOperator
   public BaseGeneticOperator(Configuration a_configuration)
       throws InvalidConfigurationException {
     if (a_configuration == null) {
-      throw new InvalidConfigurationException("Configuration to set may not be"
-                                              +" null!");
+      throw new InvalidConfigurationException("Configuration must not be null");
     }
     m_configuration = a_configuration;
   }
@@ -64,7 +61,7 @@ public abstract class BaseGeneticOperator
    */
   public boolean equals(final Object a_other) {
     try {
-      /**@todo also compare Configuration*/
+      /**@todo also compare Configuration?*/
       return compareTo(a_other) == 0;
     }
     catch (ClassCastException cex) {

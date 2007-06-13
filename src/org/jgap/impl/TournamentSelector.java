@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private TournamentSelectorConfigurable m_config
       = new TournamentSelectorConfigurable();
@@ -139,7 +139,8 @@ public class TournamentSelector
       double prob = rn.nextDouble();
       double probAccumulated = m_config.m_probability;
       int index = 0;
-      //play the tournament
+      // Play the tournament.
+      // --------------------
       if (m_config.m_tournament_size > 1) {
         do {
           if (prob <= probAccumulated) {

@@ -12,8 +12,8 @@ package org.jgap.distr;
 import org.jgap.*;
 
 /**
- * Breeds populations using a GA that will be breeded either on a single
- * server or on multiple servers being whose results will be merged/synchronized
+ * Breeds populations using a GA that will be executed either on a single
+ * server or on multiple servers, whose results will be merged/synchronized
  * later on.
  * <p>
  * A breeder is part of a fractal structure (fractal because each Breeder can
@@ -25,7 +25,7 @@ import org.jgap.*;
 public abstract class Breeder
     implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * The parent Breeder to report to
