@@ -22,7 +22,7 @@ import org.jgap.util.ICloneable;
 public interface IBreeder
     extends ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  Population evolve(Population a_pop);
+  Population evolve(Population a_pop, Configuration a_conf);
 }

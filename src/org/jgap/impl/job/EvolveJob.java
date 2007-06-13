@@ -10,8 +10,8 @@
 package org.jgap.impl.job;
 
 import org.jgap.*;
+import org.jgap.*;
 import org.jgap.event.*;
-import org.jgap.impl.*;
 import java.util.*;
 
 /**
@@ -24,11 +24,10 @@ import java.util.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-public class EvolveJob extends JobBase
-    implements IEvolveJob {
-
+public class EvolveJob
+    extends JobBase implements IEvolveJob {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public EvolveJob(JobData a_data) {
     super(a_data);
@@ -38,6 +37,8 @@ public class EvolveJob extends JobBase
    * Execute the evolution via JGAP.
    *
    * @param a_data input parameter of type EvolveData
+   * @return result of the evolution
+   *
    * @throws Exception in case of any error
    *
    * @author Klaus Meffert
@@ -45,112 +46,29 @@ public class EvolveJob extends JobBase
    */
   public JobResult execute(JobData a_data)
       throws Exception {
-    EvolveData data = (EvolveData)a_data;
+    EvolveData data = (EvolveData) a_data;
     return evolve(data);
   }
 
+  /**
+   * Does the genetic evolution.
+   *
+   * @param a_evolveData parameters for the evolution
+   * @return result of the evolution
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
   public EvolveResult evolve(EvolveData a_evolveData) {
     EvolveResult result = new EvolveResult();
     Configuration config = a_evolveData.getConfiguration();
     result.setConfiguration(config);
     Population pop = a_evolveData.getPopulation();
-    if (config == null) {
-      throw new IllegalStateException(
-          "The configuration object must be set prior to evolution.");
-    }
-    // Adjust population size to configured size (if wanted).
-    // Theoretically, this should be done at the end of this method.
-    // But for optimization issues it is not. If it is the last call to
-    // evolve() then the resulting population possibly contains more
-    // chromosomes than the wanted number. But this is no bad thing as
-    // more alternatives mean better chances having a fit candidate.
-    // If it is not the last call to evolve() then the next call will
-    // ensure the correct population size by calling keepPopSizeConstant.
-    // ------------------------------------------------------------------
-    if (config.isKeepPopulationSizeConstant()) {
-      pop.keepPopSizeConstant();
-    }
-    // Apply certain NaturalSelectors before GeneticOperators will be applied.
-    // -----------------------------------------------------------------------
-    pop = applyNaturalSelectors(config, pop, true);
-    // Execute all of the Genetic Operators.
-    // -------------------------------------
-    applyGeneticOperators(config, pop);
-    // Reset fitness value of genetically operated chromosomes.
-    // Normally, this should not be necessary as the Chromosome
-    // class initializes each newly created chromosome with
-    // FitnessFunction.NO_FITNESS_VALUE. But who knows which
-    // Chromosome implementation is used...
-    // --------------------------------------------------------
-    int originalPopSize = config.getPopulationSize();
-    int currentPopSize = pop.size();
-    for (int i = originalPopSize; i < currentPopSize; i++) {
-      IChromosome chrom = pop.getChromosome(i);
-      chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
-    }
-    // Apply certain NaturalSelectors after GeneticOperators have been applied.
-    // ------------------------------------------------------------------------
-    pop = applyNaturalSelectors(config, pop, false);
-    // If a bulk fitness function has been provided, call it.
-    // ------------------------------------------------------
-    BulkFitnessFunction bulkFunction = config.getBulkFitnessFunction();
-    if (bulkFunction != null) {
-      /**@todo utilize jobs: bulk fitness function is not so important for a
-       * prototype! */
-      bulkFunction.evaluate(pop);
-    }
-    // Fill up population randomly if size dropped below specified percentage
-    // of original size.
-    // ----------------------------------------------------------------------
-    if (config.getMinimumPopSizePercent() > 0) {
-      int sizeWanted = config.getPopulationSize();
-      int popSize;
-      int minSize = (int) Math.round(sizeWanted *
-                                     (double) config.getMinimumPopSizePercent()
-                                     / 100);
-      popSize = pop.size();
-      if (popSize < minSize) {
-        IChromosome newChrom;
-        IChromosome sampleChrom = config.getSampleChromosome();
-        Class sampleChromClass = sampleChrom.getClass();
-        IInitializer chromIniter = config.getJGAPFactory().
-            getInitializerFor(sampleChrom, sampleChromClass);
-        while (pop.size() < minSize) {
-          try {
-            /**@todo utilize jobs: initialization may be time-consuming as
-             * invalid combinations may have to be filtered out*/
-            newChrom = (IChromosome) chromIniter.perform(sampleChrom,
-                sampleChromClass, null);
-            pop.addChromosome(newChrom);
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
-          }
-        }
-      }
-    }
-    if (config.isPreserveFittestIndividual()) {
-      /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
-       * computation*/
-      IChromosome fittest = pop.determineFittestChromosome(0,
-          config.getPopulationSize() - 1);
-      if (config.isKeepPopulationSizeConstant()) {
-        pop.keepPopSizeConstant();
-      }
-      // Determine the fittest chromosome in the population.
-      // ---------------------------------------------------
-      if (!pop.contains(fittest)) {
-        // Re-add fittest chromosome to current population.
-        // ------------------------------------------------
-        pop.addChromosome(fittest);
-      }
-    }
-    // Increase number of generation.
-    // ------------------------------
-    config.incrementGenerationNr();
-    // Fire an event to indicate we've performed an evolution.
-    // -------------------------------------------------------
-    config.getEventManager().fireGeneticEvent(
-        new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
+    // Breed a new population by performing evolution.
+    // -----------------------------------------------
+    IBreeder breeder = a_evolveData.getBreeder();
+    pop = breeder.evolve(pop, config);
+    //
     result.setPopulation(pop);
     return result;
   }
@@ -230,5 +148,4 @@ public class EvolveJob extends JobBase
       operator.operate(a_pop, a_pop.getChromosomes());
     }
   }
-
 }

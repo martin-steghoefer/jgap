@@ -20,16 +20,9 @@ import java.util.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  private Configuration m_config;
-
-  public BreederBase(Configuration a_config) {
-    if (a_config == null) {
-      throw new IllegalStateException(
-          "The configuration object must be set prior to evolution.");
-    }
-    m_config = a_config;
+  public BreederBase() {
   }
 
   /**
@@ -106,16 +99,6 @@ public abstract class BreederBase
       /**@todo utilize jobs: integrate job into GeneticOperator*/
       operator.operate(a_pop, a_pop.getChromosomes());
     }
-  }
-
-  /**
-   * @return the configuration set
-   *
-   * @author Klaus Meffert
-   * @since 3.2
-   */
-  public Configuration getConfiguration() {
-    return m_config;
   }
 
   /**

@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class DefaultConfiguration
     extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public DefaultConfiguration() {
     this("","");
@@ -47,7 +47,7 @@ public class DefaultConfiguration
   public DefaultConfiguration(String a_id, String a_name) {
     super(a_id, a_name);
     try {
-      setBreeder(new GABreeder(this));
+      setBreeder(new GABreeder());
       setRandomGenerator(new StockRandomGenerator());
       setEventManager(new EventManager());
       BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
