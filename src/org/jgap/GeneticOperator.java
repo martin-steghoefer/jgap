@@ -9,7 +9,8 @@
  */
 package org.jgap;
 
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * A GeneticOperator represents an operation that takes place on
@@ -24,10 +25,10 @@ import java.util.List;
  * @since 1.0
  */
 public interface GeneticOperator
-    extends java.io.Serializable {
+    extends Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.12 $";
+  final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
