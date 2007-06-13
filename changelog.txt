@@ -1,5 +1,8 @@
 3.2
 -----------------------------------------------------------
+* Introduced breeder (interface IBreeder, base class
+  BreederBase, class GABreeder) to simplify evolution
+  outside/without Genotype --> grid
 * Enhanced grid logic a lot
 * Enhanced GP program generation a lot (a low "max nodes"
   parameter does not lead to program abortion any more;
