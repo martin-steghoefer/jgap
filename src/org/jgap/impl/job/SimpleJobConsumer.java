@@ -4,7 +4,6 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.distr.*;
-import examples.simpleBoolean.MaxFunction;
 
 public class SimpleJobConsumer {
 
