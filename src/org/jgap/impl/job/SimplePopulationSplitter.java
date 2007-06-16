@@ -11,7 +11,7 @@ import org.jgap.*;
 public class SimplePopulationSplitter
     implements IPopulationSplitter {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_count;
 
@@ -22,6 +22,9 @@ public class SimplePopulationSplitter
    * @since 3.2
    */
   public SimplePopulationSplitter(int a_count) {
+    if (a_count < 1) {
+      throw new IllegalArgumentException("Count must be greater than zero!");
+    }
     m_count = a_count;
   }
 
@@ -34,14 +37,16 @@ public class SimplePopulationSplitter
    */
   public Population[] split(Population a_pop)
       throws Exception {
-    Population[] result = new Population[m_count];
     int popSize = a_pop.size();
-    int chunkSize = popSize / m_count;
+    int count = m_count;
+    int chunkSize = popSize / count;
     if (chunkSize < 1) {
       chunkSize = 1;
+      count = 1;
     }
+    Population[] result = new Population[count];
     int index = 0;
-    for (int i = 0; i < m_count; i++) {
+    for (int i = 0; i < count; i++) {
       Population chunk = new Population(a_pop.getConfiguration(), chunkSize);
       // Fill chunk with chromosomes.
       // ----------------------------
