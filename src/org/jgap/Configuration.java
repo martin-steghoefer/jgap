@@ -42,7 +42,7 @@ import org.apache.commons.lang.builder.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.83 $";
+  private final static String CVS_REVISION = "$Revision: 1.84 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -224,15 +224,19 @@ public class Configuration
    */
   private ChainOfSelectors m_postSelectors;
 
-  private int m_sizeNaturalSelectorsPre;
-
-  private int m_sizeNaturalSelectorsPost;
-
   /**
    * Should the fittest chromosome in the population be preserved to the next
    * generation when evolving (in Genotype.evolve()) ?
    */
   private boolean m_preserveFittestIndividual;
+
+  /**
+   * How many chromosomes should be selected from previous generation?
+   * The missing chromosomes will be filled up with randomly created new
+   * ones.
+   * 1 = all
+   */
+  private double m_selectFromPrevGen;
 
   /**
    * Indicates how many times the evolve()-method in class Genotype has been
@@ -276,7 +280,7 @@ public class Configuration
    * @author Klaus Meffert
    * @since 2.6
    */
-  private transient IJGAPFactory m_factory;
+  private IJGAPFactory m_factory;
 
   private transient String threadKey;
 
@@ -309,8 +313,7 @@ public class Configuration
     makeThreadKey();
     m_preSelectors = new ChainOfSelectors(this);
     m_postSelectors = new ChainOfSelectors(this);
-    m_sizeNaturalSelectorsPre = 0;
-    m_sizeNaturalSelectorsPost = 0;
+    m_selectFromPrevGen = 1.0d;
     // use synchronized list for distributed computing
     m_geneticOperators = new Vector();
     m_conHandler = new RootConfigurationHandler();
@@ -326,7 +329,7 @@ public class Configuration
       } catch (Throwable ex) {
         throw new RuntimeException("Class " + clazz
                                    + " could not be instantiated"
-                                   + " as type IJGAPFactory");
+                                   + " as type IJGAPFactory", ex);
       }
     }
     else {
@@ -696,16 +699,17 @@ public class Configuration
    * chain's get(index) method
    */
   public synchronized NaturalSelector getNaturalSelector() {
-    if (m_sizeNaturalSelectorsPost < 1) {
+    if (getNaturalSelectors(false).size() < 1) {
       return null;
     }
     return getNaturalSelectors(false).get(0);
   }
 
   /**
-   *
-   * @param a_processBeforeGeneticOperators boolean
-   * @param a_index int
+   * @param a_processBeforeGeneticOperators true: retrieve selector that is
+   * registered to be executed before genetic operators, false: get the one
+   * that is registered to be executed after genetic operators
+   * @param a_index index of the selector to get
    * @return NaturalSelector
    *
    * @author Klaus Meffert
@@ -714,22 +718,10 @@ public class Configuration
   public synchronized NaturalSelector getNaturalSelector(final boolean
       a_processBeforeGeneticOperators, final int a_index) {
     if (a_processBeforeGeneticOperators) {
-      if (m_sizeNaturalSelectorsPre <= a_index) {
-        throw new IllegalArgumentException(
-            "Index of NaturalSelector out of bounds");
-      }
-      else {
         return m_preSelectors.get(a_index);
-      }
     }
     else {
-      if (m_sizeNaturalSelectorsPost <= a_index) {
-        throw new IllegalArgumentException(
-            "Index of NaturalSelector out of bounds");
-      }
-      else {
         return m_postSelectors.get(a_index);
-      }
     }
   }
 
@@ -737,7 +729,9 @@ public class Configuration
    * Only use for read-only access! Especially don't call clear() for the
    * returned ChainOfSelectors object!
    *
-   * @param a_processBeforeGeneticOperators boolean
+   * @param a_processBeforeGeneticOperators true: retrieve selector that is
+   * registered to be executed before genetic operators, false: get the one
+   * that is registered to be executed after genetic operators
    * @return ChainOfSelectors
    *
    * @author Klaus Meffert
@@ -754,9 +748,10 @@ public class Configuration
   }
 
   /**
-   *
-   * @param a_processBeforeGeneticOperators boolean
-   * @return int
+   * @param a_processBeforeGeneticOperators true: retrieve selector that is
+   * registered to be executed before genetic operators, false: get the one
+   * that is registered to be executed after genetic operators
+   * @return size of selector list (distinct by a_processBeforeGeneticOperators)
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -764,10 +759,10 @@ public class Configuration
   public int getNaturalSelectorsSize(final boolean
                                      a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
-      return m_sizeNaturalSelectorsPre;
+      return m_preSelectors.size();
     }
     else {
-      return m_sizeNaturalSelectorsPost;
+      return m_postSelectors.size();
     }
   }
 
@@ -785,11 +780,9 @@ public class Configuration
                                      a_processBeforeGeneticOperators) {
     if (a_processBeforeGeneticOperators) {
       getNaturalSelectors(true).clear();
-      m_sizeNaturalSelectorsPre = 0;
     }
     else {
       getNaturalSelectors(false).clear();
-      m_sizeNaturalSelectorsPost = 0;
     }
   }
 
@@ -1167,11 +1160,9 @@ public class Configuration
     verifyChangesAllowed();
     if (a_processBeforeGeneticOperators) {
       m_preSelectors.addNaturalSelector(a_selector);
-      m_sizeNaturalSelectorsPre = m_preSelectors.size();
     }
     else {
       m_postSelectors.addNaturalSelector(a_selector);
-      m_sizeNaturalSelectorsPost = m_postSelectors.size();
     }
   }
 
@@ -1400,6 +1391,7 @@ public class Configuration
     return m_keepPopulationSizeConstant;
   }
 
+
   /**
    * Allows to keep the population size constant after one evolution, even if
    * there is no appropriate instance of NaturalSelector (such as
@@ -1415,6 +1407,17 @@ public class Configuration
    */
   public void setKeepPopulationSizeConstant(boolean a_keepPopSizeConstant) {
     m_keepPopulationSizeConstant = a_keepPopSizeConstant;
+  }
+
+  public void setSelectFromPrevGen(double a_percentage) {
+    if (a_percentage < 0 || a_percentage > 1.00) {
+      throw new IllegalArgumentException("Argument must be between 0 and 1");
+    }
+    m_selectFromPrevGen = a_percentage;
+  }
+
+  public double getSelectFromPrevGen() {
+    return m_selectFromPrevGen;
   }
 
   /**
@@ -1579,6 +1582,7 @@ public class Configuration
       result.m_geneticOperators = (List)doClone(m_geneticOperators);
       result.m_keepPopulationSizeConstant = m_keepPopulationSizeConstant;
       result.m_minPercentageSizePopulation = m_minPercentageSizePopulation;
+      result.m_selectFromPrevGen = m_selectFromPrevGen;
       result.m_objectiveFunction = (FitnessFunction)doClone(m_objectiveFunction);
       result.m_postSelectors = (ChainOfSelectors)doClone(m_postSelectors);
       result.m_preSelectors = (ChainOfSelectors)doClone(m_preSelectors);
@@ -1586,8 +1590,6 @@ public class Configuration
       result.m_randomGenerator = (RandomGenerator)doClone(m_randomGenerator);
       result.m_sampleChromosome = (IChromosome)m_sampleChromosome.clone();
       result.m_settingsLocked = m_settingsLocked;
-      result.m_sizeNaturalSelectorsPost = m_sizeNaturalSelectorsPost;
-      result.m_sizeNaturalSelectorsPre = m_sizeNaturalSelectorsPre;
       // Configurable data.
       // ------------------
       result.m_config = new ConfigurationConfigurable();
@@ -1668,9 +1670,6 @@ public class Configuration
             .append(m_chromosomeSize, other.m_chromosomeSize)
             .append(m_preSelectors, other.m_preSelectors)
             .append(m_postSelectors, other.m_postSelectors)
-            .append(m_sizeNaturalSelectorsPre, other.m_sizeNaturalSelectorsPre)
-            .append(m_sizeNaturalSelectorsPost,
-                    other.m_sizeNaturalSelectorsPost)
             .append(m_preserveFittestIndividual,
                     other.m_preserveFittestIndividual)
 //            .append(m_conHandler, other.m_conHandler)
@@ -1679,6 +1678,7 @@ public class Configuration
                     other.m_keepPopulationSizeConstant)
             .append(m_minPercentageSizePopulation,
                     other.m_minPercentageSizePopulation)
+            .append(m_selectFromPrevGen,other.m_selectFromPrevGen)
             .append(m_generationNr, other.m_generationNr)
             .append(m_name, other.m_name)
             .append(m_settingsLocked, other.m_settingsLocked)
