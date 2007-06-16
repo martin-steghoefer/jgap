@@ -1,5 +1,6 @@
 3.2
 -----------------------------------------------------------
+* Ported JGAP from Java 1.4 to Java 5
 * Introduced breeder (interface IBreeder, base class
   BreederBase, class GABreeder) to simplify evolution
   outside/without Genotype --> grid
