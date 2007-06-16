@@ -18,7 +18,7 @@ package org.jgap.impl.job;
 public abstract class JobBase
     implements IJob {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private JobData m_data;
 
@@ -45,7 +45,6 @@ public abstract class JobBase
   }
 
   public JobData getJobData() {
-    /**@todo maybe we should make the returned m_data immutable (via cloning, e.g.)*/
     return m_data;
   }
 
