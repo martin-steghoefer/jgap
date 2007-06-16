@@ -32,13 +32,13 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.100 $";
+  private final static String CVS_REVISION = "$Revision: 1.101 $";
 
   /**
    * The current Configuration instance.
    * @since 1.0
    */
-  private transient Configuration m_activeConfiguration;
+  private Configuration m_activeConfiguration;
 
   private transient static Configuration m_staticConfiguration;
 
@@ -213,7 +213,7 @@ public class Genotype
    * configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population. Note
    * that the population size not always remains constant (dependent on the
-   * NaturalSelectors used!).<p>
+   * NaturalSelectors used!).
    * To consecutively call this method, use evolve(int)!!!
    *
    * @author Neil Rotstan
@@ -221,111 +221,9 @@ public class Genotype
    * @since 1.0
    */
   public synchronized void evolve() {
-    if (m_activeConfiguration == null) {
-      throw new IllegalStateException(
-          "The Configuration object must be set on this"
-          + " Genotype prior to evolution.");
-    }
-    // Adjust population size to configured size (if wanted).
-    // Theoretically, this should be done at the end of this method.
-    // But for optimization issues it is not. If it is the last call to
-    // evolve() then the resulting population possibly contains more
-    // chromosomes than the wanted number. But this is no bad thing as
-    // more alternatives mean better chances having a fit candidate.
-    // If it is not the last call to evolve() then the next call will
-    // ensure the correct population size by calling keepPopSizeConstant.
-    // ------------------------------------------------------------------
-    if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
-      keepPopSizeConstant(getPopulation(),
-                          m_activeConfiguration.getPopulationSize());
-    }
-    int currentPopSize = getPopulation().size();
-    // Ensure all chromosomes all updated.
-    // -----------------------------------
-    for (int i = 0; i < currentPopSize; i++) {
-      IChromosome chrom = getPopulation().getChromosome(i);
-      chrom.setNewlyCreated(false);
-    }
-
-    // Apply certain NaturalSelectors before GeneticOperators will be applied.
-    // -----------------------------------------------------------------------
-    applyNaturalSelectors(true);
-    // Execute all of the Genetic Operators.
-    // -------------------------------------
-    applyGeneticOperators();
-    // Reset fitness value of genetically operated chromosomes.
-    // Normally, this should not be necessary as the Chromosome
-    // class initializes each newly created chromosome with
-    // FitnessFunction.NO_FITNESS_VALUE. But who knows which
-    // Chromosome implementation is used...
-    // --------------------------------------------------------
-    int originalPopSize = m_activeConfiguration.getPopulationSize();
-    currentPopSize = getPopulation().size();
-    for (int i = originalPopSize; i < currentPopSize; i++) {
-      IChromosome chrom = getPopulation().getChromosome(i);
-      chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
-    }
-    // Apply certain NaturalSelectors after GeneticOperators have been applied.
-    // ------------------------------------------------------------------------
-    applyNaturalSelectors(false);
-    // If a bulk fitness function has been provided, call it.
-    // ------------------------------------------------------
-    BulkFitnessFunction bulkFunction =
-        m_activeConfiguration.getBulkFitnessFunction();
-    if (bulkFunction != null) {
-      bulkFunction.evaluate(getPopulation());
-    }
-    // Fill up population randomly if size dropped below specified percentage
-    // of original size.
-    // ----------------------------------------------------------------------
-    if (m_activeConfiguration.getMinimumPopSizePercent() > 0) {
-      int sizeWanted = m_activeConfiguration.getPopulationSize();
-      int popSize;
-      int minSize = (int) Math.round(sizeWanted *
-                                     (double) getConfiguration().
-                                     getMinimumPopSizePercent()
-                                     / 100);
-      popSize = getPopulation().size();
-      if (popSize < minSize) {
-        IChromosome newChrom;
-        IChromosome sampleChrom = m_activeConfiguration.getSampleChromosome();
-        Class sampleChromClass = sampleChrom.getClass();
-        IInitializer chromIniter = m_activeConfiguration.getJGAPFactory().
-            getInitializerFor(sampleChrom, sampleChromClass);
-        while (getPopulation().size() < minSize) {
-          try {
-            newChrom = (IChromosome) chromIniter.perform(sampleChrom,
-                sampleChromClass, null);
-            getPopulation().addChromosome(newChrom);
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
-          }
-        }
-      }
-    }
-    if (m_activeConfiguration.isPreserveFittestIndividual()) {
-      IChromosome fittest = getFittestChromosome(0,
-          m_activeConfiguration.
-          getPopulationSize() - 1);
-      if (m_activeConfiguration.isKeepPopulationSizeConstant()) {
-        keepPopSizeConstant(getPopulation(),
-                            m_activeConfiguration.getPopulationSize());
-      }
-      // Determine the fittest chromosome in the population.
-      // ---------------------------------------------------
-      if (!getPopulation().contains(fittest)) {
-        // Re-add fittest chromosome to current population.
-        // ------------------------------------------------
-        getPopulation().addChromosome(fittest);
-      }
-    }
-    // Increase number of generation.
-    // ------------------------------
-    m_activeConfiguration.incrementGenerationNr();
-    // Fire an event to indicate we've performed an evolution.
-    // -------------------------------------------------------
-    m_activeConfiguration.getEventManager().fireGeneticEvent(
-        new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
+    IBreeder breeder = getConfiguration().getBreeder();
+    Population newPop = breeder.evolve(getPopulation(), getConfiguration());
+    setPopulation(newPop);
   }
 
   /**
@@ -516,11 +414,17 @@ public class Genotype
       int selectorSize = m_activeConfiguration.getNaturalSelectorsSize(
           a_processBeforeGeneticOperators);
       if (selectorSize > 0) {
-        int m_population_size = m_activeConfiguration.getPopulationSize();
-        int m_single_selection_size;
-        Population m_new_population;
-        m_new_population = new Population(m_activeConfiguration,
-            m_population_size);
+        int population_size = m_activeConfiguration.getPopulationSize();
+        if (a_processBeforeGeneticOperators) {
+          // Only select part of the previous population into this generation.
+          // -----------------------------------------------------------------
+          population_size = (int) Math.round(population_size *
+              getConfiguration().getSelectFromPrevGen());
+        }
+        int single_selection_size;
+        Population new_population;
+        new_population = new Population(m_activeConfiguration,
+                                        population_size);
         NaturalSelector selector;
         // Repopulate the population of chromosomes with those selected
         // by the natural selector. Iterate over all natural selectors.
@@ -531,21 +435,21 @@ public class Genotype
           if (i == selectorSize - 1 && i > 0) {
             // Ensure the last NaturalSelector adds the remaining Chromosomes.
             // ---------------------------------------------------------------
-            m_single_selection_size = m_population_size - getPopulation().size();
+            single_selection_size = population_size - getPopulation().size();
           }
           else {
-            m_single_selection_size = m_population_size / selectorSize;
+            single_selection_size = population_size / selectorSize;
           }
           // Do selection of Chromosomes.
           // ----------------------------
-          selector.select(m_single_selection_size, getPopulation(),
-                          m_new_population);
+          selector.select(single_selection_size, getPopulation(),
+                          new_population);
           // Clean up the natural selector.
           // ------------------------------
           selector.empty();
         }
         setPopulation(new Population(m_activeConfiguration));
-        getPopulation().addChromosomes(m_new_population);
+        getPopulation().addChromosomes(new_population);
       }
     } catch (InvalidConfigurationException iex) {
       // This exception should never be reached
@@ -664,6 +568,7 @@ public class Genotype
    * @since 2.5
    */
   protected void keepPopSizeConstant(Population a_pop, int a_maxSize) {
+    /**@todo use StandardPostSelector instead?*/
     int popSize = a_pop.size();
     // See request  1213752.
     // ---------------------
@@ -696,12 +601,17 @@ public class Genotype
     // -----------------------------------------
     List result = new Vector();
     Population[] pops = a_splitter.split(getPopulation());
-    IBreeder breeder = getConfiguration().getBreeder();
     // Feed the population chunks into different evolve jobs.
     // ------------------------------------------------------
     for (int i = 0; i < pops.length; i++) {
-      Configuration newConf = (Configuration)getConfiguration().clone();
+      Configuration newConf = (Configuration) getConfiguration().clone();
       EvolveData data = new EvolveData(newConf);
+      if (pops[i] == null) {
+        throw new IllegalStateException("Population must no be null"
+                                        + " (Index: " + i
+                                        + ", Splitter: "
+                                        + a_splitter.getClass().getName() + ")");
+      }
       data.setPopulation(pops[i]);
       data.setBreeder(newConf.getBreeder());
       IEvolveJob evolver = new EvolveJob(data);
@@ -725,7 +635,7 @@ public class Genotype
 //      a_merger.mergePopulations()
       List goodOnes = pop.determineFittestChromosomes(3);
       for (int j = 0; j < goodOnes.size(); j++) {
-        IChromosome goodOne = (IChromosome)goodOnes.get(j);
+        IChromosome goodOne = (IChromosome) goodOnes.get(j);
         target.addChromosome(goodOne);
       }
     }
