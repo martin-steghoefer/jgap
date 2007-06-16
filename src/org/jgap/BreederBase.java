@@ -20,7 +20,7 @@ import java.util.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public BreederBase() {
   }
@@ -28,9 +28,12 @@ public abstract class BreederBase
   /**
    * Applies all NaturalSelectors registered with the Configuration.
    *
+   * @param a_config the configuration to use
+   * @param a_pop the population to use as input
    * @param a_processBeforeGeneticOperators true apply NaturalSelectors
    * applicable before GeneticOperators, false: apply the ones applicable
    * after GeneticOperators
+   * @return selected part of input population
    *
    * @author Klaus Meffert
    * @since 3.2
@@ -45,10 +48,14 @@ public abstract class BreederBase
       int selectorSize = a_config.getNaturalSelectorsSize(
           a_processBeforeGeneticOperators);
       if (selectorSize > 0) {
-        int m_population_size = a_config.getPopulationSize();
-        int m_single_selection_size;
+        int population_size = a_config.getPopulationSize();
+        // Only select part of the previous population into this generation.
+        // -----------------------------------------------------------------
+        population_size = (int) Math.round(population_size *
+            a_config.getSelectFromPrevGen());
+        int single_selection_size;
         Population new_population = new Population(a_config,
-            m_population_size);
+            population_size);
         NaturalSelector selector;
         // Repopulate the population of chromosomes with those selected
         // by the natural selector. Iterate over all natural selectors.
@@ -59,15 +66,15 @@ public abstract class BreederBase
           if (i == selectorSize - 1 && i > 0) {
             // Ensure the last NaturalSelector adds the remaining Chromosomes.
             // ---------------------------------------------------------------
-            m_single_selection_size = m_population_size - a_pop.size();
+            single_selection_size = population_size - a_pop.size();
           }
           else {
-            m_single_selection_size = m_population_size / selectorSize;
+            single_selection_size = population_size / selectorSize;
           }
           // Do selection of chromosomes.
           // ----------------------------
           /**@todo utilize jobs: integrate job into NaturalSelector!*/
-          selector.select(m_single_selection_size, a_pop, new_population);
+          selector.select(single_selection_size, a_pop, new_population);
           // Clean up the natural selector.
           // ------------------------------
           selector.empty();
@@ -87,6 +94,9 @@ public abstract class BreederBase
 
   /**
    * Applies all GeneticOperators registered with the Configuration.
+   *
+   * @param a_config the configuration to use
+   * @param a_pop the population to use as input
    *
    * @author Klaus Meffert
    * @since 3.2
