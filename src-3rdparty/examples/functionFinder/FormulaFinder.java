@@ -29,7 +29,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -106,7 +106,7 @@ public class FormulaFinder {
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     // Selector.
     // ---------
-    conf.getNaturalSelectors(false).clear();
+    conf.removeNaturalSelectors(false);
     conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     // Read in related data.
     // ----------------------
