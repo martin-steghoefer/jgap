@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -65,6 +65,7 @@ public class BestChromosomesSelector
 
   /**
    * Using original rate of 1.0
+   *
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -202,6 +203,7 @@ public class BestChromosomesSelector
   /**
    * Determines whether doublette chromosomes may be added to the selector or
    * will be ignored.
+   *
    * @param a_doublettesAllowed true: doublette chromosomes allowed to be
    * added to the selector. FALSE: doublettes will be ignored and not added
    *
