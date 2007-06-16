@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public GABreeder() {
     super();
@@ -36,6 +36,19 @@ public class GABreeder
     if (config.isKeepPopulationSizeConstant()) {
       pop.keepPopSizeConstant();
     }
+    int currentPopSize = pop.size();
+    // Ensure all chromosomes are updated.
+    // -----------------------------------
+    BulkFitnessFunction bulkFunction =
+        config.getBulkFitnessFunction();
+    boolean bulkFitFunc = (bulkFunction != null);
+    for (int i = 0; i < currentPopSize; i++) {
+      IChromosome chrom = pop.getChromosome(i);
+      chrom.setNewlyCreated(false);
+      if (!bulkFitFunc) {
+        chrom.getFitnessValue();
+      }
+    }
     // Apply certain NaturalSelectors before GeneticOperators will be applied.
     // -----------------------------------------------------------------------
     pop = applyNaturalSelectors(config, pop, true);
@@ -49,7 +62,7 @@ public class GABreeder
     // Chromosome implementation is used...
     // --------------------------------------------------------
     int originalPopSize = config.getPopulationSize();
-    int currentPopSize = pop.size();
+    currentPopSize = pop.size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
@@ -59,7 +72,6 @@ public class GABreeder
     pop = applyNaturalSelectors(config, pop, false);
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
-    BulkFitnessFunction bulkFunction = config.getBulkFitnessFunction();
     if (bulkFunction != null) {
       /**@todo utilize jobs: bulk fitness function is not so important for a
        * prototype! */
@@ -102,8 +114,8 @@ public class GABreeder
       if (config.isKeepPopulationSizeConstant()) {
         pop.keepPopSizeConstant();
       }
-      // Determine the fittest chromosome in the population.
-      // ---------------------------------------------------
+      // Determine if all-time fittest chromosome is in the population.
+      // --------------------------------------------------------------
       if (!pop.contains(fittest)) {
         // Re-add fittest chromosome to current population.
         // ------------------------------------------------
