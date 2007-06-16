@@ -11,7 +11,6 @@ package org.jgap.impl.job;
 
 import org.jgap.*;
 import org.jgap.*;
-import org.jgap.event.*;
 import java.util.*;
 
 /**
@@ -27,7 +26,7 @@ import java.util.*;
 public class EvolveJob
     extends JobBase implements IEvolveJob {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public EvolveJob(JobData a_data) {
     super(a_data);
