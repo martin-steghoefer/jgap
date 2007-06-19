@@ -25,14 +25,14 @@ import org.jgap.distr.*;
 public class SimpleJobConsumer {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private List m_jobs = new Vector();
   private List m_results = new Vector();
 
   public void pushJobToGrid(IJob a_job) {
     m_jobs.add(a_job);
-    // Execute the job asynchronously
+    // Execute the job asynchronously.
     new Thread(a_job).start();
   }
 
@@ -89,7 +89,7 @@ public class SimpleJobConsumer {
     // Run evolution
     IPopulationSplitter popSplitter = new SimplePopulationSplitter(3);
     for (int i = 0; i < 50; i++) {
-      // Get jobs, encompass them in a griddable task ( only run() supported )
+      // Get jobs, encompass them in a griddable task (only run() supported)
       List evolves = genotype.getEvolves(popSplitter);
       Iterator it = evolves.iterator();
       while (it.hasNext()) {

@@ -33,7 +33,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**
    * The current crossover rate used by this crossover operator.
@@ -52,6 +52,7 @@ public class CrossoverOperator
    * This means that the crossover rate will be fixed at populationsize/2.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Chris Knowles
@@ -169,8 +170,8 @@ public class CrossoverOperator
       index2 = generator.nextInt(size);
       IChromosome chrom1 = a_population.getChromosome(index1);
       IChromosome chrom2 = a_population.getChromosome(index2);
-      // Verify that crossover allowed.
-      // ------------------------------
+      // Verify that crossover is allowed.
+      // ---------------------------------
       if (chrom1.isNewlyCreated() && chrom2.isNewlyCreated()) {
         // Crossing over two newly created chromosomes is not seen as helpful
         // here.
