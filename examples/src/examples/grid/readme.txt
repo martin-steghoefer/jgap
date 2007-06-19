@@ -16,14 +16,14 @@ Ensure that the given jar-files reside in the directories you specify! Each requ
 java -cp ".;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar" org.jgap.distr.grid.JGAPWorker -s SERVER -n myworker1
 
 Ensure that the given jar-files reside in the directories you specify! Each required jar-file is shipped with JGAP!
-Each worker must have a unique name --> specify it after the "-n" option
-Each worker must point to the SERVER's ip address --> specify it after the "-s" option instead of the above "SERVER"
+Each worker must have a unique name --> specify it after the "-n" option.
+Each worker must point to the SERVER's ip address --> specify it after the "-s" option instead of the above "SERVER".
 
 
 3. Start a client on a machine of your choice
 java -cp ".;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar" org.jgap.distr.grid.JGAPClient examples.grid.fitnessDistributed.GridConfiguration -s SERVER
 
-The client must point to the SERVER's ip address --> specify it after the "-s" option instead of the above "SERVER"
+The client must point to the SERVER's ip address --> specify it after the "-s" option instead of the above "SERVER".
 
 After starting the client the server receives a task from the client.
 After that the work is split into tasks and the started workers are asked by the server to compute them.
