@@ -12,7 +12,7 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
-import sun.misc.*;
+import java.util.concurrent.atomic.*;
 
 /**
  * Tests the CauchyRandomGenerator class.
@@ -23,7 +23,7 @@ import sun.misc.*;
 public class CauchyRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CauchyRandomGeneratorTest.class);

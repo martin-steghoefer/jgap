@@ -12,7 +12,7 @@ package org.jgap.impl;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
-import sun.misc.*;
+import java.util.concurrent.atomic.*;
 
 /**
  * Tests the GaussianRandomGenerator class.
@@ -23,7 +23,7 @@ import sun.misc.*;
 public class GaussianRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianRandomGeneratorTest.class);

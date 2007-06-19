@@ -11,7 +11,7 @@ package org.jgap.impl;
 
 import org.jgap.*;
 import junit.framework.*;
-import sun.misc.*;
+import java.util.concurrent.atomic.*;
 
 /**
  * Tests the StockRandomGenerator class.
@@ -22,7 +22,7 @@ import sun.misc.*;
 public class StockRandomGeneratorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StockRandomGeneratorTest.class);
