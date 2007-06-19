@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.60 $";
+  private final static String CVS_REVISION = "$Revision: 1.61 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -402,7 +402,8 @@ public class GenotypeTest
       throws Exception {
     Configuration config = new ConfigurationForTest();
     config.setKeepPopulationSizeConstant(false);
-    // Remove all natural selectors
+    // Remove all natural selectors.
+    // -----------------------------
     config.removeNaturalSelectors(false);
     config.removeNaturalSelectors(true);
     BestChromosomesSelector bcs = new BestChromosomesSelector(config);
@@ -416,6 +417,55 @@ public class GenotypeTest
   }
 
   /**
+   * Test that size of selected sub-population size is the fraction configured
+   * when using a BCS as preselector.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testEvolve_2_3()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    config.setKeepPopulationSizeConstant(false);
+    // Select only 3/4 of previous generation and and thus try mutate only
+    // on 3/4 of the chromosomes in the population.
+    config.setSelectFromPrevGen(0.75d);
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    // A zero in this sequence represents a gene to be mutated.
+    // --------------------------------------------------------
+    rand.setNextIntSequence(new int[] {
+                            // First Chromosome
+                            1, 0, 1,
+                            // Second Chromosome
+                            1, 1, 1,
+                            // Third Chromosome
+                            1, 1, 1,
+                            // Fourth Chromosome
+                            1, 1, 1
+    });
+    rand.setNextDouble(0.7d);
+    config.setRandomGenerator(rand);
+    // Remove all natural selectors.
+    // -----------------------------
+    config.removeNaturalSelectors(false);
+    config.removeNaturalSelectors(true);
+    BestChromosomesSelector bcs = new BestChromosomesSelector(config);
+    bcs.setOriginalRate(1);
+    bcs.setDoubletteChromosomesAllowed(true);
+    config.addNaturalSelector(bcs, true);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    int popSize = config.getPopulationSize();
+    genotype.evolve();
+    IChromosome c = genotype.getPopulation().getChromosome(4);
+    assertEquals(FitnessFunction.NO_FITNESS_VALUE, c.getFitnessValueDirectly(),
+                 DELTA);
+    assertEquals( (int) Math.round(popSize * config.getSelectFromPrevGen() + 1),
+                       genotype.getPopulation().size());
+  }
+
+  /**
    * Test that multiple NaturalSelector's work without error
    * @throws Exception
    *
@@ -425,8 +475,9 @@ public class GenotypeTest
   public void testEvolve_2_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
-    // Add another NaturalSelector (others already exist within
-    // ConfigurationForTest)
+    // Add another NaturalSelector (some already exist within
+    // ConfigurationForTest).
+    // ------------------------------------------------------
     BestChromosomesSelector bcs = new BestChromosomesSelector(config);
     bcs.setOriginalRate(1);
     bcs.setDoubletteChromosomesAllowed(true);
@@ -466,6 +517,7 @@ public class GenotypeTest
   public void testEvolve_3_2()
       throws Exception {
     Configuration config = new ConfigurationForTest();
+    config.setSelectFromPrevGen(1.0d);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
