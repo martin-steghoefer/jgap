@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -393,7 +393,7 @@ public class ConfigurationTest
     try {
       conf.getNaturalSelector(true, 0);
       fail();
-    } catch (IllegalArgumentException iex) {
+    } catch (ArrayIndexOutOfBoundsException iex) {
       ; //this is OK
     }
   }
@@ -408,7 +408,7 @@ public class ConfigurationTest
     try {
       conf.getNaturalSelector(false, 0);
       fail();
-    } catch (IllegalArgumentException iex) {
+    } catch (ArrayIndexOutOfBoundsException iex) {
       ; //this is OK
     }
   }
@@ -484,9 +484,8 @@ public class ConfigurationTest
     conf.addNaturalSelector(selector, false);
     conf.getNaturalSelectors(false).clear();
     conf.addNaturalSelector(selector, false);
-    Integer i = (Integer) privateAccessor.getField(conf,
-        "m_sizeNaturalSelectorsPost");
-    assertEquals(1, i.intValue());
+    int i = conf.getNaturalSelectors(false).size();
+    assertEquals(1, i);
   }
 
   /**
@@ -500,9 +499,8 @@ public class ConfigurationTest
     conf.addNaturalSelector(selector, true);
     conf.getNaturalSelectors(true).clear();
     conf.addNaturalSelector(selector, true);
-    Integer i = (Integer) privateAccessor.getField(conf,
-        "m_sizeNaturalSelectorsPre");
-    assertEquals(1, i.intValue());
+    int i = conf.getNaturalSelectors(true).size();
+    assertEquals(1, i);
   }
 
   /**

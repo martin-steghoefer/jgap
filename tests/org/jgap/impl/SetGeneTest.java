@@ -13,7 +13,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the BooleanGene class.
+ * Tests the SetGene class.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -21,7 +21,7 @@ import junit.framework.*;
 public class SetGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SetGeneTest.class);

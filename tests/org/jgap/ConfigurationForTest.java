@@ -22,12 +22,13 @@ import org.jgap.impl.*;
 public class ConfigurationForTest
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public final static double STATIC_FITNESS_VALUE = 2.3d;
 
   /**
-   * Default constructor
+   * Default constructor.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
