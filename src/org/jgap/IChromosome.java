@@ -14,6 +14,8 @@ import org.jgap.util.*;
 
 /**
  * Interface for chromosomes.
+ * Normally, you would start using BaseChromosome which implements this
+ * interface to build your own chromosome classes.
  *
  * @author Klaus Meffert
  * @since 2.6
@@ -21,7 +23,7 @@ import org.jgap.util.*;
 public interface IChromosome
     extends Comparable, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Constants for toString()
@@ -228,19 +230,56 @@ public interface IChromosome
   Configuration getConfiguration();
 
   /**
-   * @param a_newlyCreated true: Chromosome newly created in this generation
+   * Increases the number of evolutionary rounds of chromosome in which it has
+   * not been changed by one.
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  void setNewlyCreated(boolean a_newlyCreated);
+  void increaseAge();
 
   /**
-   * @return true: Chromosome newly created in this generation. This means it
-   * does not need being cross over with another newly created one.
+   * Reset age of chromosome because it has been changed.
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  boolean isNewlyCreated();
+  void resetAge();
+
+  /**
+   * @return 0: Chromosome newly created in this generation. This means it
+   * does not need being crossed over with another newly created one
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  int getAge();
+
+  /**
+   * Increase information of number of genetic operations performed on
+   * chromosome in current evolution round.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  void increaseOperatedOn();
+
+  /**
+   * Resets the information of how many genetic operators have been performed
+   * on the chromosome in the current round of evolution.
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   *
+   */
+  void resetOperatedOn();
+
+  /**
+   * @return number of genetic operations performed on chromosome in current
+   * evolution round
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  int operatedOn();
 }
