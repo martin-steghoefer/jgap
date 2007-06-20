@@ -35,7 +35,7 @@ import org.jgap.util.*;
 public abstract class FitnessFunction
     implements Serializable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -58,7 +58,7 @@ public abstract class FitnessFunction
    * @author Klaus Meffert
    * @since 2.0 (until 1.1: return type int)
    */
-  public final double getFitnessValue(final IChromosome a_subject) {
+  public double getFitnessValue(final IChromosome a_subject) {
     // Delegate to the evaluate() method to actually compute the
     // fitness value. If the returned value is less than one,
     // then we throw a runtime exception.
