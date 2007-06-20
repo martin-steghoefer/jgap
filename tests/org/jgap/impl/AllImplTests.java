@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import org.jgap.impl.salesman.*;
 import org.jgap.impl.fitness.*;
+import org.jgap.impl.job.*;
 
 import junit.framework.*;
 
@@ -24,7 +25,7 @@ public class AllImplTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllImplTests");
@@ -69,6 +70,8 @@ public class AllImplTests
     suite.addTest(AllFitnessTests.suite());
 
     suite.addTest(AllSalesmanTests.suite());
+
+    suite.addTest(AllJobTests.suite());
     return suite;
   }
 }
