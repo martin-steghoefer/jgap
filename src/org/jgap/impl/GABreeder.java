@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public GABreeder() {
     super();
@@ -23,7 +23,16 @@ public class GABreeder
 
   public Population evolve(Population a_pop, Configuration config) {
     Population pop = a_pop;
-//    Configuration config = a_config;
+    int originalPopSize = config.getPopulationSize();
+    IChromosome fittest = null;
+    // Select fittest chromosome in case it should be preserved and we are
+    // not in the very first generation.
+    // -------------------------------------------------------------------
+    if (config.isPreserveFittestIndividual() && config.getGenerationNr() > 0) {
+      /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
+       * computation*/
+      fittest = pop.determineFittestChromosome(0, originalPopSize - 1);
+    }
     // Adjust population size to configured size (if wanted).
     // Theoretically, this should be done at the end of this method.
     // But for optimization issues it is not. If it is the last call to
@@ -44,13 +53,12 @@ public class GABreeder
     boolean bulkFitFunc = (bulkFunction != null);
     for (int i = 0; i < currentPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
-      chrom.setNewlyCreated(false);
       if (!bulkFitFunc) {
         chrom.getFitnessValue();
       }
     }
-    // Apply certain NaturalSelectors before GeneticOperators will be applied.
-    // -----------------------------------------------------------------------
+    // Apply certain NaturalSelectors before GeneticOperators will be executed.
+    // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(config, pop, true);
     // Execute all of the Genetic Operators.
     // -------------------------------------
@@ -61,12 +69,28 @@ public class GABreeder
     // FitnessFunction.NO_FITNESS_VALUE. But who knows which
     // Chromosome implementation is used...
     // --------------------------------------------------------
-    int originalPopSize = config.getPopulationSize();
     currentPopSize = pop.size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
+      // Mark chromosome as new-born.
+      // ----------------------------
+      chrom.resetAge();
+      // Mark chromosome as being operated on.
+      // -------------------------------------
+      chrom.increaseOperatedOn();
     }
+    // Increase age of all chromosomes which are not modified by genetic
+    // operations.
+    // -----------------------------------------------------------------
+    for (int i = 0; i < originalPopSize; i++) {
+      IChromosome chrom = pop.getChromosome(i);
+      chrom.increaseAge();
+      // Mark chromosome as not being operated on.
+      // -----------------------------------------
+      chrom.resetOperatedOn();
+    }
+
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(config, pop, false);
@@ -106,21 +130,12 @@ public class GABreeder
         }
       }
     }
-    if (config.isPreserveFittestIndividual()) {
-      /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
-       * computation*/
-      IChromosome fittest = pop.determineFittestChromosome(0,
-          config.getPopulationSize() - 1);
-      if (config.isKeepPopulationSizeConstant()) {
-        pop.keepPopSizeConstant();
-      }
-      // Determine if all-time fittest chromosome is in the population.
-      // --------------------------------------------------------------
-      if (!pop.contains(fittest)) {
-        // Re-add fittest chromosome to current population.
-        // ------------------------------------------------
-        pop.addChromosome(fittest);
-      }
+    // Determine if all-time fittest chromosome is in the population.
+    // --------------------------------------------------------------
+    if (fittest != null && !pop.contains(fittest)) {
+      // Re-add fittest chromosome to current population.
+      // ------------------------------------------------
+      pop.addChromosome(fittest);
     }
     // Increase number of generation.
     // ------------------------------
