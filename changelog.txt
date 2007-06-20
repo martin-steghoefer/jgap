@@ -1,6 +1,7 @@
 3.2
 -----------------------------------------------------------
 * Ported JGAP from Java 1.4 to Java 5
+* Enhanced architecture BaseChromosome, Chromosome a lot
 * Introduced breeder (interface IBreeder, base class
   BreederBase, class GABreeder) to simplify evolution
   outside/without Genotype --> grid
@@ -9,6 +10,8 @@
   parameter does not lead to program abortion any more;
   auto-consider NOP if necessary for creating valid
   programs...)
+* Enhancee evolution loop
+* Introduced CachedFitnessFunction
 * Enabled GPConfiguration for grid computing
 * Better ADF support in Genetic Programming
 * Added GP function ExchangeMemory and others
