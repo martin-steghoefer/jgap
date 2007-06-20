@@ -16,7 +16,7 @@ import java.util.*;
  * A GeneticOperator represents an operation that takes place on
  * a population of Chromosomes during the evolution process. Examples
  * of genetic operators include reproduction, crossover, and mutation.
- * This interface contains only one method--operate()--which is responsible
+ * This interface contains only one method - operate() - which is responsible
  * for performing the genetic operation on the current population of
  * Chromosomes.
  *
@@ -28,7 +28,7 @@ public interface GeneticOperator
     extends Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.13 $";
+  final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators

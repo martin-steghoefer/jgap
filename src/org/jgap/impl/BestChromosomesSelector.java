@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -53,6 +53,7 @@ public class BestChromosomesSelector
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -178,8 +179,8 @@ public class BestChromosomesSelector
       // Add existing Chromosome's to fill up the return
       // result to contain the desired number of Chromosome's.
       // -----------------------------------------------------
+      /**@todo replace this step by adding newly to create chromosomes*/
       for (int i = 0; i < toAdd; i++) {
-        /**@todo add ramdomization*/
         selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
         selectedChromosome.setIsSelectedForNextGeneration(true);
         a_to_pop.addChromosome(selectedChromosome);

@@ -20,7 +20,7 @@ import java.util.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public BreederBase() {
   }
@@ -79,16 +79,15 @@ public abstract class BreederBase
           // ------------------------------
           selector.empty();
         }
-//        Population result = new Population(a_config);
-//        result.addChromosomes(new_population);
         return new_population;
       }
       else {
         return a_pop;
       }
     } catch (InvalidConfigurationException iex) {
-      // This exception should never be reached
-      throw new IllegalStateException(iex.getMessage());
+      // This exception should never be reached.
+      // ---------------------------------------
+      throw new IllegalStateException(iex);
     }
   }
 
