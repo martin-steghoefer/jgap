@@ -38,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -111,7 +111,7 @@ public class MinimizingMakeChange {
     // -----------------------------------------------------------------
     Genotype population;
     try {
-      Document doc = XMLManager.readFile(new File("JGAPExample26.xml"));
+      Document doc = XMLManager.readFile(new File("JGAPExample32.xml"));
       population = XMLManager.getGenotypeFromDocument(conf, doc);
     }
     catch (UnsupportedRepresentationException uex) {
@@ -127,9 +127,13 @@ public class MinimizingMakeChange {
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
     // ---------------------------------------------------------------
+    long startTime = System.currentTimeMillis();
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("Total evolution time: " + ( endTime - startTime)
+                       + " ms");
     // Save progress to file. A new run of this example will then be able to
     // resume where it stopped before!
     // ---------------------------------------------------------------------
