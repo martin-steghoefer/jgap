@@ -21,8 +21,9 @@ import java.util.*;
  */
 public abstract class CachedFitnessFunction
     extends FitnessFunction {
+  /**@todo allow to restrict size of cache / age of entries*/
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // Cache with the previous results
   /**@todo implement trove maps*/
