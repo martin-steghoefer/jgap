@@ -16,9 +16,9 @@ package org.jgap;
  * @since 2.2
  */
 public abstract class BaseGene
-    implements Gene {
+    implements Gene, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -47,8 +47,7 @@ public abstract class BaseGene
    */
   private boolean m_compareAppData;
 
-  private
-  /*transient*/ Configuration m_configuration;
+  private Configuration m_configuration;
 
   /**
    * Constants for toString()
@@ -383,5 +382,14 @@ public abstract class BaseGene
    */
   public Configuration getConfiguration() {
     return m_configuration;
+  }
+
+  public String getBusinessKey() {
+    Object allele = getAllele();
+    String result = getClass().getName() + PERSISTENT_FIELD_DELIMITER;
+    if (allele == null) {
+      return result;
+    }
+    return result + allele.toString();
   }
 }
