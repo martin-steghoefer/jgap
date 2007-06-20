@@ -45,10 +45,7 @@
  */
 package org.jgap;
 
-import java.lang.reflect.*;
 import java.util.*;
-import java.io.*;
-import java.net.*;
 
 /**
  * Chromosomes represent potential solutions and consist of a fixed-length
@@ -65,9 +62,9 @@ import java.net.*;
  * @since 1.0
  */
 public class Chromosome
-    extends BaseChromosome implements IPersistentRepresentation {
+    extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.91 $";
+  private final static String CVS_REVISION = "$Revision: 1.92 $";
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -85,11 +82,6 @@ public class Chromosome
    * IMultiObjective with that)
    */
   private List m_multiObjective;
-
-  /**
-   * The array of Genes contained in this Chromosome.
-   */
-  private Gene[] m_genes;
 
   /**
    * Keeps track of whether or not this Chromosome has been selected by
@@ -124,29 +116,6 @@ public class Chromosome
    * @since 2.5
    */
   private IGeneConstraintChecker m_geneAlleleChecker;
-
-  /**
-   * This field separates gene class name from the gene persistent representation
-   * string. '*' does not work properly with URLEncoder!
-   */
-  public final static String GENE_DELIMITER = "#";
-
-  /**
-   * Represents the heading delimiter that is used to separate genes in the
-   * persistent representation of Chromosome instances.
-   */
-  public final static String GENE_DELIMITER_HEADING = "<";
-
-  /**
-   * Represents the closing delimiter that is used to separate genes in the
-   * persistent representation of Chromosome instances.
-   */
-  public final static String GENE_DELIMITER_CLOSING = ">";
-
-  /**
-   * Separates chromosome-related information.
-   */
-  public final static String CHROM_DELIMITER = "#";
 
   /**
    * Default constructor, only provided for dynamic instantiation.<p>
@@ -214,7 +183,7 @@ public class Chromosome
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
     }
-    m_genes = new Gene[a_desiredSize];
+    setGenes(new Gene[a_desiredSize]);
   }
 
   /**
@@ -262,8 +231,9 @@ public class Chromosome
     // Populate the array of genes it with new Gene instances
     // created from the sample gene.
     // ------------------------------------------------------
-    for (int i = 0; i < m_genes.length; i++) {
-      m_genes[i] = a_sampleGene.newGene();
+    int size = size();
+    for (int i = 0; i < size; i++) {
+      setGene(i, a_sampleGene.newGene());
     }
   }
 
@@ -283,7 +253,7 @@ public class Chromosome
       throws InvalidConfigurationException {
     this(a_configuration, a_initialGenes == null ? 0 : a_initialGenes.length);
     checkGenes(a_initialGenes);
-    m_genes = a_initialGenes;
+    setGenes(a_initialGenes);
   }
 
   /**
@@ -307,7 +277,7 @@ public class Chromosome
       throws InvalidConfigurationException {
     this(a_configuration, a_initialGenes.length);
     checkGenes(a_initialGenes);
-    m_genes = a_initialGenes;
+    setGenes(a_initialGenes);
     setConstraintChecker(a_constraintChecker);
   }
 
@@ -369,7 +339,7 @@ public class Chromosome
       if (copy != null) {
         Gene[] genes = copy.getGenes();
         for (int i = 0; i < size(); i++) {
-          genes[i].setAllele(m_genes[i].getAllele());
+          genes[i].setAllele(getGene(i).getAllele());
         }
       }
     }
@@ -384,8 +354,8 @@ public class Chromosome
         if (size > 0) {
           Gene[] copyOfGenes = new Gene[size];
           for (int i = 0; i < copyOfGenes.length; i++) {
-            copyOfGenes[i] = m_genes[i].newGene();
-            copyOfGenes[i].setAllele(m_genes[i].getAllele());
+            copyOfGenes[i] = getGene(i).newGene();
+            copyOfGenes[i].setAllele(getGene(i).getAllele());
           }
           // Now construct a new Chromosome with the copies of the genes and
           // return it. Also clone the IApplicationData object.
@@ -442,56 +412,6 @@ public class Chromosome
       // No cloning supported, so just return the reference.
       // ---------------------------------------------------
       return a_object;
-    }
-  }
-
-  /**
-   * Returns the Gene at the given index (locus) within the Chromosome. The
-   * first gene is at index zero and the last gene is at the index equal to
-   * the size of this Chromosome - 1.
-   *
-   * @param a_desiredLocus index of the gene value to be returned
-   * @return Gene at the given index
-   *
-   * @author Neil Rotstan
-   * @since 1.0
-   */
-  public synchronized Gene getGene(int a_desiredLocus) {
-    return m_genes[a_desiredLocus];
-  }
-
-  /**
-   * Retrieves the set of genes that make up this Chromosome. This method
-   * exists primarily for the benefit of GeneticOperators that require the
-   * ability to manipulate Chromosomes at a low level.
-   *
-   * @return an array of the Genes contained within this Chromosome
-   *
-   * @author Neil Rotstan
-   * @since 1.0
-   */
-  public synchronized Gene[] getGenes() {
-    return m_genes;
-  }
-
-  /**
-   * Returns the size of this Chromosome (the number of genes it contains).
-   * A Chromosome's size is constant and will not change, until setGenes(...)
-   * is used.
-   *
-   * @return number of genes contained within this Chromosome instance
-   *
-   * @author Neil Rotstan
-   * @author Klaus Meffert
-   * @since 1.0
-   */
-  public int size() {
-    if (m_genes == null) {
-      // only possible when using default constructor
-      return 0;
-    }
-    else {
-      return m_genes.length;
     }
   }
 
@@ -603,15 +523,16 @@ public class Chromosome
     representation.append("[");
     // Append the representations of each of the genes' alleles.
     // ---------------------------------------------------------
-    for (int i = 0; i < m_genes.length; i++) {
+    int size = size();
+    for (int i = 0; i < size; i++) {
       if (i > 0) {
         representation.append(", ");
       }
-      if (m_genes[i] == null) {
+      if (getGene(i) == null) {
         representation.append("null");
       }
       else {
-        representation.append(m_genes[i].toString());
+        representation.append(getGene(i).toString());
       }
     }
     representation.append("]");
@@ -624,189 +545,6 @@ public class Chromosome
     }
     representation.append(", " + S_APPLICATION_DATA + ":" + appData);
     return representation.toString();
-  }
-
-  /**
-   * Returns a persistent representation of this chromosome, see interface Gene
-   * for description. Similar to CompositeGene's routine. But does not include
-   * all information of the chromosome (yet).
-   *
-   * @return string representation of this Chromosome's relevant parts of its
-   * current state
-   * @throws UnsupportedOperationException
-   *
-   * @author Klaus Meffert
-   * @since 3.2
-   */
-  public String getPersistentRepresentation() {
-    StringBuffer b = new StringBuffer();
-    // Persist the chromosome's fitness value.
-    // ---------------------------------------
-    b.append(m_fitnessValue);
-    b.append(CHROM_DELIMITER);
-    // Persist the genes.
-    b.append(m_genes.length);
-    b.append(CHROM_DELIMITER);
-    Gene gene;
-    for (int i = 0; i < m_genes.length; i++) {
-      gene = m_genes[i];
-      b.append(GENE_DELIMITER_HEADING);
-      try {
-        b.append(URLEncoder.encode(gene.getClass().getName()
-                                   + GENE_DELIMITER
-                                   + gene.getPersistentRepresentation()
-                                   , "UTF-8"));
-      }
-      catch (UnsupportedEncodingException uex) {
-        throw new RuntimeException("UTF-8 should always be supported!", uex);
-      }
-      b.append(GENE_DELIMITER_CLOSING);
-    }
-    return b.toString();
-  }
-
-  /**
-   * Counterpart of getPersistentRepresentation.
-   *
-   * @param a_representation the string representation retrieved from a prior
-   * call to the getPersistentRepresentation() method
-   *
-   * @throws UnsupportedRepresentationException
-   *
-   * @author Klaus Meffert
-   * @since 3.2
-   */
-  public void setValueFromPersistentRepresentation(String a_representation)
-      throws UnsupportedRepresentationException {
-    if (a_representation != null) {
-      try {
-        List r = split(a_representation);
-        String g;
-        // Obtain fitness value.
-        // ---------------------
-        g = URLDecoder.decode( (String) r.get(0), "UTF-8");
-        setFitnessValue(Double.parseDouble(g));
-        r.remove(0);/**@todo we can do this faster!*/
-        // Obtain number of genes.
-        // -----------------------
-        g = URLDecoder.decode( (String) r.get(0), "UTF-8");
-        int count = Integer.parseInt(g);
-        m_genes = new Gene[count];
-        r.remove(0);/**@todo we can do this faster!*/
-        // Obtain the genes.
-        // -----------------
-        Iterator iter = r.iterator();
-        StringTokenizer st;
-        String clas;
-        String representation;
-        Gene gene;
-        int index = 0;
-        while (iter.hasNext()) {
-          g = URLDecoder.decode( (String) iter.next(), "UTF-8");
-          st = new StringTokenizer(g, GENE_DELIMITER);
-          if (st.countTokens() != 2)
-            throw new UnsupportedRepresentationException("In " + g + ", " +
-                "expecting two tokens, separated by " + GENE_DELIMITER);
-          clas = st.nextToken();
-          representation = st.nextToken();
-          gene = createGene(clas, representation);
-          m_genes[index++] = gene;
-        }
-      }
-      catch (Exception ex) {
-        throw new UnsupportedRepresentationException(ex.toString());
-      }
-    }
-  }
-
-  /**
-   * Creates a new Gene instance.<p>
-   * Taken from CompositeGene.
-   *
-   * @param a_geneClassName name of the gene class
-   * @param a_persistentRepresentation persistent representation of the gene to
-   * create (could be obtained via getPersistentRepresentation)
-   *
-   * @return newly created gene
-   * @throws Exception
-   *
-   * @author Klaus Meffert
-   * @since 3.2
-   */
-  protected Gene createGene(String a_geneClassName,
-                            String a_persistentRepresentation)
-      throws Exception {
-    Class geneClass = Class.forName(a_geneClassName);
-    Constructor constr = geneClass.getConstructor(new Class[] {Configuration.class});
-    Gene gene = (Gene) constr.newInstance(new Object[] {getConfiguration()});
-    gene.setValueFromPersistentRepresentation(a_persistentRepresentation);
-    return gene;
-  }
-
-  /**
-   * Splits the input a_string into individual gene representations.<p>
-   * Taken and adapted from CompositeGene.
-   *
-   * @param a_string the string to split
-   * @return the elements of the returned array are the persistent
-   * representation strings of the chromosome's components
-   * @throws UnsupportedRepresentationException
-   *
-   * @author Klaus Meffert
-   * @since 3.2
-   */
-  protected static final List split(String a_string)
-      throws UnsupportedRepresentationException {
-    List a = Collections.synchronizedList(new ArrayList());
-    // Header data.
-    // ------------
-    int index = 0;
-    StringTokenizer st0 = new StringTokenizer
-        (a_string, CHROM_DELIMITER, false);
-    if (!st0.hasMoreTokens()) {
-      throw new UnsupportedRepresentationException("Fitness value expected!");
-    }
-    String fitnessS = st0.nextToken();
-    a.add(fitnessS);
-    index += fitnessS.length();
-    if (!st0.hasMoreTokens()) {
-      throw new UnsupportedRepresentationException("Number of genes expected!");
-    }
-    String numGenes = st0.nextToken();
-    a.add(numGenes);
-    index += numGenes.length();
-
-    index += 2; //2 one-character delimiters
-
-    if (!st0.hasMoreTokens()) {
-      throw new UnsupportedRepresentationException("Gene data missing!");
-    }
-
-    // Remove previously parsed content.
-    // ---------------------------------
-    a_string = a_string.substring(index);
-
-    // Gene data.
-    // ----------
-    StringTokenizer st = new StringTokenizer
-        (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
-    while (st.hasMoreTokens()) {
-      if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
-        throw new UnsupportedRepresentationException(a_string + " no open tag");
-      }
-      String n = st.nextToken();
-      if (n.equals(GENE_DELIMITER_CLOSING)) {
-        a.add(""); /* Empty token */
-      }
-      else {
-        a.add(n);
-        if (!st.nextToken().equals(GENE_DELIMITER_CLOSING)) {
-          throw new UnsupportedRepresentationException
-              (a_string + " no close tag");
-        }
-      }
-    }
-    return a;
   }
 
   /**
@@ -935,9 +673,10 @@ public class Chromosome
     // --------------------------------------------
     int geneHashcode;
     int hashCode = 1;
-    if (m_genes != null) {
-      for (int i = 0; i < m_genes.length; i++) {
-        geneHashcode = m_genes[i].hashCode();
+    if (getGenes() != null) {
+      int size = size();
+      for (int i = 0; i < size; i++) {
+        geneHashcode = getGene(i).hashCode();
         hashCode = 31 * hashCode + geneHashcode;
       }
     }
@@ -980,7 +719,7 @@ public class Chromosome
     // comparison.
     // ---------------------------------------------------------------
     for (int i = 0; i < size; i++) {
-      int comparison = m_genes[i].compareTo(otherGenes[i]);
+      int comparison = getGene(i).compareTo(otherGenes[i]);
       if (comparison != 0) {
         return comparison;
       }
@@ -1103,7 +842,7 @@ public class Chromosome
       // themselves up as well.
       // -------------------------------------------------------------
       for (int i = 0; i < size(); i++) {
-        m_genes[i].cleanup();
+        getGene(i).cleanup();
       }
     }
   }
@@ -1152,12 +891,7 @@ public class Chromosome
    */
   public void setGenes(Gene[] a_genes)
       throws InvalidConfigurationException {
-//    for (int i=0;i<a_genes.length;i++) {
-//      if (a_genes[i]==null) {
-//        throw new RuntimeException("Gene may not be null!");
-//      }
-//    }
-    m_genes = a_genes;
+    super.setGenes(a_genes);
     verify(getConstraintChecker());
   }
 
