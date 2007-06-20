@@ -27,7 +27,7 @@ import org.jgap.*;
  * @since 1.1
  */
 public class StringGene
-    extends BaseGene implements IPersistentRepresentation {
+    extends BaseGene implements IPersistentRepresentation, IBusinessKey {
   //Constants for ready-to-use alphabets or serving as part of concetenation
   public static final String ALPHABET_CHARACTERS_UPPER =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -40,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   private int m_minLength;
 
@@ -214,9 +214,9 @@ public class StringGene
       // -----------------------------------------------------------
       if (tokenizer.countTokens() != 4) {
         throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation '" +
-            a_representation + "'" +
-            "is not recognized: it does not contain four tokens.");
+            "The format of the given persistent representation '"
+            + a_representation + "'"
+            + " is not recognized: it does not contain four tokens.");
       }
       String valueRepresentation;
       String alphabetRepresentation;
@@ -337,8 +337,16 @@ public class StringGene
           URLEncoder.encode("" + m_alphabet, "UTF-8");
     }
     catch (UnsupportedEncodingException ex) {
+      // This should never happen (code coverage will most likely fail here).
+      // --------------------------------------------------------------------
       throw new Error("UTF-8 encoding should be supported");
     }
+  }
+
+  @Override
+  public String getBusinessKey() {
+    return m_value + PERSISTENT_FIELD_DELIMITER + m_minLength
+        + PERSISTENT_FIELD_DELIMITER + m_maxLength;
   }
 
   /**
@@ -360,11 +368,11 @@ public class StringGene
         throw new IllegalArgumentException(
             "The given value is too short or too long!");
       }
-      //check for validity of alphabet.
-      //-------------------------------
+      // Check for validity of alphabet.
+      // -------------------------------
       if (!isValidAlphabet(temp, m_alphabet)) {
         throw new IllegalArgumentException("The given value contains"
-                                           + " at least one invalid character.");
+            + " at least one invalid character.");
       }
       if (getConstraintChecker() != null) {
         if (!getConstraintChecker().verify(this, a_newValue, null, -1)) {

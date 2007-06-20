@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -164,6 +164,7 @@ public class DoubleGene
    */
   public void setValueFromPersistentRepresentation(String a_representation)
       throws UnsupportedRepresentationException {
+    /**@todo unify first part of method with IntegerGene*/
     if (a_representation != null) {
       StringTokenizer tokenizer =
           new StringTokenizer(a_representation,
@@ -173,8 +174,9 @@ public class DoubleGene
       // -----------------------------------------------------------
       if (tokenizer.countTokens() != 3) {
         throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation " +
-            "is not recognized: it does not contain three tokens.");
+            "The format of the given persistent representation "
+            + " is not recognized: it does not contain three tokens: "
+            + a_representation);
       }
       String valueRepresentation = tokenizer.nextToken();
       String lowerBoundRepresentation = tokenizer.nextToken();
@@ -256,8 +258,9 @@ public class DoubleGene
    * Compares to objects by first casting them into their expected type
    * (e.g. Integer for IntegerGene) and then calling the compareTo-method
    * of the casted type.
-   * @param o1 first object to be compared, always is not null
-   * @param o2 second object to be compared, always is not null
+   *
+   * @param o1 first object to be compared, which is always not null
+   * @param o2 second object to be compared, which is always not null
    * @return a negative integer, zero, or a positive integer as this object
    * is less than, equal to, or greater than the object provided for comparison
    *

@@ -24,7 +24,7 @@ import org.jgap.*;
 public class IntegerGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.43 $";
+  private static final String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * Represents the constant range of values supported by integers.
@@ -179,8 +179,9 @@ public class IntegerGene
       // -----------------------------------------------------------
       if (tokenizer.countTokens() != 3) {
         throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation " +
-            "is not recognized: it does not contain three tokens.");
+            "The format of the given persistent representation "
+            + " is not recognized: it does not contain three tokens: "
+            + a_representation);
       }
       String valueRepresentation = tokenizer.nextToken();
       String lowerBoundRepresentation = tokenizer.nextToken();

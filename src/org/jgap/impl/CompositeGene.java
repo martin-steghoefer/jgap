@@ -41,7 +41,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.55 $";
+  private final static String CVS_REVISION = "$Revision: 1.56 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -682,5 +682,26 @@ public class CompositeGene
    */
   protected Object getInternalValue() {
     return null;
+  }
+
+  @Override
+  public String getBusinessKey() {
+    Iterator iter = m_genes.iterator();
+    Gene gene;
+    StringBuffer b = new StringBuffer();
+    while (iter.hasNext()) {
+      gene = (Gene) iter.next();
+      b.append(GENE_DELIMITER_HEADING);
+      if (IBusinessKey.class.isAssignableFrom(gene.getClass())) {
+        b.append(((IBusinessKey)gene).getBusinessKey());
+      }
+      else {
+        // Fall back to suboptimal solution.
+        // ---------------------------------
+        b.append(gene.getPersistentRepresentation());
+      }
+      b.append(GENE_DELIMITER_CLOSING);
+    }
+    return b.toString();
   }
 }

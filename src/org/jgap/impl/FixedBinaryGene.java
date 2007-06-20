@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   private int m_length;
 
@@ -352,6 +352,11 @@ public class FixedBinaryGene
     return s + "]";
   }
 
+  @Override
+  public String getBusinessKey() {
+    return toString();
+  }
+
   /**
    * @return the size of the gene, i.e the number of atomic elements
    *
@@ -483,4 +488,5 @@ public class FixedBinaryGene
     }
     return result;
   }
+
 }
