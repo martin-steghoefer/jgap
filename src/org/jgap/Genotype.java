@@ -11,7 +11,6 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
-import org.jgap.event.*;
 import org.jgap.distr.*;
 import org.jgap.impl.job.*;
 
@@ -32,7 +31,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.101 $";
+  private final static String CVS_REVISION = "$Revision: 1.102 $";
 
   /**
    * The current Configuration instance.
@@ -43,7 +42,7 @@ public class Genotype
   private transient static Configuration m_staticConfiguration;
 
   /**
-   * The array of Chromosomes that makeup the Genotype's population.
+   * The array of Chromosomes that make-up the Genotype's population.
    * @since 2.0
    */
   private Population m_population;
