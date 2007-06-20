@@ -23,7 +23,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.61 $";
+  private final static String CVS_REVISION = "$Revision: 1.62 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1295,12 +1295,23 @@ public class GenotypeTest
       return m_conf;
     }
 
-    public void setNewlyCreated(boolean a_newlyCreated) {
-
+    public void increaseAge() {
     }
 
-    public boolean isNewlyCreated() {
-      return false;
+    public void resetAge() {
+    }
+
+    public int getAge() {
+      return 1;
+    }
+
+    public void increaseOperatedOn() {
+    }
+
+    public void resetOperatedOn() {
+    }
+    public int operatedOn() {
+      return 0;
     }
   }
 }

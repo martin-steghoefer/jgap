@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.26 $";
+  private static final String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -83,6 +83,7 @@ public class CrossoverOperatorTest
 
   /**
    * Use flat crossover rate and just exchange two alleles via crossover.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -91,7 +92,6 @@ public class CrossoverOperatorTest
   public void testOperate_0()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-//    conf.addGeneticOperator(op);
     // preset "random" values: index first chromosome, index second chromosome,
     // locus (index of gene on chromosome)
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
@@ -113,6 +113,9 @@ public class CrossoverOperatorTest
     Gene[] genes2 = new Gene[] {
         cgene2};
     Chromosome chrom2 = new Chromosome(conf, genes2);
+    // Age increase necessary to make x-over work.
+    // -------------------------------------------
+    chrom2.increaseAge();
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
@@ -177,6 +180,9 @@ public class CrossoverOperatorTest
     Gene[] genes2 = new Gene[] {
         cgene2};
     Chromosome chrom2 = new Chromosome(conf, genes2);
+    // Age increase necessary to make x-over work.
+    // -------------------------------------------
+    chrom2.increaseAge();
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
@@ -290,6 +296,9 @@ public class CrossoverOperatorTest
     Gene[] genes2 = new Gene[] {
         cgene2};
     Chromosome chrom2 = new Chromosome(conf, genes2);
+    // Age increase necessary to make x-over work.
+    // -------------------------------------------
+    chrom2.increaseAge();
     Chromosome[] population = new Chromosome[] {
         chrom1, chrom2};
     List chroms = new Vector();
@@ -352,6 +361,9 @@ public class CrossoverOperatorTest
     Gene[] genes2 = new Gene[] {
         cgene2};
     Chromosome chrom2 = new Chromosome(conf, genes2);
+    // Age increase necessary to make x-over work.
+    // -------------------------------------------
+    chrom2.increaseAge();
     Chromosome[] population = new Chromosome[] {
         chrom0, chrom1, chrom2};
     // Add some nonsense objects to results list (to see if they are kept).
