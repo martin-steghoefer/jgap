@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class DefaultConfiguration
     extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public DefaultConfiguration() {
     this("","");
@@ -39,6 +39,9 @@ public class DefaultConfiguration
    * configuration settings set to default values. It is still necessary
    * to set the sample Chromosome, population size, and desired fitness
    * function. Other settings may optionally be altered as desired.
+   *
+   * @param a_id unique id for the configuration within the current thread
+   * @param a_name informative name of the configuration, may be null
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
@@ -55,6 +58,8 @@ public class DefaultConfiguration
       bestChromsSelector.setDoubletteChromosomesAllowed(false);
       addNaturalSelector(bestChromsSelector, true);
       setMinimumPopSizePercent(0);
+      //
+      setSelectFromPrevGen(1.0d);
       setKeepPopulationSizeConstant(true);
       setFitnessEvaluator(new DefaultFitnessEvaluator());
       setChromosomePool(new ChromosomePool());
