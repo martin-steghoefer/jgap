@@ -17,6 +17,7 @@
       <include name="jcgrid.jar"/>
       <include name="TableLayout.jar"/>
       <include name="commons-lang-2.1.jar"/>
+      <include name="commons-codec-1.3.jar"/>
     </fileset>
     <pathelement path="${classDir}"/>
   </path>
