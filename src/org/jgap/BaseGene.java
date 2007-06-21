@@ -10,7 +10,6 @@
 package org.jgap;
 
 import org.jgap.util.StringKit;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Abstract base class for all genes. Provides default implementations.
@@ -21,7 +20,7 @@ import java.io.UnsupportedEncodingException;
 public abstract class BaseGene
     implements Gene, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
