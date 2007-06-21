@@ -26,7 +26,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -255,6 +255,13 @@ public class XMLManagerTest
     assertEquals(m_genotype_tag, elem.getTagName());
   }
 
+  /**
+   * Attention: This test generates a console output with Java 5:
+   * "[Fatal Error] : -1:-1: Premature end of file."
+   * This is OK, but kinda weird and unwanted.
+   *
+   * @throws Exception
+   */
   public void testReadFile_0()
       throws Exception {
     try {
@@ -287,6 +294,7 @@ public class XMLManagerTest
 
   /**
    * Do the same as above test to verify that overriding existing file works.
+   *
    * @throws Exception
    */
   public void testWriteFile_1()
@@ -299,6 +307,7 @@ public class XMLManagerTest
 
   /**
    * Tests XML capabilities of JGAP. Moved from examples.simpleBoolean.TestXML.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -323,6 +332,7 @@ public class XMLManagerTest
 
   /**
    * Tests XML capabilities of JGAP. Moved from examples.simpleBoolean.TestXML.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert

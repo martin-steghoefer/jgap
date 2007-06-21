@@ -34,7 +34,7 @@ import org.w3c.dom.*;
 public class XMLManager {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -616,7 +616,8 @@ public class XMLManager {
   }
 
   /**
-   * Reads in an XML file and returns a Document object
+   * Reads in an XML file and returns a Document object.
+   *
    * @param file the file to be read in
    * @throws IOException
    * @throws SAXException
@@ -631,7 +632,8 @@ public class XMLManager {
   }
 
   /**
-   * Writes an XML file from a Document object
+   * Writes an XML file from a Document object.
+   *
    * @param doc the Document object to be written to file
    * @param file the file to be written
    * @throws IOException

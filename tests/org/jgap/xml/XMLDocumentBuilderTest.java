@@ -16,7 +16,7 @@ import junit.framework.*;
 import org.w3c.dom.*;
 
 /**
- * Tests for XMLDocumentBuilder class
+ * Tests the XMLDocumentBuilder class.
  *
  * @author Klaus Meffert
  * @since 1.0
@@ -24,7 +24,7 @@ import org.w3c.dom.*;
 public class XMLDocumentBuilderTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 

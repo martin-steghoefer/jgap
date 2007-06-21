@@ -13,6 +13,7 @@ import junit.framework.*;
 
 /**
  * Test suite for all tests of package org.jgap.xml
+ *
  * @author Klaus Meffert
  * @since 1.0
  */
@@ -20,7 +21,7 @@ public class AllXMLTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllXMLTests");
