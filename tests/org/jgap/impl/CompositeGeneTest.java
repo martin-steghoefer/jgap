@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.47 $";
+  private final static String CVS_REVISION = "$Revision: 1.48 $";
 
   private static int cleanedUp = 0;
 
@@ -548,7 +548,36 @@ public class CompositeGeneTest
   }
 
   /**
-   * Test a nested persistent representation, including strings
+   * Use special characters in alphabet.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentPresentation_0_2()
+      throws Exception {
+    CompositeGene gene1 = new CompositeGene(conf);
+    Gene gene0 = new StringGene(conf, 6, 31, "##*~?ß\\/%$§!\".;:_-,");
+    gene0.setAllele("#*~?ß\\/%$§!\".;:_-,");
+    gene1.addGene(gene0, false);
+    Gene gene2 = new StringGene(conf, 8, 33, "w*~?ß\\/%$§!\".;:_-,lL");
+    gene2.setAllele("*~?ß/%$§!\".;:_-,");
+    gene1.addGene(gene2, false);
+    String pres1 = gene1.getPersistentRepresentation();
+    CompositeGene gene3 = new CompositeGene(conf);
+    gene3.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene3.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+    Gene gene3_0 = gene3.geneAt(0);
+    assertEquals(gene0, gene3_0);
+    Gene gene3_1 = gene3.geneAt(1);
+    assertEquals(gene2, gene3_1);
+  }
+
+  /**
+   * Test a nested persistent representation, including strings.
+   *
    * @throws Exception
    *
    * @author Audrius Meskauskas

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -54,8 +54,7 @@ public class StringGeneTest
     try {
       new StringGene(conf, 2, 1);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -70,8 +69,7 @@ public class StringGeneTest
     try {
       new StringGene(conf, -1, 3);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -86,8 +84,7 @@ public class StringGeneTest
     try {
       Gene gene = new StringGene(conf, 1, 3);
       gene.setAllele("ABCD");
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -102,8 +99,7 @@ public class StringGeneTest
     try {
       Gene gene = new StringGene(conf, 1, 3);
       gene.setAllele(new Double(2.3d));
-    }
-    catch (ClassCastException castex) {
+    } catch (ClassCastException castex) {
       ; //this is OK
     }
   }
@@ -381,8 +377,7 @@ public class StringGeneTest
     try {
       gene1.compareTo(new Chromosome(conf));
       fail();
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       ; // this is OK
     }
   }
@@ -439,8 +434,7 @@ public class StringGeneTest
     try {
       gene1.setAllele("AB");
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -457,8 +451,7 @@ public class StringGeneTest
     try {
       gene1.setAllele("ABDG");
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -476,8 +469,7 @@ public class StringGeneTest
       // --------------------------
       gene1.setAllele("");
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -586,8 +578,7 @@ public class StringGeneTest
     try {
       gene1.setAllele("");
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -664,6 +655,30 @@ public class StringGeneTest
   }
 
   /**
+   * Use special characters in alphabet
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testPersistentRepresentation_5_2()
+      throws Exception {
+    StringGene gene1 = new StringGene(conf, 2, 10,
+                                      "ABCDE"
+                                      + Gene.PERSISTENT_FIELD_DELIMITER
+                                      + "+*~'´`");
+    gene1.setAllele("BABE");
+    String pres1 = gene1.getPersistentRepresentation();
+    StringGene gene2 = new StringGene(conf);
+    gene2.setValueFromPersistentRepresentation(pres1);
+    String pres2 = gene2.getPersistentRepresentation();
+    assertEquals(pres1, pres2);
+    assertEquals(gene1, gene2);
+    assertEquals(gene1.getAlphabet(), gene2.getAlphabet());
+  }
+
+  /**
    *
    * @throws Exception
    *
@@ -703,8 +718,7 @@ public class StringGeneTest
     try {
       gene1.setValueFromPersistentRepresentation("null:2:ABCDE");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -735,8 +749,7 @@ public class StringGeneTest
     try {
       gene1.setValueFromPersistentRepresentation("null:a:10:ABCDE");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -755,8 +768,7 @@ public class StringGeneTest
     try {
       gene1.setValueFromPersistentRepresentation("null:2:3b:ABCDE");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -774,8 +786,7 @@ public class StringGeneTest
     try {
       gene1.setValueFromPersistentRepresentation("nada:7:6:ABCDE");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -793,8 +804,7 @@ public class StringGeneTest
     try {
       gene1.setValueFromPersistentRepresentation("nada:1:3:ABCDE");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -813,8 +823,7 @@ public class StringGeneTest
     try {
       gene1.setValueFromPersistentRepresentation("ABHJ:4:7:ABCDE");
       fail();
-    }
-    catch (UnsupportedRepresentationException uex) {
+    } catch (UnsupportedRepresentationException uex) {
       ; //this is OK
     }
   }
@@ -865,8 +874,7 @@ public class StringGeneTest
     try {
       gene1.applyMutation(1, 0.99d);
       fail();
-    }
-    catch (StringIndexOutOfBoundsException sex) {
+    } catch (StringIndexOutOfBoundsException sex) {
       ; //this is OK
     }
   }
@@ -933,8 +941,7 @@ public class StringGeneTest
     gene1.setAlphabet("");
     try {
       gene1.applyMutation(0, 0.0d);
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -955,8 +962,7 @@ public class StringGeneTest
     try {
       gene1.applyMutation(0, 0.99d);
       fail();
-    }
-    catch (NullPointerException nex) {
+    } catch (NullPointerException nex) {
       ; //this is OK
     }
   }
@@ -1076,8 +1082,7 @@ public class StringGeneTest
     try {
       gene.setToRandomValue(new StockRandomGenerator());
       fail();
-    }
-    catch (IllegalStateException iex) {
+    } catch (IllegalStateException iex) {
       ; //this is OK
     }
   }
@@ -1093,8 +1098,7 @@ public class StringGeneTest
     try {
       gene.setToRandomValue(new StockRandomGenerator());
       fail();
-    }
-    catch (IllegalStateException iex) {
+    } catch (IllegalStateException iex) {
       ; //this is OK
     }
   }
@@ -1112,8 +1116,7 @@ public class StringGeneTest
       gene.setMaxLength(1);
       gene.setToRandomValue(new StockRandomGenerator());
       fail();
-    }
-    catch (IllegalStateException iex) {
+    } catch (IllegalStateException iex) {
       ; //this is OK
     }
   }
@@ -1147,8 +1150,7 @@ public class StringGeneTest
     try {
       gene.setAllele("HALLO");
       fail();
-    }
-    catch (IllegalArgumentException ilex) {
+    } catch (IllegalArgumentException ilex) {
       ; //this is OK
     }
   }
