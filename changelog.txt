@@ -58,7 +58,7 @@
 * Implemented clone for Terminal class
 * Added unit tests
 * Improved Javadocs a lot and fixed some spelling errors
-* Adapted build.xml to new packages
+* Adapted build.xml to new packages and libraries
 
 3.1
 -----------------------------------------------------------
