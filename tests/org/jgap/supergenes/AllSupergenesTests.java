@@ -12,8 +12,7 @@ package org.jgap.supergenes;
 import junit.framework.*;
 
 /**
- * Test suite for supergene. The last step is rather slow, so it can run up
- * to 4 seconds on 2.7 Mhz PC.
+ * Test suite for supergene. The last step is rather slow.
  *
  * @author Audrius Meskauskas
  * @since 2.0
@@ -21,7 +20,7 @@ import junit.framework.*;
 public class AllSupergenesTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public AllSupergenesTests(String a_name) {
     super(a_name);

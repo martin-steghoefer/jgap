@@ -12,12 +12,13 @@ package org.jgap.supergenes;
 import java.util.*;
 import org.jgap.*;
 import junit.framework.*;
+import org.jgap.util.StringKit;
 
 /** Tests the Supergene internal parser. */
 public class SupergeneInternalParserTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -47,7 +48,7 @@ public class SupergeneInternalParserTest
     String s = "<0><1><2><><" + m_test.encode("<i1><ib><ic>")
         + "><" + m_test.encode("<k1><k2><"
                                + m_test.encode("<hn1><" + m_test.encode("<><a>")
-                                               + "><hn2><hn3>") + ">") + ">";
+        + "><hn2><hn3>") + ">") + ">";
     StringBuffer b = new StringBuffer();
     m_test.splitRecursive(s, b, "", false);
     assertEquals(b.toString(), expectedResponse);
@@ -57,7 +58,7 @@ public class SupergeneInternalParserTest
       extends AbstractSupergene {
     public TestClass(final Configuration a_conf)
         throws InvalidConfigurationException {
-      super(a_conf, new Gene[]{});
+      super(a_conf, new Gene[] {});
     }
 
     //Used in test only
@@ -87,6 +88,14 @@ public class SupergeneInternalParserTest
 
     protected Gene newGeneInternal() {
       throw new Error("Should never be called.");
+    }
+
+    protected String encode(String a_string) {
+      return super.encode(a_string);
+    }
+
+    public String decode(String a_string) {
+      return super.decode(a_string);
     }
   }
 }
