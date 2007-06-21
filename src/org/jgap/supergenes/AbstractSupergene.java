@@ -31,7 +31,7 @@ public abstract class AbstractSupergene
     extends BaseGene
     implements Supergene, SupergeneValidator, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * This field separates gene class name from
@@ -349,8 +349,9 @@ public abstract class AbstractSupergene
    * @return a string representation of the value of this Supergene
    * instance, using calls to the Supergene components. Supports other
    * (nested) supergenes in this supergene
+   * @throws UnsupportedOperationException
    */
-  public String getPersistentRepresentation() {
+  public String getPersistentRepresentation() throws UnsupportedOperationException {
     StringBuffer b = new StringBuffer();
     // Write validator:
     String validator = null;
@@ -564,26 +565,6 @@ public abstract class AbstractSupergene
       s += m_genes[i].hashCode();
     }
     return s;
-  }
-
-  /* Encode string, doubling the separators. */
-  protected static final String encode(String a_x) {
-    try {
-      return URLEncoder.encode(a_x, "UTF-8");
-    }
-    catch (UnsupportedEncodingException ex) {
-      throw new Error("This should never happen!");
-    }
-  }
-
-  /** Decode string, undoubling the separators. */
-  protected static final String decode(String a_x) {
-    try {
-      return URLDecoder.decode(a_x, "UTF-8");
-    }
-    catch (UnsupportedEncodingException ex) {
-      throw new Error("This should never happen!");
-    }
   }
 
   /**

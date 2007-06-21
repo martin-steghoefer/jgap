@@ -11,8 +11,10 @@ package org.jgap;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.net.*;
 import java.util.*;
+import org.apache.commons.codec.net.*;
+import org.apache.commons.codec.*;
+import org.jgap.util.*;
 
 /**
  * Base class for any implementation of interface IChromosome.
@@ -23,7 +25,7 @@ import java.util.*;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -285,25 +287,19 @@ public abstract class BaseChromosome
     for (int i = 0; i < size; i++) {
       gene = getGene(i);
       a_buffer.append(GENE_DELIMITER_HEADING);
-        try {
           a_buffer.append(encode(gene.getClass().getName()
               + GENE_DELIMITER
               + gene.getPersistentRepresentation()));
-        } catch (Throwable uex) {//UnsupportedEncodingException uex) {
-          throw new RuntimeException("UTF-8 should always be supported!", uex);
-        }
       a_buffer.append(GENE_DELIMITER_CLOSING);
     }
   }
 
-  protected String encode(String a_string) throws UnsupportedEncodingException {
-    return a_string;
-//    return URLEncoder.encode(a_string, "UTF-8");
+  protected String encode(String a_string) {
+    return StringKit.encode(a_string);
   }
 
   protected String decode(String a_string) throws UnsupportedEncodingException {
-    return a_string;
-//    return URLDecoder.decode(a_string, "UTF-8");
+    return StringKit.decode(a_string);
   }
 
   /**

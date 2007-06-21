@@ -40,7 +40,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   private int m_minLength;
 
@@ -222,23 +222,15 @@ public class StringGene
       String alphabetRepresentation;
       String minLengthRepresentation;
       String maxLengthRepresentation;
-      try {
-        valueRepresentation =
-            URLDecoder.decode(tokenizer.nextToken(), "UTF-8");
-        minLengthRepresentation = tokenizer.nextToken();
-        maxLengthRepresentation = tokenizer.nextToken();
-        alphabetRepresentation =
-            URLDecoder.decode(tokenizer.nextToken(), "UTF-8");
-      }
-      catch (UnsupportedEncodingException ex) {
-        throw new Error("UTF-8 encoding should be always supported");
-      }
+      valueRepresentation = decode(tokenizer.nextToken());
+      minLengthRepresentation = tokenizer.nextToken();
+      maxLengthRepresentation = tokenizer.nextToken();
+      alphabetRepresentation = decode(tokenizer.nextToken());
       // Now parse and set the minimum length.
       // -------------------------------------
       try {
         m_minLength = Integer.parseInt(minLengthRepresentation);
-      }
-      catch (NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new UnsupportedRepresentationException(
             "The format of the given persistent representation " +
             "is not recognized: field 2 does not appear to be " +
@@ -248,8 +240,7 @@ public class StringGene
       // -------------------------------------
       try {
         m_maxLength = Integer.parseInt(maxLengthRepresentation);
-      }
-      catch (NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new UnsupportedRepresentationException(
             "The format of the given persistent representation " +
             "is not recognized: field 3 does not appear to be " +
@@ -314,33 +305,26 @@ public class StringGene
    */
   public String getPersistentRepresentation()
       throws UnsupportedOperationException {
-    try {
-      // The persistent representation includes the value, minimum length,
-      // maximum length and valid alphabet. Each is separated by a colon.
-      // -----------------------------------------------------------------
-      String s;
-      if (m_value == null) {
-        s = "null";
+    // The persistent representation includes the value, minimum length,
+    // maximum length and valid alphabet. Each is separated by a colon.
+    // -----------------------------------------------------------------
+    String s;
+    if (m_value == null) {
+      s = "null";
+    }
+    else {
+      if (m_value.equals("")) {
+        s = "\"\"";
       }
       else {
-        if (m_value.equals("")) {
-          s = "\"\"";
-        }
-        else {
-          s = m_value;
-        }
+        s = m_value;
       }
-      return URLEncoder.encode("" + s, "UTF-8") +
-          PERSISTENT_FIELD_DELIMITER + m_minLength +
-          PERSISTENT_FIELD_DELIMITER + m_maxLength +
-          PERSISTENT_FIELD_DELIMITER +
-          URLEncoder.encode("" + m_alphabet, "UTF-8");
     }
-    catch (UnsupportedEncodingException ex) {
-      // This should never happen (code coverage will most likely fail here).
-      // --------------------------------------------------------------------
-      throw new Error("UTF-8 encoding should be supported");
-    }
+    return encode("" + s) +
+        PERSISTENT_FIELD_DELIMITER + m_minLength +
+        PERSISTENT_FIELD_DELIMITER + m_maxLength +
+        PERSISTENT_FIELD_DELIMITER +
+        encode("" + m_alphabet);
   }
 
   @Override
@@ -399,11 +383,10 @@ public class StringGene
   protected Gene newGeneInternal() {
     try {
       StringGene result = new StringGene(getConfiguration(), m_minLength,
-                                         m_maxLength, m_alphabet);
+          m_maxLength, m_alphabet);
       result.setConstraintChecker(getConstraintChecker());
       return result;
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
   }

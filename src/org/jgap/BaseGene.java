@@ -9,6 +9,9 @@
  */
 package org.jgap;
 
+import org.jgap.util.StringKit;
+import java.io.UnsupportedEncodingException;
+
 /**
  * Abstract base class for all genes. Provides default implementations.
  *
@@ -18,7 +21,7 @@ package org.jgap;
 public abstract class BaseGene
     implements Gene, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -391,5 +394,13 @@ public abstract class BaseGene
       return result;
     }
     return result + allele.toString();
+  }
+
+  protected String encode(String a_string) {
+    return StringKit.encode(a_string);
+  }
+
+  protected String decode(String a_string) {
+    return StringKit.decode(a_string);
   }
 }

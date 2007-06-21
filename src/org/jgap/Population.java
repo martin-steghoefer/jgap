@@ -13,7 +13,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
-
 import org.jgap.util.*;
 
 /**
@@ -26,7 +25,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.59 $";
+  private static final String CVS_REVISION = "$Revision: 1.60 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -697,15 +696,10 @@ public class Population
                                    + " IPersistentRepresentation!");
       }
       b.append(CHROM_DELIMITER_HEADING);
-      try {
-        b.append(URLEncoder.encode(chrom.getClass().getName()
-                                   + CHROM_DELIMITER
-                                   + ( (IPersistentRepresentation) chrom).
-                                   getPersistentRepresentation()
-                                   , "UTF-8"));
-      } catch (UnsupportedEncodingException uex) {
-        throw new RuntimeException("UTF-8 should always be supported!", uex);
-      }
+      b.append(StringKit.encode(chrom.getClass().getName()
+                                + CHROM_DELIMITER
+                                + ( (IPersistentRepresentation) chrom).
+                                getPersistentRepresentation()));
       b.append(CHROM_DELIMITER_CLOSING);
     }
     return b.toString();
@@ -737,7 +731,7 @@ public class Population
         String representation;
         IChromosome chrom;
         while (iter.hasNext()) {
-          g = URLDecoder.decode( (String) iter.next(), "UTF-8");
+          g = StringKit.decode( (String) iter.next());
           st = new StringTokenizer(g, CHROM_DELIMITER);
           if (st.countTokens() != 2)
             throw new UnsupportedRepresentationException("In " + g + ", " +
@@ -769,7 +763,7 @@ public class Population
    * @since 3.2
    */
   protected IChromosome createChromosome(String a_chromClassName,
-                            String a_persistentRepresentation)
+      String a_persistentRepresentation)
       throws Exception {
     Class chromClass = Class.forName(a_chromClassName);
     Constructor constr = chromClass.getConstructor(new Class[] {Configuration.class});
@@ -820,5 +814,4 @@ public class Population
     }
     return a;
   }
-
 }

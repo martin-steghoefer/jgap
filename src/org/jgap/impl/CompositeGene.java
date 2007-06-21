@@ -41,7 +41,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.56 $";
+  private final static String CVS_REVISION = "$Revision: 1.57 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -283,7 +283,7 @@ public class CompositeGene
         String g;
         Gene gene;
         while (iter.hasNext()) {
-          g = URLDecoder.decode( (String) iter.next(), "UTF-8");
+          g = decode( (String) iter.next());
           st = new StringTokenizer(g, GENE_DELIMITER);
           if (st.countTokens() != 2)
             throw new UnsupportedRepresentationException("In " + g + ", " +
@@ -340,17 +340,10 @@ public class CompositeGene
     while (iter.hasNext()) {
       gene = (Gene) iter.next();
       b.append(GENE_DELIMITER_HEADING);
-      try {
-        b.append(
-            URLEncoder.encode(
+        b.append(encode(
             gene.getClass().getName() +
             GENE_DELIMITER +
-            gene.getPersistentRepresentation(), "UTF-8"
-            ));
-      }
-      catch (UnsupportedEncodingException uex) {
-        throw new RuntimeException("UTF-8 should always be supported!", uex);
-      }
+            gene.getPersistentRepresentation()));
       b.append(GENE_DELIMITER_CLOSING);
     }
     return b.toString();
