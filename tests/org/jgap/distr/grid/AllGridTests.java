@@ -20,11 +20,11 @@ import junit.framework.*;
 public class AllGridTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllGridTests");
-//    suite.addTest(....suite());
+    suite.addTest(DefaultGenotypeInitializerTest.suite());
     return suite;
   }
 }
