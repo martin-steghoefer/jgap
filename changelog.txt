@@ -11,6 +11,8 @@
   auto-consider NOP if necessary for creating valid
   programs...)
 * Enhancee evolution loop
+* Improved speed of UTF-8 encoding
+* Unified character encoding and decoding
 * Introduced CachedFitnessFunction
 * Enabled GPConfiguration for grid computing
 * Better ADF support in Genetic Programming
