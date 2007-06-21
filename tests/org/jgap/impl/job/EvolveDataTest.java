@@ -9,23 +9,40 @@
  */
 package org.jgap.impl.job;
 
+import org.jgap.*;
+
 import junit.framework.*;
 
 /**
- * Test suite for all tests of package org.jgap.impl.job
+ * Tests the EvolveData class.
  *
  * @author Klaus Meffert
- * @since 3.0
+ * @since 3.2
  */
-public class AllJobTests
-    extends TestSuite {
-
+public class EvolveDataTest
+    extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("AllJobTests");
-    suite.addTest(EvolveDataTest.suite());
-    return suite;
+    return new TestSuite(EvolveDataTest.class);
   }
+
+  public void setUp() {
+    super.setUp();
+    Configuration.reset();
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public void testGetConfiguration_0()
+      throws Exception {
+    EvolveData data = new EvolveData(conf);
+    assertSame(conf, data.getConfiguration());
+  }
+
 }
