@@ -6,9 +6,9 @@ you might have, including details of how you're using JGAP, what you
 like about it, and what you think needs improvement. You can leave this
 feedback on the user's mailing list at jgap-users@lists.sourceforge.net
 or, if you prefer to keep these details private, you can email the JGAP
-project administrator at klausikm@users.sourceforge.net. The more feedback
-we get, the more we can improve JGAP to better meet the needs of our 
-users. Thanks for your support!
+project administrator at klausikm <at> users.sourceforge.net. The more
+feedback we get, the more we can improve JGAP to better meet the needs
+of our users. Thanks for your support!
 
 --------------------------------------------------------------------------
 
@@ -38,7 +38,9 @@ Ant home page at http://ant.apache.org
 4. Javadocs can be found in the doc/ directory (full or javadoc JGAP
 distribution). Other documentation, including basic documents to help
 you getting started, are put together on the JGAP homepage at
+
      http://jgap.sourceforge.net
+
 Simple examples which help to get started with JGAP are included under
 the examples directory.
 
@@ -91,11 +93,13 @@ download them separately. The links to the download sites could be found
 in the header comments of the corresponding JGAP source files.
 
 Please direct any questions, comments, problems, or inquiries to the
-JGAP users mailing list at:
+JGAP users mailing list at
 
-    jgap-users@lists.sourceforge.net
+    jgap-users <at> lists.sourceforge.net
 
-or to the JGAP developers mailing list at jgap-devl@lists.sourceforge.net.
+or to the JGAP developers mailing list at
+
+    jgap-devl <at> lists.sourceforge.net
 
 Public announcements concerning JGAP, including any new release
 announcements, are made on the jgap-announce mailing list. If you would
