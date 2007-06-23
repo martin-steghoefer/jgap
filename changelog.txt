@@ -10,7 +10,7 @@
   parameter does not lead to program abortion any more;
   auto-consider NOP if necessary for creating valid
   programs...)
-* Enhancee evolution loop
+* Enhanced evolution loop
 * Improved speed of UTF-8 encoding
 * Unified character encoding and decoding
 * Introduced CachedFitnessFunction
