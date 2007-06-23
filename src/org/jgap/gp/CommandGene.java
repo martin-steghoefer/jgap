@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -156,6 +156,24 @@ public abstract class CommandGene
       m_subChildTypes = a_childSubTypes;
     }
     m_subReturnType = a_subReturnType;
+  }
+
+  /**
+   * Allows specifying a sub return type.
+   *
+   * @param a_conf GPConfiguration
+   * @param a_arity int
+   * @param a_returnType Class
+   * @param a_subReturnType int
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
+  public CommandGene(final GPConfiguration a_conf, final int a_arity,
+                     final Class a_returnType, final int a_subReturnType)
+      throws InvalidConfigurationException {
+    this(a_conf, a_arity, a_returnType, a_subReturnType, null);
   }
 
   /**
