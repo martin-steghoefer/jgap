@@ -9,8 +9,6 @@
  */
 package org.jgap.gp;
 
-import org.jgap.*;
-
 /**
  * Fitness function for GP-Programs.
  *
@@ -20,7 +18,7 @@ import org.jgap.*;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
