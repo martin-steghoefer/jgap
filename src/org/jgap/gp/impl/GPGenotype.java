@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -259,7 +259,7 @@ public class GPGenotype
   }
 
   /**
-   * Creates a genotype with initial population for the world set.
+   * Creates a genotype with a randomly created initial population.
    *
    * @param a_conf the configuration to use
    * @param a_types the type of each chromosome, the length is the number of
