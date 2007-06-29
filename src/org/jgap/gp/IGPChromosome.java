@@ -11,6 +11,7 @@ package org.jgap.gp;
 
 import java.io.*;
 import org.jgap.gp.impl.*;
+
 /**
  * Interface for GP chromosomes. See ProgramChromosome for an implementation.
  *
@@ -20,7 +21,7 @@ import org.jgap.gp.impl.*;
 public interface IGPChromosome
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * @return the individual containing this chromosome
@@ -191,6 +192,14 @@ public interface IGPChromosome
   int getFunction(int a_index, Class a_type, int a_subType);
 
   CommandGene[] getFunctions();
+
+  /**
+   * @return set of CommandGene instances allowed
+   *
+   * @author Klaus Meffert
+   * @since 4.0
+   */
+  CommandGene[] getFunctionSet();
 
   GPConfiguration getGPConfiguration();
 }
