@@ -1,3 +1,10 @@
+4.0
+-----------------------------------------------------------
+* Fixed bug with allTimeBest and cloning (see bug 1744077)
+* Made INodeValidator serializable
+* Added Java command version to NOP
+* Enhanced Javadoc a lot
+
 3.2
 -----------------------------------------------------------
 * Ported JGAP from Java 1.4 to Java 5
