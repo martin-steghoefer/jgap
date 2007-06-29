@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class NOP
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -49,9 +49,28 @@ public class NOP
     return "NOP (NO Operation)";
   }
 
+
+
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     // Do nothing here as it is NOP.
     // ----------------------------
     ;
   }
+
+  /**
+   * Executes this node as an object.
+   *
+   * @param c ignored here
+   * @param n ignored here
+   * @param args ignored here
+   * @return nothing but exception
+   * @throws UnsupportedOperationException
+   *
+   * @author Klaus Meffert
+   * @since 4.0
+   */
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    return new StringBuffer(";");
+  }
+
 }
