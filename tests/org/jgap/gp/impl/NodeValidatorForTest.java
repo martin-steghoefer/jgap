@@ -15,7 +15,8 @@ public class NodeValidatorForTest
                           CommandGene a_rootNode,
                           int a_tries, int a_num, int a_recurseLevel,
                           Class a_type, CommandGene[] a_functionSet,
-                          int a_depth, boolean a_grow, int a_childIndex) {
+                          int a_depth, boolean a_grow, int a_childIndex,
+                          boolean a_fullProgram) {
     return true;
   }
 }

@@ -32,7 +32,7 @@ public class GameNodeValidator
    * in this implementation)
    * @param a_node the node selected and to be validated
    * @param a_rootNode the root node of a_node, may be null for top nodes
- * @param a_tries number of times the validator has been called, useful for
+   * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
    * @param a_num the chromosome's index in the individual of this chromosome
    * @param a_recurseLevel level of recursion, i.e. the depth of a node
@@ -53,7 +53,8 @@ public class GameNodeValidator
                           CommandGene a_rootNode,
                           int a_tries, int a_num, int a_recurseLevel,
                           Class a_type, CommandGene[] a_functionSet,
-                          int a_depth, boolean a_grow, int a_childIndex) {
+                          int a_depth, boolean a_grow, int a_childIndex,
+                          boolean a_fullProgram) {
     // Guard to avoid endless validation.
     // ----------------------------------
     if (a_tries > 10) {

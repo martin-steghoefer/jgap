@@ -45,6 +45,7 @@ public class FibonacciNodeValidator
    * implementation)
    * @param a_childIndex index of the child in the parent node to which it
    * belongs (-1 if node is root node)
+   * @param a_fullProgram true: whole program is available in a_chrom
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
@@ -54,7 +55,11 @@ public class FibonacciNodeValidator
                           CommandGene a_rootNode,
                           int a_tries, int a_num, int a_recurseLevel,
                           Class a_type, CommandGene[] a_functionSet,
-                          int a_depth, boolean a_grow, int a_childIndex) {
+                          int a_depth, boolean a_grow, int a_childIndex,
+                          boolean a_fullProgram) {
+    if (a_fullProgram) {
+      return true;
+    }
     // Guard to avoid endless validation.
     // ----------------------------------
     if (a_tries > 10) {
