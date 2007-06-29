@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -296,6 +296,8 @@ public class GPGenotype
       int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
       boolean[] a_fullModeAllowed, boolean a_verboseOutput)
       throws InvalidConfigurationException {
+    // Check preconditions.
+    // --------------------
     if (a_argTypes.length != a_fullModeAllowed.length
         || (a_minDepths != null && a_argTypes.length != a_minDepths.length)
         || (a_maxDepths != null && a_argTypes.length != a_maxDepths.length)
@@ -303,15 +305,17 @@ public class GPGenotype
       throw new IllegalArgumentException("a_argTypes must have same length"
           + " as a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
     }
+    // Clean up memory.
+    // ----------------
     System.gc();
     if (a_verboseOutput) {
       System.out.println("Creating initial population");
       System.out.println("Memory consumed before creating population: "
                          + SystemKit.getTotalMemoryMB() + "MB");
     }
-    GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
     // Create initial population.
     // --------------------------
+    GPPopulation pop = new GPPopulation(a_conf, a_conf.getPopulationSize());
     pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                a_maxNodes, a_fullModeAllowed);
     System.gc();
