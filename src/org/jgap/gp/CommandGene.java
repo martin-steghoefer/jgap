@@ -10,6 +10,7 @@
 package org.jgap.gp;
 
 import java.io.*;
+
 import org.jgap.*;
 import org.jgap.gp.impl.*;
 
@@ -24,7 +25,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -86,6 +87,8 @@ public abstract class CommandGene
   private int m_subReturnType;
 
   private int[] m_subChildTypes;
+
+  public int nodeIndex;
 
   /**
    * Initializations, called from each Constructor.
@@ -696,6 +699,14 @@ public abstract class CommandGene
     return m_subReturnType;
   }
 
+  /**
+   *
+   * @param a_childNum int
+   * @return int
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
   public int getSubChildType(int a_childNum) {
     if (m_subChildTypes == null) {
       return 0;
@@ -705,6 +716,12 @@ public abstract class CommandGene
     }
   }
 
+  /**
+   * @return int[]
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
   protected int[] getSubChildTypes() {
     return m_subChildTypes;
   }

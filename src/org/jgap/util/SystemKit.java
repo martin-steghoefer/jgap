@@ -17,7 +17,7 @@ package org.jgap.util;
  */
 public class SystemKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * @return total memory available by the VM in megabytes.
@@ -26,16 +26,36 @@ public class SystemKit {
    * @since 3.2 (since 3.0 in GPGenotype)
    */
   public static double getTotalMemoryMB() {
-    return (Runtime.getRuntime().totalMemory() / 1024 / 1024);
+    return getTotalMemoryKB() / 1024;
+  }
+
+  /**
+   * @return total memory available by the VM in kilobytes.
+   *
+   * @author Klaus Meffert
+   * @since 4.0
+   */
+  public static double getTotalMemoryKB() {
+    return (Runtime.getRuntime().totalMemory() / 1024);
   }
 
   /**
    * @return free memory available in the VM in megabytes.
    *
    * @author Klaus Meffert
-   * @since 3.0 (since 3.0 in GPGenotype)
+   * @since 3.2 (since 3.0 in GPGenotype)
    */
   public static double getFreeMemoryMB() {
-    return (Runtime.getRuntime().freeMemory() / 1024 / 1024);
+    return getFreeMemoryKB() / 1024;
+  }
+
+  /**
+   * @return free memory available in the VM in kilobytes.
+   *
+   * @author Klaus Meffert
+   * @since 4.0
+   */
+  public static double getFreeMemoryKB() {
+    return (Runtime.getRuntime().freeMemory() / 1024);
   }
 }
