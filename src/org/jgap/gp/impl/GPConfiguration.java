@@ -30,7 +30,9 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
+
+  /**@todo introduce lock for configuration*/
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -46,7 +48,8 @@ public class GPConfiguration
   /**
    * Internal memory, see StoreTerminalCommand for example.
    */
-  private transient Culture m_memory = new Culture(50); /**@todo make 50 configurable*/
+  private transient Culture m_memory = new Culture(50);
+      /**@todo make 50 configurable*/
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -135,7 +138,6 @@ public class GPConfiguration
    */
   private IGPProgram m_prototypeProgram;
 
-
   private boolean m_useProgramCache = false;
 
   private Map m_variables;
@@ -149,6 +151,15 @@ public class GPConfiguration
    * @since 2.6
    */
   private transient IJGAPFactory m_factory;
+
+  /**
+   * For initializing GP programs before random creation.
+   *
+   * @author Klaus Meffert
+   * @since 2.6
+   *
+   */
+  private IGPInitStrategy m_initStrategy;
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -186,7 +197,6 @@ public class GPConfiguration
     setName(a_name);
   }
 
-
   /**
    * Sets a GP fitness evaluator, such as
    * org.jgap.gp.impl.DefaultGPFitnessEvaluator.
@@ -203,6 +213,8 @@ public class GPConfiguration
   /**
    * Helper for construction.
    *
+   * @param a_fullInit true set event manager, random generator and fitness
+   * evaluator to defauklt
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -612,13 +624,14 @@ public class GPConfiguration
                               int a_recurseLevel, Class a_type,
                               CommandGene[] a_functionSet, int a_depth,
                               boolean a_grow, int a_childIndex,
-      boolean a_fullProgram) {
+                              boolean a_fullProgram) {
     if (m_nodeValidator == null) {
       return true;
     }
     return m_nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
                                     a_recurseLevel, a_type, a_functionSet,
-                                    a_depth, a_grow, a_childIndex, a_fullProgram);
+                                    a_depth, a_grow, a_childIndex,
+                                    a_fullProgram);
   }
 
   /**
@@ -739,12 +752,12 @@ public class GPConfiguration
   public GPProgramInfo readProgramCache(GPProgram a_prog) {
     GPProgramInfo pci = new GPProgramInfo(a_prog, true);
     pci.setFound(false);
-    return (GPProgramInfo)m_programCache.get(pci.getToStringNorm());
+    return (GPProgramInfo) m_programCache.get(pci.getToStringNorm());
   }
 
   public GPProgramInfo putToProgramCache(GPProgram a_prog) {
     GPProgramInfo pci = new GPProgramInfo(a_prog, true);
-    return (GPProgramInfo)m_programCache.put(pci.getToStringNorm(), pci);
+    return (GPProgramInfo) m_programCache.put(pci.getToStringNorm(), pci);
   }
 
   public boolean isUseProgramCache() {
@@ -805,13 +818,13 @@ public class GPConfiguration
       // Clone JGAPFactory first because it helps in cloning other objects.
       // ------------------------------------------------------------------
       if (m_factory instanceof ICloneable) {
-        result.m_factory = (IJGAPFactory)((ICloneable)m_factory).clone();
+        result.m_factory = (IJGAPFactory) ( (ICloneable) m_factory).clone();
       }
       else {
         // We must fallback to a standardized solution.
         // --------------------------------------------
         m_factory = new JGAPFactory(false);
-        result.m_factory = (IJGAPFactory)((JGAPFactory)m_factory).clone();
+        result.m_factory = (IJGAPFactory) ( (JGAPFactory) m_factory).clone();
       }
       if (result.m_factory == null) {
         throw new IllegalStateException("JGAPFactory must not be null!");
@@ -828,10 +841,11 @@ public class GPConfiguration
       result.m_minInitDepth = m_minInitDepth;
       result.m_strictProgramCreation = m_strictProgramCreation;
       result.m_programCreationMaxTries = m_programCreationMaxTries;
-      result.m_selectionMethod = (INaturalGPSelector)doClone(m_selectionMethod);
-      result.m_crossMethod = (CrossMethod)doClone(m_crossMethod);
-      result.m_fitnessEvaluator = (IGPFitnessEvaluator)doClone(m_fitnessEvaluator);
-      result.m_nodeValidator = (INodeValidator)doClone(m_nodeValidator);
+      result.m_selectionMethod = (INaturalGPSelector) doClone(m_selectionMethod);
+      result.m_crossMethod = (CrossMethod) doClone(m_crossMethod);
+      result.m_fitnessEvaluator = (IGPFitnessEvaluator) doClone(
+          m_fitnessEvaluator);
+      result.m_nodeValidator = (INodeValidator) doClone(m_nodeValidator);
       result.m_useProgramCache = m_useProgramCache;
       // Configurable data.
       // ------------------
@@ -840,7 +854,7 @@ public class GPConfiguration
       // --------------------
       result.setName(a_name);
       result.setId(a_id);
-      result.makeThreadKey();// Must be called after m_id is set
+      result.makeThreadKey(); // Must be called after m_id is set
       return result;
     } catch (Throwable t) {
       throw new CloneException(t);
@@ -880,5 +894,25 @@ public class GPConfiguration
     }
   }
 
+  /**
+   *
+   * @param a_strategy IGPInitStrategy
+   *
+   * @author Klaus Meffert
+   * @since 4.0
+   */
+  public void setInitStrategy(IGPInitStrategy a_strategy) {
+    m_initStrategy = a_strategy;
+  }
+
+  /**
+   *
+   * @return IGPInitStrategy
+   *
+   * @author Klaus Meffert
+   * @since 4.0
+   */
+  public IGPInitStrategy getInitStrategy() {
+    return  m_initStrategy;
+  }
 }
-/**@todo introduce lock for configuration*/
