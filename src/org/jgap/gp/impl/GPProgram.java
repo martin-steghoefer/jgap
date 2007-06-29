@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -435,7 +435,8 @@ public class GPProgram
       // ------------------------------
       Object appData = getApplicationData();
       if (appData != null) {
-        ICloneHandler cloner = getGPConfiguration().getJGAPFactory().getCloneHandlerFor(appData,null);
+        ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+            getCloneHandlerFor(appData, null);
         if (cloner != null) {
           result.setApplicationData(cloner.perform(appData,null,null));
         }
