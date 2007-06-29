@@ -25,9 +25,10 @@ import org.jgap.gp.impl.*;
  * @author Klaus Meffert
  * @since 3.0
  */
-public interface INodeValidator {
+public interface INodeValidator
+    extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Validates a_node in the context of a_chrom. Considers the recursion level
@@ -48,6 +49,7 @@ public interface INodeValidator {
    * @param a_grow true: use grow mode, false: use full mode
    * @param a_childIndex index of the child in the parent node to which it
    * belongs (-1 if node is root node)
+   * @param a_fullProgram true: whole program is available in a_chrom
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
@@ -57,5 +59,6 @@ public interface INodeValidator {
                    CommandGene a_rootNode, int a_tries,
                    int a_num, int a_recursLevel, Class a_type,
                    CommandGene[] a_functionSet, int a_depth,
-                   boolean a_grow, int a_childIndex);
+                   boolean a_grow, int a_childIndex, boolean a_fullProgram);
+
 }
