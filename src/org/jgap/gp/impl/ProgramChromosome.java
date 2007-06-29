@@ -9,7 +9,6 @@
  */
 package org.jgap.gp.impl;
 
-import java.util.*;
 import org.jgap.*;
 import org.jgap.util.*;
 import org.jgap.gp.terminal.*;
@@ -22,9 +21,9 @@ import org.jgap.gp.*;
  * @since 3.0
  */
 public class ProgramChromosome
-    extends BaseGPChromosome implements IGPChromosome, Comparable, Cloneable {
+    extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -221,7 +220,14 @@ public class ProgramChromosome
       // Initialization of genotype according to specific problem requirements.
       // ----------------------------------------------------------------------
       /**@todo make init as dynamic/configurable as possible*/
-      CommandGene n = null;
+      CommandGene n;
+      IGPInitStrategy programIniter = getGPConfiguration().getInitStrategy();
+      if (programIniter == null) {
+        n = null;
+      }
+      else {
+        n = programIniter.init(this, a_num);
+      }
 //      if (a_num == 0) {
 //        for (int i = 0; i < m_functionSet.length; i++) {
 //          CommandGene m = m_functionSet[i];
