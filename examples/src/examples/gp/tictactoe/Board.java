@@ -61,7 +61,6 @@ public class Board {
     if (movesInTurn != 1) {
       throw new IllegalStateException("One stone must be set by player!");
     }
-//    System.out.println("*** Valid turn!");
   }
 
   public void endRound() {
