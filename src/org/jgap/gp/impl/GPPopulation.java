@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The array of GPProgram's that make-up the Genotype's population.
@@ -189,39 +189,53 @@ public class GPPopulation
       do {
         try {
           program = create(a_types, a_argTypes, a_nodeSets,
-                           a_minDepths,
-                           a_maxDepths, depth, (i % 2) == 0,
-                           a_maxNodes,
-                           a_fullModeAllowed);
+                           a_minDepths, a_maxDepths, depth, (i % 2) == 0,
+                           a_maxNodes, a_fullModeAllowed);
           if (i == 0) {
             // Remember a prototyp of a valid program in case generation
             // cannot find a valid program within some few tries
             // --> then clone the prototype.
-            // Necessary if the maxNodes parameter is chosen too small.
-            // ---------------------------------------------------------
+            // Necessary if the maxNodes parameter is chosen small
+            // or a validator is used which is quite restrictive.
+            // ---------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
+          }
+          else if (i % 5 == 0) {
             /**@todo set prototype to new value after each some evolutions*/
+            double protoFitness = getGPConfiguration().getPrototypeProgram().getFitnessValue();
+            if (protoFitness < program.getFitnessValue()) {
+              getGPConfiguration().setPrototypeProgram(program);
+            }
           }
           break;
         } catch (IllegalStateException iex) {
           tries++;
           if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
-            ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
-                getCloneHandlerFor(
-                    getGPConfiguration().getPrototypeProgram(), null);
-            if (cloner != null) {
-              try {
-                program = (IGPProgram) cloner.perform(
-                    getGPConfiguration().getPrototypeProgram(), null, null);
-                break;
-              } catch (Exception ex) {
-                ex.printStackTrace();
-                // Rethrow original error.
-                // -----------------------
-                throw new IllegalStateException(iex.getMessage());
+            IGPProgram prototype = getGPConfiguration().getPrototypeProgram();
+            if (prototype != null) {
+              ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+                  getCloneHandlerFor(prototype, null);
+              if (cloner != null) {
+                try {
+                  program = (IGPProgram) cloner.perform(prototype, null, null);
+                  System.out.println("Prototype program reused because random"
+                                     +" program did not satisfy constraints");
+                  break;
+                } catch (Exception ex) {
+                  // Rethrow original error.
+                  // -----------------------
+                  throw iex;
+                }
+              }
+              else {
+                System.err.println("Warning: no clone handler found for"
+                                   + " prototype program type "
+                                   + prototype);
               }
             }
-            throw new IllegalStateException(iex.getMessage());
+            // Rethrow original error.
+            // -----------------------
+            throw iex;
           }
         }
       } while (true);
