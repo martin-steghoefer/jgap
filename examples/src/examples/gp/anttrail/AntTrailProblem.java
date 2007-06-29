@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private int[][] m_map;
 
@@ -188,14 +188,14 @@ public class AntTrailProblem
       config.setNewChromsPercent(0.3f);
       config.setStrictProgramCreation(true);
       config.setUseProgramCache(true);
-      GPGenotype gp = problem.create();
-      gp.setVerboseOutput(true);
       // Read the trail from file.
       // -------------------------
       problem.m_map = problem.readTrail(filename);
       AntMap antmap = new AntMap(problem.m_map, m_maxMoves);
       totalFood = countFood(antmap);
       System.out.println("Food to consume by ant: " + totalFood);
+      GPGenotype gp = problem.create();
+      gp.setVerboseOutput(true);
       // Simple implementation of running evolution in a thread.
       // -------------------------------------------------------
       final Thread t = new Thread(gp);
