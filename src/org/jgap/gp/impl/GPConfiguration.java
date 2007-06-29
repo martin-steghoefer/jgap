@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * References the current fitness function that will be used to evaluate
@@ -600,6 +600,7 @@ public class GPConfiguration
    * @param a_grow true: use grow mode, false: use full mode
    * @param a_childIndex index of the child in the parent node to which it
    * belongs (-1 if node is root node)
+   * @param a_fullProgram true: whole program is available in a_chrom
    *
    * @return true: node is valid; false: node is invalid
    *
@@ -610,13 +611,14 @@ public class GPConfiguration
                               CommandGene a_rootNode, int a_tries, int a_num,
                               int a_recurseLevel, Class a_type,
                               CommandGene[] a_functionSet, int a_depth,
-                              boolean a_grow, int a_childIndex) {
+                              boolean a_grow, int a_childIndex,
+      boolean a_fullProgram) {
     if (m_nodeValidator == null) {
       return true;
     }
     return m_nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
                                     a_recurseLevel, a_type, a_functionSet,
-                                    a_depth, a_grow, a_childIndex);
+                                    a_depth, a_grow, a_childIndex, a_fullProgram);
   }
 
   /**
