@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
+import org.apache.log4j.*;
 
 /**
  * Population for GP programs.
@@ -23,7 +24,9 @@ import org.jgap.gp.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
+
+  private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
   /**
    * The array of GPProgram's that make-up the Genotype's population.
@@ -218,7 +221,7 @@ public class GPPopulation
               if (cloner != null) {
                 try {
                   program = (IGPProgram) cloner.perform(prototype, null, null);
-                  System.out.println("Prototype program reused because random"
+                  LOGGER.warn("Prototype program reused because random"
                                      +" program did not satisfy constraints");
                   break;
                 } catch (Exception ex) {
@@ -228,7 +231,7 @@ public class GPPopulation
                 }
               }
               else {
-                System.err.println("Warning: no clone handler found for"
+                LOGGER.warn("Warning: no clone handler found for"
                                    + " prototype program type "
                                    + prototype);
               }

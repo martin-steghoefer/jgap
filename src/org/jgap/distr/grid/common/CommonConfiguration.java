@@ -1,9 +1,32 @@
+/*
+ * This file is part of JGAP.
+ *
+ * JGAP offers a dual license model containing the LGPL as well as the MPL.
+ *
+ * For licensing information please see the file license.txt included with JGAP
+ * or have a look at the top of class org.jgap.Chromosome which representatively
+ * includes the JGAP license policy applicable for any file delivered with JGAP.
+ */
+
 package org.jgap.distr.grid.common;
 
 import java.io.*;
 import org.jgap.util.*;
+import org.apache.log4j.*;
 
+/**
+ *
+ *
+ * @author Klaus Meffert
+ * @since 3.2
+ */
 public abstract class CommonConfiguration {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  private transient Logger LOGGER = Logger.getLogger(CommonConfiguration.class);
+
   /**
    * Working directory
    */
@@ -31,13 +54,14 @@ public abstract class CommonConfiguration {
   public void setWorkDir(String a_workDir) {
     try {
       m_workDir = FileKit.addSubDir(FileKit.getCurrentDir(), a_workDir, true);
-      System.out.println("Using work directory " + m_workDir);
+      LOGGER.info("Using work directory " + m_workDir);
       if (!FileKit.directoryExists(m_workDir)) {
-        System.out.println("  Directory does not exist yet. Wil create it.");
+        LOGGER.info("  Directory does not exist yet. Wil create it.");
         FileKit.createDirectory(m_workDir);
 
       }
-    } catch (IOException iex) {
+    }
+    catch (IOException iex) {
       throw new RuntimeException("Work directory " + a_workDir + " is invalid!");
     }
   }
@@ -49,13 +73,14 @@ public abstract class CommonConfiguration {
   public void setLibDir(String a_libDir) {
     try {
       m_libDir = FileKit.addSubDir(FileKit.getCurrentDir(), a_libDir, true);
-      System.out.println("Using lib directory " + m_libDir);
+      LOGGER.info("Using lib directory " + m_libDir);
       if (!FileKit.directoryExists(m_libDir)) {
-        System.out.println("  Directory does not exist yet. Wil create it.");
+        LOGGER.info("  Directory does not exist yet. Wil create it.");
         FileKit.createDirectory(m_libDir);
 
       }
-    } catch (IOException iex) {
+    }
+    catch (IOException iex) {
       throw new RuntimeException("Lib directory " + a_libDir + " is invalid!");
     }
   }

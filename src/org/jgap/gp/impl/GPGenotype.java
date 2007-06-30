@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -16,6 +16,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.event.*;
 import org.jgap.util.*;
+import org.apache.log4j.*;
 
 /**
  * Genotype for GP Programs.
@@ -26,7 +27,9 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
+
+  private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
   /**
    * The array of GPProgram's that makeup the GPGenotype's population.
@@ -309,8 +312,8 @@ public class GPGenotype
     // ----------------
     System.gc();
     if (a_verboseOutput) {
-      System.out.println("Creating initial population");
-      System.out.println("Memory consumed before creating population: "
+      LOGGER.info("Creating initial population");
+      LOGGER.info("Memory consumed before creating population: "
                          + SystemKit.getTotalMemoryMB() + "MB");
     }
     // Create initial population.
@@ -320,7 +323,7 @@ public class GPGenotype
                a_maxNodes, a_fullModeAllowed);
     System.gc();
     if (a_verboseOutput) {
-      System.out.println("Memory used after creating population: "
+      LOGGER.info("Memory used after creating population: "
                          + SystemKit.getTotalMemoryMB() + "MB");
     }
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
@@ -393,18 +396,23 @@ public class GPGenotype
    * @since 3.0
    */
   public void evolve(int a_evolutions) {
-    getGPPopulation().sort(new GPFitnessComparator());
-    // Here, we could do threading.
-    for (int i = 0; i < a_evolutions; i++) {
-      calcFitness();
-      if (m_bestFitness < 0.000001) {
-        // Optimal solution found, quit.
-        // -----------------------------
-        return;
-      }
+    int evolutions;
+    if (a_evolutions < 0) {
+      evolutions = Integer.MAX_VALUE;
+    }
+    else {
+      evolutions = a_evolutions;
+    }
+//    getGPPopulation().sort(new GPFitnessComparator());
+    for (int i = 0; i < evolutions; i++) {
+//      if (m_bestFitness < 0.000001) {
+//        // Optimal solution found, quit.
+//        // -----------------------------
+//        return;
+//      }
       if (m_verbose) {
         if (i % 25 == 0) {
-          System.out.println("Evolving generation "
+          LOGGER.info("Evolving generation "
                              + i
                              + ", memory free: "
                              + SystemKit.getFreeMemoryMB()
@@ -412,8 +420,8 @@ public class GPGenotype
         }
       }
       evolve();
+      calcFitness();
     }
-    calcFitness();
   }
 
   /**
@@ -452,8 +460,8 @@ public class GPGenotype
         if (cloner == null) {
           m_allTimeBest = best;
           if (!m_cloneWarningGPProgramShown) {
-            System.out.println("Warning: cannot clone instance of " +
-                               best.getClass());
+            LOGGER.info("Warning: cannot clone instance of "
+                        + best.getClass());
             m_cloneWarningGPProgramShown = true;
           }
         }
@@ -488,15 +496,16 @@ public class GPGenotype
   }
 
   /**
-   * Outputs the best solution currently found.
+   * Outputs the best solution until now.
+   *
    * @param a_best the fittest ProgramChromosome
    *
    * @author Klaus Meffert
    * @since 3.0
    */
   public void outputSolution(IGPProgram a_best) {
-    System.out.println(" Best solution fitness: " + a_best.getFitnessValue());
-    System.out.println(" Best solution: " + a_best.toStringNorm(0));
+    LOGGER.info(" Best solution fitness: " + a_best.getFitnessValue());
+    LOGGER.info(" Best solution: " + a_best.toStringNorm(0));
     String depths = "";
     int size = a_best.size();
     for (int i = 0; i < size; i++) {
@@ -506,12 +515,12 @@ public class GPGenotype
       depths += a_best.getChromosome(i).getDepth(0);
     }
     if (size == 1) {
-      System.out.println(" Depth of chromosome: " + depths);
+      LOGGER.info(" Depth of chromosome: " + depths);
     }
     else {
-      System.out.println(" Depths of chromosomes: " + depths);
+      LOGGER.info(" Depths of chromosomes: " + depths);
     }
-    System.out.println(" --------");
+    LOGGER.info(" --------");
   }
 
   /**
@@ -565,7 +574,7 @@ public class GPGenotype
               tries++;
               if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
                 if (!getGPConfiguration().isMaxNodeWarningPrinted()) {
-                  System.err.println(
+                  LOGGER.error(
                       "Warning: Maximum number of nodes allowed may be too small");
                   getGPConfiguration().flagMaxNodeWarningPrinted();
                   // Try cloning a previously generated valid program.
