@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -14,10 +14,13 @@ import java.net.*;
 import java.util.*;
 import java.util.jar.*;
 import java.util.zip.*;
+import org.apache.log4j.*;
 
 public class ClassKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
+
+  private transient static Logger LOGGER = Logger.getLogger(ClassKit.class);
 
   public static void main(String[] args)
       throws Exception {
@@ -30,7 +33,7 @@ public class ClassKit {
     List result = new Vector();
     result = find("org.jgap.INaturalSelector");
     for (int i = 0; i < result.size(); i++) {
-      System.err.println(result.get(i));
+      LOGGER.debug(result.get(i));
     }
 //    URL url = ClassKit.class.getResource("/info/clearthought/layout/");
     URL url = ClassKit.class.getResource("/org/jgap/impl/");
@@ -38,10 +41,12 @@ public class ClassKit {
   }
 
   /**
-   * Display all the classes inheriting or implementing a given
-   * class in the currently loaded packages.
+   * Retrieves all the classes inheriting or implementing a given class in the
+   * currently loaded packages.
    * @param a_tosubclassname the name of the class to inherit from
-   * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   * @return classes inheriting or implementing a given class in the
+   * currently loaded packages
+   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
   public static List find(final String a_tosubclassname) {
     try {
@@ -58,7 +63,7 @@ public class ClassKit {
       return result;
     }
     catch (ClassNotFoundException ex) {
-      System.err.println("Class " + a_tosubclassname + " not found!");
+      LOGGER.warn("Class " + a_tosubclassname + " not found!");
       return null;
     }
   }
@@ -66,9 +71,13 @@ public class ClassKit {
   /**
    * Display all the classes inheriting or implementing a given
    * class in a given package.
+   *
    * @param a_pckname the fully qualified name of the package
    * @param a_tosubclassname the name of the class to inherit from
-   * See http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
+   * @return classes inheriting or implementing a given class in a given package
+   * @throws ClassNotFoundException
+   *
+   * @see http//www.javaworld.com/javaworld/javatips/jw-javatip113.html
    */
   public static List find(final String a_pckname, final String a_tosubclassname)
       throws ClassNotFoundException {
@@ -128,17 +137,13 @@ public class ClassKit {
           try {
             // Try to create an instance of the object
             Class c = Class.forName(a_pckgname + "." + classname);
-            if (a_pckgname.equals("org.jgap.impl")
-                && classname.equals("BestChromosomesSelector")) {
-              System.err.println("X");
-            }
             if (implementsInterface(c, a_tosubclass)
                 || extendsClass(c, a_tosubclass)) {
               result.add(a_pckgname + "." + classname);
             }
           }
           catch (ClassNotFoundException cnfex) {
-            System.err.println(cnfex);
+            LOGGER.error(cnfex);
           }
 //          catch (InstantiationException iex) {
 //            // We try to instanciate an interface or an object that does not
@@ -187,13 +192,13 @@ public class ClassKit {
             }
           }
           catch (ClassNotFoundException cnfex) {
-            System.err.println(cnfex);
+            LOGGER.error(cnfex);
           }
         }
       }
     }
     catch (IOException ioex) {
-      System.err.println(ioex);
+      LOGGER.error(ioex);
     }
   }
 
@@ -246,8 +251,9 @@ public class ClassKit {
     Vector classes = new Vector();
     long startTime = System.currentTimeMillis();
     addClasses(classes, modulePath, "");
-    System.out.println("Found Classes in: "
-                       + (System.currentTimeMillis() - startTime) + " mills");
+    LOGGER.info("Found plugin classes in: "
+                       + (System.currentTimeMillis() - startTime)
+                       + " milliseconds");
     // -------------------------------
 //    Vector implementingClasses = new Vector();
     Enumeration e = classes.elements();
@@ -255,7 +261,7 @@ public class ClassKit {
       try {
         String name = e.nextElement().toString();
         /**@todo check if class assignable from given type*/
-        System.err.println("found: " + name);
+        LOGGER.info("Found plugin class: " + name);
       }
       catch (Throwable ex) {
         ; // do nothing?
