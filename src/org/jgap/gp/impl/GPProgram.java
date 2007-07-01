@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -11,9 +11,10 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.*;
-import org.jgap.gp.function.*;
 import org.jgap.gp.*;
+import org.jgap.gp.function.*;
 import org.jgap.util.*;
 
 /**
@@ -25,7 +26,7 @@ import org.jgap.util.*;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -127,7 +128,7 @@ public class GPProgram
   }
 
   public void growOrFull(int a_depth, boolean a_grow, int a_maxNodes,
-                         boolean[] a_fullModeAllowed) {
+                         boolean[] a_fullModeAllowed, int a_tries) {
     GPConfiguration conf = getGPConfiguration();
     int size = m_chromosomes.length;
     for (int i = 0; i < size; i++) {
@@ -169,11 +170,11 @@ public class GPProgram
       // ---------------------------------------------
       if (a_grow || !a_fullModeAllowed[i]) {
         m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
-                                    getNodeSet(i), true);
+                                    getNodeSet(i), true, a_tries);
       }
       else {
         m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
-                                    getNodeSet(i), false);
+                                    getNodeSet(i), false, a_tries);
       }
     }
     if (getGPConfiguration().isUseProgramCache()) {

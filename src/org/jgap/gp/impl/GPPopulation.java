@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -193,7 +193,7 @@ public class GPPopulation
         try {
           program = create(a_types, a_argTypes, a_nodeSets,
                            a_minDepths, a_maxDepths, depth, (i % 2) == 0,
-                           a_maxNodes, a_fullModeAllowed);
+                           a_maxNodes, a_fullModeAllowed, tries);
           if (i == 0) {
             // Remember a prototyp of a valid program in case generation
             // cannot find a valid program within some few tries
@@ -205,13 +205,15 @@ public class GPPopulation
           }
           else if (i % 5 == 0) {
             /**@todo set prototype to new value after each some evolutions*/
-            double protoFitness = getGPConfiguration().getPrototypeProgram().getFitnessValue();
+            double protoFitness = getGPConfiguration().getPrototypeProgram().
+                getFitnessValue();
             if (protoFitness < program.getFitnessValue()) {
               getGPConfiguration().setPrototypeProgram(program);
             }
           }
           break;
-        } catch (IllegalStateException iex) {
+        }
+        catch (IllegalStateException iex) {
           tries++;
           if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
             IGPProgram prototype = getGPConfiguration().getPrototypeProgram();
@@ -222,9 +224,10 @@ public class GPPopulation
                 try {
                   program = (IGPProgram) cloner.perform(prototype, null, null);
                   LOGGER.warn("Prototype program reused because random"
-                                     +" program did not satisfy constraints");
+                              + " program did not satisfy constraints");
                   break;
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                   // Rethrow original error.
                   // -----------------------
                   throw iex;
@@ -232,8 +235,8 @@ public class GPPopulation
               }
               else {
                 LOGGER.warn("Warning: no clone handler found for"
-                                   + " prototype program type "
-                                   + prototype);
+                            + " prototype program type "
+                            + prototype);
               }
             }
             // Rethrow original error.
@@ -241,7 +244,8 @@ public class GPPopulation
             throw iex;
           }
         }
-      } while (true);
+      }
+      while (true);
       setGPProgram(i, program);
     }
     setChanged(true);
@@ -276,7 +280,8 @@ public class GPPopulation
   public IGPProgram create(Class[] a_types, Class[][] a_argTypes,
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
                            int[] a_maxDepths, int a_depth, boolean a_grow,
-                           int a_maxNodes, boolean[] a_fullModeAllowed)
+                           int a_maxNodes, boolean[] a_fullModeAllowed,
+                           int a_tries)
       throws InvalidConfigurationException {
     GPProgram program;
     // Is there a fit program to be injected?
@@ -290,7 +295,8 @@ public class GPPopulation
       else {
         try {
           program = (GPProgram) cloner.perform(m_fittestToAdd, null, null);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
           ex.printStackTrace();
           program = (GPProgram) m_fittestToAdd;
         }
@@ -301,10 +307,10 @@ public class GPPopulation
       // Create new GP program.
       // ----------------------
       program = new GPProgram(getGPConfiguration(), a_types,
-                              a_argTypes,
-                              a_nodeSets, a_minDepths, a_maxDepths,
+                              a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                               a_maxNodes);
-      program.growOrFull(a_depth, a_grow, a_maxNodes, a_fullModeAllowed);
+      program.growOrFull(a_depth, a_grow, a_maxNodes, a_fullModeAllowed,
+                         a_tries);
     }
     return program;
   }
@@ -394,7 +400,8 @@ public class GPPopulation
       if (cloner != null) {
         try {
           m_fittestProgram = (IGPProgram) cloner.perform(m_fittestProgram, null, null);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
           ; // ignore
         }
       }
@@ -595,7 +602,8 @@ public class GPPopulation
   public boolean equals(Object a_pop) {
     try {
       return compareTo(a_pop) == 0;
-    } catch (ClassCastException e) {
+    }
+    catch (ClassCastException e) {
       // If the other object isn't an Population instance
       // then we're not equal.
       // ------------------------------------------------
