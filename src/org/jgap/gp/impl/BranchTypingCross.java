@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -77,7 +77,7 @@ public class BranchTypingCross
       // even if two individuals' chromosomes point to the same chromosome,
       // the only change in a chromosome is crossing, which generates
       // deep-copied chromosomes anyway.
-
+      // ------------------------------------------------------------------
       IGPProgram[] newIndividuals = {
           new GPProgram(i1), //getConfiguration(), i1.size()),
           new GPProgram(i1)}; //getConfiguration(), i1.size())};
@@ -180,7 +180,8 @@ public class BranchTypingCross
         // --------------------------
         return c;
       }
-      p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_, subType)), type_, subType);
+      p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_, subType)),
+                          type_, subType);
       // Mutate the terminal's value.
       // ----------------------------
       /**@todo make this random and configurable*/
@@ -235,8 +236,7 @@ public class BranchTypingCross
     }
     else {
       c[1] = new ProgramChromosome(getConfiguration(), c1.getFunctions().length, // c1s - s1 + s0,
-                                   c[1].getFunctionSet(),
-                                   c[1].getArgTypes(),
+                                   c[1].getFunctionSet(), c[1].getArgTypes(),
                                    c1.getIndividual());
       System.arraycopy(c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
       System.arraycopy(c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
