@@ -27,7 +27,7 @@ import org.apache.log4j.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -615,12 +615,27 @@ public class GPGenotype
           try {
             IGPProgram program = newPopulation.create(m_types, m_argTypes,
                 m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
-                m_maxNodes, m_fullModeAllowed);
+                m_maxNodes, m_fullModeAllowed, tries);
             newPopulation.setGPProgram(i, program);
+            LOGGER.debug("Added new GP program (depth "
+                        + depth
+                        + ", "
+                        + tries
+                        + " tries)");
             break;
           } catch (IllegalStateException iex) {
+            /**@todo instead of re-using prototype, create a program anyway
+             * (ignoring the validator) in case it is the last try.
+             * Or even better: Make the validator return a defect rate!
+             */
             tries++;
             if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
+              LOGGER.debug(
+                  "Creating random GP program failed (depth "
+                  +depth
+                  +", "
+                  + tries
+                  + " tries), will use prototype");
               // Try cloning a previously generated valid program.
               // -------------------------------------------------
               IGPProgram program = cloneProgram(getGPConfiguration().
