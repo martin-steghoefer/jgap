@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public GABreeder() {
     super();
@@ -83,7 +83,8 @@ public class GABreeder
     // Increase age of all chromosomes which are not modified by genetic
     // operations.
     // -----------------------------------------------------------------
-    for (int i = 0; i < originalPopSize; i++) {
+    int size = Math.min(originalPopSize, currentPopSize);
+    for (int i = 0; i < size; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.increaseAge();
       // Mark chromosome as not being operated on.
