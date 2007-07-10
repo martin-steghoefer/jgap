@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public GABreeder() {
     super();
@@ -25,13 +25,25 @@ public class GABreeder
     Population pop = a_pop;
     int originalPopSize = config.getPopulationSize();
     IChromosome fittest = null;
-    // Select fittest chromosome in case it should be preserved and we are
-    // not in the very first generation.
-    // -------------------------------------------------------------------
-    if (config.isPreserveFittestIndividual() && config.getGenerationNr() > 0) {
-      /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
-       * computation*/
-      fittest = pop.determineFittestChromosome(0, originalPopSize - 1);
+    // If first generation: Set age to one to allow genetic operations,
+    // see CrossoverOperator for an illustration.
+    // ----------------------------------------------------------------
+    if (config.getGenerationNr() == 0) {
+      int size = pop.size();
+      for (int i = 0; i < size; i++) {
+        IChromosome chrom = pop.getChromosome(i);
+        chrom.increaseAge();
+      }
+    }
+    else {
+      // Select fittest chromosome in case it should be preserved and we are
+      // not in the very first generation.
+      // -------------------------------------------------------------------
+      if (config.isPreserveFittestIndividual()) {
+        /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
+         * computation*/
+        fittest = pop.determineFittestChromosome(0, originalPopSize - 1);
+      }
     }
     // Adjust population size to configured size (if wanted).
     // Theoretically, this should be done at the end of this method.
@@ -83,8 +95,7 @@ public class GABreeder
     // Increase age of all chromosomes which are not modified by genetic
     // operations.
     // -----------------------------------------------------------------
-    int size = Math.min(originalPopSize, currentPopSize);
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < originalPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.increaseAge();
       // Mark chromosome as not being operated on.
