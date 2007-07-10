@@ -11,12 +11,13 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
+
+import org.apache.log4j.*;
 import org.jgap.*;
+import org.jgap.event.*;
 import org.jgap.gp.*;
 import org.jgap.gp.terminal.*;
-import org.jgap.event.*;
 import org.jgap.util.*;
-import org.apache.log4j.*;
 
 /**
  * Genotype for GP Programs.
@@ -27,7 +28,7 @@ import org.apache.log4j.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 

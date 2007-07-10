@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -12,8 +12,7 @@ package org.jgap;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-import org.apache.commons.codec.net.*;
-import org.apache.commons.codec.*;
+
 import org.jgap.util.*;
 
 /**
@@ -25,7 +24,7 @@ import org.jgap.util.*;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * This field separates gene class name from the gene persistent representation

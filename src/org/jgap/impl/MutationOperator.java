@@ -3,13 +3,14 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
 import org.jgap.data.config.*;
 
@@ -18,7 +19,7 @@ import org.jgap.data.config.*;
  * in the population and mutates them in statistical accordance to the
  * given mutation rate. Mutated Chromosomes are then added to the list of
  * candidate Chromosomes destined for the natural selection process.
- * <p>
+ *
  * This MutationOperator supports both fixed and dynamic mutation rates.
  * A fixed rate is one specified at construction time by the user. A dynamic
  * rate is determined by this class if no fixed rate is provided, and is
@@ -32,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
