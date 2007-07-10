@@ -4,6 +4,7 @@
 * Enhanced Robocode example a lot
 * Added Maven pom file
 * Added custom-initialization mechanism for GP
+* Introduced log4j
 * Fixed bug with allTimeBest and cloning (see bug 1744077)
 * Made INodeValidator serializable
 * Enhanced IGPChromosome by method getFunctionSet()
