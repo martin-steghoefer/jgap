@@ -9,16 +9,12 @@
 <title>Robocode with JGAP</title>
 </head>
 
-<body class="documentText">
+<body class="documentTextRobocode">
 
-<h1 class="docTitle">JGAP builds robots for Robocode</h1>
+<h1 class="docTitle"><a href="http://jgap.sf.net"><img border="0" src="RobocodeJGAP.png" width="712" height="264"></a></h1>
 
-<p align="center"><a class="homeLink" href="../../index.html">[JGAP Home]</a> </p>
-
-<hr>
 <a name="top">
 
-<h2><font color="#008000">Robocode</font></h2>
 <p class="text">Robocode is a game. There is a playfield in which two virtual
 robots fight against each other. A robot can perform certain actions, like
 moving around, scanning the environment, shooting and turning the gun. Robocode
@@ -49,35 +45,33 @@ visualize the battles of the evolved robots against its opponent.</a>
   <li>
     <p class="text">Download the Robocode sample <a href="robocodeJGAP.zip">here</a>
     (contribution by Javier
-    Meseguer and Enrique D. Martí).</li>
+    Meseguer and Enrique D. Martí, extended by Klaus Meffert with help from
+    Flemming N. Larsen).</li>
   <li>
     <p class="text">Extract the Robocode example into a folder of your choice.</li>
   <li>
-    <p class="text">Start the example by typing <i>start.bat</i> or (in one line):<br>
-    <i>
-    java -Xmx512M -Dsun.io.useCanonCaches=false -cp "robocodeJGAP.jar;lib/robocode.jar;lib/jgap.jar&quot; CreateAspirant
-    -gui -enemy evolved.Aspirant3285</i></li>
+    <p class="text">Start the example by running of the two provided batch files
+    (.bat) respectively the commands contained on Linux systems.</li>
   <li>
-    <p class="text">Wait until some rounds are done, the graphical display shows
-    up for demonstration purposes. The battle is undertaken by the currently
-    evolved robot.&nbsp;You can turn off the graphical display by skipping the
+    <p class="text"> The battle is undertaken by the currently
+    evolved robot.&nbsp;You can turn on&nbsp; the graphical display by skipping the
     &quot;-gui&quot; option in the previous step. It takes some time until the
     GUI appears as it is quite time-consuming and is just there for
-    demonstration purposes.</li>
+    demonstration purposes. Otherwise you can see the evolution by examining the
+    log messages.</li>
   <li>
-    <p class="text">The&nbsp; command-line parameter &quot;-enemy&quot;
+    <p class="text">When looking at the provided batch files: The&nbsp; command-line parameter &quot;-enemy&quot;
     lets you specify an individual opponent for your robot to compete
     with. After the &quot;-enemy&quot; option you have to give the name of your
     class, e.g. &quot;<i>myrobots.MyRobot</i>&quot; for class <i>MyRobot</i>
     that resides in subdirectory <i>myrobots</i>. In the above call,&nbsp; <i>Aspirant3285</i>
     is used.</li>
 </ol>
-<p class="text">By looking in the <i> robots/dunapep</i> subfolder you can see the
+<p class="text">By looking in the <i> robots/jgap</i> subfolder you can see the
 robot's source code generated with JGAP (file: <a href="Aspirant.java">Aspirant.java</a> - click on link for sample
 code evolved).<p class="text">As for every individual robot evolved the Java
 compiler has to be invoked, computation may take some time. In the future the
-JGAP Grid will enable to compute such things distributedly in a LAN and/or WAN.<p class="text">The
-source code for the example will be made available soon.<p class="text">Feedback
+JGAP Grid will enable to compute such things distributedly in a LAN and/or WAN.<p class="text">Feedback
 is very welcome!<p class="copyright">Copyright © 2005-2007&nbsp; <a href="http://www.klaus-meffert.com" target="_blank">Klaus Meffert</a>
 (with great support&nbsp; from Javier Meseguer). <span lang="EN-GB" style="mso-ansi-language: EN-GB">GNU
 free documentation </span><a href="http://www.gnu.org/licenses/fdl.html" target="_blank"><span lang="EN-GB" style="mso-ansi-language: EN-GB">license</span></a> </p>
