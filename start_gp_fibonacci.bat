@@ -1,2 +1,2 @@
-java -classpath ".;jgap-examples.jar;jgap.jar" examples.gp.Fibonacci
+java -classpath ".;jgap-examples.jar;jgap.jar;lib/log4j.jar" examples.gp.Fibonacci
 pause
