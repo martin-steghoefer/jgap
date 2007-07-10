@@ -27,7 +27,7 @@ import org.apache.log4j.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -119,7 +119,8 @@ public class GPGenotype
   }
 
   /**
-   * Preferred constructor to use, if not randomInitialGenotype.
+   * Preferred constructor to use, if not using the static method
+   * randomInitialGenotype.
    *
    * @param a_configuration the configuration to use
    * @param a_population the initialized population to use

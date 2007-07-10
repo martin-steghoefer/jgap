@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -899,7 +899,7 @@ public class GPConfiguration
    * @param a_strategy IGPInitStrategy
    *
    * @author Klaus Meffert
-   * @since 4.0
+   * @since 3.2.1
    */
   public void setInitStrategy(IGPInitStrategy a_strategy) {
     m_initStrategy = a_strategy;
@@ -910,7 +910,7 @@ public class GPConfiguration
    * @return IGPInitStrategy
    *
    * @author Klaus Meffert
-   * @since 4.0
+   * @since 3.2.1
    */
   public IGPInitStrategy getInitStrategy() {
     return  m_initStrategy;

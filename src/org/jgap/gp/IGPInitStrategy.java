@@ -15,11 +15,11 @@ import java.io.*;
  * Optional initializer for creating GP programs.
  *
  * @author Klaus Meffert
- * @since 4.0
+ * @since 3.2.1
  */
 public interface IGPInitStrategy extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Initializes a chromosome within a GP program before a random creation of
@@ -30,7 +30,7 @@ public interface IGPInitStrategy extends Serializable {
    * @return the CommandGene to use as first node, or null if random selection
    *
   * @author Klaus Meffert
-  * @since 4.0
+  * @since 3.2.1
   */
   CommandGene init(IGPChromosome a_chrom, int a_chromNum);
 }

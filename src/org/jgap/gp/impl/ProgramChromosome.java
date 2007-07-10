@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -201,6 +201,7 @@ public class ProgramChromosome
    * @param a_argTypes the array of types of arguments for this chromosome
    * @param a_functionSet the set of nodes valid to pick from
    * @param a_grow true: use grow method; false: use full method
+   * @param a_tries maximum number of tries to create a valid program
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -732,7 +733,7 @@ public class ProgramChromosome
    * @return true specific node found
    *
    * @author Klaus Meffert
-   * @since 4.0
+   * @since 3.2.1
    */
   public CommandGene getNode(Class a_type, boolean a_exactMatch) {
     return getNode(a_type, a_exactMatch, 0);
