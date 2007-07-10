@@ -10,6 +10,9 @@
 * Enhanced Javadoc a lot
 * Fixed bug with GABreeder.evolution (bug 1748528)
 * Added two utility functions to SystemKit
+* Fixed some few Javadocs
+* Improved Chromosome.hashCode()
+* Added some few unit tests
 
 3.2
 -----------------------------------------------------------
