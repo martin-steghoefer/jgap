@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class NOP
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -67,7 +67,7 @@ public class NOP
    * @throws UnsupportedOperationException
    *
    * @author Klaus Meffert
-   * @since 4.0
+   * @since 3.2.1
    */
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     return new StringBuffer(";");
