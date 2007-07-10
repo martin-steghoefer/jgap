@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -11,6 +11,7 @@ package org.jgap;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.distr.*;
 import org.jgap.impl.job.*;
 
@@ -31,7 +32,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.102 $";
+  private final static String CVS_REVISION = "$Revision: 1.103 $";
 
   /**
    * The current Configuration instance.
@@ -153,7 +154,7 @@ public class Genotype
    * @return the current population of chromosomes
    *
    * @author Klaus Meffert
-   * @since 2.1 (?)
+   * @since 2.1
    */
   public Population getPopulation() {
     return m_population;
@@ -479,7 +480,7 @@ public class Genotype
    * @return the configuration to use with the Genetic Algorithm
    *
    * @author Klaus Meffert
-   * @since 2.0 (?)
+   * @since 2.0
    */
   public static Configuration getStaticConfiguration() {
     return m_staticConfiguration;
@@ -490,7 +491,7 @@ public class Genotype
    * @param a_configuration the configuration to use
    *
    * @author Klaus Meffert
-   * @since 2.0 (?)
+   * @since 2.0
    */
   public static void setStaticConfiguration(Configuration a_configuration) {
     m_staticConfiguration = a_configuration;
