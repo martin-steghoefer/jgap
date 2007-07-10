@@ -1,9 +1,15 @@
-4.0
+3.2.1
 -----------------------------------------------------------
+* Made Robocode example work with newest Robocode version
+* Enhanced Robocode example a lot
+* Added custom-initialization mechanism for GP
 * Fixed bug with allTimeBest and cloning (see bug 1744077)
 * Made INodeValidator serializable
+* Enhanced IGPChromosome by method getFunctionSet()
 * Added Java command version to NOP
 * Enhanced Javadoc a lot
+* Fixed bug with GABreeder.evolution (bug 1748528)
+* Added two utility functions to SystemKit
 
 3.2
 -----------------------------------------------------------
