@@ -3,15 +3,17 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap;
 
 import java.util.*;
+
 import org.jgap.impl.*;
 import org.jgap.util.*;
+
 import junit.framework.*;
 
 /**
@@ -23,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.62 $";
+  private final static String CVS_REVISION = "$Revision: 1.63 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -342,7 +344,8 @@ public class GenotypeTest
 
   /**
    * Assert population size shrinks when using special configuration and by
-   * overwriting default setting for keeping population size constant
+   * overwriting default setting for keeping population size constant.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -748,6 +751,37 @@ public class GenotypeTest
     Genotype genotype = Genotype.randomInitialGenotype(config);
     genotype.evolve(1);
   }
+
+  /**
+   * Asserts that evolutions works without error (see bug 1748528).
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2.1
+   */
+  public void testEvolve_10()
+      throws Exception {
+    Configuration conf = new DefaultConfiguration();
+    conf.setPreservFittestIndividual(true);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    Gene gene = new BooleanGene(conf);
+    Chromosome chrom = new Chromosome(conf, new Gene[]{gene});
+    conf.setSampleChromosome(chrom);
+    conf.setPopulationSize(5);
+    // Fitness Evaluator (lower is better).
+    // ------------------------------------
+    conf.resetProperty(Configuration.PROPERTY_FITEVAL_INST);
+    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    // Selector.
+    // ---------
+    conf.removeNaturalSelectors(false);
+    conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+
+    Genotype genotype = Genotype.randomInitialGenotype(conf);
+    genotype.evolve(1);
+  }
+
 
   /**
    * @throws Exception
