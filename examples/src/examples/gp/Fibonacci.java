@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -31,7 +31,7 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   static Variable vx;
 
@@ -71,11 +71,12 @@ public class Fibonacci
     CommandGene[][] nodeSets = { {
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
                        CommandGene.VoidClass}),
-        new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
+//        new Constant(conf, CommandGene.IntegerClass, new Integer(1)),
         new StoreTerminal(conf, "mem0", CommandGene.IntegerClass),
         new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
         new Increment(conf, CommandGene.IntegerClass),
         new NOP(conf),
+        new Terminal(conf, CommandGene.IntegerClass,0.0, 10.0),
     }, {
         vx = Variable.create(conf, "X", CommandGene.IntegerClass),
         new AddAndStore(conf, CommandGene.IntegerClass, "mem2"),
