@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.92 $";
+  private final static String CVS_REVISION = "$Revision: 1.93 $";
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -669,14 +669,20 @@ public class Chromosome
    * @since 1.0
    */
   public int hashCode() {
-    // Do what {@link java.util.AbstractList} does.
-    // --------------------------------------------
+    // Do what java.util.AbstractList does.
+    // ------------------------------------
     int geneHashcode;
     int hashCode = 1;
     if (getGenes() != null) {
       int size = size();
       for (int i = 0; i < size; i++) {
-        geneHashcode = getGene(i).hashCode();
+        Gene gene = getGene(i);
+        if (gene == null) {
+          geneHashcode = -55;
+        }
+        else {
+          geneHashcode = gene.hashCode();
+        }
         hashCode = 31 * hashCode + geneHashcode;
       }
     }
