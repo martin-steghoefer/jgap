@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public GABreeder() {
     super();
@@ -95,7 +95,8 @@ public class GABreeder
     // Increase age of all chromosomes which are not modified by genetic
     // operations.
     // -----------------------------------------------------------------
-    for (int i = 0; i < originalPopSize; i++) {
+    int size = Math.min(originalPopSize, currentPopSize);
+    for (int i = 0; i < size; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.increaseAge();
       // Mark chromosome as not being operated on.
