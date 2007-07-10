@@ -1,41 +1,84 @@
-package dunapep;
+package jgap;
 
 import robocode.*;
 import java.awt.Color;
 
 public class Aspirant
     extends Robot {
+  private double global1 = 3.0;
   public void run() {
     setColors(Color.red, Color.blue, Color.green);
-    while (true) {
-      turnRight( (2.156702756881714d));
-      ahead( ( -1) * ( (2.156702756881714d) - getHeading()));
-      ahead( ( (2.156702756881714d) + (2.156702756881714d)));
+    setAdjustRadarForGunTurn(true);
+    do {
+      turnRadarLeft(360);
     }
+    while (true);
   }
 
   public void onScannedRobot(ScannedRobotEvent e) {
-    ahead(getHeading());
-    turnRight( ( (e.getBearing() / getHeading()) - ( -71.53790283203125d)));
-    turnRight( ( (e.getDistance() - e.getBearing()) - (2.0456292629241943d)));
+    double x = 2.0;
+    double y = 1.0;
+    {
+      ahead(getRadarHeading());
+      if ( (getGunHeat() <= (getGunHeat() / ( ( -135d) + ( -135d))))) {
+        fire(e.getBearing());
+      }
+      else {
+        turnGunRight( ( ( -135d) + ( -135d)));
+      }
+      back(getGunHeat());
+      turnGunRight( (e.getEnergy() / getRadarHeading()));
+      turnGunLeft( (15.656966209411621d));
+      {
+        if ( ( ( -135d) <=
+              ( (getHeading() * getY()) - ( (62.581214904785156d) + getGunHeading())))) {
+          back(e.getDistance());
+        }
+        else {
+          ahead( ( ( -135d) - ( -135d)));
+        }
+        back( (getX() + (getGunCoolingRate() * getGunCoolingRate())));
+        turnGunRight( ( ( (getGunHeat() / ( ( -135d) + ( -135d))) *
+                         e.getDistance()) +
+                       ( (e.getDistance() + e.getBearing()) / e.getEnergy())));
+        ahead( ( (getY() - (62.581214904785156d)) + e.getDistance()));
+      }
+
+    }
   }
 
   public void onHitByBullet(HitByBulletEvent e) {
-    ahead(e.getBearing());
-    turnGunRight( (2.3312511444091797d));
-    fire( ( (getHeading() * (145.2213134765625d)) /
-           (e.getBearing() * (145.2213134765625d))));
+    double x = 2.0;
+    {
+      turnLeft( ( -45d));
+      turnLeft( (getVelocity() + (getHeading() * e.getBearing())));
+    }
   }
 
   public void onHitWall(HitWallEvent e) {
-    turnRight( (31.579986572265625d));
-    fire( (e.getBearing() / getHeading()));
-    turnLeft( (e.getBearing() + (getHeading() / (1.3382158279418945d))));
+    double x = 2.0;
+    {
+      if ( ( ( -180d) >= (10.710869789123535d))) {
+        back( (10.710869789123535d));
+      }
+      else {
+        back(e.getBearing());
+      }
+      {
+        turnLeft( ( -180d));
+        {
+          turnRight( (45.0d));
+          turnRight( (10.710869789123535d));
+        }
+
+        turnLeft(e.getBearing());
+      }
+
+    }
   }
 
   public void onHitRobot(HitRobotEvent e) {
-    fire( (95.45698547363281d));
-    ahead( (e.getBearing() + getHeading()));
-    turnGunRight( ( (95.45698547363281d) * e.getBearing()));
+    double x = 2.0;
+    fire(getGunHeading());
   }
 }
