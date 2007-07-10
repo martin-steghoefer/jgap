@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -12,7 +12,6 @@ package examples.gp.tictactoe;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.*;
 import org.jgap.gp.function.*;
-import org.jgap.gp.terminal.*;
 
 /**
  * Validates evolved nodes for the Tic Tac Toe problem.
@@ -44,20 +43,24 @@ public class GameNodeValidator
    * implementation)
    * @param a_childIndex index of the child in the parent node to which it
    * belongs (-1 if node is root node)
+   * @param a_fullProgram true: full program is available for evaluation
    * @return true: node is valid; false: node is invalid
    *
    * @author Klaus Meffert
    * @since 3.2
    */
   public boolean validate(ProgramChromosome a_chrom, CommandGene a_node,
-                          CommandGene a_rootNode,
-                          int a_tries, int a_num, int a_recurseLevel,
-                          Class a_type, CommandGene[] a_functionSet,
-                          int a_depth, boolean a_grow, int a_childIndex,
+                          CommandGene a_rootNode, int a_tries, int a_num,
+                          int a_recurseLevel, Class a_type,
+                          CommandGene[] a_functionSet, int a_depth,
+                          boolean a_grow, int a_childIndex,
                           boolean a_fullProgram) {
     // Guard to avoid endless validation.
     // ----------------------------------
     if (a_tries > 10) {
+      return true;
+    }
+    if (a_fullProgram) {
       return true;
     }
     // Chromosome 1.
