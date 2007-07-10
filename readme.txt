@@ -48,15 +48,8 @@ the examples directory.
 
 About This Release:
 
-This represents a major release manifesting the long awaited Genetic
-Programming capabilities (see package org.jgap.gp, we promised it).
-As always, the javadocs have been improved, of curse new unit tests have
-been added, and two new example demonstrate JGAP's GP capabilities.
-One of these two examples - Fibonacci calculation - is quite complex and
-demonstrates what is possible with JGAP. Output of generated GP programs
-as a graphical tree in PNG file format is integrated with JGAP.
-The quality of this release is ensured by considering three Release
-Candidates.
+Please see the JGAP site on Sourceforge for information:
+http://sf.net/projects/jgap
 
 For a general list of changes, fixes, and enhancements that have been
 included in this version, please see the changelog.txt file.
