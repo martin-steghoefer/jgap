@@ -22,8 +22,9 @@ import org.jgap.*;
  * This CrossoverOperator supports both fixed and dynamic crossover rates.
  * A fixed rate is one specified at construction time by the user. This
  * operation is performed 1/m_crossoverRate as many times as there are
- * Chromosomes in the population. A dynamic rate is one determined by
- * this class if no fixed rate is provided.
+ * Chromosomes in the population. Another possibility is giving the crossover
+ * rate as a percentage. A dynamic rate is one determined by this class on the
+ * fly if no fixed rate is provided.
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
@@ -33,16 +34,23 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**
-   * The current crossover rate used by this crossover operator.
+   * The current crossover rate used by this crossover operator (mutual
+   * exclusive to m_crossoverRatePercent and m_crossoverRateCalc).
    */
   private int m_crossoverRate;
 
   /**
-   * Calculator for dynamically determining the crossover rate. If set to
-   * null the value of m_crossoverRate will be used instead.
+   * Crossover rate in percentage of population size (mutual exclusive to
+   * m_crossoverRate and m_crossoverRateCalc).
+   */
+  private double m_crossoverRatePercent;
+
+  /**
+   * Calculator for dynamically determining the crossover rate (mutual exclusive
+   * to m_crossoverRate and m_crossoverRatePercent)
    */
   private IUniversalRateCalculator m_crossoverRateCalc;
 
@@ -63,6 +71,7 @@ public class CrossoverOperator
     super(Genotype.getStaticConfiguration());
     //set the default crossoverRate to be populationsize/2
     m_crossoverRate = 2;
+    m_crossoverRatePercent = -1;
     setCrossoverRateCalc(null);
   }
 
@@ -83,6 +92,7 @@ public class CrossoverOperator
     // Set the default crossoverRate to be populationsize/2.
     // -----------------------------------------------------
     m_crossoverRate = 2;
+    m_crossoverRatePercent = -1;
     setCrossoverRateCalc(null);
   }
 
@@ -128,6 +138,32 @@ public class CrossoverOperator
       throw new IllegalArgumentException("Crossover rate must be greater zero");
     }
     m_crossoverRate = a_desiredCrossoverRate;
+    m_crossoverRatePercent = -1;
+    setCrossoverRateCalc(null);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with the given
+   * crossover rate.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_crossoverRatePercentage the desired rate of crossover in
+   * percentage of the population
+   * @throws InvalidConfigurationException
+   *
+   * @author Chris Knowles
+   * @author Klaus Meffert
+   * @since 3.0 (since 2.0 without a_configuration)
+   */
+  public CrossoverOperator(final Configuration a_configuration,
+                           final double a_crossoverRatePercentage)
+      throws InvalidConfigurationException {
+    super(a_configuration);
+    if (a_crossoverRatePercentage <= 0.0d) {
+      throw new IllegalArgumentException("Crossover rate must be greater zero");
+    }
+    m_crossoverRatePercent = a_crossoverRatePercentage;
+    m_crossoverRate = -1;
     setCrossoverRateCalc(null);
   }
 
@@ -150,11 +186,14 @@ public class CrossoverOperator
     int size = Math.min(getConfiguration().getPopulationSize(),
                         a_population.size());
     int numCrossovers = 0;
-    if (m_crossoverRateCalc == null) {
+    if (m_crossoverRate >= 0) {
       numCrossovers = size / m_crossoverRate;
     }
-    else {
+    else if (m_crossoverRateCalc != null) {
       numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
+    }
+    else {
+      numCrossovers = (int)(size * m_crossoverRatePercent);
     }
     RandomGenerator generator = getConfiguration().getRandomGenerator();
     IGeneticOperatorConstraint constraint = getConfiguration().
@@ -255,6 +294,10 @@ public class CrossoverOperator
   private void setCrossoverRateCalc(final IUniversalRateCalculator
                                     a_crossoverRateCalculator) {
     m_crossoverRateCalc = a_crossoverRateCalculator;
+    if (a_crossoverRateCalculator != null) {
+      m_crossoverRate = -1;
+      m_crossoverRatePercent = -1d;
+    }
   }
 
   /**
