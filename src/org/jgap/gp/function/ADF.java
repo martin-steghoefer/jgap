@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -16,7 +16,7 @@ import org.jgap.gp.impl.*;
 
 /**
  * Automatically Defined Function (ADF). Works with output of other chromosomes.
- * Automatically created by ProgramChromosome.
+ * An ADF is automatically created by ProgramChromosome.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private int m_chromosomeNum;
 
@@ -33,6 +33,8 @@ public class ADF
    *
    * @param a_conf the configuration to use
    * @param a_chromosomeNum the index of the chromosome to execute
+   * @param a_arity the arity of the ADF
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert

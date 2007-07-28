@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -18,15 +18,17 @@ import org.jgap.supergenes.*;
  * <P>
  * Result of test is briefly outputted to the console and to a file named
  * "Test_result.prn"
+ *
  * @author Audrius Meskauskas
  * @since 2.0
  */
 public final class SupergenesPerformanceTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
-   * Starts the performance test
+   * Starts the performance test.
+   *
    * @param args ignored
    */
   public static void main(String[] args) {
@@ -66,7 +68,6 @@ public final class SupergenesPerformanceTest {
             t_s += d_supergene;
             t_w += d_without;
             e_s += E_s;
-//            e_w += E_w;
           }
           String r = (popsize + "\t " + maxiter + "\t " + t_s
                       + "\t " + t_w + "\t " + e_s + "\t " + e_w);

@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -28,7 +28,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -62,6 +62,8 @@ public class AveragingCrossoverOperator
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
@@ -73,7 +75,10 @@ public class AveragingCrossoverOperator
   /**
    * Using the same random generator for randomizing the loci for crossing
    * over as for selecting the genes to be crossed over.
+   *
    * @param a_configuration the configuration to use
+   *
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -88,6 +93,8 @@ public class AveragingCrossoverOperator
    * crossing over than for selecting the genes to be crossed over
    * @param a_configuration the configuration to use
    * @param a_generatorForAveraging RandomGenerator to use
+   *
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0 (since 2.0 without a_configuration)
@@ -108,6 +115,8 @@ public class AveragingCrossoverOperator
    * @param a_configuration the configuration to use
    * @param a_crossoverRateCalculator calculator for dynamic crossover rate
    * computation
+   *
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0 (since 2.0 without a_configuration)

@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -18,13 +18,13 @@ import examples.supergene.*;
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
- * @author Audrius Meskauskas (subsequent adaptation)
+ * @author Audrius Meskauskas
  * @since 2.0
  */
 public abstract class AbstractChangeFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final int m_targetAmount;
 
@@ -45,7 +45,7 @@ public abstract class AbstractChangeFitnessFunction
    *
    * @return positive integer reflecting the fitness rating of the given
    * Chromosome
-   * @since 2.0 (until 1.1: return type int)
+   * @since 2.0
    */
   public double evaluate(IChromosome a_subject) {
     // The fitness value measures both how close the value is to the

@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -17,14 +17,12 @@ import org.jgap.impl.*;
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
- * @author Audrius Meskauskas (subsequent adaptation)
+ * @author Audrius Meskauskas
  * @since 2.0
  * */
 public abstract class AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
-
-  private transient Configuration m_conf;
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Gene index for the dimes gene
@@ -59,6 +57,8 @@ public abstract class AbstractSupergeneTest {
   public static boolean REPORT_ENABLED = true;
 
   /**
+   * @param a_conf the configuration to use
+   *
    * @return created Dimes gene instance
    */
   protected Gene getDimesGene(Configuration a_conf) {
@@ -71,6 +71,8 @@ public abstract class AbstractSupergeneTest {
   };
 
   /**
+   * @param a_conf the configuration to use
+   *
    * @return created Nickels gene instance
    */
   protected Gene getNickelsGene(Configuration a_conf) {
@@ -83,6 +85,8 @@ public abstract class AbstractSupergeneTest {
   }
 
   /**
+   * @param a_conf the configuration to use
+   *
    * @return created Pennies (1) gene instance
    */
   protected Gene getPenniesGene(Configuration a_conf) {
@@ -95,6 +99,8 @@ public abstract class AbstractSupergeneTest {
   }
 
   /**
+   * @param a_conf the configuration to use
+   *
    * @return created Quarters gene instance
    */
   protected Gene getQuartersGene(Configuration a_conf) {
@@ -208,6 +214,9 @@ public abstract class AbstractSupergeneTest {
 
   /**
    * Find and print the solution, return the solution error.
+   *
+   * @param a_conf the configuration to use
+   *
    * @return absolute difference between the required and computed change
    */
   protected int solve(Configuration a_conf, int a_targetChangeAmount,

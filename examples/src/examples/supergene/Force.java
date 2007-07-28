@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -12,11 +12,12 @@ package examples.supergene;
 /**
  * Solve the change problem using force method. This class was used to
  * verify if the solution exists in general.
+ *
  * @author Audrius Meskauskas
  */
 public final class Force {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static boolean REPORT_ENABLED = true;
 
@@ -25,7 +26,8 @@ public final class Force {
   }
 
   /**
-   * Check the existence of soulution.
+   * Check the existence of a soulution.
+   *
    * @param a_sum the sum needed
    * @return true if the change can be expressed in coins, satisfying
    * pennies mod 2 = nickels mod 2
@@ -59,6 +61,7 @@ public final class Force {
 
   /**
    * Test the Force method itself.
+   *
    * @param args ignored
    */
   public static void main(String[] args) {

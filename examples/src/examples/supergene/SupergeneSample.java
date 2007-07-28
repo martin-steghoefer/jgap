@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -21,13 +21,13 @@ import org.jgap.impl.*;
  *
  * @author Neil Rotstan
  * @author Klaus Meffert
- * @author Audrius Meskauskas (subsequent adaptation)
+ * @author Audrius Meskauskas
  * @since 2.0
  */
 public class SupergeneSample
     extends AbstractSupergeneTest {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Executes the genetic algorithm to determine the minimum number of
@@ -37,9 +37,9 @@ public class SupergeneSample
    * @param a_targetChangeAmount the target amount of change for which this
    * method is attempting to produce the minimum number of coins
    *
-   * @throws Exception
    * @return absolute difference between the required and computed change
    * amount
+   * @throws Exception
    */
   public int makeChangeForAmount(int a_targetChangeAmount)
       throws Exception {

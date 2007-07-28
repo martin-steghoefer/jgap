@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -24,21 +24,19 @@ import org.jgap.supergenes.*;
 public class TotalSupergeneTest
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Test supported Supegene features, including performance tests.
+   *
    *  @throws Exception
    */
   public void testSupergeneTotal() throws Exception {
-      System.out.println("Testing Supergene...");
       AbstractSupergeneTest.EXISTING_SOLUTIONS_ONLY = true;
       AbstractSupergeneTest.REPORT_ENABLED = false;
       Force.REPORT_ENABLED = false;
-      System.out.println("Testing Persistent representation");
 //      assertTrue("Persistent representation",
 //          SupergenePersistentRepresentationTest.testRepresentation());
-      System.out.println("Testing Supergene 150 % performance benefit ");
       AbstractSupergeneTest.MAX_ALLOWED_EVOLUTIONS = 512;
       AbstractSupergeneTest.POPULATION_SIZE = 256;
       long abe = 0;
@@ -48,12 +46,10 @@ public class TotalSupergeneTest
         AbstractSupergene.reset();
         long s_started;
         // Test with Supergene
-        System.out.print("            evaluating Supergene... ");
         s_started = System.currentTimeMillis();
         int E_s = new SupergeneSample().test();
         long d_supergene = System.currentTimeMillis() - s_started;
         // Test without Supergene
-        System.out.println("control...");
         s_started = System.currentTimeMillis();
         int E_w = new WithoutSupergeneSample().test();
         long d_without = System.currentTimeMillis() - s_started;
@@ -66,7 +62,5 @@ public class TotalSupergeneTest
       }
       abe = abe / N;
       assertTrue("Averaged benefit " + abe, abe >= 150);
-      System.out.println("Supergene test complete.");
-//      return true;
   }
 }
