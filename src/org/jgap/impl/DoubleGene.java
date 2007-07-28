@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -24,7 +24,7 @@ import org.jgap.*;
 public class DoubleGene
     extends NumberGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * The upper bounds of values represented by this Gene. If not explicitly
@@ -44,6 +44,7 @@ public class DoubleGene
    * than the standard range of double values.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
@@ -59,6 +60,7 @@ public class DoubleGene
    * Constructs a new DoubleGene with default settings. No bounds will
    * be put into effect for values (alleles) of this Gene instance, other
    * than the standard range of double values.
+   *
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -77,9 +79,9 @@ public class DoubleGene
    *
    * @param a_config the configuration to use
    * @param a_lowerBound the lowest value that this Gene may possess,
-   * inclusive
+   * inclusively
    * @param a_upperBound the highest value that this Gene may possess,
-   * inclusive
+   * inclusively
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -123,7 +125,7 @@ public class DoubleGene
    * available. An UnsupportedOperationException should be thrown if no
    * implementation is provided.
    *
-   * @return a string representation of this Gene's current state.
+   * @return a string representation of this Gene's current state
    *
    * @author Klaus Meffert
    * @since 1.1

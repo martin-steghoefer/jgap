@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -22,7 +22,7 @@ import org.jgap.*;
 public class GaussianMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   private double m_deviation;
 
@@ -32,6 +32,7 @@ public class GaussianMutationOperator
    * Constructs a GaussianMutationOperator with a default deviation of 0.05.
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -44,6 +45,7 @@ public class GaussianMutationOperator
 
   /**
    * Constructs a GaussianMutationOperator with a default deviation of 0.05.
+   *
    * @param a_config the configuration to use
    *
    * @throws InvalidConfigurationException
@@ -58,6 +60,7 @@ public class GaussianMutationOperator
 
   /**
    * Constructs a GaussianMutationOperator with the given deviation.
+   *
    * @param a_configuration the configuration to use
    * @param a_deviation sic
    *
@@ -89,12 +92,6 @@ public class GaussianMutationOperator
       RandomGenerator rn = getConfiguration().getRandomGenerator();
       m_rg = rn;
     }
-//    if (rn instanceof RandomGenerator) {
-//      setRandomGenerator(rn);
-//    }
-//    else {
-//      setRandomGenerator(new GaussianRandomGenerator(1.0d));
-//    }
     for (int i = 0; i < size; i++) {
       Gene[] genes = a_population.getChromosome(i).getGenes();
       IChromosome copyOfChromosome = null;

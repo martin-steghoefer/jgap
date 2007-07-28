@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class StandardPostSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -47,6 +47,7 @@ public class StandardPostSelector
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -76,6 +77,7 @@ public class StandardPostSelector
 
   /**
    * Add a Chromosome instance to this selector's working pool of Chromosomes.
+   *
    * @param a_chromosomeToAdd the specimen to add to the pool
    *
    * @author Klaus Meffert

@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -20,7 +20,7 @@ import org.jgap.*;
 public abstract class NumberGene
     extends BaseGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * References the internal value (allele) of this Gene
@@ -113,6 +113,7 @@ public abstract class NumberGene
    * Compares to objects by first casting them into their expected type
    * (e.g. Integer for IntegerGene) and then calling the compareTo-method
    * of the casted type.
+   *
    * @param a_o1 first object to be compared, always is not null
    * @param a_o2 second object to be compared, always is not null
    * @return a negative integer, zero, or a positive integer as this object

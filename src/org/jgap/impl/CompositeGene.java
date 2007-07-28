@@ -3,14 +3,12 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
 import java.lang.reflect.*;
 import org.jgap.*;
@@ -41,7 +39,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -75,6 +73,7 @@ public class CompositeGene
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -104,6 +103,7 @@ public class CompositeGene
    * @param a_config the configuration to use
    * @param a_geneTypeAllowed the class of Genes to be allowed to be added to
    * the CompositeGene
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -120,7 +120,8 @@ public class CompositeGene
   }
 
   /**
-   * Adds a gene to the CompositeGene
+   * Adds a gene to the CompositeGene.
+   *
    * @param a_gene the gene to add
    */
   public void addGene(final Gene a_gene) {
@@ -181,7 +182,8 @@ public class CompositeGene
   /**
    * Removes the given gene from the collection of genes. The gene is only
    * removed if an object of the same identity is contained. The equals
-   * method will not be used here intentionally
+   * method is not used here intentionally.
+   *
    * @param a_gene the gene to be removed
    * @return true: given gene found and removed
    *
@@ -207,7 +209,8 @@ public class CompositeGene
   /**
    * Removes the given gene from the collection of genes. The gene is
    * removed if another gene exists that is equal to the given gene in respect
-   * to the equals method of the gene
+   * to the equals method of the gene.
+   *
    * @param a_gene the gene to be removed
    * @return true: given gene found and removed
    *
@@ -235,7 +238,8 @@ public class CompositeGene
   }
 
   /**
-   * See interface Gene for description
+   * See interface Gene for description.
+   *
    * @param a_numberGenerator the random number generator that should be used
    * to create any random values. It's important to use this generator to
    * maintain the user's flexibility to configure the genetic engine to use the

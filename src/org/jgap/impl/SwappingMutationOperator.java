@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -24,14 +24,14 @@ import org.jgap.*;
  * Sushil J. Louis & Gong Li</a>  }
  *
  * @author Audrius Meskauskas
- * @author <font size=-1>Neil Rotstan, Klaus Meffert (reused code
- * from {@link org.jgap.impl.MutationOperator MutationOperator})</font>
+ * @author Neil Rotstan
+ * @author Klaus Meffert
  * @since 2.0
  */
 public class SwappingMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private int m_startOffset = 1;
 
@@ -39,6 +39,7 @@ public class SwappingMutationOperator
    * Constructs a new instance of this operator.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -64,6 +65,7 @@ public class SwappingMutationOperator
    * Constructs a new instance of this operator with a specified
    * mutation rate calculator, which results in dynamic mutation being turned
    * on.
+   *
    * @param a_config the configuration to use
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    * computation
@@ -151,6 +153,7 @@ public class SwappingMutationOperator
 
   /**
    * Operate on the given chromosome with the given mutation rate.
+   *
    * @param a_x chromosome to operate
    * @param a_rate mutation rate
    * @param a_generator random generator to use (must not be null)
@@ -189,7 +192,8 @@ public class SwappingMutationOperator
   /**
    * Operate on the given array of genes. This method is only called
    * when it is already clear that the mutation must occur under the given
-   * mutation rate
+   * mutation rate.
+   *
    * @param a_generator a random number generator that may be needed to
    * perform a mutation
    * @param a_target_gene an index of gene in the chromosome that will mutate

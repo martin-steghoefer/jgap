@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -32,7 +32,7 @@ import org.jgap.*;
 public class FixedBinaryGene
     extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   private int m_length;
 
@@ -461,6 +461,7 @@ public class FixedBinaryGene
 
   /**
    * Not called as getAllele() is overridden.
+   *
    * @return same as getAllele()
    */
   protected Object getInternalValue() {
@@ -471,6 +472,7 @@ public class FixedBinaryGene
    * Modified hashCode() function to return different hashcodes for differently
    * ordered genes in a chromosome --> does not work as internal value always
    * initialized!
+   *
    * @return this Gene's hash code
    *
    * @author Klaus Meffert

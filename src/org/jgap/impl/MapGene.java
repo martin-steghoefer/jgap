@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -27,13 +27,13 @@ import org.jgap.*;
  * be as performant as possible without losing flexibility.</p>
  *
  * @author Johnathan Kool, Organisation: RSMAS, University of Miami
- * @author Klaus Meffert (adaptations)
+ * @author Klaus Meffert
  * @since 2.4
  */
 public class MapGene
     extends BaseGene implements IPersistentRepresentation{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * Container for valid alleles
@@ -80,6 +80,7 @@ public class MapGene
 
   /**
    * Constructor setting up valid alleles directly.
+   *
    * @param a_config the configuration to use
    * @param a_alleles the valid alleles of the gene
    * @throws InvalidConfigurationException

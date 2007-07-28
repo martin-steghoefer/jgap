@@ -3,14 +3,12 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
 import org.jgap.*;
 
@@ -40,7 +38,7 @@ public class StringGene
   public static final String ALPHABET_CHARACTERS_SPECIAL = "+.*/\\,;@";
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.57 $";
+  private final static String CVS_REVISION = "$Revision: 1.58 $";
 
   private int m_minLength;
 
@@ -75,6 +73,7 @@ public class StringGene
    * You need to set the valid alphabet later!<p>
    * Do not use this constructor with a sample chromosome set in the
    * configuration.
+   *
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -91,6 +90,7 @@ public class StringGene
    * held by this gene. You need to set the valid alphabet later!<p>
    * Do not use this constructor with a sample chromosome set in the
    * configuration.
+   *
    * @param a_config the configuration to use
    * @param a_minLength minimum valid length of allele
    * @param a_maxLength maximum valid length of allele

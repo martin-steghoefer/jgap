@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -13,7 +13,6 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- * <p>
  * Takes away the fitness offset of the population to evolve.
  * The fitness function values of the population of {@link org.jgap.IChromosome}
  * instances will start from a minimum of 1 afterwards.
@@ -216,6 +215,7 @@ import org.jgap.*;
  * </font>
  * </pre>
  * </p>
+ *
  * @author Achim Westermann
  * @since 2.2
  *
@@ -223,7 +223,7 @@ import org.jgap.*;
 public class BulkFitnessOffsetRemover
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /*
    * Replace this member by the Configuration as soon as Configuration allows

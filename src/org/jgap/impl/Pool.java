@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -32,10 +32,10 @@ import java.util.*;
 public class Pool {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   /**
-   * The Objects currently in the pool.
+   * The objects currently in the pool.
    */
   private List m_pooledObjects;
 
@@ -76,8 +76,8 @@ public class Pool {
   }
 
   /**
-   * Releases an Object to the pool. It's not required that the Object
-   * originated from the pool--any Object can be released to it.
+   * Releases an object to the pool. It's not required that the Object
+   * originated from the pool - any Object can be released to it.
    *
    * @param a_objectToPool the Object instance to be released into the pool
    *
@@ -90,7 +90,7 @@ public class Pool {
 
   /**
    * Releases a Collection of objects to the pool. It's not required that
-   * the objects in the Collection originated from the pool - -any objects
+   * the objects in the Collection originated from the pool - any objects
    * can be released to it.
    *
    * @param a_objectsToPool the Collection of objects to release into the pool

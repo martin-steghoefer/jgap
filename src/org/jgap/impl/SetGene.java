@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -27,7 +27,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -37,6 +37,7 @@ public class SetGene
    * Default constructor.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    */
   public SetGene()
@@ -46,6 +47,7 @@ public class SetGene
 
   /**
    * @param a_conf the configuration to use
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -210,6 +212,7 @@ public class SetGene
    * implementation is provided.
    *
    * @return a string representation of this Gene's current state
+   *
    * @throws UnsupportedOperationException to indicate that no implementation
    *         is provided for this method
    *

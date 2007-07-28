@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -28,7 +28,7 @@ import org.jgap.*;
 public class TwoWayMutationOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The current mutation rate used by this MutationOperator, expressed as
@@ -52,6 +52,7 @@ public class TwoWayMutationOperator
    * operator based upon the number of genes present in the chromosomes.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -67,7 +68,8 @@ public class TwoWayMutationOperator
    * Constructs a new instance of this MutationOperator without a specified
    * mutation rate, which results in dynamic mutation being turned on. This
    * means that the mutation rate will be automatically determined by this
-   * operator based upon the number of genes present in the chromosomes.<p>
+   * operator based upon the number of genes present in the chromosomes.
+   *
    * @param a_config the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -83,6 +85,7 @@ public class TwoWayMutationOperator
    * Constructs a new instance of this MutationOperator with a specified
    * mutation rate calculator, which results in dynamic mutation being turned
    * on.
+   *
    * @param a_config the configuration to use
    * @param a_mutationRateCalculator calculator for dynamic mutation rate
    * computation
@@ -122,6 +125,9 @@ public class TwoWayMutationOperator
   }
 
   /**
+   * @param a_population see interface
+   * @param a_candidateChromosomes see interface
+   *
    * @author Klaus Meffert
    * @since 2.6
    */

@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -13,7 +13,6 @@ import java.util.*;
 import org.jgap.*;
 
 /**
- *
  * The Greedy Crossover is a specific type of crossover. It can only be is
  * applied if
  * <ul>
@@ -57,7 +56,7 @@ import org.jgap.*;
 public class GreedyCrossover
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.26 $";
+  private static final String CVS_REVISION = "$Revision: 1.27 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -68,6 +67,7 @@ public class GreedyCrossover
    * Default constructor for dynamic instantiation.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -81,6 +81,7 @@ public class GreedyCrossover
 
   /**
    * Using the given configuration.
+   *
    * @param a_configuration the configuration to use
    * @throws InvalidConfigurationException
    *
@@ -265,6 +266,7 @@ public class GreedyCrossover
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
    * @param a_offset the start offset to use
    */
   public void setStartOffset(int a_offset) {
@@ -276,6 +278,7 @@ public class GreedyCrossover
    * excluded from the swapping. In the Salesman task, the first city
    * in the list should (where the salesman leaves from) probably should
    * not change as it is part of the list. The default value is 1.
+   *
    * @return the start offset used
    */
   public int getStartOffset() {
