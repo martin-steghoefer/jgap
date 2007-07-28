@@ -24,7 +24,7 @@ import org.jgap.impl.*;
  */
 public class MultiObjectiveExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -53,6 +53,7 @@ public class MultiObjectiveExample {
     bestChromsSelector.setDoubletteChromosomesAllowed(true);
     conf.addNaturalSelector(bestChromsSelector, true);
 
+    conf.reset();
     conf.setFitnessEvaluator(new MOFitnessEvaluator());
     conf.setPreservFittestIndividual(false);
     conf.setKeepPopulationSizeConstant(false);
@@ -69,7 +70,7 @@ public class MultiObjectiveExample {
     Gene[] sampleGenes = new Gene[1];
     sampleGenes[0] = new DoubleGene(conf, MultiObjectiveFitnessFunction.MIN_X,
                                     MultiObjectiveFitnessFunction.MAX_X);
-    IChromosome sampleChromosome = new Chromosome(null, sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
 
     // Finally, we need to tell the Configuration object how many
