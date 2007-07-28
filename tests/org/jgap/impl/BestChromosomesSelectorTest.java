@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests for BestChromosomesSelector class.
+ * Tests the BestChromosomesSelector class.
  *
  * @author Klaus Meffert
  * @since 1.1
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -102,7 +102,7 @@ public class BestChromosomesSelectorTest
     selector.add(chrom);
     assertEquals(chrom, chromosomes.get(0));
     // if BestChromosomesSelector adds non-unique chroms, then we have a count
-    // of two then after the add(..), else a count of 1
+    // of two after the add(..), otherwise a count of 1
     selector.setDoubletteChromosomesAllowed(false);
     assertEquals(1, chromosomes.size());
     selector.setDoubletteChromosomesAllowed(true);
@@ -473,8 +473,7 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Ensures that BCS implements Serializable
-   * correctly.
+   * Ensures that BCS implements Serializable correctly.
    *
    * @throws Exception
    *
