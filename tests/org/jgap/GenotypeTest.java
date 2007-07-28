@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.63 $";
+  private final static String CVS_REVISION = "$Revision: 1.64 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -432,8 +432,9 @@ public class GenotypeTest
       throws Exception {
     Configuration config = new ConfigurationForTest();
     config.setKeepPopulationSizeConstant(false);
-    // Select only 3/4 of previous generation and and thus try mutate only
+    // Select only 3/4 of previous generation and and thus try to mutate only
     // on 3/4 of the chromosomes in the population.
+    // ----------------------------------------------------------------------
     config.setSelectFromPrevGen(0.75d);
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     // A zero in this sequence represents a gene to be mutated.
@@ -521,12 +522,67 @@ public class GenotypeTest
       throws Exception {
     Configuration config = new ConfigurationForTest();
     config.setSelectFromPrevGen(1.0d);
-    // Overwrite default setting
-    config.setKeepPopulationSizeConstant(!true);
+    // Overwrite default setting.
+    // --------------------------
+    config.setKeepPopulationSizeConstant(false);
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
     genotype.evolve();
     assertTrue(popSize < genotype.getPopulation().size());
+  }
+
+  /**
+   * Test that population size grows with default settings overwritten.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public void testEvolve_3_25()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    rand.setNextInt(0);
+    config.setRandomGenerator(rand);
+    config.setPopulationSize(200);
+    config.setSelectFromPrevGen(1.0d);
+    // Overwrite default setting.
+    // --------------------------
+    config.setKeepPopulationSizeConstant(false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    genotype.evolve();
+    assertEquals(200*2,genotype.getPopulation().size());
+  }
+
+  /**
+   * Test that population size grows with default settings overwritten.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public void testEvolve_3_26()
+      throws Exception {
+    Configuration config = new ConfigurationForTest();
+    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    // A Chromosome has 3 genes here. We let every 6th gene mutate, thus every
+    // second Chromosome.
+    // -----------------------------------------------------------------------
+    rand.setNextIntSequence(new int[]{0,1,2,1,1,2});
+    config.setRandomGenerator(rand);
+    config.setPopulationSize(200);
+    config.setSelectFromPrevGen(1.0d);
+    // Overwrite default setting.
+    // --------------------------
+    config.setKeepPopulationSizeConstant(false);
+    Genotype genotype = Genotype.randomInitialGenotype(config);
+    genotype.evolve(4);
+    // As only every second chromosome is mutated, the population is raised by
+    // 50 %, or 200/2 with 200 = population size.
+    // -----------------------------------------------------------------------
+    assertEquals(200+200/2,genotype.getPopulation().size());
   }
 
   /**
