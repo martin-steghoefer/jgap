@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.85 $";
+  private final static String CVS_REVISION = "$Revision: 1.86 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -393,6 +393,16 @@ public class Configuration
     reset("");
   }
 
+  /**
+   * Reset the configuration so that re-setting parameters such as fitness
+   * function is possible (without calling this method, an overwriting of a
+   * previously set fitness function results in a RuntimeException).
+   *
+   * @param a_id a hopefully unique id of the configuration
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public static void reset(final String a_id) {
     String threadKey = getThreadKey(Thread.currentThread(), a_id);
     System.setProperty(threadKey + Configuration.PROPERTY_FITFUNC_INST, "");
