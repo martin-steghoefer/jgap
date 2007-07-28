@@ -1,3 +1,7 @@
+3.2.2
+-----------------------------------------------------------
+* Fixed two bugs in MutliObjecteExample
+
 3.2.1
 -----------------------------------------------------------
 * Made Robocode example work with newest Robocode version
