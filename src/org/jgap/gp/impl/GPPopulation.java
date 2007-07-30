@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -194,7 +194,7 @@ public class GPPopulation
           program = create(a_types, a_argTypes, a_nodeSets,
                            a_minDepths, a_maxDepths, depth, (i % 2) == 0,
                            a_maxNodes, a_fullModeAllowed, tries);
-          if (i == 0) {
+          if (i == 0 && getGPConfiguration().getPrototypeProgram() == null) {
             // Remember a prototyp of a valid program in case generation
             // cannot find a valid program within some few tries
             // --> then clone the prototype.
