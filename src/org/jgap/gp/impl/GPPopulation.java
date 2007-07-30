@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -207,7 +207,8 @@ public class GPPopulation
             /**@todo set prototype to new value after each some evolutions*/
             double protoFitness = getGPConfiguration().getPrototypeProgram().
                 getFitnessValue();
-            if (protoFitness < program.getFitnessValue()) {
+            if (getGPConfiguration().getGPFitnessEvaluator().isFitter(program.
+                getFitnessValue(), protoFitness)) {
               getGPConfiguration().setPrototypeProgram(program);
             }
           }
