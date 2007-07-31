@@ -1,6 +1,8 @@
 3.2.2
 -----------------------------------------------------------
 * Fixed two bugs in MutliObjecteExample
+* Added some few unit tests
+* Added missing Javadoc, enhanced Javadoc
 
 3.2.1
 -----------------------------------------------------------
