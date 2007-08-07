@@ -39,7 +39,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.58 $";
+  private final static String CVS_REVISION = "$Revision: 1.59 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -67,7 +67,7 @@ public class CompositeGene
    * @author Klaus Meffert
    * @since 1.1
    */
-  private List m_genes;
+  private List<Gene> m_genes;
 
   /**
    * Default constructor.<p>
@@ -556,6 +556,17 @@ public class CompositeGene
    */
   public Gene geneAt(int a_index) {
     return (Gene) m_genes.get(a_index);
+  }
+
+  /**
+   *
+   * @return list of genes contained in the CompositeGene
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public List<Gene> getGenes() {
+    return m_genes;
   }
 
   /**
