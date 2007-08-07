@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   private static int cleanedUp = 0;
 
@@ -1141,4 +1141,32 @@ public class CompositeGeneTest
       return true;
     }
   }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void testGetGenes_1()
+      throws Exception {
+    CompositeGene gene = new CompositeGene(conf);
+    assertEquals(0, gene.getGenes().size());
+    Gene newGene = new DoubleGene(conf);
+    gene.addGene(newGene, false);
+    assertEquals(1, gene.getGenes().size());
+    assertSame(newGene, gene.geneAt(0));
+    assertSame(newGene, gene.getGenes().get(0));
+    assertEquals(1, gene.size());
+    Gene newGene2 = new DoubleGene(conf, 1.2d, 3.4d);
+    gene.addGene(newGene2, false);
+    assertEquals(2, gene.getGenes().size());
+    assertSame(newGene, gene.geneAt(0));
+    assertSame(newGene2, gene.geneAt(1));
+    assertSame(newGene2, gene.getGenes().get(1));
+    Gene newGene3 = new DoubleGene(conf, 1.2d, 3.4d);
+    gene.addGene(newGene3, false);
+    assertEquals(3, gene.getGenes().size());
+  }
+
 }
