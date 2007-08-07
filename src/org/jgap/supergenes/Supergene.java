@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -34,7 +34,7 @@ import org.jgap.*;
 public interface Supergene
     extends Gene, ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.12 $";
+  final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Test the allele combination of this supergene for validity.

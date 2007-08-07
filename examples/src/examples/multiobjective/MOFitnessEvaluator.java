@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -14,7 +14,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Fitness evaluator for multi objectives examples.
+ * Fitness evaluator for multi objectives example.
  *
  * @author Klaus Meffert
  * @since 2.6
@@ -22,10 +22,11 @@ import org.jgap.impl.*;
 public class MOFitnessEvaluator
     implements FitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Not to be called in multi-objectives context!
+   *
    * @param a_fitness_value1 ignored
    * @param a_fitness_value2 ignored
    * @return always a RuntimeException
@@ -39,7 +40,7 @@ public class MOFitnessEvaluator
   }
 
   public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
-    // evaluate values to fill vector of multiobjectives with
+    // Evaluate values to fill vector of multiobjectives with.
     DoubleGene g1 = (DoubleGene)a_chrom1.getGene(0);
     double d = g1.doubleValue();
     double y1 = formula(1, d);
