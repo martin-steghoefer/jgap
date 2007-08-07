@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -42,7 +42,7 @@ public class BestChromosomesSelectorTest
         "m_needsSorting");
     assertEquals(Boolean.FALSE, needsSorting);
     assertTrue(selector.returnsUniqueChromosomes());
-    assertFalse(selector.getDoubletteChromosomesAllowed());
+    assertTrue(selector.getDoubletteChromosomesAllowed());
     Object fitnessValueComparator = privateAccessor.getField(selector,
         "m_fitnessValueComparator");
     assertTrue(fitnessValueComparator != null);
@@ -89,6 +89,7 @@ public class BestChromosomesSelectorTest
   public void testAdd_0()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
+    selector.setDoubletteChromosomesAllowed(false);
     Gene gene = new BooleanGene(conf);
     Chromosome chrom = new Chromosome(conf, gene, 5);
     selector.add(chrom);
@@ -195,6 +196,7 @@ public class BestChromosomesSelectorTest
   public void testSelect_2()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
+    selector.setDoubletteChromosomesAllowed(false);
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene(conf);
@@ -230,15 +232,17 @@ public class BestChromosomesSelectorTest
   }
 
   /**
-   * Ensure that selected Chromosome's are not equal to added Chromosome's.
+   * Ensure that selected Chromosomes are not equal to added Chromosomes.
    *
    * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 1.1
    */
   public void testSelect_3()
       throws Exception {
     BestChromosomesSelector selector = new BestChromosomesSelector(conf);
+    selector.setDoubletteChromosomesAllowed(false);
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene(conf);
