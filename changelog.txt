@@ -1,6 +1,7 @@
 3.2.2
 -----------------------------------------------------------
 * Fixed two bugs in MutliObjecteExample
+* Added getGenes() to class CompositeGene
 * Added some few unit tests
 * Added missing Javadoc, enhanced Javadoc
 
