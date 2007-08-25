@@ -45,7 +45,7 @@ import org.jgap.event.*;
 public abstract class Salesman
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private Configuration m_config;
 
@@ -71,7 +71,7 @@ public abstract class Salesman
 
   /**
    * Override this method to create a single sample chromosome, representing
-   * al list of "cities". Each gene corresponds a single "city" and
+   * a list of "cities". Each gene corresponds a single "city" and
    * can appear only once. By default, the first gene corresponds
    * a "city" where the salesman starts the journey.
    * It never changes its position. This can be changed by setting other

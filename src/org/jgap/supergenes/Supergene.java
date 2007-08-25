@@ -13,15 +13,15 @@ import org.jgap.*;
 
 /**
  * <p>Supergene represents several genes, which usually control closely
- * related aspects of the phenotype. The Supergene mutates
- * only in such way, that the allele combination remains valid.
- * Mutations, that make allele combination invalid, are rejected
- * inside {@link org.jgap.Gene#applyMutation } method. Supergene components can
- * also be a Supergene, creating the tree-like structures in this way.
+ * related aspects of the phenotype. The Supergene mutates only in such way,
+ * that the allele combination remains valid. Mutations, that make allele
+ * combination invalid, are rejected inside {@link org.jgap.Gene#applyMutation }
+ * method. Supergene components can also be a Supergene, creating the tree-like
+ * structures in this way.
  *</p><p>
- * In biology, the invalid combinations
- * represent completely broken metabolic chains, unbalanced
- * signaling pathways (activator without supressor) and so on.
+ * In biology, the invalid combinations represent completely broken metabolic
+ * chains, unbalanced signaling pathways (activator without supressor) and so
+ * on.
  *</p><p>
  * At <i>least about 5 % of the randomly generated Supergene suparallele values
  * should be valid.</i> If the valid combinations represents too small part of
@@ -34,7 +34,7 @@ import org.jgap.*;
 public interface Supergene
     extends Gene, ICompositeGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.13 $";
+  final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Test the allele combination of this supergene for validity.

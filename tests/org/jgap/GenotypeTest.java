@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.64 $";
+  private final static String CVS_REVISION = "$Revision: 1.65 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -537,7 +537,7 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 3.3
+   * @since 3.2.2
    */
   public void testEvolve_3_25()
       throws Exception {
@@ -561,7 +561,7 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 3.3
+   * @since 3.2.2
    */
   public void testEvolve_3_26()
       throws Exception {
@@ -591,7 +591,7 @@ public class GenotypeTest
    * @throws Exception
    *
    * @author Klaus Meffert
-   * @since 3.3
+   * @since 3.2.2
    */
   public void testEvolve_3_3()
       throws Exception {
