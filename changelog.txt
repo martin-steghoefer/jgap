@@ -1,9 +1,10 @@
 3.2.2
 -----------------------------------------------------------
-* Fixed two bugs in MutliObjecteExample
+* Fixed two bugs in MultiObjectiveExample
 * Added getGenes() to class CompositeGene
 * Added some few unit tests
 * Added missing Javadoc, enhanced Javadoc
+* Preset keepPopulationSize to true instead of false
 
 3.2.1
 -----------------------------------------------------------
