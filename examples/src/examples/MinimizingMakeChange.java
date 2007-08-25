@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -38,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -65,7 +65,7 @@ public class MinimizingMakeChange {
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
     conf.setPreservFittestIndividual(true);
-    conf.setKeepPopulationSizeConstant(false);
+    conf.setKeepPopulationSizeConstant(true);
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
