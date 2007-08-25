@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.61 $";
+  private static final String CVS_REVISION = "$Revision: 1.62 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -428,17 +428,27 @@ public class Population
    * Cares that the population size does not exceed the maximum size given in
    * the configuration.
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public void keepPopSizeConstant() {
+  public void keepPopSizeConstant() throws InvalidConfigurationException {
     int popSize = size();
     // See request  1213752.
     // ---------------------
     int maxSize = getConfiguration().getPopulationSize();
+//    INaturalSelector selector = getConfiguration().getKeepPopConstantSelector();
+//    if (popSize > maxSize) {
+//      Population newPop = new Population(getConfiguration(), maxSize);
+//      selector.select(maxSize, this, newPop);
+//      m_chromosomes = newPop.getChromosomes();
+//      setChanged(true);
+//    }
     while (popSize > maxSize) {
       // Remove a chromosome.
       // --------------------
+      /**@todo use dedicated selector for that*/
       removeChromosome(0);
       popSize--;
     }
