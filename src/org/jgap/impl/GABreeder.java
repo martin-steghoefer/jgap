@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public GABreeder() {
     super();
@@ -55,17 +55,20 @@ public class GABreeder
     // ensure the correct population size by calling keepPopSizeConstant.
     // ------------------------------------------------------------------
     if (config.isKeepPopulationSizeConstant()) {
-      pop.keepPopSizeConstant();
+      try {
+        pop.keepPopSizeConstant();
+      } catch (InvalidConfigurationException iex) {
+        throw new RuntimeException(iex);
+      }
     }
     int currentPopSize = pop.size();
     // Ensure all chromosomes are updated.
     // -----------------------------------
-    BulkFitnessFunction bulkFunction =
-        config.getBulkFitnessFunction();
+    BulkFitnessFunction bulkFunction = config.getBulkFitnessFunction();
     boolean bulkFitFunc = (bulkFunction != null);
-    for (int i = 0; i < currentPopSize; i++) {
-      IChromosome chrom = pop.getChromosome(i);
-      if (!bulkFitFunc) {
+    if (!bulkFitFunc) {
+      for (int i = 0; i < currentPopSize; i++) {
+        IChromosome chrom = pop.getChromosome(i);
         chrom.getFitnessValue();
       }
     }
