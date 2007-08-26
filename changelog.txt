@@ -1,6 +1,8 @@
 3.2.2
 -----------------------------------------------------------
 * Fixed two bugs in MultiObjectiveExample
+* Added IPopulationCreator and DefaultPopulationCreator:
+  Allow for presetting the GP population at start-up
 * Added getGenes() to class CompositeGene
 * Added some few unit tests
 * Added missing Javadoc, enhanced Javadoc
