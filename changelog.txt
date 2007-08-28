@@ -1,12 +1,16 @@
 3.2.2
 -----------------------------------------------------------
-* Fixed two bugs in MultiObjectiveExample
+* Enhanced GP evolution: prototype program always recognized
+  in first evolution round 
+* Chromosome can be configured to always calculate fitness
+  value (instead of caching only)
 * Added IPopulationCreator and DefaultPopulationCreator:
   Allow for presetting the GP population at start-up
 * Added getGenes() to class CompositeGene
 * Added some few unit tests
 * Added missing Javadoc, enhanced Javadoc
 * Preset keepPopulationSize to true instead of false
+* Fixed two bugs in MultiObjectiveExample
 
 3.2.1
 -----------------------------------------------------------
