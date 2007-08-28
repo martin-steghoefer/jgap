@@ -17,9 +17,10 @@ import java.io.*;
  * @author Klaus Meffert
  * @since 3.2.1
  */
-public interface IGPInitStrategy extends Serializable {
+public interface IGPInitStrategy
+    extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Initializes a chromosome within a GP program before a random creation of
@@ -28,9 +29,11 @@ public interface IGPInitStrategy extends Serializable {
    * @param a_chrom the chromosome within the GP program to create randomly
    * @param a_chromNum index of the chromosome with the GP program
    * @return the CommandGene to use as first node, or null if random selection
+   * @throws Exception
    *
-  * @author Klaus Meffert
-  * @since 3.2.1
-  */
-  CommandGene init(IGPChromosome a_chrom, int a_chromNum);
+   * @author Klaus Meffert
+   * @since 3.2.1
+   */
+  CommandGene init(IGPChromosome a_chrom, int a_chromNum)
+      throws Exception;
 }
