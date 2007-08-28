@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -312,31 +312,56 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                                 Class[] a_types,
-                                                 Class[][] a_argTypes,
-                                                 CommandGene[][] a_nodeSets,
-                                                 int[] a_minDepths,
-                                                 int[] a_maxDepths,
-                                                 int a_maxNodes,
-                                                 boolean[] a_fullModeAllowed,
-                                                 boolean a_verboseOutput)
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+      int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
+      boolean[] a_fullModeAllowed, boolean a_verboseOutput)
       throws InvalidConfigurationException {
     return randomInitialGenotype(a_conf, a_types, a_argTypes, a_nodeSets,
                                  a_minDepths, a_maxDepths, a_maxNodes,
                                  a_fullModeAllowed, a_verboseOutput,
-        new DefaultPopulationCreator());
+                                 new DefaultPopulationCreator());
   }
-    public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                                   Class[] a_types,
-                                                   Class[][] a_argTypes,
-                                                   CommandGene[][] a_nodeSets,
-                                                   int[] a_minDepths,
-                                                   int[] a_maxDepths,
-                                                   int a_maxNodes,
-                                                   boolean[] a_fullModeAllowed,
-                                                   boolean a_verboseOutput,
-                                                   IPopulationCreator a_popCreator)
-        throws InvalidConfigurationException {
+
+  /**
+   * Allows to use a custom mechanism for population creation.
+   *
+   * @param a_conf the configuration to use
+   * @param a_types the type of each chromosome, the length is the number of
+   * chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each
+   * chromosome, must be an array of arrays, the first dimension of which is the
+   * number of chromosomes and the second dimension of which is the number of
+   * nodes. Note that it is not necessary to include the arguments of a
+   * chromosome as terminals in the chromosome's node set. This is done
+   * automatically
+   * @param a_minDepths array of minimum depths to use: for each chromosome
+   * one entry
+   * @param a_maxDepths  array of maximum depths to use: for each chromosome
+   * one entry
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
+   * @param a_verboseOutput true: output status information to console
+   * @param a_popCreator mechanism fior creating the population
+   *
+   * @return GPGenotype
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+      int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
+      boolean[] a_fullModeAllowed, boolean a_verboseOutput,
+      IPopulationCreator a_popCreator)
+      throws InvalidConfigurationException {
     // Check preconditions.
     // --------------------
     if (a_argTypes.length != a_fullModeAllowed.length
