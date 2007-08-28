@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -1023,14 +1023,7 @@ public class GPGenotype
       }
     }
     catch (Exception ex) {
-      // Try to propagate exception, see "bug" 1661635.
-      // ----------------------------------------------
-      if (ex.getCause() != null) {
-        throw new IllegalStateException(ex.getCause().toString());
-      }
-      else {
-        throw new IllegalStateException(ex.getMessage());
-      }
+        throw new IllegalStateException(ex);
     }
 
   }
