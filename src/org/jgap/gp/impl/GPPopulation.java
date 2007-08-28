@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -173,6 +173,31 @@ public class GPPopulation
                      int[] a_maxDepths, int a_maxNodes,
                      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
+    create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
+                  a_maxNodes, a_fullModeAllowed, new DefaultProgramCreator());
+  }
+
+  /**
+   *
+   * @param a_types Class[]
+   * @param a_argTypes Class[][]
+   * @param a_nodeSets CommandGene[][]
+   * @param a_minDepths int[]
+   * @param a_maxDepths int[]
+   * @param a_maxNodes int
+   * @param a_fullModeAllowed boolean[]
+   * @param a_programCreator IProgramCreator
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void create(Class[] a_types, Class[][] a_argTypes,
+                     CommandGene[][] a_nodeSets, int[] a_minDepths,
+                     int[] a_maxDepths, int a_maxNodes,
+                     boolean[] a_fullModeAllowed,
+                     IProgramCreator a_programCreator)
+      throws InvalidConfigurationException {
     int divisor;
     if (m_popSize < 2) {
       divisor = 1;
@@ -193,7 +218,8 @@ public class GPPopulation
         try {
           program = create(a_types, a_argTypes, a_nodeSets,
                            a_minDepths, a_maxDepths, depth, (i % 2) == 0,
-                           a_maxNodes, a_fullModeAllowed, tries);
+                           a_maxNodes, a_fullModeAllowed, tries,
+                           a_programCreator);
           if (i == 0 && getGPConfiguration().getPrototypeProgram() == null) {
             // Remember a prototyp of a valid program in case generation
             // cannot find a valid program within some few tries
@@ -253,10 +279,39 @@ public class GPPopulation
   }
 
   /**
-   * Creates a complete, valid ProgramChromosome.
    *
-   * @param a_types the type of each chromosome, the length
-   * is the number of chromosomes
+   * @param a_types Class[]
+   * @param a_argTypes Class[][]
+   * @param a_nodeSets CommandGene[][]
+   * @param a_minDepths int[]
+   * @param a_maxDepths int[]
+   * @param a_depth int
+   * @param a_grow boolean
+   * @param a_maxNodes int
+   * @param a_fullModeAllowed boolean[]
+   * @param a_tries int
+   * @return IGPProgram
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public IGPProgram create(Class[] a_types, Class[][] a_argTypes,
+                           CommandGene[][] a_nodeSets, int[] a_minDepths,
+                           int[] a_maxDepths, int a_depth, boolean a_grow,
+                           int a_maxNodes, boolean[] a_fullModeAllowed,
+                           int a_tries) throws InvalidConfigurationException {
+    return create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
+                  a_depth, a_grow, a_maxNodes, a_fullModeAllowed, a_tries,
+        new DefaultProgramCreator());
+
+  }
+
+  /**
+   * Creates a complete, valid IGPProgram.
+   *
+   * @param a_types the type of each chromosome, the length is the number of
+   * chromosomes
    * @param a_argTypes the types of the arguments to each chromosome, must be an
    * array of arrays, the first dimension of which is the number of chromosomes
    * and the second dimension of which is the number of arguments to the
@@ -272,7 +327,10 @@ public class GPPopulation
    * @param a_fullModeAllowed array of boolean values. For each chromosome there
    * is one value indicating whether the full mode for creating chromosome
    * generations during evolution is allowed (true) or not (false)
-   * @return ProgramChromosome
+   * @param a_tries maximum number of tries to get a valid program
+   *
+   * @return valid program
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -282,38 +340,41 @@ public class GPPopulation
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
                            int[] a_maxDepths, int a_depth, boolean a_grow,
                            int a_maxNodes, boolean[] a_fullModeAllowed,
-                           int a_tries)
+                           int a_tries, IProgramCreator a_programCreator)
       throws InvalidConfigurationException {
-    GPProgram program;
-    // Is there a fit program to be injected?
-    // --------------------------------------
+    // Is there a fittest program to be injected?
+    // ------------------------------------------
     if (m_fittestToAdd != null) {
+      IGPProgram program;
       ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
           getCloneHandlerFor(m_fittestToAdd, null);
       if (cloner == null) {
-        program = (GPProgram) m_fittestToAdd;
+        program = (IGPProgram) m_fittestToAdd;
       }
       else {
         try {
-          program = (GPProgram) cloner.perform(m_fittestToAdd, null, null);
+          program = (IGPProgram) cloner.perform(m_fittestToAdd, null, null);
         }
         catch (Exception ex) {
           ex.printStackTrace();
-          program = (GPProgram) m_fittestToAdd;
+          program = (IGPProgram) m_fittestToAdd;
         }
       }
+      // Clear out the fittest program to add as it just has been added.
+      // ---------------------------------------------------------------
       m_fittestToAdd = null;
+      return program;
     }
     else {
       // Create new GP program.
       // ----------------------
-      program = new GPProgram(getGPConfiguration(), a_types,
+      IGPProgram program;
+      program = a_programCreator.create(getGPConfiguration(), a_types,
                               a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
-                              a_maxNodes);
-      program.growOrFull(a_depth, a_grow, a_maxNodes, a_fullModeAllowed,
-                         a_tries);
+                              a_maxNodes, a_depth, a_grow, a_tries,
+                              a_fullModeAllowed);
+      return program;
     }
-    return program;
   }
 
   /**
