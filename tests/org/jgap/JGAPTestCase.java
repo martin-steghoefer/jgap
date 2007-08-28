@@ -24,7 +24,7 @@ import org.jgap.impl.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -91,7 +91,7 @@ public abstract class JGAPTestCase
     /**
      * @param a_subject Chromosome
      * @return double
-     * @since 2.0 (until 1.1: return type int)
+     * @since 2.0
      */
     protected double evaluate(IChromosome a_subject) {
       //result does not matter here
@@ -168,6 +168,7 @@ public abstract class JGAPTestCase
 
   /**
    * Retrieves a nested (private) field, that is field2 from "field1.field2".
+   *
    * @param a_instance the instance the parent field is located in
    * @param a_parentFieldName the name of the parent field (case sensitive!)
    * @param a_childFieldName the name of the child field (case sensitive!)
@@ -187,6 +188,7 @@ public abstract class JGAPTestCase
 
   /**
    * Sets a nested (private) field, that is field2 from "field1.field2".
+   *
    * @param a_instance the instance the parent field is located in
    * @param a_parentFieldName the name of the parent field (case sensitive!)
    * @param a_childFieldName the name of the child field (case sensitive!)

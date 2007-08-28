@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -15,8 +15,8 @@ import org.jgap.gp.function.*;
 import org.jgap.gp.terminal.*;
 
 /**
- * Validates evolved nodes for the Fibonacci problem. This is for
- * demonstrating how the node validator works.
+ * Validates evolved nodes for the Fibonacci problem. This is mainly to
+ * demonstrate how the node validator works.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -68,10 +68,13 @@ public class FibonacciNodeValidator
     // Chromosome 0.
     // -------------
     if (a_num == 0) {
-      // SubProgram forbidden other than as root
+      // SubProgram forbidden other than as root.
+      // ----------------------------------------
       if (a_recurseLevel > 0 && a_node.getClass() == SubProgram.class) {
         return false;
       }
+      // SubProgram wanted as root.
+      // --------------------------
       if (a_recurseLevel == 0 && a_node.getClass() != SubProgram.class) {
         return false;
       }
