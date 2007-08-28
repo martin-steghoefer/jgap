@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -227,7 +227,11 @@ public class ProgramChromosome
         n = null;
       }
       else {
-        n = programIniter.init(this, a_num);
+        try {
+          n = programIniter.init(this, a_num);
+        } catch (Exception ex) {
+          throw new IllegalStateException(ex);
+        }
       }
       // Build the (rest of the) GP program.
       // -----------------------------------
@@ -236,11 +240,11 @@ public class ProgramChromosome
       m_maxDepth = localDepth;
       growOrFullNode(a_num, localDepth, a_type, 0, m_functionSet, n, 0, a_grow,
                      -1, false);
-      // Give the chance of validating the whole program
+      // Give the chance of validating the whole program.
+      // ------------------------------------------------
       if (!getGPConfiguration().validateNode(this, null, n, a_tries,
                                              a_num, 0, a_type, m_functionSet,
-                                             a_depth,
-                                             a_grow, -1, true)) {
+                                             a_depth, a_grow, -1, true)) {
         throw new IllegalStateException("Randomly created program violates"
                                         +
             " configuration constraints (symptom 3).");
@@ -493,6 +497,8 @@ public class ProgramChromosome
                                 boolean a_validateNode) {
     if (a_rootNode == null || a_validateNode) {
       int tries = 0;
+      int evolutionRound = getGPConfiguration().getGenerationNr();
+
       CommandGene[] localFunctionSet = (CommandGene[]) a_functionSet.clone();
       do {
         CommandGene node = selectNode(a_num, a_returnType, a_subReturnType,
@@ -502,14 +508,19 @@ public class ProgramChromosome
                                                a_returnType, localFunctionSet,
                                                a_depth,
                                                a_grow, a_childNum, false)) {
-          // Remove invalid node from local function set.
-          // --------------------------------------------
-          localFunctionSet = remove(localFunctionSet, node);
-          if (localFunctionSet.length == 0) {
-            throw new IllegalStateException("No appropriate function found"
-                                            + " during program creation!");
+          // In the first round of evolution ensure to always have one valid
+          // individual as we need a prototype for cloning!
+          // ---------------------------------------------------------------
+          if (evolutionRound > 0 || tries <= 10) {
+            // Remove invalid node from local function set.
+            // --------------------------------------------
+            localFunctionSet = remove(localFunctionSet, node);
+            if (localFunctionSet.length == 0) {
+              throw new IllegalStateException("No appropriate function found"
+                                              + " during program creation!");
+            }
+            continue;
           }
-          continue;
         }
         a_rootNode = node;
         break;
