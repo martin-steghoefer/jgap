@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.63 $";
+  private final static String CVS_REVISION = "$Revision: 1.64 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -1464,6 +1464,20 @@ public class ChromosomeTest
     }
   }
 
+  class MyChromosome extends Chromosome {
+    public boolean isCalculated;
+
+    public MyChromosome(Configuration a_conf)
+        throws InvalidConfigurationException {
+      super(a_conf);
+    }
+
+    protected double calcFitnessValue() {
+      isCalculated = true;
+      return super.calcFitnessValue();
+    }
+  }
+
   /**
    * Ensures Chromosome is implementing Serializable.
    *
@@ -1708,5 +1722,67 @@ public class ChromosomeTest
       ; //this is OK
       assertEquals(1, chrom.size());
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void testAlwaysCalculate_0() throws Exception {
+    conf.setFitnessFunction(new TestFitnessFunction());
+    MyChromosome chrom = new MyChromosome(conf);
+    boolean value = (Boolean)privateAccessor.getField(chrom, "m_alwaysCalculate");
+    assertFalse(value);
+    //
+    chrom.getFitnessValue();
+    assertTrue(chrom.isCalculated);
+    //
+    chrom.isCalculated = false;
+    chrom.getFitnessValue();
+    assertFalse(chrom.isCalculated);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void testAlwaysCalculate_1() throws Exception {
+    conf.setAlwaysCaculateFitness(true);
+    Chromosome chrom = new Chromosome(conf);
+    boolean value = (Boolean)privateAccessor.getField(chrom, "m_alwaysCalculate");
+    assertTrue(value);
+    //
+    conf.setAlwaysCaculateFitness(false);
+    value = (Boolean)privateAccessor.getField(chrom, "m_alwaysCalculate");
+    assertTrue(value);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void testAlwaysCalculate_2() throws Exception {
+    conf.setFitnessFunction(new TestFitnessFunction());
+    conf.setAlwaysCaculateFitness(true);
+    MyChromosome chrom = new MyChromosome(conf);
+    boolean value = (Boolean)privateAccessor.getField(chrom, "m_alwaysCalculate");
+    assertTrue(value);
+    //
+    chrom.getFitnessValue();
+    assertTrue(chrom.isCalculated);
+    //
+    chrom.isCalculated = false;
+    chrom.getFitnessValue();
+    assertTrue(chrom.isCalculated);
+    //
+    conf.setAlwaysCaculateFitness(false);
+    value = (Boolean)privateAccessor.getField(chrom, "m_alwaysCalculate");
+    assertTrue(value);
   }
 }

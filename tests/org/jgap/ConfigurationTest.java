@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -986,6 +986,8 @@ public class ConfigurationTest
                             + conf.S_NATURAL_SELECTORS + "(" + conf.S_POST +
                             ")" + ":"
                             + natselsPost + " "
+//                            + conf.S_POPCONSTANT_SELECTOR + ":"
+//                            + "null" + " "
                  ), s);
   }
 
@@ -1044,6 +1046,8 @@ public class ConfigurationTest
                             + conf.S_NATURAL_SELECTORS + "(" + conf.S_POST +
                             ")" + ":"
                             + natselsPost + " "
+//                            + conf.S_POPCONSTANT_SELECTOR + ":"
+//                            + "null" + " "
                  ), s);
   }
 
@@ -1339,6 +1343,26 @@ public class ConfigurationTest
     assertEquals(0, conf.getNaturalSelectorsSize(false));
     assertEquals(1, conf.getNaturalSelectors(true).size());
     assertEquals(1, conf.getNaturalSelectorsSize(true));
+  }
+
+  /**
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void testSetAlwaysCalculateFitness_0() throws Exception {
+    Configuration conf = new Configuration();
+    assertFalse(conf.isAlwaysCalculateFitness());
+    conf.setAlwaysCaculateFitness(true);
+    assertTrue(conf.isAlwaysCalculateFitness());
+    conf.setAlwaysCaculateFitness(true);
+    assertTrue(conf.isAlwaysCalculateFitness());
+    conf.setAlwaysCaculateFitness(false);
+    assertFalse(conf.isAlwaysCalculateFitness());
+    conf.setAlwaysCaculateFitness(true);
+    assertTrue(conf.isAlwaysCalculateFitness());
   }
 
   /**
