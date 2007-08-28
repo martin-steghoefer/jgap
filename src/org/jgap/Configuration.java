@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.87 $";
+  private final static String CVS_REVISION = "$Revision: 1.88 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -93,7 +93,7 @@ public class Configuration
 
   public static final String S_FITNESS_EVALUATOR = "Fitness evaluator";
 
-  public static final String S_POPCONSTANT_SELECTOR = "Constant Population Selector";
+//  public static final String S_POPCONSTANT_SELECTOR = "Constant Population Selector";
 
   public static final String S_GENETIC_OPERATORS = "Genetic operators";
 
