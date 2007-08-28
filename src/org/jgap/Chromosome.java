@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.93 $";
+  private final static String CVS_REVISION = "$Revision: 1.94 $";
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -118,6 +118,15 @@ public class Chromosome
   private IGeneConstraintChecker m_geneAlleleChecker;
 
   /**
+   * If set to true the method getFitnessValue() will always (re-)calculate the
+   * fitness value. This may be necessary in case of environments where the
+   * state changes without the chromosome to notice
+   *
+   * @since 3.2.2
+   */
+  private boolean m_alwaysCalculate;
+
+  /**
    * Default constructor, only provided for dynamic instantiation.<p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
@@ -129,7 +138,7 @@ public class Chromosome
    */
   public Chromosome()
       throws InvalidConfigurationException {
-    super(Genotype.getStaticConfiguration());
+    this(Genotype.getStaticConfiguration());
   }
 
   /**
@@ -144,6 +153,7 @@ public class Chromosome
   public Chromosome(final Configuration a_configuration)
       throws InvalidConfigurationException {
     super(a_configuration);
+    m_alwaysCalculate = a_configuration.isAlwaysCalculateFitness();
   }
 
   /**
@@ -161,7 +171,7 @@ public class Chromosome
   public Chromosome(final Configuration a_configuration,
                     String a_persistentRepresentatuion)
       throws InvalidConfigurationException, UnsupportedRepresentationException {
-    super(a_configuration);
+    this(a_configuration);
     setValueFromPersistentRepresentation(a_persistentRepresentatuion);
   }
 
@@ -178,7 +188,7 @@ public class Chromosome
   public Chromosome(final Configuration a_configuration,
                     final int a_desiredSize)
       throws InvalidConfigurationException {
-    super(a_configuration);
+    this(a_configuration);
     if (a_desiredSize <= 0) {
       throw new IllegalArgumentException(
           "Chromosome size must be greater than zero");
@@ -429,10 +439,10 @@ public class Chromosome
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
-   * @since 2.0 (until 1.1: return type int)
+   * @since 2.0
    */
   public double getFitnessValue() {
-    if (m_fitnessValue >= 0.000d) {
+    if (m_fitnessValue >= 0.000d && !m_alwaysCalculate) {
       return m_fitnessValue;
     }
     else {
@@ -1013,4 +1023,5 @@ public class Chromosome
   public List getMultiObjectives() {
     return m_multiObjective;
   }
+
 }

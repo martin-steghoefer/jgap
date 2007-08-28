@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.86 $";
+  private final static String CVS_REVISION = "$Revision: 1.87 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -92,6 +92,8 @@ public class Configuration
   public static final String S_FITNESS_FUNCTION = "Fitness function";
 
   public static final String S_FITNESS_EVALUATOR = "Fitness evaluator";
+
+  public static final String S_POPCONSTANT_SELECTOR = "Constant Population Selector";
 
   public static final String S_GENETIC_OPERATORS = "Genetic operators";
 
@@ -142,6 +144,15 @@ public class Configuration
    * @since 1.0
    */
   private BulkFitnessFunction m_bulkObjectiveFunction;
+
+//  /**
+//   * If population size should be kept constant then this selector determines
+//   * which of the chromosomes to select into the next generation.
+//   *
+//   * @author Klaus Meffert
+//   * @since 3.2.2
+//   */
+//  private INaturalSelector m_popConstantSelector;
 
   /**
    * References a Chromosome that serves as a sample of the Gene setup
@@ -249,7 +260,7 @@ public class Configuration
   private int m_generationNr;
 
   /**
-   * The Configuration Handler for this Configurable.
+   * The Configuration handler for this Configurable.
    *
    * @author Siddhartha Azad
    * @since 2.3
@@ -283,6 +294,14 @@ public class Configuration
    */
   private IJGAPFactory m_factory;
 
+  /**
+   * See Chromosome class, field m_alwaysCalculate, for description
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  private boolean m_alwaysCalculateFitness;
+
   private transient String threadKey;
 
   /**
@@ -315,11 +334,13 @@ public class Configuration
     m_preSelectors = new ChainOfSelectors(this);
     m_postSelectors = new ChainOfSelectors(this);
     m_selectFromPrevGen = 1.0d;
-    // use synchronized list for distributed computing
+    // Use synchronized list for distributed computing.
+    // ------------------------------------------------
     m_geneticOperators = new Vector();
     m_conHandler = new RootConfigurationHandler();
     m_conHandler.setConfigurable(this);
     m_keepPopulationSizeConstant = true;
+    m_alwaysCalculateFitness = false;
     // Create factory for being able to configure the used default objects,
     // like random generators or fitness evaluators.
     // --------------------------------------------------------------------
@@ -1387,6 +1408,15 @@ public class Configuration
         result += " " + getNaturalSelectors(false).get(i).getClass().getName();
       }
     }
+//    String popSelector;
+//    if (m_popConstantSelector == null) {
+//      popSelector = "null";
+//    }
+//    else {
+//      popSelector = m_popConstantSelector.getClass().getName();
+//    }
+//    result += "\n " + S_POPCONSTANT_SELECTOR + ": "
+//        + popSelector;
     return result;
   }
 
@@ -1496,6 +1526,65 @@ public class Configuration
     return m_breeder;
   }
 
+//  /**
+//   * If population size should be kept constant then this selector determines
+//   * which of the chromosomes to select into the next generation.
+//   *
+//   * @param a_popConstantSelector the selector to use
+//   * @throws InvalidConfigurationException
+//   *
+//   * @author Klaus Meffert
+//   * @since 3.2.2
+//   */
+//  public void setKeepPopConstantSelector(INaturalSelector a_popConstantSelector)
+//      throws InvalidConfigurationException {
+//    verifyChangesAllowed();
+//    m_popConstantSelector = a_popConstantSelector;
+//  }
+
+//  /**
+//   * @return the registered selector to keep population size constant. If none
+//   * is set, the NewestChromosomesSelector is instantiated, assigned and
+//   * returned
+//   *
+//   * @throws InvalidConfigurationException
+//   *
+//   * @author Klaus Meffert
+//   * @since 3.2.2
+//   */
+//  public INaturalSelector getKeepPopConstantSelector()
+//  throws InvalidConfigurationException{
+//    if (m_popConstantSelector == null) {
+//      m_popConstantSelector = new NewestChromosomesSelector(this);
+//    }
+//    return m_popConstantSelector;
+//  }
+
+  /**
+   * @param a_alwaysCalculate true: Chromosome.getFitnessValue() will always
+   * (re-)calculate the fitness value. This may be necessary in case of
+   * environments where the state changes without the chromosome to notice
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void setAlwaysCaculateFitness(boolean a_alwaysCalculate) {
+    m_alwaysCalculateFitness = a_alwaysCalculate;
+  }
+
+  /**
+   * @return true: Chromosome.getFitnessValue() will always (re-)calculate the
+   * fitness value. This may be necessary in case of environments where the
+   * state changes without the chromosome to notice
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public boolean isAlwaysCalculateFitness() {
+    return m_alwaysCalculateFitness;
+  }
+
+
   protected String makeThreadKey() {
     Thread current = Thread.currentThread();
     threadKey = getThreadKey(current, m_id);
@@ -1595,11 +1684,13 @@ public class Configuration
       result.m_minPercentageSizePopulation = m_minPercentageSizePopulation;
       result.m_selectFromPrevGen = m_selectFromPrevGen;
       result.m_objectiveFunction = (FitnessFunction)doClone(m_objectiveFunction);
+//      result.m_popConstantSelector = (INaturalSelector)doClone(m_popConstantSelector);
       result.m_postSelectors = (ChainOfSelectors)doClone(m_postSelectors);
       result.m_preSelectors = (ChainOfSelectors)doClone(m_preSelectors);
       result.m_preserveFittestIndividual = m_preserveFittestIndividual;
       result.m_randomGenerator = (RandomGenerator)doClone(m_randomGenerator);
       result.m_sampleChromosome = (IChromosome)m_sampleChromosome.clone();
+      result.m_alwaysCalculateFitness = m_alwaysCalculateFitness;
       result.m_settingsLocked = m_settingsLocked;
       // Configurable data.
       // ------------------
@@ -1681,12 +1772,14 @@ public class Configuration
             .append(m_chromosomeSize, other.m_chromosomeSize)
             .append(m_preSelectors, other.m_preSelectors)
             .append(m_postSelectors, other.m_postSelectors)
+//            .append(m_popConstantSelector, other.m_popConstantSelector)
             .append(m_preserveFittestIndividual,
                     other.m_preserveFittestIndividual)
 //            .append(m_conHandler, other.m_conHandler)
             .append(threadKey, other.threadKey)
             .append(m_keepPopulationSizeConstant,
                     other.m_keepPopulationSizeConstant)
+            .append(m_alwaysCalculateFitness, other.m_alwaysCalculateFitness)
             .append(m_minPercentageSizePopulation,
                     other.m_minPercentageSizePopulation)
             .append(m_selectFromPrevGen,other.m_selectFromPrevGen)
