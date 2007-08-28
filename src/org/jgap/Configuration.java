@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.88 $";
+  private final static String CVS_REVISION = "$Revision: 1.89 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1563,7 +1563,7 @@ public class Configuration
   /**
    * @param a_alwaysCalculate true: Chromosome.getFitnessValue() will always
    * (re-)calculate the fitness value. This may be necessary in case of
-   * environments where the state changes without the chromosome to notice
+   * environments where the state changes without the chromosome to notice.
    *
    * @author Klaus Meffert
    * @since 3.2.2
@@ -1575,7 +1575,7 @@ public class Configuration
   /**
    * @return true: Chromosome.getFitnessValue() will always (re-)calculate the
    * fitness value. This may be necessary in case of environments where the
-   * state changes without the chromosome to notice
+   * state changes without the chromosome to notice.
    *
    * @author Klaus Meffert
    * @since 3.2.2
