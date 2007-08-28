@@ -10,10 +10,11 @@
 package org.jgap.gp;
 
 import org.jgap.gp.impl.*;
+import org.jgap.InvalidConfigurationException;
 
 /**
  *
- * Interface for initializing the population within
+ * Interface for initializing the complete population within
  * GPGenotype.randomInitializeGenotype.
  *
  * @author Klaus Meffert
@@ -21,7 +22,7 @@ import org.jgap.gp.impl.*;
  */
 public interface IPopulationCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Initializes the given population.
@@ -34,14 +35,14 @@ public interface IPopulationCreator {
    * @param a_maxDepths int[]
    * @param a_maxNodes int
    * @param a_fullModeAllowed boolean[]
-   * @throws Exception in case of any error
+   * @throws InvalidConfigurationException in case of any error
    *
    * @author Klaus Meffert
    * @since 3.2.2
    */
-  void initialize(GPPopulation a_pop, Class[] a_types,
-                  Class[][] a_argTypes, CommandGene[][] a_nodeSets,
-                  int[] a_minDepths,
+  void initialize(GPPopulation a_pop, Class[] a_types, Class[][] a_argTypes,
+                  CommandGene[][] a_nodeSets, int[] a_minDepths,
                   int[] a_maxDepths, int a_maxNodes,
-                  boolean[] a_fullModeAllowed) throws Exception ;
+                  boolean[] a_fullModeAllowed)
+      throws InvalidConfigurationException;
 }
