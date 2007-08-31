@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -270,6 +270,31 @@ public class BaseGeneTest
    * @throws Exception
    *
    * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void testSetApplicationData_1()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
+    String appData = "Hallo";
+    IChromosome c = new Chromosome(conf, gene, 2);
+    conf.setFitnessFunction(new TestFitnessFunction());
+    conf.setSampleChromosome(c);
+    conf.setPopulationSize(5);
+    Genotype genotype = Genotype.randomInitialGenotype(conf);
+    Population pop = genotype.getPopulation();
+    c = pop.getChromosome(0);
+    c.setApplicationData(appData);
+    pop.setChromosome(0, c);
+    genotype.evolve();
+    Population pop2 = genotype.getPopulation();
+    c = pop2.getChromosome(0);
+    assertSame(appData, c.getApplicationData());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
    * @since 2.4
    */
   public void testIsCompareApplicationData_0()
@@ -304,7 +329,11 @@ public class BaseGeneTest
     }
 
     protected Gene newGeneInternal() {
-      return null;
+      try {
+        return new BaseGeneImpl(getConfiguration());
+      } catch (InvalidConfigurationException iex) {
+        throw new RuntimeException(iex);
+      }
     }
 
     public void setAllele(Object a_newValue) {
