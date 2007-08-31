@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.89 $";
+  private final static String CVS_REVISION = "$Revision: 1.90 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -510,8 +510,10 @@ public class Configuration
     // Ensure that no other fitness function has been set in a different
     // configuration object within the same thread!
     // -----------------------------------------------------------------
-    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
-                  "Fitness function has already been set differently.");
+    if (m_objectiveFunction != null) {
+      checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
+                    "Fitness function has already been set differently.");
+    }
     m_objectiveFunction = a_functionToSet;
   }
 
@@ -664,8 +666,10 @@ public class Configuration
     // Ensure that no other sample chromosome has been set in a
     // different configuration object within the same thread!
     // --------------------------------------------------------
-    checkProperty(PROPERTY_SAMPLE_CHROM_INST, a_sampleChromosomeToSet,
-                  "Sample chromosome has already been set differently.");
+    if (m_sampleChromosome != null) {
+      checkProperty(PROPERTY_SAMPLE_CHROM_INST, a_sampleChromosomeToSet,
+                    "Sample chromosome has already been set differently.");
+    }
     m_sampleChromosome = a_sampleChromosomeToSet;
     m_chromosomeSize = m_sampleChromosome.size();
   }
@@ -1120,7 +1124,7 @@ public class Configuration
     }
     if (m_config.m_populationSize <= 0) {
       throw new InvalidConfigurationException(
-          "A genotype size greater than zero must be specified in " +
+          "A population size greater than zero must be specified in " +
           "the active configuration.");
     }
     if (m_fitnessEvaluator == null) {
