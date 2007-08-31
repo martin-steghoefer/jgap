@@ -14,6 +14,8 @@
 * Added missing Javadoc, enhanced Javadoc
 * Preset keepPopulationSize to true instead of false
 * Fixed two bugs in MultiObjectiveExample
+* Fixed small bugs in Configuration with locking null
+  valued properties
 * Enhanced Javadoc
 
 3.2.1
