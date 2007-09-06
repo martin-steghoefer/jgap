@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -66,6 +66,16 @@ public class ProgramChromosome
    * @since 3.0
    */
   private boolean m_compareAppData;
+
+  public ProgramChromosome(GPConfiguration a_conf, int a_size)
+      throws InvalidConfigurationException {
+    super(a_conf);
+    if (a_size <= 0) {
+      throw new IllegalArgumentException(
+          "Chromosome size must be greater than zero");
+    }
+    init(a_size);
+  }
 
   public ProgramChromosome(GPConfiguration a_conf, int a_size,
                            IGPProgram a_ind)
@@ -172,7 +182,7 @@ public class ProgramChromosome
     catch (Exception cex) {
       // Rethrow to have a more convenient handling.
       // -------------------------------------------
-      throw new IllegalStateException(cex.getMessage());
+      throw new IllegalStateException(cex);
     }
   }
 
