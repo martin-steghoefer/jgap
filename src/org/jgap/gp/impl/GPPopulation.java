@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -145,8 +145,7 @@ public class GPPopulation
   }
 
   /**
-   * Creates a population using the ramped half-and-half method. Adapted from
-   * JGProg.
+   * Creates a population.
    *
    * @param a_types the type for each chromosome, the length of the array
    * represents the number of chromosomes
@@ -178,6 +177,7 @@ public class GPPopulation
   }
 
   /**
+   * Creates a population.
    *
    * @param a_types Class[]
    * @param a_argTypes Class[][]
@@ -279,6 +279,7 @@ public class GPPopulation
   }
 
   /**
+   * Creates a population.
    *
    * @param a_types Class[]
    * @param a_argTypes Class[][]
@@ -328,6 +329,8 @@ public class GPPopulation
    * is one value indicating whether the full mode for creating chromosome
    * generations during evolution is allowed (true) or not (false)
    * @param a_tries maximum number of tries to get a valid program
+   * @param a_programCreator strategy class to create programs for the
+   * population
    *
    * @return valid program
    *
