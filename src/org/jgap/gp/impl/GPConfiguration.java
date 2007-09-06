@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -562,7 +562,7 @@ public class GPConfiguration
     // Ensure that no other fitness function has been set in a different
     // configuration object within the same thread!
     // -----------------------------------------------------------------
-    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
+    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,m_objectiveFunction,
                   "Fitness function has already been set differently.");
     m_objectiveFunction = a_functionToSet;
   }
@@ -899,7 +899,7 @@ public class GPConfiguration
    * @param a_strategy IGPInitStrategy
    *
    * @author Klaus Meffert
-   * @since 3.2.1
+   * @since 3.2.2
    */
   public void setInitStrategy(IGPInitStrategy a_strategy) {
     m_initStrategy = a_strategy;
@@ -910,9 +910,9 @@ public class GPConfiguration
    * @return IGPInitStrategy
    *
    * @author Klaus Meffert
-   * @since 3.2.1
+   * @since 3.2.2
    */
   public IGPInitStrategy getInitStrategy() {
-    return  m_initStrategy;
+    return m_initStrategy;
   }
 }
