@@ -6,6 +6,7 @@
   value (instead of caching only)
 * Added IPopulationCreator and DefaultPopulationCreator:
   allow for presetting the GP population at start-up
+* Added convenient constructor to ProgramChromosome
 * Added IProgramCreator and DefaultProgramCreator: allow for
   sophisticated custom initialization of GP programs
   (IGPProgram)
@@ -16,7 +17,6 @@
 * Fixed two bugs in MultiObjectiveExample
 * Fixed small bugs in Configuration with locking null
   valued properties
-* Enhanced Javadoc
 
 3.2.1
 -----------------------------------------------------------
