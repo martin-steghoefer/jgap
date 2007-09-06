@@ -26,7 +26,7 @@ public class DefaultCloneHandler
     implements ICloneHandler, ICloneable, Serializable, Comparable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Handles all implementations of IApplicationData as well as all of
@@ -114,7 +114,7 @@ public class DefaultCloneHandler
         return ( (ICloneable) a_objToClone).clone();
       }
       catch (CloneException cex) {
-        throw new IllegalStateException(cex.getMessage());
+        throw new IllegalStateException(cex);
       }
     }
     if (IApplicationData.class.isAssignableFrom(a_objToClone.getClass())) {
@@ -122,7 +122,7 @@ public class DefaultCloneHandler
         return ( (IApplicationData) a_objToClone).clone();
       }
       catch (CloneNotSupportedException cex) {
-        throw new IllegalStateException(cex.getMessage());
+        throw new IllegalStateException(cex);
       }
     }
     // Support Cloneable interface by looking for clone() method
@@ -135,10 +135,10 @@ public class DefaultCloneHandler
       return cloneMethod.invoke(a_objToClone, new Object[] {});
     }
     catch (InvocationTargetException iex) {
-      throw new IllegalStateException(iex.getTargetException().getMessage());
+      throw new IllegalStateException(iex.getTargetException());
     }
     catch (Throwable ex) {
-      throw new IllegalStateException(ex.getMessage());
+      throw new IllegalStateException(ex);
     }
   }
 
