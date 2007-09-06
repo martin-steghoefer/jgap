@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.90 $";
+  private final static String CVS_REVISION = "$Revision: 1.91 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -471,12 +471,12 @@ public class Configuration
 
   /**
    * Sets the fitness function to be used for this genetic algorithm.
-   * The fitness function is responsible for evaluating a given
-   * Chromosome and returning a positive integer that represents its
-   * worth as a candidate solution. These values are used as a guide by the
-   * natural to determine which Chromosome instances will be allowed to move
-   * on to the next round of evolution, and which will instead be eliminated.
-   * <p>
+   * The fitness function is responsible for evaluating a given Chromosome and
+   * returning a positive integer that represents its worth as a candidate
+   * solution. These values are used as a guide by the natural to determine
+   * which Chromosome instances will be allowed to move on to the next round of
+   * evolution, and which will instead be eliminated.
+   *
    * Note that it is illegal to set both this fitness function and a bulk
    * fitness function. Although one or the other must be set, the two are
    * mutually exclusive.
@@ -510,10 +510,8 @@ public class Configuration
     // Ensure that no other fitness function has been set in a different
     // configuration object within the same thread!
     // -----------------------------------------------------------------
-    if (m_objectiveFunction != null) {
-      checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,
-                    "Fitness function has already been set differently.");
-    }
+    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet, m_objectiveFunction,
+                  "Fitness function has already been set differently.");
     m_objectiveFunction = a_functionToSet;
   }
 
@@ -523,6 +521,7 @@ public class Configuration
    * @param a_propname the property to check (the current thread will be
    * considered as a part of the property's name, too)
    * @param a_obj the object that should be set in charge of the property
+   * @param a_oldObj the old object that is set until now. Not used yet
    * @param a_errmsg the error message to throw in case the property is already
    * set for the current thread
    *
@@ -530,7 +529,7 @@ public class Configuration
    * @since 3.0
    */
   protected void checkProperty(final String a_propname, final Object a_obj,
-                               final String a_errmsg) {
+                               final Object a_oldObj, final String a_errmsg) {
     String instanceHash = System.getProperty(threadKey + a_propname, null);
     String key = makeKey(a_obj);
     if (instanceHash == null || instanceHash.length() < 1) {
@@ -616,7 +615,7 @@ public class Configuration
     // Ensure that no other bulk fitness function has been set in a
     // different configuration object within the same thread!
     // ------------------------------------------------------------
-    checkProperty(PROPERTY_BFITFNC_INST, a_functionToSet,
+    checkProperty(PROPERTY_BFITFNC_INST, a_functionToSet,m_bulkObjectiveFunction,
                   "Bulk fitness function has already been set differently.");
     m_bulkObjectiveFunction = a_functionToSet;
   }
@@ -666,10 +665,8 @@ public class Configuration
     // Ensure that no other sample chromosome has been set in a
     // different configuration object within the same thread!
     // --------------------------------------------------------
-    if (m_sampleChromosome != null) {
-      checkProperty(PROPERTY_SAMPLE_CHROM_INST, a_sampleChromosomeToSet,
-                    "Sample chromosome has already been set differently.");
-    }
+    checkProperty(PROPERTY_SAMPLE_CHROM_INST, a_sampleChromosomeToSet,
+                  m_sampleChromosome,                  "Sample chromosome has already been set differently.");
     m_sampleChromosome = a_sampleChromosomeToSet;
     m_chromosomeSize = m_sampleChromosome.size();
   }
@@ -967,7 +964,7 @@ public class Configuration
     // Ensure that no other event manager has been set in a different
     // configuration object within the same thread!
     // --------------------------------------------------------------
-    checkProperty(PROPERTY_EVENT_MGR_INST, a_eventManagerToSet,
+    checkProperty(PROPERTY_EVENT_MGR_INST, a_eventManagerToSet,m_eventManager,
                   "Event manager has already been set differently.");
     m_eventManager = a_eventManagerToSet;
   }
@@ -1245,7 +1242,7 @@ public class Configuration
     // Ensure that no other fitness evaluator has been set in a
     // different configuration object within the same thread!
     // --------------------------------------------------------
-    checkProperty(PROPERTY_FITEVAL_INST, a_fitnessEvaluator,
+    checkProperty(PROPERTY_FITEVAL_INST, a_fitnessEvaluator,m_fitnessEvaluator,
                   "Fitness evaluator has already been set differently.");
     m_fitnessEvaluator = a_fitnessEvaluator;
   }
