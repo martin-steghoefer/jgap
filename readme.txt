@@ -24,8 +24,8 @@ Step 0 is optional (proceed it in case you download the 3rd-party-zip):
 the download section. These files need to be bundles separatedly due
 to license issues.
 
-1. If you haven't already, untar or unzip the JGAP archive into your
-directory of choice.
+1. If you haven't already, unzip the JGAP archive into the directory of
+your choice.
 
 2. Simply add the jgap.jar to your classpath. If you wish to use the
 examples, then also add the jgap-examples.jar to your classpath.
@@ -37,11 +37,11 @@ Ant home page at http://ant.apache.org
 
 4. Javadocs can be found in the doc/ directory (full or javadoc JGAP
 distribution). Other documentation, including basic documents to help
-you getting started, are put together on the JGAP homepage at
+you getting started, is put together on the JGAP homepage at
 
      http://jgap.sourceforge.net
 
-Simple examples which help to get started with JGAP are included under
+Simple examples which help to get started with JGAP can be found under
 the examples directory.
 
 --------------------------------------------------------------------------
@@ -104,6 +104,7 @@ the JGAP mailing list manager at:
 Mailing list archives are also available for each of the lists.
 
 Thanks again for trying out JGAP!
+
 --Klaus Meffert for the JGAP team
 
 -----------------------------------------------
