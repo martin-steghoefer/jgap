@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -153,6 +153,7 @@ public class BaseGeneTest
 
   /**
    * Compare application data.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -277,6 +278,7 @@ public class BaseGeneTest
     BaseGeneImpl gene = new BaseGeneImpl(conf);
     String appData = "Hallo";
     IChromosome c = new Chromosome(conf, gene, 2);
+    conf.reset();
     conf.setFitnessFunction(new TestFitnessFunction());
     conf.setSampleChromosome(c);
     conf.setPopulationSize(5);
