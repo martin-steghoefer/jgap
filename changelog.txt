@@ -2,14 +2,14 @@
 -----------------------------------------------------------
 * Enhanced GP evolution: prototype program always recognized
   in first evolution round 
-* Chromosome can be configured to always calculate fitness
-  value (instead of caching only)
 * Added IPopulationCreator and DefaultPopulationCreator:
   allow for presetting the GP population at start-up
-* Added convenient constructor to ProgramChromosome
 * Added IProgramCreator and DefaultProgramCreator: allow for
   sophisticated custom initialization of GP programs
   (IGPProgram)
+* Added convenient constructor to ProgramChromosome
+* Chromosome can be configured to always calculate fitness
+  value (instead of caching only)
 * Added getGenes() to class CompositeGene
 * Added some few unit tests
 * Added missing Javadoc, enhanced Javadoc
