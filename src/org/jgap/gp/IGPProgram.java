@@ -21,6 +21,11 @@ import org.jgap.util.*;
  */
 public interface IGPProgram
     extends Serializable, Comparable, ICloneable {
+
+  /** String containing the CVS revision. Read out via reflection!*/
+  final static String CVS_REVISION = "$Revision: 1.10 $";
+
+
   /**
    * Executes the given chromosome as an integer function.
    *
