@@ -1,7 +1,12 @@
+3.2.3
+-----------------------------------------------------------
+* Integrated Robocode 1.4.3 with JGAP
+* Enhanced Javadoc
+
 3.2.2
 -----------------------------------------------------------
-* Enhanced GP evolution: prototype program always recognized
-  in first evolution round 
+* Enhanced GP evolution: prototype program always
+  recognized in first evolution round 
 * Added IPopulationCreator and DefaultPopulationCreator:
   allow for presetting the GP population at start-up
 * Added IProgramCreator and DefaultProgramCreator: allow for
