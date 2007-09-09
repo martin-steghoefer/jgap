@@ -16,6 +16,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.function.*;
 import org.jgap.util.*;
+import org.jgap.gp.terminal.Argument;
 
 /**
  * A GP program contains 1..n ProgramChromosome's.
@@ -26,7 +27,7 @@ import org.jgap.util.*;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Holds the chromosomes contained in this program.
@@ -127,6 +128,20 @@ public class GPProgram
     m_chromosomes[a_index] = a_chrom;
   }
 
+  /**
+   * Initialize the chromosomes within this GP program using the grow or the
+   * full method.
+   *
+   * @param a_depth the maximum depth of the chromosome to create
+   * @param a_grow true: use grow method; false: use full method
+   * @param a_maxNodes maximum number of nodes allowed
+   * @param a_fullModeAllowed for each chromosome: true means full mode allowed,
+   * otherwise use grow mode
+   * @param a_tries maximum number of tries to create a valid program
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public void growOrFull(int a_depth, boolean a_grow, int a_maxNodes,
                          boolean[] a_fullModeAllowed, int a_tries) {
     GPConfiguration conf = getGPConfiguration();
@@ -176,6 +191,65 @@ public class GPProgram
         m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
                                     getNodeSet(i), false, a_tries);
       }
+    }
+    if (getGPConfiguration().isUseProgramCache()) {
+      // Cache fitness value by checking if a program with same
+      // representation was computed before.
+      GPProgramInfo pcInfo = getGPConfiguration().readProgramCache(this);
+      if (pcInfo == null) {
+        /**@todo add listener for event "same program evolved again"*/
+        pcInfo = getGPConfiguration().putToProgramCache(this);
+      }
+      else {
+        setFitnessValue(pcInfo.getFitnessValue());
+      }
+    }
+  }
+
+  /**
+   * Initialize this program by using given chromosomes.
+   *
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void growOrFull(Class[][] a_argTypes, CommandGene[][] a_nodeSets) {
+    int size = m_chromosomes.length;
+    for (int i = 0; i < size; i++) {
+      m_chromosomes[i].setArgTypes(a_argTypes[i]);
+      // If there are ADF's in the nodeSet, then set their type according to
+      // the chromosome it references.
+      // -------------------------------------------------------------------
+      int len = getNodeSets()[i].length;
+      for (int j = 0; j < len; j++) {
+        if (getNodeSets()[i][j] instanceof ADF) {
+          ( (ADF) getNodeSets()[i][j]).setReturnType(
+              getTypes()[ ( (ADF) getNodeSets()[i][j]).getChromosomeNum()]);
+        }
+      }
+    }
+    for (int i = 0; i < size; i++) {
+      ProgramChromosome chrom = m_chromosomes[i];
+      chrom.setFunctionSet(a_nodeSets[i]);
+      CommandGene[] functionSet = chrom.getFunctionSet();
+      CommandGene[] newFktSet = new CommandGene[functionSet.length + a_argTypes[i].length];
+      System.arraycopy(functionSet, 0, newFktSet, 0,
+                       functionSet.length);
+
+      for (int ii = 0; ii < a_argTypes[i].length; ii++) {
+        try {
+          functionSet[a_nodeSets[i].length + ii]
+              = new Argument(getGPConfiguration(), ii, a_argTypes[i][ii]);
+        } catch (InvalidConfigurationException iex) {
+          throw new RuntimeException(iex);
+        }
+      }
+      chrom.redepth();
     }
     if (getGPConfiguration().isUseProgramCache()) {
       // Cache fitness value by checking if a program with same
