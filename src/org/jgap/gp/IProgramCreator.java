@@ -21,12 +21,14 @@ import org.jgap.*;
  */
 public interface IProgramCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Initializes the given population.
    *
    * @param a_conf
+   * @param a_programIndex index of the current program in the population,
+   * starting with 0
    * @param a_types Class[]
    * @param a_argTypes Class[][]
    * @param a_nodeSets CommandGene[][]
@@ -42,10 +44,11 @@ public interface IProgramCreator {
    * @author Klaus Meffert
    * @since 3.2.2
    */
-  IGPProgram create(GPConfiguration a_conf, Class[] a_types, Class[][] a_argTypes,
-                  CommandGene[][] a_nodeSets, int[] a_minDepths,
-                  int[] a_maxDepths, int a_maxNodes, int a_depth,
-                  boolean a_grow, int a_tries, boolean[] a_fullModeAllowed)
+  IGPProgram create(GPConfiguration a_conf, int a_programIndex, Class[] a_types,
+                    Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+                    int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
+                    int a_depth, boolean a_grow, int a_tries,
+                    boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException;
 }
 
