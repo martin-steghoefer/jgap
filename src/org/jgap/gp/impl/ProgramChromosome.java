@@ -23,7 +23,7 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   /**
    * The list of allowed functions/terminals.
@@ -144,7 +144,7 @@ public class ProgramChromosome
       throws InvalidConfigurationException {
     m_depth = new int[a_size];
     m_genes = new CommandGene[a_size];
-    /**@todo speedup possible by using dynamic list?*/
+    /**@todo is speedup possible by using dynamic list?*/
   }
 
   public void setArgTypes(Class[] a_argTypes) {
@@ -208,7 +208,7 @@ public class ProgramChromosome
    * @param a_num the chromosome's index in the individual of this chromosome
    * @param a_depth the maximum depth of the chromosome to create
    * @param a_type the type of the chromosome to create
-   * @param a_argTypes the array of types of arguments for this chromosome
+   * @param a_argTypes the array of argument types for this chromosome
    * @param a_functionSet the set of nodes valid to pick from
    * @param a_grow true: use grow method; false: use full method
    * @param a_tries maximum number of tries to create a valid program
