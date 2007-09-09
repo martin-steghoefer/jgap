@@ -24,7 +24,7 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -216,7 +216,7 @@ public class GPPopulation
       int tries = 0;
       do {
         try {
-          program = create(a_types, a_argTypes, a_nodeSets,
+          program = create(i, a_types, a_argTypes, a_nodeSets,
                            a_minDepths, a_maxDepths, depth, (i % 2) == 0,
                            a_maxNodes, a_fullModeAllowed, tries,
                            a_programCreator);
@@ -301,15 +301,44 @@ public class GPPopulation
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
                            int[] a_maxDepths, int a_depth, boolean a_grow,
                            int a_maxNodes, boolean[] a_fullModeAllowed,
+                           int a_tries)
+      throws InvalidConfigurationException {
+    return create(0, a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
+                  a_depth, a_grow, a_maxNodes, a_fullModeAllowed, a_tries);
+  }
+
+  /**
+   *
+   * @param a_programIndex int
+   * @param a_types Class[]
+   * @param a_argTypes Class[][]
+   * @param a_nodeSets CommandGene[][]
+   * @param a_minDepths int[]
+   * @param a_maxDepths int[]
+   * @param a_depth int
+   * @param a_grow boolean
+   * @param a_maxNodes int
+   * @param a_fullModeAllowed boolean[]
+   * @param a_tries int
+   * @return IGPProgram
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public IGPProgram create(int a_programIndex, Class[] a_types, Class[][] a_argTypes,
+                           CommandGene[][] a_nodeSets, int[] a_minDepths,
+                           int[] a_maxDepths, int a_depth, boolean a_grow,
+                           int a_maxNodes, boolean[] a_fullModeAllowed,
                            int a_tries) throws InvalidConfigurationException {
-    return create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
+    return create(a_programIndex, a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                   a_depth, a_grow, a_maxNodes, a_fullModeAllowed, a_tries,
         new DefaultProgramCreator());
 
   }
 
   /**
-   * Creates a complete, valid IGPProgram.
+   * Creates a valid IGPProgram.
    *
    * @param a_types the type of each chromosome, the length is the number of
    * chromosomes
@@ -339,7 +368,7 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public IGPProgram create(Class[] a_types, Class[][] a_argTypes,
+  public IGPProgram create(int a_programIndex, Class[] a_types, Class[][] a_argTypes,
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
                            int[] a_maxDepths, int a_depth, boolean a_grow,
                            int a_maxNodes, boolean[] a_fullModeAllowed,
@@ -372,7 +401,7 @@ public class GPPopulation
       // Create new GP program.
       // ----------------------
       IGPProgram program;
-      program = a_programCreator.create(getGPConfiguration(), a_types,
+      program = a_programCreator.create(getGPConfiguration(), a_programIndex, a_types,
                               a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                               a_maxNodes, a_depth, a_grow, a_tries,
                               a_fullModeAllowed);
