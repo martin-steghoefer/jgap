@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -43,7 +43,7 @@ public class GPConfiguration
   /**
    * Internal stack, see PushCommand for example.
    */
-  private transient Stack m_stack = new Stack();
+  private /*transient*/ Stack m_stack = new Stack();
 
   /**
    * Internal memory, see StoreTerminalCommand for example.
