@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -40,26 +40,26 @@ public class GPGenotype
   /**
    * The current configuration instance.
    */
-  private transient GPConfiguration m_configuration;
+  private /*transient*/ GPConfiguration m_configuration;
 
   private transient static GPConfiguration m_staticConfiguration;
 
   /**
    * Fitness value of the best solution.
    */
-  private transient double m_bestFitness;
+  private /*transient*/ double m_bestFitness;
 
   /**
    * Sum of fitness values over all chromosomes.
    */
-  private transient double m_totalFitness;
+  private /*transient*/ double m_totalFitness;
 
   /**
    * Best solution found.
    */
-  private transient IGPProgram m_allTimeBest;
+  private /*transient*/ IGPProgram m_allTimeBest;
 
-  private transient double m_allTimeBestFitness;
+  private /*transient*/ double m_allTimeBestFitness;
 
   /**
    * Is full mode with program construction allowed?
@@ -108,7 +108,7 @@ public class GPGenotype
 
   private boolean m_cloneWarningGPProgramShown;
 
-  private boolean[] disabledChromosomes;
+//  private boolean[] disabledChromosomes;
 
   /**
    * Default constructor. Ony use with dynamic instantiation.
@@ -187,7 +187,7 @@ public class GPGenotype
   }
 
   protected void init() {
-    disabledChromosomes = new boolean[100];
+//    disabledChromosomes = new boolean[100];
   }
 
   /**
@@ -494,8 +494,8 @@ public class GPGenotype
   }
 
   /**
-   * Calculates the fitness value of all programs, of the best solution as
-   * well as the total fitness (sum of all fitness values).
+   * Calculates the fitness value of all programs, of the best solution as well
+   * as the total fitness (sum of all fitness values).
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -545,6 +545,7 @@ public class GPGenotype
       m_allTimeBestFitness = m_bestFitness;
       // Fire an event to indicate a new best solution.
       // ----------------------------------------------
+      /**@todo introduce global value object to be passed to the listener*/
       getGPConfiguration().getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
       if (m_verbose) {
@@ -685,7 +686,10 @@ public class GPGenotype
         int tries = 0;
         do {
           try {
-            IGPProgram program = newPopulation.create(m_types, m_argTypes,
+            /**@todo use program creator in case such is registered and returns
+             * a non-null program
+             */
+            IGPProgram program = newPopulation.create(i, m_types, m_argTypes,
                 m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
                 m_maxNodes, m_fullModeAllowed, tries);
             newPopulation.setGPProgram(i, program);
