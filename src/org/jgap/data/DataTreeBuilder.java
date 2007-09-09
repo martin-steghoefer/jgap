@@ -22,9 +22,10 @@ import org.jgap.*;
  * @since 2.0
  */
 public class DataTreeBuilder {
+  /**@todo implement representGPGenotype..*/
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Constant representing the name of the genotype element tag.
@@ -117,10 +118,9 @@ public class DataTreeBuilder {
    * Represent a Genotype as a generic data element, including its
    * population of Chromosome instances.
    *
-   * This may be useful in scenarios where representation as an
-   * entire document is undesirable, such as when the representation
-   * of this Genotype is to be combined with other elements in a
-   * single document.
+   * This may be useful in scenarios where representation as an entire document
+   * is undesirable, such as when the representation of this Genotype is to be
+   * combined with other elements in a single document.
    *
    * @param a_subject the genotype to represent
    * @throws Exception
