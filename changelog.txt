@@ -1,6 +1,9 @@
 3.2.3
 -----------------------------------------------------------
-* Integrated Robocode 1.4.3 with JGAP
+* Integrated Robocode 1.4.4 with JGAP
+* Enhanced interface IProgramCreator
+* GPProgram: added a growOrFull method for initializing
+  programs with given chromosomes
 * Enhanced Javadoc
 
 3.2.2
