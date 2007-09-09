@@ -4,6 +4,7 @@
 * Enhanced interface IProgramCreator
 * GPProgram: added a growOrFull method for initializing
   programs with given chromosomes
+* Now infinity is not accepted as a fitness value
 * Enhanced Javadoc
 
 3.2.2
