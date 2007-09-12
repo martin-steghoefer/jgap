@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -46,7 +46,6 @@ public class BranchTypingCross
       // Determine which chromosome we'll cross, probabilistically determined
       // by the sizes of the chromosomes of the first individual --
       // equivalent to Koza's branch typing.
-
       int[] sizes = new int[i1.size()];
       int totalSize = 0;
       for (int i = 0; i < i1.size(); i++) {
