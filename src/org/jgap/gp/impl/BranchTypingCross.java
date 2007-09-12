@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -132,13 +132,15 @@ public class BranchTypingCross
         // no functions
         return c;
       }
-      p0 = c0.getFunction(random.nextInt(nf));
+      int fctIndex = random.nextInt(nf);
+      p0 = c0.getFunction(fctIndex);
     }
     else {
       // Choose a terminal.
       // ------------------
       p0 = c0.getTerminal(random.nextInt(c0.numTerminals()));
-      // Mutate the terminal's value.
+    }
+      // Mutate the command's value.
       // ----------------------------
       /**@todo make this random and configurable*/
       CommandGene command = c0.getNode(p0);
@@ -153,7 +155,7 @@ public class BranchTypingCross
           }
         }
       }
-    }
+
     // Choose a point in c2 matching the type and subtype of p0.
     // ---------------------------------------------------------
     int p1;
@@ -181,10 +183,11 @@ public class BranchTypingCross
       }
       p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_, subType)),
                           type_, subType);
-      // Mutate the terminal's value.
+    }
+      // Mutate the command's value.
       // ----------------------------
       /**@todo make this random and configurable*/
-      CommandGene command = c1.getNode(p1);
+      /*CommandGene */command = c1.getNode(p1);
       if (IMutateable.class.isInstance(command)) {
         IMutateable term = (IMutateable) command;
         command = term.applyMutation(0, 0.5d);
@@ -196,7 +199,7 @@ public class BranchTypingCross
           }
         }
       }
-    }
+
     int s0 = c0.getSize(p0); //Number of nodes in c0 from index p0
     int s1 = c1.getSize(p1); //Number of nodes in c1 from index p1
     int d0 = c0.getDepth(p0); //Depth of c0 from index p0
