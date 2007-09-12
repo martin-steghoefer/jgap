@@ -4,7 +4,9 @@
 * Enhanced interface IProgramCreator
 * GPProgram: added a growOrFull method for initializing
   programs with given chromosomes
+* CommandGene: added service method ensureUniqueness
 * Now infinity is not accepted as a fitness value
+* Fixed bug with GP evolution (probability fix)
 * Enhanced Javadoc
 
 3.2.2
