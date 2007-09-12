@@ -6,6 +6,7 @@
   programs with given chromosomes
 * CommandGene: added service method ensureUniqueness
 * Now infinity is not accepted as a fitness value
+* Fixed serious bug with GP mutation of functions
 * Fixed bug with GP evolution (probability fix)
 * Enhanced Javadoc
 
