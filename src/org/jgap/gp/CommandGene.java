@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -563,7 +563,7 @@ public abstract class CommandGene
 
   /**
    * Subclasses capable of validating programs should overwrite this method.
-   * See PushCommand as a sample.
+   * See class Push as a sample.
    *
    * @param a_program the ProgramChromosome to validate
    * @return true: a_program is (superficially) valid with the current Command
@@ -724,5 +724,21 @@ public abstract class CommandGene
    */
   protected int[] getSubChildTypes() {
     return m_subChildTypes;
+  }
+
+  /**
+   * Ensures that the calling command is unique within the program.
+   * Call it on first place from the execute method.
+   *
+   * @param a_program the program to validate
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public void ensureUniqueness(ProgramChromosome a_program) {
+    if (a_program.getCommandOfClass(1, getClass()) >= 0) {
+      throw new IllegalStateException("Command must not occur more than once!");
+    }
+
   }
 }
