@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -119,7 +119,12 @@ public abstract class GPProgramBase
       // --------------------------------------------------------------
       m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
     }
-    return m_fitnessValue;
+    if (Double.isInfinite(m_fitnessValue)) {
+     return  -1;
+    }
+    else {
+      return m_fitnessValue;
+    }
   }
 
   /**
