@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -508,7 +508,16 @@ public class GPGenotype
     m_bestFitness = FitnessFunction.NO_FITNESS_VALUE;
     for (int i = 0; i < pop.size() && pop.getGPProgram(i) != null; i++) {
       IGPProgram program = pop.getGPProgram(i);
+      /**@todo get information from fitness function how calculation happened.
+       * In case of Robocode: Return the robot competed against, in case the
+       * -enemies option was used without -battleAll
+       */
       double fitness = program.getFitnessValue();
+      // Don't acceppt Infinity as a result.
+      // -----------------------------------
+      if (Double.isInfinite(fitness)) {
+        continue;
+      }
       if (best == null || evaluator.isFitter(fitness, m_bestFitness)) {
         best = program;
         m_bestFitness = fitness;
@@ -617,6 +626,8 @@ public class GPGenotype
       // Determine how many new individuals will be added to the new generation.
       // -----------------------------------------------------------------------
       int popSize1 = (int) Math.round(popSize * (1 - conf.getNewChromsPercent()));
+      double crossProb = conf.getCrossoverProb()
+          / (conf.getCrossoverProb() + conf.getReproductionProb());
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
@@ -625,7 +636,7 @@ public class GPGenotype
         // Note that if we only have one slot left to fill, we don't do
         // crossover, but fall through to reproduction.
         // ------------------------------------------------------------
-        if (i < popSize - 1 && val < conf.getCrossoverProb()) {
+        if (i < popSize - 1 && val < crossProb) {
           // Do crossover.
           // -------------
           IGPProgram i1 = conf.getSelectionMethod().select(this);
@@ -669,7 +680,7 @@ public class GPGenotype
           }
           while (true);
         }
-        else if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
+        else {//if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
           // ------------------
           newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
