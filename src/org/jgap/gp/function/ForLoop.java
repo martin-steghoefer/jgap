@@ -15,7 +15,8 @@ import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
 
 /**
- * The for-loop.
+ * The for-loop. You can preset the start index and the end index. If the latter
+ * is not given, it is dynamically computed from a child.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -23,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -93,7 +94,7 @@ public class ForLoop
    * loop.
    *
    * @param a_conf the configuration to use
-   * @param a_typeVar Class of the loop counter terminakl (e.g. IntegerClass)
+   * @param a_typeVar Class of the loop counter terminal (e.g. IntegerClass)
    * @param a_startIndex index to start the loop with
    * @param a_endIndex index to end the loop with
    * @param a_increment the maximum number of loops to perform
