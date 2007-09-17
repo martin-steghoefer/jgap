@@ -22,7 +22,7 @@ import org.jgap.*;
 public abstract class BaseGPChromosome
     implements IGPChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * The configuration object to use.
@@ -270,7 +270,7 @@ public abstract class BaseGPChromosome
    * @return the node
    *
    * @author Klaus Meffert
-   * @since 3.01 (since 3.0 in ProgramChromosome)
+   * @since 3.01
    */
   public CommandGene getNode(int a_index) {
     if (a_index >= getFunctions().length || getFunctions()[a_index] == null) {
@@ -280,8 +280,9 @@ public abstract class BaseGPChromosome
   }
 
   /**
-   * Helper: Find GP command with given class and return index of it
-   * @param a_n return the n'th found command
+   * Helper: Find GP command with given class and return index of it.
+   *
+   * @param a_n return the n'th found command (starting at zero)
    * @param a_class the class to find a command for
    * @return index of first found matching GP command, or -1 if none found
    *
@@ -302,8 +303,9 @@ public abstract class BaseGPChromosome
   }
 
   /**
-   * Helper: Find GP Variable with given return type and return index of it
-   * @param a_n return the n'th found command
+   * Helper: Find GP Variable with given return type and return index of it.
+   *
+   * @param a_n return the n'th found command (starting at zero)
    * @param a_returnType the return type to find a Variable for
    * @return index of first found matching GP command, or -1 if none found
    *
