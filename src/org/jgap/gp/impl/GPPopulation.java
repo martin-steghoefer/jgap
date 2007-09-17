@@ -14,6 +14,7 @@ import java.util.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.log4j.*;
+import org.jgap.util.*;
 
 /**
  * Population for GP programs.
@@ -24,7 +25,11 @@ import org.apache.log4j.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
+
+  final static String GPPROGRAM_DELIMITER_HEADING = "<";
+  final static String GPPROGRAM_DELIMITER_CLOSING = ">";
+  final static String GPPROGRAM_DELIMITER = "#";
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -478,10 +483,16 @@ public class GPPopulation
     double fitness;
     for (int i = 0; i < m_programs.length && m_programs[i] != null; i++) {
       IGPProgram program = m_programs[i];
-      fitness = program.getFitnessValue();
-      if (m_fittestProgram == null || evaluator.isFitter(fitness, bestFitness)) {
-        bestFitness = fitness;
-        m_fittestProgram = program;
+      try {
+        fitness = program.getFitnessValue();
+      } catch (IllegalStateException iex) {
+        fitness = Double.NaN;
+      }
+      if (!Double.isNaN(fitness)) {
+        if (m_fittestProgram == null || evaluator.isFitter(fitness, bestFitness)) {
+          bestFitness = fitness;
+          m_fittestProgram = program;
+        }
       }
     }
     setChanged(false);
@@ -745,5 +756,33 @@ public class GPPopulation
       return true;
     }
     return false;
+  }
+
+  /**
+   * @return the persistent representation of the population, including all
+   * GP programs
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public String getPersistentRepresentation() {
+    StringBuffer b = new StringBuffer();
+    for(IGPProgram program:m_programs) {
+      b.append(GPPROGRAM_DELIMITER_HEADING);
+        b.append(encode(
+            program.getClass().getName() +
+            GPPROGRAM_DELIMITER +
+            program.getPersistentRepresentation()));
+      b.append(GPPROGRAM_DELIMITER_CLOSING);
+    }
+    return b.toString();
+  }
+
+  protected String encode(String a_string) {
+    return StringKit.encode(a_string);
+  }
+
+  protected String decode(String a_string) {
+    return StringKit.decode(a_string);
   }
 }

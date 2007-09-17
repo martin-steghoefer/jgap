@@ -23,7 +23,11 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
+
+  final static String GENE_DELIMITER_HEADING = "<";
+  final static String GENE_DELIMITER_CLOSING = ">";
+  final static String GENE_DELIMITER = "#";
 
   /**
    * The list of allowed functions/terminals.
@@ -1180,5 +1184,36 @@ public class ProgramChromosome
       }
     }
     return a_functionSet;
+  }
+
+  /**
+   * @return the persistent representation of the chromosome, including all
+   * genes
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public String getPersistentRepresentation() {
+    StringBuffer b = new StringBuffer();
+    for(CommandGene gene:m_genes) {
+      if (gene == null) {
+        break;
+      }
+      b.append(GENE_DELIMITER_HEADING);
+        b.append(encode(
+            gene.getClass().getName() +
+            GENE_DELIMITER +
+            gene.getPersistentRepresentation()));
+      b.append(GENE_DELIMITER_CLOSING);
+    }
+    return b.toString();
+  }
+
+  protected String encode(String a_string) {
+    return StringKit.encode(a_string);
+  }
+
+  protected String decode(String a_string) {
+    return StringKit.decode(a_string);
   }
 }
