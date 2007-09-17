@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -555,8 +555,12 @@ public class GPGenotype
       // Fire an event to indicate a new best solution.
       // ----------------------------------------------
       /**@todo introduce global value object to be passed to the listener*/
-      getGPConfiguration().getEventManager().fireGeneticEvent(
-          new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
+      try {
+        getGPConfiguration().getEventManager().fireGeneticEvent(
+            new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
+      } catch (IllegalArgumentException iex) {
+        /**@todo should not happen but does with ensureUniqueness(..)*/
+      }
       if (m_verbose) {
         // Output the new best solution found.
         // -----------------------------------
