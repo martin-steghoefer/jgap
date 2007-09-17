@@ -27,8 +27,11 @@ import org.jgap.gp.terminal.Argument;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
+  final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
+  final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
+  final static String PROGRAMCHROM_DELIMITER = "#";
   /**
    * Holds the chromosomes contained in this program.
    */
@@ -529,5 +532,33 @@ public class GPProgram
     } catch (Exception ex) {
       throw new CloneException(ex);
     }
+  }
+
+  /**
+   * @return the persistent representation of the GP program, including all
+   * chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public String getPersistentRepresentation() {
+    StringBuffer b = new StringBuffer();
+    for(ProgramChromosome chrom:m_chromosomes) {
+      b.append(PROGRAMCHROM_DELIMITER_HEADING);
+        b.append(encode(
+            chrom.getClass().getName() +
+            PROGRAMCHROM_DELIMITER +
+            chrom.getPersistentRepresentation()));
+      b.append(PROGRAMCHROM_DELIMITER_CLOSING);
+    }
+    return b.toString();
+  }
+
+  protected String encode(String a_string) {
+    return StringKit.encode(a_string);
+  }
+
+  protected String decode(String a_string) {
+    return StringKit.decode(a_string);
   }
 }
