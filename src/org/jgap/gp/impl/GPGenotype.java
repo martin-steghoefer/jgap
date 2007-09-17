@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -512,10 +512,16 @@ public class GPGenotype
        * In case of Robocode: Return the robot competed against, in case the
        * -enemies option was used without -battleAll
        */
-      double fitness = program.getFitnessValue();
+      double fitness;
+      try {
+        fitness = program.getFitnessValue();
+      }
+      catch (IllegalStateException iex) {
+        fitness = Double.NaN;
+      }
       // Don't acceppt Infinity as a result.
       // -----------------------------------
-      if (Double.isInfinite(fitness)) {
+      if (Double.isInfinite(fitness) || Double.isNaN(fitness)) {
         continue;
       }
       if (best == null || evaluator.isFitter(fitness, m_bestFitness)) {
