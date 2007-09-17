@@ -23,7 +23,7 @@ public interface IGPProgram
     extends Serializable, Comparable, ICloneable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.11 $";
+  final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Executes the given chromosome as an integer function.
@@ -199,4 +199,13 @@ public interface IGPProgram
    * @since 3.01
    */
   Object getApplicationData();
+
+  /**
+   * @return the persistent representation of the population, including all
+   * GP programs
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  String getPersistentRepresentation();
 }

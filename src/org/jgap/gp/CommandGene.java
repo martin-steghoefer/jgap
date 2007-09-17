@@ -13,6 +13,7 @@ import java.io.*;
 
 import org.jgap.*;
 import org.jgap.gp.impl.*;
+import java.util.StringTokenizer;
 
 /**
  * Abstract base class for all GP commands. A CommandGene can hold additional
@@ -25,7 +26,14 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
+
+  /**
+   * Represents the delimiter that is used to separate fields in the
+   * persistent representation.
+   */
+  final static String PERSISTENT_FIELD_DELIMITER = ":";
+  final static String EXTENDED_INFO_DELIMITER = "~";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -210,20 +218,6 @@ public abstract class CommandGene
     return null;
   }
 
-  public String getPersistentRepresentation()
-      throws UnsupportedOperationException {
-    /**@todo Implement this org.jgap.Gene method*/
-    throw new java.lang.UnsupportedOperationException(
-        "Method getPersistentRepresentation() not yet implemented.");
-  }
-
-  public void setValueFromPersistentRepresentation(String a_representation)
-      throws UnsupportedOperationException, UnsupportedRepresentationException {
-    /**@todo Implement this org.jgap.Gene method*/
-    throw new java.lang.UnsupportedOperationException(
-        "Method setValueFromPersistentRepresentation() not yet implemented.");
-  }
-
   public void setToRandomValue(RandomGenerator a_numberGenerator) {
     // Do nothing here by default.
     // ---------------------------
@@ -300,7 +294,8 @@ public abstract class CommandGene
         else {
           return false;
         }
-      } catch (ClassCastException cex) {
+      }
+      catch (ClassCastException cex) {
         return false;
       }
     }
@@ -388,7 +383,7 @@ public abstract class CommandGene
    */
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return boolean");
+                                            " cannot return boolean");
   }
 
   /**
@@ -404,7 +399,7 @@ public abstract class CommandGene
    */
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return void");
+                                            " cannot return void");
   }
 
   /**
@@ -421,7 +416,7 @@ public abstract class CommandGene
    */
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return int");
+                                            " cannot return int");
   }
 
   /**
@@ -438,7 +433,7 @@ public abstract class CommandGene
    */
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return long");
+                                            " cannot return long");
   }
 
   /**
@@ -455,7 +450,7 @@ public abstract class CommandGene
    */
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return float");
+                                            " cannot return float");
   }
 
   /**
@@ -472,7 +467,7 @@ public abstract class CommandGene
    */
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return double");
+                                            " cannot return double");
   }
 
   /**
@@ -489,7 +484,7 @@ public abstract class CommandGene
    */
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-        " cannot return Object");
+                                            " cannot return Object");
   }
 
   public String getName() {
@@ -741,4 +736,126 @@ public abstract class CommandGene
     }
 
   }
+
+  /**
+   * @return the persistent representation of the chromosome, including all
+   * genes
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public String getPersistentRepresentation() {
+    // Return Type
+    String s;
+    if (m_returnType == null) {
+      s = "null";
+    }
+    else {
+      s = m_returnType.getClass().getName();
+    }
+    String result = PERSISTENT_FIELD_DELIMITER + m_arity
+        + PERSISTENT_FIELD_DELIMITER + m_subReturnType
+        + PERSISTENT_FIELD_DELIMITER + m_subChildTypes
+        + EXTENDED_INFO_DELIMITER + getPersistentRepresentationExt()
+        + EXTENDED_INFO_DELIMITER;
+    return result;
+  }
+
+  /**
+   * Override in your sub classes of CommandGene if you have to add additional
+   * information to be persisted.
+   *
+   * @return additional infos
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  protected String getPersistentRepresentationExt() {
+    return null;
+  }
+
+  /**
+   *
+   * @param a_representation String
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  public void setValueFromPersistentRepresentation(final String
+      a_representation)
+      throws UnsupportedRepresentationException {
+    /**@todo fertigstellen*/
+/*
+    if (a_representation != null) {
+      StringTokenizer tokenizer =
+          new StringTokenizer(a_representation,
+                              PERSISTENT_FIELD_DELIMITER);
+      // Make sure the representation contains the correct number of
+      // fields. If not, throw an exception.
+      // -----------------------------------------------------------
+      if (tokenizer.countTokens() < 4) {
+        throw new UnsupportedRepresentationException(
+            "The format of the given persistent representation "
+            + " is not recognized: it does not contain at least four tokens: "
+            + a_representation);
+      }
+      String arityRepresentation = tokenizer.nextToken();
+      String subRetBoundRepresentation = tokenizer.nextToken();
+      String subChildBoundRepresentation = tokenizer.nextToken();
+      // First parse and set the representation of the value.
+      // ----------------------------------------------------
+      if (a_representation.equals("null")) {
+        setAllele(null);
+      }
+      else {
+        try {
+          setAllele(new Integer(Integer.parseInt(a_representation)));
+        } catch (NumberFormatException e) {
+          throw new UnsupportedRepresentationException(
+              "The format of the given persistent representation " +
+              "is not recognized: field 1 does not appear to be " +
+              "an integer value.");
+        }
+      }
+      // Now parse and set the lower bound.
+      // ----------------------------------
+      try {
+        m_lowerBounds =
+            Integer.parseInt(lowerBoundRepresentation);
+      } catch (NumberFormatException e) {
+        throw new UnsupportedRepresentationException(
+            "The format of the given persistent representation " +
+            "is not recognized: field 2 does not appear to be " +
+            "an integer value.");
+      }
+      // Now parse and set the upper bound.
+      // ----------------------------------
+      try {
+        m_upperBounds =
+            Integer.parseInt(upperBoundRepresentation);
+      } catch (NumberFormatException e) {
+        throw new UnsupportedRepresentationException(
+            "The format of the given persistent representation " +
+            "is not recognized: field 3 does not appear to be " +
+            "an integer value.");
+      }
+    }
+ */
+  }
+
+  /**
+   * Override in your sub classes of CommandGene if you have to add additional
+   * information to be persisted.
+   *
+   * @param a_index index of the parameter in the range 0..n-1 (n=number of
+   * parameters)
+   * @param a_value string value of the parameter
+   *
+   * @author Klaus Meffert
+   * @since 3.2.3
+   */
+  protected void setValueFromString(int a_index, String a_value) {
+  }
+
 }
