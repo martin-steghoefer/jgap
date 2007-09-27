@@ -10,6 +10,7 @@
 package org.jgap;
 
 import junit.framework.*;
+import java.util.*;
 
 /**
  * Tests the BaseGene class.
@@ -20,7 +21,7 @@ import junit.framework.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -291,6 +292,39 @@ public class BaseGeneTest
     Population pop2 = genotype.getPopulation();
     c = pop2.getChromosome(0);
     assertSame(appData, c.getApplicationData());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public void testSetApplicationData_2()
+      throws Exception {
+    BaseGeneImpl gene = new BaseGeneImpl(conf);
+    String appData = "Hallo";
+    IChromosome c = new Chromosome(conf, gene, 2);
+    conf.reset();
+    conf.setFitnessFunction(new TestFitnessFunction());
+    conf.setSampleChromosome(c);
+    conf.setPopulationSize(5);
+    Genotype genotype = Genotype.randomInitialGenotype(conf);
+    Population pop = genotype.getPopulation();
+    c = pop.getChromosome(0);
+    c.setApplicationData(appData);
+    List geneAppData = new Vector();
+    geneAppData.add("x");
+    geneAppData.add(new Integer(3));
+    Gene g = c.getGene(0);
+    g.setApplicationData(geneAppData);
+    pop.setChromosome(0, c);
+    genotype.evolve();
+    Population pop2 = genotype.getPopulation();
+    c = pop2.getChromosome(0);
+    assertSame(appData, c.getApplicationData());
+    g = c.getGene(0);
+    assertSame(geneAppData, g.getApplicationData());
   }
 
   /**
