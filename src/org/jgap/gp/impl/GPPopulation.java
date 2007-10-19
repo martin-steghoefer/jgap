@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
   final static String GPPROGRAM_DELIMITER_CLOSING = ">";
@@ -210,6 +210,8 @@ public class GPPopulation
     else {
       divisor = m_popSize - 1;
     }
+    int genNr = getGPConfiguration().getGenerationNr();
+    int genI = new Random().nextInt(m_popSize);
     for (int i = 0; i < m_popSize; i++) {
       IGPProgram program = null;
       // Vary depth dependent on run index.
@@ -234,8 +236,8 @@ public class GPPopulation
             // ---------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
           }
-          else if (i % 5 == 0) {
-            /**@todo set prototype to new value after each some evolutions*/
+          else if (genNr % 5 == 0 && genNr > 0 && i == genI) {/**@todo 5: make configurable*/
+            // set prototype to new value after each some evolutions
             double protoFitness = getGPConfiguration().getPrototypeProgram().
                 getFitnessValue();
             if (getGPConfiguration().getGPFitnessEvaluator().isFitter(program.
@@ -329,7 +331,7 @@ public class GPPopulation
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   public IGPProgram create(int a_programIndex, Class[] a_types, Class[][] a_argTypes,
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
@@ -345,6 +347,7 @@ public class GPPopulation
   /**
    * Creates a valid IGPProgram.
    *
+   * @param a_programIndex index of the program in the population
    * @param a_types the type of each chromosome, the length is the number of
    * chromosomes
    * @param a_argTypes the types of the arguments to each chromosome, must be an
