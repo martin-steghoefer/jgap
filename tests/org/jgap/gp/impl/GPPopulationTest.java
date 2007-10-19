@@ -14,7 +14,6 @@ import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.gp.function.*;
-
 import org.jgap.gp.*;
 
 /**
@@ -26,7 +25,7 @@ import org.jgap.gp.*;
 public class GPPopulationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPPopulationTest.class);
@@ -160,7 +159,7 @@ public class GPPopulationTest
     m_gpconf.setRandomGenerator(new StockRandomGenerator());
     try {
       gppop.create(types, argTypes, nodeSets, new int[] {1}, new int[] {1}, 3,
-                   true, 10, new boolean[] {true},0);
+                   true, 10, new boolean[] {true}, 0);
       fail();
     } catch (IllegalStateException iex) {
       ; //this is OK
@@ -184,7 +183,7 @@ public class GPPopulationTest
     pop.setGPProgram(1, prog);
     // Serialize population to a file.
     // -------------------------------
-    GPPopulation pop2 = (GPPopulation)doSerialize(pop);
+    GPPopulation pop2 = (GPPopulation) doSerialize(pop);
     assertEquals(pop, pop2);
   }
 
@@ -206,5 +205,10 @@ public class GPPopulationTest
     pop.setGPProgram(0, prog);
     pop.setGPProgram(1, prog);
     pop.sort(new GPProgramFitnessComparator());
+  }
+
+  public void testSetPrototype_0()
+      throws Exception {
+    /**@todo assert that prototype is only set automatically if none is preset*/
   }
 }
