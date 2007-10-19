@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.Argument;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
@@ -185,6 +185,7 @@ public class GPProgram
         }
       }
       // Decide whether to use grow mode or full mode.
+      // Here, the program is finally created.
       // ---------------------------------------------
       if (a_grow || !a_fullModeAllowed[i]) {
         m_chromosomes[i].growOrFull(i, depth, getType(i), getArgType(i),
@@ -539,7 +540,7 @@ public class GPProgram
    * chromosomes
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   public String getPersistentRepresentation() {
     StringBuffer b = new StringBuffer();

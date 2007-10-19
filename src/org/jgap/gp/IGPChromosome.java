@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public interface IGPChromosome
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * @return the individual containing this chromosome
@@ -208,7 +208,7 @@ public interface IGPChromosome
    * GP programs
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   String getPersistentRepresentation();
 }

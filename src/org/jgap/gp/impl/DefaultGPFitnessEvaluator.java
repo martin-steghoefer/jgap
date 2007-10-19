@@ -21,7 +21,7 @@ import org.jgap.gp.*;
 public class DefaultGPFitnessEvaluator
     implements IGPFitnessEvaluator, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
@@ -57,18 +57,24 @@ public class DefaultGPFitnessEvaluator
       return true;
     }
     else {
+      // Calculate fitness, consider illegal programs.
+      // ---------------------------------------------
       double fitness1;
       double fitness2;
       try {
         fitness1 = a_prog1.getFitnessValue();
       }
       catch (IllegalStateException iex) {
+        // Illegal program.
+        // ----------------
         fitness1 = Double.NaN;
       }
       try {
         fitness2 = a_prog2.getFitnessValue();
       }
       catch (IllegalStateException iex) {
+        // Illegal program.
+        // ----------------
         fitness2 = Double.NaN;
       }
       return isFitter(fitness1, fitness2);
