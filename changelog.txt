@@ -1,6 +1,6 @@
-3.2.3
+3.3
 -----------------------------------------------------------
-* Integrated Robocode 1.4.4 with JGAP
+* Integrated Robocode 1.4.5 with JGAP
 * Added persistent representations of GPPopulation,
   GPProgram, ProgramChromosome and CommandGene
 * Enhanced interface IProgramCreator
@@ -8,12 +8,18 @@
   programs with given chromosomes
 * CommandGene: added service method ensureUniqueness
 * Now infinity is not accepted as a fitness value
+* New method getAssignableFromClass in BaseGPChromosome
+* New interface IComplexCommand for declaring GP commands
+  as complex
 * Enhanced DefaultGPFitnessEvaluator: capable of handling
   IllegalStateException's (for wrong programs)
 * Enhanced GPProgram: capable of handling
   IllegalStateException's (for wrong programs)
+* Enhanced GPGenotype.outputSOlution()
 * Fixed serious bug with GP mutation of functions
 * Fixed bug with GP evolution (probability fix)
+* Fixed Java 6 bug with MathProblem
+* Enhanced logging of GP information
 * Enhanced Javadoc
 
 3.2.2
