@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -594,6 +594,10 @@ public class GPGenotype
    * @since 3.0
    */
   public void outputSolution(IGPProgram a_best) {
+    if (a_best == null) {
+      LOGGER.info("No best solution (null");
+      return;
+    }
     LOGGER.info(" Best solution fitness: " + a_best.getFitnessValue());
     LOGGER.info(" Best solution: " + a_best.toStringNorm(0));
     String depths = "";
@@ -638,6 +642,9 @@ public class GPGenotype
       int popSize1 = (int) Math.round(popSize * (1 - conf.getNewChromsPercent()));
       double crossProb = conf.getCrossoverProb()
           / (conf.getCrossoverProb() + conf.getReproductionProb());
+      int crossover = 0;
+      int reproduction = 0;
+      int creation = 0;
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
@@ -647,6 +654,7 @@ public class GPGenotype
         // crossover, but fall through to reproduction.
         // ------------------------------------------------------------
         if (i < popSize - 1 && val < crossProb) {
+          crossover++;
           // Do crossover.
           // -------------
           IGPProgram i1 = conf.getSelectionMethod().select(this);
@@ -693,12 +701,14 @@ public class GPGenotype
         else {//if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
           // ------------------
+          reproduction++;
           newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
         }
       }
       // Add new chromosomes randomly.
       // -----------------------------
       for (int i = popSize1; i < popSize; i++) {
+        creation++;
         // Determine depth randomly and between minInitDepth and maxInitDepth.
         // -------------------------------------------------------------------
         int depth = conf.getMinInitDepth()
@@ -739,6 +749,8 @@ public class GPGenotype
               IGPProgram program = cloneProgram(getGPConfiguration().
                                                 getPrototypeProgram());
               if (program != null) {
+                // Cloning worked.
+                // ---------------
                 newPopulation.setGPProgram(i, program);
                 break;
               }
@@ -750,6 +762,10 @@ public class GPGenotype
         }
         while (true);
       }
+      LOGGER.info("Did "
+                  + crossover + " x-overs, "
+                  + reproduction + " reproductions, "
+                  + creation + " creations");
       // Now set the new population as the active one.
       // ---------------------------------------------
       setGPPopulation(newPopulation);
