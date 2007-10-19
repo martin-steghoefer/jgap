@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -728,7 +728,7 @@ public abstract class CommandGene
    * @param a_program the program to validate
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   public void ensureUniqueness(ProgramChromosome a_program) {
     if (a_program.getCommandOfClass(1, getClass()) >= 0) {
@@ -742,7 +742,7 @@ public abstract class CommandGene
    * genes
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   public String getPersistentRepresentation() {
     // Return Type
@@ -754,6 +754,7 @@ public abstract class CommandGene
       s = m_returnType.getClass().getName();
     }
     String result = PERSISTENT_FIELD_DELIMITER + m_arity
+        + PERSISTENT_FIELD_DELIMITER + s
         + PERSISTENT_FIELD_DELIMITER + m_subReturnType
         + PERSISTENT_FIELD_DELIMITER + m_subChildTypes
         + EXTENDED_INFO_DELIMITER + getPersistentRepresentationExt()
@@ -768,7 +769,7 @@ public abstract class CommandGene
    * @return additional infos
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   protected String getPersistentRepresentationExt() {
     return null;
@@ -780,7 +781,7 @@ public abstract class CommandGene
    * @throws UnsupportedRepresentationException
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   public void setValueFromPersistentRepresentation(final String
       a_representation)
@@ -853,7 +854,7 @@ public abstract class CommandGene
    * @param a_value string value of the parameter
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   protected void setValueFromString(int a_index, String a_value) {
   }
