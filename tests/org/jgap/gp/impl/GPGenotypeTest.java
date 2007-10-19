@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -295,6 +295,28 @@ public class GPGenotypeTest
     assertNotSame(gen1.getGPConfiguration(), gen2.getGPConfiguration());
     assertEquals(30, gen1.getGPConfiguration().getPopulationSize());
     assertEquals(1, gen2.getGPConfiguration().getPopulationSize());
+  }
+
+  /**
+   * Output null solution should not produce an Exception.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public void testOutputSolution_0()
+      throws Exception {
+    GPPopulation pop = new GPPopulation(m_gpconf, 2);
+    GPProgram prog = new GPProgram(m_gpconf, 2);
+    ProgramChromosome chrom = new ProgramChromosome(m_gpconf, 2, prog);
+    prog.setChromosome(0, chrom);
+    prog.setChromosome(1, chrom);
+    pop.setGPProgram(0, prog);
+    pop.setGPProgram(1, prog);
+    GPGenotype gen = new GPGenotype(m_gpconf, pop, null, null, null, null, null,
+                                    1);
+    gen.outputSolution(null);
   }
 
   class TerminalsOnly
