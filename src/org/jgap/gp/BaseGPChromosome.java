@@ -22,7 +22,7 @@ import org.jgap.*;
 public abstract class BaseGPChromosome
     implements IGPChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The configuration object to use.
@@ -287,13 +287,36 @@ public abstract class BaseGPChromosome
    * @return index of first found matching GP command, or -1 if none found
    *
    * @author Klaus Meffert
-   * @since 3.01 (since 3.0 in ProgramChromosome)
+   * @since 3.01
    */
   public int getCommandOfClass(int a_n, Class a_class) {
     CommandGene[] functions = getFunctions();
     int len = functions.length;
     for (int j = 0; j < len && functions[j] != null; j++) {
       if (functions[j].getClass() == a_class) {
+        if (--a_n < 0) {
+          return j;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Helper: Find GP command being assignable from given class.
+   *
+   * @param a_n return the n'th found command (starting at zero)
+   * @param a_class the class to find a command for
+   * @return index of first found matching GP command, or -1 if none found
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public int getAssignableFromClass(int a_n, Class a_class) {
+    CommandGene[] functions = getFunctions();
+    int len = functions.length;
+    for (int j = 0; j < len && functions[j] != null; j++) {
+      if (a_class.isAssignableFrom(functions[j].getClass())) {
         if (--a_n < 0) {
           return j;
         }
