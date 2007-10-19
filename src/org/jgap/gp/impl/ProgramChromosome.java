@@ -13,6 +13,8 @@ import org.jgap.*;
 import org.jgap.util.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.gp.*;
+import java.util.*;
+import java.lang.reflect.*;
 
 /**
  * Chromosome representing a single GP Program.
@@ -23,8 +25,9 @@ import org.jgap.gp.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
+  final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
   final static String GENE_DELIMITER_CLOSING = ">";
   final static String GENE_DELIMITER = "#";
@@ -1186,15 +1189,29 @@ public class ProgramChromosome
     return a_functionSet;
   }
 
+  protected String encode(String a_string) {
+    return StringKit.encode(a_string);
+  }
+
+  protected String decode(String a_string) {
+    return StringKit.decode(a_string);
+  }
+
   /**
    * @return the persistent representation of the chromosome, including all
    * genes
    *
    * @author Klaus Meffert
-   * @since 3.2.3
+   * @since 3.3
    */
   public String getPersistentRepresentation() {
     StringBuffer b = new StringBuffer();
+    // Store current state.
+    // --------------------
+//    String state = PERSISTENT_FIELD_DELIMITER+m_functionSet
+
+    // Process the contained genes.
+    // ----------------------------
     for(CommandGene gene:m_genes) {
       if (gene == null) {
         break;
@@ -1209,11 +1226,103 @@ public class ProgramChromosome
     return b.toString();
   }
 
-  protected String encode(String a_string) {
-    return StringKit.encode(a_string);
+  /**
+   *
+   * @param a_representation String
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  public void setValueFromPersistentRepresentation(final String
+      a_representation)
+      throws UnsupportedRepresentationException {
+    if (a_representation != null) {
+      try {
+        List r = split(a_representation);
+        Iterator iter = r.iterator();
+        StringTokenizer st;
+        String clas;
+        String representation;
+        String g;
+        CommandGene gene;
+        List genes = new Vector();
+        while (iter.hasNext()) {
+          g = decode( (String) iter.next());
+          st = new StringTokenizer(g, GENE_DELIMITER);
+          if (st.countTokens() != 2)
+            throw new UnsupportedRepresentationException("In " + g + ", " +
+                "expecting two tokens, separated by " + GENE_DELIMITER);
+          clas = st.nextToken();
+          representation = st.nextToken();
+          gene = createGene(clas, representation);
+          genes.add(gene);
+        }
+        m_genes = (CommandGene[])genes.toArray(new CommandGene[0]);
+      }
+      catch (Exception ex) {
+        throw new UnsupportedRepresentationException(ex.toString());
+      }
+    }
   }
 
-  protected String decode(String a_string) {
-    return StringKit.decode(a_string);
+  /**
+   * Creates a new instance of gene.
+   *
+   * @param a_geneClassName name of the gene class
+   * @param a_persistentRepresentation persistent representation of the gene to
+   * create (could be obtained via getPersistentRepresentation)
+   *
+   * @return newly created gene
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  protected CommandGene createGene(String a_geneClassName,
+                            String a_persistentRepresentation)
+      throws Exception {
+    Class geneClass = Class.forName(a_geneClassName);
+    Constructor constr = geneClass.getConstructor(new Class[] {GPConfiguration.class});
+    CommandGene gene = (CommandGene) constr.newInstance(new Object[] {getGPConfiguration()});
+    gene.setValueFromPersistentRepresentation(a_persistentRepresentation);
+    return gene;
   }
+
+  /**
+   * Splits a_string into individual gene representations.
+   *
+   * @param a_string the string to split
+   * @return the elements of the returned array are the persistent
+   * representation strings of the gene's components
+   * @throws UnsupportedRepresentationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3
+   */
+  protected static final List split(String a_string)
+      throws UnsupportedRepresentationException {
+    List a = Collections.synchronizedList(new ArrayList());
+    StringTokenizer st = new StringTokenizer
+        (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
+    while (st.hasMoreTokens()) {
+      if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
+        throw new UnsupportedRepresentationException(a_string + " no opening tag");
+      }
+      String n = st.nextToken();
+      if (n.equals(GENE_DELIMITER_CLOSING)) {
+        // Empty token.
+        a.add("");
+      }
+      else {
+        a.add(n);
+        if (!st.nextToken().equals(GENE_DELIMITER_CLOSING)) {
+          throw new UnsupportedRepresentationException
+              (a_string + " no closing tag");
+        }
+      }
+    }
+    return a;
+  }
+
 }
