@@ -39,7 +39,7 @@ public class CompositeGene
     extends BaseGene
     implements ICompositeGene, IPersistentRepresentation  {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.59 $";
+  private final static String CVS_REVISION = "$Revision: 1.60 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -631,7 +631,7 @@ public class CompositeGene
   }
 
   /**
-   * Splits the input a_string into individual gene representations.
+   * Splits a_string into individual gene representations.
    *
    * @param a_string the string to split
    * @return the elements of the returned array are the persistent
@@ -648,17 +648,18 @@ public class CompositeGene
         (a_string, GENE_DELIMITER_HEADING + GENE_DELIMITER_CLOSING, true);
     while (st.hasMoreTokens()) {
       if (!st.nextToken().equals(GENE_DELIMITER_HEADING)) {
-        throw new UnsupportedRepresentationException(a_string + " no open tag");
+        throw new UnsupportedRepresentationException(a_string + " no opening tag");
       }
       String n = st.nextToken();
       if (n.equals(GENE_DELIMITER_CLOSING)) {
-        a.add(""); /* Empty token */
+        // Empty token.
+        a.add("");
       }
       else {
         a.add(n);
         if (!st.nextToken().equals(GENE_DELIMITER_CLOSING)) {
           throw new UnsupportedRepresentationException
-              (a_string + " no close tag");
+              (a_string + " no closing tag");
         }
       }
     }
