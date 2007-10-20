@@ -23,7 +23,7 @@ import org.jgap.impl.*;
  */
 public class DynamicMutationExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -54,7 +54,7 @@ public class DynamicMutationExample {
 //    IUniversalRateCalculator mutCalc = new CoinsMutationRateCalc();
     TwoWayMutationOperator mutOp = new TwoWayMutationOperator(conf, 7);
     conf.addGeneticOperator(mutOp);
-    conf.addGeneticOperator(new CrossoverOperator());
+    conf.addGeneticOperator(new CrossoverOperator(conf));
     conf.setPreservFittestIndividual(!true);
     conf.setKeepPopulationSizeConstant(false);
     // Set the fitness function we want to use, which is our
@@ -63,8 +63,9 @@ public class DynamicMutationExample {
     // ---------------------------------------------------------
     FitnessFunction myFunc =
         new DynamicMutationFitnessFunction(a_targetChangeAmount);
-    conf.setFitnessFunction(myFunc);
-//    conf.setBulkFitnessFunction(new BulkFitnessOffsetRemover(myFunc));
+//    conf.setFitnessFunction(myFunc);
+    conf.setBulkFitnessFunction(new BulkFitnessOffsetRemover(myFunc));
+    conf.reset();
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
@@ -82,7 +83,7 @@ public class DynamicMutationExample {
     sampleGenes[1] = new IntegerGene(conf, 0, 2 * 10); // Dimes
     sampleGenes[2] = new IntegerGene(conf, 0, 1 * 10); // Nickels
     sampleGenes[3] = new IntegerGene(conf, 0, 4 * 10); // Pennies
-    IChromosome sampleChromosome = new Chromosome(null, sampleGenes);
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
