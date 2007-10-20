@@ -20,6 +20,7 @@
 * Fixed bug with GP evolution (probability fix)
 * Fixed Java 6 bug with MathProblem
 * Fixed bug in GPProblem.createTree
+* Fixed bug in DynamicMutationExample
 * Enhanced logging of GP information
 * Enhanced Javadoc
 
