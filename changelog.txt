@@ -19,6 +19,7 @@
 * Fixed serious bug with GP mutation of functions
 * Fixed bug with GP evolution (probability fix)
 * Fixed Java 6 bug with MathProblem
+* Fixed bug in GPProblem.createTree
 * Enhanced logging of GP information
 * Enhanced Javadoc
 
