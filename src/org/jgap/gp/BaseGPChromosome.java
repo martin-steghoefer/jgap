@@ -22,7 +22,7 @@ import org.jgap.*;
 public abstract class BaseGPChromosome
     implements IGPChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The configuration object to use.
@@ -69,6 +69,9 @@ public abstract class BaseGPChromosome
    * @since 3.01 (since 3.0 in ProgramChromosome)
    */
   public void setIndividual(IGPProgram a_ind) {
+    if (a_ind == null) {
+      throw new IllegalArgumentException("Individual must not be null");
+    }
     m_ind = a_ind;
   }
 
