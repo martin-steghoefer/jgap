@@ -74,7 +74,135 @@ robot's source code generated with JGAP (file: <a href="Aspirant.java">Aspirant.
 code evolved).<p class="text">As for every individual robot evolved the Java
 compiler has to be invoked, computation may take some time. In the future the
 JGAP Grid will enable to compute such things distributedly in a LAN and/or WAN.<p class="text">Feedback
-is very welcome!<p class="copyright">Copyright © 2005-2007&nbsp; <a href="http://www.klaus-meffert.com" target="_blank">Klaus Meffert</a>
+is very welcome!<h2><font color="#008000">Advanced options</font></h2>
+<p class="text">It is possible using several options to control how RobocodeJGAP evolves
+robots. These options are:</p>
+
+<div>
+<table bordercolor="#008000" border="1" rules="rows" cellspacing="3" cellpadding="3">
+<tr>
+  <td width="230" class="optionListing">
+    -enemies &lt;filename&gt;
+  </td>
+  <td class="optionListing2">
+    The filename given defines a test file. Each line contains the full name of an enemy to fight against. A sample content of such a file could
+    be (2 lines shown! No empty line):
+    <p>--- begin after this line:<br>
+    voidious.Dookious<br>
+    sample.TrackFire<br>
+    --- end before this line</p>
+    <p>It is important to have the referenced robots available to RobocodeJGAP.
+    Thus, they have to be under the robots directory.</p>
+    <p>Also see <b>-battleAll</b></p>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+    -enemy &lt;robot&gt;	
+  </td>
+  <td class="optionListing2">
+    Specifies a single enemy robot. Full robot name must be given, e.g. <b>sample.TrackFire</b>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+-battleAll	
+  </td>
+  <td class="optionListing2">
+    Only in conjunction with <b>-enemies</b>. If given, the robot to be evolved
+    battles against all robots from <b>-enemies</b> in one round. Then, the
+    score is the average of all fights in the round.
+    <p>If the option is omitted, in each round a single opponent is chosen
+    randomly from the list of opponents given with <b>-enemies</b>.&nbsp;</p>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+-advanced	
+  </td>
+  <td class="optionListing2">
+    The evolved robot extends the <i>AdvancedRobot</i> class. Thus, advanced
+    commands can be used.
+    <p>If omitted, the ordinary <i>Robot</i> class is extended. Not all commands
+    are available.</p>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+-fastTry &lt;tries&gt;	
+  </td>
+  <td class="optionListing2">
+    This is for testing purposes only. It skips invoking the Robocode engine for
+    <b>&lt;tries&gt;</b> times.
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+    -maxFitness &lt;value&gt;	
+  </td>
+  <td class="optionListing2">
+    After a robot has been evolved with a fitness of <b>&lt;value&gt;</b> or
+    higher, the program stops.
+    <p>If option is missing, a default of 15000 is used.</p>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+-minFitness &lt;value&gt;	
+  </td>
+  <td class="optionListing2">
+    Only robots with a fitness value of <b>&lt;value&gt;</b> or higher are
+    dumped to a file on disk.
+    <p>If option is missing, a default of 500 is used.</p>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+    -roundsStart &lt;value&gt;	
+  </td>
+  <td class="optionListing2">
+    For the first generations (at the moment 15) only <b>&lt;value&gt;</b>
+    rounds are executed in a single battle. This is to speed up computation by
+    gaining faster preliminary&nbsp; results.
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+-roundsMature &lt;value&gt;&nbsp;	
+  </td>
+  <td class="optionListing2">
+    After the first generations (see above) <b>&lt;value&gt;</b> rounds are
+    executed in a single battle. For your information: In <a href="http://robowiki.net/cgi-bin/robowiki?RoboRumble" target="_blank">RoboRumble</a>
+    35 rounds are used, which is quite a lot.
+    <p>Also see <b>-adaptRounds</b></p>
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+    -adaptRounds &lt;value&gt;	
+  </td>
+  <td class="optionListing2">
+    If this option is given, in any case the number of rounds from option <b>-roundsStart</b>
+    is battled.&nbsp;The only exception is f the fitness value determined with
+    the battle is <b>&lt;value&gt;</b> or higher. Then, and only then the number
+    of rounds from option <b>-roundsMature</b> is battled.
+  </td>
+</tr>
+<tr>
+  <td width="230" class="optionListing">
+-noCodeOutput	
+  </td>
+  <td class="optionListing2">
+    If given, no intermediary code is printed to the console/log. Intermediary
+    code is such that is not output as a new best solution. Using this option
+    makes the log more readable but less detailled.
+  </td>
+</tr>
+</table>
+</div>
+<p class="text">The options are case-insensitive. Therefore it does not matter if you write
+&quot;-noCodeOutput&quot; or &quot;-nocodeoutput&quot;.</p>
+<p class="copyright">Copyright © 2005-2007&nbsp; <a href="http://www.klaus-meffert.com" target="_blank">Klaus Meffert</a>
 (with great support&nbsp; from Javier Meseguer). <span lang="EN-GB" style="mso-ansi-language: EN-GB">GNU
 free documentation </span><a href="http://www.gnu.org/licenses/fdl.html" target="_blank"><span lang="EN-GB" style="mso-ansi-language: EN-GB">license</span></a> </p>
 
