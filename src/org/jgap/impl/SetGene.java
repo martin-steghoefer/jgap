@@ -27,7 +27,7 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private HashSet m_geneSet = new HashSet();
 
@@ -104,6 +104,7 @@ public class SetGene
    */
   public void setToRandomValue(final RandomGenerator a_numberGenerator) {
     /**@todo make faster*/
+    /**@todo use custom map-impl.*/
     m_value = m_geneSet.toArray()[a_numberGenerator.nextInt(
         m_geneSet.size())];
   }

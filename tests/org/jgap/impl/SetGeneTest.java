@@ -21,7 +21,7 @@ import junit.framework.*;
 public class SetGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SetGeneTest.class);
@@ -244,6 +244,7 @@ public class SetGeneTest
    */
   public void testApplyMutation_0()
       throws Exception {
+    /**@todo use custom map-impl. to let test pass*/
     conf.setRandomGenerator(new RandomGeneratorForTest(0));
     SetGene gene = new SetGene(conf);
     gene.addAllele(Boolean.valueOf(true));
@@ -261,6 +262,7 @@ public class SetGeneTest
    */
   public void testApplyMutation_1()
       throws Exception {
+    /**@todo use custom map-impl. to let test pass*/
     conf.setRandomGenerator(new RandomGeneratorForTest(0));
     SetGene gene = new SetGene(conf);
     gene.addAllele(Boolean.valueOf(true));
@@ -278,6 +280,7 @@ public class SetGeneTest
    */
   public void testApplyMutation_2()
       throws Exception {
+    /**@todo use custom map-impl. to let test pass*/
     conf.setRandomGenerator(new RandomGeneratorForTest(0));
     SetGene gene = new SetGene(conf);
     gene.addAllele(Boolean.valueOf(true));

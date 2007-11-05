@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -98,6 +98,7 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_1()
       throws Exception {
+    /**@todo use custom map-impl. to let test pass*/
     DefaultConfiguration conf = new DefaultConfiguration();
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
     randgen.setNextDouble(0.9999d);
@@ -149,6 +150,7 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_2()
       throws Exception {
+    /**@todo use custom map-impl. to let test pass*/
     DefaultConfiguration conf = new DefaultConfiguration();
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
     randgen.setNextDouble(0.9999d);
@@ -194,7 +196,8 @@ public class WeightedRouletteSelectorTest
 
   /**
    * Ensure the scaling of fitness value works without error (like division
-   * by zero)
+   * by zero).
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -238,7 +241,8 @@ public class WeightedRouletteSelectorTest
   }
 
   /**
-   * Use DeltaFitnessEvaluator
+   * Use DeltaFitnessEvaluator.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -246,6 +250,7 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_4()
       throws Exception {
+    /**@todo use custom map-impl. to let test pass*/
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     RandomGeneratorForTest randgen = new RandomGeneratorForTest();
     randgen.setNextDouble(0.9999d);
