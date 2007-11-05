@@ -18,10 +18,24 @@
       <include name="TableLayout.jar"/>
       <include name="commons-lang-2.1.jar"/>
       <include name="commons-codec-1.3.jar"/>
+      <include name="ext/clover.jar"/>
     </fileset>
     <pathelement path="${classDir}"/>
   </path>
 
+
+  <property name="clover.jar" location="${lib}/ext/clover.jar"/>
+  <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
+
+  <target name="with.clover">
+    <clover-setup/>
+  </target>
+
+  <target name="report.html" depends="with.clover">
+    <clover-html-report outdir="cloverhtml"
+                        title="JGAP"
+                        testresultsdir="${cloverdir}/test"/>
+  </target>
 
   <target name="compile">
     <mkdir dir="${classDir}" />
