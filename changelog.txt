@@ -1,6 +1,6 @@
 3.3
 -----------------------------------------------------------
-* Integrated Robocode 1.4.5 with JGAP
+* Integrated Robocode 1.4.8 with JGAP
 * Added persistent representations of GPPopulation,
   GPProgram, ProgramChromosome and CommandGene
 * Enhanced interface IProgramCreator
@@ -23,6 +23,7 @@
 * Fixed bug in DynamicMutationExample
 * Enhanced logging of GP information
 * Enhanced Javadoc
+* Added some unit tests
 
 3.2.2
 -----------------------------------------------------------
