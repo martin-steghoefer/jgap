@@ -33,7 +33,7 @@
 .box A:link, .box A:visited, .box A:active {
   color: #0000FF;
 }
-.Listing {
+.Listing, .ListingGreen {
   color: black;
   border-style: dotted;
   font-face: "Courier New";
@@ -41,6 +41,16 @@
   padding-top: 9;
   padding-bottom: 9;
   padding-left: 9;
+}
+.ListingGreen {
+  color: green;
+}
+.optionListing, .optionListing2 {
+  color: green;
+  font-family: "Courier New";
+}
+.optionListing {
+  font-weight: bold;
 }
 .onlyText, .onlyText A:visited, .onlyText A:active, .onlyText A:link {
   color: blue;
