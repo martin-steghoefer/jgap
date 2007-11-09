@@ -23,7 +23,7 @@ import org.jgap.impl.*;
 public class MyChromosome
     extends Chromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public MyChromosome()
       throws InvalidConfigurationException {
@@ -45,6 +45,12 @@ public class MyChromosome
                       final Gene a_sampleGene, final int a_desiredSize)
       throws InvalidConfigurationException {
     super(a_configuration, a_sampleGene, a_desiredSize);
+  }
+
+  public MyChromosome(final Configuration a_configuration,
+                      final Gene[] a_initialGenes)
+      throws InvalidConfigurationException {
+    super(a_configuration, a_initialGenes);
   }
 
   public MyChromosome(final Configuration a_configuration, Gene a_sampleGene,
@@ -134,6 +140,6 @@ public class MyChromosome
     // Finally, construct the new chromosome with the new random
     // genes values and return it.
     // ---------------------------------------------------------
-    return new Chromosome(a_configuration, newGenes);
+    return new MyChromosome(a_configuration, newGenes);
   }
 }
