@@ -17,7 +17,7 @@ package org.jgap.util;
  */
 public class SystemKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * @return total memory available by the VM in megabytes.
@@ -57,5 +57,23 @@ public class SystemKit {
    */
   public static double getFreeMemoryKB() {
     return (Runtime.getRuntime().freeMemory() / 1024);
+  }
+
+  /**
+   * Nicifies a decimal string
+   *
+   * @param a_mem the number to make nice
+   * @return nicified number as a string
+   *
+   * @since 3.3.1
+   */
+  public static String niceMemory(double a_mem) {
+    String freeMB = "" + a_mem;
+    int index = freeMB.indexOf('.');
+    int len = freeMB.length();
+    if (len - index > 2) {
+      freeMB = freeMB.substring(0, index + 2);
+    }
+    return freeMB;
   }
 }
