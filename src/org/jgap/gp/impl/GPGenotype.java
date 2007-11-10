@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -377,8 +377,8 @@ public class GPGenotype
     System.gc();
     if (a_verboseOutput) {
       LOGGER.info("Creating initial population");
-      LOGGER.info("Memory consumed before creating population: "
-                  + SystemKit.getTotalMemoryMB() + "MB");
+      LOGGER.info("Mem free: "
+                  + SystemKit.niceMemory(SystemKit.getTotalMemoryMB()) + " MB");
     }
     // Create initial population.
     // --------------------------
@@ -391,8 +391,8 @@ public class GPGenotype
     }
     System.gc();
     if (a_verboseOutput) {
-      LOGGER.info("Memory used after creating population: "
-                  + SystemKit.getTotalMemoryMB() + "MB");
+      LOGGER.info("Mem free after creating population: "
+                  + SystemKit.niceMemory(SystemKit.getTotalMemoryMB()) + " MB");
     }
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
                                    a_minDepths, a_maxDepths, a_maxNodes);
@@ -599,8 +599,8 @@ public class GPGenotype
       LOGGER.info("No best solution (null");
       return;
     }
-    LOGGER.info(" Best solution fitness: " + a_best.getFitnessValue());
-    LOGGER.info(" Best solution: " + a_best.toStringNorm(0));
+    LOGGER.info("Best solution fitness: " + a_best.getFitnessValue());
+    LOGGER.info("Best solution: " + a_best.toStringNorm(0));
     String depths = "";
     int size = a_best.size();
     for (int i = 0; i < size; i++) {
@@ -610,10 +610,10 @@ public class GPGenotype
       depths += a_best.getChromosome(i).getDepth(0);
     }
     if (size == 1) {
-      LOGGER.info(" Depth of chromosome: " + depths);
+      LOGGER.info("Depth of chrom: " + depths);
     }
     else {
-      LOGGER.info(" Depths of chromosomes: " + depths);
+      LOGGER.info("Depths of chroms: " + depths);
     }
   }
 
