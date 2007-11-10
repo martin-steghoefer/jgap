@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -481,10 +481,11 @@ public class GPGenotype
 //      }
       if (m_verbose) {
         if (i % 25 == 0) {
+          String freeMB = SystemKit.niceMemory(SystemKit.getFreeMemoryMB());
           LOGGER.info("Evolving generation "
                       + i
                       + ", memory free: "
-                      + SystemKit.getFreeMemoryMB()
+                      +  freeMB
                       + " MB");
         }
       }
@@ -614,7 +615,6 @@ public class GPGenotype
     else {
       LOGGER.info(" Depths of chromosomes: " + depths);
     }
-    LOGGER.info(" --------");
   }
 
   /**
@@ -762,7 +762,7 @@ public class GPGenotype
         }
         while (true);
       }
-      LOGGER.info("Did "
+      LOGGER.debug("Did "
                   + crossover + " x-overs, "
                   + reproduction + " reproductions, "
                   + creation + " creations");
