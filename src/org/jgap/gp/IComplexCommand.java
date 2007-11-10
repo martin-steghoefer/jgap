@@ -19,9 +19,9 @@ package org.jgap.gp;
  * @author Klaus Meffert
  * @since 3.3
  */
-public interface IComplexCommand {
+public interface IComplexCommand extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static enum Complexity {
   NANO, SMALL, MEDIUM, LARGE, VERY_LARGE} ;
