@@ -24,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class ForLoop
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -162,6 +162,23 @@ public class ForLoop
     return "ForLoop";
   }
 
+  public Object execute_object(ProgramChromosome c, int n, Object[] args) {
+    StringBuffer value = new StringBuffer();
+    value = value.append("for(int "
+                         +m_varName
+                         +"="
+                         +m_startIndex
+                         +";"
+                         +m_varName
+                         +"<"
+                         +m_endIndex+";"
+                         +m_varName+"++) {");
+    for (int i = 0; i < size(); i++) {
+      value = value.append( (StringBuffer) c.execute_object(n, i, args));
+    }
+    value = value.append("}");
+    return value;
+  }
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     // Determine the end index of the loop (child at index 0).
     // -------------------------------------------------------
@@ -279,7 +296,7 @@ public class ForLoop
   }
 
   /**
-   * @return Name of the memory cell where the current value of the loop
+   * @return name of the memory cell where the current value of the loop
    * variable is stored
    *
    * @author Klaus Meffert
