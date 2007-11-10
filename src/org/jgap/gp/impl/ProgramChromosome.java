@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -507,7 +507,8 @@ public class ProgramChromosome
    * @param a_grow true: use grow method; false: use full method
    * @param a_childNum index of the child in the parent node to which it belongs
    * (-1 if node is root node)
-   * @param a_validateNode true: check if node selected is valid
+   * @param a_validateNode true: check if node selected is valid (when called
+   * recursively a_validateNode is set to true)
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -518,6 +519,8 @@ public class ProgramChromosome
                                 CommandGene a_rootNode, int a_recurseLevel,
                                 boolean a_grow, int a_childNum,
                                 boolean a_validateNode) {
+    boolean mutated = false;
+    GPConfiguration conf = getGPConfiguration();
     if (a_rootNode == null || a_validateNode) {
       int tries = 0;
       int evolutionRound = getGPConfiguration().getGenerationNr();
@@ -526,11 +529,9 @@ public class ProgramChromosome
       do {
         CommandGene node = selectNode(a_num, a_returnType, a_subReturnType,
                                       localFunctionSet, a_depth >= 1, a_grow);
-        if (!getGPConfiguration().validateNode(this, node, a_rootNode, tries++,
-                                               a_num, a_recurseLevel,
-                                               a_returnType, localFunctionSet,
-                                               a_depth,
-                                               a_grow, a_childNum, false)) {
+        if (!conf.validateNode(this, node, a_rootNode, tries++, a_num,
+                               a_recurseLevel, a_returnType, localFunctionSet,
+                               a_depth, a_grow, a_childNum, false)) {
           // In the first round of evolution ensure to always have one valid
           // individual as we need a prototype for cloning!
           // ---------------------------------------------------------------
@@ -545,6 +546,19 @@ public class ProgramChromosome
             continue;
           }
         }
+        // Optionally use a mutant/clone of the originally selected command
+        // instead of reusing the same command instance.
+        if ( conf.getRandomGenerator().nextDouble() <= conf.getMutationProb()) {
+          if (IMutateable.class.isAssignableFrom(node.getClass())) {
+            try {
+              node = ( (IMutateable) node).applyMutation(0, 1);
+              mutated = true;
+            } catch (InvalidConfigurationException iex) {
+              // Ignore but log.
+              /**@todo log*/
+            }
+          }
+        }
         a_rootNode = node;
         break;
       }
@@ -553,7 +567,7 @@ public class ProgramChromosome
     // Generate the node.
     // ------------------
     m_depth[m_index] = m_maxDepth - a_depth;
-    if (a_rootNode instanceof ICloneable) {
+    if (!mutated && a_rootNode instanceof ICloneable) { /**@todo use clone handler instead*/
       m_genes[m_index++] = (CommandGene) ( (ICloneable) a_rootNode).clone();
     }
     else {
@@ -574,10 +588,8 @@ public class ProgramChromosome
           // No valid program could be generated. Abort.
           // -------------------------------------------
           throw new IllegalStateException("Randomly created program violates"
-                                          +
-              " configuration constraints (symptom 1). It may be that you"
-                                          +
-              " specified a too small number of maxNodes to use!");
+              + " configuration constraints (symptom 1). It may be that you"
+              + " specified a too small number of maxNodes to use!");
         }
       }
     }
