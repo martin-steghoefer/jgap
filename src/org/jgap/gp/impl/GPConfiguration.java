@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -63,6 +63,11 @@ public class GPConfiguration
    * 1.0d.
    */
   private double m_reproductionProb = 0.1d;
+
+  /**
+   * The probability that a node is mutated during growing a program
+   */
+  private double m_mutationProb = 0.1d;
 
   /**
    * Percentage of the population that will be filled with new individuals
@@ -327,6 +332,27 @@ public class GPConfiguration
 
   public void setReproductionProb(float a_reproductionProb) {
     m_reproductionProb = a_reproductionProb;
+  }
+
+  /**
+   * @return probability for mutation of a node during growing a program
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+  public double getMutationProb() {
+    return m_mutationProb;
+  }
+
+  /**
+   * @param a_mutationProb probability for mutation of a node during growing a
+   * program
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+  public void setMutationProb(float a_mutationProb) {
+    m_mutationProb = a_mutationProb;
   }
 
   /**
