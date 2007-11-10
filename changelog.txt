@@ -1,3 +1,13 @@
+3.3.1
+-----------------------------------------------------------
+* Introduced mutation of Genetic Programming commands
+* Integrated Robocode 1.4.9 with JGAP
+* Added cloning capabilities to many RobocodeJGAP commands
+* Moved method niceMemory from GPGenotype to SystemKit
+* Made class IComplexCommand serializable
+* Added execute_object() to ForLoop
+* Briefer log messages in GPGenotype
+
 3.3
 -----------------------------------------------------------
 * Integrated Robocode 1.4.8 with JGAP
