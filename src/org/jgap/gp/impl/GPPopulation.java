@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
   final static String GPPROGRAM_DELIMITER_CLOSING = ">";
@@ -338,9 +338,9 @@ public class GPPopulation
                            int[] a_maxDepths, int a_depth, boolean a_grow,
                            int a_maxNodes, boolean[] a_fullModeAllowed,
                            int a_tries) throws InvalidConfigurationException {
-    return create(a_programIndex, a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
-                  a_depth, a_grow, a_maxNodes, a_fullModeAllowed, a_tries,
-        new DefaultProgramCreator());
+    return create(a_programIndex, a_types, a_argTypes, a_nodeSets, a_minDepths,
+                  a_maxDepths, a_depth, a_grow, a_maxNodes, a_fullModeAllowed,
+                  a_tries, new DefaultProgramCreator());
 
   }
 
