@@ -8,6 +8,7 @@
 * Added execute_object() to ForLoop
 * Fixed output of generation number in GPGenotype.evolve()
 * Briefer log messages in GPGenotype
+* Added default constructor to GPFitnessFunction
 
 3.3
 -----------------------------------------------------------
