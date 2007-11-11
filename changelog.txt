@@ -6,6 +6,7 @@
 * Moved method niceMemory from GPGenotype to SystemKit
 * Made class IComplexCommand serializable
 * Added execute_object() to ForLoop
+* Fixed output of generation number in GPGenotype.evolve()
 * Briefer log messages in GPGenotype
 
 3.3
