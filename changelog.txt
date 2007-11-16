@@ -9,6 +9,9 @@
 * Fixed output of generation number in GPGenotype.evolve()
 * Briefer log messages in GPGenotype
 * Added default constructor to GPFitnessFunction
+* Renamed all aux. test classes from xxxForTest to
+  xxxForTesting
+* Fixed Maven pom file (thanx to Fabian)
 
 3.3
 -----------------------------------------------------------
