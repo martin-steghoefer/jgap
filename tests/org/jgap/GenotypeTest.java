@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.65 $";
+  private final static String CVS_REVISION = "$Revision: 1.66 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -622,7 +622,7 @@ public class GenotypeTest
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
     Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
-    config.setSampleChromosome(new ChromosomeForTest(config, genes));
+    config.setSampleChromosome(new ChromosomeForTesting(config, genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
@@ -650,7 +650,7 @@ public class GenotypeTest
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
     Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
-    config.setSampleChromosome(new ChromosomeForTest(config, genes));
+    config.setSampleChromosome(new ChromosomeForTesting(config, genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
@@ -677,7 +677,7 @@ public class GenotypeTest
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
     Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
-    config.setSampleChromosome(new ChromosomeForTest(config, genes));
+    config.setSampleChromosome(new ChromosomeForTesting(config, genes));
     config.setPreservFittestIndividual(true);
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
@@ -705,12 +705,12 @@ public class GenotypeTest
     // Reset counter. Because of static state holder we only need to do this
     // for one chromosome referencing the same global state holder as well as
     // all other chromosomes (of class ChromosomeForTest) do.
-    ChromosomeForTest chrom = (ChromosomeForTest) genotype.getPopulation().
+    ChromosomeForTesting chrom = (ChromosomeForTesting) genotype.getPopulation().
         getChromosome(0);
     chrom.resetComputedTimes();
     // Mark any chromosome as original (that is not cloned)
     for (int i = 0; i < genotype.getPopulation().size(); i++) {
-      chrom = (ChromosomeForTest) genotype.getPopulation().getChromosome(i);
+      chrom = (ChromosomeForTesting) genotype.getPopulation().getChromosome(i);
       chrom.resetIsCloned();
     }
     // Now do the test evolution --> new fitness values must be recomputed!
@@ -718,7 +718,7 @@ public class GenotypeTest
     // Check if global state holder indicates that getFitnessValue() has been
     // called at least once for a cloned (e.g. mutated) chromosome and that for
     // this call the to date fitness value is initial (i.e. not set).
-    chrom = (ChromosomeForTest) genotype.getPopulation().
+    chrom = (ChromosomeForTesting) genotype.getPopulation().
         getChromosome(0);
     return chrom.getComputedTimes();
   }
@@ -1288,7 +1288,7 @@ public class GenotypeTest
   }
 
   public class ChromosomeForTest2
-      extends ChromosomeForTest {
+      extends ChromosomeForTesting {
     public ChromosomeForTest2(Configuration a_config,
                               final Gene[] a_initialGenes)
         throws InvalidConfigurationException {

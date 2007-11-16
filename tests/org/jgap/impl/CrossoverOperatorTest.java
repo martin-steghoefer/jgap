@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.28 $";
+  private static final String CVS_REVISION = "$Revision: 1.29 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -355,7 +355,7 @@ public class CrossoverOperatorTest
     cgene1.setAllele(new Integer(5));
     Gene[] genes1 = new Gene[] {
         cgene1};
-    ChromosomeForTest chrom1 = new ChromosomeForTest(conf, genes1);
+    ChromosomeForTesting chrom1 = new ChromosomeForTesting(conf, genes1);
     Gene cgene2 = new IntegerGene(conf, 1, 10);
     cgene2.setAllele(new Integer(6));
     Gene[] genes2 = new Gene[] {
@@ -446,7 +446,7 @@ public class CrossoverOperatorTest
       Iterator it = a_chromosomes.iterator();
       while (it.hasNext()) {
         Chromosome chrom = (Chromosome) it.next();
-        if (ChromosomeForTest.class == chrom.getClass()) {
+        if (ChromosomeForTesting.class == chrom.getClass()) {
           return false;
         }
       }
