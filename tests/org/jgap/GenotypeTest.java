@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.67 $";
+  private final static String CVS_REVISION = "$Revision: 1.68 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -436,7 +436,7 @@ public class GenotypeTest
     // on 3/4 of the chromosomes in the population.
     // ----------------------------------------------------------------------
     config.setSelectFromPrevGen(0.75d);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     // A zero in this sequence represents a gene to be mutated.
     // --------------------------------------------------------
     rand.setNextIntSequence(new int[] {
@@ -542,7 +542,7 @@ public class GenotypeTest
   public void testEvolve_3_25()
       throws Exception {
     Configuration config = new ConfigurationForTesting();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextInt(0);
     config.setRandomGenerator(rand);
     config.setPopulationSize(200);
@@ -566,7 +566,7 @@ public class GenotypeTest
   public void testEvolve_3_26()
       throws Exception {
     Configuration config = new ConfigurationForTesting();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     // A Chromosome has 3 genes here. We let every 6th gene mutate, thus every
     // second Chromosome.
     // -----------------------------------------------------------------------

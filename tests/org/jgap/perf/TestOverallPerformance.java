@@ -28,7 +28,7 @@ import org.jgap.impl.*;
  */
 public class TestOverallPerformance {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -55,7 +55,7 @@ public class TestOverallPerformance {
     // -------------------------------------------------------------
     Configuration.reset();
     Configuration conf = new DefaultConfiguration();
-    RandomGeneratorForTest gen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting gen = new RandomGeneratorForTesting();
     gen.setNextDouble(0.5d);
     gen.setNextBoolean(true);
     gen.setNextInt(3);

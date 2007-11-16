@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GreedyCrossoverTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.21 $";
+  private static final String CVS_REVISION = "$Revision: 1.22 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GreedyCrossoverTest.class);
@@ -43,7 +43,7 @@ public class GreedyCrossoverTest
   public void testOperate_0()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -95,7 +95,7 @@ public class GreedyCrossoverTest
   public void testOperate_1()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -145,7 +145,7 @@ public class GreedyCrossoverTest
   public void testOperate_2()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -193,7 +193,7 @@ public class GreedyCrossoverTest
   public void testOperate_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -319,7 +319,7 @@ public class GreedyCrossoverTest
     GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextDouble(0.45d);
     rand.setNextInt(0);
     op.setStartOffset(0);
@@ -378,7 +378,7 @@ public class GreedyCrossoverTest
     GreedyCrossover op = new GreedyCrossover(conf);
     op.ASSERTIONS = true;
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextDouble(0.45d);
     rand.setNextInt(0);
     op.setStartOffset(0);

@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SupergenePersistentRepresentationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite =
@@ -38,14 +38,14 @@ public class SupergenePersistentRepresentationTest
 
   public void testRepresentation()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     Gene i1 = new IntegerGene(conf, 1, 12);
     Gene i2 = new DoubleGene(conf, 3, 4);
     i1.setAllele(new Integer(7));
     i2.setAllele(new Double(3.2));
     gene.addGene(i1);
     gene.addGene(i2);
-    InstantiableSupergeneForTest nested = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting nested = new InstantiableSupergeneForTesting(conf);
     Gene n1 = new IntegerGene(conf, 1, 12);
     Gene n2 = new DoubleGene(conf, 3, 4);
     n1.setAllele(new Integer(5));
@@ -53,7 +53,7 @@ public class SupergenePersistentRepresentationTest
     nested.addGene(n1);
     nested.addGene(n2);
     gene.addGene(nested);
-    InstantiableSupergeneForTest nested2 = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting nested2 = new InstantiableSupergeneForTesting(conf);
     nested2.setValidator(new TestValidator(conf));
     Gene nn1 = new IntegerGene(conf, 1, 1000);
     Gene nn2 = new DoubleGene(conf, 0, 1000);
@@ -62,7 +62,7 @@ public class SupergenePersistentRepresentationTest
     nested2.addGene(nn1);
     nested2.addGene(nn2);
     gene.addGene(nested2);
-    InstantiableSupergeneForTest nested3 = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting nested3 = new InstantiableSupergeneForTesting(conf);
     nested3.setValidator(null);
     Gene nnn1 = new IntegerGene(conf, 1, 1000);
     Gene nnn2 = new DoubleGene(conf, 0, 1000);
@@ -72,7 +72,7 @@ public class SupergenePersistentRepresentationTest
     nested3.addGene(nnn2);
     nested2.addGene(nested3);
     String representation = gene.getPersistentRepresentation();
-    InstantiableSupergeneForTest restored = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting restored = new InstantiableSupergeneForTesting(conf);
     restored.setValueFromPersistentRepresentation(representation);
     assertTrue(gene.equals(restored));
   }
@@ -87,7 +87,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testGetGenes_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     assertEquals(0, gene.getGenes().length);
     Gene subGene = new BooleanGene(conf);
     gene.addGene(subGene);
@@ -97,7 +97,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testSize_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     assertEquals(0, gene.size());
     Gene subGene = new BooleanGene(conf);
     gene.addGene(subGene);
@@ -106,7 +106,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testIsValid_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     gene.m_validator = null;
     assertTrue(gene.isValid());
     gene.m_validator = gene;
@@ -121,7 +121,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testReset_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     /**@todo care that m_immutable is filled*/
     gene.reset();
     Set[] m = (Set[]) privateAccessor.getField(gene, "m_immutable");
@@ -130,7 +130,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testPers_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     try {
       gene.setValueFromPersistentRepresentation(null);
       fail();
@@ -142,7 +142,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testToString_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     gene.m_validator = null;
     String s = gene.toString();
     assertEquals("Supergene " + gene.getClass().getName()
@@ -154,7 +154,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testToString_1()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     gene.m_validator = gene;
     String s = gene.toString();
     assertEquals("Supergene " + gene.getClass().getName()
@@ -166,7 +166,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testToString_2()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     Gene bgene = new BooleanGene(conf);
     gene.addGene(bgene);
     gene.m_validator = gene;
@@ -182,15 +182,15 @@ public class SupergenePersistentRepresentationTest
 
   public void testCompareTo_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     assertEquals(0, gene.compareTo(gene));
-    InstantiableSupergeneForTest gene2 = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene2 = new InstantiableSupergeneForTesting(conf);
     assertEquals(0, gene.compareTo(gene2));
   }
 
   public void testCompareTo_1()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     try {
       gene.compareTo(new Vector());
       fail();
@@ -202,8 +202,8 @@ public class SupergenePersistentRepresentationTest
 
   public void testCompareTo_2()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
-    InstantiableSupergeneForTest gene2 = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
+    InstantiableSupergeneForTesting gene2 = new InstantiableSupergeneForTesting(conf);
     gene2.addGene(new BooleanGene(conf));
     assertEquals( -1, gene.compareTo(gene2));
     assertEquals(1, gene2.compareTo(gene));
@@ -211,7 +211,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testCompareTo_3()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     AbstractSupergene gene2 = new TestClass(conf);
     assertTrue(gene.compareTo(gene2) != 0);
     assertTrue(gene2.compareTo(gene) != 0);
@@ -222,54 +222,54 @@ public class SupergenePersistentRepresentationTest
 
   public void testEquals_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     assertEquals(0, gene.compareTo(gene));
     assertFalse(gene.equals(null));
     assertFalse(gene.equals(new Vector()));
-    InstantiableSupergeneForTest gene2 = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene2 = new InstantiableSupergeneForTesting(conf);
     assertTrue(gene.equals(gene2));
   }
 
   public void testNewGene_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     gene.m_validator = null;
-    InstantiableSupergeneForTest gene2 = (InstantiableSupergeneForTest) gene.newGene();
+    InstantiableSupergeneForTesting gene2 = (InstantiableSupergeneForTesting) gene.newGene();
     assertEquals(gene, gene2);
     assertEquals(gene2, gene);
   }
 
   public void testNewGene_1()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     for (int i = 0; i < 5; i++) {
       Gene aGene = new DoubleGene(conf);
       gene.addGene(aGene);
     }
-    InstantiableSupergeneForTest gene2 = (InstantiableSupergeneForTest) gene.newGene();
+    InstantiableSupergeneForTesting gene2 = (InstantiableSupergeneForTesting) gene.newGene();
     assertEquals(gene, gene2);
     assertEquals(gene2, gene);
   }
 
   public void testNewGene_2()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     gene.m_validator = gene;
-    InstantiableSupergeneForTest gene2 = (InstantiableSupergeneForTest) gene.newGene();
+    InstantiableSupergeneForTesting gene2 = (InstantiableSupergeneForTesting) gene.newGene();
     assertEquals(gene, gene2);
     assertEquals(gene2, gene);
   }
 
   public void testSetAllele_0()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     gene.setAllele(new Double(23.4));
     assertEquals(0, gene.size());
   }
 
   public void testSetAllele_1()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     for (int i = 0; i < 2; i++) {
       Gene aGene = new DoubleGene(conf);
       gene.addGene(aGene);
@@ -285,7 +285,7 @@ public class SupergenePersistentRepresentationTest
 
   public void testSetAllele_2()
       throws Exception {
-    InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf);
+    InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf);
     for (int i = 0; i < 5; i++) {
       Gene aGene = new DoubleGene(conf);
       gene.addGene(aGene);

@@ -22,7 +22,7 @@ import junit.framework.*;
 public class GaussianMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.14 $";
+  private static final String CVS_REVISION = "$Revision: 1.15 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GaussianMutationOperatorTest.class);
@@ -45,7 +45,7 @@ public class GaussianMutationOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new GaussianMutationOperator(conf, 0.15d);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextDouble(0.45d);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
@@ -96,7 +96,7 @@ public class GaussianMutationOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new GaussianMutationOperator(conf);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -145,7 +145,7 @@ public class GaussianMutationOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new GaussianMutationOperator(conf, 0.15d);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextDouble(0.45d);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
@@ -201,7 +201,7 @@ public class GaussianMutationOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new GaussianMutationOperator(conf, 0.15d);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextDouble(0.45d);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());

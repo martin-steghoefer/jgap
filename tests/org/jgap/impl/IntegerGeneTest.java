@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -232,7 +232,7 @@ public class IntegerGeneTest
   public void testEquals_10()
       throws Exception {
     Configuration conf = new ConfigurationForTesting();
-    conf.setRandomGenerator(new RandomGeneratorForTest(5));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(5));
     Gene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(8));
     Gene gene2 = new IntegerGene(conf, 1, 99);
@@ -676,7 +676,7 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_1()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
     IntegerGene gene = new IntegerGene(conf, 0, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.5d);
@@ -691,7 +691,7 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_2()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
     IntegerGene gene = new IntegerGene(conf, 44, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 0.3d);
@@ -706,7 +706,7 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_3()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
     IntegerGene gene = new IntegerGene(conf, 33, 100);
     gene.setAllele(new Integer(50));
     gene.applyMutation(0, 1.9d);
@@ -721,7 +721,7 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_4()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
     IntegerGene gene = new IntegerGene(conf, 2, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, 1.9d);
@@ -736,7 +736,7 @@ public class IntegerGeneTest
    */
   public void testApplyMutation_5()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15));
     IntegerGene gene = new IntegerGene(conf, 0, 100);
     gene.setAllele(new Integer(60));
     gene.applyMutation(0, -1.0d);
@@ -781,7 +781,7 @@ public class IntegerGeneTest
       throws Exception {
     IntegerGene gene = new IntegerGene(conf, 5, 100);
     gene.setAllele(null);
-    conf.setRandomGenerator(new RandomGeneratorForTest(10));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(10));
     gene.applyMutation(0, -0.4d);
     assertEquals(Math.round(10 + 5), gene.intValue());
   }
@@ -796,7 +796,7 @@ public class IntegerGeneTest
       throws Exception {
     Gene gene = new IntegerGene(conf, 1, 6);
     gene.setAllele(new Integer(5));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.2d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.2d));
     assertEquals(new Integer( (int) (0.2d * (6 - 1) + 1)), gene.getAllele());
   }
 
@@ -810,7 +810,7 @@ public class IntegerGeneTest
       throws Exception {
     Gene gene = new IntegerGene(conf, -1, 7);
     gene.setAllele(new Integer(4));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.3d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.3d));
     assertEquals(new Integer( (int) (0.3d * (7 + 1) - 1)), gene.getAllele());
   }
 
@@ -825,7 +825,7 @@ public class IntegerGeneTest
     Configuration conf = new ConfigurationForTesting();
     Gene gene = new IntegerGene(conf, -2, -1);
     gene.setAllele(new Integer(4));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.8d));
     assertEquals(new Integer( (int) (0.8d * ( -1 + 2) - 2)), gene.getAllele());
   }
 
@@ -839,7 +839,7 @@ public class IntegerGeneTest
       throws Exception {
     IntegerGene gene = new IntegerGene(conf, 0, 8);
     gene.setAllele(new Integer(5));
-    gene.setToRandomValue(new RandomGeneratorForTest(4));
+    gene.setToRandomValue(new RandomGeneratorForTesting(4));
     if (gene.intValue() < 0
         || gene.intValue() > 8) {
       fail();
@@ -856,7 +856,7 @@ public class IntegerGeneTest
       throws Exception {
     IntegerGene gene = new IntegerGene(conf, 1, 6);
     gene.setAllele(new Integer(2));
-    gene.setToRandomValue(new RandomGeneratorForTest(3));
+    gene.setToRandomValue(new RandomGeneratorForTesting(3));
     if (gene.intValue() < 1
         || gene.intValue() > 6) {
       fail();
@@ -875,9 +875,9 @@ public class IntegerGeneTest
     Configuration conf = new ConfigurationForTesting();
     Gene gene = new IntegerGene(conf, 1, 3);
     gene.setAllele(new Integer(4));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.95d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.95d));
     assertEquals(new Integer(3), gene.getAllele());
-    gene.setToRandomValue(new RandomGeneratorForTest(0.05d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.05d));
     assertEquals(new Integer(1), gene.getAllele());
   }
 

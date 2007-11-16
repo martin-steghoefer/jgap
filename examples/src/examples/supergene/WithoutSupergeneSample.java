@@ -49,8 +49,8 @@ class WithoutSupergeneSample
     // Set the fitness function we want to use. We construct it with
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
-    WithoutSupergeneChangeFitFuncForTest fitnessFunction =
-        new WithoutSupergeneChangeFitFuncForTest(a_targetChangeAmount);
+    WithoutSupergeneChangeFitFForTesting fitnessFunction =
+        new WithoutSupergeneChangeFitFForTesting(a_targetChangeAmount);
     conf.setFitnessFunction(fitnessFunction);
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a

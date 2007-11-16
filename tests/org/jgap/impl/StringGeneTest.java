@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -990,11 +990,11 @@ public class StringGeneTest
       throws Exception {
     StringGene gene = new StringGene(conf, 1, 6,
                                      StringGene.ALPHABET_CHARACTERS_UPPER);
-    gene.setToRandomValue(new RandomGeneratorForTest(2));
+    gene.setToRandomValue(new RandomGeneratorForTesting(2));
     assertEquals("CCC", gene.getAllele());
-    gene.setToRandomValue(new RandomGeneratorForTest(1));
+    gene.setToRandomValue(new RandomGeneratorForTesting(1));
     assertEquals("BB", gene.getAllele());
-    gene.setToRandomValue(new RandomGeneratorForTest(0));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0));
     assertEquals("A", gene.getAllele());
   }
 
@@ -1007,14 +1007,14 @@ public class StringGeneTest
       throws Exception {
     Gene gene = new StringGene(conf, 1, 6, StringGene.ALPHABET_CHARACTERS_UPPER);
     gene.setAllele("XYZA"); // should not matter here
-    gene.setToRandomValue(new RandomGeneratorForTest(3));
+    gene.setToRandomValue(new RandomGeneratorForTesting(3));
     assertEquals("DDDD", gene.getAllele());
   }
 
   public void testSetToRandomValue_2()
       throws Exception {
     Gene gene = new StringGene(conf, 1, 6, "ABC");
-    gene.setToRandomValue(new RandomGeneratorForTest(3));
+    gene.setToRandomValue(new RandomGeneratorForTesting(3));
     assertEquals("AAAA", gene.getAllele());
   }
 
@@ -1027,7 +1027,7 @@ public class StringGeneTest
   public void testSetToRandomValue_3()
       throws Exception {
     StringGene gene = new StringGene(conf, 1, 7, "DEF");
-    gene.setToRandomValue(new RandomGeneratorForTest(2));
+    gene.setToRandomValue(new RandomGeneratorForTesting(2));
     assertEquals("FFF", gene.getAllele());
   }
 
@@ -1041,7 +1041,7 @@ public class StringGeneTest
       throws Exception {
     StringGene gene = new StringGene(conf, 1, 7, "DEF");
     gene.setAllele("EEFD");
-    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting();
     // set random generator to produce
     // 1) length of new allele (-1)
     // 2) first character out of alphabet ("DEF"), starting from 0

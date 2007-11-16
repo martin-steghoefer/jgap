@@ -22,7 +22,7 @@ import junit.framework.*;
 public class AveragingCrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.22 $";
+  private static final String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AveragingCrossoverOperatorTest.class);
@@ -43,7 +43,7 @@ public class AveragingCrossoverOperatorTest
   public void testOperate_0()
       throws Exception {
 //    conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -94,7 +94,7 @@ public class AveragingCrossoverOperatorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
 //    conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -143,7 +143,7 @@ public class AveragingCrossoverOperatorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
 //    conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -200,7 +200,7 @@ public class AveragingCrossoverOperatorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
 //    conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -253,7 +253,7 @@ public class AveragingCrossoverOperatorTest
   public void testOperate_4()
       throws Exception {
 //    conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);

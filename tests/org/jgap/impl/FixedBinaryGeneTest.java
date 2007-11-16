@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -1151,7 +1151,7 @@ public class FixedBinaryGeneTest
   public void testSetToRandomValue_2()
       throws Exception {
     FixedBinaryGene gene1 = new FixedBinaryGene(conf, 7);
-    gene1.setToRandomValue(new RandomGeneratorForTest(false));
+    gene1.setToRandomValue(new RandomGeneratorForTesting(false));
     for (int i = 0; i < 7; i++) {
       assertFalse(gene1.getBit(i));
     }
@@ -1166,7 +1166,7 @@ public class FixedBinaryGeneTest
   public void testSetToRandomValue_3()
       throws Exception {
     FixedBinaryGene gene1 = new FixedBinaryGene(conf, 7);
-    gene1.setToRandomValue(new RandomGeneratorForTest(true));
+    gene1.setToRandomValue(new RandomGeneratorForTesting(true));
     for (int i = 0; i < 7; i++) {
       assertTrue(gene1.getBit(i));
     }

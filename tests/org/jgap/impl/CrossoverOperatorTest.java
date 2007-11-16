@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.29 $";
+  private static final String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -94,7 +94,7 @@ public class CrossoverOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     // preset "random" values: index first chromosome, index second chromosome,
     // locus (index of gene on chromosome)
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0});
     conf.setRandomGenerator(rand);
@@ -161,7 +161,7 @@ public class CrossoverOperatorTest
 //    conf.addGeneticOperator(op);
     // preset "random" values: index first chromosome, index second chromosome,
     // locus (index of gene on chromosome)
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0});
     conf.setRandomGenerator(rand);
@@ -225,7 +225,7 @@ public class CrossoverOperatorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
 //    conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -275,7 +275,7 @@ public class CrossoverOperatorTest
   public void testOperate_2()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -337,7 +337,7 @@ public class CrossoverOperatorTest
     IGeneticOperatorConstraint constraint = new
         GeneticOperatorConstraintForTest();
     conf.getJGAPFactory().setGeneticOperatorConstraint(constraint);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 2, 0, 1, 2});
     conf.setRandomGenerator(rand);

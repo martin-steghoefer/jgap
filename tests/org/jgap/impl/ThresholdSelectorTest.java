@@ -23,7 +23,7 @@ import junitx.util.*;
 public class ThresholdSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ThresholdSelectorTest.class);
@@ -225,7 +225,7 @@ public class ThresholdSelectorTest
     //Set index of chromosome to be selected by ThresholdSelector to 1.
     //1 because the best chromosome will be index 0 and the other one has
     // index 1.
-    conf.setRandomGenerator(new RandomGeneratorForTest(1));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(1));
     ThresholdSelector selector = new ThresholdSelector(conf, 0.0d);
     // add first chromosome
     // --------------------

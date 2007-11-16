@@ -26,7 +26,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -64,7 +64,7 @@ public class XMLManagerTest
       m_conf.setFitnessFunction(new RandomFitnessFunction());
       m_conf.setPopulationSize(8);
       m_chrom = new Chromosome(conf, m_genes);
-      InstantiableSupergeneForTest gene = new InstantiableSupergeneForTest(conf, new Gene[]{});
+      InstantiableSupergeneForTesting gene = new InstantiableSupergeneForTesting(conf, new Gene[]{});
       m_supergenes = new Supergene[]{gene};
       m_supergenechrom = new Chromosome(conf, m_supergenes);
 

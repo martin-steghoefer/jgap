@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TwoWayMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TwoWayMutationOperatorTest.class);
@@ -124,7 +124,7 @@ public class TwoWayMutationOperatorTest
     TwoWayMutationOperator mutOp = new TwoWayMutationOperator(conf,
         new DefaultMutationRateCalculator(conf));
     List candChroms = new Vector();
-    RandomGeneratorForTest gen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting gen = new RandomGeneratorForTesting();
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
     Chromosome c1 = new Chromosome(conf, new BooleanGene(conf), 9);
@@ -204,7 +204,7 @@ public class TwoWayMutationOperatorTest
     TwoWayMutationOperator op = new TwoWayMutationOperator(conf,
         new DefaultMutationRateCalculator(conf));
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextInt(0);
     conf.setRandomGenerator(rand);
     conf.setFitnessFunction(new TestFitnessFunction());
@@ -255,7 +255,7 @@ public class TwoWayMutationOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new TwoWayMutationOperator(conf, 10);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     // 0 in this sequence represents a gene to be mutated
     // thus, the middle gene of each chromosome should be mutated
     rand.setNextIntSequence(new int[] {0, 0, 1});
@@ -339,7 +339,7 @@ public class TwoWayMutationOperatorTest
       throws Exception {
     Configuration conf = new Configuration();
     conf.setPopulationSize(5);
-    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting();
     rn.setNextInt(0);
     rn.setNextDouble(0.8d); //C
     conf.setRandomGenerator(rn);
@@ -399,7 +399,7 @@ public class TwoWayMutationOperatorTest
         chrom1, chrom2};
     TwoWayMutationOperator mutOp = new TwoWayMutationOperator(conf,
         new DefaultMutationRateCalculator(conf));
-    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting();
     rn.setNextInt(0);
     rn.setNextDouble(0.8d);
     conf.setRandomGenerator(rn);
@@ -469,7 +469,7 @@ public class TwoWayMutationOperatorTest
       throws Exception {
     Configuration conf = new Configuration();
     conf.setPopulationSize(5);
-    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting();
     rn.setNextInt(0);
     rn.setNextInt(0);
     rn.setNextDouble(0.8d);

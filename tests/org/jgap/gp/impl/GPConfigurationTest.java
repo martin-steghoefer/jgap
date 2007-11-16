@@ -25,7 +25,7 @@ import org.jgap.gp.function.Add;
 public class GPConfigurationTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPConfigurationTest.class);
@@ -323,7 +323,7 @@ public class GPConfigurationTest
     conf.setCrossoverMethod(new BranchTypingCross(conf));
     conf.setMaxInitDepth(17);
     conf.setCrossoverProb(0.3f);
-    conf.setNodeValidator(new NodeValidatorForTest());
+    conf.setNodeValidator(new NodeValidatorForTesting());
     GPProgram prog = new GPProgram(m_gpconf, 1);
     ProgramChromosome pc = new ProgramChromosome(m_gpconf);
     pc.setGene(0, new Add(m_gpconf, CommandGene.IntegerClass));

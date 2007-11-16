@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.66 $";
+  private final static String CVS_REVISION = "$Revision: 1.67 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -1125,7 +1125,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTesting();
     conf.setChromosomePool(new ChromosomePool());
-    conf.setRandomGenerator(new RandomGeneratorForTest(true));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(true));
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
     //The BooleanGene comes from the sample chrom set in ConfigurationForTest
     assertTrue( ( (BooleanGene) chrom.getGene(0)).booleanValue());
@@ -1141,7 +1141,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTesting();
     conf.setChromosomePool(new ChromosomePool());
-    conf.setRandomGenerator(new RandomGeneratorForTest(false));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(false));
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
     //The BooleanGene comes from the sample chrom set in ConfigurationForTest
     assertFalse( ( (BooleanGene) chrom.getGene(0)).booleanValue());
@@ -1159,7 +1159,7 @@ public class ChromosomeTest
       throws Exception {
     Configuration conf = new ConfigurationForTesting();
     conf.setChromosomePool(new ChromosomePool());
-    conf.setRandomGenerator(new RandomGeneratorForTest(true));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(true));
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
     chrom.cleanup(); //fill the pool
     chrom = Chromosome.randomInitialChromosome(conf);
@@ -1189,7 +1189,7 @@ public class ChromosomeTest
     // following command locks configuration
     Chromosome.randomInitialChromosome(conf);
     try {
-      conf.setRandomGenerator(new RandomGeneratorForTest(true));
+      conf.setRandomGenerator(new RandomGeneratorForTesting(true));
       fail();
     } catch (InvalidConfigurationException iex) {
       ; //this is OK

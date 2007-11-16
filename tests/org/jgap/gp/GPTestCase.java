@@ -26,7 +26,7 @@ public abstract class GPTestCase
 
   protected GPConfiguration m_gpconf;
 
-  protected RandomGeneratorForTest rn;
+  protected RandomGeneratorForTesting rn;
 
   protected Constant CMD_CONST0, CMD_CONST1, CMD_CONST2, CMD_CONST3, CMD_CONST4;
 
@@ -45,7 +45,7 @@ public abstract class GPTestCase
     try {
       GPConfiguration.reset();
       m_gpconf = new GPConfiguration();
-      rn = new RandomGeneratorForTest(3);
+      rn = new RandomGeneratorForTesting(3);
       m_gpconf.setRandomGenerator(rn);
       m_gpconf.setPopulationSize(10);
       //
@@ -81,5 +81,5 @@ public abstract class GPTestCase
 
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.4 $";
+  private static final String CVS_REVISION = "$Revision: 1.5 $";
 }

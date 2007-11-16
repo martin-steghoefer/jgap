@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -100,7 +100,7 @@ public class WeightedRouletteSelectorTest
       throws Exception {
     /**@todo use custom map-impl. to let test pass*/
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.9999d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
@@ -152,7 +152,7 @@ public class WeightedRouletteSelectorTest
       throws Exception {
     /**@todo use custom map-impl. to let test pass*/
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.9999d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
@@ -207,7 +207,7 @@ public class WeightedRouletteSelectorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     conf.addNaturalSelector(new WeightedRouletteSelector(), false);
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.0d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
@@ -252,7 +252,7 @@ public class WeightedRouletteSelectorTest
       throws Exception {
     /**@todo use custom map-impl. to let test pass*/
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
-    RandomGeneratorForTest randgen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.9999d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);

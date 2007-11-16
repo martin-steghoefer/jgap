@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -226,7 +226,7 @@ public class TournamentSelectorTest
   public void testSelect_1()
       throws Exception {
     // random generator always returning 1 (index of best chromosome below)
-    RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(1);
     conf.setRandomGenerator(rn);
     TournamentSelector selector = new TournamentSelector(conf, 4, 1.0d);
     // add first chromosome
@@ -279,7 +279,7 @@ public class TournamentSelectorTest
   public void testSelect_2()
       throws Exception {
     // random generator always returning 1 (index of best chromosome below)
-    RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(1);
     conf.setRandomGenerator(rn);
     TournamentSelector selector = new TournamentSelector(conf, 4, 1.0d);
     // add first chromosome
@@ -325,7 +325,7 @@ public class TournamentSelectorTest
     //Set index of chromosome to be selected by ThresholdSelector to 1.
     //1 because the best chromosome will be index 0 and the other one has
     // index 1.
-    RandomGeneratorForTest rn = new RandomGeneratorForTest(0);
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(0);
     rn.setNextDouble(0.0d);
     conf.setRandomGenerator(rn);
     TournamentSelector selector = new TournamentSelector(conf, 2, 1.0d);
@@ -395,7 +395,7 @@ public class TournamentSelectorTest
    */
   public void testSelect_5()
       throws Exception {
-    RandomGeneratorForTest rn = new RandomGeneratorForTest(0);
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(0);
     conf.setRandomGenerator(rn);
     TournamentSelector selector = new TournamentSelector(conf, 4, 0.00001d);
     setNestedField(selector, "m_config", "m_probability", new Double(0.0d));
@@ -432,7 +432,7 @@ public class TournamentSelectorTest
   public void testSelect_6()
       throws Exception {
     // random generator always returning 1 (index of best chromosome below)
-    RandomGeneratorForTest rn = new RandomGeneratorForTest(1);
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting(1);
     conf.setRandomGenerator(rn);
     TournamentSelector selector = new TournamentSelector(conf, 4, 1.0d);
     Population toAddFrom = new Population(conf);

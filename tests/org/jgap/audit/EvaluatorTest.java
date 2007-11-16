@@ -22,7 +22,7 @@ import junit.framework.*;
 public class EvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public void setUp() {
     super.setUp();
@@ -35,7 +35,7 @@ public class EvaluatorTest
 
   public void testStoreGenotype_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Population pop = new Population(conf);
@@ -71,7 +71,7 @@ public class EvaluatorTest
 
   public void testCalcPerformance_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Population pop = new Population(conf);
@@ -101,7 +101,7 @@ public class EvaluatorTest
 
   public void testCalcPerformance_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     // run 0
@@ -152,7 +152,7 @@ public class EvaluatorTest
 
   public void testGetNumberOfRuns_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Population pop = new Population(conf);
@@ -182,7 +182,7 @@ public class EvaluatorTest
    */
   public void testCalcPerformance_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     // run 0, permutation 0
@@ -301,7 +301,7 @@ public class EvaluatorTest
    */
   public void testConstruct_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     assertEquals(0, eval.getData().getRowCount());
@@ -316,7 +316,7 @@ public class EvaluatorTest
    */
   public void testHasNext_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     assertEquals(pconf.hasNext(), eval.hasNext());
@@ -330,7 +330,7 @@ public class EvaluatorTest
    */
   public void testNext_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     pconf.addGeneticOperatorSlot(new MutationOperator(conf));
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
@@ -350,7 +350,7 @@ public class EvaluatorTest
    */
   public void testSetValue_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Comparable rowKey = new Integer(4);
@@ -369,7 +369,7 @@ public class EvaluatorTest
    */
   public void testSetValue_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Comparable rowKey = new Integer(4);
@@ -389,7 +389,7 @@ public class EvaluatorTest
    */
   public void testSetValue_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Comparable rowKey = new Integer(4);
@@ -413,7 +413,7 @@ public class EvaluatorTest
    */
   public void testSetValue_3()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Comparable rowKey = new Integer(4);
@@ -435,7 +435,7 @@ public class EvaluatorTest
    */
   public void testCalcAvgFitness_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Comparable rowKey1 = new Integer(3);
@@ -465,7 +465,7 @@ public class EvaluatorTest
    */
   public void testCalcAvgFitness_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     PermutingConfiguration pconf = new PermutingConfiguration(conf);
     Evaluator eval = new Evaluator(pconf);
     Comparable rowKey1 = new Integer(3);

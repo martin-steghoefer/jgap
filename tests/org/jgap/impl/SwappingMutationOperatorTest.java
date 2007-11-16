@@ -23,7 +23,7 @@ import junit.framework.*;
 public class SwappingMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SwappingMutationOperatorTest.class);
@@ -118,7 +118,7 @@ public class SwappingMutationOperatorTest
     mutOp.operate(new Population(conf, population), candChroms);
     assertEquals(candChroms.size(), population.length);
     candChroms.clear();
-    RandomGeneratorForTest gen = new RandomGeneratorForTest();
+    RandomGeneratorForTesting gen = new RandomGeneratorForTesting();
     gen.setNextInt(9);
     conf.setRandomGenerator(gen);
     Chromosome c1 = new Chromosome(conf, new BooleanGene(conf), 9);
@@ -197,7 +197,7 @@ public class SwappingMutationOperatorTest
         new DefaultMutationRateCalculator(conf));
     op.setStartOffset(0);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextDouble(0.45d);
     rand.setNextInt(0);
     conf.setRandomGenerator(rand);

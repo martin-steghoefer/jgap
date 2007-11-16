@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.40 $";
+  private static final String CVS_REVISION = "$Revision: 1.41 $";
 
   public void setUp() {
     super.setUp();
@@ -564,7 +564,7 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene = new DoubleGene(conf, 1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.789d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.789d));
     assertEquals(new Double(0.789d * (6.5d - 1.3d) + 1.3d), gene.getAllele());
   }
 
@@ -577,8 +577,8 @@ public class DoubleGeneTest
       throws Exception {
     Gene gene = new DoubleGene(conf, -1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
-    conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.014));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.258d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.014));
     assertEquals(new Double(0.014d * (6.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
@@ -593,8 +593,8 @@ public class DoubleGeneTest
     Configuration conf = new ConfigurationForTesting();
     Gene gene = new DoubleGene(conf, -1.3d, -0.5d);
     gene.setAllele(new Double(5.8d));
-    conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.83d));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.258d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.83d));
     assertEquals(new Double(0.83d * ( -0.5d + 1.3d) - 1.3d), gene.getAllele());
   }
 
@@ -607,7 +607,7 @@ public class DoubleGeneTest
       throws Exception {
     DoubleGene gene = new DoubleGene(conf, 1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
-    gene.setToRandomValue(new RandomGeneratorForTest(0.478d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(0.478d));
     if (gene.doubleValue() < 1.3d
         || gene.doubleValue() > 6.5d) {
       fail();
@@ -623,7 +623,7 @@ public class DoubleGeneTest
       throws Exception {
     DoubleGene gene = new DoubleGene(conf, 1.3d, 6.5d);
     gene.setAllele(new Double(5.8d));
-    gene.setToRandomValue(new RandomGeneratorForTest(8.584d));
+    gene.setToRandomValue(new RandomGeneratorForTesting(8.584d));
     if (gene.doubleValue() < 1.3d
         || gene.doubleValue() > 6.5d) {
       fail();
@@ -725,7 +725,7 @@ public class DoubleGeneTest
    */
   public void testApplyMutation_1()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15.0d));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15.0d));
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 0.5d);
@@ -739,7 +739,7 @@ public class DoubleGeneTest
    */
   public void testApplyMutation_2()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(15.0d));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(15.0d));
     DoubleGene gene = new DoubleGene(conf, 44, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 0.3d);
@@ -753,7 +753,7 @@ public class DoubleGeneTest
    */
   public void testApplyMutation_3()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(0.5d));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.5d));
     DoubleGene gene = new DoubleGene(conf, 33, 100);
     gene.setAllele(new Double(50));
     gene.applyMutation(0, 1.9d);
@@ -767,7 +767,7 @@ public class DoubleGeneTest
    */
   public void testApplyMutation_4()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(0.4d));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.4d));
     DoubleGene gene = new DoubleGene(conf, 2, 100);
     gene.setAllele(new Double(60));
     gene.applyMutation(0, 1.9d);
@@ -782,7 +782,7 @@ public class DoubleGeneTest
    */
   public void testApplyMutation_5()
       throws Exception {
-    conf.setRandomGenerator(new RandomGeneratorForTest(0.8d));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(0.8d));
     DoubleGene gene = new DoubleGene(conf, 0, 100);
     gene.setAllele(new Double(60));
     gene.applyMutation(1, -1.0d);

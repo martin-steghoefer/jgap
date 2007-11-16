@@ -23,7 +23,7 @@ import junit.framework.*;
 public class InversionOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(InversionOperatorTest.class);
@@ -67,7 +67,7 @@ public class InversionOperatorTest
   public void testOperate_0()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     // tupels: (index of chromosome; locus), see InversionOperator.operate
     rand.setNextIntSequence(new int[] {
                             0, 1, 1, 1});
@@ -126,7 +126,7 @@ public class InversionOperatorTest
     DefaultConfiguration conf = new DefaultConfiguration();
     GeneticOperator op = new InversionOperator(conf);
     conf.addGeneticOperator(op);
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
                             0, 1, 0, 1, 2});
     conf.setRandomGenerator(rand);
@@ -173,7 +173,7 @@ public class InversionOperatorTest
   public void testOperate_2()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     // tupels: (index of chromosome; locus), see InversionOperator.operate
     rand.setNextIntSequence(new int[] {
                             0, 1, 1, 1, 2});
@@ -243,7 +243,7 @@ public class InversionOperatorTest
   public void testOperate_3()
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
-    RandomGeneratorForTest rand = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     // tupels: (index of chromosome; locus), see InversionOperator.operate
     rand.setNextIntSequence(new int[] {
                             0, 1, 1, 1, 2});
