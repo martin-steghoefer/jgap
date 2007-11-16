@@ -9,7 +9,7 @@ import org.jgap.gp.*;
  * @author Klaus Meffert
  * @since 3.2
  */
-public class NodeValidatorForTest
+public class NodeValidatorForTesting
     implements INodeValidator {
   public boolean validate(ProgramChromosome a_chrom, CommandGene a_node,
                           CommandGene a_rootNode,

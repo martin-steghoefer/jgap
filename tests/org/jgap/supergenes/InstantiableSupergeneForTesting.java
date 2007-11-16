@@ -17,23 +17,23 @@ import org.jgap.*;
  * @author Klaus Meffert
  * @since 3.0
  */
-public class InstantiableSupergeneForTest
+public class InstantiableSupergeneForTesting
     extends AbstractSupergene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
-  public InstantiableSupergeneForTest(final Configuration a_config,
+  public InstantiableSupergeneForTesting(final Configuration a_config,
                                       Gene[] a_genes)
       throws InvalidConfigurationException {
     super(a_config, a_genes);
   }
 
-  public InstantiableSupergeneForTest(final Configuration a_config)
+  public InstantiableSupergeneForTesting(final Configuration a_config)
       throws InvalidConfigurationException {
     super(a_config, new Gene[] {});
   }
 
-  public InstantiableSupergeneForTest()
+  public InstantiableSupergeneForTesting()
       throws InvalidConfigurationException {
     this(Genotype.getStaticConfiguration());
   }

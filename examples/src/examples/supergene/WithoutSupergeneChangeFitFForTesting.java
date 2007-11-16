@@ -20,12 +20,12 @@ import examples.supergene.*;
  * @author Klaus Meffert
  * @author Audrius Meskauskas
  */
-class WithoutSupergeneChangeFitFuncForTest
+class WithoutSupergeneChangeFitFForTesting
     extends SupergeneChangeFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.1 $";
 
-  public WithoutSupergeneChangeFitFuncForTest(int a_targetAmount) {
+  public WithoutSupergeneChangeFitFForTesting(int a_targetAmount) {
     super(a_targetAmount);
   }
 
