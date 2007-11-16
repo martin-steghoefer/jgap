@@ -8,7 +8,7 @@
 	<!-- Grouping, naming, versioning and packaging -->
 	<groupId>org.jgap</groupId>
 	<artifactId>JGAP</artifactId>
-	<version>4.0</version>
+	<version>3.3</version>
 
 	<!-- Name and description -->
 	<name>JGAP</name>
@@ -41,7 +41,12 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.9</version>
 		</dependency>			
-		
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.3</version>
+		</dependency>
+
 		<!-- Interface -->
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -76,7 +81,7 @@
 			<groupId>junit-addons</groupId>
 			<artifactId>junit-addons</artifactId>
 			<version>1.4</version>
-			<scope>test</scope>
+			<!-- <scope>test</scope> -->
 		</dependency>
 	</dependencies>
 	
@@ -193,9 +198,13 @@
 				</dependencies>				
 			</plugin>
 		</plugins>
-		
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<sourceDirectory>src</sourceDirectory>
+     		<testSourceDirectory>tests</testSourceDirectory>
+ 		<resources>
+      		<resource>
+       		 	<directory>src</directory>
+      		</resource>
+    		</resources>
 	</build>
 
 	<!-- Reports -->
