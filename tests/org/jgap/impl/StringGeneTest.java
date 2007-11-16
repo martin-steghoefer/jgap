@@ -22,7 +22,7 @@ import junit.framework.*;
 public class StringGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(StringGeneTest.class);
@@ -837,7 +837,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new StringGene(conf, 5, 5);
     gene1.setAllele("12345");
     gene1.applyMutation(0, 0.99d);
@@ -853,7 +853,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new StringGene(conf, 1, 1);
     gene1.setAllele("1");
     gene1.applyMutation(0, 0.99d);
@@ -868,7 +868,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new StringGene(conf, 1, 1);
     gene1.setAllele("1");
     try {
@@ -888,7 +888,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_3()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new StringGene(conf, 1, 1);
     gene1.applyMutation(0, 0.99d);
   }
@@ -899,7 +899,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_4()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new StringGene(conf, 6, 6,
                                 StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
@@ -918,7 +918,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_5()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new StringGene(conf, 6, 6,
                                 StringGene.ALPHABET_CHARACTERS_LOWER);
     gene1.setAllele("ijklmn");
@@ -935,7 +935,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_6()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     StringGene gene1 = new StringGene(conf, 6, 6);
     gene1.setAllele("ijklmn");
     gene1.setAlphabet("");
@@ -955,7 +955,7 @@ public class StringGeneTest
    */
   public void testApplyMutation_7()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.setRandomGenerator(null);
     Gene gene1 = new StringGene(conf, 5, 5);
     gene1.setAllele("12345");

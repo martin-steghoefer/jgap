@@ -23,7 +23,7 @@ import junit.framework.*;
 public class ChromosomeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.65 $";
+  private final static String CVS_REVISION = "$Revision: 1.66 $";
 
   public static Test suite() {
     return new TestSuite(ChromosomeTest.class);
@@ -116,7 +116,7 @@ public class ChromosomeTest
   public void testConstruct_1_3()
       throws Exception {
     try {
-      new Chromosome(new ConfigurationForTest(), new IntegerGene(conf), -500);
+      new Chromosome(new ConfigurationForTesting(), new IntegerGene(conf), -500);
       fail();
     } catch (IllegalArgumentException iex) {
       ; //this is OK
@@ -638,7 +638,7 @@ public class ChromosomeTest
             break;
         }
       }
-      chrom = new Chromosome(new ConfigurationForTest(), genes);
+      chrom = new Chromosome(new ConfigurationForTesting(), genes);
       // We only want to add unique object, since equal object will
       // return the same hashcode
       if (!uniqueChromosome.contains(chrom)) {
@@ -667,7 +667,7 @@ public class ChromosomeTest
     for (count = 0; count < 3; count++) {
       genes = new Gene[1];
       genes[0] = new IntegerGene(conf);
-      chrom = new Chromosome(new ConfigurationForTest(), genes);
+      chrom = new Chromosome(new ConfigurationForTesting(), genes);
       equalChromosome.add(chrom);
     }
     //If an object is equal it must have the same hashcode
@@ -1123,7 +1123,7 @@ public class ChromosomeTest
    */
   public void testRandomInitialChromosome_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.setChromosomePool(new ChromosomePool());
     conf.setRandomGenerator(new RandomGeneratorForTest(true));
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
@@ -1139,7 +1139,7 @@ public class ChromosomeTest
    */
   public void testRandomInitialChromosome_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.setChromosomePool(new ChromosomePool());
     conf.setRandomGenerator(new RandomGeneratorForTest(false));
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
@@ -1157,7 +1157,7 @@ public class ChromosomeTest
    */
   public void testRandomInitialChromosome_3()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.setChromosomePool(new ChromosomePool());
     conf.setRandomGenerator(new RandomGeneratorForTest(true));
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
@@ -1204,7 +1204,7 @@ public class ChromosomeTest
    */
   public void testCleanup_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     IChromosome chrom = Chromosome.randomInitialChromosome(conf);
     chrom.cleanup();
   }
@@ -1217,7 +1217,7 @@ public class ChromosomeTest
    */
   public void testCleanup_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     ChromosomePool chromosomePool = new ChromosomePool();
     assertNull(chromosomePool.acquireChromosome());
     conf.setChromosomePool(chromosomePool);
@@ -1233,7 +1233,7 @@ public class ChromosomeTest
    */
   public void testSetCompareApplicationData_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Chromosome chrom = (Chromosome) Chromosome.randomInitialChromosome(conf);
     assertFalse(chrom.isCompareApplicationData());
     chrom.setCompareApplicationData(true);
@@ -1250,7 +1250,7 @@ public class ChromosomeTest
    */
   public void testToString_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Chromosome chrom = new Chromosome(conf, 3);
     assertEquals(IChromosome.S_SIZE + ":" + chrom.size()
                  + ", " + IChromosome.S_FITNESS_VALUE + ":" +
@@ -1270,7 +1270,7 @@ public class ChromosomeTest
    */
   public void testToString_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene[] genes = new IntegerGene[2];
     genes[0] = new IntegerGene(conf, 0, 77);
     genes[0].setAllele(new Integer(47));
@@ -1298,7 +1298,7 @@ public class ChromosomeTest
    */
   public void testToString_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Chromosome chrom = new Chromosome(conf, 3);
     chrom.setApplicationData("uIoP");
     assertEquals(IChromosome.S_SIZE + ":" + chrom.size()
@@ -1319,7 +1319,7 @@ public class ChromosomeTest
    */
   public void testSetConstraintChecker_0()
       throws Exception {
-    Chromosome c = new Chromosome(new ConfigurationForTest(), 2);
+    Chromosome c = new Chromosome(new ConfigurationForTesting(), 2);
     assertNull(c.getConstraintChecker());
     IGeneConstraintChecker cc = new MyConstraintChecker();
     c.setConstraintChecker(cc);
@@ -1488,8 +1488,8 @@ public class ChromosomeTest
    */
   public void testIsSerializable_0()
       throws Exception {
-    Chromosome chrom = new Chromosome(new ConfigurationForTest(), new Gene[] {
-      new IntegerGene(new ConfigurationForTest(), 1, 5)
+    Chromosome chrom = new Chromosome(new ConfigurationForTesting(), new Gene[] {
+      new IntegerGene(new ConfigurationForTesting(), 1, 5)
     });
     assertTrue(isSerializable(chrom));
   }
@@ -1506,8 +1506,8 @@ public class ChromosomeTest
   public void testDoSerialize_0()
       throws Exception {
     // construct chromosome to be serialized
-    Chromosome chrom = new Chromosome(new ConfigurationForTest(), new Gene[] {
-      new IntegerGene(new ConfigurationForTest(), 1, 5)
+    Chromosome chrom = new Chromosome(new ConfigurationForTesting(), new Gene[] {
+      new IntegerGene(new ConfigurationForTesting(), 1, 5)
     });
     IGeneConstraintChecker checker = new MyConstraintChecker();
     chrom.setConstraintChecker(checker);
@@ -1523,9 +1523,9 @@ public class ChromosomeTest
    */
   public void testIsHandlerFor_0()
       throws Exception {
-    Chromosome chrom = new Chromosome(new ConfigurationForTest(), 3);
+    Chromosome chrom = new Chromosome(new ConfigurationForTesting(), 3);
     assertTrue(chrom.isHandlerFor(chrom, Chromosome.class));
-    assertFalse(chrom.isHandlerFor(chrom, ChromosomeForTest.class));
+    assertFalse(chrom.isHandlerFor(chrom, ConfigurationForTesting.class));
     assertFalse(chrom.isHandlerFor(chrom, Object.class));
     assertTrue(chrom.perform(chrom, Chromosome.class, null) instanceof
                Chromosome);
@@ -1539,7 +1539,7 @@ public class ChromosomeTest
    */
   public void testSetMultiObjectives_0()
       throws Exception {
-    Chromosome chrom = new Chromosome(new ConfigurationForTest(), 3);
+    Chromosome chrom = new Chromosome(new ConfigurationForTesting(), 3);
     List l = new Vector();
     l.add("Entry_1");
     l.add("Entry_2");

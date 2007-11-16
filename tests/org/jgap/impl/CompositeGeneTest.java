@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CompositeGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   private static int cleanedUp = 0;
 
@@ -38,7 +38,7 @@ public class CompositeGeneTest
    */
   public void testCompareTo_4()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     newGene1.setAllele(new Integer(4));
@@ -1014,7 +1014,7 @@ public class CompositeGeneTest
 
   public void testCompareTo_3_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -1070,7 +1070,7 @@ public class CompositeGeneTest
    */
   public void testCompareTo_6()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     CompositeGene gene1 = new CompositeGene(conf);
     Gene newGene1 = new IntegerGene(conf, 3, 5);
     gene1.addGene(newGene1, false);
@@ -1119,7 +1119,7 @@ public class CompositeGeneTest
    */
   public void testHashCode_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     CompositeGene c1 = new CompositeGene(conf);
     CompositeGene c2 = new CompositeGene(conf);
     assertEquals(c1.hashCode(), c2.hashCode());

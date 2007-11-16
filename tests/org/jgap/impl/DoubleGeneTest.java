@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DoubleGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.39 $";
+  private static final String CVS_REVISION = "$Revision: 1.40 $";
 
   public void setUp() {
     super.setUp();
@@ -40,7 +40,7 @@ public class DoubleGeneTest
    */
   public void testConstruct_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene = new DoubleGene(conf, 1.1d, 100.0d);
     //following should be possible without exception
     gene.setAllele(new Double(101.1d));
@@ -259,7 +259,7 @@ public class DoubleGeneTest
    */
   public void testEquals_8()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new DoubleGene(conf, 1.2d, 100.3d);
     gene1.setAllele(new Double(1));
     Gene gene2 = new DoubleGene(conf, 1.2d, 99.5d);
@@ -590,7 +590,7 @@ public class DoubleGeneTest
   public void testSetToRandomValue_2()
       throws Exception {
     /**@todo test needed any longer?*/
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene = new DoubleGene(conf, -1.3d, -0.5d);
     gene.setAllele(new Double(5.8d));
     conf.setRandomGenerator(new RandomGeneratorForTest(0.258d));
@@ -858,7 +858,7 @@ public class DoubleGeneTest
    */
   public void testHashCode_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     DoubleGene c1 = new DoubleGene(conf);
     DoubleGene c2 = new DoubleGene(conf);
     assertEquals(c1.hashCode(), c2.hashCode());

@@ -20,7 +20,7 @@ import junit.framework.*;
 public class FitnessFunctionTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FitnessFunctionTest.class);
@@ -64,7 +64,7 @@ public class FitnessFunctionTest
     FitnessFunctionImpl fitfunc = new FitnessFunctionImpl(47.15d);
     assertEquals(FitnessFunction.NO_FITNESS_VALUE,
                  fitfunc.getLastComputedFitnessValue(), DELTA);
-    IChromosome chrom = new Chromosome(new ConfigurationForTest());
+    IChromosome chrom = new Chromosome(new ConfigurationForTesting());
     fitfunc.getFitnessValue(chrom);
     assertEquals(47.15d, fitfunc.getLastComputedFitnessValue(), DELTA);
   }

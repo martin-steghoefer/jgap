@@ -20,7 +20,7 @@ import junit.framework.*;
 public final class DeltaFitnessEvaluatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DeltaFitnessEvaluatorTest.class);
@@ -63,7 +63,7 @@ public final class DeltaFitnessEvaluatorTest
 
   public void testIsFitter_6()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     FitnessEvaluator evaluator = new DeltaFitnessEvaluator();
     Chromosome chrom1 = new Chromosome(conf);
     chrom1.setFitnessValue(2);

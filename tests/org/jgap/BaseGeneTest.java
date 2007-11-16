@@ -21,7 +21,7 @@ import java.util.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.24 $";
+  private final static String CVS_REVISION = "$Revision: 1.25 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -162,7 +162,7 @@ public class BaseGeneTest
    */
   public void testEquals_3()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
 //    Genotype.setConfiguration(new ConfigurationForTest());
 //    Genotype.getConfiguration().getJGAPFactory();
     BaseGeneImpl gene = new BaseGeneImpl(conf);

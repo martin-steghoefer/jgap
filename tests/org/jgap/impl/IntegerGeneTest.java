@@ -22,7 +22,7 @@ import junit.framework.*;
 public class IntegerGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(IntegerGeneTest.class);
@@ -231,7 +231,7 @@ public class IntegerGeneTest
    */
   public void testEquals_10()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.setRandomGenerator(new RandomGeneratorForTest(5));
     Gene gene1 = new IntegerGene(conf, 1, 100);
     gene1.setAllele(new Integer(8));
@@ -547,7 +547,7 @@ public class IntegerGeneTest
    */
   public void testCompareToNative_3()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(59));
     Gene gene2 = new IntegerGene(conf, 53, 67);
@@ -564,7 +564,7 @@ public class IntegerGeneTest
    */
   public void testCompareToNative_4()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene(conf, 53, 67);
@@ -581,7 +581,7 @@ public class IntegerGeneTest
    */
   public void testCompareTo_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene1 = new IntegerGene(conf, 13, 65);
     gene1.setAllele(new Integer(0));
     Gene gene2 = new IntegerGene2(conf, 53, 67);
@@ -822,7 +822,7 @@ public class IntegerGeneTest
    */
   public void testSetToRandomValue_2()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene = new IntegerGene(conf, -2, -1);
     gene.setAllele(new Integer(4));
     gene.setToRandomValue(new RandomGeneratorForTest(0.8d));
@@ -872,7 +872,7 @@ public class IntegerGeneTest
    */
   public void testSetToRandomValue_5()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Gene gene = new IntegerGene(conf, 1, 3);
     gene.setAllele(new Integer(4));
     gene.setToRandomValue(new RandomGeneratorForTest(0.95d));

@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.66 $";
+  private final static String CVS_REVISION = "$Revision: 1.67 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -97,8 +97,8 @@ public class GenotypeTest
   public void testConstruct_2()
       throws Exception {
     Chromosome[] chroms = new Chromosome[1];
-    chroms[0] = new Chromosome(new ConfigurationForTest(), new Gene[] {
-      new IntegerGene(new ConfigurationForTest(), 1, 5)
+    chroms[0] = new Chromosome(new ConfigurationForTesting(), new Gene[] {
+      new IntegerGene(new ConfigurationForTesting(), 1, 5)
     });
     try {
       new Genotype(null, chroms);
@@ -353,7 +353,7 @@ public class GenotypeTest
    */
   public void testEvolve_0()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     // Remove all natural selectors
     config.removeNaturalSelectors(false);
     config.removeNaturalSelectors(true);
@@ -379,7 +379,7 @@ public class GenotypeTest
       throws Exception {
     // override setFF in order to set the BulkFitnessFunction although
     // ConfigurationForTest set an ordinary FF beforehand
-    Configuration config = new ConfigurationForTest() {
+    Configuration config = new ConfigurationForTesting() {
       public synchronized void setFitnessFunction(FitnessFunction
           a_functionToSet)
           throws InvalidConfigurationException {
@@ -403,7 +403,7 @@ public class GenotypeTest
    */
   public void testEvolve_2_1()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setKeepPopulationSizeConstant(false);
     // Remove all natural selectors.
     // -----------------------------
@@ -430,7 +430,7 @@ public class GenotypeTest
    */
   public void testEvolve_2_3()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setKeepPopulationSizeConstant(false);
     // Select only 3/4 of previous generation and and thus try to mutate only
     // on 3/4 of the chromosomes in the population.
@@ -478,7 +478,7 @@ public class GenotypeTest
    */
   public void testEvolve_2_2()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     // Add another NaturalSelector (some already exist within
     // ConfigurationForTest).
     // ------------------------------------------------------
@@ -502,7 +502,7 @@ public class GenotypeTest
    */
   public void testEvolve_3_1()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setKeepPopulationSizeConstant(true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
     int popSize = config.getPopulationSize();
@@ -520,7 +520,7 @@ public class GenotypeTest
    */
   public void testEvolve_3_2()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setSelectFromPrevGen(1.0d);
     // Overwrite default setting.
     // --------------------------
@@ -541,7 +541,7 @@ public class GenotypeTest
    */
   public void testEvolve_3_25()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     rand.setNextInt(0);
     config.setRandomGenerator(rand);
@@ -565,7 +565,7 @@ public class GenotypeTest
    */
   public void testEvolve_3_26()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     RandomGeneratorForTest rand = new RandomGeneratorForTest();
     // A Chromosome has 3 genes here. We let every 6th gene mutate, thus every
     // second Chromosome.
@@ -595,7 +595,7 @@ public class GenotypeTest
    */
   public void testEvolve_3_3()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     // Remove all natural selectors
     config.removeNaturalSelectors(false);
     config.removeNaturalSelectors(true);
@@ -618,7 +618,7 @@ public class GenotypeTest
    */
   public void testEvolve_5_1()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
     Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
@@ -646,7 +646,7 @@ public class GenotypeTest
    */
   public void testEvolve_5_2()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
     Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
@@ -673,7 +673,7 @@ public class GenotypeTest
    */
   public void testEvolve_5_3()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     Gene[] genes = new Gene[] {
         new BooleanGene(conf)};
     Configuration.resetProperty(Configuration.PROPERTY_SAMPLE_CHROM_INST);
@@ -733,7 +733,7 @@ public class GenotypeTest
    */
   public void testEvolve_6()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     Genotype genotype = Genotype.randomInitialGenotype(config);
     genotype.setPopulation(null);
     try {
@@ -754,7 +754,7 @@ public class GenotypeTest
    */
   public void testEvolve_7()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setMinimumPopSizePercent(290);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
@@ -775,7 +775,7 @@ public class GenotypeTest
    */
   public void testEvolve_8()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setMinimumPopSizePercent(290);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
@@ -798,7 +798,7 @@ public class GenotypeTest
    */
   public void testEvolve_9()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     config.setMinimumPopSizePercent(290);
     // Overwrite default setting
     config.setKeepPopulationSizeConstant(!true);
@@ -995,7 +995,7 @@ public class GenotypeTest
    */
   public void testRandomInitialGenotype_4()
       throws Exception {
-    Configuration config = new ConfigurationForTest();
+    Configuration config = new ConfigurationForTesting();
     // Remove all genetic operators
     config.getGeneticOperators().clear();
     config.addNaturalSelector(new WeightedRouletteSelector(), true);
@@ -1260,7 +1260,7 @@ public class GenotypeTest
    */
   public void testIsSerializable_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});
@@ -1277,7 +1277,7 @@ public class GenotypeTest
   public void testdoSerialize_0()
       throws Exception {
     // construct genotype to be serialized
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     Chromosome[] chroms = new Chromosome[1];
     chroms[0] = new Chromosome(conf, new Gene[] {
                                new IntegerGene(conf, 1, 5)});

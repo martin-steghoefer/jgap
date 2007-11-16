@@ -22,7 +22,7 @@ import junit.framework.*;
 public class ConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ConfigurationTest.class);
@@ -901,7 +901,7 @@ public class ConfigurationTest
    */
   public void testToString_0()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.addGeneticOperator(new MutationOperator(conf));
     conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
     conf.addNaturalSelector(new WeightedRouletteSelector(conf), false);
@@ -999,7 +999,7 @@ public class ConfigurationTest
    */
   public void testToString_1()
       throws Exception {
-    Configuration conf = new ConfigurationForTest();
+    Configuration conf = new ConfigurationForTesting();
     conf.getGeneticOperators().clear();
     conf.getNaturalSelectors(false).clear();
     conf.getNaturalSelectors(true).clear();
