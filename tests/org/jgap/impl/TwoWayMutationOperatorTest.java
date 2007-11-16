@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TwoWayMutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TwoWayMutationOperatorTest.class);
@@ -485,7 +485,7 @@ public class TwoWayMutationOperatorTest
     TwoWayMutationOperator mutOp = new TwoWayMutationOperator(conf,
         new DefaultMutationRateCalculator(conf));
     IGeneticOperatorConstraint constraint = new
-        GeneticOperatorConstraintForTest();
+        GeneticOperatorConstraintForTesting();
     conf.getJGAPFactory().setGeneticOperatorConstraint(
         constraint);
     Population pop = new Population(conf, chroms);
@@ -531,7 +531,7 @@ public class TwoWayMutationOperatorTest
     assertEquals(o, op);
   }
 
-  public class GeneticOperatorConstraintForTest
+  public class GeneticOperatorConstraintForTesting
       implements IGeneticOperatorConstraint {
     public boolean isValid(Population a_pop, List a_chromosomes,
                            GeneticOperator a_caller) {

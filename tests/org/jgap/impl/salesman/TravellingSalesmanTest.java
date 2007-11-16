@@ -23,7 +23,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
@@ -51,7 +51,7 @@ public class TravellingSalesmanTest
     // With 7 cities, should find the best solution with score 7
     int oks = 0;
     for (int i = 0; i < 7; i++) {
-      TravellingSalesmanForTest t = new TravellingSalesmanForTest();
+      TravellingSalesmanForTesting t = new TravellingSalesmanForTesting();
       IChromosome optimal = t.findOptimalPath(null);
       if (Integer.MAX_VALUE / 2 - optimal.getFitnessValue() <= 7) {
         oks++;
@@ -69,9 +69,10 @@ public class TravellingSalesmanTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetAcceptableCost_0() throws Exception {
-    TravellingSalesmanForTest t = new TravellingSalesmanForTest();
-    assertEquals(-1, t.getAcceptableCost());
+  public void testSetAcceptableCost_0()
+      throws Exception {
+    TravellingSalesmanForTesting t = new TravellingSalesmanForTesting();
+    assertEquals( -1, t.getAcceptableCost());
     t.setAcceptableCost(47);
     assertEquals(47, t.getAcceptableCost());
   }
@@ -82,8 +83,9 @@ public class TravellingSalesmanTest
    * @author Klaus Meffert
    * @since 3.0
    */
-  public void testSetStartOffset_0() throws Exception {
-    TravellingSalesmanForTest t = new TravellingSalesmanForTest();
+  public void testSetStartOffset_0()
+      throws Exception {
+    TravellingSalesmanForTesting t = new TravellingSalesmanForTesting();
     assertEquals(1, t.getStartOffset());
     t.setStartOffset(47);
     assertEquals(47, t.getStartOffset());
@@ -131,7 +133,7 @@ public class TravellingSalesmanTest
    * @author Audrius Meskauskas
    * @version 1.0
    */
-  public class TravellingSalesmanForTest
+  public class TravellingSalesmanForTesting
       extends Salesman {
     /** The number of cities to visit, 7 by default. */
     public static final int CITIES = 7;
@@ -161,8 +163,7 @@ public class TravellingSalesmanTest
 //             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
 //              .getFitnessValue(sample)));
         return sample;
-      }
-      catch (InvalidConfigurationException iex) {
+      } catch (InvalidConfigurationException iex) {
         throw new IllegalStateException(iex.getMessage());
       }
     }
@@ -189,6 +190,5 @@ public class TravellingSalesmanTest
       }
       return Math.abs(A - B);
     }
-
   }
 }

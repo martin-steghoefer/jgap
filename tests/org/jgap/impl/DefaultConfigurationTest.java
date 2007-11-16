@@ -23,7 +23,7 @@ import junit.framework.*;
 public class DefaultConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -70,7 +70,7 @@ public class DefaultConfigurationTest
    */
   public void testConstruct_1() {
     try {
-      Configuration conf = new DefaultConfigForTest();
+      Configuration conf = new DefaultConfigForTesting();
       fail();
     }
     catch (RuntimeException rex) {
@@ -130,7 +130,7 @@ public class DefaultConfigurationTest
                  theClone.getGeneticOperators().get(1).getClass());
   }
 
-  class DefaultConfigForTest
+  class DefaultConfigForTesting
       extends DefaultConfiguration {
     public void setRandomGenerator(RandomGenerator a_generatorToSet)
         throws InvalidConfigurationException {

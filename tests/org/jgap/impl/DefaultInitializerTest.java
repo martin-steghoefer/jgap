@@ -21,7 +21,7 @@ import junit.framework.*;
 public class DefaultInitializerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultInitializerTest.class);
@@ -42,8 +42,8 @@ public class DefaultInitializerTest
     assertFalse(handler.isHandlerFor(null,DefaultInitializer.class));
     assertFalse(handler.isHandlerFor(new DefaultInitializer(),
                                      DefaultInitializer.class));
-    assertTrue(handler.isHandlerFor(new MyInitializerForTest(),
-                                    MyInitializerForTest.class));
+    assertTrue(handler.isHandlerFor(new MyInitializerForTesting(),
+                                    MyInitializerForTesting.class));
   }
 
   /**
@@ -80,7 +80,7 @@ public class DefaultInitializerTest
     assertEquals(orig, clone);
   }
 
-  public class MyInitializerForTest
+  public class MyInitializerForTesting
       implements IInitializer {
     public boolean isHandlerFor(final Object a_obj, final Class a_class) {
       return true;

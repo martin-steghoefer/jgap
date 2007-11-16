@@ -21,7 +21,7 @@ import java.util.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -167,10 +167,10 @@ public class BaseGeneTest
 //    Genotype.getConfiguration().getJGAPFactory();
     BaseGeneImpl gene = new BaseGeneImpl(conf);
     gene.m_compareTo_result = 0;
-    gene.setApplicationData(new AppDataForTest());
+    gene.setApplicationData(new AppDataForTesting());
     BaseGeneImpl gene2 = new BaseGeneImpl(conf);
     gene2.m_compareTo_result = 0;
-    gene2.setApplicationData(new AppDataForTest());
+    gene2.setApplicationData(new AppDataForTesting());
     gene.setCompareApplicationData(true);
     assertTrue(gene.equals(gene2));
     /**@todo use other than JGAPFactory to be able to receive a null
@@ -393,7 +393,7 @@ public class BaseGeneTest
       return m_allele;
     }
   }
-  class AppDataForTest
+  class AppDataForTesting
       implements IApplicationData {
     public int compareTo(Object o2) {
       return 0;

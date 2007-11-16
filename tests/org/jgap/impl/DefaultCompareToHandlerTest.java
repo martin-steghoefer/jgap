@@ -9,8 +9,8 @@
  */
 package org.jgap.impl;
 
-import java.util.*;
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class DefaultCompareToHandlerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCompareToHandlerTest.class);
@@ -104,12 +104,12 @@ public class DefaultCompareToHandlerTest
   public void testIsHandlerFor_2()
       throws Exception {
     IHandler handler = new DefaultCompareToHandler();
-    Object app = new MyAppDataForTest();
+    Object app = new MyAppDataForTesting();
     assertTrue(handler.isHandlerFor(app, null));
     assertTrue(handler.isHandlerFor(app, app.getClass()));
   }
 
-  class MyAppDataForTest
+  class MyAppDataForTesting
       implements Comparable {
     public int compareTo(Object o) {
       return 0;

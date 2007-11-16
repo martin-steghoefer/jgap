@@ -20,7 +20,7 @@ import junit.framework.*;
 public class BaseRateCalculatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseRateCalculatorTest.class);
@@ -90,7 +90,7 @@ public class BaseRateCalculatorTest
       return true;
     }
   }
-  class AppDataForTest
+  class AppDataForTesting
       implements IApplicationData {
     public int compareTo(Object o2) {
       return 0;

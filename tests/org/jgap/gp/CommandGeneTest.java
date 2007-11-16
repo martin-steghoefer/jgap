@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class CommandGeneTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);
@@ -136,9 +136,9 @@ public class CommandGeneTest
       throws Exception {
     Configuration conf = new ConfigurationForTesting();
     CommandGeneImpl gene = new CommandGeneImpl(m_gpconf);
-    gene.setApplicationData(new AppDataForTest());
+    gene.setApplicationData(new AppDataForTesting());
     CommandGeneImpl gene2 = new CommandGeneImpl(m_gpconf);
-    gene2.setApplicationData(new AppDataForTest());
+    gene2.setApplicationData(new AppDataForTesting());
     gene.setCompareApplicationData(true);
     assertTrue(gene.equals(gene2));
     /**@todo use other than JGAPFactory to be able to receive a null
@@ -279,7 +279,7 @@ public class CommandGeneTest
     }
 
   }
-  class AppDataForTest
+  class AppDataForTesting
       implements IApplicationData {
     public int compareTo(Object o2) {
       return 0;

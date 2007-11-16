@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MutationOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.37 $";
+  private static final String CVS_REVISION = "$Revision: 1.38 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MutationOperatorTest.class);
@@ -114,9 +114,9 @@ public class MutationOperatorTest
     Configuration conf = new DefaultConfiguration();
     conf.setFitnessFunction(new TestFitnessFunction());
     MutationOperator mutOp = new MutationOperator(conf,
-                                                  new
-                                                  DefaultMutationRateCalculator(
-        conf));
+        new
+        DefaultMutationRateCalculator(
+            conf));
     List candChroms = new Vector();
     RandomGeneratorForTesting gen = new RandomGeneratorForTesting();
     gen.setNextInt(9);
@@ -153,9 +153,9 @@ public class MutationOperatorTest
     conf.setPopulationSize(3);
     conf.setRandomGenerator(new StockRandomGenerator());
     MutationOperator mutOp = new MutationOperator(conf,
-                                                  new
-                                                  DefaultMutationRateCalculator(
-        conf));
+        new
+        DefaultMutationRateCalculator(
+            conf));
     Chromosome[] population = new Chromosome[] {
         new Chromosome(conf, new BooleanGene(conf), 9),
         (new Chromosome(conf, new IntegerGene(conf), 4))};
@@ -178,8 +178,7 @@ public class MutationOperatorTest
     try {
       mutOp.operate(new Population(null, population), candChroms);
       fail();
-    }
-    catch (InvalidConfigurationException nex) {
+    } catch (InvalidConfigurationException nex) {
       ; //this is OK
     }
   }
@@ -196,9 +195,9 @@ public class MutationOperatorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     MutationOperator op = new MutationOperator(conf,
-                                               new
-                                               DefaultMutationRateCalculator(
-        conf));
+        new
+        DefaultMutationRateCalculator(
+            conf));
     conf.addGeneticOperator(op);
     RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextInt(0);
@@ -348,9 +347,9 @@ public class MutationOperatorTest
     Chromosome[] chroms = new Chromosome[] {
         chrom1, chrom2};
     MutationOperator mutOp = new MutationOperator(conf,
-                                                  new
-                                                  DefaultMutationRateCalculator(
-        conf));
+        new
+        DefaultMutationRateCalculator(
+            conf));
     Population pop = new Population(conf, chroms);
     mutOp.operate(pop, pop.getChromosomes());
     // now we should have the double number of chromosomes because the target
@@ -396,9 +395,9 @@ public class MutationOperatorTest
     Chromosome[] chroms = new Chromosome[] {
         chrom1, chrom2};
     MutationOperator mutOp = new MutationOperator(conf,
-                                                  new
-                                                  DefaultMutationRateCalculator(
-        conf));
+        new
+        DefaultMutationRateCalculator(
+            conf));
     RandomGeneratorForTesting rn = new RandomGeneratorForTesting();
     rn.setNextInt(0);
     rn.setNextDouble(0.8d);
@@ -421,7 +420,8 @@ public class MutationOperatorTest
     //        -1 + C * 2: see IntegerGene.applyMutation
     assertEquals( (int) Math.round(3 + (10 - 0) * ( -1 + 0.8d * 2)),
                  ( (
-        IntegerGene) ( (CompositeGene) pop.getChromosome(3).getGene(0)).
+                     IntegerGene) ( (CompositeGene) pop.getChromosome(3).
+                                   getGene(0)).
                   geneAt(0)).intValue());
   }
 
@@ -481,11 +481,11 @@ public class MutationOperatorTest
     Chromosome[] chroms = new Chromosome[] {
         chrom1, chrom2};
     MutationOperator mutOp = new MutationOperator(conf,
-                                                  new
-                                                  DefaultMutationRateCalculator(
-        conf));
+        new
+        DefaultMutationRateCalculator(
+            conf));
     IGeneticOperatorConstraint constraint = new
-        GeneticOperatorConstraintForTest();
+        GeneticOperatorConstraintForTesting();
     conf.getJGAPFactory().setGeneticOperatorConstraint(
         constraint);
     Population pop = new Population(conf, chroms);
@@ -531,7 +531,7 @@ public class MutationOperatorTest
     assertEquals(o, op);
   }
 
-  public class GeneticOperatorConstraintForTest
+  public class GeneticOperatorConstraintForTesting
       implements IGeneticOperatorConstraint {
     public boolean isValid(Population a_pop, List a_chromosomes,
                            GeneticOperator a_caller) {

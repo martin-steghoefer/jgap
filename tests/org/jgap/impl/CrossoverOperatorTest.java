@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.30 $";
+  private static final String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -335,7 +335,7 @@ public class CrossoverOperatorTest
       throws Exception {
     DefaultConfiguration conf = new DefaultConfiguration();
     IGeneticOperatorConstraint constraint = new
-        GeneticOperatorConstraintForTest();
+        GeneticOperatorConstraintForTesting();
     conf.getJGAPFactory().setGeneticOperatorConstraint(constraint);
     RandomGeneratorForTesting rand = new RandomGeneratorForTesting();
     rand.setNextIntSequence(new int[] {
@@ -439,7 +439,7 @@ public class CrossoverOperatorTest
     assertEquals(o, op);
   }
 
-  public class GeneticOperatorConstraintForTest
+  public class GeneticOperatorConstraintForTesting
       implements IGeneticOperatorConstraint {
     public boolean isValid(Population a_pop, List a_chromosomes,
                            GeneticOperator a_caller) {

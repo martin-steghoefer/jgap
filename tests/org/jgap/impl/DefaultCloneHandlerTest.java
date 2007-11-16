@@ -23,7 +23,7 @@ import junit.framework.*;
 public class DefaultCloneHandlerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultCloneHandlerTest.class);
@@ -40,7 +40,7 @@ public class DefaultCloneHandlerTest
   public void testIsHandlerFor_0()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    assertFalse(handler.isHandlerFor(null, MyCloneHandlerForTest.class));
+    assertFalse(handler.isHandlerFor(null, MyCloneHandlerForTesting.class));
   }
 
   /**
@@ -53,7 +53,7 @@ public class DefaultCloneHandlerTest
   public void testIsHandlerFor_1()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    assertFalse(handler.isHandlerFor(null, MyClassForTest.class));
+    assertFalse(handler.isHandlerFor(null, MyClassForTesting.class));
   }
 
   /**
@@ -65,7 +65,7 @@ public class DefaultCloneHandlerTest
   public void testIsHandlerFor_2()
       throws Exception {
     IHandler handler = new DefaultCloneHandler();
-    Object app = new MyAppDataForTest();
+    Object app = new MyAppDataForTesting();
     assertTrue(handler.isHandlerFor(app, app.getClass()));
   }
 
@@ -171,7 +171,7 @@ public class DefaultCloneHandlerTest
     }
   }
 
-  class MyAppDataForTest
+  class MyAppDataForTesting
       implements Cloneable {
     public int compareTo(Object o) {
       return 0;
@@ -182,9 +182,9 @@ public class DefaultCloneHandlerTest
       throw new CloneNotSupportedException();
     }
   }
-  class MyCloneHandlerForTest
+  class MyCloneHandlerForTesting
       implements Cloneable {
   }
-  class MyClassForTest {
+  class MyClassForTesting {
   }
 }
