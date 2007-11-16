@@ -14,7 +14,7 @@ import org.jgap.*;
 import junit.framework.*;
 
 /**
- * Tests the MetaConfig class
+ * Tests the MetaConfig class.
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MetaConfigTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // number of chromosomes used in test case
   private final static int NUM_CHROMS = 5;
@@ -35,18 +35,19 @@ public class MetaConfigTest
     return suite;
   }
 
-  public void testSingleton_0() throws Exception {
+  public void testSingleton_0()
+      throws Exception {
     MetaConfig mc = MetaConfig.getInstance();
     assertSame(MetaConfig.getInstance(), mc);
     assertSame(MetaConfig.getInstance(), mc);
   }
 
-  public void testGetConfigProperty_0() throws Exception {
+  public void testGetConfigProperty_0()
+      throws Exception {
     MetaConfig mc = MetaConfig.getInstance();
     List props = mc.getConfigProperty("org.jgap.Configuration");
     assertEquals(4, props.size());
     props = mc.getConfigProperty("org.jgap.impl.TournamentSelector");
     assertEquals(1, props.size());
   }
-
 }
