@@ -14,13 +14,17 @@ import org.jgap.*;
 
 /**
  * The averaging crossover operator randomly selects two Chromosomes from the
- * population and "mates" them by randomly picking a gene and then
- * swapping that gene and all subsequent genes between the two
- * Chromosomes. The two modified Chromosomes are then added to the
- * list of candidate Chromosomes. This operation is performed half
- * as many times as there are Chromosomes in the population.
+ * population and "mates" them by randomly picking a gene and then swapping that
+ * gene and all subsequent genes between the two Chromosomes. The two modified
+ * Chromosomes are then added to the list of candidate Chromosomes. This
+ * operation is performed half as many times as there are Chromosomes in
+ * the population.
  * Additionally, the loci of crossing over are cached for each index, i.e.,
- * after randomizing the loci for each index once, they don't change again
+ * after randomizing the loci for each index once, they don't change again.
+ *
+ * If you work with CompositeGene's, this operator expects them to contain
+ * genes of the same type (e.g. IntegerGene). If you have mixed types, please
+ * provide your own crossover operator.
  *
  * @author Klaus Meffert
  * @since 2.0
@@ -28,7 +32,7 @@ import org.jgap.*;
 public class AveragingCrossoverOperator
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * Random generator for randomizing the loci for crossing over
@@ -193,7 +197,8 @@ public class AveragingCrossoverOperator
       Gene gene2;
       Object firstAllele;
       for (int j = locus; j < firstGenes.length; j++) {
-        // Make a distinction to ICompositeGene for the first gene
+        // Make a distinction to ICompositeGene for the first gene.
+        // --------------------------------------------------------
         if (firstGenes[j] instanceof ICompositeGene) {
           // Randomly determine gene to be considered
           index1 = generator.nextInt(firstGenes[j].size());
@@ -202,7 +207,8 @@ public class AveragingCrossoverOperator
         else {
           gene1 = firstGenes[j];
         }
-        // Make a distinction to ICompositeGene fot the second gene
+        // Make a distinction to ICompositeGene for the second gene.
+        // ---------------------------------------------------------
         if (secondGenes[j] instanceof CompositeGene) {
           // Randomly determine gene to be considered
           index2 = generator.nextInt(secondGenes[j].size());
@@ -268,7 +274,7 @@ public class AveragingCrossoverOperator
   }
 
   /**
-   * Compares the given GeneticOperator to this GeneticOperator.
+   * Compares the given object to this one.
    *
    * @param a_other the instance against which to compare this instance
    * @return a negative number if this instance is "less than" the given

@@ -19,6 +19,10 @@ import org.jgap.*;
  * Chromosomes. The two modified Chromosomes are then added to the
  * list of candidate Chromosomes.
  *
+ * If you work with CompositeGene's, this operator expects them to contain
+ * genes of the same type (e.g. IntegerGene). If you have mixed types, please
+ * provide your own crossover operator.
+ *
  * This CrossoverOperator supports both fixed and dynamic crossover rates.
  * A fixed rate is one specified at construction time by the user. This
  * operation is performed 1/m_crossoverRate as many times as there are
@@ -34,7 +38,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -301,7 +305,7 @@ public class CrossoverOperator
   }
 
   /**
-   * Compares the given GeneticOperator to this GeneticOperator.
+   * Compares the given object to this one.
    *
    * @param a_other the instance against which to compare this instance
    * @return a negative number if this instance is "less than" the given

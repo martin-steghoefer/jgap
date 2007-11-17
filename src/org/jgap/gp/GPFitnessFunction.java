@@ -18,7 +18,7 @@ package org.jgap.gp;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -28,6 +28,16 @@ public abstract class GPFitnessFunction
    * The fitness value computed during the previous run
    */
   private double m_lastComputedFitnessValue = NO_FITNESS_VALUE;
+
+  /**
+   * Default constructor, may be needed for dynamic instantiation.
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+  public void GPFitnessFunction() {
+
+  }
 
   /**
    * Retrieves the fitness value of the given GPProgram. The fitness
