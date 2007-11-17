@@ -29,7 +29,7 @@ import org.jgap.audit.*;
  */
 public class CoinsExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -98,7 +98,7 @@ public class CoinsExample {
     pconf.addNaturalSelectorSlot(new BestChromosomesSelector(conf));
     pconf.addNaturalSelectorSlot(new WeightedRouletteSelector(conf));
     pconf.addRandomGeneratorSlot(new StockRandomGenerator());
-    RandomGeneratorForTest rn = new RandomGeneratorForTest();
+    RandomGeneratorForTesting rn = new RandomGeneratorForTesting();
     rn.setNextDouble(0.7d);
     rn.setNextInt(2);
     pconf.addRandomGeneratorSlot(rn);
