@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -371,6 +371,10 @@ public class GPGenotype
       throw new IllegalArgumentException("a_argTypes must have same length"
                                          +
           " as a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
+    }
+    if (a_conf.getPopulationSize() < 1) {
+      throw new IllegalArgumentException("Set the population size in the"
+                                         +" configuration!");
     }
     // Clean up memory.
     // ----------------
