@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.68 $";
+  private final static String CVS_REVISION = "$Revision: 1.69 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -365,6 +365,9 @@ public class GenotypeTest
         * config.getSampleChromosome().getGenes().length;
     genotype.evolve(1);
     assertTrue(popSize >= genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -390,6 +393,9 @@ public class GenotypeTest
     // Just test that the following runs without error by trusting exception
     // handling
     genotype.evolve();
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -417,6 +423,9 @@ public class GenotypeTest
     int popSize = config.getPopulationSize();
     genotype.evolve();
     assertEquals(popSize, genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -467,6 +476,9 @@ public class GenotypeTest
                  DELTA);
     assertEquals( (int) Math.round(popSize * config.getSelectFromPrevGen() + 1),
                        genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -490,6 +502,9 @@ public class GenotypeTest
     int popSize = config.getPopulationSize();
     genotype.evolve();
     assertEquals(popSize, genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -508,6 +523,9 @@ public class GenotypeTest
     int popSize = config.getPopulationSize();
     genotype.evolve(2);
     assertEquals(popSize, genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -529,6 +547,9 @@ public class GenotypeTest
     int popSize = config.getPopulationSize();
     genotype.evolve();
     assertTrue(popSize < genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -553,6 +574,9 @@ public class GenotypeTest
     Genotype genotype = Genotype.randomInitialGenotype(config);
     genotype.evolve();
     assertEquals(200*2,genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -583,6 +607,9 @@ public class GenotypeTest
     // 50 %, or 200/2 with 200 = population size.
     // -----------------------------------------------------------------------
     assertEquals(200+200/2,genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -763,6 +790,9 @@ public class GenotypeTest
     Genotype genotype = Genotype.randomInitialGenotype(config);
     genotype.evolve(1);
     assertEquals( (int) (10 * 290.0 / 100), genotype.getPopulation().size());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -786,6 +816,9 @@ public class GenotypeTest
     IChromosome fittest = genotype.getFittestChromosome();
     genotype.evolve(1);
     assertEquals(fittest, genotype.getFittestChromosome());
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -806,6 +839,9 @@ public class GenotypeTest
     config.setPreservFittestIndividual(true);
     Genotype genotype = Genotype.randomInitialGenotype(config);
     genotype.evolve(1);
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
   /**
@@ -836,6 +872,9 @@ public class GenotypeTest
 
     Genotype genotype = Genotype.randomInitialGenotype(conf);
     genotype.evolve(1);
+    // Ensure all chromosomes are unique in the population.
+    // ----------------------------------------------------
+    assertTrue(uniqueChromosomes(genotype.getPopulation()));
   }
 
 
