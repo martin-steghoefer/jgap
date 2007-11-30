@@ -12,6 +12,7 @@
 * Renamed all aux. test classes from xxxForTest to
   xxxForTesting
 * Fixed Maven pom file (thanx to Fabian)
+* Enhanced Genotype tests to check for unique chromosomes
 
 3.3
 -----------------------------------------------------------
