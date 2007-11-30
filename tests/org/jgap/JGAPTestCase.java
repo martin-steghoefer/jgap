@@ -24,7 +24,7 @@ import org.jgap.impl.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -204,4 +204,26 @@ public abstract class JGAPTestCase
     Object parentField = privateAccessor.getField(a_instance, a_parentFieldName);
     privateAccessor.setField(parentField, a_childFieldName, a_value);
   }
+
+  /**
+   * @param a_pop the population to verify
+   * @return true if all chromosomes in the populationa are unique
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+  public boolean uniqueChromosomes(Population a_pop) {
+    // Check that all chromosomes are unique
+    for(int i=0;i<a_pop.size()-1;i++) {
+      IChromosome c = a_pop.getChromosome(i);
+      for(int j=i+1;j<a_pop.size();j++) {
+        IChromosome c2 =a_pop.getChromosome(j);
+        if (c == c2) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
 }
