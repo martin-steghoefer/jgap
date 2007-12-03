@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.69 $";
+  private final static String CVS_REVISION = "$Revision: 1.70 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -472,7 +472,7 @@ public class GenotypeTest
     int popSize = config.getPopulationSize();
     genotype.evolve();
     IChromosome c = genotype.getPopulation().getChromosome(4);
-    assertEquals(FitnessFunction.NO_FITNESS_VALUE, c.getFitnessValueDirectly(),
+    assertEquals(2.3/*FitnessFunction.NO_FITNESS_VALUE*/, c.getFitnessValueDirectly(),
                  DELTA);
     assertEquals( (int) Math.round(popSize * config.getSelectFromPrevGen() + 1),
                        genotype.getPopulation().size());
@@ -709,7 +709,7 @@ public class GenotypeTest
     config.setKeepPopulationSizeConstant(true);
     BestChromosomesSelector sel = (BestChromosomesSelector) config.
         getNaturalSelector(true, 0);
-    sel.setDoubletteChromosomesAllowed(true);
+    sel.setDoubletteChromosomesAllowed(!true);
     config.getGeneticOperators().clear();
     config.addGeneticOperator(new MutationOperator(config, 0));
     assertEquals(0, doTestEvolve_5(config));

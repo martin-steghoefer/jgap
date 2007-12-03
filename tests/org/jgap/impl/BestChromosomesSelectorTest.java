@@ -22,7 +22,7 @@ import junit.framework.*;
 public class BestChromosomesSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BestChromosomesSelectorTest.class);
@@ -323,8 +323,9 @@ public class BestChromosomesSelectorTest
     assertEquals(bestChrom, bestChroms[1]); //because of originalRate = 0.3
     assertEquals(secondBestChrom, bestChroms[2]);
     assertEquals(thirdBestChrom, bestChroms[3]);
-    // non-unique chromosomes should have been returned
-    assertSame(bestChroms[0], bestChroms[1]);
+    // Non-unique chromosomes should have been returned, although not the same
+    // but a cloned instance!
+    assertEquals(bestChroms[0], bestChroms[1]);
     // receive top 4 chromosomes with original rate = 1
     // ------------------------------------------------
     pop.getChromosomes().clear();
