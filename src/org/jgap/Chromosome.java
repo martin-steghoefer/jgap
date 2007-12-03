@@ -64,7 +64,7 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.94 $";
+  private final static String CVS_REVISION = "$Revision: 1.95 $";
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -376,6 +376,7 @@ public class Chromosome
         else {
           copy = new Chromosome(getConfiguration());
         }
+        copy.setFitnessValue(m_fitnessValue);
       }
       // Clone constraint checker.
       // -------------------------
