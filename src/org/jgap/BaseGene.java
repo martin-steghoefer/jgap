@@ -20,7 +20,7 @@ import org.jgap.util.StringKit;
 public abstract class BaseGene
     implements Gene, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * Delta, useful for comparing doubles and floats.
@@ -371,6 +371,8 @@ public abstract class BaseGene
     Gene result = newGeneInternal();
     result.setConstraintChecker(getConstraintChecker());
     result.setEnergy(getEnergy());
+    /**@todo clone app.data*/
+    result.setApplicationData(getApplicationData());
     return result;
   }
 
