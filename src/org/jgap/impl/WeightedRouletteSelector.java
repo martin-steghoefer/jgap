@@ -14,6 +14,7 @@ import java.math.*;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.util.*;
+import gnu.trove.*;
 
 /**
  * A basic implementation of NaturalSelector that models a roulette wheel.
@@ -32,7 +33,7 @@ import org.jgap.util.*;
 public class WeightedRouletteSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -44,7 +45,7 @@ public class WeightedRouletteSelector
    * and each value is an instance of the SlotCounter inner class, which
    * keeps track of how many slots on the wheel each Chromosome is occupying.
    */
-  private HashMap m_wheel = new HashMap();
+  private THashMap m_wheel = new THashMap();
 
   /**
    * Keeps track of the total number of slots that are in use on the
@@ -202,7 +203,25 @@ public class WeightedRouletteSelector
       selectedChromosome = spinWheel(generator, fitnessValues, counterValues,
                                      chromosomes);
       selectedChromosome.setIsSelectedForNextGeneration(true);
-      a_to_pop.addChromosome(selectedChromosome);
+      if (a_to_pop.contains(selectedChromosome)) {
+        ICloneHandler cloner = getConfiguration().getJGAPFactory().
+            getCloneHandlerFor(selectedChromosome, null);
+        if (cloner != null) {
+          try {
+            a_to_pop.addChromosome( (IChromosome) cloner.perform(
+                selectedChromosome, null, null));
+          } catch (Exception ex) {
+            ex.printStackTrace();
+            a_to_pop.addChromosome(selectedChromosome);
+          }
+        }
+        else {
+          a_to_pop.addChromosome(selectedChromosome);
+        }
+      }
+      else {
+        a_to_pop.addChromosome(selectedChromosome);
+      }
     }
   }
 
@@ -259,7 +278,6 @@ public class WeightedRouletteSelector
       // Increment our ongoing total and see if we've landed on the
       // selected slot.
       // ----------------------------------------------------------
-      currentSlot += a_counterValues[i];
       boolean found;
       if (isFitter2_1) {
         // Introduced DELTA to fix bug 1449651
@@ -267,7 +285,7 @@ public class WeightedRouletteSelector
       }
       else {
         // Introduced DELTA to fix bug 1449651
-        found = currentSlot - selectedSlot <= DELTA;
+        found = Math.abs(currentSlot - selectedSlot) <= DELTA;
       }
       if (found) {
         // Remove one instance of the chromosome from the wheel by
@@ -291,10 +309,13 @@ public class WeightedRouletteSelector
         // -----------------------------------
         return a_chromosomes[i];
       }
+      else {
+        currentSlot += a_counterValues[i];
+      }
     }
     // We have reached here because there were rounding errors when
-    // computing with doubles.
-    // ------------------------------------------------------------
+    // computing with doubles or because the last entry is the right one.
+    // ------------------------------------------------------------------
     return a_chromosomes[a_counterValues.length - 1];
   }
 
@@ -392,14 +413,14 @@ public class WeightedRouletteSelector
   public Object clone() {
     WeightedRouletteSelector result = new WeightedRouletteSelector(
         getConfiguration());
-    result.m_wheel = (HashMap) m_wheel.clone();
+    result.m_wheel = (THashMap) m_wheel.clone();
     result.m_config = new WeightedRouletteSelConfig();
     result.m_config.m_doublettesAllowed = m_config.m_doublettesAllowed;
     return result;
   }
 
   public boolean equals(Object o) {
-    WeightedRouletteSelector other = (WeightedRouletteSelector)o;
+    WeightedRouletteSelector other = (WeightedRouletteSelector) o;
     if (other == null) {
       return false;
     }
@@ -428,7 +449,6 @@ public class WeightedRouletteSelector
      */
     public boolean m_doublettesAllowed;
   }
-
 }
 /**
  * Implements a counter that is used to keep track of the total number of
