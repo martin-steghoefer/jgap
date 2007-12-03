@@ -2,14 +2,18 @@
 -----------------------------------------------------------
 * Introduced mutation of Genetic Programming commands
 * Integrated Robocode 1.4.9 with JGAP
+* Utilized XStream library for serialization issues
 * Added cloning capabilities to many RobocodeJGAP commands
+* Fitness value of original chromosome is set to clone when
+  cloning the chromosome
+* Enabled cloning of application data in genes
 * Moved method niceMemory from GPGenotype to SystemKit
 * Made class IComplexCommand serializable
 * Added execute_object() to ForLoop
 * Fixed output of generation number in GPGenotype.evolve()
 * Briefer log messages in GPGenotype
 * Added default constructor to GPFitnessFunction
-* Renamed all aux. test classes from xxxForTest to
+* Renamed all auxiliary test classes from xxxForTest to
   xxxForTesting
 * Fixed Maven pom file (thanx to Fabian)
 * Enhanced Genotype tests to check for unique chromosomes
