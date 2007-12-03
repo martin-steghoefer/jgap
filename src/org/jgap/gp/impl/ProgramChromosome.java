@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -35,7 +35,7 @@ public class ProgramChromosome
   /**
    * The list of allowed functions/terminals.
    */
-  private transient CommandGene[] m_functionSet;
+  private /*transient*/ CommandGene[] m_functionSet;//was transient until 3.3.1(+)
 
   /**
    * Array to hold the depths of each node.
@@ -186,8 +186,12 @@ public class ProgramChromosome
       ProgramChromosome chrom = new ProgramChromosome( (GPConfiguration)
           getGPConfiguration(), (CommandGene[]) genes);
       chrom.argTypes = (Class[]) argTypes.clone();
-      chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
-      chrom.m_depth = (int[]) m_depth.clone();
+      if (getFunctionSet() != null) {
+        chrom.setFunctionSet( (CommandGene[]) getFunctionSet().clone());
+      }
+      if (m_depth != null) {
+        chrom.m_depth = (int[]) m_depth.clone();
+      }
       chrom.setIndividual(getIndividual());
       return chrom;
     }
