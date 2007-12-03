@@ -38,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -129,6 +129,9 @@ public class MinimizingMakeChange {
     // ---------------------------------------------------------------
     long startTime = System.currentTimeMillis();
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
+      if (!uniqueChromosomes(population.getPopulation())) {
+        throw new RuntimeException("Invalid state in generation "+i);
+      }
       population.evolve();
     }
     long endTime = System.currentTimeMillis();
@@ -215,4 +218,24 @@ public class MinimizingMakeChange {
     }
   }
 
+  /**
+   * @param a_pop the population to verify
+   * @return true if all chromosomes in the populationa are unique
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+  public static boolean uniqueChromosomes(Population a_pop) {
+    // Check that all chromosomes are unique
+    for(int i=0;i<a_pop.size()-1;i++) {
+      IChromosome c = a_pop.getChromosome(i);
+      for(int j=i+1;j<a_pop.size();j++) {
+        IChromosome c2 =a_pop.getChromosome(j);
+        if (c == c2) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }
