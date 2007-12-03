@@ -3,6 +3,7 @@
 * Introduced mutation of Genetic Programming commands
 * Integrated Robocode 1.4.9 with JGAP
 * Utilized XStream library for serialization issues
+* Utilized trove4J: fast and consistent map replacement
 * Added cloning capabilities to many RobocodeJGAP commands
 * Fitness value of original chromosome is set to clone when
   cloning the chromosome
