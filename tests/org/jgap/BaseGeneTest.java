@@ -21,7 +21,7 @@ import java.util.*;
 public class BaseGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BaseGeneTest.class);
@@ -353,7 +353,7 @@ public class BaseGeneTest
       extends BaseGene {
     private Object m_allele;
 
-    private int m_compareTo_result;
+    protected int m_compareTo_result;
 
     public int compareTo(Object a_o) {
       return m_compareTo_result;
