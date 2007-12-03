@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -106,7 +106,25 @@ public class BestChromosomesSelector
     }
     // New chromosome, insert it into the sorted collection of chromosomes
     a_chromosomeToAdd.setIsSelectedForNextGeneration(false);
-    m_chromosomes.addChromosome(a_chromosomeToAdd);
+    if (getDoubletteChromosomesAllowed()) {
+      ICloneHandler cloner = getConfiguration().getJGAPFactory().
+          getCloneHandlerFor(a_chromosomeToAdd, null);
+      if (cloner != null) {
+        try {
+          m_chromosomes.addChromosome( (IChromosome) cloner.perform(
+              a_chromosomeToAdd, null, null));
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          m_chromosomes.addChromosome(a_chromosomeToAdd);
+        }
+      }
+      else {
+        m_chromosomes.addChromosome(a_chromosomeToAdd);
+      }
+    }
+    else {
+      m_chromosomes.addChromosome(a_chromosomeToAdd);
+    }
     // Indicate that the list of chromosomes to add needs sorting.
     // -----------------------------------------------------------
     m_needsSorting = true;
@@ -179,9 +197,18 @@ public class BestChromosomesSelector
       // Add existing Chromosome's to fill up the return
       // result to contain the desired number of Chromosome's.
       // -----------------------------------------------------
-      /**@todo replace this step by adding newly to create chromosomes*/
       for (int i = 0; i < toAdd; i++) {
         selectedChromosome = m_chromosomes.getChromosome(i % chromsSize);
+        ICloneHandler cloner = getConfiguration().getJGAPFactory().
+            getCloneHandlerFor(selectedChromosome, null);
+        if (cloner != null) {
+          try {
+            selectedChromosome = (IChromosome) cloner.perform(
+                selectedChromosome, null, null);
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
         selectedChromosome.setIsSelectedForNextGeneration(true);
         a_to_pop.addChromosome(selectedChromosome);
       }
