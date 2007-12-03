@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -98,7 +98,6 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_1()
       throws Exception {
-    /**@todo use custom map-impl. to let test pass*/
     DefaultConfiguration conf = new DefaultConfiguration();
     RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.9999d);
@@ -150,7 +149,6 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_2()
       throws Exception {
-    /**@todo use custom map-impl. to let test pass*/
     DefaultConfiguration conf = new DefaultConfiguration();
     RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
     randgen.setNextDouble(0.9999d);
@@ -250,10 +248,9 @@ public class WeightedRouletteSelectorTest
    */
   public void testSelect_4()
       throws Exception {
-    /**@todo use custom map-impl. to let test pass*/
     conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
     RandomGeneratorForTesting randgen = new RandomGeneratorForTesting();
-    randgen.setNextDouble(0.9999d);
+    randgen.setNextDouble(0.3333333333333d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
     selector.setDoubletteChromosomesAllowed(false);
