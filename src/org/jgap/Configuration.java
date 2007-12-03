@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.91 $";
+  private final static String CVS_REVISION = "$Revision: 1.92 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -102,6 +102,15 @@ public class Configuration
   public static final String S_PRE = "pre";
 
   public static final String S_POST = "post";
+
+  /**
+   * Contains a bag of custom properties. Can be empty.
+   * A custom property is such that is not included in the standard JGAP
+   * configuration.
+   *
+   * @since 3.3.1
+   */
+//  private Map m_propertyBag;
 
   private ConfigurationConfigurable m_config = new ConfigurationConfigurable();
 
@@ -328,6 +337,7 @@ public class Configuration
    * @since 1.0
    */
   public Configuration(String a_id, String a_name) {
+//    m_propertyBag = new Hashtable();
     m_id = a_id;
     setName(a_name);
     makeThreadKey();
@@ -1593,6 +1603,37 @@ public class Configuration
   }
 
   /**
+   * Sets a property in the bag.
+   *
+   * Be aware that setting in unserializable value here leads to problems with
+   * distributed computing or other scenarios based on serialization!
+   *
+   * Be aware that cloning may also lead to conflicts
+   * in case you use unsupported object types!
+   *
+   * @param a_propName name of the property to se the value for
+   * @param a_value value of the property
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+//  public void setPropertyInBag(String a_propName, Object a_value) {
+//    m_propertyBag.put(a_propName, a_value);
+//  }
+
+  /**
+   *
+   * @param a_propName name of the property to retrieve the value from
+   * @return value of the property
+   *
+   * @author Klaus Meffert
+   * @since 3.3.1
+   */
+//  public Object getPropertyFromBag(String a_propName) {
+//   return m_propertyBag.get(a_propName);
+//  }
+
+  /**
    * Deserialize the object. Needed to provide a unique ID for each thread the
    * object is used in.
    *
@@ -1693,6 +1734,7 @@ public class Configuration
       result.m_sampleChromosome = (IChromosome)m_sampleChromosome.clone();
       result.m_alwaysCalculateFitness = m_alwaysCalculateFitness;
       result.m_settingsLocked = m_settingsLocked;
+//      result.m_propertyBag = (Map)doClone(m_propertyBag);
       // Configurable data.
       // ------------------
       result.m_config = new ConfigurationConfigurable();
@@ -1786,6 +1828,7 @@ public class Configuration
             .append(m_selectFromPrevGen,other.m_selectFromPrevGen)
             .append(m_generationNr, other.m_generationNr)
             .append(m_name, other.m_name)
+//            .append(m_propertyBag, other.m_propertyBag)
             .append(m_settingsLocked, other.m_settingsLocked)
             .toComparison();
       } catch (ClassCastException cex) {
