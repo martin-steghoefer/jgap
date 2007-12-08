@@ -1,3 +1,9 @@
+3.3.2
+-----------------------------------------------------------
+* Added new class RangedSwappingMutationOperator, thanx
+  to Florian
+* Added package description to equalDistribution package
+
 3.3.1
 -----------------------------------------------------------
 * Introduced mutation of Genetic Programming commands
