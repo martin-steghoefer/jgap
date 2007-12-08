@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -35,7 +35,7 @@ public class ProgramChromosome
   /**
    * The list of allowed functions/terminals.
    */
-  private /*transient*/ CommandGene[] m_functionSet;//was transient until 3.3.1(+)
+  private /*transient*/ CommandGene[] m_functionSet;//was transient until 3.3
 
   /**
    * Array to hold the depths of each node.
