@@ -38,7 +38,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -59,6 +59,12 @@ public class CrossoverOperator
   private IUniversalRateCalculator m_crossoverRateCalc;
 
   /**
+   * true: x-over before and after a randomly chosen x-over point
+   * false: only x-over after the chosen point.
+   */
+  private boolean m_allowFullCrossOver;
+
+  /**
    * Constructs a new instance of this CrossoverOperator without a specified
    * crossover rate, this results in dynamic crossover rate being turned off.
    * This means that the crossover rate will be fixed at populationsize/2.<p>
@@ -73,10 +79,7 @@ public class CrossoverOperator
   public CrossoverOperator()
       throws InvalidConfigurationException {
     super(Genotype.getStaticConfiguration());
-    //set the default crossoverRate to be populationsize/2
-    m_crossoverRate = 2;
-    m_crossoverRatePercent = -1;
-    setCrossoverRateCalc(null);
+    init();
   }
 
   /**
@@ -93,11 +96,22 @@ public class CrossoverOperator
   public CrossoverOperator(final Configuration a_configuration)
       throws InvalidConfigurationException {
     super(a_configuration);
+    init();
+  }
+
+  /**
+   * Initializes certain parameters.
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  protected void init() {
     // Set the default crossoverRate to be populationsize/2.
     // -----------------------------------------------------
     m_crossoverRate = 2;
     m_crossoverRatePercent = -1;
     setCrossoverRateCalc(null);
+    setAllowFullCrossOver(true);
   }
 
   /**
@@ -118,8 +132,32 @@ public class CrossoverOperator
                            final IUniversalRateCalculator
                            a_crossoverRateCalculator)
       throws InvalidConfigurationException {
+    this(a_configuration, a_crossoverRateCalculator, true);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with a specified
+   * crossover rate calculator, which results in dynamic crossover being turned
+   * on.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_crossoverRateCalculator calculator for dynamic crossover rate
+   * computation
+   * @param a_allowFullCrossOver true: x-over before AND after x-over point,
+   * false: only x-over after x-over point
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public CrossoverOperator(final Configuration a_configuration,
+                           final IUniversalRateCalculator
+                           a_crossoverRateCalculator,
+                           boolean a_allowFullCrossOver)
+      throws InvalidConfigurationException {
     super(a_configuration);
     setCrossoverRateCalc(a_crossoverRateCalculator);
+    setAllowFullCrossOver(a_allowFullCrossOver);
   }
 
   /**
@@ -137,6 +175,26 @@ public class CrossoverOperator
   public CrossoverOperator(final Configuration a_configuration,
                            final int a_desiredCrossoverRate)
       throws InvalidConfigurationException {
+    this(a_configuration, a_desiredCrossoverRate, true);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with the given
+   * crossover rate.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_desiredCrossoverRate the desired rate of crossover
+   * @param a_allowFullCrossOver true: x-over before AND after x-over point,
+   * false: only x-over after x-over point
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public CrossoverOperator(final Configuration a_configuration,
+                           final int a_desiredCrossoverRate,
+                           boolean a_allowFullCrossOver)
+      throws InvalidConfigurationException {
     super(a_configuration);
     if (a_desiredCrossoverRate < 1) {
       throw new IllegalArgumentException("Crossover rate must be greater zero");
@@ -144,6 +202,7 @@ public class CrossoverOperator
     m_crossoverRate = a_desiredCrossoverRate;
     m_crossoverRatePercent = -1;
     setCrossoverRateCalc(null);
+    setAllowFullCrossOver(a_allowFullCrossOver);
   }
 
   /**
@@ -162,6 +221,27 @@ public class CrossoverOperator
   public CrossoverOperator(final Configuration a_configuration,
                            final double a_crossoverRatePercentage)
       throws InvalidConfigurationException {
+    this(a_configuration, a_crossoverRatePercentage, true);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with the given
+   * crossover rate.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_crossoverRatePercentage the desired rate of crossover in
+   * percentage of the population
+   * @param a_allowFullCrossOver true: x-over before AND after x-over point,
+   * false: only x-over after x-over point
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2.
+   */
+  public CrossoverOperator(final Configuration a_configuration,
+                           final double a_crossoverRatePercentage,
+      boolean a_allowFullCrossOver)
+      throws InvalidConfigurationException {
     super(a_configuration);
     if (a_crossoverRatePercentage <= 0.0d) {
       throw new IllegalArgumentException("Crossover rate must be greater zero");
@@ -169,6 +249,7 @@ public class CrossoverOperator
     m_crossoverRatePercent = a_crossoverRatePercentage;
     m_crossoverRate = -1;
     setCrossoverRateCalc(null);
+    setAllowFullCrossOver(a_allowFullCrossOver);
   }
 
   /**
@@ -197,7 +278,7 @@ public class CrossoverOperator
       numCrossovers = size / m_crossoverRateCalc.calculateCurrentRate();
     }
     else {
-      numCrossovers = (int)(size * m_crossoverRatePercent);
+      numCrossovers = (int) (size * m_crossoverRatePercent);
     }
     RandomGenerator generator = getConfiguration().getRandomGenerator();
     IGeneticOperatorConstraint constraint = getConfiguration().
@@ -339,8 +420,56 @@ public class CrossoverOperator
         return -1;
       }
     }
+    if (m_allowFullCrossOver != op.m_allowFullCrossOver) {
+      if (m_allowFullCrossOver) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    }
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
+  }
+
+  /**
+   * @param a_allowFullXOver x-over before and after a randomly chosen point
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void setAllowFullCrossOver(boolean a_allowFullXOver) {
+    m_allowFullCrossOver = a_allowFullXOver;
+  }
+
+  /**
+   * @return x-over before and after a randomly chosen x-over point
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public boolean isAllowFullCrossOver() {
+    return m_allowFullCrossOver;
+  }
+
+  /**
+   * @return the crossover rate set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public int getCrossOverRate() {
+    return m_crossoverRate;
+  }
+
+  /**
+   * @return the crossover rate set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public double getCrossOverRatePercent() {
+    return m_crossoverRatePercent;
   }
 }
