@@ -6,6 +6,8 @@
 * Enhanced CrossOver class: full x-over selected by default
 * Added new unit tests
 * Added one-file PDF documentation, thanx to Denis
+* Equipped MapGene and SetGene with fast trove4j maps
+* Made all tests for MapGene and SetGene pass
 
 3.3.1
 -----------------------------------------------------------
