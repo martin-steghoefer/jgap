@@ -24,7 +24,7 @@ import org.jgap.impl.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -224,6 +224,19 @@ public abstract class JGAPTestCase
       }
     }
     return true;
+  }
+
+  /**
+   * Helper for assertion comparing two doubles with a JGAP-wide delta.
+   *
+   * @param a_one first double to compare
+   * @param a_two second double to compare
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void assertEquals(double a_one, double a_two) {
+    assertEquals(a_one, a_two, DELTA);
   }
 
 }
