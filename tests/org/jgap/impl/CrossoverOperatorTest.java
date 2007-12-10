@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.31 $";
+  private static final String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -59,8 +59,7 @@ public class CrossoverOperatorTest
     try {
       new CrossoverOperator(conf, 0);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
   }
@@ -75,10 +74,93 @@ public class CrossoverOperatorTest
     try {
       new CrossoverOperator(new DefaultConfiguration(), -3);
       fail();
-    }
-    catch (IllegalArgumentException iex) {
+    } catch (IllegalArgumentException iex) {
       ; //this is OK
     }
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testConstruct_4()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator(conf, 5);
+    assertSame(conf, op.getConfiguration());
+    assertTrue(op.isAllowFullCrossOver());
+    assertEquals(5, op.getCrossOverRate());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testConstruct_5()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator(conf, 3, false);
+    assertSame(conf, op.getConfiguration());
+    assertFalse(op.isAllowFullCrossOver());
+    assertEquals(3, op.getCrossOverRate());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testConstruct_6()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator(conf, 1, true);
+    assertSame(conf, op.getConfiguration());
+    assertTrue(op.isAllowFullCrossOver());
+    assertEquals(1, op.getCrossOverRate());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testConstruct_7()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator(conf, 1.2d);
+    assertSame(conf, op.getConfiguration());
+    assertTrue(op.isAllowFullCrossOver());
+    assertEquals(1.2d, op.getCrossOverRatePercent(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testConstruct_8()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator(conf, 4.2d, true);
+    assertSame(conf, op.getConfiguration());
+    assertTrue(op.isAllowFullCrossOver());
+    assertEquals(4.2d, op.getCrossOverRatePercent(), DELTA);
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testConstruct_9()
+      throws Exception {
+    CrossoverOperator op = new CrossoverOperator(conf, 18.0d, false);
+    assertSame(conf, op.getConfiguration());
+    assertFalse(op.isAllowFullCrossOver());
+    assertEquals(18.0d, op.getCrossOverRatePercent(), DELTA);
   }
 
   /**
@@ -190,9 +272,9 @@ public class CrossoverOperatorTest
     gene1.setAllele(new Integer(5));
     chroms.add(gene1);
     CrossoverOperator op = new CrossoverOperator(conf,
-                                                 new
-                                                 DefaultCrossoverRateCalculator(
-        conf));
+        new
+        DefaultCrossoverRateCalculator(
+            conf));
     op.operate(new Population(conf, population), chroms);
     // chroms size = 1 + 2 genes
     //               1 = number of already existent genes
@@ -412,9 +494,9 @@ public class CrossoverOperatorTest
       throws Exception {
     // construct object to be serialized
     CrossoverOperator op = new CrossoverOperator(conf,
-                                                 new
-                                                 DefaultCrossoverRateCalculator(
-        conf));
+        new
+        DefaultCrossoverRateCalculator(
+            conf));
     CrossoverOperator o = (CrossoverOperator) doSerialize(op);
     assertEquals(o, op);
   }
@@ -432,9 +514,9 @@ public class CrossoverOperatorTest
     Configuration conf = new DefaultConfiguration();
     // construct object to be serialized
     CrossoverOperator op = new CrossoverOperator(conf,
-                                                 new
-                                                 DefaultCrossoverRateCalculator(
-        conf));
+        new
+        DefaultCrossoverRateCalculator(
+            conf));
     CrossoverOperator o = (CrossoverOperator) doSerialize(op);
     assertEquals(o, op);
   }
