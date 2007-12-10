@@ -3,6 +3,9 @@
 * Added new class RangedSwappingMutationOperator, thanx
   to Florian
 * Added package description to equalDistribution package
+* Enhanced CrossOver class: full x-over selected by default
+* Added new unit tests
+* Added one-file PDF documentation, thanx to Denis
 
 3.3.1
 -----------------------------------------------------------
