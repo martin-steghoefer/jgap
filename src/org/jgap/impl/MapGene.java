@@ -12,6 +12,7 @@ package org.jgap.impl;
 import java.lang.reflect.*;
 import java.util.*;
 import org.jgap.*;
+import gnu.trove.*;
 
 /**
  * ATTENTION: This class is preliminary and subject of future adaptations! Use
@@ -33,12 +34,12 @@ import org.jgap.*;
 public class MapGene
     extends BaseGene implements IPersistentRepresentation{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * Container for valid alleles
    */
-  private Map m_geneMap;
+  private THashMap m_geneMap;
 
   /**
    * Represents the constant range of values supported by integers.
@@ -75,7 +76,7 @@ public class MapGene
   public MapGene(final Configuration a_config)
       throws InvalidConfigurationException {
     super(a_config);
-    m_geneMap = new HashMap();
+    m_geneMap = new THashMap();
   }
 
   /**
@@ -91,7 +92,7 @@ public class MapGene
   public MapGene(final Configuration a_config, final Map a_alleles)
       throws InvalidConfigurationException {
     super(a_config);
-    m_geneMap = new HashMap();
+    m_geneMap = new THashMap();
     addAlleles(a_alleles);
   }
 

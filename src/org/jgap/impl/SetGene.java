@@ -11,6 +11,7 @@ package org.jgap.impl;
 
 import java.util.*;
 import org.jgap.*;
+import gnu.trove.*;
 
 /**
  * ATTENTION: This class is preliminary and subject of future adaptations! Use
@@ -27,9 +28,9 @@ import org.jgap.*;
 public class SetGene
     extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
-  private HashSet m_geneSet = new HashSet();
+  private THashSet m_geneSet = new THashSet();
 
   private Object m_value;
 
@@ -103,8 +104,6 @@ public class SetGene
    * @param a_numberGenerator RandomGenerator
    */
   public void setToRandomValue(final RandomGenerator a_numberGenerator) {
-    /**@todo make faster*/
-    /**@todo use custom map-impl.*/
     m_value = m_geneSet.toArray()[a_numberGenerator.nextInt(
         m_geneSet.size())];
   }
