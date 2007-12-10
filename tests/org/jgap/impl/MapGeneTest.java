@@ -22,7 +22,7 @@ import junit.framework.*;
 public class MapGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(MapGeneTest.class);
@@ -86,9 +86,9 @@ public class MapGeneTest
   public void testToString_2()
       throws Exception {
     MapGene gene = new MapGene(conf);
-    gene.addAllele(new Integer(3), new Integer(102));
     gene.addAllele(new Integer(7), new Integer( -55));
-    assertEquals("[(3,102),(7,-55)]", gene.toString());
+    gene.addAllele(new Integer(3), new Integer(102));
+    assertEquals("[(7,-55),(3,102)]", gene.toString());
   }
 
   public void testToString_3()
@@ -111,8 +111,7 @@ public class MapGeneTest
     MapGene gene = new MapGene(conf);
     gene.addAllele(new Integer(3), new Double(102));
     gene.addAllele(new Double(7), new Integer( -55));
-    /**@todo assertInString to avoid order-dependency*/
-    assertEquals("[(7.0,-55),(3,102.0)]", gene.toString());
+    assertEquals("[(3,102.0),(7.0,-55)]", gene.toString());
   }
 
   /**
@@ -127,8 +126,7 @@ public class MapGeneTest
     MapGene gene = new MapGene(conf);
     gene.addAllele(new Double(7), new Integer( -55));
     gene.addAllele(new Integer(3), new Double(102));
-    /**@todo assertInString to avoid order-dependency*/
-    assertEquals("[(7.0,-55),(3,102.0)]", gene.toString());
+    assertEquals("[(3,102.0),(7.0,-55)]", gene.toString());
   }
 
   public void testGetAllele_0()

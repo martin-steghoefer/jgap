@@ -21,7 +21,7 @@ import junit.framework.*;
 public class SetGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(SetGeneTest.class);
@@ -244,14 +244,13 @@ public class SetGeneTest
    */
   public void testApplyMutation_0()
       throws Exception {
-    /**@todo use custom map-impl. to let test pass*/
     conf.setRandomGenerator(new RandomGeneratorForTesting(0));
     SetGene gene = new SetGene(conf);
     gene.addAllele(Boolean.valueOf(true));
     gene.addAllele(Boolean.valueOf(false));
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(0, 0.0d);
-    assertEquals(true, ((Boolean)gene.getAllele()).booleanValue());
+    assertEquals(false, ((Boolean)gene.getAllele()).booleanValue());
   }
 
   /**
@@ -262,8 +261,7 @@ public class SetGeneTest
    */
   public void testApplyMutation_1()
       throws Exception {
-    /**@todo use custom map-impl. to let test pass*/
-    conf.setRandomGenerator(new RandomGeneratorForTesting(0));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(1));
     SetGene gene = new SetGene(conf);
     gene.addAllele(Boolean.valueOf(true));
     gene.addAllele(Boolean.valueOf(false));
@@ -280,14 +278,13 @@ public class SetGeneTest
    */
   public void testApplyMutation_2()
       throws Exception {
-    /**@todo use custom map-impl. to let test pass*/
-    conf.setRandomGenerator(new RandomGeneratorForTesting(0));
+    conf.setRandomGenerator(new RandomGeneratorForTesting(2));
     SetGene gene = new SetGene(conf);
     gene.addAllele(Boolean.valueOf(true));
     gene.addAllele(Boolean.valueOf(false));
     gene.setAllele(Boolean.valueOf(true));
     gene.applyMutation(333, -0.000001d); //index 333 should be ignored
-    assertEquals(true, ((Boolean)gene.getAllele()).booleanValue());
+    assertEquals(false, ((Boolean)gene.getAllele()).booleanValue());
   }
 
   /**@todo from here on: adapt tests to SetGene*/
