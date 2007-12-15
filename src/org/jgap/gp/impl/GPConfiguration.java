@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -593,10 +593,26 @@ public class GPConfiguration
     m_objectiveFunction = a_functionToSet;
   }
 
+  /**
+   * @return true: throw an error during evolution in case a situation is
+   * detected where no function or terminal of a required type is declared
+   * in the GPConfiguration; false: don't throw an error but try a completely
+   * different combination of functions and terminals
+   *
+   * @author Klaus Meffert
+   */
   public boolean isStrictProgramCreation() {
     return m_strictProgramCreation;
   }
 
+  /**
+   * @param a_strict true: throw an error during evolution in case a situation is
+   * detected where no function or terminal of a required type is declared
+   * in the GPConfiguration; false: don't throw an error but try a completely
+   * different combination of functions and terminals
+   *
+   * @author Klaus Meffert
+   */
   public void setStrictProgramCreation(boolean a_strict) {
     m_strictProgramCreation = a_strict;
   }
