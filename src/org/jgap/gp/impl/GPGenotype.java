@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -604,7 +604,12 @@ public class GPGenotype
       LOGGER.info("No best solution (null");
       return;
     }
-    LOGGER.info("Best solution fitness: " + a_best.getFitnessValue());
+    double bestValue = a_best.getFitnessValue();
+    if (Double.isInfinite(bestValue)) {
+      LOGGER.info("No best solution (infinite)");
+      return;
+    }
+    LOGGER.info("Best solution fitness: " + bestValue);
     LOGGER.info("Best solution: " + a_best.toStringNorm(0));
     String depths = "";
     int size = a_best.size();
