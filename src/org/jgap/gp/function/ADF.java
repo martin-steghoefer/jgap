@@ -17,6 +17,14 @@ import org.jgap.gp.impl.*;
 /**
  * Automatically Defined Function (ADF). Works with output of other chromosomes.
  * An ADF is automatically created by ProgramChromosome.
+ * For more information about ADFs see John Koza's book on Genetic Programming.
+ * Or google for "Koza ADF".
+ * For a German explanation, see
+ * see http://www.tu-chemnitz.de/informatik/ThIS/seminare/ws01/gp/singer.pdf
+ * or
+ * http://www.tu-chemnitz.de/informatik/ThIS/seminare/ws01/gp/forbriger.pdf
+ * or
+ * http://www.klaus-meffert.de/download/genetische_programmierung_mit_java.pdf
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -24,7 +32,7 @@ import org.jgap.gp.impl.*;
 public class ADF
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private int m_chromosomeNum;
 
