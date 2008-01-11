@@ -3,12 +3,14 @@
 * Added new class RangedSwappingMutationOperator, thanx
   to Florian
 * Added package description to equalDistribution package
-* Fixed bug in GABreeder with preservation of fittest
+* Fixed bug in GABreeder with preservation of fittest,
+  thanx to Oscar
 * Enhanced CrossOver class: full x-over selected by default
 * Added new unit tests
 * Added one-file PDF documentation, thanx to Denis
 * Equipped MapGene and SetGene with fast trove4j maps
 * Made all tests for MapGene and SetGene pass
+* Enhanced Javadoc, fixed spelling errors
 
 3.3.1
 -----------------------------------------------------------
