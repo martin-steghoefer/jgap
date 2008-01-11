@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public GABreeder() {
     super();
@@ -42,7 +42,7 @@ public class GABreeder
       if (config.isPreserveFittestIndividual()) {
         /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
          * computation*/
-        fittest = pop.determineFittestChromosome(0, originalPopSize - 1);
+        fittest = pop.determineFittestChromosome(0, pop.size() - 1);
       }
     }
     // Adjust population size to configured size (if wanted).
