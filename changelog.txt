@@ -3,6 +3,7 @@
 * Added new class RangedSwappingMutationOperator, thanx
   to Florian
 * Added package description to equalDistribution package
+* Fixed bug in GABreeder with preservation of fittest
 * Enhanced CrossOver class: full x-over selected by default
 * Added new unit tests
 * Added one-file PDF documentation, thanx to Denis
