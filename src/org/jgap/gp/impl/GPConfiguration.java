@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -667,10 +667,11 @@ public class GPConfiguration
                               CommandGene[] a_functionSet, int a_depth,
                               boolean a_grow, int a_childIndex,
                               boolean a_fullProgram) {
-    if (m_nodeValidator == null) {
+    INodeValidator nodeValidator = getNodeValidator();
+    if (nodeValidator == null) {
       return true;
     }
-    return m_nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
+    return nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
                                     a_recurseLevel, a_type, a_functionSet,
                                     a_depth, a_grow, a_childIndex,
                                     a_fullProgram);
