@@ -3,11 +3,12 @@
 * Added new class RangedSwappingMutationOperator, thanx
   to Florian
 * Added package description to equalDistribution package
-+ Added method setMutationRate to class MutationOperator
+* Added method setMutationRate to class MutationOperator
 * Fixed bug in GABreeder with preservation of fittest,
   thanx to Oscar
 * Enhanced CrossOver class: full x-over selected by default
-* Enhanced CrossOver class: allow x-over of new age chroms
+* Enhanced CrossOver class: allow x-over of new age chroms,
+  thanx to Zahir
 * Added new unit tests
 * Added one-file PDF documentation, thanx to Denis
 * Equipped MapGene and SetGene with fast trove4j maps
