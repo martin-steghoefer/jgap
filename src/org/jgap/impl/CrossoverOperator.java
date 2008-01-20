@@ -38,7 +38,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -63,6 +63,11 @@ public class CrossoverOperator
    * false: only x-over after the chosen point.
    */
   private boolean m_allowFullCrossOver;
+
+  /**
+   * true: also x-over chromosomes with age of zero (newly created chromosomes)
+   */
+  private boolean m_xoverNewAge;
 
   /**
    * Constructs a new instance of this CrossoverOperator without a specified
@@ -180,7 +185,7 @@ public class CrossoverOperator
 
   /**
    * Constructs a new instance of this CrossoverOperator with the given
-   * crossover rate.
+   * crossover rate. No new chromosomes are x-overed.
    *
    * @param a_configuration the configuration to use
    * @param a_desiredCrossoverRate the desired rate of crossover
@@ -195,6 +200,29 @@ public class CrossoverOperator
                            final int a_desiredCrossoverRate,
                            boolean a_allowFullCrossOver)
       throws InvalidConfigurationException {
+    this(a_configuration, a_desiredCrossoverRate, a_allowFullCrossOver, false);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with the given
+   * crossover rate.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_desiredCrossoverRate the desired rate of crossover
+   * @param a_allowFullCrossOver true: x-over before AND after x-over point,
+   * false: only x-over after x-over point
+   * @throws InvalidConfigurationException
+   * @param a_xoverNewAge true: also x-over chromosomes with age of zero (newly
+   * created chromosomes)
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public CrossoverOperator(final Configuration a_configuration,
+                           final int a_desiredCrossoverRate,
+                           final boolean a_allowFullCrossOver,
+                           final boolean a_xoverNewAge)
+      throws InvalidConfigurationException {
     super(a_configuration);
     if (a_desiredCrossoverRate < 1) {
       throw new IllegalArgumentException("Crossover rate must be greater zero");
@@ -203,11 +231,12 @@ public class CrossoverOperator
     m_crossoverRatePercent = -1;
     setCrossoverRateCalc(null);
     setAllowFullCrossOver(a_allowFullCrossOver);
+    setXoverNewAge(a_xoverNewAge);
   }
 
   /**
    * Constructs a new instance of this CrossoverOperator with the given
-   * crossover rate.
+   * crossover rate. No new chromosomes are x-overed.
    *
    * @param a_configuration the configuration to use
    * @param a_crossoverRatePercentage the desired rate of crossover in
@@ -226,7 +255,7 @@ public class CrossoverOperator
 
   /**
    * Constructs a new instance of this CrossoverOperator with the given
-   * crossover rate.
+   * crossover rate. No new chromosomes are x-overed.
    *
    * @param a_configuration the configuration to use
    * @param a_crossoverRatePercentage the desired rate of crossover in
@@ -240,7 +269,31 @@ public class CrossoverOperator
    */
   public CrossoverOperator(final Configuration a_configuration,
                            final double a_crossoverRatePercentage,
-      boolean a_allowFullCrossOver)
+                           boolean a_allowFullCrossOver)
+      throws InvalidConfigurationException {
+    this(a_configuration, a_crossoverRatePercentage, a_allowFullCrossOver, false);
+  }
+
+  /**
+   * Constructs a new instance of this CrossoverOperator with the given
+   * crossover rate.
+   *
+   * @param a_configuration the configuration to use
+   * @param a_crossoverRatePercentage the desired rate of crossover in
+   * percentage of the population
+   * @param a_allowFullCrossOver true: x-over before AND after x-over point,
+   * false: only x-over after x-over point
+   * @param a_xoverNewAge true: also x-over chromosomes with age of zero (newly
+   * created chromosomes)
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2.
+   */
+  public CrossoverOperator(final Configuration a_configuration,
+                           final double a_crossoverRatePercentage,
+                           final boolean a_allowFullCrossOver,
+                           final boolean a_xoverNewAge)
       throws InvalidConfigurationException {
     super(a_configuration);
     if (a_crossoverRatePercentage <= 0.0d) {
@@ -428,6 +481,14 @@ public class CrossoverOperator
         return -1;
       }
     }
+    if (m_xoverNewAge != op.m_xoverNewAge) {
+      if (m_xoverNewAge) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    }
     // Everything is equal. Return zero.
     // ---------------------------------
     return 0;
@@ -471,5 +532,27 @@ public class CrossoverOperator
    */
   public double getCrossOverRatePercent() {
     return m_crossoverRatePercent;
+  }
+
+  /**
+   * @param a_xoverNewAge true: also x-over chromosomes with age of zero (newly
+   * created chromosomes)
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void setXoverNewAge(boolean a_xoverNewAge) {
+    m_xoverNewAge = a_xoverNewAge;
+  }
+
+  /**
+   * @return a_xoverNewAge true: also x-over chromosomes with age of zero (newly
+   * created chromosomes)
+   *
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public boolean isXoverNewAge() {
+    return m_xoverNewAge;
   }
 }
