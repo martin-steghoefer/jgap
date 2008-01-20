@@ -38,7 +38,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -303,6 +303,7 @@ public class CrossoverOperator
     m_crossoverRate = -1;
     setCrossoverRateCalc(null);
     setAllowFullCrossOver(a_allowFullCrossOver);
+    setXoverNewAge(a_xoverNewAge);
   }
 
   /**
