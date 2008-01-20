@@ -33,7 +33,7 @@ import org.jgap.data.config.*;
 public class MutationOperator
     extends BaseGeneticOperator implements Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * Calculator for dynamically determining the mutation rate. If set to
@@ -49,9 +49,11 @@ public class MutationOperator
    * Constructs a new instance of this MutationOperator without a specified
    * mutation rate, which results in dynamic mutation being turned on. This
    * means that the mutation rate will be automatically determined by this
-   * operator based upon the number of genes present in the chromosomes.<p>
+   * operator based upon the number of genes present in the chromosomes.
+   * <p>
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
+   *
    * @throws InvalidConfigurationException
    *
    * @author Neil Rotstan
@@ -121,7 +123,7 @@ public class MutationOperator
   /**
    * @param a_population the population of chromosomes from the current
    * evolution prior to exposure to any genetic operators. Chromosomes in this
-   * array should not be modified. Please, notice, that the call in
+   * array should not be modified. Please notice, that the call in
    * Genotype.evolve() to the implementations of GeneticOperator overgoes this
    * due to performance issues
    * @param a_candidateChromosomes the pool of chromosomes that have been
@@ -227,7 +229,8 @@ public class MutationOperator
   }
 
   /**
-   * Helper: mutate all atomic elements of a gene
+   * Helper: mutate all atomic elements of a gene.
+   *
    * @param a_gene the gene to be mutated
    * @param a_generator the generator delivering amount of mutation
    *
@@ -259,6 +262,7 @@ public class MutationOperator
   /**
    * Sets the MutationRateCalculator to be used for determining the strength of
    * mutation.
+   *
    * @param a_mutationRateCalc MutationRateCalculator
    *
    * @author Klaus Meffert
@@ -270,6 +274,21 @@ public class MutationOperator
     if (m_mutationRateCalc != null) {
       m_config.m_mutationRate = 0;
     }
+  }
+
+  /**
+   *
+   * @param a_mutationRate new rate of mutation, expressed as
+   * the denominator of the 1 / X fraction. For example, 1000 would result
+   * in 1/1000 genes being mutated on average. A mutation rate of zero disables
+   * mutation entirely
+   *
+   * @author Klaus Meffert
+   * @since 3.2.2
+   */
+  public void setMutationRate(int a_mutationRate) {
+    m_config.m_mutationRate = a_mutationRate;
+    setMutationRateCalc(null);
   }
 
   /**
