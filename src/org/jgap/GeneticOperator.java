@@ -28,7 +28,7 @@ public interface GeneticOperator
     extends Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.15 $";
+  final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * The operate method will be invoked on each of the genetic operators
@@ -39,7 +39,8 @@ public interface GeneticOperator
    * of the evolutionary phase and/or they may instead reference the
    * candidate Chromosomes, which are the results of prior genetic operators.
    * In either case, only Chromosomes added to the list of candidate
-   * chromosomes will be considered for natural selection.<p>
+   * chromosomes will be considered for natural selection.
+   *
    * The parameters a_population and a_candidateChromosomes may refer to the same
    * list of chromosomes for performance issues. Thus would mean an in-place
    * modification. In ealier JGAP versions it was suggested never modifying the

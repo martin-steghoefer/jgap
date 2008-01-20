@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.92 $";
+  private final static String CVS_REVISION = "$Revision: 1.93 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -899,10 +899,9 @@ public class Configuration
 
   /**
    * Retrieves the genetic operators setup in this Configuration instance.
-   * Note that once this Configuration instance is locked, a new,
-   * immutable list of operators is used and any lists previously
-   * retrieved with this method will no longer reflect the actual
-   * list in use.
+   * Note that once this Configuration instance is locked, a new, immutable list
+   * of operators is used and any lists previously retrieved with this method
+   * will no longer reflect the actual list in use.
    *
    * @return the list of genetic operators
    *

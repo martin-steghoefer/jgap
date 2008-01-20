@@ -30,7 +30,7 @@ import org.jgap.impl.*;
  */
 public class FormulaFinder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static int MIN_WANTED_EVOLUTIONS = 300;
 
@@ -58,7 +58,8 @@ public class FormulaFinder {
   public static final int MAX_TERMS_IN_FUNCTION = 1;
 
   /**
-   * Main method
+   * Main method.
+   *
    * @param args first parameter: if provided = configuration file, if not
    * the default "simpleFormula.properties" is taken
    * @throws Exception
@@ -68,7 +69,8 @@ public class FormulaFinder {
    */
   public static void main(String[] args)
       throws Exception {
-    // Initialize repository of available funktions
+    // Initialize repository of available functions.
+    // ---------------------------------------------
     Repository.init();
     String filename;
     if (args.length > 0) {
@@ -161,7 +163,7 @@ public class FormulaFinder {
     IntegerGene gene;
     for (int i = 0; i < maxTerms; i++) {
       comp = new CompositeGene(conf);
-      // Funtions, constants.
+      // Functions, constants.
       // -------------------
       gene = new IntegerGene(conf, 0, max);
       comp.addGene(gene);
