@@ -33,7 +33,7 @@ import gnu.trove.*;
 public class WeightedRouletteSelector
     extends NaturalSelector implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -220,6 +220,8 @@ public class WeightedRouletteSelector
         }
       }
       else {
+        /**@todo fix age issue, see BestChromosomesSelector*/
+        /**@todo restructure JGAP to free selectors from age, cloning...*/
         a_to_pop.addChromosome(selectedChromosome);
       }
     }
