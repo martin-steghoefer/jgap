@@ -25,7 +25,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelector {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   private TournamentSelectorConfigurable m_config
       = new TournamentSelectorConfigurable();
@@ -191,6 +191,10 @@ public class TournamentSelector
    */
   private class FitnessValueComparator
       implements Comparator {
+
+    public FitnessValueComparator() {
+
+    }
     public int compare(final Object a_first, final Object a_second) {
       IChromosome chrom1 = (IChromosome) a_first;
       IChromosome chrom2 = (IChromosome) a_second;
