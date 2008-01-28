@@ -10,6 +10,7 @@
 package org.jgap;
 
 import java.util.*;
+import gnu.trove.*;
 
 /**
  * The cached fitness function extends the original FitnessFunction
@@ -17,18 +18,44 @@ import java.util.*;
  *
  * @author Dennis Fleurbaaij
  * @author Klaus Meffert
+ * @author Tobias Getrost
  * @since 3.2
  */
 public abstract class CachedFitnessFunction
     extends FitnessFunction {
   /**@todo allow to restrict size of cache / age of entries*/
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   // Cache with the previous results
-  /**@todo implement trove maps*/
-  private Map<String, Double> cachedFitnessValues
-      = new HashMap();
+  private Map<String, Double> cachedFitnessValues;
+
+  /**
+   * Default Constructor ensuring downward compatibility.
+   *
+   * @author Tobias Getrost
+   * @since 3.3.2
+   */
+  public CachedFitnessFunction() {
+    this(new THashMap<String, Double> ());
+  }
+
+  /**
+   * Constructor that allows to use a custom <code>java.util.Map</code>
+   * implementation as cache.<br>
+   * E.g. for multi-threaded fitness calculations one could use one instance of
+   * <code>java.util.concurrent.ConcurrentHashMap</code> for all instances of
+   * the fitness function.
+   *
+   * @param cache <code>java.util.Map</code> data structure used to cache the
+   * fitness values
+   *
+   * @author Tobias Getrost
+   * @since 3.3.2
+   */
+  public CachedFitnessFunction(Map<String, Double> cache) {
+    cachedFitnessValues = cache;
+  }
 
   /**
    * Cached fitness value function.
@@ -85,7 +112,7 @@ public abstract class CachedFitnessFunction
     }
     else if (IPersistentRepresentation.class.isAssignableFrom(clazz)) {
       result = ( (IPersistentRepresentation) a_subject).
-                                getPersistentRepresentation();
+          getPersistentRepresentation();
     }
     else {
       result = null;
