@@ -9,6 +9,8 @@
 * Enhanced CrossOver class: full x-over selected by default
 * Enhanced CrossOver class: allow x-over of new age chroms,
   thanx to Zahir
+* Introduced trove maps to CachedFitnessFunction
+* Enhanced CachedFitnessFunction, thanx to Tobias
 * Added new unit tests
 * Added one-file PDF documentation, thanx to Denis
 * Equipped MapGene and SetGene with fast trove4j maps
