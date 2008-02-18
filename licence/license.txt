@@ -1,4 +1,6 @@
-JGAP dual licence model:
+JGAP - Java Genetic Algorithms and Genetic Programming Package
+
+JGAP dual license model:
 +The MPL may be used if at least $20 have been donated to the JGAP project
  thru PayPal (see http://www.sourceforge.net/projects/jgap).
 +The LGPL may be used anytime for non-commercial projects.
@@ -19,7 +21,7 @@ The Initial Developer of the Original Code is Neil Rotstan. Portions created by
 the Initial Developer are Copyright (C) 2002- 2003 by Neil Rotstan.
 All Rights Reserved.
 Co-Developer of the code and now main developer was/is Klaus Meffert.
-Portions created are Copyright (C) 2003-2007 by Klaus Meffert. All Rights Reserved.
+Portions created are Copyright (C) 2003-2008 by Klaus Meffert. All Rights Reserved.
 
 Contributor(s): all the names of the contributors are added in the source code
 where applicable.
