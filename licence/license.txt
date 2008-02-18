@@ -1,5 +1,7 @@
 JGAP - Java Genetic Algorithms and Genetic Programming Package
 
+Homepage: http://sf.net/jgap
+
 JGAP dual license model:
 +The MPL may be used if at least $20 have been donated to the JGAP project
  thru PayPal (see http://www.sourceforge.net/projects/jgap).
