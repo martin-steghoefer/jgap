@@ -23,7 +23,7 @@ import junit.framework.*;
 public class PopulationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(PopulationTest.class);
@@ -235,6 +235,7 @@ public class PopulationTest
 
   /**
    * Unordered list of fitness values of chroms in population.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -270,6 +271,7 @@ public class PopulationTest
 
   /**
    * Ordered list of fitness values of chroms in population.
+   *
    * @throws Exception
    */
   public void testDetermineFittestChromosome_2()
@@ -294,6 +296,7 @@ public class PopulationTest
   /**
    * Ordered list of fitness values of chroms in population. Use fitness
    * evaluator different from standard one.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -339,6 +342,7 @@ public class PopulationTest
 
   /**
    * Special case exposing a previous bug in method under test.
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -362,7 +366,7 @@ public class PopulationTest
     chromosomes.add(c);
     p.setChromosomes(chromosomes);
     assertEquals(c, p.determineFittestChromosome());
-    // next is important to come into a dangerous situation.
+    // Next is important to come into a dangerous situation.
     c = new Chromosome(conf, g, 10);
     c.setFitnessValue(1); //the fittest!
     p.addChromosome(c);
@@ -370,9 +374,48 @@ public class PopulationTest
   }
 
   /**
+   * Test that the last chromosome in the population is preserved if it is the
+   * fittest one.
+   *
    * @throws Exception
    *
-   * @author Dan Clark,Klaus Meffert
+   * @author Klaus Meffert
+   * @since 3.3.2
+   */
+  public void testDetermineFittestChromosome_2_0()
+      throws Exception {
+    List chromosomes = new ArrayList();
+    Gene g = null;
+    Chromosome c = null;
+    Population p = new Population(conf);
+    conf.reset();
+    // Lower fitness values are better.
+    // --------------------------------
+    conf.setFitnessEvaluator(new MyFitnessEvaluator());
+    // Build the population.
+    // ---------------------
+    g = new DoubleGene(conf);
+    c = new Chromosome(conf, g, 10);
+    c.setFitnessValue(5);
+    chromosomes.add(c);
+    g = new DoubleGene(conf);
+    IChromosome c2 = new Chromosome(conf, g, 10);
+    c2.setFitnessValue(7);
+    chromosomes.add(c2);
+    p.setChromosomes(chromosomes);
+    assertEquals(c, p.determineFittestChromosome(0, p.size()));
+    // Next is important to come into a dangerous situation.
+    c = new Chromosome(conf, g, 10);
+    c.setFitnessValue(1); //the fittest!
+    p.addChromosome(c);
+    assertEquals(c, p.determineFittestChromosome(0, p.size()-1));
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author Dan Clark
+   * @author Klaus Meffert
    * @since 2.6
    */
   public void testDetermineFittestChromosomes_1()
@@ -390,9 +433,11 @@ public class PopulationTest
 
   /**
    * Exposes bug 1422962.
+   *
    * @throws Exception
    *
-   * @author Dan Clark, Klaus Meffert
+   * @author Dan Clark
+   * @author Klaus Meffert
    * @since 2.6
    */
   public void testDetermineFittestChromosomes_2()
@@ -410,9 +455,11 @@ public class PopulationTest
 
   /**
    * Exposes bug 1422962.
+   *
    * @throws Exception
    *
-   * @author Dan Clark, Klaus Meffert
+   * @author Dan Clark
+   * @author Klaus Meffert
    * @since 2.6
    */
   public void testDetermineFittestChromosomes_3()
