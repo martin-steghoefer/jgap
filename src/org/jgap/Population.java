@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class Population
     implements Serializable, ICloneable, IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.62 $";
+  private static final String CVS_REVISION = "$Revision: 1.63 $";
 
   /**
    * The array of Chromosomes that makeup the Genotype's population.
@@ -344,8 +344,9 @@ public class Population
     FitnessEvaluator evaluator = getConfiguration().getFitnessEvaluator();
     double fitness;
     int startIndex = Math.max(0, a_startIndex);
-    int endIndex = Math.min(m_chromosomes.size() - 1, a_endIndex);
-    for (int i = startIndex; i < endIndex; i++) {
+    int endIndex = Math.min(m_chromosomes.size()-1, a_endIndex);
+    m_fittestChromosome = null;
+    for (int i = startIndex; i <= endIndex; i++) {
       IChromosome chrom = (IChromosome) m_chromosomes.get(i);
       fitness = chrom.getFitnessValue();
       if (evaluator.isFitter(fitness, bestFitness)
