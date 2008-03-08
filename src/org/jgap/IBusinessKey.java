@@ -10,7 +10,9 @@
 package org.jgap;
 
 /**
- * Interface for objects that offer a business key.
+ * Interface for objects that offer a business key. A business key helps in
+ * identifying an object uniquely.
+ *
  * @see http://www.hibernate.org/109.html for a discussion on business keys
  *
  * @author Klaus Meffert
@@ -18,7 +20,7 @@ package org.jgap;
  */
 public interface IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * @return business key
