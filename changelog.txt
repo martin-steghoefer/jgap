@@ -8,9 +8,8 @@
   thanx to Oscar
 * Fixed bug in Population with preservation of fittest,
   thanx to Francisco
-* Enhanced CrossOver class: full x-over selected by default
-* Enhanced CrossOver class: allow x-over of new age chroms,
-  thanx to Zahir
+* Enhanced CrossoverOperator: full x-over selected by
+  default; allow x-over of new age chroms (thanx to Zahir)
 * Introduced trove maps to CachedFitnessFunction
 * Enhanced CachedFitnessFunction, thanx to Tobias
 * Added new unit tests
