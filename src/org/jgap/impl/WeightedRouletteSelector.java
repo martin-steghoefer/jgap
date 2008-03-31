@@ -31,9 +31,9 @@ import gnu.trove.*;
  * @since 1.0
  */
 public class WeightedRouletteSelector
-    extends NaturalSelector implements ICloneable {
+    extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -69,27 +69,33 @@ public class WeightedRouletteSelector
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public WeightedRouletteSelector() {
+  public WeightedRouletteSelector()
+      throws InvalidConfigurationException {
     this(Genotype.getStaticConfiguration());
   }
 
   /**
    * @param a_config the configuration to use
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public WeightedRouletteSelector(Configuration a_config) {
+  public WeightedRouletteSelector(Configuration a_config)
+      throws InvalidConfigurationException {
     super(a_config);
     m_counterPool = new Pool();
     m_config.m_doublettesAllowed = false;
   }
 
   /**
-   * Add a Chromosome instance to this selector's working pool of Chromosomes.
+   * Add a chromosome instance to this selector's working pool of chromosomes.
    *
    * @param a_chromosomeToAdd the chromosom to add to the pool
    *
@@ -143,22 +149,14 @@ public class WeightedRouletteSelector
    * guaranteed.
    *
    * @param a_howManyToSelect the number of Chromosomes to select
-   * @param a_from_pop the population the Chromosomes will be selected from
    * @param a_to_pop the population the Chromosomes will be added to
    *
    * @author Neil Rotstan
    * @author Klaus Meffert
    * @since 1.0
    */
-  public synchronized void select(int a_howManyToSelect,
-                                  final Population a_from_pop,
-                                  Population a_to_pop) {
-    if (a_from_pop != null) {
-      int size = a_from_pop.size();
-      for (int i = 0; i < size; i++) {
-        add(a_from_pop.getChromosome(i));
-      }
-    }
+  public synchronized void selectChromosomes(int a_howManyToSelect,
+      Population a_to_pop) {
     RandomGenerator generator = getConfiguration().getRandomGenerator();
     scaleFitnessValues();
     // Build three arrays from the key/value pairs in the wheel map: one
@@ -413,12 +411,16 @@ public class WeightedRouletteSelector
    * @since 3.2
    */
   public Object clone() {
-    WeightedRouletteSelector result = new WeightedRouletteSelector(
-        getConfiguration());
-    result.m_wheel = (THashMap) m_wheel.clone();
-    result.m_config = new WeightedRouletteSelConfig();
-    result.m_config.m_doublettesAllowed = m_config.m_doublettesAllowed;
-    return result;
+    try {
+      WeightedRouletteSelector result = new WeightedRouletteSelector(
+          getConfiguration());
+      result.m_wheel = (THashMap) m_wheel.clone();
+      result.m_config = new WeightedRouletteSelConfig();
+      result.m_config.m_doublettesAllowed = m_config.m_doublettesAllowed;
+      return result;
+    } catch (InvalidConfigurationException iex) {
+      throw new CloneException(iex);
+    }
   }
 
   public boolean equals(Object o) {

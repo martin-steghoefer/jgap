@@ -23,9 +23,9 @@ import org.jgap.*;
  * @since 2.0
  */
 public class TournamentSelector
-    extends NaturalSelector {
+    extends NaturalSelectorExt {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   private TournamentSelectorConfigurable m_config
       = new TournamentSelectorConfigurable();
@@ -42,10 +42,12 @@ public class TournamentSelector
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Siddhartha Azad
    * @author Klaus Meffert
    */
-  public TournamentSelector() {
+  public TournamentSelector() throws InvalidConfigurationException {
     super(Genotype.getStaticConfiguration());
     init();
   }
@@ -60,12 +62,15 @@ public class TournamentSelector
    * @param a_tournament_size the size of each tournament to play
    * @param a_probability probability for selecting the best individuals
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 2.0
    */
   public TournamentSelector(final Configuration a_config,
                             final int a_tournament_size,
-                            final double a_probability) {
+                            final double a_probability)
+  throws InvalidConfigurationException {
     super(a_config);
     init();
     if (a_tournament_size < 1) {
@@ -108,19 +113,12 @@ public class TournamentSelector
    * fitness values. The chromosomes with the best fitness value win.
    *
    * @param a_howManyToSelect int
-   * @param a_from_pop the population the Chromosomes will be selected from
    * @param a_to_pop the population the Chromosomes will be added to
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void select(final int a_howManyToSelect, final Population a_from_pop,
-                     Population a_to_pop) {
-    if (a_from_pop != null) {
-      for (int i = 0; i < a_from_pop.size(); i++) {
-        add(a_from_pop.getChromosome(i));
-      }
-    }
+  public void selectChromosomes(final int a_howManyToSelect, Population a_to_pop) {
     List tournament = new Vector();
     RandomGenerator rn = getConfiguration().getRandomGenerator();
     int size = m_chromosomes.size();
@@ -129,7 +127,8 @@ public class TournamentSelector
     }
     int k;
     for (int i = 0; i < a_howManyToSelect; i++) {
-      // choose [tournament size] individuals from the population at random
+      // Choose [tournament size] individuals from the population at random.
+      // -------------------------------------------------------------------
       tournament.clear();
       for (int j = 0; j < m_config.m_tournament_size; j++) {
         k = rn.nextInt(size);
@@ -173,7 +172,7 @@ public class TournamentSelector
 
   /**
    *
-   * @param a_chromosomeToAdd the Chromosome to add
+   * @param a_chromosomeToAdd the chromosome to add
    *
    * @author Klaus Meffert
    * @since 2.0
