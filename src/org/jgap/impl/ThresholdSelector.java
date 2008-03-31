@@ -20,9 +20,9 @@ import org.jgap.*;
  * @since 2.0
  */
 public class ThresholdSelector
-    extends NaturalSelector {
+    extends NaturalSelectorExt {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -47,10 +47,13 @@ public class ThresholdSelector
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 2.6
    */
-  public ThresholdSelector() {
+  public ThresholdSelector()
+      throws InvalidConfigurationException {
     this(Genotype.getStaticConfiguration(), 0.3d);
   }
 
@@ -60,17 +63,19 @@ public class ThresholdSelector
    * chromosomes from the population to be selected for granted. All other
    * chromosomes will be selected in a random fashion. The value must be in
    * the range from 0.0 to 1.0.
+   * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public ThresholdSelector(final Configuration a_config,
-                           final double a_bestChromosomes_Percentage) {
+                           final double a_bestChromosomes_Percentage)
+      throws InvalidConfigurationException {
     super(a_config);
     if (a_bestChromosomes_Percentage < 0.0000000d
         || a_bestChromosomes_Percentage > 1.0000000d) {
       throw new IllegalArgumentException("Percentage must be between 0.0"
-                                         + " and 1.0 !");
+          + " and 1.0 !");
     }
     m_config.m_bestChroms_Percentage = a_bestChromosomes_Percentage;
     m_chromosomes = new Vector();
@@ -84,20 +89,13 @@ public class ThresholdSelector
    * fitness values. The chromosomes with the best fitness value win.
 
    * @param a_howManyToSelect the number of Chromosomes to select
-   * @param a_from_pop the population the Chromosomes will be selected from
    * @param a_to_pop the population the Chromosomes will be added to
    *
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void select(final int a_howManyToSelect, final Population a_from_pop,
-                     Population a_to_pop) {
-    if (a_from_pop != null) {
-      int size = a_from_pop.size();
-      for (int i = 0; i < size; i++) {
-        add(a_from_pop.getChromosome(i));
-      }
-    }
+  public void selectChromosomes(final int a_howManyToSelect,
+                                Population a_to_pop) {
     int canBeSelected;
     if (a_howManyToSelect > m_chromosomes.size()) {
       canBeSelected = m_chromosomes.size();
@@ -114,7 +112,7 @@ public class ThresholdSelector
     }
     // Select the best chromosomes for granted
     int bestToBeSelected = (int) Math.round(canBeSelected
-                                            * m_config.m_bestChroms_Percentage);
+        * m_config.m_bestChroms_Percentage);
     for (int i = 0; i < bestToBeSelected; i++) {
       a_to_pop.addChromosome( (IChromosome) m_chromosomes.get(i));
     }
@@ -168,6 +166,9 @@ public class ThresholdSelector
    */
   private class FitnessValueComparator
       implements Comparator {
+    public FitnessValueComparator() {
+
+    }
     public int compare(final Object a_first, final Object a_second) {
       IChromosome chrom1 = (IChromosome) a_first;
       IChromosome chrom2 = (IChromosome) a_second;
