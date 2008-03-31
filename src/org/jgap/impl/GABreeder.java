@@ -15,14 +15,14 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public GABreeder() {
     super();
   }
 
   /**
-   * Evolves the population of Chromosomes within a Genotype. This will
+   * Evolves the population of chromosomes within a genotype. This will
    * execute all of the genetic operators added to the present active
    * configuration and then invoke the natural selector to choose which
    * chromosomes will be included in the next generation population.
@@ -30,17 +30,19 @@ public class GABreeder
    * @param a_pop the population to evolve
    * @param a_conf the configuration to use for evolution
    *
+   * @return evolved population
+   *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public Population evolve(Population a_pop, Configuration config) {
+  public Population evolve(Population a_pop, Configuration a_conf) {
     Population pop = a_pop;
-    int originalPopSize = config.getPopulationSize();
+    int originalPopSize = a_conf.getPopulationSize();
     IChromosome fittest = null;
     // If first generation: Set age to one to allow genetic operations,
     // see CrossoverOperator for an illustration.
     // ----------------------------------------------------------------
-    if (config.getGenerationNr() == 0) {
+    if (a_conf.getGenerationNr() == 0) {
       int size = pop.size();
       for (int i = 0; i < size; i++) {
         IChromosome chrom = pop.getChromosome(i);
@@ -51,7 +53,7 @@ public class GABreeder
       // Select fittest chromosome in case it should be preserved and we are
       // not in the very first generation.
       // -------------------------------------------------------------------
-      if (config.isPreserveFittestIndividual()) {
+      if (a_conf.isPreserveFittestIndividual()) {
         /**@todo utilize jobs. In pop do also utilize jobs, especially for fitness
          * computation*/
         fittest = pop.determineFittestChromosome(0, pop.size() - 1);
@@ -66,7 +68,7 @@ public class GABreeder
     // If it is not the last call to evolve() then the next call will
     // ensure the correct population size by calling keepPopSizeConstant.
     // ------------------------------------------------------------------
-    if (config.isKeepPopulationSizeConstant()) {
+    if (a_conf.isKeepPopulationSizeConstant()) {
       try {
         pop.keepPopSizeConstant();
       } catch (InvalidConfigurationException iex) {
@@ -76,7 +78,7 @@ public class GABreeder
     int currentPopSize = pop.size();
     // Ensure all chromosomes are updated.
     // -----------------------------------
-    BulkFitnessFunction bulkFunction = config.getBulkFitnessFunction();
+    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     boolean bulkFitFunc = (bulkFunction != null);
     if (!bulkFitFunc) {
       for (int i = 0; i < currentPopSize; i++) {
@@ -86,16 +88,16 @@ public class GABreeder
     }
     // Apply certain NaturalSelectors before GeneticOperators will be executed.
     // ------------------------------------------------------------------------
-    pop = applyNaturalSelectors(config, pop, true);
+    pop = applyNaturalSelectors(a_conf, pop, true);
     // Execute all of the Genetic Operators.
     // -------------------------------------
-    applyGeneticOperators(config, pop);
+    applyGeneticOperators(a_conf, pop);
     // Reset fitness value of genetically operated chromosomes.
-    // Normally, this should not be necessary as the Chromosome
-    // class initializes each newly created chromosome with
-    // FitnessFunction.NO_FITNESS_VALUE. But who knows which
-    // Chromosome implementation is used...
-    // --------------------------------------------------------
+    // Normally, this should not be necessary as the Chromosome class
+    // initializes each newly created chromosome with
+    // FitnessFunction.NO_FITNESS_VALUE. But who knows which Chromosome
+    // implementation is used...
+    // ----------------------------------------------------------------
     currentPopSize = pop.size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
@@ -121,7 +123,7 @@ public class GABreeder
 
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
-    pop = applyNaturalSelectors(config, pop, false);
+    pop = applyNaturalSelectors(a_conf, pop, false);
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
     if (bulkFunction != null) {
@@ -132,22 +134,22 @@ public class GABreeder
     // Fill up population randomly if size dropped below specified percentage
     // of original size.
     // ----------------------------------------------------------------------
-    if (config.getMinimumPopSizePercent() > 0) {
-      int sizeWanted = config.getPopulationSize();
+    if (a_conf.getMinimumPopSizePercent() > 0) {
+      int sizeWanted = a_conf.getPopulationSize();
       int popSize;
       int minSize = (int) Math.round(sizeWanted *
-                                     (double) config.getMinimumPopSizePercent()
+                                     (double) a_conf.getMinimumPopSizePercent()
                                      / 100);
       popSize = pop.size();
       if (popSize < minSize) {
         IChromosome newChrom;
-        IChromosome sampleChrom = config.getSampleChromosome();
+        IChromosome sampleChrom = a_conf.getSampleChromosome();
         Class sampleChromClass = sampleChrom.getClass();
-        IInitializer chromIniter = config.getJGAPFactory().
+        IInitializer chromIniter = a_conf.getJGAPFactory().
             getInitializerFor(sampleChrom, sampleChromClass);
         while (pop.size() < minSize) {
           try {
-            /**@todo utilize jobs: initialization may be time-consuming as
+            /**@todo utilize jobs as initialization may be time-consuming as
              * invalid combinations may have to be filtered out*/
             newChrom = (IChromosome) chromIniter.perform(sampleChrom,
                 sampleChromClass, null);
@@ -167,10 +169,10 @@ public class GABreeder
     }
     // Increase number of generation.
     // ------------------------------
-    config.incrementGenerationNr();
+    a_conf.incrementGenerationNr();
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
-    config.getEventManager().fireGeneticEvent(
+    a_conf.getEventManager().fireGeneticEvent(
         new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
     return pop;
   }
