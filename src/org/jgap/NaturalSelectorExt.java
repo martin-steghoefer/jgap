@@ -36,22 +36,34 @@ public abstract class NaturalSelectorExt
   /**
    * Default constructor, only needed for dynamic instantiation!
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 3.3.2
    */
-  public NaturalSelectorExt() {
+  public NaturalSelectorExt()
+      throws InvalidConfigurationException {
     super();
+    init(Genotype.getStaticConfiguration());
   }
 
   /**
    *
    * @param a_config the configuration to use
    *
+   * @throws InvalidConfigurationException
+   *
    * @author Klaus Meffert
    * @since 3.3.2
    */
-  public NaturalSelectorExt(Configuration a_config) {
+  public NaturalSelectorExt(Configuration a_config)
+      throws InvalidConfigurationException {
     super(a_config);
+    init(a_config);
+  }
+
+  protected void init(Configuration a_config)
+      throws InvalidConfigurationException {
   }
 
   /**
@@ -100,9 +112,9 @@ public abstract class NaturalSelectorExt
     return true;
   }
 
-  /* Add a Chromosome instance to this selector's working pool of Chromosomes.
+  /* Add a chromosome instance to the selector's working pool of chromosomes.
    * @param a_chromosomeToAdd the specimen to add to the pool
-   *
+
    * @author Klaus Meffert
    * @since 3.3.2
    */
@@ -121,7 +133,7 @@ public abstract class NaturalSelectorExt
    */
   public final synchronized void select(final int a_howManyToSelect,
                                         final Population a_from_pop,
-                                        final Population a_to_pop) {
+                                        Population a_to_pop) {
     if (a_from_pop != null) {
       int popSize = a_from_pop.size();
       if (popSize < 1) {
@@ -131,8 +143,7 @@ public abstract class NaturalSelectorExt
         add(a_from_pop.getChromosome(i));
       }
     }
-    m_to_pop = a_to_pop;
-    selectChromosomes(a_howManyToSelect, a_from_pop);
+    selectChromosomes(a_howManyToSelect, a_to_pop);
   }
 
   /**
