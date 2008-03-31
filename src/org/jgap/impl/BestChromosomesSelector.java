@@ -22,19 +22,14 @@ import org.jgap.util.*;
  * @since 1.1
  */
 public class BestChromosomesSelector
-    extends NaturalSelector implements ICloneable {
+    extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
    */
   private Population m_chromosomes;
-
-  /**
-   * Allows or disallows doublette chromosomes to be added to the selector
-   */
-  private boolean m_doublettesAllowed;
 
   /**
    * Indicated whether the list of added chromosomes needs sorting
@@ -84,7 +79,7 @@ public class BestChromosomesSelector
     super(a_config);
     m_chromosomes = new Population(a_config);
     m_needsSorting = false;
-    m_doublettesAllowed = true;
+    setDoubletteChromosomesAllowed(true);
     setOriginalRate(a_originalRate);
     m_fitnessValueComparator = new FitnessValueComparator();
   }
@@ -135,25 +130,13 @@ public class BestChromosomesSelector
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
    *
-   * @param a_from_pop the population the Chromosomes will be selected from
    * @param a_to_pop the population the Chromosomes will be added to
    * @param a_howManyToSelect the number of Chromosomes to select
    *
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void select(final int a_howManyToSelect,
-                     final Population a_from_pop,
-                     final Population a_to_pop) {
-    if (a_from_pop != null) {
-      int popSize = a_from_pop.size();
-      if (popSize < 1) {
-        throw new IllegalStateException("Population size must be greater 0");
-      }
-      for (int i = 0; i < popSize; i++) {
-        add(a_from_pop.getChromosome(i));
-      }
-    }
+  public void selectChromosomes(final int a_howManyToSelect, Population a_to_pop) {
     int canBeSelected;
     int chromsSize = m_chromosomes.size();
     if (chromsSize < 1) {
@@ -229,33 +212,6 @@ public class BestChromosomesSelector
   }
 
   /**
-   * Determines whether doublette chromosomes may be added to the selector or
-   * will be ignored.
-   *
-   * @param a_doublettesAllowed true: doublette chromosomes allowed to be
-   * added to the selector. FALSE: doublettes will be ignored and not added
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public void setDoubletteChromosomesAllowed(
-      final boolean a_doublettesAllowed) {
-    m_doublettesAllowed = a_doublettesAllowed;
-  }
-
-  /**
-   * @return true: doublette chromosomes allowed to be added to the selector,
-   * false: this is sort of risky and might lead to unexpected population sizes
-   * during evolution!
-   *
-   * @author Klaus Meffert
-   * @since 2.0
-   */
-  public boolean getDoubletteChromosomesAllowed() {
-    return m_doublettesAllowed;
-  }
-
-  /**
    * @return always true as no Chromosome can be returnd multiple times
    *
    * @author Klaus Meffert
@@ -311,7 +267,7 @@ public class BestChromosomesSelector
       return false;
     }
     BestChromosomesSelector other = (BestChromosomesSelector) a_o;
-    if (m_doublettesAllowed != other.m_doublettesAllowed) {
+    if (getDoubletteChromosomesAllowed() != other.getDoubletteChromosomesAllowed()) {
       return false;
     }
     if (!m_fitnessValueComparator.getClass().getName().equals(
@@ -334,7 +290,7 @@ public class BestChromosomesSelector
           getConfiguration(), m_config.m_originalRate);
       sel.m_needsSorting = m_needsSorting;
 //      sel.m_chromosomes = (Population) m_chromosomes.clone();
-      sel.m_doublettesAllowed = m_doublettesAllowed;
+      sel.setDoubletteChromosomesAllowed(getDoubletteChromosomesAllowed());
       return sel;
     } catch (Throwable t) {
       throw new CloneException(t);
