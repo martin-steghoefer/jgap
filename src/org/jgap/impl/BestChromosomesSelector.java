@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -126,12 +126,12 @@ public class BestChromosomesSelector
   }
 
   /**
-   * Selects a given number of Chromosomes from the pool that will move on
+   * Selects a given number of chromosomes from the pool that will move on
    * to the next generation population. This selection will be guided by the
    * fitness values. The chromosomes with the best fitness value win.
    *
-   * @param a_to_pop the population the Chromosomes will be added to
-   * @param a_howManyToSelect the number of Chromosomes to select
+   * @param a_to_pop the population the chromosomes will be added to
+   * @param a_howManyToSelect the number of chromosomes to select
    *
    * @author Klaus Meffert
    * @since 1.1
@@ -139,9 +139,6 @@ public class BestChromosomesSelector
   public void selectChromosomes(final int a_howManyToSelect, Population a_to_pop) {
     int canBeSelected;
     int chromsSize = m_chromosomes.size();
-    if (chromsSize < 1) {
-      throw new IllegalStateException("Number of chromosomes must be greater 0");
-    }
     if (a_howManyToSelect > chromsSize) {
       canBeSelected = chromsSize;
     }
