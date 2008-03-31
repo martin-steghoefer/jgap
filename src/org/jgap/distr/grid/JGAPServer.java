@@ -16,16 +16,19 @@ import org.homedns.dade.jcgrid.server.*;
 import java.io.*;
 
 /**
- * A grid server able receiving work requests from JGAPClients, sending
- * work units to JGAPWorkers, receiving solutions from JGAPWorkers, and
- * sending back these solutions to the requesting JGAPClient.
+ * A grid server is able to:
+ *
+ *   a) receive work requests from JGAPClients
+ *   b) send work units to JGAPWorkers
+ *   c) receive solutions from JGAPWorkers, and
+ *   d) send back these solutions to the requesting JGAPClient.
  *
  * @author Klaus Meffert
  * @since 3.01
  */
 public class JGAPServer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private final static String className = JGAPServer.class.getName();
 
@@ -84,7 +87,6 @@ public class JGAPServer {
       in.close();
       out.close();
   }
-
 
   public static void main(String[] args)
       throws Exception {
