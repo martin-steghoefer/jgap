@@ -15,12 +15,24 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public GABreeder() {
     super();
   }
 
+  /**
+   * Evolves the population of Chromosomes within a Genotype. This will
+   * execute all of the genetic operators added to the present active
+   * configuration and then invoke the natural selector to choose which
+   * chromosomes will be included in the next generation population.
+   *
+   * @param a_pop the population to evolve
+   * @param a_conf the configuration to use for evolution
+   *
+   * @author Klaus Meffert
+   * @since 3.2
+   */
   public Population evolve(Population a_pop, Configuration config) {
     Population pop = a_pop;
     int originalPopSize = config.getPopulationSize();
