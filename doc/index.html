@@ -56,11 +56,39 @@
       <a href="links/links.html"><b><font size="3" face="Microsoft Sans Serif" color="#FFFFFF">Interesting Links</font></b></a>
     </td></tr>
       </table>
-      <p align="center" class="text"><font size="2"><a href="http://sourceforge.net/donate/index.php?group_id=11618">Make a kind
-      donation</a></font><a href="http://sourceforge.net/donate/index.php?group_id=11618"><br>
-      <img
-    src="donate.jpg" alt="Donate to JGAP" width="88" height="32"></a></p>
-      <p align="center">
+      
+      <table>
+      <tr>
+      <td height="20"></td><tr>
+      <td bgcolor="#008000" align="center">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<table  class="donate">
+  <tr><td colspan=3>
+    <span><b><font color="#FFFFFF">Support JGAP!</font></b></span>
+  </td></tr>
+  <tr>
+<!--    <td style="padding:2px"><strong>Amount</strong></td>-->
+    <td style="padding:2px"><input type="text" name="amount" value="5.00" size="6" style="text-align:right;" /></td>
+    <td style="padding:2px">
+	<select name="currency_code">
+  	<option value="EUR">€</option>
+  	<option value="USD">$</option>
+  	</select>
+	</td>
+    <td><input type="submit" name="submit" value="Donate" /></td>
+  </tr>
+</table>
+  <input type="hidden" name="cmd" value="_xclick" />
+  <input type="hidden" name="business" value="paypal@klaus-meffert.de" />
+  <input type="hidden" name="item_name" value="JGAP and RobocodeJGAP" />
+  <input type="hidden" name="item_number" value="JGAP-DONATE" />
+  <input type="hidden" name="no_shipping" value="1" />
+  <input type="hidden" name="no_note" value="0" />
+  <input type="hidden" name="tax" value="0" />
+  <input type="hidden" name="bn" value="PP-DonationsBF" />
+  <input type="hidden" name="lc" value="US" />
+</form>
+</td></tr></table>
 <table>
 <tr>
   <td>
@@ -73,7 +101,7 @@
   </td>
 </tr>
 </table>    
-      <p class="text" align="center"><font size="2">RobocodeJGAP:</font></p>
+      <p class="text" align="center" style="margin-bottom: -5"><font size="2">RobocodeJGAP:</font></p>
       <p class="text" align="center"><a href="doc/robocode/robocode.html"><img border="0" src="doc/robocode/robobattle.jpg" width="209" height="174"></a></p>
       <p class="text" align="center"><font size="2">Find JGAP as a reference project<br>
       for Test-Driven
@@ -170,6 +198,9 @@
     <p class="text">Or: retrieve most of the documentation in <a href="doc/jgap-doc-from-site-20071210.pdf" target="_blank">one
     PDF file</a> for printout or to browse on a notebook (thanx to Denis). Date
     of file creation: 2007-12-10.</p>
+    <p class="text"><b>If you need require individual information about extended
+    or complicated questions, please think about donating something (see top of
+    page on the left). You will get first class personal service via email.</b></p>
     <h4 class="header">WHERE CAN I FIND HELP?</h4>
     <p class="text">If you run into any issues or bugs, or just have a question, please try
     posting a message to the jgap-users mailing list at <a
