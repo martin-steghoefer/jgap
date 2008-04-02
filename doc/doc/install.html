@@ -62,16 +62,22 @@ contain the compiled JGAP distribution and that is all we need for now.</td>
 
 <h3 class="subheader">Running the example</h3>
 
-<table border="0" width="100%" cellspacing="5" cellpadding="4">
+<table border="0" width="100%" cellspacing="5" cellpadding="4" height="111">
   <tr>
-    <td width="60" align="center" class="text" bgcolor="#008000"><b><font color="#FFFFFF">5</font></b></td>
-    <td width="95%" class="text"><u>Windows</u>: Start the example by executing the batch file <font face="Courier New">start_example.bat</font>.
+    <td width="60" align="center" class="text" bgcolor="#008000" height="97"><b><font color="#FFFFFF">5</font></b></td>
+    <td width="95%" class="text" height="97"><u>Windows</u>: Start the example by executing the batch file <font face="Courier New">start_example.bat</font>.
 
 <p><u>Other operating systems</u>: Go to the command line and change your working
 directory to <font face="Courier New">jgap-current</font>. Now type the
 following: </p>
 
 <p align="center"><font face="Courier New">java -classpath ".;jgap-examples.jar;jgap.jar" examples.MinimizingMakeChange 89</font> </p>
+
+      <p><u>Ubuntu Linux</u>: As before but with the following (use the
+      double-colon instead of the semicolon for separating classpath components): </p>
+
+<p align="center"><font face="Courier New">java -classpath
+&quot;.:jgap-examples.jar:jgap.jar&quot; examples.MinimizingMakeChange 89</font> </p>
 
     </td>
   </tr>
