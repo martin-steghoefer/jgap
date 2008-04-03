@@ -1,5 +1,12 @@
 3.3.3
 -----------------------------------------------------------
+* Added new base class NaturalSelectorExt
+* Added default constructor for class NaturalSelector
+* Inherited BestChromosomesSelector from NaturalSelectorExt
+* Inherited WeightedRouletteSelector from NaturalSelectorExt
+* Inherited TournamentSelector from NaturalSelectorExt
+* Inherited ThresholdSelector from NaturalSelectorExt
+* Enhanced Javadoc, fixed spelling errors
 
 3.3.2
 -----------------------------------------------------------
