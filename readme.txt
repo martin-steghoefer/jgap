@@ -75,9 +75,10 @@ using JGAP, we highly recommend reading the tutorial that can be found
 both on the JGAP website and in the docs/ directory. Finally, a simple
 example is also available in the src/examples directory.
 
-JGAP was compiled and tested with Java 1.4 and Java 1.5 on
+JGAP was compiled and tested with Java 1.4 and Java 5 on
 Windows 2000 and XP. Prior versions of JGAP have been tested with Linux
-and MacOS as well.
+and MacOS as well. The current JGAP version requires at least Java 5
+to compile.
 
 This release contains code that is based on external libraries. You could
 find it in the src-3rdparty library. Due to licensing issues the needed
