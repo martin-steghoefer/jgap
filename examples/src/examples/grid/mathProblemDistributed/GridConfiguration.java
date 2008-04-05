@@ -27,7 +27,7 @@ import org.jgap.gp.impl.*;
 public class GridConfiguration
     extends GridConfigurationGPBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public GridConfiguration() {
     super();
@@ -44,6 +44,7 @@ public class GridConfiguration
     jgapconfig.setEventManager(new EventManager());
     jgapconfig.setPopulationSize(500);
     jgapconfig.setKeepPopulationSizeConstant(true);
+    jgapconfig.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
     IChromosome sample = new Chromosome(jgapconfig,
                                         new BooleanGene(jgapconfig), 16);
     jgapconfig.setSampleChromosome(sample);
