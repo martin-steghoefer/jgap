@@ -28,7 +28,7 @@ import org.apache.commons.cli.*;
 public class JGAPClientGP
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -76,6 +76,7 @@ public class JGAPClientGP
       throws Exception {
     GridClient gc = new GridClient();
     gc.setNodeConfig(m_gridconfig);
+    /**@todo allow asynchronous wait for server (check for "java.net.ConnectException: Connection refused: connect")*/
     gc.start();
     return gc;
   }

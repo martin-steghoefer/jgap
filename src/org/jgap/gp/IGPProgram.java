@@ -23,7 +23,7 @@ public interface IGPProgram
     extends Serializable, Comparable, ICloneable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.13 $";
+  final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Executes the given chromosome as an integer function.
@@ -122,9 +122,10 @@ public interface IGPProgram
   double getFitnessValue();
 
   /**
-   * Builds a String that represents the normalized output of the GPProgram.
+   * Builds a string that represents the normalized output of the GP program.
+   *
    * @param a_startNode the node to start with
-   * @return output in normalized notion
+   * @return textual output in normalized notion
    *
    * @author Klaus Meffert
    * @since 3.0
@@ -134,8 +135,8 @@ public interface IGPProgram
   /**
    * Sets the given chromosome at the given index.
    *
-   * @param a_index sic
-   * @param a_chrom sic
+   * @param a_index the index to the the chromosome at
+   * @param a_chrom the chromosome to set
    *
    * @author Klaus Meffert
    * @since 3.0
