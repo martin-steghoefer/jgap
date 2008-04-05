@@ -25,11 +25,13 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
   final static String GPPROGRAM_DELIMITER_CLOSING = ">";
   final static String GPPROGRAM_DELIMITER = "#";
+
+  public final static double DELTA = 0.0000001d;
 
   private transient Logger LOGGER = Logger.getLogger(GPPopulation.class);
 
@@ -38,7 +40,7 @@ public class GPPopulation
    */
   private IGPProgram[] m_programs;
 
-  private transient float[] m_fitnessRank;
+  private /*transient*/ float[] m_fitnessRank;
 
   private int m_popSize;
 
@@ -459,6 +461,21 @@ public class GPPopulation
     return m_programs[a_index];
   }
 
+  /**
+   * Sets the GPPrograms of the given population to this population.
+   *
+   * @param a_pop the population to use as template
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setGPPrograms(final GPPopulation a_pop) {
+    synchronized (m_programs) {
+      m_programs = a_pop.m_programs;
+    }
+    setChanged(true);
+  }
+
   public IGPProgram[] getGPPrograms() {
     return m_programs;
   }
@@ -491,7 +508,8 @@ public class GPPopulation
       } catch (IllegalStateException iex) {
         fitness = Double.NaN;
       }
-      if (!Double.isNaN(fitness)) {
+      if (!Double.isNaN(fitness) &&
+          Math.abs(GPFitnessFunction.NO_FITNESS_VALUE - fitness) > DELTA) {
         if (m_fittestProgram == null || evaluator.isFitter(fitness, bestFitness)) {
           bestFitness = fitness;
           m_fittestProgram = program;
