@@ -7,8 +7,14 @@
 * Inherited TournamentSelector from NaturalSelectorExt
 * Inherited ThresholdSelector from NaturalSelectorExt
 * Enhanced Configuration.clone()
-* Fixed bug in GPPopulation.clone()
+* Fixed bug in GPConfiguration.clone()
+* GPConfiguration: added method setFitnessEvaluator
 * Fixed bug in GPPopulation.determineFittestProgram()
+* Introduced new class StaticPopulationCreator
+* GPProgramBase: Replaced -1 with constant
+* GPPopulation: added method setGPPrograms
+* GPFitnessFunction: caught exception in fitness
+  determination that could result from ensureUniqueness
 * Enhanced Javadoc, fixed spelling errors
 
 3.3.2
