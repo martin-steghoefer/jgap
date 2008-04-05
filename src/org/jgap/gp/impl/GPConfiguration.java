@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -561,6 +561,18 @@ public class GPConfiguration
   }
 
   /**
+   * Set the fitness evaluator (deciding if a given fitness value is better
+   * when it's higher or better when it's lower).
+   * @param a_fitnessEvaluator the FitnessEvaluator to be used
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setFitnessEvaluator(IGPFitnessEvaluator a_fitnessEvaluator) {
+    setGPFitnessEvaluator(a_fitnessEvaluator);
+  }
+
+  /**
    * Sets the fitness function to be used for this genetic algorithm.
    * The fitness function is responsible for evaluating a given
    * Chromosome and returning a positive integer that represents its
@@ -573,7 +585,7 @@ public class GPConfiguration
    * @throws InvalidConfigurationException if the fitness function is null, or
    * if this Configuration object is locked.
    *
-   * @author Neil Rotstan
+   * @author Klaus Meffert
    * @since 1.1
    */
   public synchronized void setFitnessFunction(GPFitnessFunction a_functionToSet)
@@ -875,6 +887,7 @@ public class GPConfiguration
       if (m_objectiveFunction != null) {
         result.m_objectiveFunction = m_objectiveFunction;
       }
+      result.setPopulationSize(getPopulationSize());/*@todo move popSize from super to here!*/
       result.m_crossoverProb = m_crossoverProb;
       result.m_reproductionProb = m_reproductionProb;
       result.m_newChromsPercent = m_newChromsPercent;
