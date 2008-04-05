@@ -26,7 +26,7 @@ import examples.grid.fitnessDistributed.*;
  */
 public class LocalEvolutionDemo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GridConfiguration m_localconfig;
 
@@ -78,6 +78,8 @@ public class LocalEvolutionDemo {
       throw new IllegalStateException(
           "Worker return strategy expected, but was null!");
     }
+    // Fetch the result and display it.
+    // --------------------------------
     JGAPResult res = m_localconfig.getWorkerReturnStrategy().assembleResult(
         m_req, genotype);
     System.out.println(res.getPopulation().determineFittestChromosome());
