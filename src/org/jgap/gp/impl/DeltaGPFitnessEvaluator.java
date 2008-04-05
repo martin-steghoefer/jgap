@@ -13,19 +13,20 @@ import org.jgap.gp.*;
 
 /**
  * Fitness evaluator taking input as delta values. Thus a lower value is seen
- * as fitter.
+ * as fitter than a higher number.
  *
  * @author Klaus Meffert
  * @since 3.1
  */
 public class DeltaGPFitnessEvaluator
-    implements IGPFitnessEvaluator {
+    implements IGPFitnessEvaluator, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Compares the first given fitness value with the second and returns true
-   * if the first one is smaller than the second one. Otherwise returns false
+   * if the first one is smaller than the second one. Otherwise returns false.
+   *
    * @param a_fitness_value1 first fitness value
    * @param a_fitness_value2 second fitness value
    * @return true: first fitness value greater than second
@@ -69,5 +70,16 @@ public class DeltaGPFitnessEvaluator
   public int compareTo(Object a_object) {
     DeltaGPFitnessEvaluator eval = (DeltaGPFitnessEvaluator) a_object;
     return 0;
+  }
+
+  /**
+   * @return deep clone of this instance
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public Object clone() {
+    DeltaGPFitnessEvaluator result = new DeltaGPFitnessEvaluator();
+    return result;
   }
 }
