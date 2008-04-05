@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.93 $";
+  private final static String CVS_REVISION = "$Revision: 1.94 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1479,6 +1479,7 @@ public class Configuration
   public IJGAPFactory getJGAPFactory() {
     return m_factory;
   }
+
   class ConfigurationConfigurable
       implements Serializable {
     /**
@@ -1486,6 +1487,7 @@ public class Configuration
      */
     int m_populationSize;
   }
+
   /**
    * Builds a string considering the current thread and the given id.
    *
@@ -1730,7 +1732,9 @@ public class Configuration
       result.m_preSelectors = (ChainOfSelectors)doClone(m_preSelectors);
       result.m_preserveFittestIndividual = m_preserveFittestIndividual;
       result.m_randomGenerator = (RandomGenerator)doClone(m_randomGenerator);
-      result.m_sampleChromosome = (IChromosome)m_sampleChromosome.clone();
+      if (m_sampleChromosome != null) {
+        result.m_sampleChromosome = (IChromosome) m_sampleChromosome.clone();
+      }
       result.m_alwaysCalculateFitness = m_alwaysCalculateFitness;
       result.m_settingsLocked = m_settingsLocked;
 //      result.m_propertyBag = (Map)doClone(m_propertyBag);
