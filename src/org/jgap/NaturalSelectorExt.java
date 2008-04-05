@@ -22,7 +22,7 @@ import gnu.trove.*;
  * WeightedRouletteSelector.
  *
  * @author Klaus Meffert
- * @since 3.3.2
+ * @since 3.3.3
  */
 public abstract class NaturalSelectorExt
     extends NaturalSelector {
@@ -39,7 +39,7 @@ public abstract class NaturalSelectorExt
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   public NaturalSelectorExt()
       throws InvalidConfigurationException {
@@ -54,7 +54,7 @@ public abstract class NaturalSelectorExt
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   public NaturalSelectorExt(Configuration a_config)
       throws InvalidConfigurationException {
@@ -73,7 +73,7 @@ public abstract class NaturalSelectorExt
    * added to the selector. false: doublettes will be ignored and not added
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   public void setDoubletteChromosomesAllowed(final boolean a_doublettesAllowed) {
     m_doublettesAllowed = a_doublettesAllowed;
@@ -85,7 +85,7 @@ public abstract class NaturalSelectorExt
    * during evolution!
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   public boolean getDoubletteChromosomesAllowed() {
     return m_doublettesAllowed;
@@ -96,7 +96,7 @@ public abstract class NaturalSelectorExt
    * @return true: compared object is seen as equal to current instance
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   public boolean equals(Object a_o) {
     if (a_o == null) {
@@ -116,7 +116,7 @@ public abstract class NaturalSelectorExt
    * @param a_chromosomeToAdd the specimen to add to the pool
 
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   protected abstract void add(final IChromosome a_chromosomeToAdd);
 
@@ -129,7 +129,7 @@ public abstract class NaturalSelectorExt
    * @param a_howManyToSelect the number of Chromosomes to select
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   public final synchronized void select(final int a_howManyToSelect,
                                         final Population a_from_pop,
@@ -155,7 +155,7 @@ public abstract class NaturalSelectorExt
    * @param a_howManyToSelect the number of Chromosomes to select
    *
    * @author Klaus Meffert
-   * @since 3.3.2
+   * @since 3.3.3
    */
   protected abstract void selectChromosomes(final int a_howManyToSelect,
       final Population a_from_pop);
