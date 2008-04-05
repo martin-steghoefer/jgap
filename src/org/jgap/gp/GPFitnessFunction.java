@@ -18,7 +18,7 @@ package org.jgap.gp;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -52,10 +52,16 @@ public abstract class GPFitnessFunction
    */
   public final double getFitnessValue(final IGPProgram a_program) {
     // Delegate to the evaluate() method to actually compute the
-    // fitness value. If the returned value is less than one,
-    // then we throw a runtime exception.
+    // fitness value. If the returned value is less than zero
+    // we throw a runtime exception.
     // ---------------------------------------------------------
-    double fitnessValue = evaluate(a_program);
+    double fitnessValue;
+    try {
+      fitnessValue = evaluate(a_program);
+    } catch (IllegalStateException iex) {
+      fitnessValue = NO_FITNESS_VALUE;
+      return fitnessValue;
+    }
     if (fitnessValue < 0.00000000d) {
       throw new RuntimeException(
           "Fitness values must be positive! Received value: "
