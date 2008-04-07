@@ -16,7 +16,7 @@ import java.util.*;
 
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -155,7 +155,7 @@ public class FileKit {
   }
 
   public static String getConformPath(String path) {
-    return getConformPath(path,fileseparator);
+    return getConformPath(path, fileseparator);
   }
 
   public static String getConformPath(String path, String a_fileseparator) {
@@ -167,7 +167,7 @@ public class FileKit {
       result = removeDoubleSeparators(path.replace('/', '\\'));
     }
     if (!result.endsWith(a_fileseparator)) {
-       result += a_fileseparator;
+      result += a_fileseparator;
     }
     return result;
   }
@@ -412,16 +412,24 @@ public class FileKit {
    */
   public static Vector readFile(String a_filename)
       throws IOException {
-
-      Vector v = new Vector();
-      String thisLine;
-      FileInputStream fin = new FileInputStream(a_filename);
-      BufferedReader myInput = new BufferedReader
-          (new InputStreamReader(fin));
-      while ( (thisLine = myInput.readLine()) != null) {
-        v.add(thisLine);
-      }
-      return (v);
+    Vector v = new Vector();
+    String thisLine;
+    FileInputStream fin = new FileInputStream(a_filename);
+    BufferedReader myInput = new BufferedReader
+        (new InputStreamReader(fin));
+    while ( (thisLine = myInput.readLine()) != null) {
+      v.add(thisLine);
+    }
+    return (v);
   }
 
+  /**
+   * @return temporary directory
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public static String getTempDir() {
+    return System.getProperty("java.io.tmpdir");
+  }
 }
