@@ -15,6 +15,7 @@
 * GPPopulation: added method setGPPrograms
 * GPFitnessFunction: caught exception in fitness
   determination that could result from ensureUniqueness
+* FileKit: added getTemDir()
 * Enhanced Javadoc, fixed spelling errors
 
 3.3.2
