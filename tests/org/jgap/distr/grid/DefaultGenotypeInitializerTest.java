@@ -9,9 +9,8 @@
  */
 package org.jgap.distr.grid;
 
-import org.jgap.event.*;
 import org.jgap.*;
-import org.jgap.impl.*;
+
 import junit.framework.*;
 
 /**
@@ -23,7 +22,7 @@ import junit.framework.*;
 public class DefaultGenotypeInitializerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultGenotypeInitializerTest.class);
