@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -17,7 +17,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import junitx.util.PrivateAccessor;
-
 import org.jgap.*;
 import org.w3c.dom.*;
 
@@ -32,9 +31,8 @@ import org.w3c.dom.*;
  * @since 1.0
  */
 public class XMLManager {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   /**
    * Constant representing the name of the genotype XML element tag.
@@ -89,8 +87,7 @@ public class XMLManager {
     try {
       m_documentCreator =
           DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    }
-    catch (ParserConfigurationException parserError) {
+    } catch (ParserConfigurationException parserError) {
       throw new RuntimeException(
           "XMLManager: Unable to setup DocumentBuilder: "
           + parserError.getMessage());
@@ -170,7 +167,7 @@ public class XMLManager {
    * @deprecated use XMLDocumentBuilder instead
    */
   public static Element representGenesAsElement(final Gene[] a_geneValues,
-                                                final Document a_xmlDocument) {
+      final Document a_xmlDocument) {
     // Create the parent genes element.
     // --------------------------------
     Element genesElement = a_xmlDocument.createElement(GENES_TAG);
@@ -210,7 +207,7 @@ public class XMLManager {
    * @since 2.0
    */
   private static Element representAlleleAsElement(final Gene a_gene,
-                                                  final Document a_xmlDocument) {
+      final Document a_xmlDocument) {
     Element alleleElement = a_xmlDocument.createElement(ALLELE_TAG);
     alleleElement.setAttribute("class", a_gene.getClass().getName());
     alleleElement.setAttribute("value", a_gene.getPersistentRepresentation());
@@ -234,7 +231,8 @@ public class XMLManager {
    * @since 1.0
    * @deprecated use XMLDocumentBuilder instead
    */
-  public static Element representChromosomeAsElement(final IChromosome a_subject,
+  public static Element representChromosomeAsElement(final IChromosome
+      a_subject,
       final Document a_xmlDocument) {
     // Start by creating an element for the chromosome and its size
     // attribute, which represents the number of genes in the chromosome.
@@ -289,7 +287,7 @@ public class XMLManager {
     for (int i = 0; i < population.size(); i++) {
       Element chromosomeElement
           = representChromosomeAsElement(population.getChromosome(i),
-                                       a_xmlDocument);
+          a_xmlDocument);
       genotypeTag.appendChild(chromosomeElement);
     }
     return genotypeTag;
@@ -361,8 +359,7 @@ public class XMLManager {
               Configuration.class});
           thisGeneObject = (Gene) constr.newInstance(new Object[] {
               a_activeConfiguration});
-        }
-        catch (NoSuchMethodException nsme) {
+        } catch (NoSuchMethodException nsme) {
           // Try it by calling method newGeneInternal.
           // -----------------------------------------
           Constructor constr = geneClass.getConstructor(new Class[] {});
@@ -370,8 +367,7 @@ public class XMLManager {
           thisGeneObject = (Gene) PrivateAccessor.invoke(thisGeneObject,
               "newGeneInternal", new Class[] {}, new Object[] {});
         }
-      }
-      catch (Throwable e) {
+      } catch (Throwable e) {
         throw new GeneCreationException(geneClass, e);
       }
       // Find the text node and fetch the string representation of
@@ -405,8 +401,7 @@ public class XMLManager {
       try {
         thisGeneObject.setValueFromPersistentRepresentation(
             alleleRepresentation);
-      }
-      catch (UnsupportedOperationException e) {
+      } catch (UnsupportedOperationException e) {
         throw new GeneCreationException(
             "Unable to build Gene because it does not support the " +
             "setValueFromPersistentRepresentation() method.");
@@ -466,7 +461,7 @@ public class XMLManager {
     // Construct the genes from their representations.
     // -----------------------------------------------
     Gene[] geneAlleles = getGenesFromElement(a_activeConfiguration,
-                                             genesElement);
+        genesElement);
     // Construct the new Chromosome with the genes and return it.
     // ----------------------------------------------------------
     return new Chromosome(a_activeConfiguration, geneAlleles);
@@ -502,7 +497,6 @@ public class XMLManager {
       Configuration a_activeConfiguration, Element a_xmlElement)
       throws ImproperXMLException, InvalidConfigurationException,
       UnsupportedRepresentationException, GeneCreationException {
-
     // Sanity check. Make sure the XML element isn't null and that it
     // actually represents a genotype.
     if (a_xmlElement == null ||
@@ -517,10 +511,11 @@ public class XMLManager {
     NodeList chromosomes =
         a_xmlElement.getElementsByTagName(CHROMOSOME_TAG);
     int numChromosomes = chromosomes.getLength();
-    Population population = new Population(a_activeConfiguration, numChromosomes);
+    Population population = new Population(a_activeConfiguration,
+        numChromosomes);
     for (int i = 0; i < numChromosomes; i++) {
       population.addChromosome(getChromosomeFromElement(a_activeConfiguration,
-                                               (Element) chromosomes.item(i)));
+          (Element) chromosomes.item(i)));
     }
     // Construct a new Genotype with the chromosomes and return it.
     // ------------------------------------------------------------
@@ -649,8 +644,7 @@ public class XMLManager {
     Transformer transformer;
     try {
       transformer = tFactory.newTransformer();
-    }
-    catch (TransformerConfigurationException tex) {
+    } catch (TransformerConfigurationException tex) {
       throw new IOException(tex.getMessage());
     }
     DOMSource source = new DOMSource(doc);
@@ -659,8 +653,7 @@ public class XMLManager {
     try {
       transformer.transform(source, result);
       fos.close();
-    }
-    catch (TransformerException tex) {
+    } catch (TransformerException tex) {
       throw new IOException(tex.getMessage());
     }
   }
