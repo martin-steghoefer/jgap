@@ -22,7 +22,7 @@ import junit.framework.*;
 public class TournamentSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TournamentSelectorTest.class);
@@ -480,10 +480,12 @@ public class TournamentSelectorTest
   }
 
   /**
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testReturnsUniqueChromosomes_0() {
+  public void testReturnsUniqueChromosomes_0() throws Exception {
     TournamentSelector selector = new TournamentSelector(null, 2, 0.5d);
     assertFalse(selector.returnsUniqueChromosomes());
   }

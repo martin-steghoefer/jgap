@@ -22,7 +22,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -36,8 +36,10 @@ public class WeightedRouletteSelectorTest
 
   /**
    * Test if construction possible without failure.
+   *
+   * @throws Exception
    */
-  public void testConstruct_0() {
+  public void testConstruct_0() throws Exception{
     new WeightedRouletteSelector();
   }
 
@@ -358,10 +360,13 @@ public class WeightedRouletteSelectorTest
   }
 
   /**
+   *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 2.2
    */
-  public void testReturnsUniqueChromosomes_0() {
+  public void testReturnsUniqueChromosomes_0() throws Exception {
     WeightedRouletteSelector selector = new WeightedRouletteSelector();
     assertFalse(selector.returnsUniqueChromosomes());
   }

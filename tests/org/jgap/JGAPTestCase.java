@@ -24,7 +24,7 @@ import org.jgap.impl.*;
 public abstract class JGAPTestCase
     extends TestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   protected static final double DELTA = 0.0000001;
@@ -152,7 +152,8 @@ public abstract class JGAPTestCase
    */
   public Object doSerialize(Object a_obj)
       throws Exception {
-    // serialize object to a file
+    // Serialize object to a file.
+    // ---------------------------
     File f = File.createTempFile("object", "ser");
     OutputStream os = new FileOutputStream(f);
     ObjectOutputStream oos = new ObjectOutputStream(os);
@@ -206,8 +207,10 @@ public abstract class JGAPTestCase
   }
 
   /**
+   * Are all chromosomes in the given population unique?
+   *
    * @param a_pop the population to verify
-   * @return true if all chromosomes in the populationa are unique
+   * @return true if all chromosomes in the population are unique
    *
    * @author Klaus Meffert
    * @since 3.3.1
