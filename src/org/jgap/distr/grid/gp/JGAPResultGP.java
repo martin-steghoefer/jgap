@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private IGPProgram m_fittest;
   private GPPopulation m_pop;
@@ -59,18 +59,16 @@ public class JGAPResultGP
    * @param id ID of the result, should be unique
    * @param a_programs the result of a worker's computation
    * @param a_unitdone number of units done
-   * @param a_genericData any generic data, may be null
    *
    * @author Klaus Meffert
    * @since 3.2
    */
   public JGAPResultGP(String a_sessionName, int id, GPPopulation a_programs,
-                    long a_unitdone, Object a_genericData) {
+                    long a_unitdone) {
     super(a_sessionName, id);
     m_fittest = null;
     m_pop = a_programs;
     m_unitDone = a_unitdone;
-    m_genericData = a_genericData;
   }
 
   /**
@@ -95,6 +93,24 @@ public class JGAPResultGP
     return m_unitDone;
   }
 
+  /**
+   * Adds arbitrary generic data to the result.
+   *
+   * @param a_genericData arbitrary generic data
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setGenericData(Object a_genericData) {
+    m_genericData = a_genericData;
+  }
+
+  /**
+   * @return generic data contained in the result.
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   public Object getGenericData() {
     return m_genericData;
   }
