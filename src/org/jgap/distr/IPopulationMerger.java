@@ -12,23 +12,23 @@ package org.jgap.distr;
 import org.jgap.*;
 
 /**
- * Interface for implementations allowing to merge two or more independent
- * Populations to be merged together into one Population.
+ * Interface for implementations allowing to merge two independent
+ * populations together into one combined population.
  *
  * @author Klaus Meffert
  * @since 2.0
  */
 public interface IPopulationMerger {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
-   * Merges two Population's into one that has the given size.
+   * Merges two populations into one that has the given size.
    *
-   * @param a_population1 first Population
-   * @param a_population2 second Population
-   * @param a_new_population_size size of merged Population
-   * @return the resulting Population
+   * @param a_population1 first population
+   * @param a_population2 second population
+   * @param a_new_population_size size of merged population
+   * @return the resulting population
    *
    * @author Klaus Meffert
    * @since 2.0
