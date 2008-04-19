@@ -10,9 +10,9 @@
 package org.jgap.distr.grid.gp;
 
 import java.io.*;
-import org.jgap.*;
+
+import org.jgap.distr.grid.*;
 import org.jgap.gp.impl.*;
-import org.homedns.dade.jcgrid.client.*;
 
 /**
  * Interface for defining a strategy that controls how a client evolves
@@ -24,15 +24,15 @@ import org.homedns.dade.jcgrid.client.*;
 public interface IClientEvolveStrategyGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  void initialize(GridClient a_gc, GPConfiguration a_config,
+  void initialize(IGridClientMediator a_gc, GPConfiguration a_config,
                   IClientFeedbackGP a_clientFeedback)
       throws Exception;
 
   JGAPRequestGP[] generateWorkRequests(JGAPRequestGP m_workReq,
-                                     IRequestSplitStrategyGP m_splitStrategy,
-                                     Object a_genericData)
+                                       IRequestSplitStrategyGP m_splitStrategy,
+                                       Object a_genericData)
       throws Exception;
 
   void resultReceived(JGAPResultGP a_result)

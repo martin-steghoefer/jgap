@@ -39,7 +39,7 @@ import org.apache.log4j.*;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.9 $";
+  public final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
@@ -81,7 +81,7 @@ public class ClientEvolveStrategy
    * @author Klaus Meffert
    * @since 3.2
    */
-  public void initialize(GridClient a_gc, GPConfiguration a_config,
+  public void initialize(IGridClientMediator a_gc, GPConfiguration a_config,
                          IClientFeedbackGP a_clientFeedback)
       throws Exception {
     log.info("Initializing...");
