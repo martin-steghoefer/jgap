@@ -15,6 +15,7 @@
 * GPPopulation: added method setGPPrograms
 * GPFitnessFunction: caught exception in fitness
   determination that could result from ensureUniqueness
+* JGAPResultGP: added support for generic data
 * FileKit: added getTemDir()
 * Enhanced Javadoc, fixed spelling errors
 
