@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.cmd.MainCmd;
  */
 public class JGAPWorkersGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_workerClass;
 
@@ -74,8 +74,8 @@ public class JGAPWorkersGP {
     // ---------------------------
     GridWorker[] gw = new GridWorker[a_config.getWorkerCount()];
     for (int i = 0; i < a_config.getWorkerCount(); i++) {
-      // Instantiate worker via reflection.
-      // ----------------------------------
+      // Instantiate a single worker.
+      // ----------------------------
       gw[i] = new GridWorker();
       gw[i].setNodeConfig( (GridNodeGenericConfig) a_config.clone());
       ( (GridNodeGenericConfig) gw[i].getNodeConfig()).
