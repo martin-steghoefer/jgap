@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
   final static String GPPROGRAM_DELIMITER_CLOSING = ">";
@@ -82,6 +82,9 @@ public class GPPopulation
   }
 
   /*
+   * Instantiate new population with parameters from other population.
+   * Don't copy the GPProgram instances from the given population!
+   *
    * @param a_pop the population to retrieve the parameters from
    *
    * @author Klaus Meffert
@@ -144,7 +147,9 @@ public class GPPopulation
     Arrays.sort(m_programs, c);
     float f = 0;
     for (int i = 0; i < m_programs.length; i++) {
-      m_fitnessRank[i] = f;
+      if (m_fitnessRank.length > i) {
+        m_fitnessRank[i] = f;
+      }
       if (m_programs[i] != null) {
         f += m_programs[i].getFitnessValue();
       }
@@ -411,10 +416,11 @@ public class GPPopulation
       // Create new GP program.
       // ----------------------
       IGPProgram program;
-      program = a_programCreator.create(getGPConfiguration(), a_programIndex, a_types,
-                              a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
-                              a_maxNodes, a_depth, a_grow, a_tries,
-                              a_fullModeAllowed);
+      program = a_programCreator.create(getGPConfiguration(), a_programIndex,
+                                        a_types, a_argTypes, a_nodeSets,
+                                        a_minDepths, a_maxDepths, a_maxNodes,
+                                        a_depth, a_grow, a_tries,
+                                        a_fullModeAllowed);
       return program;
     }
   }
@@ -476,6 +482,24 @@ public class GPPopulation
     setChanged(true);
   }
 
+  /**
+   * Sets the GPPrograms of the given population to this population.
+   *
+   * @param a_pop the population to use as template
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setGPPrograms(final List a_pop) {
+    synchronized (m_programs) {
+      int size = a_pop.size();
+      m_programs = new GPProgram[size];
+      for (int i = 0; i < size; i++) {
+        m_programs[i] = (IGPProgram) a_pop.get(i);
+      }
+    }
+    setChanged(true);
+  }
   public IGPProgram[] getGPPrograms() {
     return m_programs;
   }
