@@ -39,7 +39,7 @@ import org.apache.log4j.*;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.10 $";
+  public final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 
@@ -73,7 +73,7 @@ public class ClientEvolveStrategy
    * Called at the very beginning and only once before distributed evolution
    * starts.
    *
-   * @param a_gc GridClient
+   * @param a_gc GridClient mediator
    * @param a_config Configuration
    * @param a_clientFeedback IClientFeedback
    * @throws Exception
