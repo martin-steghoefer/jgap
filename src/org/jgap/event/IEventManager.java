@@ -57,7 +57,7 @@ public interface IEventManager
    * (as determined by the name of the event) will be notified of it
    * having been fired.
    *
-   * @param a_eventToFire the representation of the GeneticEvent to fire
+   * @param a_eventToFire the representation of the genetic event to fire
    *
    * @author Neil Rotstan
    * @since 2.6 (since 1.0 in EventManager)

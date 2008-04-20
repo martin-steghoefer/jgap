@@ -14,9 +14,14 @@ import java.util.jar.*;
 import java.net.*;
 import java.util.*;
 
+/**
+ * Contains helper functions related to the file system.
+ *
+ * @author Klaus Meffert
+ */
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -103,7 +108,8 @@ public class FileKit {
     }
     int p = s.lastIndexOf(fileseparator);
     if (p < 0) {
-      // No trailing file separator
+      // No trailing file separator.
+      // ---------------------------
       return s;
     }
     else {
@@ -242,6 +248,7 @@ public class FileKit {
    * Deletes a file from disk.
    *
    * @param a_filename name of file to delete
+   *
    * @return true if deletion successful
    */
   public static boolean deleteFile(String a_filename) {
@@ -262,6 +269,7 @@ public class FileKit {
    * @return ClassLoader the class loader with which to access the loaded
    * classes, e.g. by <classloader>.loadClass(<classname including package>),
    * e.g.: cl.loadClass("com.thoughtworks.ashcroft.runtime.JohnAshcroft");
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
@@ -279,6 +287,7 @@ public class FileKit {
    *
    * @param a_filename jar file name
    * @return Manifest included in the given jar
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
