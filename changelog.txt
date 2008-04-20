@@ -3,6 +3,7 @@
 * Added new class DummyGridClientMediator
 * Added new class MessageContext
 * Added new base class NaturalSelectorExt
+* Added new class DateKit
 * Added default constructor for class NaturalSelector
 * Did a lot of architectural improvements in JGAPClientGP
 * Inherited BestChromosomesSelector from NaturalSelectorExt
@@ -22,6 +23,7 @@
 * JGAPResultGP: added support for generic data
 * FileKit: added getTemDir()
 * Enhanced Javadoc, fixed spelling errors
+* Addes some package.html description files
 
 3.3.2
 -----------------------------------------------------------
