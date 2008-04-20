@@ -11,7 +11,6 @@ package org.jgap.distr.grid;
 
 import java.io.*;
 import java.util.*;
-
 import org.homedns.dade.jcgrid.message.*;
 
 /**
@@ -23,14 +22,13 @@ import org.homedns.dade.jcgrid.message.*;
 public interface IGridClientMediator
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
-  void send(GridMessage a_msg, String a_module, String a_context,
-            String a_contextid, Map<String, String> a_headerData)
+  void send(GridMessage a_msg, MessageContext a_context, Map<String, String>
+      a_headerData)
       throws Exception;
 
-  GridMessage getGridMessage(String a_module, String a_context,
-                             String a_contextid, int a_timeoutSeconds,
+  GridMessage getGridMessage(MessageContext a_context, int a_timeoutSeconds,
                              int a_waitTimeSeconds, boolean a_removeRequest)
       throws Exception;
 
