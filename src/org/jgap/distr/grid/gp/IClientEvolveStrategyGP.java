@@ -10,7 +10,6 @@
 package org.jgap.distr.grid.gp;
 
 import java.io.*;
-
 import org.jgap.distr.grid.*;
 import org.jgap.gp.impl.*;
 
@@ -24,7 +23,7 @@ import org.jgap.gp.impl.*;
 public interface IClientEvolveStrategyGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.3 $";
+  final static String CVS_REVISION = "$Revision: 1.4 $";
 
   void initialize(IGridClientMediator a_gc, GPConfiguration a_config,
                   IClientFeedbackGP a_clientFeedback)
