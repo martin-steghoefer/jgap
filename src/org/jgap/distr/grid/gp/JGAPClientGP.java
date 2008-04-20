@@ -17,6 +17,7 @@ import org.jgap.gp.impl.*;
 import org.homedns.dade.jcgrid.message.*;
 import org.homedns.dade.jcgrid.cmd.*;
 import org.apache.commons.cli.*;
+import org.jgap.distr.grid.*;
 
 /**
  * A client defines work for the grid and sends it to the JGAPServer.
@@ -28,7 +29,25 @@ import org.apache.commons.cli.*;
 public class JGAPClientGP
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
+
+  public static final String MODULE_CS = "CS";
+
+  public static final String MODULE_SC = "SC";
+
+  public static final String MODULE_SW = "SW";
+
+  public static final String MODULE_WS = "WS";
+
+  public static final String CONTEXT_WORK_REQUEST = "WREQ";
+
+  public static final String CONTEXT_WORK_RESULT = "WRES";
+
+  public static final String CONTEXT_ID_EMPTY = "0";
+
+  public static final int TIMEOUT_SECONDS = 5;
+
+  public static final int WAITTIME_SECONDS = 5;
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -36,13 +55,43 @@ public class JGAPClientGP
 
   protected JGAPRequestGP m_workReq;
 
-  private GridClient m_gc;
+  private IGridClientMediator m_gcmed;
 
   private IGridConfigurationGP m_gridConfig;
 
+  private String m_appid;
+
+  /**
+   * Is the client operating in a WAN or in a LAN?
+   * TRUE:  WAN --> Do not use JCGrid architecture
+   * FALSE: LAN --> Do use JCGrid architecture
+   */
+  private boolean m_WANMode;
+
+  /**
+   * Only received results or send requests beforehand?
+   */
+  private boolean m_receiveOnly;
+
   public JGAPClientGP(GridNodeClientConfig a_gridconfig,
-                      String a_clientClassName)
+                      String a_clientClassName,
+                      String a_appid, boolean a_WANMode,
+                      boolean a_receiveOnly)
       throws Exception {
+    this(null, a_gridconfig, a_clientClassName, a_appid, a_WANMode,
+         a_receiveOnly);
+    m_gcmed = new DummyGridClientMediator(m_gridconfig);
+  }
+
+  public JGAPClientGP(IGridClientMediator a_gcmed,
+                      GridNodeClientConfig a_gridconfig,
+                      String a_clientClassName,
+                      String a_appid, boolean a_WANMode,
+                      boolean a_receiveOnly)
+      throws Exception {
+    m_WANMode = a_WANMode;
+    m_receiveOnly = a_receiveOnly;
+    m_appid = a_appid;
     m_gridconfig = a_gridconfig;
     Class client = Class.forName(a_clientClassName);
     m_gridConfig = (IGridConfigurationGP) client.getConstructor(new
@@ -62,23 +111,11 @@ public class JGAPClientGP
     // -------------------------------------
     req.setEvolveStrategy(null);
     setWorkRequest(req);
-    // Start the threaded process.
-    // ---------------------------
-    start();
-    join();
+    m_gcmed = a_gcmed;
   }
 
   public void setWorkRequest(JGAPRequestGP a_request) {
     m_workReq = a_request;
-  }
-
-  protected GridClient startClient()
-      throws Exception {
-    GridClient gc = new GridClient();
-    gc.setNodeConfig(m_gridconfig);
-    /**@todo allow asynchronous wait for server (check for "java.net.ConnectException: Connection refused: connect")*/
-    gc.start();
-    return gc;
   }
 
   /**
@@ -91,23 +128,35 @@ public class JGAPClientGP
     try {
       // Start client.
       // -------------
-      m_gc = startClient();
+      if (m_WANMode) {
+        // Receive available results from earlier work requests.
+        /**@todo impl.*/
+        // Download
+
+        // Save to disk, but only the ones not saved before
+
+        // Erase from Online store
+      }
       try {
-        // Initialize evolution.
-        // ---------------------
-        IClientEvolveStrategyGP clientEvolver = m_gridConfig.
-            getClientEvolveStrategy();
-        if (clientEvolver != null) {
-          clientEvolver.initialize(m_gc, getConfiguration(),
-                                   m_gridConfig.getClientFeedback());
+        if (!m_receiveOnly) {
+          // Initialize evolution.
+          // ---------------------
+          IClientEvolveStrategyGP clientEvolver = m_gridConfig.
+              getClientEvolveStrategy();
+          if (clientEvolver != null) {
+            clientEvolver.initialize(m_gcmed, getConfiguration(),
+                                     m_gridConfig.getClientFeedback());
+          }
         }
         // Do the evolution.
         // -----------------
-        evolve(m_gc);
+        evolve(m_gcmed, m_receiveOnly);
       } finally {
         try {
-          m_gc.stop();
-        } catch (Exception ex) {}
+          m_gcmed.stop();
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -123,11 +172,14 @@ public class JGAPClientGP
       JGAPRequestGP req = a_workList[i];
       GPPopulation pop = req.getPopulation();
       if (pop == null || pop.isFirstEmpty()) {
-        log.error("Initial population to send to worker is empty!");
+        log.warn("Initial population to send to worker is empty!");
       }
       m_gridConfig.getClientFeedback().sendingFragmentRequest(req);
-      m_gc.send(new GridMessageWorkRequest(req));
-      if (this.isInterrupted()) {
+      MessageContext context = new MessageContext(MODULE_CS,
+          CONTEXT_WORK_REQUEST, CONTEXT_ID_EMPTY);
+      m_gcmed.send(new GridMessageWorkRequest(req), context,
+                   null);
+      if (isInterrupted()) {
         break;
       }
     }
@@ -135,34 +187,75 @@ public class JGAPClientGP
 
   protected void receiveWorkResults(JGAPRequestGP[] workList)
       throws Exception {
+    log.info("Receiving work results...");
     IClientFeedbackGP feedback = m_gridConfig.getClientFeedback();
     // Receive work results.
     // ---------------------
-    int idx = -1;
-    for (int i = 0; i < workList.length; i++) {
-      feedback.setProgressValue(i + workList.length);
-      m_gc.getGridMessageChannel();
-      GridMessageWorkResult gmwr = (GridMessageWorkResult) m_gc.recv(i);
-      JGAPResultGP workResult = (JGAPResultGP) gmwr.getWorkResult();
-      m_gridConfig.getClientEvolveStrategy().resultReceived(workResult);
-      idx = workResult.getRID();
-      // Fire listener.
-      // --------------
-      feedback.receivedFragmentResult(workList[idx], workResult,
-                                      idx);
-      if (this.isInterrupted()) {
-        break;
+    int size;
+    if (workList == null) {
+      size = -1;
+    }
+    else {
+      size = workList.length;
+    }
+    if (m_WANMode && size < 1) {
+      int i = 0;
+      do {
+        feedback.setProgressValue(i + workList.length);
+        i++;
+        JGAPResultGP result = receiveWorkResult(workList, feedback);
+        if (result == null) {
+          break;
+        }
+      } while (true);
+    }
+    else {
+      for (int i = 0; i < size; i++) {
+        feedback.setProgressValue(i + workList.length);
+        receiveWorkResult(workList, feedback);
+        if (this.isInterrupted()) {
+          break;
+        }
       }
     }
+  }
+
+  private JGAPResultGP receiveWorkResult(JGAPRequestGP[] workList,
+      IClientFeedbackGP feedback)
+      throws Exception {
+    /**@todo make this asynchronous with fall-back and reconnect!*/
+    int idx = -1;
+    MessageContext context = new MessageContext(MODULE_WS /**@todo later: SC*/,
+        CONTEXT_WORK_RESULT,
+        CONTEXT_ID_EMPTY);
+    GridMessageWorkResult gmwr = (GridMessageWorkResult) m_gcmed.
+        getGridMessage(context, TIMEOUT_SECONDS, WAITTIME_SECONDS, true);
+    if (gmwr == null) {
+      throw new Exception("Timeout occured, no work requests received");
+    }
+    else {
+      log.info("Work result received!");
+    }
+    JGAPResultGP workResult = (JGAPResultGP) gmwr.getWorkResult();
+    m_gridConfig.getClientEvolveStrategy().resultReceived(workResult);
+    idx = workResult.getRID();
+    // Fire listener.
+    // --------------
+    feedback.receivedFragmentResult(workList[idx], workResult,
+                                    idx);
+    return workResult;
   }
 
   /**
    * If necessary: override to implement your evolution cycle individually.
    *
-   * @param gc GridClient
+   * @param a_gcmed the GridClient mediator
+   * @param a_receiveOnly false: Don't send any work requests, just receive
+   * results from former evolutions
+   *
    * @throws Exception
    */
-  protected void evolve(GridClient gc)
+  protected void evolve(IGridClientMediator a_gcmed, boolean a_receiveOnly)
       throws Exception {
     // Do the complete evolution cycle until end.
     // ------------------------------------------
@@ -172,28 +265,36 @@ public class JGAPClientGP
     IRequestSplitStrategyGP splitter = m_gridConfig.getRequestSplitStrategy();
     int evolutionIndex = 0;
     do {
-      log.warn("Beginning evolution cycle "+evolutionIndex);
+      JGAPRequestGP[] workRequests = null;
+      if (!a_receiveOnly) {
+        log.warn("Beginning evolution cycle " + evolutionIndex);
 //      m_clientEvolveStrategy.beforeGenerateWorkResults();
-      JGAPRequestGP[] workRequests = evolver.generateWorkRequests(
-          m_workReq, splitter, null);
-      feedback.setProgressMaximum(0);
-      feedback.setProgressMaximum(workRequests.length - 1);
-      sendWorkRequests(workRequests);
+        workRequests = evolver.generateWorkRequests(
+            m_workReq, splitter, null);
+        feedback.setProgressMaximum(0);
+        feedback.setProgressMaximum(workRequests.length - 1);
+        sendWorkRequests(workRequests);
+      }
       if (this.isInterrupted()) {
         break;
       }
-      evolver.afterWorkRequestsSent();
+      if (!a_receiveOnly) {
+        evolver.afterWorkRequestsSent();
+      }
+      /**@todo check if last result received*/
       receiveWorkResults(workRequests);
-      evolver.evolve();
-      // Fire listener that one evolution cycle is complete.
-      // ---------------------------------------------------
-      feedback.completeFrame(evolutionIndex);
-      evolutionIndex++;
-      // Check if evolution is finished.
-      // -------------------------------
-      if (evolver.isEvolutionFinished(evolutionIndex)) {
-        evolver.onFinished();
-        break;
+      if (!a_receiveOnly) {
+        evolver.evolve();
+        // Fire listener that one evolution cycle is complete.
+        // ---------------------------------------------------
+        feedback.completeFrame(evolutionIndex);
+        evolutionIndex++;
+        // Check if evolution is finished.
+        // -------------------------------
+        if (evolver.isEvolutionFinished(evolutionIndex)) {
+          evolver.onFinished();
+          break;
+        }
       }
     } while (true);
     m_gridConfig.getClientFeedback().endWork();
@@ -228,6 +329,11 @@ public class JGAPClientGP
                          + "examples.grid.fitnessDistributed.GridConfiguration");
       System.exit(1);
     }
+    if (args.length < 2) {
+      System.out.println(
+          "Please provide an application name of the grid (textual identifier");
+      System.exit(1);
+    }
     try {
       // Setup logging.
       // --------------
@@ -236,10 +342,27 @@ public class JGAPClientGP
       // ---------------------
       GridNodeClientConfig config = new GridNodeClientConfig();
       Options options = new Options();
+      options.addOption("l", true, "LAN or WAN");
+      options.addOption("receive_only", false,
+                        "Only receive results, don't send requests");
       CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
+      String networkMode = cmd.getOptionValue("l", "LAN");
+      boolean inWAN;
+      if (networkMode != null && networkMode.equals("LAN")) {
+        inWAN = false;
+      }
+      else {
+        inWAN = true;
+      }
+      boolean receiveOnly = cmd.hasOption("receive_only");
       // Setup and start client.
       // -----------------------
-      new JGAPClientGP(config, args[0]);
+      JGAPClientGP client = new JGAPClientGP(config, args[0], args[1], inWAN,
+          receiveOnly);
+      // Start the threaded process.
+      // ---------------------------
+      client.start();
+      client.join();
     } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
