@@ -12,7 +12,7 @@ package org.jgap.distr.grid.gp;
 import java.io.*;
 
 import org.homedns.dade.jcgrid.client.*;
-import org.jgap.*;
+import org.jgap.distr.grid.common.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
@@ -26,7 +26,7 @@ import org.jgap.gp.impl.*;
 public interface IGridConfigurationGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   IClientFeedbackGP getClientFeedback();
 
@@ -58,10 +58,15 @@ public interface IGridConfigurationGP
 
   void initialize(GridNodeClientConfig gridconfig)
       throws Exception;
+
   void validate()
       throws Exception;
 
-  /**@todo move the following to GPConfigtation, eleganty*/
+  void setContext(BasicContext a_context);
+
+  BasicContext getContext();
+
+  /**@todo move the following to GPConfiguration, elegantly*/
   void setTypes(Class[] a_types);
 
   void setArgTypes(Class[][] a_argTypes);

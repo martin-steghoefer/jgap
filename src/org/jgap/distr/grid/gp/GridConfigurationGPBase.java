@@ -12,6 +12,7 @@ package org.jgap.distr.grid.gp;
 import org.homedns.dade.jcgrid.client.*;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.*;
+import org.jgap.distr.grid.common.*;
 
 /**
  * Abstract base class for the important GP grid configuration. It holds any
@@ -24,13 +25,15 @@ import org.jgap.gp.*;
 public abstract class GridConfigurationGPBase
     implements IGridConfigurationGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private IClientFeedbackGP m_clientFeedback;
 
   private IRequestSplitStrategyGP m_splitStrategy;
 
   private GPConfiguration m_config;
+
+  private BasicContext m_context;
 
   private IClientEvolveStrategyGP m_clientEvolveStrategy;
 
@@ -56,6 +59,15 @@ public abstract class GridConfigurationGPBase
 
   public GridConfigurationGPBase() {
 //    m_packageName = getClass().getPackage().getName();
+    m_context = new BasicContext();
+  }
+
+  public void setContext(BasicContext a_context) {
+    m_context = a_context;
+  }
+
+  public BasicContext getContext() {
+    return m_context;
   }
 
   public String getPackageName() {
