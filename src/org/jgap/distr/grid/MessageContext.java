@@ -9,21 +9,25 @@
  */
 package org.jgap.distr.grid;
 
+import org.jgap.distr.grid.common.*;
+
 /**
  * Context of a message.
  *
  * @author Klaus Meffert
  * @since 3.3.3
  */
-public class MessageContext {
+public class MessageContext extends BasicContext {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private String m_module;
 
   private String m_context;
 
-  private String m_contextid;
+  private String m_userGrp;
+
+  private String m_userID;
 
   public MessageContext() {
   }
@@ -31,15 +35,11 @@ public class MessageContext {
   public MessageContext(String a_module, String a_context, String a_contextid) {
     m_module = a_module;
     m_context = a_context;
-    m_contextid = a_contextid;
+    setContextId(a_contextid);
   }
 
   public String getContext() {
     return m_context;
-  }
-
-  public String getContextid() {
-    return m_contextid;
   }
 
   public String getModule() {
@@ -50,11 +50,23 @@ public class MessageContext {
     m_module = a_module;
   }
 
-  public void setContextid(String a_contextid) {
-    m_contextid = a_contextid;
-  }
-
   public void setContext(String a_context) {
     m_context = a_context;
+  }
+
+  public String getUserID() {
+    return m_userID;
+  }
+
+  public String getUserGrp() {
+    return m_userGrp;
+  }
+
+  public void setUserGrp(String a_userGrp) {
+    m_userGrp = a_userGrp;
+  }
+
+  public void setUserID(String a_userID) {
+    m_userID = a_userID;
   }
 }
