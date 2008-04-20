@@ -1,9 +1,13 @@
 3.3.3
 -----------------------------------------------------------
+* Added new class DummyGridClientMediator
+* Added new class MessageContext
 * Added new base class NaturalSelectorExt
 * Added default constructor for class NaturalSelector
+* Did a lot of architectural improvements in JGAPClientGP
 * Inherited BestChromosomesSelector from NaturalSelectorExt
-* Inherited WeightedRouletteSelector from NaturalSelectorExt
+* Inherited WeightedRouletteSelector from
+  NaturalSelectorExt
 * Inherited TournamentSelector from NaturalSelectorExt
 * Inherited ThresholdSelector from NaturalSelectorExt
 * Enhanced Configuration.clone()
