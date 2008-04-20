@@ -22,14 +22,15 @@ import org.homedns.dade.jcgrid.message.*;
 public interface IGridClientMediator
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  void send(GridMessage a_msg, MessageContext a_context, Map<String, String>
-      a_headerData)
+  void send(GridMessage a_msg, MessageContext a_context,
+            Map<String, String> a_headerData)
       throws Exception;
 
-  GridMessage getGridMessage(MessageContext a_context, int a_timeoutSeconds,
-                             int a_waitTimeSeconds, boolean a_removeRequest)
+  GridMessage getGridMessage(MessageContext a_context, String a_datetime,
+                             int a_timeoutSeconds, int a_waitTimeSeconds,
+                             boolean a_removeRequest)
       throws Exception;
 
   void stop()
