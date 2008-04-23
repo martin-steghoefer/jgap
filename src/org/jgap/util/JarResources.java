@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -24,7 +24,7 @@ import java.util.zip.*;
  */
 public final class JarResources {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   // external debug flag
   public boolean debugOn = false;
@@ -49,7 +49,9 @@ public final class JarResources {
 
   /**
    * Extracts a jar resource as a blob.
-   * @param name a resource name.
+   *
+   * @param name a resource name
+   * @return extracted blob
    */
   public byte[] getResource(String name) {
     return (byte[]) htJarContents.get(name);
@@ -121,27 +123,29 @@ public final class JarResources {
 
   /**
    * Dumps a zip entry into a string.
-   * @param ze a ZipEntry
+   *
+   * @param a_ze a ZipEntry
+   * @return info about the zip entry
    */
-  private String dumpZipEntry(ZipEntry ze) {
+  private String dumpZipEntry(ZipEntry a_ze) {
     StringBuffer sb = new StringBuffer();
-    if (ze.isDirectory()) {
+    if (a_ze.isDirectory()) {
       sb.append("d ");
     }
     else {
       sb.append("f ");
     }
-    if (ze.getMethod() == ZipEntry.STORED) {
+    if (a_ze.getMethod() == ZipEntry.STORED) {
       sb.append("stored   ");
     }
     else {
       sb.append("defalted ");
     }
-    sb.append(ze.getName());
+    sb.append(a_ze.getName());
     sb.append("\t");
-    sb.append("" + ze.getSize());
-    if (ze.getMethod() == ZipEntry.DEFLATED) {
-      sb.append("/" + ze.getCompressedSize());
+    sb.append("" + a_ze.getSize());
+    if (a_ze.getMethod() == ZipEntry.DEFLATED) {
+      sb.append("/" + a_ze.getCompressedSize());
     }
     return (sb.toString());
   }
@@ -163,6 +167,9 @@ public final class JarResources {
    *                   );
    *     ...
    * </pre>
+   *
+   * @param args arguments
+   * @throws IOException
    */
   public static void main(String[] args)
       throws IOException {
