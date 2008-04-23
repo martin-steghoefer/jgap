@@ -9,26 +9,14 @@
  */
 package examples.grid.mathProblemDistributed;
 
-import org.homedns.dade.jcgrid.client.*;
+import org.apache.log4j.*;
 import org.jgap.*;
-import org.jgap.gp.*;
-import org.jgap.gp.impl.*;
 import org.jgap.distr.grid.*;
 import org.jgap.distr.grid.gp.*;
-import org.jgap.gp.function.Subtract;
-import org.jgap.gp.function.Add3;
-import org.jgap.gp.impl.GPConfiguration;
-import org.jgap.gp.function.Divide;
-import org.jgap.gp.function.Multiply3;
-import org.jgap.gp.function.Pow;
-import org.jgap.gp.function.Exp;
-import org.jgap.gp.terminal.Variable;
-import org.jgap.gp.function.Sine;
-import org.jgap.gp.function.Multiply;
-import org.jgap.gp.function.Add;
+import org.jgap.gp.*;
+import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
 import org.jgap.gp.terminal.*;
-import org.apache.log4j.*;
 
 /**
  * Sample implementation of a strategy for evolving a generation on the client.
@@ -39,7 +27,7 @@ import org.apache.log4j.*;
 public class ClientEvolveStrategy
     extends GPProblem implements IClientEvolveStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  public final static String CVS_REVISION = "$Revision: 1.11 $";
+  public final static String CVS_REVISION = "$Revision: 1.12 $";
 
   private static Logger log = Logger.getLogger(ClientEvolveStrategy.class);
 

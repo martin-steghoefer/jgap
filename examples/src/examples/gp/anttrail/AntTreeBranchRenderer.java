@@ -10,9 +10,7 @@
 package examples.gp.anttrail;
 
 import java.awt.*;
-import org.jgap.util.tree.*;
-import org.jgap.gp.function.*;
-import org.jgap.gp.*;
+
 import org.jgap.gp.impl.*;
 
 /**
@@ -24,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class AntTreeBranchRenderer
     extends JGAPTreeBranchRenderer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public Color getBranchColor(Object a_node, int a_level) {
     String name = ( (JGAPTreeNode) a_node).getName();
