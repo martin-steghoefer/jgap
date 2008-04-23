@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -27,7 +27,7 @@ import org.jgap.impl.*;
  */
 public class MainClass {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Holds the available vents, each with a specific weight
@@ -53,6 +53,8 @@ public class MainClass {
 
   /**
    * Sets up the configuration for the problem.
+   *
+   * @return configured genotype
    *
    * @throws Exception
    *
@@ -114,19 +116,21 @@ public class MainClass {
   /**
    * Does the evolution until finished.
    *
+   * @param a_genotype the genotype to evolve
+   *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public void doEvolution(Genotype genotype) {
+  public void doEvolution(Genotype a_genotype) {
     int progress = 0;
     int percentEvolution = m_numEvolutions / 100;
     for (int i = 0; i < m_numEvolutions; i++) {
-      genotype.evolve();
+      a_genotype.evolve();
       // Print progress.
       // ---------------
       if (percentEvolution > 0 && i % percentEvolution == 0) {
         progress++;
-        IChromosome fittest = genotype.getFittestChromosome();
+        IChromosome fittest = a_genotype.getFittestChromosome();
         double fitness = fittest.getFitnessValue();
         System.out.println("Currently best solution has fitness " +
                            fitness);
@@ -135,7 +139,7 @@ public class MainClass {
     }
     // Print summary.
     // --------------
-    IChromosome fittest = genotype.getFittestChromosome();
+    IChromosome fittest = a_genotype.getFittestChromosome();
     System.out.println("Best solution has fitness " +
                        fittest.getFitnessValue());
     printSolution(fittest);

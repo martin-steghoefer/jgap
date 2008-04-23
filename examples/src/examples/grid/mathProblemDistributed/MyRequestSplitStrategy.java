@@ -24,7 +24,7 @@ import org.jgap.distr.grid.gp.*;
 public class MyRequestSplitStrategy
     implements IRequestSplitStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private GPConfiguration m_config;
 
@@ -73,7 +73,7 @@ public class MyRequestSplitStrategy
     // -----------------------------------------------
     int count = getConfiguration().getPopulationSize() / 10;
     for (int j = 0; j < requests; j++) {
-      result[j] = (JGAPRequestGP) a_request.newInstance("Population " + j, j);
+      result[j] = (JGAPRequestGP) a_request.newInstance("Population " + j, j,0);
       // Setup JGAP configuration for worker.
       // ------------------------------------
       GPConfiguration config = getConfiguration().newInstanceGP(j + "",

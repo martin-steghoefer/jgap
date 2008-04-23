@@ -25,7 +25,7 @@ import org.apache.log4j.*;
 public class MyWorkerReturnStrategy
     implements IWorkerReturnStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static Logger log = Logger.getLogger(MyWorkerReturnStrategy.class);
 
@@ -56,7 +56,7 @@ public class MyWorkerReturnStrategy
       }
     }
     JGAPResultGP result = new JGAPResultGP(a_req.getSessionName(), a_req.getRID(),
-        best, 1);
+        a_req.getChunk(), best, 1);
     return result;
   }
 }
