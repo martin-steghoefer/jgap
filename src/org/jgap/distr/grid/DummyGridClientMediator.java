@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.message.*;
 public class DummyGridClientMediator
     implements IGridClientMediator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -77,4 +77,13 @@ public class DummyGridClientMediator
         a_timeoutSeconds * 1000);
     return gmwr;
   }
+
+  public List listRequests(MessageContext a_context, String a_datetime,
+                           String a_pattern)
+      throws Exception  {
+    // Not implemented yet.
+    // --------------------
+    return null;
+  }
+
 }
