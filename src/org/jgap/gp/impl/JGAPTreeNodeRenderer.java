@@ -9,24 +9,17 @@
  */
 package org.jgap.gp.impl;
 
-//
-//  METreeNodeRenderer.java
-//  MetaEvolve
-//
-//  Version 1
-//
-//  Created by Brian Risk of Geneffects on March 19, 2004.
-//  Last Modified on March 19, 2004.
-//  www.geneffects.com
-//
-//  Modified by Klaus Meffert
-
 import java.awt.*;
 import org.jgap.util.tree.*;
 import org.jgap.gp.terminal.*;
 
 /**
  * Renders the nodes' colors of a tree to display.
+ * Created by Brian Risk of Geneffects on March 19, 2004.
+ * Last Modified on March 19, 2004.
+ * www.geneffects.com
+ *
+ * Modified by Klaus Meffert
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -34,7 +27,7 @@ import org.jgap.gp.terminal.*;
 public class JGAPTreeNodeRenderer
     implements TreeNodeRenderer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   //This implementation basis the shade of the node on the level
   //but you may employ any property of your node.
