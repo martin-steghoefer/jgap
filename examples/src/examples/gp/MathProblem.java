@@ -28,7 +28,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   public static Variable vx;
 
@@ -130,6 +130,9 @@ public class MathProblem
         try {
           double result = ind.execute_float(0, noargs);
           error += Math.abs(result - y[i]);
+          if (Double.isInfinite(error)) {
+            return Double.MAX_VALUE;
+          }
         } catch (ArithmeticException ex) {
           System.out.println("x = " + x[i].floatValue());
           System.out.println(ind);
