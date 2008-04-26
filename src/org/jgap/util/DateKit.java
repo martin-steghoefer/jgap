@@ -20,14 +20,14 @@ import java.util.Calendar;
  */
 public class DateKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private static Calendar m_cal = Calendar.getInstance();
 
   private static SimpleDateFormat m_sdfNow = new SimpleDateFormat(
-      "yyyymmddhhmmssSSS");
+      "yyyyMMddHHmmssSSS");
 
-  private static SimpleDateFormat m_sdfToday = new SimpleDateFormat("yyyymmdd");
+  private static SimpleDateFormat m_sdfToday = new SimpleDateFormat("yyyyMMdd");
 
   /**
    * @return now as a string, including milliseconds
