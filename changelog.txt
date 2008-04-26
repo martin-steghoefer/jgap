@@ -2,6 +2,7 @@
 -----------------------------------------------------------
 * Added new class DummyGridClientMediator
 * Added new class MessageContext
+* Added new class BasicContext
 * Added new base class NaturalSelectorExt
 * Added new class DateKit
 * Added default constructor for class NaturalSelector
@@ -13,8 +14,9 @@
 * Inherited ThresholdSelector from NaturalSelectorExt
 * Enhanced Configuration.clone()
 * Fixed bug in GPConfiguration.clone()
-* GPConfiguration: added method setFitnessEvaluator
+* Fixed bug in class MathProblem, avoiding evolution
 * Fixed bug in GPPopulation.determineFittestProgram()
+* GPConfiguration: added method setFitnessEvaluator
 * Introduced new class StaticPopulationCreator
 * GPProgramBase: Replaced -1 with constant
 * GPPopulation: added method setGPPrograms
