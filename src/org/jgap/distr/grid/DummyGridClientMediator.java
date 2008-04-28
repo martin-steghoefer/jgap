@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.message.*;
 public class DummyGridClientMediator
     implements IGridClientMediator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -35,6 +35,14 @@ public class DummyGridClientMediator
    */
   private GridClient m_gc;
 
+  /**
+   *
+   * @param a_gridconfig GridNodeClientConfig
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   public DummyGridClientMediator(GridNodeClientConfig a_gridconfig)
       throws Exception {
     // Setup logging.
@@ -46,6 +54,15 @@ public class DummyGridClientMediator
     log.info("LAN mode selected");
   }
 
+  /**
+   * Starts the underlying grid client service.
+   *
+   * @return GridClient
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   protected GridClient startClient()
       throws Exception {
     GridClient gc = new GridClient();
@@ -55,17 +72,48 @@ public class DummyGridClientMediator
     return gc;
   }
 
+  /**
+   * Stops this service.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   public void stop()
       throws Exception {
     m_gc.stop();
   }
 
+  /**
+   *
+   * @param a_msg GridMessage
+   * @param a_context MessageContext
+   * @param a_headerData Map
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   public void send(GridMessage a_msg, MessageContext a_context,
                    Map<String, String> a_headerData)
       throws Exception {
     m_gc.send(a_msg);
   }
 
+  /**
+   *
+   * @param a_context MessageContext
+   * @param a_datetime String
+   * @param a_timeoutSeconds int
+   * @param a_waitTimeSeconds int
+   * @param a_removeRequest boolean
+   * @return GridMessage
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   public GridMessage getGridMessage(MessageContext a_context, String a_datetime,
                                     int a_timeoutSeconds, int a_waitTimeSeconds,
                                     boolean a_removeRequest)
@@ -78,12 +126,52 @@ public class DummyGridClientMediator
     return gmwr;
   }
 
+  /**
+   *
+   * @param a_context MessageContext
+   * @param a_datetime String
+   * @param a_pattern String
+   * @return List
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
   public List listRequests(MessageContext a_context, String a_datetime,
                            String a_pattern)
       throws Exception  {
     // Not implemented yet.
     // --------------------
     return null;
+  }
+
+  /**
+   *
+   * @param a_context MessageContext
+   * @param a_datetime String
+   * @param a_pattern String
+   * @return List
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public List listResults(MessageContext a_context, String a_datetime,
+                           String a_pattern)
+      throws Exception  {
+    // Not implemented yet.
+    // --------------------
+    return null;
+  }
+
+  public void connect() throws Exception {
+    // Not implemented yet.
+    // --------------------
+  }
+
+  public void disconnect() throws Exception {
+    // Not implemented yet.
+    // --------------------
   }
 
 }
