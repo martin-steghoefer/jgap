@@ -18,25 +18,39 @@ package org.jgap.distr.grid.common;
  */
 public class BasicContext {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private String m_appId;
 
-  private String m_contextId;
+  private Object m_contextId;
 
   public BasicContext() {
 
   }
-  public BasicContext(String a_appId, String a_contextId) {
+  public BasicContext(String a_appId, Object a_contextId) {
     setAppId(a_appId);
     setContextId(a_contextId);
   }
 
-  public String getContextId() {
+  public Object getContextId() {
     return m_contextId;
   }
 
-  public void setContextId(String a_contextId) {
+  /**
+   * @return context ID as a string, as it should be a string most times (but
+   * not always!)
+   */
+  public String getContextIdAsString() {
+    return (String)m_contextId;
+  }
+
+  /**
+   * Sets the context id. It is an object, not a string, as a request or a
+   * response could be available as a header-object and not by its ID.
+   *
+   * @param a_contextId the context id to set
+   */
+  public void setContextId(Object a_contextId) {
     m_contextId = a_contextId;
   }
 

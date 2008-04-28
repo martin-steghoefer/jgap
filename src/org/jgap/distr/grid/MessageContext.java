@@ -19,7 +19,7 @@ import org.jgap.distr.grid.common.*;
  */
 public class MessageContext extends BasicContext {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private String m_module;
 
@@ -32,7 +32,7 @@ public class MessageContext extends BasicContext {
   public MessageContext() {
   }
 
-  public MessageContext(String a_module, String a_context, String a_contextid) {
+  public MessageContext(String a_module, String a_context, Object a_contextid) {
     m_module = a_module;
     m_context = a_context;
     setContextId(a_contextid);
