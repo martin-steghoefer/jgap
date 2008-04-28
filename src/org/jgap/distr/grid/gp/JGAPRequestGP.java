@@ -10,11 +10,10 @@
 package org.jgap.distr.grid.gp;
 
 import org.homedns.dade.jcgrid.*;
-import org.jgap.*;
+import org.homedns.dade.jcgrid.worker.*;
+import org.jgap.distr.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
-import org.homedns.dade.jcgrid.worker.*;
-import org.jgap.distr.grid.*;
 
 /**
  * An instance that defines a request from which work packages are generated
@@ -24,10 +23,9 @@ import org.jgap.distr.grid.*;
  * @since 3.2
  */
 public class JGAPRequestGP
-    extends WorkRequest
-    implements ICloneable {
+    extends WorkRequest implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private IGridConfigurationGP m_config;
 
@@ -41,44 +39,60 @@ public class JGAPRequestGP
 
   private GridWorkerFeedback m_workerFeedback;
 
+  private int m_chunk;
+
+  private MasterInfo m_requesterInfo;
+
+  private String m_id;
+
   /**
    * Constructor.
    *
-   * @param a_name String
-   * @param a_id int
+   * @param a_name textual description of request
+   * @param a_id unique identification of request
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @param a_config Configuration
    * @param a_strategy the strategy to choose for evolution
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String a_name, int a_id, IGridConfigurationGP a_config,
-                     IWorkerEvolveStrategyGP a_strategy) {
-    super(a_name, a_id);
+  public JGAPRequestGP(String a_name, String a_id, int a_chunk,
+                       IGridConfigurationGP a_config,
+                       IWorkerEvolveStrategyGP a_strategy) {
+    super(a_name, 0);
     m_config = a_config;
     m_evolveStrategy = a_strategy;
+    m_chunk = a_chunk;
+    m_id = a_id;
   }
 
   /**
    * Constructor.
    *
    * @param name String
-   * @param id int
+   * @param a_id unique identification of request
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @param a_config Configuration
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String name, int id, IGridConfigurationGP a_config) {
-    this(name, id, a_config, new DefaultEvolveStrategyGP());
+  public JGAPRequestGP(String name, String a_id, int a_chunk,
+                       IGridConfigurationGP a_config) {
+    this(name, a_id, a_chunk, a_config, new DefaultEvolveStrategyGP());
   }
 
   /**
    * Constructor. Allows to specify a preset population with which the genotype
    * will be initialized.
    *
-   * @param a_name String
-   * @param a_id int
+   * @param a_name textual description of request
+   * @param a_id unique identification of request
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @param a_config Configuration
    * @param a_pop Population
    * @param a_strategy the strategy to choose for evolution
@@ -86,9 +100,10 @@ public class JGAPRequestGP
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String a_name, int a_id, IGridConfigurationGP a_config,
-                     GPPopulation a_pop, IWorkerEvolveStrategyGP a_strategy) {
-    this(a_name, a_id, a_config, a_strategy);
+  public JGAPRequestGP(String a_name, String a_id, int a_chunk,
+                       IGridConfigurationGP a_config,
+                       GPPopulation a_pop, IWorkerEvolveStrategyGP a_strategy) {
+    this(a_name, a_id, a_chunk, a_config, a_strategy);
     m_pop = a_pop;
   }
 
@@ -96,17 +111,20 @@ public class JGAPRequestGP
    * Constructor. Allows to specify a preset population with which the genotype
    * will be initialized.
    *
-   * @param a_name String
-   * @param a_id int
+   * @param a_name textual description of request
+   * @param a_id unique identification of request
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @param a_config Configuration
    * @param a_pop Population
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP(String a_name, int a_id, IGridConfigurationGP a_config,
-                     GPPopulation a_pop) {
-    this(a_name, a_id, a_config, a_pop, new DefaultEvolveStrategyGP());
+  public JGAPRequestGP(String a_name, String a_id, int a_chunk,
+                       IGridConfigurationGP a_config,
+                       GPPopulation a_pop) {
+    this(a_name, a_id, a_chunk, a_config, a_pop, new DefaultEvolveStrategyGP());
   }
 
   /**
@@ -147,11 +165,11 @@ public class JGAPRequestGP
   }
 
   public GridWorkerFeedback getWorkerFeedback() {
-   return m_workerFeedback;
+    return m_workerFeedback;
   }
 
   public void setWorkerFeedback(GridWorkerFeedback a_feedback) {
-   m_workerFeedback = a_feedback;
+    m_workerFeedback = a_feedback;
   }
 
   /**
@@ -163,7 +181,6 @@ public class JGAPRequestGP
   public void setGenotypeInitializer(IGenotypeInitializerGP a_initializer) {
     m_genotypeInitializer = a_initializer;
   }
-
 
   /**
    * @return the IGenotypeInitializer set
@@ -187,7 +204,6 @@ public class JGAPRequestGP
   public void setPopulation(GPPopulation a_pop) {
     m_pop = a_pop;
   }
-
 
   /**
    * @return the JGAP configuration set
@@ -240,7 +256,7 @@ public class JGAPRequestGP
    * @since 3.2
    */
   public Object clone() {
-    JGAPRequestGP result = newInstance(getSessionName(), getRID());
+    JGAPRequestGP result = newInstance(getSessionName(), getID(), getChunk());
     return result;
   }
 
@@ -248,19 +264,51 @@ public class JGAPRequestGP
    * Creates a new instance using the given name and ID. Reason for this method:
    * ID cannot be set other than with construction!
    *
-   * @param a_name the name to set
-   * @param a_ID unique ID to set
+   * @param a_name textual description of request
+   * @param a_id unique identification of request
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @return newly created JGAPRequest object
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPRequestGP newInstance(String a_name, int a_ID) {
-    JGAPRequestGP result = new JGAPRequestGP(a_name, a_ID,
-                                       m_config, getPopulation());
+  public JGAPRequestGP newInstance(String a_name, String a_id, int a_chunk) {
+    JGAPRequestGP result = new JGAPRequestGP(a_name, a_id, a_chunk,
+        m_config, getPopulation());
     result.setEvolveStrategy(getWorkerEvolveStrategy());
     result.setGenotypeInitializer(getGenotypeInitializer());
     result.setWorkerReturnStrategy(getWorkerReturnStrategy());
+    result.setRequesterInfo(getRequesterInfo());
     return result;
+  }
+
+  public int getChunk() {
+    return m_chunk;
+  }
+
+  /**
+   * @return information about the requester
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public MasterInfo getRequesterInfo() {
+    return m_requesterInfo;
+  }
+
+  /**
+   *
+   * @param a_requesterInfo set information about the requester
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setRequesterInfo(MasterInfo a_requesterInfo) {
+    m_requesterInfo = a_requesterInfo;
+  }
+
+  public String getID() {
+    return m_id;
   }
 }
