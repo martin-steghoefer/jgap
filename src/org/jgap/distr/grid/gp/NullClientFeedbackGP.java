@@ -20,17 +20,17 @@ package org.jgap.distr.grid.gp;
 public class NullClientFeedbackGP
     implements IClientFeedbackGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  public void setProgressMinimum(int min) {
+  public void setProgressMinimum(int a_min) {
     // Do nothing.
   }
 
-  public void setProgressMaximum(int max) {
+  public void setProgressMaximum(int a_max) {
     // Do nothing.
   }
 
-  public void setProgressValue(int val) {
+  public void setProgressValue(int a_val) {
     // Do nothing.
   }
 
@@ -38,11 +38,12 @@ public class NullClientFeedbackGP
     // Do nothing.
   }
 
-  public void sendingFragmentRequest(JGAPRequestGP req) {
+  public void sendingFragmentRequest(JGAPRequestGP a_req) {
     // Do nothing.
   }
 
-  public void receivedFragmentResult(JGAPRequestGP req, JGAPResultGP res, int idx) {
+  public void receivedFragmentResult(JGAPRequestGP a_req, JGAPResultGP a_res,
+                                     int a_idx) {
     // Do nothing.
   }
 
@@ -50,15 +51,15 @@ public class NullClientFeedbackGP
     // Do nothing.
   }
 
-  public void completeFrame(int idx) {
+  public void completeFrame(int a_idx) {
     // Do nothing.
   }
 
-  public void error(String msg, Exception ex) {
+  public void error(String a_msg, Exception a_ex) {
     // Do nothing.
   }
 
-  public void info(String msg) {
+  public void info(String a_msg) {
     // Do nothing.
   }
 }

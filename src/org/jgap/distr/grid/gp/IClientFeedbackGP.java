@@ -20,25 +20,26 @@ import java.io.*;
 public interface IClientFeedbackGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  void setProgressMinimum(int min);
+  void setProgressMinimum(int a_min);
 
-  void setProgressMaximum(int max);
+  void setProgressMaximum(int a_max);
 
-  void setProgressValue(int val);
+  void setProgressValue(int a_val);
 
   void beginWork();
 
-  void sendingFragmentRequest(JGAPRequestGP req);
+  void sendingFragmentRequest(JGAPRequestGP a_req);
 
-  void receivedFragmentResult(JGAPRequestGP req, JGAPResultGP res, int idx);
+  void receivedFragmentResult(JGAPRequestGP a_req, JGAPResultGP a_res,
+                              int a_idx);
 
   void endWork();
 
-  void completeFrame(int idx);
+  void completeFrame(int a_idx);
 
-  void error(String msg, Exception ex);
+  void error(String a_msg, Exception a_ex);
 
-  void info(String msg);
+  void info(String a_msg);
 }
