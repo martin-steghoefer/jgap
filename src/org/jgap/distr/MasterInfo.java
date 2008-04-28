@@ -9,6 +9,8 @@
  */
 package org.jgap.distr;
 
+import org.jgap.util.NetworkKit;
+
 /**
  * Holds information about an IMaster instance and allows to communicate with
  * it.
@@ -18,11 +20,31 @@ package org.jgap.distr;
  */
 public class MasterInfo {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  // The computer's address over it is reachable in the network
+  /**
+   * The computer's address over which it is reachable in the network
+   */
   public String m_IPAddress;
 
-  // Only for display purposes
+  /**
+   * Name of the grid user associated with the IP address
+   */
+  public String m_username;
+
+  /**
+   * Host name
+   */
   public String m_name;
+
+  public MasterInfo() throws Exception {
+    this(false);
+  }
+
+  public MasterInfo(boolean a_preset) throws Exception {
+    if (a_preset) {
+      m_IPAddress = NetworkKit.getLocalIPAddress();
+      m_name = NetworkKit.getLocalHostName();
+    }
+  }
 }
