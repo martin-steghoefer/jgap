@@ -3,6 +3,7 @@
 * Added new class DummyGridClientMediator
 * Added new class MessageContext
 * Added new class BasicContext
+* Added new class PersistableObject
 * Added new base class NaturalSelectorExt
 * Added new class DateKit
 * Added default constructor for class NaturalSelector
@@ -23,9 +24,10 @@
 * GPFitnessFunction: caught exception in fitness
   determination that could result from ensureUniqueness
 * JGAPResultGP: added support for generic data
+* MasterInfo: added preset constructor; added username
 * FileKit: added getTemDir()
 * Enhanced Javadoc, fixed spelling errors
-* Addes some package.html description files
+* Added some package.html description files
 
 3.3.2
 -----------------------------------------------------------
