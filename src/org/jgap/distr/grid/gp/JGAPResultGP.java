@@ -10,7 +10,7 @@
 package org.jgap.distr.grid.gp;
 
 import org.homedns.dade.jcgrid.*;
-import org.jgap.*;
+import org.jgap.distr.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
@@ -23,10 +23,13 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private IGPProgram m_fittest;
+
   private GPPopulation m_pop;
+
+  private MasterInfo m_workerInfo;
 
   /**
    * Arbitrary extra data
@@ -35,40 +38,52 @@ public class JGAPResultGP
 
   private long m_unitDone;
 
+  private int m_chunk;
+
+  private String m_id;
+
   /**
    * Constructor: Takes the fittest program determined as result of a worker's
    * computation.
    *
    * @param a_sessionName arbitrary session name to distinct from other results
    * @param a_id ID of the result, should be unique
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @param a_fittestProg the fittest program determined
    * @param a_unitdone number of units done
    * @deprecated use other constructor with GPPopulation parameter instead
    */
-  public JGAPResultGP(String a_sessionName, int a_id, IGPProgram a_fittestProg,
-                    long a_unitdone) {
-    super(a_sessionName, a_id);
+  public JGAPResultGP(String a_sessionName, String a_id, int a_chunk,
+                      IGPProgram a_fittestProg, long a_unitdone) {
+    super(a_sessionName, 0);
     m_fittest = a_fittestProg;
     m_unitDone = a_unitdone;
+    m_chunk = a_chunk;
+    m_id = a_id;
   }
 
   /**
    * Constructor: Takes a population as result of a worker's computation.
    *
    * @param a_sessionName arbitrary session name to distinct from other results
-   * @param id ID of the result, should be unique
+   * @param a_id ID of the result, should be unique
+   * @param a_chunk running index of request chunk, should be unique within an
+   * identification
    * @param a_programs the result of a worker's computation
    * @param a_unitdone number of units done
    *
    * @author Klaus Meffert
    * @since 3.2
    */
-  public JGAPResultGP(String a_sessionName, int id, GPPopulation a_programs,
-                    long a_unitdone) {
-    super(a_sessionName, id);
+  public JGAPResultGP(String a_sessionName, String a_id, int a_chunk,
+                      GPPopulation a_programs, long a_unitdone) {
+    super(a_sessionName, 0);
     m_fittest = null;
     m_pop = a_programs;
     m_unitDone = a_unitdone;
+    m_chunk = a_chunk;
+    m_id = a_id;
   }
 
   /**
@@ -113,5 +128,34 @@ public class JGAPResultGP
    */
   public Object getGenericData() {
     return m_genericData;
+  }
+
+  public int getChunk() {
+    return m_chunk;
+  }
+
+  /**
+   * @return information about the worker
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public MasterInfo getWorkerInfo() {
+    return m_workerInfo;
+  }
+
+  /**
+   *
+   * @param a_workerInfo set information about the worker
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setWorkerInfo(MasterInfo a_workerInfo) {
+    m_workerInfo = a_workerInfo;
+  }
+
+  public String getID() {
+    return m_id;
   }
 }
