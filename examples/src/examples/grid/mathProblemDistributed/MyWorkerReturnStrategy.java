@@ -25,7 +25,7 @@ import org.apache.log4j.*;
 public class MyWorkerReturnStrategy
     implements IWorkerReturnStrategyGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private static Logger log = Logger.getLogger(MyWorkerReturnStrategy.class);
 
@@ -55,7 +55,7 @@ public class MyWorkerReturnStrategy
         log.error("Could not determine the best program!");
       }
     }
-    JGAPResultGP result = new JGAPResultGP(a_req.getSessionName(), a_req.getRID(),
+    JGAPResultGP result = new JGAPResultGP(a_req.getSessionName(), a_req.getID(),
         a_req.getChunk(), best, 1);
     return result;
   }
