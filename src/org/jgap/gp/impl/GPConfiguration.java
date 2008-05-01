@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -887,7 +887,11 @@ public class GPConfiguration
       if (m_objectiveFunction != null) {
         result.m_objectiveFunction = m_objectiveFunction;
       }
-      result.setPopulationSize(getPopulationSize());/*@todo move popSize from super to here!*/
+      int popSize = getPopulationSize();
+      if (popSize > 0) {
+        result.setPopulationSize(popSize);
+            /*@todo move popSize from super to here!*/
+      }
       result.m_crossoverProb = m_crossoverProb;
       result.m_reproductionProb = m_reproductionProb;
       result.m_newChromsPercent = m_newChromsPercent;
