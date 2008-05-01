@@ -28,6 +28,7 @@
 * FileKit: added getTemDir()
 * Enhanced Javadoc, fixed spelling errors
 * Added some package.html description files
+* Added a note about Xerces in lib/readme.txt
 
 3.3.2
 -----------------------------------------------------------
