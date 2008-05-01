@@ -56,7 +56,9 @@ start-menu of Windows. </p>
     <td width="60" align="center" class="text" bgcolor="#008000"><b><font color="#FFFFFF">4</font></b></td>
     <td width="95%" class="text">In the directory you put JGAP in and opened in your explorer, there should be
       some files ending with <font face="Courier New">.jar</font>. These files
-contain the compiled JGAP distribution and that is all we need for now.</td>
+contain the compiled JGAP distribution and that is all we need for now. Please
+      notice that there are some dependencied to external libraries. You find
+      all these jar files in the sub directory lib.</td>
   </tr>
 </table>
 
@@ -78,6 +80,17 @@ following: </p>
 
 <p align="center"><font face="Courier New">java -classpath
 &quot;.:jgap-examples.jar:jgap.jar&quot; examples.MinimizingMakeChange 89</font> </p>
+
+    </td>
+  </tr>
+  <tr>
+    <td width="60" align="center" class="text" bgcolor="#008000" height="97"><b><font color="#FFFFFF">6</font></b></td>
+    <td width="95%" class="text" height="97">In case you use classes that rely
+      on external libraries, you have to add these jar files to the class path
+      in previous step five. For example, if you run a class that utilizes the <font face="Courier New">WeightedRouletteSelector</font>
+      class from package <font face="Courier New">org.jgap.impl</font> you will
+      have to add the file <font face="Courier New">lib/trove-2.0.2.jar</font>
+      to the classpath. For running the above example, this is not necessary!
 
     </td>
   </tr>
@@ -103,7 +116,7 @@ For a total of 89 cents in 8 coins.</font></p>
 
 <table border="0" width="100%" cellspacing="5" cellpadding="4">
   <tr>
-    <td width="60" align="center" class="text" bgcolor="#008000"><b><font color="#FFFFFF">6</font></b></td>
+    <td width="60" align="center" class="text" bgcolor="#008000"><b><font color="#FFFFFF">7</font></b></td>
 
 <font
 color="#000080">
@@ -129,7 +142,7 @@ color="#000080">
 
 <table border="0" width="100%" cellspacing="5" cellpadding="4">
   <tr>
-    <td width="60" align="center" class="text" bgcolor="#008000"><b><font color="#FFFFFF">7</font></b></td>
+    <td width="60" align="center" class="text" bgcolor="#008000"><b><font color="#FFFFFF">8</font></b></td>
 
 <font
 color="#000080">
