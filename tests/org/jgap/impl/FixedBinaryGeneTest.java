@@ -22,7 +22,7 @@ import junit.framework.*;
 public class FixedBinaryGeneTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(FixedBinaryGeneTest.class);
@@ -30,10 +30,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.0
-   * @throws Exception
    */
   public void testConstruct_0()
       throws Exception {
@@ -45,9 +45,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
-   * @throws Exception
    */
   public void testConstruct_1()
       throws Exception {
@@ -61,9 +61,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
-   * @throws Exception
    */
   public void testConstruct_2()
       throws Exception {
@@ -77,9 +77,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testConstruct_3()
       throws Exception {
@@ -93,9 +93,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testConstruct_4()
       throws Exception {
@@ -108,8 +108,9 @@ public class FixedBinaryGeneTest
   /**
    * Buffer allocation test case.
    *
-   * @author vamsi
    * @throws Exception
+   *
+   * @author vamsi
    */
   public void testConstruct_5()
       throws Exception {
@@ -121,10 +122,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testConstruct_6()
       throws Exception {
@@ -133,9 +134,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testToString_0()
       throws Exception {
@@ -145,9 +146,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testToString_1()
       throws Exception {
@@ -157,10 +158,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testToString_2()
       throws Exception {
@@ -169,9 +170,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testGetAllele_0()
       throws Exception {
@@ -186,9 +187,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testGetAllele_1()
       throws Exception {
@@ -203,10 +204,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testGetAllele_2()
       throws Exception {
@@ -221,9 +222,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testEquals_0()
       throws Exception {
@@ -233,9 +234,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testEquals_1()
       throws Exception {
@@ -244,9 +245,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testEquals_2()
       throws Exception {
@@ -259,9 +260,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
   public void testEquals_3()
       throws Exception {
@@ -302,10 +303,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testEquals_8()
       throws Exception {
@@ -318,22 +319,35 @@ public class FixedBinaryGeneTest
   }
 
   /**
-   *
-   * @author vamsi
    * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
    */
-  public void testIntValues_0()
+  public void testGetIntValues_0()
       throws Exception {
-    FixedBinaryGene gene1 = new FixedBinaryGene(conf, 4);
-    assertFalse(gene1.getIntValues() == null);
+    FixedBinaryGene gene1 = new FixedBinaryGene(conf, 2);
+    gene1.setAllele(new int[] {0, 0});
+    assertEquals(0, gene1.getIntValues()[0]);
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
-  public void testIntValues_1()
+  public void testGetIntValues_1()
+      throws Exception {
+    FixedBinaryGene gene1 = new FixedBinaryGene(conf, 4);
+    assertNotNull(gene1.getIntValues());
+  }
+
+  /**
+   * @throws Exception
+   *
+   * @author vamsi
+   */
+  public void testGetIntValues_2()
       throws Exception {
     FixedBinaryGene gene1 = new FixedBinaryGene(conf, 2);
     int[] values = gene1.getIntValues();
@@ -344,11 +358,11 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author vamsi
-   * @throws Exception
    */
-  public void testIntValues_2()
+  public void testGetIntValues_3()
       throws Exception {
     FixedBinaryGene gene1 = new FixedBinaryGene(conf, 3);
     gene1.setAllele(new int[] {0, 1, 0});
@@ -361,8 +375,9 @@ public class FixedBinaryGeneTest
   /**
    * Allele is null.
    *
-   * @author vamsi
    * @throws Exception
+   *
+   * @author vamsi
    */
   public void testSetAllele_0()
       throws Exception {
@@ -379,8 +394,9 @@ public class FixedBinaryGeneTest
   /**
    * Allele is of wrong type.
    *
-   * @author vamsi
    * @throws Exception
+   *
+   * @author vamsi
    */
   public void testSetAllele_1()
       throws Exception {
@@ -397,8 +413,9 @@ public class FixedBinaryGeneTest
   /**
    * Set Allele to int values, no exception should occur.
    *
-   * @author vamsi
    * @throws Exception
+   *
+   * @author vamsi
    */
   public void testSetAllele_2()
       throws Exception {
@@ -919,10 +936,29 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void testSetBit_0_2()
+      throws Exception {
+    FixedBinaryGene gene1 = new FixedBinaryGene(conf, 7);
+    gene1.setAllele(new int[] {1, 1, 0, 0, 1, 0, 1});
+    assertTrue(gene1.getBit(0));
+    gene1.setBit(0, 0);
+    assertFalse(gene1.getBit(0));
+    gene1.setBit(1, 1);
+    assertTrue(gene1.getBit(1));
+    gene1.setBit(4, 1);
+    assertFalse(gene1.getBit(0));
+  }
+
+  /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetBit_1()
       throws Exception {
@@ -936,10 +972,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetBit_2()
       throws Exception {
@@ -955,10 +991,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetBit_3()
       throws Exception {
@@ -974,10 +1010,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetBit_4()
       throws Exception {
@@ -993,10 +1029,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
-   * @throws Exception
    */
   public void testSetBit_5()
       throws Exception {
@@ -1016,10 +1052,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.6
-   * @throws Exception
    */
   public void testSetBit_6()
       throws Exception {
@@ -1037,10 +1073,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSubbString_0()
       throws Exception {
@@ -1057,10 +1093,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSubString_1()
       throws Exception {
@@ -1076,10 +1112,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testFlip_0()
       throws Exception {
@@ -1094,10 +1130,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testFlip_1()
       throws Exception {
@@ -1131,10 +1167,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testSetToRandomValue_1()
       throws Exception {
@@ -1173,9 +1209,9 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
-   * @throws Exception
    */
   public void testNewGene_0()
       throws Exception {
@@ -1189,10 +1225,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.2
-   * @throws Exception
    */
   public void testHashCode_0()
       throws Exception {
@@ -1206,10 +1242,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.5
-   * @throws Exception
    */
   public void testHashCode_1()
       throws Exception {
@@ -1223,10 +1259,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.5
-   * @throws Exception
    */
   public void testHashCode_2()
       throws Exception {
@@ -1238,10 +1274,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.5
-   * @throws Exception
    */
   public void testHashCode_3()
       throws Exception {
@@ -1255,10 +1291,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testSetEnergy_0()
       throws Exception {
@@ -1267,10 +1303,10 @@ public class FixedBinaryGeneTest
   }
 
   /**
+   * @throws Exception
    *
    * @author Klaus Meffert
    * @since 2.4
-   * @throws Exception
    */
   public void testSetEnergy_1()
       throws Exception {
