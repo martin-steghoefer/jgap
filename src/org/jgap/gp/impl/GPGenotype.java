@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -765,7 +765,13 @@ public class GPGenotype
                 break;
               }
               else {
-                throw new IllegalStateException(iex.getMessage());
+                if (getGPConfiguration().getPrototypeProgram() == null) {
+                  throw new IllegalStateException("Cloning: Prototype program was null");
+                }
+                else {
+                  throw new IllegalStateException(
+                      "Cloning of prototype program failed, " + iex.getMessage());
+                }
               }
             }
           }
@@ -1014,8 +1020,7 @@ public class GPGenotype
   }
 
   private IGPProgram cloneProgram(IGPProgram a_original) {
-    IGPProgram validProgram = getGPConfiguration().
-        getPrototypeProgram();
+    IGPProgram validProgram = a_original;
     ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
         getCloneHandlerFor(validProgram, null);
     if (cloner != null) {
