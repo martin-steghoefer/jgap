@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -12,8 +12,8 @@ package org.jgap.util;
 import java.util.*;
 
 /**
- * A simple test class loader capable of loading from
- * multiple sources, such as local files or a URL.
+ * A simple test class loader capable of loading from multiple sources, such as
+ * local files or a URL.
  *
  * This class is derived from an article by Chuck McManis
  * http://www.javaworld.com/javaworld/jw-10-1996/indepth.src.html
@@ -31,7 +31,7 @@ import java.util.*;
 public abstract class MultiClassLoader
     extends ClassLoader {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
 //---------- Fields --------------------------------------
   private Hashtable classes = new Hashtable();

@@ -14,17 +14,16 @@ import java.util.*;
 import java.util.zip.*;
 
 /**
- * JarResources: JarResources maps all resources included in a
- * Zip or Jar file. Additionaly, it provides a method to extract one
- * as a blob.
+ * JarResources maps all resources included in a zip or jar file.
+ * Additionaly, it provides a method to extract one as a blob.
  *
- * @author Unknown
+ * @author unknown
  * @author Klaus Meffert (integrated into JGAP)
  * @since 3.2
  */
 public final class JarResources {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   // external debug flag
   public boolean debugOn = false;

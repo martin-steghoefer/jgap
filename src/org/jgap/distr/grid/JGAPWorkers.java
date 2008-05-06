@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.cmd.MainCmd;
  */
 public class JGAPWorkers {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private Class m_workerClass;
 
@@ -101,7 +101,7 @@ public class JGAPWorkers {
   }
 
   /**
-   * Convenience method to start a workers or multiple instances of it.
+   * Convenience method to start a worker or multiple instances of it.
    * For possible parameters see method
    * parseCommonOptions in class org.homedns.dade.jcgrid.cmd.MainCmd. The most
    * important parameters are:

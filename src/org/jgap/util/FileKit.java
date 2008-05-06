@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -305,9 +305,9 @@ public class FileKit {
   }
 
   /**
-   * @param a_JGAPManifest Manifest with JGAP-specific information
-   * @return version the jar file is working wit (or version of the JGAP library
-   * in case the file *is* the JGAP library)
+   * @param a_JGAPManifest manifest with JGAP-specific information
+   * @return version the jar file is working with (or version of the JGAP
+   * library in case the file _is_ the JGAP library)
    *
    * @author Klaus Meffert
    * @since 3.2
