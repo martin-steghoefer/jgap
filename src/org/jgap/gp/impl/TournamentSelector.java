@@ -10,6 +10,8 @@
 package org.jgap.gp.impl;
 
 import java.io.*;
+import java.util.*;
+
 import org.jgap.*;
 import org.jgap.gp.*;
 
@@ -18,12 +20,13 @@ import org.jgap.gp.*;
  *
  * @author Javier Meseguer
  * @author Enrique D. Martí
+ * @author Klaus Meffert
  * @since 3.2
  */
 public class TournamentSelector
     implements INaturalGPSelector, Serializable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private int m_tournament_size;
 
@@ -55,6 +58,7 @@ public class TournamentSelector
    *
    * @author Javier Meseguer
    * @author Enrique D. Martí
+   * @author Klaus Meffert
    * @since 3.2
    */
   public IGPProgram select(GPGenotype a_genotype) {
@@ -64,15 +68,27 @@ public class TournamentSelector
     RandomGenerator random = a_genotype.getGPConfiguration().getRandomGenerator();
     IGPFitnessEvaluator evaluator = a_genotype.getGPConfiguration().
         getGPFitnessEvaluator();
+    int popSize = pop.getPopSize();
+    // Care that in the tournament each individual is only considered once!
+    // --------------------------------------------------------------------
+    List<Integer> indexes = new Vector(popSize);
+    for (int i=0;i<popSize;i++) {
+      indexes.add(i);
+    }
     for (int i = 0; i < m_tournament_size; i++) {
-      index = (int) (random.nextDouble() * pop.getPopSize());
+      index = (int) (random.nextDouble() * indexes.size());
+      int realIndex = indexes.get(index);
       if (bestProgram == null) {
-        bestProgram = pop.getGPProgram(index);
+        bestProgram = pop.getGPProgram(realIndex);
       }
       else {
-        if (evaluator.isFitter(pop.getGPProgram(index), bestProgram)) {
-          bestProgram = pop.getGPProgram(index);
+        IGPProgram prog = pop.getGPProgram(realIndex);
+        if (evaluator.isFitter(prog, bestProgram)) {
+          bestProgram = prog;
         }
+      }
+      if (i < m_tournament_size-1) {
+        indexes.remove(index);
       }
     }
     return bestProgram;
