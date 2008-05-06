@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.70 $";
+  private final static String CVS_REVISION = "$Revision: 1.71 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -1428,6 +1428,9 @@ public class GenotypeTest
     }
 
     public void resetAge() {
+    }
+
+    public void setAge(int a_age) {
     }
 
     public int getAge() {

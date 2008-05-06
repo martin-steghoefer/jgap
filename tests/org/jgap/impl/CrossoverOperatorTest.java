@@ -22,7 +22,7 @@ import junit.framework.*;
 public class CrossoverOperatorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.32 $";
+  private static final String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CrossoverOperatorTest.class);
@@ -210,7 +210,7 @@ public class CrossoverOperatorTest
     Gene gene3 = new IntegerGene(conf, 1, 10);
     gene3.setAllele(new Integer(4));
     chroms.add(gene3);
-    CrossoverOperator op = new CrossoverOperator(conf);
+    CrossoverOperator op = new CrossoverOperator(conf,2);
     // following crossover-operation should exchange alleles of cgene1 and
     // cgene2.
     op.operate(new Population(conf, population), chroms);
@@ -390,7 +390,7 @@ public class CrossoverOperatorTest
     Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    CrossoverOperator op = new CrossoverOperator(conf);
+    CrossoverOperator op = new CrossoverOperator(conf, 2);
     // Do the crossing over.
     // ---------------------
     op.operate(new Population(conf, population), chroms);
@@ -456,7 +456,7 @@ public class CrossoverOperatorTest
     Gene gene2 = new IntegerGene(conf, 1, 10);
     gene2.setAllele(new Integer(7));
     chroms.add(gene2);
-    CrossoverOperator op = new CrossoverOperator(conf);
+    CrossoverOperator op = new CrossoverOperator(conf, 2);
     // Do the crossing over.
     // ---------------------
     op.operate(new Population(conf, population), chroms);
@@ -561,8 +561,8 @@ public class CrossoverOperatorTest
     CrossoverOperator op2 = new CrossoverOperator(conf);
     assertEquals(0, op.compareTo(op2));
     op = new CrossoverOperator(conf, 3);
-    assertEquals(1, op.compareTo(op2));
-    assertEquals( -1, op2.compareTo(op));
+    assertEquals(-1, op.compareTo(op2));
+    assertEquals(1, op2.compareTo(op));
     op = new CrossoverOperator(conf, new DefaultCrossoverRateCalculator(conf));
     assertEquals(1, op.compareTo(op2));
     assertEquals( -1, op2.compareTo(op));

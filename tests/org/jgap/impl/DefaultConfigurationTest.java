@@ -23,7 +23,7 @@ import junit.framework.*;
 public class DefaultConfigurationTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(DefaultConfigurationTest.class);
@@ -39,7 +39,7 @@ public class DefaultConfigurationTest
     assertEquals(DefaultFitnessEvaluator.class,
                  conf.getFitnessEvaluator().getClass());
     assertEquals(BestChromosomesSelector.class,
-                 conf.getNaturalSelectors(true).get(0).getClass());
+                 conf.getNaturalSelectors(false).get(0).getClass());
     assertEquals(StockRandomGenerator.class,
                  conf.getRandomGenerator().getClass());
     assertEquals(ChromosomePool.class, conf.getChromosomePool().getClass());
