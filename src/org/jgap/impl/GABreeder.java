@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public GABreeder() {
     super();
@@ -59,33 +59,21 @@ public class GABreeder
         fittest = pop.determineFittestChromosome(0, pop.size() - 1);
       }
     }
-    // Adjust population size to configured size (if wanted).
-    // Theoretically, this should be done at the end of this method.
-    // But for optimization issues it is not. If it is the last call to
-    // evolve() then the resulting population possibly contains more
-    // chromosomes than the wanted number. But this is no bad thing as
-    // more alternatives mean better chances having a fit candidate.
-    // If it is not the last call to evolve() then the next call will
-    // ensure the correct population size by calling keepPopSizeConstant.
-    // ------------------------------------------------------------------
-    if (a_conf.isKeepPopulationSizeConstant()) {
-      try {
-        pop.keepPopSizeConstant();
-      } catch (InvalidConfigurationException iex) {
-        throw new RuntimeException(iex);
-      }
+    if (a_conf.getGenerationNr() > 0) {
+      // Adjust population size to configured size (if wanted).
+      // Theoretically, this should be done at the end of this method.
+      // But for optimization issues it is not. If it is the last call to
+      // evolve() then the resulting population possibly contains more
+      // chromosomes than the wanted number. But this is no bad thing as
+      // more alternatives mean better chances having a fit candidate.
+      // If it is not the last call to evolve() then the next call will
+      // ensure the correct population size by calling keepPopSizeConstant.
+      // ------------------------------------------------------------------
+      keepPopSizeConstant(pop, a_conf);
     }
-    int currentPopSize = pop.size();
-    // Ensure all chromosomes are updated.
-    // -----------------------------------
-    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
-    boolean bulkFitFunc = (bulkFunction != null);
-    if (!bulkFitFunc) {
-      for (int i = 0; i < currentPopSize; i++) {
-        IChromosome chrom = pop.getChromosome(i);
-        chrom.getFitnessValue();
-      }
-    }
+    // Ensure fitness value of all chromosomes is udpated.
+    // ---------------------------------------------------
+    updateChromosomes(pop, a_conf);
     // Apply certain NaturalSelectors before GeneticOperators will be executed.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, true);
@@ -98,7 +86,7 @@ public class GABreeder
     // FitnessFunction.NO_FITNESS_VALUE. But who knows which Chromosome
     // implementation is used...
     // ----------------------------------------------------------------
-    currentPopSize = pop.size();
+    int currentPopSize = pop.size();
     for (int i = originalPopSize; i < currentPopSize; i++) {
       IChromosome chrom = pop.getChromosome(i);
       chrom.setFitnessValueDirectly(FitnessFunction.NO_FITNESS_VALUE);
@@ -120,17 +108,20 @@ public class GABreeder
       // -----------------------------------------
       chrom.resetOperatedOn();
     }
-
-    // Apply certain NaturalSelectors after GeneticOperators have been applied.
-    // ------------------------------------------------------------------------
-    pop = applyNaturalSelectors(a_conf, pop, false);
+    // Ensure fitness value of all chromosomes is udpated.
+    // ---------------------------------------------------
+    updateChromosomes(pop, a_conf);
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
+    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     if (bulkFunction != null) {
       /**@todo utilize jobs: bulk fitness function is not so important for a
        * prototype! */
       bulkFunction.evaluate(pop);
     }
+    // Apply certain NaturalSelectors after GeneticOperators have been applied.
+    // ------------------------------------------------------------------------
+    pop = applyNaturalSelectors(a_conf, pop, false);
     // Fill up population randomly if size dropped below specified percentage
     // of original size.
     // ----------------------------------------------------------------------
@@ -160,13 +151,7 @@ public class GABreeder
         }
       }
     }
-    // Determine if all-time fittest chromosome is in the population.
-    // --------------------------------------------------------------
-    if (fittest != null && !pop.contains(fittest)) {
-      // Re-add fittest chromosome to current population.
-      // ------------------------------------------------
-      pop.addChromosome(fittest);
-    }
+    reAddFittest(pop, fittest);
     // Increase number of generation.
     // ------------------------------
     a_conf.incrementGenerationNr();
@@ -185,5 +170,39 @@ public class GABreeder
    */
   public Object clone() {
     return new GABreeder();
+  }
+
+  protected void keepPopSizeConstant(Population a_pop, Configuration a_conf) {
+    if (a_conf.isKeepPopulationSizeConstant()) {
+      try {
+        a_pop.keepPopSizeConstant();
+      } catch (InvalidConfigurationException iex) {
+        throw new RuntimeException(iex);
+      }
+    }
+  }
+
+  protected void reAddFittest(Population a_pop, IChromosome a_fittest) {
+    // Determine if all-time fittest chromosome is in the population.
+    // --------------------------------------------------------------
+    if (a_fittest != null && !a_pop.contains(a_fittest)) {
+      // Re-add fittest chromosome to current population.
+      // ------------------------------------------------
+      a_pop.addChromosome(a_fittest);
+    }
+  }
+
+  protected void updateChromosomes(Population a_pop, Configuration a_conf) {
+    int currentPopSize = a_pop.size();
+    // Ensure all chromosomes are updated.
+    // -----------------------------------
+    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
+    boolean bulkFitFunc = (bulkFunction != null);
+    if (!bulkFitFunc) {
+      for (int i = 0; i < currentPopSize; i++) {
+        IChromosome chrom = a_pop.getChromosome(i);
+        chrom.getFitnessValue();
+      }
+    }
   }
 }
