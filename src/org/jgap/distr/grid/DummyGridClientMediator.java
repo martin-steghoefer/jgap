@@ -10,6 +10,7 @@
 package org.jgap.distr.grid;
 
 import java.util.*;
+
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.homedns.dade.jcgrid.cmd.*;
@@ -24,7 +25,7 @@ import org.homedns.dade.jcgrid.message.*;
 public class DummyGridClientMediator
     implements IGridClientMediator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -170,6 +171,12 @@ public class DummyGridClientMediator
   }
 
   public void disconnect() throws Exception {
+    // Not implemented yet.
+    // --------------------
+  }
+
+  public void removeMessage(Object a_entry)
+      throws Exception {
     // Not implemented yet.
     // --------------------
   }

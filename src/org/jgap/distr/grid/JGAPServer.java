@@ -10,7 +10,6 @@
 package org.jgap.distr.grid;
 
 import java.io.*;
-
 import org.apache.commons.cli.*;
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.cmd.*;
@@ -29,7 +28,7 @@ import org.homedns.dade.jcgrid.server.*;
  */
 public class JGAPServer {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private final static String className = JGAPServer.class.getName();
 
@@ -50,28 +49,27 @@ public class JGAPServer {
   }
 
   // Just for testing purposes
-  public void addFile(String a_filename) throws Exception {
+  public void addFile(String a_filename)
+      throws Exception {
     String path = m_gs.getVFSSessionPool().getPath();
     if (path == null) {
       return;
     }
-    if (path.charAt(path.length()-1) != '\\') {
+    if (path.charAt(path.length() - 1) != '\\') {
       path += "\\";
     }
     copyFile(a_filename, path);
   }
 
-
-  public static void copyFile(String source, String dest) throws Exception {
+  public static void copyFile(String source, String dest)
+      throws Exception {
     File destFile = new File(dest);
     if (!destFile.isFile()) {
       String origFilename = new File(source).getName();
       dest = dest + origFilename;
     }
-
     File inputFile = new File(source);
     File outputFile = new File(dest);
-
 //     FileReader in = new FileReader(inputFile);
 //     FileWriter out = new FileWriter(outputFile);
 
@@ -79,14 +77,12 @@ public class JGAPServer {
     FileOutputStream out;
     in = new FileInputStream(inputFile);
     out = new FileOutputStream(outputFile);
-
     int c;
-
-      while ( (c = in.read()) != -1)
-        out.write(c);
-
-      in.close();
-      out.close();
+    while ( (c = in.read()) != -1) {
+      out.write(c);
+    }
+    in.close();
+    out.close();
   }
 
   public static void main(String[] args)
