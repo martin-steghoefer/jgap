@@ -9,6 +9,8 @@
  */
 package org.jgap.util;
 
+import java.io.*;
+
 /**
  * System-related utility functions.
  *
@@ -17,7 +19,7 @@ package org.jgap.util;
  */
 public class SystemKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * @return total memory available by the VM in megabytes.
@@ -60,7 +62,7 @@ public class SystemKit {
   }
 
   /**
-   * Nicifies a decimal string
+   * Nicifies a decimal string by cutting of all but two decimal places.
    *
    * @param a_mem the number to make nice
    * @return nicified number as a string
@@ -75,5 +77,42 @@ public class SystemKit {
       freeMB = freeMB.substring(0, index + 2);
     }
     return freeMB;
+  }
+
+  /**
+   * Returns the first line of the result of a shell command.
+   * Taken from UUID.
+   *
+   * @param commands the commands to run
+   * @return the first line of the command
+   * @throws IOException
+   *
+   * @since 3.3.3
+   */
+  static String getFirstLineOfCommand(String[] commands)
+      throws IOException {
+    Process p = null;
+    BufferedReader reader = null;
+    try {
+      p = Runtime.getRuntime().exec(commands);
+      reader = new BufferedReader(new InputStreamReader(
+          p.getInputStream()), 128);
+      return reader.readLine();
+    } finally {
+      if (p != null) {
+        if (reader != null) {
+          try {
+            reader.close();
+          } catch (IOException ex) {}
+        }
+        try {
+          p.getErrorStream().close();
+        } catch (IOException ex) {}
+        try {
+          p.getOutputStream().close();
+        } catch (IOException ex) {}
+        p.destroy();
+      }
+    }
   }
 }
