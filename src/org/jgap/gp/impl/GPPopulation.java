@@ -25,10 +25,12 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
+
   final static String GPPROGRAM_DELIMITER_CLOSING = ">";
+
   final static String GPPROGRAM_DELIMITER = "#";
 
   public final static double DELTA = 0.0000001d;
@@ -40,7 +42,8 @@ public class GPPopulation
    */
   private IGPProgram[] m_programs;
 
-  private /*transient*/ float[] m_fitnessRank;
+  private
+  /*transient*/ float[] m_fitnessRank;
 
   private int m_popSize;
 
@@ -64,6 +67,7 @@ public class GPPopulation
   /*
    * @param a_config the configuration to use.
    * @param a_size the maximum size of the population in GPProgram unit
+
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -71,6 +75,10 @@ public class GPPopulation
       throws InvalidConfigurationException {
     if (a_config == null) {
       throw new InvalidConfigurationException("Configuration must not be null!");
+    }
+    if (a_size < 1) {
+      throw new InvalidConfigurationException(
+          "Population size must be greater zero!");
     }
     m_config = a_config;
     m_programs = new GPProgram[a_size];
@@ -185,20 +193,28 @@ public class GPPopulation
                      boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
     create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
-                  a_maxNodes, a_fullModeAllowed, new DefaultProgramCreator());
+           a_maxNodes, a_fullModeAllowed, new DefaultProgramCreator());
   }
 
   /**
    * Creates a population.
    *
-   * @param a_types Class[]
-   * @param a_argTypes Class[][]
-   * @param a_nodeSets CommandGene[][]
-   * @param a_minDepths int[]
-   * @param a_maxDepths int[]
-   * @param a_maxNodes int
-   * @param a_fullModeAllowed boolean[]
-   * @param a_programCreator IProgramCreator
+   * @param a_types the type for each chromosome, the length of the array
+   * represents the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
+   * @param a_programCreator service to create new programs with
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -210,6 +226,43 @@ public class GPPopulation
                      boolean[] a_fullModeAllowed,
                      IProgramCreator a_programCreator)
       throws InvalidConfigurationException {
+    create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
+           a_maxNodes, a_fullModeAllowed, a_programCreator, 0);
+  }
+
+  /**
+   * Creates a population.
+   *
+   * @param a_types the type for each chromosome, the length of the array
+   * represents the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
+   * @param a_programCreator service to create new programs with
+   * @param a_offset start index for new programs to put into the configuration
+   *
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void create(Class[] a_types, Class[][] a_argTypes,
+                     CommandGene[][] a_nodeSets, int[] a_minDepths,
+                     int[] a_maxDepths, int a_maxNodes,
+                     boolean[] a_fullModeAllowed,
+                     IProgramCreator a_programCreator,
+                     int a_offset)
+      throws InvalidConfigurationException {
     int divisor;
     if (m_popSize < 2) {
       divisor = 1;
@@ -219,7 +272,7 @@ public class GPPopulation
     }
     int genNr = getGPConfiguration().getGenerationNr();
     int genI = new Random().nextInt(m_popSize);
-    for (int i = 0; i < m_popSize; i++) {
+    for (int i = a_offset; i < m_popSize; i++) {
       IGPProgram program = null;
       // Vary depth dependent on run index.
       // ----------------------------------
@@ -234,7 +287,7 @@ public class GPPopulation
                            a_minDepths, a_maxDepths, depth, (i % 2) == 0,
                            a_maxNodes, a_fullModeAllowed, tries,
                            a_programCreator);
-          if (i == 0 && getGPConfiguration().getPrototypeProgram() == null) {
+          if (program != null && getGPConfiguration().getPrototypeProgram() == null) {
             // Remember a prototyp of a valid program in case generation
             // cannot find a valid program within some few tries
             // --> then clone the prototype.
@@ -242,9 +295,12 @@ public class GPPopulation
             // or a validator is used which is quite restrictive.
             // ---------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
+            LOGGER.info("Prototype program set");
           }
-          else if (genNr % 5 == 0 && genNr > 0 && i == genI) {/**@todo 5: make configurable*/
-            // set prototype to new value after each some evolutions
+          else if (genNr % 5 == 0 && genNr > 0 && i == genI) {
+              /**@todo 5: make configurable*/
+            // Set prototype to new value after every some evolutions.
+            // -------------------------------------------------------
             double protoFitness = getGPConfiguration().getPrototypeProgram().
                 getFitnessValue();
             if (getGPConfiguration().getGPFitnessEvaluator().isFitter(program.
@@ -253,8 +309,7 @@ public class GPPopulation
             }
           }
           break;
-        }
-        catch (IllegalStateException iex) {
+        } catch (IllegalStateException iex) {
           tries++;
           if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
             IGPProgram prototype = getGPConfiguration().getPrototypeProgram();
@@ -267,8 +322,7 @@ public class GPPopulation
                   LOGGER.warn("Prototype program reused because random"
                               + " program did not satisfy constraints");
                   break;
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                   // Rethrow original error.
                   // -----------------------
                   throw iex;
@@ -285,8 +339,7 @@ public class GPPopulation
             throw iex;
           }
         }
-      }
-      while (true);
+      } while (true);
       setGPProgram(i, program);
     }
     setChanged(true);
@@ -340,15 +393,16 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.3
    */
-  public IGPProgram create(int a_programIndex, Class[] a_types, Class[][] a_argTypes,
+  public IGPProgram create(int a_programIndex, Class[] a_types,
+                           Class[][] a_argTypes,
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
                            int[] a_maxDepths, int a_depth, boolean a_grow,
                            int a_maxNodes, boolean[] a_fullModeAllowed,
-                           int a_tries) throws InvalidConfigurationException {
+                           int a_tries)
+      throws InvalidConfigurationException {
     return create(a_programIndex, a_types, a_argTypes, a_nodeSets, a_minDepths,
                   a_maxDepths, a_depth, a_grow, a_maxNodes, a_fullModeAllowed,
                   a_tries, new DefaultProgramCreator());
-
   }
 
   /**
@@ -383,7 +437,8 @@ public class GPPopulation
    * @author Klaus Meffert
    * @since 3.0
    */
-  public IGPProgram create(int a_programIndex, Class[] a_types, Class[][] a_argTypes,
+  public IGPProgram create(int a_programIndex, Class[] a_types,
+                           Class[][] a_argTypes,
                            CommandGene[][] a_nodeSets, int[] a_minDepths,
                            int[] a_maxDepths, int a_depth, boolean a_grow,
                            int a_maxNodes, boolean[] a_fullModeAllowed,
@@ -401,8 +456,7 @@ public class GPPopulation
       else {
         try {
           program = (IGPProgram) cloner.perform(m_fittestToAdd, null, null);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
           program = (IGPProgram) m_fittestToAdd;
         }
@@ -478,6 +532,41 @@ public class GPPopulation
   public void setGPPrograms(final GPPopulation a_pop) {
     synchronized (m_programs) {
       m_programs = a_pop.m_programs;
+      m_popSize = m_programs.length;
+    }
+    setChanged(true);
+  }
+
+  /**
+   * Sets the GPPrograms of the given array to this population.
+   *
+   * @param a_progs the programs to set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setGPPrograms(final IGPProgram[] a_progs) {
+    synchronized (m_programs) {
+      m_programs = a_progs;
+      m_popSize = m_programs.length;
+    }
+    setChanged(true);
+  }
+
+  /**
+   * Sets the GPPrograms of the given population to this population.
+   *
+   * @param a_pop the population to use as template
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void copyGPPrograms(final GPPopulation a_pop) {
+    int size = a_pop.size();
+    synchronized (m_programs) {
+      for (int i = 0; i < size; i++) {
+        m_programs[i] = a_pop.getGPProgram(i);
+      }
     }
     setChanged(true);
   }
@@ -500,6 +589,7 @@ public class GPPopulation
     }
     setChanged(true);
   }
+
   public IGPProgram[] getGPPrograms() {
     return m_programs;
   }
@@ -550,8 +640,7 @@ public class GPPopulation
       if (cloner != null) {
         try {
           m_fittestProgram = (IGPProgram) cloner.perform(m_fittestProgram, null, null);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ; // ignore
         }
       }
@@ -752,8 +841,7 @@ public class GPPopulation
   public boolean equals(Object a_pop) {
     try {
       return compareTo(a_pop) == 0;
-    }
-    catch (ClassCastException e) {
+    } catch (ClassCastException e) {
       // If the other object isn't an Population instance
       // then we're not equal.
       // ------------------------------------------------
@@ -812,12 +900,12 @@ public class GPPopulation
    */
   public String getPersistentRepresentation() {
     StringBuffer b = new StringBuffer();
-    for(IGPProgram program:m_programs) {
+    for (IGPProgram program : m_programs) {
       b.append(GPPROGRAM_DELIMITER_HEADING);
-        b.append(encode(
-            program.getClass().getName() +
-            GPPROGRAM_DELIMITER +
-            program.getPersistentRepresentation()));
+      b.append(encode(
+          program.getClass().getName() +
+          GPPROGRAM_DELIMITER +
+          program.getPersistentRepresentation()));
       b.append(GPPROGRAM_DELIMITER_CLOSING);
     }
     return b.toString();
