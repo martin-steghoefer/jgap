@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public interface IChromosome
     extends Comparable, ICloneable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.13 $";
+  final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Constants for toString()
@@ -245,6 +245,15 @@ public interface IChromosome
    * @since 3.2
    */
   void resetAge();
+
+  /**
+   * @param a_age set the age of the chromosome, see BestChromosomesSelector
+   * for a use-case
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  void setAge(int a_age);
 
   /**
    * @return 0: Chromosome newly created in this generation. This means it

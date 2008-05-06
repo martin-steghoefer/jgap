@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -133,6 +133,17 @@ public abstract class BaseChromosome
    */
   public int getAge() {
     return m_age;
+  }
+
+  /**
+   * @param a_age set the age of the chromosome, see BestChromosomesSelector
+   * for a use-case
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setAge(int a_age) {
+    m_age = a_age;
   }
 
   /**
