@@ -9,8 +9,8 @@
  */
 package org.jgap.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.text.*;
+import java.util.*;
 
 /**
  * Utility functions related to date and time.
@@ -20,7 +20,7 @@ import java.util.Calendar;
  */
 public class DateKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private static Calendar m_cal = Calendar.getInstance();
 
@@ -47,5 +47,15 @@ public class DateKit {
    */
   public static String getTodayAsString() {
     return m_sdfToday.format(m_cal.getTime());
+  }
+
+  /**
+   * @return now
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public static Date now() {
+    return new Date();
   }
 }
