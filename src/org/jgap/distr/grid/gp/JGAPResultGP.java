@@ -9,6 +9,8 @@
  */
 package org.jgap.distr.grid.gp;
 
+import java.util.*;
+
 import org.homedns.dade.jcgrid.*;
 import org.jgap.distr.*;
 import org.jgap.gp.*;
@@ -23,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private IGPProgram m_fittest;
 
@@ -41,6 +43,15 @@ public class JGAPResultGP
   private int m_chunk;
 
   private String m_id;
+
+  private Date m_responseDate;
+
+  private String m_description;
+
+  /**
+   * Duration of Computation
+   */
+  private long m_durationComputation;
 
   /**
    * Constructor: Takes the fittest program determined as result of a worker's
@@ -157,5 +168,53 @@ public class JGAPResultGP
 
   public String getID() {
     return m_id;
+  }
+
+  /**
+   * @param a_date date the response was computed
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setResponseDate(Date a_date) {
+    m_responseDate = a_date;
+  }
+
+  /**
+   * @return the date the response was computed
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public Date getResponseDate() {
+    return m_responseDate;
+  }
+
+  /**
+   * @param a_descr arbitrary description of the result
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setDescription(String a_descr) {
+    m_description = a_descr;
+  }
+
+  /**
+   * @return arbitrary description of the result
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public String getDescription() {
+    return m_description;
+  }
+
+  public long getDurationComputation() {
+    return m_durationComputation;
+  }
+
+  public void setDurationComputation(long a_durationComputation) {
+    m_durationComputation = a_durationComputation;
   }
 }

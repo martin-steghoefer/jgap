@@ -9,6 +9,8 @@
  */
 package org.jgap.distr.grid.gp;
 
+import java.util.*;
+
 import org.homedns.dade.jcgrid.*;
 import org.homedns.dade.jcgrid.worker.*;
 import org.jgap.distr.*;
@@ -25,7 +27,7 @@ import org.jgap.util.*;
 public class JGAPRequestGP
     extends WorkRequest implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private IGridConfigurationGP m_config;
 
@@ -44,6 +46,14 @@ public class JGAPRequestGP
   private MasterInfo m_requesterInfo;
 
   private String m_id;
+
+  private Date m_requestDate;
+
+  private String m_description;
+
+  private double m_minFitness;
+
+  private Object m_genericData;
 
   /**
    * Constructor.
@@ -310,5 +320,67 @@ public class JGAPRequestGP
 
   public String getID() {
     return m_id;
+  }
+
+  /**
+   * @param a_date date the request was initialized
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setRequestDate(Date a_date) {
+    m_requestDate = a_date;
+  }
+
+  /**
+   * @return the date the request was initialized
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public Date getRequestDate() {
+    return m_requestDate;
+  }
+
+  /**
+   * @param a_descr arbitrary description of the request
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setDescription(String a_descr) {
+    m_description = a_descr;
+  }
+
+  /**
+   * @return arbitrary description of the request
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public String getDescription() {
+    return m_description;
+  }
+
+  /**
+   * @return the minimum fitness wanted for results to be returned as response
+   * to this request
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public double getMinFitness() {
+    return m_minFitness;
+  }
+
+  /**
+   * @param a_minFitness the minimum fitness wanted for results to be returned as
+   * response to this request
+   *
+   * @author Klaus Meffert
+   * @since 3.3.3
+   */
+  public void setMinFitness(double a_minFitness) {
+    m_minFitness = a_minFitness;
   }
 }
