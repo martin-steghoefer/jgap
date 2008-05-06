@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class DefaultConfiguration
     extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.25 $";
+  private final static String CVS_REVISION = "$Revision: 1.26 $";
 
   public DefaultConfiguration() {
     this("","");
@@ -54,17 +54,17 @@ public class DefaultConfiguration
       setRandomGenerator(new StockRandomGenerator());
       setEventManager(new EventManager());
       BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(
-          this, 0.95d);
+          this, 0.90d);
       bestChromsSelector.setDoubletteChromosomesAllowed(true);
-      addNaturalSelector(bestChromsSelector, true);
+      addNaturalSelector(bestChromsSelector, false);
       setMinimumPopSizePercent(0);
       //
       setSelectFromPrevGen(1.0d);
       setKeepPopulationSizeConstant(true);
       setFitnessEvaluator(new DefaultFitnessEvaluator());
       setChromosomePool(new ChromosomePool());
-      addGeneticOperator(new CrossoverOperator(this));
-      addGeneticOperator(new MutationOperator(this, 15));
+      addGeneticOperator(new CrossoverOperator(this, 0.35d));
+      addGeneticOperator(new MutationOperator(this, 12));
     }
     catch (InvalidConfigurationException e) {
       throw new RuntimeException(
