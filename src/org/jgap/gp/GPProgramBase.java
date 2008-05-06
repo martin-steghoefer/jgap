@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -72,7 +72,8 @@ public abstract class GPProgramBase
     m_conf = a_conf;
   }
 
-  public GPProgramBase(IGPProgram a_prog) throws InvalidConfigurationException {
+  public GPProgramBase(IGPProgram a_prog)
+      throws InvalidConfigurationException {
     this(a_prog.getGPConfiguration());
     m_types = a_prog.getTypes();
     m_argTypes = a_prog.getArgTypes();
@@ -120,7 +121,7 @@ public abstract class GPProgramBase
       m_fitnessValue = normalFitnessFunction.getFitnessValue(this);
     }
     if (Double.isInfinite(m_fitnessValue)) {
-     return  GPFitnessFunction.NO_FITNESS_VALUE;
+      return GPFitnessFunction.NO_FITNESS_VALUE;
     }
     else {
       return m_fitnessValue;
@@ -237,7 +238,6 @@ public abstract class GPProgramBase
   public Object getApplicationData() {
     return m_applicationData;
   }
-
 
   /**
    * @return deep clone of this instance
