@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.94 $";
+  private final static String CVS_REVISION = "$Revision: 1.95 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1431,7 +1431,8 @@ public class Configuration
   }
 
   /**
-   * See setKeepPopulationSizeConstant for description.
+   * See setKeepPopulationSizeConstant and
+   * GABreeder#evolve(Population, Configuration) for detailled explanation.
    * @return true: population size will always be the same size
    * (as given with Configuration.setPopulationSize(int)
    *
@@ -1444,12 +1445,12 @@ public class Configuration
 
 
   /**
-   * Allows to keep the population size constant after one evolution, even if
+   * Allows to keep the population size constant during one evolution, even if
    * there is no appropriate instance of NaturalSelector (such as
    * WeightedRouletteSelector) registered with the Configuration.<p>
-   * Be aware that keeping the population size constant often means that a
-   * higher population size is necessary (e.g. for the MinimizingMakeChange
-   * example)!
+   * See setKeepPopulationSizeConstant and
+   * GABreeder#evolve(Population, Configuration) for detailled explanation.
+   *
    * @param a_keepPopSizeConstant true: population size will always be
    * the same size (as given with Configuration.setPopulationSize(int)
    *

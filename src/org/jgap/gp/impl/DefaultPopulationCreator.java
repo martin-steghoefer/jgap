@@ -22,7 +22,7 @@ import org.jgap.*;
 public class DefaultPopulationCreator
     implements IPopulationCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private IProgramCreator m_programCreator;
 
@@ -37,14 +37,22 @@ public class DefaultPopulationCreator
   /**
    * Initializes the given population.
    *
-   * @param a_pop GPPopulation
-   * @param a_types Class[]
-   * @param a_argTypes Class[][]
-   * @param a_nodeSets CommandGene[][]
-   * @param a_minDepths int[]
-   * @param a_maxDepths int[]
-   * @param a_maxNodes int
-   * @param a_fullModeAllowed boolean[]
+   * @param a_pop the population to initialize
+   * @param a_types the type for each chromosome, the length of the array
+   * represents the number of chromosomes
+   * @param a_argTypes the types of the arguments to each chromosome, must be an
+   * array of arrays, the first dimension of which is the number of chromosomes
+   * and the second dimension of which is the number of arguments to the
+   * chromosome
+   * @param a_nodeSets the nodes which are allowed to be used by each chromosome,
+   * must be an array of arrays, the first dimension of which is the number of
+   * chromosomes and the second dimension of which is the number of nodes
+   * @param a_minDepths contains the minimum depth allowed for each chromosome
+   * @param a_maxDepths contains the maximum depth allowed for each chromosome
+   * @param a_maxNodes reserve space for a_maxNodes number of nodes
+   * @param a_fullModeAllowed array of boolean values. For each chromosome there
+   * is one value indicating whether the full mode for creating chromosome
+   * generations during evolution is allowed (true) or not (false)
    *
    * @throws InvalidConfigurationException in case of any error
    *

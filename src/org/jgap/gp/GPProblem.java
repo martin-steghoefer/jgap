@@ -20,15 +20,15 @@ import org.jgap.gp.impl.*;
 import org.jgap.util.tree.*;
 
 /**
- * Abstract base class for all GP problems. See package examples.gp for sample
- * implementations.
+ * Abstract base class for all GP problems. See packages examples.gp and
+ * examples.grid for sample implementations.
  *
  * @author Klaus Meffert
  * @since 3.0
  */
 public abstract class GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private GPConfiguration m_conf;
 
