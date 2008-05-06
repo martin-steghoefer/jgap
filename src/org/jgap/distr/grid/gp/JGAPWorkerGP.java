@@ -24,8 +24,9 @@ import org.jgap.distr.grid.*;
  */
 public class JGAPWorkerGP
     implements Worker {
+  /**@todo resume previous work in case worker was stopped*/
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Executes the evolution and returns the result.
@@ -40,6 +41,7 @@ public class JGAPWorkerGP
    */
   public WorkResult doWork(WorkRequest work, String workDir)
       throws Exception {
+    long start = System.currentTimeMillis();
     JGAPRequestGP req = ( (JGAPRequestGP) work);
     /**@todo set gridworkerfeedback in class GridWorker*/
 
@@ -70,6 +72,12 @@ public class JGAPWorkerGP
     // Assemble result according to registered strategy.
     // -------------------------------------------------
     WorkResult res = req.getWorkerReturnStrategy().assembleResult(req, gen);
+    //
+    long duration = System.currentTimeMillis() - start;
+    if (JGAPResultGP.class.isAssignableFrom(res.getClass())) {
+      JGAPResultGP resJGAP = (JGAPResultGP)res;
+      resJGAP.setDurationComputation(duration);
+    }
     return res;
   }
 
