@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class BestChromosomesSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   /**
    * Stores the chromosomes to be taken into account for selection
@@ -37,15 +37,15 @@ public class BestChromosomesSelector
   private boolean m_needsSorting;
 
   /**
-   * Comparator that is only concerned about fitness values
+   * Comparator that is concerned about both age and fitness values
    */
-  private FitnessValueComparator m_fitnessValueComparator;
+  private Comparator m_fitnessValueComparator;
 
   private BestChromosomesSelectorConfig m_config = new
       BestChromosomesSelectorConfig();
 
   /**
-   * Default constructor.<p>
+   * Default constructor.
    * Attention: The configuration used is the one set with the static method
    * Genotype.setConfiguration.
    *
@@ -81,7 +81,7 @@ public class BestChromosomesSelector
     m_needsSorting = false;
     setDoubletteChromosomesAllowed(true);
     setOriginalRate(a_originalRate);
-    m_fitnessValueComparator = new FitnessValueComparator();
+    m_fitnessValueComparator = new AgeFitnessValueComparator();
   }
 
   /**
@@ -106,8 +106,10 @@ public class BestChromosomesSelector
           getCloneHandlerFor(a_chromosomeToAdd, null);
       if (cloner != null) {
         try {
-          m_chromosomes.addChromosome( (IChromosome) cloner.perform(
-              a_chromosomeToAdd, null, null));
+          IChromosome clone = (IChromosome) cloner.perform(
+              a_chromosomeToAdd, null, null);
+          clone.setAge(a_chromosomeToAdd.getAge() + 1);
+          m_chromosomes.addChromosome(clone);
         } catch (Exception ex) {
           ex.printStackTrace();
           m_chromosomes.addChromosome(a_chromosomeToAdd);
@@ -136,7 +138,8 @@ public class BestChromosomesSelector
    * @author Klaus Meffert
    * @since 1.1
    */
-  public void selectChromosomes(final int a_howManyToSelect, Population a_to_pop) {
+  public void selectChromosomes(final int a_howManyToSelect,
+                                Population a_to_pop) {
     int canBeSelected;
     int chromsSize = m_chromosomes.size();
     if (a_howManyToSelect > chromsSize) {
@@ -183,8 +186,10 @@ public class BestChromosomesSelector
             getCloneHandlerFor(selectedChromosome, null);
         if (cloner != null) {
           try {
+            int age = selectedChromosome.getAge() + 1;
             selectedChromosome = (IChromosome) cloner.perform(
                 selectedChromosome, null, null);
+            selectedChromosome.setAge(age);
           } catch (Exception ex) {
             ex.printStackTrace();
           }
@@ -264,7 +269,8 @@ public class BestChromosomesSelector
       return false;
     }
     BestChromosomesSelector other = (BestChromosomesSelector) a_o;
-    if (getDoubletteChromosomesAllowed() != other.getDoubletteChromosomesAllowed()) {
+    if (getDoubletteChromosomesAllowed() !=
+        other.getDoubletteChromosomesAllowed()) {
       return false;
     }
     if (!m_fitnessValueComparator.getClass().getName().equals(
