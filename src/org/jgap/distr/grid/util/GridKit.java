@@ -15,15 +15,14 @@ import java.net.*;
 import org.jgap.distr.grid.request.*;
 
 /**
- *
+ * Utility functions related to distributed/grid computing.
  *
  * @author Klaus Meffert
  * @since 3.2
  */
 public class GridKit {
-
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static String ensureDirectory(String a_currentDir, String a_subDir,
                                        String a_descr)
@@ -61,10 +60,10 @@ public class GridKit {
   }
 
   public static VersionInfo isUpdateAvailable(String BASE_URL,
-      String a_moduleName,
-      String currentVersion)
+      String a_moduleName, String currentVersion)
       throws Exception {
     VersionInfo result;
+    /**@todo download a versions.txt file and obtain version per project*/
     String url = BASE_URL + "getVersion=" + a_moduleName;
     addURLParameter(url, "version", currentVersion);
     URLConnection con = GridKit.getConnection(url);
@@ -189,21 +188,25 @@ public class GridKit {
   }
 
   public static void updateModuleLibrary(String BASE_URL, String a_moduleName,
-      String a_libDir,
-      String a_workDir)
+      String a_libDir, String a_workDir)
       throws Exception {
     String currentVersion;
     String JGAPVersionNeeded;
     String filename;
     boolean isCoreModule;
-    if (a_moduleName.equals("evolutionDistributed")) {
+    if (a_moduleName.equalsIgnoreCase("evolutionDistributed")) {
       /**@todo zuordnung irgendwo abspeichern*/
       filename = "evdistr.jar";
       isCoreModule = false;
     }
-    else if (a_moduleName.equals("jgap")) {
+    else if (a_moduleName.equalsIgnoreCase("jgap")) {
       /**@todo zuordnung irgendwo abspeichern*/
       filename = "jgap.jar";
+      isCoreModule = true;
+    }
+    else if (a_moduleName.equalsIgnoreCase("rjgrid")) {
+      /**@todo zuordnung irgendwo abspeichern*/
+      filename = "rjgrid.zip";
       isCoreModule = true;
     }
     else {
