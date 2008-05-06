@@ -9,9 +9,16 @@
  */
 package org.jgap.util;
 
-import java.util.*;
 import java.io.*;
+
+import org.jgap.distr.grid.gp.*;
+import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
+
 import com.thoughtworks.xstream.*;
+import com.thoughtworks.xstream.io.xml.*;
+import org.jgap.distr.grid.wan.JGAPClientGPWAN;
+import org.apache.log4j.Logger;
 
 /**
  * A wrapper that allows an object to be written to and read from a file.
@@ -21,7 +28,9 @@ import com.thoughtworks.xstream.*;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
+  private transient Logger log = Logger.getLogger(getClass());
 
   private Object m_object;
 
@@ -37,9 +46,23 @@ public class PersistableObject {
 
   public void save()
       throws Exception {
+    save(false);
+  }
+    public void save(boolean a_omitConfig)
+        throws Exception {
     XStream xstream = new XStream();
     FileOutputStream fos = new FileOutputStream(m_file);
-    xstream.toXML(m_object, fos);
+    if (a_omitConfig) {
+      xstream.omitField(GPPopulation.class, "m_config");
+      xstream.omitField(GPProgram.class, "m_conf");
+      xstream.omitField(GPProgramBase.class, "m_conf");
+      xstream.omitField(JGAPRequestGP.class, "m_config");
+      xstream.omitField(CommandGene.class,"m_configuration");
+    }
+    FileWriter fw = new FileWriter(m_file);
+    CompactWriter compact = new CompactWriter(fw);
+    xstream.marshal(m_object, compact);
+//    xstream.toXML(m_object);
     fos.close();
   }
 
@@ -49,6 +72,7 @@ public class PersistableObject {
   }
 
   public Object load(File a_file) {
+    log.info("Loading database");
     XStream xstream = new XStream();
     try {
       FileInputStream fis = new FileInputStream(a_file);
