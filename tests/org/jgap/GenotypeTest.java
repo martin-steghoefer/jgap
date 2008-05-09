@@ -25,7 +25,7 @@ import junit.framework.*;
 public class GenotypeTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.71 $";
+  private final static String CVS_REVISION = "$Revision: 1.72 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GenotypeTest.class);
@@ -815,7 +815,8 @@ public class GenotypeTest
     genotype.evolve(1);
     IChromosome fittest = genotype.getFittestChromosome();
     genotype.evolve(1);
-    assertEquals(fittest, genotype.getFittestChromosome());
+    assertTrue(genotype.getFittestChromosome().getFitnessValue() >=
+               fittest.getFitnessValue());
     // Ensure all chromosomes are unique in the population.
     // ----------------------------------------------------
     assertTrue(uniqueChromosomes(genotype.getPopulation()));

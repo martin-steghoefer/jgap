@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -26,7 +26,7 @@ import junit.framework.*;
 public class XMLManagerTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   private final static String FILENAME_WRITE = "GAtestWrite.xml";
 
@@ -265,7 +265,7 @@ public class XMLManagerTest
   public void testReadFile_0()
       throws Exception {
     try {
-      XMLManager.readFile(File.createTempFile("FILENAME_WRITE", "tmp"));
+      XMLManager.readFile(File.createTempFile(FILENAME_WRITE, "tmp"));
       fail();
     }
     catch (Exception ex) {
@@ -276,7 +276,7 @@ public class XMLManagerTest
   public void testReadFile_1()
       throws Exception {
     Document doc = XMLManager.representGenotypeAsDocument(m_genotype);
-    File f = File.createTempFile("FILENAME_WRITE", "tmp");
+    File f = File.createTempFile(FILENAME_WRITE, "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
                          f);
     XMLManager.readFile(f);
@@ -287,7 +287,7 @@ public class XMLManagerTest
   public void testWriteFile_0()
       throws Exception {
     XMLManager.representGenotypeAsDocument(m_genotype);
-    File f = File.createTempFile("FILENAME_WRITE", "tmp");
+    File f = File.createTempFile(FILENAME_WRITE, "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
                          f);
   }
@@ -300,7 +300,7 @@ public class XMLManagerTest
   public void testWriteFile_1()
       throws Exception {
     XMLManager.representGenotypeAsDocument(m_genotype);
-    File f = File.createTempFile("FILENAME_WRITE", "tmp");
+    File f = File.createTempFile(FILENAME_WRITE, "tmp");
     XMLManager.writeFile(XMLManager.representGenotypeAsDocument(m_genotype),
                          f);
   }

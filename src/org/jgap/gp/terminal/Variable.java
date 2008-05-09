@@ -3,13 +3,14 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.gp.terminal;
 
 import java.util.*;
+
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
@@ -23,7 +24,7 @@ import org.jgap.gp.impl.*;
 public class Variable
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Hashtable vars = new Hashtable();
 

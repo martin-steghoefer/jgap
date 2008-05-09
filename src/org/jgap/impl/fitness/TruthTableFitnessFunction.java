@@ -3,18 +3,18 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl.fitness;
 
 import java.util.*;
+
 import org.jgap.*;
 
 /**
  * Fitness Function relying on a truth table.
- * <p>
  * To use this class, just implement a subclass of it, register the current
  * truth table and implement the evaluate method in a way that you can call
  * calcFitness with the required (parameter (given values: encoded with the
@@ -27,7 +27,7 @@ import org.jgap.*;
 public abstract class TruthTableFitnessFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private Map m_truthTable;
 

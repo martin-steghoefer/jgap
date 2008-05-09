@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -21,10 +21,8 @@ import org.jgap.event.*;
  * your starting point.)
  *
  * @author Audrius Meskauskas
- * @author <font size="-1">Neil Rotstan, Klaus Meffert (reused code fragments)
- * </font>
+ * @author Neil Rotstan, Klaus Meffert (reused code fragments)
  * @since 2.0
- *
  *
  * @see
  *  <ul>
@@ -45,7 +43,7 @@ import org.jgap.event.*;
 public abstract class Salesman
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   private Configuration m_config;
 

@@ -3,14 +3,16 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
 package org.jgap.impl;
 
 import java.util.*;
+
 import org.jgap.*;
+
 import junit.framework.*;
 
 /**
@@ -22,7 +24,7 @@ import junit.framework.*;
 public class WeightedRouletteSelectorTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(WeightedRouletteSelectorTest.class);
@@ -105,7 +107,6 @@ public class WeightedRouletteSelectorTest
     randgen.setNextDouble(0.9999d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
-    selector.setDoubletteChromosomesAllowed(false);
     // add first chromosome
     // --------------------
     Gene gene = new BooleanGene(conf);
@@ -135,12 +136,12 @@ public class WeightedRouletteSelectorTest
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
     assertSame(thirdBestChrom, bestChroms[0]);
-    // now select top 4 chromosomes (should only select 3!)
-    // ----------------------------------------------------
+    // now select top 4 chromosomes
+    // ----------------------------
     popNew.getChromosomes().clear();
     selector.select(4, null, popNew);
     bestChroms = popNew.toChromosomes();
-    assertEquals(3, bestChroms.length);
+    assertEquals(4, bestChroms.length);
   }
 
   /**
@@ -156,7 +157,6 @@ public class WeightedRouletteSelectorTest
     randgen.setNextDouble(0.9999d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
-    selector.setDoubletteChromosomesAllowed(false);
     Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
@@ -186,12 +186,12 @@ public class WeightedRouletteSelectorTest
     IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(thirdBestChrom, bestChroms[0]);
-    // now select top 4 chromosomes (should only select 3!)
-    // ----------------------------------------------------
+    // now select top 4 chromosomes
+    // ----------------------------
     popNew.getChromosomes().clear();
     selector.select(4, toAddFrom, popNew);
     bestChroms = popNew.toChromosomes();
-    assertEquals(3, bestChroms.length);
+    assertEquals(4, bestChroms.length);
   }
 
   /**
@@ -211,7 +211,6 @@ public class WeightedRouletteSelectorTest
     randgen.setNextDouble(0.0d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
-    selector.setDoubletteChromosomesAllowed(false);
     Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
@@ -255,7 +254,6 @@ public class WeightedRouletteSelectorTest
     randgen.setNextDouble(0.3333333333333d);
     conf.setRandomGenerator(randgen);
     WeightedRouletteSelector selector = new WeightedRouletteSelector(conf);
-    selector.setDoubletteChromosomesAllowed(false);
     Population toAddFrom = new Population(conf);
     // add first chromosome
     // --------------------
@@ -285,12 +283,12 @@ public class WeightedRouletteSelectorTest
     IChromosome[] bestChroms = popNew.toChromosomes();
     assertEquals(1, bestChroms.length);
     assertEquals(bestChrom, bestChroms[0]);
-    // now select top 4 chromosomes (should only select 3!)
-    // ----------------------------------------------------
+    // now select top 4 chromosomes
+    // ----------------------------
     popNew.getChromosomes().clear();
     selector.select(4, toAddFrom, popNew);
     bestChroms = popNew.toChromosomes();
-    assertEquals(3, bestChroms.length);
+    assertEquals(4, bestChroms.length);
   }
 
   /**

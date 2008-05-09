@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -12,7 +12,7 @@ package org.jgap.impl;
 import org.jgap.*;
 
 /**
- * Fitness function always returning the same value.<p>
+ * Fitness function always returning the same value.
  * Only for testing purpose!
  *
  * @author Klaus Meffert
@@ -22,7 +22,7 @@ public class StaticFitnessFunction
     extends FitnessFunction implements Comparable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * @since 2.0 (until 1.1: type int)
