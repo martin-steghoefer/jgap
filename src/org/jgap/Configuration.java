@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.96 $";
+  private final static String CVS_REVISION = "$Revision: 1.97 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -1188,6 +1188,9 @@ public class Configuration
    * Adds a NaturalSelector to the ordered chain of registered
    * NaturalSelector's. It's possible to execute the NaturalSelector before
    * or after (registered) genetic operations have been applied.
+   * Normally, you would add a selector that is applied after the genetic
+   * operators are processed (a_processBeforeGeneticOperators = false).
+   *
    * @param a_selector the selector to be added to the chain
    * @param a_processBeforeGeneticOperators true: execute NaturalSelector
    * before any genetic operator will be applied, false: .. after..
