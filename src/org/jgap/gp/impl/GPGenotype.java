@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.46 $";
+  private final static String CVS_REVISION = "$Revision: 1.47 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -156,11 +156,11 @@ public class GPGenotype
     // ---------------------------------------------------------------
     if (a_configuration == null) {
       throw new IllegalArgumentException(
-          "The configuration instance may not be null.");
+          "The configuration instance must not be null.");
     }
     if (a_population == null) {
       throw new IllegalArgumentException(
-          "The population may not be null.");
+          "The population must not be null.");
     }
     for (int i = 0; i < a_population.size(); i++) {
       if (a_population.getGPProgram(i) == null) {

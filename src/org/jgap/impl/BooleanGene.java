@@ -29,7 +29,7 @@ import org.jgap.*;
 public class BooleanGene
     extends BaseGene implements IPersistentRepresentation {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * Shared constant representing the "true" boolean value. Shared constants
@@ -102,7 +102,7 @@ public class BooleanGene
       throws InvalidConfigurationException {
     super(a_config);
     if (a_value == null) {
-      throw new IllegalArgumentException("Allele value may not be null. Use"
+      throw new IllegalArgumentException("Allele value must not be null. Use"
                                          + " no argument constructor if you"
                                          + " need to set allele to null"
                                          + " initially.");

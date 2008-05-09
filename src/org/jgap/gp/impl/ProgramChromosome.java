@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.32 $";
+  private final static String CVS_REVISION = "$Revision: 1.33 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -1019,7 +1019,7 @@ public class ProgramChromosome
 
   public void setGene(int index, CommandGene a_gene) {
     if (a_gene == null) {
-      throw new IllegalArgumentException("Gene may not be null!");
+      throw new IllegalArgumentException("Gene must not be null!");
     }
     m_genes[index] = a_gene;
   }

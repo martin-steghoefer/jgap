@@ -43,7 +43,7 @@ import org.jgap.util.*;
 public class Configuration
     implements Configurable, Serializable, ICloneable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.95 $";
+  private final static String CVS_REVISION = "$Revision: 1.96 $";
 
   /**
    * Constant for class name of JGAP Factory to use. Use as:
@@ -508,7 +508,7 @@ public class Configuration
     // -------------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
-          "The FitnessFunction instance may not be null.");
+          "The FitnessFunction instance must not be null.");
     }
     // Make sure the bulk fitness function hasn't already been set.
     // ------------------------------------------------------------
@@ -613,14 +613,14 @@ public class Configuration
     // ------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
-          "The BulkFitnessFunction instance may not be null.");
+          "The BulkFitnessFunction instance must not be null.");
     }
     // Make sure a normal fitness function hasn't already been set.
     // ------------------------------------------------------------
     if (m_objectiveFunction != null) {
       throw new InvalidConfigurationException(
           "The bulk fitness function and normal fitness function " +
-          "may not both be set.");
+          "must not both be set.");
     }
     // Ensure that no other bulk fitness function has been set in a
     // different configuration object within the same thread!
@@ -666,11 +666,11 @@ public class Configuration
     // -----------------------------------------------------------
     if (a_sampleChromosomeToSet == null) {
       throw new InvalidConfigurationException(
-          "The sample chromosome instance may not be null.");
+          "The sample chromosome instance must not be null.");
     }
     if (a_sampleChromosomeToSet.getConfiguration() == null) {
       throw new InvalidConfigurationException(
-          "The sample chromosome's configuration may not be null.");
+          "The sample chromosome's configuration must not be null.");
     }
     // Ensure that no other sample chromosome has been set in a
     // different configuration object within the same thread!
@@ -892,7 +892,7 @@ public class Configuration
     // -------------------------------------------------------------------
     if (a_operatorToAdd == null) {
       throw new InvalidConfigurationException(
-          "The GeneticOperator instance may not be null.");
+          "The GeneticOperator instance must not be null.");
     }
     m_geneticOperators.add(a_operatorToAdd);
   }
@@ -968,7 +968,7 @@ public class Configuration
     // ----------------------------------------------------------------
     if (a_eventManagerToSet == null) {
       throw new InvalidConfigurationException(
-          "The event manager instance may not be null.");
+          "The event manager instance must not be null.");
     }
     // Ensure that no other event manager has been set in a different
     // configuration object within the same thread!
@@ -1135,7 +1135,7 @@ public class Configuration
     }
     if (m_fitnessEvaluator == null) {
       throw new IllegalArgumentException(
-          "The fitness evaluator may not be null.");
+          "The fitness evaluator must not be null.");
     }
     // Next, it's critical that each Gene implementation in the sample
     // Chromosome has a working equals() method, or else the genetic

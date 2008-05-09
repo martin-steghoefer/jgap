@@ -34,7 +34,7 @@ import gnu.trove.*;
 public class MapGene
     extends BaseGene implements IPersistentRepresentation{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   /**
    * Container for valid alleles
@@ -153,7 +153,7 @@ public class MapGene
    */
   public void addAlleles(final Map a_alleles) {
     if (a_alleles == null) {
-      throw new IllegalArgumentException("List of alleles may not be null!");
+      throw new IllegalArgumentException("List of alleles must not be null!");
     }
     else {
       m_geneMap.putAll(a_alleles);

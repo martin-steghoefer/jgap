@@ -32,7 +32,7 @@ import org.jgap.impl.job.*;
 public class Genotype
     implements Serializable, Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.103 $";
+  private final static String CVS_REVISION = "$Revision: 1.104 $";
 
   /**
    * The current Configuration instance.
@@ -94,18 +94,18 @@ public class Genotype
     // -----------------------------------------------------------------
     if (a_configuration == null) {
       throw new IllegalArgumentException(
-          "The Configuration instance may not be null.");
+          "The Configuration instance must not be null.");
     }
     if (a_population == null) {
       throw new IllegalArgumentException(
-          "The Population may not be null.");
+          "The Population must not be null.");
     }
     for (int i = 0; i < a_population.size(); i++) {
       if (a_population.getChromosome(i) == null) {
         throw new IllegalArgumentException(
             "The Chromosome instance at index " + i + " of the array of " +
             "Chromosomes is null. No Chromosomes instance in this array " +
-            "may be null.");
+            "must not be null.");
       }
     }
     m_population = a_population;

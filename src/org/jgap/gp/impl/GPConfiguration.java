@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -595,7 +595,7 @@ public class GPConfiguration
     // -------------------------------------------------------------------
     if (a_functionToSet == null) {
       throw new InvalidConfigurationException(
-          "The FitnessFunction instance may not be null.");
+          "The FitnessFunction instance must not be null.");
     }
     // Ensure that no other fitness function has been set in a different
     // configuration object within the same thread!
