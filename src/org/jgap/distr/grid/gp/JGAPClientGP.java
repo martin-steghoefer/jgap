@@ -10,8 +10,8 @@
 package org.jgap.distr.grid.gp;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
+
 import org.apache.commons.cli.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.homedns.dade.jcgrid.cmd.*;
@@ -24,9 +24,8 @@ import org.jgap.distr.grid.util.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
-import com.google.gdata.util.*;
+
 import com.thoughtworks.xstream.*;
-import rww.google.docs.*;
 
 /**
  * A client defines work for the grid and sends it to the JGAPServer.
@@ -43,7 +42,7 @@ public class JGAPClientGP
   /**@todo versionsnummer in filename rein, mit der file erzeugt*/
   /**@todo remove old requests from online store auotmatically*/
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static final String MODULE_CS = "CS";
 
@@ -341,10 +340,28 @@ public class JGAPClientGP
    *
    * @param a_ex exception object expressing the error
    *
+   * @throws Exception
+   *
    * @author Klaus Meffert
    * @since 3.3.3
    */
-  protected void onError(Exception a_ex) {
+  protected void onError(Exception a_ex) throws Exception {
+  }
+
+  /**
+   * Called in run() on error when receiving work results.
+   * Override in sub classes if needed.
+   *
+   * @param a_workRequests for which to receive results
+   * @param a_ex Exception occured
+   * @throws Exception rethrow an unhandled exception!
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  protected void onErrorReceiveWorkResults(JGAPRequestGP[] a_workRequests,
+      Exception a_ex)
+      throws Exception {
   }
 
   /**
@@ -354,7 +371,6 @@ public class JGAPClientGP
    * @since 3.01
    */
   public void run() {
-    int errorConnect = 0;
     try {
       try {
         // Check for updates.
@@ -424,58 +440,21 @@ public class JGAPClientGP
                 break;
               }
             }
-          } catch (AuthenticationException aex) {
-            // Could be because network cable plugged off during run...
-            // --------------------------------------------------------
-            errorConnect++;
-            log.warn(
-                "Authentication failed, possibly no connection? Retrying soon");
-            sleep(10000);
-          } catch (NoRouteToHostException nex) {
-            errorConnect++;
-            log.warn(
-                "No route to host, possibly no connection? Retrying soon");
-            sleep(10000);
-          } catch (UnknownHostException aex) {
-            // Could be because network cable was plugged off...
-            // -------------------------------------------------
-            errorConnect++;
-            log.warn(
-                "Unknown host, possibly no connection? Retrying soon");
-            sleep(10000);
-          } catch (ListingFailedException lex) {
-            if (lex.getCause() != null &&
-                lex.getCause().getClass().
-                isAssignableFrom(AuthenticationException.class)) {
-              errorConnect++;
-              log.warn(
-                  "Authentication failed, logging in again after a short break");
-              sleep(10000);
-              try {
-                m_gcmed.connect();
-              } catch (Exception ex) {
-                log.error("Connect failed", ex);
-                sleep(30000);
-              }
-            }
-            else {
-              log.info("Listing failed with cause " + lex.getCause(), lex);
-              sleep(5000);
-            }
-          } catch (ServiceUnavailableException sex) {
-            log.error("Service unavailable, sleeping a short while",sex);
-            sleep(10000);
-          } catch (Exception ex) {
-            log.fatal("Unpredicted error", ex);
-            m_gridConfig.getClientFeedback().error("Error while doing the work",
-                ex);
-            onError(ex);
+          } catch (Exception ex1) {
             try {
+             onError(ex1);
+          } catch (Exception ex) {
+              log.fatal("Unpredicted error", ex);
+              m_gridConfig.getClientFeedback().error(
+                  "Error while doing the work",
+                  ex);
+              try {
 //              m_gcmed.disconnect();
-            } catch (Exception ex1) {
-              log.warn("Precautios disconnect failed.", ex1);
+              } catch (Exception ex2) {
+                log.warn("Precautios disconnect failed.", ex2);
+              }
+              sleep(10000);
             }
-            sleep(10000);
           }
         } while (true);
         if (!m_endless) {
@@ -779,17 +758,8 @@ public class JGAPClientGP
       if (!m_no_comm) {
         try {
           receiveWorkResults(workRequests);
-        } catch (NoWorkResultsFoundException nwr) {
-          log.info("No work results found.");
-        } catch (ReadFailedException rfe) {
-          log.warn("Reading work results failed.");
-        } catch (DeleteFailedException dex) {
-          log.warn("Deletion of received result failed.");
-          // Defer delete.
-          // -------------
-          m_objects.getResults().put(dex.getKey(), "delete");
-        } catch (ListingFailedException lex) {
-          log.warn("Listing failed.");
+        } catch (Exception ex) {
+          onErrorReceiveWorkResults(workRequests, ex);
         }
       }
       if (!a_receiveOnly && !m_no_evolution) {
