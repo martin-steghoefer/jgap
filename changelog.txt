@@ -1,5 +1,6 @@
 3.3.3
 -----------------------------------------------------------
+* Simplified the MinimizingMakeChange example
 * Added new class DummyGridClientMediator
 * Added new class MessageContext
 * Added new class BasicContext
@@ -8,6 +9,11 @@
 * Added new class DateKit
 * Added default constructor for class NaturalSelector
 * Did a lot of architectural improvements in JGAPClientGP
+* Added a bunch of attributes to JGAPResultGP
+* Added a bunch of attributes to JGAPRequestGP
+* JGAPWorkerGP: measure duration of work
+* Added methods to IGridClientMediator
+* Considered age in BestChromosomesSelector
 * Inherited BestChromosomesSelector from NaturalSelectorExt
 * Inherited WeightedRouletteSelector from
   NaturalSelectorExt
@@ -18,13 +24,20 @@
 * Fixed bug in class MathProblem, avoiding evolution
 * Fixed bug in GPPopulation.determineFittestProgram()
 * GPConfiguration: added method setFitnessEvaluator
+* Improved GP TournamentSelector
 * Introduced new class StaticPopulationCreator
 * GPProgramBase: Replaced -1 with constant
-* GPPopulation: added method setGPPrograms
+* GPPopulation: added methods setGPPrograms and
+  copyGPPrograms
 * GPFitnessFunction: caught exception in fitness
   determination that could result from ensureUniqueness
+* Enhanced conf. settings in CrossoverOperator
+* Enhanced conf. settings in DefaultConfiguration
+* Refactored GABreeder to better design
+* Fixed bug in BreederBase with multiple selectors
 * JGAPResultGP: added support for generic data
-* MasterInfo: added preset constructor; added username
+* MasterInfo: added preset constructor; added username,
+  GUID
 * FileKit: added getTemDir()
 * Enhanced Javadoc, fixed spelling errors
 * Added some package.html description files
@@ -260,9 +273,13 @@
   terminals protected and nonstatic
 * Added verbose output to MathProblem (GP)
 * Added Ant Trail example (GP)
-* Addes new showTree-method to GPProblem which allows to
+* Added methode setAge to interface IChromosome and
+  abstract base class BaseChromosome
+* Added inner class AgeFitnessComparator to NaturalSelector
+* Added new showTree-method to GPProblem which allows to
   use custom tree renderers
 * Added new GP-function: Loop
+
 * Fixed bug with BranchTypingCross (creation of chrom's)
 
 3.0
@@ -432,6 +449,7 @@
 * Introduced new suite AllUtilTests
 * Introduced new class PluginDiscovererTest
 * Added several units tests
+* Added a lot of utility functions
 * Extended JGAP documentation and added package information
   files (package.html)
 
