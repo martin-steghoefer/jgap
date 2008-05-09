@@ -33,7 +33,7 @@ import gnu.trove.*;
 public class WeightedRouletteSelector
     extends NaturalSelectorExt implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.40 $";
+  private final static String CVS_REVISION = "$Revision: 1.41 $";
 
   //delta for distinguishing whether a value is to be interpreted as zero
   private static final double DELTA = 0.000001d;
@@ -189,10 +189,6 @@ public class WeightedRouletteSelector
       // ------------------------------------------------------
       m_totalNumberOfUsedSlots += counterValues[i];
     }
-    if (a_howManyToSelect > numberOfEntries
-        && !getDoubletteChromosomesAllowed()) {
-      a_howManyToSelect = numberOfEntries;
-    }
     // To select each chromosome, we just "spin" the wheel and grab
     // whichever chromosome it lands on.
     // ------------------------------------------------------------
@@ -218,8 +214,6 @@ public class WeightedRouletteSelector
         }
       }
       else {
-        /**@todo fix age issue, see BestChromosomesSelector*/
-        /**@todo restructure JGAP to free selectors from age, cloning...*/
         a_to_pop.addChromosome(selectedChromosome);
       }
     }
@@ -382,26 +376,27 @@ public class WeightedRouletteSelector
   }
 
   /**
-   * Determines whether doublette chromosomes may be added to the selector or
-   * will be ignored.
-   * @param a_doublettesAllowed true: doublette chromosomes allowed to be
-   * added to the selector. FALSE: doublettes will be ignored and not added
+   * Not supported by this selector! Please do not use it.
+   *
+   * @param a_doublettesAllowed do not use
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public void setDoubletteChromosomesAllowed(final boolean a_doublettesAllowed) {
-    m_config.m_doublettesAllowed = a_doublettesAllowed;
+    throw new IllegalStateException("Weighted roulette selector does not"
+                                    +" support this parameter,"
+                                   +" please do not use it!");
   }
 
   /**
-   * @return TRUE: doublette chromosomes allowed to be added to the selector
+   * @return TRUE: doublette chromosomes allowed to be added by the selector
    *
    * @author Klaus Meffert
    * @since 2.0
    */
   public boolean getDoubletteChromosomesAllowed() {
-    return m_config.m_doublettesAllowed;
+    return true;
   }
 
   /**
