@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public abstract class BaseChromosome
     implements IChromosome, IInitializer, IPersistentRepresentation, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * This field separates gene class name from the gene persistent representation
@@ -196,6 +196,7 @@ public abstract class BaseChromosome
 
   /**
    * Sets the genes for the chromosome.
+   *
    * @param a_genes the genes to set for the chromosome
    *
    * @throws InvalidConfigurationException in case constraint checker is
