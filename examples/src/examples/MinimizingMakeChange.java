@@ -38,7 +38,7 @@ import org.w3c.dom.*;
  */
 public class MinimizingMakeChange {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -64,20 +64,19 @@ public class MinimizingMakeChange {
     // most common settings.
     // -------------------------------------------------------------
     Configuration conf = new DefaultConfiguration();
+    // Care that the fittest individual of the current population is
+    // always taken to the next generation.
+    // Consider: With that, the pop. size may exceed its original
+    // size by one sometimes!
+    // -------------------------------------------------------------
     conf.setPreservFittestIndividual(true);
-    conf.setKeepPopulationSizeConstant(true);
     // Set the fitness function we want to use, which is our
     // MinimizingMakeChangeFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
     // ---------------------------------------------------------
     FitnessFunction myFunc =
         new MinimizingMakeChangeFitnessFunction(a_targetChangeAmount);
-//    conf.setFitnessFunction(myFunc);
-    conf.setBulkFitnessFunction(new BulkFitnessOffsetRemover(myFunc));
-    // Optionally, this example is working with DeltaFitnessEvaluator.
-    // See MinimizingMakeChangeFitnessFunction for details!
-    // ---------------------------------------------------------------
-//    conf.setFitnessEvaluator(new DeltaFitnessEvaluator());
+    conf.setFitnessFunction(myFunc);
 
     // Now we need to tell the Configuration object how we want our
     // Chromosomes to be setup. We do that by actually creating a
@@ -115,14 +114,16 @@ public class MinimizingMakeChange {
       population = XMLManager.getGenotypeFromDocument(conf, doc);
     }
     catch (UnsupportedRepresentationException uex) {
-      // JGAP codebase might have changed between two consecutive runs
+      // JGAP codebase might have changed between two consecutive runs.
+      // --------------------------------------------------------------
       population = Genotype.randomInitialGenotype(conf);
     }
     catch (FileNotFoundException fex) {
       population = Genotype.randomInitialGenotype(conf);
     }
-    // Now we initialize the population randomly, anyway!
+    // Now we initialize the population randomly, anyway (as an example only)!
     // If you want to load previous results from file, remove the next line!
+    // -----------------------------------------------------------------------
     population = Genotype.randomInitialGenotype(conf);
     // Evolve the population. Since we don't know what the best answer
     // is going to be, we just evolve the max number of times.
@@ -138,10 +139,11 @@ public class MinimizingMakeChange {
     System.out.println("Total evolution time: " + ( endTime - startTime)
                        + " ms");
     // Save progress to file. A new run of this example will then be able to
-    // resume where it stopped before!
+    // resume where it stopped before! --> this is completely optional.
     // ---------------------------------------------------------------------
 
     // Represent Genotype as tree with elements Chromomes and Genes.
+    // -------------------------------------------------------------
     DataTreeBuilder builder = DataTreeBuilder.getInstance();
     IDataCreators doc2 = builder.representGenotypeAsDocument(population);
     // create XML document from generated tree
