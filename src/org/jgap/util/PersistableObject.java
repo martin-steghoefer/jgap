@@ -11,14 +11,13 @@ package org.jgap.util;
 
 import java.io.*;
 
+import org.apache.log4j.*;
 import org.jgap.distr.grid.gp.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 
 import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.io.xml.*;
-import org.jgap.distr.grid.wan.JGAPClientGPWAN;
-import org.apache.log4j.Logger;
 
 /**
  * A wrapper that allows an object to be written to and read from a file.
@@ -28,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
