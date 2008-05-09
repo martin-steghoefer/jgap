@@ -1,6 +1,7 @@
 3.3.4
 -----------------------------------------------------------
-* Improved JGAPClientGP
+* Improved error handling in JGAPClientGP
+* Fittest individual is always preserved in GP evolution
 
 3.3.3
 -----------------------------------------------------------
