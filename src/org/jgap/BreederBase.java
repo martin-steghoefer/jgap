@@ -20,7 +20,7 @@ import java.util.*;
 public abstract class BreederBase
     implements IBreeder {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public BreederBase() {
   }
@@ -66,7 +66,7 @@ public abstract class BreederBase
           if (i == selectorSize - 1 && i > 0) {
             // Ensure the last NaturalSelector adds the remaining Chromosomes.
             // ---------------------------------------------------------------
-            single_selection_size = population_size - a_pop.size();
+            single_selection_size = population_size - new_population.size();
           }
           else {
             single_selection_size = population_size / selectorSize;
