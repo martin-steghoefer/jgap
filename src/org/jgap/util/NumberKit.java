@@ -3,7 +3,7 @@
  *
  * JGAP offers a dual license model containing the LGPL as well as the MPL.
  *
- * For licencing information please see the file license.txt included with JGAP
+ * For licensing information please see the file license.txt included with JGAP
  * or have a look at the top of class org.jgap.Chromosome which representatively
  * includes the JGAP license policy applicable for any file delivered with JGAP.
  */
@@ -17,7 +17,7 @@ package org.jgap.util;
  */
 public class NumberKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Returns the hex value of "c" or -1 if there is no corresponding hex value.
@@ -135,13 +135,23 @@ public class NumberKit {
    * @since 3.3.3
    */
   public static String niceDecimalNumber(double a_number, int a_decimals) {
-    String s = a_number+"";
+    String s = a_number + "";
     int index = s.indexOf('.');
     if (index > 0) {
-      if (index+a_decimals >= s.length()) {
-        a_decimals = s.length() - index;
+      if (index + a_decimals >= s.length()) {
+        a_decimals = s.length() - index - 1;
       }
       s = s.substring(0, index + a_decimals + 1);
+      if (s.lastIndexOf('.') == s.length() - 1) {
+        if (a_decimals < 1) {
+          s = s.substring(0, s.length() - 1);
+        }
+        else {
+          for (int i = 0; i < a_decimals; i++) {
+            s += "0";
+          }
+        }
+      }
     }
     return s;
   }
