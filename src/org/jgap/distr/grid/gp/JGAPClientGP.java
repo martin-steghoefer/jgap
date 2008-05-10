@@ -39,10 +39,11 @@ public class JGAPClientGP
   /**@todo in dateiname requester/worker kodieren*/
   /**@todo small, medium, large work requests*/
   /**@todo re-evaluate each result on behalf of another worker*/
-  /**@todo versionsnummer in filename rein, mit der file erzeugt*/
   /**@todo remove old requests from online store auotmatically*/
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
+
+  public static final String APP_VERSION = "1.0";/**@todo store in external file*/
 
   public static final String MODULE_CS = "CS";
 
@@ -158,6 +159,7 @@ public class JGAPClientGP
     if (m_no_evolution) {
       log.info("Don't execute genetic evolution");
     }
+    log.info("This is JGAP Grid version " + APP_VERSION);
     m_gridconfig = a_gridconfig;
     Class client = Class.forName(a_clientClassName);
     m_gridConfig = (IGridConfigurationGP) client.getConstructor(new
@@ -346,6 +348,8 @@ public class JGAPClientGP
    * @since 3.3.3
    */
   protected void onError(Exception a_ex) throws Exception {
+    // Do nothing in default implementation.
+    // -------------------------------------
   }
 
   /**
@@ -362,6 +366,8 @@ public class JGAPClientGP
   protected void onErrorReceiveWorkResults(JGAPRequestGP[] a_workRequests,
       Exception a_ex)
       throws Exception {
+    // Do nothing in default implementation.
+    // -------------------------------------
   }
 
   /**
@@ -555,7 +561,7 @@ public class JGAPClientGP
     else {
       size = workList.length;
     }
-    if (m_WANMode && size < 1) {
+    if (m_WANMode) {
       // First, get a list of all work results.
       // --------------------------------------
       MessageContext context = new MessageContext(MODULE_WS,
@@ -656,6 +662,11 @@ public class JGAPClientGP
       req = workList[idx];
     }
     feedback.receivedFragmentResult(req, workResult, idx);
+    IGPProgram best =workResult.getFittest();
+    if (best == null) {
+      best = workResult.getPopulation().determineFittestProgram();
+    }
+    resultReceived(best);
     return workResult;
   }
 
@@ -738,12 +749,6 @@ public class JGAPClientGP
           }
         } catch (WorkRequestsSendException wex) {
           errorOnSendWorkRequests(wex.getCause(), wex.getWorkRequests());
-//        } catch (UploadFailedException uex) {
-//          errorOnSendWorkRequests(uex, null);
-//          throw uex;
-//        } catch (ListingFailedException lex) {
-//          errorOnSendWorkRequests(lex, null);
-//          throw lex;
         }
         if (!deferRequests && !afterSendWorkRequests(workRequests)) {
           break;
@@ -1006,8 +1011,8 @@ public class JGAPClientGP
   }
 
   /**
-   * A new result has been received. Care that it is stored in case it is a top
-   * 3 result.
+   * A new result has been received. Care that it is stored to fisk in case it
+   * is a top 3 result.
    *
    * @param a_fittest the fittest result received for a work request
    *
@@ -1107,38 +1112,39 @@ public class JGAPClientGP
       while (index < pop.getPopSize() && pop.getGPProgram(index) != null) {
         index++;
       }
-      List toAdd = new Vector();
-      for (IGPProgram prog : topApp) {
-        toAdd.add(prog);
-        added++;
-        if (added >= 3 || randGen.nextDouble() > 0.7d) {
-          break;
+      if (topApp != null && topApp.size() > 0) {
+        List toAdd = new Vector();
+        for (IGPProgram prog : topApp) {
+          toAdd.add(prog);
+          added++;
+          if (added >= 3 || randGen.nextDouble() > 0.7d) {
+            break;
+          }
         }
-      }
-      // Now merge old and new programs to one pool.
-      // -------------------------------------------
-      int len = programs.length;
-      if (len > 0) {
-        len = 0;
-        while (len < programs.length && programs[len] != null) {
-          len++;
+        // Now merge old and new programs to one pool.
+        // -------------------------------------------
+        int len = programs.length;
+        if (len > 0) {
+          len = 0;
+          while (len < programs.length && programs[len] != null) {
+            len++;
+          }
         }
+        IGPProgram[] programsNew = (IGPProgram[]) toAdd.toArray(new IGPProgram[] {});
+        int size = len + toAdd.size();
+        IGPProgram[] allPrograms = new IGPProgram[size];
+        if (len > 0) {
+          System.arraycopy(programs, 0, allPrograms, 0, len);
+        }
+        System.arraycopy(programsNew, 0, allPrograms, len, programsNew.length);
+        pop.setGPPrograms(allPrograms);
+        log.info("Population preset with " + added + " additional programs");
       }
-      IGPProgram[] programsNew = (IGPProgram[]) toAdd.toArray(new IGPProgram[] {});
-      int size = len + toAdd.size();
-      IGPProgram[] allPrograms = new IGPProgram[size];
-      if (len > 0) {
-        System.arraycopy(programs, 0, allPrograms, 0, len);
-      }
-      System.arraycopy(programsNew, 0, allPrograms, len, programsNew.length);
-      pop.setGPPrograms(allPrograms);
-      log.info("Population preset with " + added + " additional programs");
     }
   }
 
   protected void showCurrentResults()
       throws Exception {
-    /**@todo impl*/
     String appid = m_gridConfig.getContext().getAppId();
     Map<String, List> topAll = m_objects.getTopResults();
     List<IGPProgram> topApp = topAll.get(appid);
@@ -1150,6 +1156,9 @@ public class JGAPClientGP
                  NumberKit.niceDecimalNumber(prog.getFitnessValue(), 2));
       }
       log.info("");
+    }
+    else {
+      log.info("No top results yet.");
     }
   }
 }
