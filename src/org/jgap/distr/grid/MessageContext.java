@@ -17,9 +17,10 @@ import org.jgap.distr.grid.common.*;
  * @author Klaus Meffert
  * @since 3.3.3
  */
-public class MessageContext extends BasicContext {
+public class MessageContext
+    extends BasicContext {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private String m_module;
 
@@ -28,6 +29,8 @@ public class MessageContext extends BasicContext {
   private String m_userGrp;
 
   private String m_userID;
+
+  private String m_version;
 
   public MessageContext() {
   }
@@ -68,5 +71,13 @@ public class MessageContext extends BasicContext {
 
   public void setUserID(String a_userID) {
     m_userID = a_userID;
+  }
+
+  public String getVersion() {
+    return m_version;
+  }
+
+  public void setVersion(String a_version) {
+    m_version = a_version;
   }
 }
