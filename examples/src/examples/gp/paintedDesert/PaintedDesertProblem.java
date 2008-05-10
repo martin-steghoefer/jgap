@@ -39,7 +39,8 @@ public class PaintedDesertProblem
   private Ant[] m_ants;
 
   /**
-   * Holds the AntMap object used to hold the initial and current map of sand and Ants.
+   * Holds the AntMap object used to hold the initial and current map of sand
+   * and Ants.
    */
   private static AntMap m_antMap;
 
@@ -229,7 +230,7 @@ public class PaintedDesertProblem
     try {
       System.out.println("Painted Desert Problem");
       GPConfiguration config = new GPConfiguration();
-      config.setSelectionMethod(new TournamentSelector(7));
+      config.setSelectionMethod(new TournamentSelector(3));
       config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
       int popSize = 300;
       String filename;
@@ -246,9 +247,9 @@ public class PaintedDesertProblem
       final PaintedDesertProblem problem = new PaintedDesertProblem(config);
       GPFitnessFunction func = problem.createFitFunc();
       config.setFitnessFunction(func);
-      config.setCrossoverProb(0.9f);
-      config.setFunctionProb(0.8f);
-      config.setReproductionProb(0.1f);
+      config.setCrossoverProb(0.4f);
+      config.setReproductionProb(0.6f);
+      config.setFunctionProb(0.6f);
       config.setNewChromsPercent(0.3f);
       config.setStrictProgramCreation(true);
       config.setUseProgramCache(false);
@@ -422,6 +423,7 @@ public class PaintedDesertProblem
       a_program.getGPConfiguration().clearMemory();
       a_program.setApplicationData(m_antMap);
       try {
+        m_antMap.init();
         // Execute the program for each ant in turn.
         for (int antIndex = 0; antIndex < m_popSize; antIndex++) {
           m_antMap.nextAnt();

@@ -23,7 +23,7 @@ public class AntMap {
    * through the ants.  It is expected that the clients of the AntMap can use getAnt()
    * to return the Ant instance at the currentAnt index.
    */
-  private int m_currentAnt = -1;
+  private int m_currentAnt;
 
   // Carrying
   /**
@@ -96,6 +96,8 @@ public class AntMap {
     m_sizex = a_map.length;
     m_sizey = a_map[0].length;
     m_ants = ants;
+    m_popSize = m_ants.length;
+    m_currentAnt = -1;
     m_initialPosition = new int[m_sizex][m_sizey];
     this.m_currentMap = new int[m_sizex][m_sizey];
     for (int x = 0; x < m_sizex; x++) {
@@ -192,7 +194,7 @@ public class AntMap {
 
   /**
    * Returns the current Ant.  The current ant is incremented by the NextAnt
-   * method
+   * method.
    * @return
    */
   public Ant getAnt() {
@@ -246,7 +248,7 @@ public class AntMap {
   public int fitness() {
     //Causes all ants to drop their sand at a location
     this.finalize();
-    int fitness = (int) GPFitnessFunction.MAX_FITNESS_VALUE;
+    int fitness = 0;//(int) GPFitnessFunction.MAX_FITNESS_VALUE;
     int hit = 0;
     for (int x = 0; x < this.getWidth(); x++) {
       for (int y = 0; y < this.getHeight(); y++) {
@@ -258,8 +260,8 @@ public class AntMap {
           // when all sand is in the proper location fitness = 0
           //fitness = fitness + Math.abs(x- antmap.getMap()[x][y]);
           fitness = fitness +
-              fitnessValue(this.getMap(), this.getMap()[x][y], x, y);
-          if (this.getMap()[x][y] == x) {
+              fitnessValue(getMap(), getMap()[x][y], x, y);
+          if (getMap()[x][y] == x) {
             // Sand is in the correct position - color = x value
             hit++;
           }
@@ -345,6 +347,8 @@ public class AntMap {
       m_currentAnt++;
     }
     else {
+      System.out.println("nextAnt with m_currentAnt=" + m_currentAnt +
+                         " and m_popSize=" + m_popSize);
       throw new IllegalStateException("Iterated beyond last ant");
     }
     return getAnts()[m_currentAnt];
@@ -387,4 +391,26 @@ public class AntMap {
   public Ant[] getAnts() {
     return m_ants;
   }
+
+  public void init() {
+    resetMap();
+  }
+
+  /**
+   * Resets the sand and ant back to their positions before the program was applied
+   *
+   */
+  public void resetMap() {
+    m_currentAnt = -1;
+//    m_fitnessFailure = false;
+    for (int antIndex = 0; antIndex < m_ants.length; antIndex++) {
+      m_ants[antIndex].reset();
+    }
+    for (int x = 0; x < m_sizex; x++) {
+      for (int y = 0; y < m_sizey; y++) {
+        m_currentMap[x][y] = m_initialPosition[x][y];
+      }
+    }
+  }
+
 }
