@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -356,8 +356,8 @@ public class GPConfiguration
   }
 
   /**
-   * @param a_functionProb probability that a function is chosen in crossing
-   * over (between 0 and 1)
+   * @param a_functionProb probability that a function instead of a terminal
+   * is chosen in crossing over (between 0 and 1)
    *
    * @author Klaus Meffert
    * @since 3.2
@@ -367,7 +367,8 @@ public class GPConfiguration
   }
 
   /**
-   * @return probability that a function is chosen in crossing over
+   * @return probability that a function instead of a terminal is chosen in
+   * crossing over
    *
    * @author Klaus Meffert
    * @since 3.2
