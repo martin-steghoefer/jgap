@@ -17,7 +17,7 @@ package org.jgap.util;
  */
 public class NumberKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Returns the hex value of "c" or -1 if there is no corresponding hex value.
@@ -138,6 +138,11 @@ public class NumberKit {
     String s = a_number + "";
     int index = s.indexOf('.');
     if (index > 0) {
+      // Do not remove anything if "E" is contained in the number string.
+      // ----------------------------------------------------------------
+      if (s.indexOf('E',index) > 0) {
+        return s;
+      }
       if (index + a_decimals >= s.length()) {
         a_decimals = s.length() - index - 1;
       }
