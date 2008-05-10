@@ -21,6 +21,9 @@ import org.jgap.gp.impl.*;
  */
 public class GO_E
     extends AntCommand implements IMutateable {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
   /**
    * Constructor for the Go east function
    * @param a_conf

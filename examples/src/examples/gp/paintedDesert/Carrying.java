@@ -21,6 +21,9 @@ import org.jgap.*;
  */
 public class Carrying
     extends AntCommand {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
   /**
    * Constructor for the Carrying function.
    *

@@ -22,6 +22,9 @@ import org.jgap.gp.impl.*;
  */
 public abstract class AntCommand
     extends CommandGene {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
   public AntCommand(final GPConfiguration a_conf, int a_arity, Class a_type)
       throws InvalidConfigurationException {
     super(a_conf, a_arity, a_type);

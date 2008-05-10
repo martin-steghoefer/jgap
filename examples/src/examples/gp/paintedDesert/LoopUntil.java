@@ -21,6 +21,9 @@ import org.jgap.gp.impl.*;
  */
 public class LoopUntil
     extends CommandGene {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
+
   /**
    * Type of the fist argument
    */

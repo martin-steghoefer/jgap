@@ -9,8 +9,6 @@
  */
 package examples.gp.paintedDesert;
 
-import org.jgap.gp.GPFitnessFunction;
-
 /**
  * Holds the map of the painted desert sand locations
  *
@@ -18,6 +16,8 @@ import org.jgap.gp.GPFitnessFunction;
  * @since 3.2
  */
 public class AntMap {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
   /** Holds the instance of the ant being processed.  Assumption that some external
    * single threaded process will loop through all the ants using nextAnt to sequence
    * through the ants.  It is expected that the clients of the AntMap can use getAnt()
