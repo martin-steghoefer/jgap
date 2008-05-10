@@ -28,7 +28,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.48 $";
+  private final static String CVS_REVISION = "$Revision: 1.49 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -512,10 +512,11 @@ public class GPGenotype
     IGPProgram best = null;
     IGPFitnessEvaluator evaluator = getGPConfiguration().getGPFitnessEvaluator();
     m_bestFitness = FitnessFunction.NO_FITNESS_VALUE;
+    boolean bestPreserved = false;
     for (int i = 0; i < pop.size() && pop.getGPProgram(i) != null; i++) {
       IGPProgram program = pop.getGPProgram(i);
       /**@todo get information from fitness function how calculation happened.
-       * In case of Robocode: Return the robot competed against, in case the
+       * In case of Robocode: return the robot competed against, in case the
        * -enemies option was used without -battleAll
        */
       double fitness;
@@ -525,21 +526,25 @@ public class GPGenotype
       catch (IllegalStateException iex) {
         fitness = Double.NaN;
       }
-      // Don't acceppt Infinity as a result.
-      // -----------------------------------
+      // Don't acceppt Infinity or NaN as a result.
+      // ------------------------------------------
       if (Double.isInfinite(fitness) || Double.isNaN(fitness)) {
         continue;
       }
       if (best == null || evaluator.isFitter(fitness, m_bestFitness)) {
         best = program;
         m_bestFitness = fitness;
+        if (!bestPreserved && m_allTimeBest != null) {
+          if (best.toStringNorm(0).equals(m_allTimeBest.toStringNorm(0))) {
+            bestPreserved = true;
+          }
+        }
       }
-      // Problem with totalFitness: what about fitness being NaN?
       totalFitness += fitness;
     }
     m_totalFitness = totalFitness;
-//    best = pop.determineFittestProgram();
-//    m_bestFitness = best.getFitnessValue();
+    best = pop.determineFittestProgram();
+    m_bestFitness = best.getFitnessValue();
     /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
     if (m_allTimeBest == null
         || evaluator.isFitter(m_bestFitness, m_allTimeBestFitness)) {
@@ -578,6 +583,9 @@ public class GPGenotype
         // -----------------------------------
         outputSolution(m_allTimeBest);
       }
+    }
+    if (!bestPreserved && m_allTimeBest != null) {
+      addFittestProgram(m_allTimeBest);
     }
   }
 
@@ -1100,7 +1108,7 @@ public class GPGenotype
     }
     try {
       for (int i = 0; i < a_num; i++) {
-        /**@todo implement*/
+        /**@todo implement filling up population*/
 //        getGPPopulation().addChromosome( (IChromosome) chromIniter.perform(sampleProg,
 //            sampleClass, null));
       }
