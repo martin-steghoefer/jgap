@@ -9,13 +9,10 @@
  */
 package org.jgap.gp.impl;
 
-import junit.framework.*;
-import org.jgap.*;
-import org.jgap.impl.*;
-import org.jgap.gp.terminal.*;
+import org.jgap.gp.*;
 import org.jgap.gp.function.*;
 
-import org.jgap.gp.*;
+import junit.framework.*;
 
 /**
  * Tests the BranchTypingCross class.
@@ -26,7 +23,7 @@ import org.jgap.gp.*;
 public class BranchTypingCrossTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(BranchTypingCrossTest.class);
