@@ -11,7 +11,6 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
-
 import org.apache.log4j.*;
 import org.jgap.*;
 import org.jgap.event.*;
@@ -28,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.49 $";
+  private final static String CVS_REVISION = "$Revision: 1.50 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -40,26 +39,27 @@ public class GPGenotype
   /**
    * The current configuration instance.
    */
-  private /*transient*/ GPConfiguration m_configuration;
+  private
+      /*transient*/GPConfiguration m_configuration;
 
   private transient static GPConfiguration m_staticConfiguration;
 
   /**
    * Fitness value of the best solution.
    */
-  private /*transient*/ double m_bestFitness;
+  private double m_bestFitness;
 
   /**
    * Sum of fitness values over all chromosomes.
    */
-  private /*transient*/ double m_totalFitness;
+  private double m_totalFitness;
 
   /**
    * Best solution found.
    */
-  private /*transient*/ IGPProgram m_allTimeBest;
+  private IGPProgram m_allTimeBest;
 
-  private /*transient*/ double m_allTimeBestFitness;
+  private double m_allTimeBestFitness;
 
   /**
    * Is full mode with program construction allowed?
@@ -217,11 +217,11 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                                 Class[] a_types,
-                                                 Class[][] a_argTypes,
-                                                 CommandGene[][] a_nodeSets,
-                                                 int a_maxNodes,
-                                                 boolean a_verboseOutput)
+      Class[] a_types,
+      Class[][] a_argTypes,
+      CommandGene[][] a_nodeSets,
+      int a_maxNodes,
+      boolean a_verboseOutput)
       throws InvalidConfigurationException {
     int[] minDepths = null;
     int[] maxDepths = null;
@@ -261,13 +261,13 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-                                                 Class[] a_types,
-                                                 Class[][] a_argTypes,
-                                                 CommandGene[][] a_nodeSets,
-                                                 int[] a_minDepths,
-                                                 int[] a_maxDepths,
-                                                 int a_maxNodes,
-                                                 boolean a_verboseOutput)
+      Class[] a_types,
+      Class[][] a_argTypes,
+      CommandGene[][] a_nodeSets,
+      int[] a_minDepths,
+      int[] a_maxDepths,
+      int a_maxNodes,
+      boolean a_verboseOutput)
       throws InvalidConfigurationException {
     boolean[] fullModeAllowed = new boolean[a_types.length];
     for (int i = 0; i < a_types.length; i++) {
@@ -369,12 +369,12 @@ public class GPGenotype
         || (a_maxDepths != null && a_argTypes.length != a_maxDepths.length)
         || a_argTypes.length != a_types.length) {
       throw new IllegalArgumentException("a_argTypes must have same length"
-                                         +
+          +
           " as a_types, a_minDepths, a_maxDepths and a_fullModeAllowed");
     }
     if (a_conf.getPopulationSize() < 1) {
       throw new IllegalArgumentException("Set the population size in the"
-                                         +" configuration!");
+          + " configuration!");
     }
     // Clean up memory.
     // ----------------
@@ -398,6 +398,7 @@ public class GPGenotype
       LOGGER.info("Mem free after creating population: "
                   + SystemKit.niceMemory(SystemKit.getTotalMemoryMB()) + " MB");
     }
+    checkErroneousPop(pop, " after creating population/2");
     GPGenotype gp = new GPGenotype(a_conf, pop, a_types, a_argTypes, a_nodeSets,
                                    a_minDepths, a_maxDepths, a_maxNodes);
     gp.m_fullModeAllowed = a_fullModeAllowed;
@@ -410,6 +411,7 @@ public class GPGenotype
       Variable var = (Variable) gp.m_variables.get(varName);
       a_conf.putVariable(var);
     }
+    gp.checkErroneousPop(gp.getGPPopulation(), " after creating population/2");
     return gp;
   }
 
@@ -459,7 +461,6 @@ public class GPGenotype
       }
     }
   }
-
   /**
    * Evolves the population n times.
    *
@@ -490,7 +491,7 @@ public class GPGenotype
           LOGGER.info("Evolving generation "
                       + (i + offset)
                       + ", memory free: "
-                      +  freeMB
+                      + freeMB
                       + " MB");
         }
       }
@@ -522,8 +523,7 @@ public class GPGenotype
       double fitness;
       try {
         fitness = program.getFitnessValue();
-      }
-      catch (IllegalStateException iex) {
+      } catch (IllegalStateException iex) {
         fitness = Double.NaN;
       }
       // Don't acceppt Infinity or NaN as a result.
@@ -563,8 +563,7 @@ public class GPGenotype
         else {
           m_allTimeBest = (IGPProgram) cloner.perform(best, null, null);
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         m_allTimeBest = best;
         ex.printStackTrace();
       }
@@ -664,6 +663,8 @@ public class GPGenotype
       int crossover = 0;
       int reproduction = 0;
       int creation = 0;
+      // Test code for error finding
+      checkErroneousPop(getGPPopulation(), " (before evolution)", true);
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
         // ---------------------------------------------------------
@@ -677,20 +678,28 @@ public class GPGenotype
           // Do crossover.
           // -------------
           IGPProgram i1 = conf.getSelectionMethod().select(this);
-//          newPopulation.checkIfFittest(i1);
           IGPProgram i2 = conf.getSelectionMethod().select(this);
-//          newPopulation.checkIfFittest(i2);
           int tries = 0;
           do {
             try {
+              checkErroneousProg(i1,
+                                 " at start of evolution (index " + i + "/01)", false);
+                  /**@todo hier Fehler!*/
+              checkErroneousProg(i2,
+                                 " at start of evolution (index " + i + "/02)", false);
               IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1,
                   i2);
               newPopulation.setGPProgram(i, newIndividuals[0]);
               newPopulation.setGPProgram(i + 1, newIndividuals[1]);
+              // Test code for error finding
+              checkErroneousProg(newIndividuals[0],
+                                 " at start of evolution (index " + i + "/11)", false);
+                  /**@todo hier Fehler!*/
+              checkErroneousProg(newIndividuals[1],
+                                 " at start of evolution (index " + i + "/12)", false);
               i++;
               break;
-            }
-            catch (IllegalStateException iex) {
+            } catch (IllegalStateException iex) {
               tries++;
               if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
                 if (!getGPConfiguration().isMaxNodeWarningPrinted()) {
@@ -704,7 +713,7 @@ public class GPGenotype
                   if (program != null) {
                     newPopulation.setGPProgram(i++, program);
                     program = cloneProgram(getGPConfiguration().
-                                           getPrototypeProgram());
+                        getPrototypeProgram());
                     newPopulation.setGPProgram(i, program);
                     break;
                   }
@@ -714,18 +723,17 @@ public class GPGenotype
                 }
               }
             }
-          }
-          while (true);
+          } while (true);
         }
-        else {//if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
+        else { //if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
           // ------------------
           reproduction++;
           newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
         }
       }
-      // Add new chromosomes randomly.
-      // -----------------------------
+      // Add new programs randomly.
+      // --------------------------
       for (int i = popSize1; i < popSize; i++) {
         creation++;
         // Determine depth randomly and between minInitDepth and maxInitDepth.
@@ -743,14 +751,17 @@ public class GPGenotype
                 m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
                 m_maxNodes, m_fullModeAllowed, tries);
             newPopulation.setGPProgram(i, program);
+            // Test code for error finding
+            checkErroneousProg(program,
+                               " when adding a program, evolution (index " + i +
+                               ")", true);
             LOGGER.debug("Added new GP program (depth "
                          + depth
                          + ", "
                          + tries
                          + " tries)");
             break;
-          }
-          catch (IllegalStateException iex) {
+          } catch (IllegalStateException iex) {
             /**@todo instead of re-using prototype, create a program anyway
              * (ignoring the validator) in case it is the last try.
              * Or even better: Make the validator return a defect rate!
@@ -766,7 +777,7 @@ public class GPGenotype
               // Try cloning a previously generated valid program.
               // -------------------------------------------------
               IGPProgram program = cloneProgram(getGPConfiguration().
-                                                getPrototypeProgram());
+                  getPrototypeProgram());
               if (program != null) {
                 // Cloning worked.
                 // ---------------
@@ -775,7 +786,8 @@ public class GPGenotype
               }
               else {
                 if (getGPConfiguration().getPrototypeProgram() == null) {
-                  throw new IllegalStateException("Cloning: Prototype program was null");
+                  throw new IllegalStateException(
+                      "Cloning: Prototype program was null");
                 }
                 else {
                   throw new IllegalStateException(
@@ -784,13 +796,12 @@ public class GPGenotype
               }
             }
           }
-        }
-        while (true);
+        } while (true);
       }
       LOGGER.debug("Did "
-                  + crossover + " x-overs, "
-                  + reproduction + " reproductions, "
-                  + creation + " creations");
+                   + crossover + " x-overs, "
+                   + reproduction + " reproductions, "
+                   + creation + " creations");
       // Now set the new population as the active one.
       // ---------------------------------------------
       setGPPopulation(newPopulation);
@@ -801,8 +812,7 @@ public class GPGenotype
       // -------------------------------------------------------
       conf.getEventManager().fireGeneticEvent(
           new GeneticEvent(GeneticEvent.GPGENOTYPE_EVOLVED_EVENT, this));
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       // This should never happen.
       // -------------------------
       throw new IllegalStateException(iex.getMessage());
@@ -838,8 +848,7 @@ public class GPGenotype
         // ------------------------------------------------
         Thread.sleep(10);
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
     }
@@ -919,8 +928,7 @@ public class GPGenotype
   public boolean equals(Object a_other) {
     try {
       return compareTo(a_other) == 0;
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
@@ -979,8 +987,7 @@ public class GPGenotype
         }
       }
       return 0;
-    }
-    catch (ClassCastException e) {
+    } catch (ClassCastException e) {
       return -1;
     }
   }
@@ -1037,8 +1044,7 @@ public class GPGenotype
         IGPProgram program = (IGPProgram) cloner.perform(
             validProgram, null, null);
         return program;
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         LOGGER.error(ex.getMessage(), ex);
         return null;
       }
@@ -1104,7 +1110,7 @@ public class GPGenotype
         getInitializerFor(sampleProg, sampleClass);
     if (chromIniter == null) {
       throw new InvalidConfigurationException("No initializer found for class "
-                                              + sampleClass);
+          + sampleClass);
     }
     try {
       for (int i = 0; i < a_num; i++) {
@@ -1112,11 +1118,9 @@ public class GPGenotype
 //        getGPPopulation().addChromosome( (IChromosome) chromIniter.perform(sampleProg,
 //            sampleClass, null));
       }
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
     }
-    catch (Exception ex) {
-        throw new IllegalStateException(ex);
-    }
-
   }
 
 //  /**
@@ -1150,4 +1154,53 @@ public class GPGenotype
 //    }
 //    return disabledChromosomes[a_index];
 //  }
+
+  public static void checkErroneousPop(GPPopulation pop, String s) {
+    checkErroneousPop(pop, s, false);
+  }
+
+  public static void checkErroneousPop(GPPopulation pop, String s,
+                                       boolean a_clearFitness) {
+    if (pop == null) {
+      return;
+    }
+    if (!pop.getGPConfiguration().isVerifyPrograms()) {
+      // Verification not activated!
+      // ---------------------------
+      return;
+    }
+    int popSize1 = pop.size();
+    for (int i = 0; i < popSize1; i++) {
+      IGPProgram prog = pop.getGPProgram(i);
+      checkErroneousProg(prog, s, a_clearFitness);
+    }
+  }
+
+  public static void checkErroneousProg(IGPProgram prog, String s) {
+    checkErroneousProg(prog, s, false);
+  }
+
+  public static void checkErroneousProg(IGPProgram a_prog, String s,
+                                        boolean a_clearFitness) {
+    if (a_prog == null) {
+      return;
+    }
+    if (!a_prog.getGPConfiguration().isVerifyPrograms()) {
+      // Verification not activated!
+      // ---------------------------
+      return;
+    }
+    if (a_clearFitness) {
+      // Reset fitness value.
+      // --------------------
+      a_prog.setFitnessValue(GPFitnessFunction.NO_FITNESS_VALUE);
+    }
+    try {
+      a_prog.getFitnessValue();
+    } catch (Throwable ex) {
+      String msg = "Invalid program detected" + s + "!";
+      LOGGER.fatal(msg);
+      throw new RuntimeException(msg);
+    }
+  }
 }
