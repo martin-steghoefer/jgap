@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public abstract class CrossMethod
     implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private /*transient*/ GPConfiguration m_configuration;
 
@@ -33,6 +33,16 @@ public abstract class CrossMethod
     return m_configuration;
   }
 
-  public abstract IGPProgram[] operate(final IGPProgram i1,
-                                       final IGPProgram i2);
+  /**
+   * Crosses two individuals.
+   *
+   * @param a_i1 the first individual to cross
+   * @param a_i2 the second individual to cross
+   * @return an array of the two resulting individuals
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public abstract IGPProgram[] operate(final IGPProgram a_i1,
+                                       final IGPProgram a_i2);
 }
