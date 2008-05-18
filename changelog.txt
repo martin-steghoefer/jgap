@@ -1,7 +1,11 @@
 3.3.4
 -----------------------------------------------------------
+* Improved functionality of grid computing
 * Improved error handling in JGAPClientGP
 * Fittest individual is always preserved in GP evolution
+* Fixed bug in NumberKit.niceDecimalNumber
+* Added painted desert example (package examples.gp)
+* Improved Javadoc
 
 3.3.3
 -----------------------------------------------------------
