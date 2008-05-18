@@ -24,7 +24,7 @@ import org.homedns.dade.jcgrid.cmd.MainCmd;
  */
 public class JGAPWorkersGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private Class m_workerClass;
 
@@ -53,7 +53,7 @@ public class JGAPWorkersGP {
    * @param a_config GridNodeWorkerConfig
    */
   public void getNeededFiles(GridNodeWorkerConfig a_config) {
-    /**@todo*/
+    /**@todo implement*/
     // determine files
 
     // request files
