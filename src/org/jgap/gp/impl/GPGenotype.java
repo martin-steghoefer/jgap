@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.50 $";
+  private final static String CVS_REVISION = "$Revision: 1.51 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -663,7 +663,6 @@ public class GPGenotype
       int crossover = 0;
       int reproduction = 0;
       int creation = 0;
-      // Test code for error finding
       checkErroneousPop(getGPPopulation(), " (before evolution)", true);
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program (=ProgramChromosome).
@@ -684,19 +683,30 @@ public class GPGenotype
             try {
               checkErroneousProg(i1,
                                  " at start of evolution (index " + i + "/01)", false);
-                  /**@todo hier Fehler!*/
               checkErroneousProg(i2,
                                  " at start of evolution (index " + i + "/02)", false);
               IGPProgram[] newIndividuals = conf.getCrossMethod().operate(i1,
                   i2);
               newPopulation.setGPProgram(i, newIndividuals[0]);
               newPopulation.setGPProgram(i + 1, newIndividuals[1]);
-              // Test code for error finding
-              checkErroneousProg(newIndividuals[0],
-                                 " at start of evolution (index " + i + "/11)", false);
-                  /**@todo hier Fehler!*/
-              checkErroneousProg(newIndividuals[1],
-                                 " at start of evolution (index " + i + "/12)", false);
+              try {
+                checkErroneousProg(newIndividuals[0],
+                                   " at start of evolution (index " + i +
+                                   "/11)", false);
+              } catch (RuntimeException t) {
+                writeToFile(i1, i2, newIndividuals[0],
+                            "Error in first X-over program");
+                throw t;
+              }
+              try {
+                checkErroneousProg(newIndividuals[1],
+                                   " at start of evolution (index " + i +
+                                   "/12)", false);
+              } catch (RuntimeException t) {
+                writeToFile(i1, i2, newIndividuals[1],
+                            "Error in second X-over program");
+                throw t;
+              }
               i++;
               break;
             } catch (IllegalStateException iex) {
@@ -751,7 +761,6 @@ public class GPGenotype
                 m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
                 m_maxNodes, m_fullModeAllowed, tries);
             newPopulation.setGPProgram(i, program);
-            // Test code for error finding
             checkErroneousProg(program,
                                " when adding a program, evolution (index " + i +
                                ")", true);
@@ -1159,20 +1168,30 @@ public class GPGenotype
     checkErroneousPop(pop, s, false);
   }
 
-  public static void checkErroneousPop(GPPopulation pop, String s,
+  public static void checkErroneousPop(GPPopulation a_pop, String a_s,
                                        boolean a_clearFitness) {
-    if (pop == null) {
+    if (a_pop == null) {
       return;
     }
-    if (!pop.getGPConfiguration().isVerifyPrograms()) {
+    checkErroneousPop(a_pop, a_s, a_clearFitness,
+                      a_pop.getGPConfiguration().isVerifyPrograms());
+  }
+
+  public static void checkErroneousPop(GPPopulation a_pop, String a_s,
+                                       boolean a_clearFitness,
+                                       boolean a_active) {
+    if (a_pop == null) {
+      return;
+    }
+    if (!a_active) {
       // Verification not activated!
       // ---------------------------
       return;
     }
-    int popSize1 = pop.size();
+    int popSize1 = a_pop.size();
     for (int i = 0; i < popSize1; i++) {
-      IGPProgram prog = pop.getGPProgram(i);
-      checkErroneousProg(prog, s, a_clearFitness);
+      IGPProgram a_prog = a_pop.getGPProgram(i);
+      checkErroneousProg(a_prog, a_s, a_clearFitness, a_active);
     }
   }
 
@@ -1180,16 +1199,30 @@ public class GPGenotype
     checkErroneousProg(prog, s, false);
   }
 
-  public static void checkErroneousProg(IGPProgram a_prog, String s,
+  public static void checkErroneousProg(IGPProgram a_prog, String a_s,
                                         boolean a_clearFitness) {
     if (a_prog == null) {
       return;
     }
-    if (!a_prog.getGPConfiguration().isVerifyPrograms()) {
+    checkErroneousProg(a_prog, a_s, a_clearFitness,
+                       a_prog.getGPConfiguration().isVerifyPrograms());
+  }
+
+  public static void checkErroneousProg(IGPProgram a_prog, String s,
+                                        boolean a_clearFitness,
+                                        boolean a_active) {
+    if (a_prog == null) {
+      return;
+    }
+    if (!a_active) {
       // Verification not activated!
       // ---------------------------
       return;
     }
+    // Has program already been verified?
+    // ----------------------------------
+    /**@todo impl. cache*/
+
     if (a_clearFitness) {
       // Reset fitness value.
       // --------------------
@@ -1200,7 +1233,48 @@ public class GPGenotype
     } catch (Throwable ex) {
       String msg = "Invalid program detected" + s + "!";
       LOGGER.fatal(msg);
-      throw new RuntimeException(msg);
+      throw new RuntimeException(msg, ex);
     }
+  }
+
+  private void writeToFile(IGPProgram i1, IGPProgram i2, IGPProgram inew,
+                           String header) {
+    StringBuffer sb = new StringBuffer();
+    try {
+      sb.append(header);
+      sb.append("First Program to cross over\n");
+      sb.append(getProgramString(i1));
+      sb.append("\nSecond Program to cross over\n");
+      sb.append(getProgramString(i2));
+      sb.append("\nResulting Program after cross over\n");
+      sb.append(getProgramString(inew));
+      String filename = DateKit.getNowAsString();
+      File f = new File(filename);
+      FileWriter fw = new FileWriter(f);
+      fw.write(sb.toString());
+      fw.close();
+    } catch (IOException iex) {
+      System.out.println(sb.toString());
+      iex.printStackTrace();
+    }
+  }
+
+  private StringBuffer getProgramString(IGPProgram i1) {
+    int size = i1.size();
+    int size2;
+    ProgramChromosome chrom;
+    CommandGene gene;
+    StringBuffer result = new StringBuffer();
+    for (int i = 0; i < size; i++) {
+      chrom = i1.getChromosome(i);
+      result.append("Chromosome " + i + ", class " + chrom.getClass() + "\n");
+      size2 = chrom.size();
+      for (int j = 0; j < size2; j++) {
+        gene = chrom.getGene(j);
+        result.append("Gene " + j + ", class " + gene.getClass() +
+                      ", toString: " + gene.toString() + " \n");
+      }
+    }
+    return result;
   }
 }
