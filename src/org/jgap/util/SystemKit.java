@@ -10,6 +10,9 @@
 package org.jgap.util;
 
 import java.io.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.Option;
 
 /**
  * System-related utility functions.
@@ -19,7 +22,7 @@ import java.io.*;
  */
 public class SystemKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * @return total memory available by the VM in megabytes.
@@ -115,4 +118,29 @@ public class SystemKit {
       }
     }
   }
+
+  /**
+   * Prints all available comamnd line options.
+   *
+   * @param cmd the CommandLine object
+   * @param options the Options list
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public static void printHelp(CommandLine cmd, Options options) {
+    if (cmd.hasOption("help")) {
+      System.out.println("");
+      System.out.println(" Command line options:");
+      System.out.println(" ---------------------\n");
+      for (Object opt0 : options.getOptions()) {
+        Option opt = (Option) opt0;
+        String s = opt.getOpt();
+        s = StringKit.fill(s, 20, ' ');
+        System.out.println(" " + s + " - " + opt.getDescription());
+      }
+      System.exit(0);
+    }
+  }
+
 }
