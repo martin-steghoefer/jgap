@@ -6,6 +6,7 @@
 * Fixed bug in NumberKit.niceDecimalNumber
 * Added painted desert example (package examples.gp)
 * Improved Javadoc
+* Added SystemKit.printHelp(..)
 
 3.3.3
 -----------------------------------------------------------
