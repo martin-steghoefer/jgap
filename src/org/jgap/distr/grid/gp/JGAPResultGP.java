@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private IGPProgram m_fittest;
 
@@ -49,7 +49,7 @@ public class JGAPResultGP
   private String m_description;
 
   /**
-   * Duration of Computation
+   * Duration of computation
    */
   private long m_durationComputation;
 

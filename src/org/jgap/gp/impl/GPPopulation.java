@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.34 $";
+  private final static String CVS_REVISION = "$Revision: 1.35 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -406,7 +406,7 @@ public class GPPopulation
   }
 
   /**
-   * Creates a valid IGPProgram.
+   * Creates a valid IGPProgram. No fitness computation is initiated here!
    *
    * @param a_programIndex index of the program in the population
    * @param a_types the type of each chromosome, the length is the number of
