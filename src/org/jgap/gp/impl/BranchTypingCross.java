@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -30,28 +30,28 @@ public class BranchTypingCross
 
   /**
    * Crosses two individuals. A random chromosome is chosen for crossing based
-   * probabilistically on the proportion of nodes in each chromosome in the
-   * first individual.
+   * on the proportion of nodes in each chromosome in the first individual.
    *
-   * @param i1 the first individual to cross
-   * @param i2 the second individual to cross
+   * @param a_i1 the first individual to cross
+   * @param a_i2 the second individual to cross
    * @return an array of the two resulting individuals
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  public IGPProgram[] operate(final IGPProgram i1,
-                              final IGPProgram i2) {
+  public IGPProgram[] operate(final IGPProgram a_i1,
+                              final IGPProgram a_i2) {
     try {
       // Determine which chromosome we'll cross, probabilistically determined
-      // by the sizes of the chromosomes of the first individual --
-      // equivalent to Koza's branch typing.
-      int[] sizes = new int[i1.size()];
+      // by the sizes of the chromosomes of the first individual.
+      // This is equivalent to Koza's branch typing.
+      // --------------------------------------------------------------------
+      int[] sizes = new int[a_i1.size()];
       int totalSize = 0;
-      for (int i = 0; i < i1.size(); i++) {
+      for (int i = 0; i < a_i1.size(); i++) {
         // Size of a chromosome = number of nodes.
         // ---------------------------------------
-        sizes[i] = i1.getChromosome(i).getSize(0);
+        sizes[i] = a_i1.getChromosome(i).getSize(0);
         totalSize += sizes[i];
       }
       /**@todo we could also select a chromosome directly!*/
@@ -60,7 +60,7 @@ public class BranchTypingCross
       // Select the chromosome in which node "nodeNum" resides.
       // ------------------------------------------------------
       int chromosomeNum;
-      for (chromosomeNum = 0; chromosomeNum < i1.size(); chromosomeNum++) {
+      for (chromosomeNum = 0; chromosomeNum < a_i1.size(); chromosomeNum++) {
         nodeNum -= sizes[chromosomeNum];
         if (nodeNum < 0)
           break;
@@ -68,8 +68,8 @@ public class BranchTypingCross
       // Cross the selected chromosomes.
       // -------------------------------
       ProgramChromosome[] newChromosomes = doCross(
-          i1.getChromosome(chromosomeNum),
-          i2.getChromosome(chromosomeNum));
+          a_i1.getChromosome(chromosomeNum),
+          a_i2.getChromosome(chromosomeNum));
       // Create the new individuals by copying the uncrossed chromosomes
       // and setting the crossed chromosome. There's no need to deep-copy
       // the uncrossed chromosomes because they don't change. That is,
@@ -78,14 +78,18 @@ public class BranchTypingCross
       // deep-copied chromosomes anyway.
       // ------------------------------------------------------------------
       IGPProgram[] newIndividuals = {
-          new GPProgram(i1), //getConfiguration(), i1.size()),
-          new GPProgram(i1)}; //getConfiguration(), i1.size())};
-      for (int i = 0; i < i1.size(); i++)
+          new GPProgram(a_i1), //getConfiguration(), i1.size()),
+          new GPProgram(a_i1)}; //getConfiguration(), i1.size())};
+      for (int i = 0; i < a_i1.size(); i++)
         if (i != chromosomeNum) {
-          newIndividuals[0].setChromosome(i, i1.getChromosome(i));
-          newIndividuals[1].setChromosome(i, i2.getChromosome(i));
+          // Unchanged, not crossed, chromosomes.
+          // ------------------------------------
+          newIndividuals[0].setChromosome(i, a_i1.getChromosome(i));
+          newIndividuals[1].setChromosome(i, a_i2.getChromosome(i));
         }
         else {
+          // The crossed chromosomes.
+          // ------------------------
           newIndividuals[0].setChromosome(i, newChromosomes[0]);
           newIndividuals[1].setChromosome(i, newChromosomes[1]);
         }
@@ -97,133 +101,134 @@ public class BranchTypingCross
 
   /**
    * Crosses two chromsomes using branch-typing.
-   * A random point in the first chromosome is chosen, with 90% probability it
-   * will be a function and 10% probability it will be a terminal. A random
-   * point in the second chromosome is chosen using the same probability
+   * A random point in the first chromosome is chosen, with a certain probability
+   * it will be a function and with a rest probability it will be a terminal. A
+   * random point in the second chromosome is chosen using the same probability
    * distribution, but the node chosen must be of the same type as the chosen
-   * node in the first chromosome.<p>
+   * node in the first chromosome.
    * If a suitable point in the second chromosome couldn't be found then the
-   * chromosomes are not crossed.<p>
-   * If a resulting chromosome's depth is larger than the World's maximum
-   * crossover depth then that chromosome is simply copied from the original
+   * chromosomes are not crossed.
+   * If a resulting chromosome's depth is larger than the maximum crossover
+   * depth then that chromosome is simply copied from the original
    * rather than crossed.
    *
-   * @param c0 the first chromosome to cross
-   * @param c1 the second chromosome to cross
+   * @param a_c0 the first chromosome to cross
+   * @param a_c1 the second chromosome to cross
    * @return an array of the two resulting chromosomes
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected ProgramChromosome[] doCross(ProgramChromosome c0,
-                                        ProgramChromosome c1)
+  protected ProgramChromosome[] doCross(ProgramChromosome a_c0,
+                                        ProgramChromosome a_c1)
       throws InvalidConfigurationException {
     ProgramChromosome[] c = {
-        c0, c1};
+        a_c0, a_c1};
     // Choose a point in c1.
     // ---------------------
     int p0;
     RandomGenerator random = getConfiguration().getRandomGenerator();
     if (random.nextFloat() < getConfiguration().getFunctionProb()) {
-      // choose a function
-      int nf = c0.numFunctions();
+      // Choose a function.
+      // ------------------
+      int nf = a_c0.numFunctions();
       if (nf == 0) {
-        // no functions
+        // No functions there.
+        // -------------------
         return c;
       }
       int fctIndex = random.nextInt(nf);
-      p0 = c0.getFunction(fctIndex);
+      p0 = a_c0.getFunction(fctIndex);
     }
     else {
       // Choose a terminal.
       // ------------------
-      p0 = c0.getTerminal(random.nextInt(c0.numTerminals()));
+      p0 = a_c0.getTerminal(random.nextInt(a_c0.numTerminals()));
     }
-      // Mutate the command's value.
-      // ----------------------------
-      /**@todo make this random and configurable*/
-      CommandGene command = c0.getNode(p0);
-      if (IMutateable.class.isInstance(command)) {
-        IMutateable term = (IMutateable) command;
-        command = term.applyMutation(0, 0.5d);
-        if (command != null) {
-          // Check if mutant's function is allowed.
-          // --------------------------------------
-          if (c0.getCommandOfClass(0, command.getClass()) >=0) {
-            c0.setGene(p0, command);
-          }
+    // Mutate the command's value.
+    // ----------------------------
+    /**@todo make this random and configurable*/
+    CommandGene command = a_c0.getNode(p0);
+    if (IMutateable.class.isInstance(command)) {
+      IMutateable term = (IMutateable) command;
+      command = term.applyMutation(0, 0.5d);
+      if (command != null) {
+        // Check if mutant's function is allowed.
+        // --------------------------------------
+        if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
+          a_c0.setGene(p0, command);
         }
       }
-
+    }
     // Choose a point in c2 matching the type and subtype of p0.
     // ---------------------------------------------------------
     int p1;
-    CommandGene nodeP0 = c0.getNode(p0);
+    CommandGene nodeP0 = a_c0.getNode(p0);
     Class type_ = nodeP0.getReturnType();
     int subType = nodeP0.getSubReturnType();
     if (random.nextFloat() < getConfiguration().getFunctionProb()) {
-      // choose a function
-      int nf = c1.numFunctions(type_, subType);
+      // Choose a function.
+      // ------------------
+      int nf = a_c1.numFunctions(type_, subType);
       if (nf == 0) {
         // No functions of that type.
         // --------------------------
         return c;
       }
-      p1 = c1.getFunction(random.nextInt(nf), type_, subType);
+      p1 = a_c1.getFunction(random.nextInt(nf), type_, subType);
     }
     else {
       // Choose a terminal.
       // ------------------
-      int nt = c1.numTerminals(type_, subType);
+      int nt = a_c1.numTerminals(type_, subType);
       if (nt == 0) {
         // No terminals of that type.
         // --------------------------
         return c;
       }
-      p1 = c1.getTerminal(random.nextInt(c1.numTerminals(type_, subType)),
+      p1 = a_c1.getTerminal(random.nextInt(a_c1.numTerminals(type_, subType)),
                           type_, subType);
     }
-      // Mutate the command's value.
-      // ----------------------------
-      /**@todo make this random and configurable*/
-      /*CommandGene */command = c1.getNode(p1);
-      if (IMutateable.class.isInstance(command)) {
-        IMutateable term = (IMutateable) command;
-        command = term.applyMutation(0, 0.5d);
-        if (command != null) {
-          // Check if mutant's function is allowed.
-          // --------------------------------------
-          if (c0.getCommandOfClass(0, command.getClass()) >=0) {
-            c1.setGene(p1, command);
-          }
+    // Mutate the command's value.
+    // ----------------------------
+    /**@todo make this random and configurable*/
+    command = a_c1.getNode(p1);
+    if (IMutateable.class.isInstance(command)) {
+      IMutateable term = (IMutateable) command;
+      command = term.applyMutation(0, 0.5d);
+      if (command != null) {
+        // Check if mutant's function is allowed.
+        // --------------------------------------
+        if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
+          a_c1.setGene(p1, command);
         }
       }
-
-    int s0 = c0.getSize(p0); //Number of nodes in c0 from index p0
-    int s1 = c1.getSize(p1); //Number of nodes in c1 from index p1
-    int d0 = c0.getDepth(p0); //Depth of c0 from index p0
-    int d1 = c1.getDepth(p1); //Depth of c1 from index p1
-    int c0s = c0.getSize(0); //Number of nodes in c0
-    int c1s = c1.getSize(0); //Number of nodes in c1
-
+    }
+    int s0 = a_c0.getSize(p0); //Number of nodes in c0 from index p0
+    int s1 = a_c1.getSize(p1); //Number of nodes in c1 from index p1
+    int d0 = a_c0.getDepth(p0); //Depth of c0 from index p0
+    int d1 = a_c1.getDepth(p1); //Depth of c1 from index p1
+    int c0s = a_c0.getSize(0); //Number of nodes in c0
+    int c1s = a_c1.getSize(0); //Number of nodes in c1
     // Check for depth constraint for p1 inserted into c0.
     // ---------------------------------------------------
     if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()
         || c0s - p0 - s0 < 0
-        || p0 + s1 + c0s - p0 - s0>= c0.getFunctions().length) {
+        || p0 + s1 + c0s - p0 - s0 >= a_c0.getFunctions().length) {
       // Choose the other parent.
       // ------------------------
-      c[0] = c1;
+      c[0] = a_c1;
     }
     else {
-      c[0] = new ProgramChromosome(getConfiguration(), c0.getFunctions().length, // c0s - s0 + s1,
+      c[0] = new ProgramChromosome(getConfiguration(),
+                                   a_c0.getFunctions().length, // c0s - s0 + s1,
                                    c[0].getFunctionSet(),
                                    c[0].getArgTypes(),
-                                   c0.getIndividual());
-      System.arraycopy(c0.getFunctions(), 0, c[0].getFunctions(), 0, p0);
-      System.arraycopy(c1.getFunctions(), p1, c[0].getFunctions(), p0, s1);
-      System.arraycopy(c0.getFunctions(), p0 + s0, c[0].getFunctions(),
+                                   a_c0.getIndividual());
+      System.arraycopy(a_c0.getFunctions(), 0, c[0].getFunctions(), 0, p0);
+      System.arraycopy(a_c1.getFunctions(), p1, c[0].getFunctions(), p0, s1);
+      System.arraycopy(a_c0.getFunctions(), p0 + s0, c[0].getFunctions(),
                        p0 + s1, c0s - p0 - s0);
       c[0].redepth();
     }
@@ -231,18 +236,20 @@ public class BranchTypingCross
     // ---------------------------------------------------
     if (d1 - 1 + s0 > getConfiguration().getMaxCrossoverDepth()
         || c1s - p1 - s1 < 0
-        || p1 + s0 + c1s - p1 - s1 >= c1.getFunctions().length) {
+        || p1 + s0 + c1s - p1 - s1 >= a_c1.getFunctions().length) {
       // Choose the other parent.
       // ------------------------
-      c[1] = c0;
+      c[1] = a_c0;
     }
     else {
-      c[1] = new ProgramChromosome(getConfiguration(), c1.getFunctions().length, // c1s - s1 + s0,
-                                   c[1].getFunctionSet(), c[1].getArgTypes(),
-                                   c1.getIndividual());
-      System.arraycopy(c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
-      System.arraycopy(c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
-      System.arraycopy(c1.getFunctions(), p1 + s1, c[1].getFunctions(),
+      c[1] = new ProgramChromosome(getConfiguration(),
+                                   a_c1.getFunctions().length, // c1s - s1 + s0,
+                                   c[1].getFunctionSet(),
+                                   c[1].getArgTypes(),
+                                   a_c1.getIndividual());
+      System.arraycopy(a_c1.getFunctions(), 0, c[1].getFunctions(), 0, p1);
+      System.arraycopy(a_c0.getFunctions(), p0, c[1].getFunctions(), p1, s0);
+      System.arraycopy(a_c1.getFunctions(), p1 + s1, c[1].getFunctions(),
                        p1 + s0, c1s - p1 - s1);
       c[1].redepth();
     }
