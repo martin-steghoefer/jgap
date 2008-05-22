@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   private IGPProgram m_fittest;
 
@@ -43,6 +43,8 @@ public class JGAPResultGP
   private int m_chunk;
 
   private String m_id;
+
+  private String m_title;
 
   private Date m_responseDate;
 
@@ -216,5 +218,25 @@ public class JGAPResultGP
 
   public void setDurationComputation(long a_durationComputation) {
     m_durationComputation = a_durationComputation;
+  }
+
+  /**
+   * @param a_title the title to set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public void setTitle(String a_title) {
+    m_title = a_title;
+  }
+
+  /**
+   * @return the title set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public String getTitle() {
+    return m_title;
   }
 }

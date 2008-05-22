@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class JGAPRequestGP
     extends WorkRequest implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private IGridConfigurationGP m_config;
 
@@ -52,6 +52,8 @@ public class JGAPRequestGP
   private String m_description;
 
   private double m_minFitness;
+
+  private String m_title;
 
   private Object m_genericData;
 
@@ -290,6 +292,10 @@ public class JGAPRequestGP
     result.setGenotypeInitializer(getGenotypeInitializer());
     result.setWorkerReturnStrategy(getWorkerReturnStrategy());
     result.setRequesterInfo(getRequesterInfo());
+    result.setDescription(getDescription());
+    result.setRequestDate(getRequestDate());
+    result.setMinFitness(getMinFitness());
+    result.setTitle(getTitle());
     return result;
   }
 
@@ -382,5 +388,25 @@ public class JGAPRequestGP
    */
   public void setMinFitness(double a_minFitness) {
     m_minFitness = a_minFitness;
+  }
+
+  /**
+   * @param a_title the title to set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public void setTitle(String a_title) {
+    m_title = a_title;
+  }
+
+  /**
+   * @return the title set
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public String getTitle() {
+    return m_title;
   }
 }
