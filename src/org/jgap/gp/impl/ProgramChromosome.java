@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.33 $";
+  private final static String CVS_REVISION = "$Revision: 1.34 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -718,8 +718,8 @@ public class ProgramChromosome
   public int getSize(int a_index) {
     int i;
     // Get the node at which the depth is <= depth[n].
-    for (i = a_index + 1; i < m_genes.length && m_genes[i] != null;
-         i++) {
+    // -----------------------------------------------
+    for (i = a_index + 1; i < m_genes.length && m_genes[i] != null;i++) {
       if (m_depth[i] <= m_depth[a_index]) {
         break;
       }
@@ -737,9 +737,8 @@ public class ProgramChromosome
    * @since 3.0
    */
   public int getDepth(int a_index) {
-    int i, maxdepth = m_depth[a_index];
-    for (i = a_index + 1; i < m_genes.length && m_genes[i] != null;
-         i++) {
+    int maxdepth = m_depth[a_index];
+    for (int i = a_index + 1; i < m_genes.length && m_genes[i] != null;i++) {
       if (m_depth[i] <= m_depth[a_index]) {
         break;
       }
