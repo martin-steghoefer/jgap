@@ -1,5 +1,6 @@
 3.3.4
 -----------------------------------------------------------
+* Added 12 new GP functions
 * Improved functionality of grid computing
 * Improved error handling in JGAPClientGP
 * Fittest individual is always preserved in GP evolution
