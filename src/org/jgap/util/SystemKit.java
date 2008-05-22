@@ -22,7 +22,7 @@ import org.apache.commons.cli.Option;
  */
 public class SystemKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * @return total memory available by the VM in megabytes.
@@ -132,7 +132,7 @@ public class SystemKit {
     if (cmd.hasOption("help")) {
       System.out.println("");
       System.out.println(" Command line options:");
-      System.out.println(" ---------------------\n");
+      System.out.println(" ---------------------");
       for (Object opt0 : options.getOptions()) {
         Option opt = (Option) opt0;
         String s = opt.getOpt();
