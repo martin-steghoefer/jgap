@@ -11,7 +11,6 @@ package org.jgap.distr.grid.gp;
 
 import java.io.*;
 import java.util.*;
-
 import org.apache.commons.cli.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.homedns.dade.jcgrid.cmd.*;
@@ -24,7 +23,6 @@ import org.jgap.distr.grid.util.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
-
 import com.thoughtworks.xstream.*;
 
 /**
@@ -38,16 +36,28 @@ public class JGAPClientGP
     extends Thread {
   /**@todo in dateiname requester/worker kodieren*/
   /**@todo small, medium, large work requests*/
-  /**@todo re-evaluate each result on behalf of another worker*/
+  /**@todo re-evaluate each result on behalf of another worker: keep separate
+   * lookup-table for all requests --> m_resultsVerified, m_resultsPersister */
   /**@todo remove old requests from online store auotmatically*/
-  /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  /**@todo info when work request has been taken*/
+  /**@todo info when worker logs on --> evaluate logon files*/
+  /**@todo top results in eigener datei speichern,
+   * komprimierung durch weglassen überfl. infos, siehe xml --> prototypeprogram null setzen!*/
+  /**@todo versionsspanne angeben, die ein client/worker behandeln kann
+   * --> v1.02a kann auch 1.01a, 1.01a kann nicht 1.00a */
 
-  public static final String APP_VERSION = "1.0";/**@todo store in external file*/
+  /** String containing the CVS revision. Read out via reflection!*/
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
+
+  public static final String APP_VERSION = "1.02a";
+
+  /**@todo store in external file*/
 
   public static final String MODULE_CS = "CS";
 
-  public static final String CLIENT_DATABASE = "clientdb0.jgap";
+  public static final String CLIENT_DATABASE = "clientdbGP.jgap";
+
+  public static final String RESULTS_DATABASE = "results.jgap";
 
   /**@todo das ist nicht module, sondern sender-receiver*/
 
@@ -73,7 +83,6 @@ public class JGAPClientGP
 
   public static final int WAITTIME_SECONDS = 5;
 
-//  private transient Logger log = Logger.getLogger(getClass());
   private static transient org.apache.log4j.Logger log
       = org.apache.log4j.Logger.getLogger(JGAPClientGP.class);
 
@@ -109,20 +118,27 @@ public class JGAPClientGP
 
   private PersistableObject m_persister;
 
+  private ResultVerification m_resultsVerified;
+
+  private PersistableObject m_resultsPersister;
+
   private int m_requestIdx;
 
   private boolean m_no_comm;
 
   private boolean m_no_evolution;
 
+  private int m_max_fetch_results;
+
   public JGAPClientGP(GridNodeClientConfig a_gridconfig,
                       String a_clientClassName,
                       boolean a_WANMode,
                       boolean a_receiveOnly, boolean a_list, boolean a_no_comm,
-                      boolean a_no_evolution, boolean a_endless)
+                      boolean a_no_evolution, boolean a_endless,
+                      int a_max_fetch_results)
       throws Exception {
     this(null, a_gridconfig, a_clientClassName, a_WANMode, a_receiveOnly,
-         a_list, a_no_comm, a_no_evolution, a_endless);
+         a_list, a_no_comm, a_no_evolution, a_endless, a_max_fetch_results);
     m_gcmed = new DummyGridClientMediator(m_gridconfig);
   }
 
@@ -130,8 +146,10 @@ public class JGAPClientGP
                       GridNodeClientConfig a_gridconfig,
                       String a_clientClassName, boolean a_WANMode,
                       boolean a_receiveOnly, boolean a_list, boolean a_no_comm,
-                      boolean a_no_evolution, boolean a_endless)
+                      boolean a_no_evolution, boolean a_endless,
+                      int a_max_fetch_results)
       throws Exception {
+    log.info("This is JGAP Grid version " + APP_VERSION);
     m_runID = getRunID();
     log.info("ID of this run: " + m_runID);
     if (a_clientClassName == null || a_clientClassName.length() < 1) {
@@ -159,7 +177,12 @@ public class JGAPClientGP
     if (m_no_evolution) {
       log.info("Don't execute genetic evolution");
     }
-    log.info("This is JGAP Grid version " + APP_VERSION);
+    m_max_fetch_results = a_max_fetch_results;
+    if (m_max_fetch_results <= 0) {
+      m_max_fetch_results = 500;
+    }
+    log.info("Maximum number of results to fetch at once: " +
+             m_max_fetch_results);
     m_gridconfig = a_gridconfig;
     Class client = Class.forName(a_clientClassName);
     m_gridConfig = (IGridConfigurationGP) client.getConstructor(new
@@ -201,6 +224,15 @@ public class JGAPClientGP
     if (m_objects == null) {
       m_objects = new ClientStatus();
       m_persister.setObject(m_objects);
+    }
+    // Try to load previous request information.
+    // -----------------------------------------
+    f = new File(workDir, RESULTS_DATABASE);
+    m_resultsPersister = new PersistableObject(f);
+    m_resultsVerified = (ResultVerification) m_resultsPersister.load();
+    if (m_resultsVerified == null) {
+      m_resultsVerified = new ResultVerification();
+      m_resultsPersister.setObject(m_resultsVerified);
     }
   }
 
@@ -258,7 +290,8 @@ public class JGAPClientGP
    * Called in run() before generating work requests for sending.
    * Override in sub classes if needed.
    *
-   * @return true: do generate work requests, false: don't generate any work request
+   * @return true: do generate work requests, false: don't generate any work
+   * request
    *
    * @throws Exception
    *
@@ -347,7 +380,8 @@ public class JGAPClientGP
    * @author Klaus Meffert
    * @since 3.3.3
    */
-  protected void onError(Exception a_ex) throws Exception {
+  protected void onError(Exception a_ex)
+      throws Exception {
     // Do nothing in default implementation.
     // -------------------------------------
   }
@@ -387,12 +421,21 @@ public class JGAPClientGP
         log.error("Check for updates failed", ex);
       }
       do {
+        boolean showResultsError = false;
         do {
+          boolean doBreak = false;
           try {
             onBeginOfRunning();
-            // Show stats about best results for current application.
-            // ------------------------------------------------------
-            showCurrentResults();
+            if (!showResultsError) {
+              // Show stats about best results for current application.
+              // ------------------------------------------------------
+              try {
+                showCurrentResults();
+              } catch (Exception ex) {
+                log.error("Error during showing current results", ex);
+                showResultsError = true;
+              }
+            }
             // Do deferred deletion of results.
             // --------------------------------
             Iterator<String> it = m_objects.getResults().keySet().iterator();
@@ -429,8 +472,9 @@ public class JGAPClientGP
                   evolve(m_gcmed, m_receiveOnly);
                   afterEvolve(m_gcmed);
                 }
+                doBreak = true;
               } catch (Exception ex) {
-                log.error("Error", ex);
+                log.error("Error: ", ex);
                 throw ex;
               }
             } finally {
@@ -442,14 +486,18 @@ public class JGAPClientGP
                   t = t1;
                 }
               } finally {
+                log.info("Calling afterStopped");
                 afterStopped(t);
-                break;
+                if (doBreak) {
+                  break;
+                }
               }
             }
           } catch (Exception ex1) {
             try {
-             onError(ex1);
-          } catch (Exception ex) {
+              log.info("before onError");
+              onError(ex1);
+            } catch (Exception ex) {
               log.fatal("Unpredicted error", ex);
               m_gridConfig.getClientFeedback().error(
                   "Error while doing the work",
@@ -534,9 +582,14 @@ public class JGAPClientGP
     // -------------------
     for (int i = 0; i < a_workList.length; i++) {
       JGAPRequestGP req = a_workList[i];
+      req.setRequestDate(DateKit.now());
       GPPopulation pop = req.getPopulation();
       if (pop == null || pop.isFirstEmpty()) {
         log.debug("Population to send to worker is empty!");
+      }
+      else {
+        GPGenotype.checkErroneousPop(pop, " before sending to worker", true);
+        /**@todo hier ist fehler aufgetreten!*/
       }
       m_gridConfig.getClientFeedback().sendingFragmentRequest(req);
       MessageContext context = new MessageContext(MODULE_CS,
@@ -572,13 +625,21 @@ public class JGAPClientGP
       // ------------------------------------------------------
       int i = 0;
       for (Object request : requests) {
+        if (i >= m_max_fetch_results) {
+          break;
+        }
         feedback.setProgressValue(i);
         i++;
         JGAPResultGP result = receiveWorkResult(request, feedback, true);
         if (result != null) {
           IGPProgram best = result.getPopulation().determineFittestProgram();
-          log.info("Result received: " +
-                   best.getFitnessValue());
+          if (best != null) {
+            log.info("Result received: " +
+                     best.getFitnessValue());
+          }
+          else {
+            log.info("Empty result received!");
+          }
           resultReceived(best);
           MasterInfo worker = result.getWorkerInfo();
           if (worker != null) {
@@ -662,7 +723,7 @@ public class JGAPClientGP
       req = workList[idx];
     }
     feedback.receivedFragmentResult(req, workResult, idx);
-    IGPProgram best =workResult.getFittest();
+    IGPProgram best = workResult.getFittest();
     if (best == null) {
       best = workResult.getPopulation().determineFittestProgram();
     }
@@ -837,7 +898,7 @@ public class JGAPClientGP
     log.info("Work dir: " + m_workDir);
   }
 
-  public String getWorkdirectory() {
+  public String getWorkDirectory() {
     return m_workDir;
   }
 
@@ -901,7 +962,7 @@ public class JGAPClientGP
 //      options.addOption("help", false,
 //                        "Display all available options");
       CommandLine cmd = MainCmd.parseCommonOptions(options, config, args);
-      printHelp(cmd, options);
+      SystemKit.printHelp(cmd, options);
       String networkMode = cmd.getOptionValue("l", "LAN");
       boolean inWAN;
       if (networkMode != null && networkMode.equals("LAN")) {
@@ -929,10 +990,12 @@ public class JGAPClientGP
       boolean noComm = cmd.hasOption("no_comm");
       boolean noEvolution = cmd.hasOption("no_evolution");
       boolean endless = cmd.hasOption("endless");
+      int max_fetch_results = Integer.valueOf(cmd.getOptionValue(
+          "max_fetch_results", "0"));
       // Setup and start client.
       // -----------------------
       JGAPClientGP client = new JGAPClientGP(config, clientClassName, inWAN,
-          receiveOnly, list, noComm, noEvolution, endless);
+          receiveOnly, list, noComm, noEvolution, endless, max_fetch_results);
       // Start the threaded process.
       // ---------------------------
       client.start();
@@ -940,22 +1003,6 @@ public class JGAPClientGP
     } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
-    }
-  }
-
-  protected static void printHelp(CommandLine cmd, Options options) {
-    if (cmd.hasOption("help")) {
-      System.out.println("");
-      System.out.println(" Command line options:");
-      System.out.println(" ---------------------\n");
-//      Option[] opts = options.
-      for (Object opt0 : options.getOptions()) {
-        Option opt = (Option) opt0;
-        String s = opt.getOpt();
-        s = StringKit.fill(s, 20, ' ');
-        System.out.println(" " + s + " - " + opt.getDescription());
-      }
-      System.exit(0);
     }
   }
 
@@ -971,6 +1018,8 @@ public class JGAPClientGP
     options.addOption("config", true, "Grid configuration's class name");
     options.addOption("list", false,
                       "List requests and results");
+    options.addOption("max_fetch_results", true,
+                      "Maximum number of results to fetch at once");
     options.addOption("help", false,
                       "Display all available options");
     return options;
@@ -995,19 +1044,24 @@ public class JGAPClientGP
    * in case it is a top 3 result.
    *
    * @param a_pop the fittest results received for a work request
+   * @return true: new top result
    *
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 3.3.3
    */
-  protected void resultReceived(GPPopulation a_pop)
+  protected boolean resultReceived(GPPopulation a_pop)
       throws Exception {
+    boolean isTopResult = false;
     for (IGPProgram prog : a_pop.getGPPrograms()) {
       if (prog != null) {
-        resultReceived(prog);
+        if (resultReceived(prog)) {
+          isTopResult = true;
+        }
       }
     }
+    return isTopResult;
   }
 
   /**
@@ -1016,13 +1070,18 @@ public class JGAPClientGP
    *
    * @param a_fittest the fittest result received for a work request
    *
+   * @return true: new top result
+   *
    * @throws Exception
    *
    * @author Klaus Meffert
    * @since 3.3.3
    */
-  protected void resultReceived(IGPProgram a_fittest)
+  protected boolean resultReceived(IGPProgram a_fittest)
       throws Exception {
+    if (a_fittest == null) {
+      return false;
+    }
     /**@todo jeden Worker einer von n (rein logischen) Gruppen zuteilen.
      * Pro logischer Gruppe top n Ergebnisse halten
      */
@@ -1039,6 +1098,8 @@ public class JGAPClientGP
       Object worstEntry = null;
       double worstFitness = -1;
       String norm = a_fittest.toStringNorm(0);
+      int count = 0;
+      double a_fittness = a_fittest.getFitnessValue();
       while (it.hasNext()) {
         IGPProgram prog = (IGPProgram) it.next();
         // Don't allow identical results.
@@ -1052,32 +1113,64 @@ public class JGAPClientGP
           fitter = 100;
           break;
         }
-        else if (fitness >= a_fittest.getFitnessValue()) {
+        else if (fitness >= a_fittness) {
           fitter++;
         }
-        else {
-          // Determine the worst entry for later replacement.
-          // ------------------------------------------------
-          if (worstEntry == null ||
-              getConfiguration().getGPFitnessEvaluator().
-              isFitter(worstFitness, fitness)) {
-            worstEntry = prog;
-            worstFitness = fitness;
-          }
+        // Determine the worst entry for later replacement.
+        // ------------------------------------------------
+        if (worstEntry == null ||
+            getConfiguration().getGPFitnessEvaluator().
+            isFitter(worstFitness, fitness)) {
+          worstEntry = prog;
+          worstFitness = fitness;
         }
+        count++;
       }
-      if (fitter < 3) { /**@todo make configurable*/
+      boolean result = true;
+      if (fitter < 3 || count > 3) { /**@todo make configurable*/
         // Remove worst result yet and add new fit result.
         // -----------------------------------------------
-        topApp.remove(worstEntry);
-        topApp.add(a_fittest);
-        log.info("Added fit program, fitness: " +
-                 NumberKit.niceDecimalNumber(a_fittest.getFitnessValue(), 2));
+        if (worstEntry != null && count >= 3) {
+          /**@todo compare with toStringNorm(0), use remove(int) instead of remove(Object)*/
+          if (!topApp.remove(worstEntry)) {
+            log.error("Removing of worst entry failed");
+          }
+        }
+        if (fitter < 3) {
+          try {
+            GPGenotype.checkErroneousProg(a_fittest, " add top fit", true, true);
+          } catch (Throwable t) {
+            log.warn("Received program not valid!");
+            result = false;
+          }
+          if (result) {
+            a_fittness = a_fittest.getFitnessValue();
+            if (a_fittness < 1000) { /**@todo ist nur test!*/
+              result = false;
+            }
+            else {
+              topApp.add(a_fittest);
+              log.info("Added fit program, fitness: " +
+                       NumberKit.niceDecimalNumber(a_fittness, 2));
+              log.info("Solution: " + a_fittest.toStringNorm(0));
+              result = true;
+            }
+          }
+        }
+        else {
+          log.info(
+              "Result not better than top results received, removed obsolete top result");
+          result = false;
+        }
       }
       else {
         log.info("Result not better than top results received");
+        result = false;
       }
-      m_persister.save();
+      if (result) {
+        m_persister.save();
+      }
+      return result;
     } catch (Exception ex) {
       ex.printStackTrace();
       throw ex;
@@ -1115,6 +1208,7 @@ public class JGAPClientGP
       if (topApp != null && topApp.size() > 0) {
         List toAdd = new Vector();
         for (IGPProgram prog : topApp) {
+          GPGenotype.checkErroneousProg(prog, " before add preset", true);
           toAdd.add(prog);
           added++;
           if (added >= 3 || randGen.nextDouble() > 0.7d) {
@@ -1151,14 +1245,39 @@ public class JGAPClientGP
     if (topApp != null && topApp.size() > 0) {
       log.info("Top evolved results yet:");
       log.info("------------------------");
-      for (IGPProgram prog : topApp) {
+      boolean changed = false;
+      Iterator<IGPProgram> it = topApp.iterator();
+      while (it.hasNext()) {
+        IGPProgram prog = it.next();
+        try {
+          GPGenotype.checkErroneousProg(prog, " as top result", true, true);
+        } catch (Throwable t) {
+          // Remove invalid program.
+          // -----------------------
+          it.remove();
+          changed = true;
+          continue;
+        }
+        double fitness = prog.getFitnessValue();
         log.info("Fitness " +
-                 NumberKit.niceDecimalNumber(prog.getFitnessValue(), 2));
+                 NumberKit.niceDecimalNumber(fitness, 2));
+        if (fitness < 1000) {
+          log.info("Removing too bad result with fitness " + fitness);
+          it.remove();
+          changed = true;
+        }
+      }
+      if (changed) {
+        m_persister.save();
       }
       log.info("");
     }
     else {
       log.info("No top results yet.");
     }
+  }
+
+  public int getMaxFetchResults() {
+    return m_max_fetch_results;
   }
 }
