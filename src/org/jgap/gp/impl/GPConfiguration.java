@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -165,6 +165,12 @@ public class GPConfiguration
    *
    */
   private IGPInitStrategy m_initStrategy;
+
+  /**
+   * TRUE: Activate methods checkErroneousPop and checkErroneousProg in class
+   * GPGenotype.
+   */
+  private boolean m_verify;
 
   /**
    * Constructor utilizing the FitnessProportionateSelection.
@@ -378,6 +384,10 @@ public class GPConfiguration
   }
 
   public void setNewChromsPercent(double a_newChromsPercent) {
+    if (m_newChromsPercent >= 1.0d) {
+      throw new IllegalArgumentException(
+          "Parameter value must be smaller than 1!");
+    }
     m_newChromsPercent = a_newChromsPercent;
   }
 
@@ -619,8 +629,8 @@ public class GPConfiguration
   }
 
   /**
-   * @param a_strict true: throw an error during evolution in case a situation is
-   * detected where no function or terminal of a required type is declared
+   * @param a_strict true: throw an error during evolution in case a situation
+   * is detected where no function or terminal of a required type is declared
    * in the GPConfiguration; false: don't throw an error but try a completely
    * different combination of functions and terminals
    *
@@ -908,6 +918,7 @@ public class GPConfiguration
           m_fitnessEvaluator);
       result.m_nodeValidator = (INodeValidator) doClone(m_nodeValidator);
       result.m_useProgramCache = m_useProgramCache;
+      result.m_verify = m_verify;
       // Configurable data.
       // ------------------
 //      result.m_config = new ConfigurationConfigurable();
@@ -975,5 +986,27 @@ public class GPConfiguration
    */
   public IGPInitStrategy getInitStrategy() {
     return m_initStrategy;
+  }
+
+  /**
+   * @param a_verify true: verify GP programs for correctness (i.e. is fitness
+   * computation possible without exception?)
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public void setVerifyPrograms(boolean a_verify) {
+    m_verify = a_verify;
+  }
+
+  /**
+   * @return true: verify GP programs for correctness (i.e. is fitness
+   * computation possible without exception?)
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public boolean isVerifyPrograms() {
+    return m_verify;
   }
 }
