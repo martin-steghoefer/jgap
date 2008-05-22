@@ -47,7 +47,7 @@ public class JGAPClientGP
    * --> v1.02a kann auch 1.01a, 1.01a kann nicht 1.00a */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   public static final String APP_VERSION = "1.02a";
 
@@ -1138,7 +1138,7 @@ public class JGAPClientGP
         }
         if (fitter < 3) {
           try {
-            GPGenotype.checkErroneousProg(a_fittest, " add top fit", true, true);
+            GPGenotype.checkErroneousProg(a_fittest, " add top fit", true, false);
           } catch (Throwable t) {
             log.warn("Received program not valid!");
             result = false;
@@ -1250,7 +1250,7 @@ public class JGAPClientGP
       while (it.hasNext()) {
         IGPProgram prog = it.next();
         try {
-          GPGenotype.checkErroneousProg(prog, " as top result", true, true);
+          GPGenotype.checkErroneousProg(prog, " as top result", false, true);
         } catch (Throwable t) {
           // Remove invalid program.
           // -----------------------
