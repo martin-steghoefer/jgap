@@ -11,6 +11,7 @@ package org.jgap.distr.grid.gp;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.commons.cli.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.homedns.dade.jcgrid.cmd.*;
@@ -20,9 +21,11 @@ import org.jgap.distr.*;
 import org.jgap.distr.grid.*;
 import org.jgap.distr.grid.common.*;
 import org.jgap.distr.grid.util.*;
+import org.jgap.distr.grid.wan.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
+
 import com.thoughtworks.xstream.*;
 
 /**
@@ -47,7 +50,7 @@ public class JGAPClientGP
    * --> v1.02a kann auch 1.01a, 1.01a kann nicht 1.00a */
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static final String APP_VERSION = "1.02a";
 
@@ -214,11 +217,17 @@ public class JGAPClientGP
 
   private void init()
       throws Exception {
-    String workDir = FileKit.getCurrentDir() + "/work/" + "storage";
-    workDir = FileKit.getConformPath(workDir);
+    if (getWorkDirectory() == null) {
+      String workDir = FileKit.getCurrentDir() + "/work/" + "storage";
+      workDir = FileKit.getConformPath(workDir);
+      setWorkDirectory(workDir);
+    }
+    /**@todo put results into subdir*/
+//    m_workDirResults =FileKit.getCurrentDir() + "/work/" + "results";
+//    m_workDirResults = FileKit.getConformPath(workDir);
     // Try to load previous object information.
     // ----------------------------------------
-    File f = new File(workDir, CLIENT_DATABASE);
+    File f = new File(getWorkDirectory(), CLIENT_DATABASE);
     m_persister = new PersistableObject(f);
     m_objects = (ClientStatus) m_persister.load();
     if (m_objects == null) {
@@ -227,7 +236,7 @@ public class JGAPClientGP
     }
     // Try to load previous request information.
     // -----------------------------------------
-    f = new File(workDir, RESULTS_DATABASE);
+    f = new File(getWorkDirectory(), RESULTS_DATABASE);
     m_resultsPersister = new PersistableObject(f);
     m_resultsVerified = (ResultVerification) m_resultsPersister.load();
     if (m_resultsVerified == null) {
@@ -648,9 +657,7 @@ public class JGAPClientGP
           }
           // Store result to disk.
           // ---------------------
-          String filename = "result_" + getRunID() + "_" + result.getID() +
-              "_" +
-              result.getSessionName() + "_" + result.getChunk();
+          String filename = getResultFilename(result);
           writeToFile(best, m_workDir, filename);
           // Now remove the result from the online store.
           // --------------------------------------------
@@ -667,6 +674,28 @@ public class JGAPClientGP
         }
       }
     }
+  }
+
+  protected String getResultFilename(JGAPResultGP a_result) {
+    IGPProgram fittest = WANUtils.getFittest(a_result);
+    String fitness = "";
+    if (fittest == null) {
+      // Should not happen at all!
+      log.error("No fittest program found!");
+    }
+    else {
+      fitness = NumberKit.niceDecimalNumber(fittest.getFitnessValue(), 2);
+    }
+    return "result_"
+        + fitness
+        + "_"
+        + getRunID()
+        + "_"
+        + a_result.getID()
+        + "_"
+        + a_result.getSessionName()
+        + "_" + a_result.getChunk()
+        + ".jgap";
   }
 
   private JGAPResultGP receiveWorkResult(Object a_result,
