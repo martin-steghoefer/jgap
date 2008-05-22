@@ -25,7 +25,7 @@ import org.jgap.impl.*;
  */
 public class CoinsEnergy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -204,7 +204,7 @@ public class CoinsEnergy {
       // index of the Gene within the Chromosome. The Chromosome is not
       // accessible by the Gene!
       // ----------------------------------------------------------------------
-       /**todo compute*/
+       /**@todo compute*/
 //      a_gene.setEnergy(computedWeight);
       // No verification here, always conform.
       // -------------------------------------
