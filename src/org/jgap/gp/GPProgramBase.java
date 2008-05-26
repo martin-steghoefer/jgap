@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public abstract class GPProgramBase
     implements IGPProgram {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private double m_fitnessValue = FitnessFunction.NO_FITNESS_VALUE;
 
@@ -63,6 +63,18 @@ public abstract class GPProgramBase
    * Free to use data object.
    */
   private Object m_applicationData;
+
+  /**
+   * Default constructor, only for dynamic instantiation.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public GPProgramBase()
+      throws Exception {
+  }
 
   public GPProgramBase(GPConfiguration a_conf)
       throws InvalidConfigurationException {

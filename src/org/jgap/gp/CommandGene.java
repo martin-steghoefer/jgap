@@ -13,7 +13,6 @@ import java.io.*;
 
 import org.jgap.*;
 import org.jgap.gp.impl.*;
-import java.util.StringTokenizer;
 
 /**
  * Abstract base class for all GP commands. A CommandGene can hold additional
@@ -26,7 +25,7 @@ import java.util.StringTokenizer;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.26 $";
+  private final static String CVS_REVISION = "$Revision: 1.27 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -102,6 +101,18 @@ public abstract class CommandGene
    * Initializations, called from each Constructor.
    */
   protected void init() {
+  }
+
+  /**
+   * Default constructor, only for dynamic instantiation.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public CommandGene()
+      throws Exception {
   }
 
   public CommandGene(final GPConfiguration a_conf, final int a_arity,

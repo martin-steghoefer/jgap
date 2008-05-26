@@ -27,7 +27,7 @@ import org.jgap.gp.terminal.Argument;
 public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
@@ -36,6 +36,18 @@ public class GPProgram
    * Holds the chromosomes contained in this program.
    */
   private ProgramChromosome[] m_chromosomes;
+
+  /**
+   * Default constructor, only for dynamic instantiation.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public GPProgram()
+      throws Exception {
+  }
 
   /**
    * Constructor.

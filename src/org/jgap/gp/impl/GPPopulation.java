@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.35 $";
+  private final static String CVS_REVISION = "$Revision: 1.36 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -64,10 +64,22 @@ public class GPPopulation
 
   private IGPProgram m_fittestToAdd;
 
+  /**
+   * Default constructor, only for dynamic instantiation.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public GPPopulation()
+      throws Exception {
+  }
+
   /*
    * @param a_config the configuration to use.
    * @param a_size the maximum size of the population in GPProgram unit
-
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
