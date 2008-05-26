@@ -12,6 +12,7 @@ package org.jgap.distr.grid;
 import java.io.*;
 
 /**
+ * Client side:
  * Can be used in implementations of IClientEvolveStrategyGP to merge previous
  * results with the current result in order to obtain a working set for future
  * evolutions.
@@ -22,7 +23,7 @@ import java.io.*;
 public interface IResultMergeStrategy extends Serializable {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.1 $";
+  final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    *
