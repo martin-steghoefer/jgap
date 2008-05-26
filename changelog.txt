@@ -8,6 +8,12 @@
 * Added painted desert example (package examples.gp)
 * Improved Javadoc
 * Added SystemKit.printHelp(..)
+* Enhanced interface IGridClientMediator and implementing 
+  class GridClientMediator
+* Added default constructor to GP classes (for dynamic 
+  instantiation)
+* Added new classes XStreamPassThruConverter and
+  JGAPGPXStream for easing XStream usage
 
 3.3.3
 -----------------------------------------------------------
