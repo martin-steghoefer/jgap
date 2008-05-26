@@ -10,12 +10,10 @@
 package org.jgap.util;
 
 import java.io.*;
-
 import org.apache.log4j.*;
 import org.jgap.distr.grid.gp.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
-
 import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.io.xml.*;
 
@@ -27,7 +25,7 @@ import com.thoughtworks.xstream.io.xml.*;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -47,21 +45,33 @@ public class PersistableObject {
       throws Exception {
     save(false);
   }
-    public void save(boolean a_omitConfig)
+
+  public void save(boolean a_omitConfig)
+      throws Exception {
+    save(a_omitConfig, null);
+  }
+    public void save(boolean a_omitConfig, Object[][] a_omitFields)
         throws Exception {
-    XStream xstream = new XStream();
+    JGAPGPXStream xstream = new JGAPGPXStream();
+    init(xstream);
     FileOutputStream fos = new FileOutputStream(m_file);
     if (a_omitConfig) {
       xstream.omitField(GPPopulation.class, "m_config");
       xstream.omitField(GPProgram.class, "m_conf");
       xstream.omitField(GPProgramBase.class, "m_conf");
       xstream.omitField(JGAPRequestGP.class, "m_config");
-      xstream.omitField(CommandGene.class,"m_configuration");
+      xstream.omitField(CommandGene.class, "m_configuration");
+    }
+    if (a_omitFields != null) {
+      for (int i = 0; i < a_omitFields.length; i++) {
+        Class clazz = (Class)a_omitFields[i][0];
+        String fieldName = (String)a_omitFields[i][1];
+        xstream.omitField(clazz, fieldName);
+      }
     }
     FileWriter fw = new FileWriter(m_file);
     CompactWriter compact = new CompactWriter(fw);
     xstream.marshal(m_object, compact);
-//    xstream.toXML(m_object);
     fos.close();
   }
 
@@ -72,7 +82,8 @@ public class PersistableObject {
 
   public Object load(File a_file) {
     log.info("Loading database");
-    XStream xstream = new XStream();
+    JGAPGPXStream xstream = new JGAPGPXStream();
+    init(xstream);
     try {
       FileInputStream fis = new FileInputStream(a_file);
       m_object = (Object) xstream.fromXML(fis);
@@ -85,5 +96,8 @@ public class PersistableObject {
 
   public Object getObject() {
     return m_object;
+  }
+
+  protected void init(XStream a_xstream) {
   }
 }
