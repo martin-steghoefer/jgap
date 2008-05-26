@@ -10,7 +10,6 @@
 package org.jgap.distr.grid;
 
 import java.util.*;
-
 import org.apache.log4j.*;
 import org.homedns.dade.jcgrid.client.*;
 import org.homedns.dade.jcgrid.cmd.*;
@@ -25,7 +24,7 @@ import org.homedns.dade.jcgrid.message.*;
 public class DummyGridClientMediator
     implements IGridClientMediator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -140,7 +139,7 @@ public class DummyGridClientMediator
    */
   public List listRequests(MessageContext a_context, String a_datetime,
                            String a_pattern)
-      throws Exception  {
+      throws Exception {
     // Not implemented yet.
     // --------------------
     return null;
@@ -158,19 +157,21 @@ public class DummyGridClientMediator
    * @since 3.3.3
    */
   public List listResults(MessageContext a_context, String a_datetime,
-                           String a_pattern)
-      throws Exception  {
+                          String a_pattern)
+      throws Exception {
     // Not implemented yet.
     // --------------------
     return null;
   }
 
-  public void connect() throws Exception {
+  public void connect()
+      throws Exception {
     // Not implemented yet.
     // --------------------
   }
 
-  public void disconnect() throws Exception {
+  public void disconnect()
+      throws Exception {
     // Not implemented yet.
     // --------------------
   }
@@ -181,4 +182,9 @@ public class DummyGridClientMediator
     // --------------------
   }
 
+  public void backupResult(Object a_result, String a_subDir, String a_title)
+      throws Exception {
+    // Not implemented yet.
+    // --------------------
+  }
 }
