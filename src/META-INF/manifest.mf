@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+JGAP-Version: 3.3.4
+Created-By: Klaus Meffert
+Specification-Title: JGAP - Java Genetic Algorithms Package
