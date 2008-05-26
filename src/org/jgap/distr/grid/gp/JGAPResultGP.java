@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class JGAPResultGP
     extends WorkResult {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private IGPProgram m_fittest;
 
@@ -238,5 +238,15 @@ public class JGAPResultGP
    */
   public String getTitle() {
     return m_title;
+  }
+
+  /**
+   * Clear the fittes program.
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public void clearFittest() {
+    m_fittest = null;
   }
 }
