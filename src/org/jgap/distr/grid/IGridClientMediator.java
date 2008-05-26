@@ -22,7 +22,7 @@ import org.homedns.dade.jcgrid.message.*;
 public interface IGridClientMediator
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   void connect()
       throws Exception;
@@ -51,5 +51,20 @@ public interface IGridClientMediator
       throws Exception;
 
   void stop()
+      throws Exception;
+
+  /**
+   * Backs up a result in the given sub directory
+   *
+   * @param a_result the result to backup
+   * @param a_subDir sub directory to store the copy of the result in
+   * @param a_title the title of the entry to create
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  void backupResult(Object a_result, String a_subDir, String a_title)
       throws Exception;
 }
