@@ -38,7 +38,7 @@ import org.jgap.*;
 public class CrossoverOperator
     extends BaseGeneticOperator implements Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   /**
    * The current crossover rate used by this crossover operator (mutual
@@ -377,7 +377,7 @@ public class CrossoverOperator
     }
   }
 
-  private void doCrossover(IChromosome firstMate, IChromosome secondMate,
+  protected void doCrossover(IChromosome firstMate, IChromosome secondMate,
                            List a_candidateChromosomes,
                            RandomGenerator generator) {
     Gene[] firstGenes = firstMate.getGenes();
