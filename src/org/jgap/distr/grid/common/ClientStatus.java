@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class ClientStatus {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Last time a requests listing was executed.
@@ -59,7 +59,7 @@ public class ClientStatus {
     this.requests = requests;
   }
 
-  public Map getResults() {
+  public Map<String, String> getResults() {
     if (results == null) {
       results = new HashMap();
     }
