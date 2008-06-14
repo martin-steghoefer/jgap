@@ -26,7 +26,7 @@ import org.apache.commons.cli.*;
 public class JGAPClient
     extends Thread {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   private final static String className = JGAPClient.class.getName();
 
@@ -84,6 +84,12 @@ public class JGAPClient
    */
   public void run() {
     try {
+      if (m_gridConfig.getClientFeedback() == null) {
+        // Use dummy feedback handler.
+        // ---------------------------
+        log.info("No feedback handler set, using DefaultClientFeedback");
+        m_gridConfig.setClientFeedback(new DefaultClientFeedback());
+      }
       // Start client.
       // -------------
       m_gc = startClient();
