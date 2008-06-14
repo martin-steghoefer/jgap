@@ -14,6 +14,8 @@
   instantiation)
 * Added new classes XStreamPassThruConverter and
   JGAPGPXStream for easing XStream usage
+* Introduced DefaultClientFeedback
+* New class DefaultClientFeedback
 
 3.3.3
 -----------------------------------------------------------
