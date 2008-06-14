@@ -16,6 +16,8 @@
   JGAPGPXStream for easing XStream usage
 * Introduced DefaultClientFeedback
 * New class DefaultClientFeedback
+* New class ResultData
+* New class ResultVerification
 
 3.3.3
 -----------------------------------------------------------
