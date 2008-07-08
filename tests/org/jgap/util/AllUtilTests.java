@@ -21,10 +21,12 @@ public class AllUtilTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllUtilTests");
+    suite.addTest(FileKitTest.suite());
+    suite.addTest(NumberKitTest.suite());
     suite.addTest(PluginDiscovererTest.suite());
     return suite;
   }
