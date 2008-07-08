@@ -5,6 +5,7 @@
 * Improved error handling in JGAPClientGP
 * Fittest individual is always preserved in GP evolution
 * Fixed bug in NumberKit.niceDecimalNumber
+* Fixed bug in GP terminal False
 * Added painted desert example (package examples.gp)
 * Improved Javadoc
 * Added SystemKit.printHelp(..)
