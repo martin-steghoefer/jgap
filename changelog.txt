@@ -1,7 +1,7 @@
 3.3.4
 -----------------------------------------------------------
+* Strongly Improved functionality of grid computing
 * Added 12 new GP functions
-* Improved functionality of grid computing
 * Improved error handling in JGAPClientGP
 * Fittest individual is always preserved in GP evolution
 * Fixed bug in NumberKit.niceDecimalNumber
@@ -11,6 +11,7 @@
 * Added SystemKit.printHelp(..)
 * Enhanced interface IGridClientMediator and implementing 
   class GridClientMediator
+* FileKit: added some service methods
 * Added default constructor to GP classes (for dynamic 
   instantiation)
 * Added new classes XStreamPassThruConverter and
