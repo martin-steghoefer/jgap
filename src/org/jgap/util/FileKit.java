@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.jar.*;
 import java.net.*;
 import java.util.*;
+import java.util.regex.*;
 
 /**
  * Contains helper functions related to the file system.
@@ -21,7 +22,7 @@ import java.util.*;
  */
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -149,6 +150,11 @@ public class FileKit {
     File f = new File(getConformPath(dir, true), subDir);
     String s = getConformPath(f.getAbsolutePath(), makeNice);
     return s;
+  }
+
+  public static String addFilename(String dir, String a_filename) {
+    File f = new File(getConformPath(dir, false), a_filename);
+    return f.getAbsolutePath();
   }
 
   public static String getConformPath(String path, boolean makeNice) {
@@ -440,5 +446,52 @@ public class FileKit {
    */
   public static String getTempDir() {
     return System.getProperty("java.io.tmpdir");
+  }
+
+  /**
+   * Returns the files within a directory that match a given pattern. No
+   * directories are returned.
+   *
+   * @param a_dir String
+   * @param a_mask String
+   * @return String[]
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  public static String[] listFilesInDir(String a_dir, String a_mask)
+      throws Exception {
+    File f = new File(a_dir);
+    return f.list(new MyFileNameFilter(a_dir, a_mask));
+  }
+
+  static class MyFileNameFilter
+      implements FilenameFilter {
+    private String m_dir;
+
+    private String m_mask;
+
+    public MyFileNameFilter(String a_dir, String a_mask) {
+      m_dir = a_dir;
+      if (a_mask == null || a_mask.length() < 1) {
+        m_mask =null;
+      }
+      else {
+        m_mask = a_mask;
+      }
+    }
+
+    public boolean accept(File dir, String name) {
+      if (m_dir.equals(FileKit.getConformPath(dir.getPath()))) {
+        if (m_mask == null) {
+          return true;
+        }
+        Pattern p = Pattern.compile(m_mask);
+        Matcher m = p.matcher(name);
+        return m.matches();
+      }
+      return false;
+    }
   }
 }
