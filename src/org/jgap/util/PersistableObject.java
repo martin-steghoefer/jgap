@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.io.xml.*;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -35,6 +35,10 @@ public class PersistableObject {
 
   public PersistableObject(File a_file) {
     m_file = a_file;
+  }
+
+  public PersistableObject(String a_filename) {
+    this(new File(a_filename));
   }
 
   public void setObject(Object a_object) {
