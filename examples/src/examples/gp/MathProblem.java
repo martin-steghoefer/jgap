@@ -22,7 +22,8 @@ import org.jgap.gp.terminal.*;
  * The problem is to find a formula for a given truth table (X/Y-pairs).
  * <p>
  * <ul>
- * <li>The setup of the GP is done in method create()</li>
+ * <li>The setup of the GP is done in method main and specifically in method
+ * create()</li>
  * <li>The problem solving process is started via gp.evolve(800) in the main
  * method, with 800 the maximum number of evolutions to take place.
  * <li>The evaluation of the evolved formula is done in fitness function
@@ -37,7 +38,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   public static Variable vx;
 
@@ -155,6 +156,9 @@ public class MathProblem
     // Setup the algorithm's parameters.
     // ---------------------------------
     GPConfiguration config = new GPConfiguration();
+    // We use a delta fitness evaluator because we compute a defect rate, not
+    // a point score!
+    // ----------------------------------------------------------------------
     config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());
     config.setMaxInitDepth(4);
     config.setPopulationSize(1000);
