@@ -20,6 +20,13 @@
 * New class DefaultClientFeedback
 * New class ResultData
 * New class ResultVerification
+* Added test cases
+* corrected AgeFitnessValueComparator in NaturalSelector,
+  thanx to Eran for pointing that out
+* Added FitnessAgeValueComparator to NaturalSelector
+* Replaced AgeFitnessValueComparator with
+  FitnessAgeValueComparator in BestChrom.Selector, thanx to
+  Eran
 
 3.3.3
 -----------------------------------------------------------
