@@ -22,7 +22,7 @@ import org.jgap.data.config.*;
 public abstract class NaturalSelector
     implements INaturalSelector, Configurable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.27 $";
+  private static final String CVS_REVISION = "$Revision: 1.28 $";
 
   protected /*transient*/ Configuration m_config;
 
@@ -92,8 +92,8 @@ public abstract class NaturalSelector
     }
   }
   /**
-   * Comparator regarding first the age (older is better), the the fitness
-   * value. Better results will be on top of the resulting sorted list
+   * Comparator regarding first the age (older is better), then the fitness
+   * value. Better results will be on top of the resulting sorted list.
    *
    * @author Klaus Meffert
    * @since 3.3.3
@@ -104,7 +104,7 @@ public abstract class NaturalSelector
       IChromosome chrom1 = (IChromosome) first;
       IChromosome chrom2 = (IChromosome) second;
       if (chrom1.getAge() > chrom2.getAge()) {
-        return 1;
+        return -1;
       }
       if (chrom1.getAge() < chrom2.getAge()) {
         return 1;
