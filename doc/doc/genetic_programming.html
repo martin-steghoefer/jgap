@@ -48,7 +48,8 @@ also contains a fitness function named <i>FormulaFitnessFunction</i>. A more
 complex example can be found in class <i>examples.gp.Fibonacci </i>and in class <i>examples.gp.anttrail.AntTrailProblem</i>.
  </p>
 
-<p class="text">The math example at a glance:
+<p class="text">The math example at a glance (after that the steps are explained
+in detail) :
  </p>
 
 <p class="text">1. Create configuration
@@ -71,8 +72,6 @@ complex example can be found in class <i>examples.gp.Fibonacci </i>and in class 
 
 </tt>
  </p>
-
-<p class="text">&nbsp; </p>
 
 <p class="text">2. Create initial Genotype (continued from above method <i>main</i>): </p>
 
@@ -145,7 +144,141 @@ setup. </p>
 <p class="text">You can benefit from looking at the examples mentioned above. Go
 for the code and you'll get a better feeling. It's very easy using JGAP for GP! </p>
 
-<p class="copyright">Copyright © 2006-2007 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
+<h3 class="subheader">Digging into detail </h3>
+
+<p class="text">Now as promised, the steps explained in more detail. The
+documentation below refers to the example above, corresponding with the step
+number: </p>
+
+<p class="text">1. Create configuration </p>
+
+<p class="text">At first, a JGAP configuration for GP is created and setup: </p>
+
+<p class="Listing">
+<tt>
+&nbsp; GPConfiguration config = new GPConfiguration();<br>
+  &nbsp; config.setGPFitnessEvaluator(new DeltaGPFitnessEvaluator());<br>
+&nbsp; config.setMaxInitDepth(6);<br>
+&nbsp; config.setPopulationSize(100);<br>
+&nbsp; config.setFitnessFunction(new MathProblem.FormulaFitnessFunction());<br>
+
+</tt>
+ </p>
+
+<p class="text">The parameters used are: </p>
+
+<ul>
+  <li>
+    <p class="text">&nbsp;fitness evaluator: the delta fitness evaluator gives
+    lower fitness values a better ranking as the fitness value is seen as a
+    defect rate. If you want to see the fitness value as a success rate,
+    instead, please use the DefaultGPFitnessEvaluator!</li>
+  <li>
+    <p class="text">The maximum depth of a GP program on initialization is set
+    to six. Consider a GP program. It is represented as a tree. The maximum
+    number of children of the top node (which has depth zero) is six, resulting
+    in a maximum depth of six. Too high values may result in bad performance of
+    even a memory overflow. Six is a good value for our example. In more complex
+    examples, maybe use a maximum of, say, 12.</li>
+  <li>
+    <p class="text">The population size, i.e. the number of coexisting GP
+    programs, is set to 100. This already is a quite high value as each program
+    consumes time and memory resources! If programs are getting bigger (i.e.
+    having more children), time and memory consumption rises, too!</li>
+  <li>
+    <p class="text">Finally, the fitness function is set. It evaluates each GP
+    program, which is also called an individuum. Please notice: The fitness
+    function ALWAYS is specific to your problem, there is no common fitness
+    function! You have to study the examples to get an idea about the
+    implementation of it (later on, there will be some additional
+    documentation).</li>
+</ul>
+<p class="text">The fitness function can be found in the JGAP code base in the
+example class MathProblem.
+<p class="text">2. Create initial Genotype</p>
+<p class="text">The Genotype initialization and creation is done in method
+create, which is called from the main method. At first follows the
+initialization, divided into chunks, starting with:</p>
+<p class="Listing">
+<tt>
+&nbsp; Class[] types = {<br>
+&nbsp;&nbsp;&nbsp; CommandGene.FloatClass};<br>
+&nbsp; Class[][] argTypes = {<br>
+&nbsp;&nbsp;&nbsp; {}<br>
+&nbsp; };<br>
+</tt> &nbsp;</p>
+<p class="text">As you can see there are two array, both having one dimension
+and the same length, namely one. This is a must!
+<p class="text">The first array, types, defines the return type of the sub
+programs (which will be outlined soon). In our example, we only have one sub
+program, thus the length of the arrays is one. The parameter
+CommandGene.FloatClass expresses that the return type is Float.Class. This is
+because CommandGene.FloatClass is just a convenient, speaking definition of
+Float.Class (it is equivalent).
+<p class="text">The second array, argTypes, defines the input type of so-called
+Automatically Defined Functions (ADF's). They are not important here. If you
+want to get insights about ADF's, please look at the MathProblem class.
+<p class="Listing">
+<tt>
+&nbsp; // Define the commands and terminals the GP is allowed to use.<br>
+&nbsp; // -----------------------------------------------------------<br>
+&nbsp; CommandGene[][] nodeSets = {<br>
+  &nbsp;&nbsp;&nbsp; {<br>
+  &nbsp;&nbsp;&nbsp; vx = Variable.create(a_conf, "X", CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new AddCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new SubtractCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new MultiplyCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new DivideCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new SinCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new CosCommand(a_conf, CommandGene.FloatClass),<br>
+  &nbsp;&nbsp;&nbsp; new ExpCommand(a_conf, CommandGene.FloatClass),<br>
+&nbsp;&nbsp;&nbsp; // Use terminal with possible value from 2.0 to 10.0 decimal<br>
+&nbsp;&nbsp;&nbsp; new Terminal(conf, CommandGene.FloatClass, 2.0d, 10.0d, false),<br>
+&nbsp; &nbsp; }<br>
+  &nbsp; };<br>
+</tt> 
+<p class="text">Here, the valid sets of commands (functions and terminals) is
+defined. This means: a GP program will be evolved randomly, but by using one or
+more of the commands defined in nodeSets, each command can be used more than
+once, potentially. Please notice, that the variable &quot;X&quot; is set in the
+fitness function to inject an input value! Also notice, that the last parameter
+of the variable denotes the return type of the variable, i.e Float.class (or:
+CommandGene.FloatClass). This is comparable&nbsp; to the declaration in array
+types, above in this step. 
+<p class="text">to be continued...: Explain the functions and the terminal in
+more detail. 
+<p class="Listing">
+<tt>
+  &nbsp; Random random = new Random();<br>
+  &nbsp; // Randomly initialize function data (X-Y table) for x^4+x^3+x^2+x.<br>
+&nbsp; // This is problem-specific and not necessary in other cases.<br>
+&nbsp; // ----------------------------------------------------------------<br>
+  &nbsp; for (int i = 0; i &lt; 20; i++) {<br>
+  &nbsp;&nbsp;&nbsp; float f = 2.0f * (random.nextFloat() - 0.5f);<br>
+  &nbsp;&nbsp;&nbsp; x[i] = new Float(f);<br>
+  &nbsp;&nbsp;&nbsp; y[i] = f * f * f * f + f * f * f + f * f - f;<br>
+  &nbsp;&nbsp;&nbsp; System.out.println(i + ") " + x[i] + "   " + y[i]);<br>
+  &nbsp; }<br>
+</tt> 
+<p class="text">As the fitness function should compare the results of the
+evolved GP program (i.e. a mathematical function!) with a truth table, we
+initialize this truth table once at the beginning with fixed, but random input
+numbers. Instead of these random numbers, it would be perfectly OK to use
+subsequent values from, say, 0 to 20.
+<p class="Listing">
+<tt>
+  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets, 100,
+  true);<br>
+</tt>  
+<p class="text">This returns the initialized genotype, using the
+above-discussed, initialized parameters.<p class="text">to be continued...:
+Explain the last two parameters.  
+<p class="text">3. Start the evolution
+<p class="text">This is easy, see the code in step 3 at the beginning. It is
+self-explanatory.
+<p class="text">4. Implement your own functions and terminals
+<p class="text">To be continued...: Explain how
+<p class="copyright">Copyright © 2006-2008 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
 Meffert</a>. All rights reserved. </p>
 
 <hr>
