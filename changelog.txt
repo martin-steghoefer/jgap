@@ -1,5 +1,6 @@
 3.3.4
 -----------------------------------------------------------
+* Extended GP documentation a lot
 * Strongly Improved functionality of grid computing
 * Added 12 new GP functions
 * Improved error handling in JGAPClientGP
@@ -23,6 +24,7 @@
 * Added test cases
 * corrected AgeFitnessValueComparator in NaturalSelector,
   thanx to Eran for pointing that out
+* Added a new GP-command, Add4 (addition of 4 numbers)
 * Added FitnessAgeValueComparator to NaturalSelector
 * Replaced AgeFitnessValueComparator with
   FitnessAgeValueComparator in BestChrom.Selector, thanx to
