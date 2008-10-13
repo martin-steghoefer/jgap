@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public GABreeder() {
     super();
@@ -113,15 +113,21 @@ public class GABreeder
     updateChromosomes(pop, a_conf);
     // If a bulk fitness function has been provided, call it.
     // ------------------------------------------------------
+//    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
+//    if (bulkFunction != null) {
+//      /**@todo utilize jobs: bulk fitness function is not so important for a
+//       * prototype! */
+//      bulkFunction.evaluate(pop);
+//    }
+    // Apply certain NaturalSelectors after GeneticOperators have been applied.
+    // ------------------------------------------------------------------------
+    pop = applyNaturalSelectors(a_conf, pop, false);
     BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     if (bulkFunction != null) {
       /**@todo utilize jobs: bulk fitness function is not so important for a
        * prototype! */
       bulkFunction.evaluate(pop);
     }
-    // Apply certain NaturalSelectors after GeneticOperators have been applied.
-    // ------------------------------------------------------------------------
-    pop = applyNaturalSelectors(a_conf, pop, false);
     // Fill up population randomly if size dropped below specified percentage
     // of original size.
     // ----------------------------------------------------------------------
@@ -152,8 +158,8 @@ public class GABreeder
       }
     }
     reAddFittest(pop, fittest);
-    // Increase number of generation.
-    // ------------------------------
+    // Increase number of generations.
+    // -------------------------------
     a_conf.incrementGenerationNr();
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
