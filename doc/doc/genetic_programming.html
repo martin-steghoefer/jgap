@@ -136,8 +136,8 @@ gp.outputSolution(gp.getAllTimeBest());<br>
 
 <p class="text">4. Optional: Implement your own functions and terminals </p>
 
-<p class="text">Please have a look at packages <i>org.jgap.gp.function</i>, <i>org.jgap.gp.terminal</i>
-and examples.gp.anttrail for available GP functions and terminals. There you can
+<p class="text">Please have a look at packages <i>org.jgap.gp.function</i>, <i>org.jgap.gp.terminal,</i><i>org.jgap.gp.function</i>
+and <i> examples.gp.anttrail</i> for available GP functions and terminals. There you can
 see how to implement your own classes and use them in the above step 2 during
 setup. </p>
 
@@ -244,9 +244,34 @@ once, potentially. Please notice, that the variable &quot;X&quot; is set in the
 fitness function to inject an input value! Also notice, that the last parameter
 of the variable denotes the return type of the variable, i.e Float.class (or:
 CommandGene.FloatClass). This is comparable&nbsp; to the declaration in array
-types, above in this step. 
-<p class="text">to be continued...: Explain the functions and the terminal in
-more detail. 
+types, above in this step.<p class="text">Each command used can either be a
+function or a terminal. A function has at least one input parameter whereas a
+terminal never has an input parameter. A terminal is a constant, like a number
+or a boolean value. You can find a lot of prefabricated functions and terminals
+in packages <i>org.jgap.gp.function</i> and&nbsp; <i>org.jgap.gp.terminal</i>.
+It is important to notice that each function or terminal must support at least
+one return type. E.g., that means for a terminal representing a number, it must
+at least support either a float, an integer, a double, a short or a byte number.
+It <i>can</i> support all of them, but <i>must </i>implement at least one. See <i>org.jgap.gp.terminal.Constant</i>
+for a simple example. In class <i>org.jgap.gp.terminal.Terminal</i>, there is a
+more complex example, with fixed numbers that can be mutated and thus have to be
+mapped to be within the specified bounds.<p class="text">Functions returning a
+number have to be setup in analogy: They can support multiple return types like
+int, float and double, but they must support at least one of them. With numbers
+it is easy to imagine: it is OK to return either a float value, say, 47.11f, or
+alternatively, the truncated integer value, 47. See class <i>org.jgap.gp.function.Add</i>
+for an example, look for the <i>execute_XXX</i> functions where the different
+return types are realized.<p class="text">Functions have a number of input
+parameters, this is called the arity of the function. Arity two means: two input
+parameters. The arity is setup during construction of each function via its base
+class, also see the Add-class for example. In the constructor, the return type
+is defined, too.<p class="text">A function can have input parameters with
+different types. Consider the IF-Statement (IF &lt;condition&gt; THEN
+&lt;command&gt;). The first parameter is a boolean value. Besides, number values
+could be supported, with a number bigger than zero being seen as true and all
+other numbers representing false. The second parameter is a void type. See class
+org.jgap.gp.function.IfElse (especially method getChildType) for an example of
+this extended type handling for children. 
 <p class="Listing">
 <tt>
   &nbsp; Random random = new Random();<br>
@@ -271,12 +296,19 @@ subsequent values from, say, 0 to 20.
   true);<br>
 </tt>  
 <p class="text">This returns the initialized genotype, using the
-above-discussed, initialized parameters.<p class="text">to be continued...:
-Explain the last two parameters.  
+above-discussed, initialized parameters. The last two parameters are as follows.
+The number 100 is the maximum number of nodes to reserve space for in memory for
+each GP program. If you have a program spanning a <b>full</b> binary tree with
+depth of six, then you&nbsp; would need 127 nodes (2^(n+1) - 1, n = 6). The last
+parameter, true, controls that the system outputs verbose messages. This does
+not influence evolution itself, but maybe useful for analyzing and reduces speed
+a bit.  
 <p class="text">3. Start the evolution
 <p class="text">This is easy, see the code in step 3 at the beginning. It is
 self-explanatory.
 <p class="text">4. Implement your own functions and terminals
+<p class="text">For now, please see the functions and terminals in packages <i>org.jgap.gp.function</i>
+and&nbsp; <i>org.jgap.gp.terminal.</i>
 <p class="text">To be continued...: Explain how
 <p class="copyright">Copyright © 2006-2008 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
 Meffert</a>. All rights reserved. </p>
