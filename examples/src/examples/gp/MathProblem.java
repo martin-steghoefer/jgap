@@ -18,7 +18,7 @@ import org.jgap.gp.terminal.*;
 
 /**
  * Example demonstrating Genetic Programming (GP) capabilities of JGAP.
- * Also demonstrates usage of ADFs.<br>
+ * Also demonstrates usage of ADF's.<br>
  * The problem is to find a formula for a given truth table (X/Y-pairs).
  * <p>
  * <ul>
@@ -38,7 +38,7 @@ import org.jgap.gp.terminal.*;
 public class MathProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   public static Variable vx;
 
