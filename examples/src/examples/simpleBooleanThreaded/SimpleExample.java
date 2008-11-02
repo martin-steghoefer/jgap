@@ -22,7 +22,7 @@ import org.jgap.event.*;
  */
 public class SimpleExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Starts the example.
@@ -35,9 +35,9 @@ public class SimpleExample {
    */
   public static void main(String[] args)
       throws Exception {
-    final int numEvolutions = 500;
+    final int numEvolutions = 50;
     final int numThreads = 5;
-    int chromeSize = 20;
+    int chromeSize = 32;
     if (chromeSize > 32) {
       System.err.println("This example does not handle " +
                          "Chromosomes greater than 32 bits in length.");
@@ -51,7 +51,7 @@ public class SimpleExample {
       IChromosome sampleChromosome = new Chromosome(gaConf,
           new BooleanGene(gaConf), chromeSize);
       gaConf.setSampleChromosome(sampleChromosome);
-      gaConf.setPopulationSize(gaConf.getRandomGenerator().nextInt(500));
+      gaConf.setPopulationSize(4);
       gaConf.setFitnessFunction(new MaxFunction());
       Genotype genotype = null;
       try {
@@ -64,11 +64,11 @@ public class SimpleExample {
       gaConf.getEventManager().addEventListener(GeneticEvent.
           GENOTYPE_EVOLVED_EVENT, new GeneticEventListener() {
         public void geneticEventFired(GeneticEvent a_firedEvent) {
-          Genotype genotype = (Genotype) a_firedEvent.getSource();
-          int evno = genotype.getConfiguration().getGenerationNr();
+          GABreeder genotype = (GABreeder) a_firedEvent.getSource();
+          int evno = genotype.getLastConfiguration().getGenerationNr();
           if (evno % 10 == 0) {
-            double bestFitness = genotype.getFittestChromosome().
-                getFitnessValue();
+            double bestFitness = genotype.getLastPopulation().
+                determineFittestChromosome().getFitnessValue();
             System.out.println(t1.getName() + ": Evolving generation " + evno
                                + ", best fitness: " + bestFitness);
           }
