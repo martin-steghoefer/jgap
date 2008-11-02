@@ -31,7 +31,6 @@ import org.jgap.*;
  * The algorithm throws an assertion error if the two initial chromosomes
  * does not satisfy these conditions.
  *
- *
  * Greedy crossover can be best explained in the terms of the
  * Traveling Salesman Problem:
  *
@@ -56,7 +55,7 @@ import org.jgap.*;
 public class GreedyCrossover
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.27 $";
+  private static final String CVS_REVISION = "$Revision: 1.28 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
@@ -95,8 +94,8 @@ public class GreedyCrossover
 
   /**
    * Compute the distance between "cities", indicated by these two
-   * given genes. The default method expects the genes to be a
-   * IntegerGenes's and returns they absolute difference, that
+   * given genes. The default method expects the genes to be
+   * IntegerGene's and returns their absolute difference, that
    * makes sense only for tests.
    *
    * @param a_from Object
