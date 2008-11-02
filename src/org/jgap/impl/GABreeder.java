@@ -15,7 +15,11 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
+
+  private transient Configuration m_lastConf;
+
+  private transient Population m_lastPop;
 
   public GABreeder() {
     super();
@@ -163,9 +167,19 @@ public class GABreeder
     a_conf.incrementGenerationNr();
     // Fire an event to indicate we've performed an evolution.
     // -------------------------------------------------------
+    m_lastPop = pop;
+    m_lastConf = a_conf;
     a_conf.getEventManager().fireGeneticEvent(
         new GeneticEvent(GeneticEvent.GENOTYPE_EVOLVED_EVENT, this));
     return pop;
+  }
+
+  public Configuration getLastConfiguration() {
+    return m_lastConf;
+  }
+
+  public Population getLastPopulation() {
+    return m_lastPop;
   }
 
   /**
