@@ -13,7 +13,7 @@ import org.jgap.*;
 import org.jgap.impl.*;
 
 /**
- * Fitness function for our example. See evolve() method for details
+ * Fitness function for our example. See evolve() method for details.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -21,11 +21,12 @@ import org.jgap.impl.*;
 public class MaxFunction
     extends FitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * This example implementation calculates the fitness value of Chromosomes
-   * using BooleanAllele implementations.
+   * using BooleanAllele implementations. Each second bit is expected to be set,
+   * each other bit to be not set.
    *
    * @param a_subject the Chromosome to be evaluated
    * @return defect rate of our problem
@@ -35,26 +36,23 @@ public class MaxFunction
    */
   public double evaluate(IChromosome a_subject) {
     int total = 0;
-
     for (int i = 0; i < a_subject.size(); i++) {
       BooleanGene value = (BooleanGene) a_subject.getGene(a_subject.size() -
           (i + 1));
       if (value.booleanValue()) {
-        if (i % 3 == 0) {
-          total += Math.pow(1.3, (double) i);
+        if (i % 2 == 0) {
+          total += 2;
         }
-        else         if (i % 3 == 1) {
-          total -= Math.pow(1.7, (double) i);
-        }
-        else {
-          total += Math.pow(1.9, (double) i);
+      }
+      else {
+        if (i % 2 == 1) {
+          total += 2;
         }
       }
       if (total < 0) {
         total = 0;
       }
     }
-
     return total;
   }
 }
