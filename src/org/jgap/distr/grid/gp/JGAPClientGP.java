@@ -10,6 +10,7 @@
 package org.jgap.distr.grid.gp;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import org.apache.commons.cli.*;
@@ -26,7 +27,7 @@ import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
-import com.thoughtworks.xstream.*;
+import com.thoughtworks.xstream.io.xml.*;
 
 /**
  * A client defines work for the grid and sends it to the JGAPServer.
@@ -38,23 +39,26 @@ import com.thoughtworks.xstream.*;
 public class JGAPClientGP
     extends Thread {
   /**@todo in dateiname requester/worker kodieren*/
+  /**@todo auch schlechtere ergebnisse einmixen: die direkt empfangenen
+   * gleich wieder in einen request reinstecken --> aber mischen verschiedener
+   * results in einen request!*/
+
   /**@todo small, medium, large work requests*/
   /**@todo re-evaluate each result on behalf of another worker: keep separate
    * lookup-table for all requests --> m_resultsVerified, m_resultsPersister */
-  /**@todo remove old requests from online store auotmatically*/
+  /**@todo remove old requests from online store automatically*/
   /**@todo info when work request has been taken*/
   /**@todo info when worker logs on --> evaluate logon files*/
   /**@todo top results in eigener datei speichern,
-   * komprimierung durch weglassen überfl. infos, siehe xml --> prototypeprogram null setzen!*/
-  /**@todo versionsspanne angeben, die ein client/worker behandeln kann
-   * --> v1.02a kann auch 1.01a, 1.01a kann nicht 1.00a */
+   * komprimierung durch weglassen überfl. infos, siehe xml --> injection after reload*/
+  /**@todo copy good results to online folder*/
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static final String APP_VERSION = "1.02a";
 
-  /**@todo store in external file*/
+  /**@todo store version in external file*/
 
   public static final String MODULE_CS = "CS";
 
@@ -86,6 +90,13 @@ public class JGAPClientGP
 
   public static final int WAITTIME_SECONDS = 5;
 
+  public static final Object[][] FIELDSTOSKIP = new Object[][] { {GPPopulation.class,
+      "m_fitnessRank"}, {GPPopulation.class, "m_fittestProgram"}, {GPPopulation.class,
+      "m_changed"}, {GPPopulation.class, "m_sorted"}, {GPPopulation.class,
+      "m_fittestToAdd"}, {BaseGPChromosome.class,
+      "m_ind"},
+  };
+
   private static transient org.apache.log4j.Logger log
       = org.apache.log4j.Logger.getLogger(JGAPClientGP.class);
 
@@ -112,6 +123,11 @@ public class JGAPClientGP
   private boolean m_list;
 
   private String m_workDir;
+
+  /**
+   * Dir for not too bad results
+   */
+  private String m_ntbResultsDir;
 
   private String m_runID;
 
@@ -222,7 +238,9 @@ public class JGAPClientGP
       workDir = FileKit.getConformPath(workDir);
       setWorkDirectory(workDir);
     }
-    /**@todo put results into subdir*/
+    m_ntbResultsDir = FileKit.addSubDir(getWorkDirectory(), "ntb", true);
+    FileKit.createDirectory(m_ntbResultsDir);
+    log.info("NTB dir: " + m_ntbResultsDir);
 //    m_workDirResults =FileKit.getCurrentDir() + "/work/" + "results";
 //    m_workDirResults = FileKit.getConformPath(workDir);
     // Try to load previous object information.
@@ -391,8 +409,28 @@ public class JGAPClientGP
    */
   protected void onError(Exception a_ex)
       throws Exception {
-    // Do nothing in default implementation.
-    // -------------------------------------
+    // Do not handle any eror specifically.
+    // ------------------------------------
+    throw a_ex;
+  }
+
+  /**
+   * Called in case of any unhandled error when trying to delete a request or
+   * result.
+   * Override in sub classes if needed.
+   *
+   * @param a_ex exception object expressing the error
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  protected void onDeleteError(Exception a_ex)
+      throws Exception {
+    // Do not handle any eror specifically.
+    // ------------------------------------
+    throw a_ex;
   }
 
   /**
@@ -409,8 +447,9 @@ public class JGAPClientGP
   protected void onErrorReceiveWorkResults(JGAPRequestGP[] a_workRequests,
       Exception a_ex)
       throws Exception {
-    // Do nothing in default implementation.
-    // -------------------------------------
+    // Do not handle any eror specifically.
+    // ------------------------------------
+    throw a_ex;
   }
 
   /**
@@ -448,12 +487,36 @@ public class JGAPClientGP
             // Do deferred deletion of results.
             // --------------------------------
             Iterator<String> it = m_objects.getResults().keySet().iterator();
-            while (it.hasNext()) {
-              String key = it.next();
-              String value = (String) m_objects.getResults().get(key);
-              if ("delete".equals(value)) {
-                m_gcmed.removeMessage(key);
-                m_objects.getResults().remove(key);
+            boolean modified = false;
+            try {
+              while (it.hasNext()) {
+                String key = it.next();
+                String value = (String) m_objects.getResults().get(key);
+                if (startsWith(value, "delete:")) {
+                  log.info("Delete result (deferred), key: " + key);
+                  try {
+                    m_gcmed.removeMessage(key);
+                  } catch (MalformedURLException mex) {
+                    log.warn("Invalid key", mex);
+                  } catch (Exception ex) {
+                    onDeleteError(ex);
+                    continue;
+                  }
+                  it.remove();
+//                  m_objects.getResults().remove(key);
+                  modified = true;
+                }
+                else {
+                  if (startsWith(value, "delete")) {
+                    it.remove();
+                    modified = true;
+                  }
+                }
+              }
+            } finally {
+              if (modified) {
+                m_persister.save();
+                modified = false;
               }
             }
             try {
@@ -556,6 +619,7 @@ public class JGAPClientGP
         feedback.setProgressMaximum(0);
         feedback.setProgressMaximum(workRequests.length - 1);
         for (int i = 0; i < workRequests.length; i++) {
+          log.info("Setting up work request " + i);
           presetPopulation(workRequests[i]);
         }
         if (beforeSendWorkRequests(workRequests)) {
@@ -603,6 +667,7 @@ public class JGAPClientGP
       m_gridConfig.getClientFeedback().sendingFragmentRequest(req);
       MessageContext context = new MessageContext(MODULE_CS,
           CONTEXT_WORK_REQUEST, CONTEXT_ID_EMPTY);
+      context.setVersion(APP_VERSION);
       m_gcmed.send(new GridMessageWorkRequest(req), context, null);
       if (isInterrupted()) {
         break;
@@ -629,39 +694,91 @@ public class JGAPClientGP
       MessageContext context = new MessageContext(MODULE_WS,
           /**@todo later: SC*/
           CONTEXT_WORK_RESULT, CONTEXT_ID_EMPTY);
-      List requests = m_gcmed.listResults(context, null, null);
+      List results = m_gcmed.listResults(context, null, null);
       // Then, iterate over them and receive one after another.
       // ------------------------------------------------------
-      int i = 0;
-      for (Object request : requests) {
-        if (i >= m_max_fetch_results) {
-          break;
+      if (results == null || results.size() < 1) {
+        log.info("No earlier results found.");
+      }
+      else {
+        int i = 0;
+        int len = results.size();
+        log.info(len + " results found.");
+        if (len > getMaxFetchResults()) {
+          len = getMaxFetchResults();
+          log.info("Fetching only " + len + " results.");
         }
-        feedback.setProgressValue(i);
-        i++;
-        JGAPResultGP result = receiveWorkResult(request, feedback, true);
-        if (result != null) {
-          IGPProgram best = result.getPopulation().determineFittestProgram();
-          if (best != null) {
-            log.info("Result received: " +
-                     best.getFitnessValue());
+        /**@todo sort results according to post date, the oldest first*/
+        for (Object resultStub : results) {
+          if (i >= m_max_fetch_results) {
+            break;
           }
-          else {
-            log.info("Empty result received!");
+          feedback.setProgressValue(i);
+          JGAPResultGP result = receiveWorkResult(resultStub, feedback, false);
+          if (result != null) {
+            log.info(" Generic data: " + result.getGenericData());
+            /**@todo config.params wie popsite, evol.anz dazu*/
+            log.info(" Title: " + result.getTitle());
+            IGPProgram best = result.getPopulation().determineFittestProgram();
+            String key = result.getID();
+            // Check if result already received, and if, skip it
+            if (m_objects.getResults().get(key) != null) {
+              log.info("Already received result detected, key: "+key);
+              continue;
+            }
+            if (best == null) {
+              log.info("Empty result received!");
+            }
+            m_objects.getResults().put(key, "received");
+            // Work with the result.
+            // ---------------------
+            m_gridConfig.getClientEvolveStrategy().resultReceived(result);
+            try {
+              // Remove result from online store.
+              // ---------------------------------
+              try {
+                log.info("Removing result from online store");
+                if (false && result.getGenericData() != null &&
+                    WANData.class.isAssignableFrom(result.getGenericData().
+                    getClass())) {
+                  WANData wanData = (WANData) result.getGenericData();
+                  m_gcmed.removeMessage(wanData.getUri());
+                }
+                else {
+                  m_gcmed.removeMessage(resultStub);
+                }
+              } catch (Exception ex) {
+                log.warn("Deletion of result failed, deferring...", ex);
+                key = getKeyFromObject(resultStub);
+                if (key != null) {
+                  log.info(" Key for later deletion: " + key);
+                  m_objects.getResults().put(key, "delete:");
+                }
+                else {
+                  log.info("Deferred deletion not possible: key unknown");
+                }
+              }
+            } finally {
+              m_persister.save();
+            }
+            i++;
+            resultReceived(best);
+            MasterInfo worker = result.getWorkerInfo();
+            if (worker != null) {
+              log.info(" Worker IP " + worker.m_IPAddress + ", host " +
+                       worker.m_name);
+            }
+            // Store result to disk.
+            // ---------------------
+            if (best != null && best.getFitnessValue() > 5000) {
+              String filename = getResultFilename(result);
+              log.info("Writing result to file " + filename);
+              writeToFile(best, m_workDir, filename);
+            }
+            // Now remove the result from the online store.
+            // --------------------------------------------
+            /**@todo do this here explicitely and not in receiveWorkResult*/
           }
-          resultReceived(best);
-          MasterInfo worker = result.getWorkerInfo();
-          if (worker != null) {
-            log.info(" Worker IP " + worker.m_IPAddress + ", host " +
-                     worker.m_name);
-          }
-          // Store result to disk.
-          // ---------------------
-          String filename = getResultFilename(result);
-          writeToFile(best, m_workDir, filename);
-          // Now remove the result from the online store.
-          // --------------------------------------------
-          /**@todo do this here explicitely and not in receiveWorkResult*/
         }
       }
     }
@@ -701,6 +818,8 @@ public class JGAPClientGP
   private JGAPResultGP receiveWorkResult(Object a_result,
       IClientFeedbackGP feedback, boolean a_remove)
       throws Exception {
+    // Object reference is realized via context id.
+    // --------------------------------------------
     MessageContext context = new MessageContext(MODULE_WS /**@todo later: SC*/,
         CONTEXT_WORK_RESULT, a_result);
     GridMessageWorkResult gmwr = (GridMessageWorkResult) m_gcmed.
@@ -717,7 +836,6 @@ public class JGAPClientGP
       log.info("Work result received" + s);
     }
     JGAPResultGP workResult = (JGAPResultGP) gmwr.getWorkResult();
-    m_gridConfig.getClientEvolveStrategy().resultReceived(workResult);
     int idx = workResult.getChunk();
     // Fire listener.
     // --------------
@@ -819,7 +937,7 @@ public class JGAPClientGP
                 // Requests of type that sub classes have to handle.
                 // -------------------------------------------------
                 for (Object obj : requests) {
-                  String key = getKeyFromObject(obj);
+                  Object key = getKeyFromObject(obj);
                   if (key != null) {
                     foundKeys.put(key, "");
                   }
@@ -828,7 +946,6 @@ public class JGAPClientGP
               removeEntries(foundKeys, m_objects.getRequests());
             }
           }
-          /**@todo do the same for results*/
           if (!deferRequests) {
             workRequests = sendWorkRequests(evolutionIndex, evolver, splitter,
                 feedback);
@@ -869,6 +986,10 @@ public class JGAPClientGP
           evolver.onFinished();
           break;
         }
+      }
+      else {
+        log.info("Sleeping a while before beginning again...");
+        Thread.sleep(40000);
       }
     } while (true);
     try {
@@ -913,11 +1034,13 @@ public class JGAPClientGP
    */
   public void writeToFile(Object a_obj, String a_dir, String a_filename)
       throws Exception {
-    XStream xstream = new XStream();
+    JGAPGPXStream xstream = new JGAPGPXStream();
     File f = new File(a_dir, a_filename);
-    FileOutputStream fos = new FileOutputStream(f);
-    xstream.toXML(a_obj, fos);
-    fos.close();
+//    FileOutputStream fos = new FileOutputStream(f);
+    FileWriter fw = new FileWriter(f);
+    CompactWriter compact = new CompactWriter(fw);
+    xstream.marshal(a_obj, compact);
+    fw.close();
   }
 
   public void setWorkDirectory(String a_workDir)
@@ -1064,7 +1187,16 @@ public class JGAPClientGP
     }
   }
 
-  protected String getKeyFromObject(Object a_obj) {
+  /**
+   * Override in sub classes.
+   *
+   * @param a_obj the object to get the key from
+   * @return the key of the object
+   *
+   * @throws Exception
+   */
+  protected String getKeyFromObject(Object a_obj)
+      throws Exception {
     return null;
   }
 
@@ -1094,8 +1226,10 @@ public class JGAPClientGP
   }
 
   /**
-   * A new result has been received. Care that it is stored to fisk in case it
-   * is a top 3 result.
+   * A new result has been received. Care that it is stored to top list on disk
+   * in case it is a top 3 result. Also store it in other cases and if the
+   * result is not too bad to be able to mix it in when generating new work
+   * requests.
    *
    * @param a_fittest the fittest result received for a work request
    *
@@ -1128,8 +1262,28 @@ public class JGAPClientGP
       double worstFitness = -1;
       String norm = a_fittest.toStringNorm(0);
       int count = 0;
-      double a_fittness = a_fittest.getFitnessValue();
-      while (it.hasNext()) {
+      double a_fitness = a_fittest.getFitnessValue();
+      if (a_fitness > 12500) {
+        // Store online as a backup.
+        // -------------------------
+        log.info("Backup up good result");
+        String title = "fitness_" + NumberKit.niceDecimalNumber(a_fitness, 2);
+        m_gcmed.backupResult(a_fittest, "goodResults", title);
+      }
+      else {
+        if (a_fitness > 1750) {
+          // Store not too bad result for mixing it in to new work requests.
+          // ---------------------------------------------------------------
+          log.info("Storing not too bad result for later reusage");
+          String title = "ntb_fitness_"
+              + DateKit.getNowAsString()
+              + "_"
+              + NumberKit.niceDecimalNumber(a_fitness, 2);
+          // Store in separate subdir.
+          // -------------------------
+          saveResult(m_ntbResultsDir, title, a_fittest);
+        }
+      } while (it.hasNext()) {
         IGPProgram prog = (IGPProgram) it.next();
         // Don't allow identical results.
         // ------------------------------
@@ -1142,7 +1296,7 @@ public class JGAPClientGP
           fitter = 100;
           break;
         }
-        else if (fitness >= a_fittness) {
+        else if (fitness >= a_fitness) {
           fitter++;
         }
         // Determine the worst entry for later replacement.
@@ -1173,14 +1327,14 @@ public class JGAPClientGP
             result = false;
           }
           if (result) {
-            a_fittness = a_fittest.getFitnessValue();
-            if (a_fittness < 1000) { /**@todo ist nur test!*/
+            a_fitness = a_fittest.getFitnessValue();
+            if (a_fitness < 1000) { /**@todo ist nur test!*/
               result = false;
             }
             else {
               topApp.add(a_fittest);
               log.info("Added fit program, fitness: " +
-                       NumberKit.niceDecimalNumber(a_fittness, 2));
+                       NumberKit.niceDecimalNumber(a_fitness, 2));
               log.info("Solution: " + a_fittest.toStringNorm(0));
               result = true;
             }
@@ -1197,6 +1351,8 @@ public class JGAPClientGP
         result = false;
       }
       if (result) {
+        /**@todo skip unnecessary data, inject it after reload*/
+        //m_persister.save(true, JGAPClientGP.FIELDSTOSKIP);
         m_persister.save();
       }
       return result;
@@ -1204,6 +1360,33 @@ public class JGAPClientGP
       ex.printStackTrace();
       throw ex;
     }
+  }
+
+  /**
+   * Saves a result to disk.
+   *
+   * @param a_dir the directory to put the result into
+   * @param a_filename name of the file to write
+   * @param a_obj the result object to write
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.3.4
+   */
+  protected void saveResult(String a_dir, String a_filename,
+                            IGPProgram a_obj)
+      throws Exception {
+    String filename = FileKit.addFilename(a_dir, a_filename);
+    PersistableObject po = new PersistableObject(filename);
+    po.setObject(a_obj);
+    po.save();
+  }
+
+  public String[] getFilenames(String a_dir)
+      throws Exception {
+    String[] files = FileKit.listFilesInDir(a_dir, null);
+    return files;
   }
 
   /**
@@ -1218,40 +1401,65 @@ public class JGAPClientGP
    */
   protected void presetPopulation(JGAPRequestGP a_workRequest)
       throws Exception {
-    /**@todo merge previously stored results with new requests!
-     * sometimes preset them as input for worker, sometimes give worker an
-     * empty population*/
+    // Merge previously stored results with new requests.
+    // Often preset them as input for worker, sometimes give worker an
+    // empty population.
+    // -------------------------------------------------------------------
     RandomGenerator randGen = getConfiguration().getRandomGenerator();
     double d = randGen.nextDouble();
-    if (d > 0.2d) {
+    if (d > 0.15d) {
       Map<String, List> topAll = m_objects.getTopResults();
       String appid = m_gridConfig.getContext().getAppId();
       List<IGPProgram> topApp = topAll.get(appid);
       int added = 0;
-      int index = 0;
+//      int index = 0;
       GPPopulation pop = a_workRequest.getPopulation();
       IGPProgram[] programs = pop.getGPPrograms();
-      while (index < pop.getPopSize() && pop.getGPProgram(index) != null) {
-        index++;
-      }
+//      while (index < pop.getPopSize() && pop.getGPProgram(index) != null) {
+//        index++;
+//      }
+      List toAdd = new Vector();
       if (topApp != null && topApp.size() > 0) {
-        List toAdd = new Vector();
+        // Merge top results in.
+        // ---------------------
         for (IGPProgram prog : topApp) {
           GPGenotype.checkErroneousProg(prog, " before add preset", true);
           toAdd.add(prog);
           added++;
-          if (added >= 3 || randGen.nextDouble() > 0.7d) {
+          if (added >= 3 || randGen.nextDouble() > 0.6d) {
             break;
           }
         }
-        // Now merge old and new programs to one pool.
-        // -------------------------------------------
-        int len = programs.length;
-        if (len > 0) {
-          len = 0;
-          while (len < programs.length && programs[len] != null) {
-            len++;
+      }
+      // Merge not too bad results in.
+      // -----------------------------
+      String[] results = getFilenames(m_ntbResultsDir);
+      if (results != null && results.length > 0) {
+        int count = randGen.nextInt(Math.min(5, results.length));
+        if (count > 0) {
+          if (count > results.length) {
+            count = results.length;
           }
+          for (int i = 0; i < count; i++) {
+            int index = randGen.nextInt(results.length);
+            String filename = FileKit.addFilename(m_ntbResultsDir,
+                results[index]);
+            /**@todo remove results[index]*/
+            PersistableObject po = new PersistableObject(filename);
+            IGPProgram ntb = (IGPProgram) po.load();
+            log.info("Presetting with NTB result");
+            added++;
+            toAdd.add(ntb);
+          }
+        }
+      }
+      // Now merge old and new programs to one pool.
+      // -------------------------------------------
+      int len = programs.length;
+      if (len > 0) {
+        len = 0;
+        while (len < programs.length && programs[len] != null) {
+          len++;
         }
         IGPProgram[] programsNew = (IGPProgram[]) toAdd.toArray(new IGPProgram[] {});
         int size = len + toAdd.size();
@@ -1291,7 +1499,8 @@ public class JGAPClientGP
         log.info("Fitness " +
                  NumberKit.niceDecimalNumber(fitness, 2));
         if (fitness < 1000) {
-          log.info("Removing too bad result with fitness " + fitness);
+          log.info("Removing too bad result with fitness "
+                   + NumberKit.niceDecimalNumber(fitness, 2));
           it.remove();
           changed = true;
         }
@@ -1308,5 +1517,12 @@ public class JGAPClientGP
 
   public int getMaxFetchResults() {
     return m_max_fetch_results;
+  }
+
+  private boolean startsWith(String s, String a_prefix) {
+    if (s == null || a_prefix == null) {
+      return false;
+    }
+    return s.startsWith(a_prefix);
   }
 }
