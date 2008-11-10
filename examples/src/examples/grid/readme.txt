@@ -10,7 +10,8 @@ To use the grid, do the following in the given order:
 java -cp ".;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar" org.jgap.distr.grid.JGAPServer
 
 Ensure that the given jar-files reside in the directories you specify! Each required jar-file is shipped with JGAP!
-
+Attention: For Linux and similar operating systems, you have to use the slash instead of the backslash (for Windows)
+           --> Also is true for the following commands!
 
 2. Start as many workers as you like on machines of your choice (following is one command line):
 java -cp ".;jgap-examples.jar;lib\log4j.jar;jgap.jar;lib\commons-cli-1.0.jar;lib\jcgrid.jar" org.jgap.distr.grid.JGAPWorker -s SERVER -n myworker1
