@@ -12,7 +12,11 @@ package org.jgap.distr.grid.util;
 import org.jgap.util.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import org.jgap.distr.grid.request.*;
+import org.jgap.distr.grid.gp.JGAPGPXStream;
+import org.jgap.distr.grid.wan.DeferredResult;
+import org.jgap.gp.IGPProgram;
 
 /**
  * Utility functions related to distributed/grid computing.
@@ -22,7 +26,7 @@ import org.jgap.distr.grid.request.*;
  */
 public class GridKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static String ensureDirectory(String a_currentDir, String a_subDir,
                                        String a_descr)
@@ -260,5 +264,37 @@ public class GridKit {
                                        String a_workDir)
       throws Exception {
     updateModuleLibrary(BASE_URL, "jgap", a_libDir, a_workDir);
+  }
+
+  public static void main(String[] args)
+      throws Exception {
+    JGAPGPXStream xstream = new JGAPGPXStream();
+    String dir = "D:\\JavaProjekte\\JGAP_CVS\\work\\storage\\ntb\\";
+    String filename = "ntb_fitness_20080719180208812_12418.45";
+    File f = new File(dir, filename);
+    FileInputStream fis = new FileInputStream(f);
+    IGPProgram result = (IGPProgram) xstream.fromXML(fis);
+    String line = result.toStringNorm(0);
+    Vector v = new Vector();
+    v.add(line);
+    writeTextFile(v, dir + filename + ".gp");
+    fis.close();
+  }
+
+  public static void writeTextFile(Vector zeilen, String dateiname)
+      throws Exception {
+    FileWriter fi;
+    fi = new FileWriter(dateiname, false);
+    PrintWriter os = new PrintWriter(fi);
+    String s;
+    for (int i = 0; i < zeilen.size(); i++) {
+      s = (String) zeilen.elementAt(i);
+      os.println(s);
+    }
+    os.close();
+    //Auf Fehler abfragen, da keine Exception über PrintWriter erzeugt wird!
+    if (os.checkError()) {
+      throw new IOException("Fehler beim Schreiben der Textdatei " + dateiname);
+    }
   }
 }
