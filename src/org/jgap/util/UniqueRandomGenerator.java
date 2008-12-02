@@ -22,10 +22,16 @@ public class UniqueRandomGenerator {
   public int nextInt()
       throws IllegalStateException {
     int size = m_resultSet.size();
+    int index;
     if (size < 1) {
       throw new IllegalStateException("No more numbers left");
     }
-    int index = m_generator.nextInt(size);
+    else if (size == 1) {
+      index = 0;
+    }
+    else {
+      index = m_generator.nextInt(size);
+    }
     Integer result = (Integer) m_resultSet.get(index);
     m_resultSet.remove(index);
     return result.intValue();
