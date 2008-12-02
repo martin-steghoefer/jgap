@@ -29,6 +29,8 @@
 * Replaced AgeFitnessValueComparator with
   FitnessAgeValueComparator in BestChrom.Selector, thanx to
   Eran
+* Optimized UniqueRandomGenerator.nextInt()
+* Fixed bug in ColtRandomGenerator.nextInt()
 
 3.3.3
 -----------------------------------------------------------
