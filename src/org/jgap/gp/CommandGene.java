@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.27 $";
+  private final static String CVS_REVISION = "$Revision: 1.28 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -743,9 +743,50 @@ public abstract class CommandGene
    */
   public void ensureUniqueness(ProgramChromosome a_program) {
     if (a_program.getCommandOfClass(1, getClass()) >= 0) {
-      throw new IllegalStateException("Command must not occur more than once!");
+      throw new IllegalStateException("Command "
+                                      + getClass()
+                                      + " must not occur more than once!");
     }
 
+  }
+
+  /**
+   * Ensures that the calling command is unique within the program.
+   * Call it on first place from the execute method.
+   *
+   * @param a_program the program to validate
+   * @param a_maxCount maximum number of allowed occurences
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public void ensureUniqueness(ProgramChromosome a_program, int a_maxCount) {
+    if (a_program.getCommandOfClass(1, getClass()) > a_maxCount) {
+      throw new IllegalStateException("Command "
+                                      + getClass()
+                                      + " must not occur more than "
+                                      + a_maxCount
+                                      + " times!");
+    }
+  }
+
+  /**
+   * Ensures that the calling command is unique within the program.
+   * Call it on first place from the execute method.
+   *
+   * @param a_program the program to validate
+   * @param a_maxCount maximum number of allowed occurences
+   *
+   * @return false: uniqueness constraint violated
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public boolean ensureUniqueness2(ProgramChromosome a_program, int a_maxCount) {
+    if (a_program.getCommandOfClass(1, getClass()) > a_maxCount) {
+      return false;
+    }
+    return true;
   }
 
   /**
