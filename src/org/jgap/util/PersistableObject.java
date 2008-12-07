@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.io.xml.*;
  */
 public class PersistableObject {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private transient Logger log = Logger.getLogger(getClass());
 
@@ -85,7 +85,7 @@ public class PersistableObject {
   }
 
   public Object load(File a_file) {
-    log.info("Loading database");
+    log.info("Loading database for file "+a_file.getName());
     JGAPGPXStream xstream = new JGAPGPXStream();
     init(xstream);
     try {
