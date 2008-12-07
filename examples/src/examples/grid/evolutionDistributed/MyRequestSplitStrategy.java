@@ -22,7 +22,7 @@ import org.jgap.distr.grid.*;
 public class MyRequestSplitStrategy
     implements IRequestSplitStrategy {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Configuration m_config;
 
@@ -59,13 +59,13 @@ public class MyRequestSplitStrategy
       firstTime = false;
     }
     if (!firstTime) {
-      // Sort Population to have the fittest ones at the beginning.
+      // Sort population to have the fittest ones at the beginning.
       // ----------------------------------------------------------
       pop.sortByFitness();
     }
     // Generate 20 work requests.
     // --------------------------
-    int requests = 20; // number of requests to create
+    int requests = 20;
     JGAPRequest[] result = new JGAPRequest[requests];
     // Only send 10% of the population to the workers.
     // -----------------------------------------------
