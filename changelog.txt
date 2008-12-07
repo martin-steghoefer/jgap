@@ -1,36 +1,38 @@
 3.3.4
 -----------------------------------------------------------
 * Extended GP documentation a lot
-* Strongly Improved functionality of grid computing
 * Added 12 new GP functions
 * Improved error handling in JGAPClientGP
 * Fittest individual is always preserved in GP evolution
-* Fixed bug in NumberKit.niceDecimalNumber
-* Fixed bug in GP terminal False
+* Strongly Improved functionality of grid computing
+* Added new classes XStreamPassThruConverter and
+  JGAPGPXStream for easing XStream usage
+* Enhanced interface IGridConfigurationGP
+* Added a new GP-command, Add4 (addition of 4 numbers)
+* Added FitnessAgeValueComparator to NaturalSelector
 * Added painted desert example (package examples.gp)
-* Improved Javadoc
 * Added SystemKit.printHelp(..)
 * Enhanced interface IGridClientMediator and implementing 
   class GridClientMediator
 * FileKit: added some service methods
+* GridKit: added method writeTextFile
 * Added default constructor to GP classes (for dynamic 
   instantiation)
-* Added new classes XStreamPassThruConverter and
-  JGAPGPXStream for easing XStream usage
 * Introduced DefaultClientFeedback
 * New class DefaultClientFeedback
 * New class ResultData
 * New class ResultVerification
-* Added test cases
 * corrected AgeFitnessValueComparator in NaturalSelector,
   thanx to Eran for pointing that out
-* Added a new GP-command, Add4 (addition of 4 numbers)
-* Added FitnessAgeValueComparator to NaturalSelector
 * Replaced AgeFitnessValueComparator with
   FitnessAgeValueComparator in BestChrom.Selector, thanx to
   Eran
 * Optimized UniqueRandomGenerator.nextInt()
+* Fixed bug in NumberKit.niceDecimalNumber
+* Fixed bug in GP terminal False
 * Fixed bug in ColtRandomGenerator.nextInt()
+* Improved Javadoc
+* Added test cases
 
 3.3.3
 -----------------------------------------------------------
