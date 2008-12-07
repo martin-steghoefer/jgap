@@ -25,7 +25,7 @@ import org.jgap.distr.grid.common.*;
 public abstract class GridConfigurationGPBase
     implements IGridConfigurationGP {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private IClientFeedbackGP m_clientFeedback;
 
@@ -56,6 +56,8 @@ public abstract class GridConfigurationGPBase
   private int[] m_maxDepths;
 
   private int m_maxNodes;
+
+  private double m_minFitnessToStore;
 
   public GridConfigurationGPBase() {
 //    m_packageName = getClass().getPackage().getName();
@@ -197,5 +199,13 @@ public abstract class GridConfigurationGPBase
 
   public int getMaxNodes() {
     return m_maxNodes;
+  }
+
+  public double getMinFitnessToStore() {
+    return m_minFitnessToStore;
+  }
+
+  public void setMinFitnessToStore(double a_minFitnessToStore) {
+    m_minFitnessToStore = a_minFitnessToStore;
   }
 }

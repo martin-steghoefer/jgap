@@ -26,7 +26,7 @@ import org.jgap.gp.impl.*;
 public interface IGridConfigurationGP
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   IClientFeedbackGP getClientFeedback();
 
@@ -92,4 +92,7 @@ public interface IGridConfigurationGP
   int getMaxNodes();
   // End of todo
 
+  double getMinFitnessToStore();
+
+  void setMinFitnessToStore(double a_minFitnessToStore);
 }
