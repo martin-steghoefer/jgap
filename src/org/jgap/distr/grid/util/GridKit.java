@@ -9,14 +9,14 @@
  */
 package org.jgap.distr.grid.util;
 
-import org.jgap.util.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import org.jgap.distr.grid.gp.*;
 import org.jgap.distr.grid.request.*;
-import org.jgap.distr.grid.gp.JGAPGPXStream;
-import org.jgap.distr.grid.wan.DeferredResult;
-import org.jgap.gp.IGPProgram;
+import org.jgap.gp.*;
+import org.jgap.util.*;
 
 /**
  * Utility functions related to distributed/grid computing.
@@ -26,7 +26,7 @@ import org.jgap.gp.IGPProgram;
  */
 public class GridKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static String ensureDirectory(String a_currentDir, String a_subDir,
                                        String a_descr)
