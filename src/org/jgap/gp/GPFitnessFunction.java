@@ -9,6 +9,8 @@
  */
 package org.jgap.gp;
 
+import org.apache.log4j.Logger;
+
 /**
  * Fitness function for GP-Programs.
  *
@@ -18,11 +20,13 @@ package org.jgap.gp;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
   public final static double MAX_FITNESS_VALUE = Double.MAX_VALUE / 2;
+
+  private transient static Logger LOGGER = Logger.getLogger(GPFitnessFunction.class);
 
   /**
    * The fitness value computed during the previous run
@@ -59,6 +63,7 @@ public abstract class GPFitnessFunction
     try {
       fitnessValue = evaluate(a_program);
     } catch (IllegalStateException iex) {
+      LOGGER.debug(iex.getMessage());
       fitnessValue = NO_FITNESS_VALUE;
       return fitnessValue;
     }
