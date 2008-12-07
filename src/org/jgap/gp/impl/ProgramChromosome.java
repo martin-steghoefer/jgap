@@ -25,7 +25,7 @@ import java.lang.reflect.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -516,7 +516,7 @@ public class ProgramChromosome
    * @author Klaus Meffert
    * @since 3.0
    */
-  protected void growOrFullNode(int a_num, int a_depth,
+  protected CommandGene[] growOrFullNode(int a_num, int a_depth,
                                 Class a_returnType, int a_subReturnType,
                                 CommandGene[] a_functionSet,
                                 CommandGene a_rootNode, int a_recurseLevel,
@@ -562,6 +562,11 @@ public class ProgramChromosome
             }
           }
         }
+        // Avoid using commands more than once if allowed only once.
+        // ---------------------------------------------------------
+        if (IUniqueCommand.class.isAssignableFrom(node.getClass())) {
+          a_functionSet = remove(a_functionSet, node);
+        }
         a_rootNode = node;
         break;
       }
@@ -581,7 +586,7 @@ public class ProgramChromosome
       for (int i = 0; i < a_rootNode.getArity(ind); i++) {
         /**@todo ensure required depth is cared about*/
         if (m_index < m_depth.length) {
-          growOrFullNode(a_num, a_depth - 1,
+          a_functionSet = growOrFullNode(a_num, a_depth - 1,
                          a_rootNode.getChildType(getIndividual(), i),
                          a_rootNode.getSubChildType(i),
                          a_functionSet, a_rootNode, a_recurseLevel + 1, a_grow,
@@ -605,6 +610,7 @@ public class ProgramChromosome
                                         + " (symptom 2)");
       }
     }
+    return a_functionSet;
   }
 
   /**
