@@ -54,7 +54,7 @@ public class JGAPClientGP
   /**@todo copy good results to online folder*/
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   public static final String APP_VERSION = "1.02a";
 
@@ -212,9 +212,10 @@ public class JGAPClientGP
     }
     // Setup work request.
     // -------------------
+    /**@todo ab 2. zyklus ist pop.grösse nur 1 !*/
     JGAPRequestGP req = new JGAPRequestGP(m_gridconfig.getSessionName(),
-        m_runID + "_" + m_requestIdx,
-        0, m_gridConfig);
+                                          m_runID + "_" + m_requestIdx, 0,
+                                          m_gridConfig);
     m_requestIdx++;
     req.setWorkerReturnStrategy(m_gridConfig.getWorkerReturnStrategy());
     req.setGenotypeInitializer(m_gridConfig.getGenotypeInitializer());
@@ -768,9 +769,14 @@ public class JGAPClientGP
               log.info(" Worker IP " + worker.m_IPAddress + ", host " +
                        worker.m_name);
             }
-            // Store result to disk.
-            // ---------------------
-            if (best != null && best.getFitnessValue() > 5000) {
+            // Store result to disk if it is fit enough.
+            // -----------------------------------------
+            double minFitness;
+            minFitness = m_gridConfig.getMinFitnessToStore();
+            if (minFitness < 0.0001d) {/**@todo allow fitness 0.0*/
+              minFitness = 5000;
+            }
+            if (best != null && best.getFitnessValue() >= minFitness) {
               String filename = getResultFilename(result);
               log.info("Writing result to file " + filename);
               writeToFile(best, m_workDir, filename);
@@ -988,8 +994,10 @@ public class JGAPClientGP
         }
       }
       else {
+        a_gcmed.disconnect();
         log.info("Sleeping a while before beginning again...");
         Thread.sleep(40000);
+        a_gcmed.connect();
       }
     } while (true);
     try {
@@ -1278,7 +1286,8 @@ public class JGAPClientGP
           String title = "ntb_fitness_"
               + DateKit.getNowAsString()
               + "_"
-              + NumberKit.niceDecimalNumber(a_fitness, 2);
+              + NumberKit.niceDecimalNumber(a_fitness, 2)
+              + ".jgap";
           // Store in separate subdir.
           // -------------------------
           saveResult(m_ntbResultsDir, title, a_fittest);
@@ -1525,4 +1534,5 @@ public class JGAPClientGP
     }
     return s.startsWith(a_prefix);
   }
+
 }
