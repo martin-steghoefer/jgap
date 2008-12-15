@@ -9,12 +9,14 @@
  */
 package org.jgap.gp.impl;
 
-import org.jgap.*;
-import org.jgap.util.*;
-import org.jgap.gp.terminal.*;
-import org.jgap.gp.*;
-import java.util.*;
 import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.log4j.*;
+import org.jgap.*;
+import org.jgap.gp.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.util.*;
 
 /**
  * Chromosome representing a single GP Program.
@@ -23,19 +25,21 @@ import java.lang.reflect.*;
  * @since 3.0
  */
 public class ProgramChromosome
-    extends BaseGPChromosome implements Comparable, Cloneable {
+    extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
   final static String GENE_DELIMITER_CLOSING = ">";
   final static String GENE_DELIMITER = "#";
 
+  private transient static Logger LOGGER = Logger.getLogger(ProgramChromosome.class);
+
   /**
    * The list of allowed functions/terminals.
    */
-  private /*transient*/ CommandGene[] m_functionSet;//was transient until 3.3
+  private CommandGene[] m_functionSet;
 
   /**
    * Array to hold the depths of each node.
@@ -335,8 +339,10 @@ public class ProgramChromosome
   }
 
   /**
-   * Output program in "natural" notion (e.g.: "X + Y" for "X + Y")
-   * @param a_startNode the node to start with
+   * Output program in "natural" notion (e.g.: "X + Y" for "X + Y").
+   *
+   * @param a_startNode the node to start with, e.g. 0 for a complete dump of
+   * the program
    * @return output in normalized notion
    *
    * @author Klaus Meffert
@@ -382,6 +388,36 @@ public class ProgramChromosome
       str += ")";
     }
     return str;
+  }
+
+  /**
+   * @return business key of the chromosome
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public String getBusinessKey() {
+    return toStringNorm(0);
+  }
+
+  /**
+   * @return debug representation of progrm chromosome, containing class names
+   * of all children
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public String toStringDebug() {
+    IGPProgram ind = getIndividual();
+    if (m_genes[0].getArity(ind) == 0) {
+      return getClass().getName();
+    }
+    String s = "";
+    for (int i = 0; i < m_genes[0].getArity(ind); i++) {
+      String childString = toStringNorm(getChild(0, i));
+      s = s + "<" + childString + " >";
+    }
+    return s;
   }
 
   /**
@@ -513,6 +549,9 @@ public class ProgramChromosome
    * @param a_validateNode true: check if node selected is valid (when called
    * recursively a_validateNode is set to true)
    *
+   * @return possible modified set of functions (e.g. to avoid having a unique
+   * command more than once)
+   *
    * @author Klaus Meffert
    * @since 3.0
    */
@@ -551,6 +590,7 @@ public class ProgramChromosome
         }
         // Optionally use a mutant/clone of the originally selected command
         // instead of reusing the same command instance.
+        // ----------------------------------------------------------------
         if ( conf.getRandomGenerator().nextDouble() <= conf.getMutationProb()) {
           if (IMutateable.class.isAssignableFrom(node.getClass())) {
             try {
@@ -558,7 +598,8 @@ public class ProgramChromosome
               mutated = true;
             } catch (InvalidConfigurationException iex) {
               // Ignore but log.
-              /**@todo log*/
+              // ---------------
+              LOGGER.warn("Ignored problem",iex);
             }
           }
         }
@@ -675,7 +716,7 @@ public class ProgramChromosome
    * @return the node number of the child, or -1 if not found
    *
    * @author Klaus Meffert
-   * @since 3.01 (since 3.0 in ProgramChromosome)
+   * @since 3.01
    */
   public int getChild(int a_index, int a_child) {
     /**@todo speedup*/

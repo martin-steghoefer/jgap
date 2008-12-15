@@ -25,9 +25,10 @@ import org.jgap.gp.terminal.Argument;
  * @since 3.0
  */
 public class GPProgram
-    extends GPProgramBase implements Serializable, Comparable, ICloneable {
+    extends GPProgramBase implements Serializable, Comparable, ICloneable,
+    IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.19 $";
+  private final static String CVS_REVISION = "$Revision: 1.20 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
@@ -293,8 +294,9 @@ public class GPProgram
   }
 
   /**
-   * Builds a String that represents the output of the GPProgram in
+   * Builds a string that represents the output of the GPProgram in
    * left-hand-notion.
+   *
    * @param a_startNode the node to start with
    * @return output in left-hand notion
    *
@@ -316,7 +318,8 @@ public class GPProgram
   }
 
   /**
-   * Builds a String that represents the normalized output of the GPProgram.
+   * Builds a string that represents the normalized output of the GPProgram.
+   *
    * @param a_startNode the node to start with
    * @return output in normalized notion
    *
@@ -334,6 +337,26 @@ public class GPProgram
       }
       m_chromosomes[i].setIndividual(this);
       sb.append(m_chromosomes[i].toStringNorm(a_startNode));
+    }
+    return sb.toString();
+  }
+
+  /**
+   * Builds a string that represents the debug output of the GPProgram.
+   *
+   * @return class names of all program chromosomes
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public String toStringDebug() {
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < m_chromosomes.length; i++) {
+      if (i > 0) {
+        sb.append(" ==> ");
+      }
+      m_chromosomes[i].setIndividual(this);
+      sb.append(m_chromosomes[i].toStringDebug());
     }
     return sb.toString();
   }
@@ -574,5 +597,15 @@ public class GPProgram
 
   protected String decode(String a_string) {
     return StringKit.decode(a_string);
+  }
+
+  /**
+   * @return hopefully unique key representing the state of the GPProgram
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public String getBusinessKey() {
+    return toStringNorm(0);
   }
 }
