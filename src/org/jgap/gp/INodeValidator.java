@@ -28,7 +28,7 @@ import org.jgap.gp.impl.*;
 public interface INodeValidator
     extends java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.6 $";
+  final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * Validates a_node in the context of a_chrom. Considers the recursion level
@@ -37,7 +37,7 @@ public interface INodeValidator
    * (a_depth), and whether grow mode is used (a_grow is true) or not.
    *
    * @param a_chrom the chromosome that will contain the node, if valid
-   * @param a_node the node selected and to be validated
+   * @param a_node the selected node to be validated
    * @param a_rootNode the root node of a_node, may be null for top nodes
    * @param a_tries number of times the validator has been called, useful for
    * stopping by returning true if the number exceeds a limit
