@@ -22,7 +22,7 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public BranchTypingCross(GPConfiguration a_config) {
     super(a_config);
@@ -67,6 +67,7 @@ public class BranchTypingCross
       }
       // Cross the selected chromosomes.
       // -------------------------------
+      /**@todo try to ensure uniqueness for unique commands*/
       ProgramChromosome[] newChromosomes = doCross(
           a_i1.getChromosome(chromosomeNum),
           a_i2.getChromosome(chromosomeNum));
@@ -78,8 +79,7 @@ public class BranchTypingCross
       // deep-copied chromosomes anyway.
       // ------------------------------------------------------------------
       IGPProgram[] newIndividuals = {
-          new GPProgram(a_i1), //getConfiguration(), i1.size()),
-          new GPProgram(a_i1)}; //getConfiguration(), i1.size())};
+          new GPProgram(a_i1), new GPProgram(a_i1)};
       for (int i = 0; i < a_i1.size(); i++)
         if (i != chromosomeNum) {
           // Unchanged, not crossed, chromosomes.
@@ -222,7 +222,7 @@ public class BranchTypingCross
     }
     else {
       c[0] = new ProgramChromosome(getConfiguration(),
-                                   a_c0.getFunctions().length, // c0s - s0 + s1,
+                                   a_c0.getFunctions().length,
                                    c[0].getFunctionSet(),
                                    c[0].getArgTypes(),
                                    a_c0.getIndividual());
@@ -243,7 +243,7 @@ public class BranchTypingCross
     }
     else {
       c[1] = new ProgramChromosome(getConfiguration(),
-                                   a_c1.getFunctions().length, // c1s - s1 + s0,
+                                   a_c1.getFunctions().length,
                                    c[1].getFunctionSet(),
                                    c[1].getArgTypes(),
                                    a_c1.getIndividual());
