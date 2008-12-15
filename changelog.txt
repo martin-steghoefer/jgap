@@ -1,3 +1,21 @@
+3.4
+-----------------------------------------------------------
+* Added interface IUniqueCommand for GP commands, optimized
+  GP program creation
+* CommandGene: added new versions of method
+  ensureUniqueness
+* Add setTournamentSize in TournamentSelector
+* Output of command's class when violating uniqueness
+  constraint via CommandGene.ensureUniqueness
+* GPFitnessFunction: added exception logging
+* ProgramChromosome, GPProgram: implemented interface
+  IBusinessKey (method getBusinessKey)
+* ProgramChromosome.growOrFullNode: Added loggin in case of
+  an ignored problem
+* Made inner class TournamentSelectorConfigurable of
+  org.jgap.impl.TournamentSelector serializable
+* Enhanced Javadoc
+
 3.3.4
 -----------------------------------------------------------
 * Extended GP documentation a lot
