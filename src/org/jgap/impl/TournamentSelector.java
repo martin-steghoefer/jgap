@@ -9,6 +9,7 @@
  */
 package org.jgap.impl;
 
+import java.io.*;
 import java.util.*;
 import org.jgap.*;
 
@@ -25,7 +26,7 @@ import org.jgap.*;
 public class TournamentSelector
     extends NaturalSelectorExt {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.23 $";
+  private final static String CVS_REVISION = "$Revision: 1.24 $";
 
   private TournamentSelectorConfigurable m_config
       = new TournamentSelectorConfigurable();
@@ -47,7 +48,8 @@ public class TournamentSelector
    * @author Siddhartha Azad
    * @author Klaus Meffert
    */
-  public TournamentSelector() throws InvalidConfigurationException {
+  public TournamentSelector()
+      throws InvalidConfigurationException {
     super(Genotype.getStaticConfiguration());
     init();
   }
@@ -70,7 +72,7 @@ public class TournamentSelector
   public TournamentSelector(final Configuration a_config,
                             final int a_tournament_size,
                             final double a_probability)
-  throws InvalidConfigurationException {
+      throws InvalidConfigurationException {
     super(a_config);
     init();
     if (a_tournament_size < 1) {
@@ -78,7 +80,7 @@ public class TournamentSelector
     }
     if (a_probability <= 0.0d || a_probability > 1.0d) {
       throw new IllegalArgumentException("Probability must be greater 0.0 and"
-                                         + " less or equal than 1.0!");
+          + " less or equal than 1.0!");
     }
     m_config.m_tournament_size = a_tournament_size;
     m_config.m_probability = a_probability;
@@ -102,7 +104,7 @@ public class TournamentSelector
   public void setProbability(final double a_probability) {
     if (a_probability <= 0.0d || a_probability > 1.0d) {
       throw new IllegalArgumentException("Probability must be greater 0.0 and"
-                                         + " less or equal than 1.0!");
+          + " less or equal than 1.0!");
     }
     m_config.m_probability = a_probability;
   }
@@ -118,7 +120,8 @@ public class TournamentSelector
    * @author Klaus Meffert
    * @since 2.0
    */
-  public void selectChromosomes(final int a_howManyToSelect, Population a_to_pop) {
+  public void selectChromosomes(final int a_howManyToSelect,
+                                Population a_to_pop) {
     List tournament = new Vector();
     RandomGenerator rn = getConfiguration().getRandomGenerator();
     int size = m_chromosomes.size();
@@ -149,8 +152,7 @@ public class TournamentSelector
             probAccumulated += probAccumulated * (1 - m_config.m_probability);
             index++;
           }
-        }
-        while (index < m_config.m_tournament_size - 1);
+        } while (index < m_config.m_tournament_size - 1);
       }
       a_to_pop.addChromosome( (IChromosome) tournament.get(index));
     }
@@ -190,10 +192,9 @@ public class TournamentSelector
    */
   private class FitnessValueComparator
       implements Comparator {
-
     public FitnessValueComparator() {
-
     }
+
     public int compare(final Object a_first, final Object a_second) {
       IChromosome chrom1 = (IChromosome) a_first;
       IChromosome chrom2 = (IChromosome) a_second;
@@ -210,8 +211,8 @@ public class TournamentSelector
       }
     }
   }
-
-  class TournamentSelectorConfigurable {
+  class TournamentSelectorConfigurable
+      implements Serializable {
     /**
      * The probability for selecting the best chromosome in a tournament.
      * For the second-best chromosome it would be p * (1 - p).
@@ -224,6 +225,5 @@ public class TournamentSelector
      * account for one selection round
      */
     public int m_tournament_size;
-
   }
 }
