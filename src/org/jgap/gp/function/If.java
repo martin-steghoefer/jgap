@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The if-then construct.
@@ -20,13 +21,14 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class If
-    extends CommandGene {
+    extends CommandGene
+implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
-  public If(final GPConfiguration a_conf, Class type)
+  public If(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 2, type);
+    super(a_conf, 2, a_type);
   }
 
   public String toString() {
@@ -82,6 +84,23 @@ public class If
     int x = c.execute_int(n, 0, args);/**@todo add option for type of first child to constructor*/
     if (x >= 0) {
       c.execute_void(n, 1, args);
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      If result = new If(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Returns a double/float value with a positive sign, greater than or equal to
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.4
  */
 public class RandomGenerator
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public RandomGenerator(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -45,11 +46,28 @@ public class RandomGenerator
   }
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
-    return (float)Math.random();
+    return (float) Math.random();
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     return Math.random();
   }
 
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      RandomGenerator result = new RandomGenerator(getGPConfiguration(),
+          getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
+  }
 }

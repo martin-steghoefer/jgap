@@ -13,6 +13,7 @@ import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Reads a value from the internal memory.
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class ReadTerminal
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -165,6 +166,24 @@ public class ReadTerminal
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      ReadTerminal result = new ReadTerminal(getGPConfiguration(),
+          getReturnType(), m_storageName, getSubReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

@@ -14,6 +14,7 @@ import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The add operation that stores the result in internal memory afterwards.
@@ -22,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class AddAndStore
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -127,6 +128,24 @@ public class AddAndStore
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      AddAndStore result = new AddAndStore(getGPConfiguration(), getReturnType(),
+          m_storageName);
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

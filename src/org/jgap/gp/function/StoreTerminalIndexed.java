@@ -13,6 +13,7 @@ import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Stores a value in the internal indexed memory.
@@ -21,17 +22,16 @@ import org.jgap.gp.impl.*;
  * @since 3.2
  */
 public class StoreTerminalIndexed
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_index;
 
   private Class m_type;
 
   public StoreTerminalIndexed(final GPConfiguration a_conf,
-                              int a_index,
-                              Class a_childType)
+                              int a_index, Class a_childType)
       throws InvalidConfigurationException {
     this(a_conf, a_index, a_childType, 0, 0);
   }
@@ -40,7 +40,7 @@ public class StoreTerminalIndexed
    * Allows setting a sub type and sub return type.
    *
    * @param a_conf GPConfiguration
-   * @param a_index
+   * @param a_index the index of the memory cell to use
    * @param a_childType Class
    * @param a_subChildType int
    * @param a_subReturnType int
@@ -50,9 +50,8 @@ public class StoreTerminalIndexed
    * @since 3.2
    */
   public StoreTerminalIndexed(final GPConfiguration a_conf,
-                              int a_index,
-                              Class a_childType, int a_subReturnType,
-                              int a_subChildType
+                              int a_index, Class a_childType,
+                              int a_subReturnType, int a_subChildType
       )
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass, a_subReturnType,
@@ -203,6 +202,24 @@ public class StoreTerminalIndexed
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      StoreTerminalIndexed result = new StoreTerminalIndexed(getGPConfiguration(),
+          m_index, m_type, getSubReturnType(), getSubChildType(0));
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

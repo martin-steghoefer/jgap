@@ -14,6 +14,7 @@ import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * A loop.
@@ -22,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.01
  */
 public class Loop
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   private Class m_typeVar;
 
@@ -129,6 +130,24 @@ public class Loop
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Loop result = new Loop(getGPConfiguration(), m_typeVar, m_count,
+                             getSubReturnType(), getSubChildType(0));
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

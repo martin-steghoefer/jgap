@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The for-loop. You can preset the start index and the end index. If the latter
@@ -22,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class ForLoop
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -165,20 +166,21 @@ public class ForLoop
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     StringBuffer value = new StringBuffer();
     value = value.append("for(int "
-                         +m_varName
-                         +"="
-                         +m_startIndex
-                         +";"
-                         +m_varName
-                         +"<"
-                         +m_endIndex+";"
-                         +m_varName+"++) {");
+                         + m_varName
+                         + "="
+                         + m_startIndex
+                         + ";"
+                         + m_varName
+                         + "<"
+                         + m_endIndex + ";"
+                         + m_varName + "++) {");
     for (int i = 0; i < size(); i++) {
       value = value.append( (StringBuffer) c.execute_object(n, i, args));
     }
     value = value.append("}");
     return value;
   }
+
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     // Determine the end index of the loop (child at index 0).
     // -------------------------------------------------------
@@ -304,5 +306,25 @@ public class ForLoop
    */
   public String getCounterMemoryName() {
     return m_memory_name_int;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      ForLoop result = new ForLoop(getGPConfiguration(), m_typeVar,
+                                   m_startIndex, m_endIndex, m_increment,
+                                   m_varName, getSubReturnType(),
+                                   getSubChildType(0));
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

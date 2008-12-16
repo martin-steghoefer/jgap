@@ -14,6 +14,7 @@ import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The increment operation.
@@ -23,9 +24,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Increment
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.9 $";
+  private static final String CVS_REVISION = "$Revision: 1.10 $";
 
   private int m_increment;
 
@@ -152,6 +153,23 @@ public class Increment
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Increment result = new Increment(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The multiply operation with three argument (X * Y * Z).
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Multiply3
-    extends MathCommand {
+    extends MathCommand implements ICloneable{
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.6 $";
+  private static final String CVS_REVISION = "$Revision: 1.7 $";
 
   public Multiply3(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -71,5 +72,22 @@ public class Multiply3
 
   protected interface Compatible {
     public Object execute_multiply3(Object o);
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Multiply3 result = new Multiply3(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Returns the natural logarithm (base e) of a double value.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.4
  */
 public class Log
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Log(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -45,7 +46,7 @@ public class Log
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     float f = c.execute_float(n, 0, args);
-    return (float)Math.log(f);
+    return (float) Math.log(f);
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
@@ -59,5 +60,21 @@ public class Log
 
   protected interface Compatible {
     public Object execute_log();
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Log result = new Log(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

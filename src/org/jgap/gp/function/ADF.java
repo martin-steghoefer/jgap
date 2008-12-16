@@ -13,6 +13,7 @@ import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Automatically Defined Function (ADF). Works with output of other chromosomes.
@@ -30,9 +31,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class ADF
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private int m_chromosomeNum;
 
@@ -65,14 +66,14 @@ public class ADF
   }
 
   public String toString() {
-    return "ADF"+m_chromosomeNum+"(&1,&2,&3)";
+    return "ADF" + m_chromosomeNum + "(&1,&2,&3)";
   }
 
   public int getArity(IGPProgram a_individual) {
-      if (a_individual.size() <= m_chromosomeNum) {
-        return 0;
-      }
-      return a_individual.getChromosome(m_chromosomeNum).getArity();
+    if (a_individual.size() <= m_chromosomeNum) {
+      return 0;
+    }
+    return a_individual.getChromosome(m_chromosomeNum).getArity();
   }
 
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
@@ -184,6 +185,23 @@ public class ADF
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      ADF result = new ADF(getGPConfiguration(), m_chromosomeNum, getArity(null));
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

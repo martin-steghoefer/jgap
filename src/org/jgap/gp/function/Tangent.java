@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The tangent command.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.4
  */
 public class Tangent
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Tangent(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -59,5 +60,21 @@ public class Tangent
 
   protected interface Compatible {
     public Object execute_tangent();
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Tangent result = new Tangent(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

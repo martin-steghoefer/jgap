@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The subtract operation.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Subtract
-    extends MathCommand implements IMutateable{
+    extends MathCommand implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public Subtract(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -33,6 +34,23 @@ public class Subtract
       throws InvalidConfigurationException {
     Add mutant = new Add(getGPConfiguration(), getReturnType());
     return mutant;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Subtract result = new Subtract(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 
   public String toString() {

@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The add operation with four parameters (W + X + Y + Z).
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.3.4
  */
 public class Add4
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Add4(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -73,5 +74,21 @@ public class Add4
 
   protected interface Compatible {
     public Object execute_add4(Object o);
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Add4 result = new Add4(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

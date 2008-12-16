@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The modulo operation.
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Modulo
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.8 $";
+  private static final String CVS_REVISION = "$Revision: 1.9 $";
 
   public Modulo(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
@@ -91,5 +92,21 @@ public class Modulo
 
   protected interface Compatible {
     public Object execute_mod(Object o);
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Modulo result = new Modulo(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

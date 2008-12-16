@@ -9,12 +9,12 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.jgap.gp.terminal.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
+import org.jgap.gp.terminal.*;
+import org.jgap.util.*;
 
 /**
  * The for-loop loop from 0 to X-1.
@@ -23,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class ForXLoop
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   private Class m_type;
 
@@ -136,6 +136,23 @@ public class ForXLoop
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      ForXLoop result = new ForXLoop(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

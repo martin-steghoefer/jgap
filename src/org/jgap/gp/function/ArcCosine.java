@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The arc cosine command.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.4
  */
 public class ArcCosine
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public ArcCosine(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -59,5 +60,21 @@ public class ArcCosine
 
   protected interface Compatible {
     public Object execute_arccosine();
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      ArcCosine result = new ArcCosine(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The boolean not operation.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Not
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   public Not(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -45,5 +46,22 @@ public class Not
 
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     return!c.execute_boolean(n, 0, args);
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Not result = new Not(getGPConfiguration());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

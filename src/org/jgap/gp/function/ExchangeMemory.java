@@ -13,6 +13,7 @@ import org.jgap.*;
 import org.jgap.gp.*;
 import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Exchanges the values of two memory cells.
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.2
  */
 public class ExchangeMemory
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -149,6 +150,24 @@ public class ExchangeMemory
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      ExchangeMemory result = new ExchangeMemory(getGPConfiguration(),
+          m_sourceStorageName, m_targetStorageName);
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

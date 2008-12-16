@@ -14,6 +14,7 @@ import org.jgap.gp.*;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Stores a value in the internal memory.
@@ -22,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class StoreTerminal
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -54,8 +55,9 @@ public class StoreTerminal
    * @since 3.2
    */
   public StoreTerminal(final GPConfiguration a_conf, String a_storageName,
-                       Class a_childType, int a_subReturnType, int a_subChildType
-                       )
+                       Class a_childType, int a_subReturnType,
+                       int a_subChildType
+      )
       throws InvalidConfigurationException {
     super(a_conf, 1, CommandGene.VoidClass, a_subReturnType,
           new int[] {a_subChildType});
@@ -77,7 +79,7 @@ public class StoreTerminal
    * @since 3.2
    */
   public String getName() {
-    return "Store Terminal("+m_storageName+")";
+    return "Store Terminal(" + m_storageName + ")";
   }
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
@@ -208,6 +210,24 @@ public class StoreTerminal
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      StoreTerminal result = new StoreTerminal(getGPConfiguration(),
+          m_storageName, m_type, getSubReturnType(), getSubChildType(0));
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

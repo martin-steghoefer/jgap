@@ -9,11 +9,11 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Increments the value of a memory cell and returns the incremented value.
@@ -23,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.2
  */
 public class IncrementMemory
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.3 $";
+  private static final String CVS_REVISION = "$Revision: 1.4 $";
 
   private int m_increment;
 
@@ -57,6 +57,8 @@ public class IncrementMemory
    *
    * @param a_conf the configuration to use
    * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_memoryName name of the memory cell
+   * @param a_initialValue initial value of the memory cell
    * @param a_increment the increment to use, may also be negative
    * @throws InvalidConfigurationException
    *
@@ -151,6 +153,24 @@ public class IncrementMemory
       } catch (ClassCastException cex) {
         return false;
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      IncrementMemory result = new IncrementMemory(getGPConfiguration(),
+          getReturnType(), m_memoryName, m_initialValue, m_increment);
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
     }
   }
 }

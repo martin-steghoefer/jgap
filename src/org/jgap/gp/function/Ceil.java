@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Returns the smallest (closest to negative infinity) double/float value that is
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.4
  */
 public class Ceil
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Ceil(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -46,7 +47,7 @@ public class Ceil
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     float f = c.execute_float(n, 0, args);
-    return (float)Math.ceil(f);
+    return (float) Math.ceil(f);
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
@@ -60,5 +61,21 @@ public class Ceil
 
   protected interface Compatible {
     public Object execute_ceil();
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Ceil result = new Ceil(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

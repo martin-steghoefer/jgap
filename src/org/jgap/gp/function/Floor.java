@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Returns the largest (closest to positive infinity) double/float value that
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.3.4
  */
 public class Floor
-    extends MathCommand {
+    extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public Floor(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
@@ -46,7 +47,7 @@ public class Floor
 
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     float f = c.execute_float(n, 0, args);
-    return (float)Math.floor(f);
+    return (float) Math.floor(f);
   }
 
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
@@ -60,5 +61,21 @@ public class Floor
 
   protected interface Compatible {
     public Object execute_floor();
+  }
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Floor result = new Floor(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }

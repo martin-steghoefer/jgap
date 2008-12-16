@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The add operation.
@@ -20,19 +21,36 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class Add
-    extends MathCommand implements IMutateable {
+    extends MathCommand implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
-  public Add(final GPConfiguration a_conf, Class type)
+  public Add(final GPConfiguration a_conf, Class a_type)
       throws InvalidConfigurationException {
-    super(a_conf, 2, type);
+    super(a_conf, 2, a_type);
   }
 
   public CommandGene applyMutation(int index, double a_percentage)
       throws InvalidConfigurationException {
     Subtract mutant = new Subtract(getGPConfiguration(), getReturnType());
     return mutant;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      Add result = new Add(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 
   public String toString() {

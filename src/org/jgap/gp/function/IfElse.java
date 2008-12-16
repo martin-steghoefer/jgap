@@ -12,6 +12,7 @@ package org.jgap.gp.function;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The if-then-else construct.
@@ -20,9 +21,9 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class IfElse
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   private Class m_type;
 
@@ -71,7 +72,7 @@ public class IfElse
       condition = c.execute_float(n, 0, args) > 0;
     }
     else {
-      throw new IllegalStateException("IfElse: cannot process type "+m_type);
+      throw new IllegalStateException("IfElse: cannot process type " + m_type);
     }
     if (condition) {
       c.execute_void(n, 1, args);
@@ -96,5 +97,23 @@ public class IfElse
       return m_type;
     }
     return CommandGene.VoidClass;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      IfElse result = new IfElse(getGPConfiguration(), getReturnType(),
+                                 getSubReturnType(), getSubChildTypes());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 }
