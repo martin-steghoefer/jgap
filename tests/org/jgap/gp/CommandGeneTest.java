@@ -22,7 +22,7 @@ import org.jgap.gp.impl.*;
 public class CommandGeneTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandGeneTest.class);
@@ -81,6 +81,7 @@ public class CommandGeneTest
       throws Exception {
     CommandGene gene = new CommandGeneImpl(m_gpconf);
     assertEquals(1, gene.size());
+    assertEquals(1, gene.getArity(null));
   }
 
   /**
