@@ -25,10 +25,10 @@ import org.jgap.xml.*;
 import junit.framework.*;
 
 /**
- * Test suite for all test cases.<p>
- * Start this class to execute all Tests.<p>
- * Required are junit.jar and junit-addons_1.4.jar<p>
- * In here, only test suites will be referenced (see method suite()).<p>
+ * Test suite for all test cases.
+ * Start this class to execute all Tests.
+ * Required are junit.jar and junit-addons_1.4.jar.
+ * In here, only test suites will be referenced (see method suite()).
  * Don't add any test cases to this class!
  *
  * @author Klaus Meffert
@@ -37,7 +37,7 @@ import junit.framework.*;
 public class AllTests
     extends TestSuite {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllTests");
