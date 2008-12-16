@@ -4,6 +4,7 @@
   GP program creation
 * CommandGene: added new versions of method
   ensureUniqueness
+* CommandGene: added support for dynamization of arity
 * Add setTournamentSize in TournamentSelector
 * Output of command's class when violating uniqueness
   constraint via CommandGene.ensureUniqueness
@@ -18,6 +19,7 @@
   obsolete constructor
 * GPProgram: extracted statement into new method
   putToCache, removed two todos
+* GPTestCase: added method getRandomGenerator
 * Added constructors for GP-command NOP, False, True, And
 * GP-command terminal now supports primitive class types
 * Made some GP-commands cloneable: True, False, If, IfElse,
@@ -26,9 +28,10 @@
   ReadTerminalIndexed, ReadTerminal, Push, Pop, Pow, Max,
   Min, RandomGenerator, Modulo, Round, Sine, StoreTerminal,
   StoreTerminalIndexed, Tangent, TransferMemory, Abs, Add3,
-  Add4, AddAndStore, ADF, ArcCosine, ArcSine, ArcTangent,
+  Add4, AddAndStore, ArcCosine, ArcSine, ArcTangent,
   Ceil, ExchangeMemory, Floor, ForLoop, ForXLoop, Log,
   GreaterThan, LesserThan
+* Made GP commands of TicTacToe example cloneable
 * Enhanced Javadoc
 
 3.3.4
