@@ -39,6 +39,9 @@ public abstract class GPTestCase
 
   protected NOP CMD_NOP;
 
+  public RandomGeneratorForTesting getRandomGenerator() {
+    return (RandomGeneratorForTesting)m_gpconf.getRandomGenerator();
+  }
 
   public void setUp() {
     super.setUp();
@@ -81,5 +84,5 @@ public abstract class GPTestCase
 
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.5 $";
+  private static final String CVS_REVISION = "$Revision: 1.6 $";
 }
