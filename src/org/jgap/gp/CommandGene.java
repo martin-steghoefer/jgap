@@ -15,9 +15,14 @@ import org.jgap.*;
 import org.jgap.gp.impl.*;
 
 /**
- * Abstract base class for all GP commands. A CommandGene can hold additional
+ * Abstract base class for all GP commands.
+ *
+ * A CommandGene represents a node within a GP program. A node either is a
+ * terminal (like a constant), or a function (having input parameters).
+ *
+ * A CommandGene can hold additional
  * CommandGene's, it acts sort of like a Composite (also see CompositeGene for
- * a similar characteristics, although for a GA).
+ * a comparable concept, although for a GA).
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -25,7 +30,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.28 $";
+  private final static String CVS_REVISION = "$Revision: 1.29 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -63,6 +68,11 @@ public abstract class CommandGene
    */
   private Class m_returnType;
 
+  /**
+   * The arity of this node. Arity is the number of children of the node.
+   * An arity if zero means: there are no children.
+   * A terminal has an arity of zero.
+   */
   private int m_arity;
 
   private boolean m_integerType;
@@ -115,6 +125,13 @@ public abstract class CommandGene
       throws Exception {
   }
 
+  /**
+   *
+   * @param a_conf the configuration to use
+   * @param a_arity the number of children of the node
+   * @param a_returnType type of the return value of the node
+   * @throws InvalidConfigurationException
+   */
   public CommandGene(final GPConfiguration a_conf, final int a_arity,
                      final Class a_returnType)
       throws InvalidConfigurationException {
@@ -138,11 +155,11 @@ public abstract class CommandGene
   /**
    * Allows specifying a sub return type and sub child types.
    *
-   * @param a_conf GPConfiguration
-   * @param a_arity int
-   * @param a_returnType Class
-   * @param a_subReturnType int
-   * @param a_childSubTypes int[]
+   * @param a_conf the configuration to use
+   * @param a_arity the number of children of the node
+   * @param a_returnType type of the return value of the node
+   * @param a_subReturnType sub type of the return type, optional usage
+   * @param a_childSubTypes sub types of the childs, optional usage
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -183,10 +200,10 @@ public abstract class CommandGene
   /**
    * Allows specifying a sub return type.
    *
-   * @param a_conf GPConfiguration
-   * @param a_arity int
-   * @param a_returnType Class
-   * @param a_subReturnType int
+   * @param a_conf the configuration to use
+   * @param a_arity the number of children of the node
+   * @param a_returnType type of the return value of the node
+   * @param a_subReturnType sub type of the return type, optional usage
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -202,11 +219,11 @@ public abstract class CommandGene
    * Command with one child: Allows specifying a sub return type and a sub child
    * type. Convenience version of the called constructor.
    *
-   * @param a_conf GPConfiguration
-   * @param a_arity int
-   * @param a_returnType Class
-   * @param a_subReturnType int
-   * @param a_childSubType int
+   * @param a_conf the configuration to use
+   * @param a_arity the number of children of the node
+   * @param a_returnType type of the return value of the node
+   * @param a_subReturnType sub type of the return type, optional usage
+   * @param a_childSubType sub type of a child, optional usage
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -245,6 +262,7 @@ public abstract class CommandGene
 
   /**
    * Arity of the command. Override if necessary.
+   * The arity is the number of children a node has.
    *
    * @param a_indvividual the invididual the command's arity may depend on (in
    * most cases the arity will not depend on the individual)
@@ -838,7 +856,7 @@ public abstract class CommandGene
   public void setValueFromPersistentRepresentation(final String
       a_representation)
       throws UnsupportedRepresentationException {
-    /**@todo fertigstellen*/
+    /**@todo finish*/
 /*
     if (a_representation != null) {
       StringTokenizer tokenizer =

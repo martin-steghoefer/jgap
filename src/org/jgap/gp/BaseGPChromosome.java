@@ -22,7 +22,7 @@ import org.jgap.*;
 public abstract class BaseGPChromosome
     implements IGPChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The configuration object to use.
@@ -77,7 +77,7 @@ public abstract class BaseGPChromosome
 
   /**
    * Gets the i'th terminal in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the first terminal in this
+   * depth-first manner, with node zero being the first terminal in this
    * chromosome.
    *
    * @param a_index the i'th terminal to get
@@ -101,7 +101,7 @@ public abstract class BaseGPChromosome
 
   /**
    * Gets the a_index'th function in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the first function in this
+   * depth-first manner, with node zero being the first function in this
    * chromosome.
    *
    * @param a_index the a_index'th function to get
@@ -124,9 +124,9 @@ public abstract class BaseGPChromosome
   }
 
   /**
-   * Gets the a_index'th terminal of the given type in this chromosome. The nodes
-   * are counted in a depth-first manner, with node 0 being the first terminal of
-   * the given type in this chromosome.
+   * Gets the a_index'th terminal of the given type in this chromosome. The
+   * nodes are counted in a depth-first manner, with node zero being the first
+   * terminal of the given type in this chromosome.
    *
    * @param a_index the a_index'th terminal to get
    * @param a_type the type of terminal to get
@@ -154,7 +154,7 @@ public abstract class BaseGPChromosome
 
   /**
    * Gets the i'th function of the given return type in this chromosome. The
-   * nodes are counted in a depth-first manner, with node 0 being the first
+   * nodes are counted in a depth-first manner, with node zero being the first
    * function of the given type in this chromosome.
    *
    * @param a_index the i'th function to get
@@ -267,7 +267,7 @@ public abstract class BaseGPChromosome
 
   /**
    * Gets the a_index'th node in this chromosome. The nodes are counted in a
-   * depth-first manner, with node 0 being the root of this chromosome.
+   * depth-first manner, with node zero being the root of this chromosome.
    *
    * @param a_index the node number to get
    * @return the node

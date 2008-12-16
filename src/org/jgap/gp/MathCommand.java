@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public abstract class MathCommand
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.11 $";
+  private static final String CVS_REVISION = "$Revision: 1.12 $";
 
   public MathCommand(final GPConfiguration a_conf, int a_arity,
                      Class a_returnType)
@@ -38,11 +38,11 @@ public abstract class MathCommand
   /**
    * Allows specifying a sub return type and sub child types.
    *
-   * @param a_conf GPConfiguration
-   * @param a_arity int
-   * @param a_returnType Class
-   * @param a_subReturnType int
-   * @param a_subChildTypes int[]
+   * @param a_conf the configuration to use
+   * @param a_arity the number of children of the node
+   * @param a_returnType type of the return value of the node
+   * @param a_subReturnType sub type of the return type, optional usage
+   * @param a_subChildTypes sub type of a child, optional usage
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -58,11 +58,11 @@ public abstract class MathCommand
   /**
    * Allows specifying a sub return type and a single sub child type.
    *
-   * @param a_conf GPConfiguration
-   * @param a_arity int
-   * @param a_returnType Class
-   * @param a_subReturnType int
-   * @param a_subChildType int
+   * @param a_conf the configuration to use
+   * @param a_arity the number of children of the node
+   * @param a_returnType type of the return value of the node
+   * @param a_subReturnType sub type of the return type, optional usage
+   * @param a_subChildType sub type of a child, optional usage
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
