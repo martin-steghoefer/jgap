@@ -31,9 +31,11 @@ import org.jgap.util.*;
  * @since 3.0
  */
 public class ADF
-    extends CommandGene implements ICloneable {
+    extends CommandGene
+//    implements ICloneable
+{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   private int m_chromosomeNum;
 
@@ -188,20 +190,20 @@ public class ADF
     }
   }
 
-  /**
-   * Clones the object. Simple and straight forward implementation here.
-   *
-   * @return cloned instance of this object
-   *
-   * @author Klaus Meffert
-   * @since 3.4
-   */
-  public Object clone() {
-    try {
-      ADF result = new ADF(getGPConfiguration(), m_chromosomeNum, getArity(null));
-      return result;
-    } catch (Exception ex) {
-      throw new CloneException(ex);
-    }
-  }
+//  /**
+//   * Clones the object.
+//   *
+//   * @return cloned instance of this object
+//   *
+//   * @author Klaus Meffert
+//   * @since 3.4
+//   */
+//  public Object clone() {
+//    try {
+//      ADF result = new ADF(getGPConfiguration(), m_chromosomeNum, getArity(INDIVIDUAL));
+//      return result;
+//    } catch (Exception ex) {
+//      throw new CloneException(ex);
+//    }
+//  }
 }
