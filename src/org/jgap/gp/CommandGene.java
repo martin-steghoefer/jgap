@@ -30,7 +30,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -74,6 +74,9 @@ public abstract class CommandGene
    * A terminal has an arity of zero.
    */
   private int m_arity;
+
+  private int m_arityMin;
+  private int m_arityMax;
 
   private boolean m_integerType;
 
@@ -273,6 +276,62 @@ public abstract class CommandGene
    */
   public int getArity(IGPProgram a_indvividual) {
     return m_arity;
+  }
+
+  /**
+   * Should only be used by class CommandDynamicArity or a similar class.
+   *
+   * @param a_arity the arity to set, overrides the current arity.
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  protected void setArity(int a_arity) {
+    m_arity = a_arity;
+  }
+
+  /**
+   * Adaptation of the arity so that it represents a value within the interval
+   * [m_arityMin, m_arityMax].
+   *
+   * Override if necessary. See CommandDynamicArity for an implementation.
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public void dynamizeArity() {
+    // Nothing done here by default.
+    // -----------------------------
+  }
+
+  /**
+   * Should only be used by class CommandDynamicArity or a similar class.
+   * @param a_arityMin the minimal arity possible
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  protected void setArityMin(int a_arityMin) {
+    m_arityMin = a_arityMin;
+  }
+
+  /**
+   * Should only be used by class CommandDynamicArity or a similar class.
+   * @param a_arityMax the maximal arity possible
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  protected void setArityMax(int a_arityMax) {
+    m_arityMax = a_arityMax;
+  }
+
+  protected int getArityMin() {
+    return m_arityMin;
+  }
+
+  protected int getArityMax() {
+    return m_arityMax;
   }
 
   public int compareTo(Object a_other) {
