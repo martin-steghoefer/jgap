@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.51 $";
+  private final static String CVS_REVISION = "$Revision: 1.52 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -217,11 +217,8 @@ public class GPGenotype
    * @since 3.0
    */
   public static GPGenotype randomInitialGenotype(final GPConfiguration a_conf,
-      Class[] a_types,
-      Class[][] a_argTypes,
-      CommandGene[][] a_nodeSets,
-      int a_maxNodes,
-      boolean a_verboseOutput)
+      Class[] a_types, Class[][] a_argTypes, CommandGene[][] a_nodeSets,
+      int a_maxNodes, boolean a_verboseOutput)
       throws InvalidConfigurationException {
     int[] minDepths = null;
     int[] maxDepths = null;
@@ -544,43 +541,45 @@ public class GPGenotype
     }
     m_totalFitness = totalFitness;
     best = pop.determineFittestProgram();
-    m_bestFitness = best.getFitnessValue();
-    /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
-    if (m_allTimeBest == null
-        || evaluator.isFitter(m_bestFitness, m_allTimeBestFitness)) {
-      pop.setChanged(true);
-      try {
-        ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
-            getCloneHandlerFor(best, null);
-        if (cloner == null) {
-          m_allTimeBest = best;
-          if (!m_cloneWarningGPProgramShown) {
-            LOGGER.info("Warning: cannot clone instance of "
-                        + best.getClass());
-            m_cloneWarningGPProgramShown = true;
+    if (best != null) {
+      m_bestFitness = best.getFitnessValue();
+      /**@todo do something similar here as with Genotype.preserveFittestChromosome*/
+      if (m_allTimeBest == null
+          || evaluator.isFitter(m_bestFitness, m_allTimeBestFitness)) {
+        pop.setChanged(true);
+        try {
+          ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
+              getCloneHandlerFor(best, null);
+          if (cloner == null) {
+            m_allTimeBest = best;
+            if (!m_cloneWarningGPProgramShown) {
+              LOGGER.info("Warning: cannot clone instance of "
+                          + best.getClass());
+              m_cloneWarningGPProgramShown = true;
+            }
           }
+          else {
+            m_allTimeBest = (IGPProgram) cloner.perform(best, null, null);
+          }
+        } catch (Exception ex) {
+          m_allTimeBest = best;
+          ex.printStackTrace();
         }
-        else {
-          m_allTimeBest = (IGPProgram) cloner.perform(best, null, null);
+        m_allTimeBestFitness = m_bestFitness;
+        // Fire an event to indicate a new best solution.
+        // ----------------------------------------------
+        /**@todo introduce global value object to be passed to the listener*/
+        try {
+          getGPConfiguration().getEventManager().fireGeneticEvent(
+              new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
+        } catch (IllegalArgumentException iex) {
+          /**@todo should not happen but does with ensureUniqueness(..)*/
         }
-      } catch (Exception ex) {
-        m_allTimeBest = best;
-        ex.printStackTrace();
-      }
-      m_allTimeBestFitness = m_bestFitness;
-      // Fire an event to indicate a new best solution.
-      // ----------------------------------------------
-      /**@todo introduce global value object to be passed to the listener*/
-      try {
-        getGPConfiguration().getEventManager().fireGeneticEvent(
-            new GeneticEvent(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, this));
-      } catch (IllegalArgumentException iex) {
-        /**@todo should not happen but does with ensureUniqueness(..)*/
-      }
-      if (m_verbose) {
-        // Output the new best solution found.
-        // -----------------------------------
-        outputSolution(m_allTimeBest);
+        if (m_verbose) {
+          // Output the new best solution found.
+          // -----------------------------------
+          outputSolution(m_allTimeBest);
+        }
       }
     }
     if (!bestPreserved && m_allTimeBest != null) {
@@ -716,20 +715,20 @@ public class GPGenotype
                   LOGGER.error(
                       "Warning: Maximum number of nodes allowed may be too small");
                   getGPConfiguration().flagMaxNodeWarningPrinted();
-                  // Try cloning a previously generated valid program.
-                  // -------------------------------------------------
-                  IGPProgram program = cloneProgram(getGPConfiguration().
+                }
+                // Try cloning a previously generated valid program.
+                // -------------------------------------------------
+                IGPProgram program = cloneProgram(getGPConfiguration().
+                    getPrototypeProgram());
+                if (program != null) {
+                  newPopulation.setGPProgram(i++, program);
+                  program = cloneProgram(getGPConfiguration().
                       getPrototypeProgram());
-                  if (program != null) {
-                    newPopulation.setGPProgram(i++, program);
-                    program = cloneProgram(getGPConfiguration().
-                        getPrototypeProgram());
-                    newPopulation.setGPProgram(i, program);
-                    break;
-                  }
-                  else {
-                    throw new IllegalStateException(iex.getMessage());
-                  }
+                  newPopulation.setGPProgram(i, program);
+                  break;
+                }
+                else {
+                  throw new IllegalStateException(iex.getMessage());
                 }
               }
             }
