@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class AddAndStore
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -141,7 +141,7 @@ public class AddAndStore
    */
   public Object clone() {
     try {
-      AddAndStore result = new AddAndStore(getGPConfiguration(), getReturnType(),
+      AddAndStore result = new AddAndStore(getGPConfiguration(), m_type,
           m_storageName);
       return result;
     } catch (Exception ex) {
