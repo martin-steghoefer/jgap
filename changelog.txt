@@ -14,6 +14,21 @@
   an ignored problem
 * Made inner class TournamentSelectorConfigurable of
   org.jgap.impl.TournamentSelector serializable
+* Simplified GP class IncrementMemory by removing an
+  obsolete constructor
+* GPProgram: extracted statement into new method
+  putToCache, removed two todos
+* Added constructors for GP-command NOP, False, True, And
+* GP-command terminal now supports primitive class types
+* Made some GP-commands cloneable: True, False, If, IfElse,
+  Equals, Add, Subtract, Multiply, Divide, Exp, Increment,
+  IncrementMemory, IfDyn, Loop, Or, Xor, Not, Multiply3,
+  ReadTerminalIndexed, ReadTerminal, Push, Pop, Pow, Max,
+  Min, RandomGenerator, Modulo, Round, Sine, StoreTerminal,
+  StoreTerminalIndexed, Tangent, TransferMemory, Abs, Add3,
+  Add4, AddAndStore, ADF, ArcCosine, ArcSine, ArcTangent,
+  Ceil, ExchangeMemory, Floor, ForLoop, ForXLoop, Log,
+  GreaterThan, LesserThan
 * Enhanced Javadoc
 
 3.3.4
