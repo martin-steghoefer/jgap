@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.39 $";
+  private final static String CVS_REVISION = "$Revision: 1.40 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -624,6 +624,10 @@ public class ProgramChromosome
     }
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
+      // Optional dynamization of the arity for commands with a flexible number
+      // of children. Normally, dynamizeArity does nothing, see CommandGene.
+      // ----------------------------------------------------------------------
+      a_rootNode.dynamizeArity();
       int arity = a_rootNode.getArity(ind);
       for (int i = 0; i < arity; i++) {
         /**@todo ensure required depth is cared about*/
@@ -639,7 +643,12 @@ public class ProgramChromosome
           // -------------------------------------------
           throw new IllegalStateException("Randomly created program violates"
               + " configuration constraints (symptom 1). It may be that you"
-              + " specified a too small number of maxNodes to use!");
+              + " specified a too small number of maxNodes to use"
+              +" (current arity: "
+              + i
+              +", overall arity: "
+              + arity
+              +")!");
         }
       }
     }

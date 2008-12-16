@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.36 $";
+  private final static String CVS_REVISION = "$Revision: 1.37 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -288,6 +288,7 @@ public class GPPopulation
       IGPProgram program = null;
       // Vary depth dependent on run index.
       // ----------------------------------
+      /**@todo add element of randomness*/
       int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i
           / divisor;
       // Create new GP program.

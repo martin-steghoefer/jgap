@@ -28,7 +28,7 @@ public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable,
     IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.20 $";
+  private final static String CVS_REVISION = "$Revision: 1.21 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
@@ -161,6 +161,8 @@ public class GPProgram
   public void growOrFull(int a_depth, boolean a_grow, int a_maxNodes,
                          boolean[] a_fullModeAllowed, int a_tries) {
     GPConfiguration conf = getGPConfiguration();
+    // The number of chromosomes to create.
+    // ------------------------------------
     int size = m_chromosomes.length;
     for (int i = 0; i < size; i++) {
       try {
@@ -215,13 +217,25 @@ public class GPProgram
       // ------------------------------------------------------
       GPProgramInfo pcInfo = getGPConfiguration().readProgramCache(this);
       if (pcInfo == null) {
-        /**@todo add listener for event "same program evolved again"*/
-        pcInfo = getGPConfiguration().putToProgramCache(this);
+        pcInfo = putToCache(this);
       }
       else {
         setFitnessValue(pcInfo.getFitnessValue());
       }
     }
+  }
+
+  /**
+   * Put program to cache.
+   *
+   * @param a_program the program to put into the cache
+   * @return GPProgramInfo info about the program
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  protected GPProgramInfo putToCache(GPProgram a_program) {
+    return getGPConfiguration().putToProgramCache(a_program);
   }
 
   /**
@@ -274,8 +288,7 @@ public class GPProgram
       // representation was computed before.
       GPProgramInfo pcInfo = getGPConfiguration().readProgramCache(this);
       if (pcInfo == null) {
-        /**@todo add listener for event "same program evolved again"*/
-        pcInfo = getGPConfiguration().putToProgramCache(this);
+        pcInfo = putToCache(this);
       }
       else {
         setFitnessValue(pcInfo.getFitnessValue());
