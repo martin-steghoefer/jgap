@@ -12,6 +12,7 @@ package examples.gp.tictactoe;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The if-then construct. If-Condition is: if specific color, then
@@ -21,9 +22,9 @@ import org.jgap.gp.impl.*;
  * @since 3.2
  */
 public class IfIsFree
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Class m_type;
 
@@ -93,5 +94,23 @@ public class IfIsFree
       return m_type;
     }
     return CommandGene.VoidClass;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      IfIsFree result = new IfIsFree(getGPConfiguration(), m_board, m_type,
+                                   getSubReturnType(), getSubChildTypes());
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }

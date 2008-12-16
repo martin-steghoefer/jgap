@@ -12,11 +12,12 @@ package examples.gp.tictactoe;
 import org.jgap.gp.*;
 import org.jgap.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 public class PutStone1
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Board m_board;
 
@@ -72,5 +73,23 @@ public class PutStone1
    */
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
     return CommandGene.IntegerClass;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      PutStone1 result = new PutStone1(getGPConfiguration(), m_board, m_color,
+                                       getSubReturnType(), getSubChildType(0));
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }

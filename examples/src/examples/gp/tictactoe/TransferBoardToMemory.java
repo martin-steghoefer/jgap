@@ -12,11 +12,12 @@ package examples.gp.tictactoe;
 import org.jgap.gp.*;
 import org.jgap.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 public class TransferBoardToMemory
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private Board m_board;
 
@@ -65,9 +66,27 @@ public class TransferBoardToMemory
     int index = m_startMemoryIndex;
     for (int x = 0; x < Board.WIDTH; x++) {
       for (int y = 0; y < Board.HEIGHT; y++) {
-        int boardValue = m_board.readField(x+1, y+1);
+        int boardValue = m_board.readField(x + 1, y + 1);
         getGPConfiguration().storeIndexedMemory(index++, new Integer(boardValue));
       }
+    }
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      TransferBoardToMemory result = new TransferBoardToMemory(
+          getGPConfiguration(), m_board, m_startMemoryIndex, getSubReturnType());
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
     }
   }
 }

@@ -30,7 +30,7 @@ import org.jgap.impl.*;
 public class TicTacToeMain
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   private static Variable vb;
 
@@ -139,7 +139,15 @@ public class TicTacToeMain
         new IsOwnColor(conf, color),
         new Increment(conf, CommandGene.IntegerClass, 1),
         new Increment(conf, CommandGene.IntegerClass, -1),
-        new StoreTerminalIndexed(conf, 15, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 0, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 1, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 2, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 3, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 10, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 11, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 12, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 13, CommandGene.IntegerClass),
+        new StoreTerminalIndexed(conf, 14, CommandGene.IntegerClass),
         new StoreTerminal(conf, "mem0", CommandGene.IntegerClass),
 //        new StoreTerminal(conf, "mem1", CommandGene.IntegerClass),
         new AddAndStoreTerminal(conf, "memA", CommandGene.IntegerClass),
