@@ -12,6 +12,7 @@ package org.jgap.gp.terminal;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * The boolean value true.
@@ -20,19 +21,41 @@ import org.jgap.gp.impl.*;
  * @since 3.0
  */
 public class True
-    extends MathCommand implements IMutateable {
+    extends MathCommand implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public True(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
-    super(a_conf, 0, CommandGene.BooleanClass);
+    this(a_conf, CommandGene.BooleanClass);
+  }
+
+  public True(final GPConfiguration a_conf, Class a_returnType)
+      throws InvalidConfigurationException {
+    super(a_conf, 0, a_returnType);
   }
 
   public CommandGene applyMutation(int index, double a_percentage)
       throws InvalidConfigurationException {
-    CommandGene mutant = new False(getGPConfiguration());
+    CommandGene mutant = new False(getGPConfiguration(), getReturnType());
     return mutant;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public Object clone() {
+    try {
+      True result = new True(getGPConfiguration(), getReturnType());
+      return result;
+    } catch (Exception ex) {
+      throw new CloneException(ex);
+    }
   }
 
   public String toString() {
