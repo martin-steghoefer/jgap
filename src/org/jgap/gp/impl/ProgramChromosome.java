@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -624,7 +624,8 @@ public class ProgramChromosome
     }
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
-      for (int i = 0; i < a_rootNode.getArity(ind); i++) {
+      int arity = a_rootNode.getArity(ind);
+      for (int i = 0; i < arity; i++) {
         /**@todo ensure required depth is cared about*/
         if (m_index < m_depth.length) {
           a_functionSet = growOrFullNode(a_num, a_depth - 1,
@@ -674,8 +675,8 @@ public class ProgramChromosome
    * starting with the first child.
    *
    * @param a_index the index of the reference depth
-   * @return the index of the next node of the same depth as the
-   * current node (i.e. the next sibling node)
+   * @return the index of the next node of the same depth as the current node
+   * (i.e. the next sibling node)
    *
    * @author Klaus Meffert
    * @since 3.0
