@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class NOP
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public NOP(final GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -32,7 +32,13 @@ public class NOP
 
   public NOP(final GPConfiguration a_conf, int a_subReturnType)
       throws InvalidConfigurationException {
-    super(a_conf, 0, CommandGene.VoidClass, a_subReturnType, null);
+    this(a_conf, CommandGene.VoidClass, a_subReturnType);
+  }
+
+  public NOP(final GPConfiguration a_conf, Class a_returnType,
+             int a_subReturnType)
+      throws InvalidConfigurationException {
+    super(a_conf, 0, a_returnType, a_subReturnType, null);
   }
 
   public String toString() {
@@ -48,8 +54,6 @@ public class NOP
   public String getName() {
     return "NOP (NO Operation)";
   }
-
-
 
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     // Do nothing here as it is NOP.
@@ -72,5 +76,4 @@ public class NOP
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     return new StringBuffer(";");
   }
-
 }
