@@ -25,7 +25,7 @@ import org.jgap.gp.impl.*;
 public class IncrementMemory
     extends MathCommand {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.2 $";
+  private static final String CVS_REVISION = "$Revision: 1.3 $";
 
   private int m_increment;
 
@@ -38,6 +38,9 @@ public class IncrementMemory
    *
    * @param a_conf the configuration to use
    * @param a_type the type of the terminal to increment (e.g. IntegerClass)
+   * @param a_memoryName name of the memory cell
+   * @param a_initialValue initial value of the memory cell
+   *
    * @throws InvalidConfigurationException
    *
    * @author Klaus Meffert
@@ -64,14 +67,7 @@ public class IncrementMemory
                          String a_memoryName, int a_initialValue,
                          int a_increment)
       throws InvalidConfigurationException {
-    this(a_conf, a_type, a_memoryName, a_initialValue, a_increment, 0, 0);
-  }
-
-  public IncrementMemory(final GPConfiguration a_conf, Class a_type,
-                         String a_memoryName, int a_initialValue,int a_increment,
-                         int a_subReturnType, int a_subChildType)
-      throws InvalidConfigurationException {
-    super(a_conf, 0, a_type, a_subReturnType, a_subChildType);
+    super(a_conf, 0, a_type);
     m_increment = a_increment;
     m_memoryName = a_memoryName;
     m_initialValue = a_initialValue;
