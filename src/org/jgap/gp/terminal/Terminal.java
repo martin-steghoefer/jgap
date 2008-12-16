@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.15 $";
+  private static final String CVS_REVISION = "$Revision: 1.16 $";
 
   private float m_value_float;
 
@@ -133,16 +133,16 @@ public class Terminal
 
   protected void setRandomValue() {
     Class retType = getReturnType();
-    if (retType == CommandGene.FloatClass) {
+    if (retType == CommandGene.FloatClass || retType == float.class) {
       setRandomValue(m_value_float);
     }
-    else if (retType == CommandGene.IntegerClass) {
+    else if (retType == CommandGene.IntegerClass  || retType == int.class) {
       setRandomValue(m_value_int);
     }
-    else if (retType == CommandGene.LongClass) {
+    else if (retType == CommandGene.LongClass  || retType == long.class) {
       setRandomValue(m_value_long);
     }
-    else if (retType == CommandGene.DoubleClass) {
+    else if (retType == CommandGene.DoubleClass  || retType == double.class) {
       setRandomValue(m_value_double);
     }
     else {
