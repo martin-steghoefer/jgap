@@ -31,7 +31,7 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.29 $";
+  private final static String CVS_REVISION = "$Revision: 1.30 $";
 
   static Variable vx;
 
@@ -60,11 +60,20 @@ public class Fibonacci
    */
   public GPGenotype create()
       throws InvalidConfigurationException {
+    // Define return types of sub programs (see nodeSets).
+    // The first entry in types corresponds with the first entry in nodeSets,
+    // etc.
     Class[] types = {
         CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.IntegerClass};
+    // The following is only relevant for ADF's and not used here.
     Class[][] argTypes = { {}, {}, {}
     };
+    // Configure desired minimum number of nodes per sub program.
+    // Same as with types: First entry here corresponds with first entry in
+    // nodeSets.
     int[] minDepths = new int[] {2, 3, 1};
+    // Configure desired maximum number of nodes per sub program.
+    // First entry here corresponds with first entry in nodeSets.
     int[] maxDepths = new int[] {2, 9, 1};
     GPConfiguration conf = getGPConfiguration();
     /**@todo allow to optionally preset a static program in each chromosome*/
