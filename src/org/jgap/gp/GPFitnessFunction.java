@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 public abstract class GPFitnessFunction
     implements java.io.Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public final static double NO_FITNESS_VALUE = -1.0000000d;
 
@@ -34,7 +34,7 @@ public abstract class GPFitnessFunction
   private double m_lastComputedFitnessValue = NO_FITNESS_VALUE;
 
   /**
-   * Default constructor, may be needed for dynamic instantiation.
+   * Default constructor.
    *
    * @author Klaus Meffert
    * @since 3.3.1
