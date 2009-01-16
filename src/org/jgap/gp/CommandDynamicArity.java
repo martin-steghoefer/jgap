@@ -21,7 +21,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandDynamicArity
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.1 $";
+  private static final String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * Default constructor, only for dynamic instantiation.
@@ -98,6 +98,5 @@ public abstract class CommandDynamicArity
         + getGPConfiguration().getRandomGenerator().nextInt(getArityMax()
         - getArityMin() + 1);
     setArity(arity);
-    System.out.println("Arity: "+arity);
   }
 }
