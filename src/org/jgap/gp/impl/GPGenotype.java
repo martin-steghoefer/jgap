@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.52 $";
+  private final static String CVS_REVISION = "$Revision: 1.53 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -417,7 +417,7 @@ public class GPGenotype
   }
 
   /**
-   * @return the static configuration to use with the Genetic Programming
+   * @return the static configuration to use with Genetic Programming
    *
    * @author Klaus Meffert
    * @since 3.2
@@ -664,8 +664,8 @@ public class GPGenotype
       int creation = 0;
       checkErroneousPop(getGPPopulation(), " (before evolution)", true);
       for (int i = 0; i < popSize1; i++) {
-        // Clear the stack for each GP program (=ProgramChromosome).
-        // ---------------------------------------------------------
+        // Clear the stack for each GP program.
+        // ------------------------------------
         getGPConfiguration().clearStack();
         val = random.nextFloat();
         // Note that if we only have one slot left to fill, we don't do
