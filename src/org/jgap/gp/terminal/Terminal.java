@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.16 $";
+  private static final String CVS_REVISION = "$Revision: 1.17 $";
 
   private float m_value_float;
 
@@ -178,7 +178,7 @@ public class Terminal
 
   public CommandGene applyMutation(int index, double a_percentage)
       throws InvalidConfigurationException {
-    // If percentag very high then do mutation not relying on
+    // If percentage is very high: do mutation not relying on
     // current value random value.
     // ------------------------------------------------------
     if (a_percentage > 0.85d) {
