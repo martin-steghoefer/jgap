@@ -1,7 +1,10 @@
 3.4
 -----------------------------------------------------------
+* Added the Mona Lisa painting problem (GA and GP version).
+  Thanx to Yann for his great contribution
 * Added interface IUniqueCommand for GP commands, optimized
   GP program creation
+* GPPopulation: enhanced creation of new programs
 * CommandGene: added new versions of method
   ensureUniqueness
 * CommandGene: added support for dynamization of arity
@@ -32,6 +35,7 @@
   Ceil, ExchangeMemory, Floor, ForLoop, ForXLoop, Log,
   GreaterThan, LesserThan
 * Made GP commands of TicTacToe example cloneable
+* Replaces System.out's in examples with call to logger
 * Enhanced Javadoc
 
 3.3.4
