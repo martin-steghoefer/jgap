@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.37 $";
+  private final static String CVS_REVISION = "$Revision: 1.38 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -284,20 +284,33 @@ public class GPPopulation
     }
     int genNr = getGPConfiguration().getGenerationNr();
     int genI = new Random().nextInt(m_popSize);
+    RandomGenerator generator = getGPConfiguration().getRandomGenerator();
+    int minDepth = getGPConfiguration().getMinInitDepth();
+    int maxDepth = getGPConfiguration().getMaxInitDepth();
     for (int i = a_offset; i < m_popSize; i++) {
       IGPProgram program = null;
       // Vary depth dependent on run index.
       // ----------------------------------
       /**@todo add element of randomness*/
-      int depth = 2 + (getGPConfiguration().getMaxInitDepth() - 1) * i
+      int depth = minDepth
+          + (maxDepth - minDepth) * i
           / divisor;
+
       // Create new GP program.
       // ----------------------
       int tries = 0;
+      int maxTries = getGPConfiguration().getProgramCreationMaxtries();
       do {
         try {
+          boolean grow;
+          if (i % 2 == 0 || generator.nextInt(8) > 6) {
+            grow = true;
+          }
+          else {
+            grow = false;
+          }
           program = create(i, a_types, a_argTypes, a_nodeSets,
-                           a_minDepths, a_maxDepths, depth, (i % 2) == 0,
+                           a_minDepths, a_maxDepths, depth, grow,
                            a_maxNodes, a_fullModeAllowed, tries,
                            a_programCreator);
           if (program != null && getGPConfiguration().getPrototypeProgram() == null) {
@@ -308,7 +321,8 @@ public class GPPopulation
             // or a validator is used which is quite restrictive.
             // ---------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
-            LOGGER.info("Prototype program set");
+            /**@todo output depth of all chromosomes*/
+            LOGGER.info("Prototype program set (depth "+program.getChromosome(0).getDepth(0)+")");
           }
           else if (genNr % 5 == 0 && genNr > 0 && i == genI) {
               /**@todo 5: make configurable*/
@@ -323,8 +337,17 @@ public class GPPopulation
           }
           break;
         } catch (IllegalStateException iex) {
+          if (depth < maxDepth) {
+            depth = depth + generator.nextInt(2);
+          }
+          else {
+            depth = depth - generator.nextInt(4);
+            if (depth < minDepth) {
+                depth = minDepth;
+            }
+          }
           tries++;
-          if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
+          if (maxTries >=0 && tries > maxTries || (i > 0 && tries > 100)) {
             IGPProgram prototype = getGPConfiguration().getPrototypeProgram();
             if (prototype != null) {
               ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
