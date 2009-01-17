@@ -16,12 +16,12 @@ import org.jgap.gp.*;
  * Used by DefaultPopulationCreator to create GP programs.
  *
  * @author Klaus Meffert
- * @since 3.2.x
+ * @since 3.2.1
  */
 public class DefaultProgramCreator
     implements IProgramCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public IGPProgram create(GPConfiguration a_conf, int a_programIndex,
                            Class[] a_types, Class[][] a_argTypes,
