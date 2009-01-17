@@ -9,11 +9,12 @@
  */
 package examples.gp;
 
+import org.apache.log4j.*;
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
-import org.jgap.gp.impl.*;
 import org.jgap.gp.function.*;
+import org.jgap.gp.impl.*;
 import org.jgap.gp.terminal.*;
 import org.jgap.util.*;
 
@@ -31,7 +32,9 @@ import org.jgap.util.*;
 public class Fibonacci
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
+
+  private transient static Logger LOGGER = Logger.getLogger(Fibonacci.class);
 
   static Variable vx;
 
@@ -71,10 +74,10 @@ public class Fibonacci
     // Configure desired minimum number of nodes per sub program.
     // Same as with types: First entry here corresponds with first entry in
     // nodeSets.
-    int[] minDepths = new int[] {2, 3, 1};
+    int[] minDepths = new int[] {2, 3, 0};
     // Configure desired maximum number of nodes per sub program.
     // First entry here corresponds with first entry in nodeSets.
-    int[] maxDepths = new int[] {2, 9, 1};
+    int[] maxDepths = new int[] {4, 9, 1};
     GPConfiguration conf = getGPConfiguration();
     /**@todo allow to optionally preset a static program in each chromosome*/
     CommandGene[][] nodeSets = { {
@@ -117,7 +120,7 @@ public class Fibonacci
     // Create genotype with initial population.
     // ----------------------------------------
     return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets,
-        minDepths, maxDepths, 10, new boolean[] {!true, !true, false}, true);
+        minDepths, maxDepths, 20, new boolean[] {!true, !true, false}, true);
   }
 
   //(Sort of) This is what we would like to (and can) find via GP:
@@ -214,7 +217,7 @@ public class Fibonacci
           double freeMem = SystemKit.getFreeMemoryMB();
           if (evno % 50 == 0) {
             double allBestFitness = genotype.getAllTimeBest().getFitnessValue();
-            System.out.println("Evolving generation " + evno
+            LOGGER.info("Evolving generation " + evno
                                + ", all-time-best fitness: " + allBestFitness
                                + ", memory free: " + freeMem + " MB");
           }
