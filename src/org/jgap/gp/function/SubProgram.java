@@ -25,9 +25,9 @@ import org.jgap.util.*;
  * @since 3.0
  */
 public class SubProgram
-    extends CommandGene implements ICloneable {
+    extends CommandGene implements ICloneable, IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -39,13 +39,28 @@ public class SubProgram
    */
   private Class[] m_types;
 
+  private boolean m_mutateable;
+
   public SubProgram(final GPConfiguration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
     this(a_conf, a_types, 0, null);
   }
 
   public SubProgram(final GPConfiguration a_conf, Class[] a_types,
+                    boolean a_mutateable)
+      throws InvalidConfigurationException {
+    this(a_conf, a_types, 0, null, a_mutateable);
+  }
+
+  public SubProgram(final GPConfiguration a_conf, Class[] a_types,
                     int a_subReturnType, int[] a_subChildTypes)
+      throws InvalidConfigurationException {
+    this(a_conf, a_types, a_subReturnType, a_subChildTypes, false);
+  }
+
+  public SubProgram(final GPConfiguration a_conf, Class[] a_types,
+                    int a_subReturnType, int[] a_subChildTypes, boolean
+                    a_mutateable)
       throws InvalidConfigurationException {
     super(a_conf, a_types.length, a_types[a_types.length - 1], a_subReturnType,
           a_subChildTypes);
@@ -54,6 +69,7 @@ public class SubProgram
     }
     m_types = a_types;
     m_subtrees = a_types.length;
+    m_mutateable = a_mutateable;
   }
 
   public String toString() {
@@ -141,7 +157,11 @@ public class SubProgram
   }
 
   public Class getChildType(IGPProgram a_ind, int a_chromNum) {
-    return m_types[a_chromNum];
+    try {
+      return m_types[a_chromNum];
+    } catch (ArrayIndexOutOfBoundsException aex) {
+      return null;
+    }
   }
 
   /**
@@ -200,15 +220,78 @@ public class SubProgram
     try {
       int[] subChildTypes = getSubChildTypes();
       if (subChildTypes != null) {
-        subChildTypes = (int[])subChildTypes.clone();
+        subChildTypes = (int[]) subChildTypes.clone();
       }
       SubProgram result = new SubProgram(getGPConfiguration(), m_types,
           getSubReturnType(), subChildTypes);
       result.m_subtrees = m_subtrees;
-      result.m_types = (Class[])m_types.clone();
+      result.m_types = (Class[]) m_types.clone();
       return result;
     } catch (Throwable t) {
       throw new CloneException(t);
     }
   }
+
+  public CommandGene applyMutation(int index, double a_percentage)
+      throws InvalidConfigurationException {
+    if (!m_mutateable) {
+      return this;
+    }
+    org.jgap.RandomGenerator randomGen = getGPConfiguration().
+        getRandomGenerator();
+    double random = randomGen.nextDouble();
+    if (random < a_percentage) {
+      return applyMutation();
+    }
+    return this;
+  }
+
+  /**@todo this is just a quick stitch*/
+//  public CommandGene applyMutation()
+//      throws InvalidConfigurationException {
+//    org.jgap.RandomGenerator randomGen = getGPConfiguration().
+//        getRandomGenerator();
+//    int random = randomGen.nextInt(20) + 2;
+//    Class[] types = new Class[random];
+//    for (int i = 0; i < random; i++) {
+//      types[i] = m_types[0];
+//    }
+//    SubProgram mutant = new SubProgram(getGPConfiguration(), types);
+//    return mutant;
+//  }
+
+  public CommandGene applyMutation()
+      throws InvalidConfigurationException {
+    int[] subChildTypes = getSubChildTypes();
+    if (subChildTypes != null) {
+      subChildTypes = (int[]) subChildTypes.clone();
+    }
+    int size = getGPConfiguration().getRandomGenerator().nextInt(7) + 2;
+    size = m_types.length;
+    Class[] types = new Class[size];
+    for (int i = 0; i < size; i++) {
+      types[i] = m_types[m_types.length - 1];
+    }
+    SubProgram result = new SubProgram(getGPConfiguration(), types,
+                                       getSubReturnType(), subChildTypes);
+    return result;
+  }
+  /**
+   * Adaptation of the arity so that it represents a value within the interval
+   * [m_arityMin, m_arityMax].
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+//  public void dynamizeArity() {
+//    int arity = 3
+//        + getGPConfiguration().getRandomGenerator().nextInt(15 - 3 + 1);
+//    setArity(arity);
+//    Class atype = m_types[0];
+//    m_types = new Class[arity];
+//    for (int i = 0; i < arity; i++) {
+//      m_types[i] = atype;
+//    }
+//    m_subtrees = arity;
+//  }
 }
