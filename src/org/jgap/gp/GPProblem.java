@@ -28,7 +28,7 @@ import org.jgap.util.tree.*;
  */
 public abstract class GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private GPConfiguration m_conf;
 
@@ -61,7 +61,7 @@ public abstract class GPProblem {
       throws InvalidConfigurationException;
 
   /**
-   * Creates a tree out of a given GP program and saves it to a file.
+   * Creates a graphical tree out of a given GP program and saves it to a file.
    *
    * @param a_prog the GP program to visualize a tree for
    * @param a_filename the name of the file to save the tree in
@@ -84,7 +84,7 @@ public abstract class GPProblem {
     tv.setTreeNodeRenderer(new JGAPTreeNodeRenderer());
     tv.setBranchStartWidth(18.0);
     tv.setArenaColor(Color.black);
-    tv.setBkgndColor(Color.black); //new Color(10, 10, 10));
+    tv.setBkgndColor(Color.black);
     tv.setRenderNodes(true);
     tv.setSide(1024);
     tv.setCircleDiminishFactor(0.5);
@@ -117,7 +117,7 @@ public abstract class GPProblem {
     tv.setTreeNodeRenderer(a_treeNodeRenderer);
     tv.setBranchStartWidth(18.0);
     tv.setArenaColor(Color.black);
-    tv.setBkgndColor(Color.black); //new Color(10, 10, 10));
+    tv.setBkgndColor(Color.black);
     tv.setRenderNodes(true);
     tv.setSide(1024);
     tv.setCircleDiminishFactor(0.5);
@@ -145,7 +145,7 @@ public abstract class GPProblem {
     if (a_prog.size() > 1) {
       Class[] types = new Class[a_prog.size()];
       for (int i = 0; i < a_prog.size(); i++) {
-        types[i] = CommandGene.VoidClass; //arbitrary
+        types[i] = CommandGene.VoidClass; //this is arbitrary
       }
       master.setGene(0, new SubProgram(m_conf, types));
       int index = 1;
