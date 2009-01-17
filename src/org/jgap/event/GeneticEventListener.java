@@ -22,13 +22,13 @@ package org.jgap.event;
 public interface GeneticEventListener {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.5 $";
+  final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * Notify this GeneticEventListener that an event has been fired of a type
    * to which this listener is subscribed.
    *
-   * @param a_firedEvent the event object that was fired. The type of event
+   * @param a_firedEvent the event object that was fired. The type of the event
    * can be determined by the GeneticEvent's name
    *
    * @author Neil Rotstan
