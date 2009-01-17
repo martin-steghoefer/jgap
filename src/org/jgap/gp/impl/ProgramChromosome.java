@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.41 $";
+  private final static String CVS_REVISION = "$Revision: 1.42 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -480,14 +480,15 @@ public class ProgramChromosome
         // -------------------------------------------
         try {
           return new NOP(getGPConfiguration(), a_subReturnType);
-        }
-        catch (InvalidConfigurationException iex) {
+        } catch (InvalidConfigurationException iex) {
           // Should never happen.
           // --------------------
           throw new RuntimeException(iex);
         }
       }
-      final String errormsg = "Chromosome (index " + a_chromIndex
+      final String errormsg = "Chromosome (depth "
+          + getDepth(0)
+          + ", index " + a_chromIndex
           + ") requires a " +
           (a_function ?
            ("function" + (a_growing ? " or terminal" : ""))
@@ -566,11 +567,13 @@ public class ProgramChromosome
     if (a_rootNode == null || a_validateNode) {
       int tries = 0;
       int evolutionRound = getGPConfiguration().getGenerationNr();
+      boolean aFunction = a_depth >= 1;
 
       CommandGene[] localFunctionSet = (CommandGene[]) a_functionSet.clone();
+
       do {
         CommandGene node = selectNode(a_num, a_returnType, a_subReturnType,
-                                      localFunctionSet, a_depth >= 1, a_grow);
+                                      localFunctionSet, aFunction, a_grow);
         if (!conf.validateNode(this, node, a_rootNode, tries++, a_num,
                                a_recurseLevel, a_returnType, localFunctionSet,
                                a_depth, a_grow, a_childNum, false)) {
@@ -594,8 +597,27 @@ public class ProgramChromosome
         if ( conf.getRandomGenerator().nextDouble() <= conf.getMutationProb()) {
           if (IMutateable.class.isAssignableFrom(node.getClass())) {
             try {
-              node = ( (IMutateable) node).applyMutation(0, 1);
-              mutated = true;
+              CommandGene node2 = ((IMutateable) node).applyMutation(0, 1);
+              /**@todo make configurable*/
+              if (node2.getClass().getName().equals("org.jgap.gp.function.SubProgram")) {
+                IGPProgram ind = getIndividual();
+                for (int i = 0; i < node2.getArity(ind); i++) {
+                  int child = getChild(node, i);
+                  if (child != -2) {
+                    if (child < 0) {
+                      // Insert new child for given place in incomplete node.
+                      // ----------------------------------------------------
+                      int recurseLevel = 0;
+                      growOrFullNode(a_num, a_depth - 1,
+                              node2.getChildType(getIndividual(), i),
+                              node2.getSubChildType(i),
+                              a_functionSet, node2, recurseLevel + 1, a_grow,
+                              i, true);
+                      node = node2;
+                    }
+                  }
+                }
+              }
             } catch (InvalidConfigurationException iex) {
               // Ignore but log.
               // ---------------
@@ -624,14 +646,23 @@ public class ProgramChromosome
     }
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
-      // Optional dynamization of the arity for commands with a flexible number
+      // Optional dynamize the arity for commands with a flexible number
       // of children. Normally, dynamizeArity does nothing, see CommandGene.
-      // ----------------------------------------------------------------------
+      // -------------------------------------------------------------------
       a_rootNode.dynamizeArity();
       int arity = a_rootNode.getArity(ind);
       for (int i = 0; i < arity; i++) {
-        /**@todo ensure required depth is cared about*/
+//        /**@todo ensure required depth is cared about*/
         if (m_index < m_depth.length) {
+//          if (arity !=a_rootNode.getArity(ind)) {
+//            /**todo cause: dynamizeArity!*/
+//            if (i >= a_rootNode.getArity(ind)) {
+//              break;
+//            }
+//            else {
+//             arity = a_rootNode.getArity(ind);
+//            }
+//          }
           a_functionSet = growOrFullNode(a_num, a_depth - 1,
                          a_rootNode.getChildType(getIndividual(), i),
                          a_rootNode.getSubChildType(i),
@@ -745,6 +776,32 @@ public class ProgramChromosome
                                + a_child
                                + " of node with index = "
                                + a_index);
+  }
+
+  public int getChild(CommandGene a_node, int a_child) {
+    /**@todo speedup*/
+    int len = getFunctions().length;
+    int index = -1;
+    for (int i = 0; i < len; i++) {
+      if (m_genes[i] == a_node) {
+        index = i;
+        break;
+      }
+    }
+    if (index == -1) {
+      return -2;
+    }
+    for (int i = index + 1; i < len; i++) {
+      if (m_depth[i] <= m_depth[index]) {
+        return -1;
+      }
+      if (m_depth[i] == m_depth[index] + 1) {
+        if (--a_child < 0) {
+          return i;
+        }
+      }
+    }
+    throw new RuntimeException("Bad child " + a_child + " of node with index = " + index);
   }
 
   public CommandGene[] getFunctionSet() {
