@@ -26,7 +26,7 @@ import org.jgap.gp.IGPProgram;
 public class LMSFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private final DrawingGPConfiguration m_conf;
 
@@ -74,6 +74,7 @@ public class LMSFitnessFunction
       int b = (c1 & 0xff) - (c2 & 0xff);
       sum += r * r + g * g + b * b;
     }
+    /**@todo consider number of polygons necessary*/
     return Math.sqrt(sum);
   }
 }
