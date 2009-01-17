@@ -22,7 +22,7 @@ import org.jgap.*;
 public class DefaultPopulationCreator
     implements IPopulationCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private IProgramCreator m_programCreator;
 
@@ -64,7 +64,7 @@ public class DefaultPopulationCreator
                          int[] a_minDepths, int[] a_maxDepths, int a_maxNodes,
                          boolean[] a_fullModeAllowed)
       throws InvalidConfigurationException {
-    /**@todo pass params (e.g. advanced yes/no for RC)*/
+    /**@todo pass params (e.g. advanced yes/no for Robocode)*/
     a_pop.create(a_types, a_argTypes, a_nodeSets, a_minDepths, a_maxDepths,
                  a_maxNodes, a_fullModeAllowed, m_programCreator);
   }
