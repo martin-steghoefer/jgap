@@ -18,6 +18,8 @@ import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 import org.jgap.util.tree.*;
+import examples.gp.Fibonacci;
+import org.apache.log4j.Logger;
 
 /**
  * The ant trail problem.
@@ -28,9 +30,9 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
-  private int[][] m_map;
+  protected int[][] m_map;
 
   private static int foodAvail;
 
@@ -38,17 +40,70 @@ public class AntTrailProblem
 
   private static int m_maxy;
 
-  private static int totalFood;
+  protected static int totalFood;
 
   /**
    * Maximum number of moves allowed.
    */
-  private static int m_maxMoves = 400;
+  public static int m_maxMoves = 400;
 
-  public AntTrailProblem(GPConfiguration a_conf)
-      throws InvalidConfigurationException {
-    super(a_conf);
-  }
+  public AntTrailProblem(GPConfiguration config, String a_filename)
+      throws InvalidConfigurationException, Exception {
+    super(config);
+    GPFitnessFunction func = createFitFunc();
+    config.setFitnessFunction(func);
+    // Read the trail from file.
+    // -------------------------
+    m_map = readTrail(a_filename);
+    AntMap antmap = new AntMap(m_map, m_maxMoves);
+    totalFood = countFood(antmap);
+    System.out.println("Food to consume by ant: " + totalFood);
+    GPGenotype gp = create();
+    gp.setVerboseOutput(true);
+    // Simple implementation of running evolution in a thread.
+    // -------------------------------------------------------
+    final Thread t = new Thread(gp);
+    config.getEventManager().addEventListener(GeneticEvent.
+        GPGENOTYPE_EVOLVED_EVENT, new GeneticEventListener() {
+      public void geneticEventFired(GeneticEvent a_firedEvent) {
+        GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
+        int evno = genotype.getGPConfiguration().getGenerationNr();
+        double freeMem = SystemKit.getFreeMemoryMB();
+        if (evno % 100 == 0) {
+          double bestFitness = genotype.getFittestProgram().
+              getFitnessValue();
+          System.out.println("Evolving generation " + evno
+                      + ", best fitness: " + bestFitness
+                      + ", memory free: " + freeMem + " MB");
+        }
+        if (evno > 500000) {
+          t.stop();
+        }
+        else {
+          try {
+            // Collect garbage if memory low.
+            // ------------------------------
+            if (freeMem < 50) {
+              System.gc();
+              t.sleep(500);
+            }
+            else {
+              // Avoid 100% CPU load.
+              // --------------------
+              t.sleep(30);
+            }
+          } catch (InterruptedException iex) {
+            iex.printStackTrace();
+            System.exit(1);
+          }
+        }
+      }
+    });
+    GeneticEventListener myGeneticEventListener = new EventListener(this, t);
+    config.getEventManager().addEventListener(GeneticEvent.
+        GPGENOTYPE_NEW_BEST_SOLUTION, myGeneticEventListener);
+      t.start();
+    }
 
   /**
    * Sets up the functions to use and other parameters. Then creates the
@@ -180,106 +235,12 @@ public class AntTrailProblem
       System.out.println("Using map " + filename);
       config.setMaxInitDepth(7);
       config.setPopulationSize(popSize);
-      final AntTrailProblem problem = new AntTrailProblem(config);
-      GPFitnessFunction func = problem.createFitFunc();
-      config.setFitnessFunction(func);
       config.setCrossoverProb(0.9f);
       config.setReproductionProb(0.1f);
       config.setNewChromsPercent(0.3f);
       config.setStrictProgramCreation(true);
       config.setUseProgramCache(true);
-      // Read the trail from file.
-      // -------------------------
-      problem.m_map = problem.readTrail(filename);
-      AntMap antmap = new AntMap(problem.m_map, m_maxMoves);
-      totalFood = countFood(antmap);
-      System.out.println("Food to consume by ant: " + totalFood);
-      GPGenotype gp = problem.create();
-      gp.setVerboseOutput(true);
-      // Simple implementation of running evolution in a thread.
-      // -------------------------------------------------------
-      final Thread t = new Thread(gp);
-      config.getEventManager().addEventListener(GeneticEvent.
-          GPGENOTYPE_EVOLVED_EVENT, new GeneticEventListener() {
-        public void geneticEventFired(GeneticEvent a_firedEvent) {
-          GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
-          int evno = genotype.getGPConfiguration().getGenerationNr();
-          double freeMem = SystemKit.getFreeMemoryMB();
-          if (evno % 100 == 0) {
-            double bestFitness = genotype.getFittestProgram().
-                getFitnessValue();
-            System.out.println("Evolving generation " + evno
-                               + ", best fitness: " + bestFitness
-                               + ", memory free: " + freeMem + " MB");
-          }
-          if (evno > 500000) {
-            t.stop();
-          }
-          else {
-            try {
-              // Collect garbage if memory low.
-              // ------------------------------
-              if (freeMem < 50) {
-                System.gc();
-                t.sleep(500);
-              }
-              else {
-                // Avoid 100% CPU load.
-                // --------------------
-                t.sleep(30);
-              }
-            } catch (InterruptedException iex) {
-              iex.printStackTrace();
-              System.exit(1);
-            }
-          }
-        }
-      });
-
-      GeneticEventListener myGeneticEventListener =
-      new GeneticEventListener() {
-        /**
-         * New best solution found.
-         *
-         * @param a_firedEvent GeneticEvent
-         */
-        public void geneticEventFired(GeneticEvent a_firedEvent) {
-          GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
-          int evno = genotype.getGPConfiguration().getGenerationNr();
-          String indexString = "" + evno;
-          while (indexString.length() < 5) {
-            indexString = "0" + indexString;
-          }
-          String filename = "anttrail_best" + indexString + ".png";
-          IGPProgram best = genotype.getAllTimeBest();
-          try {
-            // Create graphical tree of GPProgram.
-            // -----------------------------------
-            TreeBranchRenderer antBranchRenderer = new AntTreeBranchRenderer();
-            TreeNodeRenderer antNodeRenderer = new AntTreeNodeRenderer();
-            problem.showTree(best, filename, antBranchRenderer, antNodeRenderer);
-            // Display solution's trail.
-            // -------------------------
-            AntMap antmap = (AntMap) best.getApplicationData();
-            problem.displaySolution(antmap.getMovements());
-            System.out.println(" Number of moves: " + antmap.getMoveCount());
-            System.out.println(" Food taken: " + antmap.getFoodTaken());
-          } catch (InvalidConfigurationException iex) {
-            iex.printStackTrace();
-          }
-          double bestFitness = genotype.getFittestProgram().
-              getFitnessValue();
-          if (bestFitness < 0.001) {
-            genotype.outputSolution(best);
-            t.stop();
-            System.exit(0);
-          }
-        }
-      };
-
-      config.getEventManager().addEventListener(GeneticEvent.
-          GPGENOTYPE_NEW_BEST_SOLUTION, myGeneticEventListener);
-      t.start();
+      new AntTrailProblem(config, filename);
     } catch (Exception ex) {
       ex.printStackTrace();
       System.exit(1);
@@ -291,7 +252,7 @@ public class AntTrailProblem
    *
    * @param a_antmap the map containing the trail
    */
-  private void displaySolution(int[][] a_antmap) {
+  protected void displaySolution(int[][] a_antmap) {
     for (int y = 0; y < m_maxy; y++) {
       for (int x = 0; x < m_maxx; x++) {
         char toPrint;
@@ -388,6 +349,54 @@ public class AntTrailProblem
     }
     return result;
   }
+}
+
+class EventListener implements GeneticEventListener {
+
+  private AntTrailProblem problem;
+  private Thread m_t;
+
+  public EventListener(AntTrailProblem a_problem, Thread a_t) {
+    problem = a_problem;
+    m_t = a_t;
+  }
+  /**
+   * New best solution found.
+   *
+   * @param a_firedEvent GeneticEvent
+   */
+  public void geneticEventFired(GeneticEvent a_firedEvent) {
+    GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
+    int evno = genotype.getGPConfiguration().getGenerationNr();
+    String indexString = "" + evno;
+    while (indexString.length() < 5) {
+      indexString = "0" + indexString;
+    }
+    String filename = "anttrail_best" + indexString + ".png";
+    IGPProgram best = genotype.getAllTimeBest();
+    try {
+      // Create graphical tree of GPProgram.
+      // -----------------------------------
+      TreeBranchRenderer antBranchRenderer = new AntTreeBranchRenderer();
+      TreeNodeRenderer antNodeRenderer = new AntTreeNodeRenderer();
+      problem.showTree(best, filename, antBranchRenderer, antNodeRenderer);
+      // Display solution's trail.
+      // -------------------------
+      AntMap antmap = (AntMap) best.getApplicationData();
+      problem.displaySolution(antmap.getMovements());
+      System.out.println(" Number of moves: " + antmap.getMoveCount());
+      System.out.println(" Food taken: " + antmap.getFoodTaken());
+    } catch (InvalidConfigurationException iex) {
+      iex.printStackTrace();
+    }
+    double bestFitness = genotype.getFittestProgram().
+        getFitnessValue();
+    if (bestFitness < 0.001) {
+      genotype.outputSolution(best);
+      m_t.stop();
+      System.exit(0);
+    }
+      }
 }
 /*
  abcd
