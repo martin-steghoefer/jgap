@@ -48,7 +48,7 @@ public class ColtRandomGenerator
    * ceiling - 1, inclusive
    */
   public int nextInt(int ceiling) {
-    return Uniform.staticNextIntFromTo(0, ceiling);
+    return Uniform.staticNextIntFromTo(0, ceiling - 1);
   }
 
   /**
