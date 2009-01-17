@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.43 $";
+  private final static String CVS_REVISION = "$Revision: 1.44 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -94,7 +94,7 @@ public class GPConfiguration
   /**
    * The minimum depth of an individual when the world is created.
    */
-  private int m_minInitDepth = 3;
+  private int m_minInitDepth = 2;
 
   /**
    * The method of choosing an individual to perform an evolution operation on.
