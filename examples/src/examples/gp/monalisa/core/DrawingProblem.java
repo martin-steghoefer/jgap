@@ -21,12 +21,13 @@ import examples.gp.monalisa.core.commands.*;
  * composing a picture from polygons.
  *
  * @author Yann N. Dauphin
+ * @author Klaus Meffert (only finalization)
  * @since 3.4
  */
 public class DrawingProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public DrawingProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -76,21 +77,19 @@ public class DrawingProblem
 
   /**
    * TerminalType helps differentiate the terminals that have different ranges.
-   *
-   * @author lokee
    */
   public enum TerminalType {
     WIDTH(1),
     HEIGHT(2), ;
 
-    private int value;
+    private int m_value;
 
     public int intValue() {
-      return this.value;
+      return m_value;
     }
 
-    TerminalType(int value) {
-      this.value = value;
+    TerminalType(int a_value) {
+      m_value = a_value;
     }
   }
 }
