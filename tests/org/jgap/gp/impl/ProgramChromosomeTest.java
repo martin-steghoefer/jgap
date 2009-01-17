@@ -24,7 +24,7 @@ import junit.framework.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -72,12 +72,12 @@ public class ProgramChromosomeTest
         CMD_CONST3, //5
         CMD_CONST4, //6
     };
-    rn.setNextIntSequence(new int[] {1, 4, 2, 5});
+    rn.setNextIntSequence(new int[] {0,0, 4, 2, 5});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_V_I,
                       0, true, -1, false);
     pc.redepth();
     assertEquals(CMD_SUB_V_I, pc.getNode(0));
-    assertSame(CMD_FOR, pc.getNode(1));
+    assertEquals(CMD_FOR.toString(), pc.getNode(1).toString());
     assertSame(CMD_CONST2, pc.getNode(2));
     assertSame(CMD_NOP, pc.getNode(3));
     assertSame(CMD_CONST3, pc.getNode(4));
@@ -114,7 +114,7 @@ public class ProgramChromosomeTest
                       0, true, -1, false);
     pc.redepth();
     assertEquals(CMD_SUB_V_I, pc.getNode(0));
-    assertSame(CMD_FOR, pc.getNode(1));
+    assertEquals(CMD_FOR.toString(), pc.getNode(1).toString());
     assertSame(CMD_CONST4, pc.getNode(2));
     assertSame(CMD_NOP, pc.getNode(3));
     assertSame(CMD_CONST3, pc.getNode(4));
@@ -148,7 +148,7 @@ public class ProgramChromosomeTest
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FORX, 0, true,
                       -1, false);
     pc.redepth();
-    assertSame(CMD_FORX, pc.getNode(0));
+    assertEquals(CMD_FORX.toString(), pc.getNode(0).toString());
     assertEquals(CMD_SUB_V_V_V, pc.getNode(1));
     assertEquals(AddAndStore.class, pc.getNode(2).getClass());
     assertEquals(ReadTerminal.class, pc.getNode(3).getClass());
@@ -181,7 +181,7 @@ public class ProgramChromosomeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //8
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
-    rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 6, 7});
+    rn.setNextIntSequence(new int[] {0, 3, 0, 5, 8, 9, 6, 7});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FOR, 0, true,
                       -1, false);
     pc.redepth();
