@@ -27,7 +27,7 @@ import examples.gp.monalisa.core.commands.*;
 public class DrawingProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public DrawingProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -55,20 +55,22 @@ public class DrawingProblem
                        Void.class}, true),
         new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
                        Void.class, Void.class}, true),
+        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
+                       Void.class, Void.class, Void.class}, true),
         new PointConstructor(conf),
-        new PolygonConstructor(conf),
+        new PolygonConstructor(conf, 5),
         new ColorConstructor(conf),
         new DrawPolygon(conf),
         new Terminal(conf, CommandGene.FloatClass, 0.0d, 1.0d),
         new Terminal(conf, CommandGene.IntegerClass, 0,
-                     conf.getTarget().getWidth(), true,
+                     conf.getTarget().getWidth()-1, true,
                      TerminalType.WIDTH.intValue()),
         new Terminal(conf, CommandGene.IntegerClass, 0,
-                     conf.getTarget().getHeight(), true,
+                     conf.getTarget().getHeight()-1, true,
                      TerminalType.HEIGHT.intValue()), }
     };
     int[] minDepth = new int[] {5};
-    int[] maxDepth = new int[] {45};
+    int[] maxDepth = new int[] {50};
     int maxNodes = 5000;
     boolean[] fullMode = new boolean[] {true};
     return GPGenotype.randomInitialGenotype(conf, retTypes, argTypes, nodeSets,
