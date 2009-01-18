@@ -30,11 +30,13 @@ import examples.gp.monalisa.core.*;
 public class EvolutionRunnable
     implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private transient static Logger LOGGER = Logger.getLogger(EvolutionRunnable.class);
 
   protected final GeneticDrawingView m_view;
+
+  protected static boolean initView;
 
   public EvolutionRunnable(GeneticDrawingView a_view) {
     super();
@@ -84,6 +86,11 @@ public class EvolutionRunnable
           BufferedImage image = gpProgramRunner.run(best);
           Graphics g = m_view.getFittestDrawingView().getMainPanel().
               getGraphics();
+          if (!initView) {
+            m_view.getFittestDrawingView().setSize(202, 200 + 30);
+            m_view.getFittestDrawingView().getMainPanel().setSize(200, 200);
+            initView = true;
+          }
           g.drawImage(image, 0, 0, m_view.getFittestDrawingView());
           if (m_view.isSaveToFile()) {
             int fitness = (int) best.getFitnessValue();
