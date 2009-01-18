@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class GeneticDrawingView
     extends FrameView {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public GeneticDrawingView(SingleFrameApplication app) {
     super(app);
@@ -139,9 +139,9 @@ public class GeneticDrawingView
     saveCheckBox.setText("Save every fittest result to file");
     targetSaveDirLabel = new JLabel("Target directory:");
     try {
-      targetSaveDirEdit = new JTextField(FileKit.getCurrentDir());
+      targetSaveDirEdit = new JLabel(FileKit.getCurrentDir());
     } catch (IOException ex) {
-      targetSaveDirEdit = new JTextField();
+      targetSaveDirEdit = new JLabel();
     }
     JFreeChart chart = ChartFactory.createXYLineChart(
         "Fitness versus Generation",
@@ -293,7 +293,7 @@ public class GeneticDrawingView
 
   private javax.swing.JLabel targetSaveDirLabel;
 
-  private javax.swing.JTextField targetSaveDirEdit;
+  private javax.swing.JLabel targetSaveDirEdit;
 
   private BufferedImage targetImage = null;
 
