@@ -20,18 +20,17 @@ import org.jgap.impl.*;
 /**
  * Copy of class MinimizingMakeChange with added support for JFreeChart, see
  * code below. In the given directory, a file named "chart.jpg" will be created.
- * You need to download JFreeChart before using this class at:
- * http://www.jfree.org/jfreechart/index.php
- * <p>
- * This implementation was tested with JFreeChart 0.9.21, but newer versions
+ *
+ * This implementation was tested with JFreeChart 1.0.11, but newer versions
  * should do as well.
+ *
  * @author Neil Rotstan
  * @author Klaus Meffert
  * @since 1.0
  */
 public class MinimizingMakeChangeWithChart {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.5 $";
+  private final static String CVS_REVISION = "$Revision: 1.6 $";
 
   /**
    * The total number of times we'll let the population evolve.
