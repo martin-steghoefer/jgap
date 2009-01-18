@@ -9,7 +9,7 @@
  */
 package examples.gp.monalisa.gui;
 
-import org.jdesktop.application.Action;
+import org.jdesktop.application.*;
 
 /**
  *

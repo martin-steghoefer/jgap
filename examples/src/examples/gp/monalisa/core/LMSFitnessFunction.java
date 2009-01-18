@@ -9,12 +9,11 @@
  */
 package examples.gp.monalisa.core;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.PixelGrabber;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jgap.gp.GPFitnessFunction;
-import org.jgap.gp.IGPProgram;
+import java.util.logging.*;
+
+import java.awt.image.*;
+
+import org.jgap.gp.*;
 
 /**
  * Computes the fitness of a program as the Least-Mean-Sqare distance between
@@ -26,7 +25,7 @@ import org.jgap.gp.IGPProgram;
 public class LMSFitnessFunction
     extends GPFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private final DrawingGPConfiguration m_conf;
 

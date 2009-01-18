@@ -9,10 +9,10 @@
  */
 package examples.gp.monalisa.core;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import org.jgap.gp.IGPProgram;
+import java.awt.*;
+import java.awt.image.*;
+
+import org.jgap.gp.*;
 
 /**
  * Interprets the commands manifested within a GP Program. Finally, this leads
@@ -23,7 +23,7 @@ import org.jgap.gp.IGPProgram;
  */
 public class DrawingGPProgramRunner {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private DrawingGPConfiguration m_conf = null;
 

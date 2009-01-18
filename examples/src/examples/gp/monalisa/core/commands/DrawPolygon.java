@@ -9,14 +9,11 @@
  */
 package examples.gp.monalisa.core.commands;
 
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Color;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.gp.CommandGene;
-import org.jgap.gp.IGPProgram;
-import org.jgap.gp.impl.GPConfiguration;
-import org.jgap.gp.impl.ProgramChromosome;
+import java.awt.*;
+
+import org.jgap.*;
+import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
 
 /**
  * Draws a polygon with a certain fill color.
@@ -27,7 +24,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 public class DrawPolygon
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public DrawPolygon(GPConfiguration a_conf)
       throws InvalidConfigurationException {

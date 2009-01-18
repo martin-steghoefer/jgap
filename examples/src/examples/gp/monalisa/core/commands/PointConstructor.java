@@ -9,13 +9,13 @@
  */
 package examples.gp.monalisa.core.commands;
 
-import examples.gp.monalisa.core.DrawingProblem.TerminalType;
-import java.awt.Point;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.gp.CommandGene;
-import org.jgap.gp.IGPProgram;
-import org.jgap.gp.impl.GPConfiguration;
-import org.jgap.gp.impl.ProgramChromosome;
+import java.awt.*;
+
+import org.jgap.*;
+import org.jgap.gp.*;
+import org.jgap.gp.impl.*;
+
+import examples.gp.monalisa.core.DrawingProblem.*;
 
 /**
  * A point, consisting of X and Y coordinates.
@@ -26,7 +26,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 public class PointConstructor
     extends CommandGene {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public PointConstructor(GPConfiguration a_conf)
       throws InvalidConfigurationException {

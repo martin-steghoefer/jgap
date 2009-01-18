@@ -9,8 +9,7 @@
  */
 package examples.gp.monalisa.gui;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.*;
 
 /**
  * The main class of the application. Starts the application.
@@ -22,7 +21,7 @@ public class GeneticDrawingApp
     extends SingleFrameApplication {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
   /**
    * At startup create and show the main frame of the application.
    */
