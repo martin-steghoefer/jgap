@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -562,6 +562,7 @@ public class ProgramChromosome
       boolean a_validateNode) {
     boolean mutated = false;
     GPConfiguration conf = getGPConfiguration();
+    RandomGenerator random = conf.getRandomGenerator();
     if (a_rootNode == null || a_validateNode) {
       int tries = 0;
       int evolutionRound = getGPConfiguration().getGenerationNr();
@@ -590,11 +591,16 @@ public class ProgramChromosome
         // Optionally use a mutant/clone of the originally selected command
         // instead of reusing the same command instance.
         // ----------------------------------------------------------------
-        if (conf.getRandomGenerator().nextDouble() <= conf.getMutationProb()) {
+        if (random.nextDouble() <= conf.getMutationProb()) {
           if (IMutateable.class.isAssignableFrom(node.getClass())) {
             try {
               CommandGene node2 = ( (IMutateable) node).applyMutation(0, 1);
-              node = node2;
+              // Check if mutant's function is allowed.
+              // --------------------------------------
+              if (getCommandOfClass(0, node2.getClass()) >= 0) {
+                node = node2;
+                mutated = true;
+              }
             } catch (InvalidConfigurationException iex) {
               // Ignore but log.
               // ---------------
@@ -611,9 +617,11 @@ public class ProgramChromosome
         break;
       } while (true);
     }
-    // Generate the node.
-    // ------------------
+    // Generate the new node.
+    // ----------------------
     m_depth[m_index] = m_maxDepth - a_depth;
+    // Clone node if possible and not already done via mutation.
+    // ---------------------------------------------------------
     if (!mutated && a_rootNode instanceof ICloneable) {
         /**@todo use clone handler*/
       a_rootNode = (CommandGene) ( (ICloneable) a_rootNode).clone();
@@ -621,6 +629,7 @@ public class ProgramChromosome
     }
     else {
       m_genes[m_index++] = a_rootNode;
+      mutated = true;
     }
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
@@ -628,8 +637,10 @@ public class ProgramChromosome
       // of children. Normally, dynamizeArity does nothing, see declaration
       // of method in CommandGene, which can be overridden in sub classes.
       // -------------------------------------------------------------------
-      /**@todo introduce dynamization parameter*/
-      a_rootNode.dynamizeArity();
+      boolean dynamize = random.nextDouble() <= conf.getDynamizeArityProb();
+      if (dynamize) {
+        a_rootNode.dynamizeArity();
+      }
       int arity = a_rootNode.getArity(ind);
       for (int i = 0; i < arity; i++) {
         // Ensure required depth is cared about.
