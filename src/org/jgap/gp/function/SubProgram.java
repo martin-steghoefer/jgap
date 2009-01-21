@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class SubProgram
     extends CommandGene implements ICloneable, IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.14 $";
+  private final static String CVS_REVISION = "$Revision: 1.15 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -246,20 +246,6 @@ public class SubProgram
     return this;
   }
 
-  /**@todo this is just a quick stitch*/
-//  public CommandGene applyMutation()
-//      throws InvalidConfigurationException {
-//    org.jgap.RandomGenerator randomGen = getGPConfiguration().
-//        getRandomGenerator();
-//    int random = randomGen.nextInt(20) + 2;
-//    Class[] types = new Class[random];
-//    for (int i = 0; i < random; i++) {
-//      types[i] = m_types[0];
-//    }
-//    SubProgram mutant = new SubProgram(getGPConfiguration(), types);
-//    return mutant;
-//  }
-
   public CommandGene applyMutation()
       throws InvalidConfigurationException {
     int[] subChildTypes = getSubChildTypes();
@@ -276,6 +262,7 @@ public class SubProgram
                                        getSubReturnType(), subChildTypes);
     return result;
   }
+
   /**
    * Adaptation of the arity so that it represents a value within the interval
    * [m_arityMin, m_arityMax].
