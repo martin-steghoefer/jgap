@@ -22,9 +22,26 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
+
+  private boolean m_simpleChromosomeSelection;
 
   public BranchTypingCross(GPConfiguration a_config) {
+    this(a_config, false);
+  }
+
+  /**
+   *
+   * @param a_config the configuration to use
+   * @param a_simpleChromosomeSelection true: plainly select chromosomes,
+   * false: select chromosomes proportionally to their size (=number of nodes
+   * within a chromosome)
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public BranchTypingCross(GPConfiguration a_config,
+          boolean a_simpleChromosomeSelection) {
     super(a_config);
   }
 
@@ -42,32 +59,44 @@ public class BranchTypingCross
   public IGPProgram[] operate(final IGPProgram a_i1,
                               final IGPProgram a_i2) {
     try {
-      // Determine which chromosome we'll cross, probabilistically determined
-      // by the sizes of the chromosomes of the first individual.
-      // This is equivalent to Koza's branch typing.
-      // --------------------------------------------------------------------
-      int[] sizes = new int[a_i1.size()];
-      int totalSize = 0;
-      for (int i = 0; i < a_i1.size(); i++) {
-        // Size of a chromosome = number of nodes.
-        // ---------------------------------------
-        sizes[i] = a_i1.getChromosome(i).getSize(0);
-        totalSize += sizes[i];
-      }
-      /**@todo we could also select a chromosome directly!*/
-      int nodeNum = getConfiguration().getRandomGenerator().nextInt(
-          totalSize);
-      // Select the chromosome in which node "nodeNum" resides.
-      // ------------------------------------------------------
       int chromosomeNum;
-      for (chromosomeNum = 0; chromosomeNum < a_i1.size(); chromosomeNum++) {
-        nodeNum -= sizes[chromosomeNum];
-        if (nodeNum < 0)
-          break;
+      if (!m_simpleChromosomeSelection) {
+        // Determine which chromosome we'll cross, probabilistically determined
+        // by the sizes of the chromosomes of the first individual.
+        // This is equivalent to Koza's branch typing.
+        // Advantage over plain selection: proportion of the chromosomes' sizes
+        // is cared about.
+        // --------------------------------------------------------------------
+        int[] sizes = new int[a_i1.size()];
+        int totalSize = 0;
+        for (int i = 0; i < a_i1.size(); i++) {
+          // Size of a chromosome = number of nodes.
+          // ---------------------------------------
+          sizes[i] = a_i1.getChromosome(i).getSize(0);
+          totalSize += sizes[i];
+        }
+        int nodeNum = getConfiguration().getRandomGenerator().nextInt(
+                totalSize);
+        // Select the chromosome in which node "nodeNum" resides.
+        // ------------------------------------------------------
+        for (chromosomeNum = 0; chromosomeNum < a_i1.size(); chromosomeNum++) {
+          nodeNum -= sizes[chromosomeNum];
+          if (nodeNum < 0) {
+            break;
+          }
+        }
+      } else {
+        // Select a chromosome directly.
+        // -----------------------------
+        chromosomeNum = getConfiguration().getRandomGenerator().
+                nextInt(a_i1.size());
       }
       // Cross the selected chromosomes.
       // -------------------------------
-      /**@todo try to ensure uniqueness for unique commands*/
+      /**@todo try to ensure uniqueness for unique commands:
+       * after selecting first node, check if there is a unique node in the sub
+       * tree. If so, check if it appears in the sub tree of the second node.
+       */
       ProgramChromosome[] newChromosomes = doCross(
           a_i1.getChromosome(chromosomeNum),
           a_i2.getChromosome(chromosomeNum));
@@ -146,21 +175,22 @@ public class BranchTypingCross
       // ------------------
       p0 = a_c0.getTerminal(random.nextInt(a_c0.numTerminals()));
     }
-    // Mutate the command's value.
-    // ----------------------------
-    /**@todo make this random and configurable*/
-    CommandGene command = a_c0.getNode(p0);
-    if (IMutateable.class.isInstance(command)) {
-      IMutateable term = (IMutateable) command;
-      command = term.applyMutation(0, 0.5d);
-      if (command != null) {
-        // Check if mutant's function is allowed.
-        // --------------------------------------
-        if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
-          a_c0.setGene(p0, command);
-        }
-      }
-    }
+//    // Mutate the command's value.
+//    // ----------------------------
+//    CommandGene command = a_c0.getNode(p0);
+//    if (random.nextDouble() <= m_mutationRate) {
+//      if (IMutateable.class.isInstance(command)) {
+//        IMutateable term = (IMutateable) command;
+//        command = term.applyMutation(0, 0.5d);
+//        if (command != null) {
+//          // Check if mutant's function is allowed.
+//          // --------------------------------------
+//          if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
+//            a_c0.setGene(p0, command);
+//          }
+//        }
+//      }
+//    }
     // Choose a point in c2 matching the type and subtype of p0.
     // ---------------------------------------------------------
     int p1;
@@ -190,21 +220,22 @@ public class BranchTypingCross
       p1 = a_c1.getTerminal(random.nextInt(a_c1.numTerminals(type_, subType)),
                           type_, subType);
     }
-    // Mutate the command's value.
-    // ----------------------------
-    /**@todo make this random and configurable*/
-    command = a_c1.getNode(p1);
-    if (IMutateable.class.isInstance(command)) {
-      IMutateable term = (IMutateable) command;
-      command = term.applyMutation(0, 0.5d);
-      if (command != null) {
-        // Check if mutant's function is allowed.
-        // --------------------------------------
-        if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
-          a_c1.setGene(p1, command);
-        }
-      }
-    }
+//    // Mutate the command's value.
+//    // ----------------------------
+//    command = a_c1.getNode(p1);
+//    if (random.nextDouble() <= m_mutationRate) {
+//      if (IMutateable.class.isInstance(command)) {
+//        IMutateable term = (IMutateable) command;
+//        command = term.applyMutation(0, 0.5d);
+//        if (command != null) {
+//          // Check if mutant's function is allowed.
+//          // --------------------------------------
+//          if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
+//            a_c1.setGene(p1, command);
+//          }
+//        }
+//      }
+//    }
     int s0 = a_c0.getSize(p0); //Number of nodes in c0 from index p0
     int s1 = a_c1.getSize(p1); //Number of nodes in c1 from index p1
     int d0 = a_c0.getDepth(p0); //Depth of c0 from index p0
