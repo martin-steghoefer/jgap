@@ -25,7 +25,7 @@ import org.jgap.gp.*;
 public class GPGenotypeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.10 $";
+  private final static String CVS_REVISION = "$Revision: 1.11 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(GPGenotypeTest.class);
@@ -126,7 +126,7 @@ public class GPGenotypeTest
     // ------------------
     int node = 0;
     assertEquals(9, p.getChromosome(1).size());
-    assertSame(CMD_FOR, p.getChromosome(1).getNode(node++));
+    assertEquals(CMD_FOR, p.getChromosome(1).getNode(node++));
     assertEquals(Increment.class, p.getChromosome(1).getNode(node++).getClass());
     assertEquals(Variable.class, p.getChromosome(1).getNode(node++).getClass());
     assertEquals(CMD_SUB_V_V_V, p.getChromosome(1).getNode(node++));
@@ -174,7 +174,7 @@ public class GPGenotypeTest
             break;
           }
         } catch (ArithmeticException ex) {
-          System.out.println("x = " + i);
+          System.out.println("Arithmetic Exception with x = " + i);
           System.out.println(a_program.getChromosome(j));
           throw ex;
         }
