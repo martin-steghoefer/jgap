@@ -13,6 +13,7 @@ import java.io.*;
 
 /**
  * Optional initializer for creating GP programs.
+ * Set it via GPConfiguration.setInitStrategy.
  *
  * @author Klaus Meffert
  * @since 3.2.1
@@ -20,7 +21,7 @@ import java.io.*;
 public interface IGPInitStrategy
     extends Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.4 $";
+  final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Initializes a chromosome within a GP program before a random creation of
