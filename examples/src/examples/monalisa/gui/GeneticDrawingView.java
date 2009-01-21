@@ -40,7 +40,7 @@ import org.jgap.InvalidConfigurationException;
 public class GeneticDrawingView
     extends FrameView {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public GeneticDrawingView(SingleFrameApplication app) {
     super(app);
@@ -163,11 +163,11 @@ public class GeneticDrawingView
     javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
     mainPanel.setName("mainPanel"); // NOI18N
     javax.swing.ActionMap actionMap = org.jdesktop.application.Application.
-        getInstance(examples.gp.monalisa.gui.GeneticDrawingApp.class).
+        getInstance(examples.monalisa.gui.GeneticDrawingApp.class).
         getContext().getActionMap(GeneticDrawingView.class, this);
     chooseImage.setAction(actionMap.get("chooseImage")); // NOI18N
     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.
-        Application.getInstance(examples.gp.monalisa.gui.GeneticDrawingApp.class).
+        Application.getInstance(examples.monalisa.gui.GeneticDrawingApp.class).
         getContext().getResourceMap(GeneticDrawingView.class);
     chooseImage.setText(resourceMap.getString("chooseImage.text")); // NOI18N
     chooseImage.setName("chooseImage"); // NOI18N

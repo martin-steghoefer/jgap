@@ -17,7 +17,7 @@ package examples.monalisa.gui;
 public class FittestDrawingView
     extends javax.swing.JFrame {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public FittestDrawingView() {
     initComponents();
@@ -38,7 +38,7 @@ public class FittestDrawingView
     mainPanel = new javax.swing.JPanel();
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.
-        Application.getInstance(examples.gp.monalisa.gui.GeneticDrawingApp.class).
+        Application.getInstance(examples.monalisa.gui.GeneticDrawingApp.class).
         getContext().getResourceMap(FittestDrawingView.class);
     setTitle(resourceMap.getString("Form.title")); // NOI18N
     setName("Form"); // NOI18N
