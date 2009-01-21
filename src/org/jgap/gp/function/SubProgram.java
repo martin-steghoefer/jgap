@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class SubProgram
     extends CommandGene implements ICloneable, IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -44,6 +44,52 @@ public class SubProgram
   public SubProgram(final GPConfiguration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
     this(a_conf, a_types, 0, null);
+  }
+
+  /**
+   * Collage constructor: Create a sub program that has a_arity elements
+   * of the same type a_types.
+   *
+   * @param a_conf the configuration to use
+   * @param a_arity number of children in the collage
+   * @param a_types uniform type of all children
+   * @throws org.jgap.InvalidConfigurationException
+   *
+ * @author Klaus Meffert
+ * @since 3.4
+   */
+  public SubProgram(final GPConfiguration a_conf, int a_arity, Class a_types)
+      throws InvalidConfigurationException {
+    this(a_conf, a_arity, a_types, false);
+  }
+
+  /**
+   * Collage constructor: Create a sub program that has a_arity elements
+   * of the same type a_types.
+   *
+   * @param a_conf the configuration to use
+   * @param a_arity number of children in the collage
+   * @param a_types uniform type of all children
+   * @param a_mutateable true: allow mutation of the sub program, i.e., the
+   * number of children (=arity) may be varied automatically during evolution
+   * @throws org.jgap.InvalidConfigurationException
+   *
+ * @author Klaus Meffert
+ * @since 3.4
+   */
+  public SubProgram(final GPConfiguration a_conf, int a_arity, Class a_types,
+          boolean a_mutateable)
+      throws InvalidConfigurationException {
+    super(a_conf, a_arity, a_types, 0, null);
+    if (a_arity < 1) {
+      throw new IllegalArgumentException("Arity must be >= 1");
+    }
+    m_types = new Class[a_arity];
+    for(int i=0;i<a_arity;i++) {
+      m_types[i] = a_types;
+    }
+    m_subtrees = a_arity;
+    m_mutateable = a_mutateable;
   }
 
   public SubProgram(final GPConfiguration a_conf, Class[] a_types,
@@ -246,6 +292,7 @@ public class SubProgram
     return this;
   }
 
+  /**@todo use dynamizeArity instead!*/
   public CommandGene applyMutation()
       throws InvalidConfigurationException {
     int[] subChildTypes = getSubChildTypes();
@@ -253,7 +300,6 @@ public class SubProgram
       subChildTypes = (int[]) subChildTypes.clone();
     }
     int size = getGPConfiguration().getRandomGenerator().nextInt(7) + 2;
-    size = m_types.length;
     Class[] types = new Class[size];
     for (int i = 0; i < size; i++) {
       types[i] = m_types[m_types.length - 1];
