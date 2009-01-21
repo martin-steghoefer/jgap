@@ -28,7 +28,7 @@ public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable,
     IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
@@ -51,7 +51,7 @@ public class GPProgram
   }
 
   /**
-   * Constructor.
+   * Master constructor.
    *
    * @param a_conf the configuration to use
    * @param a_types the type of each chromosome, the length is the number of
