@@ -24,7 +24,7 @@ import junit.framework.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.8 $";
+  private final static String CVS_REVISION = "$Revision: 1.9 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -50,6 +50,7 @@ public class ProgramChromosomeTest
       ;//this is OK
     }
   }
+
   /**
    * Produce a valid program. Random numbers preset to optimum (= hit at first
    * number returned by generator).
@@ -72,8 +73,8 @@ public class ProgramChromosomeTest
         CMD_CONST3, //5
         CMD_CONST4, //6
     };
-    rn.setNextIntSequence(new int[] {0,0, 4, 2, 5});
-    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_V_I,
+    rn.setNextIntSequence(new int[] {0, 1, 4, 2, 5});
+    pc.growOrFullNode(0, 3, CommandGene.IntegerClass, 0, funcSet, null,
                       0, true, -1, false);
     pc.redepth();
     assertEquals(CMD_SUB_V_I, pc.getNode(0));
@@ -181,12 +182,12 @@ public class ProgramChromosomeTest
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem0"), //8
         new ReadTerminal(m_gpconf, CommandGene.IntegerClass, "mem1"), //9
     };
-    rn.setNextIntSequence(new int[] {0, 3, 0, 5, 8, 9, 6, 7});
+    rn.setNextIntSequence(new int[] {3, 0, 5, 8, 9, 6, 7});
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_FOR, 0, true,
                       -1, false);
     pc.redepth();
+    assertEquals(CMD_FOR, pc.getNode(0));
     assertEquals(3, pc.getDepth(0));
-    assertSame(CMD_FOR, pc.getNode(0));
     assertEquals(Variable.class, pc.getNode(1).getClass());
     assertEquals(CMD_SUB_V_V_V, pc.getNode(2));
     assertEquals(AddAndStore.class, pc.getNode(3).getClass());
@@ -194,6 +195,131 @@ public class ProgramChromosomeTest
     assertEquals(ReadTerminal.class, pc.getNode(5).getClass());
     assertEquals(TransferMemory.class, pc.getNode(6).getClass());
     assertEquals(TransferMemory.class, pc.getNode(7).getClass());
+  }
+
+  /**
+   * Produce a valid program. Random numbers preset to optimum (= hit at first
+   * number returned by generator).
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGrowNode_4()
+      throws Exception {
+    IGPProgram ind = new GPProgram(m_gpconf,1);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, ind);
+    CommandGene[] funcSet = new CommandGene[] {
+        CMD_SUB_I_I, //0
+        CMD_TERM0, //1
+        CMD_TERM1, //2
+        CMD_TERM2, //3
+    };
+    rn.setNextIntSequence(new int[] {1, 2, 3});
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_I_I,
+                      0, true, -1, false);
+    pc.redepth();
+    assertEquals(CMD_SUB_I_I, pc.getNode(0));
+    assertEquals(CMD_TERM0, pc.getNode(1));
+    assertEquals(CMD_TERM1, pc.getNode(2));
+  }
+
+  /**
+   * Mutate arity of sub program: Increase arity from 2 to 3.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGrowNode_4_2()
+      throws Exception {
+    IGPProgram ind = new GPProgram(m_gpconf,1);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, ind);
+    CommandGene[] funcSet = new CommandGene[] {
+        CMD_SUB_I_IM, //0
+        CMD_TERM0, //1
+        CMD_TERM1, //2
+        CMD_TERM2, //3
+    };
+    rn.setNextIntSequence(new int[] {0, //CMD_SUB_I_IM
+    1, //CMD_SUB_I_IM.applyMutation (2 + 1 = arity 3)
+    1, //CMD_TERM0
+    2, //CMD_TERM1
+    3  //CMD_TERM2
+    });
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, null,
+                      0, true, -1, false);
+    pc.redepth();
+    assertEquals(CMD_SUB_I_I_I, pc.getNode(0));
+    assertEquals(3, pc.getNode(0).getArity(null));
+    assertEquals(CMD_TERM0, pc.getNode(1));
+    assertEquals(CMD_TERM1, pc.getNode(2));
+    assertEquals(CMD_TERM2, pc.getNode(3));
+  }
+
+  /**
+   * Mutate arity of sub program: Reduce arity from 3 to 2.
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGrowNode_4_3()
+      throws Exception {
+    IGPProgram ind = new GPProgram(m_gpconf,1);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, ind);
+    CommandGene[] funcSet = new CommandGene[] {
+        CMD_SUB_I_IM, //0
+        CMD_TERM0, //1
+        CMD_TERM1, //2
+        CMD_TERM2, //3
+    };
+    rn.setNextIntSequence(new int[] {0, //CMD_SUB_I_IM
+    0, //CMD_SUB_I_IM.applyMutation (2 + 0 = arity 2)
+    1, //CMD_TERM0
+    3  //CMD_TERM2
+    });
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, null,
+                      0, true, -1, false);
+    pc.redepth();
+    assertEquals(CMD_SUB_I_I, pc.getNode(0));
+    assertEquals(2, pc.getNode(0).getArity(null));
+    assertEquals(CMD_TERM0, pc.getNode(1));
+    assertEquals(CMD_TERM2, pc.getNode(2));
+  }
+
+  /**
+   * Produce a valid program. Random numbers preset to optimum (= hit at first
+   * number returned by generator).
+   *
+   * @throws Exception
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
+  public void testGrowNode_5()
+      throws Exception {
+    IGPProgram ind = new GPProgram(m_gpconf,1);
+    ProgramChromosome pc = new ProgramChromosome(m_gpconf, 50, ind);
+    CommandGene[] funcSet = new CommandGene[] {
+        CMD_SUB_I_I, //0
+        CMD_SUB_I_I2, //1
+        CMD_TERM0, //2
+        CMD_TERM1, //3
+        CMD_TERM2, //4
+    };
+    rn.setNextIntSequence(new int[] {1, 2, 3, 4});
+    pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, CMD_SUB_I_I,
+                      0, true, -1, false);
+    pc.redepth();
+    assertEquals(CMD_SUB_I_I, pc.getNode(0));
+    assertEquals(CMD_SUB_I_I2, pc.getNode(1));
+    assertEquals(CMD_TERM0, pc.getNode(2));
+    assertEquals(CMD_TERM1, pc.getNode(3));
+    assertEquals(CMD_TERM2, pc.getNode(4));
   }
 
   /**
