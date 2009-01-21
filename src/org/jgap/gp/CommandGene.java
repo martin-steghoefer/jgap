@@ -11,6 +11,7 @@ package org.jgap.gp;
 
 import java.io.*;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.impl.*;
 
@@ -30,13 +31,14 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.31 $";
+  private final static String CVS_REVISION = "$Revision: 1.32 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
    * persistent representation.
    */
   final static String PERSISTENT_FIELD_DELIMITER = ":";
+
   final static String EXTENDED_INFO_DELIMITER = "~";
 
   /**
@@ -75,7 +77,6 @@ public abstract class CommandGene
       m_value = a_value;
     }
   }
-
   private GPConfiguration m_configuration;
 
   /**
@@ -96,6 +97,7 @@ public abstract class CommandGene
   private int m_arity;
 
   private int m_arityMin;
+
   private int m_arityMax;
 
   private boolean m_integerType;
@@ -354,58 +356,55 @@ public abstract class CommandGene
     return m_arityMax;
   }
 
+  /**
+   * The compareTo-method.
+   *
+   * @param a_other the other object to compare
+   * @return -1, 0, 1
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public int compareTo(Object a_other) {
-    CommandGene o2 = (CommandGene) a_other;
-    if (size() != o2.size()) {
-      if (size() > o2.size()) {
-        return 1;
-      }
-      else {
-        return -1;
-      }
+    if (a_other == null) {
+      return 1;
     }
-    if (getClass() != o2.getClass()) {
+    CommandGene other = (CommandGene) a_other;
+    if (getClass() != other.getClass()) {
       /**@todo do it more precisely*/
       return -1;
     }
     else {
-      return 0;
+      return new CompareToBuilder()
+          .append(size(), other.size())
+          .append(m_subChildTypes, other.m_subChildTypes)
+          .append(m_subReturnType, other.m_subReturnType)
+          .toComparison();
     }
   }
 
+  /**
+   * The equals-method.
+   *
+   * @param a_other the other object to compare
+   * @return true if the objects are seen as equal
+   *
+   * @author Klaus Meffert
+   * @since 3.0
+   */
   public boolean equals(Object a_other) {
     if (a_other == null) {
       return false;
     }
-    else {
-      try {
-        /**@todo return type, input type*/
-        CommandGene other = (CommandGene) a_other;
-        if (getClass() == a_other.getClass()) {
-          if (getInternalValue() == null) {
-            if (other.getInternalValue() == null) {
-              return true;
-            }
-            else {
-              return false;
-            }
-          }
-          else {
-            if (other.getInternalValue() == null) {
-              return false;
-            }
-            else {
-              return true;
-            }
-          }
-        }
-        else {
-          return false;
-        }
-      }
-      catch (ClassCastException cex) {
-        return false;
-      }
+    try {
+      CommandGene other = (CommandGene) a_other;
+      return new EqualsBuilder()
+          .append(size(), other.size())
+          .append(m_subChildTypes, other.m_subChildTypes)
+          .append(m_subReturnType, other.m_subReturnType)
+          .isEquals();
+    } catch (ClassCastException cex) {
+      return false;
     }
   }
 
@@ -491,7 +490,7 @@ public abstract class CommandGene
    */
   public boolean execute_boolean(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return boolean");
+        " cannot return boolean");
   }
 
   /**
@@ -507,7 +506,7 @@ public abstract class CommandGene
    */
   public void execute_void(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return void");
+        " cannot return void");
   }
 
   /**
@@ -524,7 +523,7 @@ public abstract class CommandGene
    */
   public int execute_int(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return int");
+        " cannot return int");
   }
 
   /**
@@ -541,7 +540,7 @@ public abstract class CommandGene
    */
   public long execute_long(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return long");
+        " cannot return long");
   }
 
   /**
@@ -558,7 +557,7 @@ public abstract class CommandGene
    */
   public float execute_float(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return float");
+        " cannot return float");
   }
 
   /**
@@ -575,7 +574,7 @@ public abstract class CommandGene
    */
   public double execute_double(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return double");
+        " cannot return double");
   }
 
   /**
@@ -592,11 +591,11 @@ public abstract class CommandGene
    */
   public Object execute_object(ProgramChromosome c, int n, Object[] args) {
     throw new UnsupportedOperationException(getName() +
-                                            " cannot return Object");
+        " cannot return Object");
   }
 
   public String getName() {
-    return toString()+" (class "+getClass().getName()+")";
+    return toString() + " (class " + getClass().getName() + ")";
   }
 
   /**
@@ -844,7 +843,6 @@ public abstract class CommandGene
                                       + getClass()
                                       + " must not occur more than once!");
     }
-
   }
 
   /**
@@ -936,62 +934,62 @@ public abstract class CommandGene
       a_representation)
       throws UnsupportedRepresentationException {
     /**@todo finish*/
-/*
-    if (a_representation != null) {
-      StringTokenizer tokenizer =
-          new StringTokenizer(a_representation,
-                              PERSISTENT_FIELD_DELIMITER);
-      // Make sure the representation contains the correct number of
-      // fields. If not, throw an exception.
-      // -----------------------------------------------------------
-      if (tokenizer.countTokens() < 4) {
-        throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation "
-            + " is not recognized: it does not contain at least four tokens: "
-            + a_representation);
-      }
-      String arityRepresentation = tokenizer.nextToken();
-      String subRetBoundRepresentation = tokenizer.nextToken();
-      String subChildBoundRepresentation = tokenizer.nextToken();
-      // First parse and set the representation of the value.
-      // ----------------------------------------------------
-      if (a_representation.equals("null")) {
-        setAllele(null);
-      }
-      else {
-        try {
-          setAllele(new Integer(Integer.parseInt(a_representation)));
-        } catch (NumberFormatException e) {
-          throw new UnsupportedRepresentationException(
-              "The format of the given persistent representation " +
-              "is not recognized: field 1 does not appear to be " +
-              "an integer value.");
+    /*
+        if (a_representation != null) {
+          StringTokenizer tokenizer =
+              new StringTokenizer(a_representation,
+                                  PERSISTENT_FIELD_DELIMITER);
+          // Make sure the representation contains the correct number of
+          // fields. If not, throw an exception.
+          // -----------------------------------------------------------
+          if (tokenizer.countTokens() < 4) {
+            throw new UnsupportedRepresentationException(
+                "The format of the given persistent representation "
+     + " is not recognized: it does not contain at least four tokens: "
+                + a_representation);
+          }
+          String arityRepresentation = tokenizer.nextToken();
+          String subRetBoundRepresentation = tokenizer.nextToken();
+          String subChildBoundRepresentation = tokenizer.nextToken();
+          // First parse and set the representation of the value.
+          // ----------------------------------------------------
+          if (a_representation.equals("null")) {
+            setAllele(null);
+          }
+          else {
+            try {
+              setAllele(new Integer(Integer.parseInt(a_representation)));
+            } catch (NumberFormatException e) {
+              throw new UnsupportedRepresentationException(
+                  "The format of the given persistent representation " +
+                  "is not recognized: field 1 does not appear to be " +
+                  "an integer value.");
+            }
+          }
+          // Now parse and set the lower bound.
+          // ----------------------------------
+          try {
+            m_lowerBounds =
+                Integer.parseInt(lowerBoundRepresentation);
+          } catch (NumberFormatException e) {
+            throw new UnsupportedRepresentationException(
+                "The format of the given persistent representation " +
+                "is not recognized: field 2 does not appear to be " +
+                "an integer value.");
+          }
+          // Now parse and set the upper bound.
+          // ----------------------------------
+          try {
+            m_upperBounds =
+                Integer.parseInt(upperBoundRepresentation);
+          } catch (NumberFormatException e) {
+            throw new UnsupportedRepresentationException(
+                "The format of the given persistent representation " +
+                "is not recognized: field 3 does not appear to be " +
+                "an integer value.");
+          }
         }
-      }
-      // Now parse and set the lower bound.
-      // ----------------------------------
-      try {
-        m_lowerBounds =
-            Integer.parseInt(lowerBoundRepresentation);
-      } catch (NumberFormatException e) {
-        throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation " +
-            "is not recognized: field 2 does not appear to be " +
-            "an integer value.");
-      }
-      // Now parse and set the upper bound.
-      // ----------------------------------
-      try {
-        m_upperBounds =
-            Integer.parseInt(upperBoundRepresentation);
-      } catch (NumberFormatException e) {
-        throw new UnsupportedRepresentationException(
-            "The format of the given persistent representation " +
-            "is not recognized: field 3 does not appear to be " +
-            "an integer value.");
-      }
-    }
- */
+     */
   }
 
   /**
@@ -1007,5 +1005,4 @@ public abstract class CommandGene
    */
   protected void setValueFromString(int a_index, String a_value) {
   }
-
 }
