@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class TransferMemory
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -111,16 +111,15 @@ public class TransferMemory
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      TransferMemory other = (TransferMemory) a_other;
-      return new CompareToBuilder()
-          .append(m_sourceStorageName, other.m_sourceStorageName)
-          .append(m_targetStorageName, other.m_targetStorageName)
-          .toComparison();
-    }
+    TransferMemory other = (TransferMemory) a_other;
+    return new CompareToBuilder()
+        .append(m_sourceStorageName, other.m_sourceStorageName)
+        .append(m_targetStorageName, other.m_targetStorageName)
+        .toComparison();
   }
 
   /**
@@ -133,19 +132,14 @@ public class TransferMemory
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      TransferMemory other = (TransferMemory) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_sourceStorageName, other.m_sourceStorageName)
+          .append(m_targetStorageName, other.m_targetStorageName)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        TransferMemory other = (TransferMemory) a_other;
-        return new EqualsBuilder()
-            .append(m_sourceStorageName, other.m_sourceStorageName)
-            .append(m_targetStorageName, other.m_targetStorageName)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 

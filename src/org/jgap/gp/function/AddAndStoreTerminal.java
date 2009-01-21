@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class AddAndStoreTerminal
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -172,16 +172,15 @@ public class AddAndStoreTerminal
    * @since 3.2
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      AddAndStoreTerminal other = (AddAndStoreTerminal) a_other;
-      return new CompareToBuilder()
-          .append(m_storageName, other.m_storageName)
-          .append(m_type, other.m_type)
-          .toComparison();
-    }
+    AddAndStoreTerminal other = (AddAndStoreTerminal) a_other;
+    return new CompareToBuilder()
+        .append(m_storageName, other.m_storageName)
+        .append(m_type, other.m_type)
+        .toComparison();
   }
 
   /**
@@ -194,19 +193,14 @@ public class AddAndStoreTerminal
    * @since 3.2
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      AddAndStoreTerminal other = (AddAndStoreTerminal) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_storageName, other.m_storageName)
+          .append(m_type, other.m_type)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        AddAndStoreTerminal other = (AddAndStoreTerminal) a_other;
-        return new EqualsBuilder()
-            .append(m_storageName, other.m_storageName)
-            .append(m_type, other.m_type)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 

@@ -9,10 +9,9 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
@@ -25,7 +24,7 @@ import org.jgap.util.*;
 public class StoreTerminal
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -175,16 +174,15 @@ public class StoreTerminal
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      StoreTerminal other = (StoreTerminal) a_other;
-      return new CompareToBuilder()
-          .append(m_storageName, other.m_storageName)
-          .append(m_type, other.m_type)
-          .toComparison();
-    }
+    StoreTerminal other = (StoreTerminal) a_other;
+    return new CompareToBuilder()
+        .append(m_storageName, other.m_storageName)
+        .append(m_type, other.m_type)
+        .toComparison();
   }
 
   /**
@@ -197,19 +195,14 @@ public class StoreTerminal
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      StoreTerminal other = (StoreTerminal) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_storageName, other.m_storageName)
+          .append(m_type, other.m_type)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        StoreTerminal other = (StoreTerminal) a_other;
-        return new EqualsBuilder()
-            .append(m_storageName, other.m_storageName)
-            .append(m_type, other.m_type)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 

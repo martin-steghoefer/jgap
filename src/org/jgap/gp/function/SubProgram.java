@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class SubProgram
     extends CommandGene implements ICloneable, IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -55,8 +55,8 @@ public class SubProgram
    * @param a_types uniform type of all children
    * @throws org.jgap.InvalidConfigurationException
    *
- * @author Klaus Meffert
- * @since 3.4
+   * @author Klaus Meffert
+   * @since 3.4
    */
   public SubProgram(final GPConfiguration a_conf, int a_arity, Class a_types)
       throws InvalidConfigurationException {
@@ -74,18 +74,18 @@ public class SubProgram
    * number of children (=arity) may be varied automatically during evolution
    * @throws org.jgap.InvalidConfigurationException
    *
- * @author Klaus Meffert
- * @since 3.4
+   * @author Klaus Meffert
+   * @since 3.4
    */
   public SubProgram(final GPConfiguration a_conf, int a_arity, Class a_types,
-          boolean a_mutateable)
+                    boolean a_mutateable)
       throws InvalidConfigurationException {
     super(a_conf, a_arity, a_types, 0, null);
     if (a_arity < 1) {
       throw new IllegalArgumentException("Arity must be >= 1");
     }
     m_types = new Class[a_arity];
-    for(int i=0;i<a_arity;i++) {
+    for (int i = 0; i < a_arity; i++) {
       m_types[i] = a_types;
     }
     m_subtrees = a_arity;
@@ -220,15 +220,14 @@ public class SubProgram
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      SubProgram other = (SubProgram) a_other;
-      return new CompareToBuilder()
-          .append(m_types, other.m_types)
-          .toComparison();
-    }
+    SubProgram other = (SubProgram) a_other;
+    return new CompareToBuilder()
+        .append(m_types, other.m_types)
+        .toComparison();
   }
 
   /**
@@ -241,18 +240,13 @@ public class SubProgram
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      SubProgram other = (SubProgram) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_types, other.m_types)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        SubProgram other = (SubProgram) a_other;
-        return new EqualsBuilder()
-            .append(m_types, other.m_types)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 
@@ -300,6 +294,7 @@ public class SubProgram
       subChildTypes = (int[]) subChildTypes.clone();
     }
     int size = getGPConfiguration().getRandomGenerator().nextInt(7) + 2;
+    //size = m_types.length;
     Class[] types = new Class[size];
     for (int i = 0; i < size; i++) {
       types[i] = m_types[m_types.length - 1];
@@ -308,7 +303,6 @@ public class SubProgram
                                        getSubReturnType(), subChildTypes);
     return result;
   }
-
   /**
    * Adaptation of the arity so that it represents a value within the interval
    * [m_arityMin, m_arityMax].

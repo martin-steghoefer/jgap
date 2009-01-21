@@ -9,10 +9,9 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
@@ -26,7 +25,7 @@ import org.jgap.util.*;
 public class Increment
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.10 $";
+  private static final String CVS_REVISION = "$Revision: 1.11 $";
 
   private int m_increment;
 
@@ -120,15 +119,14 @@ public class Increment
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      Increment other = (Increment) a_other;
-      return new CompareToBuilder()
-          .append(m_increment, other.m_increment)
-          .toComparison();
-    }
+    Increment other = (Increment) a_other;
+    return new CompareToBuilder()
+        .append(m_increment, other.m_increment)
+        .toComparison();
   }
 
   /**
@@ -141,18 +139,13 @@ public class Increment
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      Increment other = (Increment) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_increment, other.m_increment)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        Increment other = (Increment) a_other;
-        return new EqualsBuilder()
-            .append(m_increment, other.m_increment)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 

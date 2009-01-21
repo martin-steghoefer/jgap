@@ -24,7 +24,7 @@ import org.jgap.util.*;
 public class ReadTerminal
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.12 $";
+  private final static String CVS_REVISION = "$Revision: 1.13 $";
 
   /**
    * Symbolic name of the storage. Must correspond with a chosen name for
@@ -133,15 +133,14 @@ public class ReadTerminal
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      ReadTerminal other = (ReadTerminal) a_other;
-      return new CompareToBuilder()
-          .append(m_storageName, other.m_storageName)
-          .toComparison();
-    }
+    ReadTerminal other = (ReadTerminal) a_other;
+    return new CompareToBuilder()
+        .append(m_storageName, other.m_storageName)
+        .toComparison();
   }
 
   /**
@@ -154,18 +153,13 @@ public class ReadTerminal
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      ReadTerminal other = (ReadTerminal) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_storageName, other.m_storageName)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        ReadTerminal other = (ReadTerminal) a_other;
-        return new EqualsBuilder()
-            .append(m_storageName, other.m_storageName)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 

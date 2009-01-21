@@ -13,7 +13,6 @@ import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
-import org.jgap.util.*;
 
 /**
  * Automatically Defined Function (ADF). Works with output of other chromosomes.
@@ -35,7 +34,7 @@ public class ADF
 //    implements ICloneable
 {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   private int m_chromosomeNum;
 
@@ -154,15 +153,14 @@ public class ADF
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      ADF other = (ADF) a_other;
-      return new CompareToBuilder()
-          .append(m_chromosomeNum, other.m_chromosomeNum)
-          .toComparison();
-    }
+    ADF other = (ADF) a_other;
+    return new CompareToBuilder()
+        .append(m_chromosomeNum, other.m_chromosomeNum)
+        .toComparison();
   }
 
   /**
@@ -175,21 +173,15 @@ public class ADF
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      ADF other = (ADF) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_chromosomeNum, other.m_chromosomeNum)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
     }
-    else {
-      try {
-        ADF other = (ADF) a_other;
-        return new EqualsBuilder()
-            .append(m_chromosomeNum, other.m_chromosomeNum)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
-    }
   }
-
 //  /**
 //   * Clones the object.
 //   *

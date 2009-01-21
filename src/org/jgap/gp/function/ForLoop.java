@@ -9,9 +9,9 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class ForLoop
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -250,6 +250,16 @@ public class ForLoop
   }
 
   /**
+   * @return symbolic name of the variable name used in the for header.
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public String getVarName() {
+    return m_varName;
+  }
+
+  /**
    * The compareTo-method.
    *
    * @param a_other the other object to compare
@@ -259,16 +269,18 @@ public class ForLoop
    * @since 3.0
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      ForLoop other = (ForLoop) a_other;
-      return new CompareToBuilder()
-          .append(m_typeVar, other.m_typeVar)
-          .append(m_maxLoop, other.m_maxLoop)
-          .toComparison();
-    }
+    ForLoop other = (ForLoop) a_other;
+    return new CompareToBuilder()
+        .append(m_typeVar, other.m_typeVar)
+        .append(m_maxLoop, other.m_maxLoop)
+        .append(m_startIndex, other.m_startIndex)
+        .append(m_endIndex, other.m_endIndex)
+        .append(m_increment, other.m_increment)
+        .toComparison();
   }
 
   /**
@@ -281,19 +293,17 @@ public class ForLoop
    * @since 3.0
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      ForLoop other = (ForLoop) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_typeVar, other.m_typeVar)
+          .append(m_maxLoop, other.m_maxLoop)
+          .append(m_startIndex, other.m_startIndex)
+          .append(m_endIndex, other.m_endIndex)
+          .append(m_increment, other.m_increment)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        ForLoop other = (ForLoop) a_other;
-        return new EqualsBuilder()
-            .append(m_typeVar, other.m_typeVar)
-            .append(m_maxLoop, other.m_maxLoop)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 
@@ -318,19 +328,18 @@ public class ForLoop
    */
   public Object clone() {
     try {
-        ForLoop result ;
-        if (getArity(null) == 1) {
-      result = new ForLoop(getGPConfiguration(), m_typeVar,
-                                   m_startIndex, m_endIndex, m_increment,
-                                   m_varName, getSubReturnType(),
-                                   getSubChildType(0));
-        }
-        else {
-      result = new ForLoop(getGPConfiguration(), m_typeVar,
-                                   m_startIndex, m_maxLoop,
-                                   m_varName);
-
-        }
+      ForLoop result;
+      if (getArity(null) == 1) {
+        result = new ForLoop(getGPConfiguration(), m_typeVar,
+                             m_startIndex, m_endIndex, m_increment,
+                             m_varName, getSubReturnType(),
+                             getSubChildType(0));
+      }
+      else {
+        result = new ForLoop(getGPConfiguration(), m_typeVar,
+                             m_startIndex, m_maxLoop,
+                             m_varName);
+      }
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);

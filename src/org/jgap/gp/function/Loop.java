@@ -9,15 +9,14 @@
  */
 package org.jgap.gp.function;
 
+import org.apache.commons.lang.builder.*;
 import org.jgap.*;
 import org.jgap.gp.*;
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 
 /**
- * A loop.
+ * A loop that executes a given number of times.
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -25,7 +24,7 @@ import org.jgap.util.*;
 public class Loop
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   private Class m_typeVar;
 
@@ -95,16 +94,15 @@ public class Loop
    * @since 3.01
    */
   public int compareTo(Object a_other) {
-    if (a_other == null) {
-      return 1;
+    int result = super.compareTo(a_other);
+    if (result != 0) {
+      return result;
     }
-    else {
-      Loop other = (Loop) a_other;
-      return new CompareToBuilder()
-          .append(m_typeVar, other.m_typeVar)
-          .append(m_count, other.m_count)
-          .toComparison();
-    }
+    Loop other = (Loop) a_other;
+    return new CompareToBuilder()
+        .append(m_typeVar, other.m_typeVar)
+        .append(m_count, other.m_count)
+        .toComparison();
   }
 
   /**
@@ -117,19 +115,14 @@ public class Loop
    * @since 3.01
    */
   public boolean equals(Object a_other) {
-    if (a_other == null) {
+    try {
+      Loop other = (Loop) a_other;
+      return super.equals(a_other) && new EqualsBuilder()
+          .append(m_typeVar, other.m_typeVar)
+          .append(m_count, other.m_count)
+          .isEquals();
+    } catch (ClassCastException cex) {
       return false;
-    }
-    else {
-      try {
-        Loop other = (Loop) a_other;
-        return new EqualsBuilder()
-            .append(m_typeVar, other.m_typeVar)
-            .append(m_count, other.m_count)
-            .isEquals();
-      } catch (ClassCastException cex) {
-        return false;
-      }
     }
   }
 
