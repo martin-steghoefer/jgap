@@ -30,7 +30,7 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.44 $";
+  private final static String CVS_REVISION = "$Revision: 1.45 $";
 
   /**@todo introduce lock for configuration*/
 
@@ -65,9 +65,15 @@ public class GPConfiguration
   private double m_reproductionProb = 0.1d;
 
   /**
-   * The probability that a node is mutated during growing a program
+   * The probability that a node is mutated during growing a program.
    */
   private double m_mutationProb = 0.1d;
+
+  /**
+   * The probability that the arity of a node is changed during growing a
+   * program.
+   */
+  private double m_dynArityProb = 0.08d;
 
   /**
    * Percentage of the population that will be filled with new individuals
@@ -77,7 +83,7 @@ public class GPConfiguration
 
   /**
    * In crossover: If random number (0..1) < this value, then choose a function
-   * otherwise a terminal
+   * otherwise a terminal.
    */
   private double m_functionProb = 0.9d;
 
@@ -109,8 +115,7 @@ public class GPConfiguration
   /**
    * True: Set of available functions must contain any "type of function" that
    * may be needed during construction of a new program. A "type of function"
-   * is, for instance, a terminal with return type
-   * <code>CommandGene.IntegerClass</code>.
+   * is, for instance, a terminal with return type CommandGene.IntegerClass.
    */
   private boolean m_strictProgramCreation;
 
@@ -137,7 +142,7 @@ public class GPConfiguration
 
   /**
    * Prototype of a valid program. May be cloned if needed (do not reference
-   * it!)
+   * it!).
    *
    * @since 3.2
    */
@@ -359,6 +364,28 @@ public class GPConfiguration
    */
   public void setMutationProb(float a_mutationProb) {
     m_mutationProb = a_mutationProb;
+  }
+
+  /**
+   * @return probability for dynamizing the arity of a node during growing a
+   * program
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public double getDynamizeArityProb() {
+    return m_dynArityProb;
+  }
+
+  /**
+   * @param a_mutationProb probability for dynamizing the arity of a node during growing a
+   * program
+   *
+   * @author Klaus Meffert
+   * @since 3.4
+   */
+  public void setDynamizeArityProb(float a_dynArityProb) {
+    m_dynArityProb = a_dynArityProb;
   }
 
   /**
