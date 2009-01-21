@@ -11,6 +11,7 @@ package org.jgap.gp;
 
 import junit.framework.*;
 import org.jgap.gp.impl.*;
+import org.jgap.gp.function.*;
 
 /**
  * Test suite for all tests of package org.jgap.gp.
@@ -22,10 +23,11 @@ public class AllGPTests
     extends TestSuite {
 
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite("AllGPTests");
+    suite.addTest(AllGPFunctionTests.suite());
     suite.addTest(AllGPImplTests.suite());
     suite.addTest(CommandGeneTest.suite());
     suite.addTest(CommandDynamicArityTest.suite());
