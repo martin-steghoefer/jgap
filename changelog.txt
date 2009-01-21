@@ -2,28 +2,18 @@
 -----------------------------------------------------------
 * Added the Mona Lisa painting problem (GA and GP version).
   Thanx to Yann for his great contribution
-* Added interface IUniqueCommand for GP commands, optimized
-  GP program creation
+* Enhanced Javadoc
+* Added some unit tests
 * GPPopulation: enhanced creation of new programs
 * CommandGene: added new versions of method
   ensureUniqueness
 * CommandGene: added support for dynamization of arity
-* Add setTournamentSize in TournamentSelector
-* Output of command's class when violating uniqueness
-  constraint via CommandGene.ensureUniqueness
-* GPFitnessFunction: added exception logging
 * ProgramChromosome, GPProgram: implemented interface
   IBusinessKey (method getBusinessKey)
 * ProgramChromosome.growOrFullNode: Added loggin in case of
   an ignored problem
-* Made inner class TournamentSelectorConfigurable of
-  org.jgap.impl.TournamentSelector serializable
-* Simplified GP class IncrementMemory by removing an
-  obsolete constructor
-* GPProgram: extracted statement into new method
-  putToCache, removed two todos
-* GPTestCase: added method getRandomGenerator
 * Added constructors for GP-command NOP, False, True, And
+* Fixed bug in ForLoop.clone
 * GP-command terminal now supports primitive class types
 * Made some GP-commands cloneable: True, False, If, IfElse,
   Equals, Add, Subtract, Multiply, Divide, Exp, Increment,
@@ -34,9 +24,24 @@
   Add4, AddAndStore, ArcCosine, ArcSine, ArcTangent,
   Ceil, ExchangeMemory, Floor, ForLoop, ForXLoop, Log,
   GreaterThan, LesserThan
+* Enhanced compareTo of several GP commands
 * Made GP commands of TicTacToe example cloneable
-* Replaces System.out's in examples with call to logger
-* Enhanced Javadoc
+* Replaced System.out's in examples with call to logger
+  (but kept them in AntTrailProblem due to formatting
+  issues)
+* Added interface IUniqueCommand for GP commands, optimized
+  GP program creation
+* Add setTournamentSize in TournamentSelector
+* Output of command's class when violating uniqueness
+  constraint via CommandGene.ensureUniqueness
+* GPFitnessFunction: added exception logging
+* Made inner class TournamentSelectorConfigurable of
+  org.jgap.impl.TournamentSelector serializable
+* Simplified GP class IncrementMemory by removing an
+  obsolete constructor
+* GPProgram: extracted statement into new method
+  putToCache, removed two todos
+* GPTestCase: added method getRandomGenerator
 
 3.3.4
 -----------------------------------------------------------
