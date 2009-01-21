@@ -27,7 +27,7 @@ import org.jgap.gp.function.SubProgram;
 public class CommandDynamicArityTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandDynamicArityTest.class);
@@ -124,11 +124,21 @@ public class CommandDynamicArityTest
     // Verify arity of IfDyn.
     // ----------------------
     GPPopulation pop = gp.getGPPopulation();
+    int index = 0;
     for(int i=0;i<pop.size();i++) {
       CommandGene gene = pop.getGPProgram(i).getChromosome(0).getGene(0);
       if (IfDyn.class.isAssignableFrom(gene.getClass())) {
         IfDyn ifdyn = (IfDyn)gene;
-        System.out.println(ifdyn.getArity(null));
+        int arity = ifdyn.getArity(null);
+        switch(index) {
+            case 0:assertEquals(4, arity);break;
+            case 1:assertEquals(4, arity);break;
+            case 2:assertEquals(4, arity);break;
+            case 3:assertEquals(4, arity);break;
+            case 4:assertEquals(5, arity);break;
+            case 5:assertEquals(5, arity);break;
+        }
+        index++;
       }
     }
   }
