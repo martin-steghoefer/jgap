@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.42 $";
+  private final static String CVS_REVISION = "$Revision: 1.43 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
   final static String GENE_DELIMITER_HEADING = "<";
@@ -598,26 +598,7 @@ public class ProgramChromosome
           if (IMutateable.class.isAssignableFrom(node.getClass())) {
             try {
               CommandGene node2 = ((IMutateable) node).applyMutation(0, 1);
-              /**@todo make configurable*/
-              if (node2.getClass().getName().equals("org.jgap.gp.function.SubProgram")) {
-                IGPProgram ind = getIndividual();
-                for (int i = 0; i < node2.getArity(ind); i++) {
-                  int child = getChild(node, i);
-                  if (child != -2) {
-                    if (child < 0) {
-                      // Insert new child for given place in incomplete node.
-                      // ----------------------------------------------------
-                      int recurseLevel = 0;
-                      growOrFullNode(a_num, a_depth - 1,
-                              node2.getChildType(getIndividual(), i),
-                              node2.getSubChildType(i),
-                              a_functionSet, node2, recurseLevel + 1, a_grow,
-                              i, true);
-                      node = node2;
-                    }
-                  }
-                }
-              }
+              node = node2;
             } catch (InvalidConfigurationException iex) {
               // Ignore but log.
               // ---------------
@@ -639,7 +620,8 @@ public class ProgramChromosome
     // ------------------
     m_depth[m_index] = m_maxDepth - a_depth;
     if (!mutated && a_rootNode instanceof ICloneable) { /**@todo use clone handler*/
-      m_genes[m_index++] = (CommandGene) ( (ICloneable) a_rootNode).clone();
+      a_rootNode = (CommandGene) ( (ICloneable) a_rootNode).clone();
+      m_genes[m_index++] = a_rootNode;
     }
     else {
       m_genes[m_index++] = a_rootNode;
@@ -647,22 +629,16 @@ public class ProgramChromosome
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
       // Optional dynamize the arity for commands with a flexible number
-      // of children. Normally, dynamizeArity does nothing, see CommandGene.
+      // of children. Normally, dynamizeArity does nothing, see declaration
+      // of method in CommandGene, which can be overridden in sub classes.
       // -------------------------------------------------------------------
+      /**@todo introduce dynamization parameter*/
       a_rootNode.dynamizeArity();
       int arity = a_rootNode.getArity(ind);
       for (int i = 0; i < arity; i++) {
-//        /**@todo ensure required depth is cared about*/
+        // Ensure required depth is cared about.
+        // -------------------------------------
         if (m_index < m_depth.length) {
-//          if (arity !=a_rootNode.getArity(ind)) {
-//            /**todo cause: dynamizeArity!*/
-//            if (i >= a_rootNode.getArity(ind)) {
-//              break;
-//            }
-//            else {
-//             arity = a_rootNode.getArity(ind);
-//            }
-//          }
           a_functionSet = growOrFullNode(a_num, a_depth - 1,
                          a_rootNode.getChildType(getIndividual(), i),
                          a_rootNode.getSubChildType(i),
