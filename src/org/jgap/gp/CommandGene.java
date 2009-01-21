@@ -20,9 +20,9 @@ import org.jgap.gp.impl.*;
  * A CommandGene represents a node within a GP program. A node either is a
  * terminal (like a constant), or a function (having input parameters).
  *
- * A CommandGene can hold additional
- * CommandGene's, it acts sort of like a Composite (also see CompositeGene for
- * a comparable concept, although for a GA).
+ * A CommandGene can hold additional CommandGene's, it acts sort of like a
+ * * Composite (also see CompositeGene for a comparable concept, although for a
+ * GA).
  *
  * @author Klaus Meffert
  * @since 3.0
@@ -30,7 +30,7 @@ import org.jgap.gp.impl.*;
 public abstract class CommandGene
     implements Comparable, Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.30 $";
+  private final static String CVS_REVISION = "$Revision: 1.31 $";
 
   /**
    * Represents the delimiter that is used to separate fields in the
@@ -55,6 +55,26 @@ public abstract class CommandGene
   public final static Class DoubleClass = Double.class;
 
   public final static Class VoidClass = Void.class;
+
+  public enum COMMAND_TYPE {
+    COMMAND_TYPE_UNDEFINED(0),
+    COMMAND_TYPE_LOOP(8),
+    COMMAND_TYPE_CONDITIONAL(16),
+    COMMAND_TYPE_OPERATION(32),
+    COMMAND_TYPE_MATH_OPERATION(33),
+    COMMAND_TYPE_DECLARATION(64),
+    COMMAND_TYPE_ASSIGNMENT(128);
+
+    private int m_value;
+
+    public int intValue() {
+      return m_value;
+    }
+
+    COMMAND_TYPE(int a_value) {
+      m_value = a_value;
+    }
+  }
 
   private GPConfiguration m_configuration;
 
@@ -576,7 +596,7 @@ public abstract class CommandGene
   }
 
   public String getName() {
-    return toString();
+    return toString()+" (class "+getClass().getName()+")";
   }
 
   /**
