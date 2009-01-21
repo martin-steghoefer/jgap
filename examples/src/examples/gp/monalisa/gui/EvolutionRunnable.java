@@ -30,7 +30,7 @@ import examples.gp.monalisa.core.*;
 public class EvolutionRunnable
     implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private transient static Logger LOGGER = Logger.getLogger(EvolutionRunnable.class);
 
@@ -87,7 +87,7 @@ public class EvolutionRunnable
           Graphics g = m_view.getFittestDrawingView().getMainPanel().
               getGraphics();
           if (!initView) {
-            m_view.getFittestDrawingView().setSize(202, 200 + 30);
+            m_view.getFittestDrawingView().setSize(204, 200 + 30);
             m_view.getFittestDrawingView().getMainPanel().setSize(200, 200);
             initView = true;
           }
