@@ -23,26 +23,30 @@ import org.jgap.gp.impl.*;
  */
 public abstract class GPTestCase
     extends JGAPTestCase {
+  /** String containing the CVS revision. Read out via reflection!*/
+  private static final String CVS_REVISION = "$Revision: 1.8 $";
 
   protected GPConfiguration m_gpconf;
 
   protected RandomGeneratorForTesting rn;
 
   protected Constant CMD_CONST0, CMD_CONST1, CMD_CONST2, CMD_CONST3, CMD_CONST4;
-  protected Terminal CMD_TERM0,CMD_TERM1,CMD_TERM2;
+
+  protected Terminal CMD_TERM0, CMD_TERM1, CMD_TERM2;
 
   protected Add CMD_ADD;
 
   protected ForLoop CMD_FOR;
+
   protected ForXLoop CMD_FORX;
 
   protected SubProgram CMD_SUB_I_I, CMD_SUB_I_I2, CMD_SUB_I_IM, CMD_SUB_I_I2M,
-          CMD_SUB_I_I_I, CMD_SUB_V_I, CMD_SUB_V_V_V, CMD_SUB_V_V;
+  CMD_SUB_I_I_I, CMD_SUB_V_I, CMD_SUB_V_V_V, CMD_SUB_V_V;
 
   protected NOP CMD_NOP;
 
   public RandomGeneratorForTesting getRandomGenerator() {
-    return (RandomGeneratorForTesting)m_gpconf.getRandomGenerator();
+    return (RandomGeneratorForTesting) m_gpconf.getRandomGenerator();
   }
 
   public void setUp() {
@@ -74,17 +78,18 @@ public abstract class GPTestCase
                                    new Class[] {CommandGene.IntegerClass,
                                    CommandGene.IntegerClass});
       CMD_SUB_I_IM = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.IntegerClass,
-                                   CommandGene.IntegerClass}, true);
+                                    new Class[] {CommandGene.IntegerClass,
+                                    CommandGene.IntegerClass}, true);
       CMD_SUB_I_I2 = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.IntegerClass,
-                                   CommandGene.IntegerClass});
+                                    new Class[] {CommandGene.IntegerClass,
+                                    CommandGene.IntegerClass});
       CMD_SUB_I_I2M = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.IntegerClass,
-                                   CommandGene.IntegerClass}, true);
+                                     new Class[] {CommandGene.IntegerClass,
+                                     CommandGene.IntegerClass}, true);
       CMD_SUB_I_I_I = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.IntegerClass,
-                                   CommandGene.IntegerClass,CommandGene.IntegerClass});
+                                     new Class[] {CommandGene.IntegerClass,
+                                     CommandGene.IntegerClass,
+                                     CommandGene.IntegerClass});
       CMD_SUB_V_I = new SubProgram(m_gpconf,
                                    new Class[] {CommandGene.VoidClass,
                                    CommandGene.IntegerClass});
@@ -92,17 +97,12 @@ public abstract class GPTestCase
                                    new Class[] {CommandGene.VoidClass,
                                    CommandGene.VoidClass});
       CMD_SUB_V_V_V = new SubProgram(m_gpconf,
-                                   new Class[] {CommandGene.VoidClass,
-                                   CommandGene.VoidClass,
-                                   CommandGene.VoidClass});
+                                     new Class[] {CommandGene.VoidClass,
+                                     CommandGene.VoidClass,
+                                     CommandGene.VoidClass});
       CMD_ADD = new Add(m_gpconf, CommandGene.IntegerClass);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       throw new RuntimeException(ex);
     }
   }
-
-
-  /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.7 $";
 }
