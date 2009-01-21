@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class ForLoop
     extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   private static String INTERNAL_COUNTER_STORAGE = "FORLOOPSTORAGE_INT";
 
@@ -318,10 +318,19 @@ public class ForLoop
    */
   public Object clone() {
     try {
-      ForLoop result = new ForLoop(getGPConfiguration(), m_typeVar,
+        ForLoop result ;
+        if (getArity(null) == 1) {
+      result = new ForLoop(getGPConfiguration(), m_typeVar,
                                    m_startIndex, m_endIndex, m_increment,
                                    m_varName, getSubReturnType(),
                                    getSubChildType(0));
+        }
+        else {
+      result = new ForLoop(getGPConfiguration(), m_typeVar,
+                                   m_startIndex, m_maxLoop,
+                                   m_varName);
+
+        }
       return result;
     } catch (Exception ex) {
       throw new CloneException(ex);
