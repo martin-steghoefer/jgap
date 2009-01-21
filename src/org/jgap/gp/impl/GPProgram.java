@@ -11,7 +11,6 @@ package org.jgap.gp.impl;
 
 import java.io.*;
 import java.util.*;
-
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.function.*;
@@ -28,11 +27,14 @@ public class GPProgram
     extends GPProgramBase implements Serializable, Comparable, ICloneable,
     IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.22 $";
+  private final static String CVS_REVISION = "$Revision: 1.23 $";
 
   final static String PROGRAMCHROM_DELIMITER_HEADING = "<";
+
   final static String PROGRAMCHROM_DELIMITER_CLOSING = ">";
+
   final static String PROGRAMCHROM_DELIMITER = "#";
+
   /**
    * Holds the chromosomes contained in this program.
    */
@@ -269,10 +271,10 @@ public class GPProgram
       ProgramChromosome chrom = m_chromosomes[i];
       chrom.setFunctionSet(a_nodeSets[i]);
       CommandGene[] functionSet = chrom.getFunctionSet();
-      CommandGene[] newFktSet = new CommandGene[functionSet.length + a_argTypes[i].length];
+      CommandGene[] newFktSet = new CommandGene[functionSet.length +
+          a_argTypes[i].length];
       System.arraycopy(functionSet, 0, newFktSet, 0,
                        functionSet.length);
-
       for (int ii = 0; ii < a_argTypes[i].length; ii++) {
         try {
           functionSet[a_nodeSets[i].length + ii]
@@ -566,7 +568,7 @@ public class GPProgram
         ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
             getCloneHandlerFor(appData, null);
         if (cloner != null) {
-          result.setApplicationData(cloner.perform(appData,null,null));
+          result.setApplicationData(cloner.perform(appData, null, null));
         }
         else {
           result.setApplicationData(appData);
@@ -593,12 +595,12 @@ public class GPProgram
    */
   public String getPersistentRepresentation() {
     StringBuffer b = new StringBuffer();
-    for(ProgramChromosome chrom:m_chromosomes) {
+    for (ProgramChromosome chrom : m_chromosomes) {
       b.append(PROGRAMCHROM_DELIMITER_HEADING);
-        b.append(encode(
-            chrom.getClass().getName() +
-            PROGRAMCHROM_DELIMITER +
-            chrom.getPersistentRepresentation()));
+      b.append(encode(
+          chrom.getClass().getName() +
+          PROGRAMCHROM_DELIMITER +
+          chrom.getPersistentRepresentation()));
       b.append(PROGRAMCHROM_DELIMITER_CLOSING);
     }
     return b.toString();
