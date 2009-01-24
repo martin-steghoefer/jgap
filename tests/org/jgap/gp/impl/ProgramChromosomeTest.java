@@ -24,7 +24,7 @@ import junit.framework.*;
 public class ProgramChromosomeTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.9 $";
+  private final static String CVS_REVISION = "$Revision: 1.10 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(ProgramChromosomeTest.class);
@@ -249,6 +249,7 @@ public class ProgramChromosomeTest
     2, //CMD_TERM1
     3  //CMD_TERM2
     });
+    pc.setFunctions(funcSet);
     pc.growOrFullNode(0, 5, CommandGene.IntegerClass, 0, funcSet, null,
                       0, true, -1, false);
     pc.redepth();
