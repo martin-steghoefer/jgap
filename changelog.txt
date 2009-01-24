@@ -4,16 +4,18 @@
   Thanx to Yann for his great contribution
 * Enhanced Javadoc
 * Added some unit tests
+* CommandGene, ProgramChromosome: added support for
+  dynamization of the arity of nodes
+* GPConfiguration: added parameter for dynamization of
+  nodes' arities
 * GPPopulation: enhanced creation of new programs
+* ProgramChromosome
 * CommandGene: added new versions of method
   ensureUniqueness
-* CommandGene: added support for dynamization of arity
 * ProgramChromosome, GPProgram: implemented interface
   IBusinessKey (method getBusinessKey)
-* ProgramChromosome.growOrFullNode: Added loggin in case of
-  an ignored problem
-* Added constructors for GP-command NOP, False, True, And
-* Fixed bug in ForLoop.clone
+* ProgramChromosome.growOrFullNode: Added loggin in case
+  of an ignored problem
 * GP-command terminal now supports primitive class types
 * Made some GP-commands cloneable: True, False, If, IfElse,
   Equals, Add, Subtract, Multiply, Divide, Exp, Increment,
@@ -25,6 +27,10 @@
   Ceil, ExchangeMemory, Floor, ForLoop, ForXLoop, Log,
   GreaterThan, LesserThan
 * Enhanced compareTo of several GP commands
+* Added option in BranchTypingCross to plainly select a
+  chromosome
+* Added constructors for GP-command NOP, False, True, And
+* Fixed bug in ForLoop.clone
 * Made GP commands of TicTacToe example cloneable
 * Replaced System.out's in examples with call to logger
   (but kept them in AntTrailProblem due to formatting
