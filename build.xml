@@ -123,7 +123,7 @@
     <jar jarfile="jgap-examples.jar" basedir="${classDir}">
          <include name="examples/*.class"/>
          <include name="examples/monalisa/gui/resources/*.*"/>
-         <include name="examples/monalisa/gui/resources/*.*"/>
+         <include name="examples/gp/monalisa/gui/resources/*.*"/>
          <include name="examples/**"/>
          <exclude name="examples/functionFinder/*.class"/>
          <exclude name="examples/functionFinder/test/*.class"/>
