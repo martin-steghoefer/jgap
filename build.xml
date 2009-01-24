@@ -47,6 +47,13 @@
 
   <target name="compile">
     <mkdir dir="${classDir}" />
+  <copy todir="${classDir}">
+    <fileset dir="${examples}">
+      <include name="**/*.properties"/>
+      <include name="**/*.png"/>
+      <include name="**/*.jpg"/>
+    </fileset>
+  </copy>
     <javac srcdir="${src}"
            destdir="${classDir}"
            classpathref="classpathCompile">
@@ -115,6 +122,8 @@
 
     <jar jarfile="jgap-examples.jar" basedir="${classDir}">
          <include name="examples/*.class"/>
+         <include name="examples/monalisa/gui/resources/*.*"/>
+         <include name="examples/monalisa/gui/resources/*.*"/>
          <include name="examples/**"/>
          <exclude name="examples/functionFinder/*.class"/>
          <exclude name="examples/functionFinder/test/*.class"/>
