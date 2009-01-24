@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.16 $";
+  private final static String CVS_REVISION = "$Revision: 1.17 $";
 
   protected int[][] m_map;
 
@@ -125,7 +125,7 @@ public class AntTrailProblem
     GPConfiguration conf = getGPConfiguration();
     CommandGene[][] nodeSets = { {
         new SubProgram(conf, new Class[] {CommandGene.VoidClass,
-                       CommandGene.VoidClass, CommandGene.VoidClass}),
+                       CommandGene.VoidClass, CommandGene.VoidClass}, true),
         new SubProgram(conf, new Class[] {CommandGene.VoidClass, //nonclassic
                        CommandGene.VoidClass, CommandGene.VoidClass,
                        CommandGene.VoidClass}),
