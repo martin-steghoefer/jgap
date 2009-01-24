@@ -29,7 +29,7 @@ import org.jgap.util.*;
 public class PaintedDesertProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
   /**
    * Local copy of the map read into from the file.
    */
@@ -260,7 +260,7 @@ public class PaintedDesertProblem
       // Read the map from file.
       problem.m_map = problem.readMap(filename);
       problem.displaySolution(problem.m_map, problem.m_map);
-      m_antMap = new AntMap(problem.m_map, m_maxMoves, problem.m_ants);
+      m_antMap = new AntMap(problem.m_map, problem.m_ants);
       // Simple implementation of running evolution in a thread.
 
       final Thread t = new Thread(gp);
