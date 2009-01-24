@@ -17,7 +17,7 @@ package examples.gp.paintedDesert;
  */
 public class AntMap {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
   /** Holds the instance of the ant being processed.  Assumption that some external
    * single threaded process will loop through all the ants using nextAnt to sequence
    * through the ants.  It is expected that the clients of the AntMap can use getAnt()
@@ -90,12 +90,15 @@ public class AntMap {
 
 
   /**
-   * Creates the map
+   * Creates the map.
+   *
+   * @param a_map the map itself
+   * @param a_ants the list of ants
    */
-  public AntMap(final int[][] a_map, int a_maxMoves, Ant[] ants) {
+  public AntMap(final int[][] a_map, Ant[] a_ants) {
     m_sizex = a_map.length;
     m_sizey = a_map[0].length;
-    m_ants = ants;
+    m_ants = a_ants;
     m_popSize = m_ants.length;
     m_currentAnt = -1;
     m_initialPosition = new int[m_sizex][m_sizey];

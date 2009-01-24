@@ -9,9 +9,10 @@
  */
 package examples.monalisa.gui;
 
-import org.jdesktop.application.Action;
+import org.jdesktop.application.*;
 
 /**
+ * Shows a dialog that informs about the application.
  *
  * @author Yann N. Dauphin
  * @since 3.4
@@ -19,7 +20,7 @@ import org.jdesktop.application.Action;
 public class GeneticDrawingAboutBox
     extends javax.swing.JDialog {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public GeneticDrawingAboutBox(java.awt.Frame parent) {
     super(parent);

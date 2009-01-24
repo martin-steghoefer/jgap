@@ -12,6 +12,7 @@ package examples.gp.monalisa.gui;
 import org.jdesktop.application.*;
 
 /**
+ * Shows a dialog that informs about the application.
  *
  * @author Yann N. Dauphin
  * @since 3.4
