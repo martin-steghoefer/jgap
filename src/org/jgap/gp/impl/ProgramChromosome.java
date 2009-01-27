@@ -26,7 +26,7 @@ import org.jgap.util.*;
 public class ProgramChromosome
     extends BaseGPChromosome implements Comparable, Cloneable, IBusinessKey {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   final static String PERSISTENT_FIELD_DELIMITER = ":";
 
@@ -555,18 +555,19 @@ public class ProgramChromosome
    * @since 3.0
    */
   protected CommandGene[] growOrFullNode(int a_num, int a_depth,
-      Class a_returnType, int a_subReturnType,
-      CommandGene[] a_functionSet,
+      Class a_returnType, int a_subReturnType, CommandGene[] a_functionSet,
       CommandGene a_rootNode, int a_recurseLevel,
-      boolean a_grow, int a_childNum,
-      boolean a_validateNode) {
+      boolean a_grow, int a_childNum, boolean a_validateNode) {
     boolean mutated = false;
+    boolean uncloned = true;
     GPConfiguration conf = getGPConfiguration();
     RandomGenerator random = conf.getRandomGenerator();
     if (a_rootNode == null || a_validateNode) {
       int tries = 0;
       int evolutionRound = getGPConfiguration().getGenerationNr();
       boolean aFunction = a_depth >= 1;
+      // Clone the array, not the content of the array.
+      // ----------------------------------------------
       CommandGene[] localFunctionSet = (CommandGene[]) a_functionSet.clone();
       do {
         CommandGene node = selectNode(a_num, a_returnType, a_subReturnType,
@@ -594,12 +595,16 @@ public class ProgramChromosome
         if (random.nextDouble() <= conf.getMutationProb()) {
           if (IMutateable.class.isAssignableFrom(node.getClass())) {
             try {
-              CommandGene node2 = ( (IMutateable) node).applyMutation(0, 1);
+              CommandGene node2 = ( (IMutateable) node).applyMutation(0,
+                  random.nextDouble());
               // Check if mutant's function is allowed.
               // --------------------------------------
               if (getCommandOfClass(0, node2.getClass()) >= 0) {
-                node = node2;
                 mutated = true;
+                if (node2 != node) {
+                  node = node2;
+                  uncloned = false;
+                }
               }
             } catch (InvalidConfigurationException iex) {
               // Ignore but log.
@@ -620,27 +625,26 @@ public class ProgramChromosome
     // Generate the new node.
     // ----------------------
     m_depth[m_index] = m_maxDepth - a_depth;
+    // Optional dynamize the arity for commands with a flexible number
+    // of children. Normally, dynamizeArity does nothing, see declaration
+    // of method in CommandGene, which can be overridden in sub classes.
+    // -------------------------------------------------------------------
+    boolean dynamize = random.nextDouble() <= conf.getDynamizeArityProb();
+    if (dynamize) {
+      a_rootNode.dynamizeArity();
+    }
     // Clone node if possible and not already done via mutation.
     // ---------------------------------------------------------
-    if (!mutated && a_rootNode instanceof ICloneable) {
-        /**@todo use clone handler*/
+    if (uncloned && a_rootNode instanceof ICloneable) {
+        /**@todo we could optionally use the clone handler*/
       a_rootNode = (CommandGene) ( (ICloneable) a_rootNode).clone();
       m_genes[m_index++] = a_rootNode;
     }
     else {
       m_genes[m_index++] = a_rootNode;
-      mutated = true;
     }
     if (a_depth >= 1) {
       IGPProgram ind = getIndividual();
-      // Optional dynamize the arity for commands with a flexible number
-      // of children. Normally, dynamizeArity does nothing, see declaration
-      // of method in CommandGene, which can be overridden in sub classes.
-      // -------------------------------------------------------------------
-      boolean dynamize = random.nextDouble() <= conf.getDynamizeArityProb();
-      if (dynamize) {
-        a_rootNode.dynamizeArity();
-      }
       int arity = a_rootNode.getArity(ind);
       for (int i = 0; i < arity; i++) {
         // Ensure required depth is cared about.
