@@ -25,7 +25,7 @@ import org.jgap.util.*;
 public class GPPopulation
     implements Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.38 $";
+  private final static String CVS_REVISION = "$Revision: 1.39 $";
 
   final static String GPPROGRAM_DELIMITER_HEADING = "<";
 
@@ -302,6 +302,9 @@ public class GPPopulation
       int maxTries = getGPConfiguration().getProgramCreationMaxtries();
       do {
         try {
+          // Randomize grow option as growing produces a valid program
+          // more likely than the full mode.
+          // ---------------------------------------------------------
           boolean grow;
           if (i % 2 == 0 || generator.nextInt(8) > 6) {
             grow = true;
@@ -322,7 +325,8 @@ public class GPPopulation
             // ---------------------------------------------------
             getGPConfiguration().setPrototypeProgram(program);
             /**@todo output depth of all chromosomes*/
-            LOGGER.info("Prototype program set (depth "+program.getChromosome(0).getDepth(0)+")");
+            LOGGER.info("Prototype program set (depth " +
+                        program.getChromosome(0).getDepth(0) + ")");
           }
           else if (genNr % 5 == 0 && genNr > 0 && i == genI) {
               /**@todo 5: make configurable*/
@@ -347,7 +351,7 @@ public class GPPopulation
             }
           }
           tries++;
-          if (maxTries >=0 && tries > maxTries || (i > 0 && tries > 100)) {
+          if (maxTries >=0 && tries > maxTries || (i > a_offset && tries > 40)) {
             IGPProgram prototype = getGPConfiguration().getPrototypeProgram();
             if (prototype != null) {
               ICloneHandler cloner = getGPConfiguration().getJGAPFactory().
@@ -460,8 +464,8 @@ public class GPPopulation
    * @param a_grow true: grow mode, false: full mode
    * @param a_maxNodes reserve space for a_maxNodes number of nodes
    * @param a_fullModeAllowed array of boolean values. For each chromosome there
-   * is one value indicating whether the full mode for creating chromosome
-   * generations during evolution is allowed (true) or not (false)
+   * is one value indicating whether the full mode for creating chromosomes
+   * during evolution is allowed (true) or not (false)
    * @param a_tries maximum number of tries to get a valid program
    * @param a_programCreator strategy class to create programs for the
    * population
