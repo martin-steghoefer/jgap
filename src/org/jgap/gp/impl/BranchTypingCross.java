@@ -22,10 +22,15 @@ import org.jgap.gp.*;
 public class BranchTypingCross
     extends CrossMethod implements Serializable, Comparable, Cloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   private boolean m_simpleChromosomeSelection;
 
+  /**
+   * Standard constructor.
+   *
+   * @param a_config the configuration to use
+   */
   public BranchTypingCross(GPConfiguration a_config) {
     this(a_config, false);
   }
@@ -43,6 +48,7 @@ public class BranchTypingCross
   public BranchTypingCross(GPConfiguration a_config,
           boolean a_simpleChromosomeSelection) {
     super(a_config);
+    m_simpleChromosomeSelection = a_simpleChromosomeSelection;
   }
 
   /**
@@ -174,23 +180,23 @@ public class BranchTypingCross
       // Choose a terminal.
       // ------------------
       p0 = a_c0.getTerminal(random.nextInt(a_c0.numTerminals()));
+      // Mutate the command's value.
+      // ----------------------------
+      CommandGene command = a_c0.getNode(p0);
+      if (random.nextDouble() <= getConfiguration().getMutationProb()) {
+        if (IMutateable.class.isInstance(command)) {
+          IMutateable term = (IMutateable) command;
+          command = term.applyMutation(0, 0.3d);
+          if (command != null) {
+            // Check if mutant's function is allowed.
+            // --------------------------------------
+            if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
+              a_c0.setGene(p0, command);
+            }
+          }
+        }
+      }
     }
-//    // Mutate the command's value.
-//    // ----------------------------
-//    CommandGene command = a_c0.getNode(p0);
-//    if (random.nextDouble() <= m_mutationRate) {
-//      if (IMutateable.class.isInstance(command)) {
-//        IMutateable term = (IMutateable) command;
-//        command = term.applyMutation(0, 0.5d);
-//        if (command != null) {
-//          // Check if mutant's function is allowed.
-//          // --------------------------------------
-//          if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
-//            a_c0.setGene(p0, command);
-//          }
-//        }
-//      }
-//    }
     // Choose a point in c2 matching the type and subtype of p0.
     // ---------------------------------------------------------
     int p1;
@@ -219,23 +225,27 @@ public class BranchTypingCross
       }
       p1 = a_c1.getTerminal(random.nextInt(a_c1.numTerminals(type_, subType)),
                           type_, subType);
+      // Mutate the command's value.
+      // ----------------------------
+      CommandGene command = a_c1.getNode(p1);
+      if (random.nextDouble() <= getConfiguration().getMutationProb()) {
+        if (IMutateable.class.isInstance(command)) {
+          IMutateable term = (IMutateable) command;
+          command = term.applyMutation(0, 0.3d);
+          if (command != null) {
+            // Check if mutant's function is allowed.
+            // --------------------------------------
+            if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
+              a_c1.setGene(p1, command);
+            }
+          }
+        }
+      }
     }
-//    // Mutate the command's value.
-//    // ----------------------------
-//    command = a_c1.getNode(p1);
-//    if (random.nextDouble() <= m_mutationRate) {
-//      if (IMutateable.class.isInstance(command)) {
-//        IMutateable term = (IMutateable) command;
-//        command = term.applyMutation(0, 0.5d);
-//        if (command != null) {
-//          // Check if mutant's function is allowed.
-//          // --------------------------------------
-//          if (a_c0.getCommandOfClass(0, command.getClass()) >= 0) {
-//            a_c1.setGene(p1, command);
-//          }
-//        }
-//      }
-//    }
+    /**@todo solve in general*/
+    if (org.jgap.gp.function.SubProgram.class.isAssignableFrom(a_c1.getFunctions()[p1].getClass())) {
+      ((IMutateable)a_c1.getFunctions()[p1]).applyMutation(0, 0.5d);
+    }
     int s0 = a_c0.getSize(p0); //Number of nodes in c0 from index p0
     int s1 = a_c1.getSize(p1); //Number of nodes in c1 from index p1
     int d0 = a_c0.getDepth(p0); //Depth of c0 from index p0
@@ -244,7 +254,7 @@ public class BranchTypingCross
     int c1s = a_c1.getSize(0); //Number of nodes in c1
     // Check for depth constraint for p1 inserted into c0.
     // ---------------------------------------------------
-    if (d0 - 1 + s1 > getConfiguration().getMaxCrossoverDepth()
+    if (d0 - 1 + d1/*s1*/ > getConfiguration().getMaxCrossoverDepth()
         || c0s - p0 - s0 < 0
         || p0 + s1 + c0s - p0 - s0 >= a_c0.getFunctions().length) {
       // Choose the other parent.
@@ -265,7 +275,7 @@ public class BranchTypingCross
     }
     // Check for depth constraint for p0 inserted into c1.
     // ---------------------------------------------------
-    if (d1 - 1 + s0 > getConfiguration().getMaxCrossoverDepth()
+    if (d1 - 1 + d0/*s0*/ > getConfiguration().getMaxCrossoverDepth()
         || c1s - p1 - s1 < 0
         || p1 + s0 + c1s - p1 - s1 >= a_c1.getFunctions().length) {
       // Choose the other parent.
