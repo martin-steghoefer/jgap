@@ -23,7 +23,7 @@ import org.jgap.util.*;
 public class Terminal
     extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.17 $";
+  private static final String CVS_REVISION = "$Revision: 1.18 $";
 
   private float m_value_float;
 
@@ -91,11 +91,35 @@ public class Terminal
                   double a_minValue, double a_maxValue, boolean a_wholeNumbers,
                   int a_subReturnType)
       throws InvalidConfigurationException {
+    this(a_conf, a_returnType, a_minValue, a_maxValue, a_wholeNumbers,
+         a_subReturnType, true);
+  }
+
+  /**
+   *
+   * @param a_conf GPConfiguration
+   * @param a_returnType Class
+   * @param a_minValue double
+   * @param a_maxValue double
+   * @param a_wholeNumbers boolean
+   * @param a_subReturnType int
+   * @param a_randomize true: randomize initial value
+   * @throws InvalidConfigurationException
+   *
+   * @author Klaus Meffert
+   * @since 3.4.1
+   */
+  public Terminal(final GPConfiguration a_conf, Class a_returnType,
+                  double a_minValue, double a_maxValue, boolean a_wholeNumbers,
+                  int a_subReturnType, boolean a_randomize)
+      throws InvalidConfigurationException {
     super(a_conf, 0, a_returnType, a_subReturnType, null);
     m_lowerBounds = a_minValue;
     m_upperBounds = a_maxValue;
     m_wholeNumbers = a_wholeNumbers;
-    setRandomValue();
+    if (a_randomize) {
+      setRandomValue();
+    }
   }
 
   protected void setRandomValue(int a_value) {
@@ -136,13 +160,13 @@ public class Terminal
     if (retType == CommandGene.FloatClass || retType == float.class) {
       setRandomValue(m_value_float);
     }
-    else if (retType == CommandGene.IntegerClass  || retType == int.class) {
+    else if (retType == CommandGene.IntegerClass || retType == int.class) {
       setRandomValue(m_value_int);
     }
-    else if (retType == CommandGene.LongClass  || retType == long.class) {
+    else if (retType == CommandGene.LongClass || retType == long.class) {
       setRandomValue(m_value_long);
     }
-    else if (retType == CommandGene.DoubleClass  || retType == double.class) {
+    else if (retType == CommandGene.DoubleClass || retType == double.class) {
       setRandomValue(m_value_double);
     }
     else {
@@ -179,7 +203,7 @@ public class Terminal
   public CommandGene applyMutation(int index, double a_percentage)
       throws InvalidConfigurationException {
     // If percentage is very high: do mutation not relying on
-    // current value random value.
+    // current value but on a random value.
     // ------------------------------------------------------
     if (a_percentage > 0.85d) {
       setRandomValue();
@@ -200,8 +224,8 @@ public class Terminal
         }
         // Ensure value is within bounds.
         // ------------------------------
-        if (Math.abs(newValuef - m_lowerBounds) < DELTA ||
-            Math.abs(m_upperBounds - newValuef) < DELTA) {
+        if (m_lowerBounds - newValuef > DELTA ||
+            newValuef - m_upperBounds > DELTA) {
           setRandomValue(m_value_float);
         }
         else {
@@ -221,9 +245,9 @@ public class Terminal
         }
         // Ensure value is within bounds.
         // ------------------------------
-        if (Math.abs(newValueD - m_lowerBounds) < DELTA ||
-            Math.abs(m_upperBounds - newValueD) < DELTA) {
-          setRandomValue(m_value_double);
+        if (m_lowerBounds - newValueD > DELTA ||
+            newValueD - m_upperBounds > DELTA) {
+          setRandomValue(m_value_float);
         }
         else {
           setValue(newValueD);
@@ -357,15 +381,15 @@ public class Terminal
   public Object clone() {
     try {
       Terminal result = new Terminal(getGPConfiguration(), getReturnType(),
-                                     m_lowerBounds, m_upperBounds);
+                                     m_lowerBounds, m_upperBounds,
+                                     m_wholeNumbers, getSubReturnType(), false);
       result.m_value_double = m_value_double;
       result.m_value_float = m_value_float;
       result.m_value_int = m_value_int;
       result.m_value_long = m_value_long;
-      result.m_wholeNumbers = m_wholeNumbers;
       return result;
-    } catch (Exception ex) {
-      throw new CloneException(ex);
+    } catch (Throwable t) {
+      throw new CloneException(t);
     }
   }
 }
