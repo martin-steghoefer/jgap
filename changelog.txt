@@ -1,3 +1,19 @@
+3.4.1
+-----------------------------------------------------------
+* Added constructor for SUbProgram to control minimum and
+  maximum arity
+* Fixed maxtries-bug in GPGenotype.evolve()
+* Fixed Terminal.clone()
+* Fixed Terminal.applyMutation(..)
+* Fixed bug in BranchTypingCross with option for simple
+  chromosome selection
+* Fixed bug in BranchTypingCross with fallback-decision
+  of crossing over
+* Reintroduced mutation in BranchTypingCross
+* Added convenience constructor in Terminal
+* Enhanced the Mona Lisa Painting Problem (GP version)
+* Enhanced Javadoc
+
 3.4
 -----------------------------------------------------------
 * Added the Mona Lisa painting problem (GA and GP version).
@@ -366,7 +382,6 @@
 * Added new showTree-method to GPProblem which allows to
   use custom tree renderers
 * Added new GP-function: Loop
-
 * Fixed bug with BranchTypingCross (creation of chrom's)
 
 3.0
