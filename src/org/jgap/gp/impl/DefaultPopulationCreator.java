@@ -22,7 +22,7 @@ import org.jgap.*;
 public class DefaultPopulationCreator
     implements IPopulationCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   private IProgramCreator m_programCreator;
 
@@ -35,7 +35,7 @@ public class DefaultPopulationCreator
   }
 
   /**
-   * Initializes the given population.
+   * Initializes the given population by creating individuals for it.
    *
    * @param a_pop the population to initialize
    * @param a_types the type for each chromosome, the length of the array

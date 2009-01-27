@@ -21,12 +21,12 @@ import org.jgap.*;
  */
 public interface IProgramCreator {
   /** String containing the CVS revision. Read out via reflection!*/
-  final static String CVS_REVISION = "$Revision: 1.2 $";
+  final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
-   * Initializes the given population.
+   * Initializes the given population by adding new individuals to it.
    *
-   * @param a_conf
+   * @param a_conf the configuration to use
    * @param a_programIndex index of the current program in the population,
    * starting with 0
    * @param a_types Class[]
@@ -35,6 +35,9 @@ public interface IProgramCreator {
    * @param a_minDepths int[]
    * @param a_maxDepths int[]
    * @param a_maxNodes int
+   * @param a_depth the required depth of the program
+   * @param a_grow true: use grow mode, false: use full mode
+   * @param a_tries maximum number of tries allowed to produce a valid program
    * @param a_fullModeAllowed boolean[]
    *
    * @return the newly created program
