@@ -1,8 +1,12 @@
 3.4.1
 -----------------------------------------------------------
 * Enhanced GP evolution cycle by avoiding dead ends
+* Enhanced the Mona Lisa Painting Problem (GP version)
 * Added constructor for SUbProgram to control minimum and
   maximum arity
+* Reintroduced mutation in BranchTypingCross
+* Added convenience constructor in Terminal
+* Worked over the multi-objective example
 * Fixed maxTries-bug in GPGenotype.evolve()
 * Fixed Terminal.clone()
 * Fixed Subprogram.clone()
@@ -11,9 +15,6 @@
   chromosome selection
 * Fixed bug in BranchTypingCross with fallback-decision
   of crossing over
-* Reintroduced mutation in BranchTypingCross
-* Added convenience constructor in Terminal
-* Enhanced the Mona Lisa Painting Problem (GP version)
 * Enhanced Javadoc
 
 3.4
