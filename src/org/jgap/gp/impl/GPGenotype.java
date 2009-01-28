@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class GPGenotype
     implements Runnable, Serializable, Comparable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.53 $";
+  private final static String CVS_REVISION = "$Revision: 1.54 $";
 
   private transient static Logger LOGGER = Logger.getLogger(GPGenotype.class);
 
@@ -663,6 +663,9 @@ public class GPGenotype
       int reproduction = 0;
       int creation = 0;
       checkErroneousPop(getGPPopulation(), " (before evolution)", true);
+      final int maxTries = getGPConfiguration().getProgramCreationMaxtries();
+      // Do crossing over.
+      // -----------------
       for (int i = 0; i < popSize1; i++) {
         // Clear the stack for each GP program.
         // ------------------------------------
@@ -673,8 +676,8 @@ public class GPGenotype
         // ------------------------------------------------------------
         if (i < popSize - 1 && val < crossProb) {
           crossover++;
-          // Do crossover.
-          // -------------
+          // Actually do the crossover here.
+          // -------------------------------
           IGPProgram i1 = conf.getSelectionMethod().select(this);
           IGPProgram i2 = conf.getSelectionMethod().select(this);
           int tries = 0;
@@ -710,7 +713,7 @@ public class GPGenotype
               break;
             } catch (IllegalStateException iex) {
               tries++;
-              if (tries >= getGPConfiguration().getProgramCreationMaxtries()) {
+              if ( (maxTries > 0 && tries >= maxTries) || tries > 40) {
                 if (!getGPConfiguration().isMaxNodeWarningPrinted()) {
                   LOGGER.error(
                       "Warning: Maximum number of nodes allowed may be too small");
@@ -732,7 +735,8 @@ public class GPGenotype
                 }
               }
             }
-          } while (true);
+            } while (true)
+              ;
         }
         else { //if (val < conf.getCrossoverProb() + conf.getReproductionProb()) {
           // Reproduction only.
@@ -741,23 +745,33 @@ public class GPGenotype
           newPopulation.setGPProgram(i, conf.getSelectionMethod().select(this));
         }
       }
-      // Add new programs randomly.
-      // --------------------------
+      // Add new random programs.
+      // ------------------------
       for (int i = popSize1; i < popSize; i++) {
         creation++;
-        // Determine depth randomly and between minInitDepth and maxInitDepth.
-        // -------------------------------------------------------------------
+        // Randomly determine depth between minInitDepth and maxInitDepth.
+        // ---------------------------------------------------------------
         int depth = conf.getMinInitDepth()
             + random.nextInt(conf.getMaxInitDepth() - conf.getMinInitDepth()
                              + 1);
         int tries = 0;
         do {
           try {
+            // Randomize grow option as growing produces a valid program
+            // more likely than the full mode.
+            // ---------------------------------------------------------
+            boolean grow;
+            if (i % 2 == 0 || random.nextInt(8) > 6) {
+              grow = true;
+            }
+            else {
+              grow = false;
+            }
             /**@todo use program creator in case such is registered and returns
              * a non-null program
              */
             IGPProgram program = newPopulation.create(i, m_types, m_argTypes,
-                m_nodeSets, m_minDepths, m_maxDepths, depth, (i % 2) == 0,
+                m_nodeSets, m_minDepths, m_maxDepths, depth, grow,
                 m_maxNodes, m_fullModeAllowed, tries);
             newPopulation.setGPProgram(i, program);
             checkErroneousProg(program,
@@ -770,12 +784,12 @@ public class GPGenotype
                          + " tries)");
             break;
           } catch (IllegalStateException iex) {
+            tries++;
             /**@todo instead of re-using prototype, create a program anyway
              * (ignoring the validator) in case it is the last try.
              * Or even better: Make the validator return a defect rate!
              */
-            tries++;
-            if (tries > getGPConfiguration().getProgramCreationMaxtries()) {
+            if ( (maxTries > 0 && tries > maxTries) || tries > 40) {
               LOGGER.debug(
                   "Creating random GP program failed (depth "
                   + depth
@@ -799,12 +813,14 @@ public class GPGenotype
                 }
                 else {
                   throw new IllegalStateException(
-                      "Cloning of prototype program failed, " + iex.getMessage());
+                      "Cloning of prototype program failed, " +
+                      iex.getMessage());
                 }
               }
             }
           }
-        } while (true);
+          } while (true)
+            ;
       }
       LOGGER.debug("Did "
                    + crossover + " x-overs, "
