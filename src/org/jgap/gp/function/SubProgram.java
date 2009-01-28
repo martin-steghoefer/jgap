@@ -27,7 +27,7 @@ import org.jgap.util.*;
 public class SubProgram
     extends CommandGene implements ICloneable, IMutateable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   /**
    * Number of subprograms. Redundant, because equal to m_types.length.
@@ -35,11 +35,23 @@ public class SubProgram
   private int m_subtrees;
 
   /**
+   * Minimum arity allowed during mutation of arity.
+   */
+  private int m_minArity;
+
+  /**
+   * Maximum arity allowed during mutation of arity.
+   */
+  private int m_maxArity;
+
+  /**
    * Return types of the subprograms to excecute.
    */
   private Class[] m_types;
 
   private boolean m_mutateable;
+
+  private int m_mode;
 
   public SubProgram(final GPConfiguration a_conf, Class[] a_types)
       throws InvalidConfigurationException {
@@ -80,16 +92,33 @@ public class SubProgram
   public SubProgram(final GPConfiguration a_conf, int a_arity, Class a_types,
                     boolean a_mutateable)
       throws InvalidConfigurationException {
+    this(a_conf, a_arity, a_types, a_arity, a_arity + 5, a_mutateable);
+  }
+
+  public SubProgram(final GPConfiguration a_conf, int a_arity, Class a_types,
+                    int a_minArity, int a_maxArity, boolean a_mutateable)
+      throws InvalidConfigurationException {
     super(a_conf, a_arity, a_types, 0, null);
     if (a_arity < 1) {
       throw new IllegalArgumentException("Arity must be >= 1");
     }
+    if (a_minArity > a_arity) {
+      throw new IllegalArgumentException("Arity must not be smaller than"
+          + " min. arity");
+    }
+    if (a_maxArity < a_arity) {
+      throw new IllegalArgumentException("Arity must not be bigger than"
+          + " max. arity");
+    }
+    m_mode = 2;
     m_types = new Class[a_arity];
     for (int i = 0; i < a_arity; i++) {
       m_types[i] = a_types;
     }
     m_subtrees = a_arity;
     m_mutateable = a_mutateable;
+    m_minArity = a_minArity;
+    m_maxArity = a_maxArity;
   }
 
   public SubProgram(final GPConfiguration a_conf, Class[] a_types,
@@ -113,6 +142,9 @@ public class SubProgram
     if (a_types.length < 1) {
       throw new IllegalArgumentException("Number of subtrees must be >= 1");
     }
+    m_mode = 1;
+    m_minArity = a_types.length;
+    m_maxArity = m_minArity + 5;
     m_types = a_types;
     m_subtrees = a_types.length;
     m_mutateable = a_mutateable;
@@ -258,14 +290,36 @@ public class SubProgram
    */
   public Object clone() {
     try {
-      int[] subChildTypes = getSubChildTypes();
-      if (subChildTypes != null) {
-        subChildTypes = (int[]) subChildTypes.clone();
+//      int[] subChildTypes = getSubChildTypes();
+//      if (subChildTypes != null) {
+//        subChildTypes = (int[]) subChildTypes.clone();
+//      }
+//      SubProgram result = new SubProgram(getGPConfiguration(), m_types,
+//          getSubReturnType(), subChildTypes, m_mutateable);
+//      result.m_subtrees = m_subtrees;
+//      result.m_types = (Class[]) m_types.clone();
+//      return result;
+      SubProgram result;
+      if (m_mode == 1) {
+        // First way of construction.
+        // --------------------------
+        Class[] types = new Class[m_subtrees];
+        for (int i = 0; i < m_subtrees; i++) {
+          types[i] = m_types[m_types.length - 1];
+        }
+        int[] subChildTypes = getSubChildTypes();
+        if (subChildTypes != null) {
+          subChildTypes = (int[]) subChildTypes.clone();
+        }
+        result = new SubProgram(getGPConfiguration(), types,
+                                getSubReturnType(), subChildTypes, m_mutateable);
       }
-      SubProgram result = new SubProgram(getGPConfiguration(), m_types,
-          getSubReturnType(), subChildTypes);
-      result.m_subtrees = m_subtrees;
-      result.m_types = (Class[]) m_types.clone();
+      else {
+        // Second way of construction.
+        // ---------------------------
+        result = new SubProgram(getGPConfiguration(), m_subtrees, m_types[0],
+                                m_minArity, m_maxArity, m_mutateable);
+      }
       return result;
     } catch (Throwable t) {
       throw new CloneException(t);
@@ -287,20 +341,39 @@ public class SubProgram
   }
 
   /**@todo use dynamizeArity instead!*/
+
+  /**
+   * @return mutated command gene
+   * @throws InvalidConfigurationException
+   */
   public CommandGene applyMutation()
       throws InvalidConfigurationException {
-    int[] subChildTypes = getSubChildTypes();
-    if (subChildTypes != null) {
-      subChildTypes = (int[]) subChildTypes.clone();
+    int size = getGPConfiguration().getRandomGenerator().nextInt(m_maxArity + 1 -
+        m_minArity) + m_minArity;
+    if (m_types.length == size) {
+      return this;
     }
-    int size = getGPConfiguration().getRandomGenerator().nextInt(7) + 2;
-    //size = m_types.length;
-    Class[] types = new Class[size];
-    for (int i = 0; i < size; i++) {
-      types[i] = m_types[m_types.length - 1];
+    SubProgram result;
+    if (m_mode == 1) {
+      // First way of construction.
+      // --------------------------
+      Class[] types = new Class[size];
+      for (int i = 0; i < size; i++) {
+        types[i] = m_types[m_types.length - 1];
+      }
+      int[] subChildTypes = getSubChildTypes();
+      if (subChildTypes != null) {
+        subChildTypes = (int[]) subChildTypes.clone();
+      }
+      result = new SubProgram(getGPConfiguration(), types,
+                              getSubReturnType(), subChildTypes, m_mutateable);
     }
-    SubProgram result = new SubProgram(getGPConfiguration(), types,
-                                       getSubReturnType(), subChildTypes);
+    else {
+      // Second way of construction.
+      // ---------------------------
+      result = new SubProgram(getGPConfiguration(), size, m_types[0],
+                              m_minArity, m_maxArity, m_mutateable);
+    }
     return result;
   }
   /**
@@ -311,14 +384,14 @@ public class SubProgram
    * @since 3.4
    */
 //  public void dynamizeArity() {
-//    int arity = 3
-//        + getGPConfiguration().getRandomGenerator().nextInt(15 - 3 + 1);
-//    setArity(arity);
+//    int size = getGPConfiguration().getRandomGenerator().nextInt(m_maxArity + 1 -
+//        m_minArity) + m_minArity;
+//    setArity(size);
 //    Class atype = m_types[0];
-//    m_types = new Class[arity];
-//    for (int i = 0; i < arity; i++) {
+//    m_types = new Class[size];
+//    for (int i = 0; i < size; i++) {
 //      m_types[i] = atype;
 //    }
-//    m_subtrees = arity;
+//    m_subtrees = size;
 //  }
 }
