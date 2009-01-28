@@ -14,6 +14,7 @@ import java.awt.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
  * Specifies a color, represented by R, G, B and Alpha.
@@ -22,9 +23,9 @@ import org.jgap.gp.impl.*;
  * @since 3.4
  */
 public class ColorConstructor
-    extends CommandGene {
+    extends CommandGene implements ICloneable{
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public ColorConstructor(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -49,5 +50,23 @@ public class ColorConstructor
   @Override
   public String toString() {
     return "new Color(&1, &2, &3, &4)";
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4.1
+   */
+  public Object clone() {
+    try {
+      ColorConstructor result = new ColorConstructor(getGPConfiguration());
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
+
   }
 }
