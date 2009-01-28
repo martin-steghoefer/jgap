@@ -30,7 +30,7 @@ import examples.gp.monalisa.core.*;
 public class EvolutionRunnable
     implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   private transient static Logger LOGGER = Logger.getLogger(EvolutionRunnable.class);
 
@@ -58,6 +58,7 @@ public class EvolutionRunnable
         /**
          * Updates the chart in the main view.
          *
+         * @param a_firedEvent the event
          */
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
@@ -74,15 +75,22 @@ public class EvolutionRunnable
       });
       eventManager.addEventListener(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION,
                                     new GeneticEventListener() {
+        private transient Logger LOGGER2 = Logger.getLogger(EvolutionRunnable.class);
         private DrawingGPProgramRunner gpProgramRunner = new
             DrawingGPProgramRunner(conf);
 
         /**
-         * Display best solution in fittestChromosomeView's mainPanel
+         * Display best solution in fittestChromosomeView's mainPanel.
+         *
+         * @param a_firedEvent the event
          */
         public void geneticEventFired(GeneticEvent a_firedEvent) {
           GPGenotype genotype = (GPGenotype) a_firedEvent.getSource();
           IGPProgram best = genotype.getAllTimeBest();
+          ApplicationData data = (ApplicationData)best.getApplicationData();
+          LOGGER2.info("Num Points / Polygons: " + data.numPoints + " / " +
+                      data.numPolygons);
+
           BufferedImage image = gpProgramRunner.run(best);
           Graphics g = m_view.getFittestDrawingView().getMainPanel().
               getGraphics();
@@ -113,9 +121,9 @@ public class EvolutionRunnable
         gp.calcFitness();
         if (gp.getGPConfiguration().getGenerationNr() % 25 == 0) {
           String freeMB = SystemKit.niceMemory(SystemKit.getFreeMemoryMB());
-          LOGGER.info("Evolving generation " +
+          LOGGER.info("Evolving gen. " +
                       (gp.getGPConfiguration().getGenerationNr()) +
-                      ", memory free: " + freeMB + " MB");
+                      ", mem free: " + freeMB + " MB");
         }
       }
       // Create graphical tree from currently fittest image.
