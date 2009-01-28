@@ -22,10 +22,11 @@ import org.jgap.impl.*;
 public class MOFitnessEvaluator
     implements FitnessEvaluator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
-   * Not to be called in multi-objectives context!
+   * Not to be called in multi-objectives context! Other method below applies
+   * for multi-objectives.
    *
    * @param a_fitness_value1 ignored
    * @param a_fitness_value2 ignored
@@ -41,24 +42,22 @@ public class MOFitnessEvaluator
 
   public boolean isFitter(IChromosome a_chrom1, IChromosome a_chrom2) {
     // Evaluate values to fill vector of multiobjectives with.
-    DoubleGene g1 = (DoubleGene)a_chrom1.getGene(0);
+    DoubleGene g1 = (DoubleGene) a_chrom1.getGene(0);
     double d = g1.doubleValue();
     double y1 = formula(1, d);
     List l = new Vector();
     l.add(new Double(y1));
     double y2 = formula(2, d);
     l.add(new Double(y2));
-    ((Chromosome)a_chrom1).setMultiObjectives(l);
-
+    ( (Chromosome) a_chrom1).setMultiObjectives(l);
     l.clear();
-    g1 = (DoubleGene)a_chrom2.getGene(0);
+    g1 = (DoubleGene) a_chrom2.getGene(0);
     d = g1.doubleValue();
     y1 = formula(1, d);
     l.add(new Double(y1));
     y2 = formula(2, d);
     l.add(new Double(y2));
-    ((Chromosome)a_chrom2).setMultiObjectives(l);
-
+    ( (Chromosome) a_chrom2).setMultiObjectives(l);
     List v1 = ( (Chromosome) a_chrom1).getMultiObjectives();
     List v2 = ( (Chromosome) a_chrom2).getMultiObjectives();
     int size = v1.size();
@@ -66,17 +65,20 @@ public class MOFitnessEvaluator
       throw new RuntimeException("Size of objectives inconsistent!");
     }
     boolean better = false;
+    double d1Total = 0;
+    double d2Total = 0;
     for (int i = 0; i < size; i++) {
       double d1 = ( (Double) v1.get(i)).doubleValue();
       double d2 = ( (Double) v2.get(i)).doubleValue();
-      if (d1 > d2) {
-        better = true;
-      }
-      else if (d1 < d2) {
-        return false;
-      }
+      d1Total += d1;
+      d2Total += d2;
     }
-    return better;
+    if (d1Total < d2Total) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   private double formula(int a_index, double a_x) {
