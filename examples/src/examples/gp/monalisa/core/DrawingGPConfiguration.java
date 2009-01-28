@@ -23,7 +23,7 @@ import org.jgap.gp.impl.*;
 public class DrawingGPConfiguration
     extends GPConfiguration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   protected BufferedImage m_target = null;
 
@@ -37,14 +37,14 @@ public class DrawingGPConfiguration
     setPopulationSize(5);
     setStrictProgramCreation(false);
     setProgramCreationMaxTries( -1);
-    setMinInitDepth(5);
-    setMaxInitDepth(45);
+    setMinInitDepth(3);
+    setMaxInitDepth(14);
     setInitStrategy(new InitStrategy());
-    setCrossoverProb(0.3f);
-    setReproductionProb(0.7f);
-    setNewChromsPercent(0.1f);
+    setCrossoverProb(0.3f); //0.9
+    setReproductionProb(0.7f); //0.1
+    setNewChromsPercent(0.25f); //0.4
     setMutationProb(0.8f);
-    setMaxCrossoverDepth(60);
+    setMaxCrossoverDepth(45);
   }
 
   /**

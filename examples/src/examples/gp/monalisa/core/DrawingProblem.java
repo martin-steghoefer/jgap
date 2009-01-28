@@ -21,13 +21,13 @@ import examples.gp.monalisa.core.commands.*;
  * composing a picture from polygons.
  *
  * @author Yann N. Dauphin
- * @author Klaus Meffert (only finalization)
+ * @author Klaus Meffert (finalization, tuning)
  * @since 3.4
  */
 public class DrawingProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public DrawingProblem(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -40,6 +40,7 @@ public class DrawingProblem
    * Generates an inital genotype for the drawing problem.
    *
    * @return an initial Genotype
+   * @throws InvalidConfigurationException in case of an error
    */
   @Override
   public GPGenotype create()
@@ -48,8 +49,9 @@ public class DrawingProblem
     Class[] retTypes = {CommandGene.VoidClass};
     Class[][] argTypes = { {}
     };
+    SUBPROGRAM = new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class}, true);
     CommandGene[][] nodeSets = { {
-        new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class}, true),
+        SUBPROGRAM,
         new SubProgram(conf, new Class[] {Void.class, Void.class}, true),
         new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
                        Void.class}, true),
@@ -57,21 +59,23 @@ public class DrawingProblem
                        Void.class, Void.class}, true),
         new SubProgram(conf, new Class[] {Void.class, Void.class, Void.class,
                        Void.class, Void.class, Void.class}, true),
+        new SubProgram(conf, 4, Void.class, 2, 7, true),
+        new SubProgram(conf, 8, Void.class, 5, 20, true),
         new PointConstructor(conf),
-        new PolygonConstructor(conf, 5),
+        new PolygonConstructor(conf, 5, true),
         new ColorConstructor(conf),
         new DrawPolygon(conf),
-        new Terminal(conf, CommandGene.FloatClass, 0.0d, 1.0d),
+        new Terminal(conf, CommandGene.FloatClass, 0.0d, 1.0d, false),
         new Terminal(conf, CommandGene.IntegerClass, 0,
-                     conf.getTarget().getWidth()-1, true,
+                     conf.getTarget().getWidth() - 1, true,
                      TerminalType.WIDTH.intValue()),
         new Terminal(conf, CommandGene.IntegerClass, 0,
-                     conf.getTarget().getHeight()-1, true,
+                     conf.getTarget().getHeight() - 1, true,
                      TerminalType.HEIGHT.intValue()), }
     };
-    int[] minDepth = new int[] {5};
+    int[] minDepth = new int[] {4};
     int[] maxDepth = new int[] {50};
-    int maxNodes = 5000;
+    int maxNodes = 3000;
     boolean[] fullMode = new boolean[] {true};
     return GPGenotype.randomInitialGenotype(conf, retTypes, argTypes, nodeSets,
         minDepth, maxDepth, maxNodes, fullMode, true);
