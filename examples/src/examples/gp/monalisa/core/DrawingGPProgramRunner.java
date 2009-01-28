@@ -19,13 +19,17 @@ import org.jgap.gp.*;
  * to painting an image from polygons.
  *
  * @author Yann N. Dauphin
+ * @author Klaus Meffert;
  * @since 3.4
  */
 public class DrawingGPProgramRunner {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
-  private DrawingGPConfiguration m_conf = null;
+  private DrawingGPConfiguration m_conf;
+
+  public int numPoints;
+  public int numPolygons;
 
   public DrawingGPProgramRunner(DrawingGPConfiguration a_conf) {
     m_conf = a_conf;
@@ -38,8 +42,12 @@ public class DrawingGPProgramRunner {
     Graphics g2d = generated.getGraphics();
     g2d.setColor(Color.white);
     g2d.fillRect(0, 0, generated.getWidth(), generated.getHeight());
-    a_subject.setApplicationData(g2d);
+    ApplicationData appData = new ApplicationData();
+    appData.graphics = g2d;
+    a_subject.setApplicationData(appData);
     a_subject.execute_void(0, null);
+    numPoints = appData.numPoints;
+    numPolygons = appData.numPolygons;
     return generated;
   }
 }
