@@ -10,21 +10,23 @@
 package examples.gp.monalisa.core.commands;
 
 import java.awt.*;
-
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
+import examples.gp.monalisa.core.*;
 
 /**
  * Draws a polygon with a certain fill color.
  *
  * @author Yann N. Dauphin
+ * @author Klaus Meffert (statistics data)
  * @since 3.4
  */
 public class DrawPolygon
-    extends CommandGene {
+    extends CommandGene implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public DrawPolygon(GPConfiguration a_conf)
       throws InvalidConfigurationException {
@@ -33,11 +35,16 @@ public class DrawPolygon
 
   @Override
   public void execute_void(ProgramChromosome a_chrom, int a_n, Object[] a_args) {
-    Graphics2D g2d = getGraphics2D(a_chrom);
+    ApplicationData appData = getAppData(a_chrom);
+    Graphics2D g2d = (Graphics2D) appData.graphics;
     Color color = (Color) a_chrom.execute_object(a_n, 0, a_args);
     Polygon polygon = (Polygon) a_chrom.execute_object(a_n, 1, a_args);
     g2d.setColor(color);
     g2d.fillPolygon(polygon);
+    //Update statistics data.
+    // ----------------------
+    appData.numPoints += polygon.npoints;
+    appData.numPolygons += 1;
   }
 
   @Override
@@ -48,16 +55,31 @@ public class DrawPolygon
     return Polygon.class;
   }
 
-  public Graphics2D getGraphics2D(ProgramChromosome a_chrom) {
-    if ( (Graphics2D) a_chrom.getIndividual().getApplicationData() == null) {
-      throw new UnsupportedOperationException(
-          "Application data not provided to individual.");
-    }
-    return (Graphics2D) a_chrom.getIndividual().getApplicationData();
+  public ApplicationData getAppData(ProgramChromosome a_chrom) {
+    ApplicationData appData = (ApplicationData) a_chrom.getIndividual().
+        getApplicationData();
+    return appData;
   }
 
   @Override
   public String toString() {
     return "DrawPolygon(&1, &2)";
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4.1
+   */
+  public Object clone() {
+    try {
+      DrawPolygon result = new DrawPolygon(getGPConfiguration());
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }

@@ -13,26 +13,46 @@ import java.awt.*;
 import org.jgap.*;
 import org.jgap.gp.*;
 import org.jgap.gp.impl.*;
+import org.jgap.util.*;
 
 /**
- * A polygon cosists of a series of points.
+ * A polygon consists of a series of points.
  *
  * @author Yann N. Dauphin
  */
 public class PolygonConstructor
-    extends CommandGene implements IMutateable {
+    extends CommandGene implements IMutateable, ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   private boolean m_mutateable;
 
   private int m_points = 5;
 
+  private int m_minPoints;
+
+  private int m_maxPoints;
+
   public PolygonConstructor(GPConfiguration a_conf, int a_points)
+      throws InvalidConfigurationException {
+    this(a_conf, a_points, false);
+  }
+
+  public PolygonConstructor(GPConfiguration a_conf, int a_points,
+                            int a_minPoints,
+                            int a_maxPoints)
+      throws InvalidConfigurationException {
+    this(a_conf, a_points, true);
+    m_minPoints = a_minPoints;
+    m_maxPoints = a_maxPoints;
+  }
+
+  public PolygonConstructor(GPConfiguration a_conf, int a_points,
+                            boolean a_mutateable)
       throws InvalidConfigurationException {
     super(a_conf, a_points, Polygon.class);
     m_points = a_points;
-    m_mutateable = false;/**@todo set to true when applyMutation works*/
+    m_mutateable = a_mutateable;
   }
 
   @Override
@@ -79,9 +99,35 @@ public class PolygonConstructor
 
   public CommandGene applyMutation()
       throws InvalidConfigurationException {
-    int points = getGPConfiguration().getRandomGenerator().nextInt(7) + 3;
+    int points;
+    if (m_minPoints < 1) {
+      points = getGPConfiguration().getRandomGenerator().nextInt(7) +
+          3;
+    }
+    else {
+      points = getGPConfiguration().getRandomGenerator().nextInt(m_maxPoints +
+          1 - m_minPoints) + m_minPoints;
+    }
     PolygonConstructor result = new PolygonConstructor(getGPConfiguration(),
-        points);
+        points, m_mutateable);
     return result;
+  }
+
+  /**
+   * Clones the object. Simple and straight forward implementation here.
+   *
+   * @return cloned instance of this object
+   *
+   * @author Klaus Meffert
+   * @since 3.4.1
+   */
+  public Object clone() {
+    try {
+      PolygonConstructor result = new PolygonConstructor(getGPConfiguration(),
+          m_points, m_mutateable);
+      return result;
+    } catch (Throwable t) {
+      throw new CloneException(t);
+    }
   }
 }
