@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MultiObjectiveFitnessFunction
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static final int MAX_BOUND = 4000;
 
@@ -44,11 +44,13 @@ public class MultiObjectiveFitnessFunction
     Iterator it = a_subject.getChromosomes().iterator();
     while (it.hasNext()) {
       IChromosome a_chrom1 = (IChromosome) it.next();
-      // evaluate values to fill vector of multiobjectives with
+      // Evaluate values to fill vector of multiobjectives with.
+      // -------------------------------------------------------
+      List l = new Vector();
       DoubleGene g1 = (DoubleGene) a_chrom1.getGene(0);
       double d = g1.doubleValue();
+      l.add(new Double(d));
       double y1 = formula(1, d);
-      List l = new Vector();
       l.add(new Double(y1));
       double y2 = formula(2, d);
       l.add(new Double(y2));
@@ -67,14 +69,20 @@ public class MultiObjectiveFitnessFunction
     result.add(d);
     d = (Double) mo.get(1);
     result.add(d);
+    d = (Double) mo.get(2);
+    result.add(d);
     return result;
   }
 
   private double formula(int a_index, double a_x) {
     if (a_index == 1) {
+      // First objective.
+      // ----------------
       return a_x * a_x;
     }
     else {
+      // Second objective.
+      // -----------------
       return (a_x - 2) * (a_x - 2);
     }
   }

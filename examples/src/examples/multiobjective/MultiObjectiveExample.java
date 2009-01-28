@@ -16,15 +16,17 @@ import org.jgap.impl.*;
 /**
  * Example for a multiobjective problem. Here, we have a function F with one
  * input parameter t and two output values F1 and F2, with F1 = t²
- * and F2 = (t - 2)². This example is from Goldberg (pp. 199), who adapted it
- * from Schaffer (1984).
+ * and F2 = (t - 2)². The input value is restricted from -10 to 10.
+ * We are looking for a t where F1 and F2 get minimal.
+ * This example is from Goldberg (pp. 199), who adapted it from Schaffer (1984).
+ *
  *
  * @author Klaus Meffert
  * @since 2.6
  */
 public class MultiObjectiveExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.6 $";
+  private final static String CVS_REVISION = "$Revision: 1.7 $";
 
   /**
    * The total number of times we'll let the population evolve.
@@ -52,19 +54,17 @@ public class MultiObjectiveExample {
         conf, 0.95d);
     bestChromsSelector.setDoubletteChromosomesAllowed(true);
     conf.addNaturalSelector(bestChromsSelector, true);
-
     conf.reset();
     conf.setFitnessEvaluator(new MOFitnessEvaluator());
     conf.setPreservFittestIndividual(false);
     conf.setKeepPopulationSizeConstant(false);
     // Set the fitness function we want to use, which is our
-    // MinimizingMakeChangeFitnessFunction. We construct it with
+    // MultiObjectiveFitnessFunction. We construct it with
     // the target amount of change passed in to this method.
-    // ---------------------------------------------------------
+    // -----------------------------------------------------
     BulkFitnessFunction myFunc =
         new MultiObjectiveFitnessFunction();
     conf.setBulkFitnessFunction(myFunc);
-
     // Set sample chromosome.
     // ----------------------
     Gene[] sampleGenes = new Gene[1];
@@ -72,7 +72,6 @@ public class MultiObjectiveExample {
                                     MultiObjectiveFitnessFunction.MAX_X);
     IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
     conf.setSampleChromosome(sampleChromosome);
-
     // Finally, we need to tell the Configuration object how many
     // Chromosomes we want in our population. The more Chromosomes,
     // the larger number of potential solutions (which is good for
@@ -96,7 +95,7 @@ public class MultiObjectiveExample {
     int i = 0;
     boolean removed = false;
     MOFitnessComparator comp = new MOFitnessComparator();
-    while (i<size-1) {
+    while (i < size - 1) {
       IChromosome chrom1 = population.getPopulation().getChromosome(i);
       int j = i + 1;
       while (j < size) {
@@ -128,7 +127,7 @@ public class MultiObjectiveExample {
     // Print all Pareto-optimal solutions.
     // -----------------------------------
     Collections.sort(chroms, comp);
-    for (int k=0;k<chroms.size();k++) {
+    for (int k = 0; k < chroms.size(); k++) {
       Chromosome bestSolutionSoFar = (Chromosome) chroms.get(k);
       System.out.println(MultiObjectiveFitnessFunction.
                          getVector(bestSolutionSoFar));
@@ -156,7 +155,6 @@ public class MultiObjectiveExample {
    */
   public class MOFitnessComparator
       implements java.util.Comparator {
-
     public int compare(final Object a_chrom1, final Object a_chrom2) {
       List v1 = ( (Chromosome) a_chrom1).getMultiObjectives();
       List v2 = ( (Chromosome) a_chrom2).getMultiObjectives();
