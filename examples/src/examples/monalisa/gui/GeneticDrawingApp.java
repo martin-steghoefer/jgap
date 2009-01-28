@@ -13,7 +13,17 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 /**
- * The main class of the application.
+ /**
+  * This is the main class of the Mona Lisa Painting Problem. It starts the
+  * application. Please notice that this is the Genetic Algorithms version.
+  * Another implementation of the problem is done with Genetic Programmiung.
+  * Please see package examples.gp.monalisa.
+  *
+  * The Mona Lisa Painting Problem is to find a number of polygons that form
+  * a picture which corresponds as good as possible to a given input picture.
+  * Originally, the Mona Lisa from Leonardo da Vinci was chosen as input.<p>
+  * See http://rogeralsing.com/2008/12/07/genetic-programming-evolution-of-mona-lisa/
+  * for the initiator's blog of the problem, Roger Alsing.
  *
  * @author Yann N. Dauphin
  * @since 3.4
@@ -21,7 +31,7 @@ import org.jdesktop.application.SingleFrameApplication;
 public class GeneticDrawingApp
     extends SingleFrameApplication {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   /**
    * At startup create and show the main frame of the application.
