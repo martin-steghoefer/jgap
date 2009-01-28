@@ -1,9 +1,11 @@
 3.4.1
 -----------------------------------------------------------
+* Enhanced GP evolution cycle by avoiding dead ends
 * Added constructor for SUbProgram to control minimum and
   maximum arity
-* Fixed maxtries-bug in GPGenotype.evolve()
+* Fixed maxTries-bug in GPGenotype.evolve()
 * Fixed Terminal.clone()
+* Fixed Subprogram.clone()
 * Fixed Terminal.applyMutation(..)
 * Fixed bug in BranchTypingCross with option for simple
   chromosome selection
