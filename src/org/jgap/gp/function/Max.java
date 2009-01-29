@@ -23,15 +23,15 @@ import org.jgap.util.*;
 public class Max
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public Max(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, type);
+    super(a_conf, 2, type);
   }
 
   public String toString() {
-    return "max &1";
+    return "max(&1, &2)";
   }
 
   /**

@@ -23,15 +23,15 @@ import org.jgap.util.*;
 public class Min
     extends MathCommand implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public Min(final GPConfiguration a_conf, Class type)
       throws InvalidConfigurationException {
-    super(a_conf, 1, type);
+    super(a_conf, 2, type);
   }
 
   public String toString() {
-    return "min &1";
+    return "min(&1, &2)";
   }
 
   /**
