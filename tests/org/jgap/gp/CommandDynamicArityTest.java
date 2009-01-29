@@ -27,7 +27,7 @@ import org.jgap.gp.function.SubProgram;
 public class CommandDynamicArityTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandDynamicArityTest.class);
@@ -95,13 +95,14 @@ public class CommandDynamicArityTest
 
   public void testExecution_0()
       throws Exception {
-    getRandomGenerator().setNextFloatSequence(new float[]{
+    getRandomGenerator().setNextFloatSequence(new float[] {
         0.01f, //compared against crossover prob.
         0.20f, //function probability 1
         0.20f, //function probability 2
     });
-    getRandomGenerator().setNextIntSequence(new int[]{
-        2,1,3,0,4,6,2,5,0,5,1,1,3,0,4,9,11,45,7,3,13,2,0,0,0,1
+    getRandomGenerator().setNextIntSequence(new int[] {
+        2, 1, 3, 0, 4, 6, 2, 5, 0, 5, 1, 1, 3, 0, 4, 9, 11, 45, 7, 3, 13, 2, 0,
+        0, 0, 1
     });
     GPGenotype gp;
     Class[] types = {
@@ -109,8 +110,8 @@ public class CommandDynamicArityTest
     Class[][] argTypes = { {}
     };
     CommandGene[][] nodeSets = { {
-        new SubProgram(m_gpconf, new Class[]{Void.class, Void.class}),
-        new SubProgram(m_gpconf, new Class[]{Void.class, Void.class, Void.class}),
+        new SubProgram(m_gpconf, new Class[] {Void.class, Void.class}),
+        new SubProgram(m_gpconf, new Class[] {Void.class, Void.class, Void.class}),
         new IfDyn(m_gpconf, Void.class, 1, 1, 4),
         new NOP(m_gpconf, Void.class, 0),
         new Terminal(m_gpconf, int.class),
@@ -125,18 +126,30 @@ public class CommandDynamicArityTest
     // ----------------------
     GPPopulation pop = gp.getGPPopulation();
     int index = 0;
-    for(int i=0;i<pop.size();i++) {
+    for (int i = 0; i < pop.size(); i++) {
       CommandGene gene = pop.getGPProgram(i).getChromosome(0).getGene(0);
       if (IfDyn.class.isAssignableFrom(gene.getClass())) {
-        IfDyn ifdyn = (IfDyn)gene;
+        IfDyn ifdyn = (IfDyn) gene;
         int arity = ifdyn.getArity(null);
-        switch(index) {
-            case 0:assertEquals(4, arity);break;
-            case 1:assertEquals(4, arity);break;
-            case 2:assertEquals(4, arity);break;
-            case 3:assertEquals(4, arity);break;
-            case 4:assertEquals(5, arity);break;
-            case 5:assertEquals(5, arity);break;
+        switch (index) {
+          case 0:
+            assertEquals(4, arity);
+            break;
+          case 1:
+            assertEquals(4, arity);
+            break;
+          case 2:
+            assertEquals(4, arity);
+            break;
+          case 3:
+            assertEquals(4, arity);
+            break;
+          case 4:
+            assertEquals(5, arity);
+            break;
+          case 5:
+            assertEquals(5, arity);
+            break;
         }
         index++;
       }
