@@ -15,6 +15,7 @@
   chromosome selection
 * Fixed bug in BranchTypingCross with fallback-decision
   of crossing over
+* Fixed bug in GP functions Min and Max
 * Enhanced Javadoc
 
 3.4
