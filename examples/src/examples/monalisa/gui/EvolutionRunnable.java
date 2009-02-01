@@ -9,17 +9,12 @@
  */
 package examples.monalisa.gui;
 
-import examples.monalisa.core.GAConfiguration;
-import examples.monalisa.core.GAInitialChromosomeFactory;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jgap.Genotype;
-import org.jgap.IChromosome;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.Population;
+import java.awt.*;
+import java.awt.image.*;
+import org.jfree.chart.*;
+import org.jfree.data.xy.*;
+import org.jgap.*;
+import examples.monalisa.core.*;
 
 /**
  * Class in charge of actually running the evolution process.
@@ -30,7 +25,7 @@ import org.jgap.Population;
 public class EvolutionRunnable
     implements Runnable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GAConfiguration m_conf;
 
@@ -66,7 +61,9 @@ public class EvolutionRunnable
           pop.addChromosome(GAInitialChromosomeFactory.create(m_conf));
         }
         m_genotype = new Genotype(m_conf, pop);
-      } while (m_view.isEvolutionActivated()) {
+      }
+      //
+      while (m_view.isEvolutionActivated()) {
         m_genotype.evolve();
         if (m_conf.getGenerationNr() % 25 == 0) {
           IChromosome best = m_genotype.getFittestChromosome();
