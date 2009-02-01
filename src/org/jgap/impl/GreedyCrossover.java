@@ -20,7 +20,7 @@ import org.jgap.*;
  * 1. All genes in the chromosome are different and
  * </li>
  * <li>
- * 2. The set of genes for both chromosomes is identical and only they order
+ * 2. The set of genes for both chromosomes is identical and only their order
  * in the chromosome can vary.
  * </li>
  * </ul>
@@ -55,7 +55,7 @@ import org.jgap.*;
 public class GreedyCrossover
     extends BaseGeneticOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.28 $";
+  private static final String CVS_REVISION = "$Revision: 1.29 $";
 
   /** Switches assertions on/off. Must be true during tests and debugging. */
   boolean ASSERTIONS = true;
