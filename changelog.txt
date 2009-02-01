@@ -1,3 +1,10 @@
+3.4.2
+-----------------------------------------------------------
+* Fixed the Salesman problem: use real coordinates instead
+  of city indices only; skip acceptable cost option (did
+  not work)
+* Fixed about box in GA version of Mona Lisa example
+
 3.4.1
 -----------------------------------------------------------
 * Enhanced GP evolution cycle by avoiding dead ends
