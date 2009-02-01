@@ -20,7 +20,7 @@ import org.jdesktop.application.*;
 public class GeneticDrawingAboutBox
     extends javax.swing.JDialog {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public GeneticDrawingAboutBox(java.awt.Frame parent) {
     super(parent);
@@ -51,14 +51,14 @@ public class GeneticDrawingAboutBox
     javax.swing.JLabel imageLabel = new javax.swing.JLabel();
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.
-        Application.getInstance(examples.gp.monalisa.gui.GeneticDrawingApp.class).
+        Application.getInstance(examples.monalisa.gui.GeneticDrawingApp.class).
         getContext().getResourceMap(GeneticDrawingAboutBox.class);
     setTitle(resourceMap.getString("title")); // NOI18N
     setModal(true);
     setName("aboutBox"); // NOI18N
     setResizable(false);
     javax.swing.ActionMap actionMap = org.jdesktop.application.Application.
-        getInstance(examples.gp.monalisa.gui.GeneticDrawingApp.class).
+        getInstance(examples.monalisa.gui.GeneticDrawingApp.class).
         getContext().getActionMap(GeneticDrawingAboutBox.class, this);
     closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
     closeButton.setName("closeButton"); // NOI18N
