@@ -31,7 +31,7 @@ import org.jdesktop.application.SingleFrameApplication;
 public class GeneticDrawingApp
     extends SingleFrameApplication {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * At startup create and show the main frame of the application.
@@ -45,9 +45,11 @@ public class GeneticDrawingApp
    * This method is to initialize the specified window by injecting resources.
    * Windows shown in our application come fully initialized from the GUI
    * builder, so this additional configuration is not needed.
+   *
+   * @param a_root not needed here
    */
   @Override
-  protected void configureWindow(java.awt.Window root) {
+  protected void configureWindow(java.awt.Window a_root) {
   }
 
   /**
@@ -60,8 +62,10 @@ public class GeneticDrawingApp
 
   /**
    * Main method launching the application.
+   *
+   * @param a_args command-line options
    */
-  public static void main(String[] args) {
-    launch(GeneticDrawingApp.class, args);
+  public static void main(String[] a_args) {
+    launch(GeneticDrawingApp.class, a_args);
   }
 }
