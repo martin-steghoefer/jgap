@@ -9,17 +9,10 @@
  */
 package examples.monalisa.core;
 
-import java.util.List;
-import java.util.Vector;
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.IChromosome;
-import org.jgap.ICompositeGene;
-import org.jgap.IGeneticOperatorConstraint;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.Population;
-import org.jgap.RandomGenerator;
-import org.jgap.impl.MutationOperator;
+import java.util.*;
+
+import org.jgap.*;
+import org.jgap.impl.*;
 
 /**
  * Changes the color of a polygon of each chromosome.
@@ -30,7 +23,7 @@ import org.jgap.impl.MutationOperator;
 public class ColorMutationOperator
     extends MutationOperator {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   public ColorMutationOperator(final Configuration a_config,
                                final int a_desiredMutationRate)
