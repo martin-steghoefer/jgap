@@ -11,6 +11,7 @@ package examples.gp.anttrail;
 
 import java.io.*;
 import java.util.*;
+
 import org.jgap.*;
 import org.jgap.event.*;
 import org.jgap.gp.*;
@@ -18,8 +19,6 @@ import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
 import org.jgap.util.*;
 import org.jgap.util.tree.*;
-import examples.gp.Fibonacci;
-import org.apache.log4j.Logger;
 
 /**
  * The ant trail problem.
@@ -30,7 +29,7 @@ import org.apache.log4j.Logger;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.17 $";
+  private final static String CVS_REVISION = "$Revision: 1.18 $";
 
   protected int[][] m_map;
 
