@@ -57,11 +57,14 @@ import org.jgap.impl.salesman.*;
 public class TravellingSalesman
     extends Salesman {
   /** String containing the CVS revision. Read out via reflection!*/
-  private static final String CVS_REVISION = "$Revision: 1.13 $";
+  private static final String CVS_REVISION = "$Revision: 1.14 $";
 
   /** The number of cities to visit*/
   public static final int CITIES = 7;
 
+  public static final int[][] CITYARRAY = new int[][] { {2, 4}, {7, 5}, {7, 11},
+      {8, 1}, {1, 6}, {5, 9}, {0, 11}
+  };
   /**
    * Create an array of the given number of integer genes. The first gene is
    * always 0, this is the city where the salesman starts the journey.
@@ -80,17 +83,6 @@ public class TravellingSalesman
         genes[i].setAllele(new Integer(i));
       }
       IChromosome sample = new Chromosome(getConfiguration(), genes);
-      System.out.println("Optimal way " + sample);
-      System.out.println("Score " +
-                         (Integer.MAX_VALUE / 2 -
-                          getConfiguration().getFitnessFunction()
-                          .getFitnessValue(sample)));
-      shuffle(genes);
-      System.out.println("Sample chromosome " + sample);
-      System.out.println("Score " +
-                         (Integer.MAX_VALUE / 2 -
-                          getConfiguration().getFitnessFunction()
-                          .getFitnessValue(sample)));
       return sample;
     }
     catch (InvalidConfigurationException iex) {
@@ -111,17 +103,21 @@ public class TravellingSalesman
    * @since 2.0
    */
   public double distance(Gene a_from, Gene a_to) {
-    IntegerGene a = (IntegerGene) a_from;
-    IntegerGene b = (IntegerGene) a_to;
-    int A = a.intValue();
-    int B = b.intValue();
-    if (A == 0 && B == CITIES - 1) {
-      return 1;
-    }
-    if (B == 0 && A == CITIES - 1) {
-      return 1;
-    }
-    return Math.abs(A - B);
+    IntegerGene geneA = (IntegerGene) a_from;
+    IntegerGene geneB = (IntegerGene) a_to;
+    int a = geneA.intValue();
+    int b = geneB.intValue();
+    int x1 = CITYARRAY[a][0];
+    int y1 = CITYARRAY[a][1];
+    int x2 = CITYARRAY[b][0];
+    int y2 = CITYARRAY[b][1];
+//    if (A == 0 && B == CITIES - 1) {
+//      return 1;
+//    }
+//    if (B == 0 && A == CITIES - 1) {
+//      return 1;
+//    }
+    return Math.sqrt( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   }
 
   /**
