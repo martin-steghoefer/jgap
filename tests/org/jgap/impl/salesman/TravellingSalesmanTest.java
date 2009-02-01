@@ -24,7 +24,7 @@ import junit.framework.*;
 public class TravellingSalesmanTest
     extends JGAPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.15 $";
+  private final static String CVS_REVISION = "$Revision: 1.16 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(TravellingSalesmanTest.class);
@@ -143,8 +143,8 @@ public class TravellingSalesmanTest
      * Create an array of the given number of integer genes. The first gene is
      * always 0, this is a city where the salesman starts the journey.
      *
-     * @param a_initial_data Object
-     * @return Chromosome
+     * @param a_initial_data not needed here
+     * @return new chromosome
      */
     public IChromosome createSampleChromosome(Object a_initial_data) {
       try {
@@ -154,15 +154,6 @@ public class TravellingSalesmanTest
           genes[i].setAllele(new Integer(i));
         }
         IChromosome sample = new Chromosome(getConfiguration(), genes);
-//            System.out.println("Optimal way "+sample);
-//            System.out.println("Fitness "+
-//             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
-//              .getFitnessValue(sample)));
-        shuffle(genes);
-//            System.out.println("Sample chromosome "+sample);
-//            System.out.println("Fitness "+
-//             (Integer.MAX_VALUE/2-m_conf.getFitnessFunction()
-//              .getFitnessValue(sample)));
         return sample;
       } catch (InvalidConfigurationException iex) {
         throw new IllegalStateException(iex.getMessage());
@@ -176,7 +167,7 @@ public class TravellingSalesmanTest
      * soultion is 0 1 2 3 .. n - easy to check.
      * @param a_from Gene
      * @param a_to Gene
-     * @return double
+     * @return distance betwen cities
      */
     public double distance(Gene a_from, Gene a_to) {
       IntegerGene a = (IntegerGene) a_from;
