@@ -9,16 +9,11 @@
  */
 package examples.monalisa.core;
 
-import java.awt.image.BufferedImage;
-import org.jgap.Configuration;
-import org.jgap.DeltaFitnessEvaluator;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.event.EventManager;
-import org.jgap.impl.BestChromosomesSelector;
-import org.jgap.impl.ChromosomePool;
-import org.jgap.impl.GABreeder;
-import org.jgap.impl.StockRandomGenerator;
-import org.jgap.util.ICloneable;
+import java.awt.image.*;
+import org.jgap.*;
+import org.jgap.event.*;
+import org.jgap.impl.*;
+import org.jgap.util.*;
 
 /**
  * Encapsulates the settings of the genetic algorithm.
@@ -29,7 +24,7 @@ import org.jgap.util.ICloneable;
 public class GAConfiguration
     extends Configuration implements ICloneable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   final private GAPhenotypeExpresser m_phenotypeExpresser;
 
@@ -52,19 +47,18 @@ public class GAConfiguration
     addNaturalSelector(bestChromsSelector, false);
     setMinimumPopSizePercent(0);
     setPreservFittestIndividual(true);
-    setPopulationSize(2);
+    setPopulationSize(5);
     setKeepPopulationSizeConstant(false);
     setFitnessEvaluator(new DeltaFitnessEvaluator());
     setFitnessFunction(new LMSFitnessFunction(this));
     setChromosomePool(new ChromosomePool());
     /*      addGeneticOperator(new CrossoverOperator(this, 0.35d));*/
     addGeneticOperator(new SingleMutationOperator(this, 2));
-    //addGeneticOperator(new PointMutationOperator(this, 75));
-    //addGeneticOperator(new PointMutationOperator(this, 75));
-    //addGeneticOperator(new ColorMutationOperator(this, 50));
+    addGeneticOperator(new PointMutationOperator(this, 8));
+    addGeneticOperator(new ColorMutationOperator(this, 10));
     //addGeneticOperator(new AlphaMutationOperator(this, 200));
     //addGeneticOperator(new AlphaOffMutationOperator(this, 150));
-    //addGeneticOperator(new PolygonMutationOperator(this, 150));
+    addGeneticOperator(new PolygonMutationOperator(this, 5));
 
     setSampleChromosome(GAInitialChromosomeFactory.create(this));
   }
