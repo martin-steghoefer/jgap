@@ -2,7 +2,7 @@
 -----------------------------------------------------------
 * Fixed the Salesman problem: use real coordinates instead
   of city indices only; skip acceptable cost option (did
-  not work)
+  not work); removed shuffle (done with JGAP itself)
 * Fixed about box in GA version of Mona Lisa example
 
 3.4.1
