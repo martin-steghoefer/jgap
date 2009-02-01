@@ -9,27 +9,20 @@
  */
 package examples.monalisa.gui;
 
-import examples.monalisa.core.GAConfiguration;
-import java.awt.Image;
-import java.io.IOException;
+import java.io.*;
+import javax.imageio.*;
+
+import java.awt.*;
+import java.awt.image.*;
+import javax.swing.*;
+
+import org.jdesktop.application.*;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import org.jdesktop.application.ResourceMap;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jgap.Configuration;
-import org.jgap.InvalidConfigurationException;
+import org.jfree.chart.*;
+import org.jfree.data.xy.*;
+import org.jgap.*;
+
+import examples.monalisa.core.*;
 
 /**
  * The application's main frame.
@@ -40,7 +33,7 @@ import org.jgap.InvalidConfigurationException;
 public class GeneticDrawingView
     extends FrameView {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   public GeneticDrawingView(SingleFrameApplication app) {
     super(app);
@@ -85,7 +78,7 @@ public class GeneticDrawingView
       return;
     }
     ResourceMap resourceMap = getResourceMap();
-    if (isEvolutionActivated == false) {
+    if (!isEvolutionActivated) {
       startEvolution.setText(resourceMap.getString("stopEvolution.text"));
       fittestDrawingView.setVisible(true);
       isEvolutionActivated = true;
@@ -103,15 +96,18 @@ public class GeneticDrawingView
 
   /**
    * Scale an image to fit the size of the targetImageLabel.
+   *
+   * @param a_image the image to scale
+   * @return scaled image
    */
-  public ImageIcon scaleToImageLabel(Image image) {
-    ImageIcon scaled = new ImageIcon(image);
+  public ImageIcon scaleToImageLabel(Image a_image) {
+    ImageIcon scaled = new ImageIcon(a_image);
     if (scaled.getIconHeight() > targetImageLabel.getHeight()) {
-      scaled = new ImageIcon(image.getScaledInstance(
+      scaled = new ImageIcon(a_image.getScaledInstance(
           -1, targetImageLabel.getHeight(), Image.SCALE_FAST));
     }
     if (scaled.getIconWidth() > targetImageLabel.getWidth()) {
-      scaled = new ImageIcon(image.getScaledInstance(
+      scaled = new ImageIcon(a_image.getScaledInstance(
           targetImageLabel.getWidth(), -1, Image.SCALE_FAST));
     }
     return scaled;
@@ -278,9 +274,9 @@ public class GeneticDrawingView
   // End of variables declaration//GEN-END:variables
   private JDialog aboutBox;
 
-  private BufferedImage targetImage = null;
+  private BufferedImage targetImage;
 
-  private boolean isEvolutionActivated = false;
+  private boolean isEvolutionActivated;
 
-  private FittestDrawingView fittestDrawingView = null;
+  private FittestDrawingView fittestDrawingView;
 }
