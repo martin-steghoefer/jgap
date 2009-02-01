@@ -9,9 +9,11 @@
  */
 package org.jgap.impl.salesman;
 
+import java.io.*;
+
 import org.jgap.*;
-import org.jgap.impl.*;
 import org.jgap.event.*;
+import org.jgap.impl.*;
 
 /**
  * The class solves the travelling salesman problem.
@@ -41,17 +43,15 @@ import org.jgap.event.*;
  * </ul>
  */
 public abstract class Salesman
-    implements java.io.Serializable {
+    implements Serializable {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.21 $";
+  private final static String CVS_REVISION = "$Revision: 1.22 $";
 
   private Configuration m_config;
 
   private int m_maxEvolution = 128;
 
   private int m_populationSize = 512;
-
-  private int m_acceptableCost = -1;
 
   /**
    * Override this method to compute the distance between "cities",
@@ -110,7 +110,10 @@ public abstract class Salesman
    * @param a_initial_data the same object as was passed to findOptimalPath.
    * It can be used to specify the task more precisely if the class is
    * used for solving multiple tasks
+   *
    * @return created configuration
+   *
+   * @throws InvalidConfigurationException
    *
    * @author Audrius Meskauskas
    * @since 2.0
@@ -134,25 +137,6 @@ public abstract class Salesman
       config.addGeneticOperator(new GreedyCrossover(config));
       config.addGeneticOperator(new SwappingMutationOperator(config, 20));
       return config;
-  }
-
-  /**
-   * The solution process breaks after the total path length drops below this
-   * limit. The default value (-1) will never be achieved, and evolution stops
-   * after getMaxEvolution() iterations.
-   *
-   * @return satisfying cost allowed to conditionally stop before an optimal
-   * solution has been found
-   *
-   * @author Audrius Meskauskas
-   * @since 2.0
-   */
-  public int getAcceptableCost() {
-    return m_acceptableCost;
-  }
-
-  public void setAcceptableCost(final int a_acceptableCost) {
-    m_acceptableCost = a_acceptableCost;
   }
 
   /**
@@ -246,9 +230,12 @@ public abstract class Salesman
         genes[k] = samplegenes[k].newGene();
         genes[k].setAllele(samplegenes[k].getAllele());
       }
-      shuffle(genes);
       chromosomes[i] = new Chromosome(m_config, genes);
     }
+    // Create the genotype. We cannot use Genotype.randomInitialGenotype,
+    // Because we need unique gene values (representing the indices of the
+    // cities of our problem).
+    // -------------------------------------------------------------------
     Genotype population = new Genotype(m_config,
                                        new Population(m_config, chromosomes));
     IChromosome best = null;
@@ -259,28 +246,10 @@ public abstract class Salesman
         for (int i = 0; i < getMaxEvolution(); i++) {
       population.evolve();
       best = population.getFittestChromosome();
-      if (best.getFitnessValue() >= getAcceptableCost()) {
-        break Evolution;
-      }
     }
     // Return the best solution we found.
     // ----------------------------------
     return best;
-  }
-
-  protected void shuffle(final Gene[] a_genes) {
-    Gene t;
-    // shuffle:
-    for (int r = 0; r < 10 * a_genes.length; r++) {
-      for (int i = m_startOffset; i < a_genes.length; i++) {
-        int p = m_startOffset
-            + m_config.getRandomGenerator().
-            nextInt(a_genes.length - m_startOffset);
-        t = a_genes[i];
-        a_genes[i] = a_genes[p];
-        a_genes[p] = t;
-      }
-    }
   }
 
   private int m_startOffset = 1;
