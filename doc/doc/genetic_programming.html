@@ -312,7 +312,196 @@ and&nbsp; <i>org.jgap.gp.terminal.</i>
 <p class="text">To be continued...: Explain how<p class="text">A further, quite
 complex example about GP is the Mona Lisa painting problem, see class <a href="../javadoc/3.4/examples/gp/monalisa/gui/GeneticDrawingApp.html">examples.gp.monalisa.GeneticDrawingApp</a>.
 For your information, it might be useful to know that there is a corresponding
-GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html">examples.monalisa.GeneticDrawingApp</a>.
+GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html">examples.monalisa.GeneticDrawingApp</a>.<h3 class="subheader">The
+program flow in JGAP when creating a GP Program</h3>
+<table>
+  <tbody>
+    <tr>
+      <td colSpan="12" class="text"><b><font face="Courier New">GPGenotype.
+        randomInitialGenotype, line 219</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td colSpan="11" class="text"><b><font face="Courier New">GPGenotype.
+        randomInitialGenotype, line 263</font></b></td>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="10" class="text"><b><font face="Courier New">GPGenotype.
+        randomInitialGenotype, line 314</font></b></td>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="9" class="text"><b><font face="Courier New">GPGenotype.
+        randomInitialGenotype, line 359</font></b></td>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="8" class="text"><b><font face="Courier New">IPopulationCreator.initialize</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="8" class="text">
+        <ul style="MARGIN-BOTTOM: 5px">
+          <li><font face="Courier New">Normally given by class
+            DefaultPopulationCreator</font></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="7" class="text"><b><font face="Courier New">GPPolulation.create(...),
+        line 235</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="7" class="text">
+        <ul style="MARGIN-BOTTOM: 5px">
+          <li><font face="Courier New">Also called from
+            GPPolulation.create(...), line 207</font></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="6" class="text"><b><font face="Courier New">GPPolulation.create(...),
+        line 271 and GPPolulation.create(...), line 408</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="6" class="text">
+        <ul style="MARGIN-BOTTOM: 5px">
+          <li><font face="Courier New">Here, the depth parameter for program
+            creation is determined by considering the minimum and maximum depth
+            allowed during program initialization. This setting is given in the
+            GP configuration object (class GPConfiguration)</font></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="5" class="text"><b><font face="Courier New">GPPolulation.create(...),
+        line 452</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="4" class="text"><b><font face="Courier New">IProgramCreator.create(...)</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="4" class="text">
+        <ul style="MARGIN-BOTTOM: 5px">
+          <li><font face="Courier New">Normally given by class
+            DefaultProgramCreator</font></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="3" class="text"><b><font face="Courier New">GPProgram.growOrFull,
+        line 160</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td colSpan="2" class="text"><b><font face="Courier New">ProgramChromosome.growOrFull,
+        line 235</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"><b><font face="Courier New">ProgramChromosome.growOrFullNode,
+        line 519</font></b></td>
+    </tr>
+    <tr>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text"></td>
+      <td class="text">
+        <ul style="MARGIN-BOTTOM: 5px">
+          <li><font face="Courier New">Calls itself recursively</font></li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
 <p class="copyright">Copyright © 2006-2009 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
 Meffert</a>. All rights reserved. </p>
 
