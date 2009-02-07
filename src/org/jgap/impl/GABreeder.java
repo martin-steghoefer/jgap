@@ -15,7 +15,7 @@ import org.jgap.event.*;
 public class GABreeder
     extends BreederBase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.13 $";
+  private final static String CVS_REVISION = "$Revision: 1.14 $";
 
   private transient Configuration m_lastConf;
 
@@ -115,17 +115,11 @@ public class GABreeder
     // Ensure fitness value of all chromosomes is udpated.
     // ---------------------------------------------------
     updateChromosomes(pop, a_conf);
-    // If a bulk fitness function has been provided, call it.
-    // ------------------------------------------------------
-//    BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
-//    if (bulkFunction != null) {
-//      /**@todo utilize jobs: bulk fitness function is not so important for a
-//       * prototype! */
-//      bulkFunction.evaluate(pop);
-//    }
     // Apply certain NaturalSelectors after GeneticOperators have been applied.
     // ------------------------------------------------------------------------
     pop = applyNaturalSelectors(a_conf, pop, false);
+    // If a bulk fitness function has been provided, call it.
+    // ------------------------------------------------------
     BulkFitnessFunction bulkFunction = a_conf.getBulkFitnessFunction();
     if (bulkFunction != null) {
       /**@todo utilize jobs: bulk fitness function is not so important for a
