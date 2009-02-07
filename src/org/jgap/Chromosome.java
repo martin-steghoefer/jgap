@@ -64,7 +64,8 @@ import java.util.*;
 public class Chromosome
     extends BaseChromosome {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.95 $";
+  private final static String CVS_REVISION = "$Revision: 1.96 $";
+
   /**
    * Application-specific data that is attached to this Chromosome.
    * This data may assist the application in evaluating this Chromosome
@@ -365,7 +366,22 @@ public class Chromosome
           Gene[] copyOfGenes = new Gene[size];
           for (int i = 0; i < copyOfGenes.length; i++) {
             copyOfGenes[i] = getGene(i).newGene();
-            copyOfGenes[i].setAllele(getGene(i).getAllele());
+            Object allele = getGene(i).getAllele();
+            if (allele != null) {
+              IJGAPFactory factory = getConfiguration().getJGAPFactory();
+              if (factory != null) {
+                ICloneHandler cloner = factory.
+                    getCloneHandlerFor(allele, allele.getClass());
+                if (cloner != null) {
+                  try {
+                    allele = cloner.perform(allele, null, this);
+                  } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                  }
+                }
+              }
+            }
+            copyOfGenes[i].setAllele(allele);
           }
           // Now construct a new Chromosome with the copies of the genes and
           // return it. Also clone the IApplicationData object.
@@ -381,16 +397,14 @@ public class Chromosome
       // Clone constraint checker.
       // -------------------------
       copy.setConstraintChecker(getConstraintChecker());
-    }
-    catch (InvalidConfigurationException iex) {
+    } catch (InvalidConfigurationException iex) {
       throw new IllegalStateException(iex.getMessage());
     }
     // Also clone the IApplicationData object.
     // ---------------------------------------
     try {
       copy.setApplicationData(cloneObject(getApplicationData()));
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       throw new IllegalStateException(ex.getMessage());
     }
     return copy;
@@ -500,7 +514,6 @@ public class Chromosome
     }
   }
 
-
   /**
    * Sets the fitness value of this Chromosome directly without any
    * constraint checks, conversions or checks. Only use if you know what
@@ -605,7 +618,7 @@ public class Chromosome
           /**@todo what about Gene's energy?*/
         }
         randomChromosome.setFitnessValueDirectly(FitnessFunction.
-                                                 NO_FITNESS_VALUE);
+            NO_FITNESS_VALUE);
         return randomChromosome;
       }
     }
@@ -663,8 +676,7 @@ public class Chromosome
      */
     try {
       return compareTo(other) == 0;
-    }
-    catch (ClassCastException cex) {
+    } catch (ClassCastException cex) {
       return false;
     }
   }
@@ -776,8 +788,7 @@ public class Chromosome
           try {
             return ( (Comparable) getApplicationData()).compareTo(
                 otherChromosome.getApplicationData());
-          }
-          catch (ClassCastException cex) {
+          } catch (ClassCastException cex) {
             /**@todo improve*/
             return -1;
           }
@@ -1024,5 +1035,4 @@ public class Chromosome
   public List getMultiObjectives() {
     return m_multiObjective;
   }
-
 }
