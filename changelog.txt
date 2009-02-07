@@ -1,9 +1,12 @@
 3.4.2
 -----------------------------------------------------------
+* Corrected cloning of alleles in Chromosome.clone()
 * Fixed the Salesman problem: use real coordinates instead
   of city indices only; skip acceptable cost option (did
   not work); removed shuffle (done with JGAP itself)
-* Fixed about box in GA version of Mona Lisa example
+* Fixed about box in GA version of Mona Lisa example,
+  increased polygon number in resource file
+* Enhanced Javadoc
 
 3.4.1
 -----------------------------------------------------------
@@ -41,7 +44,7 @@
   ensureUniqueness
 * ProgramChromosome, GPProgram: implemented interface
   IBusinessKey (method getBusinessKey)
-* ProgramChromosome.growOrFullNode: Added loggin in case
+* ProgramChromosome.growOrFullNode: Added logging in case
   of an ignored problem
 * GP-command terminal now supports primitive class types
 * Made some GP-commands cloneable: True, False, If, IfElse,
