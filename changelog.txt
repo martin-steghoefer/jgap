@@ -6,6 +6,7 @@
   not work); removed shuffle (done with JGAP itself)
 * Fixed about box in GA version of Mona Lisa example,
   increased polygon number in resource file
+* Added example, see package examples.math
 * Enhanced Javadoc
 
 3.4.1
