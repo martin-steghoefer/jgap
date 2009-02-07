@@ -9,12 +9,10 @@
  */
 package examples.monalisa.core;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import java.awt.image.BufferedImage;
-import org.jgap.IChromosome;
-import org.jgap.impl.IntegerGene;
+import java.awt.*;
+import java.awt.image.*;
+import org.jgap.*;
+import org.jgap.impl.*;
 
 /**
  *
@@ -23,7 +21,7 @@ import org.jgap.impl.IntegerGene;
  */
 public class GAPhenotypeExpresser {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.1 $";
+  private final static String CVS_REVISION = "$Revision: 1.2 $";
 
   private GAConfiguration m_conf;
 
@@ -50,7 +48,10 @@ public class GAPhenotypeExpresser {
   }
 
   /**
-   * Returns an object representing the nth color encoded in the chromosome.
+   * @param a_chromosome the chromosome that holds the color information
+   * @param a_n the index of the polygon
+   *
+   * @return an object representing the nth color encoded in the chromosome
    */
   public Color expressColor(IChromosome a_chromosome, int a_n) {
     int pos = a_n * GAInitialChromosomeFactory.getNumberOfGenesPerPolygon();
@@ -64,7 +65,10 @@ public class GAPhenotypeExpresser {
   }
 
   /**
-   * Returns an object representing the nth polygon encoded in the chromosome.
+   * @param a_chromosome the chromosome that holds the polygon information
+   * @param a_n the index of the polygon
+   *
+   * @return an object representing the nth polygon encoded in the chromosome
    */
   public Polygon expressPolygon(IChromosome a_chromosome, int a_n) {
     int[] xpoints = new int[GAInitialChromosomeFactory.POINTS];
