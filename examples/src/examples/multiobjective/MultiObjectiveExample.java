@@ -12,6 +12,7 @@ package examples.multiobjective;
 import java.util.*;
 import org.jgap.*;
 import org.jgap.impl.*;
+import org.jgap.util.*;
 
 /**
  * Example for a multiobjective problem. Here, we have a function F with one
@@ -26,12 +27,12 @@ import org.jgap.impl.*;
  */
 public class MultiObjectiveExample {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.7 $";
+  private final static String CVS_REVISION = "$Revision: 1.8 $";
 
   /**
    * The total number of times we'll let the population evolve.
    */
-  private static final int MAX_ALLOWED_EVOLUTIONS = 200;
+  private static final int MAX_ALLOWED_EVOLUTIONS = 20;
 
   /**
    * Executes the genetic algorithm.
@@ -88,49 +89,53 @@ public class MultiObjectiveExample {
     for (int i = 0; i < MAX_ALLOWED_EVOLUTIONS; i++) {
       population.evolve();
     }
-    // Remove solutions that are not Pareto-optimal.
-    // ---------------------------------------------
+    // Now we have at least one solution.
+    // ----------------------------------
     List chroms = population.getPopulation().getChromosomes();
-    int size = population.getPopulation().getChromosomes().size();
-    int i = 0;
-    boolean removed = false;
     MOFitnessComparator comp = new MOFitnessComparator();
-    while (i < size - 1) {
-      IChromosome chrom1 = population.getPopulation().getChromosome(i);
-      int j = i + 1;
-      while (j < size) {
-        IChromosome chrom2 = population.getPopulation().getChromosome(j);
-        int res = comp.compare(chrom1, chrom2);
-        if (res != 0) {
-          if (res == -1) {
-            population.getPopulation().getChromosomes().remove(i);
-            size--;
-            removed = true;
-            break;
-          }
-          else {
-            population.getPopulation().getChromosomes().remove(j);
-            size--;
-          }
-        }
-        else {
-          j++;
-        }
-      }
-      if (removed) {
-        removed = false;
+    // Remove all duplicate solutions.
+    // -------------------------------
+    Collections.sort(chroms, comp);
+    int index = 0;
+    while (index < chroms.size() - 1) {
+      // First solution to compare.
+      Chromosome aSolution1 = (Chromosome) chroms.get(index);
+      Vector<Double> v1 = MultiObjectiveFitnessFunction.getVector(aSolution1);
+      Double d1 = v1.get(0);
+      // Second solution to compare.
+      Chromosome aSolution2 = (Chromosome) chroms.get(index + 1);
+      Vector<Double> v2 = MultiObjectiveFitnessFunction.getVector(aSolution2);
+      Double d2 = v2.get(0);
+      if (Math.abs(d1 - d2) < 0.000001) {
+        // Duplicate solution found
+        chroms.remove(index);
       }
       else {
-        i++;
+        index++;
       }
     }
     // Print all Pareto-optimal solutions.
     // -----------------------------------
-    Collections.sort(chroms, comp);
+    System.out.println("Formula F1(x) = x²");
+    System.out.println("Formula F2(x) = (x-2)²");
+    System.out.println("\nFound pareto-optimal solutions:");
+    System.out.println("===============================\n");
+    System.out.println("Input value x  F1(x)          F2(x)"
+                       + "          Difference from optimum");
+    System.out.println("=============  =====          ====="
+                       + "          =======================");
     for (int k = 0; k < chroms.size(); k++) {
       Chromosome bestSolutionSoFar = (Chromosome) chroms.get(k);
-      System.out.println(MultiObjectiveFitnessFunction.
-                         getVector(bestSolutionSoFar));
+      String s = "";
+      Vector<Double>
+          v = MultiObjectiveFitnessFunction.getVector(bestSolutionSoFar);
+      for (int j = 0; j < 4; j++) {
+        Double d = v.get(j);
+        String t = NumberKit.niceDecimalNumber(d, 9);
+        t = StringKit.fill(t, 15, ' ');
+        s += t;
+      }
+      System.out.println(s);
     }
   }
 
@@ -162,29 +167,20 @@ public class MultiObjectiveExample {
       if (size != v2.size()) {
         throw new RuntimeException("Size of objectives inconsistent!");
       }
-      boolean better1 = false;
-      boolean better2 = false;
+      double d1Total = 0;
+      double d2Total = 0;
       for (int i = 0; i < size; i++) {
         double d1 = ( (Double) v1.get(i)).doubleValue();
         double d2 = ( (Double) v2.get(i)).doubleValue();
-        if (d1 < d2) {
-          better1 = true;
-        }
-        else if (d2 < d1) {
-          better2 = true;
-        }
+        d1Total += d1;
+        d2Total += d2;
       }
-      if (better1) {
-        if (better2) {
-          return 0;
-        }
-        else {
-          return 1;
-        }
+      if (d1Total < d2Total) {
+        return -1;
       }
       else {
-        if (better2) {
-          return -1;
+        if (d1Total > d2Total) {
+          return 1;
         }
         else {
           return 0;
