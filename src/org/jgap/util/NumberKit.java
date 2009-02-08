@@ -17,7 +17,7 @@ package org.jgap.util;
  */
 public class NumberKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   /**
    * Returns the hex value of "c" or -1 if there is no corresponding hex value.
@@ -106,7 +106,8 @@ public class NumberKit {
 
   /**
    * Formats a number as a string having the total length of a_places, filling
-   * up needed characters with a_filler
+   * up needed characters with a_filler.
+   *
    * @param a_number the number to format
    * @param a_places total length of output string
    * @param a_filler fill character
@@ -124,7 +125,7 @@ public class NumberKit {
   }
 
   /**
-   * Removes decimal places if there are more than a_decimals
+   * Removes decimal places if there are more than a_decimals.
    *
    * @param a_number the number to convert to a string
    * @param a_decimals maximum number of decimal places allowed
