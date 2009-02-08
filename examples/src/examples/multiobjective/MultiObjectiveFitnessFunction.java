@@ -22,7 +22,7 @@ import org.jgap.impl.*;
 public class MultiObjectiveFitnessFunction
     extends BulkFitnessFunction {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.4 $";
+  private final static String CVS_REVISION = "$Revision: 1.5 $";
 
   public static final int MAX_BOUND = 4000;
 
@@ -58,23 +58,32 @@ public class MultiObjectiveFitnessFunction
     }
   }
 
-  public static Vector getVector(IChromosome a_chrom) {
+  /**
+   * @param a_chrom the chromosome for which to obtain the result it represents
+   *
+   * @return vector of data for output
+   */
+  public static Vector<Double> getVector(IChromosome a_chrom) {
+    // Fill MO Vector with X (input), output F1(X), output F2(X),
+    // difference of |F1(X)| + |F2(X)| from zero
+    // ----------------------------------------------------------
     Vector result = new Vector();
-//    Gene g1 = a_chrom.getGene(0);
-//    result.add(g1);
-//    Gene g2 = a_chrom.getGene(1);
-//    result.add(g2);
     List mo = ( (Chromosome) a_chrom).getMultiObjectives();
+    // X as input for F1 and F2
     Double d = (Double) mo.get(0);
     result.add(d);
+    // Result F1(X)
     d = (Double) mo.get(1);
     result.add(d);
-    d = (Double) mo.get(2);
-    result.add(d);
+    // Result F2(X)
+    Double d2 = (Double) mo.get(2);
+    result.add(d2);
+    // Difference from optimum
+    result.add(Math.abs(d) + Math.abs(d2));
     return result;
   }
 
-  private double formula(int a_index, double a_x) {
+  public static double formula(int a_index, double a_x) {
     if (a_index == 1) {
       // First objective.
       // ----------------
