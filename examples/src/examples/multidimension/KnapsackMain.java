@@ -18,8 +18,8 @@ import org.w3c.dom.*;
 
 /**
  * This class provides an implementation of the extended classic knapsack
- * problem using a genetic algorithm. The goal of the problem is to reach a given
- * volume (of a knapsack) by putting a number of items into the knapsack.
+ * problem using a genetic algorithm. The goal of the problem is to reach a
+ * given volume of a knapsack by putting a number of items into the knapsack.
  * The closer the sum of the item volumes to the given volume the better.
  * <p>
  * The extension to the classic knapsack is that each item can have a specific
@@ -32,7 +32,7 @@ import org.w3c.dom.*;
  */
 public class KnapsackMain {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.2 $";
+  private final static String CVS_REVISION = "$Revision: 1.3 $";
 
   /**
    * The total number of times we'll let the population evolve.
