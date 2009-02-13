@@ -6,7 +6,7 @@
   not work); removed shuffle (done with JGAP itself)
 * Fixed about box in GA version of Mona Lisa example,
   increased polygon number in resource file
-* Added example, see package examples.math
+* Added a mathematical example, see package examples.math
 * Fixed the MultiObjective example: fixed MO evaluator and
   comparator, enhanced output
 * Enhanced Javadoc
