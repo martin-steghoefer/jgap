@@ -1,3 +1,10 @@
+3.4.3
+-----------------------------------------------------------
+* Added deleteDirectory to FileKit
+* Added a second deleteFile method to FileKit
+* Fixed bug in SbWhile, made guard-variable name "more"
+  unique
+
 3.4.2
 -----------------------------------------------------------
 * Corrected cloning of alleles in Chromosome.clone()
