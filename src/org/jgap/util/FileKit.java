@@ -22,7 +22,7 @@ import java.util.regex.*;
  */
 public class FileKit {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.11 $";
+  private final static String CVS_REVISION = "$Revision: 1.12 $";
 
   public static String fileseparator = System.getProperty("file.separator");
 
@@ -259,14 +259,50 @@ public class FileKit {
    */
   public static boolean deleteFile(String a_filename) {
     File file = new File(getConformPath(a_filename));
-    if (file.exists()) {
-      return file.delete();
+    return deleteFile(file);
+  }
+
+  /**
+   * Deletes a file from disk.
+   *
+   * @param a_file name of file to delete
+   *
+   * @return true if deletion successful
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+ public static boolean deleteFile(File a_file) {
+    if (a_file.exists()) {
+      return a_file.delete();
     }
     else {
       return false;
     }
   }
 
+  /**
+   * Deletes a directory from disk, also if it is non-empty.
+   *
+   * @param a_dir name of file to delete
+   *
+   * @return true if deletion successful
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public static boolean deleteDirectory(File a_dir) {
+    if (a_dir.isDirectory()) {
+      String[] children = a_dir.list();
+      for (int i = 0; i < children.length; i++) {
+        boolean success = deleteDirectory(new File(a_dir, children[i]));
+        if (!success) {
+          return false;
+        }
+      }
+    }
+    return a_dir.delete();
+  }
   /**
    * Loads a jar file and returns a class loader to access the jar's classes.
    *
