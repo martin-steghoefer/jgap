@@ -30,10 +30,9 @@ import java.io.*;
 public class GPConfiguration
     extends Configuration {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.45 $";
+  private final static String CVS_REVISION = "$Revision: 1.46 $";
 
   /**@todo introduce lock for configuration*/
-
   /**
    * References the current fitness function that will be used to evaluate
    * chromosomes during the natural selection process.
@@ -49,7 +48,9 @@ public class GPConfiguration
    * Internal memory, see StoreTerminalCommand for example.
    */
   private transient Culture m_memory = new Culture(50);
-      /**@todo make 50 configurable*/
+
+  /**@todo make 50 configurable*/
+  private transient Hashtable<String, char[][]> m_matrices;
 
   /**
    * The probability that a crossover operation is chosen during evolution. Must
@@ -247,9 +248,9 @@ public class GPConfiguration
       try {
         m_factory = (IJGAPFactory) Class.forName(clazz).newInstance();
       } catch (Throwable ex) {
-        throw new RuntimeException("Class " + clazz
-                                   + " could not be instantiated"
-                                   + " as type IJGAPFactory");
+        throw new RuntimeException("Class " + clazz +
+                                   " could not be instantiated" +
+                                   " as type IJGAPFactory");
       }
     }
     else {
@@ -328,7 +329,6 @@ public class GPConfiguration
 //  public synchronized void addGeneticOperator(IGPGeneticOperator a_operatorToAdd)
 //      throws InvalidConfigurationException {
 //  }
-
   public double getCrossoverProb() {
     return m_crossoverProb;
   }
@@ -378,8 +378,8 @@ public class GPConfiguration
   }
 
   /**
-   * @param a_mutationProb probability for dynamizing the arity of a node during growing a
-   * program
+   * @param a_dynArityProb probability for dynamizing the arity of a node during
+   * growing a program
    *
    * @author Klaus Meffert
    * @since 3.4
@@ -485,6 +485,104 @@ public class GPConfiguration
    */
   public void storeInMemory(String a_name, Object a_value) {
     m_memory.set(a_name, a_value, -1);
+  }
+
+  /**
+   * Creates an instance of a matrix with a unique name.
+   *
+   * @param a_name the name of the matrix
+   * @param a_cols number of columns the matrix should have
+   * @param a_rows number of rows the matrix should have
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public void createMatrix(String a_name, int a_cols, int a_rows) {
+    if (a_name == null || a_name.length() < 1) {
+      throw new IllegalArgumentException("Matrix name must not be empty!");
+    }
+    if (a_cols < 1 || a_rows < 1) {
+      throw new IllegalArgumentException(
+          "Number of colums and rows must be greater than zero!");
+    }
+    char[][] m_matrix = new char[a_cols][a_rows];
+    m_matrices.put(a_name, m_matrix);
+  }
+
+  /**
+   * Sets a matrix field with a value.
+   *
+   * @param a_name the name of the matrix
+   * @param a_col column in the matrix
+   * @param a_row row in the matrix
+   * @param a_value the value to set in the matrix at given column and row
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public void setMatrix(String a_name, int a_col, int a_row, char a_value) {
+    char[][] m_matrix = m_matrices.get(a_name);
+    if (m_matrix == null) {
+      throw new IllegalArgumentException("Matrix with name " + a_name +
+          " not found!");
+    }
+    m_matrix[a_col][a_row] = a_value;
+  }
+
+  /**
+   * Resets the matrix by filling it with a given character.
+   *
+   * @param a_name the name of the matrix
+   * @param a_filler the character to fill the whole matrix with
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public void resetMatrix(String a_name, char a_filler) {
+    char[][] m_matrix = m_matrices.get(a_name);
+    if (m_matrix == null) {
+      throw new IllegalArgumentException("Matrix with name " + a_name +
+          " not found!");
+    }
+    for (int col = 0; col < m_matrix.length; col++) {
+      for (int row = 0; row < m_matrix[col].length; row++) {
+        m_matrix[col][row] = a_filler;
+      }
+    }
+  }
+
+  /**
+   * Reads a matrix cell and returns the value.
+   *
+   * @param a_name the name of the matrix
+   * @param a_col the column to read
+   * @param a_row the row to read
+   * @return the value in the matrix
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public char readMatrix(String a_name, int a_col, int a_row) {
+    char[][] m_matrix = m_matrices.get(a_name);
+    if (m_matrix == null) {
+      throw new IllegalArgumentException("Matrix with name " + a_name +
+          " not found!");
+    }
+    return m_matrix[a_col][a_row];
+  }
+
+  /**
+   * Retrieves a named matrix.
+   *
+   * @param a_name the name of the matrix
+   * @return the matrix itself
+   *
+   * @author Klaus Meffert
+   * @since 3.4.3
+   */
+  public char[][] getMatrix(String a_name) {
+    char[][] m_matrix = m_matrices.get(a_name);
+    return m_matrix;
   }
 
   /**
@@ -638,7 +736,7 @@ public class GPConfiguration
     // Ensure that no other fitness function has been set in a different
     // configuration object within the same thread!
     // -----------------------------------------------------------------
-    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet,m_objectiveFunction,
+    checkProperty(PROPERTY_FITFUNC_INST, a_functionToSet, m_objectiveFunction,
                   "Fitness function has already been set differently.");
     m_objectiveFunction = a_functionToSet;
   }
@@ -722,9 +820,9 @@ public class GPConfiguration
       return true;
     }
     return nodeValidator.validate(a_chrom, a_node, a_rootNode, a_tries, a_num,
-                                    a_recurseLevel, a_type, a_functionSet,
-                                    a_depth, a_grow, a_childIndex,
-                                    a_fullProgram);
+                                  a_recurseLevel, a_type, a_functionSet,
+                                  a_depth, a_grow, a_childIndex,
+                                  a_fullProgram);
   }
 
   /**
@@ -772,24 +870,21 @@ public class GPConfiguration
     }
     else {
       GPConfiguration other = (GPConfiguration) a_other;
-      return new CompareToBuilder()
-          .append(m_objectiveFunction, other.m_objectiveFunction)
-          .append(m_crossoverProb, other.m_crossoverProb)
-          .append(m_reproductionProb, other.m_reproductionProb)
-          .append(m_newChromsPercent, other.m_newChromsPercent)
-          .append(m_maxCrossoverDepth, other.m_maxCrossoverDepth)
-          .append(m_maxInitDepth, other.m_maxInitDepth)
-          .append(m_selectionMethod.getClass(),
-                  other.m_selectionMethod.getClass())
-          .append(m_crossMethod.getClass(), other.m_crossMethod.getClass())
-          .append(m_programCreationMaxTries, other.m_programCreationMaxTries)
-          .append(m_strictProgramCreation, other.m_strictProgramCreation)
-          .append(m_fitnessEvaluator.getClass(),
-                  other.m_fitnessEvaluator.getClass())
-          .toComparison();
+      return new CompareToBuilder().
+          append(m_objectiveFunction, other.m_objectiveFunction).
+          append(m_crossoverProb, other.m_crossoverProb).
+          append(m_reproductionProb, other.m_reproductionProb).
+          append(m_newChromsPercent, other.m_newChromsPercent).
+          append(m_maxCrossoverDepth, other.m_maxCrossoverDepth).
+          append(m_maxInitDepth, other.m_maxInitDepth).
+          append(m_selectionMethod.getClass(), other.m_selectionMethod.getClass()).
+          append(m_crossMethod.getClass(), other.m_crossMethod.getClass()).
+          append(m_programCreationMaxTries, other.m_programCreationMaxTries).
+          append(m_strictProgramCreation, other.m_strictProgramCreation).
+          append(m_fitnessEvaluator.getClass(),
+                 other.m_fitnessEvaluator.getClass()).toComparison();
     }
-  }
-
+    }
   /**
    *
    * @return see ProgramChromosome.growOrFull(...) and GPGenotype.evolve()
@@ -928,7 +1023,7 @@ public class GPConfiguration
       int popSize = getPopulationSize();
       if (popSize > 0) {
         result.setPopulationSize(popSize);
-            /*@todo move popSize from super to here!*/
+        /*@todo move popSize from super to here!*/
       }
       result.m_crossoverProb = m_crossoverProb;
       result.m_reproductionProb = m_reproductionProb;
