@@ -9,14 +9,11 @@
  */
 package org.jgap.gp;
 
-import junit.framework.*;
 import org.jgap.*;
+import org.jgap.gp.function.*;
 import org.jgap.gp.impl.*;
-import org.jgap.gp.function.IfDyn;
-import org.jgap.gp.terminal.NOP;
-import org.jgap.gp.terminal.Terminal;
-import org.jgap.gp.terminal.True;
-import org.jgap.gp.function.SubProgram;
+import org.jgap.gp.terminal.*;
+import junit.framework.*;
 
 /**
  * Tests the CommandDynamicArity class and the dynamic arity concept.
@@ -27,7 +24,7 @@ import org.jgap.gp.function.SubProgram;
 public class CommandDynamicArityTest
     extends GPTestCase {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.3 $";
+  private final static String CVS_REVISION = "$Revision: 1.4 $";
 
   public static Test suite() {
     TestSuite suite = new TestSuite(CommandDynamicArityTest.class);
@@ -148,7 +145,7 @@ public class CommandDynamicArityTest
             assertEquals(5, arity);
             break;
           case 5:
-            assertEquals(5, arity);
+            assertEquals(3, arity);
             break;
         }
         index++;
