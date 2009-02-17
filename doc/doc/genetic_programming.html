@@ -18,14 +18,15 @@
 
 <hr>
 
-<p class="text">Genetic Programming (GP) is supposed to be introduced by John
-Koza. GP is sort of different to Genetic Algorithms (GA) as GP is more complex
-than GA. GP is about evolving programs with a given set of commands. Each
+<p class="text"><b>Genetic Programming (GP)</b> is supposed to be introduced by John
+Koza. GP is sort of different to <b> Genetic Algorithms (GA)</b> as GP is more complex
+than GA. GP is about evolving programs with a given set of commands and an <b>unknown
+structure</b> (GA = known structure). Each
 command is assigned a number of parameters. That way, programs can be
 constructed. They are represented internally as a tree. But you do not have to
 cope with the internal representation. For you it is only important to know that
 you can write sort of programs. Each program contains only those commands and
-terminals (such as numbers or Boolean values) that you define to be used! It is
+terminals (such as numbers or boolean values) that you define to be used! It is
 even possible evolving full-blown Java programs (see the <a href="http://jgap.sourceforge.net/doc/robocode/robocode.html">Robocode
 example</a>). </p>
 
@@ -52,7 +53,7 @@ complex examples can be found in classes <i><a href="../javadoc/3.4/examples/gp/
 in detail) :
  </p>
 
-<p class="text">1. Create configuration
+<p class="text"><b>1. Create configuration</b>
  </p>
 
 <p class="Listing">
@@ -73,7 +74,7 @@ in detail) :
 </tt>
  </p>
 
-<p class="text">2. Create initial Genotype (continued from above method <i>main</i>): </p>
+<p class="text"><b>2. Create initial Genotype (continued from above method <i>main</i>):</b> </p>
 
 <p class="Listing">    
 <tt>&nbsp; GPGenotype gp = create(config);<br>
@@ -121,7 +122,7 @@ in detail) :
   }
 </tt> </p>
 
-<p class="text">3. Start the evolution and output the result: (continued in above method <i>main</i>):&nbsp; </p>
+<p class="text"><b>3. Start the evolution and output the result: (continued in above method <i>main</i>):&nbsp;</b> </p>
 
 <p class="Listing">    <tt>// Do 100 evolutions in a row.<br>
 // ---------------------------<br>
@@ -134,7 +135,7 @@ gp.outputSolution(gp.getAllTimeBest());<br>
 <br>
 </tt> </p>
 
-<p class="text">4. Optional: Implement your own functions and terminals </p>
+<p class="text"><b>4. Optional: Implement your own functions and terminals</b> </p>
 
 <p class="text">Please have a look at packages <i>org.jgap.gp.function</i>, <i>org.jgap.gp.terminal,</i><i>org.jgap.gp.function</i>
 and <i> examples.gp.anttrail</i> for available GP functions and terminals. There you can
@@ -146,11 +147,15 @@ for the code and you'll get a better feeling. It's very easy using JGAP for GP! 
 
 <h3 class="subheader">Digging into detail </h3>
 
-<p class="text">Now as promised, the steps explained in more detail. The
+<p class="text">Now as promised, the steps explained in more detail. If you want
+to get a quick overview of the JGAP classes involved into GP, please see the <a href="#overviewClasses">end
+of the document</a>. </p>
+
+<p class="text">The
 documentation below refers to the example above, corresponding with the step
 number: </p>
 
-<p class="text">1. Create configuration </p>
+<p class="text"><b>1. Create configuration</b> </p>
 
 <p class="text">At first, a JGAP configuration for GP is created and setup: </p>
 
@@ -195,7 +200,7 @@ number: </p>
 </ul>
 <p class="text">The fitness function can be found in the JGAP code base in the
 example class MathProblem.
-<p class="text">2. Create initial Genotype</p>
+<p class="text"><b>2. Create initial Genotype</b></p>
 <p class="text">The Genotype initialization and creation is done in method
 create, which is called from the main method. At first follows the
 initialization, divided into chunks, starting with:</p>
@@ -217,7 +222,14 @@ because CommandGene.FloatClass is just a convenient, speaking definition of
 Float.Class (it is equivalent).
 <p class="text">The second array, argTypes, defines the input type of so-called
 Automatically Defined Functions (ADF's). They are not important here. If you
-want to get insights about ADF's, please look at the MathProblem class.
+want to get insights about ADF's, please look at the MathProblem class.<p class="text">The
+following box shows the definition of the valid sets of commands (functions and terminals). This means: a GP program will be evolved randomly, but by using one or
+more of the commands defined in nodeSets, each command can be used more than
+once, potentially. Please notice, that the variable &quot;X&quot; is set in the
+fitness function to inject an input value! Also notice, that the last parameter
+of the variable denotes the return type of the variable, i.e Float.class (or:
+CommandGene.FloatClass). This is comparable&nbsp; to the declaration in array
+types, above in this step.
 <p class="Listing">
 <tt>
 &nbsp; // Define the commands and terminals the GP is allowed to use.<br>
@@ -237,19 +249,12 @@ want to get insights about ADF's, please look at the MathProblem class.
 &nbsp; &nbsp; }<br>
   &nbsp; };<br>
 </tt> 
-<p class="text">Here, the valid sets of commands (functions and terminals) is
-defined. This means: a GP program will be evolved randomly, but by using one or
-more of the commands defined in nodeSets, each command can be used more than
-once, potentially. Please notice, that the variable &quot;X&quot; is set in the
-fitness function to inject an input value! Also notice, that the last parameter
-of the variable denotes the return type of the variable, i.e Float.class (or:
-CommandGene.FloatClass). This is comparable&nbsp; to the declaration in array
-types, above in this step.<p class="text">Each command used can either be a
+<p class="text">Each command used can either be a
 function or a terminal. A function has at least one input parameter whereas a
 terminal never has an input parameter. A terminal is a constant, like a number
 or a boolean value. You can find a lot of prefabricated functions and terminals
-in packages <i>org.jgap.gp.function</i> and&nbsp; <i>org.jgap.gp.terminal</i>.
-It is important to notice that each function or terminal must support at least
+in packages <i>org.jgap.gp.function</i> and&nbsp;<i>org.jgap.gp.terminal</i>.<p class="text"><b>Return
+Type, Child Type, and Type of the Declaring Class (Declaration Type)</b><p class="text">It is important to notice that each function or terminal must support at least
 one return type. E.g., that means for a terminal representing a number, it must
 at least support either a float, an integer, a double, a short or a byte number.
 It <i>can</i> support all of them, but <i>must </i>implement at least one. See <i>org.jgap.gp.terminal.Constant</i>
@@ -261,17 +266,40 @@ int, float and double, but they must support at least one of them. With numbers
 it is easy to imagine: it is OK to return either a float value, say, 47.11f, or
 alternatively, the truncated integer value, 47. See class <i>org.jgap.gp.function.Add</i>
 for an example, look for the <i>execute_XXX</i> functions where the different
-return types are realized.<p class="text">Functions have a number of input
-parameters, this is called the arity of the function. Arity two means: two input
+return types are realized.<p class="text"><i><u><b><a name="returnType"></a>Return
+Type</b></u>: The type of the value a function or terminal returns. This could
+be virtually any class. The class itself is not interpreted, only its name.
+Meaning: functions and terminals with the same return type can be substituted in
+a GP program, because their outside interface (their return value) declares the
+same return type.</i><p class="text"><a name="Arity"></a>Functions have a number of input
+parameters, this is called the <b> arity</b> of the function. Arity two means: two input
 parameters. The arity is setup during construction of each function via its base
-class, also see the Add-class for example. In the constructor, the return type
-is defined, too.<p class="text">A function can have input parameters with
+class, also see the Add-class for example. To let JGAP know which functions or
+terminals may server as children for a parent function, the parent function
+declares the types of its children. The type of a child is called <b>input type</b>.
+A parent with input type X.class can have any function or terminal as child
+which in turn has a return type of X.class.<p class="text"><i><u><b><a name="inputType"></a>Input
+Type</b></u>: The type of the child a function accepts. This could be virtually
+any class. The class itself is not interpreted, only its name (as with return
+type). Input type and return type correspond: A parent function with the same
+input type as another function's or terminal's return type can mate: The latter
+mentioned function or terminal can be used as child for the parent function.</i><p class="text"><i><b><u><a name="declarationType"></a>Declaration
+Type</u></b>: The class a GP function or terminal is declared in (i.e., the name
+of the source file representing the function or terminal) is completely
+unimportant for matching parent and children! For the matching, only the
+above-mentioned return type and input type are important.</i><p class="text"><b><a name="getChildType">Overwriting
+of method getChildType</a></b><p class="text">A function can have input parameters with
 different types. Consider the IF-Statement (IF &lt;condition&gt; THEN
 &lt;command&gt;). The first parameter is a boolean value. Besides, number values
 could be supported, with a number bigger than zero being seen as true and all
 other numbers representing false. The second parameter is a void type. See class
-org.jgap.gp.function.IfElse (especially method getChildType) for an example of
-this extended type handling for children. 
+<i>
+org.jgap.gp.function.IfElse</i> (especially method getChildType) for an example of
+this extended type handling for children.<p class="text">As the fitness function should compare the results of the
+evolved GP program (i.e. a mathematical function!) with a truth table, we
+initialize this truth table once at the beginning with fixed, but random input
+numbers. Instead of these random numbers, it would be perfectly OK to use
+subsequent values from, say, 0 to 20: 
 <p class="Listing">
 <tt>
   &nbsp; Random random = new Random();<br>
@@ -285,31 +313,45 @@ this extended type handling for children.
   &nbsp;&nbsp;&nbsp; System.out.println(i + ") " + x[i] + "   " + y[i]);<br>
   &nbsp; }<br>
 </tt> 
-<p class="text">As the fitness function should compare the results of the
-evolved GP program (i.e. a mathematical function!) with a truth table, we
-initialize this truth table once at the beginning with fixed, but random input
-numbers. Instead of these random numbers, it would be perfectly OK to use
-subsequent values from, say, 0 to 20.
-<p class="Listing">
-<tt>
-  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets, 100,
-  true);<br>
-</tt>  
-<p class="text">This returns the initialized genotype, using the
+<p class="text">The code in the following box returns the initialized genotype, using the
 above-discussed, initialized parameters. The last two parameters are as follows.
 The number 100 is the maximum number of nodes to reserve space for in memory for
 each GP program. If you have a program spanning a <b>full</b> binary tree with
 depth of six, then you&nbsp; would need 127 nodes (2^(n+1) - 1, n = 6). The last
 parameter, true, controls that the system outputs verbose messages. This does
 not influence evolution itself, but maybe useful for analyzing and reduces speed
-a bit.  
-<p class="text">3. Start the evolution
+a bit.
+<p class="Listing">
+<tt>
+  &nbsp; return randomInitialGenotype(a_conf, types, argTypes, nodeSets, 100,
+  true);
+</tt>  
+<p class="text"><b>3. Start the evolution</b>
 <p class="text">This is easy, see the code in step 3 at the beginning. It is
 self-explanatory.
-<p class="text">4. Implement your own functions and terminals
+<p class="text"><b>4. Implement your own functions and terminals</b>
 <p class="text">For now, please see the functions and terminals in packages <i>org.jgap.gp.function</i>
-and&nbsp; <i>org.jgap.gp.terminal.</i>
-<p class="text">To be continued...: Explain how<p class="text">A further, quite
+and&nbsp;<i>org.jgap.gp.terminal.</i>
+<p class="text">Take care of:
+<ul>
+  <li>
+    <p class="text">Arity: number of children of a function. A zero means: you
+    have a terminal with no children (see <a href="#Arity">above</a>).</li>
+  <li>
+    <p class="text">Input types: In case of arity greater than zero: For each
+    child declare the type of function or terminal you allow (see <a href="#in">above</a>)</li>
+  <li>
+    <p class="text">Return type: Each function or terminal has exactly one
+    return type, representing the type of the value it returns (see <a href="#returnType">above</a>)</li>
+  <li>
+    <p class="text">overwrite method getChildType if necessary: Consider this if
+    you have a function with more than one children, with at least two children
+    having different return types. See <a href="#getChildType">above paragraph</a>.</li>
+</ul>
+<p class="text">Besides: Name your class whatever you like. This is not
+important for matching parents and children (see <a href="#declarationType">above</a>).
+It is best to take an existing function or terminal as a template.</p>
+<p class="text">A further, quite
 complex example about GP is the Mona Lisa painting problem, see class <a href="../javadoc/3.4/examples/gp/monalisa/gui/GeneticDrawingApp.html">examples.gp.monalisa.GeneticDrawingApp</a>.
 For your information, it might be useful to know that there is a corresponding
 GA example, which can be started with class <a href="../../javadoc/3.4/examples/monalisa/gui/GeneticDrawingApp.html">examples.monalisa.GeneticDrawingApp</a>.<h3 class="subheader">The
@@ -502,6 +544,173 @@ program flow in JGAP when creating a GP Program</h3>
     </tr>
   </tbody>
 </table>
+<h3 class="subheader"><a name="overviewClasses"></a>Overview of entities involved in the evolution process </h3>
+<table border="1" cellspacing=0 cellpadding=0>
+  <tr>
+    <td class="text"><b><i>Level: Class.Method</i></b></td>
+	<td class="text"><b><i>Description</i></b></td>
+	<td class="text"><b><i>Notes</i></b></td>
+  </tr>
+  <tr>
+	<td class="text"><b>0: GPGenotype.evolve</b></td>
+	<td class="text"><b>Overall: Evolve the population by one generation</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 1: Select two GP programs to be crossed over</td>
+	<td class="text">See TournamentSelector, FitnessProportionateSelection</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 2: Cross over two GP programs</td>
+	<td class="text">See BranchTypingCross</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 3: Randomly (instead of crossing over) do reproduction of GP programs</td>
+	<td class="text">Uses selection from step 1</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">Step 4: Randomly add new GP programs</td>
+	<td class="text">See GPPopulation, DefaultProgramCreator</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>1: GPPopulation.create</b></td>
+	<td class="text"><b>Create a single GP program calling IProgramCreator</b></td>
+	<td class="text">See DefaultProgramCreator</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>2: DefaultProgramCreator.create</b></td>
+	<td class="text"><b>Create a single GP program</b></td>
+	<td class="text">Implements IProgramCreator</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: Instantiates program</td>
+	<td class="text">See constructor of GPProgram</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: Fills program with nodes</td>
+	<td class="text">See GPProgram.growOrFull</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>3: GPProgram.growOrFull</b></td>
+	<td class="text"><b>Initializes a GP program with nodes</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: Construct as many nodes (=chromosomes) as needed</td>
+	<td class="text">See ProgramChromosome</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1a: Instantiate a single ProgramChromosome</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: For all nodes</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2a: Grow the node by populating it with sub nodes</td>
+	<td class="text">See next section</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">3: If cache enabled and program found in cache: read fitness; otherwise: calculate fitness of program</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>4: ProgramChromosome.growOrFull</b></td>
+	<td class="text"><b>Initializes a node within a program</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: If custom initialization strategy is registered, use it to preset the first node</td>
+	<td class="text">See IGPInitStrategy</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: Recursively build the node and its subtrees</td>
+	<td class="text">See next section</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">3: Recalculate the depths of the nodes in the tree</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text"><b>5: ProgramChromosome.growOrFullNode</b></td>
+	<td class="text"><b>Create a tree of nodes</b></td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">1: Select an appropriate node</td>
+	<td class="text">See same class, method selectNode</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">2: Validate node, if validator registered</td>
+	<td class="text">See INodeValidator</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">3: Randomly mutate node if node supports this</td>
+	<td class="text">See IMutateable</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">4: If node is marked as unique, remove type of node from list of available functions</td>
+	<td class="text">See IUniqueCommand</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">5: Clone node and add it to the tree of nodes</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">6: Call self recursively (goto step 1 in this section) if nodes are missing</td>
+	<td class="text">End is reached if required depth of node tree is met</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td><td class="text">&nbsp;</td><td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">0: Back in evolve</td>
+	<td class="text">5: Set evolved population as current</td>
+	<td class="text">&nbsp;</td>
+  </tr>
+  <tr>
+	<td class="text">&nbsp;</td>
+	<td class="text">6: Fire event GPGENOTYPE_EVOLVED_EVENT</td>
+	<td class="text">See GeneticEvent</td>
+  </tr>
+</table>
+
 <p class="copyright">Copyright © 2006-2009 <a href="http://www.klaus-meffert.com" target="_blank"> Klaus
 Meffert</a>. All rights reserved. </p>
 
