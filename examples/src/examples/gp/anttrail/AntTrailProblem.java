@@ -21,7 +21,16 @@ import org.jgap.util.*;
 import org.jgap.util.tree.*;
 
 /**
- * The ant trail problem.
+ * The ant trail problem. It demonstrates Genetic Programming (GP) capabilities
+ * of JGAP.<p>
+ *
+ * The ant trail problem searches for a solution to let an ant pick up as many
+ * food as possible on a given parcours with as few steps as possible. The
+ * ant can move, take food and see food in adjacent fields.<p>
+ *
+ * Whenever a new best solution has been found, the ant trail is printed to the
+ * console. Additionally, the tree represented by the GP program is output
+ * in graphical representation.<p>
  *
  * @author Klaus Meffert
  * @since 3.01
@@ -29,7 +38,7 @@ import org.jgap.util.tree.*;
 public class AntTrailProblem
     extends GPProblem {
   /** String containing the CVS revision. Read out via reflection!*/
-  private final static String CVS_REVISION = "$Revision: 1.18 $";
+  private final static String CVS_REVISION = "$Revision: 1.19 $";
 
   protected int[][] m_map;
 
